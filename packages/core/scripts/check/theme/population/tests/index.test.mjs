@@ -19,36 +19,53 @@ import { after, describe, it } from 'node:test';
 import {
   AXES,
   AXIS_IDS,
+  SELECTOR_RULE,
+  axisChannels,
   catalogRevision,
+  checkExclusionRegistry,
   checkPilotPopulation,
   checkPopulationFloor,
+  cssRules,
   declaredProperties,
-  pilotPopulation,
+  exclusionsRevision,
   familyAxisDeclarations,
+  normalizeCssText,
+  pilotPopulation,
+  populationLine,
   populationReport,
   readChannels,
+  readExclusions,
   skinFamilies,
   stripCssComments,
+  withNotApplicable,
 } from '../index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
 const SKIN_ROOT = 'src/foundation/tokens/css/runtime/engines/modern/skin';
+const AGNOSTIC_ROOT = 'src/foundation/tokens/css/presentation/components/skin';
 const CATALOG = 'src/contracts/theme/runtime/catalog/index.ts';
 const FLOOR = join(ROOT, 'scripts/check/theme/population/baseline/index.json');
 const ROSTER = 'scripts/check/family-cut/baseline/index.json';
 const PILOT_PIN = join(ROOT, 'scripts/check/theme/population/pilot/index.json');
+const EXCLUSIONS = join(ROOT, 'scripts/check/theme/population/exclusions/index.json');
+const RADIO_SKIN = `${SKIN_ROOT}/radio/index.css`;
+const RADIO_GROUP_SKIN = `${AGNOSTIC_ROOT}/radio-group/index.css`;
+const REVIEW = 'WO-EVI-05 core review 2026-09-14';
+const PHYSICAL_CORNERS = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'];
 
 const sandboxes = [];
 after(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
 
-/** A sandbox carrying only what the population walk reads: skins, the catalog and the family-cut roster. */
+/** A sandbox carrying only what the population walk reads: both skin roots, the catalog and the family-cut roster. */
 function sandbox() {
   const dir = mkdtempSync(join(tmpdir(), 'evi02-population-'));
   sandboxes.push(dir);
-  mkdirSync(join(dir, SKIN_ROOT), { recursive: true });
-  cpSync(join(ROOT, SKIN_ROOT), join(dir, SKIN_ROOT), { recursive: true });
+  for (const skinRoot of [SKIN_ROOT, AGNOSTIC_ROOT]) {
+    mkdirSync(join(dir, skinRoot), { recursive: true });
+    cpSync(join(ROOT, skinRoot), join(dir, skinRoot), { recursive: true });
+  }
   mkdirSync(join(dir, dirname(ROSTER)), { recursive: true });
   cpSync(join(ROOT, ROSTER), join(dir, ROSTER));
   mkdirSync(join(dir, 'src/contracts/theme/runtime/catalog'), { recursive: true });
@@ -57,6 +74,16 @@ function sandbox() {
 }
 
 const catalogIn = (dir) => join(dir, CATALOG);
+const baseRegistry = () => JSON.parse(readFileSync(EXCLUSIONS, 'utf8'));
+const writeRegistry = (dir, registry, name = 'exclusions.json') => {
+  const path = join(dir, name);
+  writeFileSync(path, JSON.stringify(registry, null, 2));
+  return path;
+};
+const radiiOf = (file) => cssRules(readFileSync(file, 'utf8')).flatMap((rule) =>
+  rule.declarations
+    .filter((declaration) => AXES.shape.authored.includes(declaration.property))
+    .map((declaration) => ({ selector: rule.selector, property: declaration.property, value: declaration.value })));
 
 describe('theme population — the denominator is read, not assumed', () => {
   it('publishes a content revision of the catalog it read', () => {
@@ -122,7 +149,7 @@ describe('theme population drills — a shrunken denominator is refused', () => 
       'the sandbox must be green before the mutation');
 
     const doomed = report.axes.find((entry) => entry.axis === 'shape').families[0];
-    rmSync(join(dir, SKIN_ROOT, doomed), { recursive: true, force: true });
+    for (const skinRoot of [SKIN_ROOT, AGNOSTIC_ROOT]) rmSync(join(dir, skinRoot, doomed), { recursive: true, force: true });
     const { failures } = checkPopulationFloor(dir, catalogIn(dir), floorPath);
     assert.ok(failures.some((line) => line.includes('is BELOW its floor')),
       `deleting ${doomed} did not trip the floor: ${failures.join(' | ')}`);
@@ -226,5 +253,352 @@ describe('theme population — the pilot population of WO-EVI-05', () => {
     assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), pinPath).failures, []);
     assert.ok(checkPilotPopulation(dir, catalogIn(dir), pinPath, { revision: true }).failures
       .some((line) => line.startsWith('catalog revision')));
+  });
+});
+
+describe('theme population — the reviewed semantic-identity exclusion of radio/shape (WO-EVI-05)', () => {
+  it('admits exactly radio/shape, on the byProperty path only, and validates green on the tree', () => {
+    const registry = readExclusions();
+    assert.deepEqual(registry.admitted, [{ family: 'radio', axis: 'shape' }]);
+    assert.deepEqual(registry.entries.map((entry) => [entry.family, entry.axis, entry.path, entry.review]),
+      [['radio', 'shape', 'byProperty', REVIEW]]);
+    assert.deepEqual(checkExclusionRegistry().failures, []);
+  });
+
+  it('names the two reviewed declarations verbatim, and they are the only radii the radio skin authors', () => {
+    const [entry] = readExclusions().entries;
+    assert.equal(entry.skin, RADIO_SKIN);
+    assert.deepEqual(radiiOf(join(ROOT, entry.skin)), entry.declarations);
+    assert.deepEqual(entry.declarations.map((declaration) => declaration.selector), [
+      ".ds-radio.ds-radio--modern [data-part='circle']",
+      ".ds-radio.ds-radio--modern [data-part='dot']",
+    ]);
+    assert.ok(entry.declarations.every((declaration) => declaration.value === 'var(--ds-radius-full)'));
+    assert.ok(!axisChannels().get('shape').has('--ds-radius-full'),
+      'the exclusion acts on the byProperty path only: --ds-radius-full is not a shape head channel');
+  });
+
+  it('withdraws radio from shape as NOT APPLICABLE with its reason, in the declarations, the report, the runner line and the pilot', () => {
+    const radio = familyAxisDeclarations().get('radio');
+    assert.deepEqual(Object.keys(radio.axes), ['typography', 'rhythm', 'depth', 'states', 'motion']);
+    assert.equal(radio.notApplicable.shape.review, REVIEW);
+    assert.equal(radio.notApplicable.shape.excludedDeclarations.length, 2);
+
+    const report = populationReport();
+    const shape = report.axes.find((entry) => entry.axis === 'shape');
+    assert.ok(!shape.families.includes('radio'));
+    assert.deepEqual(shape.notApplicable.map((entry) => entry.family), ['radio']);
+    assert.equal(shape.notApplicableCount, 1);
+    for (const entry of report.axes) {
+      assert.ok(entry.families.every((family) => !entry.notApplicable.some((withdrawn) => withdrawn.family === family)),
+        `${entry.axis}: applicable and not-applicable sets must be disjoint`);
+      if (entry.axis !== 'shape') assert.equal(entry.notApplicableCount, 0, `${entry.axis}: no exclusion is reviewed there`);
+    }
+    assert.deepEqual(report.exclusions.ineffective, []);
+    assert.equal(report.exclusions.revision, exclusionsRevision());
+
+    const line = populationLine();
+    assert.match(line, /shape 216 \(1 N\/A\)/);
+    assert.match(line, /typography 181 \(0 N\/A\)/);
+    assert.match(line, /exclusions [0-9a-f]{16} \(1 reviewed\)/);
+
+    const pilot = pilotPopulation();
+    assert.deepEqual(pilot.families.radio, ['typography', 'rhythm', 'depth', 'states', 'motion']);
+    assert.deepEqual(Object.keys(pilot.notApplicable), ['radio']);
+    assert.deepEqual(Object.keys(pilot.notApplicable.radio), ['shape']);
+    assert.equal(pilot.notApplicable.radio.shape.review, REVIEW);
+    assert.deepEqual(pilot.denominators, { shape: 4, typography: 5, rhythm: 5, depth: 5, states: 5, motion: 5 });
+    assert.deepEqual(pilot.notApplicableCounts, { shape: 1, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
+    assert.deepEqual(withNotApplicable([{ axis: 'shape', moved: 4, denominator: 4 }], pilot),
+      [{ axis: 'shape', moved: 4, denominator: 4, notApplicable: 1, declared: 5 }]);
+  });
+
+  it('the pilot pin and the fleet floor carry the N/A beside the denominator, record the previous membership, and match the live derivation', () => {
+    const pin = JSON.parse(readFileSync(PILOT_PIN, 'utf8'));
+    assert.deepEqual(pin.denominators, { shape: 4, typography: 5, rhythm: 5, depth: 5, states: 5, motion: 5 });
+    assert.deepEqual(pin.notApplicableCounts, { shape: 1, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
+    assert.equal(pin.notApplicable.radio.shape.review, REVIEW);
+    assert.equal(pin.exclusionsRevision, exclusionsRevision());
+    assert.equal(pin.provenance.previousPin.denominators.shape, 5);
+    assert.deepEqual(pin.provenance.membershipMoves.shape.removed, ['radio']);
+
+    const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
+    assert.equal(floor.axes.shape, 216);
+    assert.equal(floor.notApplicable.shape, 1);
+    assert.equal(floor.exclusionsRevision, exclusionsRevision());
+    assert.equal(floor.provenance.previousPin.axes.shape, 217);
+    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape, { removed: ['radio'], added: [] });
+    assert.deepEqual(floor.provenance.membershipMoves.physicalCornerLonghands.newEntrants, []);
+
+    assert.deepEqual(checkPilotPopulation(ROOT, undefined, PILOT_PIN, { revision: true }).failures, []);
+    assert.deepEqual(checkPopulationFloor().failures, []);
+  });
+
+  it('MUTANT: the previous pin, which counted radio on shape, is refused by name', () => {
+    const dir = sandbox();
+    const pin = JSON.parse(readFileSync(PILOT_PIN, 'utf8'));
+    const stale = {
+      ...pin,
+      families: { ...pin.families, radio: [...AXIS_IDS] },
+      notApplicable: {},
+      denominators: { ...pin.denominators, shape: 5 },
+      notApplicableCounts: { ...pin.notApplicableCounts, shape: 0 },
+    };
+    const pinPath = writeRegistry(dir, stale, 'stale-pin.json');
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), pinPath);
+    assert.ok(failures.includes('radio: published axes [shape, typography, rhythm, depth, states, motion] != declared [typography, rhythm, depth, states, motion]'), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('radio/shape: withdrawn by a reviewed exclusion')), failures.join(' | '));
+    assert.ok(failures.includes('shape: published pilot denominator 5 != 4'), failures.join(' | '));
+    assert.ok(failures.includes('shape: published pilot not-applicable count 0 != 1'), failures.join(' | '));
+  });
+
+  it('MUTANT: a pin that publishes radio/shape as both applicable and not applicable is refused', () => {
+    const dir = sandbox();
+    const pin = JSON.parse(readFileSync(PILOT_PIN, 'utf8'));
+    const overlapping = { ...pin, families: { ...pin.families, radio: [...AXIS_IDS] } };
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), writeRegistry(dir, overlapping, 'overlap-pin.json'));
+    assert.ok(failures.includes('radio/shape: published BOTH applicable and not applicable; the two sets must be disjoint'), failures.join(' | '));
+  });
+
+  it('MUTANT (a): a tenant corner planted on the radio ROOT re-enters shape and the published pilot pin refuses it', () => {
+    const dir = sandbox();
+    const skin = join(dir, RADIO_SKIN);
+    const source = readFileSync(skin, 'utf8');
+    const planted = source.replace(
+      ".ds-radio.ds-radio--modern[data-part='root'] {\n  position: relative;",
+      ".ds-radio.ds-radio--modern[data-part='root'] {\n  border-radius: var(--ds-radio-corner, var(--ds-radius-md));\n  position: relative;",
+    );
+    assert.notEqual(planted, source, 'the mutation must reach the root rule');
+    writeFileSync(skin, planted);
+    const radio = familyAxisDeclarations(dir, catalogIn(dir)).get('radio');
+    assert.deepEqual(radio.axes.shape.properties, ['border-radius']);
+    assert.deepEqual(radio.axes.shape.headChannels, ['--ds-radius-md']);
+    assert.equal(radio.axes.shape.exclusionEffective, false);
+    assert.equal(radio.axes.shape.excludedDeclarations.length, 2, 'the reviewed pair still matches; the root corner is what re-enters');
+    assert.deepEqual(radio.notApplicable, {});
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN);
+    assert.ok(failures.some((line) => line.startsWith('radio/shape: published NOT APPLICABLE and now declared')), failures.join(' | '));
+    assert.ok(failures.includes('radio: published axes [typography, rhythm, depth, states, motion] != declared [shape, typography, rhythm, depth, states, motion]'), failures.join(' | '));
+    assert.ok(failures.includes('shape: published pilot denominator 4 != 5'), failures.join(' | '));
+    assert.ok(failures.includes('shape: published pilot not-applicable count 1 != 0'), failures.join(' | '));
+    assert.ok(populationReport(dir, catalogIn(dir)).exclusions.ineffective.some((entry) => entry.family === 'radio' && entry.axis === 'shape'));
+    assert.deepEqual(checkExclusionRegistry(dir).failures, [], 'the registry is not stale: the reviewed declarations are still authored verbatim');
+  });
+
+  it('MUTANT (d): fronting the reviewed declaration with a channel, replacing its token or adding !important invalidates the exclusion', () => {
+    for (const replacement of [
+      'var(--ds-radio-corner, var(--ds-radius-full))',
+      'var(--ds-radius-lg)',
+      'var(--ds-radius-full) !important',
+    ]) {
+      const dir = sandbox();
+      const skin = join(dir, RADIO_SKIN);
+      const source = readFileSync(skin, 'utf8');
+      const mutated = source.replace('border-radius: var(--ds-radius-full);', `border-radius: ${replacement};`);
+      assert.notEqual(mutated, source);
+      writeFileSync(skin, mutated);
+      const radio = familyAxisDeclarations(dir, catalogIn(dir)).get('radio');
+      assert.ok(radio.axes.shape, `${replacement}: radio must re-enter shape`);
+      assert.deepEqual(radio.axes.shape.properties, ['border-radius']);
+      assert.equal(radio.axes.shape.excludedDeclarations.length, 1, `${replacement}: only the dot still matches the review`);
+      assert.deepEqual(radio.notApplicable, {});
+      const { failures } = checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN);
+      assert.ok(failures.some((line) => line.startsWith('radio/shape: published NOT APPLICABLE and now declared')), `${replacement}: ${failures.join(' | ')}`);
+      assert.ok(failures.some((line) => line.includes('STALE') && line.includes("[data-part='circle']")),
+        `${replacement}: the registry must name the stale declaration: ${failures.join(' | ')}`);
+    }
+  });
+
+  it('MUTANT (e): a second rule with the same selector text and another radius, later in the file, re-enters the family', () => {
+    const dir = sandbox();
+    const skin = join(dir, RADIO_SKIN);
+    writeFileSync(skin, `${readFileSync(skin, 'utf8')}\n.ds-radio.ds-radio--modern [data-part='circle'] {\n  border-radius: var(--ds-radius-md);\n}\n`);
+    const radio = familyAxisDeclarations(dir, catalogIn(dir)).get('radio');
+    assert.ok(radio.axes.shape, 'radio must re-enter shape');
+    assert.deepEqual(radio.axes.shape.properties, ['border-radius']);
+    assert.deepEqual(radio.axes.shape.headChannels, ['--ds-radius-md']);
+    assert.equal(radio.axes.shape.excludedDeclarations.length, 2, 'the reviewed pair still matches; the third declaration is what re-enters');
+    assert.deepEqual(radio.notApplicable, {});
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN);
+    assert.ok(failures.some((line) => line.startsWith('radio/shape: published NOT APPLICABLE and now declared')), failures.join(' | '));
+    assert.deepEqual(checkExclusionRegistry(dir).failures, [], 'the registry is not stale; the duplicate rule is a declaration of its own');
+  });
+
+  it('MUTANT (f): an entry whose selector is not authored in the named file fails, and a selector living only in a comment does not satisfy it', () => {
+    const dir = sandbox();
+    const registry = baseRegistry();
+    registry.entries[0].declarations[0].selector = ".ds-radio.ds-radio--modern [data-part='frame']";
+    const path = writeRegistry(dir, registry);
+    const named = (failures) => failures.some((line) => line.includes('selector not authored') && line.includes("[data-part='frame']"));
+    assert.ok(named(checkExclusionRegistry(dir, path).failures));
+
+    const skin = join(dir, RADIO_SKIN);
+    writeFileSync(skin, `${readFileSync(skin, 'utf8')}\n/* .ds-radio.ds-radio--modern [data-part='frame'] { border-radius: var(--ds-radius-full); } */\n`);
+    assert.ok(named(checkExclusionRegistry(dir, path).failures), 'F-23: a selector inside a comment is not an authored one');
+
+    const radio = familyAxisDeclarations(dir, catalogIn(dir), path).get('radio');
+    assert.ok(radio.axes.shape, 'a stale entry excludes nothing it does not match: the circle radius counts again');
+    assert.equal(radio.axes.shape.excludedDeclarations.length, 1);
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path });
+    assert.ok(failures.some((line) => line.startsWith('exclusion registry: entry 0 (radio/shape): selector not authored')), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('radio/shape: published NOT APPLICABLE and now declared')), failures.join(' | '));
+  });
+
+  it('MUTANT (g): an entry for a family that still authors radius on a non-excluded selector has no effect', () => {
+    const dir = sandbox();
+    const checkboxFile = familyAxisDeclarations(dir, catalogIn(dir)).get('checkbox').files[0];
+    const radii = radiiOf(join(dir, checkboxFile));
+    assert.ok(radii.length >= 2, 'the drill needs a family with at least two radius declarations');
+    const registry = baseRegistry();
+    registry.admitted.push({ family: 'checkbox', axis: 'shape' });
+    registry.entries.push({
+      family: 'checkbox', axis: 'shape', path: 'byProperty', skin: checkboxFile, declarations: [radii[0]], reason: 'drill', review: 'drill',
+    });
+    const path = writeRegistry(dir, registry);
+    assert.deepEqual(checkExclusionRegistry(dir, path).failures, []);
+    const checkbox = familyAxisDeclarations(dir, catalogIn(dir), path).get('checkbox');
+    assert.ok(checkbox.axes.shape, 'checkbox stays in shape');
+    assert.equal(checkbox.axes.shape.exclusionEffective, false);
+    assert.equal(checkbox.axes.shape.excludedDeclarations.length, 1);
+    assert.deepEqual(checkbox.notApplicable, {});
+    const report = populationReport(dir, catalogIn(dir), path);
+    assert.ok(report.axes.find((entry) => entry.axis === 'shape').families.includes('checkbox'));
+    assert.deepEqual(report.axes.find((entry) => entry.axis === 'shape').notApplicable.map((entry) => entry.family), ['radio']);
+    assert.ok(report.exclusions.ineffective.some((entry) => entry.family === 'checkbox' && entry.axis === 'shape'));
+    assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path }).failures, [],
+      'an ineffective entry changes no published denominator');
+  });
+
+  it('MUTANT: a duplicate entry, an unadmitted pair, a head-channel path and a foreign skin file are each refused by name, on both gates', () => {
+    const dir = sandbox();
+
+    const duplicated = baseRegistry();
+    duplicated.entries.push(JSON.parse(JSON.stringify(duplicated.entries[0])));
+    assert.ok(checkExclusionRegistry(dir, writeRegistry(dir, duplicated, 'dup.json')).failures
+      .some((line) => line.includes('duplicate of an earlier entry')));
+
+    const toggleFile = familyAxisDeclarations(dir, catalogIn(dir)).get('toggle').files[0];
+    const unadmitted = baseRegistry();
+    unadmitted.entries.push({
+      family: 'toggle', axis: 'shape', path: 'byProperty', skin: toggleFile,
+      declarations: [radiiOf(join(dir, toggleFile))[0]], reason: 'drill', review: 'drill',
+    });
+    assert.ok(checkExclusionRegistry(dir, writeRegistry(dir, unadmitted, 'unadmitted.json')).failures
+      .some((line) => line.includes('toggle/shape is not an admitted exclusion')));
+
+    const headChannel = baseRegistry();
+    headChannel.entries[0].path = 'byHeadChannel';
+    assert.ok(checkExclusionRegistry(dir, writeRegistry(dir, headChannel, 'head.json')).failures
+      .some((line) => line.includes('is not byProperty; a head-channel read is never excluded')));
+
+    const foreign = baseRegistry();
+    foreign.entries[0].skin = RADIO_GROUP_SKIN;
+    const foreignPath = writeRegistry(dir, foreign, 'foreign.json');
+    assert.ok(checkExclusionRegistry(dir, foreignPath).failures.some((line) => line.includes('is not a skin file of radio')));
+    assert.ok(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: foreignPath }).failures
+      .some((line) => line.startsWith('exclusion registry: ') && line.includes('is not a skin file of radio')));
+    assert.ok(checkPopulationFloor(dir, catalogIn(dir), FLOOR, foreignPath).failures
+      .some((line) => line.startsWith('exclusion registry: ') && line.includes('is not a skin file of radio')));
+  });
+
+  it('MUTANT: a registry edit that the pins do not carry is refused by both gates when the revision is asked for', () => {
+    const dir = sandbox();
+    const reworded = baseRegistry();
+    reworded.entries[0].reason = `${reworded.entries[0].reason} (reworded)`;
+    const path = writeRegistry(dir, reworded, 'reworded.json');
+    assert.deepEqual(checkExclusionRegistry(dir, path).failures, []);
+    assert.ok(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { revision: true, exclusionsPath: path }).failures
+      .some((line) => line.startsWith('exclusions revision')));
+    assert.ok(checkPopulationFloor(dir, catalogIn(dir), FLOOR, path).failures
+      .some((line) => line.startsWith('exclusions revision')));
+    assert.ok(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN, { exclusionsPath: path }).failures
+      .some((line) => line.startsWith('radio/shape: the published not-applicable reason or review differs')));
+  });
+
+  it('(c) radio-group is a separate population family the exclusion never reaches: baseline first, then a severed chain keeps it applicable', () => {
+    const dir = sandbox();
+    const before = familyAxisDeclarations(dir, catalogIn(dir)).get('radio-group');
+    assert.ok(before, 'the sandbox must carry the agnostic skin root that owns radio-group');
+    assert.deepEqual(before.files, [RADIO_GROUP_SKIN]);
+    assert.deepEqual(before.axes.shape, { properties: ['border-radius'], headChannels: ['--ds-radius-md'], stateSelectors: [], stateChannels: [] });
+    assert.deepEqual(before.notApplicable, {});
+    assert.deepEqual(radiiOf(join(dir, RADIO_GROUP_SKIN)), [
+      { selector: ".ds-radio-group.ds-radio-group--button [data-part='option']", property: 'border-radius', value: 'var(--ds-radius-md)' },
+    ]);
+
+    const skin = join(dir, RADIO_GROUP_SKIN);
+    const source = readFileSync(skin, 'utf8');
+    const severed = source.replace('border-radius: var(--ds-radius-md);', 'border-radius: 8px;');
+    assert.notEqual(severed, source);
+    writeFileSync(skin, severed);
+    const after = familyAxisDeclarations(dir, catalogIn(dir)).get('radio-group');
+    assert.deepEqual(after.axes.shape, { properties: ['border-radius'], headChannels: [], stateSelectors: [], stateChannels: [] });
+    assert.deepEqual(after.notApplicable, {});
+    const shape = populationReport(dir, catalogIn(dir)).axes.find((entry) => entry.axis === 'shape');
+    assert.ok(shape.families.includes('radio-group'));
+    assert.ok(!shape.notApplicable.some((entry) => entry.family === 'radio-group'));
+
+    const aimed = baseRegistry();
+    aimed.entries[0].skin = RADIO_GROUP_SKIN;
+    aimed.entries[0].declarations = [
+      { selector: ".ds-radio-group.ds-radio-group--button [data-part='option']", property: 'border-radius', value: 'var(--ds-radius-md)' },
+    ];
+    assert.ok(checkExclusionRegistry(dir, writeRegistry(dir, aimed, 'aimed.json')).failures
+      .some((line) => line.includes('is not a skin file of radio')), 'the entry is keyed by family id and file path');
+  });
+
+  it('(B) a physical corner longhand declares shape, and widening the vocabulary moved no denominator', () => {
+    const dir = sandbox();
+    mkdirSync(join(dir, SKIN_ROOT, 'drill-physical'));
+    writeFileSync(join(dir, SKIN_ROOT, 'drill-physical/index.css'), '.ds-drill-physical { border-top-left-radius: 4px; }\n');
+    const record = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-physical');
+    assert.deepEqual(record.axes.shape.properties, ['border-top-left-radius']);
+    assert.ok(PHYSICAL_CORNERS.every((name) => AXES.shape.authored.includes(name)));
+
+    const authoring = {};
+    for (const [family, files] of skinFamilies()) {
+      const properties = declaredProperties(files.map((file) => readFileSync(file, 'utf8')).join('\n'));
+      const physical = PHYSICAL_CORNERS.filter((name) => properties.has(name));
+      if (physical.length > 0) authoring[family] = { physical, alsoBorderRadius: properties.has('border-radius') };
+    }
+    assert.deepEqual(authoring, {
+      'card-compounds': { physical: PHYSICAL_CORNERS, alsoBorderRadius: true },
+      'detail-header': { physical: ['border-top-left-radius', 'border-top-right-radius'], alsoBorderRadius: true },
+    });
+    const shape = populationReport().axes.find((entry) => entry.axis === 'shape').families;
+    for (const family of Object.keys(authoring)) assert.ok(shape.includes(family), `${family} declares shape`);
+    const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
+    assert.deepEqual(Object.keys(floor.provenance.membershipMoves.physicalCornerLonghands.familiesAuthoringThem).sort(), Object.keys(authoring).sort());
+  });
+
+  it('the rule tokenizer reads the same properties as the joined-text reader, attributes every SELECTOR_RULE selector, and shares the probe\'s literal', () => {
+    const probe = readFileSync(join(ROOT, 'scripts/check/theme/axis-difference/index.mjs'), 'utf8');
+    assert.ok(probe.includes(`const SELECTOR_RULE = ${SELECTOR_RULE.toString()};`), 'one selector vocabulary, in both instruments');
+
+    let mismatches = 0;
+    let unattributed = 0;
+    for (const [, files] of skinFamilies()) {
+      const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
+      const viaRegex = [...declaredProperties(css)].sort();
+      const viaRules = [...new Set(files.flatMap((file) =>
+        cssRules(readFileSync(file, 'utf8')).flatMap((rule) => rule.declarations.map((declaration) => declaration.property))))].sort();
+      if (JSON.stringify(viaRegex) !== JSON.stringify(viaRules)) mismatches += 1;
+      for (const file of files) {
+        const source = readFileSync(file, 'utf8');
+        const selectors = new Set(cssRules(source).map((rule) => rule.selector));
+        for (const match of stripCssComments(source).matchAll(SELECTOR_RULE)) {
+          if (!selectors.has(normalizeCssText(match[2]))) unattributed += 1;
+        }
+      }
+    }
+    assert.equal(mismatches, 0, 'a family gained or lost a property by the change of reader');
+    assert.equal(unattributed, 0, 'a selector the probe can read is a selector the population attributes');
+
+    const rules = cssRules('@media (x) { .a { border-radius: 1px; } }\n.b, .c { color: red; }\n/* .z { border-radius: 9px } */\n.d { content: ";"; padding: 0 }');
+    assert.deepEqual(rules, [
+      { selector: '.a', atRules: ['@media (x)'], declarations: [{ property: 'border-radius', value: '1px' }] },
+      { selector: '.b, .c', atRules: [], declarations: [{ property: 'color', value: 'red' }] },
+      { selector: '.d', atRules: [], declarations: [{ property: 'content', value: '";"' }, { property: 'padding', value: '0' }] },
+    ]);
   });
 });

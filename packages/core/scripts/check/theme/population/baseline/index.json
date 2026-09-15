@@ -1,50 +1,240 @@
 {
   "purpose": "The per-axis denominator of the by-axis tenant-difference probe (kit-2026-09 section 5 rule 4), pinned so it cannot be shrunk to reach a threshold (WO-EVI-02 R4 amendment 3).",
-  "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets.",
+  "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets. A reviewed semantic-identity exclusion is the one lawful subtraction: it is pinned beside the denominator it subtracts from (notApplicable per axis) and under the exclusion revision it was reviewed at, so neither can drift on its own.",
   "catalogRevision": "2a25f7c6068407fb",
+  "exclusionsRevision": "34bd866512177f9b",
   "pinnedOn": "2026-09-14",
   "skinFamilies": 270,
   "axes": {
-    "shape": 217,
+    "shape": 216,
     "typography": 181,
     "rhythm": 213,
     "depth": 193,
     "states": 155,
     "motion": 200
   },
+  "notApplicable": {
+    "shape": 1,
+    "typography": 0,
+    "rhythm": 0,
+    "depth": 0,
+    "states": 0,
+    "motion": 0
+  },
   "provenance": {
-    "reconciles": "G107-02, second pass -- the WO-FAM-04 skin folds",
-    "sourceCommit": "ce05c3d41",
-    "computedFrom": "f9e13791a",
+    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary",
+    "sourceCommit": "0867fb986",
     "computedOn": "2026-09-14",
-    "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed family by family against the same computation over the previous pin's tree",
+    "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed family by family against the same computation over the previous pin's tree (HEAD owner, identical corpus)",
     "previousPin": {
       "pinnedOn": "2026-09-14",
-      "sourceCommit": "2bd1d7799",
-      "skinFamilies": 273,
-      "axes": { "shape": 220, "typography": 183, "rhythm": 215, "depth": 196, "states": 158, "motion": 203 }
+      "sourceCommit": "ce05c3d41",
+      "skinFamilies": 270,
+      "axes": {
+        "shape": 217,
+        "typography": 181,
+        "rhythm": 213,
+        "depth": 193,
+        "states": 155,
+        "motion": 200
+      },
+      "notApplicable": {
+        "shape": 0,
+        "typography": 0,
+        "rhythm": 0,
+        "depth": 0,
+        "states": 0,
+        "motion": 0
+      }
     },
     "membershipMoves": {
-      "folds": [
-        "toast + notification + message -> notifier, one family with three roles (a4a8b6f2e)",
-        "callout -> alert, folded into the existing alert namespace (0866afe18)",
-        "overlay-modal -> modal, namespace rename by the modal cut (75d77e375)",
-        "tooltip-compounds rewritten onto the ds-tooltip channels by the tooltip cut (179da599a): it gained padding-block/padding-inline and a font shorthand, so it enters `typography` and `rhythm` without moving in or out of the corpus"
-      ],
-      "namespacesAdded": ["modal", "notifier"],
-      "rewrittenInPlace": ["alert", "tooltip", "popover", "drawer", "sheet", "dropdown"],
+      "kind": "reviewed exclusion -- neither fold nor shrink",
+      "reviewedExclusion": {
+        "family": "radio",
+        "axis": "shape",
+        "registry": "scripts/check/theme/population/exclusions/index.json",
+        "review": "WO-EVI-05 core review 2026-09-14",
+        "declarations": [
+          ".ds-radio.ds-radio--modern [data-part='circle'] { border-radius: var(--ds-radius-full) }",
+          ".ds-radio.ds-radio--modern [data-part='dot'] { border-radius: var(--ds-radius-full) }"
+        ],
+        "effect": "radio leaves the shape denominator (217 -> 216) and is published NOT APPLICABLE on shape with its reason; it stays in the other five axes"
+      },
+      "physicalCornerLonghands": {
+        "added": [
+          "border-top-left-radius",
+          "border-top-right-radius",
+          "border-bottom-left-radius",
+          "border-bottom-right-radius"
+        ],
+        "familiesAuthoringThem": {
+          "card-compounds": [
+            "border-top-left-radius",
+            "border-top-right-radius",
+            "border-bottom-left-radius",
+            "border-bottom-right-radius"
+          ],
+          "detail-header": [
+            "border-top-left-radius",
+            "border-top-right-radius"
+          ]
+        },
+        "newEntrants": [],
+        "note": "both families already declared shape through border-radius, so the vocabulary widening moves no denominator; verified against presentation/components/skin/card-compounds/index.css and presentation/components/skin/detail-header/index.css"
+      },
       "byAxis": {
-        "skinFamilies": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
-        "shape": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
-        "typography": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier", "tooltip-compounds"] },
-        "rhythm": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier", "tooltip-compounds"] },
-        "depth": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
-        "states": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] },
-        "motion": { "removed": ["callout", "message", "notification", "overlay-modal", "toast"], "added": ["modal", "notifier"] }
+        "skinFamilies": {
+          "removed": [],
+          "added": []
+        },
+        "shape": {
+          "removed": [
+            "radio"
+          ],
+          "added": []
+        },
+        "typography": {
+          "removed": [],
+          "added": []
+        },
+        "rhythm": {
+          "removed": [],
+          "added": []
+        },
+        "depth": {
+          "removed": [],
+          "added": []
+        },
+        "states": {
+          "removed": [],
+          "added": []
+        },
+        "motion": {
+          "removed": [],
+          "added": []
+        }
       },
       "carriedForward": {
         "priorPass": "the FAM-01/02/03/14 renames and merges reconciled at 2bd1d7799: skeleton-compounds -> skeleton-anatomy, autocomplete -> auto-complete, switch merged into Toggle behind a deprecated prop adapter, input-residual merged, select-compounds and form-field added by the FAM-02/03 cuts",
         "toastCompoundsMotion": "toast-compounds entered `motion` at fe4eabadb (WO-INV-05) on two `animation: none !important` reduced-motion kill switches and is still in it here. Whether a suppression declares an axis is open and owned by the motion vocabulary, not by this pin; if it is ruled out, `motion` drops by one and this file is republished in that commit."
+      },
+      "priorPass": {
+        "reconciles": "G107-02, second pass -- the WO-FAM-04 skin folds",
+        "sourceCommit": "ce05c3d41",
+        "computedFrom": "f9e13791a",
+        "folds": [
+          "toast + notification + message -> notifier, one family with three roles (a4a8b6f2e)",
+          "callout -> alert, folded into the existing alert namespace (0866afe18)",
+          "overlay-modal -> modal, namespace rename by the modal cut (75d77e375)",
+          "tooltip-compounds rewritten onto the ds-tooltip channels by the tooltip cut (179da599a): it gained padding-block/padding-inline and a font shorthand, so it enters `typography` and `rhythm` without moving in or out of the corpus"
+        ],
+        "namespacesAdded": [
+          "modal",
+          "notifier"
+        ],
+        "rewrittenInPlace": [
+          "alert",
+          "tooltip",
+          "popover",
+          "drawer",
+          "sheet",
+          "dropdown"
+        ],
+        "byAxis": {
+          "skinFamilies": {
+            "removed": [
+              "callout",
+              "message",
+              "notification",
+              "overlay-modal",
+              "toast"
+            ],
+            "added": [
+              "modal",
+              "notifier"
+            ]
+          },
+          "shape": {
+            "removed": [
+              "callout",
+              "message",
+              "notification",
+              "overlay-modal",
+              "toast"
+            ],
+            "added": [
+              "modal",
+              "notifier"
+            ]
+          },
+          "typography": {
+            "removed": [
+              "callout",
+              "message",
+              "notification",
+              "overlay-modal",
+              "toast"
+            ],
+            "added": [
+              "modal",
+              "notifier",
+              "tooltip-compounds"
+            ]
+          },
+          "rhythm": {
+            "removed": [
+              "callout",
+              "message",
+              "notification",
+              "overlay-modal",
+              "toast"
+            ],
+            "added": [
+              "modal",
+              "notifier",
+              "tooltip-compounds"
+            ]
+          },
+          "depth": {
+            "removed": [
+              "callout",
+              "message",
+              "notification",
+              "overlay-modal",
+              "toast"
+            ],
+            "added": [
+              "modal",
+              "notifier"
+            ]
+          },
+          "states": {
+            "removed": [
+              "callout",
+              "message",
+              "notification",
+              "overlay-modal",
+              "toast"
+            ],
+            "added": [
+              "modal",
+              "notifier"
+            ]
+          },
+          "motion": {
+            "removed": [
+              "callout",
+              "message",
+              "notification",
+              "overlay-modal",
+              "toast"
+            ],
+            "added": [
+              "modal",
+              "notifier"
+            ]
+          }
+        }
       }
     }
   }

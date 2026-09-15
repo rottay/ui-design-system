@@ -2,17 +2,21 @@
  * The WO-EVI-05 pilot run of the by-axis probe: the WO-FAM-01 families mounted on
  * their own server-rendered anatomy, measured in real Chromium on two provisional
  * BitHire tenants that differ beyond colour, with both negative controls of kit
- * rule 4. Every figure it publishes is a pilot figure, never a fleet one.
+ * rule 4. Every figure it publishes is a pilot figure, never a fleet one, and
+ * every denominator is read beside the not-applicable set the population owner
+ * publishes with it: 29 applicable pairs plus one reviewed N/A, never 30.
  */
 import React from 'react';
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
 
 import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import ModernCheckbox from '@/components/primitives/inputs/checkbox/engines/modern';
 import ModernRadio from '@/components/primitives/inputs/radio/engines/modern';
+import { RadioGroup } from '@/components/primitives/inputs/radio/compound/group';
 import ModernToggle from '@/components/primitives/inputs/toggle/engines/modern';
 import ModernSegmented from '@/components/primitives/navigation/segmented/engines/modern';
 import { compileTenantThemeDocumentV2 } from '@/entrypoints/server';
@@ -25,12 +29,31 @@ import {
   pilotReadings,
   run,
 } from '@checks/theme/axis-difference/index.mjs';
-import { checkPilotPopulation } from '@checks/theme/population/index.mjs';
+import { checkPilotPopulation, withNotApplicable } from '@checks/theme/population/index.mjs';
 
-const RECORD = resolve(__dirname, '../../../../../test-artifacts/gates/axis-difference-pilot/index.json');
+const CORE = resolve(__dirname, '../../..');
+const RECORD = resolve(CORE, '../../test-artifacts/gates/axis-difference-pilot/index.json');
+const MODERN_SKINS = 'src/foundation/tokens/css/runtime/engines/modern/skin';
+const AGNOSTIC_SKINS = 'src/foundation/tokens/css/presentation/components/skin';
+const CATALOG = 'src/contracts/theme/runtime/catalog/index.ts';
+const ROSTER = 'scripts/check/family-cut/baseline/index.json';
 
 /** The provisional pair: angular and compact against rounded and lifted, through admitted decisions only. */
 const PAIR = ['product-dense', 'warm-humanist'] as const;
+
+type ProbeResult = Awaited<ReturnType<typeof run>>;
+type ProbeOptions = {
+  verticals: string[];
+  themes: string[];
+  families: string[];
+  scenarios: ReturnType<typeof pairScenarios>;
+  mounts: Record<string, { markup: string }>;
+  compile: typeof compileTenantThemeDocumentV2;
+};
+/** The probe's defaults are `null`, which TypeScript reads as its whole parameter type; the run is typed by what it is handed. */
+const probe = run as unknown as (options: ProbeOptions) => Promise<ProbeResult>;
+
+type NotApplicable = Record<string, Record<string, { reason: string; review: string }>>;
 
 /**
  * The anatomy a visible desktop client without a reduced-motion preference
@@ -98,43 +121,87 @@ const MOUNTS: Record<string, { markup: string }> = {
 };
 
 /**
- * The (family, axis) pairs measured NOT moving on the pilot pair, with the cause
- * measured for each. The pilot is not green while this is non-empty; the run
- * asserts it exactly, so a new red fails and a cured pair must leave it.
+ * The real button-style Radio.Group: the one radius its own skin authors sits on
+ * `[data-part='option']`, below the root the bare probe would read, so the
+ * corner is measured only when the anatomy is mounted with `buttonStyle` stamped.
  */
-const NOT_YET_GREEN: Record<string, string> = {
-  'radio/shape':
-    'ADJUDICATED, not a wiring gap (WO-EVI-05 progressLog, 2026-09-14): every radius the bare radio '
-    + 'paints is a semantic identity, so no shape decision may lawfully move it. The circle is round '
-    + 'because round means single-choice (skin/radio/index.css:64) and the dot is bound to it (:203); '
-    + 'the family stamps no frame part for a corner to govern; the focus ring is an outline, which '
-    + 'follows the circle rather than carrying a radius of its own; and the touch target is a height, '
-    + 'which kit rule 4 does not count as shape. The family therefore declares an axis it cannot '
-    + 'satisfy without breaking what the control means. Correcting the declaration is a shared-core '
-    + 'contract decision pending above the DT -- the population is DERIVED from the skin, so a '
-    + 'withdrawal needs a semantic-identity exclusion in the population owner, not an edit here. The '
-    + 'future lawful owner is named: the Radio.Group button-style option corner '
-    + '(presentation/components/skin/radio-group/index.css:92), pending a Modern skin owner.',
+const RADIO_GROUP_MOUNT = {
+  markup: render(
+    <RadioGroup
+      buttonStyle="solid"
+      direction="horizontal"
+      defaultValue="month"
+      options={[
+        { value: 'day', label: 'Day' },
+        { value: 'week', label: 'Week' },
+        { value: 'month', label: 'Month' },
+      ]}
+    />,
+  ),
 };
 
 const decisionsOf = (id: string) =>
   (bithireIdentityCandidate(id).document as { decisions: Record<string, unknown> }).decisions;
 
+const sandboxes: string[] = [];
+afterAll(() => { for (const dir of sandboxes) rmSync(dir, { recursive: true, force: true }); });
+
+/** A copy of what the population owner reads, so a planted skin can be derived without touching the tree. */
+function populationSandbox(): string {
+  const dir = mkdtempSync(join(tmpdir(), 'evi05-pilot-'));
+  sandboxes.push(dir);
+  for (const skins of [MODERN_SKINS, AGNOSTIC_SKINS]) {
+    mkdirSync(join(dir, skins), { recursive: true });
+    cpSync(join(CORE, skins), join(dir, skins), { recursive: true });
+  }
+  for (const file of [ROSTER, CATALOG]) {
+    mkdirSync(join(dir, dirname(file)), { recursive: true });
+    cpSync(join(CORE, file), join(dir, file));
+  }
+  return dir;
+}
+
 const record: Record<string, unknown> = {};
 
 describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () => {
-  const { live: pilot, failures: populationFailures } = checkPilotPopulation(undefined, undefined, undefined, {
+  const { live: pilot, pin, failures: populationFailures } = checkPilotPopulation(undefined, undefined, undefined, {
     revision: true,
   });
+  const notApplicable = pilot.notApplicable as NotApplicable;
+  const notApplicablePairs = Object.entries(notApplicable)
+    .flatMap(([family, axes]) => Object.keys(axes).map((axis) => `${family}/${axis}`))
+    .sort();
 
-  it('measures exactly the published pilot population, at its catalog revision', () => {
+  const writeRecord = () => {
+    mkdirSync(resolve(RECORD, '..'), { recursive: true });
+    writeFileSync(RECORD, `${JSON.stringify({
+      workOrder: 'WO-EVI-05',
+      scope: 'pilot',
+      pair: PAIR,
+      applicablePairs: Object.values(pilot.families).reduce((sum, axes) => sum + axes.length, 0),
+      notApplicablePairs,
+      notApplicable,
+      exclusionsRevision: pilot.exclusionsRevision,
+      runs: record,
+    }, null, 2)}\n`);
+  };
+
+  it('measures exactly the published pilot population, with its N/A read from the live derivation and equal to the pin', () => {
     expect(populationFailures).toEqual([]);
     expect(Object.keys(MOUNTS).sort()).toEqual(Object.keys(pilot.families).sort());
+    expect(notApplicable).toEqual(pin.notApplicable);
+    expect(notApplicablePairs).toEqual(['radio/shape']);
+    expect(pilot.families.radio).toEqual(['typography', 'rhythm', 'depth', 'states', 'motion']);
+    expect(pilot.denominators).toEqual({ shape: 4, typography: 5, rhythm: 5, depth: 5, states: 5, motion: 5 });
+    expect(pilot.notApplicableCounts).toEqual({ shape: 1, typography: 0, rhythm: 0, depth: 0, states: 0, motion: 0 });
+    expect(notApplicable.radio!.shape!.review).toBe('WO-EVI-05 core review 2026-09-14');
+    expect(notApplicable.radio!.shape!.reason).toMatch(/semantic identity/);
+    expect(Object.values(pilot.families).reduce((sum, axes) => sum + axes.length, 0)).toBe(29);
   });
 
   for (const [baseId, otherId] of [PAIR, [PAIR[1], PAIR[0]]] as const) {
-    it(`${baseId} against ${otherId}: both controls hold at 0 % on every cell, and only the NOT_YET_GREEN pairs fail to move`, async () => {
-      const result = await run({
+    it(`${baseId} against ${otherId}: both controls hold at 0 % on every cell, every applicable pair moves, and only the published N/A stands aside`, async () => {
+      const result = await probe({
         verticals: ['bithire'],
         themes: ['light', 'dark'],
         families: Object.keys(pilot.families),
@@ -148,25 +215,44 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
         revision: { digest: result.revision.digest, decisionRows: result.revision.decisionRows },
         browser: result.browser,
         bundleMode: result.bundleMode,
-        pilotReadings: pilotReadings(result, pilot),
+        pilotReadings: withNotApplicable(pilotReadings(result, pilot), pilot),
         cells: result.cells.map(({ movedFamilies: _moved, ...cell }) => cell),
         refusals: result.refusals,
         failures,
       };
-      mkdirSync(resolve(RECORD, '..'), { recursive: true });
-      writeFileSync(RECORD, `${JSON.stringify({ workOrder: 'WO-EVI-05', scope: 'pilot', pair: PAIR, runs: record }, null, 2)}\n`);
-      expect([...failures].sort()).toEqual(
-        Object.keys(NOT_YET_GREEN).flatMap((key) => {
-          const [family, axis] = key.split('/');
-          return ['light', 'dark'].map((theme) => `${family}: declares ${axis} and did not move on it in bithire/${theme}`);
-        }).sort(),
-      );
+      writeRecord();
+      expect(failures).toEqual([]);
+      // The N/A pair is outside the applicable denominator, not silently inside it.
+      expect(result.effectiveFamilies.shape).not.toContain('radio');
+      expect(result.effectiveFamilies.typography).toContain('radio');
+      for (const reading of withNotApplicable(pilotReadings(result, pilot), pilot)) {
+        expect(reading.notApplicable).toBe(reading.axis === 'shape' ? 1 : 0);
+        expect(reading.moved).toBe(reading.denominator);
+      }
     }, 900_000);
   }
 
+  it('MUTANT (a): a tenant corner planted on a non-excluded part of the radio re-enters shape, and the pin refuses it before any browser runs', () => {
+    const dir = populationSandbox();
+    const skin = join(dir, MODERN_SKINS, 'radio/index.css');
+    const source = readFileSync(skin, 'utf8');
+    const planted = source.replace(
+      ".ds-radio.ds-radio--modern[data-part='root'] {\n  position: relative;",
+      ".ds-radio.ds-radio--modern[data-part='root'] {\n  border-radius: var(--ds-radio-corner, var(--ds-radius-md));\n  position: relative;",
+    );
+    expect(planted).not.toBe(source);
+    writeFileSync(skin, planted);
+    const { live, failures } = checkPilotPopulation(dir, join(dir, CATALOG), undefined, { revision: true });
+    expect(live.families.radio).toEqual(['shape', 'typography', 'rhythm', 'depth', 'states', 'motion']);
+    expect(live.notApplicable).toEqual({});
+    expect(failures).toContain('shape: published pilot denominator 4 != 5');
+    expect(failures).toContain('shape: published pilot not-applicable count 1 != 0');
+    expect(failures.some((line) => line.startsWith('radio/shape: published NOT APPLICABLE and now declared'))).toBe(true);
+  });
+
   it('MUTANT: a pilot family whose anatomy the skin no longer reaches is named on the axis it declares', async () => {
     const severed = MOUNTS.checkbox!.markup.replaceAll('ds-checkbox', 'ds-severed');
-    const result = await run({
+    const result = await probe({
       verticals: ['bithire'],
       themes: ['light'],
       families: Object.keys(pilot.families),
@@ -177,5 +263,42 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
     const failures = evaluatePilot(result, pilot);
     expect(failures).toContain('checkbox: declares shape and did not move on it in bithire/light');
     expect(failures).not.toContain('button: declares shape and did not move on it in bithire/light');
+  }, 900_000);
+
+  it('radio-group continuity: the population family the exclusion never reaches is mounted button-style and its option corner measured on the shape positive', async () => {
+    expect(RADIO_GROUP_MOUNT.markup).toContain('ds-radio-group--button');
+    expect(RADIO_GROUP_MOUNT.markup).toContain('data-part="option"');
+    expect(RADIO_GROUP_MOUNT.markup).toContain('data-button-style="solid"');
+    const result = await probe({
+      verticals: ['bithire'],
+      themes: ['light', 'dark'],
+      families: [...Object.keys(pilot.families), 'radio-group'],
+      scenarios: pairScenarios({ base: decisionsOf(PAIR[0]), other: decisionsOf(PAIR[1]) }),
+      mounts: { ...MOUNTS, 'radio-group': RADIO_GROUP_MOUNT },
+      compile: compileTenantThemeDocumentV2,
+    });
+    expect(result.families.mounted).toContain('radio-group');
+    expect(result.effectiveFamilies.shape).toContain('radio-group');
+    const shapeCells = result.cells.filter((cell) => cell.kind === 'positive' && cell.axis === 'shape');
+    expect(shapeCells.map((cell) => cell.theme).sort()).toEqual(['dark', 'light']);
+    const wiring = Object.fromEntries(shapeCells.map((cell) => [cell.theme, {
+      evidential: cell.evidential,
+      moved: cell.movedIds.includes('radio-group'),
+      property: cell.movedFamilies.find((entry) => entry.family === 'radio-group')?.property ?? null,
+    }]));
+    record['radio-group-continuity'] = {
+      family: 'radio-group',
+      scope: 'fleet family outside the pilot roster, mounted for continuity; not a pilot figure',
+      mount: 'Radio.Group buttonStyle="solid": the [data-part=option] corner at presentation/components/skin/radio-group/index.css:92',
+      pair: PAIR,
+      shape: wiring,
+      cells: shapeCells.map(({ movedFamilies: _moved, ...cell }) => cell),
+    };
+    writeRecord();
+    for (const cell of shapeCells) expect(cell.evidential).toBe(true);
+    // A correctly wired corner PASSES: the option corner moves with the shape decision in both modes.
+    for (const cell of shapeCells) expect(cell.movedIds).toContain('radio-group');
+    // Its presence changes no pilot verdict: the pilot denominators are the roster's alone.
+    expect(evaluatePilot(result, pilot)).toEqual([]);
   }, 900_000);
 });

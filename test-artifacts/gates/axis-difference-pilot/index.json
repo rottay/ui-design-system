@@ -1,0 +1,2886 @@
+{
+  "workOrder": "WO-EVI-05",
+  "scope": "pilot",
+  "pair": [
+    "product-dense",
+    "warm-humanist"
+  ],
+  "applicablePairs": 29,
+  "notApplicablePairs": [
+    "radio/shape"
+  ],
+  "notApplicable": {
+    "radio": {
+      "shape": {
+        "reason": "semantic identity: the indicator is round because round means single-choice, and the dot is bound to the indicator. The bare radio stamps no frame part for a corner to govern, its focus ring is an outline and its touch target is a height, which kit rule 4 does not count as shape. No shape decision may lawfully move these two radii without breaking what the control means.",
+        "review": "WO-EVI-05 core review 2026-09-14"
+      }
+    }
+  },
+  "exclusionsRevision": "34bd866512177f9b",
+  "runs": {
+    "product-dense->warm-humanist": {
+      "pilotPopulation": {
+        "scope": "pilot",
+        "cut": "WO-FAM-01",
+        "catalogRevision": "2a25f7c6068407fb",
+        "decisionRows": 29,
+        "exclusionsRevision": "34bd866512177f9b",
+        "families": {
+          "button": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "checkbox": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "radio": [
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "segmented": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "toggle": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ]
+        },
+        "notApplicable": {
+          "radio": {
+            "shape": {
+              "reason": "semantic identity: the indicator is round because round means single-choice, and the dot is bound to the indicator. The bare radio stamps no frame part for a corner to govern, its focus ring is an outline and its touch target is a height, which kit rule 4 does not count as shape. No shape decision may lawfully move these two radii without breaking what the control means.",
+              "review": "WO-EVI-05 core review 2026-09-14"
+            }
+          }
+        },
+        "withoutSkin": [],
+        "denominators": {
+          "shape": 4,
+          "typography": 5,
+          "rhythm": 5,
+          "depth": 5,
+          "states": 5,
+          "motion": 5
+        },
+        "notApplicableCounts": {
+          "shape": 1,
+          "typography": 0,
+          "rhythm": 0,
+          "depth": 0,
+          "states": 0,
+          "motion": 0
+        }
+      },
+      "revision": {
+        "digest": "2a25f7c6068407fb",
+        "decisionRows": 29
+      },
+      "browser": {
+        "specifier": "playwright",
+        "root": "/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/package.json",
+        "resolved": "/Users/daniel/Developer/Rottay/ui-design-system/node_modules/.pnpm/playwright@1.61.1/node_modules/playwright/index.js",
+        "browserVersion": "149.0.7827.55"
+      },
+      "bundleMode": "fresh",
+      "pilotReadings": [
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "shape",
+          "moved": 4,
+          "denominator": 4,
+          "notApplicable": 1,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "typography",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "rhythm",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "depth",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "states",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "motion",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "shape",
+          "moved": 4,
+          "denominator": 4,
+          "notApplicable": 1,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "typography",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "rhythm",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "depth",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "states",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "motion",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        }
+      ],
+      "cells": [
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 206,
+          "compiledB": 206,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 206,
+          "appliedB": 206,
+          "evidential": true,
+          "witness": null,
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 4,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "typography",
+          "kind": "positive",
+          "axis": "typography",
+          "compiledA": 206,
+          "compiledB": 202,
+          "baseA": 206,
+          "baseB": 202,
+          "appliedA": 206,
+          "appliedB": 202,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "rhythm",
+          "kind": "positive",
+          "axis": "rhythm",
+          "compiledA": 206,
+          "compiledB": 206,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 206,
+          "appliedB": 206,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "depth",
+          "kind": "positive",
+          "axis": "depth",
+          "compiledA": 206,
+          "compiledB": 213,
+          "baseA": 206,
+          "baseB": 213,
+          "appliedA": 206,
+          "appliedB": 213,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "states",
+          "kind": "positive",
+          "axis": "states",
+          "compiledA": 206,
+          "compiledB": 203,
+          "baseA": 206,
+          "baseB": 203,
+          "appliedA": 206,
+          "appliedB": 203,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "motion",
+          "kind": "positive",
+          "axis": "motion",
+          "compiledA": 206,
+          "compiledB": 207,
+          "baseA": 206,
+          "baseB": 207,
+          "appliedA": 206,
+          "appliedB": 207,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 206,
+          "compiledB": 209,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 206,
+          "appliedB": 209,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 209,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 206,
+          "compiledB": 209,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 206,
+          "appliedB": 209,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 209,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "rhythm",
+          "compiledA": 206,
+          "compiledB": 209,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 206,
+          "appliedB": 209,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 209,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "depth",
+          "compiledA": 206,
+          "compiledB": 209,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 206,
+          "appliedB": 209,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 209,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "states",
+          "compiledA": 206,
+          "compiledB": 209,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 206,
+          "appliedB": 209,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 209,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "motion",
+          "compiledA": 206,
+          "compiledB": 209,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 206,
+          "appliedB": 209,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 209,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 206,
+          "compiledB": 200,
+          "baseA": 206,
+          "baseB": 200,
+          "appliedA": 206,
+          "appliedB": 200,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 206,
+          "compiledB": 200,
+          "baseA": 206,
+          "baseB": 200,
+          "appliedA": 206,
+          "appliedB": 200,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": null,
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 4,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "typography",
+          "kind": "positive",
+          "axis": "typography",
+          "compiledA": 216,
+          "compiledB": 212,
+          "baseA": 206,
+          "baseB": 202,
+          "appliedA": 216,
+          "appliedB": 212,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "rhythm",
+          "kind": "positive",
+          "axis": "rhythm",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "depth",
+          "kind": "positive",
+          "axis": "depth",
+          "compiledA": 216,
+          "compiledB": 223,
+          "baseA": 206,
+          "baseB": 213,
+          "appliedA": 216,
+          "appliedB": 223,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "states",
+          "kind": "positive",
+          "axis": "states",
+          "compiledA": 216,
+          "compiledB": 213,
+          "baseA": 206,
+          "baseB": 203,
+          "appliedA": 216,
+          "appliedB": 213,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "motion",
+          "kind": "positive",
+          "axis": "motion",
+          "compiledA": 216,
+          "compiledB": 217,
+          "baseA": 206,
+          "baseB": 207,
+          "appliedA": 216,
+          "appliedB": 217,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 216,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 216,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "rhythm",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 216,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "depth",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 216,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "states",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 216,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "motion",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 209,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 216,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 216,
+          "compiledB": 210,
+          "baseA": 206,
+          "baseB": 200,
+          "appliedA": 216,
+          "appliedB": 210,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 216,
+          "compiledB": 210,
+          "baseA": 206,
+          "baseB": 200,
+          "appliedA": 216,
+          "appliedB": 210,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        }
+      ],
+      "refusals": [],
+      "failures": []
+    },
+    "warm-humanist->product-dense": {
+      "pilotPopulation": {
+        "scope": "pilot",
+        "cut": "WO-FAM-01",
+        "catalogRevision": "2a25f7c6068407fb",
+        "decisionRows": 29,
+        "exclusionsRevision": "34bd866512177f9b",
+        "families": {
+          "button": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "checkbox": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "radio": [
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "segmented": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ],
+          "toggle": [
+            "shape",
+            "typography",
+            "rhythm",
+            "depth",
+            "states",
+            "motion"
+          ]
+        },
+        "notApplicable": {
+          "radio": {
+            "shape": {
+              "reason": "semantic identity: the indicator is round because round means single-choice, and the dot is bound to the indicator. The bare radio stamps no frame part for a corner to govern, its focus ring is an outline and its touch target is a height, which kit rule 4 does not count as shape. No shape decision may lawfully move these two radii without breaking what the control means.",
+              "review": "WO-EVI-05 core review 2026-09-14"
+            }
+          }
+        },
+        "withoutSkin": [],
+        "denominators": {
+          "shape": 4,
+          "typography": 5,
+          "rhythm": 5,
+          "depth": 5,
+          "states": 5,
+          "motion": 5
+        },
+        "notApplicableCounts": {
+          "shape": 1,
+          "typography": 0,
+          "rhythm": 0,
+          "depth": 0,
+          "states": 0,
+          "motion": 0
+        }
+      },
+      "revision": {
+        "digest": "2a25f7c6068407fb",
+        "decisionRows": 29
+      },
+      "browser": {
+        "specifier": "playwright",
+        "root": "/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/package.json",
+        "resolved": "/Users/daniel/Developer/Rottay/ui-design-system/node_modules/.pnpm/playwright@1.61.1/node_modules/playwright/index.js",
+        "browserVersion": "149.0.7827.55"
+      },
+      "bundleMode": "fresh",
+      "pilotReadings": [
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "shape",
+          "moved": 4,
+          "denominator": 4,
+          "notApplicable": 1,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "typography",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "rhythm",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "depth",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "states",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "light",
+          "axis": "motion",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "shape",
+          "moved": 4,
+          "denominator": 4,
+          "notApplicable": 1,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "typography",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "rhythm",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "depth",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "states",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        },
+        {
+          "scope": "pilot",
+          "vertical": "bithire",
+          "theme": "dark",
+          "axis": "motion",
+          "moved": 5,
+          "denominator": 5,
+          "notApplicable": 0,
+          "declared": 5
+        }
+      ],
+      "cells": [
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 177,
+          "compiledB": 177,
+          "baseA": 177,
+          "baseB": 177,
+          "appliedA": 177,
+          "appliedB": 177,
+          "evidential": true,
+          "witness": null,
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 4,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "typography",
+          "kind": "positive",
+          "axis": "typography",
+          "compiledA": 177,
+          "compiledB": 181,
+          "baseA": 177,
+          "baseB": 181,
+          "appliedA": 177,
+          "appliedB": 181,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "rhythm",
+          "kind": "positive",
+          "axis": "rhythm",
+          "compiledA": 177,
+          "compiledB": 177,
+          "baseA": 177,
+          "baseB": 177,
+          "appliedA": 177,
+          "appliedB": 177,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "depth",
+          "kind": "positive",
+          "axis": "depth",
+          "compiledA": 177,
+          "compiledB": 170,
+          "baseA": 177,
+          "baseB": 170,
+          "appliedA": 177,
+          "appliedB": 170,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "states",
+          "kind": "positive",
+          "axis": "states",
+          "compiledA": 177,
+          "compiledB": 180,
+          "baseA": 177,
+          "baseB": 180,
+          "appliedA": 177,
+          "appliedB": 180,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "motion",
+          "kind": "positive",
+          "axis": "motion",
+          "compiledA": 177,
+          "compiledB": 176,
+          "baseA": 177,
+          "baseB": 176,
+          "appliedA": 177,
+          "appliedB": 176,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 177,
+          "compiledB": 174,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 177,
+          "appliedB": 174,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 177,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 177,
+          "compiledB": 174,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 177,
+          "appliedB": 174,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 177,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "rhythm",
+          "compiledA": 177,
+          "compiledB": 174,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 177,
+          "appliedB": 174,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 177,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "depth",
+          "compiledA": 177,
+          "compiledB": 174,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 177,
+          "appliedB": 174,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 177,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "states",
+          "compiledA": 177,
+          "compiledB": 174,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 177,
+          "appliedB": 174,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 177,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "motion",
+          "compiledA": 177,
+          "compiledB": 174,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 177,
+          "appliedB": 174,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 177,
+            "differing": 113,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 177,
+          "compiledB": 183,
+          "baseA": 177,
+          "baseB": 183,
+          "appliedA": 177,
+          "appliedB": 183,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 177,
+          "compiledB": 183,
+          "baseA": 177,
+          "baseB": 183,
+          "appliedA": 177,
+          "appliedB": 183,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 177,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": null,
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 4,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "typography",
+          "kind": "positive",
+          "axis": "typography",
+          "compiledA": 184,
+          "compiledB": 188,
+          "baseA": 177,
+          "baseB": 181,
+          "appliedA": 184,
+          "appliedB": 188,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "rhythm",
+          "kind": "positive",
+          "axis": "rhythm",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 177,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "depth",
+          "kind": "positive",
+          "axis": "depth",
+          "compiledA": 184,
+          "compiledB": 177,
+          "baseA": 177,
+          "baseB": 170,
+          "appliedA": 184,
+          "appliedB": 177,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "states",
+          "kind": "positive",
+          "axis": "states",
+          "compiledA": 184,
+          "compiledB": 187,
+          "baseA": 177,
+          "baseB": 180,
+          "appliedA": 184,
+          "appliedB": 187,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "motion",
+          "kind": "positive",
+          "axis": "motion",
+          "compiledA": 184,
+          "compiledB": 183,
+          "baseA": 177,
+          "baseB": 176,
+          "appliedA": 184,
+          "appliedB": 183,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 184,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 184,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "rhythm",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 184,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "depth",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 184,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "states",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 184,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "palette-only",
+          "kind": "negative",
+          "axis": "motion",
+          "compiledA": 184,
+          "compiledB": 184,
+          "baseA": 177,
+          "baseB": 174,
+          "appliedA": 184,
+          "appliedB": 184,
+          "evidential": true,
+          "witness": {
+            "kind": "effective-map",
+            "control": "color group",
+            "channels": 184,
+            "differing": 50,
+            "differingChannels": [
+              "--ds-button-primary-bg-hover",
+              "--ds-chart-series-1",
+              "--ds-chart-series-10",
+              "--ds-chart-series-2",
+              "--ds-chart-series-3",
+              "--ds-chart-series-4",
+              "--ds-chart-series-5",
+              "--ds-chart-series-6",
+              "--ds-chart-series-7",
+              "--ds-chart-series-8",
+              "--ds-chart-series-9",
+              "--ds-color-accent"
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "shape",
+          "compiledA": 184,
+          "compiledB": 190,
+          "baseA": 177,
+          "baseB": 183,
+          "appliedA": 184,
+          "appliedB": 190,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 4,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "states-emphasis-only",
+          "kind": "negative",
+          "axis": "typography",
+          "compiledA": 184,
+          "compiledB": 190,
+          "baseA": 177,
+          "baseB": 183,
+          "appliedA": 184,
+          "appliedB": 190,
+          "evidential": true,
+          "witness": {
+            "kind": "axis-positive",
+            "axis": "states",
+            "control": "states.emphasis",
+            "positive": "states",
+            "moved": 5,
+            "denominator": 5,
+            "movedFamilies": [
+              {
+                "family": "button",
+                "property": "transform"
+              },
+              {
+                "family": "checkbox",
+                "property": "transform"
+              },
+              {
+                "family": "radio",
+                "property": "transform"
+              },
+              {
+                "family": "segmented",
+                "property": "transform"
+              },
+              {
+                "family": "toggle",
+                "property": "transform"
+              }
+            ]
+          },
+          "denominator": 5,
+          "excludedUnsettled": [
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "mobile-header"
+          ],
+          "moved": 0,
+          "percent": 0,
+          "movedIds": []
+        }
+      ],
+      "refusals": [],
+      "failures": []
+    },
+    "radio-group-continuity": {
+      "family": "radio-group",
+      "scope": "fleet family outside the pilot roster, mounted for continuity; not a pilot figure",
+      "mount": "Radio.Group buttonStyle=\"solid\": the [data-part=option] corner at presentation/components/skin/radio-group/index.css:92",
+      "pair": [
+        "product-dense",
+        "warm-humanist"
+      ],
+      "shape": {
+        "light": {
+          "evidential": true,
+          "moved": true,
+          "property": "border-top-left-radius"
+        },
+        "dark": {
+          "evidential": true,
+          "moved": true,
+          "property": "border-top-left-radius"
+        }
+      },
+      "cells": [
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 206,
+          "compiledB": 206,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 206,
+          "appliedB": 206,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio-group",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 5,
+          "percent": 100,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "radio-group",
+            "segmented",
+            "toggle"
+          ]
+        }
+      ]
+    }
+  }
+}

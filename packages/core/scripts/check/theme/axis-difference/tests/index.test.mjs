@@ -819,12 +819,20 @@ describe('axis-difference — the pilot verdict', () => {
     assert.deepEqual(evaluatePilot(pilotRun(), PILOT), []);
   });
 
-  it('publishes pilot readings over the pilot denominator, labelled as the pilot', () => {
+  it('publishes pilot readings over the pilot denominator with the N/A beside it, labelled as the pilot', () => {
     const readings = pilotReadings(pilotRun(), PILOT);
     assert.ok(readings.every((entry) => entry.scope === 'pilot'));
     assert.deepEqual(readings.find((entry) => entry.axis === 'states'), {
-      scope: 'pilot', vertical: 'bithire', theme: 'light', axis: 'states', moved: 2, denominator: 2,
+      scope: 'pilot', vertical: 'bithire', theme: 'light', axis: 'states', moved: 2, denominator: 2, notApplicable: 0,
     });
+    const withdrawn = {
+      ...PILOT,
+      families: { ...PILOT.families, radio: ['states'] },
+      notApplicable: { radio: { shape: { reason: 'semantic identity', review: 'core review' } } },
+    };
+    const shape = pilotReadings(pilotRun(), withdrawn).find((entry) => entry.axis === 'shape');
+    assert.equal(shape.denominator, 2, 'the N/A family is outside the applicable denominator');
+    assert.equal(shape.notApplicable, 1, 'and is published beside it, so 2/2 cannot be read as the whole axis');
   });
 
   it('MUTANT: a pilot family that does not move on an axis it declares is named', () => {

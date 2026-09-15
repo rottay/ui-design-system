@@ -1353,7 +1353,7 @@ export function evaluatePilot(result, pilot) {
   return failures;
 }
 
-/** Pilot family `moved/denominator` per positive cell, labelled as the pilot's so it cannot pass for a fleet figure. */
+/** Pilot family `moved/denominator` per positive cell with the axis's reviewed N/A beside it, labelled as the pilot's so it cannot pass for a fleet figure. */
 export function pilotReadings(result, pilot) {
   return result.cells.filter((cell) => cell.kind === 'positive').map((cell) => {
     const declaring = Object.keys(pilot.families).filter((family) => pilot.families[family].includes(cell.axis));
@@ -1364,6 +1364,7 @@ export function pilotReadings(result, pilot) {
       axis: cell.axis,
       moved: declaring.filter((family) => cell.movedIds.includes(family)).length,
       denominator: declaring.length,
+      notApplicable: Object.values(pilot.notApplicable ?? {}).filter((axes) => Object.hasOwn(axes, cell.axis)).length,
     };
   });
 }

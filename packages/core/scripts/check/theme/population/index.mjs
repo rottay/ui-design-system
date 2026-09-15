@@ -33,6 +33,7 @@
  *   node scripts/check/theme/population/index.mjs          the published report
  *   node scripts/check/theme/population/index.mjs --json    the same, machine-readable
  *   node scripts/check/theme/population/index.mjs --pilot   the WO-EVI-05 pilot population against its pin
+ *   node scripts/check/theme/population/index.mjs --exclusions   the reviewed exclusion registry against the tree
  */
 
 import { createHash } from 'node:crypto';
@@ -75,7 +76,8 @@ export const AXES = Object.freeze({
   shape: {
     group: 'shape',
     authored: ['border-radius', 'border-start-start-radius', 'border-start-end-radius',
-      'border-end-start-radius', 'border-end-end-radius'],
+      'border-end-start-radius', 'border-end-end-radius', 'border-top-left-radius',
+      'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius'],
     computed: ['border-top-left-radius', 'border-top-right-radius',
       'border-bottom-left-radius', 'border-bottom-right-radius'],
   },
@@ -247,24 +249,189 @@ export function readChannels(css) {
 }
 
 /**
- * family -> the axes it DECLARES it consumes, with the evidence for each.
+ * The style-rule prelude of `check/theme/axis-difference`: a run of text
+ * without braces or `@` before an opening brace. The two instruments share
+ * this one vocabulary so a selector the probe can read is a selector the
+ * population can attribute a declaration to, and the population drill holds
+ * the probe's source to the same literal.
+ */
+export const SELECTOR_RULE = /(^|\})([^{}@]+)\{/gu;
+
+export const normalizeCssText = (text) => text.replace(/\s+/g, ' ').trim();
+
+/**
+ * The rules a stylesheet declares, comments removed, each with its selector,
+ * the at-rules enclosing it and its declarations in order.
+ *
+ * Declarations are read at RULE level rather than off the joined text so a
+ * declaration can be told apart by the part it paints: a `border-radius` on
+ * the indicator of a radio and one on its root are different declarations,
+ * and only the first has a semantic-identity review behind it. The scanner is
+ * brace-aware because 929 at-rules enclose rules in the Modern corpus and ten
+ * radius declarations sit inside them; a regex anchored on `}` never sees the
+ * first rule after an at-rule's own brace. A declaration written directly
+ * inside a block at-rule (`@font-face`) is attributed to that at-rule as its
+ * selector, so the property set this yields is the one `declaredProperties`
+ * yields and no family gains or loses an axis by the change of reader.
+ */
+export function cssRules(css) {
+  const source = stripCssComments(css);
+  const rules = [];
+  const context = [];
+  let prelude = '';
+  let quote = null;
+  let parentheses = 0;
+  const top = () => context[context.length - 1];
+  const ruleFor = (frame) => {
+    if (frame.rule) return frame.rule;
+    frame.rule = { selector: normalizeCssText(frame.prelude), atRules: frame.atRules, declarations: [] };
+    rules.push(frame.rule);
+    return frame.rule;
+  };
+  const flush = () => {
+    const text = prelude;
+    prelude = '';
+    const frame = top();
+    if (!frame) return;
+    const colon = text.indexOf(':');
+    if (colon < 0) return;
+    const property = text.slice(0, colon).trim().toLowerCase();
+    if (!/^[-a-z]+$/u.test(property)) return;
+    ruleFor(frame).declarations.push({ property, value: normalizeCssText(text.slice(colon + 1)) });
+  };
+  for (let index = 0; index < source.length; index += 1) {
+    const char = source[index];
+    if (quote !== null) {
+      prelude += char;
+      if (char === quote && source[index - 1] !== '\\') quote = null;
+      continue;
+    }
+    if (char === '"' || char === "'") {
+      quote = char;
+      prelude += char;
+      continue;
+    }
+    if (char === '(') parentheses += 1;
+    if (char === ')') parentheses = Math.max(0, parentheses - 1);
+    if (parentheses > 0) {
+      prelude += char;
+      continue;
+    }
+    if (char === '{') {
+      const text = prelude.trim();
+      prelude = '';
+      const atRules = context.filter((frame) => frame.kind === 'at').map((frame) => normalizeCssText(frame.prelude));
+      if (text.startsWith('@')) {
+        context.push({ kind: 'at', prelude: text, atRules, rule: null });
+      } else {
+        const frame = { kind: 'rule', prelude: text, atRules, rule: null };
+        context.push(frame);
+        ruleFor(frame);
+      }
+      continue;
+    }
+    if (char === '}') {
+      flush();
+      context.pop();
+      continue;
+    }
+    if (char === ';') {
+      flush();
+      continue;
+    }
+    prelude += char;
+  }
+  return rules;
+}
+
+function relativeTo(root, file) {
+  return file.startsWith(root + sep) ? file.slice(root.length + 1) : file;
+}
+
+/**
+ * The reviewed semantic-identity exclusions: a closed registry of data, one
+ * entry per (family, axis, skin file), each naming the exact declarations the
+ * core review read. `admitted` pins which (family, axis) pairs the registry
+ * may carry at all; a new pair returns to review before it can act.
+ */
+export const EXCLUSIONS_PATH = join(HERE, 'exclusions/index.json');
+export const EXCLUSION_PATHS = Object.freeze(['byProperty']);
+
+export function readExclusions(path = EXCLUSIONS_PATH) {
+  const registry = JSON.parse(readFileSync(path, 'utf8'));
+  return { ...registry, admitted: registry.admitted ?? [], entries: registry.entries ?? [] };
+}
+
+/** A content digest of the registry, so a publication can say which exclusion revision it was measured under. */
+export function exclusionsRevision(path = EXCLUSIONS_PATH) {
+  return createHash('sha256').update(readFileSync(path)).digest('hex').slice(0, 16);
+}
+
+const declarationKey = (declaration) =>
+  `${normalizeCssText(declaration.selector)} { ${declaration.property.toLowerCase()}: ${normalizeCssText(declaration.value)} }`;
+
+/**
+ * The exclusion entry that names this exact declaration for this family, axis
+ * and file, or null. Verbatim means selector, property AND value: a value that
+ * gains a channel or changes token stops matching, and so does the same
+ * selector authored again with another radius, because that second
+ * declaration is a declaration of its own and nothing in the registry names it.
+ */
+function matchingExclusion(registry, family, axis, file, selector, declaration) {
+  const key = declarationKey({ selector, ...declaration });
+  for (const entry of registry.entries) {
+    if (entry.family !== family || entry.axis !== axis || entry.skin !== file) continue;
+    if ((entry.path ?? 'byProperty') !== 'byProperty') continue;
+    if ((entry.declarations ?? []).some((reviewed) => declarationKey(reviewed) === key)) return entry;
+  }
+  return null;
+}
+
+/**
+ * family -> the axes it DECLARES it consumes, with the evidence for each, and
+ * the axes a reviewed exclusion withdrew it from, with the reason.
  *
  * The evidence is kept rather than collapsed to a boolean because a denominator
  * without evidence cannot be argued with, and this one will be argued with:
  * every percentage this lane publishes is a fraction of it.
+ *
+ * An exclusion acts on the byProperty path alone and only on a declaration
+ * that matches an entry verbatim. A family is NOT APPLICABLE on an axis when
+ * every authored declaration of that axis is excluded and no head channel of
+ * the axis is read; a family that still authors the axis elsewhere keeps its
+ * membership and the entry is reported as ineffective, never as a withdrawal.
  */
-export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE) {
+export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, exclusionsPath = EXCLUSIONS_PATH) {
   const channelsByAxis = axisChannels(sourcePath);
+  const registry = readExclusions(exclusionsPath);
   const declarations = new Map();
   for (const [family, files] of skinFamilies(root)) {
-    const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    const properties = declaredProperties(css);
+    const sources = files.map((file) => ({ file: relativeTo(root, file), css: readFileSync(file, 'utf8') }));
+    const css = sources.map((source) => source.css).join('\n');
+    const rulesByFile = sources.map((source) => ({ file: source.file, rules: cssRules(source.css) }));
     const channels = readChannels(css);
     const stripped = stripCssComments(css);
     const axes = {};
+    const notApplicable = {};
     for (const axis of AXIS_IDS) {
       const spec = AXES[axis];
-      const byProperty = spec.authored.filter((name) => properties.has(name));
+      const authored = new Set(spec.authored);
+      const declaredNames = new Set();
+      const excluded = [];
+      for (const { file, rules } of rulesByFile) {
+        for (const rule of rules) {
+          for (const declaration of rule.declarations) {
+            if (!authored.has(declaration.property)) continue;
+            const entry = matchingExclusion(registry, family, axis, file, rule.selector, declaration);
+            if (entry) {
+              excluded.push({ file, selector: rule.selector, property: declaration.property, value: declaration.value, review: entry.review });
+            } else {
+              declaredNames.add(declaration.property);
+            }
+          }
+        }
+      }
+      const byProperty = spec.authored.filter((name) => declaredNames.has(name));
       const byHeadChannel = [...channelsByAxis.get(axis)].filter((channel) => channels.has(channel));
       const bySelector = axis === 'states'
         ? spec.stateSelectors.filter((needle) => stripped.includes(needle))
@@ -280,21 +447,25 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
           headChannels: byHeadChannel,
           stateSelectors: bySelector,
           stateChannels: byStateChannel.slice(0, 8),
+          ...(excluded.length > 0 ? { excludedDeclarations: excluded, exclusionEffective: false } : {}),
+        };
+      } else if (excluded.length > 0) {
+        const entry = registry.entries.find((candidate) => candidate.family === family && candidate.axis === axis);
+        notApplicable[axis] = {
+          reason: entry.reason,
+          review: entry.review,
+          excludedDeclarations: excluded,
         };
       }
     }
-    declarations.set(family, { family, files: files.map((file) => relativeTo(root, file)), axes });
+    declarations.set(family, { family, files: sources.map((source) => source.file), axes, notApplicable });
   }
   return declarations;
 }
 
-function relativeTo(root, file) {
-  return file.startsWith(root + sep) ? file.slice(root.length + 1) : file;
-}
-
-/** axis -> the families in its denominator, sorted. The published population. */
-export function axisPopulations(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE) {
-  const declarations = familyAxisDeclarations(root, sourcePath);
+/** axis -> the families in its denominator, sorted. The published (applicable) population. */
+export function axisPopulations(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, exclusionsPath = EXCLUSIONS_PATH) {
+  const declarations = familyAxisDeclarations(root, sourcePath, exclusionsPath);
   const populations = new Map(AXIS_IDS.map((axis) => [axis, []]));
   for (const [family, record] of declarations) {
     for (const axis of Object.keys(record.axes)) populations.get(axis).push(family);
@@ -303,85 +474,219 @@ export function axisPopulations(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE
   return populations;
 }
 
-/** The whole published population, in one object, revision included. */
-export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE) {
-  const revision = catalogRevision(sourcePath);
-  const populations = axisPopulations(root, sourcePath);
-  const controls = axisControls(sourcePath);
+/** axis -> the families a reviewed exclusion withdrew from it, each with its reason; disjoint from `axisPopulations` by construction. */
+export function axisNotApplicable(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, exclusionsPath = EXCLUSIONS_PATH) {
+  const declarations = familyAxisDeclarations(root, sourcePath, exclusionsPath);
+  const byAxis = new Map(AXIS_IDS.map((axis) => [axis, []]));
+  for (const [family, record] of declarations) {
+    for (const [axis, entry] of Object.entries(record.notApplicable)) {
+      byAxis.get(axis).push({ family, reason: entry.reason, review: entry.review, excludedDeclarations: entry.excludedDeclarations });
+    }
+  }
+  for (const list of byAxis.values()) list.sort((a, b) => a.family.localeCompare(b.family));
+  return byAxis;
+}
+
+/**
+ * The registry against the tree. Fails closed on every drift path the review
+ * named: an unadmitted pair, a duplicate, a family or file the registry does
+ * not own, a selector absent from the comment-stripped skin (a selector that
+ * survives only in a comment is the F-23 class), and a reviewed declaration
+ * the skin no longer authors verbatim -- that family has re-entered by itself
+ * and the entry must return to review rather than sit stale.
+ */
+export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXCLUSIONS_PATH) {
+  const failures = [];
+  let registry;
+  try {
+    registry = readExclusions(exclusionsPath);
+  } catch (error) {
+    return { registry: null, failures: [`exclusion registry unreadable: ${error instanceof Error ? error.message : String(error)}`] };
+  }
   const families = skinFamilies(root);
+  const admitted = new Set(registry.admitted.map((pair) => `${pair.family}/${pair.axis}`));
+  const seenEntries = new Set();
+  registry.entries.forEach((entry, index) => {
+    const label = `entry ${index} (${entry.family ?? '?'}/${entry.axis ?? '?'})`;
+    const pair = `${entry.family}/${entry.axis}`;
+    if (!admitted.has(pair)) failures.push(`${label}: ${pair} is not an admitted exclusion; a new pair returns to core review before it can act`);
+    if (!AXIS_IDS.includes(entry.axis)) failures.push(`${label}: axis ${entry.axis} is not an axis of kit rule 4`);
+    if (!EXCLUSION_PATHS.includes(entry.path)) failures.push(`${label}: path ${entry.path} is not byProperty; a head-channel read is never excluded`);
+    for (const field of ['reason', 'review']) {
+      if (typeof entry[field] !== 'string' || entry[field].trim().length === 0) failures.push(`${label}: ${field} is empty`);
+    }
+    const entryKey = `${entry.family}/${entry.axis}/${entry.skin}`;
+    if (seenEntries.has(entryKey)) failures.push(`${label}: duplicate of an earlier entry for ${entryKey}`);
+    seenEntries.add(entryKey);
+    const files = families.get(entry.family);
+    if (!files) {
+      failures.push(`${label}: ${entry.family} is not a skin family`);
+      return;
+    }
+    const owned = files.map((file) => relativeTo(root, file));
+    if (!owned.includes(entry.skin)) {
+      failures.push(`${label}: ${entry.skin} is not a skin file of ${entry.family} (${owned.join(', ')})`);
+      return;
+    }
+    const rules = cssRules(readFileSync(join(root, entry.skin), 'utf8'));
+    const selectors = new Set(rules.map((rule) => rule.selector));
+    const authoredKeys = new Set();
+    for (const rule of rules) {
+      for (const declaration of rule.declarations) authoredKeys.add(declarationKey({ selector: rule.selector, ...declaration }));
+    }
+    const declarations = entry.declarations ?? [];
+    if (declarations.length === 0) failures.push(`${label}: names no declaration`);
+    const seenDeclarations = new Set();
+    for (const reviewed of declarations) {
+      const key = declarationKey(reviewed);
+      if (seenDeclarations.has(key)) failures.push(`${label}: declaration listed twice: ${key}`);
+      seenDeclarations.add(key);
+      if (!AXES[entry.axis]?.authored.includes(reviewed.property.toLowerCase())) {
+        failures.push(`${label}: ${reviewed.property} is not an authored longhand of ${entry.axis}`);
+      }
+      if (!selectors.has(normalizeCssText(reviewed.selector))) {
+        failures.push(`${label}: selector not authored in ${entry.skin} (comments removed): ${reviewed.selector}`);
+        continue;
+      }
+      if (!authoredKeys.has(key)) {
+        failures.push(`${label}: STALE — ${entry.skin} no longer authors ${key} verbatim; the family has re-entered ${entry.axis} and the entry must be re-reviewed or removed`);
+      }
+    }
+  });
+  return { registry, failures };
+}
+
+/** The whole published population, in one object, revision and exclusions included. */
+export function populationReport(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, exclusionsPath = EXCLUSIONS_PATH) {
+  const revision = catalogRevision(sourcePath);
+  const declarations = familyAxisDeclarations(root, sourcePath, exclusionsPath);
+  const populations = new Map(AXIS_IDS.map((axis) => [axis, []]));
+  const notApplicable = new Map(AXIS_IDS.map((axis) => [axis, []]));
+  const ineffective = [];
+  for (const [family, record] of declarations) {
+    for (const [axis, evidence] of Object.entries(record.axes)) {
+      populations.get(axis).push(family);
+      if (evidence.exclusionEffective === false) {
+        ineffective.push({ family, axis, stillDeclares: evidence.properties, headChannels: evidence.headChannels });
+      }
+    }
+    for (const [axis, entry] of Object.entries(record.notApplicable)) {
+      notApplicable.get(axis).push({ family, reason: entry.reason, review: entry.review });
+    }
+  }
+  for (const list of populations.values()) list.sort();
+  for (const list of notApplicable.values()) list.sort((a, b) => a.family.localeCompare(b.family));
+  const controls = axisControls(sourcePath);
+  const registry = readExclusions(exclusionsPath);
   return {
     revision,
     excludedGroup: EXCLUDED_GROUP,
-    skinFamilies: families.size,
+    skinFamilies: declarations.size,
+    exclusions: {
+      source: relativeTo(root, exclusionsPath),
+      revision: exclusionsRevision(exclusionsPath),
+      entries: registry.entries.length,
+      admitted: registry.admitted,
+      ineffective,
+    },
     axes: AXIS_IDS.map((axis) => ({
       axis,
       group: AXES[axis].group,
       controls: controls.get(axis),
       denominator: populations.get(axis).length,
       families: populations.get(axis),
+      notApplicableCount: notApplicable.get(axis).length,
+      notApplicable: notApplicable.get(axis),
     })),
   };
 }
 
-/** One line the runner prints so every run states the revision it measured at. */
-export function populationLine(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE) {
-  const report = populationReport(root, sourcePath);
-  const axes = report.axes.map((entry) => `${entry.axis} ${entry.denominator}`).join(', ');
+/** One line the runner prints so every run states the revision it measured at, with the N/A beside every denominator. */
+export function populationLine(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, exclusionsPath = EXCLUSIONS_PATH) {
+  const report = populationReport(root, sourcePath, exclusionsPath);
+  const axes = report.axes.map((entry) => `${entry.axis} ${entry.denominator} (${entry.notApplicableCount} N/A)`).join(', ');
   return `population: theme catalog ${report.revision.digest} (${report.revision.decisionRows} decisions), `
+    + `exclusions ${report.exclusions.revision} (${report.exclusions.entries} reviewed), `
     + `${report.skinFamilies} modern skin families; per-axis denominators — ${axes}`;
 }
 
 /**
  * The PILOT population of `WO-EVI-05`: the families of one family cut, the axes
- * each declares, and the catalog revision both were read at.
+ * each declares, the axes a reviewed exclusion withdrew, and the catalog and
+ * exclusion revisions all of it was read at.
  *
  * Membership is read from the family-cut roster (`cut` names the owning work
  * order), and each family's axes from the same skin declarations every fleet
  * denominator uses, so the pilot is a subset of the fleet population and never
  * a second listing of it. Its denominators are the pilot's alone: a fleet claim
- * may not cite them (`WO-EVI-05`, Do NOT).
+ * may not cite them (`WO-EVI-05`, Do NOT). `notApplicable` is published beside
+ * every denominator so a pilot reading can never be read as 4/4 without it.
  */
 export const PILOT_CUT = 'WO-FAM-01';
 export const FAMILY_CUT_ROSTER = 'scripts/check/family-cut/baseline/index.json';
 export const PILOT_PIN_PATH = join(HERE, 'pilot/index.json');
 
-export function pilotPopulation(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, cut = PILOT_CUT) {
+export function pilotPopulation(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, cut = PILOT_CUT, exclusionsPath = EXCLUSIONS_PATH) {
   const roster = JSON.parse(readFileSync(join(root, FAMILY_CUT_ROSTER), 'utf8')).families ?? {};
   const members = Object.keys(roster).filter((family) => roster[family].cut === cut).sort();
-  const declarations = familyAxisDeclarations(root, sourcePath);
+  const declarations = familyAxisDeclarations(root, sourcePath, exclusionsPath);
   const revision = catalogRevision(sourcePath);
   const families = Object.fromEntries(members.map((family) => [
     family,
     AXIS_IDS.filter((axis) => Object.hasOwn(declarations.get(family)?.axes ?? {}, axis)),
   ]));
+  const notApplicable = {};
+  for (const family of members) {
+    const withdrawn = declarations.get(family)?.notApplicable ?? {};
+    if (Object.keys(withdrawn).length === 0) continue;
+    notApplicable[family] = Object.fromEntries(
+      AXIS_IDS.filter((axis) => Object.hasOwn(withdrawn, axis))
+        .map((axis) => [axis, { reason: withdrawn[axis].reason, review: withdrawn[axis].review }]),
+    );
+  }
   return {
     scope: 'pilot',
     cut,
     catalogRevision: revision.digest,
     decisionRows: revision.decisionRows,
+    exclusionsRevision: exclusionsRevision(exclusionsPath),
     families,
+    notApplicable,
     withoutSkin: members.filter((family) => !declarations.has(family)),
     denominators: Object.fromEntries(
       AXIS_IDS.map((axis) => [axis, members.filter((family) => families[family].includes(axis)).length]),
     ),
+    notApplicableCounts: Object.fromEntries(
+      AXIS_IDS.map((axis) => [axis, members.filter((family) => Object.hasOwn(notApplicable[family] ?? {}, axis)).length]),
+    ),
   };
 }
 
+/** Pilot readings with the N/A of their axis beside `moved/denominator`; `denominator` stays the applicable count. */
+export function withNotApplicable(readings, pilot) {
+  return readings.map((reading) => ({
+    ...reading,
+    notApplicable: pilot.notApplicableCounts?.[reading.axis] ?? 0,
+    declared: reading.denominator + (pilot.notApplicableCounts?.[reading.axis] ?? 0),
+  }));
+}
+
 /**
- * The published pilot population against the tree. Families, axes and
- * denominators must match exactly; the revision is compared only when asked,
- * because the pin names the revision the last pilot RUN was measured at and a
- * catalog edit elsewhere makes that run stale rather than this structure wrong.
+ * The published pilot population against the tree. Families, axes,
+ * denominators and the not-applicable set must match exactly; the revisions
+ * are compared only when asked, because the pin names the revisions the last
+ * pilot RUN was measured at and a catalog edit elsewhere makes that run stale
+ * rather than this structure wrong.
  */
 export function checkPilotPopulation(
   root = DEFAULT_ROOT,
   sourcePath = CATALOG_SOURCE,
   pinPath = PILOT_PIN_PATH,
-  { revision = false } = {},
+  { revision = false, exclusionsPath = EXCLUSIONS_PATH } = {},
 ) {
-  const live = pilotPopulation(root, sourcePath);
+  const live = pilotPopulation(root, sourcePath, PILOT_CUT, exclusionsPath);
   const pin = JSON.parse(readFileSync(pinPath, 'utf8'));
-  const failures = [];
+  const failures = checkExclusionRegistry(root, exclusionsPath).failures.map((line) => `exclusion registry: ${line}`);
   if (Object.keys(live.families).length === 0) {
     failures.push(`${live.cut}: the family-cut roster names no family, so the pilot population is empty`);
   }
@@ -399,15 +704,45 @@ export function checkPilotPopulation(
       failures.push(`${family}: published axes [${pinned.join(', ')}] != declared [${measured.join(', ')}]`);
     }
   }
+  const pinnedNotApplicable = pin.notApplicable ?? {};
+  for (const family of names) {
+    for (const axis of AXIS_IDS) {
+      const pinnedEntry = pinnedNotApplicable[family]?.[axis];
+      const liveEntry = live.notApplicable[family]?.[axis];
+      if (pinnedEntry && (pin.families?.[family] ?? []).includes(axis)) {
+        failures.push(`${family}/${axis}: published BOTH applicable and not applicable; the two sets must be disjoint`);
+      }
+      if (pinnedEntry && !liveEntry) {
+        failures.push(
+          `${family}/${axis}: published NOT APPLICABLE and now declared — a configurable corner (or a changed reviewed `
+          + 'declaration) restored applicability; re-publish the pilot population and re-review the exclusion',
+        );
+      } else if (!pinnedEntry && liveEntry) {
+        failures.push(`${family}/${axis}: withdrawn by a reviewed exclusion (${liveEntry.review}) and the published pilot population still counts it`);
+      } else if (pinnedEntry && liveEntry
+        && (pinnedEntry.reason !== liveEntry.reason || pinnedEntry.review !== liveEntry.review)) {
+        failures.push(`${family}/${axis}: the published not-applicable reason or review differs from the registry's`);
+      }
+    }
+  }
   for (const axis of AXIS_IDS) {
     if (pin.denominators?.[axis] !== live.denominators[axis]) {
       failures.push(`${axis}: published pilot denominator ${pin.denominators?.[axis]} != ${live.denominators[axis]}`);
+    }
+    if ((pin.notApplicableCounts?.[axis] ?? 0) !== live.notApplicableCounts[axis]) {
+      failures.push(`${axis}: published pilot not-applicable count ${pin.notApplicableCounts?.[axis] ?? 0} != ${live.notApplicableCounts[axis]}`);
     }
   }
   if (revision && pin.catalogRevision !== live.catalogRevision) {
     failures.push(
       `catalog revision ${live.catalogRevision} != published ${pin.catalogRevision}: the pilot run and its `
       + 'population must be re-published together at the revision they were measured at',
+    );
+  }
+  if (revision && pin.exclusionsRevision !== live.exclusionsRevision) {
+    failures.push(
+      `exclusions revision ${live.exclusionsRevision} != published ${pin.exclusionsRevision}: the pilot run and its `
+      + 'population must be re-published together under the exclusion review they were measured at',
     );
   }
   return { live, pin, failures };
@@ -425,12 +760,14 @@ export const FLOOR_PATH = join(HERE, 'baseline/index.json');
  * percentage in this lane easier to pass, so shrinkage is the regression and
  * growth is the only free direction. Growth is still REPORTED, with the
  * instruction to raise the pin in the same commit, so the floor follows the
- * tree up and a silent drift in either direction is impossible.
+ * tree up and a silent drift in either direction is impossible. A reviewed
+ * exclusion is the one lawful subtraction, and it is pinned beside the
+ * denominator it subtracts from so the two can never drift apart silently.
  */
-export function checkPopulationFloor(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, floorPath = FLOOR_PATH) {
-  const report = populationReport(root, sourcePath);
+export function checkPopulationFloor(root = DEFAULT_ROOT, sourcePath = CATALOG_SOURCE, floorPath = FLOOR_PATH, exclusionsPath = EXCLUSIONS_PATH) {
+  const report = populationReport(root, sourcePath, exclusionsPath);
   const floor = JSON.parse(readFileSync(floorPath, 'utf8'));
-  const failures = [];
+  const failures = checkExclusionRegistry(root, exclusionsPath).failures.map((line) => `exclusion registry: ${line}`);
   const pinned = floor.axes ?? {};
   for (const axis of AXIS_IDS) {
     if (!Object.hasOwn(pinned, axis)) {
@@ -456,6 +793,19 @@ export function checkPopulationFloor(root = DEFAULT_ROOT, sourcePath = CATALOG_S
         + 'the published population and the floor keep naming the same set',
       );
     }
+    const pinnedNotApplicable = floor.notApplicable?.[entry.axis] ?? 0;
+    if (entry.notApplicableCount !== pinnedNotApplicable) {
+      failures.push(
+        `${entry.axis}: ${entry.notApplicableCount} famil(ies) not applicable != pinned ${pinnedNotApplicable} — a reviewed `
+        + 'exclusion is published beside the denominator it subtracts from; re-pin both in the same commit with the review',
+      );
+    }
+  }
+  if (typeof floor.exclusionsRevision === 'string' && floor.exclusionsRevision !== report.exclusions.revision) {
+    failures.push(
+      `exclusions revision ${report.exclusions.revision} != pinned ${floor.exclusionsRevision} — the registry moved; `
+      + 're-pin it here in the same commit with the review that changed it',
+    );
   }
   if (typeof floor.skinFamilies === 'number' && report.skinFamilies !== floor.skinFamilies) {
     failures.push(
@@ -475,13 +825,36 @@ if (isMain && process.argv.includes('--pilot')) {
     revision: process.argv.includes('--check'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(live, null, 2));
-  console.log(`pilot population (${live.cut}) — catalog ${live.catalogRevision}, ${Object.keys(live.families).length} families; `
-    + `pilot denominators — ${AXIS_IDS.map((axis) => `${axis} ${live.denominators[axis]}`).join(', ')}`);
-  for (const [family, axes] of Object.entries(live.families)) console.log(`  ${family.padEnd(11)} ${axes.join(', ')}`);
+  console.log(`pilot population (${live.cut}) — catalog ${live.catalogRevision}, exclusions ${live.exclusionsRevision}, `
+    + `${Object.keys(live.families).length} families; pilot denominators — `
+    + `${AXIS_IDS.map((axis) => `${axis} ${live.denominators[axis]} (${live.notApplicableCounts[axis]} N/A)`).join(', ')}`);
+  for (const [family, axes] of Object.entries(live.families)) {
+    const withdrawn = Object.keys(live.notApplicable[family] ?? {});
+    console.log(`  ${family.padEnd(11)} ${axes.join(', ')}${withdrawn.length > 0 ? `; N/A: ${withdrawn.join(', ')}` : ''}`);
+  }
+  for (const [family, axes] of Object.entries(live.notApplicable)) {
+    for (const [axis, entry] of Object.entries(axes)) console.log(`  N/A ${family}/${axis} — ${entry.review}: ${entry.reason}`);
+  }
   if (failures.length > 0) {
     for (const failure of failures) console.error(`theme-population pilot FAIL — ${failure}`);
     process.exit(1);
   }
+} else if (isMain && process.argv.includes('--exclusions')) {
+  const { registry, failures } = checkExclusionRegistry();
+  const report = populationReport();
+  console.log(`exclusion registry ${report.exclusions.revision} — ${registry?.entries.length ?? 0} entr(ies), `
+    + `admitted: ${(registry?.admitted ?? []).map((pair) => `${pair.family}/${pair.axis}`).join(', ') || '(none)'}`);
+  for (const entry of report.axes) {
+    for (const withdrawn of entry.notApplicable) console.log(`  N/A ${withdrawn.family}/${entry.axis} — ${withdrawn.review}`);
+  }
+  for (const entry of report.exclusions.ineffective) {
+    console.log(`  INEFFECTIVE ${entry.family}/${entry.axis} — still declares ${entry.stillDeclares.join(', ') || '(head channel)'}`);
+  }
+  if (failures.length > 0) {
+    for (const failure of failures) console.error(`theme-population exclusions FAIL — ${failure}`);
+    process.exit(1);
+  }
+  console.log('theme-population exclusions OK');
 } else if (isMain && process.argv.includes('--check')) {
   const { report, failures } = checkPopulationFloor();
   console.log(populationLine());
@@ -489,7 +862,8 @@ if (isMain && process.argv.includes('--pilot')) {
     for (const failure of failures) console.error(`theme-population FAIL — ${failure}`);
     process.exit(1);
   }
-  console.log(`theme-population OK — ${report.axes.length} axes pinned at catalog ${report.revision.digest}`);
+  console.log(`theme-population OK — ${report.axes.length} axes pinned at catalog ${report.revision.digest}, `
+    + `exclusions ${report.exclusions.revision}`);
 } else if (isMain) {
   const report = populationReport();
   if (process.argv.includes('--json')) {
@@ -498,10 +872,12 @@ if (isMain && process.argv.includes('--pilot')) {
     console.log(`theme population — catalog ${report.revision.digest} at ${report.revision.source}`);
     console.log(`  ${report.revision.decisionRows} decisions, ${report.revision.annexRows} annex, `
       + `${report.revision.retiredRows} retired; excluded group: ${report.excludedGroup}`);
-    console.log(`  ${report.skinFamilies} modern skin families in the corpus`);
+    console.log(`  ${report.skinFamilies} modern skin families in the corpus; exclusions ${report.exclusions.revision} `
+      + `(${report.exclusions.entries} reviewed)`);
     for (const entry of report.axes) {
       console.log(`  ${entry.axis.padEnd(11)} denominator ${String(entry.denominator).padStart(4)} `
-        + `— controls: ${entry.controls.join(', ') || '(none)'}`);
+        + `(${entry.notApplicableCount} N/A) — controls: ${entry.controls.join(', ') || '(none)'}`);
+      for (const withdrawn of entry.notApplicable) console.log(`${' '.repeat(14)}N/A ${withdrawn.family} — ${withdrawn.review}`);
     }
   }
 }

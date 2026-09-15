@@ -39,6 +39,9 @@ test-artifacts/gates/*
 # WO-FAM-14 R108-RUN-01 red-before/green-after browser proof for the skeleton
 # ancestor-invalidation repair — same authoritative-evidence class as GAT-07.
 !test-artifacts/skeleton-r108/
+# WO-EVI-05 pilot run records (29/29 applicable + 1 reviewed N/A) with the
+# published population readings — authoritative gate evidence.
+!test-artifacts/gates/axis-difference-pilot/
 # Playwright visual-regression run output (baselines under e2e/visual/__screenshots__/ ARE committed)
 packages/showroom/test-results/
 packages/showroom/playwright-report/

@@ -1,10 +1,12 @@
 {
-  "purpose": "The pilot population of WO-EVI-05: the families of the WO-FAM-01 cut, the kit rule 4 axes each declares in its own Modern skin, and the catalog revision the pilot run was measured at. Pilot denominators only; a fleet claim may not cite them.",
+  "purpose": "The pilot population of WO-EVI-05: the families of the WO-FAM-01 cut, the kit rule 4 axes each declares in its own Modern skin, the axes a reviewed semantic-identity exclusion withdrew (published as NOT APPLICABLE with the reason, never as moved), and the catalog and exclusion revisions the pilot run was measured at. Pilot denominators only; a fleet claim may not cite them. Read as applicable/denominator PLUS the N/A beside it: shape is 4 applicable + 1 N/A, never 5 and never 4/4 alone.",
   "scope": "pilot",
-  "publishedOn": "2026-09-13",
+  "publishedOn": "2026-09-14",
   "cut": "WO-FAM-01",
   "catalogRevision": "2a25f7c6068407fb",
   "decisionRows": 29,
+  "exclusionsRevision": "34bd866512177f9b",
+  "exclusionsReview": "WO-EVI-05 core review 2026-09-14",
   "families": {
     "button": [
       "shape",
@@ -23,7 +25,6 @@
       "motion"
     ],
     "radio": [
-      "shape",
       "typography",
       "rhythm",
       "depth",
@@ -47,12 +48,125 @@
       "motion"
     ]
   },
+  "notApplicable": {
+    "radio": {
+      "shape": {
+        "reason": "semantic identity: the indicator is round because round means single-choice, and the dot is bound to the indicator. The bare radio stamps no frame part for a corner to govern, its focus ring is an outline and its touch target is a height, which kit rule 4 does not count as shape. No shape decision may lawfully move these two radii without breaking what the control means.",
+        "review": "WO-EVI-05 core review 2026-09-14"
+      }
+    }
+  },
   "denominators": {
-    "shape": 5,
+    "shape": 4,
     "typography": 5,
     "rhythm": 5,
     "depth": 5,
     "states": 5,
     "motion": 5
+  },
+  "notApplicableCounts": {
+    "shape": 1,
+    "typography": 0,
+    "rhythm": 0,
+    "depth": 0,
+    "states": 0,
+    "motion": 0
+  },
+  "provenance": {
+    "republishedFor": "WO-EVI-05 lot E5 (2026-09-14): the reviewed exclusion of radio/shape, bound to the two verbatim declarations of scripts/check/theme/population/exclusions/index.json",
+    "sourceCommit": "0867fb986",
+    "computedBy": "node scripts/check/theme/population/index.mjs --pilot (pilotPopulation), membership diffed family by family against the same computation over the previous pin's tree",
+    "previousPin": {
+      "publishedOn": "2026-09-13",
+      "catalogRevision": "2a25f7c6068407fb",
+      "families": {
+        "button": [
+          "shape",
+          "typography",
+          "rhythm",
+          "depth",
+          "states",
+          "motion"
+        ],
+        "checkbox": [
+          "shape",
+          "typography",
+          "rhythm",
+          "depth",
+          "states",
+          "motion"
+        ],
+        "radio": [
+          "shape",
+          "typography",
+          "rhythm",
+          "depth",
+          "states",
+          "motion"
+        ],
+        "segmented": [
+          "shape",
+          "typography",
+          "rhythm",
+          "depth",
+          "states",
+          "motion"
+        ],
+        "toggle": [
+          "shape",
+          "typography",
+          "rhythm",
+          "depth",
+          "states",
+          "motion"
+        ]
+      },
+      "denominators": {
+        "shape": 5,
+        "typography": 5,
+        "rhythm": 5,
+        "depth": 5,
+        "states": 5,
+        "motion": 5
+      },
+      "notApplicableCounts": {
+        "shape": 0,
+        "typography": 0,
+        "rhythm": 0,
+        "depth": 0,
+        "states": 0,
+        "motion": 0
+      }
+    },
+    "membershipMoves": {
+      "shape": {
+        "removed": [
+          "radio"
+        ],
+        "added": [],
+        "kind": "reviewed exclusion (neither fold nor shrink): radio's two authored radii are semantic identity; published N/A with reason"
+      },
+      "typography": {
+        "removed": [],
+        "added": []
+      },
+      "rhythm": {
+        "removed": [],
+        "added": []
+      },
+      "depth": {
+        "removed": [],
+        "added": []
+      },
+      "states": {
+        "removed": [],
+        "added": []
+      },
+      "motion": {
+        "removed": [],
+        "added": []
+      }
+    },
+    "pilotFigure": "29 applicable (family, axis) pairs + 1 N/A (radio/shape); never 30/30"
   }
 }
