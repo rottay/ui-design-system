@@ -4755,7 +4755,13 @@
    "notes": "wave 4; closes F-41",
    "claimedBy": "claude-admin",
    "claimedAt": "2026-09-14",
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-09-14 23:45",
+     "by": "kimi-admin",
+     "note": "F5b DT adjudication (owner-confirmed): (1) adapt NOT implemented in the tabs/breadcrumb/pagination lot — none of the three is declared layout-sensitive and WO-INV-07 is done (its registry accepts no progress entries); pagination's LAYOUT-SENSITIVE CANDIDACY (toolbar scrolls in narrow frames) is registered HERE as the routing point: the remaining lots of this WO or a bounded follow-up evaluate it against the INV-07 contract and, if admitted, add adapt + data-posture as a bounded lot rather than retroactively reopening F5b. (2) The F5b fence was extended by exactly four named files (typographic roles, the tabs recipe definition, the embedded-CSS contract test, the touch-target keys) so tabs can reach legacyNamespaceClasses=0 and the skeleton arm; extension confirmed by the owner. F5a (menu) integrated as eabf62987 with the roster pin and RWP re-pin (debt 1362 -> 1316, set-difference attributed)."
+    }
+   ]
   },
   {
    "id": "WO-FAM-06",
