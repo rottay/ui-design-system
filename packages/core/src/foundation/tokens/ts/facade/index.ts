@@ -23,6 +23,7 @@
 export * from '../foundation/base';
 export * from '../runtime/components';
 export * from '../presentation/brand-themes';
+export * from '../../../presets/verticals/roster';
 export * from '../runtime/mirrors';
 
 // Named imports for combined export

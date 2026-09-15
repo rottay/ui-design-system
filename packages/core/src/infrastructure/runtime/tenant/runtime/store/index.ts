@@ -21,7 +21,7 @@ import {
   ReservedTenantIdentityError,
   assertTenantIdentityAllowed,
   getFirstPartyIdentity,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
+} from '@/foundation/presets/verticals/roster';
 import { loadStaticTenantConfig } from './static/loader';
 import { fetchRemoteTenantConfig } from './remote';
 import { getUnresolvedTenantConfig } from '../../foundation/configuration/defaults';

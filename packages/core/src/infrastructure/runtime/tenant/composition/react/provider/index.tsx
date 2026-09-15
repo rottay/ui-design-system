@@ -62,7 +62,7 @@ import type { TenantConfig, TenantContextValue } from '../../../../../../foundat
 import type { TenantAppearance } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes/registry';
 import { isCanonicalJsonObject } from '@/foundation/kernel/serialization';
-import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
 import { isCodeOwnedTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import {
   assertLowerKebabTenantSlug,

@@ -70,7 +70,7 @@ import {
   tenantThemeArtifactElementId,
   verifyTenantThemeArtifactV1,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
-import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
 
 /**
  * What to mount: a compiled artifact, or the document to compile into one.

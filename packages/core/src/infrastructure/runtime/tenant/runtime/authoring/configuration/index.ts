@@ -16,7 +16,7 @@ import type {
   BrandTheme,
   BrandTypography,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
-import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
 import {
   resolvePersonalityPreset,
   type PersonalityPreset,

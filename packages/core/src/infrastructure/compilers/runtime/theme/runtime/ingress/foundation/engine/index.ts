@@ -8,7 +8,7 @@
 
 import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { getFirstPartyVertical } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { getFirstPartyVertical } from "@/foundation/presets/verticals/roster";
 
 /**
  * The roster row's engine, or a refusal.

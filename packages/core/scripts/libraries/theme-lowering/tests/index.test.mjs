@@ -65,7 +65,7 @@ function harness() {
     if (absolutePath.includes('engine-identity')) {
       throw new Error('the adapter must not load the engine-identity contract');
     }
-    if (absolutePath.includes('brand-themes')) {
+    if (absolutePath.includes('verticals/roster')) {
       return { getFirstPartyVertical: (slug) => ROSTER[slug] };
     }
     // WO-CAT-03: the lowering and the lift are internal owners now, reached by

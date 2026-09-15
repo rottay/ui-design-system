@@ -15,7 +15,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 const ROSTER_PATH = resolve(
   CORE_ROOT,
-  'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
+  'src/foundation/presets/verticals/roster/index.ts',
 );
 
 test('executes the authored TypeScript roster rather than parsing its text', () => {

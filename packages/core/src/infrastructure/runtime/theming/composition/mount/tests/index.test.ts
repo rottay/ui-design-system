@@ -16,7 +16,7 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
-import { FIRST_PARTY_VERTICALS } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { FIRST_PARTY_VERTICALS } from '@/foundation/presets/verticals/roster';
 import {
   TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,

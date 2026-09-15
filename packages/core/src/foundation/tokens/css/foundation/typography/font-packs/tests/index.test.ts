@@ -10,7 +10,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/presets/verticals/roster";
 import {
   FONT_PACK_MANIFEST,
   FONT_PACK_IDS,

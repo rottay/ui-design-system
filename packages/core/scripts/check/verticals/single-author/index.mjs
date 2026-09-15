@@ -140,7 +140,7 @@ export const DEFAULT_CSS_ROOT = resolve(CORE_ROOT, 'src/foundation/tokens/css');
 export const DEFAULT_ARTIFACTS_ROOT = resolve(DEFAULT_CSS_ROOT, 'facade/artifacts');
 export const DEFAULT_ROSTER_SOURCE = resolve(
   CORE_ROOT,
-  'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
+  'src/foundation/presets/verticals/roster/index.ts',
 );
 
 /**

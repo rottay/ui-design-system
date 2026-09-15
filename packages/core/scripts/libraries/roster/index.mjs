@@ -28,8 +28,11 @@ try {
   );
   const roster = loaded.FIRST_PARTY_VERTICAL_ROSTER;
   if (!Array.isArray(roster)) throw new Error('FIRST_PARTY_VERTICAL_ROSTER is not an array');
+  const themes = await server.ssrLoadModule(
+    '/src/foundation/tokens/ts/presentation/brand-themes/index.ts'
+  );
   process.stdout.write(JSON.stringify(roster.map((row) => {
-    const motion = row.theme?.motion;
+    const motion = themes[row.slug + 'BrandTheme']?.motion;
     const springEligible = motion
       && typeof motion.springTension === 'number'
       && typeof motion.springFriction === 'number'
@@ -37,7 +40,7 @@ try {
     return {
       slug: row.slug,
       verticalKey: row.verticalKey,
-      themeId: row.theme?.id,
+      themeId: row.themeId,
       name: row.name,
       themeSourcePath: row.themeSourcePath,
       artifactPath: row.artifactPath,

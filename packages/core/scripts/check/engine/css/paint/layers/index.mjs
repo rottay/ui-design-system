@@ -501,7 +501,7 @@ export const UNREACHABLE_BY_DESIGN = new Map([
  */
 const ROSTER_SOURCE = resolve(
   packageRoot,
-  "src/foundation/tokens/ts/presentation/brand-themes/index.ts"
+  "src/foundation/presets/verticals/roster/index.ts"
 );
 
 export function readFirstPartyRoster(rosterPath = ROSTER_SOURCE) {
@@ -512,7 +512,7 @@ export function readFirstPartyRoster(rosterPath = ROSTER_SOURCE) {
   const block = source.slice(start, source.indexOf("\n  ]);", start));
   const rows = [];
   for (const match of block.matchAll(
-    /entry\(\s*([A-Za-z0-9_]+)BrandTheme\s*,[\s\S]*?fontPacks:\s*\[([^\]]*)\]/g
+    /entry\(\s*["']([a-z0-9-]+)["']\s*,[\s\S]*?fontPacks:\s*\[([^\]]*)\]/g
   )) {
     rows.push({
       slug: match[1],

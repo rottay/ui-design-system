@@ -22,7 +22,7 @@ import { describe, expect, it } from 'vitest';
 import {
   FIRST_PARTY_VERTICAL_ROSTER,
   FIRST_PARTY_VERTICAL_SLUGS,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
+} from '@/foundation/presets/verticals/roster';
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
@@ -62,7 +62,6 @@ describe('brand-themes tree pins vertical ownership', () => {
     for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
       expect(row.verticalKey).toBe(row.slug);
       expect(row.themeId).toBe(row.slug);
-      expect(row.theme.id).toBe(row.slug);
       expect(row.themeSourcePath).toBe(
         `foundation/tokens/ts/presentation/brand-themes/${row.slug}/index.ts`,
       );

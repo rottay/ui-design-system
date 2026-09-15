@@ -3,7 +3,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { TenantBranding, TenantConfig } from '@/foundation/contracts';
-import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 import { useTenantContext } from '@/infrastructure/runtime/tenant/composition/react/provider';
 import {
   getCodeOwnedGovernedBehavior,

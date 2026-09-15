@@ -35,7 +35,12 @@
 import { describe, expect, it } from 'vitest';
 
 import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
+import {
+  bithireBrandTheme,
+  evntoBrandTheme,
+  rottayBrandTheme,
+} from '@/foundation/tokens/ts/presentation/brand-themes';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
@@ -67,8 +72,9 @@ const INK_DECLARATION = `color: var(${INK_CHANNEL});`;
 /** A color no shipped theme authors, so its presence can only come from the test. */
 const CANARY_INK = '#FE01DC';
 
+const BRAND_THEME_BY_SLUG = { rottay: rottayBrandTheme, bithire: bithireBrandTheme, evnto: evntoBrandTheme } as const;
 const THEME_BY_SLUG = new Map<string, BrandTheme>(
-  FIRST_PARTY_VERTICAL_ROSTER.map((row) => [row.slug, row.theme]),
+  FIRST_PARTY_VERTICAL_ROSTER.map((row) => [row.slug, BRAND_THEME_BY_SLUG[row.slug]]),
 );
 
 function themeFor(spec: FirstPartyArtifactSpec): BrandTheme {

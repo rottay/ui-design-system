@@ -34,7 +34,7 @@ import {
   FIRST_PARTY_VERTICALS,
   getFirstPartyVertical,
   isFirstPartyVerticalId,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
+} from "..";
 
 /** The roster's ordered slug list, which every projection must reproduce. */
 const ROSTER_SLUGS = FIRST_PARTY_VERTICAL_ROSTER.map((row) => row.slug);
@@ -51,13 +51,10 @@ describe("the roster is internally consistent", () => {
     expect(getFirstPartyVertical("platform")).toBeUndefined();
   });
 
-  it("keeps slug, verticalKey and theme.id as ONE fact per row", () => {
+  it("keeps slug, verticalKey and themeId as ONE fact per row", () => {
     for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
       expect(row.verticalKey).toBe(row.slug);
       expect(row.themeId).toBe(row.slug);
-      // The cast this replaces (`theme.id as FirstPartyVerticalSlug`) is why
-      // this needs asserting at runtime as well as in the type.
-      expect(row.theme.id).toBe(row.slug);
     }
   });
 

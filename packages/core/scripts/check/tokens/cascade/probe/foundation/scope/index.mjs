@@ -38,7 +38,7 @@ import { CASCADE_ENGINE_ORDER } from '../../../../../../libraries/engine/roster/
 
 const rosterPath = resolve(
   CORE_ROOT,
-  'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
+  'src/foundation/presets/verticals/roster/index.ts',
 );
 const rosterScopes = readFirstPartyRosterSource(rosterPath).map((row) => [
   row.slug,

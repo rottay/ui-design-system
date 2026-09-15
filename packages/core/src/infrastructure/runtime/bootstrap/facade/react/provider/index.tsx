@@ -132,7 +132,7 @@ import {
   isCodeOwnedTenantConfig,
   type CodeOwnedGovernedBehavior,
 } from '../../../../tenant/foundation/configuration/registry';
-import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 import { getUnresolvedTenantConfig } from '../../../../tenant/foundation/configuration/defaults';
 import { ResponsiveProvider } from '../../../../responsive';
 import type { DocumentViewportHint } from '../../../../foundation/root-attributes/ssr';

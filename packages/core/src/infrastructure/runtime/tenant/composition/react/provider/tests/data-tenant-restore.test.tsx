@@ -7,7 +7,7 @@ import type { TenantConfig } from '@/foundation/contracts';
 import { outstandingRootClaims } from '@/infrastructure/runtime/foundation/root-attributes';
 import { TenantProvider, useTenantContext } from '..';
 import { getDefaultTenant } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
-import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 
 function config(slug: string): TenantConfig {
   return {

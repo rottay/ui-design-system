@@ -39,7 +39,7 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { typePairingToTypography } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { isFirstPartyVerticalId } from "@/foundation/presets/verticals/roster";
 import {
   renderedMode,
   verticalDefaultMode,

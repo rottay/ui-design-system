@@ -6,7 +6,7 @@
 
 import type { TenantConfig, TenantBranding, TenantPlan } from '../../../../../foundation/contracts';
 import type { SupportedLocale } from '@/foundation/i18n/kernel/contracts';
-import { isTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { isTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
 
 /**
  * Branding is intentionally permissive: only `companyName` is required.

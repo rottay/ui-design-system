@@ -6,7 +6,7 @@ import {
   classifyTenantIdentity,
   getFirstPartyIdentity,
   normalizeIdentityFingerprint,
-} from "../ts/presentation/brand-themes";
+} from "..";
 
 describe("first-party tenant identity", () => {
   /* Every row here renders on screen as the reserved name: case, spacing and

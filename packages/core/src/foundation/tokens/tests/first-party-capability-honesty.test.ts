@@ -32,7 +32,12 @@ import {
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
 import type { BrandCapabilityId } from "@/foundation/contracts/composition/tenants/themes";
 
-import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/presets/verticals/roster";
+import {
+  bithireBrandTheme,
+  evntoBrandTheme,
+  rottayBrandTheme,
+} from "@/foundation/tokens/ts/presentation/brand-themes";
 
 /**
  * A capability is LIVE when removing it from the theme changes what the
@@ -49,6 +54,8 @@ const LIVENESS_PROBES: Partial<
     ]),
 };
 
+const BRAND_THEME_BY_SLUG = { rottay: rottayBrandTheme, bithire: bithireBrandTheme, evnto: evntoBrandTheme } as const;
+
 describe("first-party capability dispositions are honest", () => {
   for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
     describe(row.slug, () => {
@@ -56,14 +63,14 @@ describe("first-party capability dispositions are honest", () => {
         [BrandCapabilityId, (t: Record<string, unknown>) => string]
       >) {
         it(`states \`${id}\` as active iff the compilers actually consume it`, () => {
-          const authored = row.theme as unknown as Record<string, unknown>;
+          const authored = BRAND_THEME_BY_SLUG[row.slug] as unknown as Record<string, unknown>;
           if (authored[id] === undefined) return; // nothing authored: nothing to lie about
 
           const withCapability = probe(authored);
           const withoutCapability = probe({ ...authored, [id]: undefined });
 
           const compilerConsumesIt = withCapability !== withoutCapability;
-          const declaredStatus = row.theme.capabilities[id]?.status;
+          const declaredStatus = BRAND_THEME_BY_SLUG[row.slug].capabilities[id]?.status;
 
           expect(
             declaredStatus,
@@ -76,7 +83,7 @@ describe("first-party capability dispositions are honest", () => {
       }
 
       it("lowers authored spring physics onto the shipped `--ds-motion-spring` channel", () => {
-        const theme = row.theme;
+        const theme = BRAND_THEME_BY_SLUG[row.slug];
         const springAuthored =
           typeof theme.motion?.springTension === "number" &&
           typeof theme.motion?.springFriction === "number" &&
@@ -117,7 +124,7 @@ describe("first-party capability dispositions are honest", () => {
         "responsive",
       ] as const) {
         expect(
-          row.theme.capabilities[id],
+          BRAND_THEME_BY_SLUG[row.slug].capabilities[id],
           `${row.slug} must state a disposition for \`${id}\`; silent absence ` +
             `is the exact failure mode the catalog exists to remove.`,
         ).toBeDefined();

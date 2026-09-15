@@ -10,7 +10,7 @@ import {
   TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
 } from '@/infrastructure/runtime/theming/foundation/visual-authority';
-import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 import { useCreateTenant } from '..';
 
 const ARTIFACT = compileTenantThemeConfig(

@@ -50,8 +50,8 @@ const verifyDist = process.argv.includes('--verify-dist');
 /** The compiler modules the generator reads, loaded from one compile root. */
 async function loadCompiler(compilerRoot) {
   const load = (key) => import(pathToFileURL(resolve(compilerRoot, `${COMPILER_MODULES[key]}.js`)).href);
-  const [ground, contrast, renderer, brandThemes] = await Promise.all(
-    ['ground', 'brandingContrast', 'artifactRenderer', 'brandThemes'].map(load),
+  const [ground, contrast, renderer, brandThemes, roster] = await Promise.all(
+    ['ground', 'brandingContrast', 'artifactRenderer', 'brandThemes', 'roster'].map(load),
   );
   return {
     isDarkSurfaceTheme: ground.isDarkSurfaceTheme,
@@ -60,21 +60,23 @@ async function loadCompiler(compilerRoot) {
     renderFirstPartyArtifact: renderer.renderFirstPartyArtifact,
     FIRST_PARTY_ARTIFACT_SPECS: renderer.FIRST_PARTY_ARTIFACT_SPECS,
     REGENERATE_COMMAND: renderer.FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
-    FIRST_PARTY_VERTICAL_ROSTER: brandThemes.FIRST_PARTY_VERTICAL_ROSTER,
+    FIRST_PARTY_VERTICAL_ROSTER: roster.FIRST_PARTY_VERTICAL_ROSTER,
+    BRAND_THEMES: brandThemes,
   };
 }
 
 /** First-party artifacts this generator owns (spec is the shared source of truth). */
-function firstPartyArtifacts({ FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_ARTIFACT_SPECS }) {
+function firstPartyArtifacts({ FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_ARTIFACT_SPECS, BRAND_THEMES }) {
   const artifacts = FIRST_PARTY_VERTICAL_ROSTER.map((row, index) => {
     const spec = FIRST_PARTY_ARTIFACT_SPECS[index];
     if (!spec || spec.slug !== row.slug) {
       throw new Error(`First-party artifact order drift at index ${index}: ${spec?.slug ?? '<missing>'} !== ${row.slug}`);
     }
-    if (row.theme.id !== row.slug) {
-      throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
+    const theme = BRAND_THEMES[`${row.slug}BrandTheme`];
+    if (!theme || theme.id !== row.slug) {
+      throw new Error(`First-party roster mismatch: theme.id ${theme?.id} !== slug ${row.slug}`);
     }
-    return { ...spec, brandTheme: row.theme };
+    return { ...spec, brandTheme: theme };
   });
   if (artifacts.length !== FIRST_PARTY_ARTIFACT_SPECS.length) {
     throw new Error('First-party artifact projection length differs from the roster');

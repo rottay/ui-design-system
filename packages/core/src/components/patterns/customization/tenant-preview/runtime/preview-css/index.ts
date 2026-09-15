@@ -48,7 +48,7 @@ import type {
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import type { TenantThemeArtifact } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
-import { isFirstPartyVerticalId } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { isFirstPartyVerticalId } from '@/foundation/presets/verticals/roster';
 import { brandTenantSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
 import {
   compileThemeIntent,

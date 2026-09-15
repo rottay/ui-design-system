@@ -23,7 +23,13 @@ import type {
   BrandExpressiveSelection,
   BrandTheme,
 } from '@/foundation/contracts/composition/tenants/themes';
-import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
+import {
+  bithireBrandTheme,
+  evntoBrandTheme,
+  rottayBrandTheme,
+} from '@/foundation/tokens/ts/presentation/brand-themes';
 import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 // The generated leaf, never the `tenant-css` barrel: that barrel reaches the
 // artifact renderer and therefore the whole lowering, which this runtime owner
@@ -152,10 +158,17 @@ function declaredChannels(theme: BrandTheme): Set<string> {
   return decided;
 }
 
+/** The authored theme each roster slug compiles, keyed where the roster is read. */
+const FIRST_PARTY_BRAND_THEMES: Readonly<Record<FirstPartyVerticalId, BrandTheme>> = {
+  rottay: rottayBrandTheme,
+  bithire: bithireBrandTheme,
+  evnto: evntoBrandTheme,
+};
+
 function projectGovernedBehavior(
   entry: (typeof FIRST_PARTY_VERTICAL_ROSTER)[number],
 ): CodeOwnedGovernedBehavior | undefined {
-  const theme = entry.theme;
+  const theme = FIRST_PARTY_BRAND_THEMES[entry.slug];
   const intensity = theme?.motion?.intensity;
   const entranceDuration = theme?.motion?.entranceDuration;
   const expressive = theme?.expressive;

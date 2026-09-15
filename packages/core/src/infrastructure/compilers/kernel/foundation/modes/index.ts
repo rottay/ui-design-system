@@ -29,7 +29,7 @@ import type {
 import {
   UNDECLARED_VERTICAL_DEFAULT_MODE,
   getFirstPartyVertical,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
+} from "@/foundation/presets/verticals/roster";
 
 /** The tenant's declared intent. `auto` selects no mode; it defers to the viewer. */
 export type DeclaredThemeMode = BrandThemeMode | "auto";

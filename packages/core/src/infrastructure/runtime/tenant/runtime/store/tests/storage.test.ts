@@ -13,7 +13,7 @@ import {
 } from '..';
 import { loadStaticTenantConfig } from '../static/loader';
 import { fetchRemoteTenantConfig } from '../remote';
-import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 
 vi.mock('../static/loader', () => ({
   loadStaticTenantConfig: vi.fn(),

@@ -70,7 +70,7 @@ function fontPackBundle(fontPacks) {
 
 const rosterPath = resolve(
   root,
-  "src/foundation/tokens/ts/presentation/brand-themes/index.ts"
+  "src/foundation/presets/verticals/roster/index.ts"
 );
 const verticals = readFirstPartyRosterSource(rosterPath).map((row) => ({
   name: row.slug,

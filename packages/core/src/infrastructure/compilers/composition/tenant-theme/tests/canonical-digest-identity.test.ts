@@ -19,10 +19,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import {
-  FIRST_PARTY_THEMES,
-  FIRST_PARTY_VERTICAL_ROSTER,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/presets/verticals/roster";
 import {
   TENANT_THEME_COMPILER_VERSION,
   TENANT_THEME_CONFIG_SCHEMA_DIGEST,

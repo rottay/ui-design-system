@@ -284,7 +284,7 @@ function rosterFixture(root, slug = "fixture") {
     rosterPath,
     [
       "export const FIRST_PARTY_VERTICAL_ROSTER = Object.freeze([",
-      `    entry(${slug}BrandTheme, {`,
+      `    entry("${slug}", {`,
       '      fontPacks: ["fixture-text"],',
       "    }),",
       "  ]);",

@@ -648,7 +648,7 @@ function measureVerticals() {
   );
   const rosterPath = join(
     CORE_ROOT,
-    'src/foundation/tokens/ts/presentation/brand-themes/index.ts',
+    'src/foundation/presets/verticals/roster/index.ts',
   );
   // The roster is the single author of first-party identity, so the trio is
   // READ from it. A literal ['rottay', 'bithire', 'evnto'] in this gate would

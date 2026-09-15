@@ -6,7 +6,7 @@
  */
 
 import type { TenantConfig } from '../../../../../../../foundation/contracts';
-import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
 import {
   assertLowerKebabTenantSlug,
   isValidTenantConfig,

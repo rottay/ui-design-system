@@ -33,6 +33,7 @@ export const COMPILER_MODULES = Object.freeze({
   brandingContrast: 'foundation/kernel/accessibility/branding-contrast/index',
   artifactRenderer: 'infrastructure/compilers/runtime/tenant-css/artifact-renderer/index',
   brandThemes: 'foundation/tokens/ts/presentation/brand-themes/index',
+  roster: 'foundation/presets/verticals/roster/index',
   artifactRuntime: 'infrastructure/compilers/runtime/tenant-css/artifact-runtime/index',
 });
 

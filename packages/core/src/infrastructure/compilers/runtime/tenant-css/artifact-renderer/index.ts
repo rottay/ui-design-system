@@ -12,7 +12,7 @@ import type {
   ThemeCompilationModeBlock,
 } from '@/foundation/contracts/composition/tenants/themes/compiled';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
-import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
 import {
   compileThemeIntent,
   containerScope,

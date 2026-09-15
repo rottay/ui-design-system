@@ -52,7 +52,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { TenantConfig } from '@/foundation/contracts';
 import type { VerticalKey } from '@/foundation/contracts/kernel/verticals';
-import { assertTenantIdentityAllowed } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
 import { getKnownTenantConfig } from '../../../foundation/configuration/registry';
 import {
   assertLowerKebabTenantSlug,

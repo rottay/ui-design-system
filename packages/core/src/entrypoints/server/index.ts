@@ -311,7 +311,7 @@ export {
 export type {
   FirstPartyVerticalId,
 } from '../../foundation/contracts/kernel/verticals';
-export { isFirstPartyVerticalId } from '../../foundation/tokens/ts/presentation/brand-themes';
+export { isFirstPartyVerticalId } from '../../foundation/presets/verticals/roster';
 export type {
   NormalizedTenantThemeAppearance,
   TenantThemeAdvancedAppearance,

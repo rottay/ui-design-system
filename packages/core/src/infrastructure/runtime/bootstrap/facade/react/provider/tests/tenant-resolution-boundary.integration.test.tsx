@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TenantConfig } from '../../../../../../../foundation/contracts';
 import { useTenantContext } from '../../../../../tenant/composition/react/provider';
 import { DesignSystemProvider, isCommittedTenantRequest } from '..';
-import { ReservedTenantIdentityError } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { ReservedTenantIdentityError } from '@/foundation/presets/verticals/roster';
 
 const { resolveTenantConfigMock } = vi.hoisted(() => ({
   resolveTenantConfigMock: vi.fn(),

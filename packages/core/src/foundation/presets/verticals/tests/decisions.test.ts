@@ -8,7 +8,7 @@ import { assertTenantThemeDocumentV2, type TenantThemeDocumentV2 } from "@/contr
 import { THEME_CONTROL_CATALOG } from "@/contracts/theme/runtime/catalog";
 import { contrastRatio } from "@/foundation/kernel/color/contrast";
 import { BITHIRE_IDENTITY_CANDIDATES, bithireIdentityCandidate } from "@/foundation/presets/candidates/bithire";
-import { FIRST_PARTY_VERTICALS } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_VERTICALS } from "@/foundation/presets/verticals/roster";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import { admitDocument } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/presentation/admission";
 

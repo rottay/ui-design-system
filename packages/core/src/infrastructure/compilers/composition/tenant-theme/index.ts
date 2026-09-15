@@ -20,7 +20,7 @@ import {
 import { sha256Utf8 } from "@/foundation/kernel/cryptography/sha-256";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import { validateResponsivePostureSelection } from "@/foundation/tokens/ts/presentation/responsive-postures";
-import { assertTenantIdentityAllowed } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { assertTenantIdentityAllowed } from "@/foundation/presets/verticals/roster";
 import type {
   NormalizedTenantThemeAppearance,
   TenantThemeArtifact,
@@ -61,7 +61,7 @@ import {
 } from "./foundation/envelope";
 import { TENANT_THEME_COMPILER_VERSION } from "./version";
 import { declaredDocumentMode } from "../../kernel/foundation/modes";
-import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { isFirstPartyVerticalId } from "@/foundation/presets/verticals/roster";
 import type { EngineVisualDeclaration } from "@/foundation/contracts/composition/tenants/themes/engine-adapter";
 import { engineVisualOf } from "../../runtime/theme/facade/presentation/engine-visual";
 import type {

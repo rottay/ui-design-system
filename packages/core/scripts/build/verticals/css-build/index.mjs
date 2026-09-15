@@ -47,7 +47,8 @@ import { wrapModernFrameworkLayer } from "../../../libraries/engine/framework/in
 // build-vertical-artifacts.mjs, so this script runs after `tsc && vite build`
 // (build:vertical-css sequences it).
 import { springLinearEasing } from "../../../../dist/infrastructure/compilers/kernel/foundation/motion/spring-easing/index.js";
-import { FIRST_PARTY_VERTICAL_ROSTER } from "../../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js";
+import { FIRST_PARTY_VERTICAL_ROSTER } from "../../../../dist/foundation/presets/verticals/roster/index.js";
+import * as brandThemes from "../../../../dist/foundation/tokens/ts/presentation/brand-themes/index.js";
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -259,8 +260,9 @@ for (const match of baseCssWithoutComments.matchAll(/@layer\s+([a-z0-9-]+)\s*\{/
 // the bundle basename, because the roster derives all three from one field.
 const CSS_SOURCE_PREFIX = "foundation/tokens/css/";
 const verticals = FIRST_PARTY_VERTICAL_ROSTER.map((row) => {
-  if (row.theme.id !== row.slug) {
-    throw new Error(`First-party roster mismatch: theme.id ${row.theme.id} !== slug ${row.slug}`);
+  const theme = brandThemes[`${row.slug}BrandTheme`];
+  if (!theme || theme.id !== row.slug) {
+    throw new Error(`First-party roster mismatch: theme.id ${theme?.id} !== slug ${row.slug}`);
   }
   if (!row.artifactPath.startsWith(CSS_SOURCE_PREFIX)) {
     throw new Error(`First-party artifact path is outside the CSS source root: ${row.artifactPath}`);
@@ -269,7 +271,7 @@ const verticals = FIRST_PARTY_VERTICAL_ROSTER.map((row) => {
     name: row.slug,
     tenantFile: row.artifactPath.slice(CSS_SOURCE_PREFIX.length),
     fontPacks: [...row.fontPacks],
-    theme: row.theme,
+    theme,
     selector: row.selector,
   };
 });

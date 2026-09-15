@@ -35,7 +35,7 @@ import {
   isBundledTenant,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
-import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 

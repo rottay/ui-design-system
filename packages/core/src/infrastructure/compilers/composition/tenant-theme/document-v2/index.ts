@@ -33,8 +33,8 @@ import type {
   TenantThemeVerticalEnvelope,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { assertTenantIdentityAllowed } from "@/foundation/tokens/ts/presentation/brand-themes";
-import { isFirstPartyVerticalId } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { assertTenantIdentityAllowed } from "@/foundation/presets/verticals/roster";
+import { isFirstPartyVerticalId } from "@/foundation/presets/verticals/roster";
 import {
   ThemeAdmissionError,
   documentThemeAdmission,

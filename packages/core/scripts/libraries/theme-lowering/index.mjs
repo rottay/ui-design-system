@@ -109,7 +109,7 @@ const LOWERING_OWNER_MODULE =
 const RESOLVED_CONTRACT =
   'dist/foundation/contracts/composition/tenants/themes/resolved/index.js';
 const VERTICAL_ROSTER =
-  'dist/foundation/tokens/ts/presentation/brand-themes/index.js';
+  'dist/foundation/presets/verticals/roster/index.js';
 
 /**
  * Build the flat `compile(input, options)` the readers call, over `compileTheme`.
