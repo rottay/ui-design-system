@@ -53,7 +53,7 @@ const managementAppearance: TenantAppearance = {
 interface StaticTransportFixture {
   slug: string;
   vertical: string;
-  brandTheme: FlatTheme;
+  flatTheme: FlatTheme;
 }
 interface DbTransportFixture {
   slug: string;
@@ -133,7 +133,7 @@ const radiusScaleFor = (radiusScale: number): string | undefined =>
 const bithireStaticConfig = {
   slug: "bithire",
   vertical: "bithire",
-  brandTheme: bithireFlatTheme,
+  flatTheme: bithireFlatTheme,
 } satisfies StaticTransportFixture;
 
 function managementDbConfig(locale: Locale) {
@@ -164,10 +164,10 @@ describe("tenant identity and locale are independent runtime axes", () => {
   it("uses static FlatTheme for BitHire and a DB document for The Management", () => {
     const management = managementDbConfig("en");
 
-    expect(bithireStaticConfig.brandTheme).toBe(bithireFlatTheme);
+    expect(bithireStaticConfig.flatTheme).toBe(bithireFlatTheme);
     expect(bithireStaticConfig).not.toHaveProperty("appearance");
     expect(management.appearance).toBe(managementAppearance);
-    expect(management).not.toHaveProperty("brandTheme");
+    expect(management).not.toHaveProperty("flatTheme");
     expect(managementDbVariables["--ds-color-primary"]).toBe("#0F766E");
     expect(managementDbVariables["--ds-font-family-heading"]).toContain(
       "--ds-font-pack-editorial-display"

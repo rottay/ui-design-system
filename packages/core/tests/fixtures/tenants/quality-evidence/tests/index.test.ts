@@ -53,7 +53,7 @@ describe("DS-Q001 torture tenant fixtures", () => {
   it("keeps fixture and tenant identities stable and unique", () => {
     const fixtureIds = TORTURE_TENANT_FIXTURES.map((fixture) => fixture.id);
     const brandIds = TORTURE_TENANT_FIXTURES.map(
-      (fixture) => fixture.brandTheme.id
+      (fixture) => fixture.flatTheme.id
     );
     const tenantIds = TORTURE_TENANT_FIXTURES.map(
       (fixture) => fixture.tenantTheme.identity.tenantId
@@ -74,7 +74,7 @@ describe("DS-Q001 torture tenant fixtures", () => {
 
   it("defines all eight coordinated semantic surface roles for every brand", () => {
     for (const fixture of TORTURE_TENANT_FIXTURES) {
-      const surfaceRoles = fixture.brandTheme.surfaces?.surfaceRoles;
+      const surfaceRoles = fixture.flatTheme.surfaces?.surfaceRoles;
       expect(
         surfaceRoles,
         `${fixture.id} has no surface-role hierarchy`
@@ -164,13 +164,13 @@ describe("DS-Q001 torture tenant fixtures", () => {
   it("produces three distinct whole-product signatures, not recolors", () => {
     const signatures = TORTURE_TENANT_FIXTURES.map((fixture) =>
       JSON.stringify({
-        palette: fixture.brandTheme.palette,
-        typography: fixture.brandTheme.typography,
-        surfaceRoles: fixture.brandTheme.surfaces?.surfaceRoles,
-        radii: fixture.brandTheme.surfaces?.borderRadius,
-        shadows: fixture.brandTheme.surfaces?.shadows,
-        density: fixture.brandTheme.surfaces?.densityScale,
-        effects: fixture.brandTheme.surfaces?.effectIntensity,
+        palette: fixture.flatTheme.palette,
+        typography: fixture.flatTheme.typography,
+        surfaceRoles: fixture.flatTheme.surfaces?.surfaceRoles,
+        radii: fixture.flatTheme.surfaces?.borderRadius,
+        shadows: fixture.flatTheme.surfaces?.shadows,
+        density: fixture.flatTheme.surfaces?.densityScale,
+        effects: fixture.flatTheme.surfaces?.effectIntensity,
         general: fixture.tenantTheme.document.visualFoundation.general,
         anatomy:
           fixture.tenantTheme.document.visualFoundation.advanced?.chrome,

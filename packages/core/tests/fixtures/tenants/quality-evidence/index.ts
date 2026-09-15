@@ -39,7 +39,7 @@ export interface TortureTenantFixture {
   readonly id: string;
   readonly description: string;
   readonly axes: readonly TortureTenantAxis[];
-  readonly brandTheme: FlatTheme;
+  readonly flatTheme: FlatTheme;
   readonly tenantTheme: {
     readonly identity: TenantThemeConfigIdentity;
     readonly document: TenantThemeAdvancedDocument;
@@ -604,7 +604,7 @@ export const TORTURE_TENANT_FIXTURES = [
     description:
       "Warm editorial paper, zero radius, zero shadow and compact density.",
     axes: ["editorial", "light", "flat", "radius-0", "compact"],
-    brandTheme: EDITORIAL_FLAT_BRAND_THEME,
+    flatTheme: EDITORIAL_FLAT_BRAND_THEME,
     tenantTheme: {
       identity: EDITORIAL_FLAT_IDENTITY,
       document: EDITORIAL_FLAT_DOCUMENT,
@@ -615,7 +615,7 @@ export const TORTURE_TENANT_FIXTURES = [
     description:
       "Dense dark instrumentation with mono detail, sharp geometry and precise edges.",
     axes: ["technical", "dark", "compact"],
-    brandTheme: TECHNICAL_DARK_BRAND_THEME,
+    flatTheme: TECHNICAL_DARK_BRAND_THEME,
     tenantTheme: {
       identity: TECHNICAL_DARK_IDENTITY,
       document: TECHNICAL_DARK_DOCUMENT,
@@ -632,7 +632,7 @@ export const TORTURE_TENANT_FIXTURES = [
       "ultra-rounded",
       "spacious",
     ],
-    brandTheme: HUMANIST_SOFT_BRAND_THEME,
+    flatTheme: HUMANIST_SOFT_BRAND_THEME,
     tenantTheme: {
       identity: HUMANIST_SOFT_IDENTITY,
       document: HUMANIST_SOFT_DOCUMENT,
