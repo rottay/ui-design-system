@@ -510,8 +510,14 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *     +0/-12   +0/-12   +0/-12  85bc5edc9  bare-var accent channels retired: alert 4 + notifier 8
      *         +4       +4       +4  3082d0dfb  --ds-alert-<tone>-wash-subtle
      *         +2       +2       +2  04e835647  --ds-toggle-{track,dot}-border-radius
-     *   2098 / 2139 / 1455  measured today (51aea6509)
-     * Totals: rottay +846/-55, bithire +869/-13, evnto +884/-13. */
+     *   2098 / 2139 / 1455  re-anchored at 9bd9e3dd8 (the 51aea6509 tree); 72a1a99b6 and 73c6e9195 measure the same
+     *        +82      +91      +92  eabf62987  menu chrome deriver (WO-FAM-05 lot 1), every key a --ds-menu-* relation
+     *      +0/-1    +0/-2       +0  61280a253  profile emissions retired: --ds-recipe-profile (rottay, bithire) and --ds-experience-profile (bithire) travel as runtime data (WO-DER-06 2d-i); b68389160 (catalog data-only row) moves nothing
+     *       +171     +152     +213  011910356  tabs, breadcrumb and pagination chrome derivers (WO-FAM-05 lot 2): rottay tabs 95, breadcrumb 39, pagination 37; bithire tabs 78, breadcrumb 32, pagination 42; evnto tabs 128, breadcrumb 43, pagination 42
+     *   2350 / 2380 / 1760  the WO-FAM-05 lot 2 tree (011910356; a054f8972 is docs-only and measures the same)
+     *         +0    +0/-1       +0  95a85b080  --ds-elevation-border-style retired with its producers (WO-DER-06 2d-ii); bithire is the one first-party theme whose flat posture emitted it
+     *   2350 / 2379 / 1760  measured today (7b35276d5)
+     * Totals: rottay +1099/-56, bithire +1112/-16, evnto +1189/-13. */
     const counts: Record<Vertical, number> = {
       // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
       // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
@@ -549,7 +555,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // moved: the -8 is a keyset move, not a paint move.
       // Family-cut wave (measured, 2026-09-14): rottay 1307 -> 2098, added 846, removed
       // 55, commit by commit in the table above.
-      rottay: 2098,
+      // WO-FAM-05 lots 1 and 2 plus DER-06 2d-i (measured, 2026-09-15): rottay 2098 -> 2350,
+      // added 253, removed 1, rows eabf62987, 61280a253 and 011910356 in the table above.
+      rottay: 2350,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -574,7 +582,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // moved: the -8 is a keyset move, not a paint move.
       // Family-cut wave (measured, 2026-09-14): bithire 1283 -> 2139, added 869, removed
       // 13, commit by commit in the table above.
-      bithire: 2139,
+      // WO-FAM-05 lots 1 and 2 plus DER-06 2d-i and 2d-ii (measured, 2026-09-15): bithire
+      // 2139 -> 2379, added 243, removed 3, rows eabf62987, 61280a253, 011910356 and
+      // 95a85b080 in the table above.
+      bithire: 2379,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -602,7 +613,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // moved: the -8 is a keyset move, not a paint move.
       // Family-cut wave (measured, 2026-09-14): evnto 584 -> 1455, added 884, removed
       // 13, commit by commit in the table above.
-      evnto: 1455,
+      // WO-FAM-05 lots 1 and 2 plus DER-06 2d-i (measured, 2026-09-15): evnto 1455 -> 1760,
+      // added 305, removed 0, rows eabf62987, 61280a253 and 011910356 in the table above.
+      evnto: 1760,
     };
     for (const vertical of VERTICALS) {
       expect(

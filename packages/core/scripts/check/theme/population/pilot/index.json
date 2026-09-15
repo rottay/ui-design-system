@@ -1,9 +1,9 @@
 {
   "purpose": "The pilot population of WO-EVI-05: the families of the WO-FAM-01 cut, the kit rule 4 axes each declares in its own Modern skin, the axes a reviewed semantic-identity exclusion withdrew (published as NOT APPLICABLE with the reason, never as moved), and the catalog and exclusion revisions the pilot run was measured at. Pilot denominators only; a fleet claim may not cite them. Read as applicable/denominator PLUS the N/A beside it: shape is 4 applicable + 1 N/A, never 5 and never 4/4 alone.",
   "scope": "pilot",
-  "publishedOn": "2026-09-14",
+  "publishedOn": "2026-09-15",
   "cut": "WO-FAM-01",
-  "catalogRevision": "2a25f7c6068407fb",
+  "catalogRevision": "d50537e438bdbcfa",
   "decisionRows": 29,
   "exclusionsRevision": "ef3de957d72fda22",
   "exclusionsReview": "WO-EVI-05 core review 2026-09-14",
@@ -73,8 +73,8 @@
     "motion": 0
   },
   "provenance": {
-    "republishedFor": "WO-EVI-05 lot E5 (2026-09-14): the reviewed exclusion of radio/shape, bound to the two verbatim declarations of scripts/check/theme/population/exclusions/index.json | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned",
-    "sourceCommit": "0867fb986",
+    "republishedFor": "WO-EVI-05 lot E5 (2026-09-14): the reviewed exclusion of radio/shape, bound to the two verbatim declarations of scripts/check/theme/population/exclusions/index.json | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned | catalog revision 2a25f7c6068407fb -> d50537e438bdbcfa (2026-09-15), republished at HEAD 7b35276d5 with membership UNCHANGED: two catalog edits moved the content digest and neither moved a row or a family -- b68389160 (the recipe-profile row declares runtime scope via data-only, WO-DER-06 owner pick) 2a25f7c6068407fb -> 5fbbeface23f6b76, then 95a85b080 (--ds-elevation-border-style retired from the surfaces.border-style row, WO-DER-06 2d-ii) 5fbbeface23f6b76 -> d50537e438bdbcfa; 29 decision rows and identical row ids on every side, and populationReport on isolated copies of 61280a253, b68389160, 011910356 and 7b35276d5 gives the same axes, N/A set and 270 skin families at each step (breadcrumb-compounds +1 in rhythm, depth and states is the WO-FAM-05 lot 2 row already pinned here, not a catalog move). Measured with catalogRevision() over the checked-out bytes, which is what the gate hashes",
+    "sourceCommit": "7b35276d5",
     "computedBy": "node scripts/check/theme/population/index.mjs --pilot (pilotPopulation), membership diffed family by family against the same computation over the previous pin's tree",
     "previousPin": {
       "publishedOn": "2026-09-13",

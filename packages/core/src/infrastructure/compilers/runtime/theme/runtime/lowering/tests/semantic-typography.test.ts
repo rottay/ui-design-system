@@ -312,6 +312,21 @@ const FIRST_PARTY = [
 // pinned at the digests measured on a054f8972 itself (c7223694…, b758de6e…) and
 // bithire's starting digest there is d6546f8a…; restoring the two map entries
 // on that tree reproduces it byte for byte.
+// WO-FAM-05 LOT 2 attribution (2026-09-15), the per-cut measurement the two
+// rows above lean on when they say the navigation cuts "moved the keyset
+// without re-anchoring": 011910356 is ADDITIVE ONLY and measured rather than
+// asserted. The tabs, breadcrumb and pagination chrome derivers add rottay
+// 2179 -> 2350 base keys (+171: tabs 95, breadcrumb 39, pagination 37), bithire 2228 -> 2380 (+152:
+// tabs 78, breadcrumb 32, pagination 42), evnto 1547 -> 1760 (+213: tabs 128, breadcrumb 43, pagination 42); removed 0, values
+// moved 0, every mode block byte-identical (rottay light 704, bithire dark 441,
+// evnto dark 89 keys) and cssString grows by exactly the added keys. Withdrawing
+// the four files the cut added under `derivation` (chrome/tabs,
+// chrome/breadcrumb, chrome/pagination and their registry lines) on an isolated
+// copy of that tree returns all three digests to the PROVENANCE-CHANNEL pins
+// byte for byte (f2eaf241…, 1392ba2a…, 815bc4b2…) and that copy passes this
+// suite; the cut's parent (82ba19fdb) measures those same pins, so nothing
+// between them moved. The menu cut (eabf62987, +82/+91/+92 keys, all
+// `--ds-menu-*`) is likewise parent-exact against 73c6e9195.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
   rottay: "c7223694115e1a36504401b43426dde79d69b8a081a104f7b392e64a8966e0d0",
   bithire: "e384038826da0c9147fa0d9fe94b07bb66aae0052084545efc4f5d8ed3677600",
