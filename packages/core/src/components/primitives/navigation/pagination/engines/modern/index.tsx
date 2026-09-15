@@ -1,8 +1,8 @@
 /**
  * @fileoverview Pagination Modern Engine - Rottay Design System
  * @description Token-driven pagination: the engine stamps anatomy
- * (`data-part` hooks) and accessibility state, and the modern skin
- * (`modern/skin/pagination.css`) owns 100% of layout and paint.
+ * (`data-part` hooks, the interaction kernel's `data-state`) and
+ * accessibility state, and the modern skin owns 100% of layout and paint.
  * No DaisyUI classes, no Tailwind utilities, no inline style objects.
  *
  * @remarks
@@ -65,6 +65,7 @@
 import React from 'react';
 import type { PaginationProps } from '../../contracts';
 import { PAGINATION_DEFAULTS } from '../../contracts';
+import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { revealInlineWithinScroller } from '../../../../foundation/scroll-reveal';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
@@ -168,6 +169,103 @@ function getPageNumbers(
   for (let i = totalPages - boundaryCount + 1; i <= totalPages; i++) pages.push(i);
 
   return pages;
+}
+
+// ============================================================================
+// Controls: each decides its hover, press and focus through the kernel
+// ============================================================================
+
+type NativeButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+const NavButton = React.forwardRef<
+  HTMLButtonElement,
+  NativeButtonProps & { direction: 'prev' | 'next'; disabled: boolean }
+>(function NavButton({ direction, disabled, children, ...rest }, ref) {
+  const interaction = useInteractionState({ disabled });
+  return (
+    <button
+      {...rest}
+      ref={ref}
+      type="button"
+      disabled={disabled}
+      {...partAttributes('pagination-nav-button', interaction.state)}
+      {...interaction.handlers}
+      data-direction={direction}
+    >
+      {children}
+    </button>
+  );
+});
+
+function PageButton({
+  page,
+  current,
+  disabled,
+  onSelect,
+}: {
+  page: number;
+  current: boolean;
+  disabled: boolean;
+  onSelect: (page: number) => void;
+}): React.ReactElement {
+  const interaction = useInteractionState({ disabled });
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(page)}
+      disabled={disabled}
+      {...partAttributes('pagination-page-button', interaction.state)}
+      {...interaction.handlers}
+      data-current={current}
+      aria-current={current ? 'page' : undefined}
+    >
+      {page}
+    </button>
+  );
+}
+
+function QuickJumperInput({
+  disabled,
+  ...rest
+}: React.InputHTMLAttributes<HTMLInputElement> & { disabled: boolean }): React.ReactElement {
+  const interaction = useInteractionState({ disabled });
+  const { onBlur, ...handlers } = interaction.handlers;
+  // The part name stays a literal attribute: the touch-target authority proves
+  // this input's coarse floor by matching it, and a spread hides it.
+  return (
+    <input
+      {...rest}
+      type="text"
+      inputMode="numeric"
+      pattern="[0-9]*"
+      disabled={disabled}
+      data-part="quick-jumper"
+      data-state={serializeState(interaction.state)}
+      {...handlers}
+      onBlur={(event) => {
+        onBlur(event);
+        rest.onBlur?.(event);
+      }}
+    />
+  );
+}
+
+function SizeSelect({
+  disabled,
+  children,
+  ...rest
+}: React.SelectHTMLAttributes<HTMLSelectElement> & { disabled: boolean }): React.ReactElement {
+  const interaction = useInteractionState({ disabled });
+  return (
+    <select
+      {...rest}
+      disabled={disabled}
+      {...partAttributes('pagination-size-select', interaction.state)}
+      {...interaction.handlers}
+    >
+      {children}
+    </select>
+  );
 }
 
 // ============================================================================
@@ -345,7 +443,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
 
   return (
     <nav
-      className={`rottay-pagination rottay-pagination--modern ${className}`.trim()}
+      className={`ds-pagination ds-pagination--modern ${className}`.trim()}
       style={style}
       data-part="root"
       data-size={size ?? 'md'}
@@ -364,20 +462,18 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
       <div data-part="pagination-controls" ref={controlsRef}>
         {/* Previous button: glyph-only, so the accessible name comes from
             i18n; the semantic chevron auto-mirrors in RTL. */}
-        <button
-          type="button"
+        <NavButton
           ref={prevButtonRef}
+          direction="prev"
           onClick={(event) => {
             recordEdgeIntent('prev', event.currentTarget);
             handlePageChange(current - 1);
           }}
-          disabled={disabled || current <= 1}
-          data-part="pagination-nav-button"
-          data-direction="prev"
+          disabled={Boolean(disabled) || current <= 1}
           aria-label={translate('pagination.previous', EN_FALLBACK.previous)}
         >
           <NavigationBackIcon decorative size="sm" />
-        </button>
+        </NavButton>
 
         {simple ? (
           /* Simple mode: a single localized readout replaces the page-button
@@ -389,17 +485,13 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           /* Page number buttons: the visible number IS the accessible name */
           getPageNumbers(current, totalPages, siblingCount, boundaryCount).map((page, index) =>
             typeof page === 'number' ? (
-              <button
+              <PageButton
                 key={page}
-                type="button"
-                onClick={() => handlePageChange(page)}
-                disabled={disabled}
-                data-part="pagination-page-button"
-                data-current={page === current}
-                aria-current={page === current ? 'page' : undefined}
-              >
-                {page}
-              </button>
+                page={page}
+                current={page === current}
+                disabled={Boolean(disabled)}
+                onSelect={handlePageChange}
+              />
             ) : (
               <span key={`ellipsis-${index}`} data-part="ellipsis" aria-hidden="true">
                 {page}
@@ -409,33 +501,27 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
         )}
 
         {/* Next button */}
-        <button
-          type="button"
+        <NavButton
           ref={nextButtonRef}
+          direction="next"
           onClick={(event) => {
             recordEdgeIntent('next', event.currentTarget);
             handlePageChange(current + 1);
           }}
-          disabled={disabled || current >= totalPages}
-          data-part="pagination-nav-button"
-          data-direction="next"
+          disabled={Boolean(disabled) || current >= totalPages}
           aria-label={translate('pagination.next', EN_FALLBACK.next)}
         >
           <NavigationForwardIcon decorative size="sm" />
-        </button>
+        </NavButton>
       </div>
 
       {/* Quick jumper: commits on Enter and on blur; clamps to
           [1, totalPages] and ignores an empty or non-numeric value. */}
       {showQuickJumper && (
         <span data-part="pagination-jumper" data-disabled={disabled || undefined}>
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            data-part="quick-jumper"
+          <QuickJumperInput
             value={jumpValue}
-            disabled={disabled}
+            disabled={Boolean(disabled)}
             onChange={(event) => setJumpValue(event.target.value)}
             onKeyDown={handleJumpKeyDown}
             onBlur={commitJump}
@@ -451,10 +537,9 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           control AND chevron as one unit. */}
       {showSizeChanger && (
         <span data-part="pagination-size-changer" data-disabled={disabled || undefined}>
-          <select
-            data-part="pagination-size-select"
+          <SizeSelect
             value={pageSize}
-            disabled={disabled}
+            disabled={Boolean(disabled)}
             onChange={handlePageSizeChange}
             aria-label={translate('pagination.size_changer', EN_FALLBACK.sizeChanger)}
           >
@@ -465,7 +550,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
                 })}
               </option>
             ))}
-          </select>
+          </SizeSelect>
           <NavigationDownIcon decorative size="sm" data-part="pagination-size-icon" />
         </span>
       )}

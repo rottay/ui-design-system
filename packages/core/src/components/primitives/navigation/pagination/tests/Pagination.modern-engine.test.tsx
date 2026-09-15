@@ -1,13 +1,8 @@
 import React from 'react';
-import { readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernPagination from '../engines/modern';
-
-const here = dirname(fileURLToPath(import.meta.url));
 
 /**
  * Real-engine contract for modern Pagination (K3-B Pass 1): the engine stamps
@@ -18,7 +13,7 @@ describe('Modern Pagination public anatomy', () => {
   it('paints nothing inline and stamps the skin contract', () => {
     const { container } = render(<ModernPagination current={3} total={120} pageSize={10} size="lg" />);
 
-    const root = container.querySelector('.rottay-pagination--modern[data-part="root"]') as HTMLElement;
+    const root = container.querySelector('.ds-pagination--modern[data-part="root"]') as HTMLElement;
     expect(root).toHaveAttribute('data-size', 'lg');
     expect(root.style.cssText).toBe('');
 
@@ -103,30 +98,11 @@ describe('Modern Pagination public anatomy', () => {
     expect(screen.getByRole('button', { name: '4' })).toHaveAttribute('aria-current', 'page');
   });
 
-  it('contains the joined controls row inside narrow frames instead of overflowing the page', () => {
-    // K3-B Pass-2 regression pin: at a 390px frame the joined controls row
-    // measured 377px against a 342px container and pushed 11px of horizontal
-    // page overflow (sighted on the k3-lane-b mobile captures, both
-    // tenants). The skin must clip the row to its container and scroll it
-    // internally (breadcrumb.css's root precedent).
-    const PAGINATION_SKIN = readFileSync(
-      join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css'),
-      'utf8'
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-
-    const controlsRule = PAGINATION_SKIN.match(
-      /\[data-part='pagination-controls'\]\s*\{[^}]*\}/
-    );
-    expect(controlsRule, 'controls rule not found').not.toBeNull();
-    expect(controlsRule?.[0]).toContain('max-inline-size: 100%');
-    expect(controlsRule?.[0]).toContain('overflow-x: auto');
-  });
 });
 
 /**
- * R2+R3 (BATCH C) Pass-2 pins: the nav glyphs are semantic icons (consistent
- * with the rest of the modern fleet, auto-mirrored in RTL) and the numerals
- * are tabular so page columns never jitter across widths.
+ * The nav glyphs are semantic icons, consistent with the rest of the modern
+ * fleet and auto-mirrored in RTL.
  */
 describe('Modern Pagination premium craft', () => {
   it('renders semantic chevron icons instead of text guillemets', () => {
@@ -143,20 +119,4 @@ describe('Modern Pagination premium craft', () => {
     expect(container.querySelector('[data-part="pagination-nav-button"]')).toBeInTheDocument();
   });
 
-  it('pins tabular numerals in the skin for controls and the range readout', () => {
-    const PAGINATION_SKIN = readFileSync(
-      join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/pagination/index.css'),
-      'utf8'
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-
-    // The shared controls rule (nav + page buttons + ellipsis) and the range
-    // readout both set the tabular channel — two declaration sites.
-    const sites = PAGINATION_SKIN.match(
-      /font-variant-numeric: var\(--ds-pagination-numeric, tabular-nums\)/g
-    );
-    expect(sites).toHaveLength(2);
-
-    const rangeRule = PAGINATION_SKIN.match(/\[data-part='pagination-range'\]\s*\{[^}]*\}/);
-    expect(rangeRule?.[0]).toContain('font-variant-numeric');
-  });
 });

@@ -136,15 +136,15 @@
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
     },
     {
-      "key": "input/index.css :: .rottay-input.rottay-input--modern :: .rottay-input.rottay-input--modern[type='number']",
-      "kind": "exempt",
-      "reason": "same box as the floored class rule, not a second target: this selector is `.rottay-input.rottay-input--modern` plus a UA input-mode qualifier, and its only declarations are the spinner reset (`appearance: textfield`). The coarse floor at `@media (pointer: coarse) .rottay-input.rottay-input--modern` matches this element too. `[type]` is not dropped structurally the way a state pseudo is, because an attribute in the part half is load-bearing wherever it IS the identity (`[data-interactive='true']` on avatar)"
-    },
-    {
       "key": "input-number/index.css :: [data-part='addon-before'] :: [data-part='addon-before']",
       "kind": "debt",
       "owner": "design-system/D1-floors",
       "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "input/index.css :: .rottay-input.rottay-input--modern :: .rottay-input.rottay-input--modern[type='number']",
+      "kind": "exempt",
+      "reason": "same box as the floored class rule, not a second target: this selector is `.rottay-input.rottay-input--modern` plus a UA input-mode qualifier, and its only declarations are the spinner reset (`appearance: textfield`). The coarse floor at `@media (pointer: coarse) .rottay-input.rottay-input--modern` matches this element too. `[type]` is not dropped structurally the way a state pseudo is, because an attribute in the part half is load-bearing wherever it IS the identity (`[data-interactive='true']` on avatar)"
     },
     {
       "key": "invoice-template/index.css :: .ds-pattern-invoice-template.ds-engine-modern :: [data-part='items-table-wrapper']",
@@ -170,12 +170,6 @@
       "key": "notifier/index.css :: .ds-notifier.ds-notifier--modern :: [data-part='root']",
       "kind": "exempt",
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
-    },
-    {
-      "key": "pagination/index.css :: .rottay-pagination--modern :: [data-part='ellipsis']",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
     },
     {
       "key": "pattern-calendar-view/index.css :: .ds-pattern-calendar-view.ds-engine-modern :: [data-part='event']",
@@ -333,11 +327,6 @@
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row pattern-kanban-board.css :: .ds-pattern-kanban-board.ds-engine-modern :: [data-part='card'])"
     },
     {
-      "key": "src/components/surfaces/presentation/pages/data/search/index.tsx :: Box :: [data-part='result-custom']",
-      "kind": "exempt",
-      "reason": "proven outside the flat engine-skin corpus: the canonical Box is floored on its own result-custom part by presentation/components/skin/search/index.css under the coarse-pointer media contract"
-    },
-    {
       "key": "src/components/primitives/display/avatar/engines/modern/index.tsx :: div :: dynamic",
       "kind": "debt",
       "owner": "design-system/D1-floors",
@@ -368,6 +357,11 @@
       "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
+      "key": "src/components/primitives/display/table/engines/modern/index.tsx :: span :: [data-part='resize-handle']",
+      "kind": "exempt",
+      "reason": "essential geometry: a 4px `cursor: col-resize` gutter pinned to the column boundary, already widened to 24px on coarse pointers by `[data-part='resize-handle']::after { inset-inline: -10px }`. Its block axis spans the whole header cell; its inline axis cannot reach 44px without adjacent handles overlapping and swallowing the header's own sort click, so the boundary itself determines the target."
+    },
+    {
       "key": "src/components/primitives/display/table/engines/modern/index.tsx :: td :: [data-part='cell']",
       "kind": "debt",
       "owner": "design-system/D1-floors",
@@ -378,11 +372,6 @@
       "kind": "debt",
       "owner": "design-system/D1-floors",
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
-    },
-    {
-      "key": "src/components/primitives/display/table/engines/modern/index.tsx :: span :: [data-part='resize-handle']",
-      "kind": "exempt",
-      "reason": "essential geometry: a 4px `cursor: col-resize` gutter pinned to the column boundary, already widened to 24px on coarse pointers by `[data-part='resize-handle']::after { inset-inline: -10px }`. Its block axis spans the whole header cell; its inline axis cannot reach 44px without adjacent handles overlapping and swallowing the header's own sort click, so the boundary itself determines the target."
     },
     {
       "key": "src/components/primitives/feedback/drawer/engines/modern/index.tsx :: div :: [data-part='backdrop']",
@@ -487,10 +476,9 @@
       "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
-      "key": "src/components/primitives/inputs/select/engines/modern/index.tsx :: input :: dynamic",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+      "key": "src/components/primitives/inputs/select/engines/modern/index.tsx :: div :: [data-part='empty']",
+      "kind": "exempt",
+      "reason": "not activatable: the no-options well, holding the same spatial contract as the loading posture above (`min-block-size: 4.5rem`) and carrying `role=\"option\"` with `aria-disabled=\"true\"` purely for aria-required-children. Nothing on it responds to a tap, and its 4.5rem well is unprovable for the same reason."
     },
     {
       "key": "src/components/primitives/inputs/select/engines/modern/index.tsx :: div :: [data-part='loading-state']",
@@ -498,9 +486,10 @@
       "reason": "not activatable: an inert status well that carries `role=\"option\"` with `aria-disabled=\"true\"` only to satisfy the listbox's aria-required-children while results stream in. Its skin already gives it `min-block-size: 4.5rem` (72px, well past the floor), which the audit cannot count because 4.5rem is not one of the governed touch values."
     },
     {
-      "key": "src/components/primitives/inputs/select/engines/modern/index.tsx :: div :: [data-part='empty']",
-      "kind": "exempt",
-      "reason": "not activatable: the no-options well, holding the same spatial contract as the loading posture above (`min-block-size: 4.5rem`) and carrying `role=\"option\"` with `aria-disabled=\"true\"` purely for aria-required-children. Nothing on it responds to a tap, and its 4.5rem well is unprovable for the same reason."
+      "key": "src/components/primitives/inputs/select/engines/modern/index.tsx :: input :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
       "key": "src/components/primitives/inputs/slider/engines/modern/index.tsx :: div :: [data-part='root']",
@@ -615,6 +604,11 @@
       "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — no modern skin owns this file, so the element is painted by ad-hoc or inherited rules; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
+      "key": "src/components/surfaces/presentation/pages/data/search/index.tsx :: Box :: [data-part='result-custom']",
+      "kind": "exempt",
+      "reason": "proven outside the flat engine-skin corpus: the canonical Box is floored on its own result-custom part by presentation/components/skin/search/index.css under the coarse-pointer media contract"
+    },
+    {
       "key": "src/components/surfaces/presentation/pages/workspace/record-workbench/index.tsx :: Button :: .ds-record-workbench__tab",
       "kind": "debt",
       "owner": "design-system/D1-floors",
@@ -655,16 +649,9 @@
       "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
     },
     {
-      "key": "tabs/index.css :: .rottay-tabs--modern :: [data-part^='overflow-']",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
-    },
-    {
-      "key": "tabs/index.css :: .rottay-tabs--modern :: [data-part='tab-panel']",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+      "key": "tabs/index.css :: .ds-tabs--modern :: [data-part='tab-panel']",
+      "kind": "exempt",
+      "reason": "not a tap target: the tabpanel is a focusable region (tabindex=0 so a keyboard reader can enter the content) and therefore carries the governed focus ring -- and that ring alone is what classifies it css-pointer (the rule declares no `cursor: pointer`). Nothing on the panel activates; the destinations that do are the tab buttons, discovered and floored separately."
     },
     {
       "key": "tenant-preview/index.css :: .ds-pattern-tenant-preview.ds-engine-modern :: [data-part=\"table-scroll\"]",

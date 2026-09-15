@@ -43,7 +43,7 @@ describe('Tabs integration', () => {
     renderWithEngine(<Tabs engine="modern" items={items} defaultActiveKey="overview" />, 'modern');
 
     const overviewTab = await screen.findByRole('tab', { name: 'Overview' }, { timeout: 10000 });
-    const root = overviewTab.closest('.rottay-tabs--modern');
+    const root = overviewTab.closest('.ds-tabs--modern');
     expect(root).toHaveAttribute('data-variant', 'line');
     expect(root).toHaveAttribute('data-recipe', 'underline');
     expect(root).toHaveAttribute('data-size', 'md');
@@ -108,7 +108,7 @@ describe('Tabs integration', () => {
     );
 
     const tab = await screen.findByRole('tab', { name: /Inbox/ });
-    expect(tab.closest('.rottay-tabs--modern')).toHaveAttribute(
+    expect(tab.closest('.ds-tabs--modern')).toHaveAttribute(
       'data-recipe',
       'segmented'
     );
@@ -176,7 +176,7 @@ describe('Tabs integration', () => {
     );
 
     const root = (await screen.findByRole('tablist')).closest(
-      '.rottay-tabs--modern'
+      '.ds-tabs--modern'
     );
     expect(root).toHaveAttribute('data-direction', 'rtl');
 

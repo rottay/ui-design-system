@@ -1,56 +1,45 @@
-/** Modern Breadcrumb skin: explicit anatomy, full framing and tenant tokens.
+/**
+ * Modern Breadcrumb skin.
  *
- * PAIRED-SURFACE LAW (K3-B Pass 2): surfaces behind text mix from
- * `--ds-card-bg` (fallback `--ds-surface-card`), never raw `--ds-surface-card`
- * — a tenant may make `--ds-surface-card` a dark feature surface (TMM:
- * #18181c) with dark text tokens; `--ds-card-bg` is the theme's own paired
- * card chrome (BitHire #fff, TMM #FFFEFB; ink ratios 15.0:1 / 14.8:1 with
- * the text tokens). BitHire's `--ds-card-bg` IS `--ds-surface-card`, so the
- * light visuals are byte-identical.
- *
- * PASS-2 LAW (batch-28): clickable crumbs carry a quiet underline at rest
- * (interactive affordance is never color-only) that strengthens on
- * hover/focus; the current crumb's inset keyline scales by
- * `--ds-effect-intensity`; geometry is logical-property clean
- * (`max-inline-size`, `inline-size`/`block-size`, `min-inline-size`) so the
- * trail composes identically in RTL; in forced-colors the current location
- * fills Highlight and the underline survives as solid system ink.
+ * The one paint owner of the `ds-breadcrumb` engine tree. It selects on the
+ * anatomy the TSX stamps (`data-part`, the kernel's `data-state`,
+ * `data-current`, `data-clickable`, `data-ellipsis`) and reads every
+ * `--ds-breadcrumb-*` channel the breadcrumb chrome deriver produces, chained
+ * to the cascade roots. A clickable crumb carries a quiet underline at rest so
+ * the affordance is never colour alone; the current location is the one
+ * tinted, framed cell; hover, press and focus are decided once by the
+ * interaction kernel with the platform pseudo-class as fallback.
  */
 
-.rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'] {
+.ds-breadcrumb.ds-breadcrumb--modern[data-part='root'] {
   max-inline-size: 100%;
   overflow-x: auto;
-  padding: var(--ds-breadcrumb-padding, 4px);
-  color: var(--ds-breadcrumb-color, var(--ds-color-text-secondary));
-  background: var(
-    --ds-breadcrumb-bg,
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%), var(--ds-card-bg, var(--ds-surface-card)))
-  );
+  padding: var(--ds-breadcrumb-padding);
+  border: var(--ds-edge-standard-width) var(--ds-edge-standard-style) var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-breadcrumb-radius, var(--ds-radius-lg));
-  box-shadow: var(--ds-breadcrumb-shadow, var(--ds-shadow-xs));
+  background: var(--ds-breadcrumb-bg);
+  color: var(--ds-breadcrumb-color, var(--ds-color-text-secondary));
+  font-family: var(--ds-breadcrumb-font-family, var(--ds-type-supporting-font-family));
+  box-shadow: var(--ds-breadcrumb-shadow);
   scrollbar-width: none;
 }
 
-.rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'][data-count] {
-  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
-}
-
-.rottay-breadcrumb-shell--modern[data-part='root']::-webkit-scrollbar {
+.ds-breadcrumb--modern[data-part='root']::-webkit-scrollbar {
   display: none;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] > [data-part='list'] {
+.ds-breadcrumb--modern[data-part='root'] > [data-part='list'] {
   display: flex;
-  min-width: max-content;
+  min-inline-size: max-content;
   align-items: center;
-  gap: 2px;
+  gap: var(--ds-breadcrumb-list-gap);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='item'],
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='separator'] {
+.ds-breadcrumb--modern[data-part='root'] [data-part='item'],
+.ds-breadcrumb--modern[data-part='root'] [data-part='separator'] {
   display: flex;
   align-items: center;
   margin: 0;
@@ -58,244 +47,169 @@
   list-style: none;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'] {
+.ds-breadcrumb--modern[data-part='root'] [data-part='crumb'],
+.ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger'] {
   display: inline-flex;
-  min-height: var(--ds-breadcrumb-item-height, 30px);
+  min-block-size: var(--ds-breadcrumb-item-height);
   align-items: center;
-  gap: var(--ds-spacing-1-5, 6px);
+  gap: var(--ds-breadcrumb-item-gap);
   padding-block: 0;
-  padding-inline: var(--ds-breadcrumb-item-padding-inline, 9px);
+  padding-inline: var(--ds-breadcrumb-item-padding-inline);
+  border: var(--ds-edge-standard-width) var(--ds-edge-standard-style) transparent;
   border-radius: var(--ds-breadcrumb-item-radius, var(--ds-radius-md));
+  outline: none;
   background: transparent;
   color: var(--ds-breadcrumb-item-color, var(--ds-color-text-secondary));
   font-family: inherit;
-  font-size: var(--ds-breadcrumb-font-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-breadcrumb-font-weight, 520);
+  font-size: var(--ds-breadcrumb-font-size, var(--ds-type-supporting-font-size));
+  font-weight: var(--ds-breadcrumb-font-weight, var(--ds-font-weight-medium));
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
   cursor: default;
   transition:
-    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast) var(--ds-ease-standard, ease);
+    color var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
+    background-color var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
+    border-color var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
+    box-shadow var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
+    transform var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing);
 }
 
-/* Crumbs are anchors, buttons (onClick items) or inert spans: the UA chrome
-   of the button case must never leak through the skin. */
-.rottay-breadcrumb-shell--modern[data-part='root'] button[data-part='crumb'] {
+/* Crumbs are anchors, buttons or inert spans: UA button chrome never leaks through. */
+.ds-breadcrumb--modern[data-part='root'] button[data-part='crumb'],
+.ds-breadcrumb--modern[data-part='root'] button[data-part='overflow-trigger'] {
   appearance: none;
 }
 
-/* Long labels truncate with the "…" affordance instead of stretching the
-   trail (content-integrity law: never clip without an affordance; the
-   18rem bound follows tabs.css's `--ds-tabs-item-max-width`). The root's
-   horizontal scroll remains the many-items affordance. */
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='label'] {
+.ds-breadcrumb--modern[data-part='root'] [data-part='label'] {
   min-inline-size: 0;
-  max-inline-size: var(--ds-breadcrumb-label-max-width, 18rem);
+  max-inline-size: var(--ds-breadcrumb-label-max-width);
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Interactive affordance, never color-only (B1.4): a clickable crumb's label
-   carries a quiet underline AT REST — readable as a navigation action before
-   any hover — that strengthens to the full ink on hover/focus. The current
-   page and the truncation ellipsis carry no `data-clickable`, so they stay
-   plain. Applied to the label span, not the crumb: the crumb is a flex box,
-   and text-decoration does not propagate through blockified flex items. The
-   proto axis is private (batch-28 ledger); forced-colors strips the alpha,
-   so the underline survives there as a solid system-colored one. */
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] [data-part='label'] {
+/* The underline sits on the label: text-decoration does not propagate through a flex item. */
+.ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] [data-part='label'] {
   text-decoration: underline;
-  text-decoration-color: var(
-    --_ds-breadcrumb-link-underline-color,
-    color-mix(in srgb, currentColor 32%, transparent)
-  );
+  text-decoration-color: var(--ds-breadcrumb-link-underline);
   text-underline-offset: 0.18em;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] {
+.ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true'],
+.ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger'] {
   cursor: pointer;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current] {
-  border: 1px solid transparent;
-}
-
 @media (hover: hover) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:hover {
+  .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='hovered'], :hover),
+  .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='hovered'], :hover) {
+    border-color: var(--ds-breadcrumb-hover-border);
+    background: var(--ds-breadcrumb-hover-bg);
     color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
-    background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
-    border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
-    box-shadow: var(--ds-shadow-xs);
-    transform: translateY(-1px);
+    box-shadow: var(--ds-breadcrumb-hover-shadow);
+    transform: translateY(var(--ds-breadcrumb-hover-lift));
   }
 
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:hover [data-part='label'] {
+  .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='hovered'], :hover) [data-part='label'] {
     text-decoration-color: currentColor;
   }
 }
 
-/* Keyboard parity for the affordance: the quiet underline strengthens on
-   focus too, on every pointer class. */
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:focus-visible [data-part='label'] {
+.ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) [data-part='label'] {
   text-decoration-color: currentColor;
 }
 
-/* A held press keeps the hover wash but drops the lift back onto the surface
-   (4th-tanda law: the touch/active equivalent of the hover treatment). */
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:active {
+/* A held press keeps the wash and drops the lift back onto the surface. */
+.ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='pressed'], :active),
+.ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='pressed'], :active) {
+  border-color: var(--ds-breadcrumb-hover-border);
+  background: var(--ds-breadcrumb-hover-bg);
   color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
-  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
-  border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   box-shadow: none;
   transform: translateY(0);
+  transition-duration: var(--ds-motion-instant);
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
-  color: var(--ds-breadcrumb-active-color, var(--ds-breadcrumb-color-active, var(--ds-color-text-primary)));
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
-  border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
-  /* intensity-scaled optical keyline: at `--ds-effect-intensity: 0` the inset
-     dissolves while the tint + frame keep the current-location hierarchy. */
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white calc(58% * var(--ds-effect-intensity)), transparent);
-  font-weight: var(--ds-font-weight-semibold);
+.ds-breadcrumb--modern[data-part='root'] [data-part='crumb']:is([data-state~='focus-visible'], :focus-visible),
+.ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: none;
+  box-shadow: var(--ds-breadcrumb-focus-ring, var(--ds-focus-ring));
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='icon'] {
+.ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
+  border-color: var(--ds-breadcrumb-current-border);
+  background: var(--ds-breadcrumb-current-bg);
+  color: var(--ds-breadcrumb-active-color, var(--ds-color-text-primary));
+  font-weight: var(--ds-breadcrumb-current-font-weight, var(--ds-font-weight-semibold));
+  box-shadow: var(--ds-breadcrumb-current-keyline);
+}
+
+.ds-breadcrumb--modern[data-part='root'] [data-part='icon'] {
   display: inline-flex;
-  inline-size: 18px;
-  block-size: 18px;
+  inline-size: var(--ds-breadcrumb-icon-size, var(--ds-icon-sm-size));
+  block-size: var(--ds-breadcrumb-icon-size, var(--ds-icon-sm-size));
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-breadcrumb-icon-radius, var(--ds-radius-sm));
+  background: var(--ds-breadcrumb-icon-bg);
   color: var(--ds-breadcrumb-link-color, var(--ds-color-primary));
-  background: color-mix(in srgb, currentColor 7%, transparent);
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='separator'] {
-  inline-size: 18px;
-  block-size: 18px;
+/* The default separator is a governed icon that mirrors itself under RTL; a consumer node owns its own posture. */
+.ds-breadcrumb--modern[data-part='root'] [data-part='separator'] {
+  inline-size: var(--ds-breadcrumb-separator-size, var(--ds-icon-sm-size));
+  block-size: var(--ds-breadcrumb-separator-size, var(--ds-icon-sm-size));
   justify-content: center;
   color: var(--ds-breadcrumb-separator-color, var(--ds-color-text-tertiary));
-  opacity: 0.72;
+  opacity: var(--ds-breadcrumb-separator-opacity);
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-ellipsis='true'] [data-part='crumb'] {
-  min-inline-size: 30px;
+.ds-breadcrumb--modern[data-part='root'] [data-ellipsis='true'] [data-part='crumb'],
+.ds-breadcrumb--modern[data-part='root'] [data-ellipsis='true'] [data-part='overflow-trigger'] {
+  min-inline-size: var(--ds-breadcrumb-ellipsis-min-width);
   justify-content: center;
-  padding-inline: 7px;
-  color: var(--ds-color-text-muted);
-  background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  padding-inline: var(--ds-breadcrumb-ellipsis-padding-inline);
+  color: var(--ds-breadcrumb-ellipsis-color, var(--ds-color-text-muted));
+  background: var(--ds-breadcrumb-ellipsis-bg);
 }
 
-/* overflow-trigger (contract `overflow`): the SAME ink and hover/active
-   grammar as a clickable crumb link (`--ds-breadcrumb-item-color`, the
-   shared hover/active tint) but WITHOUT the link underline proto -- that
-   law is link-specific (interactive-affordance-as-underline), while this is
-   a disclosure control, not a navigable link. */
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
-  display: inline-flex;
-  min-height: var(--ds-breadcrumb-item-height, 30px);
-  align-items: center;
-  gap: var(--ds-spacing-1-5, 6px);
-  padding-block: 0;
-  padding-inline: var(--ds-breadcrumb-item-padding-inline, 9px);
-  border: 1px solid transparent;
-  border-radius: var(--ds-breadcrumb-item-radius, var(--ds-radius-md));
-  background: transparent;
-  color: var(--ds-breadcrumb-item-color, var(--ds-color-text-secondary));
-  font-family: inherit;
-  font-size: var(--ds-breadcrumb-font-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-breadcrumb-font-weight, 520);
-  line-height: 1;
-  cursor: pointer;
-  transition:
-    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
-}
-
-/* The button's UA chrome must never leak through the skin (crumb link
-   precedent above). */
-.rottay-breadcrumb-shell--modern[data-part='root'] button[data-part='overflow-trigger'] {
-  appearance: none;
-}
-
-@media (hover: hover) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:hover {
-    color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
-    background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
-    border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
-  }
-}
-
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:active {
-  color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
-  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
-  border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
-}
-
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:focus-visible {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb']:focus-visible {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
-/* The default separator is a governed NavigationForwardIcon whose facade
-   mirrors it under RTL globally (`semantic-icon.css`: `[data-icon-mirrored=
-   'auto']:dir(rtl)`), so this family declares NO flip of its own -- the
-   former `[dir='rtl'] scaleX(-1)` rule double-mirrored the autoMirror. A
-   consumer-supplied `separator` node owns its own RTL posture. */
-
-/* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'],
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
-    min-block-size: var(--ds-breadcrumb-touch-target-min, var(--ds-touch-target-min, 44px));
+  .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true'],
+  .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger'] {
+    min-block-size: var(--ds-breadcrumb-touch-target-min, var(--ds-touch-target-min));
   }
 }
 
-/* ---- forced colors: every crumb keeps a frame; the current page survives.
-        The distinct `[data-current]` attribute (stamped on EVERY crumb) ties
-        the (0,4,0) border shorthand -- no repetition -- and this later media
-        block wins on source order. The current location fills Highlight (the
-        batch-28 law shared with Pagination's current page and Segmented's
-        selected option); the quiet link underline loses its alpha and reads
-        as a solid system-colored underline, so the interactive affordance
-        survives untouched. ---- */
 @media (forced-colors: active) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current] {
+  .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-current],
+  .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
+    box-shadow: none;
   }
 
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
+  .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
+    border-color: Highlight;
     background: Highlight;
     color: HighlightText;
-    border-color: Highlight;
   }
 
-  /* The overflow trigger is a disclosure control, not a crumb -- it carries
-     no `[data-current]` to tie the border shorthand, so it gets its own
-     (0,4,0) doubled-selector rule instead of piggybacking the one above. */
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'][data-part='overflow-trigger'] {
-    forced-color-adjust: auto;
-    border-color: ButtonText;
+  /* The ring is a box-shadow, which forced colors strip: an outline stands in. */
+  .ds-breadcrumb--modern[data-part='root'] [data-part='crumb']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-breadcrumb-focus-ring-width, var(--ds-focus-ring-width)) solid Highlight;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'],
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
+  .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'],
+  .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger'] {
     transition: none;
   }
+}
+
+html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'],
+html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger'] {
+  transition: none;
 }

@@ -175,7 +175,7 @@ export const TabPane = forwardRef<HTMLDivElement, TabPaneProps>(
     const { children, className = '', style = {} } = props;
 
     return (
-      <div ref={ref} className={`rottay-tabs-tabpane ${className}`} style={style}>
+      <div ref={ref} className={`ds-tabs-pane ${className}`.trim()} style={style}>
         {children}
       </div>
     );

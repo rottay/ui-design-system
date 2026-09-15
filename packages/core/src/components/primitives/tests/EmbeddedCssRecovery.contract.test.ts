@@ -185,7 +185,7 @@ const RELOCATED = {
 
 /** Engine-scoped selector prefixes of the two families that moved. */
 const MODERN_SCROLL_AREA = ".rottay-scroll-area.rottay-scroll-area--modern[data-part='root']";
-const MODERN_TABS = ".rottay-tabs--modern[data-part='root']";
+const MODERN_TABS = ".ds-tabs--modern[data-part='root']";
 
 describe('skin ownership migration embedded CSS recovery — exact static payload', () => {
   it('pins all six audited stylesheets byte-for-byte', () => {
@@ -448,17 +448,21 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     // The Tabs half moved to the engine-scoped owner, which re-expressed the
     // former `[data-tabs-id]` instance hook as the engine class pair plus
     // `data-part`. Same two rules, anchored to a scope class instead of a
-    // generated per-mount identifier.
+    // generated per-mount identifier; the focus rule pairs the kernel's
+    // state with the platform pseudo-class and paints the family's ring.
     expect(
       ruleContract(RELOCATED.tabsModern, `${MODERN_TABS} [data-part='tab-list']::-webkit-scrollbar`)
     ).toEqual({
       display: 'none',
     });
     expect(
-      ruleContract(RELOCATED.tabsModern, `${MODERN_TABS} [data-part='tab-button']:focus-visible`)
+      ruleContract(
+        RELOCATED.tabsModern,
+        `${MODERN_TABS} [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible)`,
+      )
     ).toEqual({
-      outline: 'var(--ds-focus-ring-width) solid var(--ds-focus-ring-color)',
-      'outline-offset': 'calc(-1 * var(--ds-focus-ring-offset))',
+      outline: 'none',
+      'box-shadow': 'var(--ds-tabs-focus-ring, var(--ds-focus-ring))',
     });
 
     // `ds-tabs-fade-in` now lives in the foundation keyframes owner and is

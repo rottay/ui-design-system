@@ -8,7 +8,7 @@
 
 export const TABS_RECIPE_DEFINITION = {
   name: 'tabs',
-  slots: { root: ['rottay-tabs', 'rottay-tabs--modern'] },
+  slots: { root: ['ds-tabs', 'ds-tabs--modern'] },
   axes: {},
   defaults: {},
 };

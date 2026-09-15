@@ -1,445 +1,294 @@
 /**
- * Modern Pagination skin (K3-B Pass 1: single paint owner).
+ * Modern Pagination skin.
  *
- * LAYER: `layer(rottay-engines)`. The canonical order lives in
- * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
- * rottay-structures -> rottay-surfaces. This file refines the engine-agnostic
- * component base and is in turn overridden by the structure and surface tiers;
- * the unlayered compiled tenant artifact wins over all of them.
- *
- * SINGLE PAINT OWNER. The modern engine stamps anatomy only (`data-part`
- * hooks, `data-size`, `data-current`, `aria-current`); no inline styles, no
- * DaisyUI classes, no Tailwind utilities. The stale "DaisyUI join pattern"
- * docblock this file's previous header warned about was removed from the
- * engine in the same wave; `personality.css`'s PAGINATION block still targets
- * `.ant-pagination-item` / `.join .btn` / `.ds-pagination-item`, none of which
- * this engine stamps, so it stays orphaned exactly as before.
- *
- * SCOPE ROOT carries `rottay-pagination rottay-pagination--modern` +
- * `data-part='root'`. All control parts are anchored under it. The root is
- * one wrapping flex toolbar: the optional range readout (`showTotal`), the
- * joined controls row, and the page-size changer (`showSizeChanger`, a
- * native select in the select.css native-trigger idiom with a governed
- * chevron part) sit inline and wrap as one composition on narrow frames.
- *
- * Pass P2 (Phase B segunda pasada): the disabled size changer dims control
- * and chevron as one unit (`data-disabled` on the wrapper — the chevron is
- * the select's sibling, not its child), and forced-colors adds the ellipsis
- * to the joined frame and remaps the disabled chevron to GrayText.
- *
- * THE JOINED-BUTTON BORDER IS ORDER-DEPENDENT. Every control gets the full
- * `border` shorthand; then prev/page/ellipsis drop their INLINE-END edge so
- * adjacent controls share one seam, and only `next` keeps an inline-end
- * border. The `border-inline-end: none` rules therefore have to out-rank the
- * shorthand that precedes them: they carry at least the same (0,4,0) and come
- * later, so they win exactly as the inline spread order did. Logical
- * properties keep the seam and the outer corners correct in RTL.
- *
- * SPECIFICITY (P-48): the shared `border` shorthand carries a real color and
- * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1), so it
- * reaches (0,4,0) via the scope class + the root attr + a REPEATED `data-part`
- * on the target (a compound, no descendant space), and stays a SHORTHAND.
- * `border-inline-end: none` is a color-free reset (exempt from the floor) but
- * is held at (0,4,0)+ so it still beats the shorthand. `background` / `color` /
- * `border-radius` are non-border paint and win at (0,3,0).
+ * The one paint owner of the `ds-pagination` family. The engine stamps anatomy
+ * (`data-part`, the kernel's `data-state`, `data-size`, `data-current`,
+ * `data-direction`, `data-simple`) and this skin reads every
+ * `--ds-pagination-*` channel the pagination chrome deriver produces, chained
+ * to the cascade roots. The joined controls share one seam: every control
+ * carries the full border, every control but `next` drops its inline-end edge
+ * in a later rule of equal specificity, and only the outer corners round.
+ * Logical properties keep seam and corners correct under RTL.
  */
 
-/* ---- root: one wrapping toolbar (range readout · joined controls · size
-        changer) instead of a stacked block; the range's margin channel
-        defaults to 0 now that the regions sit inline. ---- */
-.rottay-pagination--modern[data-part='root'] {
+.ds-pagination.ds-pagination--modern[data-part='root'] {
+  --_ds-pagination-current-height: var(--ds-pagination-md-height);
+  --_ds-pagination-current-padding-x: var(--ds-pagination-md-padding-x);
+  --_ds-pagination-current-font-size: var(--ds-pagination-md-font-size);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: var(--ds-spacing-3);
-  row-gap: var(--ds-spacing-2);
+  column-gap: var(--ds-pagination-gap);
+  row-gap: var(--ds-pagination-row-gap);
   color: var(--ds-pagination-color, var(--ds-color-text-primary));
-  font-size: var(--ds-pagination-font-size, var(--ds-font-size-sm));
+  font-family: var(--ds-pagination-font-family, var(--ds-type-body-font-family));
+  font-size: var(--ds-pagination-font-size, var(--ds-type-body-font-size));
 }
 
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-range'] {
+.ds-pagination.ds-pagination--modern[data-part='root'][data-size='sm'] {
+  --_ds-pagination-current-height: var(--ds-pagination-sm-height);
+  --_ds-pagination-current-padding-x: var(--ds-pagination-sm-padding-x);
+  --_ds-pagination-current-font-size: var(--ds-pagination-sm-font-size);
+}
+
+.ds-pagination.ds-pagination--modern[data-part='root'][data-size='lg'] {
+  --_ds-pagination-current-height: var(--ds-pagination-lg-height);
+  --_ds-pagination-current-padding-x: var(--ds-pagination-lg-padding-x);
+  --_ds-pagination-current-font-size: var(--ds-pagination-lg-font-size);
+}
+
+.ds-pagination--modern[data-part='root'] [data-part='pagination-range'] {
   flex: 0 0 auto;
-  margin-block-end: var(--ds-pagination-range-margin-block-end, 0);
+  margin-block-end: var(--ds-pagination-range-margin-block-end);
   color: var(--ds-pagination-range-color, var(--ds-color-text-secondary));
-  font-size: var(--ds-pagination-range-font-size, var(--ds-font-size-sm));
-  font-variant-numeric: var(--ds-pagination-numeric, tabular-nums);
+  font-size: var(--ds-pagination-range-font-size, var(--ds-type-supporting-font-size));
+  font-variant-numeric: var(--ds-pagination-numeric);
 }
 
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-controls'] {
+/* Narrow frames: the joined row scrolls inside its container; the bleed keeps the focus ring unclipped. */
+.ds-pagination--modern[data-part='root'] [data-part='pagination-controls'] {
   display: inline-flex;
-  align-items: stretch;
-  /* Narrow frames: the joined row scrolls inside its container instead of
-     overflowing the page (breadcrumb.css's root precedent; measured 377px of
-     controls vs a 342px frame at 390px). The 4px bleed keeps the
-     outline-offset focus ring unclipped at the scrollport edges. */
   max-inline-size: 100%;
+  align-items: stretch;
+  margin: calc(-1 * var(--ds-pagination-controls-bleed));
+  padding: var(--ds-pagination-controls-bleed);
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 4px;
-  margin: -4px;
 }
 
-/* ---- size scale: the documented 32/36/44 control heights ride data-size. ---- */
-.rottay-pagination--modern[data-part='root'][data-size='sm'] {
-  --ds-pagination-current-height: var(--ds-pagination-sm-height, 32px);
-  --ds-pagination-current-padding-x: var(--ds-pagination-sm-padding-x, 12px);
-  --ds-pagination-current-font-size: var(--ds-pagination-sm-font-size, 13px);
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
+.ds-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'],
+.ds-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'] {
+  border: var(--ds-edge-standard-width) var(--ds-edge-standard-style) var(--ds-pagination-border, var(--ds-color-border));
 }
 
-.rottay-pagination--modern[data-part='root'][data-size='md'] {
-  --ds-pagination-current-height: var(--ds-pagination-md-height, 36px);
-  --ds-pagination-current-padding-x: var(--ds-pagination-md-padding-x, 16px);
-  --ds-pagination-current-font-size: var(--ds-pagination-md-font-size, 14px);
-}
-
-.rottay-pagination--modern[data-part='root'][data-size='lg'] {
-  --ds-pagination-current-height: var(--ds-pagination-lg-height, 44px);
-  --ds-pagination-current-padding-x: var(--ds-pagination-lg-padding-x, 20px);
-  --ds-pagination-current-font-size: var(--ds-pagination-lg-font-size, 16px);
-}
-
-/* ---- shared control chrome: the one bordered rule (0,4,0). ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
-.rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'] {
-  border: 1px solid var(--ds-pagination-border, var(--ds-color-border));
-}
-
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
-.rottay-pagination--modern[data-part='root'] [data-part='ellipsis'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
+.ds-pagination--modern[data-part='root'] [data-part='ellipsis'] {
   display: inline-flex;
-  block-size: var(--ds-pagination-current-height);
+  block-size: var(--_ds-pagination-current-height);
   align-items: center;
   justify-content: center;
-  padding: 0 var(--ds-pagination-current-padding-x);
+  padding: 0 var(--_ds-pagination-current-padding-x);
   border-radius: 0;
+  outline: none;
   background: var(--ds-pagination-item-bg);
   color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
   font: inherit;
-  font-size: var(--ds-pagination-current-font-size);
-  /* Page numerals align in columns across widths (Quiet Premium numeral law). */
-  font-variant-numeric: var(--ds-pagination-numeric, tabular-nums);
-  cursor: pointer;
+  font-size: var(--_ds-pagination-current-font-size);
+  font-variant-numeric: var(--ds-pagination-numeric);
   transition:
-    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+    color var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing),
+    background-color var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing),
+    border-color var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing),
+    box-shadow var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing);
 }
 
-/* ---- glyph nav buttons read square next to the padded numeral cells:
-        optical alignment (a wide pill around a chevron reads off-balance
-        beside tabular numerals centered in their own cells). ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'] {
-  inline-size: var(
-    --ds-pagination-nav-inline-size,
-    var(--ds-pagination-current-height)
-  );
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'] {
+  cursor: pointer;
+}
+
+/* Glyph controls read square beside the padded numeral cells. */
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'] {
+  inline-size: var(--ds-pagination-nav-inline-size, var(--_ds-pagination-current-height));
   padding-inline: 0;
 }
 
-/* ---- the joined seam: every control but `next` drops its inline-end edge. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='prev'][data-part='pagination-nav-button'],
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
-.rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='prev'][data-part='pagination-nav-button'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
+.ds-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'] {
   border-inline-end: none;
 }
 
-/* ---- the outer corners round; the inner seams stay square (logical: RTL-safe). ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='prev'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='prev'] {
   border-start-start-radius: var(--ds-pagination-radius, var(--ds-radius-md));
   border-end-start-radius: var(--ds-pagination-radius, var(--ds-radius-md));
 }
 
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='next'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='next'] {
   border-start-end-radius: var(--ds-pagination-radius, var(--ds-radius-md));
   border-end-end-radius: var(--ds-pagination-radius, var(--ds-radius-md));
 }
 
-/* ---- hover only on live buttons; the ellipsis and disabled stay put. Gated
-        to hover-capable pointers; the `:active` rule below is the touch
-        equivalent (lane law: no hover paint without a touch counterpart). ---- */
+/* Hover is decided by the kernel with the platform pseudo-class as fallback, gated to hover-capable pointers; press is the touch twin. */
 @media (hover: hover) {
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:not(:disabled):hover,
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:not(:disabled):not([data-current='true']):hover {
-    /* `--ds-color-bg-hover` is a dark inset under both first-party themes
-       (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
-       from the paired card chrome instead (measured: text-primary on
-       `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
-    background: var(
-      --ds-pagination-item-bg-hover,
-      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
-    );
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:not([data-state~='disabled']):is([data-state~='hovered'], :hover),
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button']:not([data-state~='disabled']):not([data-current='true']):is([data-state~='hovered'], :hover),
+  .ds-pagination--modern[data-part='root'] [data-part='quick-jumper']:not([data-state~='disabled']):is([data-state~='hovered'], :hover),
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select']:not([data-state~='disabled']):is([data-state~='hovered'], :hover) {
+    background: var(--ds-pagination-item-bg-hover);
     color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
   }
 }
 
-/* ---- a held press inks the button one step deeper. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:not(:disabled):active,
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:not(:disabled):not([data-current='true']):active {
-  background: var(
-    --ds-pagination-item-bg-active,
-    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))
-  );
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:not([data-state~='disabled']):is([data-state~='pressed'], :active),
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button']:not([data-state~='disabled']):not([data-current='true']):is([data-state~='pressed'], :active),
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-select']:not([data-state~='disabled']):is([data-state~='pressed'], :active) {
+  background: var(--ds-pagination-item-bg-active);
+  transition-duration: var(--ds-motion-instant);
 }
 
-/* ---- the current page inverts. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {
   background: var(--ds-pagination-item-bg-current, var(--ds-color-primary));
   color: var(--ds-pagination-item-color-current, var(--ds-color-text-on-primary));
-  font-weight: var(--ds-pagination-current-font-weight, 600);
+  font-weight: var(--ds-pagination-current-font-weight, var(--ds-font-weight-semibold));
 }
 
-/* ---- the ellipsis is inert readout, never a control. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='ellipsis'] {
+.ds-pagination--modern[data-part='root'] [data-part='ellipsis'] {
   color: var(--ds-pagination-ellipsis-color, var(--ds-color-text-muted));
-  cursor: default;
 }
 
-/* ---- simple mode (contract `simple`): the 3-item cluster (prev, readout,
-        next) reads tighter with the next spacing rung down instead of the
-        default toolbar gap. ---- */
-.rottay-pagination--modern[data-part='root'][data-simple='true'] {
-  column-gap: var(--ds-spacing-2);
+.ds-pagination--modern[data-part='root'][data-simple='true'] {
+  column-gap: var(--ds-pagination-simple-gap);
 }
 
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-simple-text'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-simple-text'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  padding-inline: var(--ds-pagination-current-padding-x);
+  padding-inline: var(--_ds-pagination-current-padding-x);
   color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
-  font-size: var(--ds-pagination-current-font-size);
-  /* Bare value, not the `--ds-pagination-numeric` channel expression: the
-     modern-engine test pins that channel to exactly two declaration sites
-     (pagination-size-select carries the same precedent, same reason). */
-  font-variant-numeric: tabular-nums;
+  font-size: var(--_ds-pagination-current-font-size);
+  font-variant-numeric: var(--ds-pagination-numeric);
   white-space: nowrap;
 }
 
-/* ---- quick jumper (contract `showQuickJumper`): the same height scale,
-        hairline, radius and typography as the joined controls / size
-        select -- the family's one control grammar, reused rather than
-        reinvented. The width is instance geometry with no existing channel,
-        so it rides a private proto axis (batch-28 ledger convention) with a
-        literal fallback, following the size-changer's arrow-clearance
-        precedent above. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-jumper'] {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-}
-
-.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'] {
-  border: 1px solid var(--ds-pagination-border, var(--ds-color-border));
-}
-
-.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
-  display: inline-flex;
-  inline-size: var(--_ds-pagination-jumper-width, 56px);
-  block-size: var(--ds-pagination-current-height);
-  padding-inline: var(--ds-pagination-current-padding-x);
-  border-radius: var(--ds-pagination-radius, var(--ds-radius-md));
-  background: var(--ds-pagination-item-bg);
-  color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
-  font: inherit;
-  font-size: var(--ds-pagination-current-font-size);
-  /* Bare value; see the simple-text rule above for why this stays outside
-     the pinned `--ds-pagination-numeric` channel expression. */
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-  transition:
-    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
-}
-
-@media (hover: hover) {
-  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:not(:disabled):hover {
-    background: var(
-      --ds-pagination-item-bg-hover,
-      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
-    );
-    color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
-  }
-}
-
-.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:focus-visible {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
-/* Disabled dims control as one unit, same posture as the size-changer. */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-jumper'][data-disabled='true'] {
-  opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity));
-}
-
-.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:disabled {
-  cursor: not-allowed;
-}
-
-/* ---- page-size changer (contract `showSizeChanger`): a native select in
-        the select.css native-trigger idiom — same height scale, hairline,
-        radius and typography as the joined controls, with the governed
-        chevron docked at the inline end. The clearance axis is still a
-        governed prototoken pending the shared native-arrow substrate; the
-        inset is settled private geometry. Both fall back to existing DS
-        channels. `tabular-nums` here is a plain value, not the
-        `--ds-pagination-numeric` channel expression: the modern-engine test
-        pins that channel to exactly two declaration sites. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-changer'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-jumper'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-changer'] {
   position: relative;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
 }
 
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'] {
-  border: 1px solid var(--ds-pagination-border, var(--ds-color-border));
-}
-
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
-  appearance: none;
+.ds-pagination--modern[data-part='root'] [data-part='quick-jumper'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
   display: inline-flex;
-  block-size: var(--ds-pagination-current-height);
+  block-size: var(--_ds-pagination-current-height);
   align-items: center;
   padding-block: 0;
-  padding-inline-start: var(--ds-pagination-current-padding-x);
-  /* Private pagination canon. The hold was a shared native-select-arrow
-     substrate that does not exist and that nobody has planned: today both this
-     site and select.css merely borrow the undeclared
-     `--ds-select-native-arrow-clearance` name and fall through to the same
-     2rem. A prototoken means an adjudication is OPEN, and waiting on an
-     unplanned substrate is not one — so this settles as private canon.
-     Unifying the two families behind a real substrate stays a D3 opportunity IF
-     that substrate is ever minted; the borrowed name is kept in the chain so
-     that the day it lands, both sites pick it up unchanged. */
-  padding-inline-end: var(
-    --_ds-pagination-size-arrow-clearance,
-    var(--ds-select-native-arrow-clearance, 2rem)
-  );
   border-radius: var(--ds-pagination-radius, var(--ds-radius-md));
+  outline: none;
   background: var(--ds-pagination-item-bg);
   color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
   font: inherit;
-  font-size: var(--ds-pagination-current-font-size);
-  font-variant-numeric: tabular-nums;
-  cursor: pointer;
+  font-size: var(--_ds-pagination-current-font-size);
+  font-variant-numeric: var(--ds-pagination-numeric);
   transition:
-    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+    color var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing),
+    background-color var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing),
+    border-color var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing),
+    box-shadow var(--ds-pagination-motion-duration) var(--ds-pagination-motion-easing);
 }
 
-@media (hover: hover) {
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:not(:disabled):hover {
-    background: var(
-      --ds-pagination-item-bg-hover,
-      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
-    );
-    color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
-  }
+.ds-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
+  inline-size: var(--ds-pagination-jumper-width);
+  padding-inline: var(--_ds-pagination-current-padding-x);
+  text-align: center;
 }
 
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:not(:disabled):active {
-  background: var(
-    --ds-pagination-item-bg-active,
-    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))
-  );
+/* A native select keeps keyboard, mobile picker and forced-colors behaviour; the governed chevron docks at the inline end. */
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
+  appearance: none;
+  padding-inline-start: var(--_ds-pagination-current-padding-x);
+  padding-inline-end: var(--ds-pagination-size-arrow-clearance, var(--ds-select-native-arrow-clearance));
+  cursor: pointer;
 }
 
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:focus-visible {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
-/* Disabled dims control AND chevron as one unit: the opacity rides the
-   wrapper (the chevron is a sibling part, not a child of the select), while
-   the select keeps the refusal cursor. */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-changer'][data-disabled='true'] {
-  opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity));
-}
-
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled {
-  cursor: not-allowed;
-}
-
-/* Governed chevron docked at the inline end: decorative, `pointer-events:
-   none`, centered with the `translate` property so it never fights the
-   semantic-icon facade's own `transform` (RTL auto-mirror) channel. */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-icon'] {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-icon'] {
   position: absolute;
   inset-block-start: 50%;
-  inset-inline-end: var(--_ds-pagination-size-arrow-inset, var(--ds-spacing-2));
+  inset-inline-end: var(--ds-pagination-size-arrow-inset, var(--ds-spacing-2));
   translate: 0 -50%;
   pointer-events: none;
-  color: var(--ds-color-text-muted);
+  color: var(--ds-pagination-size-icon-color, var(--ds-color-text-muted));
 }
 
-/* ---- disabled controls dim and refuse the pointer. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:disabled,
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:disabled {
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pagination--modern[data-part='root'] [data-part='quick-jumper']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-select']:is([data-state~='focus-visible'], :focus-visible) {
+  position: relative;
+  z-index: var(--ds-z-index-relative-above);
+  outline: none;
+  box-shadow: var(--ds-pagination-focus-ring, var(--ds-focus-ring));
+}
+
+/* Disabled dims a control and its docked chevron as one unit and refuses the pointer. */
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-state~='disabled'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-state~='disabled'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-jumper'][data-disabled='true'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-changer'][data-disabled='true'] {
   opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity));
+}
+
+.ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-state~='disabled'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-state~='disabled'],
+.ds-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-state~='disabled'],
+.ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-state~='disabled'] {
   cursor: not-allowed;
 }
 
-/* ---- keyboard focus ring. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:focus-visible,
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:focus-visible {
-  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset);
-}
-
-/* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
-  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
-    min-block-size: var(--ds-pagination-touch-target-min, var(--ds-touch-target-min, 44px));
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
+  .ds-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
+    min-block-size: var(--ds-pagination-touch-target-min, var(--ds-touch-target-min));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
-  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
+  .ds-pagination--modern[data-part='root'] [data-part='ellipsis'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
+  .ds-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
     transition: none;
   }
 }
 
-/* ---- forced colors: the frame and the current page must survive. Doubled
-        data-part ties the (0,4,0) border shorthand, later source wins.
-        Opacity is stripped in this mode, so disabled ink remaps to the
-        GrayText system color instead of vanishing into the frame. ---- */
+html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
+html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
+html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-part='ellipsis'],
+html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
+html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
+  transition: none;
+}
+
 @media (forced-colors: active) {
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'],
-  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'] {
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
+  .ds-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'],
+  .ds-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
+    box-shadow: none;
   }
 
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {
     background: Highlight;
     color: HighlightText;
   }
 
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:disabled,
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:disabled,
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled,
-  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:disabled {
+  /* Opacity is stripped here, so disabled ink remaps to the system colour. */
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-state~='disabled'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-state~='disabled'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-state~='disabled'],
+  .ds-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-state~='disabled'],
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-size-changer'][data-disabled='true'] [data-part='pagination-size-icon'] {
     color: GrayText;
+    opacity: 1;
   }
 
-  /* Opacity is stripped in this mode, so the disabled size-changer chevron
-     remaps to GrayText with its control instead of reading enabled. */
-  .rottay-pagination--modern[data-part='root']
-    [data-part='pagination-size-changer'][data-disabled='true']
-    [data-part='pagination-size-icon'] {
-    color: GrayText;
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-pagination--modern[data-part='root'] [data-part='quick-jumper']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-pagination-focus-ring-width, var(--ds-focus-ring-width)) solid Highlight;
   }
 }

@@ -20,7 +20,7 @@ describe('Modern Breadcrumb public anatomy', () => {
     const { container } = render(<ModernBreadcrumb items={items} />);
 
     const root = container.querySelector(
-      '.rottay-breadcrumb-shell--modern[data-part="root"]'
+      '.ds-breadcrumb--modern[data-part="root"]'
     ) as HTMLElement;
     expect(root).toHaveAttribute('data-count', '3');
 

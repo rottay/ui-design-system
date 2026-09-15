@@ -3,14 +3,14 @@
   "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets. A reviewed semantic-identity exclusion is the one lawful subtraction: it is pinned beside the denominator it subtracts from (notApplicable per axis) and under the exclusion revision it was reviewed at, so neither can drift on its own.",
   "catalogRevision": "2a25f7c6068407fb",
   "exclusionsRevision": "ef3de957d72fda22",
-  "pinnedOn": "2026-09-14",
+  "pinnedOn": "2026-09-15",
   "skinFamilies": 270,
   "axes": {
     "shape": 216,
     "typography": 181,
-    "rhythm": 213,
-    "depth": 193,
-    "states": 155,
+    "rhythm": 214,
+    "depth": 194,
+    "states": 156,
     "motion": 200
   },
   "notApplicable": {
@@ -22,9 +22,9 @@
     "motion": 0
   },
   "provenance": {
-    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned",
+    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned | WO-FAM-05 lot 2 (2026-09-15): rhythm 213 -> 214, depth 193 -> 194, states 155 -> 156, one family entering each -- breadcrumb-compounds (presentation/components/skin/breadcrumb-compounds), which read only --ds-color-primary-500 before the cut and now reads --ds-breadcrumb-item-gap, --ds-breadcrumb-focus-ring and the compound's box-shadow ring through the breadcrumb chrome deriver; tabs, breadcrumb and pagination were already members of every axis they belong to, so their skin rewrites move no membership. shape, typography and motion unchanged; catalog revision left as pinned (the live digest differs through another lot's uncommitted catalog edit, not through this cut)",
     "sourceCommit": "0867fb986",
-    "computedOn": "2026-09-14",
+    "computedOn": "2026-09-15",
     "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed family by family against the same computation over the previous pin's tree (HEAD owner, identical corpus)",
     "previousPin": {
       "pinnedOn": "2026-09-14",

@@ -14,9 +14,8 @@
  * - When integrating with routing libraries that require components
  *
  * **Styling:**
- * Uses CSS variables for theming:
- * - `--ds-color-primary-500`: Link text color
- * - Gap and alignment handled via inline flexbox styles
+ * Painted by the breadcrumb compound skin through the family's
+ * `--ds-breadcrumb-*` channels; nothing is styled inline.
  *
  * **Accessibility:**
  * - Links use proper anchor tags with href
@@ -70,6 +69,7 @@
 
 import React, { forwardRef } from 'react';
 import type { ReactNode } from 'react';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 // ============================================================================
 // Type Definitions
@@ -145,17 +145,9 @@ export interface BreadcrumbItemProps {
  *
  * @description
  * Represents a single navigation step in a breadcrumb trail.
- * Renders as a link when `href` is provided, otherwise as a span.
- *
- * @remarks
- * **Rendering Logic:**
- * - With `href`: Renders as `<span><a href="...">content</a></span>`
- * - Without `href`: Renders as `<span>content</span>`
- *
- * **Styling:**
- * - Uses inline flexbox for icon/text alignment
- * - Link color uses CSS variable `--ds-color-primary-500`
- * - Cursor changes based on interactivity
+ * Renders as a link when `href` is provided, otherwise as a span. Paint lives
+ * in the breadcrumb compound skin; the link's hover, press and focus are
+ * decided by the interaction kernel.
  *
  * @param props - {@link BreadcrumbItemProps}
  * @param ref - Forwarded ref to the outer span element
@@ -170,35 +162,9 @@ export interface BreadcrumbItemProps {
  */
 export const BreadcrumbItem = forwardRef<HTMLSpanElement, BreadcrumbItemProps>(
   (props, ref) => {
-    // -------------------------------------------------------------------------
-    // Props Destructuring
-    // -------------------------------------------------------------------------
+    const { children, href, onClick, icon, className = '', style } = props;
+    const interaction = useInteractionState();
 
-    const { children, href, onClick, icon, className = '', style = {} } = props;
-
-    // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /** Container styles for the item wrapper */
-    const itemStyle: React.CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '4px',
-      ...style,
-    };
-
-    /** Link/text styles based on interactivity */
-    const linkStyle: React.CSSProperties = {
-      textDecoration: 'none',
-      cursor: href || onClick ? 'pointer' : 'default',
-    };
-
-    // -------------------------------------------------------------------------
-    // Content
-    // -------------------------------------------------------------------------
-
-    /** Composed content with optional icon */
     const content = (
       <>
         {icon}
@@ -206,29 +172,27 @@ export const BreadcrumbItem = forwardRef<HTMLSpanElement, BreadcrumbItemProps>(
       </>
     );
 
-    // -------------------------------------------------------------------------
-    // Render - Link Variant
-    // -------------------------------------------------------------------------
-
     if (href) {
       return (
-        <span ref={ref} className={`rottay-breadcrumb-item ${className}`} style={itemStyle}>
-          <a href={href} onClick={onClick} style={linkStyle} data-part="crumb" data-current={false}>
+        <span ref={ref} className={`ds-breadcrumb-item ${className}`.trim()} style={style}>
+          <a
+            href={href}
+            onClick={onClick}
+            {...partAttributes('crumb', interaction.state)}
+            {...interaction.handlers}
+            data-current={false}
+          >
             {content}
           </a>
         </span>
       );
     }
 
-    // -------------------------------------------------------------------------
-    // Render - Non-Link Variant
-    // -------------------------------------------------------------------------
-
     return (
       <span
         ref={ref}
-        className={`rottay-breadcrumb-item ${className}`}
-        style={{ ...itemStyle, ...linkStyle }}
+        className={`ds-breadcrumb-item ${className}`.trim()}
+        style={style}
         onClick={onClick}
         data-part="crumb"
         data-current={true}

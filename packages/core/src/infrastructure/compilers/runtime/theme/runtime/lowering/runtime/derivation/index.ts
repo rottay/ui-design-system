@@ -38,6 +38,9 @@ import { popoverChromeDeriver } from "./chrome/popover";
 import { hoverCardChromeDeriver } from "./chrome/hover-card";
 import { dropdownChromeDeriver } from "./chrome/dropdown";
 import { menuChromeDeriver } from "./chrome/menu";
+import { tabsChromeDeriver } from "./chrome/tabs";
+import { breadcrumbChromeDeriver } from "./chrome/breadcrumb";
+import { paginationChromeDeriver } from "./chrome/pagination";
 import { tooltipChromeDeriver } from "./chrome/tooltip";
 import { tourChromeDeriver } from "./chrome/tour";
 import { notifierChromeDeriver } from "./chrome/notifier";
@@ -121,6 +124,9 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   hoverCardChromeDeriver,
   dropdownChromeDeriver,
   menuChromeDeriver,
+  tabsChromeDeriver,
+  breadcrumbChromeDeriver,
+  paginationChromeDeriver,
   tooltipChromeDeriver,
   tourChromeDeriver,
   notifierChromeDeriver,

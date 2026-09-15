@@ -4,8 +4,10 @@
  * Modern Tabs engine.
  *
  * The engine owns interaction and measurement; the Modern skin owns every
- * static geometry, paint, type and motion channel. This keeps Tabs responsive,
- * accessible and completely re-skinnable through BrandTabsChrome.
+ * static geometry, paint, type and motion channel. Hover, press and focus of
+ * every destination and control are decided once by the interaction kernel;
+ * the indicator's measured position rides two runtime channels the skin turns
+ * into a transform.
  */
 
 import React, {
@@ -20,7 +22,12 @@ import React, {
 import { flushSync } from 'react-dom';
 
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import {
+  resolveNavigationIntent,
+  resolveReadingDirectionIsRtl,
+} from '@/components/primitives/runtime/collection/roving-focus';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
 import { TABS_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
@@ -67,22 +74,22 @@ const SIZE_CONFIG: Record<
   }
 > = {
   sm: {
-    height: 'var(--ds-tabs-sm-height, 32px)',
-    padding: 'var(--ds-tabs-sm-padding, 0 var(--ds-spacing-3, 12px))',
-    fontSize: 'var(--ds-tabs-sm-font-size, var(--ds-font-size-xs, 12px))',
-    iconSize: 'var(--ds-tabs-sm-icon-size, 14px)',
+    height: 'var(--ds-tabs-sm-height)',
+    padding: 'var(--ds-tabs-sm-padding)',
+    fontSize: 'var(--ds-tabs-sm-font-size)',
+    iconSize: 'var(--ds-tabs-sm-icon-size)',
   },
   md: {
-    height: 'var(--ds-tabs-md-height, 36px)',
-    padding: 'var(--ds-tabs-md-padding, 0 var(--ds-spacing-4, 16px))',
-    fontSize: 'var(--ds-tabs-md-font-size, var(--ds-font-size-sm, 14px))',
-    iconSize: 'var(--ds-tabs-md-icon-size, 16px)',
+    height: 'var(--ds-tabs-md-height)',
+    padding: 'var(--ds-tabs-md-padding)',
+    fontSize: 'var(--ds-tabs-md-font-size)',
+    iconSize: 'var(--ds-tabs-md-icon-size)',
   },
   lg: {
-    height: 'var(--ds-tabs-lg-height, 40px)',
-    padding: 'var(--ds-tabs-lg-padding, 0 var(--ds-spacing-4, 16px))',
-    fontSize: 'var(--ds-tabs-lg-font-size, var(--ds-font-size-base, 15px))',
-    iconSize: 'var(--ds-tabs-lg-icon-size, 18px)',
+    height: 'var(--ds-tabs-lg-height)',
+    padding: 'var(--ds-tabs-lg-padding)',
+    fontSize: 'var(--ds-tabs-lg-font-size)',
+    iconSize: 'var(--ds-tabs-lg-icon-size)',
   },
 };
 
@@ -121,13 +128,6 @@ function firstSelectableKey(items: TabItem[]): string | undefined {
   );
 }
 
-/** Resolve writing direction from semantic markup before computed CSS. */
-function elementDirection(element: HTMLElement): 'ltr' | 'rtl' {
-  const directionOwner = element.closest<HTMLElement>('[dir]');
-  if (directionOwner?.dir === 'rtl') return 'rtl';
-  return getComputedStyle(element).direction === 'rtl' ? 'rtl' : 'ltr';
-}
-
 function inlineOffsetWithin(node: HTMLElement, ancestor: HTMLElement): number {
   let offset = 0;
   let current: HTMLElement | null = node;
@@ -150,6 +150,156 @@ function splitLegacyBadge(label: React.ReactNode): {
   if (typeof label !== 'string') return { label };
   const match = label.match(/^(.+?)\s+(\d+)$/);
   return match ? { label: match[1], badge: match[2] } : { label };
+}
+
+interface TabButtonProps {
+  item: TabItem;
+  tabsId: string;
+  selected: boolean;
+  focusable: boolean;
+  label: React.ReactNode;
+  badge: React.ReactNode;
+  tabRef: (node: HTMLButtonElement | null) => void;
+  labelRef: (node: HTMLSpanElement | null) => void;
+  onActivate: (key: string) => void;
+  onFocusKey: (key: string) => void;
+  onKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>, key: string) => void;
+}
+
+function TabButton({
+  item,
+  tabsId,
+  selected,
+  focusable,
+  label,
+  badge,
+  tabRef,
+  labelRef,
+  onActivate,
+  onFocusKey,
+  onKeyDown,
+}: TabButtonProps): React.ReactElement {
+  const interaction = useInteractionState({ disabled: Boolean(item.disabled) });
+  const unavailable = Boolean(item.disabled || item.loading);
+  const hasBadge = badge !== undefined && badge !== null;
+  return (
+    <button
+      ref={tabRef}
+      id={`tabs-tab-${tabsId}-${item.key}`}
+      role="tab"
+      type="button"
+      {...partAttributes('tab-button', interaction.state)}
+      {...interaction.handlers}
+      data-selected={selected}
+      data-loading={item.loading || undefined}
+      data-has-badge={hasBadge || undefined}
+      aria-selected={selected}
+      aria-disabled={unavailable || undefined}
+      aria-busy={item.loading || undefined}
+      aria-controls={`tabs-panel-${tabsId}-${item.key}`}
+      tabIndex={focusable ? 0 : -1}
+      disabled={item.disabled}
+      onClick={() => onActivate(item.key)}
+      onFocus={(event) => {
+        interaction.handlers.onFocus(event);
+        onFocusKey(item.key);
+      }}
+      onKeyDown={(event) => onKeyDown(event, item.key)}
+    >
+      {item.icon && (
+        <span data-part="icon" aria-hidden="true">
+          {item.icon}
+        </span>
+      )}
+      {item.loading ? <span data-part="loading-indicator" aria-hidden="true" /> : null}
+      <span
+        ref={labelRef}
+        data-part="tab-label"
+        title={typeof label === 'string' ? label : undefined}
+      >
+        {label}
+      </span>
+      {hasBadge && (
+        <span data-part="tab-badge" aria-label={item.badgeAriaLabel}>
+          {badge}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function OverflowControl({
+  part,
+  label,
+  disabled,
+  onClick,
+}: {
+  part: 'previous' | 'next';
+  label: string;
+  disabled: boolean;
+  onClick: () => void;
+}): React.ReactElement {
+  const interaction = useInteractionState({ disabled });
+  const isPrevious = part === 'previous';
+  return (
+    <button
+      type="button"
+      {...partAttributes(isPrevious ? 'overflow-previous' : 'overflow-next', interaction.state)}
+      {...interaction.handlers}
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {isPrevious ? (
+        <NavigationBackIcon decorative size="sm" />
+      ) : (
+        <NavigationForwardIcon decorative size="sm" />
+      )}
+    </button>
+  );
+}
+
+/** The Dropdown clones its disclosure attributes onto this trigger, so every prop reaches the button. */
+function OverflowMenuTrigger({
+  label,
+  ...rest
+}: { label: string } & React.ButtonHTMLAttributes<HTMLButtonElement>): React.ReactElement {
+  const interaction = useInteractionState();
+  return (
+    <button
+      type="button"
+      {...rest}
+      {...partAttributes('overflow-more', interaction.state)}
+      {...interaction.handlers}
+      aria-label={label}
+    >
+      <NavigationMoreIcon decorative size="sm" />
+    </button>
+  );
+}
+
+function TabPanel({
+  tabsId,
+  item,
+}: {
+  tabsId: string;
+  item: TabItem;
+}): React.ReactElement {
+  const interaction = useInteractionState();
+  return (
+    <div
+      id={`tabs-panel-${tabsId}-${item.key}`}
+      role="tabpanel"
+      {...partAttributes('tab-panel', interaction.state)}
+      {...interaction.handlers}
+      data-active-key={item.key}
+      aria-labelledby={`tabs-tab-${tabsId}-${item.key}`}
+      tabIndex={0}
+      style={tabPanelTransitionStyle(tabsId)}
+    >
+      {item.children}
+    </div>
+  );
 }
 
 export default function ModernTabs(props: TabsProps): React.ReactElement {
@@ -286,7 +436,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       );
       const nextIndex = items.findIndex((candidate) => candidate.key === key);
       const isRtl = tabListRef.current
-        ? elementDirection(tabListRef.current) === 'rtl'
+        ? resolveReadingDirectionIsRtl(tabListRef.current)
         : false;
       const direction = directionFromIndexDelta(
         isRtl ? nextIndex : previousIndex,
@@ -323,9 +473,12 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     (event: React.KeyboardEvent<HTMLButtonElement>, key: string) => {
       if (enabledItems.length === 0) return;
 
-      const isRtl = elementDirection(event.currentTarget) === 'rtl';
-      const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
-      const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
+      // Both axes answer so a horizontal tablist still walks on ArrowUp/Down;
+      // the horizontal pair follows the reading direction.
+      const intent = resolveNavigationIntent(event.key, {
+        orientation: 'both',
+        rtl: resolveReadingDirectionIsRtl(event.currentTarget),
+      });
 
       // A pointer can land DOM focus on a loading destination that the roving
       // sequence excludes; anchor arrow navigation at its insertion point in
@@ -349,13 +502,13 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       }
       let nextKey: string | undefined;
 
-      if (event.key === forwardKey || event.key === 'ArrowDown') {
+      if (intent === 'next') {
         nextKey = arrayValueAt(enabledItems, forwardIndex)?.key;
-      } else if (event.key === backwardKey || event.key === 'ArrowUp') {
+      } else if (intent === 'previous') {
         nextKey = arrayValueAt(enabledItems, backwardIndex)?.key;
-      } else if (event.key === 'Home') {
+      } else if (intent === 'first') {
         nextKey = arrayValueAt(enabledItems, 0)?.key;
-      } else if (event.key === 'End') {
+      } else if (intent === 'last') {
         nextKey = arrayValueAt(enabledItems, -1)?.key;
       } else if (
         activationMode === 'manual' &&
@@ -384,7 +537,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       return;
     }
 
-    const isRtl = elementDirection(list) === 'rtl';
+    const isRtl = resolveReadingDirectionIsRtl(list);
     setWritingDirection((current) =>
       current === (isRtl ? 'rtl' : 'ltr') ? current : isRtl ? 'rtl' : 'ltr'
     );
@@ -469,34 +622,12 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   const scrollRail = (visualDirection: -1 | 1) => {
     const list = tabListRef.current;
     if (!list) return;
-    const isRtl = elementDirection(list) === 'rtl';
+    const isRtl = resolveReadingDirectionIsRtl(list);
     const physicalDirection = isRtl ? -visualDirection : visualDirection;
     list.scrollBy?.({
       left: physicalDirection * list.clientWidth * 0.72,
       behavior: motionIsFinal ? 'auto' : 'smooth',
     });
-  };
-
-  const renderOverflowControl = (
-    part: 'previous' | 'next',
-    disabled: boolean
-  ): React.ReactElement => {
-    const isPrevious = part === 'previous';
-    return (
-      <button
-        type="button"
-        data-part={isPrevious ? 'overflow-previous' : 'overflow-next'}
-        aria-label={isPrevious ? chromeLabels.previous : chromeLabels.next}
-        disabled={disabled}
-        onClick={() => scrollRail(isPrevious ? -1 : 1)}
-      >
-        {isPrevious ? (
-          <NavigationBackIcon decorative size="sm" />
-        ) : (
-          <NavigationForwardIcon decorative size="sm" />
-        )}
-      </button>
-    );
   };
 
   const showScrollControls =
@@ -511,10 +642,12 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     onClick: () => handleChange(item.key),
   }));
 
-  const indicatorStyle: React.CSSProperties | undefined = indicatorPosition
-    ? {
-        transform: `translateX(${indicatorPosition.left}px) scaleX(${indicatorPosition.width})`,
-      }
+  // Runtime measurement only: the skin owns the transform that reads these.
+  const indicatorStyle = indicatorPosition
+    ? ({
+        '--ds-tabs-indicator-offset': `${indicatorPosition.left}px`,
+        '--ds-tabs-indicator-scale': `${indicatorPosition.width}`,
+      } as React.CSSProperties)
     : undefined;
 
   return (
@@ -543,7 +676,14 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     >
 
       <div data-part="tab-rail">
-        {showScrollControls && renderOverflowControl('previous', !overflowState.before)}
+        {showScrollControls && (
+          <OverflowControl
+            part="previous"
+            label={chromeLabels.previous}
+            disabled={!overflowState.before}
+            onClick={() => scrollRail(-1)}
+          />
+        )}
 
         <div
           ref={tabListRef}
@@ -554,64 +694,26 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           onScroll={refreshOverflow}
         >
           {items.map((item) => {
-            const selected = item.key === currentKey;
-            const unavailable = Boolean(item.disabled || item.loading);
             const legacy = splitLegacyBadge(item.label);
-            const badge = item.badge ?? legacy.badge;
             return (
-              <button
+              <TabButton
                 key={item.key}
-                ref={(node) => {
+                item={item}
+                tabsId={tabsId}
+                selected={item.key === currentKey}
+                focusable={(focusedKey ?? currentKey) === item.key}
+                label={legacy.label}
+                badge={item.badge ?? legacy.badge}
+                tabRef={(node) => {
                   tabRefs.current.set(item.key, node);
                 }}
-                id={`tabs-tab-${tabsId}-${item.key}`}
-                role="tab"
-                type="button"
-                data-part="tab-button"
-                data-selected={selected}
-                data-disabled={item.disabled || undefined}
-                data-loading={item.loading || undefined}
-                data-has-badge={
-                  (badge !== undefined && badge !== null) || undefined
-                }
-                aria-selected={selected}
-                aria-disabled={unavailable || undefined}
-                aria-busy={item.loading || undefined}
-                aria-controls={`tabs-panel-${tabsId}-${item.key}`}
-                tabIndex={(focusedKey ?? currentKey) === item.key ? 0 : -1}
-                disabled={item.disabled}
-                onClick={() => handleChange(item.key)}
-                onFocus={() => setFocusedKey(item.key)}
-                onKeyDown={(event) => handleKeyDown(event, item.key)}
-              >
-                {item.icon && (
-                  <span data-part="icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                )}
-                {item.loading ? (
-                  <span data-part="loading-indicator" aria-hidden="true" />
-                ) : null}
-                <span
-                  ref={(node) => {
-                    labelRefs.current.set(item.key, node);
-                  }}
-                  data-part="tab-label"
-                  title={
-                    typeof legacy.label === 'string' ? legacy.label : undefined
-                  }
-                >
-                  {legacy.label}
-                </span>
-                {badge !== undefined && badge !== null && (
-                  <span
-                    data-part="tab-badge"
-                    aria-label={item.badgeAriaLabel}
-                  >
-                    {badge}
-                  </span>
-                )}
-              </button>
+                labelRef={(node) => {
+                  labelRefs.current.set(item.key, node);
+                }}
+                onActivate={handleChange}
+                onFocusKey={setFocusedKey}
+                onKeyDown={handleKeyDown}
+              />
             );
           })}
 
@@ -625,28 +727,26 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           )}
         </div>
 
-        {showScrollControls && renderOverflowControl('next', !overflowState.after)}
+        {showScrollControls && (
+          <OverflowControl
+            part="next"
+            label={chromeLabels.next}
+            disabled={!overflowState.after}
+            onClick={() => scrollRail(1)}
+          />
+        )}
         {showOverflowMenu && (
           <Dropdown
             trigger={['click']}
             placement={writingDirection === 'rtl' ? 'bottomLeft' : 'bottomRight'}
             menu={{ items: menuItems }}
           >
-            <button
-              type="button"
-              data-part="overflow-more"
-              aria-label={chromeLabels.more}
-            >
-              <NavigationMoreIcon decorative size="sm" />
-            </button>
+            <OverflowMenuTrigger label={chromeLabels.more} />
           </Dropdown>
         )}
       </div>
 
-      {/* Loading announcements ride the canonical VisuallyHidden rule (the
-          local clip block is retired); role=status + aria-live survive on the
-          rendered span through the primitive's rest props. */}
-      <VisuallyHidden data-part="loading-status" role="status" aria-live="polite">
+      <VisuallyHidden role="status" aria-live="polite">
         {loadingItems.length > 0 ? (
           <>
             {loadingItems.map((item, index) => (
@@ -661,17 +761,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       </VisuallyHidden>
 
       {activeItem && activeItem.children !== undefined && (
-        <div
-          id={`tabs-panel-${tabsId}-${activeItem.key}`}
-          role="tabpanel"
-          data-part="tab-panel"
-          data-active-key={activeItem.key}
-          aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
-          tabIndex={0}
-          style={tabPanelTransitionStyle(tabsId)}
-        >
-          {activeItem.children}
-        </div>
+        <TabPanel tabsId={tabsId} item={activeItem} />
       )}
     </div>
   );

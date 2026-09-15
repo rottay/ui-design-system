@@ -12,7 +12,7 @@ const items = [
 ];
 
 function rootOf(container: HTMLElement, engine: 'modern' | 'rustic'): HTMLElement {
-  const root = container.querySelector(`.rottay-tabs--${engine}`);
+  const root = container.querySelector(engine === 'modern' ? '.ds-tabs--modern' : `.rottay-tabs--${engine}`);
   expect(root).not.toBeNull();
   return root as HTMLElement;
 }

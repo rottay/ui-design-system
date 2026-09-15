@@ -6,6 +6,7 @@
 'use client';
 
 import React from 'react';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { BreadcrumbProps, BreadcrumbItem } from '../../contracts';
 import { BREADCRUMB_OVERFLOW_DEFAULTS } from '../../contracts';
@@ -52,6 +53,104 @@ function toDropdownMenuItem(entry: CollapsibleCrumb): DropdownMenuItem {
       }
     },
   };
+}
+
+type CrumbElementProps = React.HTMLAttributes<HTMLElement> & {
+  href?: string;
+  onClick?: () => void;
+  isCurrent: boolean;
+  hasMenu: boolean;
+  icon?: React.ReactNode;
+  label: React.ReactNode;
+};
+
+/**
+ * One crumb: an anchor for `href`, a real button for `onClick` or a menu, an
+ * inert span for the current page. The interaction kernel decides hover,
+ * press and focus for the interactive shapes; the Dropdown clones its
+ * disclosure attributes onto the element through the rest props.
+ */
+function Crumb({ href, onClick, isCurrent, hasMenu, icon, label, ...rest }: CrumbElementProps): React.ReactElement {
+  const interaction = useInteractionState();
+  const labelTitle = typeof label === 'string' ? label : undefined;
+  const content = (
+    <>
+      {icon && <span data-part="icon">{icon}</span>}
+      <span data-part="label" title={labelTitle}>{label}</span>
+    </>
+  );
+
+  if (href && !isCurrent) {
+    return (
+      <a
+        {...rest}
+        href={href}
+        onClick={onClick}
+        {...partAttributes('crumb', interaction.state)}
+        {...interaction.handlers}
+        data-current="false"
+        data-clickable="true"
+      >
+        {content}
+      </a>
+    );
+  }
+  if (onClick && !isCurrent) {
+    return (
+      <button
+        {...rest}
+        type="button"
+        onClick={onClick}
+        {...partAttributes('crumb', interaction.state)}
+        {...interaction.handlers}
+        data-current="false"
+        data-clickable="true"
+      >
+        {content}
+      </button>
+    );
+  }
+  if (hasMenu) {
+    // A menu-bearing crumb is the disclosure trigger: a span cannot take focus or carry aria-haspopup.
+    return (
+      <button
+        {...rest}
+        type="button"
+        {...partAttributes('crumb', interaction.state)}
+        {...interaction.handlers}
+        data-current={isCurrent ? 'true' : 'false'}
+        aria-current={isCurrent ? 'page' : undefined}
+      >
+        {content}
+      </button>
+    );
+  }
+  // The current page is inert: its onClick is dropped so no keyboard-invisible target contradicts aria-current.
+  return (
+    <span
+      {...rest}
+      data-part="crumb"
+      data-current={isCurrent ? 'true' : 'false'}
+      aria-current={isCurrent ? 'page' : undefined}
+    >
+      {content}
+    </span>
+  );
+}
+
+function OverflowTrigger({ label, ...rest }: { label: string } & React.ButtonHTMLAttributes<HTMLButtonElement>): React.ReactElement {
+  const interaction = useInteractionState();
+  return (
+    <button
+      {...rest}
+      type="button"
+      {...partAttributes('overflow-trigger', interaction.state)}
+      {...interaction.handlers}
+      aria-label={label}
+    >
+      <span aria-hidden="true">…</span>
+    </button>
+  );
 }
 
 /** One entry in the unified render sequence the `<ol>` maps over. */
@@ -204,7 +303,7 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   return (
     <nav
       ref={rootRef}
-      className={`rottay-breadcrumb-shell rottay-breadcrumb-shell--modern ${className}`.trim()}
+      className={`ds-breadcrumb ds-breadcrumb--modern ${className}`.trim()}
       style={style}
       data-part="root"
       data-truncated={isTruncated || undefined}
@@ -251,13 +350,7 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                     menu={{ items: slot.hidden.map(toDropdownMenuItem) }}
                     getPopupContainer={() => document.body}
                   >
-                    <button
-                      type="button"
-                      data-part="overflow-trigger"
-                      aria-label={expandHiddenLabel}
-                    >
-                      <span aria-hidden="true">…</span>
-                    </button>
+                    <OverflowTrigger label={expandHiddenLabel} />
                   </Dropdown>
                 </li>
               </React.Fragment>
@@ -266,59 +359,19 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
           const item = slot.item;
           const isCurrent = item.key === lastItemKey;
-          const labelTitle = typeof item.label === 'string' ? item.label : undefined;
           const itemMenu = item.menu;
           const hasMenu = Boolean(itemMenu && itemMenu.length > 0);
 
-          const crumbElement =
-            item.href && !isCurrent ? (
-              <a
-                href={item.href}
-                onClick={item.onClick}
-                data-part="crumb"
-                data-current="false"
-                data-clickable="true"
-              >
-                {item.icon && <span data-part="icon">{item.icon}</span>}
-                <span data-part="label" title={labelTitle}>{item.label}</span>
-              </a>
-            ) : item.onClick && !isCurrent ? (
-              <button
-                type="button"
-                onClick={item.onClick}
-                data-part="crumb"
-                data-current="false"
-                data-clickable="true"
-              >
-                {item.icon && <span data-part="icon">{item.icon}</span>}
-                <span data-part="label" title={labelTitle}>{item.label}</span>
-              </button>
-            ) : hasMenu ? (
-              // A menu-bearing crumb is the disclosure trigger, so it must be a
-              // real button: a span is unfocusable and cannot carry aria-haspopup.
-              <button
-                type="button"
-                data-part="crumb"
-                data-current={isCurrent ? 'true' : 'false'}
-                aria-current={isCurrent ? 'page' : undefined}
-              >
-                {item.icon && <span data-part="icon">{item.icon}</span>}
-                <span data-part="label" title={labelTitle}>{item.label}</span>
-              </button>
-            ) : (
-              <span
-                data-part="crumb"
-                data-current={isCurrent ? 'true' : 'false'}
-                aria-current={isCurrent ? 'page' : undefined}
-                /* The CURRENT page is inert: a span wiring onClick would be a
-                   keyboard-invisible click target, and its quiet-underline
-                   affordance would contradict aria-current="page" -- so a
-                   current item's onClick is deliberately dropped here. */
-              >
-                {item.icon && <span data-part="icon">{item.icon}</span>}
-                <span data-part="label" title={labelTitle}>{item.label}</span>
-              </span>
-            );
+          const crumbElement = (
+            <Crumb
+              href={item.href}
+              onClick={item.onClick}
+              isCurrent={isCurrent}
+              hasMenu={hasMenu}
+              icon={item.icon}
+              label={item.label}
+            />
+          );
 
           return (
             <React.Fragment key={item.key}>

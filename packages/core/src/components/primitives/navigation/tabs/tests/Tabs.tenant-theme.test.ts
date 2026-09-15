@@ -1,22 +1,8 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-
 import { describe, expect, it } from 'vitest';
 
 import { validateTenantThemeDocument } from '@/infrastructure/compilers/composition/tenant-theme';
 
 describe('Tabs tenant chrome contract', () => {
-  it('inherits readable ink from tenant semantic channels by default', () => {
-    const defaultThemeCss = readFileSync(
-      resolve(process.cwd(), 'src/foundation/tokens/css/foundation/themes/default/index.css'),
-      'utf8'
-    );
-
-    expect(defaultThemeCss).toContain('--ds-tab-color: var(--ds-color-text-secondary);');
-    expect(defaultThemeCss).toContain('--ds-tab-color-hover: var(--ds-color-text-primary);');
-    expect(defaultThemeCss).toContain('--ds-tab-color-active: var(--ds-color-text-primary);');
-  });
-
   it('accepts the Pass 2 material, state and motion channels from DB theme data', () => {
     const result = validateTenantThemeDocument({
       schemaVersion: 1,

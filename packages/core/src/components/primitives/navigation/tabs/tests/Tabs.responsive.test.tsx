@@ -85,7 +85,7 @@ describe('ModernTabs responsive size', () => {
       <ModernTabs size={{ base: 'sm', lg: 'lg' }} items={TAB_ITEMS} />
     );
     const styleTag = responsiveCss(container);
-    const root = container.querySelector('.rottay-tabs--modern');
+    const root = container.querySelector('.ds-tabs--modern');
 
     expect(root).toHaveAttribute('data-size', 'responsive');
     expect(responsiveTokens(container).length).toBeGreaterThan(0);
