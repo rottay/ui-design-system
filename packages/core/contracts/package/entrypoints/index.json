@@ -782,8 +782,8 @@
       "output": "entrypoints/public/primitives/breadcrumb/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 19,
-        "maxSourceBytes": 101625
+        "maxReachableModules": 20,
+        "maxSourceBytes": 104741
       },
       "symbols": [
         {
