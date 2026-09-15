@@ -4407,6 +4407,11 @@
      "at": "2026-09-14 22:26",
      "by": "kimi-admin",
      "note": "D6-1 INTEGRATED (72a1a99b6, audited): the three first-party verticals are v2 ThemeDecisions on the internal seat with closed manifests — bithire = provisional WO-DER-07 product-dense (verbatim decisions, seat raised, D-30 recorded, most-contrasting rationale), rottay/evnto structural-neutral per owner scope; SanctionedOverrides closed (zero today) with the new preset-without-derivable-values gate (11/11, post-build fresh-dist wired). Contrast at decision level: bithire-dark authored --ds-input-error-color (1.22:1 measured / 1.08:1 axe) retired as not decision-derived — invalid input now reads the error seed at 3.25:1 measured; the evnto-dark 2.27:1 lives in the baseline dark ramp that NO kit decision reaches, honestly ROUTED to the D6-3 baseline retirement (neutral foundation), not masked by an override. Also in this block: the contract-changeset roster prose re-anchored to the actual DRILLS (298fdddda). Next: D6-2 (BrandTheme retirement + the routed channel dispositions: --ds-experience-profile/--ds-recipe-profile reader-or-retire, --ds-elevation-border-style, --ds-switch-*, fanOutUnreached recipe-profile)."
+    },
+    {
+     "at": "2026-09-14 22:40",
+     "by": "kimi-admin",
+     "note": "D6-2 STOPPED CORRECTLY on blast-radius grounds (good fences behavior, zero files modified): BrandTheme has 492 non-test references, far beyond the original write set; deleting it touches compilers lowering (not just entries), the catalog, src/index.ts, verticals facade, build/library scripts, showroom and themes/default. Read-only verification at stop: liveness --check-dispositions OK, drill 129/129. The writer is producing a measured slicing proposal (D6-2a/b/c/d with explicit write sets) at .tmp/dispatch-2026-09-14/d6-2-slicing-proposal.md; the DT adjudicates the slicing and dispatches D6-2a next. The channel dispositions stay scoped to this WO."
     }
    ]
   },
