@@ -55,7 +55,7 @@ describeCausality({
     { id: 'duration', selector: CLOSE, property: 'transition-duration' },
   ],
   decisions: {
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['nextBg'], holds: 'radius', in: VERTICALS },
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['nextBg', 'focusRing'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'titleSize', in: VERTICALS },
     // `spacious` is the one stop no first-party preset decides (rottay/evnto
@@ -116,23 +116,15 @@ describe('tour direction, language, loading and accessibility', () => {
 });
 
 /**
- * The focus ring follows `palette.seeds` only where the ring has a producer.
- *
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). Measured on
- * this tree: rottay moves #a3a3a3 -> #306B9A, while bithire and evnto hold at
- * the foundation constant #ECECEC that `foundation/themes/default` declares --
- * the retired authored themes used to state the ring as their own primary. The
- * reach is pinned PER VERTICAL rather than dropped, so the lane that gives the
- * light-default verticals a producer reddens this row instead of passing.
+ * The focus ring follows `palette.seeds` on every vertical: the foundation
+ * derives `--ds-focus-ring-color` from `--ds-color-primary` in the light scope
+ * and from `--ds-color-primary-400` in the dark one, so a tenant moves the ring
+ * by moving its seed (WO-DER-06 N1, closed 2026-09-15). This row reddens if any
+ * vertical loses that reach again.
  */
-const FOCUS_RING_SEED_REACH: Readonly<Record<string, boolean>> = {
-  rottay: true,
-  bithire: false,
-  evnto: false,
-};
 
 describe('focus ring seed reach', () => {
-  it('follows palette.seeds only where the ring has a producer', async () => {
+  it('follows palette.seeds on every vertical', async () => {
     for (const vertical of VERTICALS) {
       const reading = await measureArms({
         vertical,
@@ -143,11 +135,7 @@ describe('focus ring seed reach', () => {
       const base = reading.base!.focusRing;
       const seeded = reading.seeds!.focusRing;
       expect(base, `${vertical}: focusRing has a reading`).not.toMatch(/^<no match/);
-      if (FOCUS_RING_SEED_REACH[vertical]) {
-        expect(seeded, `${vertical}: the seed reaches the ring`).not.toBe(base);
-      } else {
-        expect(seeded, `${vertical}: the ring has no producer yet`).toBe(base);
-      }
+      expect(seeded, `${vertical}: the seed reaches the ring`).not.toBe(base);
     }
   }, 240_000);
 });

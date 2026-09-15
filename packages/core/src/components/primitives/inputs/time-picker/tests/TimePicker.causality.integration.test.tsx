@@ -45,13 +45,9 @@ describeCausality({
     { id: 'duration', selector: REST, property: 'transition-duration' },
   ],
   decisions: {
-    // WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the light
-    // foundation scope pins --ds-focus-ring-color to the constant #ECECEC while the
-    // dark scope derives it from --ds-color-primary-400, so a seed reaches the ring
-    // only on a dark-default vertical. The gap itself is pinned below.
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusRing'], holds: 'radius', in: ['rottay'] },
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorBorder'], holds: 'radius', in: VERTICALS },
-    'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: ['bithire', 'evnto'] },
+    'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     // `subtle`, not `strong`: bithire's preset already decides strong, so that arm
     // restated the baseline and moved nothing (D6-2c-ii-RED, 2026-09-15).
     'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
@@ -131,25 +127,23 @@ describe('time-picker keyboard, language and accessibility', () => {
     expect(loading).toContain('data-part="clock-icon"');
   });
 
-  // WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the light
-  // foundation scope pins --ds-focus-ring-color to the constant #ECECEC and only
-  // the dark scope derives it from --ds-color-primary-400. A light-default
-  // vertical therefore cannot express a seeded ring; this reddens when it can.
-  it('pins the focus-ring gap: a seed cannot reach the ring on a light-default vertical', async () => {
-    const seeded = await measureArms({
-      vertical: 'bithire',
-      markup,
-      arms: { base: {}, seeded: { 'palette.seeds': { primary: '#2F6B9A' } } },
-      targets: [
-        { id: 'ringColor', selector: REST, property: '--ds-focus-ring-color' },
-        { id: 'primary', selector: REST, property: '--ds-color-primary' },
-      ],
-    });
-    expect(seeded.base!.ringColor.trim()).toBe('#ECECEC');
-    expect(seeded.seeded!.ringColor.trim()).toBe('#ECECEC');
-    // The seed DOES reach the palette, so the ring is the only thing stuck.
-    expect(seeded.seeded!.primary.trim()).not.toBe(seeded.base!.primary.trim());
-  }, 60_000);
+  // WO-DER-06 N1 (closed 2026-09-15): the foundation derives the ring from the
+  // primary seed in both scopes, so a seed reaches the ring on every vertical.
+  it('the seed reaches the focus ring on every vertical', async () => {
+    for (const vertical of VERTICALS) {
+      const seeded = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {}, seeded: { 'palette.seeds': { primary: '#2F6B9A' } } },
+        targets: [
+          { id: 'ringColor', selector: REST, property: '--ds-focus-ring-color' },
+          { id: 'primary', selector: REST, property: '--ds-color-primary' },
+        ],
+      });
+      expect(seeded.seeded!.ringColor.trim(), `${vertical}: the seed reaches the ring`).not.toBe(seeded.base!.ringColor.trim());
+      expect(seeded.seeded!.primary.trim(), `${vertical}: the seed reaches the palette`).not.toBe(seeded.base!.primary.trim());
+    }
+  }, 180_000);
 
   it('has no serious or critical axe violation in any gated vertical mode', async () => {
     const gallery = renderToStaticMarkup(

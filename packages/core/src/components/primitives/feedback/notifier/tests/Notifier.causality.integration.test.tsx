@@ -65,10 +65,7 @@ describeCausality({
     { id: 'duration', selector: CLOSE, property: 'transition-duration' },
   ],
   decisions: {
-    // `focusRing` left this arm in D6-2c-ii-RED: `--ds-focus-ring-color` is the
-    // foundation light fallback on a light-default vertical. Pinned two-sided in
-    // Modal.causality ("focus ring reach under the neutral compile"); WO-DER-06.
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['edgeInk'], holds: 'radius', in: VERTICALS },
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['edgeInk', 'focusRing'], holds: 'radius', in: VERTICALS },
     'palette.status-seeds': { value: { success: '#2E7D5B' }, moves: ['successWell'], holds: 'edgeInk', in: VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize', 'messageSize'], holds: 'radius', in: VERTICALS },

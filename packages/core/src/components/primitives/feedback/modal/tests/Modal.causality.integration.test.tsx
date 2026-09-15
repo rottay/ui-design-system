@@ -87,9 +87,7 @@ describeCausality({
     { id: 'duration', selector: CLOSE, property: 'transition-duration' },
   ],
   decisions: {
-    // `focusRing` left this arm in D6-2c-ii-RED: the ring colour follows the
-    // seed only in a dark scope. The two-sided pin below is the detector.
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['okBg'], holds: 'radius', in: VERTICALS },
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['okBg', 'focusRing'], holds: 'radius', in: VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize'], holds: 'radius', in: VERTICALS },
@@ -203,20 +201,15 @@ describe('modal posture, direction, language, loading and accessibility', () => 
 });
 
 /**
- * The focus ring is a THEME channel, and D6-2c-ii moved which verticals reach it.
- *
- * `--ds-focus-ring-color` is declared twice by the foundation: `#ECECEC` in the
- * light `:root` scope and `var(--ds-color-primary-400)` in the dark one. The
- * light literal is a tenant-less fallback whose own comment says "every
- * first-party tenant re-declares this as var(--ds-color-primary) in its own
- * artifact block". The authored themes did; the preset documents do not, so a
- * light-default vertical now ships the fallback and the ring stops following
- * the palette. This is the canonical two-sided pin for the four families whose
- * `palette.seeds` arm listed `focusRing` (modal, drawer, alert, notifier);
- * WO-DER-06 owns the gap and this row reddens when the lane closes it.
+ * The focus ring is a THEME channel, and the foundation owns both its scopes:
+ * the light `:root` derives `--ds-focus-ring-color` from `--ds-color-primary`
+ * and the dark one from `--ds-color-primary-400` (WO-DER-06 N1, closed
+ * 2026-09-15). This is the canonical reach row for the four families whose
+ * `palette.seeds` arm lists `focusRing` (modal, drawer, alert, notifier): it
+ * reddens if any vertical stops following its own seed.
  */
 describe('focus ring reach under the neutral compile', () => {
-  it('follows the seed in a dark scope and stops at the light fallback', async () => {
+  it('follows the seed on every vertical', async () => {
     const reach: Record<string, boolean> = {};
     for (const vertical of VERTICALS) {
       const result = await measureArms({
@@ -229,8 +222,6 @@ describe('focus ring reach under the neutral compile', () => {
       });
       reach[vertical] = result.seed!.ringColor !== result.base!.ringColor;
     }
-    // rottay is dark-default and reaches its palette; bithire and evnto are
-    // light-default and are stuck on the foundation fallback.
-    expect(reach).toEqual({ rottay: true, bithire: false, evnto: false });
+    expect(reach).toEqual({ rottay: true, bithire: true, evnto: true });
   }, 240_000);
 });

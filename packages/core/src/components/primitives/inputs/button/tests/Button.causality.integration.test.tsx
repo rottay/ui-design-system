@@ -170,19 +170,6 @@ function contrast(a: string, b: string): number {
 }
 
 describe('button environments in a real browser', () => {
-  /**
-   * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15):
-   * `--ds-focus-ring-color` has no producer in the compile chain. Its only
-   * declaration is the foundation constant `#ECECEC`, and the retired authored
-   * themes were what supplied each vertical's own ring. Measured against HEAD:
-   * rottay `rgb(255,255,255)` -> `#a3a3a3`, bithire `rgb(58,111,176)` ->
-   * `#ECECEC`, evnto `rgb(23,23,23)` -> `#ECECEC`. The 3:1 floor is NOT lowered:
-   * it still runs on every vertical whose ring clears it, and the two that do
-   * not are pinned by name with their measured ratio, so each one reddens the
-   * moment the lane gives the ring a producer.
-   */
-  const RING_DEBT: Readonly<Record<string, number>> = { bithire: 1.18, evnto: 1.13 };
-
   it('draws a focus ring that clears 3:1 against the canvas in every vertical', async () => {
     for (const vertical of VERTICALS) {
       const result = await measureArms({
@@ -205,15 +192,7 @@ describe('button environments in a real browser', () => {
         targets: [{ id: 'canvas', selector: 'i', property: 'color' }],
       });
       const measured = contrast(ringColor, probe.base!.canvas!);
-      const debt = RING_DEBT[vertical];
-      const label = `${vertical}: ${ringColor} on ${probe.base!.canvas}`;
-      if (debt === undefined) {
-        expect(measured, label).toBeGreaterThanOrEqual(3);
-      } else {
-        // Pinned, not waived: a ring that climbs past its measured debt -- or
-        // one that sinks further -- turns this row red.
-        expect(measured, `${label} (registered)`).toBeCloseTo(debt, 1);
-      }
+      expect(measured, `${vertical}: ${ringColor} on ${probe.base!.canvas}`).toBeGreaterThanOrEqual(3);
     }
   }, 120_000);
 

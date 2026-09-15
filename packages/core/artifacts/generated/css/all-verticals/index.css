@@ -2090,12 +2090,14 @@
 
   --ds-focus-ring-width: 2px;
   --ds-focus-ring-offset: 2px;
-  /* Tenant-less dark default: the fallback primary (#171717) reads dark on the
-     dark canvas (~1.2:1 — fails the >=3:1 ring law above), so the default
-     palette carries a light neutral ring (16.7:1 on --ds-color-bg-primary).
-     Every first-party tenant re-declares this as var(--ds-color-primary) in
-     its own artifact block (rottay dark/light, bithire, evnto — W8). */
-  --ds-focus-ring-color: #ECECEC;
+  /* The ring derives from the primary seed in BOTH scopes, and the foundation
+     owns both: this light scope from --ds-color-primary, the dark scope below
+     from --ds-color-primary-400 (the tint that clears the ring law on a dark
+     canvas, where the seed itself would not). No tenant re-declares the
+     channel — a tenant moves the ring by moving its seed. Measured against
+     each first-party canvas: light 17.18:1 rottay, 5.55:1 bithire, 17.18:1
+     evnto; dark 7.42:1, 5.02:1, 7.42:1 (WO-DER-06 N1, 2026-09-15). */
+  --ds-focus-ring-color: var(--ds-color-primary);
   --ds-focus-ring:
     0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary),
     0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
