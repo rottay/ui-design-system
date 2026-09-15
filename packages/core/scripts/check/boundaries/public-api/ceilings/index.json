@@ -178,7 +178,7 @@
     },
     "./primitives/message": {
       "maxReachableModules": 64,
-      "maxSourceBytes": 268168
+      "maxSourceBytes": 268796
     },
     "./primitives/modal": {
       "maxReachableModules": 52,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "integration: the shared interaction-state kernel grew +408 bytes with the press-cancellation lifecycle (28dec8d73, 4134 -> 4542) and reaches modal and message through their FAM-04 graphs -- ./primitives/message 266142 -> 266550 and ./primitives/modal 185473 -> 185881, exactly +408 each, reachable modules unchanged. Prior moves stand: WO-FAM-04 modal 31 -> 52 modules (168791 -> 185473) and message 54 -> 63 modules (256096 -> 265545 -> 266142, the countdown pause reasons), and WO-FAM-01 radio 157925 -> 158333 for the same kernel growth. WO-FAM-04 acceptance then moves ./primitives/message 63 -> 64 modules and 266550 -> 268168 bytes for one leaf: the shared Escape router in the overlay layer stack now reads the composition authority (foundation/behavior/runtime/submit-intent, which imports nothing of its own) so a live IME composition keeps the Escape it owns instead of dismissing the layer the user is typing into.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 1 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "integration: the unified Notifier lifecycle fix (009715266 -- a keyed refresh cancels a pending exit, a replaced duration re-arms the full budget, the item's Escape yields to IME composition) grew five leaves that ./primitives/message reaches through its FAM-04 fold by exactly +628 bytes: message/contracts 10151 -> 10292, message/engines/modern 8378 -> 8490, notifier/contracts 3468 -> 3623, notifier/presentation/item 7784 -> 7924, notifier/runtime/countdown 2965 -> 3045 -- so ./primitives/message 268168 -> 268796, reachable modules unchanged at 64, and no other governed subpath exceeds its budget. Prior moves stand: the shared interaction-state kernel grew +408 bytes with the press-cancellation lifecycle (28dec8d73, 4134 -> 4542) and reaches modal and message through their FAM-04 graphs -- ./primitives/message 266142 -> 266550 and ./primitives/modal 185473 -> 185881, exactly +408 each, reachable modules unchanged; WO-FAM-04 modal 31 -> 52 modules (168791 -> 185473) and message 54 -> 63 modules (256096 -> 265545 -> 266142, the countdown pause reasons); WO-FAM-01 radio 157925 -> 158333 for the same kernel growth; and WO-FAM-04 acceptance moved ./primitives/message 63 -> 64 modules and 266550 -> 268168 bytes for one leaf: the shared Escape router in the overlay layer stack now reads the composition authority (foundation/behavior/runtime/submit-intent, which imports nothing of its own) so a live IME composition keeps the Escape it owns instead of dismissing the layer the user is typing into.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
