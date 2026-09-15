@@ -188,9 +188,9 @@ export const rusticThemeAdapter = defineEngineAdapter({
       posture: "unsupported",
       evidence: {
         kind: "absent",
-        unaccounted: 5,
+        unaccounted: 2,
         reason:
-          "the rustic surface reads sidebar geometry and typography channels but none of the declared tone ones",
+          "the rustic surface reads sidebar geometry and typography channels but none of the declared tone ones; the gap is the two the Modern surface does read, the rest being unread by every engine",
       },
     },
     "experience.profile": {
