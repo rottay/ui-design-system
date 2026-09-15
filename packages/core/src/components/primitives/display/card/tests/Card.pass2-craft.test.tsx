@@ -95,7 +95,7 @@ describe('Card Pass 2 craft contract', () => {
     expect(screen.getByRole('status', { name: 'جارٍ تحميل الصورة' })).toBeInTheDocument();
     fireEvent.error(screen.getByAltText('صورة المرشحة'));
     expect(screen.getByRole('status', { name: 'تعذر تحميل الصورة' })).toBeInTheDocument();
-    expect(container.querySelector('.rottay-card-image')).toHaveAttribute('data-error', 'true');
+    expect(container.querySelector('.ds-card-image')).toHaveAttribute('data-error', 'true');
   });
 
   it('keeps one DS anatomy locale-agnostic across tenant language and direction', async () => {
@@ -257,10 +257,11 @@ describe('Card Pass 2 craft contract', () => {
     expect(skin).toContain('@media (prefers-reduced-motion: reduce)');
     expect(skin).toContain('@media (forced-colors: active)');
     expect(skin).toContain('--ds-card-state-overlay-hover-opacity');
-    expect(skin).toContain('@keyframes ds-card-skeleton-sweep');
+    expect(skin).not.toContain('@keyframes ds-card-skeleton');
+    expect(skin).not.toMatch(/\[data-part='skeleton/);
     expect(tokens).toContain('.ds-card.ds-card--modern::before');
     expect(tokens).not.toMatch(/(^|\n)\.ds-card::before/);
-    expect(skin.lastIndexOf("[data-disabled='true']")).toBeGreaterThan(
+    expect(skin.lastIndexOf("[data-state~='disabled']")).toBeGreaterThan(
       skin.indexOf("[data-tone='primary']"),
     );
     expect(skin).not.toMatch(/border-(left|inline-start)\s*:/);
@@ -276,19 +277,19 @@ describe('Card unavailable state under forced colors', () => {
   // The disabled card carries its state in `opacity` plus a disabled ink
   // token, and forced colors honours neither -- the card read as fully live.
   it('re-expresses the unavailable card in the system inactive colour', () => {
-    expect(forcedColors).toContain("[data-disabled='true']");
-    expect(forcedColors).toMatch(/\[data-disabled='true'\][\s\S]{0,400}?GrayText/);
+    expect(forcedColors).toContain("[data-state~='disabled']");
+    expect(forcedColors).toMatch(/\[data-state~='disabled'\][\s\S]{0,400}?GrayText/);
   });
 
   it('carries the inactive signal into the card title and description', () => {
-    const rule = forcedColors.slice(forcedColors.indexOf("[data-disabled='true']"));
+    const rule = forcedColors.slice(forcedColors.indexOf("[data-state~='disabled']"));
     expect(rule).toContain("[data-part='title']");
     expect(rule).toContain("[data-part='description']");
   });
 
   it('places the unavailable rule after selection so a selected card still reads inactive', () => {
     expect(forcedColors.indexOf("[data-selected='true']")).toBeLessThan(
-      forcedColors.indexOf("[data-disabled='true']"),
+      forcedColors.indexOf("[data-state~='disabled']"),
     );
   });
 
@@ -300,7 +301,7 @@ describe('Card unavailable state under forced colors', () => {
     );
 
     const root = container.querySelector('[data-part="root"]') as HTMLElement;
-    expect(root).toHaveAttribute('data-disabled', 'true');
+    expect(root.getAttribute('data-state')).toContain('disabled');
     expect(root.querySelector('[data-part="title"]')).not.toBeNull();
   });
 });

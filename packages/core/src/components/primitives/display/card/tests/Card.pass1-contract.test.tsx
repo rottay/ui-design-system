@@ -71,6 +71,7 @@ describe('Card Pass 1 primitive contract', () => {
     expect(root).toHaveAttribute('aria-busy', 'true');
     expect(root).toHaveAttribute('data-loading', 'true');
     expect(container.querySelector('[data-part="spinner"]')?.tagName).toBe('SPAN');
+    expect(container.querySelector('[data-part^="skeleton"]')).toBeNull();
 
     rerender(
       <ModernCard cover="/candidate.jpg" coverAlt="Localized portrait" title={<span>Candidate</span>}>
@@ -92,7 +93,7 @@ describe('Card Pass 1 primitive contract', () => {
       />,
     );
 
-    const root = container.querySelector('.rottay-card-header') as HTMLElement;
+    const root = container.querySelector('.ds-card-header') as HTMLElement;
     expect(root).toHaveAttribute('id', 'decision-header');
     expect(root).toHaveAttribute('data-audit', 'pass1');
     expect(root).toHaveAttribute('data-part', 'header');
@@ -104,13 +105,11 @@ describe('Card Pass 1 primitive contract', () => {
       <ModernCard loading>Hidden</ModernCard>,
     );
 
-    // The loading branch stamps anatomy only: rhythm (gaps, stacks, min
-    // height) lives in the skin. Per-bar widths/heights remain inline as
-    // documented anatomy geometry.
+    // The loading state reserves the anatomy under the spinner scrim; no
+    // hand-made bar carries geometry inline.
     expect(container.querySelector('[data-part="loading-content"]')).not.toHaveAttribute('style');
-    expect(container.querySelector('[data-part="skeleton"]')).not.toHaveAttribute('style');
-    expect(container.querySelector('[data-part="skeleton-stack"]')).not.toHaveAttribute('style');
-    expect(container.querySelector('[data-part="skeleton-bar"]')).toHaveAttribute('style');
+    expect(container.querySelector('[data-part="loading-overlay"]')).not.toHaveAttribute('style');
+    expect(container.querySelector('[data-part^="skeleton"]')).toBeNull();
 
     rerender(
       <ModernCard

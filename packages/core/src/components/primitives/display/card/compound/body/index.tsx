@@ -83,7 +83,7 @@ export function CardBody({
   const renderedChildren = React.Children.toArray(children);
 
   return (
-    <div {...rest} className={`rottay-card-body ${className}`} data-part="body" data-padding={padding} style={style}>
+    <div {...rest} className={['ds-card-body', className].filter(Boolean).join(' ')} data-part="body" data-padding={padding} style={style}>
       {renderedChildren}
     </div>
   );

@@ -94,10 +94,10 @@ describe('Card real engine coverage', () => {
     // bare `solid` keyword became a channel whose fallback preserves solid.
     // Pinned as a chain, tolerant of reformatting.
     expect(skin).toMatch(
-      /border:\s*var\(\s*--ds-card-bordered-border-width\s*,\s*var\(\s*--ds-card-border-width\s*,\s*var\(\s*--ds-edge-standard-width\s*,\s*1px\s*\)\s*\)\s*\)\s+var\(\s*--ds-edge-standard-style\s*,\s*solid\s*\)\s+var\(\s*--ds-card-bordered-border-color\s*,\s*var\(\s*--ds-card-border\s*,\s*var\(\s*--ds-card-border-color\s*,\s*var\(\s*--ds-color-border-subtle\s*\)\s*\)\s*\)\s*\)/
+      /border:\s*var\(\s*--ds-card-bordered-border-width\s*,\s*var\(\s*--ds-card-border-width\s*,\s*var\(\s*--ds-edge-standard-width\s*\)\s*\)\s*\)\s+var\(\s*--ds-edge-standard-style\s*\)\s+var\(\s*--ds-card-bordered-border-color\s*,\s*var\(\s*--ds-card-border\s*,\s*var\(\s*--ds-card-border-color\s*,\s*var\(\s*--ds-color-border-subtle\s*\)\s*\)\s*\)\s*\)/
     );
     expect(skin).toContain(
-      'border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color))'
+      'border: 0 var(--ds-edge-standard-style) var(--ds-card-border, var(--ds-card-ghost-border-color))'
     );
     expect(skin).not.toContain('var(--ds-card-border-width, 1px)');
   });
@@ -141,7 +141,7 @@ describe('Card real engine coverage', () => {
       "[data-interactive='true'][data-variant='elevated'][data-state~='hovered']"
     );
     expect(skin).toContain(
-      'transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform, translateY(-1px)))'
+      'transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform))'
     );
     expect(skin).toContain(
       'box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover))'

@@ -104,7 +104,7 @@ export function CardHeader({
   return (
     <div
       {...rest}
-      className={`rottay-card-header ${className}`}
+      className={['ds-card-header', className].filter(Boolean).join(' ')}
       data-part="header"
       data-divider={divider ? 'true' : undefined}
       data-padding={padding}
@@ -114,19 +114,19 @@ export function CardHeader({
       data-has-extra={extra ? 'true' : undefined}
       style={style}
     >
-      <div className="rottay-card-header-content">
+      <div data-part="content">
         {icon && (
-          <span className="rottay-card-header-icon" data-part="icon" aria-hidden="true">
+          <span data-part="icon" aria-hidden="true">
             {icon}
           </span>
         )}
         {avatar && (
-          <div className="rottay-card-header-avatar" data-part="avatar">
+          <div data-part="avatar">
             {avatar}
           </div>
         )}
         {hasTextContent && (
-          <div className="rottay-card-header-text">
+          <div data-part="header-main">
             {eyebrow && <span data-part="eyebrow">{eyebrow}</span>}
             {title && <Heading data-part="title">{title}</Heading>}
             {subtitle && <p data-part="subtitle">{subtitle}</p>}
@@ -135,7 +135,7 @@ export function CardHeader({
         {children}
       </div>
       {extra && (
-        <div className="rottay-card-header-extra" data-part="extra">
+        <div data-part="extra">
           {extra}
         </div>
       )}

@@ -38,6 +38,7 @@ import type { ReactNode } from 'react';
 import type { BaseComponentProps, Size, WithChildren, ClickableProps, ShadowedProps, BorderedProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import type { Adapt } from '../../../../../foundation/contracts/kernel/adaptation';
 
 /** Card size type alias derived from the global Size scale. */
 export type CardSize = Size;
@@ -57,6 +58,17 @@ export type CardColorVariant = 'default' | 'primary' | 'success' | 'warning' | '
 /**
  * Card component props.
  */
+/** The card's layout-sensitive axes; a posture delta may move either. */
+export interface CardAdaptation {
+  readonly coverPosition?: 'top' | 'bottom' | 'start' | 'end';
+  readonly padding?: 'none' | 'sm' | 'md' | 'lg';
+}
+
+export interface ResolvedCardAdaptation {
+  readonly coverPosition: 'top' | 'bottom' | 'start' | 'end';
+  readonly padding: 'none' | 'sm' | 'md' | 'lg';
+}
+
 export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChildren, ClickableProps, ShadowedProps, BorderedProps, DisableableProps {
   /**
    * Card size.
@@ -173,6 +185,9 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
    * compatibility and must not be used for product-level theming.
    */
   backgroundColor?: string;
+
+  /** Posture deltas the app declares; the family has no default of its own. */
+  adapt?: Adapt<CardAdaptation>;
 }
 
 /**
@@ -467,10 +482,10 @@ export const PADDING_MAP: Record<string, string> = {
  */
 export const SHADOW_MAP: Record<string, string> = {
   none: 'none',
-  sm: 'var(--ds-card-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05))',
-  md: 'var(--ds-card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1))',
-  lg: 'var(--ds-card-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1))',
-  xl: 'var(--ds-card-shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1))',
+  sm: 'var(--ds-card-shadow-sm, var(--ds-elevation-1))',
+  md: 'var(--ds-card-shadow, var(--ds-elevation-2))',
+  lg: 'var(--ds-card-shadow-lg, var(--ds-elevation-3))',
+  xl: 'var(--ds-card-shadow-xl, var(--ds-elevation-4))',
 };
 
 /**
@@ -506,27 +521,27 @@ export const COLOR_VARIANT_MAP: Record<string, { borderColor: string; background
   },
   /** Primary brand accent - complete frame + subtle tinted background. */
   primary: {
-    borderColor: 'var(--ds-color-primary-500, #3b82f6)',
-    background: 'var(--ds-color-primary-50, rgba(59, 130, 246, 0.05))',
+    borderColor: 'var(--ds-color-primary-500)',
+    background: 'var(--ds-color-primary-50)',
   },
   /** Success accent for positive content (e.g., completion, approval). */
   success: {
-    borderColor: 'var(--ds-color-success-500, #22c55e)',
-    background: 'var(--ds-color-success-50, rgba(34, 197, 94, 0.05))',
+    borderColor: 'var(--ds-color-success-500)',
+    background: 'var(--ds-color-success-50)',
   },
   /** Warning accent for cautionary content (e.g., expiring, degraded). */
   warning: {
-    borderColor: 'var(--ds-color-warning-500, #f59e0b)',
-    background: 'var(--ds-color-warning-50, rgba(245, 158, 11, 0.05))',
+    borderColor: 'var(--ds-color-warning-500)',
+    background: 'var(--ds-color-warning-50)',
   },
   /** Error accent for critical content (e.g., failures, blocked). */
   error: {
-    borderColor: 'var(--ds-color-error-500, #ef4444)',
-    background: 'var(--ds-color-error-50, rgba(239, 68, 68, 0.05))',
+    borderColor: 'var(--ds-color-error-500)',
+    background: 'var(--ds-color-error-50)',
   },
   /** Informational accent for neutral-positive notices. */
   info: {
-    borderColor: 'var(--ds-color-info-500, #3b82f6)',
-    background: 'var(--ds-color-info-50, rgba(59, 130, 246, 0.05))',
+    borderColor: 'var(--ds-color-info-500)',
+    background: 'var(--ds-color-info-50)',
   },
 };

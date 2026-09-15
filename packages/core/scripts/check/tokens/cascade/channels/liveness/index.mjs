@@ -1339,7 +1339,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card)-/, (m) => `chrome.${m[1]}`],
 ]);
 
 export function classifySemanticOwner(name) {
@@ -1555,14 +1555,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-posture-id',
       '--ds-posture-span-bias',
     ]),
-  }),
-  Object.freeze({
-    owner: 'WO-FAM-06',
-    classification: LIVENESS.readNoProductiveTerminal,
-    registered: '2026-09-14',
-    reason:
-      'card presentation composes each of these into --ds-card-error-title-color and --ds-card-success-title-color, and the chain dies in a TS token map nothing imports; the 900 steps are the dark-mode on-status inks, so the pin clears when the card cut paints the title-color terminal or retires the private chain with a contrast-conscious replacement -- never by deleting the step to reach green',
-    channels: Object.freeze(['--ds-color-error-900', '--ds-color-success-900']),
   }),
   Object.freeze({
     invariant: 'z-index-single-scale',

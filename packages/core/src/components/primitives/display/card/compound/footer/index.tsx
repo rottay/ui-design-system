@@ -96,13 +96,10 @@ export function CardFooter({
   ...rest
 }: CardFooterProps): React.ReactElement {
   return (
-    <div {...rest} className={`rottay-card-footer ${className}`} data-part="footer" data-divider={divider ? 'true' : undefined} data-padding={padding} data-align={align} style={style}>
+    <div {...rest} className={['ds-card-footer', className].filter(Boolean).join(' ')} data-part="footer" data-divider={divider ? 'true' : undefined} data-padding={padding} data-align={align} style={style}>
       {children}
       {actions && actions.length > 0 && (
-        <div
-          className="rottay-card-footer-actions"
-          data-part="actions"
-        >
+        <div data-part="actions">
           {actions.map((action, index) => (
             <React.Fragment key={index}>{action}</React.Fragment>
           ))}

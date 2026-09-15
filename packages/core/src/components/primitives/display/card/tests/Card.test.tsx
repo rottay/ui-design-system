@@ -224,7 +224,7 @@ describe('Card.Body', () => {
 
   it('applies custom style', () => {
     render(<Card.Body style={{ backgroundColor: 'blue' }}>Content</Card.Body>);
-    const body = document.querySelector('.rottay-card-body');
+    const body = document.querySelector('.ds-card-body');
     // Verify the element exists and receives the style prop
     expect(body).toBeInTheDocument();
     expect(body?.getAttribute('style')).toContain('background-color');

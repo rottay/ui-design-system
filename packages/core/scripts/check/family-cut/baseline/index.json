@@ -854,6 +854,27 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-05 lot 3: the collapsible sidebar structure (structures/shell/navigation/sidebar-surface). Tracks, region gap, stacked posture and the panel-to-main separator by derivation/chrome/sidebar-surface (10 --ds-sidebar-surface-* channels on the spacing ramp scaled by the rhythm dial, the tenant's authored --ds-sidebar-width and --ds-sidebar-collapsed-width chained ahead of the family's own tracks, the separator on the edge decision and --ds-sidebar-border, the track change on the rearrange cadence); one presentation skin (presentation/components/skin/sidebar-surface, the structures layer; channelsRead is 0 because the gate's read census walks engine skins only and the presentation skin reads its ten channels with a producer) on one ds-sidebar-surface vocabulary; the panel, aside and toggle are Card and Button and paint their own material and states; declared layout-sensitive (WO-INV-07): adapt: Adapt<SidebarSurfaceAdaptation> on the props, the legacy stackOnMobile/stackOnTablet config as the per-posture defaults, data-posture resolved through useAdaptation; the config-stated widths are the only inline channels; every part carries a skeleton role."
+    },
+    "card": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 8,
+        "channelsRead": 174,
+        "classTokens": 16,
+        "partsStamped": 25,
+        "partsConsumed": 25
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-06 lot 1: the display card (primitives/display/card). Size steps on the type roles, the five toned title inks on the palette's 900 steps (--ds-card-{primary,success,warning,error,info}-title-color, painted on the engine title and the Card.Header title under [data-tone]), the tenant-authored --ds-card-header-color and --ds-card-border-accent-hover wired as inputs of --ds-card-header-ink, --ds-card-header-eyebrow-color and --ds-card-outlined-border-hover, the header icon and extra well on the elevation scale, the edge weight and the spacing ramp scaled by density, the underline anatomy edge and the nested shadow, and the Card.Image runtime channels (--ds-card-image-block-size, --ds-card-image-aspect-ratio) with their resting defaults, all by derivation/chrome/card (25 channels); constants stay in presentation/components/card. One ds-card vocabulary: the compounds are ds-card-{header,body,footer,image} with their inner anatomy as data-part (content, header-main, icon, avatar, eyebrow, title, subtitle, extra, actions, img, placeholder, spinner, error-icon, gradient, overlay); the kernel decides hovered/pressed/focused/disabled on the root as data-state; the hand-made skeleton (four inline bars, ds-card-skeleton-sweep) is retired and the loading state is the reserved anatomy (loading-content on --ds-card-loading-min-height) under the frosted spinner scrim -- the shared anatomy renderer stays a WO decision because a primitive may not depend on the sibling feedback/skeleton owner (structure:check sibling-owner-dependency); Card.Image paints object-fit and radius from data-fit and data-radius instead of inline style; declared layout-sensitive: adapt: Adapt<CardAdaptation> (coverPosition, padding) on the props, no family default, data-posture resolved through useAdaptation. channelsRead 191 -> 174: the eleven skeleton channels the engine no longer stamps, the two -current intermediates now written as --_ds- privates, and the four unwritten names repointed to produced channels."
     }
   }
 }

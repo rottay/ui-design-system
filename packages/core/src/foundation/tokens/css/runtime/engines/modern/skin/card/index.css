@@ -2,58 +2,17 @@
  * Modern Card skin.
  *
  * Imported into the canonical `rottay-engines` layer. React owns semantics and
- * publishes a finite data contract; this file owns all state paint. BrandTheme
- * and DB-backed TenantTheme change the public `--ds-card-*` channels without
- * requiring product selectors or tenant branches.
+ * publishes a finite data contract; this file owns all state paint through the
+ * public `--ds-card-*` channels, which `derivation/chrome/card` and the card
+ * constants produce and BrandTheme / TenantTheme move.
  *
- * The rules read the `data-*` contract the component stamps. Rest, hover and the
- * keyboard focus ring are photographed per tenant per engine by
- * `packages/showroom/e2e/visual/states.spec.ts`; the clickable card that carries
- * the ring renders behind `?interactive=1`, so no flagship baseline sees it.
+ * Two behaviours stated by name rather than by rule order: a toned card's
+ * border does not react to hover (`:not([data-tone])`), and keyboard focus is
+ * an outline, so it never erases a tenant's depth or selected-state shadow.
  *
- * Two behaviours the object this replaces expressed by ORDER, and this file
- * expresses by name, because order is not a contract a reader can check:
- *
- *   - a toned card's border does not react to hover. The tone was spread last, so
- *     it overwrote the hover border colour. Here the hover rule says
- *     `:not([data-tone])` and means it.
- *   - keyboard focus is an outline, so it cannot erase a tenant's chosen depth
- *     or selected-state shadow. Variant elevation remains independently tunable.
- *
- * Phase B (second premium pass) additions:
- *
- *   - nested-material grammar: every radius rule publishes the resolved corner
- *     as `--_ds-card-radius-current`; the body re-publishes a derived
- *     `--_ds-card-nest-radius` (parent radius minus a bounded inset) so a card
- *     rendered inside another card's body gets CONCENTRIC corners instead of
- *     two unrelated rounded rectangles. The shared premium contract supplies
- *     the resting floor through `--ds-premium-card-min-height`.
- *   - title/action baseline alignment in this engine's own header.
- *   - the elevated variant carries an intensity-scaled optical top keyline
- *     (material layer 4) composed with the tenant shadow.
- *   - `--ds-premium-card-footer-border` is consumed as the quiet default of
- *     the actions-rail divider (the tenant `--ds-card-footer-border` still
- *     wins when emitted).
- *
- * Phase C0 (material-grammar canary) additions:
- *
- *   - nest-radius law matured: the inset is now bounded by max(governed
- *     `--ds-radius-nest-inset`, parent radius * `--ds-radius-nest-ratio`)
- *     instead of a raw 8px, so
- *     nested corners stay concentric across the tenant radius scale
- *     (contained-radius tenants no longer derive near-square children) and
- *     `radius: none` still derives 0.
- *   - protected content zones: the engine header reads the tenant
- *     `--ds-card-header-bg` band and the actions rail keeps the tenant
- *     `--ds-card-footer-bg`, both wearing the concentric nest radius; the
- *     token floor for both channels is `transparent`, so unauthored tenants
- *     render byte-identical. Toned cards keep owning their fill. Proto
- *     escape hatches: `--_ds-card-header-zone-bg/-inset`,
- *     `--_ds-card-actions-zone-bg/-inset` (exact current-render
- *     fallbacks).
- *   - reduced-transparency degradation for the loading scrim (opaque
- *     `--ds-material-overlay-opaque` counterpart), and forced-colors
- *     silencing of the zone bands so planes re-express as system borders.
+ * The `:not(.ds-card-header)` guard on the header rules is load-bearing: the
+ * Card.Header compound stamps the same `data-part='header'` and `'title'` and
+ * paints from `presentation/components/skin/card-compounds`.
  */
 
 /* base */
@@ -66,10 +25,8 @@
   isolation: isolate;
   color: var(--ds-card-color, var(--ds-color-text-primary));
   transform: translateY(0);
-  /* --ds-elevation-lift (registered <number>) rises to 1 on hover;
-     --ds-card-elevation-surface reads it so the elevated surface tint cross-fades
-     instead of snapping. Both are inert while --ds-elevation-lift-strength is 0
-     (light surfaces), so this paints nothing until a dark surface raises the dial. */
+  /* --ds-elevation-lift (registered <number>) rises to 1 on hover so the
+     elevated surface tint cross-fades instead of snapping. */
   --ds-elevation-lift: 0;
   --ds-card-elevation-surface: color-mix(in oklch, var(--ds-color-bg-elevated) calc(var(--ds-elevation-lift-strength) * (1 + var(--ds-elevation-lift)) * 1%), transparent);
   transition:
@@ -80,13 +37,13 @@
     --ds-elevation-lift var(--ds-card-transition-duration) var(--ds-card-transition-timing);
 }
 
-/* A full-surface state wash gives every material a coherent interaction cue.
-   It is deliberately uniform: semantic tone never becomes a side rail. */
+/* A full-surface state wash gives every material one interaction cue;
+   semantic tone never becomes a side rail. */
 .ds-card.ds-card--modern[data-part='root']::after {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: var(--ds-z-index-relative-base);
   pointer-events: none;
   border-radius: inherit;
   background: var(--ds-card-state-overlay);
@@ -94,17 +51,15 @@
   transition: opacity var(--ds-card-transition-duration) var(--ds-card-transition-timing);
 }
 
-/* Hover paint exists only where the pointer can hover (`@media (hover:
-   hover)`). On touch the behavior core still stamps `hovered` during a tap;
-   the pressed posture below is the tactile equivalent (the same gate the
-   Button skin documents). */
+/* Hover paint exists only where the pointer can hover; on touch the pressed
+   posture below is the tactile equivalent. */
 @media (hover: hover) {
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-state~='disabled']) {
     color: var(--ds-card-color-hover, var(--ds-card-color));
-    transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform, translateY(-1px)));
+    transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform));
   }
 
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true'])::after {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-state~='disabled'])::after {
     opacity: var(--ds-card-state-overlay-hover-opacity);
   }
 }
@@ -119,8 +74,8 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* radius: each rule also publishes the resolved corner so nested surfaces can
-   derive a concentric radius (see the nesting grammar at the end of the file) */
+/* radius: each rule publishes the resolved corner so nested surfaces derive
+   a concentric radius */
 .ds-card.ds-card--modern[data-part='root'][data-radius='none'] {
   border-radius: 0;
   --_ds-card-radius-current: 0px;
@@ -146,37 +101,34 @@
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
   background-color: var(--ds-card-elevated-bg, var(--ds-card-bg, var(--ds-material-card-background, var(--ds-surface-card))));
   background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-elevated-border-width, var(--ds-edge-hairline-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-card-border);
-  /* material layer 4 (optical edge): an intensity-scaled inset top keyline
-     composed with the tenant elevation. At --ds-effect-intensity: 0 the
-     keyline dissolves while the shadow channel keeps the hierarchy. The
-     hover/selected shadows replace this list wholesale — their stronger
-     frame subsumes the keyline. */
+  border: var(--ds-card-elevated-border-width, var(--ds-edge-hairline-width)) var(--ds-edge-standard-style) var(--ds-card-border);
+  /* optical edge: an intensity-scaled inset top keyline composed with the
+     tenant elevation; the hover/selected shadows replace this list wholesale */
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent),
+    inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent),
     var(--ds-card-elevated-shadow, var(--ds-card-shadow));
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'] {
   background-color: var(--ds-card-bordered-bg, var(--ds-card-bg, var(--ds-material-card-background, var(--ds-surface-card))));
   background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width, 1px))) var(--ds-edge-standard-style, solid) var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
+  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width))) var(--ds-edge-standard-style) var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
   box-shadow: var(--ds-card-bordered-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'] {
   background-color: var(--ds-card-flat-bg, var(--ds-card-bg, var(--ds-surface-panel)));
   background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-flat-border-width) solid var(--ds-card-border);
+  border: var(--ds-card-flat-border-width) var(--ds-edge-standard-style) var(--ds-card-border);
   box-shadow: var(--ds-card-flat-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'] {
   background-color: var(--ds-card-ghost-bg);
   background-image: none;
-  border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color));
+  border: 0 var(--ds-edge-standard-style) var(--ds-card-border, var(--ds-card-ghost-border-color));
   box-shadow: var(--ds-card-ghost-shadow);
 }
 
-/* Orthogonal frame/elevation switches. Variant chooses the material; these
-   explicit props decide whether its frame and depth are visible. */
+/* Variant chooses the material; these explicit props decide whether its
+   frame and depth are visible. */
 .ds-card.ds-card--modern[data-part='root'][data-bordered='true']:not([data-variant='ghost']) {
   border-width: var(--ds-card-border-width);
   border-style: var(--ds-card-border-style);
@@ -191,83 +143,99 @@
   box-shadow: none;
 }
 
-/* The shared hover fill is a white-label state channel, independent from the
-   selected/pressed terminal states below. Semantic tones retain their hue and
-   use the state wash instead. Gated to hover-capable pointers (see above). */
 @media (hover: hover) {
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-disabled='true']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-state~='disabled']) {
     background-color: var(--ds-card-bg-hover, var(--ds-material-card-background-hover, var(--ds-card-bg)));
   }
 
-  /* hover, only on an interactive card, and only where the variant answers */
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='disabled']) {
     --ds-elevation-lift: 1;
   }
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']):not([data-shadowed='false']) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-state~='disabled']):not([data-shadowed='false']) {
     box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
   }
-  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-disabled='true']) {
-    border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-state~='disabled']) {
+    border-color: var(--ds-card-outlined-border-hover);
   }
 }
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true']) {
-  transform: var(--ds-card-active-transform, translateY(0) scale(0.995));
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']) {
+  transform: var(--ds-card-active-transform);
   color: var(--ds-card-color-active, var(--ds-card-color));
   background-color: var(--ds-card-bg-active, var(--ds-material-card-background-active, var(--ds-card-bg)));
   border-color: var(--ds-card-border-active, var(--ds-card-border-hover, var(--ds-card-border)));
 }
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true']):not([data-shadowed='false']) {
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled']):not([data-shadowed='false']) {
   box-shadow: var(--ds-card-shadow-active, var(--ds-card-shadow));
 }
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true'])::after {
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-state~='disabled'])::after {
   opacity: var(--ds-card-state-overlay-active-opacity);
 }
 
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true']) {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']) {
   color: var(--ds-card-color-selected, var(--ds-card-color));
   background-color: var(--ds-card-bg-selected, var(--ds-material-card-background-selected, var(--ds-card-bg)));
   border-color: var(--ds-card-border-selected, var(--ds-color-primary));
-  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) solid var(--ds-card-border-selected, var(--ds-color-primary));
+  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) var(--ds-edge-standard-style) var(--ds-card-border-selected, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true']):not([data-shadowed='false']) {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled']):not([data-shadowed='false']) {
   box-shadow: var(--ds-card-shadow-selected, var(--ds-card-focus-ring));
 }
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true'])::after {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-state~='disabled'])::after {
   opacity: var(--ds-card-state-overlay-selected-opacity);
 }
 
-/* Focus is an outline, so it never destroys tenant elevation or selection. */
-.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-disabled='true']) {
-  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-card-focus-ring-color, var(--ds-focus-ring-color));
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-state~='disabled']) {
+  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width)) var(--ds-edge-standard-style) var(--ds-card-focus-ring-color, var(--ds-focus-ring-color));
   outline-offset: var(--ds-card-focus-ring-offset);
 }
 
-/* colour tone: it wins the border and the fill, and it suppresses the surface tint */
+/* colour tone: it wins the border, the fill and the title ink, and it
+   suppresses the surface tint */
 .ds-card.ds-card--modern[data-part='root'][data-tone='primary'] {
-  border-color: var(--ds-card-primary-border-color, var(--ds-color-primary));
-  background-color: var(--ds-card-primary-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-primary-border-color);
+  background-color: var(--ds-card-primary-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='success'] {
-  border-color: var(--ds-card-success-border-color, var(--ds-color-success));
-  background-color: var(--ds-card-success-bg, color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-success-border-color);
+  background-color: var(--ds-card-success-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='warning'] {
-  border-color: var(--ds-card-warning-border-color, var(--ds-color-warning));
-  background-color: var(--ds-card-warning-bg, color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-warning-border-color);
+  background-color: var(--ds-card-warning-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='error'] {
-  border-color: var(--ds-card-error-border-color, var(--ds-color-error));
-  background-color: var(--ds-card-error-bg, color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-error-border-color);
+  background-color: var(--ds-card-error-bg);
   background-image: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-tone='info'] {
-  border-color: var(--ds-card-info-border-color, var(--ds-color-info));
-  background-color: var(--ds-card-info-bg, color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-card-bg)));
+  border-color: var(--ds-card-info-border-color);
+  background-color: var(--ds-card-info-bg);
   background-image: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='primary'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='primary'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-primary-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='success'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='success'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-success-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='warning'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='warning'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-warning-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='error'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='error'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-error-title-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='info'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'],
+.ds-card.ds-card--modern[data-part='root'][data-tone='info'] > [data-part='body'] > .ds-card-header > [data-part='content'] > [data-part='header-main'] > [data-part='title'] {
+  color: var(--ds-card-info-title-color);
 }
 
 /* Explicit frame suppression remains authoritative after semantic tones. */
@@ -276,152 +244,89 @@
 }
 
 /* Selection stays legible on semantic materials without becoming a side rail. */
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-disabled='true']) {
-  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) solid var(--ds-card-border-selected, var(--ds-color-primary));
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']) {
+  outline: var(--ds-card-selected-outline-width, var(--ds-card-border-width)) var(--ds-edge-standard-style) var(--ds-card-border-selected, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-card-selected-outline-width, var(--ds-card-border-width)));
 }
-.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-disabled='true']):not([data-shadowed='false']) {
+.ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'][data-tone]:not([data-state~='disabled']):not([data-shadowed='false']) {
   box-shadow: var(--ds-card-shadow-selected, var(--ds-card-focus-ring));
 }
 
-/* ===========================================================================
- * WO-SKIN-05 checkpoint D1 — everything the ARC-07 migration left inline: the
- * loading state, and the header/body/actions text and rules.
- *
- * Loading shares the exact same root contract as the ready state. `data-loading`
- * distinguishes the placeholder cover from the real cover wrapper, keeping
- * radius, tenant material and accessibility state stable while content resolves.
- *
- * The `:not(.rottay-card-header)` guard on the header is equally load-bearing.
- * `Card.Header` is a compound a caller can drop into `children`, where it lands as
- * a direct child of `[data-part='body']` — exactly where this engine renders its
- * OWN header. Both stamp `data-part='header'` and `data-part='title'`, and their
- * token fallback chains differ, so without the guard this rule would repaint the
- * compound. The compound has its own file: components/skin/card-compounds.css.
- *
- * SPECIFICITY (P-48): the header and actions rules carry a border colour and must
- * clear the tenant's unlayered `*` border-color floor at (0,3,1); their selector
- * chains are far past it. They stay SHORTHANDS because preflight zeroes
- * `border-width` on every element.
- * ======================================================================== */
-
-/* ---- loading: the cover placeholder (a fill the real cover wrapper never has) ---- */
+/* ---- loading: the reserved anatomy under a frosted spinner scrim; the cover
+        placeholder holds the geometry the real cover will take ---- */
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] > [data-part='cover'] {
-  height: var(--ds-card-cover-height, var(--ds-card-cover-min-height));
+  min-block-size: var(--ds-card-cover-min-height);
   opacity: var(--ds-card-loading-cover-opacity);
   background-color: var(--ds-surface-inset);
 }
-
-/* ---- loading: the four skeleton bars share one fill and one radius; only their
-        widths and heights differ, and those stay inline ---- */
-.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] [data-part='skeleton-bar'] {
-  background-color: var(--ds-card-skeleton-bg, var(--ds-surface-inset));
-  background-image: linear-gradient(
-    100deg,
-    transparent 18%,
-    var(--ds-card-skeleton-highlight) 48%,
-    transparent 78%
-  );
-  background-size: 220% 100%;
-  border-radius: var(--ds-card-skeleton-radius, var(--ds-radius-sm));
-  animation: ds-card-skeleton-sweep var(--ds-card-skeleton-duration, var(--ds-motion-glacial)) var(--ds-card-transition-timing) infinite;
+.ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
+  position: relative;
+  min-block-size: var(--ds-card-loading-min-height);
+  padding: var(--ds-card-instance-padding, var(--_ds-card-padding-current));
 }
-.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-card-skeleton-gap, var(--ds-spacing-3));
-  opacity: var(--ds-card-loading-skeleton-opacity);
-}
-.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton-stack'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-card-skeleton-stack-gap, var(--ds-spacing-2));
-  margin-block-start: var(--ds-card-skeleton-stack-margin-top, var(--ds-spacing-1));
-}
-
-/* ---- loading: the frosted spinner scrim ---- */
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above);
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1;
   backdrop-filter: blur(var(--ds-card-loading-backdrop-blur));
   -webkit-backdrop-filter: blur(var(--ds-card-loading-backdrop-blur));
-  background-color: var(--ds-card-loading-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 60%, transparent));
+  background-color: var(--ds-card-loading-overlay-bg);
   border-radius: inherit;
-  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
   display: block;
-  width: var(--ds-card-spinner-size);
-  height: var(--ds-card-spinner-size);
-  border: var(--ds-card-spinner-stroke) solid var(--ds-card-spinner-track, var(--ds-color-border));
+  inline-size: var(--ds-card-spinner-size);
+  block-size: var(--ds-card-spinner-size);
+  border: var(--ds-card-spinner-stroke) var(--ds-edge-standard-style) var(--ds-card-spinner-track, var(--ds-color-border));
   border-block-start-color: var(--ds-card-spinner-color, var(--ds-color-primary));
-  border-radius: 50%;
-  animation: ds-card-spinner-rotate var(--ds-card-spinner-duration, var(--ds-motion-glacial)) linear infinite;
+  border-radius: var(--ds-radius-full);
+  animation: ds-card-spin var(--ds-card-spinner-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
 /* ---- body ---- */
 .ds-card.ds-card--modern[data-part='root'] {
-  --ds-card-padding-current: calc(var(--ds-card-padding-md, var(--ds-card-md-padding)) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-card-padding-current: calc(var(--ds-card-padding-md, var(--ds-card-md-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='none'] {
-  --ds-card-padding-current: 0;
+  --_ds-card-padding-current: 0px;
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='sm'] {
-  --ds-card-padding-current: calc(var(--ds-card-padding-sm, var(--ds-card-sm-padding)) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-card-padding-current: calc(var(--ds-card-padding-sm, var(--ds-card-sm-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='lg'] {
-  --ds-card-padding-current: calc(var(--ds-card-padding-lg, var(--ds-card-lg-padding)) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-card-padding-current: calc(var(--ds-card-padding-lg, var(--ds-card-lg-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 
-/* size axis: density scaling of the header copy and body text. `md`/`lg` keep
-   the baseline above; compact sizes de-escalate, amplified sizes scale up.
-   The `-current` channels leave the tenant's explicit `--ds-card-*-font-size`
-   untouched as each rule's fallback, so BrandTheme still wins by default. */
+/* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;
+   the tenant's explicit --ds-card-*-font-size stays each rule's fallback */
 .ds-card.ds-card--modern[data-part='root'][data-size='xs'],
 .ds-card.ds-card--modern[data-part='root'][data-size='sm'] {
-  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-sm, var(--ds-font-size-base));
-  --_ds-card-body-font-size-current: var(--ds-card-body-font-size-sm, var(--ds-font-size-sm));
+  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-sm);
+  --_ds-card-body-font-size-current: var(--ds-card-body-font-size-sm);
 }
 .ds-card.ds-card--modern[data-part='root'][data-size='xl'],
 .ds-card.ds-card--modern[data-part='root'][data-size='2xl'],
 .ds-card.ds-card--modern[data-part='root'][data-size='3xl'] {
-  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-lg, var(--ds-font-size-xl));
+  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-lg);
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
   min-inline-size: 0;
-  padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
+  padding: var(--ds-card-instance-padding, var(--_ds-card-padding-current));
   color: var(--ds-card-body-color);
   font-size: var(--_ds-card-body-font-size-current, var(--ds-card-body-font-size));
   line-height: var(--ds-card-body-line-height);
   overflow-wrap: anywhere;
-  /* Nested-material grammar: the corner a card nested in this body should
-     wear. Concentric derivation — the parent's resolved radius minus a
-     bounded inset. The inset is the SMALLER of the body padding (the true
-     distance between the two strokes) and the LARGER of the governed
-     `--ds-radius-nest-inset` floor and `--ds-radius-nest-ratio` of the
-     parent radius, so the nested corner keeps visibly related curvature
-     across the whole radius-scale instead of collapsing to a square on
-     contained-radius tenants (a 10px parent used to derive a 2px child; it
-     now derives a concentric 5px). Both operands are what `shape.nesting`
-     states: at their resting 4px/0.5 this is the law as written, and at
-     0px/0 the inset collapses and the nested corner IS the parent's. Each is
-     read through a card channel that falls back to the governed root, which
-     is the §1.6 cascade shape: the card may bend the law for itself without
-     restating either value. `radius: none` still derives 0. Published on the body
-     (not the root) so a nested card — and any SemanticSurface landing in
-     this body — reads the PARENT's value through inheritance while its own
-     body recomputes for the next level down. */
+  /* Nested-material grammar: the corner an inner region of this body wears,
+     concentric with the card's own resolved radius (`shape.nesting`). */
   --_ds-card-nest-radius: max(
     0px,
     calc(
       var(--_ds-card-radius-current, var(--ds-card-radius)) -
         min(
-          var(--ds-card-instance-padding, var(--ds-card-padding-current, 0px)),
+          var(--ds-card-instance-padding, var(--_ds-card-padding-current, 0px)),
           max(
             var(--ds-card-nest-inset, var(--ds-radius-nest-inset)),
             calc(var(--_ds-card-radius-current, var(--ds-card-radius)) * var(--ds-card-nest-ratio, var(--ds-radius-nest-ratio)))
@@ -430,26 +335,19 @@
     )
   );
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
-  position: relative;
-  min-block-size: var(--ds-card-skeleton-min-height, 120px);
-  padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
-}
 .ds-card.ds-card--modern[data-part='root'] > [data-part='cover'] {
   overflow: hidden;
   line-height: 0;
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='cover'] > [data-part='cover-image'] {
   display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   object-fit: var(--ds-card-cover-object-fit, var(--ds-card-media-object-fit));
   object-position: var(--ds-card-cover-object-position);
 }
 
-/* ---- cover that failed to load: the engine drops the dead `img` and keeps the
-        wrapper, so the reserved geometry holds and the gap reads as the same
-        quiet inset material the loading placeholder already uses ---- */
+/* a cover that failed keeps its wrapper as the same quiet inset material */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='cover'][data-error='true'] {
   background-color: var(--ds-surface-inset);
 }
@@ -476,53 +374,39 @@
   flex: 999 1 var(--ds-card-body-inline-min-size);
 }
 
-/* ---- this engine's OWN header (never the Card.Header compound) ---- */
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+/* ---- this engine's own header (never the Card.Header compound) ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
   display: flex;
-  /* title copy and the trailing actions share one text baseline instead of
-     hanging from unrelated top edges; in the stacked container composition
-     below the cross axis stretches instead. */
   align-items: baseline;
   justify-content: space-between;
   gap: var(--ds-card-header-gap, var(--ds-card-header-actions-gap));
 }
-/* Protected header zone: the engine header finally reads the tenant's
-   `--ds-card-header-bg` (chrome.cardComponent.headerBg), the channel the
-   Card.Header compound already painted. The `background` shorthand accepts
-   both authored forms — a color (The Management's warm paper tint) and a
-   gradient (BitHire's cool 112° band) — while the token floor is
-   `transparent`, so a tenant that never authors the channel renders
-   byte-identical to before. The zone wears the concentric nest radius this
-   card's body publishes, so a painted band reads as ONE bounded region
-   related to the card corner, never a second unrelated rectangle. A
-   semantically toned card owns its fill; the zone yields to the tone. The
-   `--_ds-card-header-zone-*` privates are the documented escape
-   hatch (kill the band, or give it inset) with an exact current-render
-   fallback. */
-.ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+/* the tenant header band wears the concentric nest radius; a toned card owns
+   its fill, so the band yields to the tone */
+.ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
   position: relative;
   border-radius: var(--_ds-card-nest-radius);
   padding-inline: var(--_ds-card-header-zone-inset, 0px);
   padding-block-start: var(--_ds-card-header-zone-inset, 0px);
   background: var(--_ds-card-header-zone-bg, var(--ds-card-header-bg, transparent));
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header)[data-divider='true'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header)[data-divider='true'] {
   padding-block-end: var(--ds-card-header-padding-bottom);
   margin-block-end: var(--ds-card-header-padding-bottom);
-  border-block-end: var(--ds-card-header-border-width) solid var(--ds-card-header-border, var(--ds-color-border));
+  border-block-end: var(--ds-card-header-border-width) var(--ds-edge-standard-style) var(--ds-card-header-border, var(--ds-color-border));
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='extra'] {
   flex: 0 0 auto;
   max-inline-size: 100%;
   margin-inline-start: var(--ds-card-header-actions-gap);
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='title'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='title'] {
   margin: 0;
-  color: var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)));
+  color: var(--ds-card-title-color, var(--ds-card-header-ink));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--_ds-card-title-font-size-current, var(--ds-card-title-font-size));
   font-weight: var(--ds-card-title-font-weight);
@@ -531,7 +415,7 @@
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='description'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='description'] {
   color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
   font-size: var(--ds-card-subtitle-font-size);
   line-height: var(--ds-card-body-line-height);
@@ -539,28 +423,17 @@
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='description'][data-has-title='true'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='header-main'] > [data-part='description'][data-has-title='true'] {
   margin-block-start: var(--ds-card-subtitle-margin-top);
 }
 
-/* ---- actions rail (layout was inline in the engine until the R2+R3 pass;
-        the skin now owns the row: flex, wrap, justify, gap and rhythm) ---- */
+/* ---- actions rail ---- */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: var(--ds-card-actions-justify, flex-end);
-  /* the tenant footer border wins when emitted; the shared premium contract
-     supplies the quieter default hairline */
-  border-block-start: var(--ds-card-footer-border-width) solid var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-color-border)));
-  /* Protected footer zone: the tenant `--ds-card-footer-bg`
-     (chrome.cardComponent.footerBg — The Management authors warm paper) was
-     already painted here; it now also wears the concentric nest radius, so
-     a tinted rail reads as a bounded region related to the card corner
-     instead of a square-edged strip. The token floor is `transparent`, so
-     default tenants render byte-identical. `--_ds-card-actions-zone-inset`
-     is the documented hatch for a tenant that wants the rail inset from
-     its controls; 0px preserves the current geometry exactly. */
+  justify-content: var(--_ds-card-actions-justify, flex-end);
+  border-block-start: var(--ds-card-footer-border-width) var(--ds-edge-standard-style) var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-color-border)));
   border-radius: var(--_ds-card-nest-radius);
   background: var(--_ds-card-actions-zone-bg, var(--ds-card-footer-bg, transparent));
   gap: var(--ds-card-actions-gap, var(--ds-spacing-2));
@@ -571,24 +444,22 @@
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] > * {
   max-inline-size: 100%;
 }
-/* empty-region safety: with no header and no content, the rail is the body's
-   only region — its rhythm margin must not become a phantom top gap. */
+/* with no header and no content the rail is the body's only region */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions']:first-child {
   margin-block-start: 0;
 }
 
 @container ds-card (max-width: 28rem) {
   .ds-card.ds-card--modern[data-part='root'] {
-    --ds-card-actions-justify: stretch;
+    --_ds-card-actions-justify: stretch;
   }
 
-  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
     flex-direction: column;
-    /* stacked composition: full-width regions, no cross-axis baseline hunt */
     align-items: stretch;
   }
 
-  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
+  .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.ds-card-header) > [data-part='extra'] {
     inline-size: 100%;
     margin-inline-start: 0;
   }
@@ -605,88 +476,58 @@
   }
 }
 
-/* ===========================================================================
- * Anatomy variants (W4-A). `cardComponent.anatomy` in the tenant chrome compiles
- * to a `data-anatomy-card` attribute on the DS root; the closed vocabulary lives
- * in TENANT_THEME_ANATOMY_VARIANTS and is enforced by anatomy-variant-gate.mjs.
- * `default`/absent selects the base rendering above and needs no rule here.
- *
- * Each block prefixes the anatomy attribute onto the base root chain and REPEATS
- * `[data-part='root']`, reaching (0,5,0): one attribute over the (0,4,0)
- * variant/tone/radius rules it governs, so it wins in the same unlayered origin
- * without `!important`. Anatomy is a cross-variant frame treatment; the
- * per-instance variant still colours within the frame the anatomy defines. State
- * rules (hover/focus at (0,6,0)+) intentionally still react on top of the frame.
- * ======================================================================== */
-
-/* framed: an explicit full border + surface shadow, uniform across variants. The
-   shadow/radius reach every framed card; the neutral border is added only to an
-   untoned card, so a toned card keeps its tone frame. */
+/* Anatomy variants: `cardComponent.anatomy` compiles to `data-anatomy-card`
+   on the DS root. The repeated `[data-part='root']` outranks the variant,
+   tone and radius rules it governs; state rules still react on top. */
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border-radius: var(--ds-card-radius);
   box-shadow: var(--ds-card-shadow, var(--ds-elevation-1));
 }
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root']:not([data-tone]) {
-  border: var(--ds-card-border-width) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border: var(--ds-card-border-width) var(--ds-edge-standard-style) var(--ds-card-border, var(--ds-color-border-subtle));
 }
 
-/* underline: no side/top borders, one block-end hairline, tighter radius, no lift. */
 [data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border: 0;
-  border-block-end: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-card-underline-border-width) var(--ds-edge-standard-style) var(--ds-card-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-card-radius-sm);
   box-shadow: none;
 }
 
-/* ghost: no frame at rest; an interactive ghost card tints only on hover
-   (gated to hover-capable pointers like every other hover paint above). The
-   protected zones honor the same contract: a ghost card is structural
-   grouping, so the header band and footer rail do not paint at rest
-   (their proto overrides can still force them back on). */
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border: 0;
   box-shadow: none;
   background-color: transparent;
   background-image: none;
 }
-[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
+[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.ds-card-header) {
   background: var(--_ds-card-header-zone-bg, none);
 }
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
   background: var(--_ds-card-actions-zone-bg, none);
 }
 @media (hover: hover) {
-  [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
+  [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-state~='disabled']) {
     background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
   }
 }
 
-/* Nesting: a card rendered inside another card's body is grouping, not a new
-   surface — it keeps its frame but drops depth at rest so nested composition
-   cannot stack elevations. At (0,7,0) this beats the at-rest variant and
-   anatomy depth rules; the hover rule (0,8,0) still lifts on interaction, and
-   the selected/hover state treatments keep their outline and wash.
-
-   RETIRED (spacing.rhythm concentric ruling): the corner used to DERIVE from
-   the parent body's `--_ds-card-nest-radius`. The subject here is a whole
-   Card's `[data-part='root']`, so that was a component's own/outer radius
-   tracking rhythm — forbidden "even when that component can be nested". A
-   nested card now keeps its own resolved corner; only genuinely inner parts of
-   the padded body (header zone, actions zone) stay concentric. */
+/* A card nested in another card's body is grouping, not a new surface: it
+   keeps its frame and its own corner but drops depth at rest. */
 .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size] {
-  box-shadow: var(--ds-card-nested-shadow, none);
+  box-shadow: var(--ds-card-nested-shadow);
   border-radius: var(--_ds-card-radius-current, var(--ds-card-radius));
 }
 
-/* Instance-level suppression and unavailable state are terminal even when a
-   tenant selects a stronger anatomy recipe. */
+/* Instance-level suppression and the unavailable state are terminal even
+   under a stronger anatomy recipe. */
 .ds-card.ds-card--modern[data-part='root'][data-bordered='false'] {
   border-color: transparent;
 }
 .ds-card.ds-card--modern[data-part='root'][data-shadowed='false'] {
   box-shadow: none;
 }
-.ds-card.ds-card--modern[data-part='root'][data-disabled='true'] {
+.ds-card.ds-card--modern[data-part='root'][data-state~='disabled'] {
   cursor: var(--ds-card-disabled-cursor);
   opacity: var(--ds-card-disabled-opacity, var(--ds-state-disabled-opacity));
   color: var(--ds-card-color-disabled, var(--ds-color-text-disabled));
@@ -697,17 +538,12 @@
   transform: none;
   pointer-events: none;
 }
-.ds-card.ds-card--modern[data-part='root'][data-disabled='true']::after {
+.ds-card.ds-card--modern[data-part='root'][data-state~='disabled']::after {
   opacity: 0;
 }
 
-@keyframes ds-card-spinner-rotate {
+@keyframes ds-card-spin {
   to { transform: rotate(1turn); }
-}
-
-@keyframes ds-card-skeleton-sweep {
-  from { background-position: 120% 0; }
-  to { background-position: -120% 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -715,26 +551,17 @@
   .ds-card.ds-card--modern[data-part='root'] *,
   .ds-card.ds-card--modern[data-part='root']::after {
     scroll-behavior: auto;
-    transition-duration: 0.01ms;
+    animation: none;
+    transition: none;
   }
 
   .ds-card.ds-card--modern[data-part='root'] {
     transform: none;
   }
-
-  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
-    animation: none;
-  }
-
-  .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton-bar'] {
-    animation: none;
-    background-image: none;
-  }
 }
 
-/* Reduced transparency: the frosted loading scrim collapses to the opaque
-   overlay counterpart — the same authority the SemanticSurface RT block
-   chains to — never to a see-through card. */
+/* Reduced transparency: the frosted scrim collapses to the opaque overlay
+   material, never to a see-through card. */
 @media (prefers-reduced-transparency: reduce) {
   .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='loading-overlay'] {
     backdrop-filter: none;
@@ -745,42 +572,35 @@
 
 @media (forced-colors: active) {
   .ds-card.ds-card--modern[data-part='root'] {
-    border: 1px solid CanvasText;
+    border: var(--ds-edge-hairline-width) solid CanvasText;
     background: Canvas;
     color: CanvasText;
     box-shadow: none;
   }
 
-  /* Protected zones re-express as structure, not paint: tenant band
-     gradients would survive the system color enforcement (background
-     images are not forced), so they are explicitly silenced here. The
-     regions keep their rhythm and the hairlines below re-express them. The
-     header selector mirrors the zone rule's `:not([data-tone])` so this
-     silence still wins by source order at matching specificity. */
-  .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.rottay-card-header),
+  /* tenant band gradients survive the system colour pass, so the protected
+     zones re-express as structure, not paint */
+  .ds-card.ds-card--modern[data-part='root']:not([data-tone]) > [data-part='body'] > [data-part='header']:not(.ds-card-header),
   .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
     background: none;
   }
 
   .ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: var(--ds-focus-ring-width);
   }
 
   .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true'] {
     border-color: Highlight;
-    outline: 2px solid Highlight;
-    outline-offset: -2px;
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: calc(-1 * var(--ds-focus-ring-width));
   }
 
-  /* Unavailable cards carry their state in `opacity` and a disabled ink token,
-     and forced colors honours neither — the card re-read as fully live. The
-     system inactive colour is the only signal that survives (the same law the
-     Typography skin applies to a disabled link). It is placed after the
-     selected rule so an unavailable selected card still reads unavailable. */
-  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'],
-  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='title'],
-  .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] [data-part='description'] {
+  /* opacity and the disabled ink do not survive forced colours; the system
+     inactive colour is the only signal left, placed after selection */
+  .ds-card.ds-card--modern[data-part='root'][data-state~='disabled'],
+  .ds-card.ds-card--modern[data-part='root'][data-state~='disabled'] [data-part='title'],
+  .ds-card.ds-card--modern[data-part='root'][data-state~='disabled'] [data-part='description'] {
     border-color: GrayText;
     color: GrayText;
     outline-color: GrayText;

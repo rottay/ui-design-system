@@ -57,66 +57,6 @@ import type { CSSProperties } from 'react';
 import type { CardImageProps } from '../../contracts';
 import { ContentImageIcon } from '@/graphics/icons/semantic/generated/roles/content-image';
 
-/**
- * Border radius to CSS value mapping.
- * @internal
- */
-const RADIUS_MAP: Record<string, string> = {
-  none: '0',
-  sm: 'var(--ds-card-image-radius-sm, var(--ds-radius-sm))',
-  md: 'var(--ds-card-image-radius-md, var(--ds-radius-md))',
-  lg: 'var(--ds-card-image-radius-lg, var(--ds-radius-lg))',
-  inherit: 'inherit',
-};
-
-/**
- * Card image compound component.
- * Displays images within cards with support for overlays, gradients, and loading states.
- *
- * Features:
- * - Automatic loading state with spinner
- * - Error state with placeholder icon
- * - Gradient overlay for text readability
- * - Custom overlay content support
- * - Configurable positioning (top, bottom, cover)
- * - Smooth fade-in animation on load
- *
- * @component
- * @example
- * // Basic usage
- * <Card.Image src="/photo.jpg" alt="Product photo" />
- *
- * @example
- * // With gradient overlay for text
- * <Card.Image
- *   src="/hero.jpg"
- *   alt="Hero image"
- *   gradient
- *   height={300}
- * />
- *
- * @example
- * // With custom overlay content
- * <Card.Image
- *   src="/product.jpg"
- *   alt="Product"
- *   overlay={
- *     <Badge variant="success">New</badge>
- *   }
- * />
- *
- * @example
- * // As full card cover
- * <Card.Image
- *   src="/background.jpg"
- *   alt="Background"
- *   position="cover"
- *   gradient
- * />
- *
- * @param {CardImageProps} props - Component properties
- * @returns {React.ReactElement} The rendered CardImage component
- */
 export function CardImage({
   src,
   alt,
@@ -143,59 +83,39 @@ export function CardImage({
       ? 'end'
       : position;
 
-  /**
-   * Handles successful image load
-   */
   const handleLoad = () => {
     setImageLoaded(true);
     onLoad?.();
   };
 
-  /**
-   * Handles image load error
-   */
   const handleError = () => {
     setImageError(true);
     onError?.(new Error('Failed to load image'));
   };
 
-  // `radius` passes an unrecognised value straight through, so the resolved radius
-  // is an open string no rule can enumerate; card-compounds.css reads it as a custom
-  // property and overrides the corner pair each position rounds. The same holds for
-  // the per-instance aspect ratio and height: open contract values stay inline as
-  // documented instance geometry; every static layout/paint decision (position,
-  // sizing, overflow, absolute regions) is owned by card-compounds.css.
-  const containerStyle: CSSProperties = {
-    // A cover image is pinned to the card bounds by the skin ([data-position='cover']
-    // sets block-size: 100%); the historical inline cover spread also overrode any
-    // caller height, so the prop must not leak back in through this inline value.
-    height:
-      position === 'cover'
-        ? undefined
-        : typeof height === 'number'
-          ? `${height}px`
-          : height ?? (aspectRatio ? undefined : 'var(--ds-card-image-height, 12.5rem)'),
-    '--ds-card-image-aspect-ratio': aspectRatio,
-    '--ds-card-image-radius': RADIUS_MAP[radius] || radius,
+  const hasHeight = position !== 'cover' && height !== undefined && height !== null;
+  // Only runtime-computed channels travel inline: the caller's block size and
+  // aspect ratio are open values the skin reads back.
+  const containerStyle = {
+    ...(hasHeight ? { '--ds-card-image-block-size': typeof height === 'number' ? `${height}px` : height } : {}),
+    ...(aspectRatio ? { '--ds-card-image-aspect-ratio': aspectRatio } : {}),
     ...style,
   } as CSSProperties;
-
-  const imageStyle: CSSProperties = {
-    objectFit,
-  };
 
   return (
     <div
       {...rest}
-      className={`rottay-card-image ${className}`}
+      className={['ds-card-image', className].filter(Boolean).join(' ')}
       data-part="image"
       data-position={logicalPosition}
+      data-sizing={!hasHeight && aspectRatio ? 'aspect' : undefined}
+      data-fit={objectFit}
+      data-radius={radius}
       data-loaded={imageLoaded && !imageError ? 'true' : 'false'}
       data-error={imageError ? 'true' : 'false'}
       data-gradient={gradient ? 'true' : 'false'}
       style={containerStyle}
     >
-      {/* Placeholder shown while loading or on error */}
       {(!imageLoaded || imageError) && (
         <div
           data-part="placeholder"
@@ -209,33 +129,26 @@ export function CardImage({
               <ContentImageIcon decorative size="2xl" />
             </span>
           ) : (
-            <div
-              className="rottay-card-image-loading"
-              data-part="spinner"
-            />
+            <span data-part="spinner" aria-hidden="true" />
           )}
         </div>
       )}
 
-      {/* Actual image */}
       {!imageError && (
         <img
           data-part="img"
           src={src}
           alt={alt}
           decoding="async"
-          style={imageStyle}
           onLoad={handleLoad}
           onError={handleError}
         />
       )}
 
-      {/* Gradient overlay */}
       {gradient && <div data-part="gradient" aria-hidden="true" />}
 
-      {/* Custom overlay content */}
       {overlay && (
-        <div className="rottay-card-image-overlay" data-part="overlay">
+        <div data-part="overlay">
           {overlay}
         </div>
       )}

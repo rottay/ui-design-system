@@ -1,26 +1,13 @@
 /**
  * @fileoverview Card Modern Engine - Rottay Design System
- * @description Token-driven card with precise, calm, premium styling.
- * Part of the Rottay Design System's display primitives collection.
- *
- * @remarks
- * This engine uses CSS custom property tokens for all visual decisions.
- * No DaisyUI classes. The stable DOM anatomy is rendered here while every
- * visual decision is owned by the Modern Card skin and public design tokens.
+ * @description The stable DOM anatomy of the Modern card. Every visual
+ * decision belongs to the Modern Card skin and the `--ds-card-*` channels.
  *
  * **Material Ladder:**
  * - `elevated`: Surface and calibrated depth. Primary card.
  * - `outlined`: Full frame, no default depth. Flat and precise.
  * - `filled`: Inset material with no default frame or depth.
  * - `ghost`: Transparent structural grouping.
- *
- * **Hover Behavior:**
- * - Elevated: tokenized lift + depth transition
- * - Outlined: border darkens to secondary
- * - Filled/Ghost: no hover elevation change
- *
- * **Transitions:**
- * - Timing and easing are tenant-tunable through bounded Card channels
  *
  * @example Basic Usage
  * ```tsx
@@ -39,31 +26,19 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useId, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
 import { CARD_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
-import type { CardProps } from '../../contracts';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
+import type { CardProps, ResolvedCardAdaptation } from '../../contracts';
 import { CARD_DEFAULTS, PADDING_MAP } from '../../contracts';
-
-/**
- * DS-S001 recipe: the exact semantic classes the modern Card has always
- * emitted, resolved through the Rottay recipe engine. The always-on `modern`
- * axis sits between `interactive` and `tone` so the historical class order is
- * preserved byte for byte.
- */
-export const modernCardRecipe = defineRecipe(CARD_RECIPE_DEFINITION);
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 
-// ============================================================================
-// Constants
-// ============================================================================
-
-
-/** Paint belongs to the engine skin; the spinner anatomy is deliberately CSS-only. */
-const CardSpinner: React.FC = () => <span data-part="spinner" aria-hidden="true" />;
+/** The semantic classes the Modern card emits, resolved through the recipe engine. */
+export const modernCardRecipe = defineRecipe(CARD_RECIPE_DEFINITION);
 
 const NESTED_INTERACTIVE_SELECTOR = [
   'button',
@@ -89,13 +64,17 @@ function isNestedInteractiveTarget(target: EventTarget | null, root: HTMLElement
   return interactiveAncestor !== null && interactiveAncestor !== root && root.contains(interactiveAncestor);
 }
 
-// ============================================================================
-// Component
-// ============================================================================
+type LogicalCoverPosition = ResolvedCardAdaptation['coverPosition'];
+
+function toLogicalCoverPosition(position: NonNullable<CardProps['coverPosition']>): LogicalCoverPosition {
+  if (position === 'left') return 'start';
+  if (position === 'right') return 'end';
+  return position;
+}
 
 /**
- * Modern engine Card component using token-driven inline styles.
- * Premium quality: precise, calm, expensive.
+ * Modern engine Card: structure, interaction state and the finite `data-*`
+ * contract the skin paints from.
  *
  * @component
  * @param {CardProps} props - Component properties
@@ -131,16 +110,14 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     selected = false,
     onSelect,
     disabled = false,
+    adapt,
     extensions: _extensions,
     engine: _engine,
-    // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
-    // root element. It must spread BEFORE the engine's own stamps so the
-    // engine's data-part and skin contract always land last.
+    // Caller passthrough (id / aria-* / data-*): spread first so the engine's
+    // own stamps always land last.
     ...rest
   } = props;
 
-  // DS-S001: profile defaults apply only where the caller left the axis
-  // unset; explicit props always win, then the engine default.
   const cardProfileDefaults = useRecipeProfileDefaults('card');
   const variant =
     variantProp ??
@@ -149,48 +126,48 @@ export default function ModernCard(props: CardProps): React.ReactElement {
       : undefined) ??
     CARD_DEFAULTS.variant;
 
-  // A cover that 404s used to paint the browser's broken-image glyph inside the
-  // frame. The wrapper survives the failure so the reserved cover geometry never
-  // collapses (the Avatar fallback law); only the dead `img` is dropped and the
-  // skin paints the wrapper as a neutral placeholder.
+  // A cover that fails keeps its wrapper so the reserved geometry never
+  // collapses; only the dead `img` is dropped and the skin paints the wrapper.
   const [coverFailed, setCoverFailed] = useState(false);
   const coverRef = React.useRef<HTMLImageElement>(null);
   useEffect(() => {
     setCoverFailed(false);
   }, [cover]);
 
-  // A server-rendered cover can fail BEFORE hydration attaches `onError`, so
-  // the failure would never be observed; reconcile against the real element.
+  // A server-rendered cover can fail before hydration attaches `onError`.
   useEffect(() => {
     const img = coverRef.current;
     if (!img || !img.complete) return;
     if (img.naturalWidth === 0) setCoverFailed(true);
   }, [cover]);
 
-  // Responsive padding handling
-  const reactId = useId();
   const responsiveEntries: ResponsivePropEntry<any>[] = [];
   const paddingIsResponsive = isResponsiveValue(paddingProp);
 
   if (paddingIsResponsive) {
     responsiveEntries.push({
-      // The visible inset belongs to the body/loading anatomy, not the root.
-      // A scoped custom property lets the generated breakpoint rule cross that
-      // boundary without coupling the responsive runtime to Card selectors.
+      // The visible inset belongs to the body anatomy, not the root; the
+      // instance channel crosses that boundary.
       cssProperty: '--ds-card-instance-padding',
       value: paddingProp,
       resolve: (v: string) => PADDING_MAP[v] || PADDING_MAP.md,
     } as ResponsivePropEntry<any>);
   }
 
-  const needsResponsiveCSS = responsiveEntries.length > 0;
   const responsive = generateResponsiveCSS(responsiveEntries);
+  const restingPadding = (paddingIsResponsive ? CARD_DEFAULTS.padding : paddingProp) as ResolvedCardAdaptation['padding'];
 
-  const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
+  const [rootElement, setRootElement] = useState<HTMLDivElement | null>(null);
+  const containerRef = useMemo(() => ({ current: rootElement }), [rootElement]);
+  const base = useMemo<ResolvedCardAdaptation>(
+    () => ({ coverPosition: toLogicalCoverPosition(coverPosition), padding: restingPadding }),
+    [coverPosition, restingPadding],
+  );
+  const { adaptation, postureAttribute } = useAdaptation(adapt, { base, containerRef });
+  const logicalCoverPosition = adaptation.coverPosition;
+  const padding = adaptation.padding;
 
   const unavailable = disabled || loading;
-  // The triad is decided once, in the behavior core: both skins of this
-  // component read the same state, and a focus ring is a keyboard affordance.
   const { state: interaction, handlers: interactionHandlers } = useInteractionState({
     disabled: unavailable,
   });
@@ -223,11 +200,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   );
 
   const isInteractive = hoverable || clickable || isActionable;
-  const logicalCoverPosition = coverPosition === 'left'
-    ? 'start'
-    : coverPosition === 'right'
-      ? 'end'
-      : coverPosition;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
   const cardClassName = modernCardRecipe.resolve(
     {
@@ -238,12 +210,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     { root: className }
   ).root;
 
-  // Paint lives in `foundation/tokens/css/runtime/engines/modern/skin/card/index.css`, keyed on the
-  // `data-*` contract stamped on the root below. Only a caller's own `style` prop
-  // stays inline, which is the precedence it has always had.
-  const cardStyle: React.CSSProperties | undefined = style;
-
-  /** The DOM contract the modern Card skin selects on. */
+  /** The DOM contract the Modern Card skin selects on. */
   const skinAttributes = {
     'data-variant': variant,
     'data-radius': radius,
@@ -251,35 +218,28 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     'data-padding': padding,
     'data-cover-position': cover ? logicalCoverPosition : undefined,
     'data-tone': hasColorVariant ? colorVariant : undefined,
-    // `hoverable || clickable`, the condition the hover paint was gated on.
     'data-interactive': isInteractive ? 'true' : undefined,
     // Paints a pointer. Not the same as being operable.
     'data-clickable': clickable || isActionable ? 'true' : undefined,
-    // Actually operable: takes a tab stop, a button role, and a focus ring.
+    // Operable: a tab stop, a button role and a focus ring.
     'data-actionable': isActionable ? 'true' : undefined,
     'data-selectable': selectable ? 'true' : undefined,
     'data-selected': selectable ? (selected ? 'true' : 'false') : undefined,
-    'data-disabled': unavailable ? 'true' : undefined,
     'data-loading': loading ? 'true' : undefined,
     'data-has-cover': cover ? 'true' : undefined,
     'data-has-header': title || description || extra ? 'true' : undefined,
     'data-has-actions': actions && actions.length > 0 ? 'true' : undefined,
     'data-bordered': props.bordered === undefined ? undefined : bordered ? 'true' : 'false',
     'data-shadowed': shadowed === undefined ? undefined : shadowed ? 'true' : 'false',
+    'data-posture': postureAttribute,
   } as const;
 
   const resolvedCoverAlt = coverAlt ?? (typeof title === 'string' ? title : '');
   const TitleHeading = `h${titleHeadingLevel}` as keyof React.JSX.IntrinsicElements;
 
-  // ============================================================================
-  // Shared sub-elements
-  // ============================================================================
-
-  const responsiveAttrs = responsive.attrs;
-
   const coverNode = cover ? (
     <div data-part="cover" data-error={coverFailed ? 'true' : undefined}>
-      {!coverFailed && (
+      {!loading && !coverFailed && (
         <img
           ref={coverRef}
           data-part="cover-image"
@@ -292,147 +252,86 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     </div>
   ) : null;
 
-  // ============================================================================
-  // Loading state
-  // ============================================================================
+  return (
+    <div
+      {...rest}
+      ref={setRootElement}
+      className={cardClassName}
+      onClick={isActionable ? handleClick : undefined}
+      onPointerEnter={interactionHandlers.onPointerEnter}
+      onPointerLeave={interactionHandlers.onPointerLeave}
+      onPointerDown={(event) => {
+        if (!isNestedInteractiveTarget(event.target, event.currentTarget)) {
+          interactionHandlers.onPointerDown(event);
+        }
+      }}
+      onPointerUp={interactionHandlers.onPointerUp}
+      onFocus={(event) => {
+        if (event.target === event.currentTarget) interactionHandlers.onFocus(event);
+      }}
+      onBlur={(event) => {
+        if (event.target === event.currentTarget) interactionHandlers.onBlur(event);
+      }}
+      onKeyDown={isActionable ? handleKeyDown : undefined}
+      tabIndex={isActionable && !unavailable ? 0 : undefined}
+      role={isActionable ? 'button' : undefined}
+      aria-pressed={isActionable && selectable ? selected : undefined}
+      aria-disabled={unavailable || undefined}
+      aria-busy={loading || undefined}
+      style={{ ...style, ...responsive.channels }}
+      {...skinAttributes}
+      {...responsive.attrs}
+      {...partAttributes('root', interaction)}
+    >
+      {(logicalCoverPosition === 'top' || logicalCoverPosition === 'start') && coverNode}
 
-  if (loading) {
-    return (
-      <>
-        <div
-          {...rest}
-          style={{ ...cardStyle, ...responsive.channels }}
-          className={cardClassName}
-          aria-busy="true"
-          aria-disabled="true"
-          {...skinAttributes}
-          {...responsiveAttrs}
-          {...partAttributes('root', interaction)}
-        >
-          {/* Placeholder cover */}
-          {cover && (
-            <div data-part="cover" />
-          )}
-          <div data-part="loading-content">
-            {/* Skeleton bars: the skin owns fill/radius/motion and the column
-                rhythm; only the per-bar widths and heights stay inline as
-                anatomy geometry. */}
-            <div data-part="skeleton">
-              <div data-part="skeleton-bar" style={{
-                height: 'var(--ds-skeleton-bar-height, 12px)',
-                width: '60%',
-              }} />
-              <div data-part="skeleton-bar" style={{
-                height: 'var(--ds-skeleton-bar-height, 12px)',
-                width: '40%',
-              }} />
-              <div data-part="skeleton-stack">
-                <div data-part="skeleton-bar" style={{
-                  height: 'var(--ds-skeleton-bar-height-sm, 10px)',
-                  width: '100%',
-                }} />
-                <div data-part="skeleton-bar" style={{
-                  height: 'var(--ds-skeleton-bar-height-sm, 10px)',
-                  width: '85%',
-                }} />
-              </div>
-            </div>
-            {/* Spinner overlay */}
-            <div
-              data-part="loading-overlay"
-            >
-              <CardSpinner />
-            </div>
+      {loading ? (
+        <div data-part="loading-content">
+          <div data-part="loading-overlay">
+            <span data-part="spinner" aria-hidden="true" />
           </div>
         </div>
-      </>
-    );
-  }
-
-  // ============================================================================
-  // Default render
-  // ============================================================================
-
-  return (
-    <>
-      <div
-        {...rest}
-        className={cardClassName}
-        onClick={isActionable ? handleClick : undefined}
-        onPointerEnter={interactionHandlers.onPointerEnter}
-        onPointerLeave={interactionHandlers.onPointerLeave}
-        onPointerDown={(event) => {
-          if (!isNestedInteractiveTarget(event.target, event.currentTarget)) {
-            interactionHandlers.onPointerDown(event);
-          }
-        }}
-        onPointerUp={interactionHandlers.onPointerUp}
-        onFocus={(event) => {
-          if (event.target === event.currentTarget) interactionHandlers.onFocus(event);
-        }}
-        onBlur={(event) => {
-          if (event.target === event.currentTarget) interactionHandlers.onBlur(event);
-        }}
-        onKeyDown={isActionable ? handleKeyDown : undefined}
-        tabIndex={isActionable && !unavailable ? 0 : undefined}
-        role={isActionable ? 'button' : undefined}
-        aria-pressed={isActionable && selectable ? selected : undefined}
-        aria-disabled={unavailable || undefined}
-        aria-busy={loading || undefined}
-        style={{ ...cardStyle, ...responsive.channels }}
-        {...skinAttributes}
-        {...responsiveAttrs}
-        {...partAttributes('root', interaction)}
-      >
-        {/* Cover image - top */}
-        {(logicalCoverPosition === 'top' || logicalCoverPosition === 'start') && coverNode}
-
-        {/* Body */}
-        <div data-part="body">
-          {/* Header */}
-          {(title || description || extra) && (
-            <div
-              data-part="header"
-              data-divider={divider ? 'true' : undefined}
-            >
-              <div data-part="header-main">
-                {title && (
-                  <TitleHeading data-part="title">
-                    {title}
-                  </TitleHeading>
-                )}
-                {description && (
-                  <div data-part="description" data-has-title={title ? 'true' : undefined}>
-                    {description}
-                  </div>
-                )}
-              </div>
-              {extra && (
-                <div data-part="extra">
-                  {extra}
+      ) : (
+      <div data-part="body">
+        {(title || description || extra) && (
+          <div
+            data-part="header"
+            data-divider={divider ? 'true' : undefined}
+          >
+            <div data-part="header-main">
+              {title && (
+                <TitleHeading data-part="title">
+                  {title}
+                </TitleHeading>
+              )}
+              {description && (
+                <div data-part="description" data-has-title={title ? 'true' : undefined}>
+                  {description}
                 </div>
               )}
             </div>
-          )}
+            {extra && (
+              <div data-part="extra">
+                {extra}
+              </div>
+            )}
+          </div>
+        )}
 
-          {/* Content */}
-          {children}
+        {children}
 
-          {/* Actions: the skin owns the row layout (flex, wrap, justify,
-              gap, rhythm) through the --ds-card-actions-* channels. */}
-          {actions && actions.length > 0 && (
-            <div data-part="actions">
-              {actions.map((action, index) => (
-                <React.Fragment key={index}>{action}</React.Fragment>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Cover image - bottom */}
-        {(logicalCoverPosition === 'bottom' || logicalCoverPosition === 'end') && coverNode}
+        {actions && actions.length > 0 && (
+          <div data-part="actions">
+            {actions.map((action, index) => (
+              <React.Fragment key={index}>{action}</React.Fragment>
+            ))}
+          </div>
+        )}
       </div>
-    </>
+      )}
+
+      {(logicalCoverPosition === 'bottom' || logicalCoverPosition === 'end') && coverNode}
+    </div>
   );
 }
 
