@@ -1557,14 +1557,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     ]),
   }),
   Object.freeze({
-    owner: 'WO-DER-06',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-14',
-    reason:
-      'no consumer reads it anywhere in the repository: the catalog bars surfaces.border-style from emitting it and the elevation border deriver refuses it by name, while the channel the productive skins actually compose is --ds-edge-standard-style; the pin clears when the preset conversion wires a proven stylesheet or style-query reader, or retires the channel and removes its producers in the same commit',
-    channels: Object.freeze(['--ds-elevation-border-style']),
-  }),
-  Object.freeze({
     owner: 'WO-FAM-06',
     classification: LIVENESS.readNoProductiveTerminal,
     registered: '2026-09-14',

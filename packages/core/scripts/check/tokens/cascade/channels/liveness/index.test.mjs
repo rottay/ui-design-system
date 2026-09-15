@@ -410,7 +410,7 @@ test('LIVE: the shapes the old walk could not see are in the emitted universe, w
   ]));
   for (const name of [
     '--ds-font-weight-heading',      // a sub-owner literal assignment
-    '--ds-elevation-border-style',   // a sub-owner roster membership guard
+    '--ds-elevation-6',              // a sub-owner roster membership guard
     '--ds-z-index-modal',            // a sub-owner template over a literal table
     '--ds-breakpoint-sm',            // a top-level template over an IMPORTED table
     '--ds-density-mode-factor',      // a top-level named-constant key
@@ -1700,19 +1700,19 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 48 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 47 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
     index.size,
-    48,
-    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them)',
+    47,
+    'the pin count is the audit-100 registration, plus the audit-107 status-tint rows, less the pins the cuts discharged and the channels retired: 33 + 13 + 4 + 1 - 1 (the Drawer cut gave --ds-z-index-drawer a terminal; the button cut made --ds-radius-button paint) - 2 (the two governed-selection provenance channels stopped being emitted, so their pin went with them) - 1 (--ds-elevation-border-style had no reader anywhere, so the channel, its producers and its pin went together)',
   );
   const byClass = {};
   for (const pin of index.values()) byClass[pin.classification] = (byClass[pin.classification] ?? 0) + 1;
   assert.deepEqual(byClass, {
     [LIVENESS.authorableUnprovenEffect]: 33,
-    [LIVENESS.unreadEmittedNoRoute]: 11,
+    [LIVENESS.unreadEmittedNoRoute]: 10,
     [LIVENESS.readNoProductiveTerminal]: 2,
     [LIVENESS.readUnproven]: 1,
     [LIVENESS.structuralConstant]: 1,

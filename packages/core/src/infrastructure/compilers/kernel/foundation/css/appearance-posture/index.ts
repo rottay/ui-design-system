@@ -74,8 +74,7 @@ export function buttonStyleRadius(
 }
 
 /**
- * The ladder each governed posture states, over all SEVEN roles plus the
- * border weight it implies.
+ * The ladder each governed posture states, over all SEVEN roles.
  *
  * It used to state roles 1..3 only, so a theme that asked for a flat product
  * still got the full derived depth on roles 4..6: three steps of one posture
@@ -97,7 +96,6 @@ const ELEVATION_PRESET: Readonly<
     "--ds-elevation-4": "0 1px 3px rgba(0,0,0,0.06)",
     "--ds-elevation-5": "0 2px 4px rgba(0,0,0,0.07)",
     "--ds-elevation-6": "0 2px 6px rgba(0,0,0,0.08)",
-    "--ds-elevation-border-style": "solid",
   },
   soft: {},
   elevated: {
@@ -108,7 +106,6 @@ const ELEVATION_PRESET: Readonly<
     "--ds-elevation-4": "0 16px 32px rgba(0,0,0,0.14)",
     "--ds-elevation-5": "0 24px 48px rgba(0,0,0,0.16)",
     "--ds-elevation-6": "0 32px 64px rgba(0,0,0,0.18)",
-    "--ds-elevation-border-style": "none",
   },
 };
 

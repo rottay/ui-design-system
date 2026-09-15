@@ -712,8 +712,8 @@ describe("static and DB share one lowering", () => {
     // ZERO variables on both non-identity stops while the static arm moved
     // three. The values below are the static arm's, reproduced through the DB
     // door.
-    // WO-DER-04: a posture now states the WHOLE seven-role ladder plus the
-    // border weight it implies. It used to state levels 1..3 only, so a flat
+    // WO-DER-04: a posture now states the WHOLE seven-role ladder. It used to
+    // state levels 1..3 only, so a flat
     // product still got a deep modal shadow from roles 4..6.
     const PRESET = {
       flat: {
@@ -725,7 +725,6 @@ describe("static and DB share one lowering", () => {
         "--ds-elevation-4": "0 1px 3px rgba(0,0,0,0.06)",
         "--ds-elevation-5": "0 2px 4px rgba(0,0,0,0.07)",
         "--ds-elevation-6": "0 2px 6px rgba(0,0,0,0.08)",
-        "--ds-elevation-border-style": "solid",
       },
       elevated: {
         "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
@@ -734,7 +733,6 @@ describe("static and DB share one lowering", () => {
         "--ds-elevation-4": "0 16px 32px rgba(0,0,0,0.14)",
         "--ds-elevation-5": "0 24px 48px rgba(0,0,0,0.16)",
         "--ds-elevation-6": "0 32px 64px rgba(0,0,0,0.18)",
-        "--ds-elevation-border-style": "none",
       },
     } as const;
     const elevationDoc = (elevation: string) => ({

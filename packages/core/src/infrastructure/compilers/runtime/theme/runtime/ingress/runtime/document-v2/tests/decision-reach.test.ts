@@ -185,16 +185,21 @@ describe("every connected decision reaches a channel on every vertical", () => {
  * The probe above drives one decision at a time, which is the exact shape that
  * cannot see this: `surfaces.border-style` alone has no posture to contest. The
  * CC-01 re-audit drove both together and found the stated order inverted -- the
- * catalog row and two doc comments said the keyline outranked the
- * `--ds-elevation-border-style` an elevation posture merely implies, while the
- * merge did the opposite, because a TENANT posture is re-stated by the `tenant`
- * family and the keyline derives two ranks below it. Settled by withdrawing the
- * claim and the channel: the row owns the three WIDTHS, the posture owns the
- * style. Both halves are asserted here, against the catalog, so the row's
- * declaration and the merge can only move together.
+ * catalog row and two doc comments said the keyline outranked the border style
+ * an elevation posture merely implied, while the merge did the opposite,
+ * because a TENANT posture is re-stated by the `tenant` family and the keyline
+ * derives two ranks below it. Settled by withdrawing the claim, and then the
+ * implied channel itself, which nothing read: the row owns the three WIDTHS,
+ * the posture owns the shadow LADDER. Both halves are asserted here, against
+ * the catalog, so the row's declaration and the merge can only move together.
  */
 describe("surfaces.border-style beside surfaces.elevation-posture", () => {
   const ROW = themeControl("surfaces.border-style");
+  const LADDER_ROLES = [
+    "--ds-elevation-1",
+    "--ds-elevation-2",
+    "--ds-elevation-3",
+  ] as const;
 
   /** The audit's own two cases, at the values it drove them with. */
   const CASES = [
@@ -206,7 +211,11 @@ describe("surfaces.border-style beside surfaces.elevation-posture", () => {
         "--ds-edge-standard-width": "1.5px",
         "--ds-edge-emphasis-width": "2px",
       },
-      impliedStyle: "none",
+      ladder: {
+        "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
+        "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
+        "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
+      },
     },
     {
       elevation: "flat",
@@ -216,11 +225,15 @@ describe("surfaces.border-style beside surfaces.elevation-posture", () => {
         "--ds-edge-standard-width": "0px",
         "--ds-edge-emphasis-width": "1px",
       },
-      impliedStyle: "solid",
+      ladder: {
+        "--ds-elevation-1": "none",
+        "--ds-elevation-2": "none",
+        "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
+      },
     },
   ] as const;
 
-  it("declares the three width roles, and no border style", () => {
+  it("declares the three width roles, and nothing of the ladder", () => {
     expect([...ROW.produces.channels]).toEqual([
       "--ds-edge-hairline-width",
       "--ds-edge-standard-width",
@@ -229,8 +242,8 @@ describe("surfaces.border-style beside surfaces.elevation-posture", () => {
   });
 
   for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
-    for (const { elevation, borderStyle, widths, impliedStyle } of CASES) {
-      it(`${vertical}/${elevation}+${borderStyle}: the row keeps the widths, the posture keeps the style`, () => {
+    for (const { elevation, borderStyle, widths, ladder } of CASES) {
+      it(`${vertical}/${elevation}+${borderStyle}: the row keeps the widths, the posture keeps the ladder`, () => {
         const both = compiled(
           vertical,
           v2({
@@ -241,21 +254,20 @@ describe("surfaces.border-style beside surfaces.elevation-posture", () => {
         for (const [channel, value] of Object.entries(widths)) {
           expect(both[channel], `${vertical} ${channel}`).toBe(value);
         }
-        expect(
-          both["--ds-elevation-border-style"],
-          `${vertical} keyline style`
-        ).toBe(impliedStyle);
+        for (const [channel, value] of Object.entries(ladder)) {
+          expect(both[channel], `${vertical} ${channel}`).toBe(value);
+        }
       });
 
-      it(`${vertical}/${borderStyle}: alone, the row states no border style at all`, () => {
+      it(`${vertical}/${borderStyle}: alone, the row states no ladder at all`, () => {
         // The withdrawal itself: without a posture beside it the row must leave
-        // the channel exactly where the vertical rests, rather than winning a
+        // the ladder exactly where the vertical rests, rather than winning a
         // contest it loses the moment a posture is authored.
         const alone = compiled(vertical, v2({ "surfaces.border-style": borderStyle }));
         const rest = compiled(vertical, v2({}));
-        expect(alone["--ds-elevation-border-style"]).toBe(
-          rest["--ds-elevation-border-style"]
-        );
+        for (const channel of LADDER_ROLES) {
+          expect(alone[channel], `${vertical} ${channel}`).toBe(rest[channel]);
+        }
         expect(alone["--ds-edge-standard-width"]).toBe(
           widths["--ds-edge-standard-width"]
         );

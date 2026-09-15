@@ -68,13 +68,12 @@ describe("elevation/ladder", () => {
   const ladderOf = (posture: "flat" | "soft" | "elevated") =>
     ladderFor({ elevation: posture });
 
-  it("states all seven roles and the border weight for a non-identity posture", () => {
+  it("states all seven roles for a non-identity posture", () => {
     for (const posture of ["flat", "elevated"] as const) {
       const ladder = ladderOf(posture);
       for (const role of [0, 1, 2, 3, 4, 5, 6]) {
         expect(ladder[`--ds-elevation-${role}`], `${posture}/${role}`).toBeDefined();
       }
-      expect(ladder["--ds-elevation-border-style"]).toBeDefined();
     }
   });
 
@@ -140,12 +139,13 @@ describe("surfaces.border-style (kit row 18)", () => {
     ).toEqual({});
   });
 
-  it("leaves the border style an elevation POSTURE implies to the posture", () => {
-    // The row states WIDTHS. `--ds-elevation-border-style` is the posture's on
-    // every rank -- a tenant that authors the posture has the `tenant` family
-    // re-state it two ranks above this one -- so a keyline that claimed it
-    // inside this family would be overruled on the full compile. Fenced here
-    // and on the door in `document-v2/tests/decision-reach.test.ts`.
+  it("leaves the shadow ladder an elevation POSTURE states to the posture", () => {
+    // The row states WIDTHS and nothing of the ladder: the roles are the
+    // posture's on every rank -- a tenant that authors the posture has the
+    // `tenant` family re-state them two ranks above this one -- so a keyline
+    // that claimed one inside this family would be overruled on the full
+    // compile. Fenced here and on the door in
+    // `document-v2/tests/decision-reach.test.ts`.
     const context = buildLoweringContext({
       theme: {
         id: "t",
@@ -157,11 +157,18 @@ describe("surfaces.border-style (kit row 18)", () => {
       context.theme,
       context.expressive.expansion
     );
-    expect(Object.keys(posture("strong"))).not.toContain(
-      "--ds-elevation-border-style"
-    );
-    expect(channels["--ds-elevation-border-style"]).toBe("none");
-    // The widths ARE the row's, beside the posture that keeps the style.
+    expect(
+      Object.keys(posture("strong")).filter((channel) =>
+        /^--ds-elevation-/u.test(channel)
+      )
+    ).toEqual([]);
+    // The family's elevation channels are the seven roles and nothing else.
+    expect(
+      Object.keys(channels)
+        .filter((channel) => /^--ds-elevation-/u.test(channel))
+        .sort()
+    ).toEqual([0, 1, 2, 3, 4, 5, 6].map((role) => `--ds-elevation-${role}`));
+    // The widths ARE the row's, beside the posture that keeps the ladder.
     expect(channels["--ds-edge-standard-width"]).toBe("1.5px");
     // The shadow ladder the posture states is untouched by the keyline.
     expect(channels["--ds-elevation-3"]).toBe(

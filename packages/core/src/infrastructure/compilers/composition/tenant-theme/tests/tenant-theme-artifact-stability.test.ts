@@ -615,14 +615,13 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-color-secondary-rgb",
       // WO-DER-04. The density posture this document AUTHORS (`normal`) now
       // reaches the delta at its identity factor, and its `flat` elevation
-      // states the whole 0..6 ladder plus the border weight it implies instead
-      // of levels 1..3 -- so roles 4..6 join `--ds-elevation-1..3`, which the
-      // baseline already matched and `W4_RETIRED` already records.
+      // states the whole 0..6 ladder instead of levels 1..3 -- so roles 4..6
+      // join `--ds-elevation-1..3`, which the baseline already matched and
+      // `W4_RETIRED` already records.
       "--ds-density-mode-factor",
       "--ds-elevation-4",
       "--ds-elevation-5",
       "--ds-elevation-6",
-      "--ds-elevation-border-style",
       "--ds-input-border-focus",
       "--ds-input-shadow-focus",
       // 04e835647 (toggle silhouette). The toggle deriver emits both corners,

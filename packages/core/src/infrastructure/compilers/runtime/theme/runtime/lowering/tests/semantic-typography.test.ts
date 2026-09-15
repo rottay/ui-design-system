@@ -302,10 +302,20 @@ const FIRST_PARTY = [
 // starting digests are the ones measured on eabf62987 itself (rottay
 // d2447215…, bithire a2bedc6a…, evnto 815bc4b2…), and restoring the two
 // emissions on that tree reproduces them byte for byte.
+// ELEVATION-KEYLINE re-anchor, bithire only, SUBTRACTIVE-ONLY and measured.
+// `--ds-elevation-border-style` was retired with its producers (nothing read
+// it), and bithire is the one first-party theme whose `flat` posture emitted
+// it: bithire 2380 -> 2379, rottay and evnto unchanged. Measured with every
+// other producer at its committed state, a054f8972: the navigation family cuts
+// (011910356) had moved the keyset rottay 2179 -> 2350, bithire 2228 -> 2380,
+// evnto 1547 -> 1760 without re-anchoring these pins, so rottay and evnto are
+// pinned at the digests measured on a054f8972 itself (c7223694…, b758de6e…) and
+// bithire's starting digest there is d6546f8a…; restoring the two map entries
+// on that tree reproduces it byte for byte.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "f2eaf241dce7721175cd427f7f99f428fa0be2cca5220e56a81a994ceece2873",
-  bithire: "1392ba2aad26717f46be8bf12dc5ac23083deb38e9ae6a770372614638ceeca5",
-  evnto: "815bc4b262c5b6db4de335da9be68dd422820105e886e4436c45995d22460f7f",
+  rottay: "c7223694115e1a36504401b43426dde79d69b8a081a104f7b392e64a8966e0d0",
+  bithire: "e384038826da0c9147fa0d9fe94b07bb66aae0052084545efc4f5d8ed3677600",
+  evnto: "b758de6e74775dbcd0ef28bcac68d9a51698407560dc2899d7b33ad2fc4bb455",
 };
 
 /**

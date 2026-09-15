@@ -17,10 +17,7 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
  * would be two edge ladders, and the profile is the floor this decision is
  * expected to outrank, not a different scale.
  *
- * The three widths are the WHOLE row. `--ds-elevation-border-style` stays the
- * elevation posture's: a tenant that authors the posture has it written from
- * the `tenant` rank, above every family that derives from the Theme, so a
- * keyline stated here could not outrank it -- and does not need to. A `0px`
+ * The three widths are the WHOLE row. No border style is stated: a `0px`
  * role width already draws nothing, and the style token the skins compose
  * beside these widths is `--ds-edge-standard-style`, which the expressive
  * `edge` axis owns.

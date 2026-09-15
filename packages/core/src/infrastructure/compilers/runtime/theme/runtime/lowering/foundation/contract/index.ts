@@ -170,7 +170,7 @@ export const TYPE_PAIRING_CHANNELS = [
   "--ds-line-height-display",
 ] as const;
 
-/** The posture channels the ELEVATION family owns: seven roles and the edge. */
+/** The posture channels the ELEVATION family owns: the seven roles. */
 export const ELEVATION_PRESET_CHANNELS = [
   "--ds-elevation-0",
   "--ds-elevation-1",
@@ -179,7 +179,6 @@ export const ELEVATION_PRESET_CHANNELS = [
   "--ds-elevation-4",
   "--ds-elevation-5",
   "--ds-elevation-6",
-  "--ds-elevation-border-style",
 ] as const;
 
 /** A read-only view of everything merged at strictly lower ranks. */
