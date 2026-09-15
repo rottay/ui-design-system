@@ -4821,7 +4821,13 @@
    "notes": "wave 4; closes F-30, F-63",
    "claimedBy": "claude-admin",
    "claimedAt": "2026-09-15",
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-09-15 03:03",
+     "by": "kimi-admin",
+     "note": "F6a INTEGRATED (3aea57452, audited): card cut end to end (chrome deriver registered, Modern skins drained, skeleton parts, suites 133/133, family-cut OK with every ratchet 0). The error/success-900 pins resolved by WIRE (the preferred route): the card title reads --ds-card-<tone>-title-color in the skin, declared as var(--ds-color-<tone>-900) in the presentation chain — the 900 steps gain a productive terminal, the private TS map chain is gone, the pins retire with their rows, never by deleting the steps. The semantic-owner rules gained stepper|sidebar-surface|card (the F5c2 integration had missed this guard — recorded as a coordinator correction, not a product defect). Remaining in this WO: table (anchor L), badge/tag/avatar, tree/list/descriptions, typography compounds (roles adoption). From the F6a audit, routed: theme-parity card=3 bucket (--ds-card-padding/-xl/--ds-card-shadow-elevated unconsumed) to the F6b lot now running; the F5b tabs control-height second-factor violation (kit row 14, two skin lines) to the same F6b; the runtime/personality .ds-card paint-over-skin transition debt to the personality lane (registered here, owner needed)."
+    }
+   ]
   },
   {
    "id": "WO-FAM-07",
