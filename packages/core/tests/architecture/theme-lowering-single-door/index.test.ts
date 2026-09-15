@@ -252,6 +252,29 @@ const ADMISSION_OWNER =
 const COMPILE_DOOR =
   "src/infrastructure/compilers/runtime/theme/facade/runtime/compile/index.ts";
 
+/** The sole resolution, and the only file allowed to define `resolveTheme`. */
+const RESOLUTION_OWNER =
+  "src/infrastructure/compilers/runtime/theme/runtime/resolution/index.ts";
+
+/**
+ * The one productive caller allowed to hand `resolveTheme` its options, and
+ * the only key it may pass.
+ *
+ * The retired shape was `resolveTheme(baseline, intent?)`: it returned before
+ * `assertThemeIntent` ran, so the one arm nobody declared was also the one arm
+ * nothing validated. The admitted shape is `resolveTheme(intent, { baseline })`:
+ * the intent is validated first, always, and the baseline by
+ * `assertThemeBaseline`. The door derives that baseline from the CLOSED set
+ * `THEME_BASELINE_SOURCES` through `baselineFor`, so no caller can hand the
+ * resolver a Theme of its own. Keyed on the door and not on the ingress owner:
+ * the three intent producers may not pass options. The census below asserts
+ * EXACT equality, so a door that stops passing options turns it red and the
+ * exception is deleted with it (the `APPEARANCE_DOOR_KNOWN_CALLERS` precedent).
+ */
+const RESOLVE_THEME_OPTIONS_CALLER = COMPILE_DOOR;
+const RESOLVE_THEME_OPTION_KEYS: readonly string[] = ["baseline"];
+const RESOLVE_THEME_BASELINE_PRODUCER = "baselineFor";
+
 /**
  * The admission stations, by the symbol each one owns.
  *
@@ -314,6 +337,138 @@ function callsTo(source: string, file: string, name: string): ts.CallExpression[
   };
   visit(parsed);
   return calls;
+}
+
+/**
+ * Local names that bind `resolveTheme` in a source: the bare identifier plus
+ * every import specifier whose original name is `resolveTheme`. A property
+ * access (`resolution.resolveTheme(...)`) still evades this census; that half
+ * of the blind spot is noted here, not closed.
+ */
+function resolveThemeLocalNames(parsed: ts.SourceFile): Set<string> {
+  const names = new Set<string>(["resolveTheme"]);
+  for (const statement of parsed.statements) {
+    if (!ts.isImportDeclaration(statement)) continue;
+    const bindings = statement.importClause?.namedBindings;
+    if (!bindings || !ts.isNamedImports(bindings)) continue;
+    for (const element of bindings.elements) {
+      if ((element.propertyName ?? element.name).text === "resolveTheme") {
+        names.add(element.name.text);
+      }
+    }
+  }
+  return names;
+}
+
+/** Every call of `resolveTheme` in this source, under its own name or an import alias. */
+function resolveThemeCalls(source: string, file: string): ts.CallExpression[] {
+  const parsed = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true);
+  const names = resolveThemeLocalNames(parsed);
+  const calls: ts.CallExpression[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && names.has(node.expression.text)) {
+      calls.push(node);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(parsed);
+  return calls;
+}
+
+/**
+ * Findings for the options one `resolveTheme` call passes.
+ *
+ * The argument is unwrapped through every branch of a conditional; each branch
+ * must be an object literal whose keys are within the allowlist (`{}` passes),
+ * and a `baseline` must be produced by `baselineFor`. Anything else -- an
+ * identifier, a spread, another call -- is a baseline the door did not derive
+ * from the closed source set, which is a fourth origin.
+ */
+function resolveThemeOptionFindings(node: ts.Expression, label: string): string[] {
+  if (ts.isParenthesizedExpression(node)) {
+    return resolveThemeOptionFindings(node.expression, label);
+  }
+  if (ts.isConditionalExpression(node)) {
+    return [
+      ...resolveThemeOptionFindings(node.whenTrue, label),
+      ...resolveThemeOptionFindings(node.whenFalse, label),
+    ];
+  }
+  if (!ts.isObjectLiteralExpression(node)) {
+    return [`${label}: resolveTheme options are not an object literal (${ts.SyntaxKind[node.kind]})`];
+  }
+  const findings: string[] = [];
+  for (const property of node.properties) {
+    if (!ts.isPropertyAssignment(property)) {
+      findings.push(`${label}: resolveTheme options carry a ${ts.SyntaxKind[property.kind]}`);
+      continue;
+    }
+    const key =
+      ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)
+        ? property.name.text
+        : undefined;
+    if (key === undefined || !RESOLVE_THEME_OPTION_KEYS.includes(key)) {
+      findings.push(
+        `${label}: resolveTheme option ${key ?? ts.SyntaxKind[property.name.kind]} is outside ${RESOLVE_THEME_OPTION_KEYS.join(", ")}`
+      );
+      continue;
+    }
+    const { initializer } = property;
+    if (
+      !ts.isCallExpression(initializer) ||
+      !ts.isIdentifier(initializer.expression) ||
+      initializer.expression.text !== RESOLVE_THEME_BASELINE_PRODUCER
+    ) {
+      findings.push(
+        `${label}: resolveTheme ${key} is not produced by ${RESOLVE_THEME_BASELINE_PRODUCER} (${ts.SyntaxKind[initializer.kind]})`
+      );
+    }
+  }
+  return findings;
+}
+
+/**
+ * The arity law over a source tree: one argument anywhere, two only at the
+ * declared caller and only in the admitted shape, more than two nowhere. The
+ * callers that passed options are returned for the exact-equality half.
+ */
+function resolveThemeArityCensus(
+  rows: typeof SOURCES
+): { findings: string[]; optionCallers: string[] } {
+  const findings: string[] = [];
+  const optionCallers = new Set<string>();
+  for (const { path, source, label } of rows) {
+    for (const call of resolveThemeCalls(source, path)) {
+      const arity = call.arguments.length;
+      if (arity === 1) continue;
+      if (arity !== 2) {
+        findings.push(`${label}: resolveTheme called with ${arity} arguments`);
+        continue;
+      }
+      if (label !== RESOLVE_THEME_OPTIONS_CALLER) {
+        findings.push(`${label}: resolveTheme called with options outside the declared caller`);
+        continue;
+      }
+      optionCallers.add(label);
+      findings.push(...resolveThemeOptionFindings(call.arguments[1]!, label));
+    }
+  }
+  return { findings, optionCallers: [...optionCallers].sort() };
+}
+
+/** The members `ResolveThemeOptions` declares, from the resolution owner's AST. */
+function resolveThemeOptionMembers(source: string, file: string): string[] {
+  const parsed = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true);
+  for (const statement of parsed.statements) {
+    if (ts.isInterfaceDeclaration(statement) && statement.name.text === "ResolveThemeOptions") {
+      return statement.members.map((member) =>
+        member.name && (ts.isIdentifier(member.name) || ts.isStringLiteral(member.name))
+          ? member.name.text
+          : ts.SyntaxKind[member.kind]
+      );
+    }
+  }
+  return [];
 }
 
 /**
@@ -451,9 +606,7 @@ describe("the theme lowering has exactly one productive door", () => {
     const owners = SOURCES.filter(({ path, source }) =>
       declaredNames(source, path).has("resolveTheme")
     ).map(({ label }) => label);
-    expect(owners).toEqual([
-      "src/infrastructure/compilers/runtime/theme/runtime/resolution/index.ts",
-    ]);
+    expect(owners).toEqual([RESOLUTION_OWNER]);
   });
 
   it("the retired compiler owners are physically gone, with no forwarding file", () => {
@@ -476,19 +629,27 @@ describe("the theme lowering has exactly one productive door", () => {
   /* C4 · the ingress above the lowering also has exactly one door           */
   /* ---------------------------------------------------------------------- */
 
-  it("resolveTheme takes exactly ONE argument at every productive call site", () => {
-    // The optional second argument was a fourth, unnamed origin: it returned
-    // before `assertThemeIntent` ran, so the only unvalidated ingress was also
-    // the only one nobody had declared.
-    const findings: string[] = [];
-    for (const { path, source, label } of SOURCES) {
-      for (const call of callsTo(source, path, "resolveTheme")) {
-        if (call.arguments.length !== 1) {
-          findings.push(`${label}: resolveTheme called with ${call.arguments.length} arguments`);
-        }
-      }
-    }
+  it("resolveTheme takes one argument everywhere, and options only at the declared caller in the admitted shape", () => {
+    // The retired shape, `resolveTheme(baseline, intent?)`, returned before
+    // `assertThemeIntent` ran: the only unvalidated ingress was also the only
+    // one nobody had declared. The admitted shape validates the intent first,
+    // always, and the baseline through `assertThemeBaseline`; the door derives
+    // that baseline from the closed `THEME_BASELINE_SOURCES` via `baselineFor`,
+    // so no caller hands the resolver a Theme by hand. The exact-equality half
+    // keeps the exception honest: a door that stops passing options deletes it.
+    const { findings, optionCallers } = resolveThemeArityCensus(SOURCES);
     expect(findings).toEqual([]);
+    expect(optionCallers).toEqual([RESOLVE_THEME_OPTIONS_CALLER]);
+  });
+
+  it("the resolver declares exactly `baseline` as its option surface", () => {
+    // A fourth origin would be born as a new key (`intent`, `skipAdmission`);
+    // the call-site check catches its use, this pin catches its declaration.
+    const owner = SOURCES.find(({ label }) => label === RESOLUTION_OWNER);
+    expect(owner, `${RESOLUTION_OWNER} must be in the census`).toBeDefined();
+    expect(resolveThemeOptionMembers(owner!.source, owner!.path)).toEqual([
+      ...RESOLVE_THEME_OPTION_KEYS,
+    ]);
   });
 
   it("no productive source outside the ingress owner assembles a ThemeIntent", () => {
@@ -876,20 +1037,99 @@ describe("planted mutants make the single-door gate go red", () => {
   /* C4 · the ingress laws go red on the exact shapes they retired          */
   /* ---------------------------------------------------------------------- */
 
-  it("a reinstated two-argument resolveTheme is caught", () => {
+  /** A private copy of the door, calling the resolver with the given second argument. */
+  const doorCalling = (options: string) =>
+    `const resolveOver = (target) => resolveTheme(target, ${options});\n`;
+
+  /** The door's real conditional shape, with one branch mutated. */
+  const doorConditional = (branch: string) =>
+    doorCalling(`baselineSource === "brand-theme" ? {} : ${branch}`);
+
+  it("the unmutated tree has zero arity findings and exactly the declared options caller", () => {
+    const { findings, optionCallers } = resolveThemeArityCensus(SOURCES);
+    expect(findings).toEqual([]);
+    expect(optionCallers).toEqual([RESOLVE_THEME_OPTIONS_CALLER]);
+  });
+
+  it("a reinstated two-argument resolveTheme outside the declared caller is caught", () => {
     const planted = `resolveTheme(baseline, { origin: "preview", patch });\n`;
-    const found = withPlanted(victim, planted).flatMap(({ path, source, label }) =>
-      callsTo(source, path, "resolveTheme")
-        .filter((call) => call.arguments.length !== 1)
-        .map(() => label)
+    const { findings } = resolveThemeArityCensus(withPlanted(victim, planted));
+    expect(findings).toEqual([
+      `${victim}: resolveTheme called with options outside the declared caller`,
+    ]);
+  });
+
+  it("an import alias of resolveTheme does not evade the arity census", () => {
+    const planted =
+      `import { resolveTheme as resolve } from "../../theme/runtime/resolution";\n` +
+      `resolve(intent, {});\n`;
+    const { findings } = resolveThemeArityCensus(withPlanted(victim, planted));
+    expect(findings).toEqual([
+      `${victim}: resolveTheme called with options outside the declared caller`,
+    ]);
+  });
+
+  it("a second key beside baseline at the door is caught", () => {
+    const planted = doorConditional(
+      `{ baseline: baselineFor(target.vertical, target.slug, baselineSource), skipAdmission: true }`
     );
-    expect(found).toEqual([victim]);
-    // and the unmutated tree has none, so the finding came from the mutant
-    expect(
-      SOURCES.flatMap(({ path, source }) =>
-        callsTo(source, path, "resolveTheme").filter((call) => call.arguments.length !== 1)
-      )
-    ).toHaveLength(0);
+    const { findings, optionCallers } = resolveThemeArityCensus(withPlanted(COMPILE_DOOR, planted));
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toContain("skipAdmission is outside baseline");
+    expect(optionCallers).toEqual([RESOLVE_THEME_OPTIONS_CALLER]);
+  });
+
+  it("an identifier as the door's second argument is caught", () => {
+    const { findings } = resolveThemeArityCensus(withPlanted(COMPILE_DOOR, doorCalling("options")));
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toContain("not an object literal (Identifier)");
+  });
+
+  it("a spread inside the door's options is caught", () => {
+    const { findings } = resolveThemeArityCensus(
+      withPlanted(COMPILE_DOOR, doorCalling("{ ...options }"))
+    );
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toContain("carry a SpreadAssignment");
+  });
+
+  it("a baseline the door did not derive through baselineFor is caught", () => {
+    for (const branch of ["{ baseline: theme }", "{ baseline: pickBaseline(target) }", "{ baseline }"]) {
+      const { findings } = resolveThemeArityCensus(
+        withPlanted(COMPILE_DOOR, doorConditional(branch))
+      );
+      expect(findings, branch).toHaveLength(1);
+    }
+  });
+
+  it("three arguments at the door are caught", () => {
+    const { findings } = resolveThemeArityCensus(
+      withPlanted(COMPILE_DOOR, doorCalling("{}, extra"))
+    );
+    expect(findings).toEqual([`${COMPILE_DOOR}: resolveTheme called with 3 arguments`]);
+  });
+
+  it("a resolution owner declaring a second option member is caught", () => {
+    const planted =
+      `export interface ResolveThemeOptions {\n` +
+      `  readonly baseline?: Theme;\n` +
+      `  readonly skipAdmission?: boolean;\n` +
+      `}\n`;
+    const mutated = withPlanted(RESOLUTION_OWNER, planted).find(
+      ({ label }) => label === RESOLUTION_OWNER
+    );
+    const members = resolveThemeOptionMembers(mutated!.source, mutated!.path);
+    expect(members).toEqual(["baseline", "skipAdmission"]);
+    expect(members).not.toEqual([...RESOLVE_THEME_OPTION_KEYS]);
+  });
+
+  it("a door that stops passing options fails the exact-equality half", () => {
+    const { findings, optionCallers } = resolveThemeArityCensus(
+      withPlanted(COMPILE_DOOR, `const resolveOver = (target) => resolveTheme(target);\n`)
+    );
+    expect(findings).toEqual([]);
+    expect(optionCallers).toEqual([]);
+    expect(optionCallers).not.toEqual([RESOLVE_THEME_OPTIONS_CALLER]);
   });
 
   it("a hand-assembled ThemeIntent outside the ingress owner is caught", () => {

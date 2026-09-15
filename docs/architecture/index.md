@@ -286,6 +286,15 @@ and enter **one lowering** under
 `emitThemeCss`. There is deliberately no second compiler, and the structural gate
 `tests/architecture/theme-lowering-single-door/` fails if one reappears.
 
+The resolver's arity law was amended on 2026-09-15 (WO-DER-06, double ACCEPT): `resolveTheme`
+takes one argument at every productive call site except the compile door
+(`facade/runtime/compile`), which alone may pass options, and only `{ baseline }` produced by
+`baselineFor` from the closed `THEME_BASELINE_SOURCES`. The retired shape,
+`resolveTheme(baseline, intent?)`, returned before the intent was validated; the admitted shape
+validates the intent first and the baseline through `assertThemeBaseline`. The gate pins the
+exception by exact equality, the option surface at its declaration, and the order on the
+resolver's own AST.
+
 The theme contracts under `src/foundation/contracts/composition/tenants/themes/` are a
 directed ladder rather than a bag of peers: `iso`, `provenance`, `tenant-theme`, `intent`,
 `resolved`, `compiled`, `emission`, `engine-adapter`, ranked in `SCOPED_OWNER_RANKS` in

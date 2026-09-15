@@ -1,0 +1,16 @@
+You are a shared-core reviewer per roadmap/README.md execution-policy. One focused core-contract question for WO-DER-06: the single-door ingress law vs the validated baseline override that D6-2a introduced. Repo: /Users/daniel/Developer/Rottay/r4-recon-opus (read-only for you).
+
+THE LAW (packages/core/tests/architecture/theme-lowering-single-door/index.test.ts:479): "resolveTheme takes exactly ONE argument at every productive call site". Its recorded reason: "The optional second argument was a fourth, unnamed origin: it returned before assertThemeIntent ran, so the only unvalidated ingress was also the only one nobody had declared."
+
+THE CURRENT STATE (introduced by D6-2a, commit 1390ebb82; the acceptance of that lot missed this gate — DT error, registered): exactly ONE productive call site passes a second argument — packages/core/src/infrastructure/compilers/runtime/theme/facade/runtime/compile/index.ts (the ingress owner), inside compileThemeIntent: resolveTheme(target, { baseline: baselineFor(target.vertical, target.slug, baselineSource) }). The neutral-preset pipeline (D6-2c-i) depends on this.
+
+WHY THE HISTORICAL DEFECT CANNOT RECUR (verified at packages/core/src/infrastructure/compilers/runtime/theme/runtime/resolution/index.ts:282): resolveTheme(intent, options = {}) runs assertThemeIntent(intent) FIRST, unconditionally; a supplied options.baseline is validated by assertThemeBaseline(baseline, "resolveTheme"); when absent, the baseline defaults to baselineFor(intent.vertical, intent.slug). The second argument is not an ingress: the intent still goes through the one validated door, and the override is itself validated.
+
+THE GATE TODAY: the law test fails with exactly one finding (the call site above), and the planted-mutant test "a reinstated two-argument resolveTheme is caught" fails as a consequence. Everything else in the 54-test file passes.
+
+OPTIONS:
+(a) DT recommendation — AMEND the law to declare the real contract: resolveTheme takes one argument at every productive call site EXCEPT the ingress owner's, whose optional second argument must be exactly a ResolveThemeOptions carrying `baseline`; keep the mutant red for any two-arg call outside the ingress owner or with a non-baseline payload; update the test comment to record why the historical defect cannot recur (assertThemeIntent first, assertThemeBaseline on the override).
+(b) REFACTOR — the resolution owner exports a differently-named validated entry (e.g. resolveThemeOverBaseline) and the law stays mechanically intact; note this renames the parameter away without changing the architecture, and the "one door" count grows by an exported entry anyway.
+(c) Embed the baseline in the serializable ThemeIntent — changes the intent document contract; DT rejects.
+
+Give your verdict: ACCEPT (a), or CHANGES with reasons, plus any guardrail the amended law must carry (e.g. exact assertion shape, mutant coverage, where the declaration lives). Verify any claim read-only. Your reply is recorded verbatim in WO-DER-06.

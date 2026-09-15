@@ -3,7 +3,7 @@
  * decides authorship.
  */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
 import type {
   ThemeIntent,
@@ -33,7 +33,7 @@ import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-th
 
 import { assertThemeBaseline } from "@/foundation/contracts/composition/tenants/themes/iso";
 
-import { baselineFor, resolveTheme } from "..";
+import { baselineFor, resolveTheme, type ResolveThemeOptions } from "..";
 
 const baseline = FIRST_PARTY_THEMES.rottay;
 
@@ -75,9 +75,16 @@ describe("origin classification", () => {
 describe("there is no intentless arm", () => {
   // The optional intent was a FOURTH origin with no name: it returned before
   // `assertThemeIntent` ran, so the one path nobody declared was also the one
-  // path nothing validated. It is gone, and the resolver takes one argument.
-  it("takes exactly one argument", () => {
+  // path nothing validated. It is gone: the intent is the one REQUIRED
+  // parameter and the options parameter is defaulted. `Function.length` counts
+  // required parameters only, so this pins the signature, not who may pass
+  // options; that census is the single-door gate's.
+  it("declares the intent as its one required parameter", () => {
     expect(resolveTheme.length).toBe(1);
+  });
+
+  it("declares exactly `baseline` as its option surface", () => {
+    expectTypeOf<keyof ResolveThemeOptions>().toEqualTypeOf<"baseline">();
   });
 
   it("refuses a call with no intent at all", () => {
