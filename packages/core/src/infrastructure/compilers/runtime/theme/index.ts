@@ -16,7 +16,9 @@
  *
  * `baselineFor` stays: it names a vertical's own Theme and lowers nothing.
  */
-export { baselineFor } from "./runtime/resolution";
+export { THEME_BASELINE_SOURCES, baselineFor } from "./facade/foundation/baseline";
+export type { ThemeBaselineSource } from "./facade/foundation/baseline";
+export type { ResolveThemeOptions } from "./runtime/resolution";
 export {
   ThemePatchMigrationError,
   admitDocument,
