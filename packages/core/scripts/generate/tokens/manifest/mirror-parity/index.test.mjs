@@ -627,7 +627,6 @@ const BLOCKED_UPSTREAM_RATCHET = {
   rottay: {
     '--ds-card-elevated-shadow': { reads: ['--ds-elevation-3'], roles: ['default-mode'] },
     '--ds-card-shadow': { reads: ['--ds-elevation-1'], roles: ['default-mode'] },
-    '--ds-card-shadow-elevated': { reads: ['--ds-elevation-3'], roles: ['default-mode'] },
     '--ds-card-shadow-hover': { reads: ['--ds-elevation-2'], roles: ['default-mode'] },
     '--ds-shadow-lg': { reads: ['--ds-elevation-3'], roles: ['default-mode'] },
     '--ds-shadow-md': { reads: ['--ds-elevation-2'], roles: ['default-mode'] },

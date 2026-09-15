@@ -754,7 +754,10 @@ describe("CERT-FENCE-CONFLICT9 matrix B6 (ledger + source evidence)", () => {
 describe("CERT-FENCE-CONFLICT9 canaries", () => {
   it("three zeroEffective channels are not in the A matrix and match the live compile (raw or resolved)", () => {
     const aChannels = new Set(A6_ROWS.map((r) => r.channel));
-    for (const ch of ["--ds-card-shadow-elevated", "--ds-color-error", "--ds-color-info"]) {
+    // `--ds-card-shadow-elevated` was retired with the card cut (its twin
+    // `--ds-card-elevated-shadow`, written by the same shadowElevated field,
+    // carries the same alias and is the name the Modern skin reads).
+    for (const ch of ["--ds-card-elevated-shadow", "--ds-color-error", "--ds-color-info"]) {
       expect(aChannels.has(ch)).toBe(false);
       // Rottay dark re-aliases error/info through 400-step ramp tokens; resolve
       // those aliases. Card shadow is already raw-equal.
@@ -944,9 +947,10 @@ describe("CERT-FENCE-CONFLICT9 mutants turn red", () => {
     // proves nothing about resolution. `--ds-color-error` stopped being one:
     // rottay's base block now declares it as the literal `#F87171`, so mutating
     // the 400-step ramp underneath it changes nothing and the mutant passes.
-    // `--ds-card-shadow-elevated` is the member of the same zeroEffective
-    // roster that still reads `var(--ds-elevation-3)`, so it carries the drill.
-    const channel = "--ds-card-shadow-elevated";
+    // `--ds-card-elevated-shadow` (the surviving twin of the retired
+    // `--ds-card-shadow-elevated`, same field, same alias) still reads
+    // `var(--ds-elevation-3)`, so it carries the drill.
+    const channel = "--ds-card-elevated-shadow";
     expect(artifactEffectiveValue("rottay", "dark", channel)).toContain(
       "var(--ds-elevation-3)",
     );

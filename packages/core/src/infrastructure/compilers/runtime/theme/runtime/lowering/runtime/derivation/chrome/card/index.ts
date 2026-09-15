@@ -25,6 +25,7 @@ export const cardChromeDeriver: FamilyDeriver = {
     "--ds-card-outlined-border-hover",
     "--ds-card-underline-border-width",
     "--ds-card-nested-shadow",
+    "--ds-card-padding-base",
     "--ds-card-loading-min-height",
     "--ds-card-primary-title-color",
     "--ds-card-success-title-color",
@@ -58,6 +59,7 @@ export function deriveCardChannels(): Record<string, string> {
     "var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))))";
   vars["--ds-card-underline-border-width"] = "var(--ds-edge-hairline-width)";
   vars["--ds-card-nested-shadow"] = "none";
+  vars["--ds-card-padding-base"] = "var(--ds-card-padding, var(--ds-card-md-padding))";
   vars["--ds-card-loading-min-height"] = "calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-card-primary-title-color"] = "var(--ds-color-primary-900)";
   vars["--ds-card-success-title-color"] = "var(--ds-color-success-900)";
@@ -67,7 +69,7 @@ export function deriveCardChannels(): Record<string, string> {
   vars["--ds-card-header-icon-shadow"] = "var(--ds-elevation-1)";
   vars["--ds-card-header-icon-shadow-hover"] = "var(--ds-elevation-2)";
   vars["--ds-card-header-icon-lift"] = "translateY(calc(-1 * var(--ds-edge-hairline-width))) scale(1.025)";
-  vars["--ds-card-header-extra-min-height"] = "calc(var(--ds-spacing-8) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
+  vars["--ds-card-header-extra-min-height"] = "calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-card-footer-actions-inset"] = "var(--ds-spacing-1)";
   vars["--ds-card-image-aspect-ratio"] = "auto";
   vars["--ds-card-image-block-size"] = "var(--ds-card-image-height)";

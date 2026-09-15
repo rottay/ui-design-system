@@ -61,12 +61,12 @@ export type CardColorVariant = 'default' | 'primary' | 'success' | 'warning' | '
 /** The card's layout-sensitive axes; a posture delta may move either. */
 export interface CardAdaptation {
   readonly coverPosition?: 'top' | 'bottom' | 'start' | 'end';
-  readonly padding?: 'none' | 'sm' | 'md' | 'lg';
+  readonly padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export interface ResolvedCardAdaptation {
   readonly coverPosition: 'top' | 'bottom' | 'start' | 'end';
-  readonly padding: 'none' | 'sm' | 'md' | 'lg';
+  readonly padding: 'none' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChildren, ClickableProps, ShadowedProps, BorderedProps, DisableableProps {
@@ -170,7 +170,7 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
    * <Card padding={{ base: 'sm', md: 'md', xl: 'lg' }} />
    * ```
    */
-  padding?: ResponsiveValue<'none' | 'sm' | 'md' | 'lg'>;
+  padding?: ResponsiveValue<'none' | 'sm' | 'md' | 'lg' | 'xl'>;
 
   /**
    * Whether to show a divider between header and body.
@@ -468,6 +468,7 @@ export const PADDING_MAP: Record<string, string> = {
   sm: 'var(--ds-card-padding-sm, var(--ds-card-sm-padding, 12px))',
   md: 'var(--ds-card-padding-md, var(--ds-card-md-padding, 16px))',
   lg: 'var(--ds-card-padding-lg, var(--ds-card-lg-padding, 24px))',
+  xl: 'var(--ds-card-padding-xl, var(--ds-card-xl-padding, 32px))',
 };
 
 /**

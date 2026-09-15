@@ -989,7 +989,6 @@
 
   /* Card Shadows - Visible depth */
   --ds-card-shadow: var(--ds-shadow-sm);
-  --ds-card-shadow-elevated: var(--ds-shadow-lg);
 
   /* Card Header */
   --ds-card-header-border: #e5e5e5;

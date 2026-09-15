@@ -175,7 +175,7 @@
   box-sizing: border-box;
   min-inline-size: 0;
   max-inline-size: var(--ds-tabs-item-max-width);
-  block-size: calc(var(--_ds-tabs-current-height) * var(--ds-control-height-scale, 1));
+  block-size: var(--_ds-tabs-current-height);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -578,7 +578,7 @@
 /* Coarse pointers keep the physical floor the touch decision states. */
 @media (hover: none), (pointer: coarse) {
   .ds-tabs--modern[data-part='root'] [data-part='tab-button'] {
-    min-block-size: max(var(--ds-tabs-touch-target-min, var(--ds-touch-target-min)), calc(var(--_ds-tabs-current-height) * var(--ds-control-height-scale, 1)));
+    min-block-size: max(var(--ds-tabs-touch-target-min, var(--ds-touch-target-min)), var(--_ds-tabs-current-height));
   }
 
   .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']) {

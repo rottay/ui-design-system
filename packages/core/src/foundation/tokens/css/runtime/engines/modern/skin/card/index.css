@@ -288,7 +288,7 @@
 
 /* ---- body ---- */
 .ds-card.ds-card--modern[data-part='root'] {
-  --_ds-card-padding-current: calc(var(--ds-card-padding-md, var(--ds-card-md-padding)) * var(--ds-rhythm-effective-scale, 1));
+  --_ds-card-padding-current: calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='none'] {
   --_ds-card-padding-current: 0px;
@@ -298,6 +298,9 @@
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='lg'] {
   --_ds-card-padding-current: calc(var(--ds-card-padding-lg, var(--ds-card-lg-padding)) * var(--ds-rhythm-effective-scale, 1));
+}
+.ds-card.ds-card--modern[data-part='root'][data-padding='xl'] {
+  --_ds-card-padding-current: calc(var(--ds-card-padding-xl, var(--ds-card-xl-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;

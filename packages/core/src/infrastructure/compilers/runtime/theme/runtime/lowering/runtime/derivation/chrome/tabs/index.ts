@@ -160,12 +160,14 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-focus-ring"] = "var(--ds-focus-ring)";
   vars["--ds-tabs-focus-ring-width"] = "var(--ds-focus-ring-width)";
 
-  // Three size steps on the spacing ramp and the type roles.
-  vars["--ds-tabs-sm-height"] = "var(--ds-spacing-8)";
+  // Three size steps and the type roles. A control height is its base scaled
+  // by density and by the control-height factor once each, so the base is the
+  // ramp step's own rem, not the ramp (which already carries density).
+  vars["--ds-tabs-sm-height"] = "calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-tabs-sm-padding"] = "0 var(--ds-spacing-3)";
   vars["--ds-tabs-sm-font-size"] = "var(--ds-type-supporting-font-size)";
   vars["--ds-tabs-sm-icon-size"] = "var(--ds-icon-sm-size)";
-  vars["--ds-tabs-md-height"] = "var(--ds-spacing-9)";
+  vars["--ds-tabs-md-height"] = "calc(2.25rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-tabs-md-padding"] = "0 var(--ds-spacing-4)";
   vars["--ds-tabs-md-font-size"] = "var(--ds-type-body-font-size)";
   vars["--ds-tabs-md-icon-size"] = "var(--ds-icon-sm-size)";
@@ -173,7 +175,7 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-responsive-padding"] = "var(--ds-tabs-md-padding)";
   vars["--ds-tabs-responsive-font-size"] = "var(--ds-tabs-md-font-size)";
   vars["--ds-tabs-responsive-icon-size"] = "var(--ds-tabs-md-icon-size)";
-  vars["--ds-tabs-lg-height"] = "var(--ds-spacing-10)";
+  vars["--ds-tabs-lg-height"] = "calc(2.5rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-tabs-lg-padding"] = "0 var(--ds-spacing-4)";
   vars["--ds-tabs-lg-font-size"] = "var(--ds-font-size-base)";
   vars["--ds-tabs-lg-icon-size"] = "var(--ds-icon-md-size)";

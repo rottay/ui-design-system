@@ -361,6 +361,7 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/chrome/auto-complete/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/breadcrumb/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/button/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/chrome/card/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/cascader/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/checkbox/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/color-picker/index.ts`,

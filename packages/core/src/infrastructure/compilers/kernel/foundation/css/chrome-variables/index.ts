@@ -2543,10 +2543,7 @@ export function chromeToVariables(
     if (cc.shadowActive) vars["--ds-card-shadow-active"] = cc.shadowActive;
     if (cc.shadowSelected)
       vars["--ds-card-shadow-selected"] = cc.shadowSelected;
-    if (cc.shadowElevated) {
-      vars["--ds-card-shadow-elevated"] = cc.shadowElevated;
-      vars["--ds-card-elevated-shadow"] = cc.shadowElevated;
-    }
+    if (cc.shadowElevated) vars["--ds-card-elevated-shadow"] = cc.shadowElevated;
     if (cc.focusRing) vars["--ds-card-focus-ring"] = cc.focusRing;
     if (cc.focusRingColor)
       vars["--ds-card-focus-ring-color"] = cc.focusRingColor;
