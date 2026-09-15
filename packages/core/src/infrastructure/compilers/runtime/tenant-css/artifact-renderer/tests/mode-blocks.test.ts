@@ -9,8 +9,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
@@ -23,7 +23,7 @@ import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
 import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const bithireSpec = () => {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === 'bithire');
@@ -39,10 +39,10 @@ const bithireSpec = () => {
  * block layout, not the baseline authority, so the compile happens here and the
  * artifact composer is called directly.
  */
-const render = (brandTheme: BrandTheme) => {
+const render = (flatTheme: FlatTheme) => {
   const spec = bithireSpec();
   const compiled = compileTheme(
-    { theme: liftAuthoredTheme(brandTheme), provenance: EMPTY_PROVENANCE },
+    { theme: liftAuthoredTheme(flatTheme), provenance: EMPTY_PROVENANCE },
     resolveAdapter(PRIMARY_ENGINE),
   );
   return renderVerticalArtifact({
@@ -60,7 +60,7 @@ const render = (brandTheme: BrandTheme) => {
 
 describe('mode blocks in the rendered artifact', () => {
   it('renders one block per authored mode, scoped above the base block', () => {
-    const css = render(bithireBrandTheme);
+    const css = render(bithireFlatTheme);
 
     expect(css).toContain('/* === Compiled from Theme.modes.dark — do not edit === */');
     // The scope projection wraps the tenant arm; the mode attribute must stay
@@ -79,40 +79,40 @@ describe('mode blocks in the rendered artifact', () => {
   });
 
   it('carries a typed seed edit from modes.dark into the artifact', () => {
-    const edited: BrandTheme = {
-      ...bithireBrandTheme,
+    const edited: FlatTheme = {
+      ...bithireFlatTheme,
       modes: {
-        ...bithireBrandTheme.modes,
+        ...bithireFlatTheme.modes,
         dark: {
-          ...bithireBrandTheme.modes?.dark,
+          ...bithireFlatTheme.modes?.dark,
           palette: {
-            ...bithireBrandTheme.modes?.dark?.palette,
+            ...bithireFlatTheme.modes?.dark?.palette,
             backgroundColor: '#BADA55',
           },
         },
       },
     };
 
-    expect(render(bithireBrandTheme)).not.toContain('#BADA55');
+    expect(render(bithireFlatTheme)).not.toContain('#BADA55');
     expect(render(edited)).toContain('--ds-color-bg-primary: #BADA55;');
   });
 
   it('emits no mode section for a theme that authors none', () => {
-    const singleMode: BrandTheme = { ...bithireBrandTheme, modes: undefined };
+    const singleMode: FlatTheme = { ...bithireFlatTheme, modes: undefined };
     const css = render(singleMode);
 
-    expect(css).not.toContain('Compiled from BrandTheme.modes');
+    expect(css).not.toContain('Compiled from FlatTheme.modes');
     expect(css).not.toContain("[data-theme='dark']");
   });
 
   it('keeps the artifact a pure function of its one authored source', () => {
     // Same inputs, same bytes: the renderer must not depend on anything else.
-    expect(render(bithireBrandTheme)).toBe(render(bithireBrandTheme));
+    expect(render(bithireFlatTheme)).toBe(render(bithireFlatTheme));
   });
 
   it('does not restate a base-block channel inside the mode block', () => {
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: bithireFlatTheme,
       tenantSlug: 'bithire',
     });
     const dark = compiled.modeBlocks?.find((block) => block.mode === 'dark');

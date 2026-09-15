@@ -52,7 +52,7 @@ function unwrapGoverned(path: string): string {
 }
 
 /**
- * Every keypath of `patch` that carries a defined value, in BrandTheme space.
+ * Every keypath of `patch` that carries a defined value, in FlatTheme space.
  *
  * A leaf is anything that is not a plain object: a primitive, or an array like
  * `charts.categoryColors`. Containers are not members -- a `{}` authors nothing
@@ -79,7 +79,7 @@ export function authoredLeaves(patch: ThemeLayerPatch): ReadonlySet<string> {
  *
  * A tenant answers for what it CHANGED, and the two transports state a change
  * differently. A document carries only what the tenant chose, so every leaf in
- * it is a change. A `BrandTheme` draft is a whole theme: an editor opens the
+ * it is a change. A `FlatTheme` draft is a whole theme: an editor opens the
  * vertical's own and edits a few leaves, so the patch still carries every value
  * the author never touched. Treating those as authorship blames a tenant for
  * the product's own ink -- and refuses a draft that changed nothing at all.
@@ -103,7 +103,7 @@ export function movedLeaves(
   return moved;
 }
 
-/** Walk a plain keypath; the patch is already in unwrapped BrandTheme space. */
+/** Walk a plain keypath; the patch is already in unwrapped FlatTheme space. */
 function readPatchLeaf(patch: ThemeLayerPatch, path: string): unknown {
   return readUnwrapped(patch as unknown as Record<string, unknown>, path);
 }
@@ -181,7 +181,7 @@ export function authoredUnderPrefix(
  * The patch a WHOLE-THEME draft really authors: its moved leaves and no others.
  *
  * A document carries only what its tenant chose, so its patch is authorship by
- * construction. A `BrandTheme` draft is the theme the studio opened, so the
+ * construction. A `FlatTheme` draft is the theme the studio opened, so the
  * projection of it carries every value the author never touched -- and those
  * values then reach the tenant posture floors, where they are read as a tenant
  * re-dialling a knob it merely inherited. That is how one preset's two radius

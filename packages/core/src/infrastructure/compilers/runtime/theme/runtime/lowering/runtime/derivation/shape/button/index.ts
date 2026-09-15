@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import {
   buttonSilhouetteAlias,
@@ -24,7 +24,7 @@ import {
  * because nobody chose a word would be the profile deciding a decision.
  */
 export function deriveButtonSilhouette(
-  bt: BrandTheme,
+  bt: FlatTheme,
   expansion: ExpressiveExpansion,
   radiusBaseline: string
 ): Record<string, string> {

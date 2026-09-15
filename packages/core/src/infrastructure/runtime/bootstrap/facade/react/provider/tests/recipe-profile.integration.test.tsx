@@ -216,7 +216,7 @@ describe('DesignSystemProvider recipe-profile authority', () => {
    *
    * The registry used to answer "which profile did this vertical choose?" by
    * calling `validateRecipeProfileSelection(theme.recipes.profile, ...)` on the
-   * authored BrandTheme -- an independently projected AUTHORED selection beside
+   * authored FlatTheme -- an independently projected AUTHORED selection beside
    * the artifact's own compiled one. Two readers of one decision is exactly the
    * D-26 violation, and it cannot be closed by a comment: a source assertion is
    * what keeps the call from growing back.

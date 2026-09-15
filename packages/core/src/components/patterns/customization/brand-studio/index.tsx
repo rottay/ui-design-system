@@ -1,8 +1,8 @@
 /**
- * @fileoverview PatternBrandStudio — bounded BrandTheme editor with a live,
+ * @fileoverview PatternBrandStudio — bounded FlatTheme editor with a live,
  * dual-ground preview and inline WCAG contrast validation.
  *
- * The editor exposes only the bounded BrandTheme fields (palette, typography,
+ * The editor exposes only the bounded FlatTheme fields (palette, typography,
  * surfaces, motion, chrome). The preview resolves the in-flight theme as a
  * PATCH over the vertical it is a draft for — the same door a tenant document
  * takes — and injects the channels that draft actually MOVES off the untouched
@@ -60,10 +60,10 @@ import type {
   BrandControlsChrome,
   BrandPalette,
   BrandSurfaces,
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
 } from '../../../../foundation/contracts/composition/tenants/themes';
-import { cloneBrandTheme } from './runtime/file-export';
+import { cloneFlatTheme } from './runtime/file-export';
 import { useTenantThemePreview } from './runtime/tenant-theme-preview';
 import { TenantThemePreviewReport } from './runtime/tenant-theme-preview/report';
 import type { ThemeCompilation } from '@/foundation/contracts/composition/tenants/themes/compiled';
@@ -78,11 +78,11 @@ import type {
 
 export * from './contracts';
 export {
-  cloneBrandTheme,
-  serializeBrandTheme,
-  deserializeBrandTheme,
-  brandThemeToTenantAppearance,
-  brandThemeToTenantAppearanceAdvanced,
+  cloneFlatTheme,
+  serializeFlatTheme,
+  deserializeFlatTheme,
+  flatThemeToTenantAppearance,
+  flatThemeToTenantAppearanceAdvanced,
 } from './runtime/file-export';
 export {
   useTenantThemePreview,
@@ -187,7 +187,7 @@ export const DEFAULT_LIGHT_GROUND: Record<string, string> = {
 };
 
 /** The ground each panel compiles against, selected by its `baseTheme`. */
-const PREVIEW_GROUNDS: Readonly<Record<BrandThemeMode, Record<string, string>>> = {
+const PREVIEW_GROUNDS: Readonly<Record<FlatThemeMode, Record<string, string>>> = {
   dark: admitCssVariables(DEFAULT_DARK_GROUND),
   light: admitCssVariables(DEFAULT_LIGHT_GROUND),
 };
@@ -296,7 +296,7 @@ export function deriveBrandingColors(
  * of that question (`compilers/kernel/foundation/modes`). A studio that
  * answered it itself would repaint a canvas the publish never writes.
  */
-function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
+function themeDefaultMode(theme: FlatTheme): FlatThemeMode {
   return resolveThemeDefaultMode(theme);
 }
 
@@ -318,7 +318,7 @@ function themeDefaultMode(theme: BrandTheme): BrandThemeMode {
  */
 function modeOverlayOf(
   compiled: ThemeCompilation,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): Record<string, string> {
   return compiled.modeBlocks?.find((entry) => entry.mode === mode)?.cssVariables ?? {};
 }
@@ -355,7 +355,7 @@ export interface SurfaceVariables {
  * and `modes` overlays, resolved per-panel by `resolveModeVariables` above,
  * not by an input flag the compiler reads.
  */
-export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSurfaceConfig): SurfaceVariables {
+export function buildSurfaceVariables(theme: FlatTheme, surface: BrandStudioSurfaceConfig): SurfaceVariables {
   // The draft is a PATCH over the vertical it is authored for, never a baseline
   // of its own: it used to be lifted wrap-only and compiled as if it were the
   // whole theme, which is a compile no publish path can produce.
@@ -444,7 +444,7 @@ function projectSurfaceVariables(
  * with it so the studio can say why. Nothing is compiled around the door.
  */
 export function tryBuildSurfaceVariables(
-  theme: BrandTheme,
+  theme: FlatTheme,
   surface: BrandStudioSurfaceConfig
 ): SurfaceVariables & { refusal?: string } {
   try {
@@ -469,11 +469,11 @@ export function tryBuildSurfaceVariables(
 }
 
 /**
- * Compile a BrandTheme against one preview ground and validate the derived
+ * Compile a FlatTheme against one preview ground and validate the derived
  * colors. This is the exact evaluation the component runs on every edit.
  */
-export function evaluateBrandThemeContrast(
-  theme: BrandTheme,
+export function evaluateFlatThemeContrast(
+  theme: FlatTheme,
   surface: BrandStudioSurfaceConfig
 ): BrandStudioContrastReport {
   const { vars, declaredKeys } = tryBuildSurfaceVariables(theme, surface);
@@ -488,8 +488,8 @@ export function evaluateBrandThemeContrast(
  * motion values are extreme for the visual preview only and are never contrast
  * scored (the validator has no font or radius notion).
  */
-export function applyHostileBrandTheme(theme: BrandTheme): BrandTheme {
-  const draft = cloneBrandTheme(theme);
+export function applyHostileFlatTheme(theme: FlatTheme): FlatTheme {
+  const draft = cloneFlatTheme(theme);
   draft.palette = {
     ...(draft.palette ?? {}),
     primaryColor: '#f4f4f4',
@@ -502,7 +502,7 @@ export function applyHostileBrandTheme(theme: BrandTheme): BrandTheme {
   // the hostile ground pinned on `modes.light` instead -- still "the mode
   // this theme does not already speak for in its base block," which is
   // exactly what both preview grounds compile from.
-  const hostileOverlayMode: BrandThemeMode = themeDefaultMode(draft) === 'dark' ? 'light' : 'dark';
+  const hostileOverlayMode: FlatThemeMode = themeDefaultMode(draft) === 'dark' ? 'light' : 'dark';
   draftModePalette(draft, hostileOverlayMode).backgroundColor = '#f7f7f7';
   draft.chrome = { ...(draft.chrome ?? {}) };
   draft.chrome.cardComponent = {
@@ -531,13 +531,13 @@ export function applyHostileBrandTheme(theme: BrandTheme): BrandTheme {
   return draft;
 }
 
-/** Ensure required id/name so a partial value satisfies the BrandTheme contract. */
-export function normalizeBrandTheme(value: BrandTheme | Partial<BrandTheme>): BrandTheme {
+/** Ensure required id/name so a partial value satisfies the FlatTheme contract. */
+export function normalizeFlatTheme(value: FlatTheme | Partial<FlatTheme>): FlatTheme {
   return {
     ...value,
     id: value.id ?? 'brand-studio-draft',
     name: value.name ?? 'Brand Studio Draft',
-  } as BrandTheme;
+  } as FlatTheme;
 }
 
 // ---------------------------------------------------------------------------
@@ -845,7 +845,7 @@ function PreviewPanel({
   galleries,
   report,
 }: {
-  theme: BrandTheme;
+  theme: FlatTheme;
   surface: BrandStudioSurfaceConfig;
   scopeSalt: string;
   galleries: PatternBrandStudioProps['galleries'];
@@ -979,7 +979,7 @@ function buildSkeletonOptions(t: BrandStudioTranslator): Array<{
 }
 
 /** Ensure `draft.palette` exists and return it (typed, mutable). primaryColor is required by the contract. */
-function draftPalette(draft: BrandTheme): BrandPalette {
+function draftPalette(draft: FlatTheme): BrandPalette {
   const palette = draft.palette ?? { primaryColor: '' };
   draft.palette = palette;
   return palette;
@@ -991,10 +991,10 @@ function draftPalette(draft: BrandTheme): BrandPalette {
  * The mode-overlay counterpart of `draftPalette` above: a theme's non-default
  * mode is authored here instead of through `dark`-prefixed palette fields.
  * Unlike the base palette, every field here is optional
- * (`BrandThemeModeOverlay.palette` is `Partial<BrandPalette>`), so there is no
+ * (`FlatThemeModeOverlay.palette` is `Partial<BrandPalette>`), so there is no
  * required-leaf seed to default in.
  */
-function draftModePalette(draft: BrandTheme, mode: BrandThemeMode): Partial<BrandPalette> {
+function draftModePalette(draft: FlatTheme, mode: FlatThemeMode): Partial<BrandPalette> {
   const modes = draft.modes ?? {};
   draft.modes = modes;
   const overlay = modes[mode] ?? {};
@@ -1005,21 +1005,21 @@ function draftModePalette(draft: BrandTheme, mode: BrandThemeMode): Partial<Bran
 }
 
 /** Ensure `draft.surfaces` exists and return it (typed, mutable). */
-function draftSurfaces(draft: BrandTheme): BrandSurfaces {
+function draftSurfaces(draft: FlatTheme): BrandSurfaces {
   const surfaces = draft.surfaces ?? {};
   draft.surfaces = surfaces;
   return surfaces;
 }
 
 /** Ensure `draft.chrome` exists and return it (typed, mutable). */
-function draftChrome(draft: BrandTheme): BrandChrome {
+function draftChrome(draft: FlatTheme): BrandChrome {
   const chrome = draft.chrome ?? {};
   draft.chrome = chrome;
   return chrome;
 }
 
 /** Ensure `draft.chrome.controls` exists and return it (typed, mutable). */
-function draftControls(draft: BrandTheme): BrandControlsChrome {
+function draftControls(draft: FlatTheme): BrandControlsChrome {
   const chrome = draftChrome(draft);
   const controls = chrome.controls ?? {};
   chrome.controls = controls;
@@ -1050,14 +1050,14 @@ const NO_PROTECTED_KEYS: ReadonlySet<string> = new Set();
  * from an edited draft.
  *
  * Every control writes into a cloned draft, so clearing a field used to leave
- * `''` behind (and an empty `{ input: {} }` group above it). The BrandTheme
+ * `''` behind (and an empty `{ input: {} }` group above it). The FlatTheme
  * compiler skips falsy values, so the preview looked restored while the emitted
  * document had permanently diverged from the untouched default: it could no
- * longer deep-equal it, and `brandThemeToTenantAppearanceAdvanced` projects
+ * longer deep-equal it, and `flatThemeToTenantAppearanceAdvanced` projects
  * `chrome` verbatim, carrying the empty string into the DB-bound appearance.
  * Pruning makes clearing the exact inverse of setting on both paths.
  */
-function pruneClearedFields(root: BrandTheme): void {
+function pruneClearedFields(root: FlatTheme): void {
   // Captured AFTER the caller's `mutate(draft)` already ran, so this is the
   // exact object `draft.palette` points to right now — the only node in the
   // tree whose `primaryColor` leaf is contract-required.
@@ -1081,12 +1081,12 @@ function pruneClearedFields(root: BrandTheme): void {
   walk(root, REQUIRED_ROOT_KEYS);
 }
 
-function BrandThemeEditor({
+function FlatThemeEditor({
   theme,
   emit,
 }: {
-  theme: BrandTheme;
-  emit: (mutate: (draft: BrandTheme) => void) => void;
+  theme: FlatTheme;
+  emit: (mutate: (draft: FlatTheme) => void) => void;
 }): React.ReactElement {
   const t = useBrandStudioCopy();
   const inheritPlaceholder = t('brandStudio.inherit', 'Inherit');
@@ -1632,11 +1632,11 @@ export function PatternBrandStudio({
   const t = useBrandStudioCopy();
   const resolvedTitle = title ?? t('brandStudio.title', 'Brand Studio');
   const scopeSalt = useId().replace(/:/g, '');
-  const theme = useMemo(() => normalizeBrandTheme(value), [value]);
+  const theme = useMemo(() => normalizeFlatTheme(value), [value]);
 
   const emit = useCallback(
-    (mutate: (draft: BrandTheme) => void) => {
-      const draft = cloneBrandTheme(theme);
+    (mutate: (draft: FlatTheme) => void) => {
+      const draft = cloneFlatTheme(theme);
       mutate(draft);
       pruneClearedFields(draft);
       onChange?.(draft);
@@ -1653,15 +1653,15 @@ export function PatternBrandStudio({
   );
 
   const reports = useMemo(
-    () => surfaces.map((surface) => evaluateBrandThemeContrast(theme, surface)),
+    () => surfaces.map((surface) => evaluateFlatThemeContrast(theme, surface)),
     [theme, surfaces]
   );
 
   const [hostileReports, setHostileReports] = useState<BrandStudioContrastReport[] | null>(null);
 
   const runHostileCheck = useCallback(() => {
-    const extreme = applyHostileBrandTheme(theme);
-    setHostileReports(surfaces.map((surface) => evaluateBrandThemeContrast(extreme, surface)));
+    const extreme = applyHostileFlatTheme(theme);
+    setHostileReports(surfaces.map((surface) => evaluateFlatThemeContrast(extreme, surface)));
   }, [theme, surfaces]);
 
   return (
@@ -1700,9 +1700,9 @@ export function PatternBrandStudio({
             size="sm"
             weight="semibold"
           >
-            {t('brandStudio.editorHeading', 'Bounded BrandTheme fields')}
+            {t('brandStudio.editorHeading', 'Bounded FlatTheme fields')}
           </Text>
-          <BrandThemeEditor theme={theme} emit={emit} />
+          <FlatThemeEditor theme={theme} emit={emit} />
         </Stack>
 
         <Stack className="ds-pattern-brand-studio__preview-grid" data-part="preview-column" spacing="lg">

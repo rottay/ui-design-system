@@ -15,7 +15,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
@@ -46,7 +46,7 @@ const document = (palette: Record<string, unknown>): TenantThemeDocument =>
     appearance: { palette },
   }) as unknown as TenantThemeDocument;
 
-const defaultModeOf = (vertical: FirstPartyVerticalId): BrandThemeMode => {
+const defaultModeOf = (vertical: FirstPartyVerticalId): FlatThemeMode => {
   const mode = FIRST_PARTY_BASELINES[vertical].appearance?.defaultMode;
   if (!mode) throw new Error(`${vertical} declares no default mode`);
   return mode;
@@ -54,7 +54,7 @@ const defaultModeOf = (vertical: FirstPartyVerticalId): BrandThemeMode => {
 
 const effective = (
   compiled: ThemeCompilation,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): Record<string, string> => ({
   ...compiled.cssVariables,
   ...compiled.modeBlocks?.find((block) => block.mode === mode)?.cssVariables,
@@ -71,7 +71,7 @@ const at = (patch: unknown, ...path: readonly string[]): unknown =>
 function brandedChannels(
   vertical: FirstPartyVerticalId,
   doc: TenantThemeDocument,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): string[] {
   const tenant = effective(
     compileThemeIntent(

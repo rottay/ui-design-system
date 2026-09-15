@@ -1,11 +1,11 @@
 /**
- * @fileoverview BrandTheme serialization and bounded projection.
+ * @fileoverview FlatTheme serialization and bounded projection.
  *
  * Two export paths:
- *   - BrandTheme -> BrandTheme JSON: a lossless, identity round-trip target
- *     ({@link serializeBrandTheme} / {@link deserializeBrandTheme}).
- *   - BrandTheme -> TenantAppearanceAdvanced: a bounded projection
- *     ({@link brandThemeToTenantAppearanceAdvanced}). Chrome maps directly.
+ *   - FlatTheme -> FlatTheme JSON: a lossless, identity round-trip target
+ *     ({@link serializeFlatTheme} / {@link deserializeFlatTheme}).
+ *   - FlatTheme -> TenantAppearanceAdvanced: a bounded projection
+ *     ({@link flatThemeToTenantAppearanceAdvanced}). Chrome maps directly.
  *     Palette, typography, and motion have no Advanced home, so they funnel
  *     through bounded `tokenOverrides` keyed on the exact `--ds-*` names the
  *     brand compiler emits. `chrome.card` and `chrome.accent` are personality
@@ -17,8 +17,8 @@
  */
 
 import type {
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
   BrandChrome,
   BrandPalette,
   BrandTypography,
@@ -29,19 +29,25 @@ import type {
 import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
 import { themeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 
-/** Deep clone through JSON. BrandTheme is a plain data contract. */
-export function cloneBrandTheme(theme: BrandTheme): BrandTheme {
-  return JSON.parse(JSON.stringify(theme)) as BrandTheme;
+/*
+ * The studio draft transport. `FlatTheme` is the DRAFT here, not only the read
+ * view the lowering consumes: the studio authors and serializes this shape.
+ * WO-DER-08 owns splitting the two roles.
+ */
+
+/** Deep clone through JSON. FlatTheme is a plain data contract. */
+export function cloneFlatTheme(theme: FlatTheme): FlatTheme {
+  return JSON.parse(JSON.stringify(theme)) as FlatTheme;
 }
 
-/** Serialize a BrandTheme to its canonical JSON string. */
-export function serializeBrandTheme(theme: BrandTheme): string {
+/** Serialize a FlatTheme to its canonical JSON string. */
+export function serializeFlatTheme(theme: FlatTheme): string {
   return JSON.stringify(theme);
 }
 
-/** Parse a BrandTheme JSON string produced by {@link serializeBrandTheme}. */
-export function deserializeBrandTheme(json: string): BrandTheme {
-  return JSON.parse(json) as BrandTheme;
+/** Parse a FlatTheme JSON string produced by {@link serializeFlatTheme}. */
+export function deserializeFlatTheme(json: string): FlatTheme {
+  return JSON.parse(json) as FlatTheme;
 }
 
 /** The real `TenantAppearanceAdvanced['chrome']` contract, named for reuse below. */
@@ -152,11 +158,11 @@ type TokenOverrides = NonNullable<TenantAppearanceAdvanced['tokenOverrides']>;
  * dead `darkPrimaryColor`/`darkSecondaryColor`/`darkAccentColor`/
  * `darkBackgroundColor` fields used to alias here onto a `--ds-color-dark-*`
  * family that nothing ever compiled or read. A theme's non-default mode now
- * lives in `BrandTheme.modes.{light,dark}.palette` and compiles to its own
+ * lives in `FlatTheme.modes.{light,dark}.palette` and compiles to its own
  * scoped CSS block (`compileTheme`'s `modeBlocks`) using the SAME
  * `--ds-color-*` names as the base block — a shape `TenantAppearanceAdvanced.
  * tokenOverrides` (flat, mode-agnostic) has no way to represent. See
- * `brandThemeToTenantAppearance` below for the projection that DOES carry a
+ * `flatThemeToTenantAppearance` below for the projection that DOES carry a
  * theme's dark values, through `TenantAppearanceGeneral.palette.dark`.
  */
 const PALETTE_TOKENS: Array<[keyof BrandPalette, `--ds-${string}`]> = [
@@ -189,7 +195,7 @@ const TYPOGRAPHY_FONT_TOKENS: Array<[keyof BrandTypography, `--ds-${string}`]> =
  * Only the fixed allowlist below is emitted, so the projection can never grow
  * an unbounded override surface.
  */
-function buildBoundedTokenOverrides(theme: BrandTheme): TokenOverrides {
+function buildBoundedTokenOverrides(theme: FlatTheme): TokenOverrides {
   const overrides: Record<string, string | number> = {};
 
   if (theme.palette) {
@@ -231,12 +237,12 @@ function buildBoundedTokenOverrides(theme: BrandTheme): TokenOverrides {
 }
 
 /**
- * Project a BrandTheme into a bounded TenantAppearanceAdvanced. Chrome families
+ * Project a FlatTheme into a bounded TenantAppearanceAdvanced. Chrome families
  * map directly (minus card/accent); palette, typography, and motion funnel into
  * bounded `--ds-*` token overrides. This projection is intentionally lossy — the
- * lossless path is {@link serializeBrandTheme}.
+ * lossless path is {@link serializeFlatTheme}.
  */
-export function brandThemeToTenantAppearanceAdvanced(theme: BrandTheme): TenantAppearanceAdvanced {
+export function flatThemeToTenantAppearanceAdvanced(theme: FlatTheme): TenantAppearanceAdvanced {
   const advanced: TenantAppearanceAdvanced = {};
 
   if (theme.chrome) {
@@ -260,8 +266,8 @@ export function brandThemeToTenantAppearanceAdvanced(theme: BrandTheme): TenantA
  * mode resolves the other to `undefined`.
  */
 function palettePerMode(
-  theme: BrandTheme,
-  mode: BrandThemeMode
+  theme: FlatTheme,
+  mode: FlatThemeMode
 ): Partial<BrandPalette> | undefined {
   return mode === themeDefaultMode(theme)
     ? theme.palette
@@ -274,7 +280,7 @@ function palettePerMode(
  * the remaining bounded channels stay in Advanced. The older Advanced-only
  * exporter remains available for backwards-compatible documents.
  */
-export function brandThemeToTenantAppearance(theme: BrandTheme): TenantAppearance {
+export function flatThemeToTenantAppearance(theme: FlatTheme): TenantAppearance {
   // `TenantAppearanceGeneral.palette.background` is documented as the
   // "Clear-scheme page canvas" -- the base/plain fields are specifically the
   // LIGHT-mode values, and `.dark` is specifically the DARK-mode values. Each
@@ -365,6 +371,6 @@ export function brandThemeToTenantAppearance(theme: BrandTheme): TenantAppearanc
 
   return {
     ...(Object.keys(general).length > 0 ? { general } : {}),
-    advanced: brandThemeToTenantAppearanceAdvanced(theme),
+    advanced: flatThemeToTenantAppearanceAdvanced(theme),
   };
 }

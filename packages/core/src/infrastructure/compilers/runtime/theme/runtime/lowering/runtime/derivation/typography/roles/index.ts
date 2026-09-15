@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { SemanticTypographyTokens } from "@/foundation/contracts/kernel/tokens/typography";
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { omitUndefined } from "../../../../foundation/shape";
@@ -64,7 +64,7 @@ function foldPosture(
  * The finer `typography.roles.<role>` surface still wins over all three.
  */
 export function deriveTypeRoleChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   typeRoleOverlay: ExpressiveTypeRoleOverlay | undefined,
   postures: TypeRolePostures
 ): Record<string, string> {

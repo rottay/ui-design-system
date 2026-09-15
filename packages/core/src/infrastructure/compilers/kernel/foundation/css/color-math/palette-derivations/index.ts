@@ -13,7 +13,7 @@
  * theme that states a channel by hand still wins and the shipped verticals
  * keep their exact pixels. The derivation only fills what nobody authored.
  *
- * This is the single derivation authority for the static BrandTheme compiler
+ * This is the single derivation authority for the static FlatTheme compiler
  * (`runtime/brand-theme`) and the DB Appearance compiler (`runtime/appearance`)
  * so the two cannot drift in vocabulary or in math. Callers resolve their own
  * contract shape (and, on the DB path, their own light/dark halves) down to

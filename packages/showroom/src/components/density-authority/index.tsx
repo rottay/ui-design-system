@@ -5,7 +5,7 @@
  *
  * ONE identical public DS tree, URL-addressable, rendered through the shared
  * `ShowroomTenantProvider` and nothing else. The probe owns no tenant config,
- * no Appearance literal, no BrandTheme and no `DesignSystemProvider` call: the
+ * no Appearance literal, no FlatTheme and no `DesignSystemProvider` call: the
  * shared module is the single place that knows how a governed source is
  * mounted, and a probe that rebuilt any of that would be photographing a
  * blank page (see `@/components/showroom-tenant` for the measured why).

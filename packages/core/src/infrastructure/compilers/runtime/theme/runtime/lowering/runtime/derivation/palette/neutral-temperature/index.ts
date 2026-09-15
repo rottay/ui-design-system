@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { hexToOklch, oklchToHex } from "@/foundation/kernel/color/oklch";
 import { isHexColor } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
 
@@ -33,7 +33,7 @@ const ACHROMATIC_PAPER = "#ffffff";
 const TINTED_INK_LIGHTNESS = 0.08;
 const TINTED_PAPER_LIGHTNESS = 0.985;
 
-function resolveLean(bt: BrandTheme): Lean | undefined {
+function resolveLean(bt: FlatTheme): Lean | undefined {
   const authored = bt.palette?.neutralTemperature;
   return authored !== undefined && authored in TEMPERATURES
     ? TEMPERATURES[authored as TemperatureName]
@@ -57,7 +57,7 @@ function lean(step: string, to: Lean): string {
  * about it is a TEMPERATURE. `foundation/monochrome` mixes all eleven of its
  * steps between the two anchors stated here.
  */
-export function deriveNeutralAxis(bt: BrandTheme): Record<string, string> {
+export function deriveNeutralAxis(bt: FlatTheme): Record<string, string> {
   const palette = bt.palette;
   if (!palette) return {};
   const to = resolveLean(bt);

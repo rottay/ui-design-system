@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { deriveBorderPosture } from "./border";
@@ -63,7 +63,7 @@ export const elevationDeriver: FamilyDeriver = {
  * the expressive `edge` axis, so no border style is stated here at all.
  */
 export function deriveElevationChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   expansion: ExpressiveExpansion
 ): Record<string, string> {
   return {

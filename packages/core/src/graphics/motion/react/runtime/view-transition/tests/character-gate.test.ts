@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import { deriveMotionChannels } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/motion';
 import { buildLoweringContext } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/pipeline';
 
@@ -61,7 +61,7 @@ const RECIPES = rules(TRANSITIONS_CSS).filter((rule) => rule.guard === null);
 const GUARDS = rules(TRANSITIONS_CSS).filter((rule) => rule.guard !== null);
 
 function channelsFor(character: (typeof CHARACTERS)[number]): Record<string, string> {
-  const theme = { id: 't', name: 'T', motion: { character } } as BrandTheme;
+  const theme = { id: 't', name: 'T', motion: { character } } as FlatTheme;
   const context = buildLoweringContext({ theme });
   return deriveMotionChannels(context.theme, context.expressive.expansion);
 }

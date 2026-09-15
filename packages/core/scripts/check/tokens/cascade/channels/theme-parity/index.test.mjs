@@ -36,7 +36,7 @@ import {
 } from "../../../../../libraries/tokens/index.mjs";
 
 const contract = `
-export interface BrandTheme {
+export interface FlatTheme {
   id: string;
   palette?: Palette;
   chrome?: Chrome;
@@ -59,7 +59,7 @@ test("declaration parser follows typed visual roots and deduplicates reused owne
     "chrome.repeated.bg",
   ]);
   assert.ok(
-    !fields.has("BrandTheme.id"),
+    !fields.has("FlatTheme.id"),
     "non-visual metadata root is excluded"
   );
 });
@@ -74,7 +74,7 @@ function cardVars(vars: Record<string, string>, prefix: string, card: Partial<Ca
   if (card.bg) vars[\`--ds-\${prefix}-bg\`] = card.bg;
   if (card.border) vars[\`--ds-\${prefix}-border\`] = card.border;
 }
-export function emit(theme: BrandTheme) {
+export function emit(theme: FlatTheme) {
   const vars: Record<string, string> = { '--ds-fixed': '1' };
   const p = theme.palette;
   if (p?.primary) vars['--ds-color-primary'] = p.primary;
@@ -122,7 +122,7 @@ const DEAD_MAP = {
 const UNTYPED_MAP = {
   bg: "--ds-untyped-bg",
 };
-export function emit(theme: BrandTheme) {
+export function emit(theme: FlatTheme) {
   const vars: Record<string, string> = {};
   setMapped(vars, theme.chrome?.card, CARD_VARIABLES);
   setMapped(vars, theme.palette, PALETTE_VARIABLES);
@@ -257,7 +257,7 @@ test("baseline is decrease-only per category and owner/namespace bucket", () => 
 // ---------------------------------------------------------------------------
 
 const anatomyContract = `
-export interface BrandTheme {
+export interface FlatTheme {
   chrome?: BrandChrome;
 }
 export interface BrandChrome {

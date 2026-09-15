@@ -180,7 +180,7 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
 
   /**
    * Card background color.
-   * @deprecated Prefer BrandTheme/TenantTheme card chrome or a scoped
+   * @deprecated Prefer FlatTheme/TenantTheme card chrome or a scoped
    * `--ds-card-bg` custom property. This escape hatch is retained for source
    * compatibility and must not be used for product-level theming.
    */

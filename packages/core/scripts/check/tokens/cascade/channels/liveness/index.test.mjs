@@ -22,7 +22,7 @@ import {
   findDuplicateDirectAssignments,
   findTintDirectOverlap,
   DEFAULT_BRAND_THEME_COMPILER_ROOT,
-  collectBrandThemeCompilerSources,
+  collectFlatThemeCompilerSources,
   extractIdentifierVarsAssignments,
   extractKeyedVarsEmissions,
   findCrossFileProducerCollisions,
@@ -247,14 +247,14 @@ test('defect 5: findTintDirectOverlap fires when a name is emitted by BOTH mecha
 });
 
 test('LIVE: the real brand-theme compiler registers zero duplicate tint-scale producers', () => {
-  const callSites = collectBrandThemeCompilerSources().flatMap(
+  const callSites = collectFlatThemeCompilerSources().flatMap(
     (source) => extractTintRampEmissions(source.text).callSites,
   );
   assert.deepEqual(findDuplicateTintScales(callSites), []);
 });
 
 test('LIVE: every family deriver declares a rank, and none is unranked', () => {
-  const sources = collectBrandThemeCompilerSources();
+  const sources = collectFlatThemeCompilerSources();
   assert.ok(sources.length > 0, 'the derivation registry resolved to zero families');
   const unranked = sources.filter((source) => source.rank === 'unranked').map((s) => s.relativePath);
   assert.deepEqual(unranked, [], `every family deriver must declare a merge rank, unranked: ${unranked.join(', ')}`);
@@ -287,7 +287,7 @@ test('NEGATIVE CONTROL: a family that emits from a SUB-owner is not an empty fam
   // it left the census.
   const root = plantNestedRegistry();
   try {
-    const sources = collectBrandThemeCompilerSources(root);
+    const sources = collectFlatThemeCompilerSources(root);
     const nested = sources.find((source) => source.relativePath.endsWith('typography/weights/index.ts'));
     assert.ok(nested, `the sub-owner must be discovered, got: ${sources.map((s) => s.relativePath).join(', ')}`);
     // A layer of one authority carries that authority's rank; it does not
@@ -303,7 +303,7 @@ test('NEGATIVE CONTROL: a family that emits from a SUB-owner is not an empty fam
 });
 
 test('LIVE: the real registry reaches its sub-owners, and every one inherits a real rank', () => {
-  const sources = collectBrandThemeCompilerSources();
+  const sources = collectFlatThemeCompilerSources();
   const nested = sources.filter((source) => !source.declaresRank).map((source) => source.relativePath);
   assert.ok(
     nested.some((path) => path.endsWith('derivation/typography/weights/index.ts')),
@@ -403,7 +403,7 @@ test('findCrossFileProducerCollisions fires across FILES at one rank, not within
 });
 
 test('LIVE: the shapes the old walk could not see are in the emitted universe, with owners', () => {
-  const sources = collectBrandThemeCompilerSources();
+  const sources = collectFlatThemeCompilerSources();
   const emitted = new Set(sources.flatMap((source) => [
     ...extractDirectVarsAssignments(source.text).keys(),
     ...extractKeyedVarsEmissions(source.text, { file: source.path }).resolved.keys(),
@@ -422,7 +422,7 @@ test('LIVE: the shapes the old walk could not see are in the emitted universe, w
 
 test('LIVE: no channel is produced twice at one rank across the derivation registry', () => {
   const directEmission = new Map();
-  for (const source of collectBrandThemeCompilerSources()) {
+  for (const source of collectFlatThemeCompilerSources()) {
     for (const [name, sites] of extractDirectVarsAssignments(source.text)) {
       const merged = directEmission.get(name) ?? [];
       for (const site of sites) merged.push({ ...site, file: source.relativePath, rank: source.rank });
@@ -643,7 +643,7 @@ test('LIVE: every real declared/emitted channel name resolves to a non-null sema
   const tenantThemeSource = readFileSync(DEFAULT_TENANT_THEME_CONTRACT, 'utf8');
   const { names: overrideNames } = extractOverrideTokens(tenantThemeSource);
   const { names: referenceNames } = extractReferenceTokens(tenantThemeSource, overrideNames);
-  const sources = collectBrandThemeCompilerSources();
+  const sources = collectFlatThemeCompilerSources();
   const tintNames = new Set(sources.flatMap((source) => [...extractTintRampEmissions(source.text).names]));
   const directNames = new Set(
     sources.flatMap((source) => [...extractDirectVarsAssignments(source.text).keys()]),
@@ -838,7 +838,7 @@ const BASE_DIGEST_INPUT = {
   ciGatesManifestRaw: 'MANIFEST_V1',
   packageJsonRaw: 'PKG_V1',
   tenantThemeSource: 'TENANT_V1',
-  brandThemeSource: 'BRAND_V1',
+  flatThemeSource: 'BRAND_V1',
   familyInventoryRaw: 'FAMILY_V1',
   cssStylesheets: [css('a.css', '.a{color:red}')],
   tsStylesheets: [css('a.tsx', 'const a = 1;')],
@@ -979,7 +979,7 @@ test('defect 7: a real consumerRoot with a genuine external terminal chain is di
   const { rows: familyRows } = loadFamilyRows(DEFAULT_FAMILY_INVENTORY);
   const result = analyzeChannelLiveness({
     tenantThemeSource: FIXTURE_TENANT_THEME_SOURCE,
-    brandThemeSource: FIXTURE_BRAND_THEME_SOURCE,
+    flatThemeSource: FIXTURE_BRAND_THEME_SOURCE,
     familyRows,
     cssStylesheets: [],
     tsStylesheets: [],
@@ -1031,7 +1031,7 @@ test('the sibling root is the MAIN checkout\'s parent, so a linked worktree stil
 function baseAnalyzerArgs(overrides = {}) {
   return {
     tenantThemeSource: FIXTURE_TENANT_THEME_SOURCE,
-    brandThemeSource: FIXTURE_BRAND_THEME_SOURCE,
+    flatThemeSource: FIXTURE_BRAND_THEME_SOURCE,
     familyRows: FIXTURE_FAMILY_ROWS,
     cssStylesheets: [css('src/foundation/tokens/css/theme.css', ':root { color: var(--ds-color-primary); }')],
     tsStylesheets: [css('src/components/primitives/display/Button/index.tsx', 'const s = 1;')],
@@ -1097,26 +1097,26 @@ test('RED 4/8: a fabricated NEW channel with no terminal and no external evidenc
 });
 
 test('RED 5/8: duplicate tint scale in the real analyzer surfaces as a failure', () => {
-  const brandThemeSource = `
+  const flatThemeSource = `
     function setTintRampVariables(vars, scale, colorVar) {
       vars[\`\${scale}-4\`] = 1;
     }
     setTintRampVariables(vars, "--ds-tint", "--ds-color-primary-500");
     setTintRampVariables(vars, "--ds-tint", "--ds-color-primary-500");
   `;
-  const result = analyzeChannelLiveness(baseAnalyzerArgs({ brandThemeSource }));
+  const result = analyzeChannelLiveness(baseAnalyzerArgs({ flatThemeSource }));
   assert.ok(result.failures.some((f) => f.includes('duplicate owner')));
 });
 
 test('RED 6/8: tint x direct overlap in the real analyzer surfaces as a failure', () => {
-  const brandThemeSource = `
+  const flatThemeSource = `
     function setTintRampVariables(vars, scale, colorVar) {
       vars[\`\${scale}-4\`] = 1;
     }
     setTintRampVariables(vars, "--ds-tint", "--ds-color-primary-500");
     vars["--ds-tint-4"] = "#000";
   `;
-  const result = analyzeChannelLiveness(baseAnalyzerArgs({ brandThemeSource }));
+  const result = analyzeChannelLiveness(baseAnalyzerArgs({ flatThemeSource }));
   assert.ok(result.failures.some((f) => f.includes('tint x direct overlap')));
 });
 
@@ -1274,22 +1274,22 @@ test('GREEN: runGate accepts a present, valid, fresh artifact and uses it as the
   const evidenceRoot = join(workDir, 'evidence');
   mkdirSync(join(evidenceRoot, 'R1'), { recursive: true });
   const tenantThemeContractPath = join(workDir, 'tenant-theme.ts');
-  const brandThemeCompilerRoot = join(workDir, 'derivation');
-  const brandThemeCompilerPath = join(brandThemeCompilerRoot, 'fixture/index.ts');
+  const flatThemeCompilerRoot = join(workDir, 'derivation');
+  const flatThemeCompilerPath = join(flatThemeCompilerRoot, 'fixture/index.ts');
   const familyInventoryPath = join(workDir, 'family-inventory/index.json');
   const cssRoot = join(workDir, 'css-root');
   mkdirSync(dirname(familyInventoryPath), { recursive: true });
-  mkdirSync(dirname(brandThemeCompilerPath), { recursive: true });
+  mkdirSync(dirname(flatThemeCompilerPath), { recursive: true });
   mkdirSync(cssRoot, { recursive: true });
   writeFileSync(tenantThemeContractPath, FIXTURE_TENANT_THEME_SOURCE);
-  writeFileSync(brandThemeCompilerPath, FIXTURE_BRAND_THEME_SOURCE);
+  writeFileSync(flatThemeCompilerPath, FIXTURE_BRAND_THEME_SOURCE);
   writeFileSync(familyInventoryPath, JSON.stringify({ rows: FIXTURE_FAMILY_ROWS }));
   writeFileSync(join(cssRoot, 'theme.css'), ':root { color: var(--ds-color-primary); }');
   writeFileSync(join(cssRoot, 'component.tsx'), 'const s = 1;');
 
   const gateArgs = {
     tenantThemeContractPath,
-    brandThemeCompilerRoot,
+    flatThemeCompilerRoot,
     familyInventoryPath,
     cssRoots: [cssRoot],
     consumerRoots: [],
@@ -1353,7 +1353,7 @@ const pinGroup = (over = {}) => ({
 
 /** FABRICATED is the only non-LIVE row: the one emitted channel is read. */
 const isolatedArgs = (overrides = {}) =>
-  fabricatedArgs({ brandThemeSource: 'vars["--ds-color-primary"] = "#111111";', familyRows: [], ...overrides });
+  fabricatedArgs({ flatThemeSource: 'vars["--ds-color-primary"] = "#111111";', familyRows: [], ...overrides });
 
 test('a pin is ownership PASS and full-liveness FAIL: the owned row is published, not discharged', () => {
   const result = analyzeChannelLiveness(isolatedArgs({ dispositions: [pinGroup()] }));
@@ -1607,7 +1607,7 @@ function zScaleAnalyzerArgs(ownerCss, overrides = {}) {
         export const TENANT_THEME_OVERRIDE_TOKENS = ["--ds-color-primary"] as const;
         export const TENANT_THEME_REFERENCE_TOKENS = new Set([...TENANT_THEME_OVERRIDE_TOKENS]);
       `,
-      brandThemeSource: `vars["--ds-color-primary"] = "#111111"; vars["${FLOOR}"] = "0";`,
+      flatThemeSource: `vars["--ds-color-primary"] = "#111111"; vars["${FLOOR}"] = "0";`,
       familyRows: [],
       dispositions: [structuralPin()],
       zScaleOwnerPath,
@@ -1662,7 +1662,7 @@ test('ANALYZER (drift, reader): a terminal read of the floor -> LIVE and a disch
 
 test('ANALYZER (new band, no pin): a second measured structural band without a structural pin is STOP NO-GO', () => {
   const { workDir, args } = zScaleAnalyzerArgs(ZSCALE_FIXTURE_WITH_FLOOR, {
-    brandThemeSource: `vars["--ds-color-primary"] = "#111111"; vars["${FLOOR}"] = "0"; vars["--ds-z-index-max"] = "9999";`,
+    flatThemeSource: `vars["--ds-color-primary"] = "#111111"; vars["${FLOOR}"] = "0"; vars["--ds-z-index-max"] = "9999";`,
   });
   const result = analyzeChannelLiveness(args);
   assert.equal(result.channels.find((entry) => entry.name === '--ds-z-index-max').classification, LIVENESS.structuralConstant);

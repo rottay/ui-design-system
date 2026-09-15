@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { MERGE_RANK } from "../foundation/contract";
 import { FAMILY_DERIVERS } from "../runtime/derivation";
 import { buildLoweringContext } from "../runtime/pipeline";
@@ -19,20 +19,20 @@ import {
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
-const MINIMAL_THEME: BrandTheme = { id: "minimal", name: "Minimal" };
+const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
 const FIXTURES: readonly FamilyFixture[] = [
-  { label: "rottay", theme: rottayBrandTheme },
-  { label: "bithire", theme: bithireBrandTheme },
-  { label: "evnto", theme: evntoBrandTheme },
+  { label: "rottay", theme: rottayFlatTheme },
+  { label: "bithire", theme: bithireFlatTheme },
+  { label: "evnto", theme: evntoFlatTheme },
   { label: "minimal", theme: MINIMAL_THEME },
   {
     label: "bithire under a tenant floor",
-    theme: bithireBrandTheme,
+    theme: bithireFlatTheme,
     tenant: FIXTURE_TENANT_FACTS,
   },
   {

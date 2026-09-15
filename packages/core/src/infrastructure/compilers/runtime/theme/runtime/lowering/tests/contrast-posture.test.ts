@@ -14,7 +14,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import { contrastRatio, isHexColor } from "@/foundation/kernel/color/contrast";
@@ -24,9 +24,9 @@ import {
 } from "@/infrastructure/compilers/runtime/theme";
 import { documentThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 // ── The floor half: a raised posture never lowers a measured ratio ─────────
 
@@ -52,21 +52,21 @@ const INK_OVER_GROUND = [
 const DARK_PRIMARY = "#1e84e6";
 
 const bithireAt = (contrastPosture: string) =>
-  lowerBrandThemeFixture({
-    brandTheme: {
-      ...bithireBrandTheme,
-      palette: { ...bithireBrandTheme.palette, contrastPosture },
+  lowerFlatThemeFixture({
+    flatTheme: {
+      ...bithireFlatTheme,
+      palette: { ...bithireFlatTheme.palette, contrastPosture },
       modes: {
-        ...bithireBrandTheme.modes,
+        ...bithireFlatTheme.modes,
         dark: {
-          ...bithireBrandTheme.modes?.dark,
+          ...bithireFlatTheme.modes?.dark,
           palette: {
-            ...(bithireBrandTheme.modes?.dark?.palette ?? {}),
+            ...(bithireFlatTheme.modes?.dark?.palette ?? {}),
             primaryColor: DARK_PRIMARY,
           },
         },
       },
-    } as BrandTheme,
+    } as FlatTheme,
     tenantSlug: "bithire",
   });
 

@@ -20,7 +20,7 @@ function sanitizeLocale(value: string | null): ProfileEvidenceLocale {
 function ProbeContent() {
   const searchParams = useSearchParams();
   // `?profile=` is deliberately NOT read. A recipe profile is authored in the
-  // vertical's checked-in BrandTheme and reaches the runtime only through the
+  // vertical's checked-in FlatTheme and reaches the runtime only through the
   // code-owned registry path; a runtime override is unrenderable, so offering
   // the knob would only produce spinners. See the probe's own header.
   const cell = useMemo(

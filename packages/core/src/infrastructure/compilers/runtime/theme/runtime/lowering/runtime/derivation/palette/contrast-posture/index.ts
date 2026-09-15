@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   READABLE_INK_DARK,
   READABLE_INK_LIGHT,
@@ -59,7 +59,7 @@ export const CONTRAST_POSTURES = {
 export type ContrastPostureName = keyof typeof CONTRAST_POSTURES;
 
 /** The posture this block compiles under; an unstated one rests at `standard`. */
-export function resolveContrastPosture(bt: BrandTheme): ContrastPosture {
+export function resolveContrastPosture(bt: FlatTheme): ContrastPosture {
   const authored = bt.palette?.contrastPosture;
   return authored !== undefined && authored in CONTRAST_POSTURES
     ? CONTRAST_POSTURES[authored as ContrastPostureName]

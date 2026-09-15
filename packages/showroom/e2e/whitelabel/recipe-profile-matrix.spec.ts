@@ -3,7 +3,7 @@
  *
  * The specimen route renders one identical tree for the six DS-S001 families
  * under the two opposing governed INGRESS PATHS: the code-owned `rottay`
- * registry tenant, whose checked-in BrandTheme authors `rottay/technical-
+ * registry tenant, whose checked-in FlatTheme authors `rottay/technical-
  * sharp@1` and whose CSS is bundled, versus a published customer document
  * selecting `rottay/editorial-round@1`, compiled and mounted as a verified
  * artifact. This spec proves the machine-checkable half of the exit contract;
@@ -230,7 +230,7 @@ test.describe("DS-Q001L: opposing profile sources over one tree", () => {
     expect(editorial.tableAttrs.recipe).toBe("minimal");
 
     // Geometry divergence is asserted as divergence. The literal `0px` this
-    // once pinned came from the deleted synthetic BrandTheme; the radius the
+    // once pinned came from the deleted synthetic FlatTheme; the radius the
     // registry tenant ships is Rottay's to change, and the profile contract is
     // that the two postures do not agree.
     expect(technical.button["border-radius"]).not.toBe(

@@ -8,7 +8,7 @@ import { test, expect, type Page } from '@playwright/test';
 // Whitelabel used to be true by construction. This makes it true by proof.
 //
 // The probe drives /probe/whitelabel-torture three times: once under each of
-// two hostile BrandTheme proof fixtures (torture-dark, torture-light) and once
+// two hostile FlatTheme proof fixtures (torture-dark, torture-light) and once
 // under the real `rottay` tenant, which is the REFERENCE load. The fixtures are
 // never registered as product tenants and never generate an artifact — their
 // slugs are absent from BUNDLED_TENANT_SLUGS, so DesignSystemProvider compiles
@@ -19,7 +19,7 @@ import { test, expect, type Page } from '@playwright/test';
 // ------------------------------------------------------------------
 // For every entry in PROBES — a (component part, CSS property) pair — the probe
 // reads the part's COMPUTED value on each load, plus the value the tenant's
-// BrandTheme ASKED for on that channel (`themePath`, read from the theme object
+// FlatTheme ASKED for on that channel (`themePath`, read from the theme object
 // the surface publishes on `window`). Two independent checks then run, and
 // either one failing records ONE violation keyed `<slug>/<part>/<property>`:
 //
@@ -29,7 +29,7 @@ import { test, expect, type Page } from '@playwright/test';
 //      is the hardcode detector.
 //
 //   2. `not-derived` — computed(torture-dark) !== the value torture-dark's
-//      BrandTheme specifies at `themePath`. The part moved, but not to what the
+//      FlatTheme specifies at `themePath`. The part moved, but not to what the
 //      tenant asked for: a later rule overwrote the token, or the part reads a
 //      different channel, or it paints its own literal.
 //
@@ -87,7 +87,7 @@ interface Probe {
   selector: string;
   /** The computed longhand to read. Longhands only — shorthands are not comparable. */
   property: string;
-  /** Dot path into the tenant's BrandTheme naming the channel this part must paint from. */
+  /** Dot path into the tenant's FlatTheme naming the channel this part must paint from. */
   themePath: string | null;
   kind: ProbeKind;
   /** Only reachable once the flagship's modal is opened (it renders in a portal). */
@@ -96,7 +96,7 @@ interface Probe {
 
 // The documented probe list. Every entry was verified against the modern-engine
 // source: the element named here is the one that actually paints the property,
-// and the themePath names the BrandTheme channel whose value it must land on.
+// and the themePath names the FlatTheme channel whose value it must land on.
 const PROBES: readonly Probe[] = [
   // Button — VARIANT_STYLES drives bg/color per variant; radius resolves
   // --ds-radius-button, which the foundation aliases onto --ds-radius-md.
@@ -128,7 +128,7 @@ const PROBES: readonly Probe[] = [
   // Select — the gallery's simple select takes the NATIVE <select> path. It
   // reads --ds-select-bg falling back to --ds-surface-control, which derives
   // from --ds-color-bg-input, which the compiler emits from the tenant's own
-  // `chrome.controls.input.bg`. The whole chain terminates in the BrandTheme,
+  // `chrome.controls.input.bg`. The whole chain terminates in the FlatTheme,
   // so the derivation check applies and not only the differential. (Before
   // WO-TOK-08 nothing emitted --ds-color-bg-input, the chain terminated in the
   // DS dark default, and this probe's comment claimed there was no channel.)
@@ -160,8 +160,8 @@ const PROBES: readonly Probe[] = [
   { key: 'modal/dialog/border-radius', selector: '[role="dialog"]', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.lg', kind: 'length', requiresModal: true },
 
   // Toast — the modern engine's `default` variant has no chrome.toast.*
-  // BrandTheme section of its own (WO-ENG-21), so it reads the card surface
-  // pair, the only BrandTheme-reachable neutral elevated surface today.
+  // FlatTheme section of its own (WO-ENG-21), so it reads the card surface
+  // pair, the only FlatTheme-reachable neutral elevated surface today.
   { key: 'toast/default/background-color', selector: '[data-testid="probe-extras"] [role="alert"]', property: 'background-color', themePath: 'chrome.cardComponent.bg', kind: 'color' },
 ];
 
@@ -203,7 +203,7 @@ const artifactDir = (): string =>
 
 /**
  * Reads every probe on the current load. `computed` is what the COMPONENT
- * actually painted; `declared` is what the TENANT'S BrandTheme asked for at the
+ * actually painted; `declared` is what the TENANT'S FlatTheme asked for at the
  * probe's `themePath`, taken from the theme object the surface publishes on
  * `window` rather than from the CSS cascade. Both are normalized by the same
  * browser that did the painting, so `#FF00AA` and `rgb(255, 0, 170)` compare
@@ -283,7 +283,7 @@ async function readProbes(page: Page, probes: Probe[]): Promise<Readings> {
  * palette. Those two DOM facts are the causal signal that the tenant is live.
  *
  * Ground LUMINANCE cannot serve as that signal here: the app canvas
- * (--ds-color-bg-primary) is not a BrandTheme channel. A dynamic tenant's
+ * (--ds-color-bg-primary) is not a FlatTheme channel. A dynamic tenant's
  * palette.darkBackgroundColor compiles to --ds-color-dark-bg and never reaches
  * the canvas, and BrandPalette has no light background field at all, so both
  * torture fixtures paint the DS default canvas regardless of their theme mode.
@@ -296,7 +296,7 @@ async function gotoFixture(page: Page, fixture: Fixture, extraParams = ''): Prom
   await page.waitForFunction(
     ({ slug, dynamic }: { slug: string; dynamic: boolean }) => {
       if (document.documentElement.getAttribute('data-tenant') !== slug) return false;
-      // The surface publishes the active fixture's BrandTheme in the same commit
+      // The surface publishes the active fixture's FlatTheme in the same commit
       // that mounts the providers, so its presence pairs with the tenant attrs.
       if (!(window as Window & { __probeBrandTheme?: unknown }).__probeBrandTheme) return false;
       // Bundled tenants (rottay) get their variables from the static styles
@@ -398,7 +398,7 @@ test.describe('whitelabel torture probe', () => {
       if (probe.themePath) {
         expect(
           observed.declared,
-          `torture-dark's BrandTheme sets nothing at ${probe.themePath}; the probe for ${probe.key} has no anchor`,
+          `torture-dark's FlatTheme sets nothing at ${probe.themePath}; the probe for ${probe.key} has no anchor`,
         ).not.toBeNull();
 
         if (observed.computed !== observed.declared) {

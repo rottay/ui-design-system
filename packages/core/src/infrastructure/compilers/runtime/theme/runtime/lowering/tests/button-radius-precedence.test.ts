@@ -24,7 +24,7 @@ import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/vertica
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   admitDocument,
   documentThemeIntent,
@@ -209,14 +209,14 @@ for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
  * The same law on the DRAFT door, where "authored" is not free.
  *
  * A document states only what its tenant chose, so an override in it is
- * authorship by construction. A `BrandTheme` draft is the whole theme the studio
+ * authorship by construction. A `FlatTheme` draft is the whole theme the studio
  * opened: the same chrome leaf may be the value the editor typed or the
  * vertical's own ink carried along untouched, and only the baseline separates
  * them. Reading every carried leaf as inherited made a radius the editor really
  * typed lose to the silhouette beside it -- with the ledger still reporting that
  * radius as the leaf's owner, which is the one answer this law forbids.
  */
-const draftOf = (radius: string | undefined): BrandTheme =>
+const draftOf = (radius: string | undefined): FlatTheme =>
   ({
     id: SLUG,
     name: "Draft precedence",
@@ -224,7 +224,7 @@ const draftOf = (radius: string | undefined): BrandTheme =>
     ...(radius === undefined
       ? {}
       : { chrome: { controls: { buttonGeometry: { radius } } } }),
-  }) as unknown as BrandTheme;
+  }) as unknown as FlatTheme;
 
 const draftPainted = (
   vertical: FirstPartyVerticalId,

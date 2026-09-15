@@ -586,7 +586,7 @@ const controls = object({
   input,
   /**
    * ROTTAY-T2 MASS. The DB transport authors the same closed control
-   * vocabulary the static `BrandTheme` transport does, because
+   * vocabulary the static `FlatTheme` transport does, because
    * `chromeToVariables` is the single lowering for both. 13 containers, 163
    * governed leaves: `select` carries 33 (the 15 C3 channels plus the 18
    * ROTTAY-T2 added), and the twelve families below carry 130.

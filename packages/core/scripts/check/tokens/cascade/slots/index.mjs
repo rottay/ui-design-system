@@ -69,7 +69,7 @@ import { assertDistFresh } from '../../../../package/artifacts/freshness/index.m
 import {
   LOWERING_EXPORT,
   LOWERING_MODULE,
-  loadBrandThemeLowering,
+  loadFlatThemeLowering,
 } from '../../../../libraries/theme-lowering/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -461,7 +461,7 @@ export async function loadCompiledArm({ coreRoot = CORE_ROOT, importModule = (sp
   const { readGovernedTheme } = await importModule(
     pathToFileURL(join(coreRoot, INTAKE_MODULE)).href,
   );
-  const { compile } = await loadBrandThemeLowering({ coreRoot, importModule });
+  const { compile } = await loadFlatThemeLowering({ coreRoot, importModule });
   const baseline = (vertical) => readGovernedTheme(baselineFor(vertical, vertical));
   return {
     compile,

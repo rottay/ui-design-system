@@ -779,7 +779,7 @@ name inside the operational tree fails the check.
 | Question | Authority | Projection here |
 | --- | --- | --- |
 | Which tokens exist, who writes/reads each, dead stock | \`surface/report/index.json\` (derived census, PostCSS + TS AST) | [catalog.md](./catalog.md), [catalog/](./catalog/README.md), [governance/](./governance/README.md) |
-| Which CONTROLS each actor gets (Standard/Pro/Expert/…) | \`TENANT_CAPABILITY_REGISTRY\` + raw allowlist + BrandTheme contracts | [exposure-tiers.md](./exposure-tiers.md) |
+| Which CONTROLS each actor gets (Standard/Pro/Expert/…) | \`TENANT_CAPABILITY_REGISTRY\` + raw allowlist + FlatTheme contracts | [exposure-tiers.md](./exposure-tiers.md) |
 | What changes when a control moves | registry \`derivedChannels\` + theme var() chains | [impact-map.md](./impact-map.md) |
 | Profiles, axes, dials, family emphasis | \`expressive-profiles\` module | [profiles-and-dials.md](./profiles-and-dials.md) |
 | App hooks vs fenced reads | \`contracts/css/hooks/index.json\` (v${manifest.schemaVersion}) | [exposure-tiers.md](./exposure-tiers.md), [app-customization.md](./app-customization.md) |
@@ -934,9 +934,9 @@ ${allowlist.map((n) => `\`${n}\``).join(' · ')}
 
 </details>
 
-## Vertical / BrandTheme — code-owned depth
+## Vertical / FlatTheme — code-owned depth
 
-Typed contracts (\`BrandTheme\`) compiled by the brand compiler; deep
+Typed contracts (\`FlatTheme\`) compiled by the brand compiler; deep
 identity (hundreds of channels) through derivations, never a parallel CSS.
 Static-first verticals (BitHire, Evnto) select composition + expressive
 selection here; the SAME lowerer serves the DB path (convergence is
@@ -1051,7 +1051,7 @@ ${expressive.profiles.map((p) => `- \`${p}\``).join('\n')}
 One Standard field (\`appearance.experienceProfile\`) moves the full
 9-axis composition (type, geometry, edge, material, elevation, motif,
 density, motion, icon posture) through ONE shared expansion — both static
-BrandTheme and tenant DB paths traverse the same lowerer, and the acid
+FlatTheme and tenant DB paths traverse the same lowerer, and the acid
 suite proves the SAME public component diverges between two real artifacts.
 
 ## Pro per-axis overrides

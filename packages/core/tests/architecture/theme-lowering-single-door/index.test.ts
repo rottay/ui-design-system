@@ -620,7 +620,7 @@ describe("the theme lowering has exactly one productive door", () => {
 
   it("the test harness over the door is never imported by productive code", () => {
     const importers = SOURCES.filter(({ source }) =>
-      /theme-lowering|lowerBrandThemeFixture/u.test(code(source))
+      /theme-lowering|lowerFlatThemeFixture/u.test(code(source))
     ).map(({ label }) => label);
     expect(importers).toEqual([]);
   });
@@ -845,7 +845,7 @@ describe("the theme lowering has exactly one productive door", () => {
     expect(String(ownership.domain).length).toBeGreaterThan(40);
     // and the count it declares is the count this file measured above
     const importers = SOURCES.filter(({ source }) =>
-      /theme-lowering|lowerBrandThemeFixture/u.test(code(source))
+      /theme-lowering|lowerFlatThemeFixture/u.test(code(source))
     );
     expect(importers).toHaveLength(ownership.productiveConsumers as number);
   });
@@ -1026,9 +1026,9 @@ describe("planted mutants make the single-door gate go red", () => {
   });
 
   it("a productive import of the test harness is caught", () => {
-    const planted = `import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";\n`;
+    const planted = `import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";\n`;
     const importers = withPlanted(victim, planted)
-      .filter(({ source }) => /theme-lowering|lowerBrandThemeFixture/u.test(code(source)))
+      .filter(({ source }) => /theme-lowering|lowerFlatThemeFixture/u.test(code(source)))
       .map(({ label }) => label);
     expect(importers).toEqual([victim]);
   });

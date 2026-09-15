@@ -191,7 +191,7 @@ describe('density authority contract', () => {
     });
     // `comfortable` is the identity factor and is deliberately undeclared:
     // RootDensityProvider stamps it whenever no preference exists, so writing
-    // `1` at :root[data-density] specificity would erase a static BrandTheme
+    // `1` at :root[data-density] specificity would erase a static FlatTheme
     // posture compiled into the lower-specificity html[data-tenant] artifact.
     expect(densityCss).not.toMatch(/:root\[data-density=['"]comfortable['"]\]/);
   });

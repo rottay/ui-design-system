@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest';
 
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '../../../../../foundation/contracts';
-import type { BrandTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
 import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
@@ -21,9 +21,9 @@ import type {
 import {
   PatternBrandStudio,
   buildSurfaceVariables,
-  normalizeBrandTheme,
+  normalizeFlatTheme,
 } from '../index';
-import { brandThemeToTenantAppearanceAdvanced } from '../runtime/file-export';
+import { flatThemeToTenantAppearanceAdvanced } from '../runtime/file-export';
 import {
   buildTenantThemePreviewScope,
   compileTenantThemePreview,
@@ -38,7 +38,7 @@ const TEST_TENANT: TenantConfig = {
   branding: { companyName: 'Brand Studio Causality' },
 };
 
-const DEFAULT_THEME: BrandTheme = {
+const DEFAULT_THEME: FlatTheme = {
   id: 'causality',
   name: 'Causality',
   palette: { primaryColor: '#4f46e5' },
@@ -64,10 +64,10 @@ function ControlledStudio({
   initial,
   onTheme,
 }: {
-  initial: BrandTheme;
-  onTheme: (theme: BrandTheme) => void;
+  initial: FlatTheme;
+  onTheme: (theme: FlatTheme) => void;
 }): React.ReactElement {
-  const [theme, setTheme] = useState<BrandTheme>(initial);
+  const [theme, setTheme] = useState<FlatTheme>(initial);
   return (
     <PatternBrandStudio
       vertical="bithire"
@@ -87,9 +87,9 @@ function styleText(): string {
     .join('\n');
 }
 
-describe('PatternBrandStudio tenant causality (static BrandTheme path)', () => {
+describe('PatternBrandStudio tenant causality (static FlatTheme path)', () => {
   it('mutates the rendered tree from a chrome control and restores the exact default document when cleared', async () => {
-    const seen: BrandTheme[] = [];
+    const seen: FlatTheme[] = [];
     render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
         <ControlledStudio initial={DEFAULT_THEME} onTheme={(next) => seen.push(next)} />
@@ -110,13 +110,13 @@ describe('PatternBrandStudio tenant causality (static BrandTheme path)', () => {
     fireEvent.change(screen.getByLabelText('Input bg'), { target: { value: '' } });
 
     const restored = seen[seen.length - 1];
-    expect(restored).toEqual(normalizeBrandTheme(DEFAULT_THEME));
+    expect(restored).toEqual(normalizeFlatTheme(DEFAULT_THEME));
     expect(restored.chrome).toBeUndefined();
     expect(styleText()).toBe(before);
   });
 
   it('does not leak a cleared chrome value into the DB-bound appearance projection', async () => {
-    const seen: BrandTheme[] = [];
+    const seen: FlatTheme[] = [];
     render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
         <ControlledStudio initial={DEFAULT_THEME} onTheme={(next) => seen.push(next)} />
@@ -126,18 +126,18 @@ describe('PatternBrandStudio tenant causality (static BrandTheme path)', () => {
 
     fireEvent.change(screen.getByLabelText('Card bg'), { target: { value: '#0b0b0b' } });
     expect(
-      brandThemeToTenantAppearanceAdvanced(seen[seen.length - 1]!).chrome?.cardComponent?.bg
+      flatThemeToTenantAppearanceAdvanced(seen[seen.length - 1]!).chrome?.cardComponent?.bg
     ).toBe('#0b0b0b');
 
     fireEvent.change(screen.getByLabelText('Card bg'), { target: { value: '  ' } });
-    const advanced = brandThemeToTenantAppearanceAdvanced(seen[seen.length - 1]!);
+    const advanced = flatThemeToTenantAppearanceAdvanced(seen[seen.length - 1]!);
     // `chrome` projects verbatim, so an empty leaf would reach the DB document.
     expect(advanced.chrome?.cardComponent).toBeUndefined();
     expect(advanced.chrome).toBeUndefined();
   });
 
   it('keeps a contract-required leaf present when its control is cleared', async () => {
-    const seen: BrandTheme[] = [];
+    const seen: FlatTheme[] = [];
     render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
         <ControlledStudio initial={DEFAULT_THEME} onTheme={(next) => seen.push(next)} />

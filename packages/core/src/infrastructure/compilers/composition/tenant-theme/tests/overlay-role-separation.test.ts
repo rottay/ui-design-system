@@ -15,14 +15,14 @@ import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from '..';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 /* D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so the
  * shipped bithire identity authors neither overlay role (`surfaceRoles.overlay`
@@ -32,19 +32,19 @@ const bithireBrandTheme = firstPartyFixture('bithire');
  * leg re-anchors on a fixture that authors both, which is the subject SC-7 needs:
  * a theme that states the two roles must reach two channels, not one. */
 const OVERLAY_AUTHORING_FIXTURE = {
-  ...bithireBrandTheme,
+  ...bithireFlatTheme,
   palette: {
-    ...bithireBrandTheme.palette,
+    ...bithireFlatTheme.palette,
     backgroundOverlayColor: 'rgba(20, 40, 59, 0.42)',
   },
   surfaces: {
-    ...bithireBrandTheme.surfaces,
+    ...bithireFlatTheme.surfaces,
     surfaceRoles: {
-      ...bithireBrandTheme.surfaces?.surfaceRoles,
+      ...bithireFlatTheme.surfaces?.surfaceRoles,
       overlay: { background: '#ffffff' },
     },
   },
-} as typeof bithireBrandTheme;
+} as typeof bithireFlatTheme;
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_overlay_role_probe',
@@ -94,8 +94,8 @@ describe('SC-7 overlay panel/scrim separation', () => {
    * sola habria pasado con el panel pintando cualquier cosa. Juntas, la prueba
    * distingue los dos modos de romperse. */
   it('a theme that authors both roles emits the panel and the veil independently', () => {
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: OVERLAY_AUTHORING_FIXTURE,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: OVERLAY_AUTHORING_FIXTURE,
       tenantSlug: 'overlay-role-fixture',
     });
     const panel = compiled.cssVariables['--ds-surface-overlay'];

@@ -4,10 +4,10 @@ export { TokenInspector } from './token-inspector';
 export { BrandingPreviewSandbox } from './branding-preview-sandbox';
 export {
   PatternBrandStudio,
-  serializeBrandTheme,
-  deserializeBrandTheme,
-  brandThemeToTenantAppearance,
-  brandThemeToTenantAppearanceAdvanced,
+  serializeFlatTheme,
+  deserializeFlatTheme,
+  flatThemeToTenantAppearance,
+  flatThemeToTenantAppearanceAdvanced,
 } from './brand-studio';
 export type {
   PatternBrandStudioProps,

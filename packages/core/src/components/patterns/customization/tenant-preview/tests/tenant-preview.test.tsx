@@ -14,7 +14,7 @@ import {
   createTenantConfig,
   type TenantCreationConfig,
 } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
-import { buildPreviewCss, draftBrandTheme, draftPreviewSource } from '../runtime/preview-css';
+import { buildPreviewCss, draftFlatTheme, draftPreviewSource } from '../runtime/preview-css';
 import { PREVIEW_SCOPE_ATTRIBUTE } from '../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
 import RusticTenantPreview from '../engines/rustic';
 import ClassicTenantPreview from '../engines/classic';
@@ -50,7 +50,7 @@ describe('TenantPreview', () => {
       expect(config.slug).toBe('test-tenant');
       expect(config.name).toBe('Test Tenant');
       expect(config.branding.primaryColor).toBe('#93BAFA');
-      // Identity only: the preset a draft chooses is a BrandTheme channel.
+      // Identity only: the preset a draft chooses is a FlatTheme channel.
       expect(config).not.toHaveProperty('personality');
     });
 
@@ -66,7 +66,7 @@ describe('TenantPreview', () => {
 
     it('should produce genuinely different CSS across personality presets', () => {
       // Each preset authors a different `entranceDuration` (formal 160,
-      // neutral 220, expressive 300, playful 400), which `createTenantBrandTheme`
+      // neutral 220, expressive 300, playful 400), which `createTenantFlatTheme`
       // places on `BrandMotion.entranceDuration` and `compileTheme` feeds
       // verbatim into `--ds-motion-calm`. `--ds-motion-intensity` was rejected
       // as the proof axis because two presets saturate to the same clamped
@@ -120,7 +120,7 @@ describe('TenantPreview', () => {
     // `includeDarkSelector`/`includeSystemDarkSelector`, options of the
     // retired the retired runtime tenant-CSS generator call the old buildPreviewCss(TenantConfig)
     // made internally. buildPreviewCss has no such option anymore, and
-    // draftBrandTheme never authors a BrandTheme.modes overlay for an
+    // draftFlatTheme never authors a FlatTheme.modes overlay for an
     // authoring draft -- there is nothing for compileTheme to compile a
     // dark block FROM, so the toggle has no equivalent to migrate onto.
     // Replaced below with the structural guarantee that follows from that:
@@ -136,12 +136,12 @@ describe('TenantPreview', () => {
     it('emits no dark overlay of its own: an authoring draft has no mode field', () => {
       // Rottay's own default mode is dark, so its overlay is the LIGHT one.
       // What the draft must not do is add a dark block, and it structurally
-      // cannot: `draftBrandTheme` has no field a dark seed could arrive in.
+      // cannot: `draftFlatTheme` has no field a dark seed could arrive in.
       const { css } = buildPreviewCss({
         kind: 'brand-theme',
         vertical: 'rottay',
         slug: sampleConfig.slug,
-        brandTheme: draftBrandTheme(sampleConfig),
+        flatTheme: draftFlatTheme(sampleConfig),
       });
 
       expect(css).not.toContain("data-theme='dark'");
@@ -154,7 +154,7 @@ describe('TenantPreview', () => {
         kind: 'brand-theme',
       vertical: 'rottay',
         slug: draft.slug,
-        brandTheme: draftBrandTheme(draft),
+        flatTheme: draftFlatTheme(draft),
       });
 
       expect(css).toContain('--ds-color-secondary');
@@ -305,7 +305,7 @@ describe('TenantPreview', () => {
        preview-css suite pins that at the compiler boundary; these two pin it
        at the engine boundary, which is where it can actually regress. Since
        `buildPreviewCss` gained a `PreviewSource` arm, an engine could narrow
-       its own input before calling (`draftBrandTheme` carries no
+       its own input before calling (`draftFlatTheme` carries no
        `personality`/`tokenOverrides`) and lose axes SILENTLY, because a
        pre-resolved source reports `unsupportedAxes: []` by definition. Then
        the preset this very component renders as metadata would be missing
@@ -345,7 +345,7 @@ describe('TenantPreview', () => {
        accent personality, and every preset carries all three, so a preset-built
        preview ALWAYS has something to declare. */
     it('modern: reports no lost axis, because a draft compiles its whole theme', () => {
-      // A draft's preset is projected onto the BrandTheme the compiler lowers,
+      // A draft's preset is projected onto the FlatTheme the compiler lowers,
       // not onto a config the lift has to represent, so absence is the
       // assertion -- and it must agree with the builder rather than be a
       // constant that looks right.
@@ -368,7 +368,7 @@ describe('TenantPreview', () => {
         kind: 'brand-theme',
       vertical: 'rottay',
         slug: config.slug,
-        brandTheme: draftBrandTheme(sampleConfig),
+        flatTheme: draftFlatTheme(sampleConfig),
       });
       expect(unsupportedAxes).toEqual([]);
     });

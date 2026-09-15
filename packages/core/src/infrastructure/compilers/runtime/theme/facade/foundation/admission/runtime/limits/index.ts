@@ -20,7 +20,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
 import {
   ledgerOwnerOfLeaf,
@@ -469,7 +469,7 @@ export function sortedThemeVariables(
 
 function effectiveModeVariables(
   compiled: ThemeCompilation,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): Record<string, string> {
   const block = compiled.modeBlocks?.find(
     (candidate) => candidate.mode === mode
@@ -498,7 +498,7 @@ export function themeChannelDelta(
   }
   const variables = sortedThemeVariables(base);
 
-  const modes = new Set<BrandThemeMode>();
+  const modes = new Set<FlatThemeMode>();
   for (const block of compiled.modeBlocks ?? []) modes.add(block.mode);
   for (const block of baseline.modeBlocks ?? []) modes.add(block.mode);
 

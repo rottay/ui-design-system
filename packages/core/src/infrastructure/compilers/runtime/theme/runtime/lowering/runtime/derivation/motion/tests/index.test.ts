@@ -7,15 +7,15 @@
  */
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { buildLoweringContext } from "../../../pipeline";
 import { deriveMotionCharacter } from "../character";
 import { deriveMotionChannels } from "..";
 
-const theme = (motion: BrandTheme["motion"]): BrandTheme =>
-  ({ id: "t", name: "T", motion }) as BrandTheme;
+const theme = (motion: FlatTheme["motion"]): FlatTheme =>
+  ({ id: "t", name: "T", motion }) as FlatTheme;
 
-const channelsFor = (motion: BrandTheme["motion"]): Record<string, string> => {
+const channelsFor = (motion: FlatTheme["motion"]): Record<string, string> => {
   const context = buildLoweringContext({ theme: theme(motion) });
   return deriveMotionChannels(context.theme, context.expressive.expansion);
 };

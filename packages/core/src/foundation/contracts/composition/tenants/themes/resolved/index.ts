@@ -10,8 +10,8 @@
 import type {
   BrandMotion,
   BrandSurfaces,
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
   BrandTypography,
 } from "..";
 import type { ThemeIntent } from "../intent";
@@ -29,7 +29,7 @@ export type ResolvedToneRole = (typeof RESOLVED_TONE_ROLES)[number];
 
 /**
  * The tenant's posture floors: exactly the keypaths `tenantPostureFloors`
- * projects, spelled out rather than aliased to `Partial<BrandTheme>` so the
+ * projects, spelled out rather than aliased to `Partial<FlatTheme>` so the
  * type states what a floor can carry and no reader can mutate one.
  */
 export interface ThemeFloors {
@@ -58,7 +58,7 @@ export interface TenantStatusSeedAuthorship {
   readonly base: Readonly<Record<ResolvedToneRole, boolean>>;
   /** Whether EACH mode overlay's own patch carries this tone's seed. */
   readonly modes: Readonly<
-    Partial<Record<BrandThemeMode, Readonly<Record<ResolvedToneRole, boolean>>>>
+    Partial<Record<FlatThemeMode, Readonly<Record<ResolvedToneRole, boolean>>>>
   >;
 }
 
@@ -161,9 +161,9 @@ function freezeAuthorship(
   authorship: TenantStatusSeedAuthorship
 ): TenantStatusSeedAuthorship {
   const modes: Partial<
-    Record<BrandThemeMode, Readonly<Record<ResolvedToneRole, boolean>>>
+    Record<FlatThemeMode, Readonly<Record<ResolvedToneRole, boolean>>>
   > = {};
-  for (const mode of Object.keys(authorship.modes) as BrandThemeMode[]) {
+  for (const mode of Object.keys(authorship.modes) as FlatThemeMode[]) {
     const tones = authorship.modes[mode];
     modes[mode] = tones && Object.freeze({ ...tones });
   }

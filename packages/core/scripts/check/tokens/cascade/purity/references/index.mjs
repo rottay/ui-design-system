@@ -53,7 +53,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 import { assertDistFresh } from '../../../../../package/artifacts/freshness/index.mjs';
-import { loadBrandThemeLowering } from '../../../../../libraries/theme-lowering/index.mjs';
+import { loadFlatThemeLowering } from '../../../../../libraries/theme-lowering/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const CORE_ROOT = findPackageRoot(HERE);
@@ -130,7 +130,7 @@ export async function loadArm({ coreRoot = CORE_ROOT, importModule = (spec) => i
   const { readGovernedTheme } = await importModule(
     pathToFileURL(join(coreRoot, 'dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js')).href,
   );
-  const { compile } = await loadBrandThemeLowering({ coreRoot, importModule });
+  const { compile } = await loadFlatThemeLowering({ coreRoot, importModule });
   const baseline = (vertical) => readGovernedTheme(baselineFor(vertical, vertical));
   return {
     compile,

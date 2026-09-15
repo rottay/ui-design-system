@@ -1,7 +1,7 @@
 /**
  * The draft door states what the editor MOVED, not what the theme carried.
  *
- * A `BrandTheme` draft is the whole theme the studio opened, so its projection
+ * A `FlatTheme` draft is the whole theme the studio opened, so its projection
  * carries every value the author never touched. Those values reached the tenant
  * posture floors, and a floor is read as "the tenant re-dialled this knob" --
  * which made the radius divisor come from the expressive profile instead of the
@@ -15,7 +15,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import { baselineFor, compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 import {
@@ -39,7 +39,7 @@ const varsOf = (intent: Parameters<typeof compileThemeIntent>[0]) =>
   compileThemeIntent(intent).compiled.cssVariables;
 
 const draftOf = (vertical: (typeof FIRST_PARTY_VERTICAL_SLUGS)[number]) =>
-  JSON.parse(JSON.stringify(firstPartyFixture(vertical))) as BrandTheme;
+  JSON.parse(JSON.stringify(firstPartyFixture(vertical))) as FlatTheme;
 
 describe("the draft door carries what it did not move", () => {
   for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {

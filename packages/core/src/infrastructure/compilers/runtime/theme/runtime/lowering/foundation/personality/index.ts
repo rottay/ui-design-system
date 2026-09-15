@@ -1,5 +1,5 @@
 /**
- * @fileoverview BrandTheme to personality/token-override projection and its merges.
+ * @fileoverview FlatTheme to personality/token-override projection and its merges.
  *
  * @module Compilers/Theme/Lowering/Foundation/personality
  * @category Compilers
@@ -7,7 +7,7 @@
  */
 
 import type { TenantTokenOverrides } from "@/foundation/contracts/composition/tenants";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   PartialPersonalityTokens,
   PersonalityTokens,
@@ -16,12 +16,12 @@ import { springLinearEasing } from "@/infrastructure/compilers/kernel/foundation
 import { resolveExpressiveFacts } from "../expressive";
 
 /**
- * A BrandTheme opts into generated spring physics only when it declares BOTH
+ * A FlatTheme opts into generated spring physics only when it declares BOTH
  * tension and friction and does not explicitly disable spring (`useSpring:
  * false`, e.g. bithire's calm operational motion law). Absent `useSpring` defaults
  * to enabled, matching every first-party theme that sets tension/friction.
  */
-export function isSpringEligible(bt: BrandTheme): boolean {
+export function isSpringEligible(bt: FlatTheme): boolean {
   const motion = bt.motion;
   return (
     !!motion &&
@@ -32,9 +32,9 @@ export function isSpringEligible(bt: BrandTheme): boolean {
 }
 
 /**
- * Extract structural token overrides from a BrandTheme.
+ * Extract structural token overrides from a FlatTheme.
  *
- * Maps BrandTheme.surfaces to TenantTokenOverrides so the existing
+ * Maps FlatTheme.surfaces to TenantTokenOverrides so the existing
  * structural merge chain can consume it without changes. When the theme is
  * spring-eligible, also derives `motion.spring` (a generated `linear()`
  * curve) so it rides the SAME `TenantTokenOverrides.motion.spring` field
@@ -42,8 +42,8 @@ export function isSpringEligible(bt: BrandTheme): boolean {
  * that reaches the compiled artifact without a theme manually authoring a
  * literal override.
  */
-export function brandThemeToTokenOverrides(
-  bt: BrandTheme
+export function flatThemeToTokenOverrides(
+  bt: FlatTheme
 ): Partial<TenantTokenOverrides> {
   const overrides: Partial<TenantTokenOverrides> = {};
   if (bt.surfaces) {
@@ -67,13 +67,13 @@ export function brandThemeToTokenOverrides(
 }
 
 /**
- * Extract personality tokens from a BrandTheme.
+ * Extract personality tokens from a FlatTheme.
  *
- * Maps BrandTheme.motion/charts/chrome/typography to the PersonalityTokens
+ * Maps FlatTheme.motion/charts/chrome/typography to the PersonalityTokens
  * shape that the existing personality merge chain consumes.
  */
-export function brandThemeToPersonality(
-  bt: BrandTheme
+export function flatThemeToPersonality(
+  bt: FlatTheme
 ): Partial<PersonalityTokens> {
   const result: Partial<PersonalityTokens> = {};
   const expressiveMotion = resolveExpressiveFacts(bt.expressive).expansion

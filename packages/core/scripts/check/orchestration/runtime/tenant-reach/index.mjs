@@ -7,7 +7,7 @@
  * blind here by construction: `--ds-color-border` has hundreds of readers and
  * is not a declared channel, so it can never appear in that gate's output.
  * `theme-channel-parity-gate` asks whether a name is OWNED by some typed field,
- * which static BrandTheme ownership satisfies without any tenant being able to
+ * which static FlatTheme ownership satisfies without any tenant being able to
  * write it. This module asks the third question: *can the tenant reach this?*
  *
  * INTERPOLATED EMISSIONS ARE INVISIBLE TO TEXT SCANS, and that is the trap this

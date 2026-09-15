@@ -115,7 +115,7 @@ function cachedBaselineCompile(
  * Admission runs HERE, for every origin, exactly once. It used to be a single
  * explicit call on the DB terminal, which meant the `preview` origin --
  * tenant-authored by the intent contract's own definition -- reached the
- * channel writers with only the engine checked, and a `BrandTheme` draft with
+ * channel writers with only the engine checked, and a `FlatTheme` draft with
  * nothing checked at all. A preview of a publish that would be refused is the
  * most expensive kind of wrong. One door, one law.
  *

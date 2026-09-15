@@ -2,7 +2,7 @@
  * SINGLE AUTHOR — the artifact has exactly one authored source.
  *
  * The first-party artifact used to be assembled from two authored inputs: the
- * compiled BrandTheme, and a hand-written `_source/extension.css` appended after
+ * compiled FlatTheme, and a hand-written `_source/extension.css` appended after
  * it. Two authors in one cascade means the value a tenant actually paints with
  * is decided by whichever one is read last, so a theme edit could move a channel
  * in the compiled block and change nothing on screen. That is not a bug in a
@@ -35,9 +35,9 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
@@ -53,9 +53,9 @@ import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
 import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 /**
  * The ink channel, spelled as a literal ON PURPOSE.
@@ -72,14 +72,14 @@ const INK_DECLARATION = `color: var(${INK_CHANNEL});`;
 /** A color no shipped theme authors, so its presence can only come from the test. */
 const CANARY_INK = '#FE01DC';
 
-const BRAND_THEME_BY_SLUG = { rottay: rottayBrandTheme, bithire: bithireBrandTheme, evnto: evntoBrandTheme } as const;
-const THEME_BY_SLUG = new Map<string, BrandTheme>(
+const BRAND_THEME_BY_SLUG = { rottay: rottayFlatTheme, bithire: bithireFlatTheme, evnto: evntoFlatTheme } as const;
+const THEME_BY_SLUG = new Map<string, FlatTheme>(
   FIRST_PARTY_VERTICAL_ROSTER.map((row) => [row.slug, BRAND_THEME_BY_SLUG[row.slug]]),
 );
 
-function themeFor(spec: FirstPartyArtifactSpec): BrandTheme {
+function themeFor(spec: FirstPartyArtifactSpec): FlatTheme {
   const theme = THEME_BY_SLUG.get(spec.slug);
-  if (!theme) throw new Error(`no BrandTheme in the roster for slug ${spec.slug}`);
+  if (!theme) throw new Error(`no FlatTheme in the roster for slug ${spec.slug}`);
   return theme;
 }
 
@@ -99,9 +99,9 @@ function render(spec: FirstPartyArtifactSpec): string {
  * COMPOSER, so the suite still exercises the real format while the productive
  * entry keeps exactly one baseline authority.
  */
-function renderCanary(spec: FirstPartyArtifactSpec, brandTheme: BrandTheme): string {
+function renderCanary(spec: FirstPartyArtifactSpec, flatTheme: FlatTheme): string {
   const compiled = compileTheme(
-    { theme: liftAuthoredTheme(brandTheme), provenance: EMPTY_PROVENANCE },
+    { theme: liftAuthoredTheme(flatTheme), provenance: EMPTY_PROVENANCE },
     resolveAdapter(PRIMARY_ENGINE),
   );
   return renderVerticalArtifact({
@@ -167,8 +167,8 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
     });
 
     it('L4 · leaves the ink to the foundation by name when the compile carries no ink channel, and refuses a blank one', () => {
-      const compiled = lowerBrandThemeFixture({
-        brandTheme: themeFor(spec),
+      const compiled = lowerFlatThemeFixture({
+        flatTheme: themeFor(spec),
         tenantSlug: spec.slug,
       });
       const withoutInk = { ...compiled.cssVariables };
@@ -227,18 +227,18 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
 
     it('L7 · welds the rendered ink to the compiler-emitted channel, not to a value', () => {
       const authored = themeFor(spec);
-      // `BrandTheme.palette` is optional, so spreading it unchecked would widen
+      // `FlatTheme.palette` is optional, so spreading it unchecked would widen
       // every field to `| undefined` and quietly let the canary theme ship a
       // half-authored palette. A first-party theme that authors no palette
       // cannot exercise this law at all, so say so instead of compiling around
       // it.
-      if (!authored.palette) throw new Error(`${spec.slug} BrandTheme authors no palette`);
-      const canaryTheme: BrandTheme = {
+      if (!authored.palette) throw new Error(`${spec.slug} FlatTheme authors no palette`);
+      const canaryTheme: FlatTheme = {
         ...authored,
         palette: { ...authored.palette, textPrimaryColor: CANARY_INK },
       };
-      const compiled = lowerBrandThemeFixture({
-        brandTheme: canaryTheme,
+      const compiled = lowerFlatThemeFixture({
+        flatTheme: canaryTheme,
         tenantSlug: spec.slug,
       });
 

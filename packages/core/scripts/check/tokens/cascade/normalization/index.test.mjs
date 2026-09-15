@@ -16,7 +16,7 @@ import {
 /* ── el árbol sintético ─────────────────────────────────────────────────── */
 
 const CONTRACT_OK = `
-export interface ThemeSource extends BrandTheme {
+export interface ThemeSource extends FlatTheme {
 ${REQUIRED_THEME_KEYS.map((key) => `  readonly ${key}: unknown;`).join('\n')}
 }
 export type BrandCapabilityCatalog = Readonly<

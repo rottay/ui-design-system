@@ -15,7 +15,7 @@
  *
  * WHAT `fresh` STILL CANNOT PRODUCE. `scripts/build/verticals/css-build/index.mjs` appends a
  * per-tenant `--ds-motion-spring: linear(...)` block derived from the compiled
- * BrandTheme modules under `dist/`. That derivation needs a build, so `fresh`
+ * FlatTheme modules under `dist/`. That derivation needs a build, so `fresh`
  * omits it — exactly as the staleness gate does, and for the same reason. Any
  * probe of `--ds-motion-spring` must use `--bundle dist` and accept its
  * staleness. Every other channel is complete.
@@ -246,7 +246,7 @@ export async function resolveBundle({ vertical, mode = 'fresh' }) {
       freshnessNote:
         'Recomposed in memory from src/foundation/tokens/css with the formula in ' +
         'scripts/build/verticals/css-build/index.mjs. Omits the per-tenant --ds-motion-spring tail, which ' +
-        'requires compiled BrandTheme modules under dist/.',
+        'requires compiled FlatTheme modules under dist/.',
       shippedDistDrift: drift,
     },
   };
@@ -257,7 +257,7 @@ export async function resolveBundle({ vertical, mode = 'fresh' }) {
  *
  * IT MUST SEPARATE THE PREFIX FROM THE TAIL, because `fresh` deliberately omits
  * the per-tenant `--ds-motion-spring: linear(...)` block that
- * `scripts/build/verticals/css-build/index.mjs` appends from compiled BrandTheme modules under
+ * `scripts/build/verticals/css-build/index.mjs` appends from compiled FlatTheme modules under
  * `dist/`. Comparing whole files therefore reported EVERY spring-carrying
  * bundle as drifted, at end-of-file, for a difference the harness creates on
  * purpose — which read as "dist is behind src" on a tree where it was not, and

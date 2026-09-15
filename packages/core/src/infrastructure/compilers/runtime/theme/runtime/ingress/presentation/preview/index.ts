@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
 import {
   isTenantThemeDocumentV2,
@@ -29,11 +29,11 @@ export interface PreviewThemeIntentInput {
   ranges?: TenantThemeVerticalEnvelope["ranges"];
 }
 
-/** What an unsaved BrandTheme draft needs to name a compile. */
+/** What an unsaved FlatTheme draft needs to name a compile. */
 export interface DraftPreviewThemeIntentInput {
   vertical: FirstPartyVerticalId;
   slug: string;
-  draft: BrandTheme;
+  draft: FlatTheme;
   /** The baseline the draft is a patch of; the vertical's own baseline unless the caller resolved another. */
   carriedFrom?: Theme;
 }
@@ -91,9 +91,9 @@ export function previewThemeAdmission(
 }
 
 /**
- * The intent an unsaved BrandTheme draft compiles under.
+ * The intent an unsaved FlatTheme draft compiles under.
  *
- * The authoring surfaces edit a `BrandTheme`, not a document, so their draft
+ * The authoring surfaces edit a `FlatTheme`, not a document, so their draft
  * reaches the same door through the draft projection rather than the v1
  * migration. Same origin, same authorship, same admission.
  *

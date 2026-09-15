@@ -155,7 +155,7 @@ export function wrapGovernedFamilies(brand) {
   return theme;
 }
 
-export async function brandThemeLoweringAdapter({
+export async function flatThemeLoweringAdapter({
   module,
   coreRoot,
   importModule = importByPath,
@@ -227,8 +227,8 @@ export async function brandThemeLoweringAdapter({
     return adapters.get(engine);
   };
 
-  return function lowerBrandTheme(input = {}) {
-    const { brandTheme, tenantPatch, vertical } = input;
+  return function lowerFlatTheme(input = {}) {
+    const { brandTheme: flatTheme, tenantPatch, vertical } = input;
     /* A FLOOR WITH NO DECLARED AUTHORSHIP maps to a floor with an EMPTY claim
      * set, which is the same compile: the retired door skipped the seed
      * derivations when authorship was absent, and running them over an empty
@@ -238,8 +238,8 @@ export async function brandThemeLoweringAdapter({
      * lowers at the vertical's position. */
     const tenantAuthoredPaths =
       input.tenantAuthoredPaths ?? (tenantPatch !== undefined ? new Set() : undefined);
-    const slug = input.tenantSlug ?? brandTheme?.id;
-    const theme = { ...wrapGovernedFamilies(brandTheme ?? {}), id: slug };
+    const slug = input.tenantSlug ?? flatTheme?.id;
+    const theme = { ...wrapGovernedFamilies(flatTheme ?? {}), id: slug };
     /* Both legs are synthesized because the theme the readers hand in is not a
      * roster baseline: `resolveTheme` now takes a `ThemeIntent`, which NAMES its
      * baseline, and a mutant or probe fixture has no name in the roster. The
@@ -274,10 +274,10 @@ export async function brandThemeLoweringAdapter({
 }
 
 /** Load the published lowering entrypoint and wrap it for the readers. */
-export async function loadBrandThemeLowering({ coreRoot, importModule = importByPath }) {
+export async function loadFlatThemeLowering({ coreRoot, importModule = importByPath }) {
   const module = await importModule(join(coreRoot, LOWERING_MODULE));
   return {
     module,
-    compile: await brandThemeLoweringAdapter({ module, coreRoot, importModule }),
+    compile: await flatThemeLoweringAdapter({ module, coreRoot, importModule }),
   };
 }

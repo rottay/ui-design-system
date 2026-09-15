@@ -2,34 +2,34 @@ import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 
 import { normalizeThemeSource } from "@/foundation/contracts/composition/tenants/themes/iso";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { SemanticTypographyRoleTokens } from "@/foundation/contracts/kernel/tokens/typography";
 
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
-import { firstPartyFixture, lowerBrandThemeFixture, themeSourceOf } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture, themeSourceOf } from "@tests/support/theme-lowering";
 import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { resolveTheme } from "../../resolution";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { containerScope, emitThemeCss } from "../../emission";
 import { brandTenantSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 /**
  * The two lowerings of one authored theme:
- *   leg A — the static BrandTheme transport, compiled directly.
- *   leg B — the ISO transport: BrandTheme -> Theme -> governed intake -> compile.
+ *   leg A — the static FlatTheme transport, compiled directly.
+ *   leg B — the ISO transport: FlatTheme -> Theme -> governed intake -> compile.
  * Both must produce the SAME artifact. The ISO bridge materializes complete
  * containers, so leg B carries role keys that are present with the value
  * `undefined`; the compiler compacts those spread sources so a key that carries
  * no value does not participate in the merge (see `omitUndefined`).
  */
 const FIRST_PARTY = [
-  ["rottay", rottayBrandTheme],
-  ["bithire", bithireBrandTheme],
-  ["evnto", evntoBrandTheme],
+  ["rottay", rottayFlatTheme],
+  ["bithire", bithireFlatTheme],
+  ["evnto", evntoFlatTheme],
 ] as const;
 
 /** Every own key of a role, materialized with no value — the bridge skeleton. */
@@ -43,10 +43,10 @@ const ROLE_SKELETON: SemanticTypographyRoleTokens = {
   fontVariantNumeric: undefined,
 };
 
-type Compiled = ReturnType<typeof lowerBrandThemeFixture>;
+type Compiled = ReturnType<typeof lowerFlatThemeFixture>;
 
-function legA(brandTheme: BrandTheme): Compiled {
-  return lowerBrandThemeFixture({ brandTheme, tenantSlug: brandTheme.id });
+function legA(flatTheme: FlatTheme): Compiled {
+  return lowerFlatThemeFixture({ flatTheme, tenantSlug: flatTheme.id });
 }
 
 /**
@@ -56,13 +56,13 @@ function legA(brandTheme: BrandTheme): Compiled {
  * also completes shapes and materializes declared keys. Identical digests are
  * the proof that completion changes no compiled byte.
  */
-function legB(brandTheme: BrandTheme): Compiled {
-  const slug = brandTheme.id;
+function legB(flatTheme: FlatTheme): Compiled {
+  const slug = flatTheme.id;
   // The normalizer's own output, lowered directly. It cannot go through the
   // intent door: the door reads the roster, so it would compare the roster's
   // theme to itself instead of comparing the two lifts.
   const compiled = compileTheme(
-    { theme: normalizeThemeSource(themeSourceOf(brandTheme)), provenance: EMPTY_PROVENANCE },
+    { theme: normalizeThemeSource(themeSourceOf(flatTheme)), provenance: EMPTY_PROVENANCE },
     resolveAdapter("modern")
   );
   return {
@@ -175,20 +175,20 @@ function declares(line: string | undefined, channel: string): boolean {
 
 /** One authored source block, addressed by path. */
 function authoredBlock(
-  brandTheme: BrandTheme,
+  flatTheme: FlatTheme,
   path: readonly string[]
 ): Record<string, unknown> {
-  let cursor: unknown = brandTheme;
+  let cursor: unknown = flatTheme;
   for (const step of path) cursor = (cursor as Record<string, unknown>)[step];
   return cursor as Record<string, unknown>;
 }
 
 /** Own key order of an authored source block. */
 function authoredKeys(
-  brandTheme: BrandTheme,
+  flatTheme: FlatTheme,
   path: readonly string[]
 ): string[] {
-  return Object.keys(authoredBlock(brandTheme, path));
+  return Object.keys(authoredBlock(flatTheme, path));
 }
 
 /**
@@ -196,10 +196,10 @@ function authoredKeys(
  * a different order — a permutation that changes nothing but authoring order.
  */
 function withRotatedBlock(
-  brandTheme: BrandTheme,
+  flatTheme: FlatTheme,
   path: readonly string[]
-): BrandTheme {
-  const clone = structuredClone(brandTheme) as unknown as Record<
+): FlatTheme {
+  const clone = structuredClone(flatTheme) as unknown as Record<
     string,
     unknown
   >;
@@ -213,14 +213,14 @@ function withRotatedBlock(
   const rotated: Record<string, unknown> = {};
   for (const key of [...keys.slice(1), keys[0]]) rotated[key] = block[key];
   owner[leaf] = rotated;
-  return clone as unknown as BrandTheme;
+  return clone as unknown as FlatTheme;
 }
 
 describe("semantic typography roles", () => {
   it("emits complete defaults and accepts bounded first-party role overrides", () => {
-    const compiled = lowerBrandThemeFixture({
+    const compiled = lowerFlatThemeFixture({
       tenantSlug: "type-proof",
-      brandTheme: {
+      flatTheme: {
         id: "type-proof",
         name: "Type proof",
         typography: {
@@ -248,19 +248,19 @@ describe("semantic typography roles", () => {
 });
 
 describe("cross-lowering equality of the first-party themes", () => {
-  for (const [slug, brandTheme] of FIRST_PARTY) {
+  for (const [slug, flatTheme] of FIRST_PARTY) {
     // T1 — the family the bridge skeleton reaches, channel by channel.
     it(`${slug}: every --ds-type-* channel is identical in both lowerings`, () => {
-      expect(typeChannels(legB(brandTheme))).toEqual(
-        typeChannels(legA(brandTheme))
+      expect(typeChannels(legB(flatTheme))).toEqual(
+        typeChannels(legA(flatTheme))
       );
     });
 
     // T2 — the whole artifact, not just the family under repair. Any residual
     // here is a SECOND defect, not a tolerable gap: it fails, it is not pinned.
     it(`${slug}: the complete compiled surface is identical in both lowerings`, () => {
-      const a = legA(brandTheme);
-      const b = legB(brandTheme);
+      const a = legA(flatTheme);
+      const b = legB(flatTheme);
       expect(b.cssVariables).toEqual(a.cssVariables);
       expect(b.cssString).toBe(a.cssString);
       expect(b.colorScheme).toBe(a.colorScheme);
@@ -270,7 +270,7 @@ describe("cross-lowering equality of the first-party themes", () => {
     // T5 — permanent tripwire. `String(undefined)` must never reach a value,
     // in either lowering, in the base block or in any mode block.
     it(`${slug}: no compiled value is the literal string "undefined"`, () => {
-      for (const compiled of [legA(brandTheme), legB(brandTheme)]) {
+      for (const compiled of [legA(flatTheme), legB(flatTheme)]) {
         const leaked = everyEmittedEntry(compiled)
           .filter(([, value]) => value === "undefined")
           .map(([name]) => name);
@@ -315,10 +315,10 @@ describe("authored-order law", () => {
    * on both trees: a customer theme never carried order in either, because its
    * chrome families are deriver-owned; only a spread-emitted block does.
    */
-  const AUTHORED_ORDER_SUBJECT: BrandTheme = {
-    ...rottayBrandTheme,
+  const AUTHORED_ORDER_SUBJECT: FlatTheme = {
+    ...rottayFlatTheme,
     chrome: {
-      ...rottayBrandTheme.chrome,
+      ...rottayFlatTheme.chrome,
       tooltip: {
         bg: "#101014",
         color: "#F5F5F7",
@@ -376,14 +376,14 @@ describe("present-with-undefined role keys", () => {
   // it neither emits "undefined" nor deletes the default it sits on top of,
   // while a key that DOES carry a value still wins.
   it("falls through to the default and still lets an authored value win", () => {
-    const control = lowerBrandThemeFixture({
+    const control = lowerFlatThemeFixture({
       tenantSlug: "skeleton-control",
-      brandTheme: { id: "skeleton-control", name: "Control" },
+      flatTheme: { id: "skeleton-control", name: "Control" },
     }).cssVariables;
 
-    const skeletal = lowerBrandThemeFixture({
+    const skeletal = lowerFlatThemeFixture({
       tenantSlug: "skeleton-probe",
-      brandTheme: {
+      flatTheme: {
         id: "skeleton-probe",
         name: "Probe",
         typography: {
@@ -424,9 +424,9 @@ describe("present-with-undefined role keys", () => {
   // the mechanical counterfactual: compacting only the role emitter leaves this
   // red, because the value is destroyed in the caller before the emitter runs.
   it("keeps an authored labelStyle when the label role arrives as a skeleton", () => {
-    const probe = lowerBrandThemeFixture({
+    const probe = lowerFlatThemeFixture({
       tenantSlug: "label-case-probe",
-      brandTheme: {
+      flatTheme: {
         id: "label-case-probe",
         name: "Label case probe",
         typography: {
@@ -439,9 +439,9 @@ describe("present-with-undefined role keys", () => {
     expect(probe["--ds-type-label-text-transform"]).toBe("capitalize");
 
     // ...and an explicitly authored role value still outranks labelStyle.
-    const explicit = lowerBrandThemeFixture({
+    const explicit = lowerFlatThemeFixture({
       tenantSlug: "label-case-explicit",
-      brandTheme: {
+      flatTheme: {
         id: "label-case-explicit",
         name: "Label case explicit",
         typography: {
@@ -463,13 +463,13 @@ describe("present-with-undefined role keys", () => {
   // the DS default `none` -- measured, and asserted here so the vertical that
   // does drive the channel cannot go quiet unnoticed.
   it("bithire emits its profile-driven label case in both lowerings", () => {
-    expect(legA(bithireBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
+    expect(legA(bithireFlatTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
       "uppercase"
     );
-    expect(legB(bithireBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
+    expect(legB(bithireFlatTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
       "uppercase"
     );
-    expect(legA(evntoBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
+    expect(legA(evntoFlatTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
       "none"
     );
   });

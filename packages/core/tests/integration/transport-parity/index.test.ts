@@ -19,7 +19,7 @@
  *
  * THE FOUR TRANSPORTS, each the real productive door:
  *
- *   static    a code-owned `BrandTheme` with the decision's own
+ *   static    a code-owned `FlatTheme` with the decision's own
  *             `keypath.brandTheme` set, through `draftPreviewThemeIntent`
  *   document  the persisted v2 row, through `documentThemeIntent`
  *   preview   the same unsaved row, through `previewThemeIntent`
@@ -49,7 +49,7 @@
  *      and every value is byte-identical to the preview's.
  *
  * THE ASYMMETRY THIS FILE MEASURED, AND WHY IT IS NOT A DEFECT. A document
- * carries only what its tenant selected. A BrandTheme draft carries the WHOLE
+ * carries only what its tenant selected. A FlatTheme draft carries the WHOLE
  * theme, so where the vertical states the derived leaf EXPLICITLY the explicit
  * leaf outranks the posture that would derive it: `typography.pairing` cannot
  * move a family bithire names. Measured on this tree, not predicted: 2 of 4
@@ -84,7 +84,7 @@ import {
   type ThemeControlRow,
 } from "@/contracts/theme/runtime/catalog";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 import {
@@ -95,7 +95,7 @@ import {
 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const VERTICAL = "bithire" as const;
 const SLUG = "transport-parity-probe";
@@ -187,7 +187,7 @@ const CASES: Readonly<Record<string, Case>> = {
 };
 
 /**
- * Rows whose decision a BrandTheme can also say a SECOND way, with the leaves
+ * Rows whose decision a FlatTheme can also say a SECOND way, with the leaves
  * that outrank it.
  *
  * Every entry is a measurement, and an entry that stopped being one is removed
@@ -234,15 +234,15 @@ const v2 = (decisions: Record<string, unknown>): TenantThemeDocumentV2 =>
   ({ version: 2, plan: "pro", decisions }) as TenantThemeDocumentV2;
 
 /**
- * A real BrandTheme draft carrying the decision, with the competing explicit
+ * A real FlatTheme draft carrying the decision, with the competing explicit
  * leaves optionally cleared so the two arms carry the same authorship.
  */
 function draftWith(
   keypath: string,
   value: unknown,
   outrank: readonly string[] = []
-): BrandTheme {
-  const draft = JSON.parse(JSON.stringify(bithireBrandTheme)) as Record<string, unknown>;
+): FlatTheme {
+  const draft = JSON.parse(JSON.stringify(bithireFlatTheme)) as Record<string, unknown>;
   // Two walks, not one. Clearing must never CREATE the branch it was asked to
   // remove, and setting must create the branch a clear may just have removed --
   // `chrome.sidebar` is both in the same fixture. One permissive walk wrote
@@ -283,7 +283,7 @@ function draftWith(
   }
   const segments = keypath.split(".");
   ensure(segments.slice(0, -1))[segments[segments.length - 1]!] = value;
-  return draft as unknown as BrandTheme;
+  return draft as unknown as FlatTheme;
 }
 
 const compilationOf = (intent: Parameters<typeof compileThemeIntent>[0]) =>
@@ -323,7 +323,7 @@ describe("transport parity — one decision, four doors, compared as bytes", () 
       draftPreviewThemeIntent({
         vertical: VERTICAL,
         slug: SLUG,
-        draft: JSON.parse(JSON.stringify(bithireBrandTheme)) as BrandTheme,
+        draft: JSON.parse(JSON.stringify(bithireFlatTheme)) as FlatTheme,
       })
     );
     const names = [...new Set([...Object.keys(BASELINE), ...Object.keys(draftOfBaseline)])];
@@ -385,7 +385,7 @@ describe("transport parity — one decision, four doors, compared as bytes", () 
         expect(moved.length, `${row.id} moved nothing; parity would be vacuous`).toBeGreaterThan(0);
       });
 
-      it("law 1 (J.4) — the static BrandTheme arm produces the same bytes on every moved channel", () => {
+      it("law 1 (J.4) — the static FlatTheme arm produces the same bytes on every moved channel", () => {
         const mismatched = moved
           .filter((channel) => statik[channel] !== db[channel])
           .map((channel) => `${channel}: static=${statik[channel]} db=${db[channel]}`);
@@ -395,7 +395,7 @@ describe("transport parity — one decision, four doors, compared as bytes", () 
       it(
         outranking.length > 0
           ? "law 1b — the declared explicit leaves DO outrank the decision, so the ledger is not decorative"
-          : "law 1b — nothing in the BrandTheme outranks this decision",
+          : "law 1b — nothing in the FlatTheme outranks this decision",
         () => {
           const outranked = moved.filter((channel) => statikOutranked[channel] !== db[channel]);
           if (outranking.length === 0) {

@@ -20,7 +20,7 @@ import { describe, expect, it } from 'vitest';
  * `@keyframes rottay-*`.
  *
  * SCOPE excludes facade/artifacts/: that subtree is generated per-tenant
- * BrandTheme output (plus its _source/ input), governed by its own
+ * FlatTheme output (plus its _source/ input), governed by its own
  * lint:artifacts + build:vertical-css pipeline under tenancy ownership --
  * not this package's DS-authored keyframe surface.
  *

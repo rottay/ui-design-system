@@ -10,11 +10,11 @@
  *
  * WHAT THIS REGISTRY IS NOT. It used to carry a `suggestedPalette` per
  * vertical, and all seven of those seed colours disagreed with the shipped
- * BrandTheme: evnto seeded orange/cyan against a black/sand editorial theme,
+ * FlatTheme: evnto seeded orange/cyan against a black/sand editorial theme,
  * bithire seeded purple against a blue theme, platform seeded indigo against
  * a white-on-dark one. Nothing consumed the field, so the disagreement was
  * invisible — but it made this file a second colour authority that a future
- * reader could reasonably have believed. Colour comes from the BrandTheme
+ * reader could reasonably have believed. Colour comes from the FlatTheme
  * source and nowhere else; this registry owns personality, engine posture and
  * surface defaults only.
  *

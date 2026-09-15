@@ -157,7 +157,7 @@ find the shipped bundle byte-identical. Disagreeing about the regime is itself
 the finding.
 
 **What `fresh` cannot produce:** `scripts/build/verticals/css-build/index.mjs` appends a per-tenant
-`--ds-motion-spring: linear(...)` tail derived from compiled BrandTheme modules
+`--ds-motion-spring: linear(...)` tail derived from compiled FlatTheme modules
 under `dist/`. That needs a build, so `fresh` omits it — exactly as the
 staleness gate does. Probing `--ds-motion-spring` requires `--bundle dist` and
 accepting its staleness.
@@ -241,7 +241,7 @@ proved.
   `appearance`, and the arm compiles for a CUSTOMER tenant because first-party slugs are reserved;
   `compileBrandTheme(input: BrandCompilerInput)`
   destructures `{ brandTheme, tenantSlug }`, so it needs `{ brandTheme: document, tenantSlug }`,
-  never the bare `BrandTheme` fragment. What remains unverified is only the browser half —
+  never the bare `FlatTheme` fragment. What remains unverified is only the browser half —
   `loadCompilerArms` records `freshnessProven: false` since `dist/` is a build product, and the
   causal run pairs it with the stale-source guard, whose freshness surface now spans the
   instrument, both manifests, the control's own `sourceBindings` (TS lowerers + productive CSS),
@@ -451,7 +451,7 @@ that reaches nothing.
 
 **The static arm composes its stop over the vertical's published baseline**
 (H-1, 2026-08-23). `loadStaticBaselines()` reads the three first-party
-`BrandTheme`s from `dist/index.js` — the published `exports["."]` entrypoint,
+`FlatTheme`s from `dist/index.js` — the published `exports["."]` entrypoint,
 the same class of import the DB arm uses for `./server`, never a deep path — and
 `lowerStop` compiles `{ …verticalTheme, …stopAtItsKeypath }`. The arm records
 which baseline it used in `producedBy.input.baseline = { source, digest }`, and

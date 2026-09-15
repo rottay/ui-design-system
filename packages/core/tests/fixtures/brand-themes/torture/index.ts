@@ -1,7 +1,7 @@
 /**
  * Hostile-tenant whitelabel PROOF FIXTURES (WO-GAT-03).
  *
- * These two BrandTheme objects are NOT product tenants. They exist for one
+ * These two FlatTheme objects are NOT product tenants. They exist for one
  * purpose: every themable channel they populate is deliberately pushed away
  * from both first-party themes (rottay, bithire) so that any component which
  * ignores the active tenant theme (a hardcoded color, radius, font, etc.) is
@@ -12,12 +12,12 @@
  * They compile at render time through the one lowering, the same as any
  * DB-driven tenant would.
  *
- * This file is runtime-pure: only a type-only import of `BrandTheme` is used,
+ * This file is runtime-pure: only a type-only import of `FlatTheme` is used,
  * so it carries zero side effects and can be imported from a plain Node or
  * Playwright context without pulling in the rest of the design system.
  */
 
-import type { BrandTheme } from '../../../../src/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '../../../../src/foundation/contracts/composition/tenants/themes';
 
 /**
  * Torture fixture paired with the `dark` base theme.
@@ -29,7 +29,7 @@ import type { BrandTheme } from '../../../../src/foundation/contracts/compositio
  * (rottay uses `'none'` for these — a torture fixture never can, or a
  * hardcoded `'none'` fallback would look correct by accident).
  */
-export const tortureDarkBrandTheme: BrandTheme = {
+export const tortureDarkFlatTheme: FlatTheme = {
   id: 'torture-dark',
   name: 'Torture Dark',
 
@@ -368,7 +368,7 @@ export const tortureDarkBrandTheme: BrandTheme = {
  * dark fixture, densest layout, heavy saturated colored-glow shadows, and
  * real glass/gradient/overlay values.
  */
-export const tortureLightBrandTheme: BrandTheme = {
+export const tortureLightFlatTheme: FlatTheme = {
   id: 'torture-light',
   name: 'Torture Light',
 

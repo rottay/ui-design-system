@@ -2,7 +2,7 @@
  * @fileoverview Readable-ink derivation shared by both compile paths.
  *
  * One algorithm decides which canonical ink is legible over a seed, so the
- * static BrandTheme compiler and the DB Appearance compiler cannot drift in
+ * static FlatTheme compiler and the DB Appearance compiler cannot drift in
  * contrast math. Each path keeps exactly one emitter per channel: sharing
  * this function is sharing math, never adding a second author.
  *

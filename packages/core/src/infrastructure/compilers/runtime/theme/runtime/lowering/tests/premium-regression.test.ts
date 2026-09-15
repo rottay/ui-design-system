@@ -8,11 +8,11 @@
  * - palette: SHARED (generated via color scale)
  * - personality: SHARED (animation, chart, card, accent, typography)
  * - density: SHARED (--ds-density-scale)
- * - sidebar: SHARED (--ds-sidebar-* from BrandTheme.chrome.sidebar)
- * - controls: SHARED (--ds-button-*, --ds-input-* from BrandTheme.chrome.controls)
- * - table: SHARED (--ds-table-header-* from BrandTheme.chrome.table)
- * - layout: SHARED (--ds-layout-* from BrandTheme.chrome.layout)
- * - shell: SHARED (--ds-shell-* from BrandTheme.chrome.shell)
+ * - sidebar: SHARED (--ds-sidebar-* from FlatTheme.chrome.sidebar)
+ * - controls: SHARED (--ds-button-*, --ds-input-* from FlatTheme.chrome.controls)
+ * - table: SHARED (--ds-table-header-* from FlatTheme.chrome.table)
+ * - layout: SHARED (--ds-layout-* from FlatTheme.chrome.layout)
+ * - shell: SHARED (--ds-shell-* from FlatTheme.chrome.shell)
  *
  * When the shared pipeline is extended in G1, tests in the
  * "currently first-party-only" sections should start passing through
@@ -23,17 +23,17 @@ import postcss from 'postcss';
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { brandThemeToChromeVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { flatThemeToChromeVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
   isBundledTenant,
   BUNDLED_TENANT_SLUGS,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 // ── Helpers ─────────────────────────────────────────────
 
@@ -116,15 +116,15 @@ function collectDeclarationValues(css: string, property: string): string[] {
 // and compile them per test via the now-retired the retired runtime tenant-CSS generator. That
 // generator resolved a `vertical` string, a legacy `branding` literal, and
 // `includeDarkSelector` itself; `compileTheme` needs none of that -- it
-// takes a BrandTheme and a slug and always emits both the base block and
+// takes a FlatTheme and a slug and always emits both the base block and
 // every authored mode block in one `cssString` (no `includeDarkSelector`
 // toggle to thread through). Precomputed here once since compilation is pure
 // and every test below only reads the result.
 
 const COMPILED_BY_TENANT = {
-  bithire: lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' }),
-  evnto: lowerBrandThemeFixture({ brandTheme: evntoBrandTheme, tenantSlug: 'evnto' }),
-  rottay: lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' }),
+  bithire: lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' }),
+  evnto: lowerFlatThemeFixture({ flatTheme: evntoFlatTheme, tenantSlug: 'evnto' }),
+  rottay: lowerFlatThemeFixture({ flatTheme: rottayFlatTheme, tenantSlug: 'rottay' }),
 };
 
 /**
@@ -153,8 +153,8 @@ const baseBlock = (css: string): string => css.split('\n\n')[0];
  * Management -- a real customer theme carried as a fixture -- rather than a
  * vertical that no longer has one.
  */
-const THEMANAGEMENT = lowerBrandThemeFixture({
-  brandTheme: themanagementmiamiBrandTheme,
+const THEMANAGEMENT = lowerFlatThemeFixture({
+  flatTheme: themanagementmiamiFlatTheme,
   tenantSlug: 'themanagementmiami',
 });
 const THEMANAGEMENT_CSS = baseBlock(THEMANAGEMENT.cssString);
@@ -717,7 +717,7 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     // retired (it carried 28px / rgba(255, 255, 255, 0.03)), so the family's
     // subject is authored here rather than dropped: the lowering is what is
     // under test, and it is the same call the provider makes for a DB tenant.
-    const shell = brandThemeToChromeVariables({
+    const shell = flatThemeToChromeVariables({
       id: 'shell-probe',
       name: 'Shell probe',
       chrome: { shell: { gridSize: '28px', gridLine: 'rgba(255, 255, 255, 0.03)' } },
@@ -744,9 +744,9 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     expect(collectDeclarationValues(bithireCss, '--ds-table-header-font-weight')).toEqual([]);
   });
 
-  it('DB-backed tenant with BrandTheme gets same chrome vars', () => {
-    const css = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+  it('DB-backed tenant with FlatTheme gets same chrome vars', () => {
+    const css = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: 'db-premium',
     }).cssString;
     expect(css).toContain('--ds-sidebar-bg: #FFFEFB');
@@ -847,7 +847,7 @@ describe('variable naming: engines consume --ds-button-*-color', () => {
 });
 
 describe('dynamic tenant runtime chrome: scoped <style> path', () => {
-  it('brandThemeToChromeVariables produces vars for scoped injection', () => {
+  it('flatThemeToChromeVariables produces vars for scoped injection', () => {
     // This is what DesignSystemProvider uses to build the <style> tag
     // for dynamic tenants (skipCssLoading=false).
     // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so
@@ -855,7 +855,7 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
     // values (#0D0D10 sidebar, 28px shell grid, #131316 table) were what this
     // read before; a vertical now yields only the six sidebar-tone channels,
     // asserted below so the shrink is recorded rather than implied.
-    const vars = brandThemeToChromeVariables(themanagementmiamiBrandTheme);
+    const vars = flatThemeToChromeVariables(themanagementmiamiFlatTheme);
     expect(vars['--ds-sidebar-bg']).toBe('#FFFEFB');
     expect(vars['--ds-layout-bg']).toBe('#FFFEFB');
     expect(vars['--ds-button-primary-color']).toBe('#FFFEFB');
@@ -866,8 +866,8 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
     // rottay and bithire decide `navigation.sidebar-tone` and no other chrome,
     // so this call produces that family and nothing else -- each channel an
     // alias onto a governed root rather than a literal.
-    for (const theme of [rottayBrandTheme, bithireBrandTheme]) {
-      const vars = brandThemeToChromeVariables(theme);
+    for (const theme of [rottayFlatTheme, bithireFlatTheme]) {
+      const vars = flatThemeToChromeVariables(theme);
       expect(Object.keys(vars).sort()).toEqual([
         '--ds-sidebar-bg',
         '--ds-sidebar-item-bg-active',
@@ -881,7 +881,7 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
   });
 
   it('scoped CSS string uses tenant selector (dark-mode safe)', () => {
-    const vars = brandThemeToChromeVariables(themanagementmiamiBrandTheme);
+    const vars = flatThemeToChromeVariables(themanagementmiamiFlatTheme);
     const entries = Object.entries(vars).filter(([, v]) => v != null);
     const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
     const scopedCss = `html[data-tenant='db-customer'] {\n${declarations}\n}`;
@@ -896,7 +896,7 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
 
   it('dynamic tenant without brandTheme produces no chrome CSS', () => {
     // No brandTheme -> no chrome vars.
-    const vars = brandThemeToChromeVariables({ id: '', name: '' });
+    const vars = flatThemeToChromeVariables({ id: '', name: '' });
     expect(Object.keys(vars).length).toBe(0);
   });
 });
@@ -938,16 +938,16 @@ describe('DesignSystemProvider chrome injection logic', () => {
     // normalizedConfig.brandTheme && !isBundledTenant(normalizedConfig.slug)
 
     // DB tenant with brandTheme -> gets chrome
-    const dbWithBrand = { brandTheme: bithireBrandTheme, slug: 'acme-corp' };
+    const dbWithBrand = { brandTheme: bithireFlatTheme, slug: 'acme-corp' };
     expect(!!dbWithBrand.brandTheme && !isBundledTenant(dbWithBrand.slug)).toBe(true);
 
     // Bundled tenant with brandTheme -> NO chrome (already in CSS)
-    const bundledWithBrand = { brandTheme: bithireBrandTheme, slug: 'bithire' };
+    const bundledWithBrand = { brandTheme: bithireFlatTheme, slug: 'bithire' };
     expect(!!bundledWithBrand.brandTheme && !isBundledTenant(bundledWithBrand.slug)).toBe(false);
 
     // themanagementmiami (real brandTheme, not bundled) -> DOES get generated
     // chrome CSS, the same as any DB-driven tenant.
-    const tmm = { brandTheme: themanagementmiamiBrandTheme, slug: 'themanagementmiami' };
+    const tmm = { brandTheme: themanagementmiamiFlatTheme, slug: 'themanagementmiami' };
     expect(!!tmm.brandTheme && !isBundledTenant(tmm.slug)).toBe(true);
 
     // DB tenant without brandTheme -> NO chrome (nothing to generate)

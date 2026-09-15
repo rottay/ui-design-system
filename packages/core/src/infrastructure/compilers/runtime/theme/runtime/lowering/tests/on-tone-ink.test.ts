@@ -1,5 +1,5 @@
 /**
- * AUT-1 propagation contract, static path: every hex status tone a BrandTheme
+ * AUT-1 propagation contract, static path: every hex status tone a FlatTheme
  * authors emits its `--ds-color-on-<tone>` readable ink through the shared
  * `color-math/readable-ink` derivation, a mode overlay re-derives from its
  * own seeds, and a palette without a tone claims nothing (the DS root floor
@@ -8,32 +8,32 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import {
   READABLE_INK_DARK,
   READABLE_INK_LIGHT,
   deriveReadableInk,
 } from '@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
-const compile = (brandTheme: BrandTheme) =>
-  lowerBrandThemeFixture({ brandTheme, tenantSlug: 'bithire' });
+const compile = (flatTheme: FlatTheme) =>
+  lowerFlatThemeFixture({ flatTheme, tenantSlug: 'bithire' });
 
-const withPalette = (patch: Record<string, string | undefined>): BrandTheme => ({
-  ...bithireBrandTheme,
-  palette: { ...bithireBrandTheme.palette!, ...patch } as BrandTheme['palette'],
+const withPalette = (patch: Record<string, string | undefined>): FlatTheme => ({
+  ...bithireFlatTheme,
+  palette: { ...bithireFlatTheme.palette!, ...patch } as FlatTheme['palette'],
 });
 
 describe('brand-theme on-tone ink emission (AUT-1, static path)', () => {
   it('emits the shared derivation for every authored hex tone', () => {
-    const vars = compile(bithireBrandTheme).cssVariables;
+    const vars = compile(bithireFlatTheme).cssVariables;
     for (const [role, seed] of [
-      ['success', bithireBrandTheme.palette!.successColor!],
-      ['warning', bithireBrandTheme.palette!.warningColor!],
-      ['error', bithireBrandTheme.palette!.errorColor!],
-      ['info', bithireBrandTheme.palette!.infoColor!],
+      ['success', bithireFlatTheme.palette!.successColor!],
+      ['warning', bithireFlatTheme.palette!.warningColor!],
+      ['error', bithireFlatTheme.palette!.errorColor!],
+      ['info', bithireFlatTheme.palette!.infoColor!],
     ] as const) {
       const ink = vars[`--ds-color-on-${role}`];
       expect(ink, role).toBe(deriveReadableInk(seed));
@@ -54,7 +54,7 @@ describe('brand-theme on-tone ink emission (AUT-1, static path)', () => {
     expect(neutral('#f59e0b')).toBe(READABLE_INK_DARK);
     expect(neutral('#78350f')).toBe(READABLE_INK_LIGHT);
 
-    expect(bithireBrandTheme.palette!.contrastPosture).toBe('high');
+    expect(bithireFlatTheme.palette!.contrastPosture).toBe('high');
     const light = compile(withPalette({ warningColor: '#f59e0b' })).cssVariables;
     expect(light['--ds-color-on-warning']).toBe('#000000');
 
@@ -68,15 +68,15 @@ describe('brand-theme on-tone ink emission (AUT-1, static path)', () => {
     // seed is planted here. Posture-neutral for the same reason as above: the
     // claim is that the OVERLAY's seed, not the base's, drives the dark ink.
     const DARK_SUCCESS = '#7BE8B0';
-    const planted: BrandTheme = {
-      ...bithireBrandTheme,
-      palette: { ...bithireBrandTheme.palette!, contrastPosture: undefined } as BrandTheme['palette'],
+    const planted: FlatTheme = {
+      ...bithireFlatTheme,
+      palette: { ...bithireFlatTheme.palette!, contrastPosture: undefined } as FlatTheme['palette'],
       modes: {
-        ...bithireBrandTheme.modes,
+        ...bithireFlatTheme.modes,
         dark: {
-          ...bithireBrandTheme.modes?.dark,
+          ...bithireFlatTheme.modes?.dark,
           palette: {
-            ...(bithireBrandTheme.modes?.dark?.palette ?? {}),
+            ...(bithireFlatTheme.modes?.dark?.palette ?? {}),
             successColor: DARK_SUCCESS,
           },
         },

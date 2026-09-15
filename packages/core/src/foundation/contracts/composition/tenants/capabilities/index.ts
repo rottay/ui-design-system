@@ -3,7 +3,7 @@
  * white-label axis, partitioned into access tiers.
  *
  * One architecture, four access surfaces: internal vertical authoring
- * (BrandTheme, full depth), tenant STANDARD (few high-impact dials), tenant
+ * (FlatTheme, full depth), tenant STANDARD (few high-impact dials), tenant
  * PRO (bounded advanced surface), and app customization (public hooks and
  * `--rt-*`, governed elsewhere by the hooks manifest). Every capability here
  * compiles through the SAME two emitters into the same channel canon — the
@@ -12,7 +12,7 @@
  * Laws:
  * - an ACTIVE tenant-scoped capability must be expressible by BOTH paths
  *   (its `documentPath` accepted by the TenantThemeDocument schema and its
- *   `brandThemePath` by the BrandTheme contract); the reachability test in
+ *   `brandThemePath` by the FlatTheme contract); the reachability test in
  *   `infrastructure/compilers/composition/tenant-theme/tests` compiles a
  *   document exercising every one of them;
  * - a FRONTIER capability is a declared contract boundary that the schema
@@ -68,7 +68,7 @@ export interface TenantCapabilityDeclaration {
   readonly defaultBehavior: string;
   /** Path inside the resolved TenantThemeDocument (DB authoring surface). */
   readonly documentPath: string;
-  /** Path inside BrandTheme (static vertical authoring surface). */
+  /** Path inside FlatTheme (static vertical authoring surface). */
   readonly brandThemePath: string;
   /** Representative derived channels, never an exhaustive list. */
   readonly derivedChannels: readonly string[];
@@ -184,7 +184,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // dangerous shape): this read `typography.{fontFamilyBase,
       // fontFamilyHeading}`, literally `typography.families`'s own
       // brandThemePath copy-pasted one entry down. Both are real,
-      // string-typed BrandTheme fields, so a causal run writing an enum
+      // string-typed FlatTheme fields, so a causal run writing an enum
       // value there (e.g. "sober") would NOT throw -- it would silently set
       // `fontFamilyBase` to the literal string "sober", which reads back as
       // "the stop moved something", a false PASS that never exercises
@@ -252,7 +252,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // what it feeds. This once read `typography (ramp channels)`, which is
       // prose: every walker here splits on `.`, so it resolved to
       // `typography["(ramp channels)"]` and landed the stop where nothing reads
-      // it. `BrandTheme.typography.scale` is the real field (themes/index.ts:568)
+      // it. `FlatTheme.typography.scale` is the real field (themes/index.ts:568)
       // and `brand-theme:774-791` hands it to the posture lowering, whose
       // typeScale branch writes `--ds-type-scale` unconditionally. Silent by
       // construction, exactly like `surfaces.density` below: the seed at
@@ -377,7 +377,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       derivedChannels: ['--ds-rhythm-scale', '--ds-rhythm-effective-scale'],
       dependsOn: [],
       compat:
-        'additive, unset-to-rollback. ORTHOGONAL to density.mode by construction and never a second spelling of it: density scales control SIZES through --ds-density-effective-scale, rhythm scales the LAYOUT RELATIONSHIPS between controls (gap, layout padding) through --ds-rhythm-effective-scale. A chain carrying both factors is correct rather than double-scaled — the control keeps its density size while the room around it breathes. Rhythm is applied at the PRESET rungs, never at a consume site, so a consumer numeric gap stays exact geometry exactly as it does under density; and it never reaches a control height, touch target or icon box, which is what keeps the coarse-pointer touch floors intact by construction rather than by clamping. The 0.8-1.25 envelope is enforced in the derived channel, so it binds the compiler artifact, the BrandTheme lowering and a raw tokenOverride alike.',
+        'additive, unset-to-rollback. ORTHOGONAL to density.mode by construction and never a second spelling of it: density scales control SIZES through --ds-density-effective-scale, rhythm scales the LAYOUT RELATIONSHIPS between controls (gap, layout padding) through --ds-rhythm-effective-scale. A chain carrying both factors is correct rather than double-scaled — the control keeps its density size while the room around it breathes. Rhythm is applied at the PRESET rungs, never at a consume site, so a consumer numeric gap stays exact geometry exactly as it does under density; and it never reaches a control height, touch target or icon box, which is what keeps the coarse-pointer touch floors intact by construction rather than by clamping. The 0.8-1.25 envelope is enforced in the derived channel, so it binds the compiler artifact, the FlatTheme lowering and a raw tokenOverride alike.',
     },
     {
       id: 'motion.dial',
@@ -661,7 +661,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       status: 'active',
       // F4B-15 fix (false-INERT by PATH, same class as F4B-7/F4B-12/F4B-13):
       // `brandThemePath: 'recipeProfile'` named a field that does not exist
-      // on BrandTheme -- every 'recipeProfile' in the theme contracts is an
+      // on FlatTheme -- every 'recipeProfile' in the theme contracts is an
       // OUTPUT shape (TenantAppearance.recipeProfile in themes/index.ts,
       // ThemeCompilationRuntime.recipeProfile in themes/compiled/index.ts),
       // never the INPUT a stop writes. The real field is nested:
@@ -988,7 +988,7 @@ export const FOUNDATION_AUTHORITIES: readonly FoundationAuthorityDeclaration[] =
         '--ds-color-on-primary',
       ],
       derivation:
-        'shared WCAG readable-ink over each status seed; static emits from BrandTheme palette, DB derives post-merge from the final tone channels',
+        'shared WCAG readable-ink over each status seed; static emits from FlatTheme palette, DB derives post-merge from the final tone channels',
       consumers: ['icon-frame.css filled', 'meter.css threshold stripes'],
     },
     {

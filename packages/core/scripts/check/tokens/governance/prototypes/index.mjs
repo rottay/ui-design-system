@@ -88,7 +88,7 @@ const EXCLUDED_FILE = /\.(test|spec|stories)\.[jt]sx?$/;
 
 /**
  * Generated tenant snapshots. These carry variable DEFINITIONS compiled from a
- * BrandTheme, never skin rules, so a prototoken here is unambiguously a leak:
+ * FlatTheme, never skin rules, so a prototoken here is unambiguously a leak:
  * it would mean a tenant artifact had taken a position on a PRIVATE axis.
  * Hard zero.
  */

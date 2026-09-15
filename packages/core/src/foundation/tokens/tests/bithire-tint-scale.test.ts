@@ -17,9 +17,9 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const STEPS = [4, 8, 12, 16, 24] as const;
 const TONE_ROLES = [
@@ -30,8 +30,8 @@ const TONE_ROLES = [
 ] as const;
 
 describe('bithire brand compiler emits the one-blue tint scale', () => {
-  const { cssVariables } = lowerBrandThemeFixture({
-    brandTheme: bithireBrandTheme,
+  const { cssVariables } = lowerFlatThemeFixture({
+    flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });
 

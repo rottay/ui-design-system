@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 
 /**
  * Kit row 23, as three statements about SHAPE.
@@ -31,7 +31,7 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
  */
 const MOTION_CHARACTER: Readonly<
   Record<
-    NonNullable<NonNullable<BrandTheme["motion"]>["character"]>,
+    NonNullable<NonNullable<FlatTheme["motion"]>["character"]>,
     Readonly<Record<string, string>>
   >
 > = {
@@ -67,12 +67,12 @@ const MOTION_CHARACTER: Readonly<
 /**
  * The character the theme DECIDED, or nothing.
  *
- * Own-property guarded for the same reason the weight ladder is: a BrandTheme
+ * Own-property guarded for the same reason the weight ladder is: a FlatTheme
  * is plain data by the time it reaches this compiler, so a bare bracket read of
  * a closed table resolves inherited members and unknown words alike -- and an
  * invalid easing string is an animation that silently does not run.
  */
-export function deriveMotionCharacter(bt: BrandTheme): Record<string, string> {
+export function deriveMotionCharacter(bt: FlatTheme): Record<string, string> {
   const authored = bt.motion?.character;
   if (
     typeof authored !== "string" ||

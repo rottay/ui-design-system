@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
 
 /** The DS foundation's light canvas -- the ground a light-surface theme
@@ -31,11 +31,11 @@ export const DARK_DEFAULT_GROUND = "#0A0A0A";
  * the declaration is the classification, and a theme's ground is
  * `palette.backgroundColor` in every mode including its own dark one.
  */
-export function isDarkSurfaceTheme(bt: BrandTheme | undefined): boolean {
+export function isDarkSurfaceTheme(bt: FlatTheme | undefined): boolean {
   return bt?.appearance?.defaultMode === "dark";
 }
 
 /** The surface a theme's base block compiles for. */
-export function brandThemeRampSurface(bt: BrandTheme | undefined): RampSurface {
+export function flatThemeRampSurface(bt: FlatTheme | undefined): RampSurface {
   return isDarkSurfaceTheme(bt) ? "dark" : "light";
 }

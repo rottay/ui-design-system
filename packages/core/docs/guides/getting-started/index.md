@@ -395,7 +395,7 @@ the DS. Do not use this path to bypass a published customer artifact:
 ### Product profiles
 
 Product profiles are UX posture presets within a vertical. When a canonical
-BrandTheme or compiled customer artifact is present, only `surfaceDefaults`
+FlatTheme or compiled customer artifact is present, only `surfaceDefaults`
 participate; profiles do not override visual identity:
 
 ```tsx
@@ -450,7 +450,7 @@ All design tokens use the `--ds-*` prefix. You can use them in your own styleshe
 ### Token resolution chain
 
 Provider-owned compatibility tokens resolve through engine defaults, vertical
-overrides and either BrandTheme or legacy profile/tenant inputs. A productive
+overrides and either FlatTheme or legacy profile/tenant inputs. A productive
 customer artifact is already compiled and is not re-merged by the client.
 
 See the canonical [architecture guide](../../../../../docs/architecture/index.md) and

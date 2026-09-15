@@ -40,8 +40,8 @@ import type {
   BrandRecipeSelection,
   BrandResponsiveSelection,
   BrandSurfaces,
-  BrandThemeModeOverlay,
-  BrandThemeModes,
+  FlatThemeModeOverlay,
+  FlatThemeModes,
   BrandTypography,
   ThemeSource,
 } from "..";
@@ -94,7 +94,7 @@ export interface Theme {
   readonly id: string;
   readonly name: string;
   appearance: BrandAppearance;
-  modes: BrandThemeModes;
+  modes: FlatThemeModes;
   palette: BrandPalette;
   typography: BrandTypography;
   surfaces: BrandSurfaces;
@@ -505,7 +505,7 @@ const DEFAULT_RADIUS_SHAPE: Partial<
 
 /**
  * `mergeDefaultShape` walks `Object.keys(defaults)`, so a shadow field absent
- * from this shape is silently dropped on the BrandTheme -> Theme bridge. The
+ * from this shape is silently dropped on the FlatTheme -> Theme bridge. The
  * key set must therefore mirror the declared `BrandSurfaces["shadows"]` union
  * exactly — enumerating a subset is a lossy bridge, not a narrower contract.
  *
@@ -670,14 +670,14 @@ const DEFAULT_RESPONSIVE_SHAPE: BrandResponsiveSelection = {
   posture: undefined,
 } as unknown as BrandResponsiveSelection;
 
-const DEFAULT_MODE_OVERLAY_SHAPE: BrandThemeModeOverlay = {
+const DEFAULT_MODE_OVERLAY_SHAPE: FlatThemeModeOverlay = {
   palette: withAllKeys({} as BrandPalette, DEFAULT_PALETTE_KEYS),
   typography: withAllKeys({} as BrandTypography, DEFAULT_TYPOGRAPHY_KEYS),
   surfaces: normalizeSurfaces({}),
   chrome: DEFAULT_CHROME_SHAPE as unknown as BrandChrome,
 };
 
-const DEFAULT_MODES_SHAPE: BrandThemeModes = {
+const DEFAULT_MODES_SHAPE: FlatThemeModes = {
   light: DEFAULT_MODE_OVERLAY_SHAPE,
   dark: DEFAULT_MODE_OVERLAY_SHAPE,
 };
@@ -757,9 +757,9 @@ function withAllKeys<T extends object>(obj: T, keys: readonly (keyof T)[]): T {
 }
 
 function normalizeModeOverlays(
-  modes: BrandThemeModes | undefined
-): BrandThemeModes {
-  const result: Record<string, BrandThemeModeOverlay> = {};
+  modes: FlatThemeModes | undefined
+): FlatThemeModes {
+  const result: Record<string, FlatThemeModeOverlay> = {};
   for (const mode of ["light", "dark"] as const) {
     const overlay = modes?.[mode] ?? {};
     result[mode] = {
@@ -777,7 +777,7 @@ function normalizeModeOverlays(
       ),
     };
   }
-  return result as BrandThemeModes;
+  return result as FlatThemeModes;
 }
 
 /**
@@ -1319,7 +1319,7 @@ export function canonicalizeTheme(theme: Theme): Theme {
 }
 
 /**
- * The set of Theme keypaths a tenant actually authored, in BRANDTHEME space.
+ * The set of Theme keypaths a tenant actually authored, in FlatTheme space.
  *
  * There is no separate provenance map: a `ThemeLayerPatch` IS the authorship
  * record, because the only way a path can appear in it is that the tenant
@@ -1332,7 +1332,7 @@ export type TenantAuthoredPaths = ReadonlySet<string>;
 /**
  * The lowering's governed intake unwraps `.value` for exactly these six roots
  * (see :147-159), so a patch path such as `motion.value.intensity` names the
- * BrandTheme path `motion.intensity`. Collecting in one space and consuming in
+ * FlatTheme path `motion.intensity`. Collecting in one space and consuming in
  * another is how a provenance set silently stops matching, so the strip
  * happens here, once, beside the unwrap it mirrors.
  */
@@ -1379,7 +1379,7 @@ export function collectPatchAuthoredLeaves(
 }
 
 /**
- * Collect the tenant-authored paths of a patch, normalized to BrandTheme space.
+ * Collect the tenant-authored paths of a patch, normalized to FlatTheme space.
  *
  * Deliberately an over-approximation in one direction only: it enumerates
  * intermediate container keys as well as leaves. That is harmless because the
@@ -1424,7 +1424,7 @@ function unwrapGovernedKeypath(path: string): string {
  * now also carries the four status seeds and their fifteen shadowing leaves
  * (independent audit 5 audit, D3, `coh-1-fable-audit.md`).
  *
- * Membership is by BrandTheme-space path WITHOUT a mode prefix; a mode block
+ * Membership is by FlatTheme-space path WITHOUT a mode prefix; a mode block
  * consults `modes.<mode>.<field>` as well through `isTenantAuthoredField`.
  *
  * Two properties are enforced executably rather than asserted in prose:

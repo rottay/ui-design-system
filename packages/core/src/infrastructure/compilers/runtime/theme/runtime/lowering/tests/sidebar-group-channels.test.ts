@@ -24,9 +24,9 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const MENU_SKIN = readFileSync(
@@ -34,14 +34,14 @@ const MENU_SKIN = readFileSync(
   'utf-8'
 );
 
-const base: BrandTheme = {
+const base: FlatTheme = {
   id: 'sidebar-fixture',
   name: 'Sidebar fixture',
   palette: { primaryColor: '#336699' },
 };
 
-const compile = (theme: BrandTheme) =>
-  lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: 'fixture' }).cssVariables;
+const compile = (theme: FlatTheme) =>
+  lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: 'fixture' }).cssVariables;
 
 describe('sidebar group channels are wired to the Modern menu skin', () => {
   it.each([
@@ -76,7 +76,7 @@ describe('sidebar group channels are wired to the Modern menu skin', () => {
       const emitted = compile({
         ...base,
         chrome: { sidebar: { [field]: sentinel } },
-      } as BrandTheme);
+      } as FlatTheme);
       expect(emitted[channel]).toBe(sentinel);
       // The unedited theme must NOT contain the sentinel: without this the
       // assertion above would pass on a compiler that emits a constant.
@@ -96,7 +96,7 @@ describe('sidebar group channels are wired to the Modern menu skin', () => {
       ...base,
       // A retired field must not resurrect through a loose cast.
       chrome: { sidebar: { groupBorder: '1px solid #FF0000' } },
-    } as unknown as BrandTheme);
+    } as unknown as FlatTheme);
     expect(emitted['--ds-sidebar-group-border']).toBeUndefined();
     expect(MENU_SKIN).not.toContain('--ds-sidebar-group-border');
   });

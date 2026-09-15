@@ -204,7 +204,7 @@ function firstDiffLine(committed, generated) {
 // --- spring-precompute tail (TASK S) ---------------------------------------
 //
 // build-vertical-css.mjs appends a tenant-scoped `--ds-motion-spring: linear()`
-// override derived from each BrandTheme's tension/friction (useSpring-gated).
+// override derived from each FlatTheme's tension/friction (useSpring-gated).
 // The executable roster projection loads both the authored themes and the
 // authored spring compiler through Vite, so this pre-build check pins the exact
 // selector and exact easing without depending on dist/ or duplicating a table.
@@ -215,7 +215,7 @@ function escapeRegex(value) {
 
 function springBlockSource(name, selector, easing) {
   return (
-    String.raw`/\* === ${name} spring easing \(precomputed linear\(\) from the BrandTheme, useSpring\) === \*/\n`.replace(
+    String.raw`/\* === ${name} spring easing \(precomputed linear\(\) from the FlatTheme, useSpring\) === \*/\n`.replace(
       /\//g,
       "\\/"
     ) +

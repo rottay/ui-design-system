@@ -8,8 +8,8 @@
 
 import {
   type BrandMotion,
-  type BrandTheme,
-  type BrandThemeMode,
+  type FlatTheme,
+  type FlatThemeMode,
   type TenantAppearance,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";

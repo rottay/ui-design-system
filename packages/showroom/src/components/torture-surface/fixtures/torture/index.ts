@@ -9,14 +9,14 @@
  *         The showroom is their sole consumer, so it now owns the copy.
  * Constraint: these are whitelabel PROBE fixtures, never product tenants. Values
  *         are a faithful copy of the source above (deep-equal verified). They are
- *         typed against the public BrandTheme contract only — no deep import into
+ *         typed against the public FlatTheme contract only — no deep import into
  *         core source.
  */
 
 /**
  * Hostile-tenant whitelabel PROOF FIXTURES (WO-GAT-03).
  *
- * These two BrandTheme objects are NOT product tenants. They exist for one
+ * These two FlatTheme objects are NOT product tenants. They exist for one
  * purpose: every themable channel they populate is deliberately pushed away
  * from both first-party themes (rottay, bithire) so that any component which
  * ignores the active tenant theme (a hardcoded color, radius, font, etc.) is
@@ -29,12 +29,12 @@
  * held to the same admission, so a fixture that authors a pair under the
  * governed APCA floor is refused here exactly as a publish would refuse it.
  *
- * This file is runtime-pure: only a type-only import of `BrandTheme` is used,
+ * This file is runtime-pure: only a type-only import of `FlatTheme` is used,
  * so it carries zero side effects and can be imported from a plain Node or
  * Playwright context without pulling in the rest of the design system.
  */
 
-import type { BrandTheme } from '@rottay/design-system';
+import type { FlatTheme } from '@rottay/design-system';
 
 /**
  * Torture fixture paired with the `dark` base theme.
@@ -46,7 +46,7 @@ import type { BrandTheme } from '@rottay/design-system';
  * (rottay uses `'none'` for these — a torture fixture never can, or a
  * hardcoded `'none'` fallback would look correct by accident).
  */
-export const tortureDarkBrandTheme: BrandTheme = {
+export const tortureDarkFlatTheme: FlatTheme = {
   id: 'torture-dark',
   name: 'Torture Dark',
 
@@ -401,7 +401,7 @@ export const tortureDarkBrandTheme: BrandTheme = {
  * dark fixture, densest layout, heavy saturated colored-glow shadows, and
  * real glass/gradient/overlay values.
  */
-export const tortureLightBrandTheme: BrandTheme = {
+export const tortureLightFlatTheme: FlatTheme = {
   id: 'torture-light',
   name: 'Torture Light',
 

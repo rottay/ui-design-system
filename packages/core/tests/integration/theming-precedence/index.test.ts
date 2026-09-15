@@ -53,14 +53,14 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import { ThemeProvider } from '@/infrastructure/runtime/theming/composition/react/provider';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { firstPartyFixture, FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 const PROVIDER = resolve(
   process.cwd(),
@@ -136,7 +136,7 @@ const SUCCEEDED_BY_SEED: Record<string, readonly string[]> = {
 /**
  * Retired channels no first-party artifact authors under any name: the legacy
  * flat aliases of `--ds-color-text-*`. Rottay used to author them from its
- * BrandTheme; no preset does, so all three resolve from the base layer alone.
+ * FlatTheme; no preset does, so all three resolve from the base layer alone.
  */
 const UNSUCCEEDED_EVERYWHERE = ['--ds-text-primary', '--ds-text-secondary'] as const;
 
@@ -201,10 +201,10 @@ const UNSUCCEEDED_SEEDS_BY_VERTICAL: Record<string, readonly string[]> = {
   evnto: ['--ds-radius-sm-base', '--ds-radius-md-base'],
 };
 
-const BRAND_THEMES: Record<string, BrandTheme> = {
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-  rottay: rottayBrandTheme,
+const BRAND_THEMES: Record<string, FlatTheme> = {
+  bithire: bithireFlatTheme,
+  evnto: evntoFlatTheme,
+  rottay: rottayFlatTheme,
 };
 
 /** Every custom property a freshly rendered artifact declares, by name. */

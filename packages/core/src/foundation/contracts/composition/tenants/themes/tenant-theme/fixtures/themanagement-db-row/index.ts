@@ -2,8 +2,8 @@
  * The Management — a REALISTIC tenant theme row, authored in the DB contract.
  *
  * WHY THIS EXISTS. Every "DB tenant" proof in the tree until now built its
- * payload by projecting a static `BrandTheme` fixture through
- * `brandThemeToTenantAppearance()`. That proves the compiler is deterministic;
+ * payload by projecting a static `FlatTheme` fixture through
+ * `flatThemeToTenantAppearance()`. That proves the compiler is deterministic;
  * it does NOT prove a customer can express a distinct product through the
  * document a customer actually writes. The projection starts from a ~140-field
  * code-owned object and narrows; a customer starts from an empty JSONB row and
@@ -14,19 +14,19 @@
  * So this fixture is authored FORWARD, in the document's own vocabulary:
  * `TenantThemeAdvancedDocument`, the exact JSONB payload the tenancy row
  * stores, plus the trusted identity columns the read path supplies. Nothing is
- * derived from `themanagementmiami`'s BrandTheme — that file supplied the
+ * derived from `themanagementmiami`'s FlatTheme — that file supplied the
  * DESIGN INTENT (Art Deco geometry, warm earth palette, editorial serif), and
  * the values below are its expression through the customer-facing contract.
  *
  * WHAT IT IS NOT. Not a runtime tenant: it is never registered in
  * KNOWN_TENANTS, never compiled into a shipped CSS bundle, and never a second
  * source of truth for identity. It is a test/canary specimen, exactly like the
- * BrandTheme fixture beside it, and it must stay explicit-only.
+ * FlatTheme fixture beside it, and it must stay explicit-only.
  *
  * WHAT IT PROVES when compiled through `compileTenantTheme`:
  * 1. The document validates against the closed schema (fail-closed intake).
  * 2. Every axis a customer can reach is reachable from the DOCUMENT, not only
- *    from a BrandTheme.
+ *    from a FlatTheme.
  * 3. The resulting artifact diverges from bithire's static baseline on the
  *    axes a human perceives first — type, radius, density, elevation, motion,
  *    chrome — while sharing one component tree.

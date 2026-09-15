@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import { buttonStyleRadius } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import { getTenantThemeVerticalEnvelope } from "@/contracts/theme/runtime/envelopes";
@@ -58,8 +58,8 @@ const v1Document = (chrome: object): TenantThemeDocument =>
     visualFoundation: { advanced: { chrome } },
   }) as unknown as TenantThemeDocument;
 
-const draftOf = (chrome: object): BrandTheme =>
-  ({ id: SLUG, name: "Authored caps", chrome }) as unknown as BrandTheme;
+const draftOf = (chrome: object): FlatTheme =>
+  ({ id: SLUG, name: "Authored caps", chrome }) as unknown as FlatTheme;
 
 function refusal(run: () => unknown): ThemeAdmissionError {
   try {
@@ -126,7 +126,7 @@ describe("authored chrome caps bind at every public producer", () => {
     }
   });
 
-  it("refuses them on the BrandTheme draft, at the draft's own keypath", () => {
+  it("refuses them on the FlatTheme draft, at the draft's own keypath", () => {
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
       for (const [field, value] of CAP_FIXTURES) {
         const error = refusal(() =>
@@ -230,7 +230,7 @@ describe("the caps measure AUTHORSHIP, not what the compiler derived from it", (
     // the override and the cap refuses it.
     const draft = draftOf({
       controls: { buttonGeometry: { radius: "99999px" } },
-    }) as BrandTheme & { surfaces?: unknown };
+    }) as FlatTheme & { surfaces?: unknown };
     draft.surfaces = { buttonStyle: "pill" };
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
       const error = refusal(() =>
@@ -246,7 +246,7 @@ describe("the caps measure AUTHORSHIP, not what the compiler derived from it", (
   it("admits a DRAFT's radius that IS the style word's derivation", () => {
     const draft = draftOf({
       controls: { buttonGeometry: { radius: buttonStyleRadius("pill") } },
-    }) as BrandTheme & { surfaces?: unknown };
+    }) as FlatTheme & { surfaces?: unknown };
     draft.surfaces = { buttonStyle: "pill" };
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
       expect(() =>

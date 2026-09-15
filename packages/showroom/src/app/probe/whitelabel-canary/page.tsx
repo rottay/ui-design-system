@@ -52,7 +52,7 @@ import {
  * ONE Candidates-style composition of the six premium-elevated Modern
  * families (shell/headers, tabs/buttons/pills, inputs/tables, cards/states,
  * overlays, widget-board) rendered as the SAME tree under three tenants:
- *  - `?source=bithire-static`     → BitHire's bundled BrandTheme (file-first);
+ *  - `?source=bithire-static`     → BitHire's bundled FlatTheme (file-first);
  *  - `?source=themanagement-db`   → The Management's published DB document,
  *    authoring the full visual foundation (teal, sandstone, terracotta,
  *    editorial pairing, radius 0.8, spacious, elevated, strong sidebar tone);

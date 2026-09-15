@@ -285,8 +285,8 @@ describe('useTokens resolves the mounted artifact, not the config', () => {
       'config.tokenOverrides',
       'config.personality',
       'config.appearance',
-      'brandThemeToPersonality',
-      'brandThemeToTokenOverrides',
+      'flatThemeToPersonality',
+      'flatThemeToTokenOverrides',
     ]) {
       expect(source, read).not.toContain(read);
     }

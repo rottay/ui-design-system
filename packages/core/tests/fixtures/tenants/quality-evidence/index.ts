@@ -10,7 +10,7 @@
  * tenants or publish generated theme artifacts for them.
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   TenantThemeAdvancedDocument,
   TenantThemeConfigIdentity,
@@ -39,7 +39,7 @@ export interface TortureTenantFixture {
   readonly id: string;
   readonly description: string;
   readonly axes: readonly TortureTenantAxis[];
-  readonly brandTheme: BrandTheme;
+  readonly brandTheme: FlatTheme;
   readonly tenantTheme: {
     readonly identity: TenantThemeConfigIdentity;
     readonly document: TenantThemeAdvancedDocument;
@@ -114,7 +114,7 @@ export const EDITORIAL_FLAT_BRAND_THEME = {
     staggerMax: 0,
     countUpEnabled: false,
   },
-} satisfies BrandTheme;
+} satisfies FlatTheme;
 
 export const TECHNICAL_DARK_BRAND_THEME = {
   id: "quality-technical-dark",
@@ -189,7 +189,7 @@ export const TECHNICAL_DARK_BRAND_THEME = {
     staggerMax: 72,
     countUpEnabled: true,
   },
-} satisfies BrandTheme;
+} satisfies FlatTheme;
 
 export const HUMANIST_SOFT_BRAND_THEME = {
   id: "quality-humanist-soft",
@@ -266,7 +266,7 @@ export const HUMANIST_SOFT_BRAND_THEME = {
     staggerMax: 144,
     countUpEnabled: true,
   },
-} satisfies BrandTheme;
+} satisfies FlatTheme;
 
 export const EDITORIAL_FLAT_IDENTITY = {
   tenantId: "tenant_quality_editorial_flat",

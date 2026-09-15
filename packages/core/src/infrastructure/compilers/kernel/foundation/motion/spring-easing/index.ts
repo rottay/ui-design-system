@@ -3,7 +3,7 @@
  *
  * `BrandMotion.springTension`/`springFriction` (contracts/themes) follow the
  * tension/friction/mass=1 convention (mass is not an exposed field; 1 is the
- * implicit default the numeric ranges in first-party BrandThemes are tuned
+ * implicit default the numeric ranges in first-party FlatThemes are tuned
  * against). This module numerically integrates that mass-spring-damper
  * system and samples its position curve into a CSS `linear()` easing
  * function: `linear()` stops are output progress (unbounded -- values above

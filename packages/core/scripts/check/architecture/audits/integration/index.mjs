@@ -101,7 +101,7 @@ const CHROME_EMITTERS = [
     // rename fail loudly instead of emptying the scope. The owner's only other
     // declaration is private and emits no channel — it returns the radius dial
     // it reads — so nothing this audit measures falls outside the named symbol.
-    symbols: ['brandThemeToChromeVariables'],
+    symbols: ['flatThemeToChromeVariables'],
   },
   {
     // The orchestration assembles the chrome map into the compiled product; a
@@ -411,7 +411,7 @@ if (componentTokenFiles.length > 0 && matchedModernEngines === 0) {
 // inside the retired TenantConfig-shaped runtime tenant-CSS generator -- kept
 // delegating to the canonical function instead of re-declaring `--ds-...`
 // keys by hand (the WO-TOK-09 defect: a hand-written duplicate emitter). That
-// module was removed outright, not fixed in place, as part of the BrandTheme
+// module was removed outright, not fixed in place, as part of the FlatTheme
 // / TenantThemeDocument compiler consolidation, so
 // resolvePartialPersonalityCssVariables() is now the ONLY personality-variable
 // emitter left in the tree -- there is no second copy left to drift out of

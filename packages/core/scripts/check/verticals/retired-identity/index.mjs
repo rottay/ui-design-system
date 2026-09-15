@@ -65,7 +65,7 @@ const CONTENT_RULES = Object.freeze([
     new RegExp(
       `\\bRottay\\s+Platform\\b|` +
         `\\bPlatform(?=-only\\s+Rottay)|` +
-        `\\bPlatform(?=\\s+(?:or\\s+(?:BitHire|Evnto|Rottay)|vertical|theme|BrandTheme|brand|artifact|bundle|profile|identity|tenant|fallback|workspace|admin|ops|owner|health|user|runtime))|` +
+        `\\bPlatform(?=\\s+(?:or\\s+(?:BitHire|Evnto|Rottay)|vertical|theme|FlatTheme|brand|artifact|bundle|profile|identity|tenant|fallback|workspace|admin|ops|owner|health|user|runtime))|` +
         `\\bPlatform(?=\\s*,\\s*(?:BitHire|Evnto|Rottay)\\b)`,
       'gi',
     ),

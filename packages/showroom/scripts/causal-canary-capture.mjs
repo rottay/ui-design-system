@@ -75,7 +75,7 @@
  *     el `artifact.digest` INTACTO ("no cubre valores de baseline"). Falso por
  *     mecanismo: el digest cubre `variables` (admission/index.ts:341-362) y el
  *     delta del tenant RE-DECLARA los canales derivados resueltos del seed
- *     heredado (verificado offline: mutar `palette.successColor` del BrandTheme
+ *     heredado (verificado offline: mutar `palette.successColor` del FlatTheme
  *     mueve 9 `--ds-color-success-*` dentro de `variables`, y el digest
  *     55a070.. -> 0caf3d..; el restore devuelve exactamente 55a070..). Un digest
  *     que NO se moviera mientras cambian los bytes del artifact seria un oraculo
@@ -85,7 +85,7 @@
  *  8. PROPAGACION PARCIAL POR LITERAL NO DERIVADO. `--ds-color-success-bg` /
  *     `-border` / `-ink` NO estan en `declaredOutputs.channels` del control
  *     (governance/manifest/controls/palette/status-seeds/index.json:24-94): son literales del
- *     BrandTheme. Badge soft (skin/badge.css:396) y el status-badge de
+ *     FlatTheme. Badge soft (skin/badge.css:396) y el status-badge de
  *     RecordWorkbench (presentation/components/skin/record-workbench.css:95)
  *     los leen. REMEDIO: DECLARED_PARTIAL_PROPAGATION los nombra con cita; y la
  *     ley MOVER es ">=1 propiedad pintada se movio", no "todas", asi que un
@@ -221,7 +221,7 @@ const UNDECLARED_CHANNELS_WATCHED = [
 
 /**
  * PRE-COH-1 existia propagacion parcial: badge-success y workbench-status-success
- * leian `--ds-color-success-bg` como literal del BrandTheme fuera de
+ * leian `--ds-color-success-bg` como literal del FlatTheme fuera de
  * declaredOutputs, y podian NO seguir al seed. COH-1 cerro ese hueco: los
  * `-bg` ahora derivan del seed via el piso del compilador, asi que esos dos
  * carriers DEBEN seguir al seed como cualquier otro. La lista queda vacia a

@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type {
   EngineAdapter,
@@ -19,11 +19,11 @@ import { ledgerOwnerOfLeaf } from "@/foundation/contracts/composition/tenants/th
 import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { TenantFacts } from "./foundation/contract";
-import { mergeBrandThemeFloors, resolveTenantPosture } from "./foundation/floors";
+import { mergeThemeFloors, resolveTenantPosture } from "./foundation/floors";
 import { readGovernedTheme, resolveGovernedSelections } from "./foundation/intake";
 import {
-  brandThemeToPersonality,
-  brandThemeToTokenOverrides,
+  flatThemeToPersonality,
+  flatThemeToTokenOverrides,
   deepMergeTokenOverrides,
   mergePartialPersonality,
 } from "./foundation/personality";
@@ -98,7 +98,7 @@ export function compileTheme(
   resolution: ThemeResolution,
   adapter: EngineAdapter
 ): EngineThemeCompilation {
-  const brandTheme = readGovernedTheme(resolution.theme);
+  const flatTheme = readGovernedTheme(resolution.theme);
   const tenantSlug = resolution.theme.id;
   const tenant = resolution.provenance.tenantAuthored;
   const tenantAuthoredPaths = tenant
@@ -108,7 +108,7 @@ export function compileTheme(
     ? resolution.provenance.authoredLeaves
     : undefined;
   const tenantPatch = tenant
-    ? (resolution.provenance.floors as Partial<BrandTheme>)
+    ? (resolution.provenance.floors as Partial<FlatTheme>)
     : undefined;
   const tenantStatusSeedAuthorship = tenant
     ? resolution.provenance.statusSeedAuthorship
@@ -116,16 +116,16 @@ export function compileTheme(
 
   const personality = mergePartialPersonality(
     undefined,
-    brandThemeToPersonality(brandTheme)
+    flatThemeToPersonality(flatTheme)
   );
   const tokenOverrides = deepMergeTokenOverrides(
     {},
-    brandThemeToTokenOverrides(brandTheme)
+    flatThemeToTokenOverrides(flatTheme)
   );
 
   const effectiveTheme = tenantPatch
-    ? (mergeBrandThemeFloors(brandTheme, tenantPatch) as BrandTheme)
-    : brandTheme;
+    ? (mergeThemeFloors(flatTheme, tenantPatch) as FlatTheme)
+    : flatTheme;
 
   // The base block's seed is the tenant's exactly when the tenant stated it;
   // there is no overlay above this block to restate it. Status-seed authorship

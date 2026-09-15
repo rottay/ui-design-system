@@ -4,7 +4,7 @@ import { useEffect, useMemo, type ReactNode } from 'react';
 import {
   DesignSystemProvider,
   getKnownTenantConfig,
-  type BrandTheme,
+  type FlatTheme,
   type TenantConfig,
 } from '@rottay/design-system';
 import {
@@ -33,9 +33,9 @@ import {
 import { publishedManagementSpecimen } from '@/components/torture-tenant/specimen';
 
 import {
-  themanagementmiamiBrandTheme,
-  tortureDarkBrandTheme,
-  tortureLightBrandTheme,
+  themanagementmiamiFlatTheme,
+  tortureDarkFlatTheme,
+  tortureLightFlatTheme,
 } from './fixtures';
 
 // ---------------------------------------------------------------------------
@@ -47,7 +47,7 @@ import {
 //     registry). Because their slug is unbundled and they carry a brandTheme
 //     with no compiled artifact behind it, DesignSystemProvider has nothing to
 //     paint them with on its own (the runtime tenant-CSS generator is gone).
-//     TortureSurface itself compiles their BrandTheme through the ONE door
+//     TortureSurface itself compiles their FlatTheme through the ONE door
 //     (`draftPreviewThemeIntent` -> `compileThemeIntent`) and mounts the
 //     resulting CSS as a <style> element, then hands the provider the config
 //     WITHOUT the brandTheme -- minus the build-time artifact step these
@@ -93,7 +93,7 @@ export {
  */
 interface TortureFixtureSource {
   readonly config: TenantConfig;
-  readonly brandTheme?: BrandTheme;
+  readonly flatTheme?: FlatTheme;
 }
 
 function tortureTenantSource(fixture: TortureFixture): TortureFixtureSource | undefined {
@@ -113,7 +113,7 @@ function tortureTenantSource(fixture: TortureFixture): TortureFixtureSource | un
         vertical: 'rottay',
         branding: { companyName: 'Torture Dark' },
       },
-      brandTheme: tortureDarkBrandTheme,
+      flatTheme: tortureDarkFlatTheme,
     };
   }
 
@@ -128,7 +128,7 @@ function tortureTenantSource(fixture: TortureFixture): TortureFixtureSource | un
         features: ['*'],
         branding: { companyName: 'The Management Miami' },
       },
-      brandTheme: themanagementmiamiBrandTheme,
+      flatTheme: themanagementmiamiFlatTheme,
     };
   }
 
@@ -142,12 +142,12 @@ function tortureTenantSource(fixture: TortureFixture): TortureFixtureSource | un
       vertical: 'rottay',
       branding: { companyName: 'Torture Light' },
     },
-    brandTheme: tortureLightBrandTheme,
+    flatTheme: tortureLightFlatTheme,
   };
 }
 
 /**
- * The intent a fixture BrandTheme compiles under.
+ * The intent a fixture FlatTheme compiles under.
  *
  * A fixture theme is a DRAFT — a patch over the vertical it is a fixture of —
  * exactly like a brand-studio draft. It used to be lifted into a baseline of
@@ -157,17 +157,17 @@ function tortureTenantSource(fixture: TortureFixture): TortureFixtureSource | un
  */
 function tortureDraftIntent(
   tenantConfig: TenantConfig,
-  draft: BrandTheme,
+  draft: FlatTheme,
 ): ThemeIntent | undefined {
   const vertical = tenantConfig.vertical;
   if (!isFirstPartyVerticalId(vertical)) return undefined;
   return draftPreviewThemeIntent({ vertical, slug: tenantConfig.slug, draft });
 }
 
-/** The window key the whitelabel probe reads the active fixture's BrandTheme from. */
+/** The window key the whitelabel probe reads the active fixture's FlatTheme from. */
 export const PROBE_BRAND_THEME_KEY = '__probeBrandTheme';
 
-type ProbeWindow = Window & { [PROBE_BRAND_THEME_KEY]?: BrandTheme };
+type ProbeWindow = Window & { [PROBE_BRAND_THEME_KEY]?: FlatTheme };
 
 /**
  * The tenant the published DB specimen describes: identity only.
@@ -234,10 +234,10 @@ export function TortureSurface({
     ? { config: canonicalManagementTenantConfig(compiledArtifact) }
     : tortureTenantSource(fixture);
   const tenantConfig = source?.config;
-  const brandTheme = source?.brandTheme;
+  const flatTheme = source?.flatTheme;
 
   // The legacy-brand-fixture path: an unbundled, unregistered tenant carrying
-  // a BrandTheme with no compiled artifact and no bundled CSS. The compiled
+  // a FlatTheme with no compiled artifact and no bundled CSS. The compiled
   // artifact and the bundled-vertical fixtures (rottay/bithire/evnto, which
   // already carry their own pre-built stylesheet inside the DS bundle) both
   // paint through a channel this surface does not own; this branch is what's
@@ -254,11 +254,11 @@ export function TortureSurface({
   // never to compile it through a second route with the admission skipped.
   // That second route is F-24, and it is what this surface used to be.
   const legacyBrand = useMemo((): { css?: string; refusal?: string } => {
-    if (!brandTheme || !tenantConfig || compiledArtifact || KNOWN_TENANT_FIXTURES.has(fixture)) {
+    if (!flatTheme || !tenantConfig || compiledArtifact || KNOWN_TENANT_FIXTURES.has(fixture)) {
       return {};
     }
     const slug = tenantConfig.slug;
-    const intent = tortureDraftIntent(tenantConfig, brandTheme);
+    const intent = tortureDraftIntent(tenantConfig, flatTheme);
     if (!intent) return {};
     try {
       // The explicit engine is the SANCTIONED override: this surface exists to
@@ -269,7 +269,7 @@ export function TortureSurface({
     } catch (error) {
       return { refusal: error instanceof Error ? error.message : String(error) };
     }
-  }, [brandTheme, tenantConfig, compiledArtifact, fixture, engine]);
+  }, [flatTheme, tenantConfig, compiledArtifact, fixture, engine]);
   const legacyBrandCss = legacyBrand.css;
 
   // The classic engine seeds antd from the compiled projection, so the surface
@@ -277,8 +277,8 @@ export function TortureSurface({
   // surface does not own publishes nothing, and classic refuses rather than
   // seeding antd from a guess.
   const engineVisual = useMemo(() => {
-    if (brandTheme && tenantConfig) {
-      const intent = tortureDraftIntent(tenantConfig, brandTheme);
+    if (flatTheme && tenantConfig) {
+      const intent = tortureDraftIntent(tenantConfig, flatTheme);
       if (intent) {
         try {
           return engineVisualOf(compileThemeIntent(intent, { engine }).compiled);
@@ -292,7 +292,7 @@ export function TortureSurface({
     }
     const slug = tenantConfig?.slug ?? null;
     return isShowroomTenant(slug) ? firstPartyEngineVisual(slug, engine) : undefined;
-  }, [brandTheme, tenantConfig, engine]);
+  }, [flatTheme, tenantConfig, engine]);
 
   // The config the provider is handed. The fixture theme never rode on it --
   // this surface compiles and mounts it as CSS, and static CSS stays the sole
@@ -322,11 +322,11 @@ export function TortureSurface({
   // overwrite it and the component and the read would move together.
   useEffect(() => {
     const probeWindow = window as ProbeWindow;
-    probeWindow[PROBE_BRAND_THEME_KEY] = brandTheme;
+    probeWindow[PROBE_BRAND_THEME_KEY] = flatTheme;
     return () => {
       delete probeWindow[PROBE_BRAND_THEME_KEY];
     };
-  }, [brandTheme]);
+  }, [flatTheme]);
 
   if (!providerConfig) {
     return null;
@@ -344,7 +344,7 @@ export function TortureSurface({
       //     element is in the document, so the declaration names bytes the
       //     resolver can verify and it silences exactly the channels the
       //     artifact's `coverage` covers.
-      //   - legacy BrandTheme and bundled verticals: there is no v1 artifact to
+      //   - legacy FlatTheme and bundled verticals: there is no v1 artifact to
       //     name. Their CSS is static, `providerConfig` carries no visual
       //     payload, and the resolver settles on `no-visual-payload` with
       //     nothing suppressed. A declaration here would name an artifact the
@@ -355,13 +355,13 @@ export function TortureSurface({
           : undefined
       }
       // No `vertical` prop for ANY fixture, including rottay: a vertical
-      // baseline would layer extra tokens under the BrandTheme and muddy the
+      // baseline would layer extra tokens under the FlatTheme and muddy the
       // proof -- the probe must attribute every value to the tenant theme
       // alone, and the rottay reference must be layered identically to the
       // torture fixtures for the differential comparison to be apples-to-apples.
     >
       {legacyBrandCss ? (
-        // The exact compiled BrandTheme, mounted once. Scoped to
+        // The exact compiled FlatTheme, mounted once. Scoped to
         // html[data-tenant='<slug>'] (+ [data-theme='<mode>'] for the mode
         // overlay block) by the lowering itself; TenantProvider and
         // ThemeProvider stamp those same attributes on <html>, so no selector

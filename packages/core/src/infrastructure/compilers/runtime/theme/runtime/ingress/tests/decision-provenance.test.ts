@@ -16,7 +16,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { buttonStyleRadius } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import { TYPOGRAPHY_FAMILY_ROLES } from "@/contracts/theme/foundation/decisions";
 import { THEME_CONTROL_CATALOG } from "@/contracts/theme/runtime/catalog";
@@ -358,10 +358,10 @@ describe("one authorship, one class, on both transports", () => {
 describe("the draft door records the derivation its own transport states twice", () => {
   const RADIUS_LEAF = "chrome.controls.buttonGeometry.radius";
 
-  const draftOf = (draft: object): BrandTheme =>
-    ({ id: SLUG, name: "Draft provenance", ...draft }) as unknown as BrandTheme;
+  const draftOf = (draft: object): FlatTheme =>
+    ({ id: SLUG, name: "Draft provenance", ...draft }) as unknown as FlatTheme;
 
-  const radiusOwner = (draft: BrandTheme) =>
+  const radiusOwner = (draft: FlatTheme) =>
     ledgerOwnerOfLeaf(draftProvenanceLedger(draft, "rottay", { carriedFrom: baselineFor("rottay", SLUG) }), RADIUS_LEAF)?.ref;
 
   it("attributes the radius to the style word when the value IS the derivation", () => {

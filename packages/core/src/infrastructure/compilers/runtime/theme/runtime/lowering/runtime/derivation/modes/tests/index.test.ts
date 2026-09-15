@@ -29,7 +29,7 @@ import {
   themeDefaultMode,
   verticalDefaultMode,
 } from "@/infrastructure/compilers/kernel/foundation/modes";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { deriveModeThemes } from "..";
 import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
@@ -316,7 +316,7 @@ describe("WO-DER-05 · the vertical baseline is compiled once, cached by digest"
 });
 
 describe("WO-DER-05 · the modes family refuses what it always refused", () => {
-  const bithire = FIRST_PARTY_BASELINES.bithire as unknown as BrandTheme;
+  const bithire = FIRST_PARTY_BASELINES.bithire as unknown as FlatTheme;
 
   it("derives exactly the non-default mode for an untouched vertical", () => {
     const requests = deriveModeThemes({
@@ -335,7 +335,7 @@ describe("WO-DER-05 · the modes family refuses what it always refused", () => {
         ...bithire.modes,
         light: { palette: { primaryColor: "#123456" } },
       },
-    } as BrandTheme;
+    } as FlatTheme;
     expect(() =>
       deriveModeThemes({
         theme: planted,

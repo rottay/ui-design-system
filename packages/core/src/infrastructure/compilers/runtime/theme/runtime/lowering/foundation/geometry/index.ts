@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { dialReachableRadius, resolveRadiusScale } from "@/foundation/kernel/geometry/radius-dial";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import {
@@ -29,7 +29,7 @@ import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/
  * own value IS the vertical's.
  */
 export function resolveRadiusBaseline(
-  theme: BrandTheme,
+  theme: FlatTheme,
   expansion: ExpressiveExpansion,
   tenantRadiusScale: number | undefined
 ): string {

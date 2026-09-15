@@ -228,7 +228,7 @@ export const DEFAULT_BRAND_THEME_COMPILER_ROOT = resolve(
  * competing one, which is exactly why the parent is the only file that states
  * a rank.
  */
-export function collectBrandThemeCompilerSources(
+export function collectFlatThemeCompilerSources(
   root = DEFAULT_BRAND_THEME_COMPILER_ROOT,
 ) {
   const sources = [];
@@ -1285,7 +1285,7 @@ export function attributeFamily(packagesRelativePath, index) {
 /* ---------------------------------------------------------------------- */
 
 /**
- * A closed prefix -> BrandTheme-taxonomy-owner table, exhaustive against the
+ * A closed prefix -> FlatTheme-taxonomy-owner table, exhaustive against the
  * current declared/emitted universe. Unlike a prior revision of this file,
  * an unmatched prefix returns `null` — there is no `'other'` escape hatch —
  * so a genuinely new, un-mapped prefix family trips the same
@@ -1856,7 +1856,7 @@ export function computeInputsDigest({
   ciGatesManifestRaw,
   packageJsonRaw,
   tenantThemeSource,
-  brandThemeSources = [],
+  flatThemeSources = [],
   familyInventoryRaw,
   cssStylesheets,
   tsStylesheets,
@@ -1870,7 +1870,7 @@ export function computeInputsDigest({
     `tenant-theme-contract:${sha256(tenantThemeSource)}`,
     `family-inventory:${sha256(familyInventoryRaw)}`,
   ];
-  for (const source of brandThemeSources) {
+  for (const source of flatThemeSources) {
     parts.push(`brand-theme-compiler:${source.relativePath}:${sha256(source.text)}`);
   }
   for (const { file, text } of cssStylesheets) parts.push(`css:${file}:${sha256(text)}`);
@@ -2002,8 +2002,8 @@ const CONSUMER_SITE_CAP = 20;
  */
 export function analyzeChannelLiveness({
   tenantThemeSource,
-  brandThemeSource,
-  brandThemeSources,
+  flatThemeSource,
+  flatThemeSources,
   familyRows,
   cssStylesheets,
   tsStylesheets,
@@ -2050,14 +2050,14 @@ export function analyzeChannelLiveness({
   }
 
   // --- EMITTED --------------------------------------------------------
-  // One entry per family deriver. A single `brandThemeSource` string is still
+  // One entry per family deriver. A single `flatThemeSource` string is still
   // accepted, and behaves as one unranked producer, so every drill fixture in
   // this gate's own test keeps its shape.
   const compilerSources =
-    brandThemeSources ??
-    (brandThemeSource === undefined
+    flatThemeSources ??
+    (flatThemeSource === undefined
       ? []
-      : [{ relativePath: 'brand-theme/index.ts', text: brandThemeSource, rank: 'unranked' }]);
+      : [{ relativePath: 'brand-theme/index.ts', text: flatThemeSource, rank: 'unranked' }]);
 
   const tintNames = new Set();
   const tintCallSites = [];
@@ -2344,7 +2344,7 @@ export function analyzeChannelLiveness({
     ciGatesManifestRaw: readFileSync(DEFAULT_CI_GATES_MANIFEST, 'utf8'),
     packageJsonRaw: readFileSync(DEFAULT_PACKAGE_JSON, 'utf8'),
     tenantThemeSource,
-    brandThemeSources: compilerSources,
+    flatThemeSources: compilerSources,
     familyInventoryRaw: JSON.stringify(familyRows),
     cssStylesheets,
     tsStylesheets,
@@ -2444,7 +2444,7 @@ export function defaultArtifactPath({ evidenceRoot = DEFAULT_EVIDENCE_ROOT, roun
 
 export function runGate({
   tenantThemeContractPath = DEFAULT_TENANT_THEME_CONTRACT,
-  brandThemeCompilerRoot = DEFAULT_BRAND_THEME_COMPILER_ROOT,
+  flatThemeCompilerRoot = DEFAULT_BRAND_THEME_COMPILER_ROOT,
   familyInventoryPath = DEFAULT_FAMILY_INVENTORY,
   cssRoots = DEFAULT_CSS_ROOTS,
   consumerRoots = DEFAULT_CONSUMER_ROOTS,
@@ -2456,7 +2456,7 @@ export function runGate({
   drill = null,
 } = {}) {
   const tenantThemeSource = readFileSync(tenantThemeContractPath, 'utf8');
-  const brandThemeSources = collectBrandThemeCompilerSources(brandThemeCompilerRoot);
+  const flatThemeSources = collectFlatThemeCompilerSources(flatThemeCompilerRoot);
   const { rows: familyRows } = loadFamilyRows(familyInventoryPath);
 
   const cssFiles = collectSourceFiles(cssRoots, ['.css'], CORE_ROOT);
@@ -2494,7 +2494,7 @@ export function runGate({
 
   const result = analyzeChannelLiveness({
     tenantThemeSource,
-    brandThemeSources,
+    flatThemeSources,
     familyRows,
     cssStylesheets,
     tsStylesheets,
@@ -2515,7 +2515,7 @@ export function runGate({
     corpus: {
       cssFileCount: cssFiles.length,
       tsFileCount: tsFiles.length,
-      compilerFileCount: brandThemeSources.length,
+      compilerFileCount: flatThemeSources.length,
     },
   };
 }
@@ -2535,7 +2535,7 @@ export function buildArtifact(gateRun, { round = DEFAULT_ROUND, evidenceRoot = D
       'Tenant-channel liveness ledger scoped to TENANT_THEME_OVERRIDE_TOKENS ∪ TENANT_THEME_REFERENCE_TOKENS ∪ brand-theme-compiler-emitted names, plus the app-bithire external consumerRoot. NOT the customization-surface-census.mjs dead-writer census. NOT tenant-channel-consumer-gate.mjs. NOT theme-channel-parity-gate.mjs. No classification asserts a channel is dead, but membership on TENANT_THEME_REFERENCE_TOKENS never protects a row from a NO-GO finding by itself -- only a proven finite terminal-paint chain (in-repo or via a required consumerRoot) does that.',
     inputs: {
       tenantThemeContract: relative(CORE_ROOT, DEFAULT_TENANT_THEME_CONTRACT).split(sep).join('/'),
-      brandThemeCompiler: relative(CORE_ROOT, DEFAULT_BRAND_THEME_COMPILER_ROOT).split(sep).join('/'),
+      flatThemeCompiler: relative(CORE_ROOT, DEFAULT_BRAND_THEME_COMPILER_ROOT).split(sep).join('/'),
       familyInventory: relative(CORE_ROOT, DEFAULT_FAMILY_INVENTORY).split(sep).join('/'),
       evidenceContract: relative(CORE_ROOT, DEFAULT_EVIDENCE_CONTRACT).split(sep).join('/'),
       ciGatesManifest: relative(CORE_ROOT, DEFAULT_CI_GATES_MANIFEST).split(sep).join('/'),

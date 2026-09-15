@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest';
 
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '../../../../../foundation/contracts';
-import type { BrandTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
 import { PatternBrandStudio } from '../index';
 
 const TEST_TENANT: TenantConfig = {
@@ -25,7 +25,7 @@ const TEST_TENANT: TenantConfig = {
   branding: { companyName: 'Brand Studio A11y' },
 };
 
-const THEME: BrandTheme = { id: 'a11y', name: 'A11y', palette: { primaryColor: '#4f46e5' } };
+const THEME: FlatTheme = { id: 'a11y', name: 'A11y', palette: { primaryColor: '#4f46e5' } };
 
 async function renderStudio(): Promise<void> {
   render(

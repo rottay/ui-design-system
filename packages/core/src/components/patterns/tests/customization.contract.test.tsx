@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { TenantConfig } from '../../../foundation/contracts';
-import type { BrandTheme, TenantAppearance } from '../../../foundation/contracts/composition/tenants/themes';
+import type { FlatTheme, TenantAppearance } from '../../../foundation/contracts/composition/tenants/themes';
 import { DesignSystemProvider } from '../../../infrastructure/runtime/bootstrap';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import { PatternBrandStudio } from '../customization/brand-studio';
@@ -37,7 +37,7 @@ const TEST_TENANT: TenantConfig = {
   branding: { companyName: 'customization anatomy Studio' },
 };
 
-const STUDIO_THEME: BrandTheme = {
+const STUDIO_THEME: FlatTheme = {
   id: 'ck-h1-theme',
   name: 'customization anatomy Theme',
   appearance: { defaultMode: 'light' },

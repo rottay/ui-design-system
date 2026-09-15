@@ -581,7 +581,7 @@ function getPlaceholderProps(entry: PatternEntry): PropDefinition[] {
     customization: [
       {
         name: 'value',
-        type: 'BrandTheme | TenantThemeDocument',
+        type: 'FlatTheme | TenantThemeDocument',
         required: true,
         description: 'Current theme or token document being previewed or edited.',
       },

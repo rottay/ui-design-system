@@ -10,7 +10,7 @@
  * written to make it pass.
  *
  * NOT A RUNTIME TENANT. Nothing here is registered, compiled into a shipped
- * bundle, or a second source of identity: it is a fixture, like the BrandTheme
+ * bundle, or a second source of identity: it is a fixture, like the FlatTheme
  * specimens beside it, and stays explicit-only.
  */
 

@@ -93,7 +93,7 @@ export interface HookManifest {
   readonly foundationTokens: readonly string[];
   /**
    * Closed: written at `:root` per tenant by the governed chrome, static
-   * BrandTheme, or DB Appearance compiler.
+   * FlatTheme, or DB Appearance compiler.
    */
   readonly tenantChannel: readonly string[];
 }

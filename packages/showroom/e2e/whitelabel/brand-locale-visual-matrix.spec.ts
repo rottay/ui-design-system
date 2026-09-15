@@ -9,9 +9,9 @@ import {
   type Page,
 } from "@playwright/test";
 
-import { themanagementmiamiBrandTheme as canonicalManagementTheme } from "../../../core/tests/fixtures/brand-themes/themanagementmiami";
+import { themanagementmiamiFlatTheme as canonicalManagementTheme } from "../../../core/tests/fixtures/brand-themes/themanagementmiami";
 import { SHOWROOM_TENANT_ARTIFACT_TESTID } from "../../src/components/showroom-tenant";
-import { themanagementmiamiBrandTheme as showroomManagementTheme } from "../../src/components/torture-surface/fixtures";
+import { themanagementmiamiFlatTheme as showroomManagementTheme } from "../../src/components/torture-surface/fixtures";
 
 type Fixture = "bithire" | "themanagementmiami";
 type Locale = "en" | "es" | "ar";

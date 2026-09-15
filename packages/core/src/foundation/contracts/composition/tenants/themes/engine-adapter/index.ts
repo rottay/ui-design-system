@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandThemeMode } from "..";
+import type { FlatThemeMode } from "..";
 import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
 import type { EngineTokenOverrides } from "@/foundation/contracts/kernel/tokens/engine-tokens";
 import type { TenantCapabilityId } from "@/foundation/contracts/composition/tenants";
@@ -116,7 +116,7 @@ export type EngineSeeds = Readonly<Record<string, string | number>>;
  * value, so a consumer never has to re-merge to configure a mode.
  */
 export interface EngineProjectionMode {
-  readonly mode: BrandThemeMode;
+  readonly mode: FlatThemeMode;
   readonly seeds: EngineSeeds;
 }
 
@@ -169,6 +169,6 @@ export interface EngineThemeCompilation extends ThemeCompilation {
 export interface EngineVisualDeclaration {
   readonly engine: EngineName;
   readonly projection: EngineProjection;
-  readonly colorScheme?: BrandThemeMode;
+  readonly colorScheme?: FlatThemeMode;
   readonly runtime: ThemeCompilation["runtime"];
 }

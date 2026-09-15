@@ -22,7 +22,7 @@ import {
   type DecisionProvenanceClaim,
   type DecisionProvenanceLedger,
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
@@ -66,8 +66,8 @@ interface KeypathSpelling {
 }
 
 /**
- * The BrandTheme leaves a decision NAMES, expanded from the one keypath column
- * the catalog owns. A row with no BrandTheme keypath names none: it is a kit
+ * The FlatTheme leaves a decision NAMES, expanded from the one keypath column
+ * the catalog owns. A row with no FlatTheme keypath names none: it is a kit
  * row with no authoring surface yet, not a row that claims everything.
  */
 const NAMED_SPELLINGS: ReadonlyMap<ThemeDecisionId, readonly KeypathSpelling[]> =
@@ -435,7 +435,7 @@ export function documentProvenanceLedger(input: {
 }
 
 /** Read a theme leaf addressed by a catalog keypath, in either spelling. */
-function readDraftLeaf(draft: BrandTheme | Theme, leaf: string): unknown {
+function readDraftLeaf(draft: FlatTheme | Theme, leaf: string): unknown {
   let cursor: unknown = draft;
   for (const key of leaf.split(".")) {
     if (!isRecordValue(cursor)) return undefined;
@@ -446,10 +446,10 @@ function readDraftLeaf(draft: BrandTheme | Theme, leaf: string): unknown {
 
 /**
  * What a draft selected for one decision, read at the keypaths the catalog's
- * BrandTheme column names. A record decision is reassembled under the catalog's
+ * FlatTheme column names. A record decision is reassembled under the catalog's
  * own member spellings, which is the vocabulary `namedLeaves` matches against.
  */
-function draftDecisionValue(draft: BrandTheme, id: ThemeDecisionId): unknown {
+function draftDecisionValue(draft: FlatTheme, id: ThemeDecisionId): unknown {
   const spellings = NAMED_SPELLINGS.get(id) ?? [];
   if (spellings.length === 0) return undefined;
   const braced = spellings.filter((spelling) => spelling.member !== null);
@@ -476,7 +476,7 @@ function isChromeLeaf(leaf: string): boolean {
  * an authored ceiling breach from the cap that exists to refuse it.
  */
 function draftChromeClaim(
-  draft: BrandTheme,
+  draft: FlatTheme,
   id: ThemeDecisionId,
   authoredValue: unknown
 ): ThemeProvenanceClaim | null {
@@ -505,7 +505,7 @@ function draftChromeClaim(
 }
 
 /**
- * The ledger a BrandTheme draft contributes, over the chrome surface.
+ * The ledger a FlatTheme draft contributes, over the chrome surface.
  *
  * The authoring surfaces edit a whole theme rather than a document, so the one
  * question this ledger answers is the one the merged patch destroys and the
@@ -524,7 +524,7 @@ function draftChromeClaim(
  * The producer above derives it; this owner cannot compose one.
  */
 export function draftProvenanceLedger(
-  draft: BrandTheme,
+  draft: FlatTheme,
   vertical: FirstPartyVerticalId,
   options: {
     /** The baseline the draft is a patch of. */

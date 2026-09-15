@@ -11,7 +11,7 @@ import { join, relative, resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { deriveControlHeightScale } from "../control-height";
 import { deriveNestingLaw } from "../nesting";
 
@@ -30,7 +30,7 @@ const CARD_TOKEN_CSS = readFileSync(
   "utf8"
 );
 
-const theme = (surfaces: BrandTheme["surfaces"]): BrandTheme => ({
+const theme = (surfaces: FlatTheme["surfaces"]): FlatTheme => ({
   id: "t",
   name: "T",
   surfaces,
@@ -88,7 +88,7 @@ describe("shape/nesting (kit row 12)", () => {
     expect(deriveNestingLaw(theme({}))).toEqual({});
   });
 
-  // The compatibility transport erases the type: a BrandTheme arrives as plain
+  // The compatibility transport erases the type: a FlatTheme arrives as plain
   // JSON, so both failure shapes below are reachable input, not hypotheticals.
   it("emits nothing for a word outside the domain or an INHERITED member", () => {
     for (const rogue of ["square", "constructor", "toString", "hasOwnProperty"]) {

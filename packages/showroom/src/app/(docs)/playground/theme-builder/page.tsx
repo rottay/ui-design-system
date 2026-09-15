@@ -11,7 +11,7 @@ import {
   PatternBrandStudio,
   Stack,
   Text,
-  type BrandTheme,
+  type FlatTheme,
 } from '@rottay/design-system';
 
 import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
@@ -20,7 +20,7 @@ import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
 // the live evidence the preview renders under each ground.
 const STUDIO_SLUGS = FLAGSHIP_SPECS.map((spec) => spec.slug);
 
-const INITIAL_BRAND_THEME: BrandTheme = {
+const INITIAL_BRAND_THEME: FlatTheme = {
   id: 'studio-draft',
   name: 'Studio Draft',
   palette: {
@@ -64,7 +64,7 @@ const INITIAL_BRAND_THEME: BrandTheme = {
 };
 
 export default function ThemeBuilderPage() {
-  const [theme, setTheme] = useState<BrandTheme>(INITIAL_BRAND_THEME);
+  const [theme, setTheme] = useState<FlatTheme>(INITIAL_BRAND_THEME);
 
   return (
     <Stack spacing="lg">
@@ -78,10 +78,10 @@ export default function ThemeBuilderPage() {
         <Stack spacing="sm">
           <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
             <Badge variant="primary">Theme Builder</Badge>
-            <Badge variant="secondary">BrandTheme -&gt; live preview</Badge>
+            <Badge variant="secondary">FlatTheme -&gt; live preview</Badge>
           </Flex>
           <Heading level="h1" size="2xl" weight="bold" style={{ letterSpacing: '-0.03em' }}>
-            Author a bounded BrandTheme and watch it compile onto light and dark
+            Author a bounded FlatTheme and watch it compile onto light and dark
             grounds in real time.
           </Heading>
           <Text size="md" style={{ color: 'var(--ds-color-text-secondary)' }}>

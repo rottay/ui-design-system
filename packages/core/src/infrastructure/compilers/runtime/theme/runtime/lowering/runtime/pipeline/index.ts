@@ -8,8 +8,8 @@
  */
 
 import type {
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
 import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
@@ -21,7 +21,7 @@ import type {
 } from "../../foundation/contract";
 import { MERGE_RANK } from "../../foundation/contract";
 import { resolveExpressiveFacts } from "../../foundation/expressive";
-import { brandThemeRampSurface } from "../../foundation/ground";
+import { flatThemeRampSurface } from "../../foundation/ground";
 import { FAMILY_DERIVERS } from "../derivation";
 import { derivePaletteTints, resolveContrastPosture } from "../derivation/palette";
 import { resolveRadiusBaseline } from "../../foundation/geometry";
@@ -29,9 +29,9 @@ import { resolveRadiusBaseline } from "../../foundation/geometry";
 /** What the caller states about the block being compiled. */
 export interface LoweringRequest {
   /** The effective theme: vertical baseline under the tenant floor. */
-  readonly theme: BrandTheme;
+  readonly theme: FlatTheme;
   /** The mode this block is FOR; defaults to the theme's declared default. */
-  readonly mode?: BrandThemeMode;
+  readonly mode?: FlatThemeMode;
   /** The ramp surface; defaults to the one the theme's declared mode implies. */
   readonly surface?: RampSurface;
   /** "" for the base block, "modes.<mode>." for a mode overlay block. */
@@ -67,7 +67,7 @@ export function buildLoweringContext(
   const expressive = resolveExpressiveFacts(theme.expressive);
   return {
     theme,
-    surface: request.surface ?? brandThemeRampSurface(theme),
+    surface: request.surface ?? flatThemeRampSurface(theme),
     mode: request.mode ?? themeDefaultMode(theme),
     modePrefix: request.modePrefix ?? "",
     expressive,

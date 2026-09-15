@@ -3,7 +3,7 @@
  * First-party artifact SINGLE-AUTHOR gate (source plane).
  *
  * WHY THIS FILE EXISTS. A first-party vertical artifact used to have TWO
- * authors: the BrandTheme compiled by `compileBrandTheme`, and a hand-written
+ * authors: the FlatTheme compiled by `compileBrandTheme`, and a hand-written
  * `_source/extension.css` merged in by the renderer. Two authors means the
  * value that reaches a pixel is decided by whichever author is read last, so
  * editing the authored theme could change nothing. The predecessor gate

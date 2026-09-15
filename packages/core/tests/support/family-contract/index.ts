@@ -13,7 +13,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import {
@@ -64,7 +64,7 @@ export const FIXTURE_TENANT_FACTS: TenantFacts = {
 
 export interface FamilyFixture {
   readonly label: string;
-  readonly theme: BrandTheme;
+  readonly theme: FlatTheme;
   readonly tenant?: TenantFacts;
 }
 

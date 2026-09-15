@@ -5,7 +5,7 @@
  * 1. Public CSS export surface — driven from real package.json exports
  * 2. First-party artifact integrity — tenant CSS files with richness checks
  *
- * The per-vertical contract sections that graded the authored BrandTheme
+ * The per-vertical contract sections that graded the authored FlatTheme
  * sources left with that authority: a first-party vertical is the neutral
  * foundation plus its preset document, and its artifact is the compile.
  */
@@ -25,7 +25,7 @@ const CSS_SRC = resolve(process.cwd(), "src/foundation/tokens/css");
  *
  * A compiled mode block carries ONLY the channels that mode changes, so
  * "is this declaration inside the dark block" stopped being a meaningful
- * question the moment BrandTheme.modes replaced the hand-written blocks — a
+ * question the moment FlatTheme.modes replaced the hand-written blocks — a
  * channel absent from the block is inherited from the base block, which is the
  * whole point. These assertions ask what renders instead of where it is
  * written, which is also what they were trying to prove all along.

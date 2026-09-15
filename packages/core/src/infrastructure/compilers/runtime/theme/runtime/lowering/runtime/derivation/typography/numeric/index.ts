@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   SEMANTIC_TYPOGRAPHY_ROLES,
   type SemanticTypographyTokens,
@@ -48,7 +48,7 @@ export const NUMERIC_POSTURE: SemanticTypographyTokens = Object.freeze({
  */
 const NUMERIC_FIGURES: Readonly<
   Record<
-    NonNullable<NonNullable<BrandTheme["typography"]>["numeric"]>,
+    NonNullable<NonNullable<FlatTheme["typography"]>["numeric"]>,
     { readonly prose: string; readonly numeric: string }
   >
 > = {
@@ -62,12 +62,12 @@ const NUMERIC_FIGURES: Readonly<
 type NumericPosture = keyof typeof NUMERIC_FIGURES;
 
 /**
- * The posture the theme DECIDED, read with an own-property guard: a BrandTheme
+ * The posture the theme DECIDED, read with an own-property guard: a FlatTheme
  * is plain data by the time it reaches this compiler, so a bare bracket read of
  * a closed table resolves inherited members and unknown words alike. See
  * `../weights` for the full statement of that law.
  */
-function readNumeric(bt: BrandTheme): NumericPosture | undefined {
+function readNumeric(bt: FlatTheme): NumericPosture | undefined {
   const authored = bt.typography?.numeric;
   return typeof authored === "string" &&
     Object.prototype.hasOwnProperty.call(NUMERIC_FIGURES, authored)
@@ -86,7 +86,7 @@ function readNumeric(bt: BrandTheme): NumericPosture | undefined {
  * Empty when no decision is authored, which leaves `NUMERIC_POSTURE` and the
  * builder defaults exactly where they were.
  */
-export function numericOverlay(bt: BrandTheme): SemanticTypographyTokens {
+export function numericOverlay(bt: FlatTheme): SemanticTypographyTokens {
   const decided = readNumeric(bt);
   if (decided === undefined) return {};
   const figures = NUMERIC_FIGURES[decided];

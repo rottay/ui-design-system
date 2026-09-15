@@ -158,7 +158,7 @@ test.describe("canary A · the DB FULL-APPEARANCE path works, under proven autho
   /**
    * RENAMED. This block previously read "the TMM fixture authors seeds only",
    * which was false: the fixture's appearance comes from
-   * `brandThemeToTenantAppearance(...)`, which projects typography, shape,
+   * `flatThemeToTenantAppearance(...)`, which projects typography, shape,
    * density, motion, surfaces AND `advanced.chrome`/`tokenOverrides`. The
    * assertion under that name only checked one channel was non-empty, so a
    * strong claim sat on top of a weak check. The DB full-appearance path is

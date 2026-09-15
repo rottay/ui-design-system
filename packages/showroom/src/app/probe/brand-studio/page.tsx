@@ -7,7 +7,7 @@ import {
   PatternBrandStudio,
   Stack,
   getKnownTenantConfig,
-  type BrandTheme,
+  type FlatTheme,
 } from '@rottay/design-system';
 
 import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
@@ -23,7 +23,7 @@ import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
 
 const STUDIO_SLUGS = FLAGSHIP_SPECS.map((spec) => spec.slug);
 
-const CAPTURE_BRAND_THEME: BrandTheme = {
+const CAPTURE_BRAND_THEME: FlatTheme = {
   id: 'capture-draft',
   name: 'Capture Draft',
   palette: {

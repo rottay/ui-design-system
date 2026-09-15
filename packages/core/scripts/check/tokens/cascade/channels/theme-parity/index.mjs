@@ -3,7 +3,7 @@
  * theme-channel-parity-gate — DS-A003 typed theme-channel parity graph.
  *
  * Graph:
- *   declared BrandTheme field -> emitted --ds-* variable -> real var() reader
+ *   declared FlatTheme field -> emitted --ds-* variable -> real var() reader
  *                              -> typed owner
  *
  * Reports and decrease-only ratchets:
@@ -16,7 +16,7 @@
  *
  * Foundation-only consumer variables outside the tenant compiler/override
  * inventory are out of scope; sharing a broad prefix such as `--ds-color-` is
- * not enough to make a base token a BrandTheme channel. Heuristic boundaries
+ * not enough to make a base token a FlatTheme channel. Heuristic boundaries
  * are intentionally fail-soft: unresolved imported types,
  * computed keys and arbitrary JavaScript are reported as analysis limitations,
  * never converted into parity defects. Tests/stories/fixtures/generated outputs

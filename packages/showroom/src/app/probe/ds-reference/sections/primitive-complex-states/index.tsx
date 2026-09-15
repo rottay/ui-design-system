@@ -1047,7 +1047,7 @@ export function PrimitiveComplexStateScene({ only }: { only: PrimitiveComplexSta
       </SpecimenRow>
       <Vignette label={only}>
         <p style={{ font: 'inherit', fontSize: '0.75rem', opacity: 0.55, margin: 0 }}>
-          Rendered under the segment’s BrandTheme. The specimen above is the judged band; this
+          Rendered under the segment’s FlatTheme. The specimen above is the judged band; this
           note carries no tenant identity of its own.
         </p>
       </Vignette>

@@ -6,19 +6,19 @@
  * Renders one identical tree of already-accepted families (Button, Card,
  * Tabs, Tag, Input, Typography) under each first-party vertical AS IT ACTUALLY
  * SHIPS: the code-owned registry tenant, unspread, with the recipe profile its
- * own checked-in BrandTheme authored.
+ * own checked-in FlatTheme authored.
  *
  * IT USED TO ASK A QUESTION THE CONTRACT NO LONGER PERMITS. The original probe
- * swept a `profile` URL axis by cloning the vertical's BrandTheme, writing
+ * swept a `profile` URL axis by cloning the vertical's FlatTheme, writing
  * `recipes.profile` onto the clone, and handing the result to the provider as
  * `tenantConfig.brandTheme`. Measured against the real resolver, a runtime
- * BrandTheme is unrenderable under EVERY declaration -- `undefined` and
+ * FlatTheme is unrenderable under EVERY declaration -- `undefined` and
  * `authority: 'provider'` both resolve `uncompiled-visual-payload`, and
  * `compiled-artifact` lists a raw tenant brandTheme as a hard conflict. A
  * blocked resolution renders `<LoadingScreen />`, so every capture this probe
  * has ever produced was a photograph of a spinner. Worse, code-owned identity
  * is WeakSet object identity, so even spreading the registry config forfeits
- * it. There is exactly one legal home for a hand-authored BrandTheme: the
+ * it. There is exactly one legal home for a hand-authored FlatTheme: the
  * checked-in registry, where `getCodeOwnedRuntimeConfig` strips it before the
  * visual-payload census. So the probe now READS the registry instead of
  * simulating it.
@@ -117,7 +117,7 @@ export function K0ProfileEvidence({
 
   // The registry's OWN object. Not a literal that copies its fields and not a
   // spread of it: code-owned identity is object identity, and either
-  // alternative produces an ordinary tenant carrying an uncompiled BrandTheme,
+  // alternative produces an ordinary tenant carrying an uncompiled FlatTheme,
   // which blocks. `locale` travels on the provider prop below for the same
   // reason -- the code-owned projection keeps only
   // `branding | features | name | plan | slug | theme | vertical`.

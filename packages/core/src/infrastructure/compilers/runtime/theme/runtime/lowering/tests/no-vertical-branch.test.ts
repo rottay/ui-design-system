@@ -1,5 +1,5 @@
 /**
- * C6.5: static BrandTheme and DB Appearance must compile through ONE semantic
+ * C6.5: static FlatTheme and DB Appearance must compile through ONE semantic
  * channel model, with no vertical-specific compiler branch.
  *
  * A per-vertical branch is the failure mode that makes a "shared" compiler a
@@ -16,19 +16,19 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 const VERTICAL_NAMES = ['bithire', 'evnto', 'rottay', 'platform', 'themanagement'];
 
 describe('the brand compiler has no per-vertical branch', () => {
   it('produces identical channels for one theme under every tenant slug', () => {
-    for (const theme of [bithireBrandTheme, evntoBrandTheme, rottayBrandTheme]) {
+    for (const theme of [bithireFlatTheme, evntoFlatTheme, rottayFlatTheme]) {
       const compiled = VERTICAL_NAMES.map((tenantSlug) =>
-        lowerBrandThemeFixture({ brandTheme: theme, tenantSlug })
+        lowerFlatThemeFixture({ flatTheme: theme, tenantSlug })
       );
       const [reference, ...rest] = compiled;
       for (const other of rest) {
@@ -42,11 +42,11 @@ describe('the brand compiler has no per-vertical branch', () => {
     // The strongest form of the property: if the compiler knew who bithire was,
     // compiling bithire's theme under evnto's slug could not reproduce, channel
     // for channel, what compiling it under its own slug produces.
-    const asBithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-    const asEvnto = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'evnto' });
+    const asBithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const asEvnto = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'evnto' });
     expect(asEvnto.cssVariables).toEqual(asBithire.cssVariables);
 
-    const evntoOwn = lowerBrandThemeFixture({ brandTheme: evntoBrandTheme, tenantSlug: 'evnto' });
+    const evntoOwn = lowerFlatThemeFixture({ flatTheme: evntoFlatTheme, tenantSlug: 'evnto' });
     expect(evntoOwn.cssVariables).not.toEqual(asEvnto.cssVariables);
   });
 

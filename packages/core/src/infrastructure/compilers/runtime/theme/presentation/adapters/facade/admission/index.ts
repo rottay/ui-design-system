@@ -11,7 +11,7 @@ import {
 } from "@/foundation/contracts/kernel/engine-identity";
 
 /**
- * Expand a brace/star authoring path into concrete BrandTheme prefixes.
+ * Expand a brace/star authoring path into concrete FlatTheme prefixes.
  *
  * Exported because the tier admission asks the SAME question of the catalog's
  * `keypath.brandTheme` spelling that this owner asks of the capability

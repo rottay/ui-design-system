@@ -20,10 +20,10 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, it, expect } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
-  tortureDarkBrandTheme,
-  tortureLightBrandTheme,
+  tortureDarkFlatTheme,
+  tortureLightFlatTheme,
   TORTURE_PROBE_VARS,
 } from '@tests/fixtures/brand-themes/torture';
 import {
@@ -33,15 +33,15 @@ import {
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
 
-const rottayBrandTheme = firstPartyFixture('rottay');
-const bithireBrandTheme = firstPartyFixture('bithire');
+const rottayFlatTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 
 describe('torture fixtures compile', () => {
   it('compiles torture-dark without throwing and scopes it to its tenant selector', () => {
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: tortureDarkBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'torture-dark',
     });
     expect(Object.keys(compiled.cssVariables).length).toBeGreaterThan(0);
@@ -49,8 +49,8 @@ describe('torture fixtures compile', () => {
   });
 
   it('compiles torture-light without throwing and scopes it to its tenant selector', () => {
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: tortureLightBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: tortureLightFlatTheme,
       tenantSlug: 'torture-light',
     });
     expect(Object.keys(compiled.cssVariables).length).toBeGreaterThan(0);
@@ -59,20 +59,20 @@ describe('torture fixtures compile', () => {
 });
 
 describe('torture fixtures are hostile (probe channels actually move)', () => {
-  const compiledTortureDark = lowerBrandThemeFixture({
-    brandTheme: tortureDarkBrandTheme,
+  const compiledTortureDark = lowerFlatThemeFixture({
+    flatTheme: tortureDarkFlatTheme,
     tenantSlug: 'torture-dark',
   });
-  const compiledTortureLight = lowerBrandThemeFixture({
-    brandTheme: tortureLightBrandTheme,
+  const compiledTortureLight = lowerFlatThemeFixture({
+    flatTheme: tortureLightFlatTheme,
     tenantSlug: 'torture-light',
   });
-  const compiledRottay = lowerBrandThemeFixture({
-    brandTheme: rottayBrandTheme,
+  const compiledRottay = lowerFlatThemeFixture({
+    flatTheme: rottayFlatTheme,
     tenantSlug: 'rottay',
   });
-  const compiledBithire = lowerBrandThemeFixture({
-    brandTheme: bithireBrandTheme,
+  const compiledBithire = lowerFlatThemeFixture({
+    flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });
 

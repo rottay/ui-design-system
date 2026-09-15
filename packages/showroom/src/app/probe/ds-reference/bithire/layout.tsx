@@ -1,5 +1,5 @@
 /**
- * BitHire ground segment — static BrandTheme.
+ * BitHire ground segment — static FlatTheme.
  *
  * A layout may own the ground because the tenant is STATIC for this whole
  * segment: no searchParams are read, so there is no client-side plumbing and

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type {
-  BrandTheme,
+  FlatTheme,
   TenantAppearance,
 } from "@/foundation/contracts/composition/tenants/themes";
 import {
@@ -9,8 +9,8 @@ import {
   TRANSLATION_CATALOG,
 } from "@/foundation/i18n/runtime/catalog";
 import { resolveTranslation } from "@/foundation/i18n/runtime/resolution";
-import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
-import { brandThemeToTenantAppearance } from "@/components/patterns/customization/brand-studio/runtime/file-export";
+import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
+import { flatThemeToTenantAppearance } from "@/components/patterns/customization/brand-studio/runtime/file-export";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -18,7 +18,7 @@ import {
 } from "@/infrastructure/compilers/composition/tenant-theme";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const LOCALES = ["en", "es", "ar"] as const;
 type Locale = (typeof LOCALES)[number];
@@ -35,8 +35,8 @@ const MANAGEMENT_COPY: Record<Locale, string> = {
   ar: "لا توجد ملفات مواهب بعد",
 };
 
-const managementProjectedAppearance = brandThemeToTenantAppearance(
-  themanagementmiamiBrandTheme
+const managementProjectedAppearance = flatThemeToTenantAppearance(
+  themanagementmiamiFlatTheme
 );
 
 const managementAppearance: TenantAppearance = {
@@ -53,7 +53,7 @@ const managementAppearance: TenantAppearance = {
 interface StaticTransportFixture {
   slug: string;
   vertical: string;
-  brandTheme: BrandTheme;
+  brandTheme: FlatTheme;
 }
 interface DbTransportFixture {
   slug: string;
@@ -88,7 +88,7 @@ const managementDocument = {
       border: { primary: "#C8B9A5", secondary: "#E2D9CC" },
     },
     typography: {
-      fontFamilyBase: themanagementmiamiBrandTheme.typography?.fontFamilyBase,
+      fontFamilyBase: themanagementmiamiFlatTheme.typography?.fontFamilyBase,
       typePairing: "editorial",
     },
     shape: { buttonStyle: "soft", radiusScale: 0.8 },
@@ -133,7 +133,7 @@ const radiusScaleFor = (radiusScale: number): string | undefined =>
 const bithireStaticConfig = {
   slug: "bithire",
   vertical: "bithire",
-  brandTheme: bithireBrandTheme,
+  brandTheme: bithireFlatTheme,
 } satisfies StaticTransportFixture;
 
 function managementDbConfig(locale: Locale) {
@@ -161,10 +161,10 @@ function resolveEmptyCopy(
 }
 
 describe("tenant identity and locale are independent runtime axes", () => {
-  it("uses static BrandTheme for BitHire and a DB document for The Management", () => {
+  it("uses static FlatTheme for BitHire and a DB document for The Management", () => {
     const management = managementDbConfig("en");
 
-    expect(bithireStaticConfig.brandTheme).toBe(bithireBrandTheme);
+    expect(bithireStaticConfig.brandTheme).toBe(bithireFlatTheme);
     expect(bithireStaticConfig).not.toHaveProperty("appearance");
     expect(management.appearance).toBe(managementAppearance);
     expect(management).not.toHaveProperty("brandTheme");
@@ -221,9 +221,9 @@ describe("tenant identity and locale are independent runtime axes", () => {
   });
 
   it("keeps locale out of both visual-authority payloads", () => {
-    expect(bithireBrandTheme).not.toHaveProperty("locale");
+    expect(bithireFlatTheme).not.toHaveProperty("locale");
     expect(managementAppearance).not.toHaveProperty("locale");
-    expect(themanagementmiamiBrandTheme).not.toHaveProperty("locale");
+    expect(themanagementmiamiFlatTheme).not.toHaveProperty("locale");
 
     // A tenant override must not mutate the process-wide catalog used by the
     // next tenant or route.

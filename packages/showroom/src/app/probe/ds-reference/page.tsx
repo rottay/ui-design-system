@@ -40,7 +40,7 @@ const SCENES = [
 ] as const;
 
 const GROUNDS = [
-  { slug: 'bithire', label: 'Ground A', source: 'static BrandTheme' },
+  { slug: 'bithire', label: 'Ground A', source: 'static FlatTheme' },
   { slug: 'the-management', label: 'Ground B', source: 'published DB document' },
 ] as const;
 

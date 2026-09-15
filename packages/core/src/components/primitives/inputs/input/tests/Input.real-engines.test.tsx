@@ -16,11 +16,11 @@ import { InputSearch } from "../compound/search";
 import { InputTextArea } from "../compound/text-area";
 import { renderWithEngine } from "@tests/support/engine";
 import { I18nProvider } from "@/infrastructure/runtime/i18n";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import { responsiveChannelElement, responsiveCss } from "@tests/support/responsive";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 describe("Input real engine coverage", () => {
   // WO-CNF-01: `type="hidden"` renders a bare, form-participating input with no

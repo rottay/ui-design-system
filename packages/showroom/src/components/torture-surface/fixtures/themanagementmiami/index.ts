@@ -9,7 +9,7 @@
  *
  * This file exists because tenant-named proof fixtures are intentionally absent
  * from the public @rottay/design-system barrel. Apart from this provenance block
- * and the public BrandTheme type import, the exported object MUST remain
+ * and the public FlatTheme type import, the exported object MUST remain
  * structurally deep-equal to the canonical source. The showroom parity gate
  * fails closed on any future value, field, or nested-anatomy drift.
  */
@@ -19,7 +19,7 @@
  *
  * This checked-in specimen is intentionally explicit-only: production tenant
  * identity is published from the tenancy DB and compiled by the runtime v2
- * contract. It must never be added to KNOWN_TENANTS, tokens.brandThemes, or a
+ * contract. It must never be added to KNOWN_TENANTS, tokens.flatThemes, or a
  * shipped tenant CSS bundle. The fixture exists to make migrations and visual
  * regression evidence reproducible without becoming a second runtime truth.
  *
@@ -66,9 +66,9 @@
  * temporarily colliding successColor with primaryColor and watching it fail.
  */
 
-import type { BrandTheme } from "@rottay/design-system";
+import type { FlatTheme } from "@rottay/design-system";
 
-export const themanagementmiamiBrandTheme: BrandTheme = {
+export const themanagementmiamiFlatTheme: FlatTheme = {
   id: "themanagementmiami",
   name: "The Management Miami",
 

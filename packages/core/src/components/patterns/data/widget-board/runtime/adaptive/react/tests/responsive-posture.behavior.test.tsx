@@ -8,7 +8,7 @@
  *
  * - absent resolves to `balanced`, whose thresholds AND span bias are the exact
  *   pre-capability constants (the rollback identity);
- * - a document selection changes both, a BrandTheme selection works too, and
+ * - a document selection changes both, a FlatTheme selection works too, and
  *   the document wins when both are present;
  * - a container measured between two ladders' thresholds resolves to DIFFERENT
  *   postures under each — the observable difference that makes the axis a

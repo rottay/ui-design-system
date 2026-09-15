@@ -1,7 +1,7 @@
 /**
  * Strategic tests for the static artifact path (R1-P, AD-7 T1/T11/T12).
  *
- * The Round 3 audit's worst class of defect was silent inertness: a BrandTheme
+ * The Round 3 audit's worst class of defect was silent inertness: a FlatTheme
  * value that never reaches a pixel, and an artifact that no longer matches its
  * sources. Neither shows up in a snapshot test, because the snapshot is taken
  * from the same broken output. These assert the causal chain instead —
@@ -11,8 +11,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
   FIRST_PARTY_ARTIFACT_SPECS,
@@ -21,8 +21,8 @@ import {
   type FirstPartyArtifactSpec,
 } from '../index';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 function specFor(slug: string): FirstPartyArtifactSpec {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === slug);
@@ -30,8 +30,8 @@ function specFor(slug: string): FirstPartyArtifactSpec {
   return spec;
 }
 
-function render(brandTheme: BrandTheme, spec: FirstPartyArtifactSpec): string {
-  const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: spec.slug });
+function render(flatTheme: FlatTheme, spec: FirstPartyArtifactSpec): string {
+  const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: spec.slug });
   return renderVerticalArtifact({
     tenantSlug: spec.slug,
     verticalKey: spec.verticalKey,
@@ -53,14 +53,14 @@ function declarations(css: string): Map<string, string> {
   return found;
 }
 
-describe('T1 · BrandTheme values propagate into the rendered artifact', () => {
+describe('T1 · FlatTheme values propagate into the rendered artifact', () => {
   const spec = specFor('bithire');
 
   it('a changed palette seed changes the artifact at that channel and nowhere unrelated', () => {
-    const before = render(bithireBrandTheme, spec);
-    const mutated: BrandTheme = {
-      ...bithireBrandTheme,
-      palette: { ...bithireBrandTheme.palette!, textMutedColor: '#123456' },
+    const before = render(bithireFlatTheme, spec);
+    const mutated: FlatTheme = {
+      ...bithireFlatTheme,
+      palette: { ...bithireFlatTheme.palette!, textMutedColor: '#123456' },
     };
     const after = render(mutated, spec);
 
@@ -76,20 +76,20 @@ describe('T1 · BrandTheme values propagate into the rendered artifact', () => {
     // The artifact carries a chrome channel because the THEME says so; there is
     // no later block to slice off before asserting. A value that is no single
     // length is left alone.
-    const kept: BrandTheme = {
-      ...bithireBrandTheme,
+    const kept: FlatTheme = {
+      ...bithireFlatTheme,
       chrome: {
-        ...bithireBrandTheme.chrome,
-        badge: { ...bithireBrandTheme.chrome?.badge, radius: 'var(--ds-radius-full)' },
+        ...bithireFlatTheme.chrome,
+        badge: { ...bithireFlatTheme.chrome?.badge, radius: 'var(--ds-radius-full)' },
       },
     };
     expect(render(kept, spec)).toContain('--ds-badge-radius: var(--ds-radius-full);');
 
-    const mutated: BrandTheme = {
-      ...bithireBrandTheme,
+    const mutated: FlatTheme = {
+      ...bithireFlatTheme,
       chrome: {
-        ...bithireBrandTheme.chrome,
-        badge: { ...bithireBrandTheme.chrome?.badge, radius: '3px' },
+        ...bithireFlatTheme.chrome,
+        badge: { ...bithireFlatTheme.chrome?.badge, radius: '3px' },
       },
     };
     // An authored literal reaches the block folded through the radius dial,
@@ -102,10 +102,10 @@ describe('T1 · BrandTheme values propagate into the rendered artifact', () => {
   });
 
   it('the declared default mode reaches the artifact as color-scheme', () => {
-    expect(render(bithireBrandTheme, spec)).toContain('  color-scheme: light;');
-    expect(render(rottayBrandTheme, specFor('rottay'))).toContain('  color-scheme: dark;');
+    expect(render(bithireFlatTheme, spec)).toContain('  color-scheme: light;');
+    expect(render(rottayFlatTheme, specFor('rottay'))).toContain('  color-scheme: dark;');
 
-    const undeclared: BrandTheme = { ...bithireBrandTheme, appearance: undefined };
+    const undeclared: FlatTheme = { ...bithireFlatTheme, appearance: undefined };
     expect(render(undeclared, spec)).not.toContain('color-scheme:');
   });
 });
@@ -114,7 +114,7 @@ describe('T11 · a hand-edited artifact fails the freshness comparison', () => {
   const spec = specFor('bithire');
 
   it('detects a stale copy without touching the committed file', () => {
-    const generated = render(bithireBrandTheme, spec);
+    const generated = render(bithireFlatTheme, spec);
     const primary = declarations(generated).get('--ds-color-primary');
     expect(primary).toBeDefined();
 
@@ -125,7 +125,7 @@ describe('T11 · a hand-edited artifact fails the freshness comparison', () => {
     expect(generated === handEdited).toBe(false);
 
     // …and a copy that only differs by regeneration is equal again.
-    expect(render(bithireBrandTheme, spec)).toBe(generated);
+    expect(render(bithireFlatTheme, spec)).toBe(generated);
   });
 });
 
@@ -133,16 +133,16 @@ describe('T12 · a rottay tenant is served in the base state', () => {
   const spec = specFor('rottay');
   // rottay's default mode is dark by roster; the preset authors no palette, so
   // the palette served unconditionally is a tenant's own.
-  const darkTenant: BrandTheme = {
-    ...rottayBrandTheme,
-    palette: { ...rottayBrandTheme.palette, primaryColor: '#F5F5F7', secondaryColor: '#9A9AA0' },
+  const darkTenant: FlatTheme = {
+    ...rottayFlatTheme,
+    palette: { ...rottayFlatTheme.palette, primaryColor: '#F5F5F7', secondaryColor: '#9A9AA0' },
   };
 
   it('the compiled block applies unconditionally', () => {
     expect(spec.selector).toBe("html[data-tenant='rottay']");
     expect(spec.selector).not.toContain('data-theme');
 
-    const compiledBlock = render(rottayBrandTheme, spec);
+    const compiledBlock = render(rottayFlatTheme, spec);
     // Scope projection wraps the spec selector; what matters is that nothing in
     // the result narrows it to a mode.
     //
@@ -159,7 +159,7 @@ describe('T12 · a rottay tenant is served in the base state', () => {
   });
 
   it('the tenant carries the dark-default palette it declares', () => {
-    expect(rottayBrandTheme.appearance?.defaultMode).toBe('dark');
+    expect(rottayFlatTheme.appearance?.defaultMode).toBe('dark');
     const decls = declarations(render(darkTenant, spec));
     expect(decls.get('--ds-color-primary')).toBe('#F5F5F7');
     expect(decls.get('--ds-color-secondary')).toBe('#9A9AA0');

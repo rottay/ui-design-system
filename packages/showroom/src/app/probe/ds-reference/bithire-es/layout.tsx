@@ -4,7 +4,7 @@
  * Sibling of `bithire/layout.tsx`, not a `[locale]` branch under it: locale is
  * STATIC per segment for the identical reason tenant is (see `ground/index.tsx`
  * — `LabLocale`), so "no locale conditional TSX" stays visible in review. The
- * tenant (BrandTheme, artifact CSS, engine) is byte-identical to `bithire/`;
+ * tenant (FlatTheme, artifact CSS, engine) is byte-identical to `bithire/`;
  * only the ground's `locale` input differs, which is what makes this a clean
  * test of the DS's OWN locale/translation channel rather than a second tenant
  * fixture in disguise.

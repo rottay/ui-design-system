@@ -2,7 +2,7 @@
  * @fileoverview The two tenant ingress arms, on ONE scene.
  *
  * A control has two doors. A code-owned vertical writes it into a static
- * `BrandTheme` (`surfaces.rhythm`), which `compileTheme` -> `emitThemeCss`
+ * `FlatTheme` (`surfaces.rhythm`), which `compileTheme` -> `emitThemeCss`
  * lowers into the compiled tenant artifact — an unlayered block
  * behind
  * `:is(html[data-tenant='<slug>'], :where([data-ds-root][data-vertical='<v>']))`.
@@ -31,7 +31,7 @@
  * TERMINOLOGY, BECAUSE `arm` IS ALREADY TAKEN. `scope.arm` in
  * `foundation/scope` means the tenant SELECTOR arm (legacy `html[data-tenant]`
  * versus provider `[data-ds-root][data-vertical]`). This file's `ingressArm`
- * means the INGRESS DOOR (static BrandTheme versus DB TenantTheme). They are
+ * means the INGRESS DOOR (static FlatTheme versus DB TenantTheme). They are
  * orthogonal: every ingress arm is measured on a scene that carries both
  * selector arms, which is what SSR actually emits.
  *
@@ -63,7 +63,7 @@ import {
   LOWERING_MODULE,
   LOWERING_MODULE_SUBPATH,
   LOWERING_SOURCE,
-  brandThemeLoweringAdapter,
+  flatThemeLoweringAdapter,
 } from '../../../../../../libraries/theme-lowering/index.mjs';
 
 /**
@@ -396,7 +396,7 @@ export function assertArmProvenance(producedBy) {
       throw new Error(
         'resolution-probe: the static-brand-theme arm must record which vertical baseline it ' +
           'composed its stop onto (producedBy.input.baseline = { source, digest }). Since H-1 ' +
-          'this arm compiles the stop OVER the vertical\'s published BrandTheme, so an arm with ' +
+          'this arm compiles the stop OVER the vertical\'s published FlatTheme, so an arm with ' +
           'no named baseline describes a scene nobody can reconstruct.',
       );
     }
@@ -1132,7 +1132,7 @@ function ingressValueForStop({ controlManifest, stop }) {
      * this instrument rather than found in the product.
      *
      * The asymmetry itself is a real finding and is NOT this packet's to fix: it
-     * is reachable by a code-owned BrandTheme or a caller of `compileTheme`
+     * is reachable by a code-owned FlatTheme or a caller of `compileTheme`
      * with a tenant floor, not by a tenant document, and it is registered with
      * the other door asymmetries for the owner.
      *
@@ -1320,8 +1320,8 @@ function resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId
  *
  * NAMED, NEVER COLLECTED. `collectPatchAuthoredPaths` is the right tool for
  * the DB leg and the wrong one here: it normalises from ThemePatch space into
- * BrandTheme space, unwrapping `.value` for six governed roots, and this patch
- * is ALREADY in BrandTheme space because `buildIngressInput` writes it at the
+ * FlatTheme space, unwrapping `.value` for six governed roots, and this patch
+ * is ALREADY in FlatTheme space because `buildIngressInput` writes it at the
  * keypath `staticBrandThemePath` declares. Its own doc names the failure mode
  * — "Collecting in one space and consuming in another is how a provenance set
  * silently stops matching."
@@ -1373,7 +1373,7 @@ export function staticTenantAuthoredPaths({ patch, authoredPath }) {
  *
  * `buildIngressInput` builds `document` at the path the MANIFEST declares,
  * which names a position INSIDE a larger tenant document (a DB TenantTheme's
- * `appearance` field, or a static BrandTheme's own root). Neither compiler
+ * `appearance` field, or a static FlatTheme's own root). Neither compiler
  * accepts that larger document as its argument:
  *
  *   - `compileTenantThemeConfig(input): TenantThemeArtifact` takes the
@@ -1388,13 +1388,13 @@ export function staticTenantAuthoredPaths({ patch, authoredPath }) {
  *           the manifest-ingress parity drill rather than by this comment.
  *       (b) identity is required and validated, and first-party slugs are
  *           RESERVED — a DB arm must compile for a customer tenant.
- *   - the static lowering, reached through `brandThemeLoweringAdapter`
+ *   - the static lowering, reached through `flatThemeLoweringAdapter`
  *     (`scripts/libraries/theme-lowering`, which lifts the flat input into a
  *     synthesized `ThemeResolution` and calls `compileTheme` -> `emitThemeCss`
  *     in `infrastructure/compilers/runtime/theme`), takes
  *     `{ brandTheme, vertical, tenantSlug, ... }` and destructures it
  *     immediately. `document` built from `staticBrandThemePath` (e.g.
- *     `surfaces.rhythm`) IS a `BrandTheme` fragment, so it becomes
+ *     `surfaces.rhythm`) IS a `FlatTheme` fragment, so it becomes
  *     `input.brandTheme`; `vertical` and `tenantSlug` are required SIBLING
  *     fields the manifest path does not carry at all, so the caller must supply
  *     them. They are two fields because they answer two questions: the vertical
@@ -1480,7 +1480,7 @@ function toCompilerInput({
           'resolution-probe: this db-tenant-theme document writes a palette node, so its mode ' +
             'scope is decided by `palette.backgroundMode` — and no vertical defaultMode was ' +
             `handed to lowerStop (got ${JSON.stringify(defaultMode)}). Read it from the ` +
-            'published BrandTheme with verticalDefaultMode(); assuming "light" would put the ' +
+            'published FlatTheme with verticalDefaultMode(); assuming "light" would put the ' +
             "seed in a dark vertical's non-default mode and the run would compare two different " +
             'scopes without saying so.',
         );
@@ -1613,7 +1613,7 @@ function deriveTenantSlug(vertical) {
  * THE MODE SCOPE THE DB DOCUMENT DECLARES (R-2 scope-matched parity, W-A).
  *
  * The two doors do not write the same mode scope on their own. The static door
- * writes `palette.primaryColor` into the BrandTheme BODY, which is the
+ * writes `palette.primaryColor` into the FlatTheme BODY, which is the
  * vertical's DEFAULT mode. The DB door writes `appearance.general.palette.*`
  * into a v1 document, and `migratePalette` routes a top-level seed by
  * `palette.backgroundMode ?? "light"` (`ingress/foundation/document-patch`) — so on a
@@ -1629,7 +1629,7 @@ function deriveTenantSlug(vertical) {
  * tenant intent a parity run models is "my brand in my product's default
  * appearance".
  *
- * W-A — THE SOURCE OF THAT BOOLEAN IS THE PUBLISHED BrandTheme, and the reason
+ * W-A — THE SOURCE OF THAT BOOLEAN IS THE PUBLISHED FlatTheme, and the reason
  * is REACHABILITY rather than absence. W-A asked for the source to be verified
  * and the verification corrected W-A's own evidence: it held that
  * the composed baseline's `appearance.defaultMode` is `undefined`, and measured
@@ -1652,7 +1652,7 @@ export function verticalDefaultMode(baseline, vertical) {
   const mode = baseline?.theme?.appearance?.defaultMode;
   if (mode !== 'light' && mode !== 'dark') {
     throw new Error(
-      `resolution-probe: the published BrandTheme for "${vertical}" declares no usable ` +
+      `resolution-probe: the published FlatTheme for "${vertical}" declares no usable ` +
         `appearance.defaultMode (got ${JSON.stringify(mode)}), so the DB document cannot declare ` +
         'the mode scope its parity run is measured in. Refusing to assume "light": that ' +
         'assumption is exactly the scope mismatch the scope-matched ruling removes, and it ' +
@@ -2059,7 +2059,7 @@ export async function loadCompilerArms({
       armId: spec.id,
       compile:
         spec.id === 'static-brand-theme'
-          ? await brandThemeLoweringAdapter({ module, coreRoot: CORE_ROOT, importModule })
+          ? await flatThemeLoweringAdapter({ module, coreRoot: CORE_ROOT, importModule })
           : exported,
       /* M-1: the compiler's OWN mode-selector grammar, handed out with the arm.
        * Imported, never reconstructed, and it rides on the arm because that is
@@ -2345,7 +2345,7 @@ export function assertStopDiscrimination({
 }
 
 /**
- * The published BrandTheme of each first-party vertical, for the static arm to
+ * The published FlatTheme of each first-party vertical, for the static arm to
  * compose its stop onto (H-1).
  *
  * PUBLISHED ENTRYPOINT, never a deep path -- the same law the DB arm follows

@@ -78,13 +78,13 @@ function brandSource({ duplicate = false, deprecatedOnly = false, stray = false 
  * into one owner per concern, so the audit reads the chrome channel here and the
  * orchestration separately.
  */
-function chromeOwnerSource({ emitter = 'brandThemeToChromeVariables' } = {}) {
+function chromeOwnerSource({ emitter = 'flatThemeToChromeVariables' } = {}) {
   return [
     `export function ${emitter}(vars: Record<string, string>): void {`,
     "  vars['--ds-fixture-chrome-bg'] = 'transparent';",
     '}',
     '',
-    'function brandThemeRadiusScale(): string {',
+    'function flatThemeRadiusScale(): string {',
     "  return '1';",
     '}',
     '',
@@ -151,10 +151,10 @@ test('T1: the two real emitters each resolve to exactly one exported declaration
   // The two moved apart in C2: the chrome writer is its own owner and the
   // orchestration is the lowering's index, so each is resolved where it lives.
   const chrome = requireExportedDeclarations(LOWERING_CHROME, [
-    'brandThemeToChromeVariables',
+    'flatThemeToChromeVariables',
   ]);
   assert.equal(chrome.size, 1);
-  assert.equal(chrome.get('brandThemeToChromeVariables').kind, 'function');
+  assert.equal(chrome.get('flatThemeToChromeVariables').kind, 'function');
   const resolved = requireExportedDeclarations(LOWERING, ['compileTheme']);
   assert.equal(resolved.size, 1);
   assert.equal(resolved.get('compileTheme').kind, 'function');
@@ -167,7 +167,7 @@ test('T2: renaming an emitter turns the fence RED instead of emptying it', () =>
   const result = runAudit('renamed');
   assert.equal(result.status, 1, result.output);
   assert.match(result.output, /emitter-symbol-missing/);
-  assert.match(result.output, /brandThemeToChromeVariables/);
+  assert.match(result.output, /flatThemeToChromeVariables/);
 });
 
 test('T3: renaming the named compile symbol is the same failure', () => {
@@ -176,18 +176,18 @@ test('T3: renaming the named compile symbol is the same failure', () => {
   // refuses the other's, and `renamed/` drops the chrome one from the owner that
   // is supposed to have it.
   assert.throws(
-    () => requireExactlyOneExportedDeclaration(chromeFixture('renamed'), 'brandThemeToChromeVariables'),
+    () => requireExactlyOneExportedDeclaration(chromeFixture('renamed'), 'flatThemeToChromeVariables'),
     SymbolAbsentError,
   );
   const brand = brandFixture('renamed');
   assert.throws(
-    () => requireExactlyOneExportedDeclaration(brand, 'brandThemeToChromeVariables'),
+    () => requireExactlyOneExportedDeclaration(brand, 'flatThemeToChromeVariables'),
     SymbolAbsentError,
   );
   assert.equal(requireExactlyOneExportedDeclaration(brand, 'compileTheme').name, 'compileTheme');
   assert.equal(
-    requireExactlyOneExportedDeclaration(chromeFixture('clean'), 'brandThemeToChromeVariables').name,
-    'brandThemeToChromeVariables',
+    requireExactlyOneExportedDeclaration(chromeFixture('clean'), 'flatThemeToChromeVariables').name,
+    'flatThemeToChromeVariables',
   );
 });
 

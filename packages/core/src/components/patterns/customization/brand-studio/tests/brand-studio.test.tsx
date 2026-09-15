@@ -4,23 +4,23 @@ import { describe, expect, it } from 'vitest';
 
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '../../../../../foundation/contracts';
-import type { BrandTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
 import type { BrandStudioSurfaceConfig } from '../contracts';
 import {
   PatternBrandStudio,
   deriveBrandingColors,
-  evaluateBrandThemeContrast,
-  applyHostileBrandTheme,
+  evaluateFlatThemeContrast,
+  applyHostileFlatTheme,
   buildSurfaceVariables,
   tryBuildSurfaceVariables,
   DEFAULT_DARK_GROUND,
   DEFAULT_LIGHT_GROUND,
 } from '../index';
 import {
-  serializeBrandTheme,
-  deserializeBrandTheme,
-  brandThemeToTenantAppearanceAdvanced,
-  brandThemeToTenantAppearance,
+  serializeFlatTheme,
+  deserializeFlatTheme,
+  flatThemeToTenantAppearanceAdvanced,
+  flatThemeToTenantAppearance,
 } from '../runtime/file-export';
 import { FIRST_PARTY_VERTICAL_SLUGS } from '@/foundation/contracts/kernel/verticals';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
@@ -60,7 +60,7 @@ const BARE_SURFACE: BrandStudioSurfaceConfig = {
 };
 
 /** Card body text nearly identical to card background — fails AA badly. */
-const LOW_CONTRAST_THEME: BrandTheme = {
+const LOW_CONTRAST_THEME: FlatTheme = {
   id: 'low-contrast',
   name: 'Low Contrast',
   palette: { primaryColor: '#e5e7eb' },
@@ -69,7 +69,7 @@ const LOW_CONTRAST_THEME: BrandTheme = {
   },
 };
 
-const HIGH_CONTRAST_THEME: BrandTheme = {
+const HIGH_CONTRAST_THEME: FlatTheme = {
   id: 'high-contrast',
   name: 'High Contrast',
   palette: { primaryColor: '#3b82f6' },
@@ -78,7 +78,7 @@ const HIGH_CONTRAST_THEME: BrandTheme = {
   },
 };
 
-const RICH_THEME: BrandTheme = {
+const RICH_THEME: FlatTheme = {
   id: 'rich',
   name: 'Rich Theme',
   palette: {
@@ -131,7 +131,7 @@ const RICH_THEME: BrandTheme = {
 
 describe('PatternBrandStudio contrast validation', () => {
   it('flags a known low-contrast theme with a specific failing pair and ratio', () => {
-    const report = evaluateBrandThemeContrast(LOW_CONTRAST_THEME, BARE_SURFACE);
+    const report = evaluateFlatThemeContrast(LOW_CONTRAST_THEME, BARE_SURFACE);
 
     // Derivation must have produced hex card colors for the validator to score.
     expect(report.colors.surfaceCard).toBe('#ffffff');
@@ -152,7 +152,7 @@ describe('PatternBrandStudio contrast validation', () => {
   });
 
   it('passes a high-contrast card pairing', () => {
-    const report = evaluateBrandThemeContrast(HIGH_CONTRAST_THEME, BARE_SURFACE);
+    const report = evaluateFlatThemeContrast(HIGH_CONTRAST_THEME, BARE_SURFACE);
     const cardViolation = report.violations.find((entry) =>
       entry.pair.endsWith('-on-surfaceCard') && entry.pair.startsWith('text'),
     );
@@ -181,7 +181,7 @@ describe('PatternBrandStudio contrast validation', () => {
       { key: 'light', baseTheme: 'light', vertical: 'bithire', tenantSlug: 'l' },
     ];
     for (const surface of surfaces) {
-      const report = evaluateBrandThemeContrast(applyHostileBrandTheme(RICH_THEME), surface);
+      const report = evaluateFlatThemeContrast(applyHostileFlatTheme(RICH_THEME), surface);
       expect(report.valid).toBe(false);
       expect(report.violations.length).toBeGreaterThan(0);
       // Every reported failure is a color pair (the validator has no font/radius notion).
@@ -194,13 +194,13 @@ describe('PatternBrandStudio contrast validation', () => {
 });
 
 describe('PatternBrandStudio export paths', () => {
-  it('round-trips a BrandTheme through JSON without loss', () => {
-    const restored = deserializeBrandTheme(serializeBrandTheme(RICH_THEME));
+  it('round-trips a FlatTheme through JSON without loss', () => {
+    const restored = deserializeFlatTheme(serializeFlatTheme(RICH_THEME));
     expect(restored).toEqual(RICH_THEME);
   });
 
   it('projects to a bounded TenantAppearanceAdvanced', () => {
-    const advanced = brandThemeToTenantAppearanceAdvanced(RICH_THEME);
+    const advanced = flatThemeToTenantAppearanceAdvanced(RICH_THEME);
 
     // Chrome maps directly.
     expect(advanced.chrome?.controls).toEqual(RICH_THEME.chrome!.controls);
@@ -231,7 +231,7 @@ describe('PatternBrandStudio export paths', () => {
   });
 
   it('projects global palette foundations into General for DB-owned tenants', () => {
-    const appearance = brandThemeToTenantAppearance(RICH_THEME);
+    const appearance = flatThemeToTenantAppearance(RICH_THEME);
 
     expect(appearance.general?.palette).toMatchObject({
       primary: '#1a56db',
@@ -295,8 +295,8 @@ const LIGHT_SURFACE_UNDER_TEST: BrandStudioSurfaceConfig = {
 
 describe('PatternBrandStudio live preview repaint', () => {
   it('changes --ds-color-primary in the injected variable map when only the Palette primary color changes', () => {
-    const indigo: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
-    const green: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#16a34a' } };
+    const indigo: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const green: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#16a34a' } };
 
     const before = buildSurfaceVariables(indigo, DARK_SURFACE_UNDER_TEST).vars;
     const after = buildSurfaceVariables(green, DARK_SURFACE_UNDER_TEST).vars;
@@ -306,7 +306,7 @@ describe('PatternBrandStudio live preview repaint', () => {
   });
 
   it('reopens the flagship Button/Tabs primary fallback on the real default ground when the theme leaves chrome unset', () => {
-    const paletteOnly: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const paletteOnly: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
     const { vars } = buildSurfaceVariables(paletteOnly, DARK_SURFACE_UNDER_TEST);
 
     // Neither the theme nor the default ground pins a literal here -- both alias
@@ -320,7 +320,7 @@ describe('PatternBrandStudio live preview repaint', () => {
   });
 
   it('lets an explicit chrome.controls.buttonPrimary.bg win over the ground alias', () => {
-    const explicit: BrandTheme = {
+    const explicit: FlatTheme = {
       id: 'p',
       name: 'P',
       palette: { primaryColor: '#4f46e5' },
@@ -331,8 +331,8 @@ describe('PatternBrandStudio live preview repaint', () => {
   });
 
   it('proves the repaint in the rendered DOM: the injected <style> text changes with the value prop', async () => {
-    const initial: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
-    const edited: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#16a34a' } };
+    const initial: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const edited: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#16a34a' } };
 
     const { rerender } = render(
       <Harness>
@@ -360,9 +360,9 @@ describe('PatternBrandStudio live preview repaint', () => {
   });
 });
 
-describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () => {
+describe('PatternBrandStudio dark-mode overlay (FlatTheme.modes) controls', () => {
   it('drives --ds-color-primary from modes.dark.palette.primaryColor on the dark surface only', () => {
-    const theme: BrandTheme = {
+    const theme: FlatTheme = {
       id: 'p',
       name: 'P',
       palette: { primaryColor: '#4f46e5' },
@@ -377,13 +377,13 @@ describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () 
   });
 
   it('leaves --ds-color-primary at the base value on the dark surface when modes.dark is unset', () => {
-    const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const theme: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
     const dark = buildSurfaceVariables(theme, DARK_SURFACE_UNDER_TEST).vars;
     expect(dark['--ds-color-primary']).toBe('#4f46e5');
   });
 
   it('drives --ds-color-bg-primary from modes.dark.palette.backgroundColor on the dark surface only', () => {
-    const theme: BrandTheme = {
+    const theme: FlatTheme = {
       id: 'p',
       name: 'P',
       palette: { primaryColor: '#4f46e5' },
@@ -410,7 +410,7 @@ describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () 
       dark: { ...DARK_SURFACE_UNDER_TEST, vertical: 'rottay' } as BrandStudioSurfaceConfig,
       light: { ...LIGHT_SURFACE_UNDER_TEST, vertical: 'rottay' } as BrandStudioSurfaceConfig,
     };
-    const theme: BrandTheme = {
+    const theme: FlatTheme = {
       id: 'p',
       name: 'P',
       appearance: { defaultMode: 'dark' },
@@ -433,8 +433,8 @@ describe('PatternBrandStudio dark-mode overlay (BrandTheme.modes) controls', () 
 
 describe('PatternBrandStudio contrast check grades the theme, not the scaffold', () => {
   it('reports text/textMuted/surfaceCard as not-declared on the real default ground when the theme leaves chrome unset', () => {
-    const paletteOnly: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
-    const report = evaluateBrandThemeContrast(paletteOnly, DARK_SURFACE_UNDER_TEST);
+    const paletteOnly: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const report = evaluateFlatThemeContrast(paletteOnly, DARK_SURFACE_UNDER_TEST);
 
     // The scaffold itself does carry hex values for these roles (the studio's own
     // chrome needs to be readable) -- the point is that an undeclared theme color
@@ -446,7 +446,7 @@ describe('PatternBrandStudio contrast check grades the theme, not the scaffold',
   });
 
   it('grades the theme own text/surface pairing once chrome.cardComponent declares it', () => {
-    const declared: BrandTheme = {
+    const declared: FlatTheme = {
       id: 'p',
       name: 'P',
       palette: { primaryColor: '#4f46e5' },
@@ -456,7 +456,7 @@ describe('PatternBrandStudio contrast check grades the theme, not the scaffold',
     // overlay of the vertical's sits above the draft's base chrome. On the
     // other ground the vertical's overlay legitimately wins -- which is what
     // the tenant would see, and therefore what the studio must show.
-    const report = evaluateBrandThemeContrast(declared, {
+    const report = evaluateFlatThemeContrast(declared, {
       ...DARK_SURFACE_UNDER_TEST,
       vertical: 'rottay',
     });
@@ -486,7 +486,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
     ({ ...surface, groundVars: HOSTILE_GROUND }) as unknown as BrandStudioSurfaceConfig;
 
   it('drops a hostile ground map instead of compiling it into the panel variables', () => {
-    const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const theme: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
     const { vars } = buildSurfaceVariables(theme, withHostileGround(LIGHT_SURFACE_UNDER_TEST));
 
     expect(vars['--evil']).toBeUndefined();
@@ -497,7 +497,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
   });
 
   it('cannot create a body rule in the injected <style> block', async () => {
-    const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const theme: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
     render(
       <Harness>
         <PatternBrandStudio
@@ -530,7 +530,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
   it('still grounds each panel, and a theme value still wins over the ground', () => {
     // The positive control: removing the seam did not remove the ground, and
     // the intended visual setting continues to arrive through compileTheme.
-    const paletteOnly: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const paletteOnly: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
     const dark = buildSurfaceVariables(paletteOnly, DARK_SURFACE_UNDER_TEST).vars;
     const light = buildSurfaceVariables(paletteOnly, LIGHT_SURFACE_UNDER_TEST).vars;
 
@@ -543,7 +543,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
     // -- correctly: a tenant that repaints the canvas and not the ink ships
     // unreadable text. The property under test is that an AUTHORED ground wins
     // over the studio's scaffold ground, which any distinguishable value states.
-    const authored: BrandTheme = {
+    const authored: FlatTheme = {
       id: 'p',
       name: 'P',
       palette: { primaryColor: '#4f46e5', backgroundColor: '#FAFAFF' },
@@ -554,7 +554,7 @@ describe('PatternBrandStudio preview ground admits no caller CSS', () => {
   });
 
   it('selects the ground from baseTheme, the one presentation prop that names it', () => {
-    const theme: BrandTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
+    const theme: FlatTheme = { id: 'p', name: 'P', palette: { primaryColor: '#4f46e5' } };
     const asLight = buildSurfaceVariables(theme, {
       key: 'dark',
       baseTheme: 'light',
@@ -586,7 +586,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
   const selectorsOf = (css: string): string[] =>
     [...css.matchAll(/(^|\})\s*([^{}]+)\{/gu)].map((match) => match[2]!.trim());
 
-  const hostile: readonly [string, BrandTheme][] = [
+  const hostile: readonly [string, FlatTheme][] = [
     [
       'palette.primaryColor',
       { id: 'h', name: 'H', palette: { primaryColor: THEME_ESCAPE } },
@@ -672,7 +672,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
   }
 
   it('positive control: a normal theme still paints and is still grounded', async () => {
-    const normal: BrandTheme = {
+    const normal: FlatTheme = {
       id: 'p',
       name: 'P',
       palette: { primaryColor: '#4f46e5' },
@@ -724,7 +724,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
     } as const;
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
       const authored = readGovernedTheme(FIRST_PARTY_BASELINES[vertical]);
-      const brand: BrandTheme = {
+      const brand: FlatTheme = {
         ...authored,
         palette: { ...authored.palette, ...seeds[vertical] },
         typography: { ...authored.typography, scale: 1.05 },

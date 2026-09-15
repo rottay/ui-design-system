@@ -2,7 +2,7 @@
  * `spacing.rhythm` — STATIC ⇄ DB PARITY, measured rather than assumed.
  *
  * The modern-rescue product promise says one semantic input must be accepted
- * by BOTH the static `BrandTheme` path and the DB `TenantTheme` path, be
+ * by BOTH the static `FlatTheme` path and the DB `TenantTheme` path, be
  * normalized by ONE authority into governed semantic channels, and restore the
  * exact baseline when removed (README, product promise points 1, 2 and 5).
  * `governance/manifest/controls/spacing/rhythm/index.json` records the three stops
@@ -43,10 +43,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   FIRST_PARTY_BASELINES,
-  lowerBrandThemeFixture,
+  lowerFlatThemeFixture,
   lowerTheme,
 } from "@tests/support/theme-lowering";
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
   TENANT_THEME_OVERRIDE_TOKENS,
@@ -97,17 +97,17 @@ const IDENTITY = {
 /**
  * The static ingress. `surfaces.rhythm` is typed, so every hostile case below
  * has to be cast in — which is exactly the shape this compiler receives in
- * production: a `BrandTheme` arriving as plain JSON through the RSC boundary
+ * production: a `FlatTheme` arriving as plain JSON through the RSC boundary
  * or the compatibility `TenantConfig.brandTheme` field carries no type at all.
  */
 const staticVariables = (rhythm?: unknown): Record<string, string> =>
-  lowerBrandThemeFixture({
-    brandTheme: {
+  lowerFlatThemeFixture({
+    flatTheme: {
       id: 'rhythm-parity',
       name: 'Rhythm Parity',
       palette: { primaryColor: '#0F766E' },
       surfaces: rhythm === undefined ? {} : { rhythm },
-    } as unknown as BrandTheme,
+    } as unknown as FlatTheme,
     tenantSlug: 'rhythm-parity',
   }).cssVariables;
 
@@ -335,7 +335,7 @@ describe('spacing.rhythm · the counterfactual that keeps the drills load-bearin
    *
    * That premise is gone. `appearanceGeneralToVariables` was a second lowering
    * with zero productive consumers and it is deleted at source; the DB
-   * document and the static BrandTheme now resolve into the SAME `compileTheme`
+   * document and the static FlatTheme now resolve into the SAME `compileTheme`
    * call, so "the two lowerings agree" is an identity rather than a claim, and
    * a block asserting it would be green by construction.
    *

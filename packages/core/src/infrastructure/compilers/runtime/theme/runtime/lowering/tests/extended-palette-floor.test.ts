@@ -34,7 +34,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
   APCA_BODY_TEXT_MIN_LC,
@@ -45,12 +45,12 @@ import {
   measureReadableInk,
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { deriveExtendedPaletteFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 const FLOOR_CHANNELS = [
   '--ds-color-primary-foreground',
@@ -111,9 +111,9 @@ describe('deriveExtendedPaletteFloor · the derivation floor, for a bare hex see
     // ink directions (#2F5BE8 and #7A00FF take the light ink, #FF00AA the
     // dark one), which is what makes the AA claim non-trivial.
     for (const seed of [
-      bithireBrandTheme.palette!.primaryColor,
-      tortureLightBrandTheme.palette!.primaryColor,
-      tortureDarkBrandTheme.palette!.primaryColor,
+      bithireFlatTheme.palette!.primaryColor,
+      tortureLightFlatTheme.palette!.primaryColor,
+      tortureDarkFlatTheme.palette!.primaryColor,
     ]) {
       const ink = deriveExtendedPaletteFloor(seed)['--ds-color-primary-foreground'];
       expect(contrastRatio(ink, seed), `${seed} -> ${ink}`).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT_RATIO);
@@ -223,12 +223,12 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
 
   it('FOCAL: authoring only linkColor wins for that channel; the other three stay on the derived floor', () => {
     const derivedFloor = deriveExtendedPaletteFloor(SEED);
-    const bt: BrandTheme = {
+    const bt: FlatTheme = {
       id: 'authored-link',
       name: 'Authored Link',
       palette: { primaryColor: SEED, linkColor: '#1A1A1A' },
     };
-    const compiled = lowerBrandThemeFixture({ brandTheme: bt, tenantSlug: 'authored-link' }).cssVariables;
+    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-link' }).cssVariables;
     expect(compiled['--ds-color-link']).toBe('#1A1A1A');
     expect(compiled['--ds-color-primary-foreground']).toBe(derivedFloor['--ds-color-primary-foreground']);
     expect(compiled['--ds-color-border-focus']).toBe(derivedFloor['--ds-color-border-focus']);
@@ -237,19 +237,19 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
 
   it('FOCAL: removing the authored linkColor restores the derived value exactly', () => {
     const derivedFloor = deriveExtendedPaletteFloor(SEED);
-    const bt: BrandTheme = { id: 'no-authored-link', name: 'No Authored Link', palette: { primaryColor: SEED } };
-    const compiled = lowerBrandThemeFixture({ brandTheme: bt, tenantSlug: 'no-authored-link' }).cssVariables;
+    const bt: FlatTheme = { id: 'no-authored-link', name: 'No Authored Link', palette: { primaryColor: SEED } };
+    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'no-authored-link' }).cssVariables;
     expect(compiled['--ds-color-link']).toBe(derivedFloor['--ds-color-link']);
   });
 
   it('authoring primaryForegroundColor wins over the derived floor and leaves the other three derived', () => {
     const derivedFloor = deriveExtendedPaletteFloor(SEED);
-    const bt: BrandTheme = {
+    const bt: FlatTheme = {
       id: 'authored-foreground',
       name: 'Authored Foreground',
       palette: { primaryColor: SEED, primaryForegroundColor: '#FF00FF' },
     };
-    const compiled = lowerBrandThemeFixture({ brandTheme: bt, tenantSlug: 'authored-foreground' }).cssVariables;
+    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-foreground' }).cssVariables;
     expect(compiled['--ds-color-primary-foreground']).toBe('#FF00FF');
     expect(compiled['--ds-color-border-focus']).toBe(derivedFloor['--ds-color-border-focus']);
     expect(compiled['--ds-color-link']).toBe(derivedFloor['--ds-color-link']);
@@ -258,12 +258,12 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
 
   it('authoring borderFocusColor wins over the derived floor and leaves the other three derived', () => {
     const derivedFloor = deriveExtendedPaletteFloor(SEED);
-    const bt: BrandTheme = {
+    const bt: FlatTheme = {
       id: 'authored-focus',
       name: 'Authored Focus',
       palette: { primaryColor: SEED, borderFocusColor: 'rgba(10, 10, 10, 0.32)' },
     };
-    const compiled = lowerBrandThemeFixture({ brandTheme: bt, tenantSlug: 'authored-focus' }).cssVariables;
+    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-focus' }).cssVariables;
     expect(compiled['--ds-color-border-focus']).toBe('rgba(10, 10, 10, 0.32)');
     expect(compiled['--ds-color-primary-foreground']).toBe(derivedFloor['--ds-color-primary-foreground']);
     expect(compiled['--ds-color-link']).toBe(derivedFloor['--ds-color-link']);
@@ -272,12 +272,12 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
 
   it('authoring linkHoverColor wins over the derived floor and leaves the other three derived', () => {
     const derivedFloor = deriveExtendedPaletteFloor(SEED);
-    const bt: BrandTheme = {
+    const bt: FlatTheme = {
       id: 'authored-link-hover',
       name: 'Authored Link Hover',
       palette: { primaryColor: SEED, linkHoverColor: '#0A0A0A' },
     };
-    const compiled = lowerBrandThemeFixture({ brandTheme: bt, tenantSlug: 'authored-link-hover' }).cssVariables;
+    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'authored-link-hover' }).cssVariables;
     expect(compiled['--ds-color-link-hover']).toBe('#0A0A0A');
     expect(compiled['--ds-color-primary-foreground']).toBe(derivedFloor['--ds-color-primary-foreground']);
     expect(compiled['--ds-color-border-focus']).toBe(derivedFloor['--ds-color-border-focus']);
@@ -296,17 +296,17 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
       linkColor: '#8AB4FF',
       linkHoverColor: '#B9D2FF',
     } as const;
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: {
-        ...bithireBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: {
+        ...bithireFlatTheme,
         modes: {
-          ...bithireBrandTheme.modes,
+          ...bithireFlatTheme.modes,
           dark: {
-            ...bithireBrandTheme.modes?.dark,
-            palette: { ...(bithireBrandTheme.modes?.dark?.palette ?? {}), ...authoredDark },
+            ...bithireFlatTheme.modes?.dark,
+            palette: { ...(bithireFlatTheme.modes?.dark?.palette ?? {}), ...authoredDark },
           },
         },
-      } as BrandTheme,
+      } as FlatTheme,
       tenantSlug: 'authored-overlay',
     });
     const darkBlock = compiled.modeBlocks!.find((block) => block.mode === 'dark')!;
@@ -326,9 +326,9 @@ describe('the extended palette floor reaches real first-party output', () => {
       '--ds-color-link-hover': 'linkHoverColor',
     } as const;
 
-    for (const theme of [bithireBrandTheme, evntoBrandTheme]) {
+    for (const theme of [bithireFlatTheme, evntoFlatTheme]) {
       const palette = theme.palette!;
-      const compiled = lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: theme.id }).cssVariables;
+      const compiled = lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: theme.id }).cssVariables;
       const derivedFloor = deriveExtendedPaletteFloor(palette.primaryColor);
 
       for (const [channel, field] of Object.entries(channels)) {

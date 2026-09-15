@@ -18,7 +18,7 @@ Baselines: `rottay`, `bithire`, `evnto`.
   generated CSS artifact under `foundation/tokens/css/facade/artifacts/{slug}/`.
 - Use `isBundledTenant(slug)` when a host must distinguish these baselines from
   customer tenants. `isKnownTenant` is registry discovery, not a DB policy.
-- The full `BrandTheme` remains code-owned and is not tenant-editable.
+- The full `FlatTheme` remains code-owned and is not tenant-editable.
 
 ### Published customer tenants (DB-owned)
 

@@ -10,7 +10,7 @@
 import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { TYPE_PAIRING_CHANNELS } from "../../../../foundation/contract";
 
@@ -41,7 +41,7 @@ function pairingVariables(
  * authorities is the ranked merge and not a trailing assignment.
  */
 export function deriveTypePairingChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   expansion: ExpressiveExpansion
 ): Record<string, string> {
   const vars: Record<string, string> = {};

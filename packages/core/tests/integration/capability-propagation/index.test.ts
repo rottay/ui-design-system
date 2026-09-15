@@ -70,10 +70,10 @@ import {
   hydrateTenantThemeConfig,
   tenantThemeAnatomyAttributes,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_propagation_probe',
@@ -185,7 +185,7 @@ const BASE_DOC: Doc = {
  */
 interface Mutators {
   readonly db?: (document: Doc) => Doc;
-  readonly static?: (theme: BrandTheme) => BrandTheme;
+  readonly static?: (theme: FlatTheme) => FlatTheme;
 }
 
 const MUTATORS: Record<string, Mutators> = {
@@ -222,7 +222,7 @@ const MUTATORS: Record<string, Mutators> = {
       delete typography.fontFamilyBase;
       delete typography.fontFamilyHeading;
       typography.typePairing = 'geometric';
-      b.typography = typography as BrandTheme['typography'];
+      b.typography = typography as FlatTheme['typography'];
       return b;
     },
   },
@@ -232,7 +232,7 @@ const MUTATORS: Record<string, Mutators> = {
   },
   'typography.scale': {
     db: (d) => { d.visualFoundation!.general!.typography!.scale = 0.95; return d; },
-    static: (b) => { b.typography = { ...(b.typography ?? {}), scale: 1.08 } as BrandTheme['typography']; return b; },
+    static: (b) => { b.typography = { ...(b.typography ?? {}), scale: 1.08 } as FlatTheme['typography']; return b; },
   },
   'shape.radius-scale': {
     db: (d) => { d.visualFoundation!.general!.shape!.radiusScale = 0.8; return d; },
@@ -243,7 +243,7 @@ const MUTATORS: Record<string, Mutators> = {
       b.surfaces = {
         ...(b.surfaces ?? {}),
         radiusScale: 1.2,
-      } as BrandTheme['surfaces'];
+      } as FlatTheme['surfaces'];
       return b;
     },
   },
@@ -263,15 +263,15 @@ const MUTATORS: Record<string, Mutators> = {
   // differ from `BASE_DOC`.
   'density.mode': {
     db: (d) => { d.visualFoundation!.general!.density = 'compact'; return d; },
-    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), density: 'spacious' } as BrandTheme['surfaces']; return b; },
+    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), density: 'spacious' } as FlatTheme['surfaces']; return b; },
   },
   'spacing.rhythm': {
     db: (d) => { d.visualFoundation!.general!.rhythm = 'tight'; return d; },
-    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), rhythm: 'airy' } as BrandTheme['surfaces']; return b; },
+    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), rhythm: 'airy' } as FlatTheme['surfaces']; return b; },
   },
   'motion.dial': {
     db: (d) => { d.visualFoundation!.general!.motion!.intensity = 0.11; return d; },
-    static: (b) => { b.motion = { ...(b.motion ?? {}), intensity: 0.11 } as BrandTheme['motion']; return b; },
+    static: (b) => { b.motion = { ...(b.motion ?? {}), intensity: 0.11 } as FlatTheme['motion']; return b; },
   },
   'surfaces.elevation-posture': {
     db: (d) => { d.visualFoundation!.general!.surfaces!.elevation = 'flat'; return d; },
@@ -280,7 +280,7 @@ const MUTATORS: Record<string, Mutators> = {
     // nobody doubted, and said nothing about the control. The catalog's
     // `keypath.brandTheme` for this row is `surfaces.elevation`, and the
     // keypath guard below now refuses a mutator that writes anywhere else.
-    // The explicit shadow map is CLEARED, not written: a BrandTheme states its
+    // The explicit shadow map is CLEARED, not written: a FlatTheme states its
     // own shadows, and an explicit leaf outranks the posture that would derive
     // it. Measured -- setting `surfaces.elevation` alone moves 0 channels on
     // bithire. Clearing the leaf it competes with is the same precedence fact
@@ -290,13 +290,13 @@ const MUTATORS: Record<string, Mutators> = {
       const surfaces = { ...(b.surfaces ?? {}) } as Record<string, unknown>;
       delete surfaces.shadows;
       surfaces.elevation = 'flat';
-      b.surfaces = surfaces as BrandTheme['surfaces'];
+      b.surfaces = surfaces as FlatTheme['surfaces'];
       return b;
     },
   },
   'surfaces.effect-intensity': {
     db: (d) => { d.visualFoundation!.general!.surfaces!.effectIntensity = 0.05; return d; },
-    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), effectIntensity: 0.77 } as BrandTheme['surfaces']; return b; },
+    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), effectIntensity: 0.77 } as FlatTheme['surfaces']; return b; },
   },
   // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
   // the composed baseline states the sidebar inks as `var()` references rather
@@ -394,7 +394,7 @@ const MUTATORS: Record<string, Mutators> = {
  *  - DATA-ONLY: the capability travels as normalized appearance / root
  *    attributes, and `compileTheme().cssVariables` is the wrong instrument
  *    for it (`chrome.anatomy`, `profiles.icon`, `responsive.posture`).
- *  - AUTHORING-SHAPE: the BrandTheme field that carries it is a governed
+ *  - AUTHORING-SHAPE: the FlatTheme field that carries it is a governed
  *    selection envelope (`expressive`, `recipes`, `responsive`) or a derived
  *    ramp with no single authored field (`typography.scale`,
  *    `shape.button-style`, `token-overrides`, `palette.dark-mode`). Mutating
@@ -531,8 +531,8 @@ function compileDb(document: Doc) {
 /** Drops the `mode:` prefix a delta channel carries, leaving the channel name. */
 const channelName = (key: string): string => key.slice(key.indexOf(':') + 1);
 
-const compileStatic = (theme: BrandTheme): Record<string, string> =>
-  lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: 'propagation-probe' })
+const compileStatic = (theme: FlatTheme): Record<string, string> =>
+  lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: 'propagation-probe' })
     .cssVariables;
 
 function changedKeys(
@@ -617,7 +617,7 @@ describe('capability propagation — every mutator probes the control own door (
         const prefixes = keypathPrefixes(row.keypath.brandTheme);
         expect(prefixes.length, `${capability.id} has a static mutator and no brandTheme keypath`)
           .toBeGreaterThan(0);
-        const base = clone(bithireBrandTheme) as BrandTheme;
+        const base = clone(bithireFlatTheme) as FlatTheme;
         const written = writtenLeaves(base, mutators.static!(clone(base)));
         expect(written.length, 'the mutator changed nothing at all').toBeGreaterThan(0);
         expect(
@@ -742,7 +742,7 @@ const catalogEffectById = new Map(
 
 describe('static path — an authored change reaches the compiled brand', () => {
   it('moves at least one channel for every capability with a static mutator', () => {
-    const baseline = compileStatic(clone(bithireBrandTheme) as BrandTheme);
+    const baseline = compileStatic(clone(bithireFlatTheme) as FlatTheme);
     const inert: string[] = [];
 
     for (const capability of ACTIVE) {
@@ -753,7 +753,7 @@ describe('static path — an authored change reaches the compiled brand', () => 
       // CATALOG's own `effect`, never off an id list, so a fourth data-only
       // row is excluded here for the same stated reason.
       if (catalogEffectById.get(capability.id) === 'data-only') continue;
-      const mutated = compileStatic(mutate(clone(bithireBrandTheme) as BrandTheme));
+      const mutated = compileStatic(mutate(clone(bithireFlatTheme) as FlatTheme));
       if (changedKeys(baseline, mutated).length === 0) inert.push(capability.id);
     }
 
@@ -764,7 +764,7 @@ describe('static path — an authored change reaches the compiled brand', () => 
 describe('consumer reachability — the moved channel is read by production', () => {
   it('closes the loop for the ledgered capabilities', () => {
     const baseline = compileDb(clone(BASE_DOC));
-    const staticBaseline = compileStatic(clone(bithireBrandTheme) as BrandTheme);
+    const staticBaseline = compileStatic(clone(bithireFlatTheme) as FlatTheme);
     const reached: string[] = [];
 
     for (const capability of ACTIVE) {
@@ -784,7 +784,7 @@ describe('consumer reachability — the moved channel is read by production', ()
       }
       if (mutators.static) {
         const mutated = compileStatic(
-          mutators.static(clone(bithireBrandTheme) as BrandTheme)
+          mutators.static(clone(bithireFlatTheme) as FlatTheme)
         );
         changedKeys(staticBaseline, mutated).forEach((k) => moved.add(k));
       }

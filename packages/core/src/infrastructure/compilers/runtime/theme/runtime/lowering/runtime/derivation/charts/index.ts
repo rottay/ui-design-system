@@ -9,7 +9,7 @@
 
 import { deriveChartSeriesPalette } from "@/foundation/kernel/color/oklch/chart-series";
 import { isHexColor } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import {
@@ -28,7 +28,7 @@ import {
  * comes back as an unowned read with no definer.
  */
 export function deriveChartChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   surface: RampSurface
 ): Record<string, string> {
   const vars: Record<string, string> = {};

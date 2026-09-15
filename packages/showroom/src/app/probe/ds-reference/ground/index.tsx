@@ -2,7 +2,7 @@
  * The DS reference lab's tenant ground.
  *
  * R1 scope.referenceLabLaw: "same hardcoded DS tree under BitHire static
- * BrandTheme and The Management published DB document; zero app-bithire
+ * FlatTheme and The Management published DB document; zero app-bithire
  * imports, styles, routes, APIs or product fixtures."
  *
  * A ground is per-DOCUMENT: it is stamped on documentElement and, for the DB
@@ -104,7 +104,7 @@ function bithireGround(judge: JudgeMode, locale: LabLocale) {
  * The read path's job is to assemble one envelope from the JSONB payload plus
  * the trusted row columns; `hydrateTenantThemeConfig` is that join, and the
  * compile below is the same call the production server embed makes. Nothing is
- * projected from a static BrandTheme, which is the entire point of this ground
+ * projected from a static FlatTheme, which is the entire point of this ground
  * existing beside BitHire's.
  */
 function themanagementGround(judge: JudgeMode, locale: LabLocale) {

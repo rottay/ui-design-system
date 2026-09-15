@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { semanticSurfaceRolesToCssVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/materials";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 describe("semantic surface-role compiler", () => {
   it("emits coordinated role facets and compatibility aliases", () => {
@@ -67,7 +67,7 @@ describe("semantic surface-role compiler", () => {
   });
 
   it("includes semantic surface roles in the compiled brand artifact", () => {
-    const brandTheme: BrandTheme = {
+    const flatTheme: FlatTheme = {
       id: "surface-role-proof",
       name: "Surface role proof",
       surfaces: {
@@ -79,7 +79,7 @@ describe("semantic surface-role compiler", () => {
       },
     };
 
-    const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: "proof" });
+    const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: "proof" });
     expect(compiled.cssVariables["--ds-surface-canvas"]).toBe("#f7f6f2");
     expect(compiled.cssVariables["--ds-surface-panel"]).toBe("#fbfaf7");
     expect(compiled.cssVariables["--ds-material-panel-border"]).toBe("#dedbd2");

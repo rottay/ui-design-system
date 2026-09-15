@@ -66,7 +66,7 @@ const TYPE_RAMP = [
  * at weight 600 with +0.08em tracking and is the sole uppercase in the product
  * (S1) — it carries a `-transform: uppercase` facet; every other ramp entry is
  * sentence case. The ramp is a fixed, tenant-independent closed set, so it is
- * emitted for every compiled BrandTheme.
+ * emitted for every compiled FlatTheme.
  */
 export function setTypeRampVariables(vars: Record<string, string>): void {
   const family = "var(--ds-font-family-base)";

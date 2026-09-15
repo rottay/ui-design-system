@@ -25,7 +25,7 @@ describe('deriveBorderSubtle · reproduces the mechanical cells', () => {
   });
 
   it('lands within 2/255 per channel of rottay light, which authors its own', () => {
-    // Compiled from platform BrandTheme modes.light: #E5E5E3 on #FAFAF9,
+    // Compiled from platform FlatTheme modes.light: #E5E5E3 on #FAFAF9,
     // shipping #EDEDEC. The authored value wins wherever it exists; this only
     // records that the step is the same shape, not a different relationship.
     const derived = deriveBorderSubtle('#E5E5E3', '#FAFAF9');

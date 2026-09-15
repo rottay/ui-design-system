@@ -180,7 +180,7 @@ const LEAF_CLAIM_PRECEDENCE: Readonly<Record<LeafClaimSpecificity, number>> =
   Object.freeze({ named: 1, "expansion-derived": 0 });
 
 export interface AuthoredLeafClaim {
-  /** A BrandTheme-space keypath, e.g. `typography.fontFamilyBase`. */
+  /** A FlatTheme-space keypath, e.g. `typography.fontFamilyBase`. */
   readonly leaf: string;
   readonly specificity: LeafClaimSpecificity;
 }

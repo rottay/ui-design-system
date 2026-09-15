@@ -4,7 +4,7 @@
  * Six stations -- tier, engine, envelope, contrast, limits, cycles -- asked in
  * one place by `compileThemeIntent`. Before WO-CAT-03 four of them existed only
  * inside `compileTenantTheme`, so `static-vertical`, `preview` and the
- * `BrandTheme` draft reached the channel writers with only the engine checked:
+ * `FlatTheme` draft reached the channel writers with only the engine checked:
  * a preview accepted `typography.scale 100`, `radiusScale 9`, `notacolor` and a
  * palette under the APCA floor that publish refused (F-13), and any consumer
  * holding the published `compileTheme` could skip even that (F-24).
@@ -126,7 +126,7 @@ export function admitThemeIntent(input: {
   // Not `provenance.authoredPaths`: that set is a documented over-approximation
   // -- it enumerates container keys and the v1 migration's `undefined`-valued
   // palette fields, so a document that only set a background reads as having
-  // authored every ink. And not membership alone: a `BrandTheme` draft carries
+  // authored every ink. And not membership alone: a `FlatTheme` draft carries
   // the whole theme it was opened on, so every value the author never touched
   // is still in the patch. A tenant answers for what it changed.
   //

@@ -19,7 +19,7 @@ import {
   measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
-import { firstPartyFixture, lowerBrandThemeFixture } from '@tests/support/theme-lowering';
+import { firstPartyFixture, lowerFlatThemeFixture } from '@tests/support/theme-lowering';
 
 const markup = renderToStaticMarkup(
   <div>
@@ -77,8 +77,8 @@ describeCausality({
 describe('input ink producer', () => {
   it('has no root ink on any composed first-party baseline, so no temperature can move it', () => {
     for (const vertical of VERTICALS) {
-      const compiled = lowerBrandThemeFixture({
-        brandTheme: firstPartyFixture(vertical),
+      const compiled = lowerFlatThemeFixture({
+        flatTheme: firstPartyFixture(vertical),
         tenantSlug: vertical,
       });
       expect(compiled.cssVariables['--ds-color-text-primary'], vertical).toBeUndefined();

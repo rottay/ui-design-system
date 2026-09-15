@@ -28,7 +28,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join, sep } from 'node:path';
 
 import {
-  collectBrandThemeCompilerSources,
+  collectFlatThemeCompilerSources,
   extractDirectVarsAssignments,
   extractTintRampEmissions,
 } from '../../../check/tokens/cascade/channels/liveness/index.mjs';
@@ -82,7 +82,7 @@ export function collectDeclaredChannels(files = collectAuthoredStylesheets()) {
 }
 
 /** (b) Todo canal que un derivador de familia emite. */
-export function collectCompiledChannels(sources = collectBrandThemeCompilerSources()) {
+export function collectCompiledChannels(sources = collectFlatThemeCompilerSources()) {
   const emitted = new Set();
   for (const source of sources) {
     for (const name of extractDirectVarsAssignments(source.text).keys()) emitted.add(name);

@@ -42,7 +42,7 @@ const CONTRACT_ROOT = join(
  *
  * A specimen is admitted only when it is authored FORWARD in the document's own
  * vocabulary — the payload a customer actually writes — because a specimen
- * projected from a code-owned BrandTheme would prove the compiler is
+ * projected from a code-owned FlatTheme would prove the compiler is
  * deterministic and nothing about what a customer can express.
  */
 const SPECIMENS = [

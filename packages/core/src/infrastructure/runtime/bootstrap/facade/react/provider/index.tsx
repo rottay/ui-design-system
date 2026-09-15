@@ -906,7 +906,7 @@ export function DesignSystemProvider({
 
   // Vertical can come from the app explicitly or from the resolved tenant
   // record itself. Resolve it before visual normalization so runtime and static
-  // BrandTheme compilation share the same vertical baseline.
+  // FlatTheme compilation share the same vertical baseline.
   const resolvedVertical: VerticalPreset | undefined = useMemo(() => {
     const verticalSource = vertical ?? tenantConfig?.vertical ?? undefined;
     return verticalSource == null
@@ -918,12 +918,12 @@ export function DesignSystemProvider({
 
   // The resolved tenant config, RAW.
   //
-  // This provider used to pre-merge it: it compiled the BrandTheme, folded the
+  // This provider used to pre-merge it: it compiled the FlatTheme, folded the
   // compiled personality and tokenOverrides back into the config, and
   // back-filled `branding` from the theme's palette. Every one of those merges
   // already existed downstream — `useTokens` resolves engine -> vertical ->
   // brandTheme -> tenant for both structural tokens and personality, from the
-  // BrandTheme itself. Pre-merging meant the same chain ran twice on two
+  // FlatTheme itself. Pre-merging meant the same chain ran twice on two
   // different inputs, and the second run could not tell an authored tenant
   // value from a value the first run had just derived.
   //
@@ -1068,7 +1068,7 @@ export function DesignSystemProvider({
   const governedBehavior = getCodeOwnedGovernedBehavior(resolvedRuntimeConfig);
 
   // C2b: governed icon posture — dual-source precedence (explicit DB Pro
-  // axis or DB experience composition win over the static BrandTheme
+  // axis or DB experience composition win over the static FlatTheme
   // selection). Delivered through the RSC-safe seam: assigned to the CLIENT
   // context below (client/SSR worlds); Server Component trees receive the
   // same value through the per-request box the application fills via

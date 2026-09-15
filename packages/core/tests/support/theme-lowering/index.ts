@@ -1,8 +1,8 @@
 /**
- * @fileoverview Test harness that drives the SOLE lowering from a BrandTheme.
+ * @fileoverview Test harness that drives the SOLE lowering from a FlatTheme.
  *
  * This is not a second lowering and not a compatibility door. It builds a
- * canonical `ThemeResolution` from an authored `BrandTheme` fixture, calls the
+ * canonical `ThemeResolution` from an authored `FlatTheme` fixture, calls the
  * one public `compileTheme`, and re-flattens the result into the field names
  * the existing suites assert on (`personality`, `tokenOverrides`, `cssString`).
  * The lift is the lowering's own wrap-only intake, never the ISO normalizer, so
@@ -11,13 +11,13 @@
  * asserts exactly that.
  */
 
-import type { BrandTheme, ThemeSource } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme, ThemeSource } from "@/foundation/contracts/composition/tenants/themes";
 import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type {
   ThemeCompilationModeBlock,
   ThemeCompilationRuntime,
 } from "@/foundation/contracts/composition/tenants/themes/compiled";
-import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   TenantAuthoredPaths,
   ThemeLayerPatch,
@@ -75,15 +75,15 @@ export const FIRST_PARTY_BASELINES: Readonly<Record<FirstPartyVerticalId, Theme>
  * The flat read view of a first-party baseline, for the suites that spell
  * the legacy compile input. Lifting it back reproduces the baseline exactly
  * (`liftAuthoredTheme(readGovernedTheme(b))` is `b` for all three verticals),
- * so `lowerBrandThemeFixture({ brandTheme: firstPartyFixture(v) })` compiles
+ * so `lowerFlatThemeFixture({ flatTheme: firstPartyFixture(v) })` compiles
  * the same Theme the artifact does.
  */
-export function firstPartyFixture(vertical: FirstPartyVerticalId, slug: string = vertical): BrandTheme {
+export function firstPartyFixture(vertical: FirstPartyVerticalId, slug: string = vertical): FlatTheme {
   return readGovernedTheme(baselineFor(vertical, slug));
 }
 
 /** A read view as a normalizer input, proven total rather than asserted. */
-export function themeSourceOf(view: BrandTheme): ThemeSource {
+export function themeSourceOf(view: FlatTheme): ThemeSource {
   if (!view.appearance || !view.palette || !view.capabilities) {
     throw new Error(`${view.id}: a normalizer source declares appearance, palette and capabilities`);
   }
@@ -109,8 +109,8 @@ export function resolveFirstParty(intent: ThemeIntent): ThemeResolution {
 }
 
 /** The legacy compile input shape the suites still spell. */
-export interface BrandThemeFixtureInput {
-  brandTheme: BrandTheme;
+export interface FlatThemeFixtureInput {
+  flatTheme: FlatTheme;
   tenantSlug?: string;
   tenantAuthoredPaths?: TenantAuthoredPaths;
   /**
@@ -119,36 +119,36 @@ export interface BrandThemeFixtureInput {
    * a suite mirroring a real document patch passes the collector's own answer.
    */
   tenantAuthoredLeaves?: TenantAuthoredPaths;
-  tenantPatch?: Partial<BrandTheme>;
+  tenantPatch?: Partial<FlatTheme>;
   tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship;
 }
 
 /** The legacy compile output shape the suites still assert on. */
-export interface BrandThemeFixtureCompilation {
+export interface FlatThemeFixtureCompilation {
   cssVariables: Record<string, string>;
   cssString: string;
   personality: ThemeCompilationRuntime["personality"];
   tokenOverrides: ThemeCompilationRuntime["tokenOverrides"];
   recipeProfile?: string;
   experienceProfile?: string;
-  colorScheme?: BrandThemeMode;
+  colorScheme?: FlatThemeMode;
   modeBlocks?: readonly ThemeCompilationModeBlock[];
 }
 
 /**
- * Compile one authored BrandTheme through the canonical pipeline.
+ * Compile one authored FlatTheme through the canonical pipeline.
  */
-export function lowerBrandThemeFixture(
-  input: BrandThemeFixtureInput
-): BrandThemeFixtureCompilation {
-  const { brandTheme, tenantPatch } = input;
+export function lowerFlatThemeFixture(
+  input: FlatThemeFixtureInput
+): FlatThemeFixtureCompilation {
+  const { flatTheme, tenantPatch } = input;
   // A floor with no declared authorship is a floor with an EMPTY claim set --
   // the same compile, because the seed derivations the retired door skipped are
   // no-ops over an empty set. Merging the floor into the theme would NOT be the
   // same: the tenant posture is applied last, above every vertical writer.
   const tenantAuthoredPaths =
     input.tenantAuthoredPaths ?? (tenantPatch !== undefined ? new Set<string>() : undefined);
-  const slug = input.tenantSlug ?? brandTheme.id;
+  const slug = input.tenantSlug ?? flatTheme.id;
   const provenance: ThemeProvenance =
     tenantAuthoredPaths === undefined
       ? EMPTY_PROVENANCE
@@ -161,7 +161,7 @@ export function lowerBrandThemeFixture(
             input.tenantStatusSeedAuthorship ??
             deriveTenantStatusSeedAuthorship((tenantPatch ?? {}) as ThemeLayerPatch),
         };
-  const theme = { ...liftAuthoredTheme(brandTheme), id: slug };
+  const theme = { ...liftAuthoredTheme(flatTheme), id: slug };
   const compiled = compileTheme({ theme, provenance }, resolveAdapter(PRIMARY_ENGINE));
   return {
     cssVariables: { ...compiled.cssVariables },
@@ -190,16 +190,16 @@ export function lowerBrandThemeFixture(
 export interface LowerThemeProvenanceOptions {
   tenantSlug?: string;
   tenantAuthoredPaths?: TenantAuthoredPaths;
-  /** See `BrandThemeFixtureInput.tenantAuthoredLeaves`. */
+  /** See `FlatThemeFixtureInput.tenantAuthoredLeaves`. */
   tenantAuthoredLeaves?: TenantAuthoredPaths;
-  tenantPatch?: Partial<BrandTheme>;
+  tenantPatch?: Partial<FlatTheme>;
   tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship;
 }
 
 export function lowerTheme(
   theme: Theme,
   slugOrOptions: string | LowerThemeProvenanceOptions = theme.id
-): BrandThemeFixtureCompilation {
+): FlatThemeFixtureCompilation {
   const options: LowerThemeProvenanceOptions =
     typeof slugOrOptions === "string" ? { tenantSlug: slugOrOptions } : slugOrOptions;
   const tenantSlug = options.tenantSlug ?? theme.id;

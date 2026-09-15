@@ -2,15 +2,15 @@
  * MODERN-TENANT-VALUE-FREE — the Modern engine owns no tenant color.
  *
  * The product rule this pins: colors always come from the tenant (a static
- * BrandTheme or a DB Appearance document), and the Modern engine consumes
+ * FlatTheme or a DB Appearance document), and the Modern engine consumes
  * semantic channels without owning a light/dark identity of its own. The
  * failure mode is quiet and expensive: a tenant's literal gets copied into an
  * engine stylesheet as a "default", and from then on that tenant's color is
- * everyone's color — changing the BrandTheme moves the channel while the
+ * everyone's color — changing the FlatTheme moves the channel while the
  * engine keeps painting the old value underneath.
  *
  * The test collects every literal color value the three first-party
- * BrandThemes author (palette bodies AND `modes` overlays, since a mode
+ * FlatThemes author (palette bodies AND `modes` overlays, since a mode
  * overlay is just as much tenant identity as the base palette) and asserts
  * none of them appears as a DECLARED VALUE inside the Modern engine CSS tree
  * or `foundation/themes/default/index.css`.
@@ -28,9 +28,9 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -88,7 +88,7 @@ function colorsIn(text: string): string[] {
   return found;
 }
 
-/** Every color literal reachable from a BrandTheme object, base body and modes alike. */
+/** Every color literal reachable from a FlatTheme object, base body and modes alike. */
 function themeColors(theme: unknown, sink: Set<string>): void {
   if (typeof theme === 'string') {
     for (const color of colorsIn(theme)) sink.add(color);
@@ -132,7 +132,7 @@ function declaredValues(css: string): { value: string; line: number }[] {
 
 const TENANT_COLORS = (() => {
   const sink = new Set<string>();
-  for (const theme of [bithireBrandTheme, evntoBrandTheme, rottayBrandTheme]) {
+  for (const theme of [bithireFlatTheme, evntoFlatTheme, rottayFlatTheme]) {
     themeColors(theme, sink);
   }
   return sink;
@@ -177,7 +177,7 @@ const key = (finding: Finding) => `${finding.file} :: ${finding.value}`;
  *   bithire: #f8fafc (bg/readOnly — a BitHire LIGHT value declared on
  *            --ds-color-neutral-900 in the DARK scope)
  *
- * Semantic ramps — the green/amber/red/blue steps the BrandThemes also author.
+ * Semantic ramps — the green/amber/red/blue steps the FlatThemes also author.
  * A shared provenance does not make them shared property: a tenant that moves
  * its success ramp still finds these underneath.
  *
@@ -188,12 +188,12 @@ const key = (finding: Finding) => `${finding.file} :: ${finding.value}`;
  * THE 2026-08-14 RE-KEY (`bd5723e7c`, "move palette authority into brand
  * themes"). Twenty entries were added at once, which reads like the ratchet
  * running backwards. It is not. What this file measures is an INTERSECTION —
- * literals default.css declares AND the BrandThemes claim — and that commit
+ * literals default.css declares AND the FlatThemes claim — and that commit
  * moved only the second half. Measured across it:
  *
  *   default.css                    byte-identical (last touched `dcadb8474`)
  *   the Modern engine tree         still zero, the floor above is untouched
- *   the twenty literals            absent from the reachable BrandTheme object
+ *   the twenty literals            absent from the reachable FlatTheme object
  *                                  graph before, present after
  *
  * Field by field the shape is uniform: `rottay.palette.textMutedColor`,
@@ -207,7 +207,7 @@ const key = (finding: Finding) => `${finding.file} :: ${finding.value}`;
  *
  * The distinction is load-bearing, so it is stated once here and not repeated
  * per line: an entry may join this list ONLY when the value it names is
- * already declared in an unchanged default.css and a BrandTheme newly claims
+ * already declared in an unchanged default.css and a FlatTheme newly claims
  * it. A literal newly WRITTEN into default.css or the engine tree is a product
  * defect and belongs in neither list.
  */
@@ -268,8 +268,8 @@ describe('MODERN-TENANT-VALUE-FREE · the engine declares no tenant color', () =
     // BitHire is the one first-party vertical whose preset decides seeds; the
     // structural presets author no colour, so the drill plants its two seeds.
     // A drill that cannot fail on purpose proves nothing.
-    const rottayCanvas = bithireBrandTheme.palette?.secondaryColor ?? '';
-    const bithirePrimary = bithireBrandTheme.palette?.primaryColor ?? '';
+    const rottayCanvas = bithireFlatTheme.palette?.secondaryColor ?? '';
+    const bithirePrimary = bithireFlatTheme.palette?.primaryColor ?? '';
     expect(rottayCanvas).toMatch(/^#[0-9A-Fa-f]{6}$/);
     expect(bithirePrimary).toMatch(/^#[0-9A-Fa-f]{6}$/);
     writeFileSync(

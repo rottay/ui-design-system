@@ -10,7 +10,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { semanticSurfaceRolesToSurfaceVariables } from "../../../foundation/materials";
@@ -40,7 +40,7 @@ export const surfacesDeriver: FamilyDeriver = {
 };
 
 export function deriveSurfaceChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   expansion: ExpressiveExpansion
 ): Record<string, string> {
   const su = bt.surfaces;

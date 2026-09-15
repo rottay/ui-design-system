@@ -1,6 +1,6 @@
 /**
  * Canonical lowering for bounded appearance postures shared by the static
- * BrandTheme compiler and the DB Appearance compiler.
+ * FlatTheme compiler and the DB Appearance compiler.
  *
  * A posture may come from an explicitly authored field or an expressive
  * profile, but it must reach the same CSS channels through this one table.

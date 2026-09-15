@@ -6,15 +6,15 @@
  * @package @rottay/design-system
  */
 
-import type { BrandThemeMode } from "..";
+import type { FlatThemeMode } from "..";
 import type { PartialPersonalityTokens } from "@/foundation/contracts/kernel/tokens";
 import type { TenantTokenOverrides } from "@/foundation/contracts/composition/tenants";
 
 /** A non-default mode's compiled delta over the base block. */
 export interface ThemeCompilationModeBlock {
-  readonly mode: BrandThemeMode;
+  readonly mode: FlatThemeMode;
   readonly cssVariables: Readonly<Record<string, string>>;
-  readonly colorScheme: BrandThemeMode;
+  readonly colorScheme: FlatThemeMode;
 }
 
 /** The non-CSS half of a compile: what a React runtime reads without re-deriving. */
@@ -36,6 +36,6 @@ export interface ThemeCompilation {
   readonly cssVariables: Readonly<Record<string, string>>;
   /** Always present; may be empty. Never optional, so a reader needs no guard. */
   readonly modeBlocks: readonly ThemeCompilationModeBlock[];
-  readonly colorScheme?: BrandThemeMode;
+  readonly colorScheme?: FlatThemeMode;
   readonly runtime: ThemeCompilationRuntime;
 }

@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { SEMANTIC_SURFACE_ROLES } from "@/foundation/contracts/kernel/tokens/materials";
 import type {
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
 import { TENANT_THEME_OVERRIDE_TOKENS } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
@@ -12,7 +12,7 @@ import {
   hydrateTenantThemeConfig,
   validateTenantThemeDocument,
 } from "@/infrastructure/compilers/composition/tenant-theme";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 import {
   EDITORIAL_FLAT_BRAND_THEME,
@@ -269,11 +269,11 @@ type ModeChannelValues = Readonly<
 interface ModeFixtureExpectation {
   readonly id: string;
   readonly slug: string;
-  readonly brandTheme: BrandTheme;
+  readonly flatTheme: FlatTheme;
   /** The mode the theme body itself is authored in. */
-  readonly defaultMode: BrandThemeMode;
+  readonly defaultMode: FlatThemeMode;
   /** The mode authored as a `modes` overlay; the only block that may compile. */
-  readonly nonDefaultMode: BrandThemeMode;
+  readonly nonDefaultMode: FlatThemeMode;
   /** Expected effective values of the default mode (the base block). */
   readonly base: ModeChannelValues;
   /** Expected effective values of the non-default mode. */
@@ -284,7 +284,7 @@ const MODE_FIXTURES = [
   {
     id: "quality-editorial-flat",
     slug: EDITORIAL_FLAT_IDENTITY.slug,
-    brandTheme: EDITORIAL_FLAT_BRAND_THEME,
+    flatTheme: EDITORIAL_FLAT_BRAND_THEME,
     defaultMode: "light",
     nonDefaultMode: "dark",
     base: {
@@ -303,7 +303,7 @@ const MODE_FIXTURES = [
   {
     id: "quality-technical-dark",
     slug: TECHNICAL_DARK_IDENTITY.slug,
-    brandTheme: TECHNICAL_DARK_BRAND_THEME,
+    flatTheme: TECHNICAL_DARK_BRAND_THEME,
     defaultMode: "dark",
     nonDefaultMode: "light",
     base: {
@@ -322,7 +322,7 @@ const MODE_FIXTURES = [
   {
     id: "quality-humanist-soft",
     slug: HUMANIST_SOFT_IDENTITY.slug,
-    brandTheme: HUMANIST_SOFT_BRAND_THEME,
+    flatTheme: HUMANIST_SOFT_BRAND_THEME,
     defaultMode: "light",
     nonDefaultMode: "dark",
     base: {
@@ -375,8 +375,8 @@ describe("DS-Q001 torture tenant mode authority", () => {
 
   it("compiles each base block as that fixture's default-mode palette", () => {
     for (const fixture of MODE_FIXTURES) {
-      const compiled = lowerBrandThemeFixture({
-        brandTheme: fixture.brandTheme,
+      const compiled = lowerFlatThemeFixture({
+        flatTheme: fixture.flatTheme,
         tenantSlug: fixture.slug,
       });
 
@@ -396,8 +396,8 @@ describe("DS-Q001 torture tenant mode authority", () => {
 
   it("compiles exactly one non-default mode block per fixture", () => {
     for (const fixture of MODE_FIXTURES) {
-      const compiled = lowerBrandThemeFixture({
-        brandTheme: fixture.brandTheme,
+      const compiled = lowerFlatThemeFixture({
+        flatTheme: fixture.flatTheme,
         tenantSlug: fixture.slug,
       });
       const blocks = compiled.modeBlocks ?? [];
@@ -412,8 +412,8 @@ describe("DS-Q001 torture tenant mode authority", () => {
 
   it("gives the non-default mode its own effective palette", () => {
     for (const fixture of MODE_FIXTURES) {
-      const compiled = lowerBrandThemeFixture({
-        brandTheme: fixture.brandTheme,
+      const compiled = lowerFlatThemeFixture({
+        flatTheme: fixture.flatTheme,
         tenantSlug: fixture.slug,
       });
       const block = (compiled.modeBlocks ?? [])[0];
@@ -441,8 +441,8 @@ describe("DS-Q001 torture tenant mode authority", () => {
     // Technical's light ground is the same hex as its dark base, so its block
     // must NOT restate the ground; Editorial's dark ground genuinely moves, so
     // its block must.
-    const technical = lowerBrandThemeFixture({
-      brandTheme: TECHNICAL_DARK_BRAND_THEME,
+    const technical = lowerFlatThemeFixture({
+      flatTheme: TECHNICAL_DARK_BRAND_THEME,
       tenantSlug: TECHNICAL_DARK_IDENTITY.slug,
     });
     const technicalLight = (technical.modeBlocks ?? [])[0];
@@ -455,8 +455,8 @@ describe("DS-Q001 torture tenant mode authority", () => {
     );
     expect(technicalLight.cssVariables[MODE_CHANNELS.primary]).toBe("#77B7FF");
 
-    const editorial = lowerBrandThemeFixture({
-      brandTheme: EDITORIAL_FLAT_BRAND_THEME,
+    const editorial = lowerFlatThemeFixture({
+      flatTheme: EDITORIAL_FLAT_BRAND_THEME,
       tenantSlug: EDITORIAL_FLAT_IDENTITY.slug,
     });
     const editorialDark = (editorial.modeBlocks ?? [])[0];

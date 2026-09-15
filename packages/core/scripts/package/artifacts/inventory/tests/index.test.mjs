@@ -22,8 +22,8 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(scriptDir);
 
 const TOKENS = {
-  all: new Set(['themanagementmiami', 'torture', 'torture-dark', 'torture-light', 'tortureDarkBrandTheme']),
-  content: new Set(['themanagementmiami', 'torture-dark', 'torture-light', 'tortureDarkBrandTheme']),
+  all: new Set(['themanagementmiami', 'torture', 'torture-dark', 'torture-light', 'tortureDarkFlatTheme']),
+  content: new Set(['themanagementmiami', 'torture-dark', 'torture-light', 'tortureDarkFlatTheme']),
 };
 const ALLOW = { prefixes: ['dist/entrypoints/eslint/'], exacts: new Set(['contracts/runtime/suppliers/index.json']) };
 
@@ -114,9 +114,9 @@ test('a tenant fixture identifier in shipped CONTENT fails', () => {
   const p = pack(['dist/index.js']);
   const { failures } = audit(p, {
     baseline: baselineFrom(p),
-    contents: { 'dist/index.js': 'export { tortureDarkBrandTheme } from "./fixtures";\n' },
+    contents: { 'dist/index.js': 'export { tortureDarkFlatTheme } from "./fixtures";\n' },
   });
-  assert.match(failures.join('\n'), /tortureDarkBrandTheme.*shipped file content/);
+  assert.match(failures.join('\n'), /tortureDarkFlatTheme.*shipped file content/);
 });
 
 test('an unexpected new packed entry fails; an entry in the additions review passes', () => {
@@ -156,12 +156,12 @@ test('an unreadable packed file is a failure (cannot verify content)', () => {
 
 test('forbidden tokens are derived from the real torture fixtures', () => {
   const tokens = collectForbiddenTenantTokens(packageRoot);
-  for (const slug of ['themanagementmiami', 'torture-dark', 'torture-light', 'tortureDarkBrandTheme']) {
+  for (const slug of ['themanagementmiami', 'torture-dark', 'torture-light', 'tortureDarkFlatTheme']) {
     assert.ok(tokens.all.has(slug), `expected derived tokens to include ${slug}`);
   }
   // The content set keeps unambiguous slugs but drops the bare English word.
   assert.ok(tokens.content.has('themanagementmiami'));
-  assert.ok(tokens.content.has('tortureDarkBrandTheme'));
+  assert.ok(tokens.content.has('tortureDarkFlatTheme'));
   assert.ok(!tokens.content.has('torture'), 'bare "torture" must not be a content token');
 });
 

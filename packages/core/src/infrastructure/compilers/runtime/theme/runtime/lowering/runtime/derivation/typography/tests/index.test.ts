@@ -11,7 +11,7 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { NUMERIC_POSTURE, numericOverlay } from "../numeric";
 import { deriveTypeRoleChannels } from "../roles";
 import { deriveTypeScaleChannels } from "../scale";
@@ -25,14 +25,14 @@ const DEFAULT_THEME_CSS = readFileSync(
   "utf8"
 );
 
-const theme = (typography: BrandTheme["typography"]): BrandTheme => ({
+const theme = (typography: FlatTheme["typography"]): FlatTheme => ({
   id: "t",
   name: "T",
   typography,
 });
 
 /** What the family hands the role emitter, composed the way the family does. */
-const postures = (typography: BrandTheme["typography"]) => ({
+const postures = (typography: FlatTheme["typography"]) => ({
   numeric: numericOverlay(theme(typography)),
   weights: roleWeightOverlay(theme(typography)),
 });
@@ -86,7 +86,7 @@ describe("typography/weights", () => {
     );
   });
 
-  // The compatibility transport erases the type: a BrandTheme arrives as plain
+  // The compatibility transport erases the type: a FlatTheme arrives as plain
   // JSON through `TenantConfig.brandTheme`, so the two failure shapes below are
   // reachable input, not hypotheticals.
   it("rests at `normal` for a word outside the vocabulary, instead of throwing", () => {
@@ -126,7 +126,7 @@ describe("typography/numeric", () => {
 });
 
 describe("typography.role-weights (kit row 9)", () => {
-  const roles = (typography: BrandTheme["typography"]) =>
+  const roles = (typography: FlatTheme["typography"]) =>
     deriveTypeRoleChannels(theme(typography), undefined, postures(typography));
 
   it("moves the SEMANTIC role weight, not only the ladder channel", () => {
@@ -203,7 +203,7 @@ describe("typography.role-weights (kit row 9)", () => {
 });
 
 describe("typography.numeric (kit row 10)", () => {
-  const roles = (typography: BrandTheme["typography"]) =>
+  const roles = (typography: FlatTheme["typography"]) =>
     deriveTypeRoleChannels(theme(typography), undefined, postures(typography));
 
   it("states ONE figure grammar across every role", () => {

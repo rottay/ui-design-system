@@ -21,7 +21,7 @@ const SRC_ROOT = join(process.cwd(), 'src');
  * token prefix it must reference, with a minimum reference count.
  *
  * The `minRefs` threshold is intentionally strict for flagship families. A
- * token existing in BrandTheme is not useful white-label capability until the
+ * token existing in FlatTheme is not useful white-label capability until the
  * rendering engine and its skin consume it across anatomy, state and motion.
  * Small primitives keep a lower floor; premium families must retain a broad
  * customization surface or this gate fails before an app starts repainting.

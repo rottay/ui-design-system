@@ -12,7 +12,7 @@ import {
 
 /**
  * Two governed sources only. A mixed source that layered a customer Appearance
- * over a reserved code-owned BrandTheme on one config is not admissible: the
+ * over a reserved code-owned FlatTheme on one config is not admissible: the
  * runtime resolves exactly one visual authority per tenant. There is no recipe
  * axis here either — that one belongs to the recipe-profile probe, and carrying
  * a dead copy of it would fake a cross-axis this route never tests.

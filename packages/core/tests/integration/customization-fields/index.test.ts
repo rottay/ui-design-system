@@ -56,7 +56,7 @@ import { render, cleanup } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, afterEach } from 'vitest';
 
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -73,9 +73,9 @@ import { ThemeProvider } from '@/infrastructure/runtime/theming/composition/reac
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { firstPartyFixture, FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 const SRC_ROOT = join(process.cwd(), 'src');
 
@@ -151,10 +151,10 @@ function compileAuthored(document: Record<string, unknown>): Record<string, stri
   return artifact.variables as Record<string, string>;
 }
 
-const BRAND_THEMES: Record<string, BrandTheme> = {
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-  rottay: rottayBrandTheme,
+const BRAND_THEMES: Record<string, FlatTheme> = {
+  bithire: bithireFlatTheme,
+  evnto: evntoFlatTheme,
+  rottay: rottayFlatTheme,
 };
 
 /** A first-party artifact rendered in process, never read from disk. */

@@ -406,7 +406,7 @@ export function formatReport(result, { verbose = false } = {}) {
     if (result.growth.length > 40) lines.push(`    … ${result.growth.length - 40} more`);
     lines.push('');
     lines.push('  ROOT_EQUIVALENT  move the write off root/tenant/vertical scope, or publish the');
-    lines.push('                   value through BrandTheme / the tenant Appearance document.');
+    lines.push('                   value through FlatTheme / the tenant Appearance document.');
     lines.push('  UNKNOWN_HOOK     tenant/foundation/component channels are DS-owned and');
     lines.push('                   unadjudicated reads are debt: use a declared hook or --rt-*.');
     lines.push('  HOOK_VALUE_LITERAL  assign the hook a var()/color-mix() chain over DS tokens, not a');

@@ -723,7 +723,7 @@ describe("deterministic artifact compilation and isolation", () => {
    * driver, the column serialization, nor an admin edit that rewrites one
    * nested object guarantees a stable key order, so authoring order in the
    * document must not reach the artifact. This is the DB-side counterpart of
-   * the authored-order law on the static BrandTheme transport: there, leg B is
+   * the authored-order law on the static FlatTheme transport: there, leg B is
    * byte-invariant under a source permutation by design; here, the ONLY
    * transport is the document, so it must be invariant unconditionally.
    *

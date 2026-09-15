@@ -12,7 +12,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { brandThemeLoweringAdapter, UnknownVerticalError } from '../index.mjs';
+import { flatThemeLoweringAdapter, UnknownVerticalError } from '../index.mjs';
 
 const ROSTER = {
   rottay: { engine: 'classic' },
@@ -81,7 +81,7 @@ function harness() {
 
 test('lowers each first-party vertical with its own roster engine', async () => {
   const { module, importModule, resolvedEngines, compiledWith } = harness();
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module,
     coreRoot: '/core',
     importModule,
@@ -106,7 +106,7 @@ test('lowers each first-party vertical with its own roster engine', async () => 
 
 test('F-27 (DT-adjudicated form, post-CAN-06): an unknown vertical is refused, with no default engine', async () => {
   const { module, importModule, resolvedEngines, compiledWith } = harness();
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module,
     coreRoot: '/core',
     importModule,
@@ -124,7 +124,7 @@ test('F-27 (DT-adjudicated form, post-CAN-06): an unknown vertical is refused, w
 
 test('F-27 (DT-adjudicated form, post-CAN-06): a MISSING vertical is refused too', async () => {
   const { module, importModule, resolvedEngines } = harness();
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module,
     coreRoot: '/core',
     importModule,
@@ -143,7 +143,7 @@ test('F-27 (DT-adjudicated form, post-CAN-06): a rosterless CUSTOMER slug WITH a
   // for `probe-tenant-rottay`, which no roster row claims — and it must still
   // get ROTTAY's engine, because the vertical is what answers that question.
   const { module, importModule, resolvedEngines, compiledWith } = harness();
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module,
     coreRoot: '/core',
     importModule,
@@ -158,7 +158,7 @@ test('F-27 (DT-adjudicated form, post-CAN-06): a rosterless CUSTOMER slug WITH a
 test('the tenant slug feeds the emission selector and decides nothing else', async () => {
   const { module, importModule, compiledWith } = harness();
   const selectors = [];
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module: { ...module, brandTenantSelector: (slug) => (selectors.push(slug), `[t="${slug}"]`) },
     coreRoot: '/core',
     importModule,
@@ -173,7 +173,7 @@ test('the tenant slug feeds the emission selector and decides nothing else', asy
 
 test('resolves one adapter per engine, not one per compile', async () => {
   const { module, importModule, resolvedEngines } = harness();
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module,
     coreRoot: '/core',
     importModule,
@@ -188,7 +188,7 @@ test('resolves one adapter per engine, not one per compile', async () => {
 test('asks `verticalEngine` for the answer instead of re-reading the row', async () => {
   const { module, importModule, compiledWith } = harness();
   const asked = [];
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module: {
       ...module,
       verticalEngine: (vertical) => {
@@ -212,7 +212,7 @@ test('refuses a published module that exports no verticalEngine', async () => {
   const { module, importModule } = harness();
   const { verticalEngine: _absent, ...withoutLaw } = module;
   await assert.rejects(
-    brandThemeLoweringAdapter({ module: withoutLaw, coreRoot: '/core', importModule }),
+    flatThemeLoweringAdapter({ module: withoutLaw, coreRoot: '/core', importModule }),
     /exports no verticalEngine/,
   );
 });
@@ -220,7 +220,7 @@ test('refuses a published module that exports no verticalEngine', async () => {
 test('refuses an internal lowering owner that exports no compileTheme', async () => {
   const { module, importModule } = harness();
   await assert.rejects(
-    brandThemeLoweringAdapter({
+    flatThemeLoweringAdapter({
       module,
       coreRoot: '/core',
       importModule: async (absolutePath) =>
@@ -237,7 +237,7 @@ test('does not read the lowering or the lift off the public entry point', async 
   const { module, importModule, compiledWith } = harness();
   const { compileTheme: _lowering, liftAuthoredTheme: _lift, ...closedDoor } = module;
   assert.equal(closedDoor.liftAuthoredTheme, undefined);
-  const compile = await brandThemeLoweringAdapter({
+  const compile = await flatThemeLoweringAdapter({
     module: closedDoor,
     coreRoot: '/core',
     importModule,
@@ -249,7 +249,7 @@ test('does not read the lowering or the lift off the public entry point', async 
 test('refuses a roster module that cannot answer for a vertical', async () => {
   const { module } = harness();
   await assert.rejects(
-    brandThemeLoweringAdapter({
+    flatThemeLoweringAdapter({
       module,
       coreRoot: '/core',
       importModule: async (absolutePath) => {

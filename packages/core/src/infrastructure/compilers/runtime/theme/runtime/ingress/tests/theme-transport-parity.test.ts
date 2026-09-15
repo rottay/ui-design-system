@@ -2,13 +2,13 @@
  * `theme-transport-parity` — one decision, two transports, one compiled block.
  *
  * F-08 measured the opposite: `shape.button-style` moved one channel through a
- * static `BrandTheme` draft and six through a document, because the DB ingress
+ * static `FlatTheme` draft and six through a document, because the DB ingress
  * expanded the silhouette into a `chrome.controls.buttonGeometry` leaf of its
  * own before the lowering ever saw it. A derivation that lives in one
  * transport's ingress is a derivation the other transport does not have.
  *
  * The two doors compared here are the two a tenant actually reaches:
- * `draftPreviewThemeIntent` (a `BrandTheme` draft, the authoring surfaces' own
+ * `draftPreviewThemeIntent` (a `FlatTheme` draft, the authoring surfaces' own
  * shape) and `documentThemeIntent` (a persisted v2 document). Both resolve with
  * tenant authorship, so the comparison is transport against transport rather
  * than tenant against vertical.
@@ -26,7 +26,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { compileThemeIntent } from "../../../facade/runtime/compile";
 import { documentThemeIntent } from "../presentation/document";
@@ -48,7 +48,7 @@ const CONTROL_HEIGHT_CHANNELS = ["--ds-control-height-scale"] as const;
 
 const SLUG = "transport-parity";
 
-function staticArm(vertical: FirstPartyVerticalId, draft: BrandTheme) {
+function staticArm(vertical: FirstPartyVerticalId, draft: FlatTheme) {
   return compileThemeIntent(
     draftPreviewThemeIntent({ vertical, slug: SLUG, draft })
   ).compiled;
@@ -82,7 +82,7 @@ describe("theme-transport-parity: shape.button-style", () => {
           id: SLUG,
           name: SLUG,
           surfaces: { buttonStyle },
-        } as unknown as BrandTheme);
+        } as unknown as FlatTheme);
         const fromDocument = documentArm(vertical, {
           "shape.button-style": buttonStyle,
         });
@@ -111,7 +111,7 @@ describe("theme-transport-parity: shape.button-style", () => {
           id: SLUG,
           name: SLUG,
           surfaces: { buttonStyle },
-        } as unknown as BrandTheme);
+        } as unknown as FlatTheme);
         for (const alternative of BUTTON_STYLES.filter(
           (style) => style !== buttonStyle
         )) {
@@ -163,7 +163,7 @@ describe("theme-transport-parity: shape.nesting", () => {
           id: SLUG,
           name: SLUG,
           surfaces: { nesting },
-        } as unknown as BrandTheme);
+        } as unknown as FlatTheme);
         const fromDocument = documentArm(vertical, { "shape.nesting": nesting }, "pro");
         expect(fromDraft.cssVariables).toEqual(fromDocument.cssVariables);
         expect(fromDraft.modeBlocks).toEqual(fromDocument.modeBlocks);
@@ -177,7 +177,7 @@ describe("theme-transport-parity: shape.nesting", () => {
           id: SLUG,
           name: SLUG,
           surfaces: { nesting },
-        } as unknown as BrandTheme);
+        } as unknown as FlatTheme);
         const against = documentArm(
           vertical,
           { "shape.nesting": nesting === "uniform" ? "concentric" : "uniform" },
@@ -237,7 +237,7 @@ describe("theme-transport-parity: shape.control-height", () => {
           id: SLUG,
           name: SLUG,
           surfaces: { controlHeight },
-        } as unknown as BrandTheme);
+        } as unknown as FlatTheme);
         const fromDocument = documentArm(vertical, {
           "shape.control-height": controlHeight,
         });
@@ -255,7 +255,7 @@ describe("theme-transport-parity: shape.control-height", () => {
           id: SLUG,
           name: SLUG,
           surfaces: { controlHeight },
-        } as unknown as BrandTheme);
+        } as unknown as FlatTheme);
         for (const alternative of CONTROL_HEIGHTS.filter(
           (value) => value !== controlHeight
         )) {

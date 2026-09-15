@@ -532,10 +532,10 @@ export const TENANT_THEME_RHYTHM_SCALE_BOUNDS = {
 } as const;
 /**
  * Canonical rhythm posture → multiplier. The SINGLE source of the numbers:
- * the appearance compiler and the BrandTheme lowering both read this table,
+ * the appearance compiler and the FlatTheme lowering both read this table,
  * so a second multiplier literal anywhere is a cascade-integrity defect. The
  * posture VOCABULARY is additionally spelled in the schema enumeration and in
- * `BrandThemeSurfaces.rhythm`, exactly as `density` already is.
+ * `FlatTheme.surfaces.rhythm`, exactly as `density` already is.
  *
  * Rhythm is ORTHOGONAL to density by construction and the two must never be
  * collapsed. Density scales CONTROL SIZES through

@@ -1,5 +1,5 @@
 /**
- * Typography kernel — pure font-stack policy shared by the static BrandTheme
+ * Typography kernel — pure font-stack policy shared by the static FlatTheme
  * and DB appearance compilers (DS-A007).
  *
  * A tenant selects the FRONT of a font stack; it can never remove the

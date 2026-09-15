@@ -7,7 +7,7 @@ import {
 } from '../foundation/palettes';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 /**
  * WO-DES-12 — chart one-blue law (design-language §8.3 + Craft Bar A5.5).
@@ -32,7 +32,7 @@ describe('BitHire chart palette (WO-DES-12 one-blue law)', () => {
   // the engine default. Kept as a live assertion, not deleted: when DER-07 or the
   // vertical restores the decision this goes red and is re-adjudicated.
   it('carries no chart scheme decision: the one-blue selection has no preset behind it', () => {
-    expect(bithireBrandTheme.charts?.colorScheme).toBeUndefined();
+    expect(bithireFlatTheme.charts?.colorScheme).toBeUndefined();
   });
 
   it('resolves the monochrome scheme to the single-hue primary scale', () => {

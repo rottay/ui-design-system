@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type { FamilyDeriver } from "../../../foundation/contract";
@@ -73,7 +73,7 @@ export const typographyDeriver: FamilyDeriver = {
 };
 
 export function deriveTypographyChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   expansion: ExpressiveExpansion,
   typeRoleOverlay: ExpressiveTypeRoleOverlay | undefined
 ): Record<string, string> {

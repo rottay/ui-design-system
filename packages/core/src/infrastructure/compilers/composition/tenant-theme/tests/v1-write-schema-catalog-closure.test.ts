@@ -34,13 +34,13 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
   THEME_CONTROL_CATALOG,
   type ThemeControlRow,
 } from "@/contracts/theme/runtime/catalog";
 import type { ThemeDecisions } from "@/contracts/theme/presentation/document";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   migrateDocumentV1ToV2,
@@ -55,7 +55,7 @@ import {
   validateTenantThemeDocument,
 } from "../index";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const ENVELOPE = getTenantThemeVerticalEnvelope("bithire")!;
 const IDENTITY = {
@@ -286,7 +286,7 @@ describe("the projection writes documents the write validator accepts", () => {
 /**
  * The six rows this lot connected, with the in-memory spelling of each.
  *
- * The BrandTheme keypath is the catalog's own `keypath.brandTheme`, written out
+ * The FlatTheme keypath is the catalog's own `keypath.brandTheme`, written out
  * as the object a theme author would hand the compiler: the parity measurement
  * below needs the same decision expressed in both vocabularies.
  */
@@ -306,32 +306,32 @@ const CONNECTED = [
   {
     id: "palette.neutral-temperature",
     general: { palette: { neutralTemperature: "warm" } },
-    brandTheme: { palette: { neutralTemperature: "warm" } },
+    flatTheme: { palette: { neutralTemperature: "warm" } },
   },
   {
     id: "palette.contrast-posture",
     general: { palette: { contrastPosture: "soft" } },
-    brandTheme: { palette: { contrastPosture: "soft" } },
+    flatTheme: { palette: { contrastPosture: "soft" } },
   },
   {
     id: "shape.nesting",
     general: { shape: { nesting: "concentric" } },
-    brandTheme: { surfaces: { nesting: "concentric" } },
+    flatTheme: { surfaces: { nesting: "concentric" } },
   },
   {
     id: "shape.control-height",
     general: { shape: { controlHeight: "tall" } },
-    brandTheme: { surfaces: { controlHeight: "tall" } },
+    flatTheme: { surfaces: { controlHeight: "tall" } },
   },
   {
     id: "states.emphasis",
     general: { states: { emphasis: "subtle" } },
-    brandTheme: { surfaces: { stateEmphasis: "subtle" } },
+    flatTheme: { surfaces: { stateEmphasis: "subtle" } },
   },
   {
     id: "states.focus-style",
     general: { states: { focusStyle: "glow" } },
-    brandTheme: { surfaces: { focusStyle: "glow" } },
+    flatTheme: { surfaces: { focusStyle: "glow" } },
   },
 ] as const;
 
@@ -362,7 +362,7 @@ function deepMerge<T extends object>(base: T, patch: object): T {
  * posture's own channels in the difference.
  */
 const BASE_GENERAL = {
-  palette: { primary: bithireBrandTheme.palette!.primaryColor! },
+  palette: { primary: bithireFlatTheme.palette!.primaryColor! },
 };
 
 const documentVariables = (general: object): Record<string, string> =>
@@ -371,9 +371,9 @@ const documentVariables = (general: object): Record<string, string> =>
     { verticalEnvelope: ENVELOPE }
   ).variables;
 
-const brandThemeVariables = (patch: object): Record<string, string> =>
-  lowerBrandThemeFixture({
-    brandTheme: deepMerge(bithireBrandTheme, patch) as BrandTheme,
+const flatThemeVariables = (patch: object): Record<string, string> =>
+  lowerFlatThemeFixture({
+    flatTheme: deepMerge(bithireFlatTheme, patch) as FlatTheme,
     tenantSlug: IDENTITY.slug,
   }).cssVariables;
 
@@ -401,8 +401,8 @@ describe("the six connected rows compile to the same bytes on both transports", 
         documentVariables(deepMerge(BASE_GENERAL, row.general))
       );
       const fromMemory = moved(
-        brandThemeVariables({}),
-        brandThemeVariables(row.brandTheme)
+        flatThemeVariables({}),
+        flatThemeVariables(row.flatTheme)
       );
       // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
       // registration. The two arms start from different BASES: the document

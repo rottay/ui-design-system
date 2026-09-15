@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ExpressiveExpansion } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
@@ -45,7 +45,7 @@ function posturePreset(
  * the tenant family above.
  */
 export function deriveElevationLadder(
-  bt: BrandTheme,
+  bt: FlatTheme,
   expansion: ExpressiveExpansion
 ): Record<string, string> {
   const su = bt.surfaces;

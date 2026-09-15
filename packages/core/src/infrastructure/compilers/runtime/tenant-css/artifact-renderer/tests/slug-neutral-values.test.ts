@@ -19,27 +19,27 @@
 import { describe, expect, it } from 'vitest';
 
 import { brandModeSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import { projectFirstPartyArtifactScopes } from '@/infrastructure/compilers/kernel/foundation/css/scope-projection';
 import {
   compileTenantThemeConfig,
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   renderVerticalArtifact,
 } from '../index';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
-const THEMES: readonly [string, BrandTheme][] = [
-  ['bithire', bithireBrandTheme],
-  ['evnto', evntoBrandTheme],
-  ['rottay', rottayBrandTheme],
+const THEMES: readonly [string, FlatTheme][] = [
+  ['bithire', bithireFlatTheme],
+  ['evnto', evntoFlatTheme],
+  ['rottay', rottayFlatTheme],
 ];
 
 /**
@@ -52,10 +52,10 @@ const ALPHA = { slug: 'quiettenantone', verticalKey: 'quietverticalone' };
 const BETA = { slug: 'loudtenanttwo', verticalKey: 'loudverticaltwo' };
 
 function render(
-  brandTheme: BrandTheme,
+  flatTheme: FlatTheme,
   tenant: { slug: string; verticalKey: string }
 ): string {
-  const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: tenant.slug });
+  const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: tenant.slug });
   return renderVerticalArtifact({
     tenantSlug: tenant.slug,
     verticalKey: tenant.verticalKey,
@@ -105,8 +105,8 @@ describe('SLUG-NEUTRAL · the rendered artifact carries no slug-dependent value'
   });
 
   it('every difference between two tenants sits in a selector, never a declaration', () => {
-    const alpha = render(rottayBrandTheme, ALPHA).split('\n');
-    const beta = render(rottayBrandTheme, BETA).split('\n');
+    const alpha = render(rottayFlatTheme, ALPHA).split('\n');
+    const beta = render(rottayFlatTheme, BETA).split('\n');
     expect(alpha.length).toBe(beta.length);
 
     const differing = alpha.filter((line, index) => line !== beta[index]);
@@ -120,8 +120,8 @@ describe('SLUG-NEUTRAL · the rendered artifact carries no slug-dependent value'
   });
 
   it('the slug reaches mode blocks only through brandModeSelector', () => {
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: rottayBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: rottayFlatTheme,
       tenantSlug: ALPHA.slug,
     });
     expect(compiled.modeBlocks?.length ?? 0).toBeGreaterThan(0);
@@ -200,10 +200,10 @@ describe('SLUG-NEUTRAL · the DB path scopes by slug and compiles by document', 
 describe('SLUG-NEUTRAL · drill', () => {
   it('a slug-conditional value planted downstream is caught by the rename test', () => {
     const renderWithBranch = (
-      brandTheme: BrandTheme,
+      flatTheme: FlatTheme,
       tenant: { slug: string; verticalKey: string }
     ) => {
-      const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: tenant.slug });
+      const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: tenant.slug });
       const cssVariables = {
         ...compiled.cssVariables,
         // The failure mode verbatim: one vertical gets a different ground.
@@ -223,15 +223,15 @@ describe('SLUG-NEUTRAL · drill', () => {
       });
     };
 
-    const renamed = renderWithBranch(bithireBrandTheme, ALPHA)
+    const renamed = renderWithBranch(bithireFlatTheme, ALPHA)
       .split(ALPHA.slug)
       .join(BETA.slug)
       .split(ALPHA.verticalKey)
       .join(BETA.verticalKey);
-    expect(renamed).not.toBe(renderWithBranch(bithireBrandTheme, BETA));
+    expect(renamed).not.toBe(renderWithBranch(bithireFlatTheme, BETA));
 
-    expect(declarationsByBlock(renderWithBranch(bithireBrandTheme, BETA))).not.toEqual(
-      declarationsByBlock(renderWithBranch(bithireBrandTheme, ALPHA))
+    expect(declarationsByBlock(renderWithBranch(bithireFlatTheme, BETA))).not.toEqual(
+      declarationsByBlock(renderWithBranch(bithireFlatTheme, ALPHA))
     );
   });
 });

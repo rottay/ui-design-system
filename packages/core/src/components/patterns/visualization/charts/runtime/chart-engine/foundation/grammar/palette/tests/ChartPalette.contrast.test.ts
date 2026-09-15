@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
 
 import type { ChartPersonalityTokens } from '@/foundation/contracts';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import {
   CHART_CATEGORICAL_SIZE,
   resolveChartSeriesPaint,
@@ -61,7 +61,7 @@ describe('Chart grammar foundation palette non-text contrast', () => {
     // no subject left (measured: `charts` is `{}`). The selection half is carried
     // by the customer fixture below, which still authors one; the vertical's lost
     // one-blue decision is pinned in `charts/tests/bithire-chart-palette`.
-    expect(themanagementmiamiBrandTheme.charts?.colorScheme).toBe('default');
+    expect(themanagementmiamiFlatTheme.charts?.colorScheme).toBe('default');
 
     for (const scheme of SCHEMES) {
       const colors = readModeColors(scheme);

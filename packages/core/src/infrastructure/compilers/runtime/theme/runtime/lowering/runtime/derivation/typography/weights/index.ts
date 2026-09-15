@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   SemanticTypographyRole,
   SemanticTypographyTokens,
@@ -44,7 +44,7 @@ interface WeightLadder {
  */
 const ROLE_WEIGHT_POSTURE: Readonly<
   Record<
-    NonNullable<NonNullable<BrandTheme["typography"]>["roleWeights"]>,
+    NonNullable<NonNullable<FlatTheme["typography"]>["roleWeights"]>,
     {
       readonly ladder: WeightLadder;
       readonly roles: Readonly<Partial<Record<SemanticTypographyRole, number>>>;
@@ -97,7 +97,7 @@ type RoleWeights = keyof typeof ROLE_WEIGHT_POSTURE;
  */
 const HEADING_BIAS: Readonly<
   Record<
-    NonNullable<NonNullable<BrandTheme["typography"]>["headingWeightBias"]>,
+    NonNullable<NonNullable<FlatTheme["typography"]>["headingWeightBias"]>,
     WeightLadder
   >
 > = {
@@ -110,7 +110,7 @@ type HeadingBias = keyof typeof HEADING_BIAS;
 
 /**
  * FAILING CLOSED IS THE LADDER, not an extra, and it is the same law the
- * `axes` and `states` families already state. A `BrandTheme` is typed, but it
+ * `axes` and `states` families already state. A `FlatTheme` is typed, but it
  * is plain data by the time it reaches this compiler: it crosses the RSC/JSON
  * boundary and arrives through the compatibility `TenantConfig.brandTheme`
  * field, where no type survives. A bare bracket read of a closed table
@@ -130,14 +130,14 @@ function readClosed<T extends string>(
 }
 
 /** The posture the theme DECIDED, or `undefined` when it decided none. */
-function readRoleWeights(bt: BrandTheme): RoleWeights | undefined {
+function readRoleWeights(bt: FlatTheme): RoleWeights | undefined {
   return readClosed<RoleWeights>(
     ROLE_WEIGHT_POSTURE,
     bt.typography?.roleWeights
   );
 }
 
-function readHeadingBias(bt: BrandTheme): HeadingBias {
+function readHeadingBias(bt: FlatTheme): HeadingBias {
   return (
     readClosed<HeadingBias>(HEADING_BIAS, bt.typography?.headingWeightBias) ??
     "normal"
@@ -155,7 +155,7 @@ function readHeadingBias(bt: BrandTheme): HeadingBias {
  * weight posture that moved nothing at all.
  */
 export function deriveTypeWeightChannels(
-  bt: BrandTheme
+  bt: FlatTheme
 ): Record<string, string> {
   const vars: Record<string, string> = { ...WEIGHT_STEPS };
   const decided = readRoleWeights(bt);
@@ -182,7 +182,7 @@ export function deriveTypeWeightChannels(
  * Empty when no decision is authored. The legacy bias deliberately does NOT
  * produce a map here -- see `HEADING_BIAS`.
  */
-export function roleWeightOverlay(bt: BrandTheme): SemanticTypographyTokens {
+export function roleWeightOverlay(bt: FlatTheme): SemanticTypographyTokens {
   const decided = readRoleWeights(bt);
   if (decided === undefined) return {};
   const overlay: Record<string, { fontWeight: number }> = {};

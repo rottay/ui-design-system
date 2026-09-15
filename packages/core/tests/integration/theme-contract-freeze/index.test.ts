@@ -59,7 +59,7 @@ const modern = resolveAdapter("modern");
  * The three first-party `Theme` values, plus a zero-mode variant of two.
  *
  * The `torture` and `themanagementmiami` fixtures are deliberately absent: they
- * are plain `BrandTheme` literals with no `capabilities` catalog, so they are
+ * are plain `FlatTheme` literals with no `capabilities` catalog, so they are
  * not `ThemeSource` and cannot honestly become a `Theme`.
  */
 const noModes = (vertical: FirstPartyVerticalId): ThemeResolution => ({
@@ -956,7 +956,7 @@ describe("the two transitional re-exports are consumer-exact", () => {
     expect(resolved).toContain("export function tenantPostureFloors");
     expect(resolved).toContain("export function deriveTenantStatusSeedAuthorship");
     expect(resolved).toContain("export interface TenantStatusSeedAuthorship");
-    // The compile envelope is `ThemeResolution`, not a widened BrandTheme input.
+    // The compile envelope is `ThemeResolution`, not a widened FlatTheme input.
     expect(resolved).toContain("export interface ThemeResolution");
     expect(resolved).not.toContain("BrandCompilerProvenanceInput");
   });

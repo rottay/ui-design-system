@@ -124,7 +124,7 @@ const RUNTIME_FLOW = [
   'Structures add page chrome and context.',
   'Patterns solve repeated workflows.',
   'Primitives render through the active engine.',
-  'Tokens and BrandTheme finish the visual result.',
+  'Tokens and FlatTheme finish the visual result.',
 ] as const;
 
 const WARNINGS = [

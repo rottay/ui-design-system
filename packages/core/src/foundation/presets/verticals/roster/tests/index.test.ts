@@ -4,14 +4,14 @@ import { describe, expect, it } from "vitest";
 import { FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_VERTICALS } from "..";
 import { FIRST_PARTY_BASELINES, firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 const BRAND_THEME_BY_SLUG = {
-  rottay: rottayBrandTheme,
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
+  rottay: rottayFlatTheme,
+  bithire: bithireFlatTheme,
+  evnto: evntoFlatTheme,
 } as const;
 
 describe("the roster names a vertical and carries no theme", () => {

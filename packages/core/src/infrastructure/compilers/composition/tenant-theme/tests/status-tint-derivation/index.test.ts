@@ -49,9 +49,9 @@
 import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 import {
   compileTenantThemeConfig,
@@ -59,7 +59,7 @@ import {
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 /** A tenant that authors ONLY its success seed — nothing else contested. */
 const TENANT_SUCCESS_SEED_ONLY: TenantThemeDocument = {
@@ -148,16 +148,16 @@ describe("a tenant seed defeats a baseline that still bakes a status literal", (
   // baseline bakes one — a synthetic fixture, not a claim about bithire
   // today.
   it("a tenant's own seed overwrites a baseline-baked -bg/-border literal", () => {
-    const withBakedLiteral: BrandTheme = {
-      ...bithireBrandTheme,
+    const withBakedLiteral: FlatTheme = {
+      ...bithireFlatTheme,
       palette: {
-        ...bithireBrandTheme.palette,
+        ...bithireFlatTheme.palette,
         successBgColor: "#f0fdf4",
         successBorderColor: "rgba(5, 118, 66, 0.25)",
       },
-    } as BrandTheme;
+    } as FlatTheme;
     const artifact = compileWithProvenance({
-      brandTheme: withBakedLiteral,
+      flatTheme: withBakedLiteral,
       tenantSlug: "status-tint-guard-one",
       tenantPatch: { palette: { successColor: "#7C3AED" } as never },
       tenantAuthoredPaths: new Set(["palette.successColor"]),
@@ -206,18 +206,18 @@ describe("a tenant document silent on palette.status moves zero status bytes", (
  * fields are compiler-internal provenance, not part of the public contract.
  */
 function compileWithProvenance(input: {
-  brandTheme: BrandTheme;
+  flatTheme: FlatTheme;
   tenantSlug: string;
-  tenantPatch?: Partial<BrandTheme>;
+  tenantPatch?: Partial<FlatTheme>;
   tenantAuthoredPaths?: Set<string>;
 }) {
-  return lowerBrandThemeFixture(input as never);
+  return lowerFlatThemeFixture(input as never);
 }
 
 describe("a tenant leaf on the derived channel outranks tenant seed derivation", () => {
   it("a tenant that authors BOTH its own status seed AND successBgColor keeps its own successBgColor", () => {
     const artifact = compileWithProvenance({
-      brandTheme: bithireBrandTheme,
+      flatTheme: bithireFlatTheme,
       tenantSlug: "status-tint-guard-two",
       tenantPatch: {
         palette: { successColor: "#7C3AED", successBgColor: "#123456" } as never,
@@ -237,15 +237,15 @@ describe("a tenant leaf on the derived channel outranks tenant seed derivation",
 
 describe("a value that bakes no colour of its own remains exactly as assembled", () => {
   it("a baseline indirection for -border survives a tenant seed re-derivation untouched", () => {
-    const withIndirection: BrandTheme = {
-      ...bithireBrandTheme,
+    const withIndirection: FlatTheme = {
+      ...bithireFlatTheme,
       palette: {
-        ...bithireBrandTheme.palette,
+        ...bithireFlatTheme.palette,
         successBorderColor: "var(--ds-color-border-focus)",
       },
-    } as BrandTheme;
+    } as FlatTheme;
     const artifact = compileWithProvenance({
-      brandTheme: withIndirection,
+      flatTheme: withIndirection,
       tenantSlug: "status-tint-guard-three",
       tenantPatch: { palette: { successColor: "#7C3AED" } as never },
       tenantAuthoredPaths: new Set(["palette.successColor"]),

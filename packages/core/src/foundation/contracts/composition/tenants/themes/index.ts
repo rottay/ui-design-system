@@ -59,11 +59,11 @@ export interface ThemeContextValue {
   isFallback?: boolean;
 }
 
-// ── BrandTheme ──────────────────────────────────────────
+// ── FlatTheme ──────────────────────────────────────────
 // The canonical premium visual source of truth.
-// Merge precedence: DS base -> vertical baseline -> BrandTheme -> generated artifacts.
+// Merge precedence: DS base -> vertical baseline -> FlatTheme -> generated artifacts.
 //
-// A BrandTheme captures the full visual identity that was previously split across
+// A FlatTheme captures the full visual identity that was previously split across
 // TenantBranding (colors/fonts), TenantTokenOverrides (structural), and
 // PersonalityTokens (animation/chart/typography/accent/card). It does NOT include
 // tenant identity (logos, company name, plan, features) — those stay in TenantConfig.
@@ -134,7 +134,7 @@ export interface BrandExpressiveSelection {
 }
 
 /**
- * Mode posture of the palette a BrandTheme actually authors.
+ * Mode posture of the palette a FlatTheme actually authors.
  *
  * A theme declares one default mode and its values ARE that mode: bithire and
  * evnto author light palettes, rottay authors a dark one. The compiler emits
@@ -148,12 +148,12 @@ export interface BrandAppearance {
 }
 
 /** The two modes a theme can be authored for. */
-export type BrandThemeMode = "light" | "dark";
+export type FlatThemeMode = "light" | "dark";
 
 /**
  * One mode's values, as deep partials of the semantic families.
  *
- * A vertical authors its DEFAULT mode in the main BrandTheme body — those
+ * A vertical authors its DEFAULT mode in the main FlatTheme body — those
  * fields are unchanged and a theme without `modes` compiles exactly as before.
  * The NON-default mode is authored here, and only where it diverges: the
  * compiler merges this over the base theme, runs the SAME family compilers,
@@ -164,7 +164,7 @@ export type BrandThemeMode = "light" | "dark";
  * `palette` is `Partial` only because `primaryColor` is required on the base;
  * every other family is already all-optional, so it is its own deep partial.
  */
-export interface BrandThemeModeOverlay {
+export interface FlatThemeModeOverlay {
   palette?: Partial<BrandPalette>;
   typography?: BrandTypography;
   surfaces?: BrandSurfaces;
@@ -172,15 +172,15 @@ export interface BrandThemeModeOverlay {
 }
 
 /** Typed per-mode overlays keyed by the mode they describe. */
-export type BrandThemeModes = Partial<
-  Record<BrandThemeMode, BrandThemeModeOverlay>
+export type FlatThemeModes = Partial<
+  Record<FlatThemeMode, FlatThemeModeOverlay>
 >;
 
 /**
- * The optional BrandTheme families whose presence is a BRAND DECISION rather
+ * The optional FlatTheme families whose presence is a BRAND DECISION rather
  * than a schema accident.
  *
- * Every one of these is `?` on `BrandTheme` because a DB patch or a fixture may
+ * Every one of these is `?` on `FlatTheme` because a DB patch or a fixture may
  * legitimately omit it. That optionality is wrong for a first-party vertical:
  * "evnto ships no recipe selection" and "someone forgot to author evnto's
  * recipe selection" are indistinguishable from the source alone, and silent
@@ -207,7 +207,7 @@ export type { BrandCapabilityAbsenceReason } from "./iso/capability-absence";
 import type { BrandCapabilityAbsenceReason } from "./iso/capability-absence";
 
 /**
- * A capability is either active (the corresponding BrandTheme field is
+ * A capability is either active (the corresponding FlatTheme field is
  * authored and live) or explicitly not — with a reason and a human note.
  *
  * `disabled` means the decision is made and closed. `unassigned` means the
@@ -237,7 +237,12 @@ export type BrandCapabilityCatalog = Readonly<
   Record<BrandCapabilityId, BrandCapabilityDisposition>
 >;
 
-export interface BrandTheme {
+/**
+ * The flat projection of the governed `Theme`. It carries TWO roles today: the
+ * read view the lowering consumes, and the draft transport the studio, preview
+ * and fixtures author and serialize. WO-DER-08 owns splitting them.
+ */
+export interface FlatTheme {
   /** Unique identifier for this brand theme */
   id: string;
   /** Display name */
@@ -249,7 +254,7 @@ export interface BrandTheme {
    * Values for the mode this theme is NOT authored in. Absent means the
    * vertical ships one mode.
    */
-  modes?: BrandThemeModes;
+  modes?: FlatThemeModes;
   /** Light/dark palettes and semantic colors */
   palette?: BrandPalette;
   /** Font families and heading/label strategies */
@@ -271,7 +276,7 @@ export interface BrandTheme {
   /**
    * Explicit disposition for every optional capability family.
    *
-   * Optional on `BrandTheme` because DB documents stay partial patches and
+   * Optional on `FlatTheme` because DB documents stay partial patches and
    * fixtures author only what they exercise. REQUIRED on `ThemeSource`, the
    * shape the ISO normalizer lowers.
    */
@@ -289,7 +294,7 @@ export interface BrandTheme {
  * neutral foundation is a source and is no first-party vertical.
  */
 export interface ThemeSource
-  extends Omit<BrandTheme, "recipes" | "expressive" | "responsive"> {
+  extends Omit<FlatTheme, "recipes" | "expressive" | "responsive"> {
   readonly appearance: BrandAppearance;
   readonly palette: BrandPalette;
   readonly capabilities: BrandCapabilityCatalog;
@@ -634,7 +639,7 @@ export interface BrandSurfaces {
   overlays?: TenantOverlayTokens;
   densityScale?: number;
   /**
-   * Semantic density posture for a code-owned static vertical: the BrandTheme
+   * Semantic density posture for a code-owned static vertical: the FlatTheme
    * equivalent of `appearance.general.density`, resolved through the same
    * canonical factor table and emitted on the same `--ds-density-mode-factor`
    * channel. Without it a static vertical has a structural `densityScale` but
@@ -655,7 +660,7 @@ export interface BrandSurfaces {
    */
   effectIntensity?: number;
   /**
-   * Layout rhythm posture: the BrandTheme equivalent of `appearance.rhythm`,
+   * Layout rhythm posture: the FlatTheme equivalent of `appearance.rhythm`,
    * resolved through the same `TENANT_THEME_RHYTHM_FACTORS` table and emitted
    * on the same `--ds-rhythm-scale` channel.
    *
@@ -1365,7 +1370,7 @@ export interface BrandButtonVariantChrome {
 /**
  * Optical geometry for one control size. Unlike palette chrome, these values
  * tune the actual rhythm of a product: control height, horizontal economy and
- * the type/icon relationship. Keeping them in BrandTheme makes a vertical's
+ * the type/icon relationship. Keeping them in FlatTheme makes a vertical's
  * density authored instead of being frozen inside an engine implementation.
  */
 export interface BrandControlSizeChrome {
@@ -1574,7 +1579,7 @@ export interface BrandControlsChrome {
    * extension. Each is a CLOSED interface over the channels its family
    * actually paints -- not an open map, and not a per-brand dialect: the
    * common `chromeToVariables` lowering emits the same names for the static
-   * `BrandTheme` transport and the DB `TenantThemeDocument` transport.
+   * `FlatTheme` transport and the DB `TenantThemeDocument` transport.
    *
    * The field name is the camelCase of the channel suffix, and the lowering
    * names each channel after its family folder: `autocomplete` lowers to
@@ -1689,7 +1694,7 @@ export interface BrandSelectChrome {
  * a channel with no field cannot be authored, and a field with no channel
  * cannot exist, because the lowering in
  * `compilers/kernel/foundation/css/chrome-variables` is the single producer
- * for BOTH the static `BrandTheme` and the DB `TenantThemeDocument`
+ * for BOTH the static `FlatTheme` and the DB `TenantThemeDocument`
  * transports.
  */
 /**
@@ -3160,13 +3165,13 @@ export interface BrandTreeChrome {
 }
 
 // ── Vertical Theme ──────────────────────────────────────
-// Code-owned premium identity for a vertical. Same shape as BrandTheme
+// Code-owned premium identity for a vertical. Same shape as FlatTheme
 // because verticals carry the deepest premium decisions. The distinction
-// is ownership: VerticalTheme is code-owned, BrandTheme is the generic
+// is ownership: VerticalTheme is code-owned, FlatTheme is the generic
 // authored source shape.
 
-/** Code-owned vertical premium identity. Same shape as BrandTheme. */
-export type VerticalTheme = BrandTheme;
+/** Code-owned vertical premium identity. Same shape as FlatTheme. */
+export type VerticalTheme = FlatTheme;
 
 // ── Tenant Appearance ───────────────────────────────────
 // DB-owned customization layered on top of the vertical theme.
@@ -3372,10 +3377,10 @@ export interface TenantAppearanceGeneral {
  *
  * Every field maps directly to a CSS variable compiled by the appearance
  * compiler. All fields are optional and additive - tenants only set what
- * they want to override. Everything else inherits from BrandTheme or DS base.
+ * they want to override. Everything else inherits from FlatTheme or DS base.
  *
  * ~140 CSS variables exposed across all chrome categories.
- * Previously: ~20 fields. Now: full chrome parity with BrandTheme.
+ * Previously: ~20 fields. Now: full chrome parity with FlatTheme.
  */
 export interface TenantAppearanceAdvanced {
   chrome?: {

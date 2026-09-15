@@ -7,7 +7,7 @@
  * is that it is still BitHire. A test that only checks the first would pass for
  * a fork, and a test that only checks the second would pass for a hue rotation.
  *
- * The expectation is anchored on the compiled BrandTheme, never on a `--ds-*`
+ * The expectation is anchored on the compiled FlatTheme, never on a `--ds-*`
  * variable read back off `<html>`. That read only proves a component consumes
  * the variable: a later, more specific rule can overwrite it and the component
  * and the read move together while the tenant's value is silently gone. That
@@ -16,35 +16,35 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
 import { FAMILY_DERIVERS } from '../runtime/derivation';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 import type { TenantAppearance } from '@/foundation/contracts';
-import { brandThemeToTenantAppearance } from '@/components/patterns/customization/brand-studio/runtime/file-export';
+import { flatThemeToTenantAppearance } from '@/components/patterns/customization/brand-studio/runtime/file-export';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
-const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-const themanagement = lowerBrandThemeFixture({ brandTheme: themanagementmiamiBrandTheme, tenantSlug: 'themanagementmiami' });
-const themanagementProjectedAppearance = brandThemeToTenantAppearance(
-  themanagementmiamiBrandTheme
+const bithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+const themanagement = lowerFlatThemeFixture({ flatTheme: themanagementmiamiFlatTheme, tenantSlug: 'themanagementmiami' });
+const themanagementProjectedAppearance = flatThemeToTenantAppearance(
+  themanagementmiamiFlatTheme
 );
 
 /**
- * DB representation of The Management. The BrandTheme fixture above remains
+ * DB representation of The Management. The FlatTheme fixture above remains
  * the deterministic authoring/migration source, but a customer runtime never
  * receives it via a static theme transport: it receives a bounded tenant theme
  * DOCUMENT layered on top of the BitHire vertical.
  *
- * Authored by hand rather than projected from the BrandTheme, and that is a
- * measurement rather than a convenience: `brandThemeToTenantAppearance` emits
+ * Authored by hand rather than projected from the FlatTheme, and that is a
+ * measurement rather than a convenience: `flatThemeToTenantAppearance` emits
  * `typography.fontFamilyHeading` as a `var(--ds-font-pack-…)` reference and an
  * absent `palette.dark.background`, both of which the document schema refuses
  * by name. The projection is a migration aid; the document below is what the
@@ -72,7 +72,7 @@ const themanagementDbDocument = {
       border: { primary: '#C8B9A5', secondary: '#E2D9CC' },
     },
     typography: {
-      fontFamilyBase: themanagementmiamiBrandTheme.typography?.fontFamilyBase,
+      fontFamilyBase: themanagementmiamiFlatTheme.typography?.fontFamilyBase,
       typePairing: 'editorial',
       scale: 1.04,
     },
@@ -324,10 +324,10 @@ describe('and converge on the identity of the product they both are', () => {
 
   it('a tenant cannot move the vertical it belongs to', () => {
     // `vertical`, `engine` and `productProfile` are static-first by law
-    // (docs/ARCHITECTURE.md). Neither BrandTheme carries any of them, and the compiler has
+    // (docs/ARCHITECTURE.md). Neither FlatTheme carries any of them, and the compiler has
     // nowhere to put them: that is the guarantee, and this asserts the shape of
     // it rather than trusting the prose.
-    for (const theme of [bithireBrandTheme, themanagementmiamiBrandTheme]) {
+    for (const theme of [bithireFlatTheme, themanagementmiamiFlatTheme]) {
       expect(theme).not.toHaveProperty('vertical');
       expect(theme).not.toHaveProperty('engine');
       expect(theme).not.toHaveProperty('productProfile');

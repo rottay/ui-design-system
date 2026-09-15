@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { springLinearEasingGentle } from "@/infrastructure/compilers/kernel/foundation/motion/spring-easing";
 import { isSpringEligible } from "../personality";
 
@@ -18,13 +18,13 @@ import { isSpringEligible } from "../personality";
  * app-side raw ms literals are gate-banned in favor of these. The `standard`
  * ease drives everything; `exit` drives dismissals. The three steps are a fixed
  * closed set (120/200/320ms), except that `calm` tracks the theme's own
- * `entranceDuration` so the transition speed a BrandTheme authors for its
+ * `entranceDuration` so the transition speed a FlatTheme authors for its
  * entrances is the same value tabs and tooltips animate at (design-language §2.6
  * notes calm "matches BITHIRE_PROFILE.transitionSpeed: '200ms'").
  */
 export function setMotionVariables(
   vars: Record<string, string>,
-  bt: BrandTheme
+  bt: FlatTheme
 ): void {
   const calmMs = bt.motion?.entranceDuration ?? 200;
   vars["--ds-motion-instant"] = "120ms";
@@ -50,7 +50,7 @@ export function setMotionVariables(
 
   // `--ds-motion-spring-gentle` has no consumer in the static generator's
   // tokenOverrideVariables() (unlike `--ds-motion-spring`, routed through
-  // brandThemeToTokenOverrides above), so it is emitted directly as a
+  // flatThemeToTokenOverrides above), so it is emitted directly as a
   // compiled CSS variable here. It only appears in this compiled block's
   // light-theme selector, but still resolves correctly for dark-themed
   // elements: the generator's dark selector block never redeclares this

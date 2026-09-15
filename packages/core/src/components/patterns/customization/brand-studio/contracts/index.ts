@@ -1,7 +1,7 @@
 /**
  * @fileoverview PatternBrandStudio public types.
  *
- * PatternBrandStudio edits a bounded BrandTheme and renders a live, dual-ground
+ * PatternBrandStudio edits a bounded FlatTheme and renders a live, dual-ground
  * preview. It is domain-agnostic: the component knows nothing about tenants,
  * candidates, events, or any product vocabulary. Real component galleries are
  * supplied by the consumer through the {@link BrandStudioGalleriesSlot} render
@@ -12,7 +12,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BrandTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
 import type { FirstPartyVerticalId } from '../../../../../foundation/contracts/kernel/verticals';
 import type {
   TenantThemeArtifact,
@@ -126,11 +126,11 @@ export interface BrandStudioTenantThemePreviewConfig {
 
 export interface PatternBrandStudioProps {
   /**
-   * The BrandTheme being edited. Accepts a partial theme; `id`/`name` are
+   * The FlatTheme being edited. Accepts a partial theme; `id`/`name` are
    * defaulted when absent. The component is controlled: it never mutates the
    * value in place and emits the next theme through {@link onChange}.
    */
-  value: BrandTheme | Partial<BrandTheme>;
+  value: FlatTheme | Partial<FlatTheme>;
   /**
    * The first-party vertical the edited draft is a tenant of.
    *
@@ -140,8 +140,8 @@ export interface PatternBrandStudioProps {
    * dark grounds are always a delta against the same baseline.
    */
   vertical: FirstPartyVerticalId;
-  /** Called with the next full BrandTheme after any edit. */
-  onChange?: (next: BrandTheme) => void;
+  /** Called with the next full FlatTheme after any edit. */
+  onChange?: (next: FlatTheme) => void;
   /** Render slot for the live preview galleries. */
   galleries?: BrandStudioGalleriesSlot;
   /** Overrides for the light preview ground. */
@@ -156,7 +156,7 @@ export interface PatternBrandStudioProps {
    * Optional live preview of a DB-tenant theme document. When present, the
    * studio renders a second preview section driven by the tenant-theme compiler
    * (validation issues, APCA autocorrections, font-pack warnings) below the
-   * BrandTheme preview grid. Independent of {@link value}; the BrandTheme editor
+   * FlatTheme preview grid. Independent of {@link value}; the FlatTheme editor
    * is unchanged when this is absent.
    */
   tenantThemePreview?: BrandStudioTenantThemePreviewConfig;

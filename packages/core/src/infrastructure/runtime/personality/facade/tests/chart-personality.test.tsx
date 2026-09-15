@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import type { EngineVisualDeclaration } from '../../../../../foundation/contracts/composition/tenants/themes/engine-adapter';
-import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
+import { flatThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 import { EngineVisualDeclarationProvider } from '@/infrastructure/runtime/foundation/engine-visual';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { ProductProfileProvider, getProductProfile } from '../../../product-profiles';
 import { TenantProvider } from '../../../tenant';
 import { getVerticalPreset } from '../../../verticals';
@@ -15,7 +15,7 @@ import { DEFAULT_PERSONALITY } from '../../foundation/defaults';
 import { useResolvedChartPersonality } from '../../presentation/resolution/chart-personality';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const bithireVertical = getVerticalPreset('bithire');
 const recruitingProfile = getProductProfile('recruiting.operator');
@@ -38,15 +38,15 @@ function createTenant(slug: string): TenantConfig {
 /**
  * The compiled layer a mounted artifact publishes, for a theme.
  *
- * `brandThemeToPersonality` is the same function the lowering runs to fill
+ * `flatThemeToPersonality` is the same function the lowering runs to fill
  * `ThemeCompilation.runtime.personality`, so this is the compile's own answer
  * rather than a fixture that restates it.
  */
-function compiledFor(brandTheme: Parameters<typeof brandThemeToPersonality>[0]): EngineVisualDeclaration {
+function compiledFor(flatTheme: Parameters<typeof flatThemeToPersonality>[0]): EngineVisualDeclaration {
   return {
     engine: 'modern',
     projection: { seeds: {}, modes: [] },
-    runtime: { personality: brandThemeToPersonality(brandTheme), tokenOverrides: {} },
+    runtime: { personality: flatThemeToPersonality(flatTheme), tokenOverrides: {} },
   };
 }
 
@@ -105,7 +105,7 @@ describe('resolveChartPersonality', () => {
 
   it('every first-party compile decides nothing about charts, on all three verticals', () => {
     for (const vertical of ['rottay', 'bithire', 'evnto'] as const) {
-      const compiled = brandThemeToPersonality(firstPartyFixture(vertical));
+      const compiled = flatThemeToPersonality(firstPartyFixture(vertical));
       expect(
         resolveChartPersonality({ compiled, productProfile: recruitingProfile })
       ).toEqual(resolveChartPersonality({ productProfile: recruitingProfile }));
@@ -114,11 +114,11 @@ describe('resolveChartPersonality', () => {
 
   it('keeps BitHire and The Management Miami visibly distinct through their compiled charts', () => {
     const bithire = resolveChartPersonality({
-      compiled: brandThemeToPersonality(bithireBrandTheme),
+      compiled: flatThemeToPersonality(bithireFlatTheme),
       productProfile: recruitingProfile,
     });
     const management = resolveChartPersonality({
-      compiled: brandThemeToPersonality(themanagementmiamiBrandTheme),
+      compiled: flatThemeToPersonality(themanagementmiamiFlatTheme),
       productProfile: recruitingProfile,
     });
 
@@ -126,7 +126,7 @@ describe('resolveChartPersonality', () => {
     // compile emits `chart` with every key PRESENT and undefined rather than
     // omitting the family. Those keys decided nothing, so the profile beneath
     // them stands (adjudication #2, 2026-09-15).
-    const compiledChart = brandThemeToPersonality(bithireBrandTheme).chart;
+    const compiledChart = flatThemeToPersonality(bithireFlatTheme).chart;
     expect(compiledChart).toBeDefined();
     expect(Object.values(compiledChart!).every((value) => value === undefined)).toBe(true);
     expect(bithire).toMatchObject({
@@ -162,14 +162,14 @@ describe('resolveChartPersonality', () => {
     // decision -- that distinction is what keeps a library-seeding projection
     // from silently replacing the preset.
     const compiledWithoutChart = resolveChartPersonality({
-      compiled: brandThemeToPersonality({ id: 'premium-empty', name: 'Premium Empty' }),
+      compiled: flatThemeToPersonality({ id: 'premium-empty', name: 'Premium Empty' }),
       productProfile: legacyProfile,
     });
     // The Management Miami is the arm that DOES decide: since D6-2c-ii no
     // first-party preset authors a `charts` layer, so bithire's compile states
     // eight keys and decides none of them.
     const compiledWithChart = resolveChartPersonality({
-      compiled: brandThemeToPersonality(themanagementmiamiBrandTheme),
+      compiled: flatThemeToPersonality(themanagementmiamiFlatTheme),
       productProfile: legacyProfile,
     });
 
@@ -181,13 +181,13 @@ describe('resolveChartPersonality', () => {
     expect(compiledWithoutChart).toEqual(noCompile);
     expect(
       resolveChartPersonality({
-        compiled: brandThemeToPersonality(bithireBrandTheme),
+        compiled: flatThemeToPersonality(bithireFlatTheme),
         productProfile: legacyProfile,
       })
     ).toEqual(noCompile);
     // And a compile that DOES state one wins on every field it states.
     expect(compiledWithChart).toMatchObject(
-      brandThemeToPersonality(themanagementmiamiBrandTheme).chart!
+      flatThemeToPersonality(themanagementmiamiFlatTheme).chart!
     );
     expect(compiledWithChart.mountDuration).not.toBe(913);
   });
@@ -259,14 +259,14 @@ describe('useResolvedChartPersonality', () => {
     render(
       <>
         <TenantProvider config={createTenant('bithire-scope')} vertical={bithireVertical}>
-          <EngineVisualDeclarationProvider declaration={compiledFor(bithireBrandTheme)}>
+          <EngineVisualDeclarationProvider declaration={compiledFor(bithireFlatTheme)}>
             <ProductProfileProvider profile="recruiting.operator">
               <ChartProbe testId="bithire-chart" />
             </ProductProfileProvider>
           </EngineVisualDeclarationProvider>
         </TenantProvider>
         <TenantProvider config={createTenant('management-scope')} vertical={bithireVertical}>
-          <EngineVisualDeclarationProvider declaration={compiledFor(themanagementmiamiBrandTheme)}>
+          <EngineVisualDeclarationProvider declaration={compiledFor(themanagementmiamiFlatTheme)}>
             <ProductProfileProvider profile="recruiting.operator">
               <ChartProbe testId="management-chart" />
             </ProductProfileProvider>

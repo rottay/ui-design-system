@@ -13,7 +13,7 @@ import { expect, within } from 'storybook/test';
 import type { TenantConfig } from '@/foundation/contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n/composition';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { Box } from '@/components/primitives/layout/box';
 import { Grid } from '@/components/primitives/layout/grid';
 import { Stack } from '@/components/primitives/layout/stack';
@@ -45,12 +45,12 @@ const THE_MANAGEMENT_DB: TenantConfig = {
   branding: { companyName: 'The Management Miami' },
   // Regression fixture for the DB payload. It is deliberately not registered
   // as a bundled tenant or static CSS artifact.
-  brandTheme: themanagementmiamiBrandTheme,
+  brandTheme: themanagementmiamiFlatTheme,
 };
 
 // The DB supplies the override for the tenant's active locale. Keeping the
 // three payloads beside the visual matrix proves that tenant-owned copy can
-// change without coupling locale to BrandTheme or forking the DS catalog.
+// change without coupling locale to FlatTheme or forking the DS catalog.
 const THE_MANAGEMENT_DB_COPY: Record<
   'en' | 'es' | 'ar',
   NonNullable<TenantConfig['customTranslations']>

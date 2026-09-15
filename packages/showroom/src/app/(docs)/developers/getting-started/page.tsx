@@ -112,7 +112,7 @@ export function TeamPanel() {
     number: '5',
     title: 'Let tenant branding handle last-mile identity',
     description:
-      'Keep business semantics in the app while BrandTheme variables control color, radius, shadow, and chrome details across the same component tree.',
+      'Keep business semantics in the app while FlatTheme variables control color, radius, shadow, and chrome details across the same component tree.',
     code: `<DesignSystemProvider tenantSlug="bithire" forceEngine="modern">
   <App />
 </DesignSystemProvider>`,

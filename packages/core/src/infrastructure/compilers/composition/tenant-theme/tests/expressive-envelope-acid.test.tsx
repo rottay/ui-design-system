@@ -1,7 +1,7 @@
 /**
  * C1b acid test — two tenants, two systems, one canon.
  *
- * BitHire compiles STATICALLY from its authored BrandTheme (which now
+ * BitHire compiles STATICALLY from its authored FlatTheme (which now
  * SELECTS `rottay/bithire-technical@1`), and The Management compiles from a
  * SCHEMA-VALID DB DOCUMENT (document → validator → compiler → artifact) that
  * selects `rottay/management-editorial@1` on the same vertical envelope.
@@ -20,9 +20,9 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type {
   TenantThemeArtifact,
   TenantThemeConfigIdentity,
@@ -41,7 +41,7 @@ import {
 } from '..';
 import { clearTenantThemeScope, stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const MANAGEMENT_IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_the_management',
@@ -99,8 +99,8 @@ function compileManagementArtifact() {
 }
 
 function compileBithireStatic(): Record<string, string> {
-  return lowerBrandThemeFixture({
-    brandTheme: bithireBrandTheme,
+  return lowerFlatThemeFixture({
+    flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   }).cssVariables;
 }
@@ -205,7 +205,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // IDENTITY trust it sits under is asserted by `getKnownTenantConfig` above,
     // and is unaffected.
     expect(getCodeOwnedGovernedBehavior(bithireConfig)?.expressive)
-      .toEqual(bithireBrandTheme.expressive);
+      .toEqual(bithireFlatTheme.expressive);
 
     const bithire = render(
       <DesignSystemProvider tenantConfig={bithireConfig} skipCssLoading>
@@ -392,7 +392,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // Concrete anchors so the divergence is legible, not just counted. The
     // selection itself is data, not a channel: the stylesheet carries none.
     expect(
-      lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' }).experienceProfile,
+      lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' }).experienceProfile,
     ).toBe('rottay/bithire-technical@1');
     expect(managementArtifact.normalizedAppearance.general?.experienceProfile).toBe(
       'rottay/management-editorial@1'
@@ -414,7 +414,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
   });
 
   it('lowers the same experience profile identically on static and DB paths', () => {
-    const staticTheme: BrandTheme = {
+    const staticTheme: FlatTheme = {
       id: 'management-static-parity',
       name: 'Management static parity',
       expressive: {
@@ -422,8 +422,8 @@ describe('C1b expressive envelope — two-system acid test', () => {
         experienceProfile: 'rottay/management-editorial@1',
       },
     };
-    const staticCompiled = lowerBrandThemeFixture({
-      brandTheme: staticTheme,
+    const staticCompiled = lowerFlatThemeFixture({
+      flatTheme: staticTheme,
       tenantSlug: 'management-static-parity',
     });
     const staticVars = staticCompiled.cssVariables;
@@ -517,10 +517,10 @@ describe('C1b expressive envelope — two-system acid test', () => {
   });
 
   it('rolls back to baseline identity when the selection is unset (static path)', () => {
-    const stripped = structuredClone(bithireBrandTheme);
+    const stripped = structuredClone(bithireFlatTheme);
     delete (stripped as { expressive?: unknown }).expressive;
-    const vars = lowerBrandThemeFixture({
-      brandTheme: stripped,
+    const vars = lowerFlatThemeFixture({
+      flatTheme: stripped,
       tenantSlug: 'bithire',
     }).cssVariables;
     expect(vars['--ds-experience-profile']).toBeUndefined();

@@ -48,14 +48,14 @@ foundation/contracts/
 
 ## Key Types
 
-### BrandTheme (code-owned premium visual source)
+### FlatTheme (code-owned premium visual source)
 
 The single source of truth for premium visual identity. Merge precedence:
-DS base -> vertical baseline -> BrandTheme -> generated artifacts.
+DS base -> vertical baseline -> FlatTheme -> generated artifacts.
 
 Published customer writes use the bounded `TenantThemeDocument` schema stored
 in the canonical tenancy DB. They are validated and server-compiled into the
-exact SSR/hydration artifact; `BrandTheme` is not an unrestricted DB write
+exact SSR/hydration artifact; `FlatTheme` is not an unrestricted DB write
 contract.
 
 Categories: palette, typography, surfaces, motion, charts, chrome, engineBridge.
@@ -93,7 +93,7 @@ component-owned props, compounds, and slots.
 All contracts are re-exported from the package root:
 
 ```typescript
-import type { BrandTheme, TenantConfig, DesignTokens, EngineName } from '@rottay/design-system';
+import type { FlatTheme, TenantConfig, DesignTokens, EngineName } from '@rottay/design-system';
 ```
 
 Primitive component props (ButtonProps, AvatarProps, etc.) live next to their

@@ -1,9 +1,9 @@
 /**
- * Static BrandTheme channel graph used by theme-channel-parity-gate (DS-A003).
+ * Static FlatTheme channel graph used by theme-channel-parity-gate (DS-A003).
  *
  * The analysis is deliberately conservative:
  * - declarations are read from TypeScript ASTs, never from generated `dist`;
- * - only visual BrandTheme roots are traversed;
+ * - only visual FlatTheme roots are traversed;
  * - a declared leaf is called "unemitted" only when it is neither attached to
  *   a concrete/pattern emitter assignment nor read by a compiler route;
  * - dynamic CSS-variable templates become wildcard patterns, so an unresolved
@@ -190,14 +190,14 @@ function unwrapType(node) {
 }
 
 /**
- * Flatten the reachable, typed visual leaves below BrandTheme. Reused interface
- * leaves have one owner identity and retain every BrandTheme path that reaches
+ * Flatten the reachable, typed visual leaves below FlatTheme. Reused interface
+ * leaves have one owner identity and retain every FlatTheme path that reaches
  * them (for example BrandPremiumCardChrome.bg has four theme paths).
  */
 export function collectDeclaredThemeFields(
   registry,
   {
-    rootType = "BrandTheme",
+    rootType = "FlatTheme",
     visualRoots = DEFAULT_VISUAL_ROOTS,
     maxDepth = 16,
   } = {}
@@ -807,7 +807,7 @@ export function parseEmitterMappings(sources, registry) {
             }
             // A fixed or mechanically derived compiler output is still owned:
             // its contract is the named compiler function, not an editable
-            // BrandTheme leaf. Treating it as unowned would encourage exposing
+            // FlatTheme leaf. Treating it as unowned would encourage exposing
             // choreography, scale aliases, or other implementation constants
             // through TenantTheme merely to make the parity graph green.
             if (ownerSet.size === 0) ownerSet.add(compilerOwner);
@@ -1038,7 +1038,7 @@ const DATA_ATTRIBUTE_NAME = /^data-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 /**
  * The closed roster of declared visual leaves that are data-only by contract:
- * each pair states which BrandTheme leaf projects into which root `data-*`
+ * each pair states which FlatTheme leaf projects into which root `data-*`
  * attribute, and which neutral value must stamp nothing. Nothing is exempted
  * by prefix, by name shape, or by folder; a leaf leaves the CSS-channel
  * denominator only if it appears here AND the compiler source proves the
@@ -1351,7 +1351,7 @@ export function auditDataOnlyProjections({
   projectionSources = [],
   emissions = [],
   roster = DATA_ONLY_THEME_PROJECTIONS,
-  rootType = "BrandTheme",
+  rootType = "FlatTheme",
 }) {
   const projections = collectDataOnlyAttributeProjections(projectionSources);
   const emittedByOwner = new Map();
@@ -1543,7 +1543,7 @@ export function buildThemeChannelParityGraph({
     if (namespace) managedNamespaces.add(namespace);
   }
 
-  // The graph starts at the tenant/BrandTheme contract, not at every base DS
+  // The graph starts at the tenant/FlatTheme contract, not at every base DS
   // token. A consumer-only `--ds-*` name is therefore in scope only when the
   // inspected compiler emits it (concretely or by pattern) or the tenant
   // override contract exposes it. Namespace-prefix matching was intentionally

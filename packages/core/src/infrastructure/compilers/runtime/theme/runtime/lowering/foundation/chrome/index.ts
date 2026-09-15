@@ -7,20 +7,20 @@
  */
 
 import type {
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { chromeToVariables } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
 import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 
 /**
- * Map BrandTheme.chrome sub-interfaces to flat CSS variable declarations.
+ * Map FlatTheme.chrome sub-interfaces to flat CSS variable declarations.
  *
  * This is the explicit chrome channel -- sidebar, layout, shell, controls and
  * table are NOT shoehorned into tokenOverrides or personality. The mapping is
  * shared with the DB appearance path via kernel/css/chrome-variables, since
- * `TenantAppearanceAdvanced.chrome` is the same shape as `BrandTheme.chrome`.
+ * `TenantAppearanceAdvanced.chrome` is the same shape as `FlatTheme.chrome`.
  *
  * `radiusBaseline` is the divisor the emitter normalizes authored radius
  * literals against. Only the pipeline can answer it -- it is the VERTICAL's
@@ -28,9 +28,9 @@ import { themeDefaultMode } from "@/infrastructure/compilers/kernel/foundation/m
  * apart from the tenant's own -- so it is passed in, and an absent one is the
  * channel's identity rather than a second resolution of the same fact.
  */
-export function brandThemeToChromeVariables(
-  bt: BrandTheme,
-  mode: BrandThemeMode = themeDefaultMode(bt),
+export function flatThemeToChromeVariables(
+  bt: FlatTheme,
+  mode: FlatThemeMode = themeDefaultMode(bt),
   /** Tenant authorship, when this compile has a tenant. See `ChromeVariableContext`. */
   tenantAuthoredPaths?: TenantAuthoredPaths,
   modePrefix = "",

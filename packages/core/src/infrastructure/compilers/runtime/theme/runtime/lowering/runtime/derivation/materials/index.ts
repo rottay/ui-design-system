@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import { semanticSurfaceRolesToMaterialVariables } from "../../../foundation/materials";
 
@@ -36,7 +36,7 @@ export const materialsDeriver: FamilyDeriver = {
   derive: (context) => deriveMaterialChannels(context.theme),
 };
 
-export function deriveMaterialChannels(bt: BrandTheme): Record<string, string> {
+export function deriveMaterialChannels(bt: FlatTheme): Record<string, string> {
   const vars: Record<string, string> = {};
   // Written as explicit per-root assignments, not a loop over a role table:
   // the producer census both cascade gates share reads these names out of the

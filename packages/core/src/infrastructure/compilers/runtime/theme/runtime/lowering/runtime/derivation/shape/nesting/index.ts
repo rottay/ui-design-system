@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 
 /**
  * Kit row 12, as two statements about ONE derivation.
@@ -34,7 +34,7 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
  */
 const NESTING_LAW: Readonly<
   Record<
-    NonNullable<NonNullable<BrandTheme["surfaces"]>["nesting"]>,
+    NonNullable<NonNullable<FlatTheme["surfaces"]>["nesting"]>,
     { readonly inset: string; readonly ratio: string }
   >
 > = {
@@ -46,12 +46,12 @@ const NESTING_LAW: Readonly<
  * The nesting law the theme DECIDED, or nothing.
  *
  * Own-property guarded for the same reason `../../typography/weights` is: a
- * BrandTheme is plain data by the time it reaches this compiler, so a bare
+ * FlatTheme is plain data by the time it reaches this compiler, so a bare
  * bracket read of a closed table resolves inherited members and unknown words
  * alike -- the first would paint the literal string `undefined` into a `max()`
  * operand and take every nested corner with it.
  */
-export function deriveNestingLaw(bt: BrandTheme): Record<string, string> {
+export function deriveNestingLaw(bt: FlatTheme): Record<string, string> {
   const authored = bt.surfaces?.nesting;
   if (
     typeof authored !== "string" ||

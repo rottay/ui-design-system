@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type { EmissionScope } from "@/foundation/contracts/composition/tenants/themes/emission";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 
@@ -18,7 +18,7 @@ export function brandTenantSelector(tenantSlug: string): string {
 /** Shared explicit-mode selector grammar for static and DB artifact renderers. */
 export function themeModeSelector(
   baseSelector: string,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): string {
   return `${baseSelector}[data-theme='${mode}'], ${baseSelector}.${mode}`;
 }
@@ -31,7 +31,7 @@ export function themeModeSelector(
  */
 export function systemModeSelector(
   baseSelector: string,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): string {
   return `${baseSelector}:not([data-theme='${mode === "dark" ? "light" : "dark"}'])`;
 }
@@ -47,7 +47,7 @@ export function systemModeSelector(
  */
 export function brandModeSelector(
   tenantSlug: string,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): string {
   return themeModeSelector(brandTenantSelector(tenantSlug), mode);
 }
@@ -57,7 +57,7 @@ export function firstPartyScope(slug: FirstPartyVerticalId): EmissionScope {
   const baseSelector = brandTenantSelector(slug);
   return {
     baseSelector,
-    modeSelector: (mode: BrandThemeMode) => themeModeSelector(baseSelector, mode),
+    modeSelector: (mode: FlatThemeMode) => themeModeSelector(baseSelector, mode),
   };
 }
 
@@ -70,7 +70,7 @@ export function tenantArtifactScope(verticalKey: string, slug: string): Emission
   const baseSelector = `[data-ds-root][data-vertical="${verticalKey}"][data-tenant][data-tenant="${slug}"]`;
   return {
     baseSelector,
-    modeSelector: (mode: BrandThemeMode) => themeModeSelector(baseSelector, mode),
+    modeSelector: (mode: FlatThemeMode) => themeModeSelector(baseSelector, mode),
   };
 }
 
@@ -78,6 +78,6 @@ export function tenantArtifactScope(verticalKey: string, slug: string): Emission
 export function containerScope(baseSelector: string): EmissionScope {
   return {
     baseSelector,
-    modeSelector: (mode: BrandThemeMode) => themeModeSelector(baseSelector, mode),
+    modeSelector: (mode: FlatThemeMode) => themeModeSelector(baseSelector, mode),
   };
 }

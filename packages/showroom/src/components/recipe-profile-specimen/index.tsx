@@ -6,18 +6,18 @@
  * One identical component tree for the six DS-S001 families rendered under the
  * two GOVERNED INGRESS PATHS a recipe profile actually has:
  *  - `technical-static`: the code-owned `rottay` registry tenant, whose own
- *    checked-in BrandTheme authors `rottay/technical-sharp@1` (ruled, outlined,
+ *    checked-in FlatTheme authors `rottay/technical-sharp@1` (ruled, outlined,
  *    square posture -- and Rottay's real near-black canvas);
  *  - `editorial-db`: a published customer document selecting
  *    `rottay/editorial-round@1`, validated, compiled and mounted as a verified
  *    artifact (rounded, soft, elevated, warm).
  *
  * NEITHER SIDE IS SYNTHESISED ANY MORE, and that is the repair. The static side
- * used to hand-author a `TECHNICAL_STATIC_THEME` BrandTheme and pass it as
+ * used to hand-author a `TECHNICAL_STATIC_THEME` FlatTheme and pass it as
  * `tenantConfig.brandTheme`; measured against the real resolver, a runtime
- * BrandTheme is unrenderable under every declaration, so that cell was a
+ * FlatTheme is unrenderable under every declaration, so that cell was a
  * spinner. The DB side used to pass a raw `appearance` literal, which is visual
- * payload on its own and blocks just as hard. A hand-authored BrandTheme has
+ * payload on its own and blocks just as hard. A hand-authored FlatTheme has
  * exactly one legal home -- the checked-in registry -- and a customer's
  * appearance has exactly one -- a compiled artifact whose mount is proven. So
  * the specimen now uses one of each, which is also the more honest comparison:
@@ -106,7 +106,7 @@ const EDITORIAL_IDENTITY: ShowroomTenantIdentity = {
  * The published editorial document: round, soft, warm, elevated.
  *
  * Expressed as the bounded `TenantThemeDocument` a customer actually writes --
- * not a `BrandTheme` (that channel is reserved for checked-in vertical
+ * not a `FlatTheme` (that channel is reserved for checked-in vertical
  * identity) and not a raw `appearance` literal (that is visual payload no
  * declaration admits). Every dial sits inside the measured bithire envelope:
  * radiusScale 1.2 is its ceiling, effectIntensity 0.55 and motion intensity
@@ -168,7 +168,7 @@ function editorialGround(): ShowroomTenantGround {
 
 function technicalGround(): ShowroomTenantGround {
   // The REGISTRY's own object, unspread and uncopied. Rottay's checked-in
-  // BrandTheme is what authors `rottay/technical-sharp@1` here, and its CSS is
+  // FlatTheme is what authors `rottay/technical-sharp@1` here, and its CSS is
   // bundled, so this side needs neither an emission nor a declaration.
   const tenantConfig = getKnownTenantConfig("rottay");
   if (!tenantConfig) {

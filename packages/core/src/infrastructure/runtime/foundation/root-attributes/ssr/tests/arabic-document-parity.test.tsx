@@ -25,19 +25,19 @@ import {
   MANDATORY_FALLBACK_FONT_CHANNELS,
   MANDATORY_FONT_FALLBACK_FAMILY,
 } from '@/foundation/kernel/typography';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
-import type { BrandTheme } from '@/foundation/contracts';
+import type { FlatTheme } from '@/foundation/contracts';
 import { resolveDocumentRootAttributes } from '..';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
-const FIRST_PARTY_VIEWS: ReadonlyArray<readonly [string, BrandTheme]> = [
-  ['bithire', bithireBrandTheme],
-  ['evnto', evntoBrandTheme],
-  ['rottay', rottayBrandTheme],
+const FIRST_PARTY_VIEWS: ReadonlyArray<readonly [string, FlatTheme]> = [
+  ['bithire', bithireFlatTheme],
+  ['evnto', evntoFlatTheme],
+  ['rottay', rottayFlatTheme],
 ];
 
 afterEach(() => {
@@ -81,8 +81,8 @@ describe('arabic document: shipped font stacks', () => {
   // no family at all. An unemitted channel renders no text and cannot tofu.
   it.each(FIRST_PARTY_VIEWS)(
     'compiles %s with an Arabic-capable fallback on every text-bearing channel it ships',
-    (slug, brandTheme) => {
-      const { cssVariables } = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
+    (slug, flatTheme) => {
+      const { cssVariables } = lowerFlatThemeFixture({ flatTheme, tenantSlug: slug });
 
       for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
         const stack = cssVariables[channel];
@@ -99,8 +99,8 @@ describe('arabic document: shipped font stacks', () => {
     // Anti-vacuity for the per-vertical assertion above. Skipping absent
     // channels would let "nobody emits anything" read green, so the corpus has
     // to carry at least one real stack, and it is named rather than counted.
-    const { cssVariables } = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+    const { cssVariables } = lowerFlatThemeFixture({
+      flatTheme: bithireFlatTheme,
       tenantSlug: 'bithire',
     });
     const shipped = MANDATORY_FALLBACK_FONT_CHANNELS.filter(
@@ -131,17 +131,17 @@ describe('arabic document: shipped font stacks', () => {
     const latinOnly = 'Inter, system-ui, sans-serif';
     expect(hasMandatoryFontFallback(latinOnly)).toBe(false);
 
-    const authored: BrandTheme = {
-      ...bithireBrandTheme,
+    const authored: FlatTheme = {
+      ...bithireFlatTheme,
       typography: {
-        ...bithireBrandTheme.typography,
+        ...bithireFlatTheme.typography,
         fontFamilyBase: latinOnly,
         fontFamilyHeading: latinOnly,
         fontFamilyDisplay: latinOnly,
       },
     };
 
-    const { cssVariables } = lowerBrandThemeFixture({ brandTheme: authored, tenantSlug: 'bithire' });
+    const { cssVariables } = lowerFlatThemeFixture({ flatTheme: authored, tenantSlug: 'bithire' });
     for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
       expect(cssVariables[channel]).toContain(MANDATORY_FONT_FALLBACK_FAMILY);
       // The author's own families keep priority; the tail is appended, not swapped in.

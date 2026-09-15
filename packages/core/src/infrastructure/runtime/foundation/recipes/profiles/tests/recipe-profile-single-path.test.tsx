@@ -15,7 +15,7 @@
  * disagrees with the mounted context cannot move a single component.
  *
  * `recipe-profile.integration.test.tsx` already proves the context path itself
- * (static BrandTheme selection, DB Appearance override, fail-closed on an
+ * (static FlatTheme selection, DB Appearance override, fail-closed on an
  * unpublished id); none of that is repeated here.
  */
 
@@ -25,7 +25,7 @@ import { join, relative, resolve, sep } from 'node:path';
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import { themeControl } from '@/contracts/theme/runtime/catalog';
 import ModernButton from '@/components/primitives/inputs/button/engines/modern';
 import { RecipeProfileProvider } from '..';
@@ -81,8 +81,8 @@ describe('recipe profile — one resolution path', () => {
   it('is no longer emitted by the compilers: the selection is a runtime payload, not a channel', () => {
     // The census below is not looking for nothing: a valid selection still
     // resolves, and it reaches the product through the payload alone.
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: {
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: {
         id: 'recipe-profile-probe',
         name: 'Recipe profile probe',
         recipes: { schemaVersion: 1, profile: PROFILE_ID },

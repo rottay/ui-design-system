@@ -23,8 +23,8 @@
  */
 
 import type {
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
 import {
   UNDECLARED_VERTICAL_DEFAULT_MODE,
@@ -32,12 +32,12 @@ import {
 } from "@/foundation/presets/verticals/roster";
 
 /** The tenant's declared intent. `auto` selects no mode; it defers to the viewer. */
-export type DeclaredThemeMode = BrandThemeMode | "auto";
+export type DeclaredThemeMode = FlatThemeMode | "auto";
 
 /** The mode a first-party vertical's baseline values ARE, read from the roster. */
 export function verticalDefaultMode(
   vertical: string | undefined
-): BrandThemeMode {
+): FlatThemeMode {
   const entry = vertical === undefined ? undefined : getFirstPartyVertical(vertical);
   return entry ? entry.defaultMode : UNDECLARED_VERTICAL_DEFAULT_MODE;
 }
@@ -50,8 +50,8 @@ export function verticalDefaultMode(
  * before the literal does.
  */
 export function themeDefaultMode(
-  theme: Pick<BrandTheme, "appearance"> & { readonly id?: string }
-): BrandThemeMode {
+  theme: Pick<FlatTheme, "appearance"> & { readonly id?: string }
+): FlatThemeMode {
   return theme.appearance?.defaultMode ?? verticalDefaultMode(theme.id);
 }
 
@@ -63,9 +63,9 @@ export function themeDefaultMode(
  * all, the document renders the canvas its vertical already declares.
  */
 export function renderedMode(
-  defaultMode: BrandThemeMode,
+  defaultMode: FlatThemeMode,
   selection: DeclaredThemeMode | undefined
-): BrandThemeMode {
+): FlatThemeMode {
   return selection === "light" || selection === "dark" ? selection : defaultMode;
 }
 
@@ -91,7 +91,7 @@ export function documentModeSelection(
 export function resolveDocumentMode(
   vertical: string | undefined,
   document: DocumentModeDeclaration | undefined
-): BrandThemeMode {
+): FlatThemeMode {
   return renderedMode(
     verticalDefaultMode(vertical),
     documentModeSelection(document)

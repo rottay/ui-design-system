@@ -24,15 +24,15 @@ import { describe, expect, it } from 'vitest';
 
 import { hexToOklch } from '@/foundation/kernel/color/oklch';
 import { RAMP_STEPS } from '@/foundation/kernel/color/oklch/ramp';
-import type { BrandPalette, BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { BrandPalette, FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 /**
  * What a channel RESOLVES to while a mode block is active.
@@ -60,15 +60,15 @@ const isEmittedRampRole = (role: string): boolean => role !== 'accent';
 
 describe('a light-surface tenant compiles a real color ramp for its non-default (dark) mode', () => {
   it('bithire (light-default): compileTheme carries exactly one modeBlocks entry, for dark', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    const compiled = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
     expect(compiled.modeBlocks).toHaveLength(1);
     expect(compiled.modeBlocks![0]).toMatchObject({ mode: 'dark', colorScheme: 'dark' });
   });
 
   it('bithire: every step its dark overlay authors is what resolves in dark mode', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    const compiled = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
     const darkVars = compiled.modeBlocks![0].cssVariables;
-    const authoredDarkRamps = bithireBrandTheme.modes!.dark!.palette!.ramps!;
+    const authoredDarkRamps = bithireFlatTheme.modes!.dark!.palette!.ramps!;
     for (const role of Object.keys(authoredDarkRamps).filter(
       isEmittedRampRole
     ) as (keyof typeof authoredDarkRamps)[]) {
@@ -87,8 +87,8 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
     // mode, so its dark block carries no ramp to measure. The light-default
     // torture fixture seeds both its base and its `modes.dark` overlay, which
     // is the shape the rule is about.
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: tortureLightBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: tortureLightFlatTheme,
       tenantSlug: 'torture-light',
     });
     expect(compiled.modeBlocks).toHaveLength(1);
@@ -112,7 +112,7 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
   it('evnto (light-default): a structural preset seeds neither mode, so its dark block carries no ramp', () => {
     // The measured counterpart of the rule above. Stated rather than left out,
     // so the day evnto's preset seeds a palette this stops being true loudly.
-    const compiled = lowerBrandThemeFixture({ brandTheme: evntoBrandTheme, tenantSlug: 'evnto' });
+    const compiled = lowerFlatThemeFixture({ flatTheme: evntoFlatTheme, tenantSlug: 'evnto' });
     expect(compiled.modeBlocks).toHaveLength(1);
     expect(
       Object.keys(compiled.modeBlocks![0].cssVariables).filter((name) =>
@@ -122,10 +122,10 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
   });
 
   it('bithire: the dark overlay moves real ramp steps, and carries nothing that agrees with the base', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    const compiled = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
     const lightVars = compiled.cssVariables;
     const darkVars = compiled.modeBlocks![0].cssVariables;
-    const authoredDarkRamps = bithireBrandTheme.modes!.dark!.palette!.ramps!;
+    const authoredDarkRamps = bithireFlatTheme.modes!.dark!.palette!.ramps!;
     // Every authored role, including `neutral` -- which has no seed of its
     // own and exists ONLY as a hand-authored ramp, so it is not in `ROLES`
     // (the seeded subset `rampRoleSpecs` derives) but is still a real channel
@@ -160,7 +160,7 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
 
 describe('a dark-surface tenant (rottay): its non-default (light) mode compiles its own ramp too', () => {
   it('rottay compiles exactly one modeBlocks entry, for light', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
+    const compiled = lowerFlatThemeFixture({ flatTheme: rottayFlatTheme, tenantSlug: 'rottay' });
     expect(compiled.modeBlocks).toHaveLength(1);
     expect(compiled.modeBlocks![0]).toMatchObject({ mode: 'light', colorScheme: 'light' });
   });
@@ -171,8 +171,8 @@ describe('a dark-surface tenant (rottay): its non-default (light) mode compiles 
     // structural preset no longer carries. The dark-default torture fixture
     // seeds both grounds, so the mirror of the light-default case above is
     // measured on it.
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: tortureDarkBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'torture-dark',
     });
     const darkVars = compiled.cssVariables; // its base IS dark (its declared default)
@@ -193,7 +193,7 @@ describe('a dark-surface tenant (rottay): its non-default (light) mode compiles 
   });
 
   it('rottay: a structural preset seeds neither mode, so its light block carries no ramp', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
+    const compiled = lowerFlatThemeFixture({ flatTheme: rottayFlatTheme, tenantSlug: 'rottay' });
     expect(compiled.modeBlocks).toHaveLength(1);
     expect(
       Object.keys(compiled.modeBlocks![0].cssVariables).filter((name) =>
@@ -217,11 +217,11 @@ describe('no --ds-color-dark-* channel survives anywhere in a compiled theme', (
   const DARK_PREFIXED_DECLARATION = /(^|[\s;{])--ds-color-dark-[a-z0-9-]*\s*:/m;
 
   it.each([
-    ['bithire', bithireBrandTheme],
-    ['evnto', evntoBrandTheme],
-    ['rottay', rottayBrandTheme],
+    ['bithire', bithireFlatTheme],
+    ['evnto', evntoFlatTheme],
+    ['rottay', rottayFlatTheme],
   ] as const)('%s: base cssVariables and every mode block are clean', (_name, theme) => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: theme.id });
+    const compiled = lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: theme.id });
     const baseOffenders = Object.keys(compiled.cssVariables).filter((key) => DARK_PREFIXED.test(key));
     expect(baseOffenders).toEqual([]);
     for (const block of compiled.modeBlocks ?? []) {
@@ -235,9 +235,9 @@ describe('no --ds-color-dark-* channel survives anywhere in a compiled theme', (
     // A negative assertion that never had a way to fire is not evidence. This
     // proves the replacement pattern catches a mid-string declaration in the
     // exact shape the compiler would emit one.
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: rottayBrandTheme,
-      tenantSlug: rottayBrandTheme.id,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: rottayFlatTheme,
+      tenantSlug: rottayFlatTheme.id,
     });
     const planted = compiled.cssString.replace(
       '{\n',
@@ -278,14 +278,14 @@ describe('deriveTenantColorRamps · a genuinely DERIVED (not hand-authored) dark
   });
 
   it('is wired into compileTheme through the mode-block path exactly like the hand-authored cases above', () => {
-    const bt: BrandTheme = {
+    const bt: FlatTheme = {
       id: 'synthetic-dark-mode',
       name: 'Synthetic Dark Mode',
       appearance: { defaultMode: 'light' },
       palette: { primaryColor: '#3A6FB0', backgroundColor: '#FFFFFF' },
       modes: { dark: { palette: { backgroundColor: '#0A0A0A' } } },
     };
-    const compiled = lowerBrandThemeFixture({ brandTheme: bt, tenantSlug: 'synthetic-dark-mode' });
+    const compiled = lowerFlatThemeFixture({ flatTheme: bt, tenantSlug: 'synthetic-dark-mode' });
     const expected = deriveTenantColorRamps(
       { primaryColor: '#3A6FB0', backgroundColor: '#0A0A0A' },
       'dark',

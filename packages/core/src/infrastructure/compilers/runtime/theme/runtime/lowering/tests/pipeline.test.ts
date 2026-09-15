@@ -4,15 +4,15 @@
  */
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { MERGE_RANK, type FamilyDeriver } from "../foundation/contract";
 import { FAMILY_DERIVERS } from "../runtime/derivation";
 import { buildLoweringContext, lowerBlock, runDerivation } from "../runtime/pipeline";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
-const THEME: BrandTheme = { id: "pipeline", name: "Pipeline" };
+const THEME: FlatTheme = { id: "pipeline", name: "Pipeline" };
 
 const family = (
   name: string,
@@ -100,21 +100,21 @@ describe("the ranked merge", () => {
 
 describe("the real registry", () => {
   it("is the only orchestrator: lowerBlock and the registry agree byte for byte", () => {
-    const context = buildLoweringContext({ theme: bithireBrandTheme });
-    expect(lowerBlock({ theme: bithireBrandTheme })).toEqual(
+    const context = buildLoweringContext({ theme: bithireFlatTheme });
+    expect(lowerBlock({ theme: bithireFlatTheme })).toEqual(
       runDerivation(context, FAMILY_DERIVERS).channels
     );
   });
 
   it("resolves the expressive expansion once per block, not once per consumer", () => {
-    const context = buildLoweringContext({ theme: bithireBrandTheme });
-    const second = buildLoweringContext({ theme: bithireBrandTheme });
+    const context = buildLoweringContext({ theme: bithireFlatTheme });
+    const second = buildLoweringContext({ theme: bithireFlatTheme });
     expect(context.expressive.expansion).toEqual(second.expressive.expansion);
     expect(context.radiusBaseline).toBe(second.radiusBaseline);
   });
 
   it("compiles a tenant-less theme without any tenant-ranked channel", () => {
-    const context = buildLoweringContext({ theme: bithireBrandTheme });
+    const context = buildLoweringContext({ theme: bithireFlatTheme });
     const result = runDerivation(context, FAMILY_DERIVERS);
     const tenantOwned = [...result.provenance.entries()].filter(
       ([, provenance]) => provenance.rank === "tenant"

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { baselineFor } from "@/infrastructure/compilers/runtime/theme";
 
 import { draftPreviewThemeIntent } from "..";
@@ -41,7 +41,7 @@ describe("a draft ledger carried from the neutral foundation + preset", () => {
         id: "acme",
         name: "Acme",
         chrome: { accent: { badgeShape } },
-      }) as unknown as BrandTheme;
+      }) as unknown as FlatTheme;
 
     const inherited = draftPreviewThemeIntent({
       vertical: "bithire",
@@ -70,7 +70,7 @@ describe("a draft ledger carried from the neutral foundation + preset", () => {
   });
 
   it("leaves the default draft path on the authored theme", () => {
-    const draft = { id: "acme", name: "Acme", chrome: { accent: { badgeShape: "square" } } } as unknown as BrandTheme;
+    const draft = { id: "acme", name: "Acme", chrome: { accent: { badgeShape: "square" } } } as unknown as FlatTheme;
     const intent = draftPreviewThemeIntent({ vertical: "bithire", slug: "acme", draft });
     expect(intent.origin).toBe("preview");
     expect(claimFor(intent.ledger, BADGE_SHAPE_LEAF)?.provenance).toBe("direct-override");

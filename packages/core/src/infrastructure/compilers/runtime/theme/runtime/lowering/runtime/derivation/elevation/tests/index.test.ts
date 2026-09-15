@@ -11,7 +11,7 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { buildLoweringContext } from "../../../pipeline";
 import { deriveBorderPosture } from "../border";
 import { deriveElevationChannels } from "..";
@@ -36,13 +36,13 @@ const Z_INDEX_SCALE = Z_INDEX_CSS.slice(
   Z_INDEX_CSS.indexOf("COMPONENT-SPECIFIC Z-INDEX")
 );
 
-const theme = (surfaces: BrandTheme["surfaces"]): BrandTheme => ({
+const theme = (surfaces: FlatTheme["surfaces"]): FlatTheme => ({
   id: "t",
   name: "T",
   surfaces,
 });
 
-const ladderFor = (surfaces: BrandTheme["surfaces"]): Record<string, string> => {
+const ladderFor = (surfaces: FlatTheme["surfaces"]): Record<string, string> => {
   const bt = theme(surfaces);
   return deriveElevationLadder(bt, buildLoweringContext({ theme: bt }).expressive.expansion);
 };
@@ -97,7 +97,7 @@ describe("surfaces.border-style (kit row 18)", () => {
       id: "t",
       name: "T",
       surfaces: { borderStyle },
-    } as BrandTheme);
+    } as FlatTheme);
 
   it("authors the three border-width ROLES the declared families read", () => {
     expect(posture("none")).toEqual({
@@ -122,20 +122,20 @@ describe("surfaces.border-style (kit row 18)", () => {
   });
 
   it("states nothing when the theme decided nothing", () => {
-    expect(deriveBorderPosture({ id: "t", name: "T" } as BrandTheme)).toEqual({});
+    expect(deriveBorderPosture({ id: "t", name: "T" } as FlatTheme)).toEqual({});
     expect(
       deriveBorderPosture({
         id: "t",
         name: "T",
         surfaces: { borderStyle: "potato" as never },
-      } as BrandTheme)
+      } as FlatTheme)
     ).toEqual({});
     expect(
       deriveBorderPosture({
         id: "t",
         name: "T",
         surfaces: { borderStyle: "hasOwnProperty" as never },
-      } as BrandTheme)
+      } as FlatTheme)
     ).toEqual({});
   });
 
@@ -151,7 +151,7 @@ describe("surfaces.border-style (kit row 18)", () => {
         id: "t",
         name: "T",
         surfaces: { elevation: "elevated", borderStyle: "strong" },
-      } as BrandTheme,
+      } as FlatTheme,
     });
     const channels = deriveElevationChannels(
       context.theme,

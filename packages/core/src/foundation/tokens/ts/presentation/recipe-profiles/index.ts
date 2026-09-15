@@ -1,6 +1,6 @@
 /**
  * Rottay recipe-profile registry (DS-S001) — governed, migration-safe
- * personality selection shared by the static BrandTheme compiler, the DB
+ * personality selection shared by the static FlatTheme compiler, the DB
  * TenantThemeDocument compiler and the runtime provider.
  *
  * A profile is a bounded set of per-family recipe axis defaults. Theme sources

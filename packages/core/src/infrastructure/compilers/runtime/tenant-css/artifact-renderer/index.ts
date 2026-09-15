@@ -24,7 +24,7 @@ import {
   staticThemeIntent,
 } from '../../theme';
 import { readGovernedTheme } from '../../theme/runtime/lowering/foundation/intake';
-import { brandThemeToPersonality } from '../../theme/runtime/lowering/foundation/personality';
+import { flatThemeToPersonality } from '../../theme/runtime/lowering/foundation/personality';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
 
 /** Marker written at the top of every generated vertical artifact. */
@@ -248,7 +248,7 @@ const PERSONALITY_DIMENSIONS = ['animation', 'typography', 'accent', 'card'] as 
  */
 export function firstPartyGovernedBehavior(resolution: ThemeResolution): FirstPartyGovernedBehavior {
   const view = readGovernedTheme(resolution.theme);
-  const personality = brandThemeToPersonality(view);
+  const personality = flatThemeToPersonality(view);
   const decidedChannels: string[] = [];
   for (const dimension of PERSONALITY_DIMENSIONS) {
     const values = personality[dimension];

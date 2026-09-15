@@ -32,7 +32,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { contrastRatio, parseHex } from "@/foundation/kernel/color/contrast";
 
 import {
@@ -44,10 +44,10 @@ import {
   type TintStrengths,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints";
 import { STATUS_SEED_SHADOWING_FIELDS } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
 
 const TONES = ["success", "warning", "error", "info"] as const;
 type Tone = (typeof TONES)[number];
@@ -101,37 +101,37 @@ const SEED_FIELD: Record<Tone, string> = {
   info: "infoColor",
 };
 
-/** Delete a set of `palette.*` leaves from a cloned BrandTheme. Mirrors the
+/** Delete a set of `palette.*` leaves from a cloned FlatTheme. Mirrors the
  * `withoutKeypath` pattern in `bithire-extension/index.test.ts`, generalized to
  * many leaves in one clone. */
 function withoutPaletteFields(
-  theme: BrandTheme,
+  theme: FlatTheme,
   fields: readonly string[]
-): BrandTheme {
+): FlatTheme {
   const clone = structuredClone(theme) as unknown as {
     palette?: Record<string, unknown>;
   };
   for (const field of fields) {
     if (clone.palette) delete clone.palette[field];
   }
-  return clone as unknown as BrandTheme;
+  return clone as unknown as FlatTheme;
 }
 
-/** Add a `palette.*` leaf to a cloned BrandTheme. */
+/** Add a `palette.*` leaf to a cloned FlatTheme. */
 function withPaletteField(
-  theme: BrandTheme,
+  theme: FlatTheme,
   field: string,
   value: string
-): BrandTheme {
+): FlatTheme {
   const clone = structuredClone(theme) as unknown as {
     palette?: Record<string, unknown>;
   };
   if (clone.palette) clone.palette[field] = value;
-  return clone as unknown as BrandTheme;
+  return clone as unknown as FlatTheme;
 }
 
-function compile(theme: BrandTheme, slug: string) {
-  return lowerBrandThemeFixture({ brandTheme: theme, tenantSlug: slug });
+function compile(theme: FlatTheme, slug: string) {
+  return lowerFlatThemeFixture({ flatTheme: theme, tenantSlug: slug });
 }
 
 // BitHire light authors a seed for all four tones (blue success `#327CA8`)
@@ -140,10 +140,10 @@ function compile(theme: BrandTheme, slug: string) {
 // `alpha{Tone}10/20` field either. The theme AS SHIPPED is therefore already
 // the "floor fires" fixture; no cloning needed for this half of the claim.
 describe("status-tint floor fires when the seed exists and the field is unauthored", () => {
-  const { cssVariables } = compile(bithireBrandTheme, "bithire");
+  const { cssVariables } = compile(bithireFlatTheme, "bithire");
 
   it("reads its mix strengths off the posture bithire's own preset states", () => {
-    expect(resolveContrastPosture(bithireBrandTheme)).toBe(CONTRAST_POSTURES.high);
+    expect(resolveContrastPosture(bithireFlatTheme)).toBe(CONTRAST_POSTURES.high);
   });
 
   it.each(TONES)("derives -bg for %s from the vertical's own seed ramp", (tone) => {
@@ -177,7 +177,7 @@ describe("an authored status literal outranks the floor per channel", () => {
   // value far from both the seed-derived floor and any prior literal makes a
   // pass unambiguous.
   const withAuthoredBg = withPaletteField(
-    bithireBrandTheme,
+    bithireFlatTheme,
     "successBgColor",
     "#ABCDEF"
   );
@@ -196,7 +196,7 @@ describe("an authored status literal outranks the floor per channel", () => {
 
 describe("an absent status seed emits nothing", () => {
   it.each(TONES)("no %s seed means no derived -bg/-border/alpha for that tone", (tone) => {
-    const stripped = withoutPaletteFields(bithireBrandTheme, [
+    const stripped = withoutPaletteFields(bithireFlatTheme, [
       SEED_FIELD[tone],
       BG_FIELD[tone],
       BORDER_FIELD[tone],
@@ -330,14 +330,14 @@ describe("ink and well contrast holds after the hue correction", () => {
    * measurement is re-anchored on a bithire-vertical tenant that authors the
    * ramp, which is what the retired authored theme supplied.
    */
-  const withNeutralRamp = (theme: BrandTheme, nine: string): BrandTheme => {
+  const withNeutralRamp = (theme: FlatTheme, nine: string): FlatTheme => {
     const clone = structuredClone(theme) as unknown as {
       palette?: { ramps?: Record<string, Record<string, string>> };
     };
     if (clone.palette) {
       clone.palette.ramps = { ...clone.palette.ramps, neutral: { 900: nine } };
     }
-    return clone as unknown as BrandTheme;
+    return clone as unknown as FlatTheme;
   };
 
   // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
@@ -345,12 +345,12 @@ describe("ink and well contrast holds after the hue correction", () => {
   // measured state until the lane lands. The authored theme shipped the neutral
   // ramp; no preset decision reaches it, so the channel has no producer today.
   it("bithire's shipped vertical emits no neutral-900: no preset decision reaches the ramp", () => {
-    const { cssVariables } = compile(bithireBrandTheme, "bithire");
+    const { cssVariables } = compile(bithireFlatTheme, "bithire");
     expect(cssVariables["--ds-color-neutral-900"]).toBeUndefined();
   });
 
   it("bithire light success: ink over the corrected -bg clears WCAG AA for large text", () => {
-    const tenant = withNeutralRamp(bithireBrandTheme, "#0F172A");
+    const tenant = withNeutralRamp(bithireFlatTheme, "#0F172A");
     const { cssVariables } = compile(tenant, "bithire-tenant");
     const seed = cssVariables["--ds-color-success"];
     const neutral900 = cssVariables["--ds-color-neutral-900"];
@@ -403,9 +403,9 @@ describe("Evnto border channels remain byte-identical to the pre-derivation fixt
   };
 
   /** An evnto tenant that authors the seeds its vertical's preset does not. */
-  const evntoSeeded = TONES.reduce<BrandTheme>(
+  const evntoSeeded = TONES.reduce<FlatTheme>(
     (theme, tone) => withPaletteField(theme, SEED_FIELD[tone], EVNTO_TENANT_SEED[tone]),
-    evntoBrandTheme
+    evntoFlatTheme
   );
 
   it("resolves to the standard posture, which is what makes the bytes comparable", () => {

@@ -4,9 +4,9 @@
  * WHAT PROPERTY THIS PROTECTS, and why nothing else covers it.
  *
  * `tenant-divergence-matrix.test.ts` proves the compiler is deterministic and
- * that two BrandThemes produce different artifacts. It builds its "DB
- * representation" by projecting a static BrandTheme through
- * `brandThemeToTenantAppearance()`, and its own comment says the fixture is the
+ * that two FlatThemes produce different artifacts. It builds its "DB
+ * representation" by projecting a static FlatTheme through
+ * `flatThemeToTenantAppearance()`, and its own comment says the fixture is the
  * authoring source. That is a compiler test wearing a tenant test's clothes:
  * it starts from a ~140-field code-owned object, so it can never fail for the
  * reason a real customer would hit — a document the customer can actually
@@ -18,7 +18,7 @@
  * THE BUG IT WOULD CATCH. Any change that makes a customer-reachable axis
  * unreachable FROM THE DOCUMENT — a field dropped from the schema, an envelope
  * clamp that silently flattens it, a compiler branch that only fires for
- * BrandTheme-shaped input — while every BrandTheme-driven test stays green.
+ * FlatTheme-shaped input — while every FlatTheme-driven test stays green.
  *
  * COST. Four compilations of two small documents; single-digit milliseconds.
  * It replaces nothing: it covers the direction the existing matrix cannot.
@@ -265,7 +265,7 @@ describe('tenant theme — the axes a customer can actually move', () => {
 
   /**
    * The honest other half. These axes appear in the R1 authority model and in
-   * BrandTheme, but a DB tenant document cannot move them: nothing is emitted
+   * FlatTheme, but a DB tenant document cannot move them: nothing is emitted
    * for them at all.
    *
    * This is an ASSERTION, not a comment, so the census cannot rot. When a

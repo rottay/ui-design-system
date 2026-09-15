@@ -53,26 +53,26 @@ import {
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 /** Hues far from bithire's blues, so no derived step lands unchanged by luck. */
 const NEW_PRIMARY = '#B4322A';
 const NEW_BACKGROUND = '#FFF7E8';
 
-const compile = (brandTheme: BrandTheme) =>
-  lowerBrandThemeFixture({ brandTheme, tenantSlug: 'bithire' }).cssVariables;
+const compile = (flatTheme: FlatTheme) =>
+  lowerFlatThemeFixture({ flatTheme, tenantSlug: 'bithire' }).cssVariables;
 
-const withPalette = (patch: Record<string, string>): BrandTheme => ({
-  ...bithireBrandTheme,
-  palette: { ...bithireBrandTheme.palette!, ...patch },
+const withPalette = (patch: Record<string, string>): FlatTheme => ({
+  ...bithireFlatTheme,
+  palette: { ...bithireFlatTheme.palette!, ...patch },
 });
 
-const BASE = compile(bithireBrandTheme);
+const BASE = compile(bithireFlatTheme);
 
 function movedBetween(
   before: Record<string, string>,
@@ -140,15 +140,15 @@ const count = (channels: string[], family: string) =>
  * this theme paints with, it paints with BECAUSE of a derivation, so it is the
  * only honest place to measure reach.
  */
-const MINIMAL: BrandTheme = {
+const MINIMAL: FlatTheme = {
   id: 'minimal',
   name: 'Minimal',
   palette: { primaryColor: '#3A6FB0', backgroundColor: '#F4F8FB' },
-} as BrandTheme;
+} as FlatTheme;
 
 const minimal = (patch: Record<string, string>) =>
-  lowerBrandThemeFixture({
-    brandTheme: { ...MINIMAL, palette: { ...MINIMAL.palette!, ...patch } },
+  lowerFlatThemeFixture({
+    flatTheme: { ...MINIMAL, palette: { ...MINIMAL.palette!, ...patch } },
     tenantSlug: 'minimal',
   }).cssVariables;
 
@@ -490,7 +490,7 @@ describe('TENANT-COLOR PROPAGATION · one channel, one author', () => {
     // bithire authored `palette.linkColor` and no preset does, so the vertical
     // takes the SAME one-author floor as the tenant -- a pass-through of its
     // own primary seed. One author, now on both sides of the comparison.
-    expect(BASE['--ds-color-link']).toBe(bithireBrandTheme.palette!.primaryColor);
+    expect(BASE['--ds-color-link']).toBe(bithireFlatTheme.palette!.primaryColor);
   });
 });
 
@@ -559,15 +559,15 @@ describe('TENANT-COLOR PROPAGATION · the reach still withheld', () => {
  * authored here on top of the bithire baseline -- the exact shape the retired
  * theme had.
  */
-const AUTHORS_ITS_CHROME = themanagementmiamiBrandTheme;
-const AUTHORED_CHROME_BASE = lowerBrandThemeFixture({
-  brandTheme: AUTHORS_ITS_CHROME,
+const AUTHORS_ITS_CHROME = themanagementmiamiFlatTheme;
+const AUTHORED_CHROME_BASE = lowerFlatThemeFixture({
+  flatTheme: AUTHORS_ITS_CHROME,
   tenantSlug: 'themanagementmiami',
 }).cssVariables;
 const AUTHORED_CHROME_PRIMARY_MOVED = movedBetween(
   AUTHORED_CHROME_BASE,
-  lowerBrandThemeFixture({
-    brandTheme: {
+  lowerFlatThemeFixture({
+    flatTheme: {
       ...AUTHORS_ITS_CHROME,
       palette: { ...AUTHORS_ITS_CHROME.palette!, primaryColor: NEW_PRIMARY },
     },
@@ -575,7 +575,7 @@ const AUTHORED_CHROME_PRIMARY_MOVED = movedBetween(
   }).cssVariables
 );
 
-const AUTHORS_ITS_FLOOR: BrandTheme = withPalette({
+const AUTHORS_ITS_FLOOR: FlatTheme = withPalette({
   borderFocusColor: '#123456',
   linkColor: '#234567',
   linkHoverColor: '#345678',

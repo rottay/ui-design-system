@@ -177,7 +177,7 @@ export default async function RootLayout({
   // Server Components in this request render icons OUTSIDE the client
   // provider tree; the DS per-request seam receives the same posture the
   // provider derives, from the same resolver: the compiled artifact's
-  // appearance for a custom tenant, the bundled BrandTheme otherwise.
+  // appearance for a custom tenant, the bundled FlatTheme otherwise.
   provideServerIconExpressiveProfile(
     resolveActiveIconExpressiveProfile(
       runtimeArtifact

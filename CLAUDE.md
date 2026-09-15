@@ -355,7 +355,7 @@ wrongly marked as orphans.
 - Patterns knowing about page layout (patterns should not know what screen they're in)
 - Structures knowing about business domain (structures should only know about layout roles)
 
-## Premium white-label model (BrandTheme / Theme-ISO)
+## Premium white-label model (FlatTheme / Theme-ISO)
 
 > **Authority remit:** WO-CRA-23 is sealed, so the Modern Rescue contracts
 > (`packages/core/scripts/check/modern-rescue/README.md`, `program/index.json`,
@@ -377,9 +377,11 @@ wrongly marked as orphans.
 > ingestion-only and may not carry `id` or `name`.
 
 The canonical visual source of truth is the total nested **Theme** under
-`foundation/contracts/composition/tenants/themes/`. `BrandTheme` may survive
-only as a deprecated compatibility alias of the complete Theme, never as a
-patch or a second authority.
+`foundation/contracts/composition/tenants/themes/`. `FlatTheme` is the flat
+projection of that Theme, and it currently carries TWO roles: the read view the
+lowering consumes, and the draft transport the studio, preview and fixtures
+author. WO-DER-08 owns splitting them. It is never a patch and never a second
+authority.
 
 Visual merge chain: `DS base -> vertical baseline -> Theme -> compileTheme -> artifacts`
 
@@ -483,7 +485,7 @@ All charts are D3-backed, engine-agnostic, token-aware, personality-driven, and 
 ### Theming:
 - Charts use var(--ds-color-*) CSS variables natively in SVG fill/stroke
 - useChartTheme resolves to hex when needed (Canvas, interpolation)
-- BrandTheme.charts controls personality (animateOnMount, lineStyle, showDots, etc.)
+- FlatTheme.charts controls personality (animateOnMount, lineStyle, showDots, etc.)
 - 5 color palettes: default, pastel, vibrant, monochrome, accessible (Wong 2011)
 
 ---

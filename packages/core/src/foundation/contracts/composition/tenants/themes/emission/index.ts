@@ -6,10 +6,10 @@
  * @package @rottay/design-system
  */
 
-import type { BrandThemeMode } from "..";
+import type { FlatThemeMode } from "..";
 
 /** A named CSS scope. The only owner of selector text in the target chain. */
 export interface EmissionScope {
   readonly baseSelector: string;
-  modeSelector(mode: BrandThemeMode): string;
+  modeSelector(mode: FlatThemeMode): string;
 }

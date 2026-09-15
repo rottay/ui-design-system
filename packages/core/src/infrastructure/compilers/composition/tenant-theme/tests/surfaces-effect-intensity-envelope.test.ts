@@ -33,8 +33,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 // The roster union's OWNER is `contracts/kernel/verticals`; the tenants barrel
@@ -76,13 +76,13 @@ const staticVariables = (
   vertical: FirstPartyVerticalId,
   effectIntensity?: unknown
 ): Record<string, string> =>
-  lowerBrandThemeFixture({
-    brandTheme: {
+  lowerFlatThemeFixture({
+    flatTheme: {
       id: `ei-${vertical}`,
       name: 'Effect Intensity',
       palette: { primaryColor: '#0F766E' },
       surfaces: effectIntensity === undefined ? {} : { effectIntensity },
-    } as unknown as BrandTheme,
+    } as unknown as FlatTheme,
     tenantSlug: vertical,
   }).cssVariables;
 

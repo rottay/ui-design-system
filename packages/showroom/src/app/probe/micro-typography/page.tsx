@@ -118,7 +118,7 @@ function EvidenceContent() {
                   Body copy uses text-wrap: pretty so the paragraph never ends on a single lonely
                   word. Optical sizing renders tenant variable fonts at their designed optical size,
                   and hyphenation is available for narrow measures. None of this bundles a font — the
-                  family stays a BrandTheme choice.
+                  family stays a FlatTheme choice.
                 </Text>
               </Box>
             </Box>

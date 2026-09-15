@@ -25,7 +25,7 @@ import {
 import { DesignSystemProvider } from '..';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 function Probe(): React.ReactElement {
   const { config } = useTenantContext();
@@ -118,7 +118,7 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     // composed per call. Reference identity therefore cannot hold and is not
     // the claim -- that the WHOLE selection travels unchanged is: toBe ->
     // toEqual.
-    expect(behavior.expressive).toEqual(bithireBrandTheme.expressive);
+    expect(behavior.expressive).toEqual(bithireFlatTheme.expressive);
 
     const axesFromSlice = resolveExpressiveAxes(
       behavior.expressive!.experienceProfile,
@@ -126,9 +126,9 @@ describe('code-owned governed behavior survives the runtime projection', () => {
       behavior.expressive!.schemaVersion,
     );
     const axesFromSource = resolveExpressiveAxes(
-      bithireBrandTheme.expressive!.experienceProfile,
-      sanitizeExpressiveOverrides(bithireBrandTheme.expressive!.profiles),
-      bithireBrandTheme.expressive!.schemaVersion,
+      bithireFlatTheme.expressive!.experienceProfile,
+      sanitizeExpressiveOverrides(bithireFlatTheme.expressive!.profiles),
+      bithireFlatTheme.expressive!.schemaVersion,
     );
     expect(axesFromSlice).toEqual(axesFromSource);
     // Not vacuous: the selection resolves real axes, including the two the
@@ -139,7 +139,7 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     expect(axesFromSlice).toMatchObject({ type: 'technical', geometry: 'sharp' });
 
     expect(resolveActiveIconExpressiveProfile({ expressive: behavior.expressive }))
-      .toBe(resolveActiveIconExpressiveProfile({ expressive: bithireBrandTheme.expressive }));
+      .toBe(resolveActiveIconExpressiveProfile({ expressive: bithireFlatTheme.expressive }));
     expect(deriveDensityPosture(axesFromSlice.density))
       .toBe(deriveDensityPosture(axesFromSource.density));
   });
@@ -148,13 +148,13 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     renderVertical('bithire');
     const result = probe();
     const axes = resolveExpressiveAxes(
-      bithireBrandTheme.expressive!.experienceProfile,
-      sanitizeExpressiveOverrides(bithireBrandTheme.expressive!.profiles),
-      bithireBrandTheme.expressive!.schemaVersion,
+      bithireFlatTheme.expressive!.experienceProfile,
+      sanitizeExpressiveOverrides(bithireFlatTheme.expressive!.profiles),
+      bithireFlatTheme.expressive!.schemaVersion,
     );
     expect(result.density).toBe(deriveDensityPosture(axes.density));
     expect(result.iconProfile).toBe(
-      resolveActiveIconExpressiveProfile({ expressive: bithireBrandTheme.expressive }) ?? null,
+      resolveActiveIconExpressiveProfile({ expressive: bithireFlatTheme.expressive }) ?? null,
     );
   });
 

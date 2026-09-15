@@ -1187,7 +1187,7 @@ async function commandCausal(options) {
    * once per run so both the arm and the discrimination guard stand in the same
    * scope; fail-closed inside `verticalDefaultMode`.
    *
-   * A tenant-less scope (`none`) has no BrandTheme and therefore no default
+   * A tenant-less scope (`none`) has no FlatTheme and therefore no default
    * mode; it resolves to `null` here rather than throwing, so the existing
    * refusal for such a run stays where it already is. A document that actually
    * NEEDS the scope still fails closed at the stamp. */

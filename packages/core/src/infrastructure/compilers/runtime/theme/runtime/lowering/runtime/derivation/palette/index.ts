@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import {
   deriveExtendedPaletteFloor,
@@ -68,7 +68,7 @@ export const paletteDeriver: FamilyDeriver = {
 };
 
 export function derivePaletteChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   statusTints: Record<string, string>
 ): Record<string, string> {
   const vars: Record<string, string> = {};

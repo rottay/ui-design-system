@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createTenantBrandTheme, createTenantConfig, type TenantCreationConfig } from '..';
+import { createTenantFlatTheme, createTenantConfig, type TenantCreationConfig } from '..';
 import {
   resolvePersonalityPreset,
   type PersonalityPreset,
@@ -73,22 +73,22 @@ describe('createTenantConfig', () => {
     expect(config.branding.primaryColor).toBe('#3B82F6');
   });
 
-  it('carries no visual payload at all -- that is the BrandTheme half', () => {
+  it('carries no visual payload at all -- that is the FlatTheme half', () => {
     const config = createTenantConfig({
       ...minimalConfig,
       personality: 'formal',
       density: 'spacious',
     });
 
-    // The five removed fields. A draft's preset and density are BrandTheme
+    // The five removed fields. A draft's preset and density are FlatTheme
     // channels; the identity config cannot restate them.
     for (const field of ['brandTheme', 'personality', 'tokenOverrides', 'appearance', 'engine']) {
       expect(Object.prototype.hasOwnProperty.call(config, field)).toBe(false);
     }
   });
 
-  it('projects the personality preset onto the BrandTheme channels', () => {
-    const theme = createTenantBrandTheme({ ...minimalConfig, personality: 'formal' });
+  it('projects the personality preset onto the FlatTheme channels', () => {
+    const theme = createTenantFlatTheme({ ...minimalConfig, personality: 'formal' });
 
     expect(theme.motion!.entrance).toBe('fade');
     expect(theme.motion!.intensity).toBeLessThan(0.5);
@@ -96,19 +96,19 @@ describe('createTenantConfig', () => {
     expect(theme.palette!.primaryColor).toBe('#3B82F6');
   });
 
-  it('projects density onto the BrandTheme surfaces', () => {
-    const compact = createTenantBrandTheme({ ...minimalConfig, density: 'compact' });
+  it('projects density onto the FlatTheme surfaces', () => {
+    const compact = createTenantFlatTheme({ ...minimalConfig, density: 'compact' });
     expect(compact.surfaces?.densityScale).toBe(0.95);
     expect(compact.chrome!.card!.paddingDensity).toBe('compact');
 
-    const spacious = createTenantBrandTheme({ ...minimalConfig, density: 'spacious' });
+    const spacious = createTenantFlatTheme({ ...minimalConfig, density: 'spacious' });
     expect(spacious.surfaces?.densityScale).toBe(1.1);
     expect(spacious.chrome!.card!.paddingDensity).toBe('spacious');
     expect(spacious.surfaces?.borderRadius).toBeDefined();
   });
 
   it('states no density scale for the comfortable baseline', () => {
-    const theme = createTenantBrandTheme({ ...minimalConfig, density: 'comfortable' });
+    const theme = createTenantFlatTheme({ ...minimalConfig, density: 'comfortable' });
     expect(theme.surfaces?.densityScale).toBeUndefined();
   });
 
@@ -130,7 +130,7 @@ describe('createTenantConfig', () => {
   });
 
   it('should default personality to neutral', () => {
-    const theme = createTenantBrandTheme(minimalConfig);
+    const theme = createTenantFlatTheme(minimalConfig);
     const neutralTokens = resolvePersonalityPreset('neutral');
 
     expect(theme.motion!.intensity).toBe(neutralTokens.animation!.intensity);

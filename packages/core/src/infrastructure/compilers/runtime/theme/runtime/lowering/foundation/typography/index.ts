@@ -17,7 +17,7 @@ import { omitUndefined } from "../shape";
 /**
  * `fontSize` is optional here because the `body` role has no builder default:
  * body size is 14px canonical and its single authority is the theme layer
- * (foundation/tokens/css/foundation/themes/default/index.css). A BrandTheme that
+ * (foundation/tokens/css/foundation/themes/default/index.css). A FlatTheme that
  * wants a different body size still authors it via `typography.roles.body`,
  * which outranks this table.
  */

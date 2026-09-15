@@ -1,5 +1,5 @@
 /**
- * Strategic tests for the dual-mode BrandTheme contract (independent code audit C6.1).
+ * Strategic tests for the dual-mode FlatTheme contract (independent code audit C6.1).
  *
  * The defect this closes is duplicate authority: every vertical's non-default
  * mode used to be a hand-written block in its artifact extension, so a channel
@@ -11,25 +11,25 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
-const MINIMAL: BrandTheme = {
+const MINIMAL: FlatTheme = {
   id: 'fixture',
   name: 'Fixture',
   appearance: { defaultMode: 'light' },
   palette: { primaryColor: '#336699', backgroundColor: '#FFFFFF' },
 };
 
-const compile = (brandTheme: BrandTheme, tenantSlug = 'fixture') =>
-  lowerBrandThemeFixture({ brandTheme, tenantSlug });
+const compile = (flatTheme: FlatTheme, tenantSlug = 'fixture') =>
+  lowerFlatThemeFixture({ flatTheme, tenantSlug });
 
-describe('BrandTheme.modes — typed dual-mode contract', () => {
+describe('FlatTheme.modes — typed dual-mode contract', () => {
   it('emits no mode block when a theme authors no modes', () => {
     const compiled = compile(MINIMAL);
 
@@ -38,7 +38,7 @@ describe('BrandTheme.modes — typed dual-mode contract', () => {
   });
 
   it('leaves the base block byte-identical when a mode is added', () => {
-    const withDark: BrandTheme = {
+    const withDark: FlatTheme = {
       ...MINIMAL,
       modes: { dark: { palette: { backgroundColor: '#101014' } } },
     };
@@ -87,7 +87,7 @@ describe('BrandTheme.modes — typed dual-mode contract', () => {
   });
 
   it('merges an overlay leaf without dropping its siblings', () => {
-    const base: BrandTheme = {
+    const base: FlatTheme = {
       ...MINIMAL,
       chrome: { sidebar: { bg: '#FFFFFF', itemColor: '#222222' } },
       modes: { dark: { chrome: { sidebar: { bg: '#101014' } } } },
@@ -152,12 +152,12 @@ describe('BrandPalette.ramps — authored steps over derived ones', () => {
 
 describe('the three first-party verticals', () => {
   it('each author their non-default mode through the contract', () => {
-    for (const [brandTheme, slug, mode] of [
-      [bithireBrandTheme, 'bithire', 'dark'],
-      [evntoBrandTheme, 'evnto', 'dark'],
-      [rottayBrandTheme, 'rottay', 'light'],
+    for (const [flatTheme, slug, mode] of [
+      [bithireFlatTheme, 'bithire', 'dark'],
+      [evntoFlatTheme, 'evnto', 'dark'],
+      [rottayFlatTheme, 'rottay', 'light'],
     ] as const) {
-      const compiled = compile(brandTheme, slug);
+      const compiled = compile(flatTheme, slug);
       const block = compiled.modeBlocks?.find((candidate) => candidate.mode === mode);
 
       expect(block, `${slug} must author its ${mode} mode`).toBeDefined();

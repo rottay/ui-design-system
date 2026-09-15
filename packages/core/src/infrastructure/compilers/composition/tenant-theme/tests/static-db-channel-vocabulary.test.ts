@@ -1,7 +1,7 @@
 /**
  * STATIC/DB SAME VOCABULARY — one channel language, two authoring paths.
  *
- * A code-owned vertical authors its colors as a `BrandTheme` compiled by
+ * A code-owned vertical authors its colors as a `FlatTheme` compiled by
  * `compileTheme`; a customer authors them as a `TenantThemeDocument`
  * compiled by `compileTenantThemeConfig`. Both must land in the SAME semantic
  * channel vocabulary, because the components downstream read channel names and
@@ -32,7 +32,7 @@
  *
  * 1. CONTRACT (`staticMirrorChannels`) — can the static authoring language say
  *    this at all? Measured by expressing the customer document's own authored
- *    intent as a `BrandTheme` and compiling it. This is the real vocabulary
+ *    intent as a `FlatTheme` and compiling it. This is the real vocabulary
  *    law and it asserts ZERO.
  * 2. SHIPPED IDENTITY (`bithireChannels`) — does the reference product
  *    actually author this channel through the typed contract? A short
@@ -49,7 +49,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { FIRST_PARTY_BASELINES, firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { FIRST_PARTY_BASELINES, firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import { TENANT_CAPABILITY_REGISTRY } from "@/foundation/contracts/composition/tenants/capabilities";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
@@ -62,7 +62,7 @@ import {
   previewThemeIntent,
   staticThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
@@ -72,7 +72,7 @@ import {
   hydrateTenantThemeConfig,
 } from "../index";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 /**
  * A maximal customer document: every chrome family the bithire envelope
@@ -184,7 +184,7 @@ const dbChannels = new Set(Object.keys(dbCompiled.variables));
  * is literally the same function on both paths.
  *
  * Where the two paths reach a channel from DIFFERENT dials, the mirror carries
- * the DB path's own resolved value into the typed `BrandTheme` field that owns
+ * the DB path's own resolved value into the typed `FlatTheme` field that owns
  * that channel — a customer sets `navigation.sidebarTone` or a raw
  * `tokenOverride` where a vertical sets `chrome.sidebar.itemBgActive` or
  * `palette.successColor`. That is deliberate and it is what the law needs:
@@ -193,7 +193,7 @@ const dbChannels = new Set(Object.keys(dbCompiled.variables));
  * (WCAG readable ink for `--ds-color-text-on-primary`, the tone presets, the
  * semantic ramps) belongs to its own compiler and is graded by its own tests.
  */
-const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
+const buildStaticMirror = (compiled: typeof dbCompiled): FlatTheme => {
   const seeds = compiled.normalizedAppearance.general?.palette ?? {};
   const chrome = compiled.normalizedAppearance.advanced?.chrome ?? {};
   const general = compiled.normalizedAppearance.general ?? {};
@@ -233,7 +233,7 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
     },
     surfaces: {
       // The three bounded postures the customer document states in `general`.
-      // A BrandTheme spells them on `surfaces`, so naming them here is the
+      // A FlatTheme spells them on `surfaces`, so naming them here is the
       // proof the static contract HAS the field -- the same law the palette
       // seeds above satisfy. For the silhouette that is the whole claim: it is
       // reachable from the static contract without a chrome leaf standing in
@@ -258,21 +258,21 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
 };
 
 const staticMirrorChannels = allChannels(
-  lowerBrandThemeFixture({
-    brandTheme: buildStaticMirror(dbCompiled),
+  lowerFlatThemeFixture({
+    flatTheme: buildStaticMirror(dbCompiled),
     tenantSlug: "static-mirror",
   })
 );
 
 const bithireChannels = allChannels(
-  lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" })
+  lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" })
 );
 
 /**
  * The shared core families, matched on the channel name.
  *
  * `chrome` has no single prefix — the contract spreads it across the component
- * families a BrandTheme's `chrome` section authors — so it is enumerated from
+ * families a FlatTheme's `chrome` section authors — so it is enumerated from
  * those family names rather than guessed from a prefix.
  */
 const CHROME_FAMILIES = [
@@ -439,7 +439,7 @@ describe("STATIC/DB VOCABULARY · the static contract expresses every customer c
       );
     }
     // Zero, with no pinned survivors: a customer dial that paints a channel no
-    // BrandTheme field can produce is the drift this file exists to catch, and
+    // FlatTheme field can produce is the drift this file exists to catch, and
     // there is no inventory to grow it into.
     expect(dbOnly).toEqual([]);
   });
@@ -487,7 +487,7 @@ describe("STATIC/DB VOCABULARY · the shipped identity authors what it can expre
 
   it("every channel bithire leaves unauthored is still expressible statically", () => {
     // The distinction the two describes exist to keep apart. If one of these
-    // ever stops being reachable from a BrandTheme field, it is no longer an
+    // ever stops being reachable from a FlatTheme field, it is no longer an
     // authoring gap — it is the contract drift, and it fails above too.
     for (const channel of KNOWN_UNAUTHORED_BY_BITHIRE) {
       expect({
@@ -542,7 +542,7 @@ describe("STATIC/DB VOCABULARY · drill", () => {
  * Both arms are tenant-authored, so both carry a tenant floor and lower the
  * tenant posture last. The only structural difference left is the transport:
  * a `TenantThemeDocument` through `compileTenantThemeConfig`, versus a
- * `BrandTheme` draft through `draftPreviewThemeIntent`. Anything that differs
+ * `FlatTheme` draft through `draftPreviewThemeIntent`. Anything that differs
  * is a transport artefact, and every one of them has to be named here rather
  * than absorbed.
  *
@@ -553,7 +553,7 @@ interface TransportCase {
   /** The `appearance.general` fragment a customer document would carry. */
   readonly general: Record<string, unknown>;
   /** The same intent expressed in the static authoring language. */
-  readonly draft: Partial<BrandTheme>;
+  readonly draft: Partial<FlatTheme>;
 }
 
 /**
@@ -627,7 +627,7 @@ const TRANSPORT_CASES: Readonly<Record<string, TransportCase>> = {
         warningColor: "#B4761E",
         errorColor: "#B23B3B",
         infoColor: "#2F6B9A",
-      } as BrandTheme["palette"],
+      } as FlatTheme["palette"],
     },
   },
   "typography.pairing": {
@@ -679,7 +679,7 @@ const TRANSPORT_CASES: Readonly<Record<string, TransportCase>> = {
   },
   "surfaces.effect-intensity": {
     general: { surfaces: { effectIntensity: 0.6 } },
-    draft: { surfaces: { effectIntensity: 0.6 } as BrandTheme["surfaces"] },
+    draft: { surfaces: { effectIntensity: 0.6 } as FlatTheme["surfaces"] },
   },
   "navigation.sidebar-tone": {
     general: { navigation: { sidebarTone: "strong" } },
@@ -874,7 +874,7 @@ describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
                 draft: resolvePlaceholders(
                   transportCase.draft,
                   defaultMode
-                ) as BrandTheme,
+                ) as FlatTheme,
               })
             )
           ).toThrow(/cannot be APCA-verified/);
@@ -885,7 +885,7 @@ describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
           draftPreviewThemeIntent({
             vertical,
             slug,
-            draft: resolvePlaceholders(transportCase.draft, defaultMode) as BrandTheme,
+            draft: resolvePlaceholders(transportCase.draft, defaultMode) as FlatTheme,
           })
         ).compiled;
         const untouched = compileThemeIntent(staticThemeIntent(vertical, slug)).compiled;
@@ -934,7 +934,7 @@ describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
           draftPreviewThemeIntent({
             vertical,
             slug,
-            draft: resolvePlaceholders(transportCase.draft, defaultMode) as BrandTheme,
+            draft: resolvePlaceholders(transportCase.draft, defaultMode) as FlatTheme,
           })
         ).compiled;
         const untouched = compileThemeIntent(staticThemeIntent(vertical, slug)).compiled;

@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import {
   EXPRESSIVE_AXIS_VOCABULARIES,
@@ -46,12 +46,12 @@ const v1 = (profiles: unknown): TenantThemeDocument =>
     visualFoundation: { advanced: { profiles } },
   }) as unknown as TenantThemeDocument;
 
-const draft = (profiles: unknown): BrandTheme =>
+const draft = (profiles: unknown): FlatTheme =>
   ({
     id: SLUG,
     name: "Expressive acceptance",
     expressive: { schemaVersion: 1, profiles },
-  }) as unknown as BrandTheme;
+  }) as unknown as FlatTheme;
 
 describe("an invalid expressive axis is refused BY NAME", () => {
   it("refuses all 7 axes x 3 verticals x 2 public document producers", () => {

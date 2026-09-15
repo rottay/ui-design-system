@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 
 /** The five closed tint steps of the one-blue scale (design-language §2.5). */
 const TINT_STEPS = [4, 8, 12, 16, 24] as const;
@@ -73,7 +73,7 @@ function setTintRampVariables(
  */
 export function setTintScaleVariables(
   vars: Record<string, string>,
-  bt: BrandTheme
+  bt: FlatTheme
 ): void {
   const palette = bt.palette;
   if (!palette) return;

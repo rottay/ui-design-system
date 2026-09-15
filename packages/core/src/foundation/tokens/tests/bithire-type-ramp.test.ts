@@ -19,9 +19,9 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 /** design-language §2.1 table — size / line-height / weight / tracking, per entry. */
 const RAMP = [
@@ -38,8 +38,8 @@ const FAMILY = 'var(--ds-font-family-base)';
 const dialed = (literal: string) => `calc(${literal} * var(--ds-type-scale, 1))`;
 
 describe('bithire brand compiler emits the composite type ramp', () => {
-  const { cssVariables } = lowerBrandThemeFixture({
-    brandTheme: bithireBrandTheme,
+  const { cssVariables } = lowerFlatThemeFixture({
+    flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });
 

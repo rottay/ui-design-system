@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 
 /**
  * Kit row 14, as three statements about ONE factor.
@@ -30,7 +30,7 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
  */
 const CONTROL_HEIGHT_SCALE: Readonly<
   Record<
-    NonNullable<NonNullable<BrandTheme["surfaces"]>["controlHeight"]>,
+    NonNullable<NonNullable<FlatTheme["surfaces"]>["controlHeight"]>,
     string
   >
 > = {
@@ -43,14 +43,14 @@ const CONTROL_HEIGHT_SCALE: Readonly<
  * The posture the theme DECIDED, or nothing.
  *
  * Own-property guarded for the same reason `../../typography/weights` is: a
- * BrandTheme is plain data by the time it reaches this compiler, so a bare
+ * FlatTheme is plain data by the time it reaches this compiler, so a bare
  * bracket read of a closed table resolves inherited members and unknown words
  * alike -- and the literal string `undefined` inside a `calc()` product
  * invalidates the whole declaration, which collapses every control to its
  * content height.
  */
 export function deriveControlHeightScale(
-  bt: BrandTheme
+  bt: FlatTheme
 ): Record<string, string> {
   const authored = bt.surfaces?.controlHeight;
   if (

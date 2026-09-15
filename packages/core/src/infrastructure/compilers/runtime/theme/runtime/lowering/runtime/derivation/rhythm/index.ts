@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   TENANT_THEME_RHYTHM_FACTORS,
   TENANT_THEME_RHYTHM_SCALE_BOUNDS,
@@ -16,7 +16,7 @@ import type { FamilyDeriver } from "../../../foundation/contract";
 /**
  * The rhythm posture, and the bounded scale every gap chain reads.
  *
- * FAILING CLOSED IS PART OF THE PARITY, not an extra. A `BrandTheme` is typed,
+ * FAILING CLOSED IS PART OF THE PARITY, not an extra. A `FlatTheme` is typed,
  * but it is plain data by the time it reaches this compiler: it crosses the
  * RSC/JSON boundary and arrives through the compatibility
  * `TenantConfig.brandTheme` field, where no type survives. A bare bracket read
@@ -37,7 +37,7 @@ export const rhythmDeriver: FamilyDeriver = {
   derive: (context) => deriveRhythmChannels(context.theme),
 };
 
-export function deriveRhythmChannels(bt: BrandTheme): Record<string, string> {
+export function deriveRhythmChannels(bt: FlatTheme): Record<string, string> {
   const authored = bt.surfaces?.rhythm;
   if (
     typeof authored !== "string" ||

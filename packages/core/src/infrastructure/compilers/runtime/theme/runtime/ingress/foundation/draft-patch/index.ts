@@ -1,12 +1,12 @@
 /**
- * @fileoverview An authored BrandTheme draft, as the patch a preview resolves.
+ * @fileoverview An authored FlatTheme draft, as the patch a preview resolves.
  *
  * @module Compilers/Theme/Ingress/Foundation/DraftPatch
  * @category Compilers
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   Governed,
   Theme,
@@ -64,7 +64,7 @@ const IDENTITY_FAMILIES = ["id", "name"] as const;
  * declared. A family the draft omits is absent from the patch, so the
  * baseline's own value survives untouched.
  */
-export function authoredThemePatch(draft: BrandTheme): ThemeLayerPatch {
+export function authoredThemePatch(draft: FlatTheme): ThemeLayerPatch {
   // The draft is a public tenant-authored transport like the two documents, so
   // it answers to the same closed axis domains and the same named refusal.
   assertExpressiveOverrides(draft.expressive?.profiles, "$.expressive.profiles");

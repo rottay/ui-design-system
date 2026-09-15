@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   DENSITY_MODE_FACTOR_VARIABLE,
   isDensityPreference,
@@ -45,7 +45,7 @@ export const densityDeriver: FamilyDeriver = {
 };
 
 export function deriveDensityChannels(
-  bt: BrandTheme,
+  bt: FlatTheme,
   expansion: ExpressiveExpansion
 ): Record<string, string> {
   const vars: Record<string, string> = {

@@ -6,8 +6,8 @@ import {
   resolveRecipeProfile,
   validateRecipeProfileSelection,
 } from "@/foundation/tokens/ts/presentation/recipe-profiles";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 describe("recipe-profile governance (DS-S001)", () => {
   it("publishes a namespaced, versioned, closed registry", () => {
@@ -45,8 +45,8 @@ describe("recipe-profile governance (DS-S001)", () => {
       .toBeDefined();
   });
 
-  it("resolves a valid static BrandTheme selection into the runtime payload and emits no channel", () => {
-    const brandTheme: BrandTheme = {
+  it("resolves a valid static FlatTheme selection into the runtime payload and emits no channel", () => {
+    const flatTheme: FlatTheme = {
       id: "profile-proof",
       name: "Profile proof",
       recipes: {
@@ -54,7 +54,7 @@ describe("recipe-profile governance (DS-S001)", () => {
         profile: "rottay/technical-sharp@1",
       },
     };
-    const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: "proof" });
+    const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: "proof" });
     expect(compiled.recipeProfile).toBe("rottay/technical-sharp@1");
     // A selection is data, not paint: nothing in the stylesheet carries it.
     expect(compiled.cssVariables["--ds-recipe-profile"]).toBeUndefined();
@@ -63,8 +63,8 @@ describe("recipe-profile governance (DS-S001)", () => {
 
   it("resolves invalid static selections to engine defaults, with no payload and no channel", () => {
     const compile = (profile: string, schemaVersion: number) =>
-      lowerBrandThemeFixture({
-        brandTheme: {
+      lowerFlatThemeFixture({
+        flatTheme: {
           id: "profile-proof",
           name: "Profile proof",
           recipes: { schemaVersion, profile },

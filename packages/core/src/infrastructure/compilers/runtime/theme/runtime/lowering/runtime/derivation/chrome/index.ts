@@ -7,12 +7,12 @@
  */
 
 import type {
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { FamilyDeriver } from "../../../foundation/contract";
-import { brandThemeToChromeVariables } from "../../../foundation/chrome";
+import { flatThemeToChromeVariables } from "../../../foundation/chrome";
 import { FROZEN_ENGINE_COMPAT_CHANNELS } from "@/infrastructure/compilers/kernel/foundation/css/chrome-variables";
 
 /**
@@ -137,8 +137,8 @@ export const chromeDeriver: FamilyDeriver = {
 };
 
 export function deriveChromeChannels(
-  bt: BrandTheme,
-  mode: BrandThemeMode,
+  bt: FlatTheme,
+  mode: FlatThemeMode,
   radiusBaseline: string,
   modePrefix: string,
   tenantAuthoredPaths: TenantAuthoredPaths | undefined
@@ -148,7 +148,7 @@ export function deriveChromeChannels(
   if (inputBg) vars["--ds-color-bg-input"] = inputBg;
   Object.assign(
     vars,
-    brandThemeToChromeVariables(
+    flatThemeToChromeVariables(
       bt,
       mode,
       tenantAuthoredPaths,

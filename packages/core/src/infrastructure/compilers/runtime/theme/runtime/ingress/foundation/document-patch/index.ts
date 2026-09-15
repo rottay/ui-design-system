@@ -23,7 +23,7 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type {
   BrandExpressiveAxisOverrides,
-  BrandThemeMode,
+  FlatThemeMode,
   TenantAppearanceGeneral,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type {
@@ -381,7 +381,7 @@ function closedPosture<T extends string>(
 
 function migratePalette(
   palette: TenantAppearanceGeneral["palette"] | undefined,
-  defaultMode: BrandThemeMode
+  defaultMode: FlatThemeMode
 ): ThemeLayerPatch {
   if (!palette) return {};
 
@@ -540,7 +540,7 @@ function migratePalette(
   // its default IS the base block, so seeds for it are the root palette and
   // seeds for the other mode are that mode's overlay.
   const seededBlock = (
-    mode: BrandThemeMode,
+    mode: FlatThemeMode,
     fields: NonNullable<ThemeLayerPatch["palette"]> | undefined
   ): ThemeLayerPatch =>
     fields === undefined
@@ -557,7 +557,7 @@ function migratePalette(
 
 function migrateGeneral(
   general: TenantAppearanceGeneral | undefined,
-  defaultMode: BrandThemeMode
+  defaultMode: FlatThemeMode
 ): ThemeLayerPatch {
   if (!general) return {};
   assertExactKeys(
@@ -722,7 +722,7 @@ function migrateAdvanced(
 
 function migrateVisualFoundation(
   vf: TenantVisualFoundation | undefined,
-  defaultMode: BrandThemeMode
+  defaultMode: FlatThemeMode
 ): ThemeLayerPatch {
   if (!vf) return {};
   const patches: ThemeLayerPatch[] = [
@@ -769,7 +769,7 @@ function deepMergeInto(target: ThemeLayerPatch, source: ThemeLayerPatch): void {
 
 function migrateAdvancedDocument(
   doc: TenantThemeAdvancedDocument,
-  defaultMode: BrandThemeMode
+  defaultMode: FlatThemeMode
 ): ThemePatchEnvelope {
   return {
     schemaVersion: String(doc.schemaVersion),
@@ -780,7 +780,7 @@ function migrateAdvancedDocument(
 
 function migrateSimpleDocument(
   doc: TenantThemeSimpleDocument,
-  defaultMode: BrandThemeMode
+  defaultMode: FlatThemeMode
 ): ThemePatchEnvelope {
   return {
     schemaVersion: String(doc.schemaVersion),
@@ -792,7 +792,7 @@ function migrateSimpleDocument(
 /** Total migration: every known dial maps to a typed keypath; unknowns throw. */
 export function migrateV1(
   doc: TenantThemeDocument,
-  defaultMode: BrandThemeMode
+  defaultMode: FlatThemeMode
 ): ThemePatchEnvelope {
   if (doc.schemaVersion !== Number(V1_SCHEMA_VERSION)) {
     throw new ThemePatchMigrationError(

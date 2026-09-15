@@ -46,7 +46,7 @@ const GOVERNED_ROOTS: readonly string[] = [
   "responsive",
 ];
 
-/** Read a Theme leaf addressed by an authored (BrandTheme-space) keypath. */
+/** Read a Theme leaf addressed by an authored (FlatTheme-space) keypath. */
 export function readThemePath(theme: Theme, path: string): unknown {
   const segments = path.split(".");
   let cursor: unknown = theme;
@@ -72,7 +72,7 @@ function authoredSpellings(path: string): readonly string[] {
  *
  * Moved, not merely carried. The envelope bounds what a tenant DECIDES, and the
  * two transports state a decision differently: a document carries only what the
- * tenant chose, but a `BrandTheme` draft is a whole theme — an editor opens the
+ * tenant chose, but a `FlatTheme` draft is a whole theme — an editor opens the
  * vertical's own and edits a few leaves, so every value it did not touch is
  * still in the patch. Measuring membership alone would hold the PRODUCT to a
  * CUSTOMER cap: rottay's own `motion.intensity` is 1.0 against a tenant ceiling

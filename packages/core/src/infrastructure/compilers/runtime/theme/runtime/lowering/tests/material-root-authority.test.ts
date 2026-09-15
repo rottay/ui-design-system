@@ -13,22 +13,22 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { SEMANTIC_SURFACE_ROLES } from "@/foundation/contracts/kernel/tokens/materials";
 import { deriveMaterialChannels } from "../runtime/derivation/materials";
 import { lowerBlock } from "../runtime/pipeline";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 const DEFAULT_THEME_CSS = join(
   dirname(fileURLToPath(import.meta.url)),
   "../../../../../../../foundation/tokens/css/foundation/themes/default/index.css"
 );
 
-const NEUTRAL: BrandTheme = { id: "neutral", name: "Neutral" };
+const NEUTRAL: FlatTheme = { id: "neutral", name: "Neutral" };
 
 /** Every `--ds-material-*` declared inside the FIRST `:root` block. */
 function rootMaterialBlock(): Record<string, string> {
@@ -70,7 +70,7 @@ describe("the material roots", () => {
 
   it("are emitted whole by every vertical, authored facets or not", () => {
     const expected = Object.keys(deriveMaterialChannels(NEUTRAL)).sort();
-    for (const theme of [rottayBrandTheme, bithireBrandTheme, evntoBrandTheme]) {
+    for (const theme of [rottayFlatTheme, bithireFlatTheme, evntoFlatTheme]) {
       const emitted = Object.keys(lowerBlock({ theme })).filter((channel) =>
         channel.startsWith("--ds-material-")
       );
@@ -79,7 +79,7 @@ describe("the material roots", () => {
   });
 
   it("let an authored surface role override its own facet without dropping a root", () => {
-    const authored: BrandTheme = {
+    const authored: FlatTheme = {
       id: "authored",
       name: "Authored",
       surfaces: { surfaceRoles: { card: { backgroundHover: "#123456" } } },

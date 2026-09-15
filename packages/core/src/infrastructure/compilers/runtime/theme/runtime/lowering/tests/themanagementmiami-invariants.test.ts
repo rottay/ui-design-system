@@ -28,8 +28,8 @@ import { resolve } from "node:path";
 
 import { describe, it, expect } from "vitest";
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import {
   isBundledTenant,
   isKnownTenant,
@@ -44,16 +44,16 @@ import {
   rgbToHsl,
 } from "@/foundation/kernel/accessibility/branding-contrast";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
-type Compiled = ReturnType<typeof lowerBrandThemeFixture>;
+type Compiled = ReturnType<typeof lowerFlatThemeFixture>;
 
 // ── Compile ─────────────────────────────────────────────────────────────
 
 describe("themanagementmiami compiles", () => {
   it("compiles via compileTheme without throwing and scopes it to its tenant selector", () => {
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: "themanagementmiami",
     });
     expect(Object.keys(compiled.cssVariables).length).toBeGreaterThan(0);
@@ -67,17 +67,17 @@ describe("themanagementmiami compiles", () => {
 // compiled value: most channels land directly in the lowering's cssVariables
 // output;
 // motion and accent-grammar fields are personality-mediated (BrandMotion and
-// BrandChrome.accent both convert through brandThemeToPersonality, not
+// BrandChrome.accent both convert through flatThemeToPersonality, not
 // brandThemeToCssVariables) so those channels read compiled.personality
 // instead. it.each names the failing channel directly, per-row, rather than
 // bundling the whole ranked list into one assertion.
 
-const compiledThemanagementmiami: Compiled = lowerBrandThemeFixture({
-  brandTheme: themanagementmiamiBrandTheme,
+const compiledThemanagementmiami: Compiled = lowerFlatThemeFixture({
+  flatTheme: themanagementmiamiFlatTheme,
   tenantSlug: "themanagementmiami",
 });
-const compiledBithire: Compiled = lowerBrandThemeFixture({
-  brandTheme: bithireBrandTheme,
+const compiledBithire: Compiled = lowerFlatThemeFixture({
+  flatTheme: bithireFlatTheme,
   tenantSlug: "bithire",
 });
 
@@ -256,10 +256,10 @@ function isDistinguishable(a: string, b: string): boolean {
 }
 
 describe("semantic-color-collision invariant (owner decision 2026-07-09)", () => {
-  const palette = themanagementmiamiBrandTheme.palette;
+  const palette = themanagementmiamiFlatTheme.palette;
   if (!palette) {
     throw new Error(
-      "themanagementmiamiBrandTheme.palette is required for the semantic-collision invariant"
+      "themanagementmiamiFlatTheme.palette is required for the semantic-collision invariant"
     );
   }
 

@@ -8,12 +8,12 @@ import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 import { CodeBlock } from '../index';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 // --- WCAG helpers for the R2 contrast measurement --------------------------
 
@@ -205,9 +205,9 @@ describe('CodeBlock remediation (K4-B)', () => {
       'color-mix(in srgb, var(--ds-color-text-tertiary) 55%, var(--ds-color-text-primary))',
     );
 
-    const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-    const tmm = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+    const bithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const tmm = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: 'themanagementmiami',
     });
 

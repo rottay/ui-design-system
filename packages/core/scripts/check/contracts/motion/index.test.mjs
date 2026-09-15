@@ -324,7 +324,7 @@ test('exact snapshot passes unchanged and fails new, stale, expired, and body dr
 const durationKey = ['transition', 'Duration'].join('');
 const transitionKey = ['transi', 'tion'].join('');
 const millis = (amount) => `${amount}${['m', 's'].join('')}`;
-const brandThemeBody = (amount) => `${durationKey}: "${millis(amount)}",`;
+const flatThemeBody = (amount) => `${durationKey}: "${millis(amount)}",`;
 const checkboxBody = (property) => `${transitionKey}: ${property} ${['0.', '15', 's'].join('')} ease`;
 
 const RELOCATED_FROM =
@@ -352,19 +352,19 @@ function reconciliationContract(findings) {
 }
 
 test('the reconciled test row moved by path only, and the digest still refuses to ignore it', () => {
-  const emitted = sourceFindings(`const theme = {\n  ${brandThemeBody(220)}\n};\n`, '.ts');
+  const emitted = sourceFindings(`const theme = {\n  ${flatThemeBody(220)}\n};\n`, '.ts');
   assert.deepEqual(
     emitted.findings
       .filter((entry) => entry.channel === 'raw-motion-timing')
       .map((entry) => ({ symbol: entry.symbol, evidence: entry.evidence })),
-    [{ symbol: durationKey, evidence: brandThemeBody(220) }],
+    [{ symbol: durationKey, evidence: flatThemeBody(220) }],
   );
 
   const before = [
-    dsFinding({ path: RELOCATED_FROM, scope: 'test', symbol: durationKey, evidence: brandThemeBody(220) }),
+    dsFinding({ path: RELOCATED_FROM, scope: 'test', symbol: durationKey, evidence: flatThemeBody(220) }),
     dsFinding({
       path: 'packages/core/tests/fixtures/tenants/quality-evidence/index.ts',
-      scope: 'test', symbol: durationKey, evidence: brandThemeBody(180),
+      scope: 'test', symbol: durationKey, evidence: flatThemeBody(180),
     }),
   ];
   const contract = reconciliationContract(before);
@@ -393,12 +393,12 @@ test('the reconciled test row moved by path only, and the digest still refuses t
 
 test('a single millisecond of body drift in the relocated fixture is hash drift, not a free pass', () => {
   const before = [
-    dsFinding({ path: RELOCATED_TO, scope: 'test', symbol: durationKey, evidence: brandThemeBody(220) }),
+    dsFinding({ path: RELOCATED_TO, scope: 'test', symbol: durationKey, evidence: flatThemeBody(220) }),
   ];
   const contract = reconciliationContract(before);
   assert.deepEqual(auditFindings({ findings: before, registry: contract }), []);
 
-  const mutated = before.map((entry) => ({ ...entry, evidence: brandThemeBody(221) }));
+  const mutated = before.map((entry) => ({ ...entry, evidence: flatThemeBody(221) }));
   assert.notEqual(mutated[0].evidence, before[0].evidence);
   assert.equal(mutated.length, before.length);
 

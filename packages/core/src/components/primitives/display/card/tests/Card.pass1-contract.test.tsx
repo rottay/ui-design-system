@@ -123,7 +123,7 @@ describe('Card Pass 1 primitive contract', () => {
     expect(container.querySelector('[data-part="actions"]')).not.toHaveAttribute('style');
   });
 
-  it('compiles finite BrandTheme and DB-safe TenantTheme card channels', () => {
+  it('compiles finite FlatTheme and DB-safe TenantTheme card channels', () => {
     const vars = chromeToVariables({
       cardComponent: {
         bgActive: '#eff6ff',

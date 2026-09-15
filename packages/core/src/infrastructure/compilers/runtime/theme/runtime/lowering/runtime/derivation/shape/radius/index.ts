@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { resolveRadiusScale } from "@/foundation/kernel/geometry/radius-dial";
 
 /**
@@ -25,7 +25,7 @@ import { resolveRadiusScale } from "@/foundation/kernel/geometry/radius-dial";
  * binding degrades to a wildcard that resolves to no concrete channel.
  */
 export function deriveRadiusRamp(
-  bt: BrandTheme,
+  bt: FlatTheme,
   radiusBaseline: string
 ): Record<string, string> {
   const vars: Record<string, string> = {};

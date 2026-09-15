@@ -283,7 +283,7 @@ export const ModernCraftReview: Story = {
     docs: {
       description: {
         story:
-          'Adversarial craft surface for Modern Button. Both personality blocks use only public Button token channels a BrandTheme or DB TenantTheme can emit.',
+          'Adversarial craft surface for Modern Button. Both personality blocks use only public Button token channels a FlatTheme or DB TenantTheme can emit.',
       },
     },
   },

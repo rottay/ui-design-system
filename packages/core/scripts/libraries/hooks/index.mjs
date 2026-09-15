@@ -22,7 +22,7 @@
  * THE FIVE OWNERSHIP CLASSES (all derived from authored DS source)
  * ----------------------------------------------------------------
  * A1  TENANT CHANNEL — every concrete `--ds-*` output of the governed
- *     white-label compilers: chrome, static BrandTheme and DB appearance.
+ *     white-label compilers: chrome, static FlatTheme and DB appearance.
  *     These are written at ROOT on behalf of a tenant. An application that
  *     authors the same property in static CSS under any scoped selector WINS
  *     over `:root` and silently overrides the tenant's brand. They are
@@ -797,7 +797,7 @@ export const ANCHORS = Object.freeze({
     interpolatedFamilyMinimum: 30,
     describes: 'governed white-label chrome emission table (written at :root per tenant)',
   }),
-  brandThemeEmitter: Object.freeze({
+  flatThemeEmitter: Object.freeze({
     id: 'brand-theme-emitter',
     // The channel writers are one owner per concern under the lowering, not one
     // file: anchoring on a single `index.ts` would pin whichever writer happened
@@ -819,7 +819,7 @@ export const ANCHORS = Object.freeze({
     path: 'src/foundation/contracts',
     kind: 'directory',
     describes:
-      'typed BrandTheme/TenantAppearance ownership graph used to expand mapped compiler emissions',
+      'typed FlatTheme/TenantAppearance ownership graph used to expand mapped compiler emissions',
   }),
   // D-21 (b) put new contracts at the first level, so the ownership graph has
   // TWO roots until WO-RET-04 unifies them. Scanning only the legacy one made
@@ -1010,7 +1010,7 @@ export const PROMOTIONS = Object.freeze([
     owner: 'the Tabs primitive skin across engines',
     slot: 'a single application tab-strip scope',
     valueType: 'DS surface/colour/spacing/radius tokens; no raw literals',
-    fallback: 'the tenant-compiled tabs chrome (BrandTheme chrome.tabs)',
+    fallback: 'the tenant-compiled tabs chrome (FlatTheme chrome.tabs)',
     sinceVersion: '2.19.36',
     whiteLabelCompat: 'derives-from-palette',
     subtreeRepaint:
@@ -1055,7 +1055,7 @@ export const PROMOTIONS = Object.freeze([
     owner: 'the Button primitive skin across engines (modern/rustic/classic) and the Button contract tokens',
     slot: 'an explicit application control scope — a chip, suggestion, choice option, icon button or detail action bar',
     valueType: 'DS surface/colour tokens and color-mix over them; no raw literals',
-    fallback: 'the tenant-compiled button chrome (BrandTheme chrome.controls)',
+    fallback: 'the tenant-compiled button chrome (FlatTheme chrome.controls)',
     sinceVersion: '2.19.36',
     whiteLabelCompat: 'derives-from-palette',
     subtreeRepaint:
@@ -1318,7 +1318,7 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   if (!postcss) throw new Error('deriveHookManifest requires an injected postcss');
 
   const chromePath = assertAnchorExists(coreRoot, ANCHORS.tenantChannel);
-  const brandThemeEmitterPath = assertAnchorExists(coreRoot, ANCHORS.brandThemeEmitter);
+  const flatThemeEmitterPath = assertAnchorExists(coreRoot, ANCHORS.flatThemeEmitter);
   const appearancePostureEmitterPath = assertAnchorExists(
     coreRoot,
     ANCHORS.appearancePostureEmitter,
@@ -1380,7 +1380,7 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   // failure this anchor list exists to prevent.
   const compilerSources = [
     chromePath,
-    ...collectFiles(brandThemeEmitterPath, ['.ts']).filter((file) => (
+    ...collectFiles(flatThemeEmitterPath, ['.ts']).filter((file) => (
       file.endsWith(`${sep}index.ts`) && !file.includes(`${sep}tests${sep}`)
     )),
     appearancePostureEmitterPath,
@@ -1611,7 +1611,7 @@ export function serializeHookManifest(manifest) {
           'not tenant configuration or application API',
         foundationToken: 'root-declared in authored DS CSS; the DS owns the value',
         tenantChannel:
-          'emitted at :root by the governed chrome, static BrandTheme or DB appearance ' +
+          'emitted at :root by the governed chrome, static FlatTheme or DB appearance ' +
           'compiler on behalf of a tenant; concrete outputs are derived with the same typed ' +
           'graph as theme-channel parity, plus chrome interpolation families',
       },

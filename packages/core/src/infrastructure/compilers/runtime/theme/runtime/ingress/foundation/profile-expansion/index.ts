@@ -78,7 +78,7 @@ const DECISION_BY_FIELD: Readonly<
  * The Theme-space leaves a decision writes, read from the catalog keypath and
  * from no second table. A `{a,b}` row states one leaf per member.
  */
-function brandThemeLeaves(id: ThemeDecisionId): readonly string[] {
+function flatThemeLeaves(id: ThemeDecisionId): readonly string[] {
   const keypath = themeControl(id).keypath.brandTheme;
   if (keypath === null) return [];
   const brace = keypath.match(/^(.*)\{([^}]*)\}(.*)$/);
@@ -138,7 +138,7 @@ export function authoredFieldRefusal(
 }
 
 function leafOf(field: ExpressiveFieldDefaultKey): string {
-  const leaves = brandThemeLeaves(DECISION_BY_FIELD[field]);
+  const leaves = flatThemeLeaves(DECISION_BY_FIELD[field]);
   const member = field.includes(".") ? field.slice(field.indexOf(".") + 1) : "";
   const leaf = member
     ? leaves.find((candidate) => candidate.endsWith(`.${member}`))

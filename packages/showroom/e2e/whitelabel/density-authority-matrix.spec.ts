@@ -390,7 +390,7 @@ test.describe("OLA-5 F2: density authority over one identical tree", () => {
           readings.push(await rootComputedVar(page, "--ds-density-scale"));
         }
         // A semantic posture is not a structural-scale channel on either path:
-        // the static tenant's scale is authored in its BrandTheme, and this
+        // the static tenant's scale is authored in its FlatTheme, and this
         // fixture's DB document authors none. A bounded override would be
         // legal -- 0.75-1.25 by the global advanced schema, 0.85-1.15 inside
         // the BitHire envelope -- and would still not be a posture.

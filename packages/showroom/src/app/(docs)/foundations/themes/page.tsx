@@ -19,7 +19,7 @@ export default function ThemesPage() {
         panels={[
           {
             title: 'Resolution order',
-            body: 'Base tokens -> engine adjustments -> vertical baseline -> tenant BrandTheme.',
+            body: 'Base tokens -> engine adjustments -> vertical baseline -> tenant FlatTheme.',
             tone: 'dark',
           },
           {
@@ -36,7 +36,7 @@ export default function ThemesPage() {
           { label: 'Rottay' },
           { label: 'BitHire' },
           { label: 'Evnto' },
-          { label: 'BrandTheme merge chain' },
+          { label: 'FlatTheme merge chain' },
         ]}
         stats={[
           { label: 'Themes', value: '3', detail: 'First-party brands in this showroom' },
@@ -264,7 +264,7 @@ export default function ThemesPage() {
 </DesignSystemProvider>
 
 // Resolution:
-// base tokens -> engine -> vertical baseline -> tenant BrandTheme`}
+// base tokens -> engine -> vertical baseline -> tenant FlatTheme`}
       />
     </Stack>
   );

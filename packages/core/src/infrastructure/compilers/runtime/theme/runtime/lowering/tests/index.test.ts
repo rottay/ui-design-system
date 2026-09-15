@@ -18,10 +18,10 @@ import { resolveAdapter } from "../../../presentation/adapters";
 import { compileTheme } from "..";
 import {
   FIRST_PARTY_BASELINES,
-  lowerBrandThemeFixture,
+  lowerFlatThemeFixture,
   resolveFirstParty,
 } from "@tests/support/theme-lowering";
-import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
+import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 
 const modern = resolveAdapter("modern");
 const baseline = FIRST_PARTY_BASELINES.bithire;
@@ -70,12 +70,12 @@ describe("compileTheme", () => {
     // beside the resolved theme. The subject is a theme that BAKES its primary
     // family as literals: a tenant-derived value outranks a baseline LEAF, and
     // has nothing to outrank where the block only holds an indirection.
-    const plain = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+    const plain = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: "themanagementmiami",
     });
-    const claimed = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+    const claimed = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: "themanagementmiami",
       tenantAuthoredPaths: new Set(["palette.primaryColor"]),
     });

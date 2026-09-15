@@ -159,7 +159,7 @@ describe('the fixture application imports only the sanctioned surface', () => {
       'resolveTheme',
       'liftAuthoredTheme',
       'THEME_ENGINE_ADAPTERS',
-      'BrandTheme',
+      'FlatTheme',
       'tokenOverrides',
     ];
     const named = new Set(PACKAGE_IMPORTS.flatMap((entry) => entry.names));

@@ -24,7 +24,7 @@ import {
 } from '..';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 function tenantConfig(overrides: Partial<TenantConfig>): TenantConfig {
   return {
@@ -44,7 +44,7 @@ function tenantConfig(overrides: Partial<TenantConfig>): TenantConfig {
  * conflict fires even under a declared compiled-artifact `visualAuthority`
  * (`admission/index.ts`'s conflict list treats `payload.brandTheme` the same
  * way it treats `payload.personality`). Extending the FULL
- * `bithireBrandTheme` made that certain, but even the minimal shape this
+ * `bithireFlatTheme` made that certain, but even the minimal shape this
  * suite actually needs would still trip the barrier by presence alone
  * (`358ce9188`); `DesignSystemProvider` renders `<LoadingScreen />` and every
  * icon test below observed an empty tree.
@@ -53,7 +53,7 @@ function tenantConfig(overrides: Partial<TenantConfig>): TenantConfig {
  * sibling/RSC ISOLATION of the icon-profile seam -- not derivation of the
  * profile FROM a tenant config, which is unaffected and stays covered,
  * unedited, by the last describe block's direct `resolveActiveIconExpressiveProfile`
- * calls against the real `bithireBrandTheme`-derived fixtures below (those
+ * calls against the real `bithireFlatTheme`-derived fixtures below (those
  * calls never render, so the barrier never sees them). For every RENDERING
  * call site, this fixes at the real mechanism: `IconExpressiveProfileContext`
  * is `DesignSystemProvider`'s own public seam for the resolved profile
@@ -89,7 +89,7 @@ const DUOTONE_SELECTION = {
 // is structural and authors no icon axis. Bithire now serves the opposite
 // leg, asserted beside it.
 const BASELINE_SELECTION = firstPartyFixture('rottay').expressive;
-const ICON_AXIS_SELECTION = bithireBrandTheme.expressive;
+const ICON_AXIS_SELECTION = bithireFlatTheme.expressive;
 
 function NestedTree() {
   return (

@@ -8,8 +8,8 @@
  */
 
 import type {
-  BrandTheme,
-  BrandThemeMode,
+  FlatTheme,
+  FlatThemeMode,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { TenantStatusSeedAuthorship } from "@/foundation/contracts/composition/tenants/themes/resolved";
@@ -103,7 +103,7 @@ export interface TenantFacts {
    * chrome radius a studio draft carried along untouched.
    */
   readonly chosenButtonRadius: string | undefined;
-  readonly typography: BrandTheme["typography"] | undefined;
+  readonly typography: FlatTheme["typography"] | undefined;
   readonly authoredPaths: TenantAuthoredPaths | undefined;
   /**
    * The paths the patch actually STATED a value for -- the honest subset of
@@ -126,11 +126,11 @@ export interface TenantFacts {
  */
 export interface LoweringContext {
   /** The effective theme for this block: vertical baseline under the tenant floor. */
-  readonly theme: BrandTheme;
+  readonly theme: FlatTheme;
   /** The ramp surface this block derives against. */
   readonly surface: RampSurface;
   /** The mode this block compiles for. */
-  readonly mode: BrandThemeMode;
+  readonly mode: FlatThemeMode;
   /** "" for the base block, "modes.<mode>." for a mode overlay block. */
   readonly modePrefix: string;
   readonly expressive: ExpressiveFacts;

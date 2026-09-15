@@ -52,13 +52,13 @@ const CHROME_ANCHOR = ANCHORS.tenantChannel.path;
 // The lowering's channel writers are one owner per concern, so this anchor is a
 // DIRECTORY. A planted tree therefore writes the emitter as an owner inside it,
 // exactly as the real tree does.
-const BRAND_THEME_EMITTER_ANCHOR = `${ANCHORS.brandThemeEmitter.path}/index.ts`;
+const BRAND_THEME_EMITTER_ANCHOR = `${ANCHORS.flatThemeEmitter.path}/index.ts`;
 // A SECOND owner inside the same directory anchor. The anchor list used to name
 // a separate appearance-compiler file here; that compiler is retired, and the
 // property under test never depended on it being a separate anchor -- it is
 // that a second compiler owner's emissions are tenant-owned, which is exactly
 // what one deriver per family makes routine.
-const SECOND_EMITTER_ANCHOR = `${ANCHORS.brandThemeEmitter.path}/runtime/derivation/probe/index.ts`;
+const SECOND_EMITTER_ANCHOR = `${ANCHORS.flatThemeEmitter.path}/runtime/derivation/probe/index.ts`;
 const APPEARANCE_POSTURE_EMITTER_ANCHOR = ANCHORS.appearancePostureEmitter.path;
 const THEME_CONTRACTS_ANCHOR = ANCHORS.themeContracts.path;
 // D-21 (b) gave the ownership graph a second root. A planted tree writes both,
@@ -380,7 +380,7 @@ function coreFixture() {
   write(
     root,
     `${THEME_CONTRACTS_ANCHOR}/index.ts`,
-    `export interface BrandTheme { palette?: { primary?: string } }\n` +
+    `export interface FlatTheme { palette?: { primary?: string } }\n` +
       `export interface TenantAppearance { primaryColor?: string }\n`,
   );
   write(
@@ -458,7 +458,7 @@ test('the manifest derives tenant, foundation, internal, explicit-hook and unadj
   assert.equal(
     manifest.hookSet.has('--ds-brand-generated'),
     false,
-    'static BrandTheme output must not be a hook',
+    'static FlatTheme output must not be a hook',
   );
   assert.equal(
     manifest.hookSet.has('--ds-db-generated'),

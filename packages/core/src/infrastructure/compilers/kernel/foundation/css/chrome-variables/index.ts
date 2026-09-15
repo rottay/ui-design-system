@@ -4,7 +4,7 @@
  * Canonical mapping from a chrome object (sidebar, layout, shell, toolbar,
  * filter pills, breadcrumb, search, controls, table, cards, modal, tabs) to
  * flat --ds-* CSS variable declarations. Used by both runtime/brand-theme
- * (BrandTheme.chrome) and runtime/appearance (TenantAppearanceAdvanced.chrome)
+ * (FlatTheme.chrome) and runtime/appearance (TenantAppearanceAdvanced.chrome)
  * — the two shapes are structurally identical because every field on
  * BrandChrome and its nested Brand*Chrome interfaces is already optional, so
  * BrandChrome and TenantAppearanceAdvanced['chrome'] are the same type.
@@ -23,7 +23,7 @@ import type {
   BrandSurfaceChrome,
   BrandListingGridChrome,
   BrandPopoverChrome,
-  BrandThemeMode,
+  FlatThemeMode,
   BrandTooltipChrome,
   TenantAppearanceGeneral,
   BrandAlertChrome,
@@ -70,7 +70,7 @@ export interface ChromeVariableContext {
    */
   radiusBaseline?: string | number;
   /** Effective Theme mode for semantic posture lowering. */
-  mode?: BrandThemeMode;
+  mode?: FlatThemeMode;
   /**
    * The Theme paths this compilation's TENANT authored, when one exists.
    *
@@ -126,7 +126,7 @@ type SidebarTone = NonNullable<
 /** Canonical semantic sidebar lowering used by both Theme transports. */
 export function sidebarToneToChrome(
   tone: SidebarTone | undefined,
-  mode: BrandThemeMode = "light"
+  mode: FlatThemeMode = "light"
 ): Partial<BrandSidebarChrome> {
   if (tone === "subtle") {
     return {
@@ -237,7 +237,7 @@ function assignToneUnderTenantLeaves(
 
 export function sidebarToneToVariables(
   tone: SidebarTone | undefined,
-  mode: BrandThemeMode = "light"
+  mode: FlatThemeMode = "light"
 ): Record<string, string> {
   const chrome = sidebarToneToChrome(tone, mode);
   const vars: Record<string, string> = {};
@@ -555,7 +555,7 @@ const TREE_CHROME_VARIABLES = chromeVariableMap<BrandTreeChrome>("--ds-tree-", [
 /**
  * The flat component-chrome families: one closed contract slot, one
  * compiler-owned prefix map, one lowering. Both Theme transports reach this
- * table through the same `chromeToVariables` call, so a static BrandTheme
+ * table through the same `chromeToVariables` call, so a static FlatTheme
  * and a DB TenantThemeDocument that author the same field paint the same
  * declaration. Adding a family here is the only step a new one needs.
  */
@@ -1324,7 +1324,7 @@ export const FROZEN_ENGINE_COMPAT_CHANNELS: Readonly<Record<`--ds-${string}`, `-
 };
 
 /**
- * Map a chrome object (BrandTheme.chrome or TenantAppearanceAdvanced.chrome)
+ * Map a chrome object (FlatTheme.chrome or TenantAppearanceAdvanced.chrome)
  * to flat CSS variable declarations.
  *
  * This is the explicit chrome channel — sidebar, layout, shell, controls,

@@ -15,7 +15,7 @@
  */
 import { describe, it, expect } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   tenantPostureFloors,
@@ -23,9 +23,9 @@ import {
 // The contract owns the version; the compiler barrel only consumes it.
 import { TENANT_THEME_SCHEMA_VERSION } from '@/foundation/contracts/composition/tenants/themes/tenant-theme/artifact-protocol';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const rottayBrandTheme = firstPartyFixture('rottay');
-const evntoBrandTheme = firstPartyFixture('evnto');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const rottayFlatTheme = firstPartyFixture('rottay');
+const evntoFlatTheme = firstPartyFixture('evnto');
 
 const HEADING = '--ds-font-family-heading';
 const BASE = '--ds-font-family-base';
@@ -33,7 +33,7 @@ const BASE = '--ds-font-family-base';
 function statik(
   tenantPatch: Record<string, unknown>,
   paths: string[],
-  brandTheme = bithireBrandTheme
+  flatTheme = bithireFlatTheme
 ): Record<string, string> {
   // `tenantPatch` / `tenantAuthoredPaths` live on the implementation's
   // `BrandCompilerProvenanceInput`, not on the public `BrandCompilerInput` that
@@ -41,12 +41,12 @@ function statik(
   // excess-property check on the literal. Cast the literal itself, exactly as
   // the sibling drill does (`brand-compiler.test.ts`, B-1 `lower()`), instead of
   // widening the public contract for a test.
-  return lowerBrandThemeFixture({
-    brandTheme,
+  return lowerFlatThemeFixture({
+    flatTheme,
     tenantSlug: 'bithire',
     tenantPatch: tenantPatch as never,
     tenantAuthoredPaths: new Set(paths) as never,
-  } as Parameters<typeof lowerBrandThemeFixture>[0]).cssVariables;
+  } as Parameters<typeof lowerFlatThemeFixture>[0]).cssVariables;
 }
 
 function dbDoor(typography: Record<string, unknown>, vertical = 'bithire') {
@@ -128,7 +128,7 @@ describe('E-2: the composed case — the tenant literal beats the tenant pairing
         },
       },
       ['typography.typePairing', 'typography.letterSpacing.heading', 'typography.lineHeight.display'],
-      rottayBrandTheme
+      rottayFlatTheme
     );
     // Measured before the fix: 0.09em -> 0 and 1.42 -> 1.2.
     expect(vars['--ds-letter-spacing-heading']).toBe('0.09em');
@@ -142,19 +142,19 @@ describe('E-2: the composed case — the tenant literal beats the tenant pairing
     // authors a `typePairing` of its own beside its literal. So the contest is
     // measured on bithire, and it is now the STRONGER claim -- the tenant's
     // pairing outranks the vertical's literal AND the vertical's own pairing.
-    expect(bithireBrandTheme.typography?.typePairing).toBe('technical');
-    expect(bithireBrandTheme.typography?.fontFamilyHeading).toBeTruthy();
-    for (const brandTheme of [rottayBrandTheme, evntoBrandTheme]) {
-      expect(brandTheme.typography?.typePairing).toBeUndefined();
-      expect(brandTheme.typography?.fontFamilyHeading).toBeUndefined();
+    expect(bithireFlatTheme.typography?.typePairing).toBe('technical');
+    expect(bithireFlatTheme.typography?.fontFamilyHeading).toBeTruthy();
+    for (const flatTheme of [rottayFlatTheme, evntoFlatTheme]) {
+      expect(flatTheme.typography?.typePairing).toBeUndefined();
+      expect(flatTheme.typography?.fontFamilyHeading).toBeUndefined();
     }
 
-    const withTenantPairing = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+    const withTenantPairing = lowerFlatThemeFixture({
+      flatTheme: bithireFlatTheme,
       tenantSlug: 'probe',
       tenantPatch: { typography: { typePairing: 'editorial' } } as never,
       tenantAuthoredPaths: new Set(['typography.typePairing']) as never,
-    } as Parameters<typeof lowerBrandThemeFixture>[0]).cssVariables;
+    } as Parameters<typeof lowerFlatThemeFixture>[0]).cssVariables;
     // The tenant's pairing governs: the vertical's literal never travels in
     // the patch, so the floor has nothing of the tenant's to re-apply.
     expect(withTenantPairing[HEADING]).toContain('--ds-font-pack-editorial-display');
@@ -179,8 +179,8 @@ describe('E-2: the composed case — the tenant literal beats the tenant pairing
   });
 
   it('the mode overlay re-runs BOTH halves of the floor', () => {
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: rottayBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: rottayFlatTheme,
       tenantSlug: 'probe',
       tenantPatch: {
         typography: { typePairing: 'editorial', fontFamilyHeading: "'Fraunces', serif" },
@@ -189,7 +189,7 @@ describe('E-2: the composed case — the tenant literal beats the tenant pairing
         'typography.typePairing',
         'typography.fontFamilyHeading',
       ]) as never,
-    } as Parameters<typeof lowerBrandThemeFixture>[0]);
+    } as Parameters<typeof lowerFlatThemeFixture>[0]);
     for (const block of compiled.modeBlocks ?? []) {
       const emitted = block.cssVariables[HEADING];
       // A block that restates the channel must restate the tenant's literal,

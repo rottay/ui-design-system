@@ -8,12 +8,12 @@ import userEvent from '@testing-library/user-event';
 
 import { LOCALE_CONFIGS, TRANSLATION_CATALOG } from '@/foundation/i18n/runtime/catalog';
 import { resolveTranslation } from '@/foundation/i18n/runtime/resolution';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 import ModernBadge from '../engines/modern';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const skin = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/badge/index.css'),
@@ -170,9 +170,9 @@ describe('Modern Badge / Chip / Pill premium contract — Pass 1', () => {
   });
 
   it('keeps brand and locale as independent axes while making the two real tenants diverge', () => {
-    const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-    const management = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+    const bithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const management = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: 'themanagementmiami',
     });
 
@@ -220,8 +220,8 @@ describe('Modern Badge / Chip / Pill premium contract — Pass 1', () => {
     expect(LOCALE_CONFIGS.en.direction).toBe('ltr');
     expect(LOCALE_CONFIGS.es.direction).toBe('ltr');
     expect(LOCALE_CONFIGS.ar.direction).toBe('rtl');
-    expect(bithireBrandTheme).not.toHaveProperty('locale');
-    expect(themanagementmiamiBrandTheme).not.toHaveProperty('locale');
+    expect(bithireFlatTheme).not.toHaveProperty('locale');
+    expect(themanagementmiamiFlatTheme).not.toHaveProperty('locale');
   });
 
   it('encodes motion, accessibility and responsive safeguards in the skin', () => {

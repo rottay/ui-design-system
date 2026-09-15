@@ -3,13 +3,13 @@ import {
   springLinearEasing,
   springLinearEasingGentle,
 } from '@/infrastructure/compilers/kernel/foundation/motion/spring-easing';
-import { brandThemeToTokenOverrides } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import { flatThemeToTokenOverrides } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 /** Parse `linear(0, 0.1, ..., 1)` back into its numeric stops for assertions. */
 function parseLinearStops(value: string): number[] {
@@ -100,7 +100,7 @@ describe('springLinearEasingGentle', () => {
 
 // ── Compiler wiring ─────────────────────────────────────────
 
-const SPRING_THEME: BrandTheme = {
+const SPRING_THEME: FlatTheme = {
   id: 'spring-eligible',
   name: 'Spring Eligible',
   motion: {
@@ -110,7 +110,7 @@ const SPRING_THEME: BrandTheme = {
   },
 };
 
-const NO_SPRING_THEME: BrandTheme = {
+const NO_SPRING_THEME: FlatTheme = {
   id: 'spring-disabled',
   name: 'Spring Disabled',
   motion: {
@@ -120,7 +120,7 @@ const NO_SPRING_THEME: BrandTheme = {
   },
 };
 
-const PARTIAL_SPRING_THEME: BrandTheme = {
+const PARTIAL_SPRING_THEME: FlatTheme = {
   id: 'spring-partial',
   name: 'Spring Partial',
   motion: {
@@ -130,38 +130,38 @@ const PARTIAL_SPRING_THEME: BrandTheme = {
   },
 };
 
-describe('brandThemeToTokenOverrides: spring wiring', () => {
+describe('flatThemeToTokenOverrides: spring wiring', () => {
   it('emits motion.spring as a linear() curve when tension+friction are set and useSpring is not false', () => {
-    const result = brandThemeToTokenOverrides(SPRING_THEME);
+    const result = flatThemeToTokenOverrides(SPRING_THEME);
     expect(result.motion?.spring).toBeDefined();
     expect(result.motion!.spring!.startsWith('linear(')).toBe(true);
     expect(result.motion!.spring).toBe(springLinearEasing(170, 26));
   });
 
   it('does not emit motion.spring when useSpring is explicitly false', () => {
-    const result = brandThemeToTokenOverrides(NO_SPRING_THEME);
+    const result = flatThemeToTokenOverrides(NO_SPRING_THEME);
     expect(result.motion).toBeUndefined();
   });
 
   it('does not emit motion.spring when only one of tension/friction is set', () => {
-    const result = brandThemeToTokenOverrides(PARTIAL_SPRING_THEME);
+    const result = flatThemeToTokenOverrides(PARTIAL_SPRING_THEME);
     expect(result.motion).toBeUndefined();
   });
 
   it('still returns {} for a theme with neither surfaces nor motion (no regression)', () => {
-    expect(brandThemeToTokenOverrides({ id: 'bare', name: 'Bare' })).toEqual({});
+    expect(flatThemeToTokenOverrides({ id: 'bare', name: 'Bare' })).toEqual({});
   });
 });
 
 describe('compileTheme: spring-gentle CSS variable', () => {
   it('emits --ds-motion-spring-gentle for a spring-eligible theme', () => {
-    const result = lowerBrandThemeFixture({ brandTheme: SPRING_THEME, tenantSlug: 'test' });
+    const result = lowerFlatThemeFixture({ flatTheme: SPRING_THEME, tenantSlug: 'test' });
     expect(result.cssVariables['--ds-motion-spring-gentle']).toBeDefined();
     expect(result.cssVariables['--ds-motion-spring-gentle']!.startsWith('linear(')).toBe(true);
   });
 
   it('does not emit --ds-motion-spring-gentle when spring is disabled', () => {
-    const result = lowerBrandThemeFixture({ brandTheme: NO_SPRING_THEME, tenantSlug: 'test' });
+    const result = lowerFlatThemeFixture({ flatTheme: NO_SPRING_THEME, tenantSlug: 'test' });
     expect(result.cssVariables['--ds-motion-spring-gentle']).toBeUndefined();
   });
 });
@@ -190,13 +190,13 @@ describe('compileTheme: real tenants get a derived tokenOverrides.motion.spring'
   // the day a preset regains a spring pair this pin goes red rather than
   // quietly starting to pass.
   it.each([
-    ['rottay', rottayBrandTheme],
-    ['evnto', evntoBrandTheme],
-    ['bithire', bithireBrandTheme],
-  ] as const)('%s: its preset authors no spring pair, so no curve is derived', (slug, brandTheme) => {
-    expect(brandTheme.motion?.springTension).toBeUndefined();
-    expect(brandTheme.motion?.springFriction).toBeUndefined();
-    const result = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
+    ['rottay', rottayFlatTheme],
+    ['evnto', evntoFlatTheme],
+    ['bithire', bithireFlatTheme],
+  ] as const)('%s: its preset authors no spring pair, so no curve is derived', (slug, flatTheme) => {
+    expect(flatTheme.motion?.springTension).toBeUndefined();
+    expect(flatTheme.motion?.springFriction).toBeUndefined();
+    const result = lowerFlatThemeFixture({ flatTheme, tenantSlug: slug });
     expect(result.tokenOverrides.motion?.spring).toBeUndefined();
   });
 
@@ -205,11 +205,11 @@ describe('compileTheme: real tenants get a derived tokenOverrides.motion.spring'
     // on the synthetic themes this file already declares: a spring pair reaches
     // `tokenOverrides.motion.spring`, and a different pair gives a different
     // curve.
-    const primary = lowerBrandThemeFixture({ brandTheme: SPRING_THEME, tenantSlug: 'spring' });
+    const primary = lowerFlatThemeFixture({ flatTheme: SPRING_THEME, tenantSlug: 'spring' });
     expect(primary.tokenOverrides.motion?.spring).toBe(springLinearEasing(170, 26));
 
-    const other = lowerBrandThemeFixture({
-      brandTheme: { ...SPRING_THEME, motion: { useSpring: true, springTension: 200, springFriction: 18 } },
+    const other = lowerFlatThemeFixture({
+      flatTheme: { ...SPRING_THEME, motion: { useSpring: true, springTension: 200, springFriction: 18 } },
       tenantSlug: 'spring-other',
     });
     expect(other.tokenOverrides.motion?.spring).toBe(springLinearEasing(200, 18));

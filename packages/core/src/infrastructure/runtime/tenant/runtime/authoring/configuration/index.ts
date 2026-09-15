@@ -3,8 +3,8 @@
  * @description Projects one minimal draft (slug, name, primaryColor) into the
  * two things an onboarding flow needs and which are deliberately NOT the same
  * object: the tenant's IDENTITY (`createTenantConfig`) and its VISUAL SOURCE
- * (`createTenantBrandTheme`). A `TenantConfig` carries no paint, so a draft's
- * personality preset and density posture land on the BrandTheme the compiler
+ * (`createTenantFlatTheme`). A `TenantConfig` carries no paint, so a draft's
+ * personality preset and density posture land on the FlatTheme the compiler
  * lowers, never back on the config.
  */
 
@@ -13,7 +13,7 @@ import type { PersonalityTokens } from '../../../../../../foundation/contracts/k
 import type {
   BrandChrome,
   BrandSurfaces,
-  BrandTheme,
+  FlatTheme,
   BrandTypography,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
@@ -127,10 +127,10 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
 /**
  * Generates the tenant's VISUAL SOURCE from the same input.
  *
- * The preset lands on the channels `brandThemeToPersonality` reads back, and
+ * The preset lands on the channels `flatThemeToPersonality` reads back, and
  * density on `surfaces`, so one draft produces one theme.
  */
-export function createTenantBrandTheme(config: TenantCreationConfig): BrandTheme {
+export function createTenantFlatTheme(config: TenantCreationConfig): FlatTheme {
   const {
     slug,
     name,

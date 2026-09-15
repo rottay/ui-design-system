@@ -57,9 +57,9 @@ import {
 } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
 import { FIRST_PARTY_BASELINES, firstPartyFixture, themeSourceOf } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const evntoBrandTheme = firstPartyFixture('evnto');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const evntoFlatTheme = firstPartyFixture('evnto');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
 /**
  * The canonical route this suite exercises: resolve, lower, then emit.
@@ -99,11 +99,11 @@ function digestVariables(variables: Record<string, string>): string {
 
 /**
  * Recursively drop undefined values and empty objects/arrays. ISO totality adds
- * structural placeholder objects to the Theme shape; when a BrandTheme is
+ * structural placeholder objects to the Theme shape; when a FlatTheme is
  * round-tripped through Theme and back, those placeholders survive JSON
  * serialization as empty objects. Stripping empties lets the test assert
  * semantic identity without requiring the ISO shape to be byte-identical to the
- * legacy BrandTheme shape.
+ * legacy FlatTheme shape.
  */
 function stripEmpties(value: unknown): unknown {
   if (value === undefined) return undefined;
@@ -305,9 +305,9 @@ const SIMPLE_DOCUMENT: TenantThemeDocument = {
 describe("T0 ISO contracts", () => {
   it("brandTheme <-> Theme roundtrip preserves identity and families", () => {
     for (const brand of [
-      themeSourceOf(rottayBrandTheme),
-      themeSourceOf(bithireBrandTheme),
-      themeSourceOf(evntoBrandTheme),
+      themeSourceOf(rottayFlatTheme),
+      themeSourceOf(bithireFlatTheme),
+      themeSourceOf(evntoFlatTheme),
     ]) {
       const theme = normalizeThemeSource(brand);
       expect(theme.id).toBe(brand.id);
@@ -317,7 +317,7 @@ describe("T0 ISO contracts", () => {
       expect(back.id).toBe(brand.id);
       // ISO totality adds structural placeholder objects; strip empties to
       // assert semantic identity rather than byte identity against the legacy
-      // BrandTheme shape.
+      // FlatTheme shape.
       expect(stripEmpties(JSON.parse(JSON.stringify(back)))).toEqual(
         stripEmpties(JSON.parse(JSON.stringify(brand)))
       );

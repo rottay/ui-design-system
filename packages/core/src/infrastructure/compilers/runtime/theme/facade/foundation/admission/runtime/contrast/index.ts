@@ -8,7 +8,7 @@
  *
  * The authorship feed is read from the intent's own PATCH rather than from a
  * normalized DOCUMENT. That is what makes the rule origin-agnostic: a v1
- * document, a v2 decision document and an unsaved `BrandTheme` draft all arrive
+ * document, a v2 decision document and an unsaved `FlatTheme` draft all arrive
  * as authored Theme keypaths, and only the document ever had an
  * `appearance.general.palette.foreground` to read.
  *
@@ -17,7 +17,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type {
   Theme,
@@ -49,7 +49,7 @@ import type { ThemeAdmissionIssue } from "../../foundation/issues";
  *
  * It answers for all three authoring spellings at once, because all three land
  * on one keypath: `appearance.general.palette.foreground.primary`, the
- * `--ds-color-text-primary` token override, and a `BrandTheme` draft that
+ * `--ds-color-text-primary` token override, and a `FlatTheme` draft that
  * writes `palette.textPrimaryColor` directly.
  */
 const INK_CHANNELS_BY_LEAF: ReadonlyMap<string, readonly string[]> = (() => {
@@ -94,7 +94,7 @@ export const SIDEBAR_CONTRAST_ATTRIBUTION: Readonly<Record<string, string>> = {
 
 function effectiveModeVariables(
   compiled: ThemeCompilation,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): Record<string, string> {
   const block = compiled.modeBlocks?.find(
     (candidate) => candidate.mode === mode
@@ -115,7 +115,7 @@ function effectiveModeVariables(
  */
 function resolveContrastVariables(
   variables: Readonly<Record<string, string>>,
-  mode: BrandThemeMode
+  mode: FlatThemeMode
 ): Record<string, string> {
   const declared = FOUNDATION_COLOR_DEFAULTS[mode === "dark" ? "dark" : "light"];
   const resolved: Record<string, string> = {};

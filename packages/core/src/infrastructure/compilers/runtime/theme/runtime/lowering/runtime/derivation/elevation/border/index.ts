@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 
 /**
  * Kit row 18, as three statements about the three border-width ROLES.
@@ -29,7 +29,7 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
  */
 const BORDER_POSTURE: Readonly<
   Record<
-    NonNullable<NonNullable<BrandTheme["surfaces"]>["borderStyle"]>,
+    NonNullable<NonNullable<FlatTheme["surfaces"]>["borderStyle"]>,
     Readonly<Record<string, string>>
   >
 > = {
@@ -54,12 +54,12 @@ const BORDER_POSTURE: Readonly<
  * The keyline the theme DECIDED, or nothing.
  *
  * Own-property guarded for the same reason `../../typography/weights` is: a
- * BrandTheme is plain data by the time it reaches this compiler, so a bare
+ * FlatTheme is plain data by the time it reaches this compiler, so a bare
  * bracket read of a closed table resolves inherited members and unknown words
  * alike -- the first would paint the literal string `undefined` onto three
  * width roles, the second would throw and take the compile down.
  */
-export function deriveBorderPosture(bt: BrandTheme): Record<string, string> {
+export function deriveBorderPosture(bt: FlatTheme): Record<string, string> {
   const authored = bt.surfaces?.borderStyle;
   if (
     typeof authored !== "string" ||

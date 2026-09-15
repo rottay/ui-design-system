@@ -7,5 +7,5 @@
  * tenants.
  */
 
-export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './torture';
-export { themanagementmiamiBrandTheme } from './themanagementmiami';
+export { tortureDarkFlatTheme, tortureLightFlatTheme, TORTURE_PROBE_VARS } from './torture';
+export { themanagementmiamiFlatTheme } from './themanagementmiami';

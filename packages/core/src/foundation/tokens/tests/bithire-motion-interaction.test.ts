@@ -24,16 +24,16 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACT_PATH = resolve(TEST_DIR, '..', 'css/facade/artifacts/bithire/index.css');
 
 describe('bithire brand compiler emits the §2.6 motion vocabulary', () => {
-  const { cssVariables } = lowerBrandThemeFixture({
-    brandTheme: bithireBrandTheme,
+  const { cssVariables } = lowerFlatThemeFixture({
+    flatTheme: bithireFlatTheme,
     tenantSlug: 'bithire',
   });
 
@@ -45,7 +45,7 @@ describe('bithire brand compiler emits the §2.6 motion vocabulary', () => {
 
   it('binds --ds-motion-calm to the theme entranceDuration', () => {
     expect(cssVariables['--ds-motion-calm']).toBe(
-      `${bithireBrandTheme.motion?.entranceDuration ?? 200}ms`,
+      `${bithireFlatTheme.motion?.entranceDuration ?? 200}ms`,
     );
   });
 
@@ -58,18 +58,18 @@ describe('bithire brand compiler emits the §2.6 motion vocabulary', () => {
   // The §2.6 pair is kept under test on the `organic` arm below, so the
   // vocabulary stays pinned rather than moving with bithire's own choice.
   it('emits one symmetric ease for both families, the mechanical character it states', () => {
-    expect(bithireBrandTheme.motion?.character).toBe('mechanical');
+    expect(bithireFlatTheme.motion?.character).toBe('mechanical');
     expect(cssVariables['--ds-ease-standard']).toBe('cubic-bezier(0.4, 0, 0.2, 1)');
     expect(cssVariables['--ds-ease-exit']).toBe('cubic-bezier(0.4, 0, 0.2, 1)');
   });
 
   it('emits the two easing families of §2.6 on the organic character', () => {
-    const organic = structuredClone(bithireBrandTheme) as unknown as {
+    const organic = structuredClone(bithireFlatTheme) as unknown as {
       motion?: { character?: string };
     };
     if (organic.motion) organic.motion.character = 'organic';
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: organic as unknown as typeof bithireBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: organic as unknown as typeof bithireFlatTheme,
       tenantSlug: 'bithire-organic',
     });
     expect(compiled.cssVariables['--ds-ease-standard']).toBe('cubic-bezier(0.2, 0, 0, 1)');

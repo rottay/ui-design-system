@@ -197,7 +197,7 @@ const THEMANAGEMENT_DARK_PALETTE = {
  * The published customer document for `themanagementmiami`.
  *
  * This is the DB channel expressed as the DB channel: a bounded
- * `TenantThemeDocument`, not a `BrandTheme` and not a raw appearance literal.
+ * `TenantThemeDocument`, not a `FlatTheme` and not a raw appearance literal.
  * Supplying `brandTheme` here would be a false-positive proof of the file-first
  * path that is reserved for bundled vertical identity, which is why the DB
  * tenant carries no theme at all.
@@ -295,7 +295,7 @@ export const SEEDS_ONLY_DOCUMENT_ALLOWLIST: Readonly<
 
 /**
  * The seeds-only published document: the four seed colours of the SAME
- * customer palette, with zero projection of any BrandTheme and zero spread of
+ * customer palette, with zero projection of any FlatTheme and zero spread of
  * the full document above.
  *
  * The four values are read off `THEMANAGEMENT_LIGHT_PALETTE` rather than

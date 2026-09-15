@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { AppearancePostureFields } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import { resolveExpressiveFacts } from "../expressive";
 
@@ -15,7 +15,7 @@ import { resolveExpressiveFacts } from "../expressive";
  * `resolveTheme` (`iso:908-918`). NOT a shallow spread: that drops every
  * sibling leaf of any object the tenant touched.
  */
-export function mergeBrandThemeFloors(base: unknown, patch: unknown): unknown {
+export function mergeThemeFloors(base: unknown, patch: unknown): unknown {
   const plain = (v: unknown): v is Record<string, unknown> =>
     !!v && typeof v === "object" && !Array.isArray(v);
   if (!plain(base) || !plain(patch)) return patch === undefined ? base : patch;
@@ -25,7 +25,7 @@ export function mergeBrandThemeFloors(base: unknown, patch: unknown): unknown {
   const out: Record<string, unknown> = { ...base };
   for (const [k, v] of Object.entries(patch)) {
     if (v === undefined) continue;
-    out[k] = mergeBrandThemeFloors(own(base, k) ? base[k] : undefined, v);
+    out[k] = mergeThemeFloors(own(base, k) ? base[k] : undefined, v);
   }
   return out;
 }
@@ -40,7 +40,7 @@ export function mergeBrandThemeFloors(base: unknown, patch: unknown): unknown {
  * here. That is why bithire cannot regress.
  */
 export function resolveTenantPosture(
-  patch: Partial<BrandTheme>
+  patch: Partial<FlatTheme>
 ): AppearancePostureFields | undefined {
   const selection = patch.expressive?.experienceProfile;
   const profile = selection

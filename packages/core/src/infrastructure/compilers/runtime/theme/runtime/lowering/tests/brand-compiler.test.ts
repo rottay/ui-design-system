@@ -1,22 +1,22 @@
 import { describe, it, expect } from "vitest";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { brandThemeToChromeVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { flatThemeToChromeVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome";
 import {
-  brandThemeToPersonality,
-  brandThemeToTokenOverrides,
+  flatThemeToPersonality,
+  flatThemeToTokenOverrides,
   deepMergeTokenOverrides,
   mergePartialPersonality,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiFlatTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 // `BrandExpressiveSelection.schemaVersion` is REQUIRED. Derived from the
 // contract's own constant rather than restated as a literal, so a version bump
 // moves these drills with it instead of leaving them silently on v1.
 import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
-const MOCK_BRAND_THEME: BrandTheme = {
+const MOCK_BRAND_THEME: FlatTheme = {
   id: "test-brand",
   name: "Test Brand",
   // The theme's OTHER mode (it declares no `appearance`, so its body is the
@@ -74,9 +74,9 @@ const MOCK_BRAND_THEME: BrandTheme = {
   },
 };
 
-describe("brandThemeToTokenOverrides", () => {
+describe("flatThemeToTokenOverrides", () => {
   it("maps surfaces to TenantTokenOverrides shape", () => {
-    const result = brandThemeToTokenOverrides(MOCK_BRAND_THEME);
+    const result = flatThemeToTokenOverrides(MOCK_BRAND_THEME);
     expect(result.densityScale).toBe(1.1);
     expect(result.borderRadius).toEqual({
       sm: "4px",
@@ -88,14 +88,14 @@ describe("brandThemeToTokenOverrides", () => {
   });
 
   it("returns empty object when no surfaces", () => {
-    const result = brandThemeToTokenOverrides({ id: "bare", name: "Bare" });
+    const result = flatThemeToTokenOverrides({ id: "bare", name: "Bare" });
     expect(result).toEqual({});
   });
 });
 
-describe("brandThemeToPersonality", () => {
+describe("flatThemeToPersonality", () => {
   it("maps motion to animation personality", () => {
-    const result = brandThemeToPersonality(MOCK_BRAND_THEME);
+    const result = flatThemeToPersonality(MOCK_BRAND_THEME);
     expect(result.animation?.intensity).toBe(0.8);
     expect(result.animation?.entrance).toBe("spring");
     expect(result.animation?.hoverLift).toBe(3);
@@ -104,33 +104,33 @@ describe("brandThemeToPersonality", () => {
   });
 
   it("maps charts to chart personality", () => {
-    const result = brandThemeToPersonality(MOCK_BRAND_THEME);
+    const result = flatThemeToPersonality(MOCK_BRAND_THEME);
     expect(result.chart?.lineStyle).toBe("smooth");
     expect(result.chart?.tooltipStyle).toBe("glass");
     expect(result.chart?.useGradientFill).toBe(true);
   });
 
   it("maps typography to typography personality", () => {
-    const result = brandThemeToPersonality(MOCK_BRAND_THEME);
+    const result = flatThemeToPersonality(MOCK_BRAND_THEME);
     expect(result.typography?.headingWeightBias).toBe("heavier");
     expect(result.typography?.labelStyle).toBe("uppercase");
   });
 
   it("maps chrome.card and chrome.accent", () => {
-    const result = brandThemeToPersonality(MOCK_BRAND_THEME);
+    const result = flatThemeToPersonality(MOCK_BRAND_THEME);
     expect(result.card?.defaultElevation).toBe("md");
     expect(result.accent?.barStyle).toBe("gradient");
   });
 
   it("returns empty object when no visual categories", () => {
-    const result = brandThemeToPersonality({ id: "bare", name: "Bare" });
+    const result = flatThemeToPersonality({ id: "bare", name: "Bare" });
     expect(result).toEqual({});
   });
 });
 
 // `brandThemeToBranding` -- the palette-to-legacy-`TenantBranding` mapper --
 // is deleted, and nothing replaces it as a standalone function. The provider
-// used to pre-merge a compiled BrandTheme back into `config.branding` with
+// used to pre-merge a compiled FlatTheme back into `config.branding` with
 // exactly this function so the classic engine's AntdConfigProvider (which
 // historically read colors off `config.branding`) would see them; per that
 // provider's own current comment ("this provider used to pre-merge it... one
@@ -146,7 +146,7 @@ describe("brandTheme precedence", () => {
   it("tenant tokenOverrides can override brandTheme surfaces", () => {
     // This test validates the design: brandTheme is not the final word.
     // Tenant-specific overrides must be able to layer on top.
-    const btOverrides = brandThemeToTokenOverrides(MOCK_BRAND_THEME);
+    const btOverrides = flatThemeToTokenOverrides(MOCK_BRAND_THEME);
     const tenantOverrides = { borderRadius: { sm: "2px" } };
 
     // Simulate the merge chain: brandTheme -> tenant
@@ -155,7 +155,7 @@ describe("brandTheme precedence", () => {
       ...tenantOverrides.borderRadius,
     };
     expect(merged.sm).toBe("2px"); // tenant wins
-    expect(merged.md).toBe("8px"); // brandTheme preserved
+    expect(merged.md).toBe("8px"); // flatTheme preserved
   });
 
   // "effective branding uses brandTheme palette over config.branding" is
@@ -232,8 +232,8 @@ describe("deepMergeTokenOverrides", () => {
 
 describe("compileTheme", () => {
   it("produces personality from brandTheme motion/charts/chrome", () => {
-    const result = lowerBrandThemeFixture({
-      brandTheme: MOCK_BRAND_THEME,
+    const result = lowerFlatThemeFixture({
+      flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
     expect(result.personality.animation?.intensity).toBe(0.8);
@@ -243,8 +243,8 @@ describe("compileTheme", () => {
   });
 
   it("produces tokenOverrides from brandTheme surfaces", () => {
-    const result = lowerBrandThemeFixture({
-      brandTheme: MOCK_BRAND_THEME,
+    const result = lowerFlatThemeFixture({
+      flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
     expect(result.tokenOverrides.borderRadius?.sm).toBe("4px");
@@ -252,8 +252,8 @@ describe("compileTheme", () => {
   });
 
   it("produces CSS variables from palette", () => {
-    const result = lowerBrandThemeFixture({
-      brandTheme: MOCK_BRAND_THEME,
+    const result = lowerFlatThemeFixture({
+      flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
     expect(result.cssVariables["--ds-color-primary"]).toBe("#FF0000");
@@ -262,8 +262,8 @@ describe("compileTheme", () => {
   });
 
   it("emits the canonical scale axes explicitly for the static BitHire baseline", () => {
-    const result = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+    const result = lowerFlatThemeFixture({
+      flatTheme: bithireFlatTheme,
       tenantSlug: "bithire",
     });
 
@@ -298,8 +298,8 @@ describe("compileTheme", () => {
     // `--ds-color-dark-{role}-{step}` ramp family) are gone; a theme's other
     // mode is now a real `CompiledBrandModeBlock`, scoped to its own
     // selector, carrying the ordinary (non-`dark`-prefixed) channel names.
-    const result = lowerBrandThemeFixture({
-      brandTheme: MOCK_BRAND_THEME,
+    const result = lowerFlatThemeFixture({
+      flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "test",
     });
     expect(Object.keys(result.cssVariables).some((key) => key.startsWith("--ds-color-dark-"))).toBe(
@@ -317,8 +317,8 @@ describe("compileTheme", () => {
   });
 
   it("produces scoped CSS string", () => {
-    const result = lowerBrandThemeFixture({
-      brandTheme: MOCK_BRAND_THEME,
+    const result = lowerFlatThemeFixture({
+      flatTheme: MOCK_BRAND_THEME,
       tenantSlug: "acme",
     });
     expect(result.cssString).toContain("html[data-tenant='acme']");
@@ -333,11 +333,11 @@ describe("compileTheme", () => {
     // that actually decides it.
     const personality = mergePartialPersonality(
       { animation: { intensity: 0.5, entrance: "fade" } as never },
-      brandThemeToPersonality(MOCK_BRAND_THEME)
+      flatThemeToPersonality(MOCK_BRAND_THEME)
     );
     const overrides = deepMergeTokenOverrides(
       { densityScale: 0.9, borderRadius: { xl: "32px" } },
-      brandThemeToTokenOverrides(MOCK_BRAND_THEME)
+      flatThemeToTokenOverrides(MOCK_BRAND_THEME)
     );
     // The theme overrides the vertical for keys it defines.
     expect(personality.animation?.intensity).toBe(0.8);
@@ -347,9 +347,9 @@ describe("compileTheme", () => {
   });
 });
 
-describe("brandThemeToChromeVariables", () => {
+describe("flatThemeToChromeVariables", () => {
   it("emits canonical button color vars from text alias", () => {
-    const vars = brandThemeToChromeVariables({
+    const vars = flatThemeToChromeVariables({
       id: "button-alias",
       name: "Button Alias",
       chrome: {
@@ -367,7 +367,7 @@ describe("brandThemeToChromeVariables", () => {
   });
 
   it("emits premium card variant chrome and listing grid vars", () => {
-    const vars = brandThemeToChromeVariables({
+    const vars = flatThemeToChromeVariables({
       id: "premium-cards",
       name: "Premium Cards",
       chrome: {
@@ -413,7 +413,7 @@ describe("brandThemeToChromeVariables", () => {
   });
 
   it("emits optical geometry for modern controls, tabs, and table density", () => {
-    const vars = brandThemeToChromeVariables({
+    const vars = flatThemeToChromeVariables({
       id: "optical-geometry",
       name: "Optical Geometry",
       chrome: {
@@ -536,7 +536,7 @@ describe("brandThemeToChromeVariables", () => {
 });
 
 describe("parity: first-party brand pipeline", () => {
-  // "bithire BrandTheme produces same palette as registry branding" is
+  // "bithire FlatTheme produces same palette as registry branding" is
   // deleted with `brandThemeToBranding` (see the note above the retired
   // `describe("brandThemeToBranding", ...)` block). The property it wanted
   // -- bithire's own seeds reach the compiled output -- is covered directly
@@ -544,14 +544,14 @@ describe("parity: first-party brand pipeline", () => {
   // elsewhere in this file and in `color-ramps.test.ts`.
 
   it("DB-backed tenant uses same pipeline as first-party", () => {
-    // Hypothetical DB tenant with the same BrandTheme as bithire
-    // bithireBrandTheme imported at top of file
-    const dbTenantResult = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+    // Hypothetical DB tenant with the same FlatTheme as bithire
+    // bithireFlatTheme imported at top of file
+    const dbTenantResult = lowerFlatThemeFixture({
+      flatTheme: bithireFlatTheme,
       tenantSlug: "db-customer",
     });
-    const firstPartyResult = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+    const firstPartyResult = lowerFlatThemeFixture({
+      flatTheme: bithireFlatTheme,
       tenantSlug: "bithire",
     });
     // Same personality
@@ -579,7 +579,7 @@ describe("parity: first-party brand pipeline", () => {
  * emission that generator alone owned. That whole conversion is gone.
  *
  * What survives at THIS compiler's level, migrated below:
- *   - compileTheme itself still turns a BrandTheme's palette/surfaces
+ *   - compileTheme itself still turns a FlatTheme's palette/surfaces
  *     into CSS variables and a CSS string.
  *   - the vertical -> theme merge order, now asserted on the two merge owners
  *     (`mergePartialPersonality`, `deepMergeTokenOverrides`) rather than on a
@@ -601,13 +601,13 @@ describe("parity: first-party brand pipeline", () => {
  *   - "brandTheme-only tenant produces same personality vars as legacy
  *     tenant", "legacy path resolves vertical + profile (no brandTheme)", and
  *     "tenant overrides win over profile in legacy path": all three compiled
- *     a TenantConfig with NO BrandTheme at all, resolved purely through the
+ *     a TenantConfig with NO FlatTheme at all, resolved purely through the
  *     retired generator's vertical-string + product-profile lookup.
- *     compileTheme requires a BrandTheme; a vertical-only config never
+ *     compileTheme requires a FlatTheme; a vertical-only config never
  *     reached this compiler and still does not.
  *   - "keeps bundled and custom Evnto equal on density, radius, depth and
- *     motion": the "custom" side was exactly the no-BrandTheme legacy path
- *     above. The surviving half of its claim -- that evntoBrandTheme's own
+ *     motion": the "custom" side was exactly the no-FlatTheme legacy path
+ *     above. The surviving half of its claim -- that evntoFlatTheme's own
  *     authored axes equal the single canonical source of truth
  *     (EVNTO_CANONICAL_SURFACES / EVNTO_CANONICAL_MOTION) -- is already
  *     covered by `i0-inventory.test.ts`'s "Evnto canonical visual axes" block.
@@ -615,19 +615,19 @@ describe("parity: first-party brand pipeline", () => {
 describe("parity: compileTheme with vertical baselines and real first-party tenants", () => {
 
   it("compileTheme produces a scoped CSS string with the palette's color scale", () => {
-    const result = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
+    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
     expect(result.cssString).toContain("html[data-tenant='bithire']");
     expect(result.cssString).toContain("--ds-color-primary-500");
   });
 
   it("compileTheme produces the surfaces-derived densityScale token override", () => {
-    const result = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
+    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
     expect(result.cssString).toContain("--ds-density-scale");
-    expect(result.tokenOverrides.densityScale).toBe(bithireBrandTheme.surfaces!.densityScale);
+    expect(result.tokenOverrides.densityScale).toBe(bithireFlatTheme.surfaces!.densityScale);
   });
 
-  it("a DB-backed tenant reusing bithire's BrandTheme compiles the same way, under its own selector", () => {
-    const result = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "db-customer" });
+  it("a DB-backed tenant reusing bithire's FlatTheme compiles the same way, under its own selector", () => {
+    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "db-customer" });
     expect(result.cssString).toContain("html[data-tenant='db-customer']");
     expect(result.cssString).toContain("--ds-color-primary-500");
     expect(result.cssString).toContain("--ds-density-scale");
@@ -638,12 +638,12 @@ describe("parity: compileTheme with vertical baselines and real first-party tena
     // the subject moves to a theme that AUTHORS all four families. The retired
     // bithire theme authored them and its preset decides only `motion.dial`,
     // so grading the derivation on bithire would now grade four absences.
-    const result = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+    const result = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: "themanagementmiami",
     });
     expect(result.personality.animation?.intensity).toBe(
-      themanagementmiamiBrandTheme.motion!.intensity
+      themanagementmiamiFlatTheme.motion!.intensity
     );
     expect(result.personality.animation?.entrance).toBe("slideUp");
     expect(result.personality.chart?.lineStyle).toBe("smooth");
@@ -655,8 +655,8 @@ describe("parity: compileTheme with vertical baselines and real first-party tena
     // The other half of the same measurement: a preset that decides one family
     // produces one family. Pinned so a preset that later decides a chart or
     // card posture cannot start emitting personality unnoticed.
-    const result = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
-    expect(result.personality.animation?.intensity).toBe(bithireBrandTheme.motion!.intensity);
+    const result = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: "bithire" });
+    expect(result.personality.animation?.intensity).toBe(bithireFlatTheme.motion!.intensity);
     expect(result.personality.animation?.entrance).toBeUndefined();
     expect(result.personality.chart).toEqual({});
     expect(result.personality.card).toEqual({});
@@ -685,19 +685,19 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
   // leaf, so the claim set is empty -- which moves no byte on its own (proven in
   // `tests/index.test.ts`) and leaves the floor as the only variable.
   const lowerOver = (
-    brandTheme: BrandTheme,
-    tenantPatch?: Partial<BrandTheme>
+    flatTheme: FlatTheme,
+    tenantPatch?: Partial<FlatTheme>
   ) =>
-    lowerBrandThemeFixture({
-      brandTheme,
+    lowerFlatThemeFixture({
+      flatTheme,
       tenantSlug: "b1-drill",
       ...(tenantPatch
         ? { tenantPatch, tenantAuthoredPaths: new Set<string>() }
         : {}),
-    } as Parameters<typeof lowerBrandThemeFixture>[0]).cssVariables;
+    } as Parameters<typeof lowerFlatThemeFixture>[0]).cssVariables;
 
-  const lower = (tenantPatch?: Partial<BrandTheme>) =>
-    lowerOver(bithireBrandTheme, tenantPatch);
+  const lower = (tenantPatch?: Partial<FlatTheme>) =>
+    lowerOver(bithireFlatTheme, tenantPatch);
 
   /**
    * A baseline that BOTH selects a profile and authors a field that profile
@@ -714,15 +714,15 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
    * holds this shape any more, which is why it is built rather than borrowed.
    */
   const AUTHORS_AGAINST_ITS_PROFILE = {
-    ...bithireBrandTheme,
+    ...bithireFlatTheme,
     typography: {
-      ...bithireBrandTheme.typography,
+      ...bithireFlatTheme.typography,
       letterSpacing: {
-        ...bithireBrandTheme.typography?.letterSpacing,
+        ...bithireFlatTheme.typography?.letterSpacing,
         heading: "-0.025em",
       },
     },
-  } as BrandTheme;
+  } as FlatTheme;
 
   it("drill 1: with NO tenant floor the vertical's authoring still wins", () => {
     const vars = lowerOver(AUTHORS_AGAINST_ITS_PROFILE);
@@ -773,7 +773,7 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
   it("drill 4: clamps apply to the WINNER, and winning buys nothing past them", () => {
     // motionIntensityMax is 1. A tenant asking for more still lands on 1: the
     // floor decides WHICH value competes, never whether the floor holds.
-    const vars = lower({ motion: { intensity: 4 } as BrandTheme["motion"] });
+    const vars = lower({ motion: { intensity: 4 } as FlatTheme["motion"] });
     expect(Number(vars["--ds-motion-intensity"])).toBeLessThanOrEqual(1);
   });
 
@@ -799,7 +799,7 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
     // nothing the posture reads must not perturb a single variable, or the
     // API-shaped guarantee degrades into "almost identity".
     const none = lower();
-    const empty = lower({ id: "tenant" } as Partial<BrandTheme>);
+    const empty = lower({ id: "tenant" } as Partial<FlatTheme>);
     expect(empty).toEqual(none);
   });
 });

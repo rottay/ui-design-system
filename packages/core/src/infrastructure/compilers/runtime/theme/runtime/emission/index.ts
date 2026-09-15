@@ -1,4 +1,4 @@
-import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import type {
   ThemeCompilation,
   ThemeCompilationModeBlock,
@@ -96,7 +96,7 @@ export function emitThemeCss(compiled: ThemeCompilation, scope: EmissionScope): 
 
 /** One compiled mode overlay of a tenant artifact: the delta, not the block. */
 export interface TenantArtifactModeDelta {
-  readonly mode: BrandThemeMode;
+  readonly mode: FlatThemeMode;
   readonly variables: Readonly<Record<string, string>>;
 }
 

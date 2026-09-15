@@ -1,6 +1,6 @@
 /**
  * Rottay expressive-profile registry (C1b) — governed, versioned visual-axis
- * selection shared by the static BrandTheme compiler and the DB
+ * selection shared by the static FlatTheme compiler and the DB
  * TenantThemeDocument compiler.
  *
  * An expressive profile is data on closed per-axis vocabularies; the shared

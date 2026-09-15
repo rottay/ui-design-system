@@ -12,7 +12,7 @@ import {
   resolveResponsivePosture,
   RESPONSIVE_POSTURE_SCHEMA_VERSION,
 } from "@/foundation/tokens/ts/presentation/responsive-postures";
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../foundation/contract";
 
 /**
@@ -48,7 +48,7 @@ export const responsiveDeriver: FamilyDeriver = {
 };
 
 export function deriveResponsiveChannels(
-  bt: BrandTheme
+  bt: FlatTheme
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const [step, px] of Object.entries(RESPONSIVE_BREAKPOINTS)) {

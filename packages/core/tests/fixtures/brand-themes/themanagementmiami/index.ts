@@ -3,7 +3,7 @@
  *
  * This checked-in specimen is intentionally explicit-only: production tenant
  * identity is published from the tenancy DB and compiled by the runtime v2
- * contract. It must never be added to KNOWN_TENANTS, tokens.brandThemes, or a
+ * contract. It must never be added to KNOWN_TENANTS, tokens.flatThemes, or a
  * shipped tenant CSS bundle. The fixture exists to make migrations and visual
  * regression evidence reproducible without becoming a second runtime truth.
  *
@@ -50,9 +50,9 @@
  * temporarily colliding successColor with primaryColor and watching it fail.
  */
 
-import type { BrandTheme } from "../../../../src/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "../../../../src/foundation/contracts/composition/tenants/themes";
 
-export const themanagementmiamiBrandTheme: BrandTheme = {
+export const themanagementmiamiFlatTheme: FlatTheme = {
   id: "themanagementmiami",
   name: "The Management Miami",
 

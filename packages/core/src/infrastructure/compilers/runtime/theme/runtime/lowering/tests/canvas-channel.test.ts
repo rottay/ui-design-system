@@ -18,16 +18,16 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { tortureDarkFlatTheme, tortureLightFlatTheme } from '@tests/fixtures/brand-themes/torture';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
-const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireFlatTheme = firstPartyFixture('bithire');
+const rottayFlatTheme = firstPartyFixture('rottay');
 
-describe('the clear-mode ground is a BrandTheme channel', () => {
+describe('the clear-mode ground is a FlatTheme channel', () => {
   it('a declared backgroundColor reaches --ds-color-bg-primary', () => {
-    const { cssVariables } = lowerBrandThemeFixture({ brandTheme: tortureLightBrandTheme, tenantSlug: 'canvas-probe' });
-    expect(tortureLightBrandTheme.palette!.backgroundColor).toBe('#FDFDFF');
+    const { cssVariables } = lowerFlatThemeFixture({ flatTheme: tortureLightFlatTheme, tenantSlug: 'canvas-probe' });
+    expect(tortureLightFlatTheme.palette!.backgroundColor).toBe('#FDFDFF');
     expect(cssVariables['--ds-color-bg-primary']).toBe('#FDFDFF');
     // The aliases the rest of the system reads must move with it, or a surface
     // that reads --ds-color-bg keeps the old ground.
@@ -35,11 +35,11 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
     expect(cssVariables['--ds-color-background']).toBe('#FDFDFF');
   });
 
-  it('global reading ink and neutral borders are first-class BrandTheme channels', () => {
-    const { cssVariables } = lowerBrandThemeFixture({ tenantSlug: 'canvas-probe', brandTheme: {
-      ...tortureLightBrandTheme,
+  it('global reading ink and neutral borders are first-class FlatTheme channels', () => {
+    const { cssVariables } = lowerFlatThemeFixture({ tenantSlug: 'canvas-probe', flatTheme: {
+      ...tortureLightFlatTheme,
       palette: {
-        ...tortureLightBrandTheme.palette!,
+        ...tortureLightFlatTheme.palette!,
         textPrimaryColor: '#211D18',
         textSecondaryColor: '#51483D',
         textMutedColor: '#716658',
@@ -64,12 +64,12 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
     // under test. D6-2c-ii (2026-09-15): the ground is stripped from bithire,
     // the one vertical whose preset still authors one -- stripping rottay's
     // would assert nothing now that its structural preset carries no palette.
-    const { palette, ...rest } = bithireBrandTheme;
+    const { palette, ...rest } = bithireFlatTheme;
     const { backgroundColor: _omitted, ...paletteWithoutGround } = palette!;
     expect(palette!.backgroundColor).toBeDefined();
-    const { cssVariables } = lowerBrandThemeFixture({
+    const { cssVariables } = lowerFlatThemeFixture({
       tenantSlug: 'canvas-probe',
-      brandTheme: { ...rest, palette: paletteWithoutGround },
+      flatTheme: { ...rest, palette: paletteWithoutGround },
     });
     expect(cssVariables['--ds-color-bg-primary']).toBeUndefined();
   });
@@ -82,12 +82,12 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
     // THAT block and only there. The old shape could not express this: the
     // dark ground sat in `darkBackgroundColor`, which compiled to a variable
     // nothing read, so a tenant declared a ground and never saw it.
-    const compiled = lowerBrandThemeFixture({
-      brandTheme: tortureDarkBrandTheme,
+    const compiled = lowerFlatThemeFixture({
+      flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'canvas-probe',
     });
 
-    expect(tortureDarkBrandTheme.appearance?.defaultMode).toBe('dark');
+    expect(tortureDarkFlatTheme.appearance?.defaultMode).toBe('dark');
     expect(compiled.cssVariables['--ds-color-bg-primary']).toBe('#050307');
     expect(compiled.cssVariables['--ds-color-bg']).toBe('#050307');
     expect(compiled.cssVariables['--ds-color-background']).toBe('#050307');
@@ -105,13 +105,13 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
   });
 
   it('emits no `dark`-prefixed ground twin for any theme', () => {
-    for (const brandTheme of [tortureDarkBrandTheme, tortureLightBrandTheme, rottayBrandTheme, bithireBrandTheme]) {
-      const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: 'canvas-probe' });
+    for (const flatTheme of [tortureDarkFlatTheme, tortureLightFlatTheme, rottayFlatTheme, bithireFlatTheme]) {
+      const compiled = lowerFlatThemeFixture({ flatTheme, tenantSlug: 'canvas-probe' });
       const blocks = [compiled.cssVariables, ...(compiled.modeBlocks ?? []).map((b) => b.cssVariables)];
       for (const block of blocks) {
         expect(
           Object.keys(block).filter((name) => name.startsWith('--ds-color-dark-')),
-          `${brandTheme.id} emits a dark-prefixed channel`,
+          `${flatTheme.id} emits a dark-prefixed channel`,
         ).toEqual([]);
       }
     }
@@ -126,10 +126,10 @@ describe('the ground field is no longer overloaded', () => {
     // palette is authored for.
     // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
     // bithire's ground is now its preset's #FFFFFF, not the authored #F4F8FB.
-    expect(bithireBrandTheme.appearance?.defaultMode).toBe('light');
-    expect(bithireBrandTheme.palette!.backgroundColor).toBe('#FFFFFF');
-    const { cssVariables } = lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+    expect(bithireFlatTheme.appearance?.defaultMode).toBe('light');
+    expect(bithireFlatTheme.palette!.backgroundColor).toBe('#FFFFFF');
+    const { cssVariables } = lowerFlatThemeFixture({
+      flatTheme: bithireFlatTheme,
       tenantSlug: 'canvas-probe',
     });
     expect(cssVariables['--ds-color-bg-primary']).toBe('#FFFFFF');
@@ -142,13 +142,13 @@ describe('the ground field is no longer overloaded', () => {
     // D6-2c-ii (2026-09-15): anchored on the dark-default torture fixture.
     // rottay is still the dark vertical, but its preset is structural and
     // authors no palette at all, so it no longer carries a ground to assert.
-    expect(rottayBrandTheme.appearance?.defaultMode).toBe('dark');
-    expect(rottayBrandTheme.palette?.backgroundColor).toBeUndefined();
+    expect(rottayFlatTheme.appearance?.defaultMode).toBe('dark');
+    expect(rottayFlatTheme.palette?.backgroundColor).toBeUndefined();
 
-    expect(tortureDarkBrandTheme.appearance?.defaultMode).toBe('dark');
-    expect(tortureDarkBrandTheme.palette!.backgroundColor).toBe('#050307');
-    const { cssVariables } = lowerBrandThemeFixture({
-      brandTheme: tortureDarkBrandTheme,
+    expect(tortureDarkFlatTheme.appearance?.defaultMode).toBe('dark');
+    expect(tortureDarkFlatTheme.palette!.backgroundColor).toBe('#050307');
+    const { cssVariables } = lowerFlatThemeFixture({
+      flatTheme: tortureDarkFlatTheme,
       tenantSlug: 'canvas-probe',
     });
     expect(cssVariables['--ds-color-bg-primary']).toBe('#050307');

@@ -7,11 +7,11 @@ import { test, expect, type Page } from '@playwright/test';
 //
 // Captures one identical accepted-family tree per first-party vertical AS IT
 // SHIPS: the code-owned registry tenant with the recipe profile its own
-// checked-in BrandTheme authored.
+// checked-in FlatTheme authored.
 //
 // The old `profile` sweep is gone and was not merely renamed. It applied the
-// profile by cloning the vertical's BrandTheme onto `tenantConfig.brandTheme`
-// at runtime, and the resolver refuses a runtime BrandTheme under EVERY
+// profile by cloning the vertical's FlatTheme onto `tenantConfig.brandTheme`
+// at runtime, and the resolver refuses a runtime FlatTheme under EVERY
 // declaration — the provider returns `<LoadingScreen />`, so those nine cells
 // captured a spinner. The authored profile is a fact of the source tree, so
 // this spec asserts it on the frame instead of parameterising it.
@@ -25,7 +25,7 @@ type Vertical = 'rottay' | 'bithire' | 'evnto';
 
 interface Cell {
   readonly vertical: Vertical;
-  /** What the vertical's checked-in BrandTheme authors, verified in the DOM. */
+  /** What the vertical's checked-in FlatTheme authors, verified in the DOM. */
   readonly authoredProfile: string;
 }
 
@@ -93,7 +93,7 @@ test.describe('K0.6 first-party recipe-profile evidence', () => {
       expect(partCount).toBeGreaterThan(0);
 
       // The capture states its own subject: the registry tenant is the one
-      // asked for, and the profile is the one its BrandTheme authored.
+      // asked for, and the profile is the one its FlatTheme authored.
       const frame = page.getByTestId('pe-frame');
       await expect(frame).toHaveAttribute('data-pe-vertical', cell.vertical);
       await expect(frame).toHaveAttribute(

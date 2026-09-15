@@ -2,7 +2,7 @@
  * Density posture equivalence — one tree, five authorities.
  *
  * A posture may be declared through five independent paths: a static
- * BrandTheme vertical, a DB Appearance document, the CSS attribute cascade, the
+ * FlatTheme vertical, a DB Appearance document, the CSS attribute cascade, the
  * JS context, and a nested DensityScope. They are only ONE contract if the same
  * posture over the same structural scale resolves to the same effective scale
  * through every one of them.
@@ -33,7 +33,7 @@ import {
   DENSITY_LOCAL_FACTOR_VARIABLE,
   resolveEffectiveDensityScale,
 } from '@/foundation/tokens/ts/foundation/base/density';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -53,15 +53,15 @@ import { stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundati
  *
  * `resolveVisualAuthority` refuses a bare render whose config carries a runtime
  * visual payload, and it refuses `brandTheme` unconditionally -- even under a
- * compiled-artifact declaration -- because a runtime BrandTheme is a second
+ * compiled-artifact declaration -- because a runtime FlatTheme is a second
  * visual authority competing with the compiled one. That barrier is correct and
  * is not touched here.
  *
  * What was wrong was the fixture: the tree carried `brandTheme` while measuring
  * nothing from it. Legs (1) and (2) below read the compiled products of
  * `compileTheme` and `compileTenantThemeConfig` DIRECTLY, so the
- * static-BrandTheme and DB-Appearance authorities are compared without the
- * provider ever seeing a BrandTheme. The tree is needed for exactly three of the five: the `<html>`
+ * static-FlatTheme and DB-Appearance authorities are compared without the
+ * provider ever seeing a FlatTheme. The tree is needed for exactly three of the five: the `<html>`
  * boundary, the JS context, and the nested scope -- and those need the
  * appearance posture, which arrives the way production delivers it, as a
  * compiled artifact with a matching declaration (the same shape
@@ -149,7 +149,7 @@ afterEach(() => {
 });
 
 describe('density posture equivalence across every authority', () => {
-  it('resolves one effective scale from static BrandTheme, DB Appearance, CSS, JS context and a nested scope', async () => {
+  it('resolves one effective scale from static FlatTheme, DB Appearance, CSS, JS context and a nested scope', async () => {
     const expected = resolveEffectiveDensityScale(STRUCTURAL_SCALE, POSTURE);
 
     // ── One tree carrying the runtime authorities ────────────────────────────
@@ -169,10 +169,10 @@ describe('density posture equivalence across every authority', () => {
     );
     await view.findByTestId('js-posture');
 
-    // (1) Static BrandTheme vertical — the compiled artifact for a code-owned
+    // (1) Static FlatTheme vertical — the compiled artifact for a code-owned
     // product, scoped html[data-tenant='…'].
-    const brandVars = lowerBrandThemeFixture({
-      brandTheme: {
+    const brandVars = lowerFlatThemeFixture({
+      flatTheme: {
         id: 'density-equivalence',
         name: 'Density equivalence',
         surfaces: { densityScale: STRUCTURAL_SCALE, density: POSTURE },

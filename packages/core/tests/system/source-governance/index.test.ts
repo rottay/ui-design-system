@@ -133,7 +133,7 @@ describe('source governance', () => {
     expect(matches).toEqual([]);
   });
 
-  it('keeps compiled BrandTheme output free of !important specificity wars', () => {
+  it('keeps compiled FlatTheme output free of !important specificity wars', () => {
     const tenantCssRoot = join(SRC_ROOT, 'foundation', 'tokens', 'css', 'facade', 'artifacts');
     const tenantFiles = collectFirstPartyArtifactFiles(tenantCssRoot);
     const matches: string[] = [];

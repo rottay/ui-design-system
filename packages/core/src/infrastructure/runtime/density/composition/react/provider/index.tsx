@@ -40,7 +40,7 @@ export interface RootDensityProviderProps {
  *
  * The root attribute is not a second multiplier. `foundation/base/density/index.css`
  * routes it to `--ds-density-mode-factor`, the same semantic channel the
- * Appearance and BrandTheme compilers write, and applies the separate local
+ * Appearance and FlatTheme compilers write, and applies the separate local
  * factor only to non-root boundaries. Two writers of one channel resolve by
  * cascade to a single value, so a compiled tenant posture and this attribute
  * agree instead of composing; nested boundaries use `DensityScope`, whose

@@ -224,7 +224,7 @@ function observationFor({ removalValues = null } = {}) {
  * same lowering a real run uses. The source string names where a real one would
  * come from, which is what the H-1 record is for. */
 const STATIC_BASELINE = Object.freeze({ surfaces: { rhythm: 'normal' } });
-const STATIC_BASELINE_SOURCE = 'dist/index.js#rottayBrandTheme';
+const STATIC_BASELINE_SOURCE = 'dist/index.js#rottayFlatTheme';
 
 const STATIC_LOWERED = lowerStop({
   armId: 'static-brand-theme',

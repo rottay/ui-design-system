@@ -25,9 +25,9 @@
 
 import type {
   BrandPalette,
-  BrandTheme,
-  BrandThemeMode,
-  BrandThemeModeOverlay,
+  FlatTheme,
+  FlatThemeMode,
+  FlatThemeModeOverlay,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeCompilationModeBlock } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { TenantAuthoredPaths } from "@/foundation/contracts/composition/tenants/themes/iso";
@@ -56,7 +56,7 @@ export const modesFamily: ThemeLayerFamily = {
 };
 
 /** Every mode a Theme can carry a block for, in canonical order. */
-const MODES: readonly BrandThemeMode[] = Object.freeze(["light", "dark"]);
+const MODES: readonly FlatThemeMode[] = Object.freeze(["light", "dark"]);
 
 /**
  * Deep-merge one layer over another.
@@ -91,9 +91,9 @@ function mergeLayer<T>(base: T, layer: unknown): T {
 
 /** Apply a mode's overlay to a theme body, leaving identity fields alone. */
 function applyModeOverlay(
-  bt: BrandTheme,
-  overlay: BrandThemeModeOverlay
-): BrandTheme {
+  bt: FlatTheme,
+  overlay: FlatThemeModeOverlay
+): FlatTheme {
   return {
     ...bt,
     palette: mergeLayer(bt.palette, overlay.palette) as BrandPalette | undefined,
@@ -109,13 +109,13 @@ function applyModeOverlay(
 }
 
 /** Does this overlay state any value at all, at any depth? */
-export function modeOverlayHasValues(overlay: BrandThemeModeOverlay): boolean {
+export function modeOverlayHasValues(overlay: FlatThemeModeOverlay): boolean {
   for (const family of Object.values(overlay)) {
     if (family && typeof family === "object") {
       for (const value of Object.values(family)) {
         if (value === undefined) continue;
         if (value !== null && typeof value === "object") {
-          if (modeOverlayHasValues(value as BrandThemeModeOverlay)) return true;
+          if (modeOverlayHasValues(value as FlatThemeModeOverlay)) return true;
         } else {
           return true;
         }
@@ -172,7 +172,7 @@ const MODE_AGNOSTIC_DECISIONS: readonly string[] = Object.freeze([
  * tenant's own family.
  */
 function tenantDecisionsCrossingInto(
-  effective: BrandTheme,
+  effective: FlatTheme,
   authoredLeaves: TenantAuthoredPaths,
   modePrefix: string
 ): readonly (readonly [readonly string[], unknown])[] {
@@ -201,10 +201,10 @@ function readThemePath(root: unknown, segments: readonly string[]): unknown {
 
 /** Copy-on-write assignment: nothing the effective theme shares is mutated. */
 function withThemePath(
-  root: BrandTheme,
+  root: FlatTheme,
   segments: readonly string[],
   value: unknown
-): BrandTheme {
+): FlatTheme {
   const copy = { ...root } as unknown as Record<string, unknown>;
   let cursor = copy;
   for (const key of segments.slice(0, -1)) {
@@ -217,14 +217,14 @@ function withThemePath(
     cursor = next;
   }
   cursor[segments[segments.length - 1] as string] = value;
-  return copy as unknown as BrandTheme;
+  return copy as unknown as FlatTheme;
 }
 
 /** One block the pipeline still has to lower, with the theme it lowers. */
 export interface ModeBlockRequest {
-  readonly mode: BrandThemeMode;
+  readonly mode: FlatThemeMode;
   /** The effective theme FOR THIS MODE, after the ranked merge. */
-  readonly theme: BrandTheme;
+  readonly theme: FlatTheme;
   /** `modes.<mode>.` -- the authorship prefix every family reads paths under. */
   readonly modePrefix: string;
   readonly tenant: TenantFacts | undefined;
@@ -232,7 +232,7 @@ export interface ModeBlockRequest {
 
 export interface ModeDerivationInput {
   /** The effective theme: vertical baseline under the tenant floor. */
-  readonly theme: BrandTheme;
+  readonly theme: FlatTheme;
   readonly tenantFacts: TenantFacts | undefined;
   /**
    * The raw tenant patch, read-only here -- see
@@ -240,7 +240,7 @@ export interface ModeDerivationInput {
    * `authoredPaths` alone cannot tell "the tenant wrote this seed" from "the
    * patch builder always emits this key".
    */
-  readonly tenantPatch: Partial<BrandTheme> | undefined;
+  readonly tenantPatch: Partial<FlatTheme> | undefined;
 }
 
 /**
@@ -266,7 +266,7 @@ export function deriveModeThemes(
       // overlay is a structural placeholder, not an authority violation.
       if (!modeOverlayHasValues(overlay)) continue;
       throw new Error(
-        `BrandTheme '${theme.id}' authors modes.${mode}, but ${mode} is its declared defaultMode. ` +
+        `FlatTheme '${theme.id}' authors modes.${mode}, but ${mode} is its declared defaultMode. ` +
           `The default mode's values belong in the theme body; a mode overlay describes the OTHER mode.`
       );
     }
@@ -308,11 +308,11 @@ export function deriveModeThemes(
  * it for any other and the APCA floor refuses the compile by name.
  */
 function modeTenantFacts(
-  mode: BrandThemeMode,
+  mode: FlatThemeMode,
   modePrefix: string,
   crossed: ReadonlySet<string>,
   tenantFacts: TenantFacts | undefined,
-  tenantPatch: Partial<BrandTheme> | undefined
+  tenantPatch: Partial<FlatTheme> | undefined
 ): TenantFacts | undefined {
   if (!tenantFacts) return undefined;
   const authoredPaths = tenantFacts.authoredPaths;

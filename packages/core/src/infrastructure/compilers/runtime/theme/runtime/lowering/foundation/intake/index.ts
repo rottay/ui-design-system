@@ -6,7 +6,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import {
   governedValue,
   isGovernedActive,
@@ -30,8 +30,8 @@ import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentat
  * This is the lowering's own reading of the contract, not a conversion into a
  * second theme authority: nothing downstream of here may re-enter the Theme.
  */
-export function readGovernedTheme(theme: Theme): BrandTheme {
-  const brand: BrandTheme = {
+export function readGovernedTheme(theme: Theme): FlatTheme {
+  const brand: FlatTheme = {
     id: theme.id,
     name: theme.name,
     appearance: theme.appearance,
@@ -55,7 +55,7 @@ export function readGovernedTheme(theme: Theme): BrandTheme {
 }
 
 /**
- * Lift an AUTHORED `BrandTheme` into a `Theme` by wrapping its governed
+ * Lift an AUTHORED `FlatTheme` into a `Theme` by wrapping its governed
  * families and nothing else.
  *
  * This is the exact inverse of {@link readGovernedTheme}, and it is deliberately
@@ -72,7 +72,7 @@ export function readGovernedTheme(theme: Theme): BrandTheme {
  * `readGovernedTheme` drops the key again and the compiler sees exactly the
  * object it would have seen before this pipeline existed.
  */
-export function liftAuthoredTheme(brand: BrandTheme): Theme {
+export function liftAuthoredTheme(brand: FlatTheme): Theme {
   const wrap = <T>(value: T | undefined): Governed<T> =>
     value === undefined
       ? ({ value: undefined as T, disposition: "not-authored" } as Governed<T>)
@@ -101,7 +101,7 @@ export interface GovernedSelections {
 
 /** The two validated selection ids, for the compiled runtime payload. One validation, one answer. */
 export function resolveGovernedSelections(
-  theme: BrandTheme
+  theme: FlatTheme
 ): GovernedSelections {
   const recipe = validateRecipeProfileSelection(
     theme.recipes?.profile,

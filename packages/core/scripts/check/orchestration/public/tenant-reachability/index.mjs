@@ -13,7 +13,7 @@
  *   of readers and is not a declared channel, so it can never appear in that
  *   gate's output — blind by construction, not by oversight.
  *   `theme-channel-parity-gate` asks whether a name is OWNED by some typed
- *   field. Static BrandTheme ownership satisfies it without any tenant being
+ *   field. Static FlatTheme ownership satisfies it without any tenant being
  *   able to write the name.
  * This gate asks the third question: **can the tenant reach this?** A name that
  * fails it is paint frozen into the shipped bundle that no customer can change.

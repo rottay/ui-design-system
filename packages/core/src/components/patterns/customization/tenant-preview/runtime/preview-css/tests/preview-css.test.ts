@@ -22,13 +22,13 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildPreviewCss, draftBrandTheme, draftPreviewSource } from '..';
+import { buildPreviewCss, draftFlatTheme, draftPreviewSource } from '..';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
   sanitizePreviewSlug,
 } from '../../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileThemeIntent,
   containerScope,
@@ -43,10 +43,10 @@ import {
   hydrateTenantThemeConfig,
 } from '../../../../../../../infrastructure/compilers/composition/tenant-theme';
 import {
-  createTenantBrandTheme,
+  createTenantFlatTheme,
   createTenantConfig,
 } from '../../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
-import type { BrandTheme } from '../../../../../../../foundation/contracts/composition/tenants/themes';
+import type { FlatTheme } from '../../../../../../../foundation/contracts/composition/tenants/themes';
 import type { TenantConfig } from '../../../../../../../foundation/contracts/composition/tenants';
 import type {
   TenantThemeArtifact,
@@ -97,7 +97,7 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
     ];
 
     for (const draft of drafts) {
-      const brandTheme = draftBrandTheme(draft);
+      const flatTheme = draftFlatTheme(draft);
       const safeSlug = sanitizePreviewSlug(draft.slug);
       // Same call `resolveCompiledOutput` makes internally, so this is a
       // faithful "raw" baseline rather than a second interpretation of it. The
@@ -108,7 +108,7 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
           draftPreviewThemeIntent({
             vertical: 'rottay',
             slug: safeSlug,
-            draft: brandTheme,
+            draft: flatTheme,
           }),
         ).compiled,
         containerScope(brandTenantSelector(safeSlug)),
@@ -121,7 +121,7 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
         kind: 'brand-theme',
       vertical: 'rottay',
         slug: draft.slug,
-        brandTheme,
+        flatTheme,
       });
       const keptDeclarationCount = css
         .split('\n')
@@ -139,9 +139,9 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
   });
 
   it('emits no html[data-tenant] rule even when previewing the active tenant slug', () => {
-    const brandTheme = draftBrandTheme({ ...sampleDraft, slug: 'bithire' });
+    const flatTheme = draftFlatTheme({ ...sampleDraft, slug: 'bithire' });
     const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme',
-      vertical: 'rottay', slug: 'bithire', brandTheme });
+      vertical: 'rottay', slug: 'bithire', flatTheme });
 
     expect(css).not.toContain('html');
     expect(css).toContain('--ds-color-primary');
@@ -166,13 +166,13 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
    * The residual property is asserted with it: nothing is emitted at all, so
    * there is no CSS for a later pass to have to neutralize.
    */
-  const refusalOf = (brandTheme: BrandTheme) => {
+  const refusalOf = (flatTheme: FlatTheme) => {
     try {
       buildPreviewCss({
         kind: 'brand-theme',
         vertical: 'rottay',
         slug: sampleDraft.slug,
-        brandTheme,
+        flatTheme,
       });
     } catch (error) {
       return error as Error;
@@ -181,24 +181,24 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
   };
 
   it('refuses BY NAME a value that could close the block and restyle the document', () => {
-    const brandTheme: BrandTheme = {
-      ...draftBrandTheme(sampleDraft),
+    const flatTheme: FlatTheme = {
+      ...draftFlatTheme(sampleDraft),
       surfaces: { shadows: { md: 'red;} html{background:black}' } },
     };
 
-    const refusal = refusalOf(brandTheme);
+    const refusal = refusalOf(flatTheme);
     expect(refusal?.name).toBe('ThemeAdmissionError');
     expect(refusal?.message).toContain('--ds-shadow-md');
     expect(refusal?.message).toContain('unsafe variable declaration');
   });
 
   it('refuses BY NAME a multi-line value, naming the channel it was authored on', () => {
-    const brandTheme: BrandTheme = {
-      ...draftBrandTheme(sampleDraft),
+    const flatTheme: FlatTheme = {
+      ...draftFlatTheme(sampleDraft),
       surfaces: { borderRadius: { md: 'red;\n} zz9{--pwn9:1}\n' } },
     };
 
-    const refusal = refusalOf(brandTheme);
+    const refusal = refusalOf(flatTheme);
     expect(refusal?.name).toBe('ThemeAdmissionError');
     expect(refusal?.message).toContain('unsafe variable declaration');
     // The channel is named, so an author is told WHICH value to fix.
@@ -218,12 +218,12 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     // The stronger fact is asserted instead. `rescopeSelectorLine`'s rejection
     // branch survives as defence in depth behind the emission grammar, no
     // longer as the first line of it.
-    const brandTheme: BrandTheme = {
-      ...draftBrandTheme(sampleDraft),
+    const flatTheme: FlatTheme = {
+      ...draftFlatTheme(sampleDraft),
       surfaces: { shadows: { md: 'red;\n}\nzz9, * {\n  --pwn9: 1;\n' } },
     };
     const safeSlug = sanitizePreviewSlug(sampleDraft.slug);
-    const raw = lowerBrandThemeFixture({ brandTheme, tenantSlug: safeSlug }).cssString;
+    const raw = lowerFlatThemeFixture({ flatTheme, tenantSlug: safeSlug }).cssString;
     expect(raw).not.toContain('zz9');
     expect(raw).not.toContain('--pwn9');
     // The DECLARATION, not the name: the material roots READ `--ds-shadow-md`
@@ -241,7 +241,7 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
         kind: 'brand-theme',
         vertical: 'rottay',
         slug: sampleDraft.slug,
-        brandTheme,
+        flatTheme,
       });
     } catch (error) {
       refusal = error as Error;
@@ -252,7 +252,7 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     // JSON-quoted string in an error message, never CSS text -- no stylesheet
     // was produced at all, so there is nothing for the rescope pass to read.
     expect(refusal?.message).toContain('--ds-shadow-md');
-    expect(refusal?.message).toContain(JSON.stringify(brandTheme.surfaces?.shadows?.md));
+    expect(refusal?.message).toContain(JSON.stringify(flatTheme.surfaces?.shadows?.md));
   });
 
   it('never lets a hostile slug reach the selector', () => {
@@ -266,12 +266,12 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     // above, where the emission grammar refuses the hostile value before any
     // foreign selector can be assembled.
     const hostileSlug = "x'] , * { --pwn9: 1 } [q9='";
-    const brandTheme = draftBrandTheme({ ...sampleDraft, slug: hostileSlug });
+    const flatTheme = draftFlatTheme({ ...sampleDraft, slug: hostileSlug });
     const { css, safeSlug, scopeSelector } = buildPreviewCss({
       kind: 'brand-theme',
       vertical: 'rottay',
       slug: hostileSlug,
-      brandTheme,
+      flatTheme,
     });
 
     expect(safeSlug).toMatch(/^[a-z0-9-]+$/);
@@ -446,7 +446,7 @@ describe('buildPreviewCss scoping (tenant-theme source)', () => {
 describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)', () => {
   // These exercise the engines' real call shape: `buildPreviewCss(tenantConfig)`
   // with a `TenantConfig` -- not a pre-resolved `PreviewSource` -- so the
-  // internal resolution in `resolvePreviewInput`/`liftTenantConfigToBrandTheme`
+  // internal resolution in `resolvePreviewInput`/`liftTenantConfigToFlatTheme`
   // is what's under test here, per axis, with real differing output (not
   // `css.length > 0`).
 
@@ -594,10 +594,10 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     expect(css).not.toContain('prefers-color-scheme');
   });
 
-  it('a draft compiles the BrandTheme its preset and density project to', () => {
+  it('a draft compiles the FlatTheme its preset and density project to', () => {
     // `draftPreviewSource` is the arm the three preview engines use. It is the
     // only one that can paint a preset, because the preset's channels --
-    // motion, chrome, surfaces -- are BrandTheme channels; a `TenantConfig`
+    // motion, chrome, surfaces -- are FlatTheme channels; a `TenantConfig`
     // carries none of them.
     const draft = {
       slug: 'acme',
@@ -616,7 +616,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
       kind: 'brand-theme',
       vertical: 'bithire',
       slug: 'acme',
-      brandTheme: createTenantBrandTheme(draft),
+      flatTheme: createTenantFlatTheme(draft),
     });
 
     expect(direct.css).toBe(fromTheme.css);

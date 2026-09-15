@@ -8,12 +8,12 @@ import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
-import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 
 import CalendarModern from '../engines/modern';
 
-const bithireBrandTheme = firstPartyFixture('bithire');
+const bithireFlatTheme = firstPartyFixture('bithire');
 
 // The modern skin is the single paint owner for this engine. These assertions
 // pin the Pass-1 ownership contract: header-control geometry and the
@@ -266,12 +266,12 @@ describe('Modern Calendar remediation (K4-B)', () => {
     );
     expect(skin).toContain('color: var(--ds-calendar-active-ink, var(--ds-color-white))');
 
-    // Measured on the compiled BrandThemes (same method as the CodeBlock
+    // Measured on the compiled FlatThemes (same method as the CodeBlock
     // gutter measurement): white ink on BOTH raw primaries clears AA with
     // margin, so the fills stay raw.
-    const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
-    const tmm = lowerBrandThemeFixture({
-      brandTheme: themanagementmiamiBrandTheme,
+    const bithire = lowerFlatThemeFixture({ flatTheme: bithireFlatTheme, tenantSlug: 'bithire' });
+    const tmm = lowerFlatThemeFixture({
+      flatTheme: themanagementmiamiFlatTheme,
       tenantSlug: 'themanagementmiami',
     });
     const white = '#FFFFFF';

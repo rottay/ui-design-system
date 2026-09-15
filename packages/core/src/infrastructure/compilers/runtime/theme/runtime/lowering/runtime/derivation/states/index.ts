@@ -7,7 +7,7 @@
  * @package @rottay/design-system
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { FamilyDeriver } from "../../../foundation/contract";
 
 /**
@@ -83,14 +83,14 @@ const FOCUS_SIGNATURES = {
 
 type FocusSignature = keyof typeof FOCUS_SIGNATURES;
 
-function readEmphasis(bt: BrandTheme): EmphasisPosture {
+function readEmphasis(bt: FlatTheme): EmphasisPosture {
   const authored = bt.surfaces?.stateEmphasis;
   return authored !== undefined && authored in EMPHASIS_DELTAS
     ? (authored as EmphasisPosture)
     : "medium";
 }
 
-function readFocusStyle(bt: BrandTheme): FocusSignature {
+function readFocusStyle(bt: FlatTheme): FocusSignature {
   const authored = bt.surfaces?.focusStyle;
   return authored !== undefined && authored in FOCUS_SIGNATURES
     ? (authored as FocusSignature)
@@ -119,7 +119,7 @@ export const statesDeriver: FamilyDeriver = {
   derive: (context) => deriveStateChannels(context.theme),
 };
 
-export function deriveStateChannels(bt: BrandTheme): Record<string, string> {
+export function deriveStateChannels(bt: FlatTheme): Record<string, string> {
   const vars: Record<string, string> = {};
   const emphasis = readEmphasis(bt);
   const delta = EMPHASIS_DELTAS[emphasis];
