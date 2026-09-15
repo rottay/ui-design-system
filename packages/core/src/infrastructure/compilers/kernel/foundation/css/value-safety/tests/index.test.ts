@@ -6,9 +6,16 @@
  * preview and the tenant preview at once.
  */
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
+import { expandExpressiveProfiles } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import { isSafeVisualValue } from "@/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits";
+
 import {
+  ALLOWED_VALUE_FUNCTIONS,
   admitCssVariables,
   isSafeCssChannelName,
   isSafeCssDeclaration,
@@ -167,5 +174,110 @@ describe("admitCssVariables omits whole entries and never repairs one", () => {
     expect(isSafeCssDeclaration("--evil", "#fff")).toBe(false);
     expect(isSafeCssDeclaration("--ds-a", "#fff; }")).toBe(false);
     expect(isSafeCssDeclaration("--ds-a", 12)).toBe(false);
+  });
+});
+
+/**
+ * The repeating-gradient class (D6-2c-i, 2026-09-15). Admission admitted
+ * `repeating-linear-gradient` while this table did not, so the `micro-grid`
+ * and `pinstripe` motif rows compiled into a channel the emitter dropped
+ * without a trace. The values below are read from the expansion owner, not
+ * copied, so the test measures the bytes the pipeline really emits.
+ */
+describe("the repeating gradient class is admitted at emission", () => {
+  const TEXTURE_CHANNEL = "--ds-material-canvas-texture";
+  const microGrid = expandExpressiveProfiles({ motif: "micro-grid" }).variables[TEXTURE_CHANNEL]!;
+  const pinstripe = expandExpressiveProfiles({ motif: "pinstripe" }).variables[TEXTURE_CHANNEL]!;
+
+  it("reads both real emitter values from the expansion rows", () => {
+    expect(microGrid).toHaveLength(329);
+    expect(microGrid.startsWith("repeating-linear-gradient(")).toBe(true);
+    expect(microGrid.split("repeating-linear-gradient(")).toHaveLength(3);
+    expect(pinstripe.startsWith("repeating-linear-gradient(90deg, ")).toBe(true);
+  });
+
+  it("admits the micro-grid value at both doors", () => {
+    expect(isSafeCssValue(microGrid)).toBe(true);
+    expect(isSafeVisualValue(microGrid, `emitted.${TEXTURE_CHANNEL}`, false)).toBe(true);
+  });
+
+  it("admits the pinstripe value at both doors", () => {
+    expect(isSafeCssValue(pinstripe)).toBe(true);
+    expect(isSafeVisualValue(pinstripe, `emitted.${TEXTURE_CHANNEL}`, false)).toBe(true);
+  });
+
+  it("admits a repeating radial gradient", () => {
+    const radial =
+      "repeating-radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--ds-color-primary) 4%, transparent) 0 2px, transparent 2px 16px)";
+    expect(isSafeCssValue(radial)).toBe(true);
+    expect(isSafeVisualValue(radial, "emitted.--ds-material-canvas-texture", false)).toBe(true);
+  });
+
+  it("emits the texture channel with its authored string intact", () => {
+    const admitted = admitCssVariables({
+      "--ds-color-primary": "#1C3FBF",
+      [TEXTURE_CHANNEL]: microGrid,
+    });
+    expect(Object.keys(admitted)).toEqual(["--ds-color-primary", TEXTURE_CHANNEL]);
+    expect(admitted[TEXTURE_CHANNEL]).toBe(microGrid);
+  });
+
+  it("still refuses a fetch inside a repeating gradient, at any depth", () => {
+    const fetching = "repeating-linear-gradient(0deg, url(x) 0 1px, transparent 1px 24px)";
+    const nested =
+      "repeating-linear-gradient(0deg, color-mix(in srgb, url(https://example.test/x.png) 2%, transparent) 0 1px, transparent 1px 24px)";
+    for (const value of [fetching, nested]) {
+      expect(isSafeCssValue(value)).toBe(false);
+      expect(isSafeVisualValue(value, `emitted.${TEXTURE_CHANNEL}`, false)).toBe(false);
+      expect(admitCssVariables({ [TEXTURE_CHANNEL]: value })).toEqual({});
+    }
+  });
+
+  it("refuses repeating-conic-gradient on purpose: no emitter produces it", () => {
+    const conic = "repeating-conic-gradient(from 0deg, #000 0 10deg, #fff 10deg 20deg)";
+    expect(ALLOWED_VALUE_FUNCTIONS.has("repeating-conic-gradient")).toBe(false);
+    expect(isSafeCssValue(conic)).toBe(false);
+    expect(isSafeVisualValue(conic, `emitted.${TEXTURE_CHANNEL}`, false)).toBe(false);
+  });
+});
+
+/**
+ * One table for both doors. Admission's own copy is what let the two grammars
+ * drift twice (saturate/linear one way, the repeating gradients the other), so
+ * the table is imported from here and nowhere restated.
+ */
+describe("admission and emission share one function table", () => {
+  const ADMISSION_OWNER = resolve(
+    process.cwd(),
+    "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts"
+  );
+
+  it("admission imports the kernel table and declares none of its own", () => {
+    const source = readFileSync(ADMISSION_OWNER, "utf8");
+    expect(source).toMatch(
+      /import \{ ALLOWED_VALUE_FUNCTIONS \} from "@\/infrastructure\/compilers\/kernel\/foundation\/css\/value-safety";/
+    );
+    expect(source).not.toMatch(/ALLOWED_VALUE_FUNCTIONS\s*(?::[^=]+)?=\s*new Set\(/);
+    expect(source.match(/new Set\(\[\s*"(?:rgb|linear-gradient)"/g) ?? []).toEqual([]);
+  });
+
+  it("carries exactly the two repeating names and nothing beyond the table", () => {
+    expect(ALLOWED_VALUE_FUNCTIONS.has("repeating-linear-gradient")).toBe(true);
+    expect(ALLOWED_VALUE_FUNCTIONS.has("repeating-radial-gradient")).toBe(true);
+    for (const name of ["url", "attr", "image", "image-set", "src", "element", "expression"]) {
+      expect(ALLOWED_VALUE_FUNCTIONS.has(name), name).toBe(false);
+    }
+  });
+
+  it("both doors answer alike for every name in the table, and for a name outside it", () => {
+    const sample = (name: string): string =>
+      name === "var" ? "var(--ds-color-primary)" : `${name}(1)`;
+    for (const name of ALLOWED_VALUE_FUNCTIONS) {
+      const value = sample(name);
+      expect(isSafeCssValue(value), value).toBe(true);
+      expect(isSafeVisualValue(value, "emitted.--ds-probe", false), value).toBe(true);
+    }
+    expect(isSafeCssValue("repeating-conic-gradient(1)")).toBe(false);
+    expect(isSafeVisualValue("repeating-conic-gradient(1)", "emitted.--ds-probe", false)).toBe(false);
   });
 });

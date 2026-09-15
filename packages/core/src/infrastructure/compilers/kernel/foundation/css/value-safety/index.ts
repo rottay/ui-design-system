@@ -31,8 +31,15 @@ const CHANNEL_NAME = /^--ds-[a-z0-9-]+$/i;
 
 const MAX_VALUE_LENGTH = 512;
 
-/** CSS value functions the theme pipeline may legitimately emit. */
-const ALLOWED_VALUE_FUNCTIONS: ReadonlySet<string> = new Set([
+/**
+ * CSS value functions the theme pipeline may legitimately emit.
+ *
+ * ONE table for both doors: admission (`facade/foundation/admission/runtime/limits`)
+ * imports this set rather than keeping a copy, because two copies drifted twice
+ * and a name admitted upstream but refused here is a channel dropped in silence.
+ * `repeating-conic-gradient` is left out on purpose: no emitter produces it.
+ */
+export const ALLOWED_VALUE_FUNCTIONS: ReadonlySet<string> = new Set([
   'rgb',
   'rgba',
   'hsl',
@@ -45,6 +52,8 @@ const ALLOWED_VALUE_FUNCTIONS: ReadonlySet<string> = new Set([
   'linear-gradient',
   'radial-gradient',
   'conic-gradient',
+  'repeating-linear-gradient',
+  'repeating-radial-gradient',
   'var',
   'calc',
   'min',

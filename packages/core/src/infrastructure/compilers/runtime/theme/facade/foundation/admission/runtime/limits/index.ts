@@ -39,55 +39,15 @@ import {
   EXPRESSIVE_EDGE_WIDTH_CHANNELS,
   STRUCTURAL_WIDTH_CHANNELS,
 } from "@/foundation/tokens/ts/presentation/expressive-profiles";
+// The emitter's own function table. A copy here is how the two doors drifted
+// twice, each time dropping an admitted channel at emission without a trace.
+import { ALLOWED_VALUE_FUNCTIONS } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
 import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
 import type { ThemeAdmissionIssue } from "../../foundation/issues";
 import { authoredSelfReference } from "../../foundation/references";
-
-const ALLOWED_VALUE_FUNCTIONS = new Set([
-  "rgb",
-  "rgba",
-  "hsl",
-  "hsla",
-  "oklch",
-  "lab",
-  "lch",
-  "color-mix",
-  "light-dark",
-  "linear-gradient",
-  "radial-gradient",
-  "conic-gradient",
-  "repeating-linear-gradient",
-  "repeating-radial-gradient",
-  "var",
-  "calc",
-  "min",
-  "max",
-  "clamp",
-  "blur",
-  // Both are emitted by the DS's own lowering and were absent from THIS copy of
-  // the table while the emitter's copy
-  // (`kernel/foundation/css/value-safety`) admitted them. The divergence was
-  // unreachable while this check ran on the DB delta alone; running it for
-  // every origin made a governed spring easing an "unsafe declaration".
-  "saturate",
-  /** The CSS easing function, emitted by the governed spring recipes. */
-  "linear",
-  "drop-shadow",
-  "cubic-bezier",
-  "translate",
-  "translatex",
-  "translatey",
-  "scale",
-  "scalex",
-  "scaley",
-  "rotate",
-  "repeat",
-  "minmax",
-  "fit-content",
-]);
 
 function isBalancedVisualValue(value: string): boolean {
   let quote: string | null = null;
