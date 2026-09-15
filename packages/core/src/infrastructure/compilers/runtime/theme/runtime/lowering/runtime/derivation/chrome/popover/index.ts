@@ -45,6 +45,12 @@ export const popoverChromeDeriver: FamilyDeriver = {
     "--ds-popover-keyline",
     "--ds-popover-title-background",
     "--ds-popover-title-divider",
+    "--ds-popover-bordered-title-padding-inline",
+    "--ds-popover-minimal-title-padding-inline",
+    "--ds-popover-rich-title-padding-inline",
+    "--ds-popover-compact-title-padding-inline",
+    "--ds-popover-comfortable-title-padding-inline",
+    "--ds-popover-spacious-title-padding-inline",
   ],
   derive: () => derivePopoverChannels(),
 };
@@ -81,5 +87,13 @@ export function derivePopoverChannels(): Record<string, string> {
     "color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)";
   vars["--ds-popover-title-background"] = "none";
   vars["--ds-popover-title-divider"] = "var(--ds-popover-title-border, var(--ds-color-border-subtle))";
+  // The title's inline inset follows its recipe and density; a tenant's authored
+  // title inline padding (chrome.popover.titlePaddingInline) outranks every recipe.
+  vars["--ds-popover-bordered-title-padding-inline"] = "var(--ds-popover-title-padding-inline, var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md)))";
+  vars["--ds-popover-minimal-title-padding-inline"] = "var(--ds-popover-title-padding-inline, var(--ds-popover-minimal-padding-inline, var(--ds-spacing-sm)))";
+  vars["--ds-popover-rich-title-padding-inline"] = "var(--ds-popover-title-padding-inline, var(--ds-popover-rich-padding-inline, var(--ds-spacing-lg)))";
+  vars["--ds-popover-compact-title-padding-inline"] = "var(--ds-popover-title-padding-inline, var(--ds-popover-compact-padding-inline, var(--ds-spacing-sm)))";
+  vars["--ds-popover-comfortable-title-padding-inline"] = "var(--ds-popover-title-padding-inline, var(--ds-popover-comfortable-padding-inline, var(--ds-spacing-md)))";
+  vars["--ds-popover-spacious-title-padding-inline"] = "var(--ds-popover-title-padding-inline, var(--ds-popover-spacious-padding-inline, var(--ds-spacing-lg)))";
   return vars;
 }
