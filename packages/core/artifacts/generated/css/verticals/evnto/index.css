@@ -8990,7 +8990,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-alert-compact-well-size: 2rem;
   --ds-alert-well-radius: var(--ds-radius-md);
   --ds-alert-compact-well-radius: var(--ds-radius-sm);
-  --ds-alert-close-size: calc(2rem * var(--ds-control-height-scale));
+  --ds-alert-close-size: calc(2rem * var(--ds-density-effective-scale) * var(--ds-control-height-scale, 1));
   --ds-alert-close-radius: var(--ds-radius-md);
   --ds-alert-actions-gap: var(--ds-spacing-2);
   --ds-alert-actions-padding: var(--ds-spacing-2);
@@ -9101,7 +9101,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-checkbox-unchecked-border: var(--ds-color-border);
   --ds-checkbox-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-checkbox-disabled-cursor: not-allowed;
-  --ds-checkbox-border-width: var(--ds-border-width-2);
+  /* A double-weight edge: the box is deliberately heavier than a field, so it
+     states that as 2x the governed edge rather than as a fixed 2px. */
+  --ds-checkbox-border-width: calc(var(--ds-edge-standard-width, 1px) * 2);
   --ds-checkbox-label-line-height: var(--ds-line-height-snug);
   --ds-checkbox-checkmark-size: max(0.625rem, 75%);
 
@@ -9217,7 +9219,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-radio-unchecked-border: var(--ds-color-border);
   --ds-radio-disabled-opacity: var(--ds-state-disabled-opacity);
   --ds-radio-disabled-cursor: not-allowed;
-  --ds-radio-border-width: var(--ds-border-width-2);
+  /* A double-weight edge, as on the checkbox box: the circle is deliberately
+     heavier than a field, stated as 2x the governed edge, not as 2px. */
+  --ds-radio-border-width: calc(var(--ds-edge-standard-width, 1px) * 2);
   --ds-radio-label-line-height: var(--ds-line-height-snug);
 
   /* ========================================================================
@@ -47621,8 +47625,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   flex: 0 0 auto;
   place-items: center;
   box-sizing: border-box;
-  inline-size: var(--ds-alert-close-size, calc(2rem * var(--ds-control-height-scale)));
-  block-size: var(--ds-alert-close-size, calc(2rem * var(--ds-control-height-scale)));
+  inline-size: var(--ds-alert-close-size);
+  block-size: var(--ds-alert-close-size);
   padding: 0;
   cursor: pointer;
   color: var(--ds-alert-close-color, var(--ds-color-text-secondary));
@@ -57717,9 +57721,11 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
 .ds-segmented.ds-segmented--modern[role='radiogroup'] {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-segmented-gap);
+  /* The density decision multiplies every spacing step here, the same law the
+     option height and Button's own padding already obey. */
+  gap: calc(var(--ds-segmented-gap) * var(--ds-density-effective-scale, 1));
   min-width: 0;
-  padding: var(--ds-segmented-padding);
+  padding: calc(var(--ds-segmented-padding) * var(--ds-density-effective-scale, 1));
   /* Narrow frames: the group scrolls inside its container instead of clipping
      options without an affordance (pagination.css's controls-row precedent).
      The 4px track padding matches the full focus-ring extent (offset 2px +
@@ -57890,13 +57896,13 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  gap: var(--ds-segmented-current-gap);
+  gap: calc(var(--ds-segmented-current-gap) * var(--ds-density-effective-scale, 1));
   min-width: 0;
   /* Long options truncate against a bound instead of stretching the whole
      track into scroll; block mode already constrains via flex. */
   max-inline-size: var(--ds-segmented-item-max-inline-size);
   height: calc(var(--ds-segmented-current-height) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
-  padding: 0 var(--ds-segmented-current-padding-x);
+  padding: 0 calc(var(--ds-segmented-current-padding-x) * var(--ds-density-effective-scale, 1));
   border: none;
   border-radius: var(--ds-segmented-current-radius);
   outline: none;
@@ -72067,7 +72073,7 @@ html[data-ds-motion='reduced']
 
 /* The current pending dot pulses for attention (was `animate-pulse`). */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending'] {
-  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 
@@ -72235,7 +72241,7 @@ html[data-ds-motion='reduced']
 
 /* --- Skeleton (geometry was Tailwind; the pulse was `animate-pulse`) ----------- */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 
@@ -93970,7 +93976,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)),
     box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)),
-    background-position var(--ds-motion-feedback, var(--ds-motion-deliberate, 360ms))
+    background-position var(--ds-motion-feedback, var(--ds-motion-deliberate, 320ms))
       var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out));
   /* Entry decoration is opt-in. Toolbars remount frequently while navigating;
      automatic movement here is distracting rather than informative. */
@@ -94046,7 +94052,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background-size: 42% 100%;
   background-repeat: no-repeat;
   animation: ds-list-toolbar-busy
-    calc(var(--ds-motion-deliberate, 360ms) * 3)
+    calc(var(--ds-motion-deliberate, 320ms) * 3)
     linear infinite;
 }
 
@@ -96086,7 +96092,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   gap: var(--ds-tree-view-skeleton-gap, var(--ds-spacing-2, 8px));
   padding: var(--ds-tree-view-skeleton-padding, var(--ds-spacing-5, 20px));
   animation: ds-tree-view-skeleton-pulse
-    var(--ds-tree-view-skeleton-duration, var(--ds-motion-deliberate, 720ms))
+    var(--ds-tree-view-skeleton-duration, var(--ds-motion-deliberate, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 
@@ -120862,6 +120868,7 @@ html[lang]:lang(ar) {
   --ds-toggle-description-color: var(--ds-type-color-muted);
   --ds-toggle-description-font-size: var(--ds-type-caption-font-size);
   --ds-toggle-description-line-height: var(--ds-type-caption-line-height);
+  --ds-toggle-dot-border-radius: var(--ds-radius-full);
   --ds-toggle-dot-shadow: var(--ds-elevation-1);
   --ds-toggle-error-label-color: var(--ds-color-error-ink);
   --ds-toggle-error-track-bg: var(--ds-color-error);
@@ -120876,6 +120883,7 @@ html[lang]:lang(ar) {
   --ds-toggle-track-bg-active: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-active-shift));
   --ds-toggle-track-bg-checked: var(--ds-color-primary);
   --ds-toggle-track-bg-hover: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-hover-shift));
+  --ds-toggle-track-border-radius: var(--ds-radius-full);
   --ds-tooltip-bordered-background: var(--ds-material-overlay-background);
   --ds-tooltip-bordered-border: var(--ds-color-border-primary);
   --ds-tooltip-bordered-foreground: var(--ds-color-text-primary);

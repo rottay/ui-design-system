@@ -1906,6 +1906,7 @@
   --ds-toggle-description-color: var(--ds-type-color-muted);
   --ds-toggle-description-font-size: var(--ds-type-caption-font-size);
   --ds-toggle-description-line-height: var(--ds-type-caption-line-height);
+  --ds-toggle-dot-border-radius: var(--ds-radius-full);
   --ds-toggle-dot-shadow: var(--ds-elevation-1);
   --ds-toggle-error-label-color: var(--ds-color-error-ink);
   --ds-toggle-error-track-bg: var(--ds-color-error);
@@ -1920,6 +1921,7 @@
   --ds-toggle-track-bg-active: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-active-shift));
   --ds-toggle-track-bg-checked: var(--ds-color-primary);
   --ds-toggle-track-bg-hover: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-hover-shift));
+  --ds-toggle-track-border-radius: var(--ds-radius-full);
   --ds-toolbar-bg: color-mix(in srgb, #3A6FB0 4%, #FFFFFF);
   --ds-toolbar-border: #D4E0EA;
   --ds-toolbar-border-bottom: color-mix(in srgb, #D4E0EA 82%, transparent);

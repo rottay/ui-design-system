@@ -1865,6 +1865,7 @@
   --ds-toggle-description-font-size: var(--ds-type-caption-font-size);
   --ds-toggle-description-line-height: var(--ds-type-caption-line-height);
   --ds-toggle-dot-bg: #0C0C0E;
+  --ds-toggle-dot-border-radius: var(--ds-radius-full);
   --ds-toggle-dot-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
   --ds-toggle-error-bg: #EF4444;
   --ds-toggle-error-label-color: var(--ds-color-error-ink);
@@ -1883,6 +1884,7 @@
   --ds-toggle-track-bg-active: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-active-shift));
   --ds-toggle-track-bg-checked: var(--ds-color-primary);
   --ds-toggle-track-bg-hover: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-hover-shift));
+  --ds-toggle-track-border-radius: var(--ds-radius-full);
   --ds-toggle-warning-bg: #F59E0B;
   --ds-tooltip-bg: #ECECEC;
   --ds-tooltip-bordered-background: var(--ds-material-overlay-background);
