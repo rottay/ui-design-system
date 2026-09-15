@@ -4577,7 +4577,7 @@
    "lane": "family-cuts",
    "order": 3,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4619,8 +4619,8 @@
      "note": "N2 INTEGRATED (11230e84c, audited): P107-FAM-03 fixed in the single store — it now retains per-field reset defaults (registerField stores/clears, unregisterField drops), reset fills root initialValues first (documented precedence, contracts updated) then item defaults. Evidence: form suite 141/141 (16 files), post-107 Codex probes 15/15 incl. both reset scopes. WO stays open for R107-FAM-04 (validation options type/len/whitespace/warningOnly, numeric/array min-max, Form.List operations) — next bounded lot in the same lane."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-14",
+   "evidence": "ALL REMAINING OBLIGATIONS LANDED. R107-FAM-04 (b9d9362e4, audited): every contracted rule option implemented on the single store — type (string/number/boolean/email/url/array), len with precedence, whitespace semantics, warningOnly (warnings never block; surfaced as warning tone by both engines), min/max by value kind; Form.List real value operations (add/remove/move with index-aligned values/touched/errors, per-item and whole-list validation, reset restoring rows + effective defaults, preserve contract, relocation guard). Form suite 194/194 (53 new); typecheck:tests back to 0 project-wide. Earlier in this WO: store unification (getters/renderer coherent), P107-FAM-03 reset defaults (11230e84c), OTP composition fix. No public option removed; contract untouched."
   },
   {
    "id": "WO-FAM-03",
@@ -5229,6 +5229,11 @@
      "at": "2026-09-14 19:30",
      "by": "kimi-admin",
      "note": "G107-01 RESIDUAL RESOLVED (0867fb986, audited): --ds-z-index-base re-registered as STRUCTURAL_CONSTANT — a third liveness partition measured every run from the declaration site (deriveCanonicalZScaleRoster, PostCSS, bare-literal :root bands), pinned to the z-index-single-scale invariant instead of a work order, retired only with the roster. Blocking legs green: suite 129/129, --check-dispositions OK. The liveness open-owner guard no longer fails on done owners (107/108 -> 129/129). PRE-EXISTING findings observed while verifying, registered here per audit: (1) the full --check leg stays red on standing findings — R1 artifact (artifacts/quality/programs/modern-rescue/R1/channel-liveness.json) NEVER emitted, three unresolved emission patterns, and 54 chart/visualization consumer sites whose family-inventory rows drifted; none from the 0867fb986 change, all printed by design; the chart inventory drift needs its lane routing. (2) typecheck:tests gate REGRESSED at pin 3dd32ac68 (10 errors > baseline 0): TS2554 x1 Alert.callout-subtle-wash.test.tsx:62 (FAM-04 subtle-wash wave leftover, fix in flight), TS2345 x1 tenant-divergence-matrix.test.ts:191 (semantic-typography wave leftover, routed to fix-gates), TS2322 x8 axis-difference-pilot/index.test.tsx run() call sites (folded into the WO-EVI-05 implementation lot now running). (3) read-without-producer baseline drift 4504->4508 traced to the four reviewed --ds-alert-*-wash-subtle reads from 3082d0dfb; republication with provenance in flight (N4b)."
+    },
+    {
+     "at": "2026-09-14 20:11",
+     "by": "kimi-admin",
+     "note": "FLEET-LANE OBLIGATION (from Fable's ACCEPT review of WO-EVI-05, non-blocking there, owned here for milestone B): the fleet probe has no mounts registry, so a fleet run reads radio-group at its root where no radius is authored; its corner is measured only by the EVI-05 continuity drill. A fleet shape claim must NOT cite radio-group as moving until the fleet run mounts it (mounts registry for the fleet probe). Registered so the fleet milestone keeps the claim honest."
     }
    ]
   },
@@ -5371,6 +5376,11 @@
      "at": "2026-09-14 20:02",
      "by": "kimi-admin",
      "note": "E5 IMPLEMENTED + AUDITED (2d537ae85): the reviewed semantic-identity exclusion withdraws the bare radio from the shape axis. Closed registry pinned to verbatim selector+property+value on the byProperty path only, admitted set pinned to exactly radio/shape; shape vocabulary gains the four physical longhands with membership unchanged (proven: 217->216 is exactly -1); notApplicable published end-to-end (populationReport/populationLine/pilotReadings/pins); pilot pin 29 decision rows with shape 4 applicable + 1 N/A bound to exclusionsRevision 34bd866512177f9b; fleet floor 217->216 by reviewed exclusion. Auditor-rerun evidence: population 31/31 (16 new drills: value drift, duplicate rule, comment-stripped existence, no-effect entry, admitted-set pin, duplicates/overlap), axis-difference 62/62, pilot 6/6 Chromium both modes/orientations with failures [] and exactly one N/A, negative controls 0, severed mutant detected, radio-group continuity drill mounts the real button-style option and measures its corner. typecheck:tests pilot file back to 0. Core review round 1: Codex CHANGES + Fable CHANGES with conditions; all conditions landed; confirmation round dispatched to both reviewers with the compliance package — the WO closes when both ACCEPTs are recorded and the serialized milestone checkpoint passes."
+    },
+    {
+     "at": "2026-09-14 20:11",
+     "by": "kimi-admin",
+     "note": "CORE REVIEW ROUND 2: Fable ACCEPT (verified independently: population 31/31, axis-difference 62/62, population CLI three modes, committed Chromium record — applicablePairs 29, notApplicablePairs [radio/shape], shape movedIds exactly button/checkbox/segmented/toggle, 16 negative cells at 0) with two non-blocking notes. Codex CHANGES with two remaining conditions, both reproduced read-only: (i/v) the exclusion matcher ignores enclosing at-rule context (rules moved into @media print still match) and no computed invariant protects the excluded parts (a root-level --ds-radius-full: 0px producer change goes undetected); (iii-f) it requires a browser-level CSS mutant. On (iii-f) the reviewers disagree (Fable does not require it); DT adjudication: the severed-corner drill runs in Chromium against the real button-style Radio.Group option with CSS injected into the pilot document (constant corner -> applicable and failing its movement assertion -> restored baseline), plus the producer-change mutant tripping the new parts invariant, without rewiring run({root}) into resolveBundle. E5b dispatched with: at-rule context bound in the matcher, computed parts invariant in the pilot run, the two Chromium mutants, and Fable's non-blocking CLI N/A line. Round 3 follows with both reviewers."
     }
    ],
    "claimedBy": "claude-admin",
