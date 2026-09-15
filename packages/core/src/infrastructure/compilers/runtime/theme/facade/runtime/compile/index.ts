@@ -25,6 +25,7 @@ import { resolveAdapter } from "../../../presentation/adapters";
 import { staticThemeIntent, verticalEngine } from "../../../runtime/ingress";
 import { compileTheme } from "../../../runtime/lowering";
 import { resolveTheme } from "../../../runtime/resolution";
+import { baselineFor, type ThemeBaselineSource } from "../../foundation/baseline";
 import { admitThemeCompilation, admitThemeIntent } from "../../foundation/admission";
 import type { ThemeChannelDelta } from "../../foundation/admission";
 
@@ -39,6 +40,8 @@ export interface CompileThemeIntentOptions {
    * none, so a tenant cannot be rendered as a product it is not.
    */
   engine?: EngineName;
+  /** The baseline the intent resolves over; the authored theme unless the caller names the neutral foundation. */
+  baselineSource?: ThemeBaselineSource;
 }
 
 /** What the door produces: the resolution it made, and the compile from it. */
@@ -127,7 +130,15 @@ export function compileThemeIntent(
   intent: ThemeIntent,
   options?: CompileThemeIntentOptions
 ): ThemeIntentCompilation {
-  const resolution = resolveTheme(intent);
+  const baselineSource = options?.baselineSource ?? "brand-theme";
+  const resolveOver = (target: ThemeIntent) =>
+    resolveTheme(
+      target,
+      baselineSource === "brand-theme"
+        ? {}
+        : { baseline: baselineFor(target.vertical, target.slug, baselineSource) }
+    );
+  const resolution = resolveOver(intent);
   const adapter = resolveAdapter(options?.engine ?? verticalEngine(intent.vertical));
   admitThemeIntent({ intent, resolution, adapter });
   const compiled = compileTheme(resolution, adapter);
@@ -137,7 +148,7 @@ export function compileThemeIntent(
   // tenant-authored, so recursing would be one wasted compile per request and
   // an admission asked of a product about itself.
   const baselineIntent = staticThemeIntent(intent.vertical, intent.slug);
-  const baselineResolution = resolveTheme(baselineIntent);
+  const baselineResolution = resolveOver(baselineIntent);
   const baseline = cachedBaselineCompile(baselineResolution, adapter);
   const delta = admitThemeCompilation({
     resolution,

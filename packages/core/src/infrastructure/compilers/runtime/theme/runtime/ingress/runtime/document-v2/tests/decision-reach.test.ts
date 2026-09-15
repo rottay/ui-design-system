@@ -179,6 +179,37 @@ describe("every connected decision reaches a channel on every vertical", () => {
   });
 });
 
+describe("every connected decision still reaches a channel over the neutral foundation + preset", () => {
+  // The preset already states one of the two fixture values for several
+  // decisions, so a fixture equal to it moves nothing against that baseline.
+  // Reach is therefore read between the two fixture values: the two documents
+  // must differ in at least one channel, and only in channels the row declares.
+  const over = (
+    vertical: (typeof FIRST_PARTY_VERTICAL_SLUGS)[number],
+    document: TenantThemeDocumentV2
+  ): Record<string, string> =>
+    compileThemeIntent(documentThemeIntent({ vertical, slug: SLUG, document }), {
+      baselineSource: "neutral-preset",
+    }).compiled.cssVariables;
+
+  for (const id of Object.keys(FIXTURES) as ConnectedId[]) {
+    const row = themeControl(id);
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      it(`${vertical}/${id}: the two fixture values differ in a channel the row declares`, () => {
+        const [first, second] = FIXTURES[id];
+        const a = over(vertical, v2({ [id]: first }));
+        const b = over(vertical, v2({ [id]: second }));
+        const changed = [...new Set([...Object.keys(a), ...Object.keys(b)])].filter(
+          (channel) => a[channel] !== b[channel]
+        );
+        expect(changed.length).toBeGreaterThan(0);
+        const declared: readonly string[] = row.produces.channels;
+        expect(changed.filter((channel) => !declared.includes(channel))).toEqual([]);
+      });
+    }
+  }
+});
+
 /**
  * The keyline beside the shadow posture it once claimed to outrank.
  *

@@ -251,6 +251,15 @@ export function baselineFor(vertical: FirstPartyVerticalId, slug: string): Theme
   return roster.id === slug ? roster : { ...roster, id: slug };
 }
 
+export interface ResolveThemeOptions {
+  /**
+   * A baseline resolved by the caller instead of the vertical's authored
+   * theme. It is validated like any baseline and labelled with the intent's
+   * slug; a caller that hands one in owns where it came from.
+   */
+  readonly baseline?: Theme;
+}
+
 /**
  * The ledger is frozen HERE, at the boundary that validated it, because the
  * contract that declares the field may reference the ledger's owner as a type
@@ -270,9 +279,18 @@ function snapshotLedger(
       );
 }
 
-export function resolveTheme(intent: ThemeIntent): ThemeResolution {
+export function resolveTheme(
+  intent: ThemeIntent,
+  options: ResolveThemeOptions = {}
+): ThemeResolution {
   assertThemeIntent(intent);
-  const baseline = baselineFor(intent.vertical, intent.slug);
+  const supplied = options.baseline;
+  const baseline =
+    supplied === undefined
+      ? baselineFor(intent.vertical, intent.slug)
+      : supplied.id === intent.slug
+        ? cloneThemeValue(supplied)
+        : { ...cloneThemeValue(supplied), id: intent.slug };
   assertThemeBaseline(baseline, "resolveTheme");
   return {
     theme: mergeThemePatches(baseline, intent.patch),

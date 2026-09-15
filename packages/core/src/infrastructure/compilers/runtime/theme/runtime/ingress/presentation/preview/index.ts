@@ -17,6 +17,7 @@ import type { TenantThemeVerticalEnvelope } from "@/foundation/contracts/composi
 import { admitDocument, type DocumentAdmission } from "../../runtime/document-v2";
 import { authoredThemePatch } from "../../foundation/draft-patch";
 import { draftProvenanceLedger } from "../../foundation/provenance";
+import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
 
 /** What an unsaved document preview needs to name a compile. */
 export interface PreviewThemeIntentInput {
@@ -32,6 +33,8 @@ export interface DraftPreviewThemeIntentInput {
   vertical: FirstPartyVerticalId;
   slug: string;
   draft: BrandTheme;
+  /** The baseline the draft is a patch of, when it is not the vertical's authored theme. */
+  carriedFrom?: Theme;
 }
 
 /**
@@ -110,6 +113,8 @@ export function draftPreviewThemeIntent(
     slug: input.slug,
     origin: "preview",
     patch: authoredThemePatch(input.draft),
-    ledger: draftProvenanceLedger(input.draft, input.vertical),
+    ledger: draftProvenanceLedger(input.draft, input.vertical, {
+      carriedFrom: input.carriedFrom,
+    }),
   };
 }

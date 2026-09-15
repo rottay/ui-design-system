@@ -526,9 +526,13 @@ function draftChromeClaim(
  */
 export function draftProvenanceLedger(
   draft: BrandTheme,
-  vertical: FirstPartyVerticalId
+  vertical: FirstPartyVerticalId,
+  options: {
+    /** The baseline the draft is a patch of; the vertical's authored theme unless the caller resolved another. */
+    readonly carriedFrom?: Theme;
+  } = {}
 ): ThemeProvenanceLedger {
-  const carriedFrom = FIRST_PARTY_THEMES[vertical];
+  const carriedFrom = options.carriedFrom ?? FIRST_PARTY_THEMES[vertical];
   const decisions: ThemeProvenanceClaim[] = [];
   const claimed = new Set<string>();
   for (const id of THEME_DECISION_IDS) {
