@@ -24,6 +24,7 @@ import type {
   ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
+import { FOUNDATION_COLOR_DEFAULTS } from "@/foundation/tokens/ts/foundation/base/declared-defaults";
 import {
   TEXT_CONTRAST_PAIRINGS,
   enforceTextContrast,
@@ -33,7 +34,7 @@ import {
   normalizeHexColor,
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
 import { OVERRIDE_TOKEN_PATCHES } from "../../../../../runtime/ingress/foundation/document-patch";
-import { isAuthoredLeaf, movedLeaves } from "../../foundation/authorship";
+import { isAuthoredLeaf, movedLeaves } from "../../../../../runtime/ingress/foundation/authorship";
 import type { ThemeAdmissionIssue } from "../../foundation/issues";
 
 /**
@@ -101,15 +102,22 @@ function effectiveModeVariables(
   return { ...compiled.cssVariables, ...block?.cssVariables };
 }
 
-/** Resolve simple code-owned var() aliases for contrast measurement only. */
+/**
+ * Resolve code-owned var() aliases for contrast measurement only.
+ *
+ * The compiled map is consulted first and the foundation's own declarations
+ * second, because that is the order the cascade answers in: a compiled channel
+ * overrides the stylesheet, and a channel the compile never emits still
+ * resolves to what the foundation declares. Reading only the map made the
+ * floor refuse by FORM -- an ink that resolves through `--ds-color-neutral-100`
+ * is unverifiable to a map that no longer carries it, although the browser
+ * resolves it every time.
+ */
 function resolveContrastVariables(
   variables: Readonly<Record<string, string>>,
   mode: BrandThemeMode
 ): Record<string, string> {
-  const foundationConstants: Readonly<Record<string, string>> = {
-    "--ds-color-black": "#000000",
-    "--ds-color-white": "#ffffff",
-  };
+  const declared = FOUNDATION_COLOR_DEFAULTS[mode === "dark" ? "dark" : "light"];
   const resolved: Record<string, string> = {};
   const resolving = new Set<string>();
   const resolveValue = (value: string): string => {
@@ -126,7 +134,7 @@ function resolveContrastVariables(
     const [, reference, fallback] = match;
     if (resolving.has(reference))
       return fallback ? resolveValue(fallback) : value;
-    const referenced = variables[reference] ?? foundationConstants[reference];
+    const referenced = variables[reference] ?? declared[reference];
     if (referenced === undefined)
       return fallback ? resolveValue(fallback) : value;
     resolving.add(reference);

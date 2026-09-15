@@ -323,3 +323,60 @@ describe("the envelope measures AUTHORSHIP, which value equality cannot erase", 
     ).not.toThrow();
   });
 });
+
+/**
+ * The floor resolves a reference the way the CASCADE resolves it.
+ *
+ * Since the neutral doctrine moved every chromatic default into the foundation
+ * stylesheet, a governed pair can arrive at the floor as two `var()` operands:
+ * the compiled map no longer carries what the browser resolves every time. A
+ * floor that read only that map refused those pairs by FORM -- measured 9 of 9
+ * sidebar tone/vertical combinations admitted before the move and 3 of 9 after.
+ * It now consults the foundation's own declarations second, so a pair is judged
+ * on its RATIO, and fail-closed is intact: a ground with no legible ink is
+ * still refused.
+ */
+describe("the contrast floor judges the ratio, never the form", () => {
+  const tones = ["subtle", "strong", "inverse"] as const;
+
+  it("admits every sidebar tone on every vertical, through both doors", () => {
+    for (const vertical of ["rottay", "bithire", "evnto"] as const) {
+      for (const tone of tones) {
+        const doc = document({ navigation: { sidebarTone: tone } });
+        for (const [door, run] of [
+          ["document", () =>
+            compileThemeIntent(
+              documentThemeIntent({ vertical, slug: SLUG, document: doc })
+            )],
+          ["preview", () =>
+            compileThemeIntent(
+              previewThemeIntent({ vertical, slug: SLUG, document: doc })
+            )],
+        ] as const) {
+          expect(refusal(run).name, `${vertical}/${tone} via ${door}`).toBe(
+            "no-refusal"
+          );
+        }
+      }
+    }
+  });
+
+  it("still REFUSES a sidebar ground that leaves the ink illegible", () => {
+    // The ground travels WITHOUT its ink, which is the shape the floor exists
+    // to catch, and it still does: resolving the reference restored the
+    // judgement, it did not soften it.
+    const sidebar = (chrome: Record<string, string>) =>
+      ({
+        version: 2,
+        plan: "pro",
+        decisions: {},
+        overrides: { chrome: { sidebar: chrome } },
+      }) as unknown as TenantThemeDocument;
+    expect(throughDocument(sidebar({ bg: "#101010" })).message).toMatch(
+      /--ds-sidebar-text has APCA Lc .* against --ds-sidebar-bg/u
+    );
+    expect(
+      throughDocument(sidebar({ bg: "#101010", text: "#F5F5F5" })).name
+    ).toBe("no-refusal");
+  });
+});

@@ -38,8 +38,8 @@ import {
   type DecisionProvenanceLedger,
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import { getTenantThemeVerticalEnvelope } from "@/contracts/theme/runtime/envelopes";
-import { baselineFor } from "../../../runtime/resolution";
-import { movedLeaves } from "./foundation/authorship";
+import { baselineFor } from "../../../runtime/ingress";
+import { movedLeaves } from "../../../runtime/ingress/foundation/authorship";
 import { admitEngine } from "./runtime/engine";
 import { chartCategoryIssues, compiledChartGrounds, contrastIssues } from "./runtime/contrast";
 import { referenceCycleIssues } from "./runtime/cycles";
@@ -101,7 +101,7 @@ export {
   authoredUnderPrefix,
   isAuthoredLeaf,
   movedLeaves,
-} from "./foundation/authorship";
+} from "../../../runtime/ingress/foundation/authorship";
 
 /**
  * Ask the intent questions: what plan entitles this, what engine renders it,
