@@ -4796,7 +4796,7 @@
    "lane": "family-cuts",
    "order": 7,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4809,8 +4809,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-30, F-63",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-admin",
+   "claimedAt": "2026-09-15",
    "progressLog": []
   },
   {
