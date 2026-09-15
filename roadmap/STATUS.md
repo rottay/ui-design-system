@@ -12,7 +12,7 @@
 
 | # | Indicator | Audit baseline | Target | Measured now | Owed by |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-14T18:55:12.916Z | WO-CON-03 — the `decisions-lit` probe |
+| 1 | Decisions lit (full effect in at least one family, computed-style probe) | 7 / 22 (+0 / 10 new) (as of 2026-09-05) | 29 / 29 | **decisions lit = 7/22 (+0/0 new)** — decisions-lit probe, run of 2026-09-15T00:52:51.383Z | WO-CON-03 — the `decisions-lit` probe |
 | 2 | Root reach per vertical (derived channels / total) | rottay 8 % / bithire 33 % / evnto 8 % (as of 2026-09-05) | >= 80 % per vertical | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-01 — `ds:derive --check`, theme-graph by family |
 | 3 | Channels read without producer (Modern skins) | honest baseline pending; today the counter is fail-open (as of 2026-09-05) | 0 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-CAN-02 — `read-without-producer`, once its fail-open counter is fixed |
 | 4 | Material roots emitted per artifact | 0 / 65 / 2 of 71 (as of 2026-09-05) | 71 / 71 / 71 | n/a — NOT MEASURED (no gate has published an artifact yet) | WO-EVI-02 — `artifact-coverage` per family |
@@ -28,7 +28,7 @@
 
 ## Consumer contract — decisions lit (WO-CON-03)
 
-**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-14T18:55:12.916Z.
+**decisions lit = 7/22 (+0/0 new)** — RECORDED; run of 2026-09-15T00:52:51.383Z.
 
 **measured on the 7-family sample: 18/22 move at least one sampled family** — MEASURED by that run.
 
@@ -209,7 +209,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 6 | 0 | 1 | 7 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
-| [derivation](./derivation.md) | 5 | 1 | 1 | 7 |
+| [derivation](./derivation.md) | 5 | 2 | 0 | 7 |
 | [family-cuts](./family-cuts.md) | 6 | 0 | 9 | 15 |
 | [emission-mount](./emission-mount.md) | 2 | 0 | 1 | 3 |
 | [platform-invariants](./platform-invariants.md) | 3 | 0 | 5 | 8 |
@@ -249,6 +249,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
+| WO-DER-06 | Vertical presets as decisions; BrandTheme retired; neutral foundation without opinion | claude-admin | 2026-09-14 | 2026-09-13 00:05 — FLAGS ROUTED FROM WO-FAM-01 CLOSE (ad38a9327): (a) evnto dark palette defect — button text/link variants measure 2.27:1 (#515151 on #171615); pre-existing, outside the axe gating scope of the cut; fix belongs to the vertical preset decisions of this WO. (b) chrome.controls.switch still compiles --ds-switch-* with no Modern reader after the D-16 merge (Switch = deprecated Toggle alias); retire or reclassify explicitly in this WO's token lane — do not leave compiling unread channels without adjudication. |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | Kimi K3 | 2026-09-11 | 2026-09-14 20:11 — FLEET-LANE OBLIGATION (from Fable's ACCEPT review of WO-EVI-05, non-blocking there, owned here for milestone B): the fleet probe has no mounts registry, so a fleet run reads radio-group at its root where no radius is authored; its corner is measured only by the EVI-05 continuity drill. A fleet shape claim must NOT cite radio-group as moving until the fleet run mounts it (mounts registry for the fleet probe). Registered so the fleet milestone keeps the claim honest. |
 | WO-EVI-03 | Tests through the door: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines | claude-admin | 2026-09-14 | 2026-09-14 16:40 — CHECKPOINT-ADJACENT STATE: G107-03 drill repair and the emission-composer detector repair (lot E) are landed and green (family-cut 62/62, theme-contract-freeze 50/50); the G107-01 pin re-adjudication landed under this WO (liveness 108/108 at 50 pins, with the radius-button pin later discharged LIVE by the FAM-01 lot and z-index-base re-adjudicated by the FAM-04 lot; the remaining TSX-terminal extraction question for the tint steps is named in the WO-EVI-02 pins). The WO stays open for its own scope: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines (blocked only on the deferred identity pick for the showroom baselines). |
 | WO-DER-07 | BitHire reference identity: three candidate decision sets rendered for the owner to pick | opus | 2026-09-09 | 2026-09-11 11:09 — CLIENT-PROVIDER CONNECTION LANDED (3 writer commits + integrator test + integration; audited by Kimi K3 under the temporary owner-authorized auditor substitution, Fable quota-exhausted ~20h). TenantThemeArtifact carries its runtime block (EngineVisualDeclaration from the SAME lowering; changeset der-07-artifact-runtime-half.md per CON-05, digest re-anchor measured - 0/65/25 delta channels unchanged, envelope digests unchanged); provider publishes the mounted artifact's own half; resolver no longer returns artifact:null. Runtime proof in real browser 3/3 candidates (posture/motion/density/recipe/tokens differ through the mount, not just CSS); negative control (seed is paint, never reaches useTokens); preview/publication byte parity per candidate; SSR receipt + flight-boundary byte comparison prove the client uses the server's artifact without recompiling. 99-item-1 identity negative ADDED BY DT and green: artifact A + runtime B (same engine/profile ids, foreign governed value) refused at mount; digest covers the runtime half. REGISTERED: (a) the showroom Playwright leg stays blocked by packages/core/dist/index.js carrying use-client into RSC consumers (pre-existing at base, reproduced byte-identical) - repairing it is a public-contract addition that needs its own WO (DT flags it to the owner as an identified need); (b) docs-engineering tenancy/contracts edits remain uncommitted in that repo's dirty tree; (c) past showroom typechecks via symlinked node_modules read MAIN's core dist, not the lot's - audits now require real installs/farms. The WO stays open with exactly one obligation: the recorded owner pick with digest (D-30 deferred to the branding stage). |
@@ -257,7 +258,6 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-DER-06 | Vertical presets as decisions; BrandTheme retired; neutral foundation without opinion | L | derivation | audit-2026-09-05 |
 | WO-EMI-03 | Non-CSS token emitter for mobile readiness | M | emission-mount | audit-2026-09-05 |
 | WO-FAM-05 | Family cut: menu, tabs, breadcrumb, pagination, steps and sidebar navigation | M | family-cuts | audit-2026-09-05 |
 | WO-FAM-06 | Family cut: card, table, badge, tag, avatar, tree, list, descriptions and typography compounds | L | family-cuts | audit-2026-09-05 |

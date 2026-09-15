@@ -4379,7 +4379,7 @@
    "lane": "derivation",
    "order": 6,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-05",
     "WO-CAT-02",
@@ -4390,8 +4390,8 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-11, F-25, F-54, F-108 | 2026-09-10: depends on DER-07 candidate sets (exist), not on the deferred D-30 pick; bithire preset authored from a provisional candidate; final look is a branding-stage obligation (kit-2026-09.md §5c). | 2026-09-10 (98-checkpoint): DER-07 edge REMOVED from the graph — the technical preset conversion depends on the candidate sets, which exist and are landed (ec1d032cb), not on the deferred commercial pick. The final look of the bithire preset remains an explicit branding-stage obligation (kit-2026-09.md §5c).",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "claude-admin",
+   "claimedAt": "2026-09-14",
    "progressLog": [
     {
      "at": "2026-09-12 18:50",
