@@ -96,11 +96,33 @@ export function movedLeaves(
   if (baseline === undefined) return leaves;
   const moved = new Set<string>();
   for (const leaf of leaves) {
-    if (readBaselineLeaf(baseline, leaf) !== readPatchLeaf(patch, leaf)) {
+    if (!sameLeafValue(readBaselineLeaf(baseline, leaf), readPatchLeaf(patch, leaf))) {
       moved.add(leaf);
     }
   }
   return moved;
+}
+
+/**
+ * Two leaves at the same keypath, compared the way this owner defines a leaf.
+ *
+ * `!==` answers identity for the one leaf shape that is not a primitive: an
+ * array like `charts.categoryColors`. A draft that was deep-copied -- which is
+ * what serializing a theme and reading it back does -- then carries a NEW array
+ * with the same elements, and identity calls it authorship. The elements are
+ * primitives and their order is meaningful (a palette is a sequence), so the
+ * comparison is element-wise with the index kept.
+ */
+function sameLeafValue(left: unknown, right: unknown): boolean {
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return (
+      Array.isArray(left) &&
+      Array.isArray(right) &&
+      left.length === right.length &&
+      left.every((item, index) => item === right[index])
+    );
+  }
+  return left === right;
 }
 
 /** Walk a plain keypath; the patch is already in unwrapped FlatTheme space. */
