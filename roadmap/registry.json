@@ -4755,7 +4755,7 @@
    "lane": "family-cuts",
    "order": 6,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -4786,7 +4786,9 @@
      "by": "kimi-admin",
      "note": "F5c partial (stepper pinned OK, the deprecated compound lives at stepper/compound/steps) + F5c2 close-out dispatched with DT adjudications: (1) the old steps tree still stands with its own engine/skin (41 unproduced reads measured) — that is NOT the D-16 idiom, so the merge completes by retiring the old engine/skin into the deprecated-compound-only form (public Steps entry stays exported, non-breaking); (2) sidebar-surface gets its full cut (no deriver/Modern skin exists today); (3) the theme-parity sidebar=9 bucket is adjudicated WIRE-IN-MENU-DERIVER: the 9 --ds-sidebar-* roots (chrome-variables from BrandSidebarChrome, authored per vertical) are exactly menu's group/children/indent semantics, so menu's deriver chains to them as produced roots — no duplicate paint in sidebar-surface, no retirement of authored values; (4) sidebar-surface is declared layout-sensitive (fence extension granted for the LAYOUT_SENSITIVE_FAMILIES row + SidebarSurfaceConfig) and implements adapt + data-posture per the INV-07 contract; (5) the NavigationBatch Tabs assertion moves to [data-state~=disabled] (F5b residue). Also from the F5c audit: N4i committed (38409b3b2) re-anchoring the breadcrumb entrypoint ceiling with per-leaf attribution; the ./runtime/tenant ceiling is the in-flight roster lot's to re-anchor when it lands."
     }
-   ]
+   ],
+   "doneAt": "2026-09-15",
+   "evidence": "ALL SIX FAMILIES CUT AND PINNED, every ratchet 0, roster 40/40 OK (menu eabf62987; tabs/breadcrumb/pagination 011910356; steps merge + sidebar-surface 1ddfd6198). Steps merged into stepper per the D-16 idiom end to end (old tree retired: engines, skins, contracts, stories, tests; Steps survives as the deprecated compound under stepper/compound/steps on one StepStatus; public entry non-breaking; facade/barrel/entrypoint/step-wizard/form-builder follow). sidebar-surface: full cut with registered deriver emitting exactly the 10 pinned channels, one drained Modern skin reading those 10 plus the 2 authored roots, layout-sensitive declared in the adaptation registry with adapt + data-posture per INV-07 (R4), skeleton parts, causality and anatomy suites. The theme-parity sidebar=9 bucket resolved by the DT-adjudicated wire: menu's deriver chains group/children/indent to the 9 authored --ds-sidebar-* roots as produced roots (verified: 20 references in the deriver), bucket at 0, baseline re-anchored. NavigationBatch reads the kernel data-state. family-cut drills 65/65; suites green per lot (menu 84/84; the three 232/232; stepper+sidebar suites + causality Chromium per lot); typecheck 0. REGISTERED instrument notes (no acceptance impact, substance independently verified): (a) the family-cut channelsRead metric reports 0 for presentation-root skins (sidebar-surface's skin reads 12 produced names; the gate's RWP denominator corpus is the artifact — for the gates lane, never to be 'fixed' by editing the pin); (b) paint-layers --radius-field modern-theme-ownership red (3 tests, from wave commit 36d135d44, pre-existing, real ownership question in the framework projection — routed to the gates lane with the touch-targets ~50 stale rows already registered); (c) --ds-popover-title-padding-inline emitted-but-unconsumed since the FAM-04 popover cut (never read by its skin) — bounded wire-or-retire follow-up dispatched to the popover writer. Closes F-41 per its criteria; remaining FAM cuts continue per the DAG."
   },
   {
    "id": "WO-FAM-06",
