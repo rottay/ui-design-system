@@ -90,13 +90,19 @@ function writeFlattened(record: FieldRecord<unknown>, prefix: string, value: unk
   writeOwnRecordValue(record, prefix, value);
 }
 
+/** The own slot at a runtime index, exactly what `items[index]` reads. */
+function readOwnIndex(items: readonly unknown[], index: number): unknown {
+  if (!Object.prototype.hasOwnProperty.call(items, index)) return undefined;
+  return Reflect.get(items, index);
+}
+
 /** Walks a nested initial value down a relative dot-joined path. */
 function readNestedAt(value: unknown, path: string): unknown {
   if (!path) return value;
   let current: unknown = value;
   for (const segment of path.split('.')) {
-    if (Array.isArray(current)) current = current[Number(segment)];
-    else if (isPlainObject(current)) current = current[segment];
+    if (Array.isArray(current)) current = readOwnIndex(current, Number(segment));
+    else if (isPlainObject(current)) current = readOwnRecordValue(current, segment);
     else return undefined;
   }
   return current;
