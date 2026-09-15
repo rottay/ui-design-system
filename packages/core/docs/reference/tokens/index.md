@@ -62,8 +62,6 @@ foundation/tokens/
 │   │   ├── components/        # Per-component token objects
 │   │   ├── mirrors/           # Typed var(--ds-*) reference mirrors
 │   │   └── personality/       # Personality resolution
-│   ├── presentation/brand-themes/
-│   │                           # Canonical code-owned vertical sources
 │   └── facade/compat/         # Deprecated compatibility exports
 └── index.ts                   # Internal token aggregation facade
 ```
@@ -460,14 +458,16 @@ Tokens automatically adjust based on:
 
 ### Authoring Flow (canonical)
 
-New tenant visual identity is authored as a `BrandTheme` object in
-`foundation/tokens/ts/presentation/brand-themes/`. The CSS in `foundation/tokens/css/facade/artifacts/` is a
-**generated output** from that authored source — do not hand-edit
-artifact CSS as the primary authoring path.
+A first-party vertical is the neutral foundation
+(`foundation/presets/neutral-theme/`) with its preset document
+(`foundation/presets/verticals/<slug>/document/index.json`) admitted through the
+same door a customer tenant takes. There is no authored first-party theme. The
+CSS in `foundation/tokens/css/facade/artifacts/` is a **generated output** of
+that composition — do not hand-edit artifact CSS as the primary authoring path.
 
 ```
-1. Author a first-party BrandTheme in foundation/tokens/ts/presentation/brand-themes/<vertical>/index.ts
-2. The brand compiler + generator produce CSS artifacts
+1. Author the vertical's decisions in foundation/presets/verticals/<slug>/document/index.json
+2. The compile door composes neutral + preset and the single lowering produces CSS artifacts
 3. CSS artifacts in foundation/tokens/css/facade/artifacts/<tenant>/ are outputs
 ```
 
