@@ -2283,6 +2283,7 @@
           "@phosphor-icons/react"
         ],
         "Steps": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "StreamingText": [
@@ -3863,6 +3864,7 @@
       ],
       "symbols": {
         "Steps": [
+          "@phosphor-icons/react",
           "antd"
         ]
       },
