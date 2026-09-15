@@ -599,12 +599,6 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
   for (const [key, value] of projectedVariableMaps.flatMap((map) =>
     Object.entries(map)
   )) {
-    // The profile channels are not authored CSS: they are compiler-generated,
-    // quoted identifiers that already passed their closed registry. Keep the
-    // general visual-value parser hostile to arbitrary strings and admit only
-    // these exact validated declarations.
-    const isValidatedProfileChannel =
-      key === "--ds-recipe-profile" || key === "--ds-experience-profile";
     const edgeIssue = assertExpressiveEdgeWidthInvariant(key, value);
     if (edgeIssue) {
       issues.push(edgeIssue);
@@ -612,8 +606,7 @@ export function limitIssues(delta: ThemeChannelDelta): ThemeAdmissionIssue[] {
     }
     if (
       !key.startsWith("--ds-") ||
-      (!isValidatedProfileChannel &&
-        !isSafeVisualValue(value, `$.variables[${JSON.stringify(key)}]`, false))
+      !isSafeVisualValue(value, `$.variables[${JSON.stringify(key)}]`, false)
     ) {
       issues.push({
         code: "unsafe_value",

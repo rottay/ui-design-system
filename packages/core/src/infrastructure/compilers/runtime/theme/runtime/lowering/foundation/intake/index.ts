@@ -13,6 +13,8 @@ import {
   type Governed,
   type Theme,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { validateExperienceProfileSelection } from "@/foundation/tokens/ts/presentation/expressive-profiles";
+import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 
 /**
  * Unwrap a resolved `Theme`'s governed slots into the flat shape the channel
@@ -82,5 +84,35 @@ export function liftAuthoredTheme(brand: BrandTheme): Theme {
     recipes: wrap(brand.recipes),
     expressive: wrap(brand.expressive),
     responsive: wrap(brand.responsive),
+  };
+}
+
+/**
+ * The governed selection ids of a theme, validated once for the compiled
+ * runtime payload. Neither selection is paint, so neither is emitted as a CSS
+ * channel: the provider, the SSR root attributes and the artifact runtime block
+ * read the payload as data. Fail-closed -- an unknown id, malformed id or
+ * foreign schema version publishes no selection at all.
+ */
+export interface GovernedSelections {
+  readonly recipeProfile: string | undefined;
+  readonly experienceProfile: string | undefined;
+}
+
+/** The two validated selection ids, for the compiled runtime payload. One validation, one answer. */
+export function resolveGovernedSelections(
+  theme: BrandTheme
+): GovernedSelections {
+  const recipe = validateRecipeProfileSelection(
+    theme.recipes?.profile,
+    theme.recipes?.schemaVersion
+  );
+  const experience = validateExperienceProfileSelection(
+    theme.expressive?.experienceProfile,
+    theme.expressive?.schemaVersion
+  );
+  return {
+    recipeProfile: recipe.ok ? recipe.profile?.id : undefined,
+    experienceProfile: experience.ok ? experience.profile?.id : undefined,
   };
 }

@@ -23,6 +23,7 @@ import {
   TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
   auditTenantThemeArtifactSsrReceipt,
 } from '../../../foundation/visual-authority';
+import { firstPartyArtifactRecipeProfile } from '@/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
 import { mountTenantTheme } from '..';
 
 /**
@@ -153,23 +154,21 @@ describe('mountTenantTheme — static first-party verticals', () => {
   });
 
   /**
-   * THE ATTRIBUTE IS THE ARTIFACT'S OWN CHANNEL, not a second projection.
+   * THE ATTRIBUTE IS THE ARTIFACT'S OWN RUNTIME BLOCK, not a second projection.
    *
    * The literals above are readable but they are still literals; this reads the
-   * `--ds-recipe-profile` provenance channel out of the SHIPPED stylesheet and
-   * requires the projected attribute to be that exact string, for every
-   * vertical. The pair can only agree while one compile answers both.
+   * selection out of the SHIPPED runtime block and requires the projected
+   * attribute to be that exact string, for every vertical. The pair can only
+   * agree while one compile answers both; the stylesheet carries no selection.
    */
-  it('stamps the profile the shipped artifact bytes themselves declare', async () => {
+  it('stamps the profile the shipped runtime block itself declares', async () => {
     const declared: string[] = [];
 
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
-      const inBytes = committedArtifactCss(vertical).match(
-        /--ds-recipe-profile:\s*"([^"]+)"\s*;/,
-      )?.[1];
+      const shipped = firstPartyArtifactRecipeProfile(vertical);
       const { rootAttributes } = await mountTenantTheme(staticThemeIntent(vertical));
-      expect(rootAttributes['data-recipe-profile'], `${vertical} mount`).toBe(inBytes);
-      if (inBytes) declared.push(inBytes);
+      expect(rootAttributes['data-recipe-profile'], `${vertical} mount`).toBe(shipped);
+      if (shipped) declared.push(shipped);
     }
 
     expect(new Set(declared).size).toBeGreaterThanOrEqual(2);

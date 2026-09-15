@@ -1,8 +1,11 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { FIRST_PARTY_VERTICAL_SLUGS } from '@/foundation/contracts/kernel/verticals';
+import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
+import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters';
+import { staticThemeIntent } from '@/infrastructure/compilers/runtime/theme/runtime/ingress';
+import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
+import { resolveTheme } from '@/infrastructure/compilers/runtime/theme/runtime/resolution';
 import {
   FIRST_PARTY_ARTIFACT_RUNTIME,
   firstPartyArtifactRecipeProfile,
@@ -10,35 +13,27 @@ import {
 
 // ---------------------------------------------------------------------------
 // The generated runtime block is the artifact's own half, and this is where
-// that claim is BYTE-BOUND rather than asserted.
+// that claim is BOUND to the compile rather than asserted.
 //
-// A code-owned vertical publishes its recipe selection twice out of one
-// compile: as the `--ds-recipe-profile` provenance channel inside the bundled
-// stylesheet, and as this module's runtime block, which is what React reads
-// because a selection is not paint. The two are the same compile's two halves,
-// so the value the document was painted with and the value the product
-// resolves recipes from must be one string -- read out of the shipped CSS file
-// here, not recomputed from the authored theme.
+// A code-owned vertical publishes its recipe selection once, as data: the
+// compile's runtime payload, which this module's runtime block ships and which
+// React reads, because a selection is not paint. The stylesheet carries no
+// selection channel, so the value the product resolves recipes from must be
+// the value the same compile computes today -- recomputed from the authored
+// theme here, through the published door, and compared to the shipped block.
 // ---------------------------------------------------------------------------
 
-const ARTIFACT_ROOT = resolve(
-  __dirname,
-  '../../../../../../foundation/tokens/css/facade/artifacts',
-);
+const modern = resolveAdapter('modern');
 
-/** The provenance channel the recipes deriver emitted into the shipped bytes. */
-function recipeProfileInArtifactBytes(slug: string): string | undefined {
-  const css = readFileSync(resolve(ARTIFACT_ROOT, slug, 'index.css'), 'utf8');
-  const declarations = [...css.matchAll(/--ds-recipe-profile:\s*"([^"]+)"\s*;/g)].map(
-    (match) => match[1] as string,
-  );
-  const unique = new Set(declarations);
-  expect(unique.size, `${slug} declares more than one recipe profile`).toBeLessThan(2);
-  return declarations[0];
+/** The selection the current pipeline computes for a first-party vertical, and proof the stylesheet carries none. */
+function recipeProfileInArtifactBytes(slug: FirstPartyVerticalId): string | undefined {
+  const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+  expect(compiled.cssVariables['--ds-recipe-profile'], `${slug} emits no selection channel`).toBeUndefined();
+  return compiled.runtime.recipeProfile;
 }
 
 describe('first-party artifact runtime block', () => {
-  it('states the profile the shipped artifact bytes declare, per vertical', () => {
+  it('states the profile the current compile computes, per vertical', () => {
     const declared: string[] = [];
 
     for (const slug of FIRST_PARTY_VERTICAL_SLUGS) {

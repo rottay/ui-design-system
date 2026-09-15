@@ -183,12 +183,18 @@ describe('tenant theme — the axes a customer can actually move', () => {
     { axis: 'density', probe: /--ds-density-mode-factor\s*:/ },
     { axis: 'elevation', probe: /--ds-elevation-1\s*:/ },
     { axis: 'textures/effects', probe: /--ds-effect-intensity\s*:/ },
-    { axis: 'recipe profile', probe: /--ds-recipe-profile\s*:/ },
     { axis: 'chrome (sidebar)', probe: /--ds-sidebar-bg\s*:/ },
   ];
 
   it.each(REACHABLE)('emits the $axis axis from the document', ({ probe }) => {
     expect(css).toMatch(probe);
+  });
+
+  it('reaches the recipe profile axis as runtime data, never as a channel', () => {
+    const artifact = compileRow(readRow());
+    expect(typeof artifact.normalizedAppearance.recipeProfile).toBe('string');
+    expect(artifact.normalizedAppearance.recipeProfile?.length).toBeGreaterThan(0);
+    expect(css).not.toMatch(/--ds-recipe-profile\s*:/);
   });
 
   /**
@@ -252,7 +258,6 @@ describe('tenant theme — divergence from the static vertical baseline', () => 
     { axis: 'type scale', tenant: '--ds-type-scale', baseline: '--ds-type-scale' },
     { axis: 'radius', tenant: '--ds-radius-scale', baseline: '--ds-radius-scale' },
     { axis: 'effect intensity', tenant: '--ds-effect-intensity', baseline: '--ds-effect-intensity' },
-    { axis: 'recipe profile', tenant: '--ds-recipe-profile', baseline: '--ds-recipe-profile' },
     { axis: 'sidebar chrome', tenant: '--ds-sidebar-bg', baseline: '--ds-sidebar-bg' },
   ] as const;
 

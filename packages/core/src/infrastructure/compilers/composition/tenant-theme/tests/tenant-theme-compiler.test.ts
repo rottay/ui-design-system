@@ -231,7 +231,7 @@ const dialedRadius = (authored: string) =>
   `calc(${authored} / 1.25 * var(--ds-radius-scale, 1))`;
 
 describe("DS-S001 DB recipe-profile channel", () => {
-  it("persists a valid selection through normalized Appearance and CSS", () => {
+  it("persists a valid selection through normalized Appearance, never as a CSS channel", () => {
     const document = structuredClone(ADVANCED_DOCUMENT);
     if (document.mode !== "advanced") {
       throw new Error("Expected the advanced fixture");
@@ -246,9 +246,7 @@ describe("DS-S001 DB recipe-profile channel", () => {
     expect(artifact.normalizedAppearance.recipeProfile).toBe(
       "rottay/editorial-round@1"
     );
-    expect(artifact.variables["--ds-recipe-profile"]).toBe(
-      '"rottay/editorial-round@1"'
-    );
+    expect(artifact.variables["--ds-recipe-profile"]).toBeUndefined();
   });
 
   it("rejects unpublished ids at the DB schema boundary", () => {

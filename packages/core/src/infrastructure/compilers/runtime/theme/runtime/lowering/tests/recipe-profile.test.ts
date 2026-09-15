@@ -45,7 +45,7 @@ describe("recipe-profile governance (DS-S001)", () => {
       .toBeDefined();
   });
 
-  it("compiles a valid static BrandTheme selection into the canonical channel", () => {
+  it("resolves a valid static BrandTheme selection into the runtime payload and emits no channel", () => {
     const brandTheme: BrandTheme = {
       id: "profile-proof",
       name: "Profile proof",
@@ -56,13 +56,12 @@ describe("recipe-profile governance (DS-S001)", () => {
     };
     const compiled = lowerBrandThemeFixture({ brandTheme, tenantSlug: "proof" });
     expect(compiled.recipeProfile).toBe("rottay/technical-sharp@1");
-    expect(compiled.cssVariables["--ds-recipe-profile"]).toBe(
-      '"rottay/technical-sharp@1"'
-    );
-    expect(compiled.cssString).toContain("--ds-recipe-profile");
+    // A selection is data, not paint: nothing in the stylesheet carries it.
+    expect(compiled.cssVariables["--ds-recipe-profile"]).toBeUndefined();
+    expect(compiled.cssString).not.toContain("recipe-profile");
   });
 
-  it("compiles invalid static selections to engine defaults without a channel", () => {
+  it("resolves invalid static selections to engine defaults, with no payload and no channel", () => {
     const compile = (profile: string, schemaVersion: number) =>
       lowerBrandThemeFixture({
         brandTheme: {

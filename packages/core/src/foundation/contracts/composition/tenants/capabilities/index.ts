@@ -554,7 +554,6 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       documentPath: 'appearance.general.experienceProfile',
       brandThemePath: 'expressive.experienceProfile',
       derivedChannels: [
-        '--ds-experience-profile',
         '--ds-letter-spacing-heading',
         '--ds-edge-standard-width',
         '--ds-material-canvas-texture',
@@ -670,13 +669,11 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // A stop written to `patch.recipeProfile` landed on a key nothing
       // reads.
       //
-      // TWO SURFACES, one witness. `--ds-recipe-profile` (CSS) has no
-      // production reader: the lowering writes it once from the validated
-      // selection and nothing reads it back, so it is provenance, not paint.
-      // The functional reader is the provider, and it reads the SELECTION from
-      // both transports the artifact decides it on (D-26): the mounted
-      // artifact's normalized appearance, and the identity-keyed governed slot
-      // a code-owned vertical's theme fills.
+      // ONE SURFACE, one witness. The selection is not paint: no CSS channel is
+      // emitted for it. The functional reader is the provider, and it reads the
+      // SELECTION from both transports the artifact decides it on (D-26): the
+      // mounted artifact's runtime block, and the identity-keyed governed slot a
+      // code-owned vertical's theme fills.
       evidence: {
         consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
         symbol: 'publishedEngineVisual?.runtime.recipeProfile',
@@ -688,7 +685,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       defaultBehavior: 'no profile: family recipe defaults apply',
       documentPath: 'visualFoundation.recipeProfile',
       brandThemePath: 'recipes.profile',
-      derivedChannels: ['--ds-recipe-profile'],
+      derivedChannels: [],
       compat:
         'closed registry of typed per-family axes (recipe-profiles); caller props always win',
     },

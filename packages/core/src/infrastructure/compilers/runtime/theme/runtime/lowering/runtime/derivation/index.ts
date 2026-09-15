@@ -54,7 +54,6 @@ import { paletteDeriver } from "./palette";
 import { responsiveDeriver } from "./responsive";
 import { rhythmDeriver } from "./rhythm";
 import { rampsDeriver } from "./ramps";
-import { recipesDeriver } from "./recipes";
 import { seedsDeriver } from "./seeds";
 import { shapeDeriver } from "./shape";
 import { statesDeriver } from "./states";
@@ -127,5 +126,4 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   notifierChromeDeriver,
   alertChromeDeriver,
   seedsDeriver,
-  recipesDeriver,
 ]);

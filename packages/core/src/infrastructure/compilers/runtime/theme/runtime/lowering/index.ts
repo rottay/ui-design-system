@@ -20,7 +20,7 @@ import type { OnToneRole } from "@/infrastructure/compilers/kernel/foundation/cs
 import { ON_TONE_ROLES } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import type { TenantFacts } from "./foundation/contract";
 import { mergeBrandThemeFloors, resolveTenantPosture } from "./foundation/floors";
-import { readGovernedTheme } from "./foundation/intake";
+import { readGovernedTheme, resolveGovernedSelections } from "./foundation/intake";
 import {
   brandThemeToPersonality,
   brandThemeToTokenOverrides,
@@ -28,7 +28,6 @@ import {
   mergePartialPersonality,
 } from "./foundation/personality";
 import { PRIMARY_SEED_FIELD } from "./foundation/seeds";
-import { resolveGovernedSelections } from "./runtime/derivation/recipes";
 import { deriveModeThemes, projectModeDelta } from "./runtime/derivation/modes";
 import { lowerBlock } from "./runtime/pipeline";
 

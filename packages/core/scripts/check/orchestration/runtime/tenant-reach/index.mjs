@@ -87,7 +87,6 @@ export const LOWERING_RUNTIME_DERIVATION = Object.freeze([
   `${DERIVATION}/palette/semantic/index.ts`,
   DERIVATION_PALETTE_TINTS,
   `${DERIVATION}/ramps/index.ts`,
-  `${DERIVATION}/recipes/index.ts`,
   `${DERIVATION}/seeds/index.ts`,
   // WO-DER-03: the shape family emits the radius ramp operands and the button
   // silhouette from the typed `shape.*` decisions, with the same

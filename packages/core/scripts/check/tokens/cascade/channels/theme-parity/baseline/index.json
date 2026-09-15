@@ -22,13 +22,13 @@
     "emitted-but-unconsumed.color": 2,
     "emitted-but-unconsumed.command": 5,
     "emitted-but-unconsumed.compact": 37,
-    "emitted-but-unconsumed.experience": 1,
+    "emitted-but-unconsumed.experience": 0,
     "emitted-but-unconsumed.input": 1,
     "emitted-but-unconsumed.listing": 7,
     "emitted-but-unconsumed.metric": 9,
     "emitted-but-unconsumed.motion": 0,
     "emitted-but-unconsumed.premium": 2,
-    "emitted-but-unconsumed.recipe": 1,
+    "emitted-but-unconsumed.recipe": 0,
     "emitted-but-unconsumed.segmented": 0,
     "emitted-but-unconsumed.shell": 5,
     "emitted-but-unconsumed.sidebar": 0,
@@ -42,6 +42,7 @@
     "emitted-but-unconsumed.workspace": 19
   },
   "_adoptions": {
+    "der06-profile-provenance-retirement-2026-09-14": "Not an adoption: a TIGHTENING applied by hand, like c2-tightening. WO-DER-06 retired the CSS emission of the two governed selection ids (--ds-experience-profile, --ds-recipe-profile): the recipes deriver no longer exists as a channel producer and the selections travel only in the compiled runtime payload. emitted-but-unconsumed experience 1->0 and recipe 1->0. The roll-up ceiling is left at 206 because the tree measures 208 for reasons outside this lot (the popover and switch buckets are unbaselined at HEAD, before and after this change).",
     "tree-walk-emitter-inventory-2026-09-09": "WITHDRAWN 2026-09-10, and left here as the record of a ceiling that must not be raised again. The lot originally adopted TWO ceilings for the same four channels -- emitted-but-unconsumed.posture 0->4 and its roll-up emitted-but-unconsumed.total 206->208 -- because the recursive emitter walk made `derivation/responsive`'s four `--ds-posture-*` emissions census-visible for the first time. The CAUSE is instrument reach, not product debt: the four names were already being emitted (all three shipped artifacts carry them at HEAD) and their lack of a reader is already stated by a typed authority -- the responsive-posture row of src/contracts/theme/runtime/catalog/index.ts records that no productive `--ds-posture-*` reader exists under src and that the adoption is INV-07's obligation. A ceiling was the wrong instrument for exactly the reason this gate's own docblock gives: it records no owner, no reason, no target and no expiry. The debt now lives in obligations/index.json as `emitted-but-unconsumed.posture`, exact at 4 in both directions, owned by INV-07, expiring structurally when the responsive deriver moves or the channels gain a reader; the roll-up is ratcheted net of that exact count, so emitted-but-unconsumed.total is back at its pre-lot 206 against a residual actual of 204 -- byte-identical to the ceilings this branch started from, with the pre-existing 2-count slack (experience 1, recipe 1) preserved. NO ceiling moved in this lot, in either direction. Wiring or retiring the four posture channels remains INV-07's ruling, not this lot's.",
     "c2-tightening-2026-09-03": "Not an adoption: a TIGHTENING, recorded here because the ceilings were edited by hand. --update-baseline rewrites the file as {version,_comment,ceilings} and would have DROPPED every entry in this object, so the eight measured drops were applied literally instead: declared-but-unemitted BrandPalette 30->0 and total 53->23, emitted-but-unconsumed collection 35->24, color 5->2, listing 8->7, metric 24->9, sidebar 10->0, workspace 32->19. Every value is the gate's own measured actual, read from its 'tighten opportunities' list; no ceiling moved up and no bucket was added or removed. The C2 exact values are preserved untouched: emitted-but-unconsumed experience=1, recipe=1, total=206.",
     "r1p-closure-2026-07-27": "Reviewed manual adoption (R1-P closure): (a) declared-but-unemitted.BrandPalette 0->30 and total 23->53 \u2014 W-B's optional 1:1 palette capability fields (delta contract: unauthored fields emit nothing by design); (b) emitted-but-unconsumed sidebar 5->10, total 241->245 \u2014 channels previously declared-and-unconsumed inside the rottay/bithire extensions, now compiler-emitted and census-visible (transfer, not new dead surface); consumption or retirement is the design authority wire-or-retire lane. input 2->1 tightened. independent code audit ratification required.",

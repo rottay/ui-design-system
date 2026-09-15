@@ -73,13 +73,9 @@ function mountArtifact(artifact: TenantThemeArtifact): void {
 
 const SRC_ROOT = resolve(__dirname, '../../../../../../..');
 
-/** The provenance channel the recipes deriver emitted into the shipped bytes. */
+/** The selection the shipped artifact carries in its own runtime block; the stylesheet carries none. */
 function recipeProfileInArtifactBytes(slug: string): string | undefined {
-  const css = readFileSync(
-    resolve(SRC_ROOT, `foundation/tokens/css/facade/artifacts/${slug}/index.css`),
-    'utf8',
-  );
-  return css.match(/--ds-recipe-profile:\s*"([^"]+)"\s*;/)?.[1];
+  return firstPartyArtifactRecipeProfile(slug as never);
 }
 
 function ProfileProbe() {
@@ -168,9 +164,8 @@ describe('DesignSystemProvider recipe-profile authority', () => {
    * not a comment.
    *
    * So this asserts the identity directly, for every first-party vertical:
-   * the `--ds-recipe-profile` channel inside the SHIPPED CSS file, the shipped
-   * runtime block, the id the registry hands `RecipeProfileProvider`, and the
-   * id `mountTenantTheme` stamps as `data-recipe-profile` are one value.
+   * the shipped runtime block, the id the registry hands `RecipeProfileProvider`,
+   * and the id `mountTenantTheme` stamps as `data-recipe-profile` are one value.
    *
    * If they ever diverge, the product and the stylesheet disagree about which
    * recipes are active, which is exactly F-112 pointing the other way.

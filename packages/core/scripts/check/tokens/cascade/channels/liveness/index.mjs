@@ -1333,19 +1333,13 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // instead of restating them.
   [/^--ds-state-/, () => 'states'],
   [/^--ds-focus-ring/, () => 'states.focus'],
-  // Provenance, not paint. The two governed selection ids are emitted so the
-  // compiled block records WHICH profile was admitted; the engines declare in
-  // their own adapters that no surface reads them, and the selection itself is
-  // consumed as data. They still get an owner, because an unclassified row is
-  // a hole in the census rather than a decision.
-  [/^--ds-(?:recipe|experience)-profile$/, () => 'provenance.selection'],
   // The responsive family's value projection: the container thresholds, the
   // span bias and the id of the posture that was admitted. No productive
   // reader exists yet, which is a liveness verdict about them -- not a reason
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination)-/, (m) => `chrome.${m[1]}`],
 ]);
 
 export function classifySemanticOwner(name) {
@@ -1561,14 +1555,6 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-posture-id',
       '--ds-posture-span-bias',
     ]),
-  }),
-  Object.freeze({
-    owner: 'WO-DER-06',
-    classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-12',
-    reason:
-      'both are quoted selection ids echoed as provenance; every runtime reader takes the selection as data (artifact runtime block, provider, resolveExpressiveAxes), so no stylesheet reads them, and the preset conversion that deletes the BrandTheme paths the recipes deriver consumes decides reader-or-retire',
-    channels: Object.freeze(['--ds-experience-profile', '--ds-recipe-profile']),
   }),
   Object.freeze({
     owner: 'WO-DER-06',

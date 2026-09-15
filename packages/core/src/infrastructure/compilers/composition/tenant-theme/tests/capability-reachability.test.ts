@@ -307,14 +307,15 @@ const ACTIVE_CAPABILITY_PROBES = {
     ),
   "token-overrides": (artifact) =>
     expect(artifact.variables["--ds-color-error"]).toBe("#7f1d1d"),
-  "recipe-profile": (artifact) =>
-    expect(artifact.variables["--ds-recipe-profile"]).toBe(
-      '"rottay/editorial-round@1"'
-    ),
+  "recipe-profile": (artifact) => {
+    expect(artifact.normalizedAppearance.recipeProfile).toBe("rottay/editorial-round@1");
+    expect(artifact.variables["--ds-recipe-profile"]).toBeUndefined();
+  },
   "experience.profile": (artifact) => {
-    expect(artifact.variables["--ds-experience-profile"]).toBe(
-      '"rottay/management-editorial@1"'
+    expect(artifact.normalizedAppearance.general?.experienceProfile).toBe(
+      "rottay/management-editorial@1"
     );
+    expect(artifact.variables["--ds-experience-profile"]).toBeUndefined();
     // The artifact is a delta over BitHire: its existing table transform is
     // already `none`, so that unchanged type channel is intentionally absent.
     // Paper material still proves that the selected composition expanded.

@@ -214,8 +214,6 @@ describe("the guard drops no channel the first-party corpus actually emits", () 
     "--ds-motion-spring-gentle",
     "--ds-card-shadow",
     "--ds-card-shadow-hover",
-    "--ds-recipe-profile",
-    "--ds-experience-profile",
   ];
 
   it("admits every compiled channel of every first-party theme", () => {
@@ -244,9 +242,8 @@ describe("the guard drops no channel the first-party corpus actually emits", () 
     }
     expect(dropped).toEqual([]);
     expect(total).toBeGreaterThan(4000);
-    // The four value shapes the grammar had to learn are really in the corpus,
-    // so this control cannot pass vacuously: linear(), multi-line shadows and
-    // the two quoted provenance markers carrying `@`.
+    // The value shapes the grammar had to learn are really in the corpus, so
+    // this control cannot pass vacuously: linear() and multi-line shadows.
     expect([...seenShapes].sort()).toEqual([...NAMED_SHAPES].sort());
   });
 });

@@ -288,10 +288,24 @@ const FIRST_PARTY = [
  * else moved; and the moved digests are identical on 04e835647, 7314b2dbb,
  * da95cf1b3 and d7d1aba2a, so no later change is folded into this move.
  */
+// PROVENANCE-CHANNEL re-anchor, rottay and bithire only, SUBTRACTIVE-ONLY and
+// measured rather than asserted. The governed selection ids stopped being
+// emitted as CSS channels -- a selection is data, and the runtime payload
+// (`recipeProfile`, `experienceProfile`, still members of this digest) carries
+// it -- so the emitted KEYSET lost exactly the provenance channels each theme
+// authored: rottay 2180 -> 2179 (`--ds-recipe-profile`), bithire 2230 -> 2228
+// (`--ds-recipe-profile`, `--ds-experience-profile`). evnto authors neither
+// selection, emitted neither channel, and its digest is unchanged. Measured
+// with every other producer at its committed state, eabf62987: that commit
+// (the menu chrome deriver) had moved the keyset rottay 2098 -> 2180, bithire
+// 2139 -> 2230, evnto 1455 -> 1547 without re-anchoring these pins, so the
+// starting digests are the ones measured on eabf62987 itself (rottay
+// d2447215…, bithire a2bedc6a…, evnto 815bc4b2…), and restoring the two
+// emissions on that tree reproduces them byte for byte.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "6ad3fd39f4df895a1a568660e0b58b4fccf039e10c71eb5f60627b6eb058dc00",
-  bithire: "7298cb32346625a227ff18585ded3d2cf18d9da59dde325179b8e291cb9834fb",
-  evnto: "63b8a4808b1b499ade4d94b9edeba84a559c15f306c4b2a7d87105387cf87726",
+  rottay: "f2eaf241dce7721175cd427f7f99f428fa0be2cca5220e56a81a994ceece2873",
+  bithire: "1392ba2aad26717f46be8bf12dc5ac23083deb38e9ae6a770372614638ceeca5",
+  evnto: "815bc4b262c5b6db4de335da9be68dd422820105e886e4436c45995d22460f7f",
 };
 
 /**

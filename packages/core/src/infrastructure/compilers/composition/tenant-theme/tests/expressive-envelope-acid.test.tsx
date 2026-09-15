@@ -341,13 +341,16 @@ describe('C1b expressive envelope — two-system acid test', () => {
     );
     expect(management['--ds-material-canvas-texture']).toBeUndefined();
 
-    // Concrete anchors so the divergence is legible, not just counted.
-    expect(bithire['--ds-experience-profile']).toBe(
-      '"rottay/bithire-technical@1"'
+    // Concrete anchors so the divergence is legible, not just counted. The
+    // selection itself is data, not a channel: the stylesheet carries none.
+    expect(
+      lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' }).experienceProfile,
+    ).toBe('rottay/bithire-technical@1');
+    expect(managementArtifact.normalizedAppearance.general?.experienceProfile).toBe(
+      'rottay/management-editorial@1'
     );
-    expect(management['--ds-experience-profile']).toBe(
-      '"rottay/management-editorial@1"'
-    );
+    expect(bithire['--ds-experience-profile']).toBeUndefined();
+    expect(management['--ds-experience-profile']).toBeUndefined();
     expect(bithire['--ds-edge-emphasis-width']).toBe('1px');
     expect(management['--ds-edge-emphasis-width']).toBe('2px');
     expect(bithire['--ds-material-card-texture']).toBe('none');

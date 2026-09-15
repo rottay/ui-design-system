@@ -22,7 +22,7 @@ const INVARIANT_RECIPE = {
   module: "@/foundation/tokens/ts/presentation/recipe-profiles",
   symbol: "validateRecipeProfileSelection",
   reason:
-    "--ds-recipe-profile is provenance of the selection and is read by no engine surface; the selection is consumed as data",
+    "the recipe selection is provenance consumed as data through the compiled runtime payload; it emits no CSS channel and no engine surface reads one",
 } as const;
 
 /**
