@@ -13,7 +13,12 @@
  * wrong that makes a door untrustworthy -- so this owner answers the narrower
  * question the admission actually asks: which keypaths carry a DEFINED value.
  *
- * @module Compilers/Theme/Facade/Foundation/Admission/Foundation/Authorship
+ * It lives in the INGRESS rather than beside the admission that first needed
+ * it: the draft transport has to ask the same question while it is building its
+ * patch, and a second copy of "which leaves did this tenant author" is the
+ * defect class this programme keeps paying for.
+ *
+ * @module Compilers/Theme/Ingress/Foundation/Authorship
  * @category Compilers
  * @package @rottay/design-system
  */
@@ -170,4 +175,43 @@ export function authoredUnderPrefix(
     }
   }
   return false;
+}
+
+/**
+ * The patch a WHOLE-THEME draft really authors: its moved leaves and no others.
+ *
+ * A document carries only what its tenant chose, so its patch is authorship by
+ * construction. A `BrandTheme` draft is the theme the studio opened, so the
+ * projection of it carries every value the author never touched -- and those
+ * values then reach the tenant posture floors, where they are read as a tenant
+ * re-dialling a knob it merely inherited. That is how one preset's two radius
+ * statements ranked differently on the two doors: the draft door saw
+ * `surfaces.radiusScale` as the tenant's, took the vertical's dial position
+ * from the expressive profile instead, and divided by the profile default.
+ *
+ * Pruning is by the SAME comparison `movedLeaves` makes, which is the same one
+ * the ledger's CARRIED class and the contrast station make. A family whose
+ * every leaf is carried drops out entirely, so the baseline's own governed
+ * wrapper survives the merge untouched -- the merged theme is unchanged, and
+ * only the authorship attribution is corrected.
+ */
+export function movedThemePatch(
+  patch: ThemeLayerPatch,
+  baseline: Theme | undefined
+): ThemeLayerPatch {
+  if (baseline === undefined) return patch;
+  const moved = movedLeaves(patch, baseline);
+  const prune = (value: unknown, path: string): unknown => {
+    if (value === undefined) return undefined;
+    if (value === null || typeof value !== "object" || Array.isArray(value)) {
+      return path !== "" && moved.has(unwrapGoverned(path)) ? value : undefined;
+    }
+    const kept: Record<string, unknown> = {};
+    for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+      const survivor = prune(child, path === "" ? key : `${path}.${key}`);
+      if (survivor !== undefined) kept[key] = survivor;
+    }
+    return Object.keys(kept).length === 0 ? undefined : kept;
+  };
+  return (prune(patch, "") ?? {}) as ThemeLayerPatch;
 }

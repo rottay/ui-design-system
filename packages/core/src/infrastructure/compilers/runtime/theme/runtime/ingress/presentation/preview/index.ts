@@ -14,8 +14,9 @@ import {
 } from "@/contracts/theme/presentation/document";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import type { TenantThemeVerticalEnvelope } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { admitDocument, type DocumentAdmission } from "../../runtime/document-v2";
+import { admitDocument, baselineFor, type DocumentAdmission } from "../../runtime/document-v2";
 import { authoredThemePatch } from "../../foundation/draft-patch";
+import { movedThemePatch } from "../../foundation/authorship";
 import { draftProvenanceLedger } from "../../foundation/provenance";
 import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
 
@@ -33,7 +34,7 @@ export interface DraftPreviewThemeIntentInput {
   vertical: FirstPartyVerticalId;
   slug: string;
   draft: BrandTheme;
-  /** The baseline the draft is a patch of, when it is not the vertical's authored theme. */
+  /** The baseline the draft is a patch of; the vertical's own baseline unless the caller resolved another. */
   carriedFrom?: Theme;
 }
 
@@ -108,13 +109,16 @@ export function previewThemeAdmission(
 export function draftPreviewThemeIntent(
   input: DraftPreviewThemeIntentInput
 ): ThemeIntent {
+  const carriedFrom =
+    input.carriedFrom ?? baselineFor(input.vertical, input.slug);
   return {
     vertical: input.vertical,
     slug: input.slug,
     origin: "preview",
-    patch: authoredThemePatch(input.draft),
-    ledger: draftProvenanceLedger(input.draft, input.vertical, {
-      carriedFrom: input.carriedFrom,
-    }),
+    // The patch is the draft MINUS what it carries: a leaf equal to the
+    // baseline is the vertical's own, and presenting it as tenant authorship
+    // moved the tenant posture floors the compile door never sees.
+    patch: movedThemePatch(authoredThemePatch(input.draft), carriedFrom),
+    ledger: draftProvenanceLedger(input.draft, input.vertical, { carriedFrom }),
   };
 }
