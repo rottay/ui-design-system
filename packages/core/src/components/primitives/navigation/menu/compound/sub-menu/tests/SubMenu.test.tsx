@@ -1,18 +1,11 @@
 /**
- * Menu.SubMenu grid-template-rows migration tests (W6-E).
- *
- * Before this WO, SubMenu measured `scrollHeight` in a `useEffect` and
- * animated a JS-computed pixel `height` on the `<ul role="menu">` itself.
- * These tests fail if pixel-height measurement is reintroduced, if the
- * grid-template-rows values stop tracking `isOpen`, or if `data-part="panel"`
- * (the documented submenu-flyout contract, see
- * docs-engineering/engineering/design-system/runtime/skins/data-part-contracts)
- * moves off the `<ul role="menu">` onto the grid-track wrapper.
+ * Menu.SubMenu: an inline disclosure that is a legal child of a menu. The
+ * trigger is a menuitem with `aria-expanded`, the nested list stays the
+ * documented `panel` part, the track opens through `data-open` (the skin
+ * animates the grid rows; nothing inline), the forward key resolves on the
+ * reading direction through the shared collection kernel, and the row's
+ * hover, press and focus are decided by the interaction kernel.
  */
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
@@ -20,116 +13,103 @@ import { describe, expect, it, vi } from 'vitest';
 import { MenuSubMenu } from '../index';
 import { MenuItem } from '../../item';
 
-const TEST_DIR = dirname(fileURLToPath(import.meta.url));
-const SKIN_CSS_PATH = resolve(
-  TEST_DIR,
-  '..', '..', '..', '..', '..', '..', '..',
-  'foundation', 'tokens', 'css', 'presentation', 'components', 'skin', 'menu-compounds', 'index.css'
-);
-
-describe('Menu.SubMenu grid-row auto-height (W6-E)', () => {
-  it('expands the grid-row track to 1fr and collapses it to 0fr on toggle, never using a pixel height', () => {
-    render(
-      <ul>
-        <MenuSubMenu itemKey="sub" title="Sub">
+function renderSub(props: Partial<React.ComponentProps<typeof MenuSubMenu>> = {}, dir: 'ltr' | 'rtl' = 'ltr') {
+  return render(
+    <div dir={dir}>
+      <ul role="menu">
+        <MenuSubMenu itemKey="sub" title="Sub" {...props}>
           <MenuItem itemKey="child">Child</MenuItem>
         </MenuSubMenu>
       </ul>
-    );
+    </div>,
+  );
+}
 
-    const panel = screen.getByText('Child').closest('.rottay-menu-submenu__panel') as HTMLElement;
-    expect(panel).toBeTruthy();
-    expect(panel.getAttribute('style')).toContain('grid-template-rows: 0fr');
-    expect(panel.getAttribute('style')).not.toMatch(/height:\s*\d/);
+const trigger = () => screen.getByRole('menuitem', { name: /Sub/ });
+const track = () => screen.getByText('Child').closest('.ds-menu-submenu__track') as HTMLElement;
 
-    fireEvent.click(screen.getByText('Sub'));
-    expect(panel.getAttribute('style')).toContain('grid-template-rows: 1fr');
-    expect(panel.getAttribute('style')).not.toMatch(/height:\s*\d/);
+describe('Menu.SubMenu disclosure', () => {
+  it('opens and closes the track through data-open, never through an inline height', () => {
+    renderSub();
+    expect(track()).toHaveAttribute('data-open', 'false');
+    expect(track().getAttribute('style')).toBeNull();
 
-    fireEvent.click(screen.getByText('Sub'));
-    expect(panel.getAttribute('style')).toContain('grid-template-rows: 0fr');
+    fireEvent.click(trigger());
+    expect(track()).toHaveAttribute('data-open', 'true');
+    expect(track().getAttribute('style')).toBeNull();
+
+    fireEvent.click(trigger());
+    expect(track()).toHaveAttribute('data-open', 'false');
   });
 
-  it('keeps data-part="panel" on the <ul role="menu"> (the documented submenu-flyout contract), not on the grid-track wrapper', () => {
-    render(
-      <ul>
-        <MenuSubMenu itemKey="sub" title="Sub">
-          <MenuItem itemKey="child">Child</MenuItem>
-        </MenuSubMenu>
-      </ul>
-    );
+  it('keeps data-part="panel" on the nested <ul role="menu"> the trigger controls', () => {
+    renderSub();
+    const panel = screen.getByText('Child').closest('[data-part="panel"]') as HTMLElement;
+    expect(panel.tagName).toBe('UL');
+    expect(panel).toHaveAttribute('role', 'menu');
+    expect(panel.parentElement).toBe(track());
+    expect(track()).not.toHaveAttribute('data-part');
+    expect(trigger()).toHaveAttribute('aria-controls', panel.id);
+  });
 
-    const list = screen.getByRole('menu', { hidden: true });
-    expect(list.tagName).toBe('UL');
-    expect(list.getAttribute('data-part')).toBe('panel');
-    expect(list.className).toContain('rottay-menu-submenu__content');
-
-    const wrapper = list.parentElement as HTMLElement;
-    expect(wrapper.className).toContain('rottay-menu-submenu__panel');
-    expect(wrapper.getAttribute('data-part')).toBeNull();
+  it('is a menuitem row, not a button, so a menu owns only what it may', () => {
+    renderSub();
+    expect(trigger().tagName).toBe('DIV');
+    expect(trigger()).toHaveAttribute('aria-haspopup', 'menu');
+    expect(trigger().closest('li')).toHaveAttribute('role', 'none');
+    expect(screen.queryByRole('button')).toBeNull();
   });
 
   it('toggles aria-hidden/aria-expanded and calls onTitleClick on toggle', () => {
     const onTitleClick = vi.fn();
-    render(
-      <ul>
-        <MenuSubMenu itemKey="sub" title="Sub" onTitleClick={onTitleClick}>
-          <MenuItem itemKey="child">Child</MenuItem>
-        </MenuSubMenu>
-      </ul>
-    );
+    renderSub({ onTitleClick });
+    const panel = screen.getByText('Child').closest('[data-part="panel"]') as HTMLElement;
+    expect(trigger()).toHaveAttribute('aria-expanded', 'false');
+    expect(panel).toHaveAttribute('aria-hidden', 'true');
 
-    const trigger = screen.getByRole('button', { name: /Sub/ });
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
-    const list = screen.getByRole('menu', { hidden: true });
-    expect(list.getAttribute('aria-hidden')).toBe('true');
-
-    fireEvent.click(trigger);
+    fireEvent.click(trigger());
     expect(onTitleClick).toHaveBeenCalledTimes(1);
-    expect(trigger.getAttribute('aria-expanded')).toBe('true');
-    expect(list.getAttribute('aria-hidden')).toBe('false');
+    expect(trigger()).toHaveAttribute('aria-expanded', 'true');
+    expect(panel).toHaveAttribute('aria-hidden', 'false');
   });
 
-  it('ArrowRight opens and ArrowLeft closes via keyboard', () => {
-    render(
-      <ul>
-        <MenuSubMenu itemKey="sub" title="Sub">
-          <MenuItem itemKey="child">Child</MenuItem>
-        </MenuSubMenu>
-      </ul>
-    );
-    const trigger = screen.getByRole('button', { name: /Sub/ });
-
-    fireEvent.keyDown(trigger, { key: 'ArrowRight' });
-    expect(trigger.getAttribute('aria-expanded')).toBe('true');
-
-    fireEvent.keyDown(trigger, { key: 'ArrowLeft' });
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  it('opens on the forward arrow and closes on the back arrow', () => {
+    renderSub();
+    fireEvent.keyDown(trigger(), { key: 'ArrowRight' });
+    expect(trigger()).toHaveAttribute('aria-expanded', 'true');
+    fireEvent.keyDown(trigger(), { key: 'ArrowLeft' });
+    expect(trigger()).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('disabled submenu ignores click and never opens', () => {
-    render(
-      <ul>
-        <MenuSubMenu itemKey="sub" title="Sub" disabled>
-          <MenuItem itemKey="child">Child</MenuItem>
-        </MenuSubMenu>
-      </ul>
-    );
-    const trigger = screen.getByRole('button', { name: /Sub/ });
-    fireEvent.click(trigger);
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  it('mirrors the disclosure arrows under RTL through the collection kernel', () => {
+    renderSub({}, 'rtl');
+    fireEvent.keyDown(trigger(), { key: 'ArrowRight' });
+    expect(trigger()).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.keyDown(trigger(), { key: 'ArrowLeft' });
+    expect(trigger()).toHaveAttribute('aria-expanded', 'true');
+    fireEvent.keyDown(trigger(), { key: 'ArrowRight' });
+    expect(trigger()).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('the co-located skin declares the grid-rows transition, min-height:0 on the content track, and a reduced-motion override', () => {
-    const css = readFileSync(SKIN_CSS_PATH, 'utf-8');
+  it('disabled submenu ignores click and keys and reports the kernel state', () => {
+    renderSub({ disabled: true });
+    expect(trigger()).toHaveAttribute('data-state', 'disabled');
+    expect(trigger().tabIndex).toBe(-1);
+    fireEvent.click(trigger());
+    fireEvent.keyDown(trigger(), { key: 'ArrowRight' });
+    expect(trigger()).toHaveAttribute('aria-expanded', 'false');
+  });
 
-    expect(css).toMatch(/\.rottay-menu-submenu__panel\s*\{[^}]*display:\s*grid/);
-    expect(css).toMatch(/\.rottay-menu-submenu__panel\s*\{[^}]*transition:\s*grid-template-rows/);
-    expect(css).toMatch(/\.rottay-menu-submenu__content\s*\{[^}]*min-height:\s*0/);
-    expect(css).toMatch(/\.rottay-menu-submenu__content\s*\{[^}]*overflow:\s*hidden/);
-
-    const reducedMotionBlock = css.slice(css.indexOf('prefers-reduced-motion'));
-    expect(reducedMotionBlock).toContain('.rottay-menu-submenu__panel');
-    expect(reducedMotionBlock).toContain('transition: none');
+  it('stamps hover, press and focus from the interaction kernel', () => {
+    renderSub();
+    fireEvent.pointerEnter(trigger());
+    expect(trigger()).toHaveAttribute('data-state', 'hovered');
+    fireEvent.pointerDown(trigger());
+    expect(trigger()).toHaveAttribute('data-state', 'hovered pressed');
+    fireEvent.pointerUp(trigger());
+    fireEvent.pointerLeave(trigger());
+    expect(trigger()).not.toHaveAttribute('data-state');
+    fireEvent.focus(trigger());
+    expect(trigger()).toHaveAttribute('data-state', 'focused focus-visible');
   });
 });

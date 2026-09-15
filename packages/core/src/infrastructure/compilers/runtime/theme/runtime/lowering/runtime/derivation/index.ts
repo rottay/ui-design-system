@@ -37,6 +37,7 @@ import { confirmDialogChromeDeriver } from "./chrome/confirm-dialog";
 import { popoverChromeDeriver } from "./chrome/popover";
 import { hoverCardChromeDeriver } from "./chrome/hover-card";
 import { dropdownChromeDeriver } from "./chrome/dropdown";
+import { menuChromeDeriver } from "./chrome/menu";
 import { tooltipChromeDeriver } from "./chrome/tooltip";
 import { tourChromeDeriver } from "./chrome/tour";
 import { notifierChromeDeriver } from "./chrome/notifier";
@@ -120,6 +121,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   popoverChromeDeriver,
   hoverCardChromeDeriver,
   dropdownChromeDeriver,
+  menuChromeDeriver,
   tooltipChromeDeriver,
   tourChromeDeriver,
   notifierChromeDeriver,

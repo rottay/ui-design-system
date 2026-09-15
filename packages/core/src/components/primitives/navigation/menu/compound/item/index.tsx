@@ -40,6 +40,7 @@
 'use client';
 
 import React from 'react';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { MenuItemProps } from '../../contracts';
 
 // ============================================================================
@@ -85,6 +86,8 @@ export function MenuItem({
   // contract (data-part default, role, data-*) always lands last.
   ...rest
 }: MenuItemProps): React.ReactElement {
+  const interaction = useInteractionState({ disabled });
+
   // ========================================================================
   // Event Handlers
   // ========================================================================
@@ -117,21 +120,18 @@ export function MenuItem({
   // Render
   // ========================================================================
 
-  /* Layout and paint live in `menu-compounds.css` (anchored on the
-     `rottay-menu-item` BEM class); only the caller's own `style` stays
-     inline. The former inline block mixed static paint with a raw
-     `all 0.2s ease` duration and a blanket 0.5 disabled opacity whose text
-     composite measured 3.05:1 (fail) — the skin now owns the motion channels
-     and the AA-legible disabled treatment. */
+  /* Layout and paint live in the menu compound skin, keyed on the `ds-menu`
+     anatomy; only the caller's own `style` stays inline. */
   return (
     <li
       {...rest}
-      className={`rottay-menu-item ${disabled ? 'rottay-menu-item--disabled' : ''} ${danger ? 'rottay-menu-item--danger' : ''} ${className}`}
+      className={`ds-menu-item ${className}`.trim()}
       style={style}
+      {...partAttributes(dataPart ?? 'item', interaction.state)}
+      {...interaction.handlers}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="menuitem"
-      data-part={dataPart ?? 'item'}
       data-disabled={disabled || undefined}
       data-tone={danger ? 'danger' : undefined}
       tabIndex={disabled ? -1 : 0}
@@ -139,11 +139,8 @@ export function MenuItem({
       title={title}
       data-key={itemKey}
     >
-      {/* Icon container */}
-      {icon && <span className="rottay-menu-item__icon" data-part="icon">{icon}</span>}
-
-      {/* Label text */}
-      <span className="rottay-menu-item__label" data-part="label">{children}</span>
+      {icon && <span data-part="icon">{icon}</span>}
+      <span data-part="label">{children}</span>
     </li>
   );
 }

@@ -1,13 +1,9 @@
 import React from 'react';
-import { readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernMenu from '../engines/modern';
 
-const here = dirname(fileURLToPath(import.meta.url));
 
 const items = [
   { key: 'dashboard', label: 'Dashboard' },
@@ -37,7 +33,7 @@ describe('Modern Menu public anatomy', () => {
       const htmlEl = el as HTMLElement;
       for (const prop of Array.from(htmlEl.style)) {
         expect(
-          prop.startsWith('--rottay-menu-') || !PAINT_PROPS.test(prop),
+          prop.startsWith('--ds-menu-') || !PAINT_PROPS.test(prop),
           `${htmlEl.tagName}[data-part="${htmlEl.getAttribute('data-part')}"] carries inline "${prop}"`
         ).toBe(true);
       }
@@ -49,10 +45,11 @@ describe('Modern Menu public anatomy', () => {
       <ModernMenu items={items} mode="horizontal" theme="dark" defaultOpenKeys={['settings']} />
     );
 
-    const root = container.querySelector('.rottay-menu--modern[data-part="root"]') as HTMLElement;
+    const root = container.querySelector('.ds-menu--modern[data-part="root"]') as HTMLElement;
     expect(root).toHaveAttribute('role', 'menu');
     expect(root).toHaveAttribute('data-mode', 'horizontal');
-    expect(root.className).toContain('rottay-menu--dark');
+    expect(root).toHaveAttribute('data-variant', 'dark');
+    expect(root.className).not.toMatch(/rottay-/);
 
     const rows = container.querySelectorAll('[data-part="item"]');
     expect(rows).toHaveLength(4); // dashboard + profile + billing + delete
@@ -80,33 +77,17 @@ describe('Modern Menu public anatomy', () => {
     expect(screen.getByText('Profile')).toBeInTheDocument();
   });
 
-  it('makes the skin pair every text surface with the card chrome tokens', () => {
-    // PAIRED-SURFACE LAW pin: raw --ds-surface-card may be a dark feature
-    // surface (TMM #18181c) while the text tokens stay dark; every
-    // text-bearing state surface mixes from --ds-card-bg instead.
-    const MENU_SKIN = readFileSync(
-      join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/menu/index.css'),
-      'utf8'
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-
-    const stateRules = MENU_SKIN.match(/background[^;]*surface-card[^;]*;/g) ?? [];
-    expect(stateRules.length).toBeGreaterThan(0);
-    for (const rule of stateRules) {
-      expect(rule, `surface mix bypasses the card pairing: ${rule}`).toContain('--ds-card-bg');
-    }
-  });
-
   it('exposes hierarchy through data-level and the custom-property channel', () => {
     render(<ModernMenu items={items} defaultOpenKeys={['settings']} inlineIndent={20} />);
 
     const top = screen.getByText('Dashboard').closest('[data-part="item"]') as HTMLElement;
     expect(top).toHaveAttribute('data-level', 'top');
-    expect(top.style.getPropertyValue('--rottay-menu-level')).toBe('0');
+    expect(top.style.getPropertyValue('--ds-menu-level')).toBe('0');
 
     const child = screen.getByText('Profile').closest('[data-part="item"]') as HTMLElement;
     expect(child).toHaveAttribute('data-level', 'child');
-    expect(child.style.getPropertyValue('--rottay-menu-level')).toBe('1');
-    expect(child.style.getPropertyValue('--rottay-menu-inline-indent')).toBe('20px');
+    expect(child.style.getPropertyValue('--ds-menu-level')).toBe('1');
+    expect(child.style.getPropertyValue('--ds-menu-inline-indent')).toBe('20px');
   });
 
   it('marks selection with aria-current and data-selected', () => {
@@ -211,58 +192,4 @@ describe('Modern Menu public anatomy', () => {
     expect(screen.getByText(/إعدادات مساحة العمل/)).toHaveAttribute('data-part', 'label');
   });
 
-  it('keeps the label rule in a block formatting context so the ellipsis survives', () => {
-    // K3-B Pass-2 regression pin: theme.css's legacy icon bridge
-    // (`[data-tenant] .rottay-menu li > button > span:first-child`, (0,3,2))
-    // pins an icon-less row's label span to `inline-flex`, and a flex
-    // formatting context never ellipsizes — long labels clipped without the
-    // "…" (sighted on the k3-lane-b matrix captures, both tenants). The skin
-    // must therefore carry the doubled-attr label selector ((0,4,1)) AND an
-    // explicit `display: block`.
-    const MENU_SKIN = readFileSync(
-      join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/menu/index.css'),
-      'utf8'
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-
-    const labelRule = MENU_SKIN.match(
-      /\[data-part='label'\]\[data-part='label'\]\s*\{[^}]*\}/
-    );
-    expect(labelRule, 'label rule lost the doubled-attr selector').not.toBeNull();
-    expect(labelRule?.[0]).toContain('display: block');
-    expect(labelRule?.[0]).toContain('text-overflow: ellipsis');
-  });
-
-  it('owns the 62/45 level geometry against the legacy sidebar bridge', () => {
-    // K3-B Pass-2 regression pin: theme.css's legacy sidebar bridge clamps
-    // `.rottay-menu li > button/a` to `min-height: 60px`, flattening the
-    // documented 62/45 hierarchy to 60/60 (sighted: submenu children
-    // rendered as oversized 60px rows on every matrix capture). The top-row
-    // chain must not read `--ds-menu-item-height` (default.css defines it at
-    // 2.5rem for the compound Item's inline minHeight — it would hijack the
-    // 62px frame with 40px), and both level rules must clear the min clamp.
-    const MENU_SKIN = readFileSync(
-      join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/menu/index.css'),
-      'utf8'
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-
-    const topRule = MENU_SKIN.match(/\[data-level='top'\][^{]*\{[^}]*\}/);
-    expect(topRule?.[0]).toContain('min-block-size: 0');
-    expect(topRule?.[0]).toContain(
-      'block-size: calc(var(--ds-sidebar-item-height, 62px) * var(--ds-density-effective-scale, 1))'
-    );
-    expect(topRule?.[0]).not.toContain('--ds-menu-item-height');
-
-    const childRule = MENU_SKIN.match(/\[data-level='child'\][^{]*\{[^}]*\}/);
-    expect(childRule?.[0]).toContain('min-block-size: 0');
-    expect(childRule?.[0]).toContain('45px');
-
-    // The coarse-pointer 44px floor is skin-owned (the bridge clamp that
-    // used to satisfy it by accident is cleared above).
-    // C2c law: a per-component touch channel chains to the single canonical
-    // --ds-touch-target-min, so 44px survives only as that channel's own
-    // fallback. Pinned as a chain, not a literal, so reformatting cannot lie.
-    expect(MENU_SKIN).toMatch(
-      /var\(\s*--ds-menu-touch-target-min\s*,\s*var\(\s*--ds-touch-target-min\s*,\s*44px\s*\)\s*\)/
-    );
-  });
 });

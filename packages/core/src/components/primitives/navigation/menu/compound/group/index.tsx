@@ -87,22 +87,18 @@ export function MenuGroup({
   // Render
   // ========================================================================
 
-  /* Layout and paint (list resets, title padding/typography/uppercase
-     tracking) live in `menu-compounds.css` on the `rottay-menu-group` BEM
-     classes; only the caller's own `style` stays inline. The former inline
-     title block carried a font-size literal, which the typographic-roles law
-     forbids in components. */
+  /* Layout and paint live in the menu compound skin, keyed on the `ds-menu`
+     anatomy; only the caller's own `style` stays inline. */
   return (
     <li
       {...rest}
-      className={`rottay-menu-group ${className}`}
+      className={`ds-menu-group ${className}`.trim()}
       style={style}
       role="presentation"
       data-part={dataPart ?? 'group'}
     >
       {/* Group title header */}
       <div
-        className="rottay-menu-group__title"
         role="presentation"
         data-part="group-label"
       >
@@ -111,7 +107,6 @@ export function MenuGroup({
 
       {/* Grouped menu items */}
       <ul
-        className="rottay-menu-group__content"
         role="group"
         data-part="panel"
         aria-label={typeof title === 'string' ? title : undefined}

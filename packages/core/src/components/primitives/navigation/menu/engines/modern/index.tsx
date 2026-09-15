@@ -5,12 +5,12 @@
  *
  * @remarks
  * The engine stamps anatomy (`data-part` hooks), hierarchy (`data-level` +
- * the `--rottay-menu-level`/`--rottay-menu-inline-indent` custom-property
+ * the `--ds-menu-level`/`--ds-menu-inline-indent` custom-property
  * data channel — configuration, not paint) and interaction state
- * (`data-selected`, `data-open`, `data-disabled`, `data-tone`); the modern
- * skin (`modern/skin/menu.css`) owns 100% of layout and paint. No inline
- * style objects beyond the two custom properties, no DaisyUI classes, no
- * Tailwind utilities. The `BaseComponentProps` passthrough (id / aria-* /
+ * (`data-selected`, `data-open`, `data-disabled`, `data-tone`) beside the
+ * kernel's `data-state`, decided once by `useInteractionState`; the modern
+ * skin (`modern/skin/menu`) owns 100% of layout and paint. No inline style
+ * objects beyond the two custom properties. The `BaseComponentProps` passthrough (id / aria-* /
  * data-* / data-testid + the caller-owned `data-part` hook, P-79) spreads on
  * the root BEFORE the engine's stamps so the skin contract always lands last.
  *
@@ -63,6 +63,7 @@ import type { CSSProperties } from 'react';
 import type { MenuProps, MenuItem as MenuItemInterface, MenuEntry as MenuEntryInterface, MenuSelectInfo, MenuClickInfo } from '../../contracts';
 import { MENU_DEFAULTS } from '../../contracts';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import {
   resolveNavigationIntent,
   resolveNavigationTarget,
@@ -147,8 +148,8 @@ function collectNavigableRows(
  */
 function getLevelStyleVars(level: number, inlineIndent: number): CSSProperties {
   return {
-    ['--rottay-menu-level' as string]: String(level),
-    ['--rottay-menu-inline-indent' as string]: `${inlineIndent}px`,
+    ['--ds-menu-level' as string]: String(level),
+    ['--ds-menu-inline-indent' as string]: `${inlineIndent}px`,
   };
 }
 
@@ -176,19 +177,24 @@ function MenuItemRow({
   const isChild = level > 0;
   const { onItemClick, inlineIndent, roving, disclosureAxis } = context;
   const rovingProps = roving.getItemProps(item.key);
+  const interaction = useInteractionState({ disabled: Boolean(item.disabled) });
 
   return (
     <li key={item.key} data-part="row" role="none">
       <a
         role="menuitem"
-        data-part="item"
+        {...partAttributes('item', interaction.state)}
+        {...interaction.handlers}
         data-selected={isSelected}
         data-disabled={item.disabled || undefined}
         data-tone={item.danger ? 'danger' : undefined}
         data-level={isChild ? 'child' : 'top'}
         ref={rovingProps.ref}
         tabIndex={rovingProps.tabIndex}
-        onFocus={rovingProps.onFocus}
+        onFocus={(e) => {
+          interaction.handlers.onFocus(e);
+          rovingProps.onFocus();
+        }}
         style={getLevelStyleVars(level, inlineIndent)}
         aria-disabled={item.disabled || undefined}
         aria-current={isSelected ? 'page' : undefined}
@@ -255,6 +261,7 @@ function SubmenuRow({
 }) {
   const { onSubmenuToggle, selectedKeys, inlineIndent, expandIcon, roving, disclosureAxis } = context;
   const rovingProps = roving.getItemProps(item.key);
+  const interaction = useInteractionState({ disabled: Boolean(item.disabled) });
   const hadSelectedDescendantRef = useRef(false);
   // Wired only while the panel is mounted: a dangling `aria-controls` reference
   // is worse than none (the Collapse panel idiom).
@@ -281,13 +288,17 @@ function SubmenuRow({
     <li key={item.key} data-part="row" role="none">
       <div
         style={getLevelStyleVars(level, inlineIndent)}
-        data-part="trigger"
+        {...partAttributes('trigger', interaction.state)}
+        {...interaction.handlers}
         role="menuitem"
         data-disabled={item.disabled || undefined}
         data-level={level > 0 ? 'child' : 'top'}
         ref={rovingProps.ref}
         tabIndex={rovingProps.tabIndex}
-        onFocus={rovingProps.onFocus}
+        onFocus={(e) => {
+          interaction.handlers.onFocus(e);
+          rovingProps.onFocus();
+        }}
         aria-disabled={item.disabled || undefined}
         aria-expanded={isOpen}
         aria-controls={isOpen ? panelId : undefined}
@@ -668,11 +679,12 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   return (
     <ul
       {...rest}
-      className={`rottay-menu rottay-menu--modern rottay-menu--${theme} ${className}`.trim()}
+      className={`ds-menu ds-menu--modern ${className}`.trim()}
       style={style}
       role="menu"
       aria-orientation={mode === 'horizontal' ? 'horizontal' : 'vertical'}
       data-part={dataPart ?? 'root'}
+      data-variant={theme}
       data-mode={mode}
       data-collapsed={inlineCollapsed || undefined}
       data-has-selection={selectedKeys.length > 0 || undefined}

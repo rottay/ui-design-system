@@ -728,6 +728,27 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-04: Callout is folded into Alert -- both Modern engines render feedback/alert/runtime/surface (Callout stays a deprecated role entry point); tone, surface, type and dismiss relations by derivation/chrome/alert, constants by presentation/components/alert; the dismiss decides state through the interaction kernel; one ds-alert vocabulary (the compound answers to ds-alert-description). callout is not a separate cut family."
+    },
+    "menu": {
+      "cut": "WO-FAM-05",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 8,
+        "channelsRead": 146,
+        "classTokens": 7,
+        "partsStamped": 11,
+        "partsConsumed": 11
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-05 lot 1: surface, row, current-marker, icon, panel, group and divider relations by derivation/chrome/menu (92 --ds-menu-* channels on the spacing ramp, the type roles, the elevation scale and the produced --ds-sidebar-* roots); skin/menu paints the engine tree and skin/menu-compounds the compounds, both on one ds-menu vocabulary; rows, triggers and compounds decide state through the interaction kernel; keyboard and the RTL-aware disclosure axis from runtime/collection/roving-focus; the submenu compound is a menuitem row with a data-open track, no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
     }
   }
 }

@@ -53,40 +53,16 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import type { CSSProperties } from 'react';
+import React, { useId, useState } from 'react';
 import type { MenuSubMenuProps } from '../../contracts';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '@/components/primitives/runtime/collection/roving-focus';
 
 // ============================================================================
 // MenuSubMenu Component
 // ============================================================================
 
-/**
- * Expandable submenu container component.
- *
- * @description
- * Renders an expandable submenu with smooth height animation.
- * Supports icons, disabled state, and custom expand icons.
- *
- * @remarks
- * - Smooth expand/collapse animation via a `grid-template-rows` track
- * - Full keyboard navigation (Enter, Space, Arrow keys)
- * - ARIA attributes for screen reader support
- * - Rotate animation on expand icon
- * - Uses CSS variables for theming consistency
- *
- * @param props - {@link MenuSubMenuProps}
- * @returns Rendered submenu element
- *
- * @example
- * ```tsx
- * <MenuSubMenu itemKey="nav" title="Navigation" icon={<MenuIcon />}>
- *   <MenuItem itemKey="home">Home</MenuItem>
- *   <MenuItem itemKey="about">About</MenuItem>
- * </MenuSubMenu>
- * ```
- */
 export function MenuSubMenu({
   itemKey,
   title,
@@ -101,21 +77,10 @@ export function MenuSubMenu({
   // submenu root element, BEFORE the engine's own stamps.
   ...rest
 }: MenuSubMenuProps): React.ReactElement {
-  // ========================================================================
-  // State
-  // ========================================================================
-
-  /** Controls the open/closed state of the submenu */
   const [isOpen, setIsOpen] = useState(false);
+  const interaction = useInteractionState({ disabled });
+  const panelId = `menu-submenu-${useId().replace(/:/g, '')}`;
 
-  // ========================================================================
-  // Event Handlers
-  // ========================================================================
-
-  /**
-   * Handles click on the submenu title.
-   * Toggles open state and calls optional callback.
-   */
   const handleTitleClick = (e: React.MouseEvent<HTMLElement>) => {
     if (disabled) {
       e.preventDefault();
@@ -125,109 +90,56 @@ export function MenuSubMenu({
     onTitleClick?.(e);
   };
 
-  /**
-   * Handles keyboard navigation for accessibility.
-   * - Enter/Space: Toggle open state
-   * - ArrowRight: Open submenu
-   * - ArrowLeft: Close submenu
-   */
+  // The disclosure axis is the cross axis of a vertical menu, resolved by the
+  // shared collection kernel so the forward key mirrors under RTL.
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (disabled) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       setIsOpen(!isOpen);
+      return;
     }
-    if (e.key === 'ArrowRight' && !isOpen) {
+    const intent = resolveNavigationIntent(e.key, {
+      orientation: 'horizontal',
+      rtl: resolveReadingDirectionIsRtl(e.currentTarget),
+    });
+    if (intent === 'next' && !isOpen) {
+      e.preventDefault();
       setIsOpen(true);
-    }
-    if (e.key === 'ArrowLeft' && isOpen) {
+    } else if (intent === 'previous' && isOpen) {
+      e.preventDefault();
       setIsOpen(false);
     }
   };
 
-  // ========================================================================
-  // Styles
-  // ========================================================================
-
-  /**
-   * Panel track styles: the grid-template-rows value is the only per-render
-   * dynamic piece (0fr collapsed / 1fr expanded); `display:grid` and the
-   * `transition`/reduced-motion rules live in menu-compounds.css on
-   * `.rottay-menu-submenu__panel` (mirrors Collapse -- see
-   * Collapse/engines/modern/index.tsx:26-37). Every other former inline
-   * block (title row, expand-icon wrapper, content indent) was static paint
-   * with raw `0.2s ease` durations and physical `marginLeft`/`paddingLeft`
-   * properties: all of it now lives in menu-compounds.css on the compound
-   * BEM classes, on governed motion channels and logical properties.
-   */
-  const panelStyle: CSSProperties = {
-    gridTemplateRows: isOpen ? '1fr' : '0fr',
-  };
-
-  // ========================================================================
-  // Default Expand Icon
-  // ========================================================================
-
-  /**
-   * Governed disclosure icon: the semantic facade's `navigation.down` role
-   * replaces the former local SVG chevron (axis-9 law: roles only, no local
-   * SVG). `autoMirror: false` — a vertical arrow needs no RTL flip, and the
-   * skin owns the open/closed rotation via `data-open`.
-   */
   const defaultExpandIcon = <NavigationDownIcon decorative size={12} />;
 
-  // ========================================================================
-  // Render
-  // ========================================================================
-
   return (
-    <li
-      {...rest}
-      className={`rottay-menu-submenu ${isOpen ? 'rottay-menu-submenu--open' : ''} ${disabled ? 'rottay-menu-submenu--disabled' : ''} ${className}`}
-      style={style}
-      data-key={itemKey}
-    >
-      {/* Submenu title bar */}
+    <li {...rest} className={`ds-menu-submenu ${className}`.trim()} style={style} role="none" data-key={itemKey}>
       <div
-        className="rottay-menu-submenu__title"
+        {...partAttributes('trigger', interaction.state)}
+        {...interaction.handlers}
         onClick={handleTitleClick}
         onKeyDown={handleKeyDown}
-        role="button"
-        data-part="trigger"
+        role="menuitem"
         data-open={isOpen}
         data-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : 0}
         aria-expanded={isOpen}
         aria-disabled={disabled}
-        aria-haspopup="true"
+        aria-haspopup="menu"
+        aria-controls={panelId}
       >
-        {/* Optional icon */}
-        {icon && <span className="rottay-menu-submenu__icon" data-part="icon">{icon}</span>}
-
-        {/* Title label */}
-        <span className="rottay-menu-submenu__label" data-part="label">{title}</span>
-
-        {/* Expand/collapse icon */}
-        <span className="rottay-menu-submenu__expand-icon" data-part="arrow-icon">
+        {icon && <span data-part="icon">{icon}</span>}
+        <span data-part="label">{title}</span>
+        <span data-part="arrow-icon" aria-hidden="true">
           {expandIcon || defaultExpandIcon}
         </span>
       </div>
-
-      {/* Panel: the grid-template-rows track (0fr collapsed / 1fr expanded).
-          The nested `<ul role="menu">` stays the `data-part="panel"` element
-          (the documented "submenu's flyout/nested list" contract); this div
-          is a structural wrapper only, mirroring Collapse's outer/inner split
-          -- see Collapse/engines/modern/index.tsx:26-37. The skin hides the
-          collapsed content with `visibility: hidden` so its focusable rows
-          leave the tab order while `aria-hidden` is set (the former grid-only
-          collapse leaked them into keyboard navigation). */}
-      <div className="rottay-menu-submenu__panel" data-open={isOpen} style={panelStyle}>
-        <ul
-          className="rottay-menu-submenu__content"
-          role="menu"
-          data-part="panel"
-          aria-hidden={!isOpen}
-        >
+      {/* The track animates height through grid rows in the skin, keyed on
+          data-open; the nested list stays the documented `panel` part. */}
+      <div className="ds-menu-submenu__track" data-open={isOpen}>
+        <ul id={panelId} role="menu" data-part="panel" aria-hidden={!isOpen}>
           {children}
         </ul>
       </div>

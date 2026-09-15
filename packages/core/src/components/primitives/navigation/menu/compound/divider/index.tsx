@@ -90,13 +90,12 @@ export function MenuDivider({
   // Render
   // ========================================================================
 
-  /* Geometry (1px block size, block margins) lives in `menu-compounds.css`
-     on the `rottay-menu-divider` BEM class; only the caller's own `style`
+  /* Geometry lives in the menu compound skin; only the caller's own `style`
      stays inline. */
   return (
     <li
       {...rest}
-      className={`rottay-menu-divider ${dashed ? 'rottay-menu-divider--dashed' : ''} ${className}`}
+      className={`ds-menu-divider ${dashed ? 'ds-menu-divider--dashed' : ''} ${className}`.trim()}
       style={style}
       role="separator"
       data-part={dataPart ?? 'divider'}
