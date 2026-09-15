@@ -470,16 +470,23 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    * booleano `followsSystem`) y +302 en admission (el verificador lo lee del
    * artefacto igual que el productor). El techo lo amplio DER-05 con `--widen`
    * y su `lastMove`; este ancla no se habia re-medido. Los modulos siguen sin
-   * moverse: no entra ningun import nuevo. */
+   * moverse: no entra ningun import nuevo.
+   *
+   * 73141 -> 73544 (2026-09-15, lote textura D6-2c-i, commit 449e86e55): +403
+   * en UNA hoja, kernel/foundation/css/value-safety (6303 -> 6706): la palabra
+   * export, los dos nombres repeating-*-gradient y el docblock de doctrina
+   * single-source que cierra el drift admission/emision (revision focal: Codex
+   * ACCEPT + Fable ACCEPT, evidence/der-06-texture-review/). Los modulos siguen
+   * en 9: no entra ningun import nuevo. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 73141 },
+    { reachableModules: 9, sourceBytes: 73544 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 73141), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 73544), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */
