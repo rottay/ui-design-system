@@ -21,9 +21,12 @@ function createProps(overrides: Partial<WorkspaceSwitcherProps> = {}): Workspace
 }
 
 describe('ModernWorkspaceSwitcher — APG roving focus', () => {
-  it('hands REAL DOM focus from the search field to the first row', () => {
+  it('hands REAL DOM focus from the search field to the first row', async () => {
     renderWithEngine(<ModernWorkspaceSwitcher {...createProps()} />, 'modern');
-    fireEvent.click(screen.getByTestId('workspace-trigger'));
+    // The modern engine implementation is `React.lazy`, so the FIRST render of
+    // a modern component in a fresh module graph is the Suspense fallback.
+    // `findBy*` awaits that boundary; it fails just as hard if it never mounts.
+    fireEvent.click(await screen.findByTestId('workspace-trigger'));
 
     const search = screen.getByTestId('workspace-search') as HTMLInputElement;
     // A textbox may not own a `menu` popup: the combobox role went with the

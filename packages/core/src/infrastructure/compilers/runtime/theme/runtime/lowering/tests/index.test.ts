@@ -16,7 +16,12 @@ import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/the
 import { staticThemeIntent } from "../../ingress";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { compileTheme } from "..";
-import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
+import {
+  FIRST_PARTY_BASELINES,
+  lowerBrandThemeFixture,
+  resolveFirstParty,
+} from "@tests/support/theme-lowering";
+import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 
 const modern = resolveAdapter("modern");
 const baseline = FIRST_PARTY_BASELINES.bithire;
@@ -58,10 +63,37 @@ describe("compileTheme", () => {
     expect(asTenant.modeBlocks).toEqual(asVertical.modeBlocks);
   });
 
-  it("the discriminant is observable as soon as the tenant claims a leaf", () => {
-    // The claim is what the seed derivation reads -- not the value. Claiming
-    // the vertical's OWN primary colour therefore still moves channels, which
-    // is the whole reason provenance travels beside the resolved theme.
+  it("the discriminant is observable as soon as the tenant claims a leaf the block bakes", () => {
+    // The claim is what the seed derivation reads -- not the value. Claiming a
+    // primary colour therefore moves channels even when the value is the one
+    // the block already carries, which is the whole reason provenance travels
+    // beside the resolved theme. The subject is a theme that BAKES its primary
+    // family as literals: a tenant-derived value outranks a baseline LEAF, and
+    // has nothing to outrank where the block only holds an indirection.
+    const plain = lowerBrandThemeFixture({
+      brandTheme: themanagementmiamiBrandTheme,
+      tenantSlug: "themanagementmiami",
+    });
+    const claimed = lowerBrandThemeFixture({
+      brandTheme: themanagementmiamiBrandTheme,
+      tenantSlug: "themanagementmiami",
+      tenantAuthoredPaths: new Set(["palette.primaryColor"]),
+    });
+    expect(claimed.cssVariables).not.toEqual(plain.cssVariables);
+    expect(plain.cssVariables["--ds-button-primary-bg"]).toBe("#0F766E");
+    expect(claimed.cssVariables["--ds-button-primary-bg"]).toBe(
+      "var(--ds-color-primary)"
+    );
+  });
+
+  it("has nothing to outrank on a first-party baseline: the indirection already tracks the seed", () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the retired authored theme baked its primary family as literals, so the
+    // claim moved 5 channels on bithire -- it now moves 0. This is the seed
+    // deriver's third guard ("a value that bakes no colour of its own already
+    // tracks the seed"), not a lost channel: the same claim still moves the
+    // same 5 channels on a theme that bakes, asserted above.
+    const asVertical = compileTheme(resolveFirstParty(bithire), modern);
     const claimed = compileTheme(
       {
         theme: baseline,
@@ -72,8 +104,10 @@ describe("compileTheme", () => {
       },
       modern
     );
-    const asVertical = compileTheme(resolveFirstParty(bithire), modern);
-    expect(claimed.cssVariables).not.toEqual(asVertical.cssVariables);
+    expect(claimed.cssVariables).toEqual(asVertical.cssVariables);
+    expect(asVertical.cssVariables["--ds-button-primary-bg"]).toBe(
+      "var(--ds-color-primary)"
+    );
   });
 
   it("stamps the adapter's engine and projection onto the product", () => {

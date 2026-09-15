@@ -39,6 +39,29 @@ describe('touch-target floor (44px coarse pointer)', () => {
       css('runtime/engines/modern/skin/menu/index.css'),
     ].join('\n');
     const CANONICAL_FLOOR = /(?:44px|2\.75rem)/;
+    /** Every value the cascade declares for a channel, across the files above. */
+    const declaredValues = (channel: string): string[] =>
+      [...declarations.matchAll(new RegExp(`${channel}:\\s*([^;]+);`, 'g'))].map((match) =>
+        match[1].trim()
+      );
+    /**
+     * Does this expression REACH the floor? A read may carry it in place, or
+     * name a channel declared with it, or fall back to another channel that
+     * is -- which is how the menu reads it
+     * (`var(--ds-menu-touch-target-min, var(--ds-touch-target-min))`). The
+     * chain is followed the way the cascade follows it; a chain that ends
+     * anywhere else still fails.
+     */
+    const reachesFloor = (expression: string, depth = 0): boolean => {
+      if (depth > 4 || !expression) return false;
+      if (CANONICAL_FLOOR.test(expression.replace(/var\([^)]*\)/g, ''))) return true;
+      for (const match of expression.matchAll(/var\(\s*(--[a-z0-9-]+)\s*(?:,\s*([\s\S]+))?\)/g)) {
+        const [, channel, fallback] = match;
+        if (declaredValues(channel).some((value) => reachesFloor(value, depth + 1))) return true;
+        if (fallback && reachesFloor(fallback, depth + 1)) return true;
+      }
+      return false;
+    };
     for (const skin of [
       'runtime/engines/modern/skin/button/index.css',
       'runtime/engines/modern/skin/input/index.css',
@@ -47,25 +70,26 @@ describe('touch-target floor (44px coarse pointer)', () => {
     ]) {
       const content = css(skin);
       expect(content, skin).toMatch(/pointer:\s*coarse/);
+      // The fallback may itself be a `var()`, so one nesting level is captured
+      // rather than stopping at the first `)`.
       const reads = [
-        ...content.matchAll(/var\((--ds-[a-z-]*touch-target-min)\s*(,\s*[^)]+)?\)/g),
+        ...content.matchAll(
+          /var\((--ds-[a-z-]*touch-target-min)\s*(,\s*(?:[^()]|\([^()]*\))+)?\)/g
+        ),
       ].map((match) => ({ channel: match[1], fallback: (match[2] ?? '').slice(1).trim() }));
       expect(reads.length, `${skin} reads no touch-target channel`).toBeGreaterThan(0);
       for (const { channel, fallback } of reads) {
-        // Either the read carries the floor in place, or the channel it names
-        // is declared somewhere in the cascade with the floor. One of the two,
-        // never neither -- that is what makes the 44px reachable.
-        if (CANONICAL_FLOOR.test(fallback)) continue;
-        const declared = [
-          ...declarations.matchAll(new RegExp(`${channel}:\\s*([^;]+);`, 'g')),
-        ].map((match) => match[1].trim());
+        // Either the read carries the floor in place, or it reaches it through
+        // the channel it names or that channel's own fallback. One of the
+        // three, never none -- that is what makes the 44px reachable.
+        const reached =
+          reachesFloor(fallback) ||
+          declaredValues(channel).some((value) => reachesFloor(value)) ||
+          reachesFloor(`var(${channel}${fallback ? `, ${fallback}` : ''})`);
         expect(
-          declared.length,
-          `${channel} is read by ${skin} with no in-place floor and no declaration`
-        ).toBeGreaterThan(0);
-        for (const value of declared) {
-          expect(value, `${channel} in ${skin}`).toMatch(CANONICAL_FLOOR);
-        }
+          reached,
+          `${channel} is read by ${skin} and reaches no 44px floor by any route`
+        ).toBe(true);
       }
     }
   });

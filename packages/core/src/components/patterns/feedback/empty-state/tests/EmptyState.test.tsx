@@ -76,7 +76,7 @@ describe('PatternEmptyState', () => {
   // -----------------------------------------------------------------------
   it.each(STABLE_ENGINES)(
     'renders an action button and fires onClick in the %s engine',
-    (engine) => {
+    async (engine) => {
       const Component = COMPONENTS[engine];
       const onClick = vi.fn();
       renderWithEngine(
@@ -88,7 +88,9 @@ describe('PatternEmptyState', () => {
         engine,
       );
 
-      const button = screen.getByText('Create Item');
+      // The action composes the Button primitive, which resolves through its
+      // own lazy engine boundary: await it instead of reading the first frame.
+      const button = await screen.findByText('Create Item');
       expect(button).toBeInTheDocument();
       fireEvent.click(button);
       expect(onClick).toHaveBeenCalledTimes(1);

@@ -60,8 +60,10 @@ describe("the roster is internally consistent", () => {
 
   it("derives every path-shaped field from the slug", () => {
     for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+      // themeSourcePath foundation/tokens/ts/presentation/brand-themes/<slug>/index.ts -> foundation/presets/verticals/<slug>/document/index.json
       expect(row.themeSourcePath).toBe(
-        `foundation/tokens/ts/presentation/brand-themes/${row.slug}/index.ts`,
+        `foundation/presets/verticals/${row.slug}/document/index.json`,
       );
       expect(row.artifactPath).toBe(
         `foundation/tokens/css/facade/artifacts/${row.slug}/index.css`,

@@ -87,12 +87,14 @@ describeCausality({
     { id: 'duration', selector: CLOSE, property: 'transition-duration' },
   ],
   decisions: {
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['okBg', 'focusRing'], holds: 'radius', in: VERTICALS },
+    // `focusRing` left this arm in D6-2c-ii-RED: the ring colour follows the
+    // seed only in a dark scope. The two-sided pin below is the detector.
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['okBg'], holds: 'radius', in: VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
-    'states.emphasis': { value: 'strong', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
+    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'titleSize', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['padding'], holds: 'radius', in: VERTICALS },
+    'density.mode': { value: 'spacious', moves: ['padding'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'flat', moves: ['shadow'], holds: 'radius', in: ['evnto'] },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },
@@ -198,4 +200,37 @@ describe('modal posture, direction, language, loading and accessibility', () => 
       expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
     }
   }, 180_000);
+});
+
+/**
+ * The focus ring is a THEME channel, and D6-2c-ii moved which verticals reach it.
+ *
+ * `--ds-focus-ring-color` is declared twice by the foundation: `#ECECEC` in the
+ * light `:root` scope and `var(--ds-color-primary-400)` in the dark one. The
+ * light literal is a tenant-less fallback whose own comment says "every
+ * first-party tenant re-declares this as var(--ds-color-primary) in its own
+ * artifact block". The authored themes did; the preset documents do not, so a
+ * light-default vertical now ships the fallback and the ring stops following
+ * the palette. This is the canonical two-sided pin for the four families whose
+ * `palette.seeds` arm listed `focusRing` (modal, drawer, alert, notifier);
+ * WO-DER-06 owns the gap and this row reddens when the lane closes it.
+ */
+describe('focus ring reach under the neutral compile', () => {
+  it('follows the seed in a dark scope and stops at the light fallback', async () => {
+    const reach: Record<string, boolean> = {};
+    for (const vertical of VERTICALS) {
+      const result = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {}, seed: { 'palette.seeds': { primary: '#2F6B9A' } } },
+        targets: [
+          { id: 'ringColor', selector: CLOSE, property: '--ds-focus-ring-color' },
+        ],
+      });
+      reach[vertical] = result.seed!.ringColor !== result.base!.ringColor;
+    }
+    // rottay is dark-default and reaches its palette; bithire and evnto are
+    // light-default and are stuck on the foundation fallback.
+    expect(reach).toEqual({ rottay: true, bithire: false, evnto: false });
+  }, 240_000);
 });

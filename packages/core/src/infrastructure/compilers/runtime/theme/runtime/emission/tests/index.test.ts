@@ -215,6 +215,34 @@ describe("the guard drops no channel the first-party corpus actually emits", () 
     "--ds-card-shadow-hover",
   ];
 
+  /**
+   * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+   * no preset authors a spring curve or card shadow chrome, so the two hard
+   * value shapes the grammar had to learn -- `linear()` and a multi-layer
+   * shadow -- left the first-party corpus entirely (3 channels seen -> 0).
+   *
+   * The control they served is NOT dropped: a grammar proven only on the easy
+   * shapes is the vacuous pass this describe exists to prevent. It is
+   * re-anchored one layer down, on `emitDeclarations` itself, with the shapes
+   * stated explicitly instead of harvested from a theme that no longer carries
+   * them. The corpus sweep below keeps its own two assertions.
+   */
+  it("admits the hard value shapes explicitly, now that no preset authors them", () => {
+    const hard = {
+      "--ds-motion-spring-gentle":
+        "linear(0, 0.009, 0.035, 0.078, 0.141, 0.285, 0.723, 0.938, 1)",
+      "--ds-card-shadow":
+        "0 1px 2px rgba(0,0,0,0.04), 0 8px 16px rgba(0,0,0,0.08)",
+      "--ds-card-shadow-hover":
+        "0 2px 4px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.12)",
+    } as const;
+    const emitted = emitDeclarations(hard);
+    expect(emitted).toHaveLength(Object.keys(hard).length);
+    for (const [name, value] of Object.entries(hard)) {
+      expect(emitted).toContain(`  ${name}: ${value};`);
+    }
+  });
+
   it("admits every compiled channel of every first-party theme", () => {
     let total = 0;
     const dropped: string[] = [];
@@ -241,8 +269,11 @@ describe("the guard drops no channel the first-party corpus actually emits", () 
     }
     expect(dropped).toEqual([]);
     expect(total).toBeGreaterThan(4000);
-    // The value shapes the grammar had to learn are really in the corpus, so
-    // this control cannot pass vacuously: linear() and multi-line shadows.
-    expect([...seenShapes].sort()).toEqual([...NAMED_SHAPES].sort());
+    // D6-2c-ii (2026-09-15): the corpus carries NONE of the hard shapes any
+    // more (3 -> 0), so the non-vacuity control moved to the test above. Pinned
+    // to the measured emptiness rather than removed: a preset that authors a
+    // spring or a card shadow again turns this red and moves the control back.
+    expect([...seenShapes].sort()).toEqual([]);
+    expect(NAMED_SHAPES).toHaveLength(3);
   });
 });

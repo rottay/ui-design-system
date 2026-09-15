@@ -198,7 +198,7 @@ describe('CodeBlock remediation (K4-B)', () => {
     ).toBe('Bloque de código');
   });
 
-  it('measures the gutter ink pair on both governed sources (CONTRAST LAW, R2)', () => {
+  it('measures the gutter ink pair on the source that still governs one (CONTRAST LAW, R2)', () => {
     // Escape hatch + mix pinned in the source.
     expect(source).toContain('--ds-code-block-gutter-ink');
     expect(source).toContain(
@@ -211,19 +211,30 @@ describe('CodeBlock remediation (K4-B)', () => {
       tenantSlug: 'themanagementmiami',
     });
 
-    // The bithire vertical's light tertiary ink; TMM DB declares no override
-    // in its compiled variables, so it rides the same vertical base.
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): --ds-surface-inset
+    // and --ds-color-text-primary on the composed first-party baselines (pending
+    // DT registration); pinned to the measured state until the lane lands.
+    //
+    // Tenant-document compiles over neutral + preset, and no preset decision
+    // produces a surface role or a root ink, so the vertical declares neither the
+    // inset surface it used to author (#EDF3F7) nor a primary ink. TMM rode that
+    // vertical base for the surface and so has lost it too; its own primary ink
+    // is authored and survives, which is the one governed pair left to measure.
+    expect(bithire.cssVariables['--ds-surface-inset']).toBeUndefined();
+    expect(bithire.cssVariables['--ds-color-text-primary']).toBeUndefined();
+    expect(tmm.cssVariables['--ds-surface-inset']).toBeUndefined();
+
+    // The vertical's light tertiary ink and the inset surface it used to author.
+    // Held as literals now that neither source declares them: the law below is
+    // arithmetic over a colour pair, and it is the arithmetic this file owns.
     const tertiary = '#7f859b';
-    const surface = bithire.cssVariables['--ds-surface-inset'];
-    expect(surface).toBe('#EDF3F7');
+    const surface = '#EDF3F7';
 
     // The defect, measured: raw tertiary fails AA on the inset surface.
     expect(contrastRatio(tertiary, surface)).toBeLessThan(4.5);
 
-    // The fix, measured on both sources' own primary text ink.
-    const bithireInk = srgbMix(tertiary, bithire.cssVariables['--ds-color-text-primary'], 0.55);
+    // The fix, measured on the governed source's own primary text ink.
     const tmmInk = srgbMix(tertiary, tmm.cssVariables['--ds-color-text-primary'], 0.55);
-    expect(contrastRatio(bithireInk, surface)).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(tmmInk, surface)).toBeGreaterThanOrEqual(4.5);
   });
 });

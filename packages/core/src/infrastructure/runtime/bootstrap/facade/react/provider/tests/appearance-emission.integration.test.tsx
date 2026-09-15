@@ -215,19 +215,34 @@ describe('TenantAppearance via DesignSystemProvider', () => {
     // The pill silhouette reaches the channel as its own product with the
     // radius dial, so a tenant scale still moves it; the authored 9999px is
     // divided by the dial the compiled block declares.
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): bithire
+    // radius base 1.25 -> 0.8. The preset's `shape.radius-scale` now governs
+    // where the retired theme authored the dial, which is the correct
+    // semantics -- the preset decides -- and is registered for DER-07 to
+    // confirm rather than reverted.
     expect(admittedArtifact().variables['--ds-radius-button']).toBe(
-      'calc(9999px / 1.25 * var(--ds-radius-scale, 1))',
+      'calc(9999px / 0.8 * var(--ds-radius-scale, 1))',
     );
 
     const rootStyle = await renderAdmitted();
     expect(rootStyle.getPropertyValue('--ds-radius-button')).toBe('');
   });
 
-  it('appearance.navigation.sidebarTone=inverse compiles sidebar vars, and the provider does not restate them', async () => {
-    expect(admittedArtifact().variables['--ds-sidebar-bg']).toBe(
-      'var(--ds-color-neutral-900)',
-    );
+  it('appearance.navigation.sidebarTone=inverse compiles no sidebar var today, and the provider restates none either', async () => {
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15)
+    // (pending DT registration): `navigation.sidebarTone` reached
+    // `--ds-sidebar-bg` while the vertical authored sidebar chrome for the
+    // tone to invert. A neutral + preset baseline authors none, so the
+    // decision now produces no sidebar channel at all -- measured: zero
+    // `--ds-sidebar-*` in the whole artifact. Pinned to the measured state
+    // until the lane lands; the same loss is evidenced by transport-parity
+    // (sidebar-tone law 0/1b) and static-db-channel-vocabulary.
+    const variables = admittedArtifact().variables;
+    expect(variables['--ds-sidebar-bg']).toBeUndefined();
+    expect(Object.keys(variables).filter((name) => name.startsWith('--ds-sidebar-'))).toEqual([]);
 
+    // The provider half of the law is unchanged and still asserted: whatever
+    // the compile decides, the provider never restates it on the root.
     const rootStyle = await renderAdmitted();
     expect(rootStyle.getPropertyValue('--ds-sidebar-bg')).toBe('');
   });

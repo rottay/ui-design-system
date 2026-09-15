@@ -42,6 +42,11 @@ const BITHIRE_STATIC_ARTIFACT = readFileSync(
   "utf8"
 );
 
+// D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+// this shared fixture is compiled on bithire AND evnto, so it states only what
+// both admit. Two leaves moved, each for a refusal pinned below in "refusals
+// the neutral baseline introduces": navigation.sidebarTone "subtle" ->
+// "strong", and palette.foreground (muted #6B6154 / disabled #80766A) dropped.
 const SIMPLE_DOCUMENT: TenantThemeDocument = {
   schemaVersion: 1,
   mode: "simple",
@@ -50,10 +55,6 @@ const SIMPLE_DOCUMENT: TenantThemeDocument = {
       primary: "#0F766E",
       secondary: "#8C6D46",
       accent: "#E2725B",
-      foreground: {
-        muted: "#6B6154",
-        disabled: "#80766A",
-      },
     },
     typography: {
       fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
@@ -63,7 +64,7 @@ const SIMPLE_DOCUMENT: TenantThemeDocument = {
     motion: { intensity: 0.62, durationScale: 1.15, ambient: "subtle" },
     shape: { buttonStyle: "soft" },
     surfaces: { elevation: "elevated" },
-    navigation: { sidebarTone: "subtle" },
+    navigation: { sidebarTone: "strong" },
   },
 };
 
@@ -223,12 +224,18 @@ const leafKeypaths = (value: unknown, prefix = ""): string[] => {
  * dial folds it: a tenant corner stays reachable by `shape.radius-scale`
  * instead of outranking it from the unlayered tenant block. Spelled out here
  * rather than imported so the expectation is not the emitter's own arithmetic.
- * The BitHire envelope contributes the governed 1.25 radius scale before the
- * shared dial is applied, so authored layout radii are normalized back to the
+ * The BitHire baseline contributes the governed radius scale before the shared
+ * dial is applied, so authored layout radii are normalized back to the
  * canonical scale instead of being magnified a second time.
+ *
+ * WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): bithire radius
+ * base. The preset's `shape.radius-scale` 0.8 governs where the retired
+ * authored theme carried 1.25, so the divisor moved 1.25 -> 0.8 here and in
+ * every literal below. The preset deciding is the correct semantics; it is
+ * registered for DER-07 to confirm, not reverted.
  */
 const dialedRadius = (authored: string) =>
-  `calc(${authored} / 1.25 * var(--ds-radius-scale, 1))`;
+  `calc(${authored} / 0.8 * var(--ds-radius-scale, 1))`;
 
 describe("DS-S001 DB recipe-profile channel", () => {
   it("persists a valid selection through normalized Appearance, never as a CSS channel", () => {
@@ -675,7 +682,7 @@ describe("deterministic artifact compilation and isolation", () => {
       slug: IDENTITY.slug,
       tenantId: IDENTITY.tenantId,
       appearance: {
-        navigation: { sidebarTone: "subtle" },
+        navigation: { sidebarTone: "strong" },
         surfaces: { elevation: "elevated" },
         shape: { buttonStyle: "soft" },
         motion: { ambient: "subtle", durationScale: 1.15, intensity: 0.62 },
@@ -688,10 +695,6 @@ describe("deterministic artifact compilation and isolation", () => {
           accent: "#E2725B",
           secondary: "#8C6D46",
           primary: "#0F766E",
-          foreground: {
-            disabled: "#80766A",
-            muted: "#6B6154",
-          },
         },
       },
       mode: "simple",
@@ -792,8 +795,11 @@ describe("deterministic artifact compilation and isolation", () => {
         appearance: { shape: { buttonStyle: "pill" } },
       })
     );
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): bithire radius
+    // base; the preset's shape.radius-scale 0.8 governs where the retired theme
+    // authored 1.25. 1.25 -> 0.8.
     expect(artifact.variables["--ds-radius-button"]).toBe(
-      "calc(9999px / 1.25 * var(--ds-radius-scale, 1))"
+      "calc(9999px / 0.8 * var(--ds-radius-scale, 1))"
     );
   });
 
@@ -1013,9 +1019,10 @@ describe("deterministic artifact compilation and isolation", () => {
       "--ds-badge-font-weight": "650",
       // Authored 3/4/6px, emitted through the shared radius dial so
       // `shape.radius-scale` reaches a corner the tenant authored.
-      "--ds-badge-radius": "calc(3px / 1.25 * var(--ds-radius-scale, 1))",
-      "--ds-badge-chip-radius": "calc(4px / 1.25 * var(--ds-radius-scale, 1))",
-      "--ds-badge-pill-radius": "calc(6px / 1.25 * var(--ds-radius-scale, 1))",
+      // WO-DER-06 registry, bithire radius base (see `dialedRadius`): 1.25 -> 0.8.
+      "--ds-badge-radius": "calc(3px / 0.8 * var(--ds-radius-scale, 1))",
+      "--ds-badge-chip-radius": "calc(4px / 0.8 * var(--ds-radius-scale, 1))",
+      "--ds-badge-pill-radius": "calc(6px / 0.8 * var(--ds-radius-scale, 1))",
       "--ds-badge-surface": "#FFFEFB",
       "--ds-badge-frame-hover": "#0F766E",
       "--ds-badge-remove-opacity": "0.82",
@@ -1229,15 +1236,38 @@ describe("closed schema and hostile input rejection", () => {
   it.each(["rgb(15 118 110)", "hsl(176 77% 26%)", "oklch(0.52 0.09 190)"])(
     "accepts v1 functional color syntax %s but fails closed when APCA cannot verify it",
     (primary) => {
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+      // The functional primary alone no longer reaches the law: the preset
+      // authors no button chrome, so the ink half of the pair is never emitted
+      // and there is nothing to verify (measured: the compile succeeds with 14
+      // variables). The LAW is unchanged and is re-anchored on a document that
+      // authors the pair itself -- the button ink over the functional primary
+      // as its ground -- which is exactly what the retired theme used to
+      // supply. Both halves of the claim stay: the schema admits the syntax,
+      // and the compiler refuses what APCA cannot verify.
       const document = {
         schemaVersion: 1 as const,
-        mode: "simple" as const,
-        appearance: { palette: { primary } },
+        mode: "advanced" as const,
+        visualFoundation: {
+          general: { palette: { primary } },
+          advanced: {
+            chrome: {
+              controls: {
+                buttonPrimary: {
+                  bg: "var(--ds-color-primary)",
+                  color: "#FFFFFF",
+                },
+              },
+            },
+          },
+        },
       };
       expect(validateTenantThemeDocument(document).success).toBe(true);
-      expect(() => compileTenantThemeConfig(hydrate(document))).toThrow(
-        /cannot be APCA-verified.*non-hex-ground/i
-      );
+      expect(() =>
+        compileTenantThemeConfig(hydrate(document), {
+          verticalEnvelope: BITHIRE_TEST_ENVELOPE,
+        })
+      ).toThrow(/cannot be APCA-verified.*non-hex-ground/i);
     }
   );
 
@@ -1506,10 +1536,17 @@ describe("closed schema and hostile input rejection", () => {
     const darkDelta = (artifact.modeDeltas ?? []).find(
       (block) => block.mode === "dark"
     );
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+    // this is the adjudication the assertion above asks for. The bithire preset
+    // re-authors none of these material/type facets per mode, so the dark block
+    // carries no overlay at all: measured >0 -> 0. The second assertion is the
+    // load-bearing half and stays exactly as it was -- whatever the dark block
+    // does carry, it is never the tenant literal leaking into a mode the tenant
+    // did not author.
     const overlaid = compilable.filter(
       (token) => darkDelta?.variables[token] !== undefined
     );
-    expect(overlaid.length).toBeGreaterThan(0);
+    expect(overlaid).toHaveLength(0);
     expect(
       overlaid.filter((token) => darkDelta?.variables[token] === "1px")
     ).toEqual([]);
@@ -1691,5 +1728,100 @@ describe("closed schema and hostile input rejection", () => {
     expect(parsed.mode).toBe("simple");
     if (parsed.mode === "simple")
       expect(parsed.appearance.palette?.primary).toBe("#0F766E");
+  });
+});
+
+/**
+ * Refusals the neutral baseline introduces.
+ *
+ * WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
+ * registration. These two are the reason `SIMPLE_DOCUMENT` above moved two
+ * leaves, and they are pinned to the MEASURED state rather than left implicit:
+ * both are live refusals of documents the retired authored themes compiled, and
+ * both go red the moment the derivation lane supplies the missing producer --
+ * which is when they get re-adjudicated rather than quietly kept.
+ */
+describe("refusals the neutral baseline introduces", () => {
+  const simpleOn = (
+    verticalKey: string,
+    appearance: Record<string, unknown>
+  ) =>
+    compileTenantThemeConfig(
+      hydrate(
+        {
+          schemaVersion: 1,
+          mode: "simple",
+          appearance,
+        } as unknown as TenantThemeDocument,
+        { ...IDENTITY, verticalKey }
+      )
+    );
+
+  it("refuses a single authored ink on a vertical whose preset authors no per-mode ink", () => {
+    // The tenant states ONE muted/disabled ink. It lands in the default block
+    // and, with no per-mode ink from the preset to displace it, is carried into
+    // the dark block and measured against the default dark ground #0C0C0E. No
+    // single value clears both floors: measured Lc -21.3 (#6B6154), -35.7
+    // (#8A8178) and -40.4 (#8C8C8C) on the dark side, while the lighter value
+    // that would clear it fails the light side (Lc 53.5 for #A39A90).
+    for (const verticalKey of ["evnto", "rottay"]) {
+      expect(() =>
+        simpleOn(verticalKey, {
+          palette: { foreground: { muted: "#6B6154", disabled: "#80766A" } },
+        })
+      ).toThrow(/text-muted has APCA Lc .* against default:#0C0C0E/i);
+    }
+    // bithire is unaffected: its preset authors the dark inks, so the tenant's
+    // light ink never reaches the dark block unaccompanied.
+    expect(() =>
+      simpleOn("bithire", {
+        palette: { foreground: { muted: "#6B6154", disabled: "#80766A" } },
+      })
+    ).not.toThrow();
+  });
+
+  it("measures every sidebar tone, and no tone is refused for want of a ramp", () => {
+    // The measured matrix, stated in full because the shape is the finding. A
+    // tone either fans out onto ramp steps (`verified`) or lands on the
+    // baseline's own value and emits nothing at all (`inert`, a zero delta that
+    // never reaches the checker). Adjudication #2 (2026-09-15): the floor
+    // resolves a reference against the foundation's own declarations, the way
+    // the cascade does, so a pair is judged on its RATIO and never refused for
+    // arriving as `var()`. Measured Lc runs 96.4 to 107.9 across the nine
+    // cells, against a body floor of 75.
+    const matrix = [
+      { verticalKey: "bithire", tone: "subtle", verdict: "verified" },
+      { verticalKey: "bithire", tone: "strong", verdict: "verified" },
+      { verticalKey: "bithire", tone: "inverse", verdict: "inert" },
+      { verticalKey: "evnto", tone: "subtle", verdict: "inert" },
+      { verticalKey: "evnto", tone: "strong", verdict: "verified" },
+      { verticalKey: "evnto", tone: "inverse", verdict: "verified" },
+      { verticalKey: "rottay", tone: "subtle", verdict: "inert" },
+      { verticalKey: "rottay", tone: "strong", verdict: "verified" },
+      { verticalKey: "rottay", tone: "inverse", verdict: "verified" },
+    ] as const;
+
+    for (const { verticalKey, tone, verdict } of matrix) {
+      const withRamp = () =>
+        simpleOn(verticalKey, {
+          palette: { primary: "#0F766E" },
+          navigation: { sidebarTone: tone },
+        });
+      const label = `${verticalKey}/${tone}`;
+      expect(withRamp, label).not.toThrow();
+      const emitted = withRamp().variables["--ds-sidebar-bg"];
+      if (verdict === "inert") {
+        expect(emitted, label).toBeUndefined();
+      } else {
+        expect(emitted, label).toMatch(/^var\(--ds-color-[a-z0-9-]+\)$/);
+      }
+      // The pair stays measurable with NO tenant ramp, on every vertical. That
+      // is the property the verifier fix restores: a palette-less preset no
+      // longer makes its own governed pair unreadable.
+      expect(
+        () => simpleOn(verticalKey, { navigation: { sidebarTone: tone } }),
+        label
+      ).not.toThrow();
+    }
   });
 });

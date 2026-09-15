@@ -144,6 +144,21 @@ const COMPILED_BY_TENANT = {
  */
 const baseBlock = (css: string): string => css.split('\n\n')[0];
 
+/**
+ * A theme that AUTHORS what the first-party presets decide.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so no
+ * vertical authors chrome, a palette ramp or a personality family any more.
+ * Every property in this file that needs an AUTHORING subject takes The
+ * Management -- a real customer theme carried as a fixture -- rather than a
+ * vertical that no longer has one.
+ */
+const THEMANAGEMENT = lowerBrandThemeFixture({
+  brandTheme: themanagementmiamiBrandTheme,
+  tenantSlug: 'themanagementmiami',
+});
+const THEMANAGEMENT_CSS = baseBlock(THEMANAGEMENT.cssString);
+
 const CSS_BY_TENANT: Record<'bithire' | 'evnto' | 'rottay', string> = {
   bithire: baseBlock(COMPILED_BY_TENANT.bithire.cssString),
   evnto: baseBlock(COMPILED_BY_TENANT.evnto.cssString),
@@ -167,12 +182,34 @@ const FULL_CSS_BY_TENANT: Record<'bithire' | 'evnto' | 'rottay', string> = {
 // ══════════════════════════════════════════════════════════
 
 describe('shared pipeline: palette baseline', () => {
-  it.each(['bithire', 'evnto', 'rottay'] as const)(
-    '%s generates full primary color scale',
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. The
+  // ramp is derived FROM a palette seed, and only bithire's preset carries one
+  // (`palette.seeds`); rottay's and evnto's are structural, so they seed no
+  // colour and the pipeline correctly derives no scale for them. The property
+  // is the derivation, not the vertical, so it is graded where a seed exists --
+  // here and on The Management below.
+  it.each(['bithire', 'themanagementmiami'] as const)(
+    '%s seeds a palette, so the pipeline generates its full primary color scale',
     (tenant) => {
-      const css = CSS_BY_TENANT[tenant];
+      const css = tenant === 'bithire' ? CSS_BY_TENANT.bithire : THEMANAGEMENT_CSS;
       for (const step of [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]) {
         expect(css).toContain(`--ds-color-primary-${step}`);
+      }
+    }
+  );
+
+  it.each(['evnto', 'rottay'] as const)(
+    '%s seeds no palette, so no scale is invented for it',
+    (tenant) => {
+      // DECLARATIONS, not occurrences: both still READ a ramp step through the
+      // sidebar tone (`var(--ds-color-primary-200)`), and a substring check
+      // would call that a generated scale.
+      const css = CSS_BY_TENANT[tenant];
+      for (const step of [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]) {
+        expect(
+          collectDeclarationValues(css, `--ds-color-primary-${step}`),
+          `${tenant} declares --ds-color-primary-${step} with no palette seed`
+        ).toEqual([]);
       }
     }
   );
@@ -186,118 +223,133 @@ describe('shared pipeline: palette baseline', () => {
 // typography is the STRUCTURED `result.personality` object instead, so this
 // section now asserts that directly.
 describe('shared pipeline: personality baseline', () => {
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. A
+  // personality family is derived from what the THEME authors
+  // (motion/charts/chrome/typography), and the three presets decide exactly one
+  // of those -- `motion.dial`. So the vertical leg grades the one family they
+  // decide and the emptiness of the other four, and the derivation itself is
+  // graded on a theme that authors all four (The Management, here and in
+  // `brand-compiler.test.ts`). Asserting emptiness rather than deleting the
+  // rows is what stops a preset later deciding a chart or card posture and
+  // nobody noticing.
   it.each(['bithire', 'evnto', 'rottay'] as const)(
-    '%s generates animation personality',
+    '%s generates the animation personality its preset decides',
     (tenant) => {
       const personality = COMPILED_BY_TENANT[tenant].personality;
       expect(personality.animation?.intensity).toBeDefined();
-      expect(personality.animation?.entrance).toBeDefined();
     }
   );
 
   it.each(['bithire', 'evnto', 'rottay'] as const)(
-    '%s generates chart personality',
+    '%s decides no chart, card, accent or typography personality',
     (tenant) => {
       const personality = COMPILED_BY_TENANT[tenant].personality;
-      expect(personality.chart?.lineStyle).toBeDefined();
-      expect(personality.chart?.tooltipStyle).toBeDefined();
+      expect(personality.chart).toEqual({});
+      expect(personality.card).toEqual({});
+      expect(personality.accent).toEqual({});
+      expect(personality.typography).toEqual({});
     }
   );
 
-  it.each(['bithire', 'evnto', 'rottay'] as const)(
-    '%s generates card personality',
-    (tenant) => {
-      const personality = COMPILED_BY_TENANT[tenant].personality;
-      expect(personality.card?.paddingDensity).toBeDefined();
-    }
-  );
-
-  it.each(['bithire', 'evnto', 'rottay'] as const)(
-    '%s generates accent personality',
-    (tenant) => {
-      const personality = COMPILED_BY_TENANT[tenant].personality;
-      expect(personality.accent?.badgeShape).toBeDefined();
-    }
-  );
-
-  it.each(['bithire', 'evnto', 'rottay'] as const)(
-    '%s generates typography personality',
-    (tenant) => {
-      const personality = COMPILED_BY_TENANT[tenant].personality;
-      expect(personality.typography?.headingLetterSpacing).toBeDefined();
-    }
-  );
+  it('derives every family for a theme that authors them', () => {
+    const personality = THEMANAGEMENT.personality;
+    expect(personality.animation?.intensity).toBeDefined();
+    expect(personality.animation?.entrance).toBeDefined();
+    expect(personality.chart?.lineStyle).toBeDefined();
+    expect(personality.chart?.tooltipStyle).toBeDefined();
+    expect(personality.card?.paddingDensity).toBeDefined();
+    expect(personality.accent?.badgeShape).toBeDefined();
+    expect(personality.typography?.headingLetterSpacing).toBeDefined();
+  });
 });
 
 describe('shared pipeline: density baseline', () => {
-  it('bithire generates density scale from brandTheme', () => {
-    expect(CSS_BY_TENANT.bithire).toContain('--ds-density-scale: 0.9');
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset; the
+  // posture is now the governed `density.mode` decision and reaches
+  // `--ds-density-mode-factor`, where the retired themes authored the raw
+  // `--ds-density-scale` dial (bithire 0.9, evnto 1.125). bithire decides
+  // `compact` -> 0.85; rottay and evnto decide `normal` -> 1. Both channels are
+  // asserted so the raw dial cannot quietly come back as a second spelling.
+  it('bithire compiles its compact posture to the governed factor', () => {
+    expect(CSS_BY_TENANT.bithire).toContain('--ds-density-mode-factor: 0.85');
+    expect(CSS_BY_TENANT.bithire).toContain('--ds-density-scale: 1');
   });
 
-  it('evnto generates density scale from brandTheme', () => {
-    // evnto brandTheme itself authors 1.125 (matching, but no longer routed
-    // through, the evnto VerticalPreset's own 1.125 -- compileTheme
-    // does not resolve `vertical: 'evnto'` internally any more; a caller who
-    // wants the vertical baseline layered in passes it explicitly via
-    // `verticalTokenOverrides`, exercised in `brand-compiler.test.ts`).
-    expect(CSS_BY_TENANT.evnto).toContain('--ds-density-scale: 1.125');
+  it('evnto compiles its normal posture to the governed factor', () => {
+    expect(CSS_BY_TENANT.evnto).toContain('--ds-density-mode-factor: 1');
+    expect(CSS_BY_TENANT.evnto).toContain('--ds-density-scale: 1');
   });
 });
 
 // ══════════════════════════════════════════════════════════
-// SECTION 2: First-Party CSS Snapshot Baseline
-// These premium vars exist in handwritten CSS but are NOT yet
-// generated by the shared pipeline. When G1 completes, some
-// of these should move to Section 1.
+// SECTION 2: the chrome the COMPILED artifact carries
+//
+// This section used to snapshot the HANDWRITTEN first-party CSS, whose premise
+// was "these premium vars exist in handwritten CSS but are NOT yet generated by
+// the shared pipeline". That premise is void: a first-party vertical is the
+// neutral foundation plus its preset document, the handwritten chrome is
+// retired, and the pipeline is the only producer. So the receipts are re-anchored
+// on what the pipeline PRODUCES, measured per artifact, and the chrome it does
+// not produce is named rather than dropped.
+//
+// WO-DER-06 derivation-lane registry (2026-09-15, entries 11:24/12:41): sidebar
+// geometry, the non-primary button variants, layout and shell chrome have no
+// producer under neutral+preset. rottay and evnto are structural-neutral by
+// owner scope (no palette seeds), so their palette-fed chrome has no subject at
+// all; bithire seeds a palette and keeps the primary control chrome.
 // ══════════════════════════════════════════════════════════
 
+/** The tone-derived sidebar pair every vertical still compiles. */
+const SIDEBAR_TONE_CHROME = [
+  '--ds-sidebar-bg',
+  '--ds-sidebar-text',
+  '--ds-sidebar-item-color',
+  '--ds-sidebar-item-bg-active',
+] as const;
+
+/** Chrome the retired authored themes supplied and no preset decision produces. */
+const SIDEBAR_CHROME_WITHOUT_PRODUCER = [
+  '--ds-sidebar-group-font-size',
+  '--ds-sidebar-icon-size',
+  '--ds-sidebar-border',
+  '--ds-sidebar-width',
+  '--ds-sidebar-collapsed-width',
+  '--ds-sidebar-header-height',
+  '--ds-sidebar-item-font-size',
+  '--ds-sidebar-footer-bg',
+] as const;
+
+function expectVarPrefixesAbsent(css: string, prefixes: readonly string[]) {
+  const vars = extractVars(css);
+  for (const prefix of prefixes) {
+    const found = vars.some((v) => v.startsWith(prefix));
+    expect(found, `expected CSS NOT to contain vars starting with ${prefix}`).toBe(false);
+  }
+}
+
 describe('first-party CSS baseline: sidebar vars', () => {
-  it('bithire CSS has sidebar chrome', () => {
-    const css = readTenantCss('bithire');
-    expectVarPrefixes(css, [
-      '--ds-sidebar-bg',
-      '--ds-sidebar-text',
-      '--ds-sidebar-item-color',
-      '--ds-sidebar-item-bg-active',
-      '--ds-sidebar-group-font-size',
-      '--ds-sidebar-icon-size',
-    ]);
-  });
+  it.each(['bithire', 'rottay', 'evnto'] as const)(
+    '%s compiles the tone-derived sidebar pair',
+    (tenant) => {
+      expectVarPrefixes(readTenantCss(tenant), [...SIDEBAR_TONE_CHROME]);
+    }
+  );
 
-  it('rottay CSS has sidebar chrome', () => {
-    const css = readTenantCss('rottay');
-    expectVarPrefixes(css, [
-      '--ds-sidebar-bg',
-      '--ds-sidebar-border',
-      '--ds-sidebar-width',
-      '--ds-sidebar-collapsed-width',
-      '--ds-sidebar-header-height',
-      '--ds-sidebar-item-font-size',
-      '--ds-sidebar-footer-bg',
-    ]);
-  });
-
-  it('evnto CSS has sidebar chrome', () => {
-    const css = readTenantCss('evnto');
-    expectVarPrefixes(css, [
-      '--ds-sidebar-bg',
-      '--ds-sidebar-text',
-      '--ds-sidebar-item-color',
-      '--ds-sidebar-group-font-size',
-    ]);
-  });
+  it.each(['bithire', 'rottay', 'evnto'] as const)(
+    '%s carries no sidebar chrome the preset cannot produce',
+    (tenant) => {
+      // Reddens the day the derivation lane gives this family a producer, which
+      // is the event the registration exists for.
+      expectVarPrefixesAbsent(readTenantCss(tenant), SIDEBAR_CHROME_WITHOUT_PRODUCER);
+    }
+  );
 });
 
 describe('first-party CSS baseline: controls vars', () => {
-  it('bithire CSS has button chrome', () => {
+  it('bithire compiles the primary button chrome its seed feeds', () => {
     const css = readTenantCss('bithire');
     // First-party CSS uses the same engine-consumed -color names as the shared pipeline.
-    expectVarPrefixes(css, [
-      '--ds-button-primary-bg',
-      '--ds-button-primary-color',
-      '--ds-button-secondary-bg',
-      '--ds-button-secondary-color',
-    ]);
+    expectVarPrefixes(css, ['--ds-button-primary-bg', '--ds-button-primary-color']);
     expect(css).not.toContain('--ds-button-primary-text');
     expect(css).not.toContain('--ds-button-secondary-text');
   });
@@ -311,57 +363,57 @@ describe('first-party CSS baseline: controls vars', () => {
     ]);
   });
 
-  it('rottay CSS has full button variant chrome', () => {
-    const css = readTenantCss('rottay');
-    expectVarPrefixes(css, [
-      '--ds-button-primary-bg',
-      '--ds-button-secondary-bg',
-      '--ds-button-default-bg',
-      '--ds-button-ghost-bg',
-      '--ds-button-success-bg',
-    ]);
+  it('no vertical compiles a button variant beyond primary', () => {
+    // The authored themes carried the secondary/default/ghost/success variants;
+    // no preset decision produces them. Named, not dropped.
+    for (const tenant of ['bithire', 'rottay', 'evnto'] as const) {
+      expectVarPrefixesAbsent(readTenantCss(tenant), [
+        '--ds-button-secondary-bg',
+        '--ds-button-default-bg',
+        '--ds-button-ghost-bg',
+        '--ds-button-success-bg',
+      ]);
+    }
   });
 
-  it('evnto CSS has button and input chrome', () => {
-    const css = readTenantCss('evnto');
-    expectVarPrefixes(css, [
-      '--ds-button-primary-bg',
-      '--ds-button-secondary-bg',
-      '--ds-input-bg',
-      '--ds-input-border',
-    ]);
+  it('the structural-neutral verticals compile no palette-fed control chrome', () => {
+    // rottay and evnto author no palette seeds by owner scope, so button and
+    // input chrome has no subject on them at all.
+    for (const tenant of ['rottay', 'evnto'] as const) {
+      expectVarPrefixesAbsent(readTenantCss(tenant), [
+        '--ds-button-primary-bg',
+        '--ds-input-bg',
+        '--ds-input-border',
+      ]);
+    }
   });
 });
 
 describe('first-party CSS baseline: table vars', () => {
-  it.each(['bithire', 'rottay', 'evnto'] as const)(
-    '%s CSS has table header chrome',
-    (tenant) => {
-      const css = readTenantCss(tenant);
-      expectVarPrefixes(css, ['--ds-table-header-bg']);
-    }
-  );
-});
+  it('bithire compiles table header chrome from its seed', () => {
+    expectVarPrefixes(readTenantCss('bithire'), ['--ds-table-header-bg']);
+  });
 
-describe('first-party CSS baseline: layout vars', () => {
-  it('rottay CSS has layout chrome', () => {
-    const css = readTenantCss('rottay');
-    expectVarPrefixes(css, [
-      '--ds-layout-bg',
-      '--ds-layout-header-bg',
-      '--ds-layout-header-backdrop',
-      '--ds-layout-sider-bg',
-    ]);
+  it('the structural-neutral verticals compile none', () => {
+    expectVarPrefixesAbsent(readTenantCss('rottay'), ['--ds-table-header-bg']);
+    expectVarPrefixesAbsent(readTenantCss('evnto'), ['--ds-table-header-bg']);
   });
 });
 
-describe('first-party CSS baseline: shell vars', () => {
-  it('rottay CSS has shell grid chrome', () => {
-    const css = readTenantCss('rottay');
-    expectVarPrefixes(css, [
-      '--ds-shell-grid-size',
-      '--ds-shell-grid-line',
-    ]);
+describe('first-party CSS baseline: layout and shell vars', () => {
+  it('no vertical compiles layout or shell chrome', () => {
+    // rottay's authored theme was the only source of these; the pipeline has no
+    // producer for either family.
+    for (const tenant of ['bithire', 'rottay', 'evnto'] as const) {
+      expectVarPrefixesAbsent(readTenantCss(tenant), [
+        '--ds-layout-bg',
+        '--ds-layout-header-bg',
+        '--ds-layout-header-backdrop',
+        '--ds-layout-sider-bg',
+        '--ds-shell-grid-size',
+        '--ds-shell-grid-line',
+      ]);
+    }
   });
 });
 
@@ -372,40 +424,43 @@ describe('first-party CSS baseline: shell vars', () => {
 // ══════════════════════════════════════════════════════════
 
 describe('shared pipeline: chrome vars NOW generated (G1)', () => {
-  const rottayCss = CSS_BY_TENANT.rottay;
   const bithireCss = CSS_BY_TENANT.bithire;
+  /**
+   * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. This
+   * section grades the SHARED PIPELINE's ability to lower `theme.chrome` into
+   * `--ds-*` channels, so its subject has to be a theme that authors chrome.
+   * rottay's and bithire's presets author none, so the families whose subject
+   * was a first-party literal are re-anchored on The Management; the two
+   * families bithire still reaches through its own decisions stay on bithire.
+   */
+  const authoredChromeCss = THEMANAGEMENT_CSS;
 
-  it('rottay generates sidebar vars with correct values', () => {
-    expect(rottayCss).toContain('--ds-sidebar-bg: #0D0D10');
-    expect(rottayCss).toContain('--ds-sidebar-text: #ECECEC');
-    expect(rottayCss).toContain('--ds-sidebar-width: 296px');
-    expect(rottayCss).toContain('--ds-sidebar-item-color: #A0A0A5');
-    // R-1 re-anchor (D-1b): F2.4 (8f58229e3) rewired the BASE footer ground
-    // from the literal to the governed root; the base literal does not come
-    // back. D-1b restitutes the LIGHT overlay (asserted below). Colour truth
-    // kept the A2-16 way: the alias, and what the root resolves to.
-    expect(rottayCss).toContain('--ds-sidebar-footer-bg: var(--ds-sidebar-bg)');
-    expect(rottayCss).toContain('--ds-sidebar-bg: #0D0D10');
-    // D-1b also restitutes the LIGHT overlay ground (#F4F4F3) so a tenant moving
-    // --ds-sidebar-bg cannot govern light through the alias. Not asserted here:
-    // this fixture holds only the base block (`html[data-tenant='rottay']`), and
-    // the overlay lives in the mode block. The artifact carries it.
+  it('an authored sidebar lowers to the sidebar vars, with correct values', () => {
+    // The retired rottay theme carried this family (#0D0D10 / #ECECEC / 296px /
+    // #A0A0A5, footer aliased to the ground). `--ds-sidebar-width` is not
+    // asserted: it is a structural width no customer theme in the tree authors,
+    // so there is no subject for it here.
+    expect(authoredChromeCss).toContain('--ds-sidebar-bg: #FFFEFB');
+    expect(authoredChromeCss).toContain('--ds-sidebar-text: #2E261C');
+    expect(authoredChromeCss).toContain('--ds-sidebar-item-color: #5C4F3D');
+    expect(authoredChromeCss).toContain('--ds-sidebar-footer-bg: #FBF3E7');
   });
 
   it('bithire generates button variant vars with correct values', () => {
     // A2-16 idiom (alias + resolution): the brand ground is authored once on
     // the cascade root and the button channel reads it, so the literal is
     // asserted where it is DECLARED, not duplicated on the channel.
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the seed moves #3A6FB0 -> #2F5BE8 (the preset's `palette.seeds.primary`)
+    // and the ink resolves through `--ds-color-text-on-primary` instead of the
+    // retired theme's `--ds-control-on-brand` leaf. The two SECONDARY channels
+    // move to the authoring subject: bithire's preset authors no secondary
+    // button chrome, so it emits neither.
     expect(bithireCss).toContain('--ds-button-primary-bg: var(--ds-color-primary)');
-    expect(bithireCss).toContain('--ds-color-primary: #3A6FB0');
-    // Same root, read with its authored literal as the in-place fallback --
-    // the fallback is asserted verbatim so a silent widening is still red.
-    expect(bithireCss).toContain('--ds-button-secondary-color: var(--ds-color-primary, #3A6FB0)');
-    // Control ink and brand border route through the semantic control tokens.
-    // The artifact extension used to override both here; R1-P moved the value
-    // that actually shipped into the theme, so these are what production paints.
-    expect(bithireCss).toContain('--ds-button-primary-color: var(--ds-control-on-brand)');
-    expect(bithireCss).toContain('--ds-button-secondary-border: var(--ds-control-brand-border)');
+    expect(bithireCss).toContain('--ds-color-primary: #2F5BE8');
+    expect(bithireCss).toContain('--ds-button-primary-color: var(--ds-color-text-on-primary)');
+    expect(authoredChromeCss).toContain('--ds-button-secondary-color: #0F766E');
+    expect(authoredChromeCss).toContain('--ds-button-secondary-border: #0F766E');
   });
 
   /**
@@ -498,11 +553,17 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
    * `it` body below, not only by this prose.
    */
   it('bithire generates input vars through their governed authorities', () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // The three channels keep their law -- emitted, authority-routed, never a
+    // bare literal -- and change which authority they route THROUGH, because
+    // bithire's authored fallbacks went with the theme: the ground moves to the
+    // governed input surface root, and the focus pair onto the border-focus
+    // root the interaction floor owns.
     const INPUT_AUTHORITY_CHANNELS: Record<string, string> = {
-      '--ds-input-bg': 'var(--ds-surface-inset, #ffffff)',
-      '--ds-input-border-focus': 'var(--ds-material-control-border-active, #3A6FB0)',
+      '--ds-input-bg': 'var(--ds-color-bg-input)',
+      '--ds-input-border-focus': 'var(--ds-color-border-focus, var(--ds-color-primary))',
       '--ds-input-shadow-focus':
-        'var(--ds-material-control-focus-ring, 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08))',
+        '0 0 0 3px color-mix(in srgb, var(--ds-color-border-focus, var(--ds-color-primary)) 20%, transparent)',
     };
 
     // Exactly one declaration per channel, and it is exactly the governed
@@ -522,6 +583,15 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     // named color, color-mix, a gradient, ...), not just the hex/rgba shapes
     // a prior regression happened to take, and this stays a real parse
     // rather than a resurrected regex.
+    //
+    // D6-2c-ii (2026-09-15): `--ds-input-shadow-focus` is now a `color-mix()`
+    // OVER the governed root rather than a `var()` onto it, so the shape law is
+    // stated as "the declaration names its authority and carries no bare
+    // literal of its own" -- `startsWith('var(')` for the two aliases, and for
+    // the mix, that it references the root and bakes no colour. The narrower
+    // spelling would have failed a correct value, which is the false-negative
+    // class the hardening notes above exist to prevent.
+    const VAR_ROUTED = ['--ds-input-bg', '--ds-input-border-focus'];
     const collectedAcrossAllThree = Object.keys(INPUT_AUTHORITY_CHANNELS).flatMap((property) =>
       collectDeclarationValues(bithireCss, property).map((value) => ({ property, value }))
     );
@@ -529,7 +599,9 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     expect(
       collectedAcrossAllThree.map(({ property, value }) => ({
         property,
-        isVarAuthority: value.startsWith('var('),
+        isVarAuthority: VAR_ROUTED.includes(property)
+          ? value.startsWith('var(')
+          : value.includes('var(--ds-color-border-focus') && !/#[0-9a-f]{3,8}/iu.test(value),
       }))
     ).toEqual(collectedAcrossAllThree.map(({ property }) => ({ property, isVarAuthority: true })));
 
@@ -569,7 +641,7 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     // cannot silently drift from what the real check expects.
     expect(
       collectDeclarationValues(
-        `:root {\n  --ds-input-border-focus: var(\n    --ds-material-control-border-active,\n    #3A6FB0\n  );\n}`,
+        `:root {\n  --ds-input-border-focus: var(\n    --ds-color-border-focus,\n    var(--ds-color-primary)\n  );\n}`,
         '--ds-input-border-focus'
       )
     ).toEqual([INPUT_AUTHORITY_CHANNELS['--ds-input-border-focus']]);
@@ -579,7 +651,7 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     // fails on length, not merely on content.
     expect(
       collectDeclarationValues(
-        `:root {\n  --ds-input-bg: var(--ds-surface-inset, #ffffff);\n}\nhtml[data-tenant='drift'] {\n  --ds-input-bg: #eeeeee;\n}`,
+        `:root {\n  --ds-input-bg: var(--ds-color-bg-input);\n}\nhtml[data-tenant='drift'] {\n  --ds-input-bg: #eeeeee;\n}`,
         '--ds-input-bg'
       )
     ).toEqual([INPUT_AUTHORITY_CHANNELS['--ds-input-bg'], '#eeeeee']);
@@ -614,66 +686,73 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
     expect(colorMixValues[0]?.includes('var(')).toBe(true);
 
     // (8) The exact no-space-after-comma input the doc comments above
-    // describe (`var(--ds-surface-inset,#ffffff)`) is proven here, through
-    // the same collectDeclarationValues path the real pins use, not only
-    // asserted in prose.
+    // describe is proven here, through the same collectDeclarationValues path
+    // the real pins use, not only asserted in prose. D6-2c-ii (2026-09-15):
+    // it moves to the border-focus channel, because the governed input ground
+    // is now a single-argument `var()` and a proof about comma normalization
+    // needs a value that HAS a comma. Still asserted against the governed
+    // constant rather than a re-typed literal, so it cannot drift.
     expect(
       collectDeclarationValues(
-        `:root {\n  --ds-input-bg: var(--ds-surface-inset,#ffffff);\n}`,
-        '--ds-input-bg'
+        `:root {\n  --ds-input-border-focus: var(--ds-color-border-focus,var(--ds-color-primary));\n}`,
+        '--ds-input-border-focus'
       )
-    ).toEqual([INPUT_AUTHORITY_CHANNELS['--ds-input-bg']]);
+    ).toEqual([INPUT_AUTHORITY_CHANNELS['--ds-input-border-focus']]);
   });
 
-  it('rottay generates layout vars with correct values', () => {
-    // Same A2-16 idiom as the sider ground below: the page ground is authored
-    // on --ds-color-bg-primary and the layout channel reads it, which is what
-    // lets the light mode block move one root instead of every channel.
-    expect(rottayCss).toContain('--ds-layout-bg: var(--ds-color-bg-primary)');
-    expect(rottayCss).toContain('--ds-color-bg-primary: #0C0C0E');
-    expect(rottayCss).toContain('--ds-layout-header-bg: rgba(12, 12, 14, 0.82)');
-    // R-1 re-anchor (D-1): F2.4 (a7929df5a) rewired the BASE sider ground from
-    // the literal to the governed root; the base literal does not come back.
-    // Assert the alias and what the root resolves to (A2-16 idiom).
-    expect(rottayCss).toContain('--ds-layout-sider-bg: var(--ds-sidebar-bg)');
-    expect(rottayCss).toContain('--ds-sidebar-bg: #0D0D10');
+  it('an authored layout lowers to the layout vars, with correct values', () => {
+    // The retired rottay theme carried this family, aliasing the page ground to
+    // --ds-color-bg-primary and the sider to --ds-sidebar-bg. The Management
+    // authors its layout as literals, so the family is graded on the values it
+    // declares; the ALIAS idiom itself is still graded on bithire, which routes
+    // its button ground through the cascade root above.
+    expect(authoredChromeCss).toContain('--ds-layout-bg: #FFFEFB');
+    expect(authoredChromeCss).toContain('--ds-color-bg-primary: #FBF6EC');
+    expect(authoredChromeCss).toContain('--ds-layout-header-bg: rgba(255, 254, 251, 0.90)');
+    expect(authoredChromeCss).toContain('--ds-layout-sider-bg: #FFFEFB');
   });
 
-  it('rottay generates shell vars with correct values', () => {
-    expect(rottayCss).toContain('--ds-shell-grid-size: 28px');
-    expect(rottayCss).toContain('--ds-shell-grid-line: rgba(255, 255, 255, 0.03)');
+  it('an authored shell lowers to the shell grid vars', () => {
+    // No theme in the tree authors `chrome.shell` since the rottay theme was
+    // retired (it carried 28px / rgba(255, 255, 255, 0.03)), so the family's
+    // subject is authored here rather than dropped: the lowering is what is
+    // under test, and it is the same call the provider makes for a DB tenant.
+    const shell = brandThemeToChromeVariables({
+      id: 'shell-probe',
+      name: 'Shell probe',
+      chrome: { shell: { gridSize: '28px', gridLine: 'rgba(255, 255, 255, 0.03)' } },
+    });
+    expect(shell['--ds-shell-grid-size']).toBe('28px');
+    expect(shell['--ds-shell-grid-line']).toBe('rgba(255, 255, 255, 0.03)');
   });
 
-  it('rottay generates table vars with correct values', () => {
-    expect(rottayCss).toContain('--ds-table-header-bg: #131316');
-    // The AUTHORED header ink, verbatim. The lifted `#B3B3B8` this once
-    // expected was the retired runtime generator's output: that path ran
-    // `enforceTextContrast` over its final composed map, so an ink that missed
-    // the threshold against its own header ground was raised before shipping.
-    // `compileTheme` does not autocorrect -- it compiles what the theme
-    // says -- and the note beside the old expectation already recorded that
-    // "the authored value still reaches the static artifact unchanged". With
-    // the generator gone, the static value is the only one, and it is this.
-    // R-1 re-anchor (D-1b): F4A-6 (3393f70d4) authored the --ds-color-text-page
-    // root and rewired this BASE ink onto it, so the literal above is now the
-    // ROOT's value, not the channel's. Same A2-16 idiom: alias + resolution.
-    expect(rottayCss).toContain('--ds-table-header-color: var(--ds-color-text-page)');
-    expect(rottayCss).toContain('--ds-color-text-page: #A0A0A5');
-    // D-1b restitutes the LIGHT overlay ink (#6B6B6B) for the same reason; like
-    // the sidebar footer it is not visible in this base-block fixture.
+  it('an authored table lowers to the table header vars', () => {
+    // The retired rottay theme authored #131316 with its ink aliased to
+    // --ds-color-text-page; The Management authors the family as literals, so
+    // the ground, the ink and the weight are graded on it.
+    expect(authoredChromeCss).toContain('--ds-table-header-bg: #FFFFFF');
+    expect(authoredChromeCss).toContain('--ds-table-header-color: #5C4F3D');
+    expect(authoredChromeCss).toContain('--ds-table-header-font-weight: 700');
   });
 
-  it('bithire generates table vars with correct values', () => {
-    expect(bithireCss).toContain('--ds-table-header-bg: #f3f2ef');
-    expect(bithireCss).toContain('--ds-table-header-font-weight: 600');
+  it('bithire routes its table ground through the governed surface root', () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the ground moves from the authored literal #f3f2ef to the secondary
+    // surface root, and the authored `600` header weight goes with the theme --
+    // the preset decides no table typography, so the channel is not emitted.
+    expect(bithireCss).toContain('--ds-table-header-bg: var(--ds-color-bg-secondary)');
+    expect(collectDeclarationValues(bithireCss, '--ds-table-header-font-weight')).toEqual([]);
   });
 
   it('DB-backed tenant with BrandTheme gets same chrome vars', () => {
-    const css = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'db-premium' }).cssString;
-    expect(css).toContain('--ds-sidebar-bg: #0D0D10');
-    expect(css).toContain('--ds-layout-bg: var(--ds-color-bg-primary)');
-    expect(css).toContain('--ds-color-bg-primary: #0C0C0E');
-    expect(css).toContain('--ds-shell-grid-size: 28px');
+    const css = lowerBrandThemeFixture({
+      brandTheme: themanagementmiamiBrandTheme,
+      tenantSlug: 'db-premium',
+    }).cssString;
+    expect(css).toContain('--ds-sidebar-bg: #FFFEFB');
+    expect(css).toContain('--ds-layout-bg: #FFFEFB');
+    expect(css).toContain('--ds-color-bg-primary: #FBF6EC');
+    expect(css).toContain('--ds-table-header-bg: #FFFFFF');
     expect(css).toContain("html[data-tenant='db-premium']");
   });
 });
@@ -700,23 +779,30 @@ describe('mode blocks: chrome vars stay in their own scope', () => {
     expect(lightBlock).not.toContain('--ds-color-bg-primary: #0C0C0E');
   });
 
-  it("rottay's light mode block carries its OWN authored chrome", () => {
+  it("rottay's light mode block carries only what its mode DECIDES", () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // The retired theme authored a `modes.light` chrome overlay (#F4F4F3 ground
+    // and #FAFAF9 page) and rottay's preset authors no mode overlay at all, so
+    // the light block is now the colour-scheme switch and nothing else. The
+    // scoping law it guards is unchanged and still asserted by its siblings:
+    // whatever the block DOES carry stays inside it.
     const css = FULL_CSS_BY_TENANT.rottay;
     const lightMatch = css.match(/\[data-theme='light'\][^{]*\{([^}]+)\}/s);
     const lightBlock = lightMatch![1];
-    expect(lightBlock).toContain('--ds-sidebar-bg: #F4F4F3');
-    // The layout channel is not redeclared per mode: the light block moves the
-    // root it reads, which is the whole point of routing it through the root.
-    expect(lightBlock).toContain('--ds-color-bg-primary: #FAFAF9');
+    expect(lightBlock).toContain('color-scheme: light');
+    expect(lightBlock).not.toContain('--ds-sidebar-bg:');
     expect(lightBlock).not.toContain('--ds-layout-bg:');
   });
 
-  it('the base (dark) block carries the default chrome directly, unscoped', () => {
+  it('the base block carries the vertical\'s decided chrome directly, unscoped', () => {
+    // The sidebar tone is the one chrome family rottay's preset decides
+    // (`navigation.sidebar-tone`), and it lands in the base block as an alias
+    // onto the governed roots rather than as the retired theme's literals
+    // (#0D0D10 / #0C0C0E / 28px grid, all of which went with the theme).
     const base = CSS_BY_TENANT.rottay;
-    expect(base).toContain('--ds-sidebar-bg: #0D0D10');
-    expect(base).toContain('--ds-layout-bg: var(--ds-color-bg-primary)');
-    expect(base).toContain('--ds-color-bg-primary: #0C0C0E');
-    expect(base).toContain('--ds-shell-grid-size: 28px');
+    expect(base).toContain('--ds-sidebar-bg: var(--ds-color-bg-secondary)');
+    expect(base).toContain('--ds-sidebar-text: var(--ds-color-text-primary)');
+    expect(collectDeclarationValues(base, '--ds-shell-grid-size')).toEqual([]);
   });
 
   it("a channel the light overlay does NOT restate (shell.gridSize) is inherited, not duplicated in the light block", () => {
@@ -731,49 +817,79 @@ describe('mode blocks: chrome vars stay in their own scope', () => {
 });
 
 describe('variable naming: engines consume --ds-button-*-color', () => {
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. The
+  // law is a NAMING law -- whatever button ink a theme reaches is spelled
+  // `-color`, never `-text` -- so it is stated over whatever each subject
+  // actually emits. bithire's preset reaches the primary ink only; the
+  // secondary, default and ghost variants need authored chrome, so the full
+  // variant sweep moves to the theme that authors them.
   it('shared pipeline emits -color not -text for button text vars', () => {
     const css = CSS_BY_TENANT.bithire;
-    // Engines consume --ds-button-primary-color, NOT --ds-button-primary-text
     expect(css).toContain('--ds-button-primary-color');
     expect(css).not.toContain('--ds-button-primary-text');
-    expect(css).toContain('--ds-button-secondary-color');
     expect(css).not.toContain('--ds-button-secondary-text');
   });
 
-  it('rottay pipeline emits -color for all button variants', () => {
-    const css = CSS_BY_TENANT.rottay;
+  it('an authored theme emits -color for all button variants', () => {
+    const css = THEMANAGEMENT_CSS;
     expect(css).toContain('--ds-button-primary-color');
     expect(css).toContain('--ds-button-secondary-color');
     expect(css).toContain('--ds-button-default-color');
     expect(css).toContain('--ds-button-ghost-color');
     expect(css).not.toContain('--ds-button-primary-text');
   });
+
+  it('no tenant emits a -text spelling on any button variant', () => {
+    for (const css of [CSS_BY_TENANT.bithire, CSS_BY_TENANT.rottay, CSS_BY_TENANT.evnto, THEMANAGEMENT_CSS]) {
+      expect(css).not.toMatch(/--ds-button-[a-z]+-text\s*:/u);
+    }
+  });
 });
 
 describe('dynamic tenant runtime chrome: scoped <style> path', () => {
   it('brandThemeToChromeVariables produces vars for scoped injection', () => {
     // This is what DesignSystemProvider uses to build the <style> tag
-    // for dynamic tenants (skipCssLoading=false)
-    const vars = brandThemeToChromeVariables(rottayBrandTheme);
-    expect(vars['--ds-sidebar-bg']).toBe('#0D0D10');
-    expect(vars['--ds-layout-bg']).toBe('var(--ds-color-bg-primary)');
-    expect(vars['--ds-button-primary-color']).toBe('#0C0C0E');
-    expect(vars['--ds-shell-grid-size']).toBe('28px');
-    expect(vars['--ds-table-header-bg']).toBe('#131316');
+    // for dynamic tenants (skipCssLoading=false).
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so
+    // the subject is a theme that authors chrome. The retired rottay theme's
+    // values (#0D0D10 sidebar, 28px shell grid, #131316 table) were what this
+    // read before; a vertical now yields only the six sidebar-tone channels,
+    // asserted below so the shrink is recorded rather than implied.
+    const vars = brandThemeToChromeVariables(themanagementmiamiBrandTheme);
+    expect(vars['--ds-sidebar-bg']).toBe('#FFFEFB');
+    expect(vars['--ds-layout-bg']).toBe('#FFFEFB');
+    expect(vars['--ds-button-primary-color']).toBe('#FFFEFB');
+    expect(vars['--ds-table-header-bg']).toBe('#FFFFFF');
+  });
+
+  it('a vertical yields only the chrome its preset decides', () => {
+    // rottay and bithire decide `navigation.sidebar-tone` and no other chrome,
+    // so this call produces that family and nothing else -- each channel an
+    // alias onto a governed root rather than a literal.
+    for (const theme of [rottayBrandTheme, bithireBrandTheme]) {
+      const vars = brandThemeToChromeVariables(theme);
+      expect(Object.keys(vars).sort()).toEqual([
+        '--ds-sidebar-bg',
+        '--ds-sidebar-item-bg-active',
+        '--ds-sidebar-item-bg-hover',
+        '--ds-sidebar-item-color-active',
+        '--ds-sidebar-text',
+        '--ds-sidebar-text-muted',
+      ]);
+      for (const value of Object.values(vars)) expect(value).toMatch(/^var\(--ds-/u);
+    }
   });
 
   it('scoped CSS string uses tenant selector (dark-mode safe)', () => {
-    const vars = brandThemeToChromeVariables(bithireBrandTheme);
+    const vars = brandThemeToChromeVariables(themanagementmiamiBrandTheme);
     const entries = Object.entries(vars).filter(([, v]) => v != null);
     const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join('\n');
     const scopedCss = `html[data-tenant='db-customer'] {\n${declarations}\n}`;
 
     // Scoped selector — will NOT override dark-mode tenant CSS
     expect(scopedCss).toContain("html[data-tenant='db-customer']");
-    expect(scopedCss).toContain('--ds-button-primary-bg: var(--ds-color-primary)');
-    expect(scopedCss).toContain('--ds-sidebar-bg: #ffffff');
-    expect(scopedCss).toContain('--ds-command-home-panel-border: #A9C9EA');
-    expect(scopedCss).toContain('--ds-command-home-meter-fill: linear-gradient(90deg, #315F86, #6F98BC)');
+    expect(scopedCss).toContain('--ds-button-primary-bg: #0F766E');
+    expect(scopedCss).toContain('--ds-sidebar-bg: #FFFEFB');
     // NOT inline on :root — proper specificity
     expect(scopedCss).not.toContain(':root');
   });

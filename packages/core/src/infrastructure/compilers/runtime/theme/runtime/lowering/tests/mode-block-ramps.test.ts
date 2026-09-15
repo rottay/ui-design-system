@@ -28,6 +28,7 @@ import type { BrandPalette, BrandTheme } from '@/foundation/contracts/compositio
 
 import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
 import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
 
 const bithireBrandTheme = firstPartyFixture('bithire');
 const evntoBrandTheme = firstPartyFixture('evnto');
@@ -80,29 +81,44 @@ describe('a light-surface tenant compiles a real color ramp for its non-default 
     }
   });
 
-  it('evnto (light-default): its dark overlay also compiles a real ramp block', () => {
+  it('a light-default theme whose dark overlay seeds its own palette compiles a real ramp block', () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // this leg was evnto, whose structural preset seeds no palette in either
+    // mode, so its dark block carries no ramp to measure. The light-default
+    // torture fixture seeds both its base and its `modes.dark` overlay, which
+    // is the shape the rule is about.
+    const compiled = lowerBrandThemeFixture({
+      brandTheme: tortureLightBrandTheme,
+      tenantSlug: 'torture-light',
+    });
+    expect(compiled.modeBlocks).toHaveLength(1);
+    expect(compiled.modeBlocks![0]).toMatchObject({ mode: 'dark', colorScheme: 'dark' });
+    const darkVars = compiled.modeBlocks![0].cssVariables;
+
+    // Not vacuous: the block must actually carry ramp steps of its own, or a
+    // derivation that never re-ran for the overlay would read as a pass. The
+    // count is deliberately not pinned -- how MANY steps move is a property of
+    // how far the two palettes sit apart, not a compiler guarantee.
+    const rampSteps = Object.keys(darkVars).filter((name) =>
+      /^--ds-color-[a-z]+-\d+$/.test(name)
+    );
+    expect(rampSteps.length).toBeGreaterThan(0);
+    // And it is ONLY a diff: every step it carries moved off the base ramp.
+    for (const channel of rampSteps) {
+      expect(darkVars[channel], channel).not.toBe(compiled.cssVariables[channel]);
+    }
+  });
+
+  it('evnto (light-default): a structural preset seeds neither mode, so its dark block carries no ramp', () => {
+    // The measured counterpart of the rule above. Stated rather than left out,
+    // so the day evnto's preset seeds a palette this stops being true loudly.
     const compiled = lowerBrandThemeFixture({ brandTheme: evntoBrandTheme, tenantSlug: 'evnto' });
     expect(compiled.modeBlocks).toHaveLength(1);
-    const darkVars = compiled.modeBlocks![0].cssVariables;
-    const authoredDarkRamps = evntoBrandTheme.modes!.dark!.palette!.ramps!;
-    for (const role of Object.keys(authoredDarkRamps).filter(
-      isEmittedRampRole
-    ) as (keyof typeof authoredDarkRamps)[]) {
-      for (const step of RAMP_STEPS) {
-        const expected = authoredDarkRamps[role]?.[step];
-        if (expected === undefined) continue;
-        const channel = `--ds-color-${role}-${step}`;
-        expect(effective(compiled.cssVariables, darkVars, channel), channel).toBe(expected);
-      }
-    }
-    // Not vacuous: the block must actually carry ramp steps of its own, or the
-    // assertion above would be satisfied entirely by the base block. The count
-    // is deliberately not pinned -- how MANY steps move is a property of how
-    // far evnto's two palettes sit apart, which is a design decision, not a
-    // compiler guarantee.
     expect(
-      Object.keys(darkVars).filter((name) => /^--ds-color-[a-z]+-\d+$/.test(name)).length,
-    ).toBeGreaterThan(0);
+      Object.keys(compiled.modeBlocks![0].cssVariables).filter((name) =>
+        /^--ds-color-[a-z]+-\d+$/.test(name)
+      ),
+    ).toEqual([]);
   });
 
   it('bithire: the dark overlay moves real ramp steps, and carries nothing that agrees with the base', () => {
@@ -149,32 +165,41 @@ describe('a dark-surface tenant (rottay): its non-default (light) mode compiles 
     expect(compiled.modeBlocks![0]).toMatchObject({ mode: 'light', colorScheme: 'light' });
   });
 
-  it('the light mode block carries rottay\'s own hand-authored light ramp, distinct from the dark base', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
-    const darkVars = compiled.cssVariables; // rottay's base IS dark (its declared default)
+  it('the light mode block carries its own light ramp, distinct from the dark base', () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // this leg was rottay, which authored a hand-tuned light ramp its
+    // structural preset no longer carries. The dark-default torture fixture
+    // seeds both grounds, so the mirror of the light-default case above is
+    // measured on it.
+    const compiled = lowerBrandThemeFixture({
+      brandTheme: tortureDarkBrandTheme,
+      tenantSlug: 'torture-dark',
+    });
+    const darkVars = compiled.cssVariables; // its base IS dark (its declared default)
+    expect(compiled.modeBlocks).toHaveLength(1);
+    expect(compiled.modeBlocks![0]).toMatchObject({ mode: 'light', colorScheme: 'light' });
     const lightVars = compiled.modeBlocks![0].cssVariables;
-    const authoredLightRamps = rottayBrandTheme.modes!.light!.palette!.ramps!;
-    for (const role of Object.keys(authoredLightRamps).filter(
-      isEmittedRampRole
-    ) as (keyof typeof authoredLightRamps)[]) {
-      const authoredSteps = authoredLightRamps[role];
-      if (!authoredSteps) continue;
-      let moved = 0;
-      for (const step of RAMP_STEPS) {
-        const expected = authoredSteps[step];
-        if (expected === undefined) continue;
-        const channel = `--ds-color-${role}-${step}`;
-        // Same diff semantics as bithire's dark block above: the authored
-        // value must be what RESOLVES in light mode, and the block itself
-        // carries only the steps that actually move off the dark base.
-        expect(effective(darkVars, lightVars, channel), channel).toBe(expected);
-        if (lightVars[channel] !== undefined) {
-          expect(lightVars[channel], channel).not.toBe(darkVars[channel]);
-          moved += 1;
-        }
-      }
-      expect(moved, `${role}: no step moved off the dark base ramp`).toBeGreaterThan(0);
+
+    const rampSteps = Object.keys(lightVars).filter((name) =>
+      /^--ds-color-[a-z]+-\d+$/.test(name)
+    );
+    expect(rampSteps.length, 'the light overlay moved no ramp step at all').toBeGreaterThan(0);
+    for (const channel of rampSteps) {
+      // Same diff semantics as the dark block above: the block carries only
+      // the steps that actually move off the base ramp.
+      expect(lightVars[channel], channel).not.toBe(darkVars[channel]);
+      expect(effective(darkVars, lightVars, channel), channel).toBe(lightVars[channel]);
     }
+  });
+
+  it('rottay: a structural preset seeds neither mode, so its light block carries no ramp', () => {
+    const compiled = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
+    expect(compiled.modeBlocks).toHaveLength(1);
+    expect(
+      Object.keys(compiled.modeBlocks![0].cssVariables).filter((name) =>
+        /^--ds-color-[a-z]+-\d+$/.test(name)
+      ),
+    ).toEqual([]);
   });
 });
 

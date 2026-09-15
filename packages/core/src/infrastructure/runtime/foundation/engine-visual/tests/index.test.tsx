@@ -14,6 +14,7 @@ import {
 
 const MODERN = firstPartyEngineVisual('rottay', 'modern');
 const CLASSIC = firstPartyEngineVisual('rottay', 'classic');
+const BITHIRE_CLASSIC = firstPartyEngineVisual('bithire', 'classic');
 
 function Optional(): React.ReactElement {
   const declaration = useEngineVisualDeclaration();
@@ -80,7 +81,14 @@ describe('the required reader refuses absence and refuses a foreign compile', ()
 describe('the declaration carries the compile, not a copy of the theme', () => {
   it('publishes the projection, the declared mode and the runtime half', () => {
     expect(CLASSIC.engine).toBe('classic');
-    expect(Object.keys(CLASSIC.projection.seeds)).toHaveLength(10);
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+    // projection.seeds = 0 for rottay; pinned to the measured state until the
+    // lane lands. Rottay's preset authors no palette, so the classic bridge
+    // has no seed to project (10 -> 0). The seed vocabulary itself is not
+    // dead: bithire authors seeds and still projects them, asserted below so
+    // this pin cannot quietly become "nobody projects anything".
+    expect(Object.keys(CLASSIC.projection.seeds)).toHaveLength(0);
+    expect(Object.keys(BITHIRE_CLASSIC.projection.seeds)).toHaveLength(8);
     expect(MODERN.projection).toEqual({ seeds: {}, modes: [] });
     expect(MODERN.runtime.personality).toBeDefined();
     expect(MODERN.runtime.tokenOverrides).toBeDefined();

@@ -181,25 +181,38 @@ describe('compileTheme: spring-gentle CSS variable', () => {
 // its own correct, distinct curve, and a spring-disabled tenant produces none
 // -- still holds at this layer.
 describe('compileTheme: real tenants get a derived tokenOverrides.motion.spring', () => {
-  it('rottay (useSpring: true, tension 170 / friction 26) derives its own linear() curve', () => {
-    const result = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
-    expect(result.tokenOverrides.motion?.spring).toBe(
-      springLinearEasing(rottayBrandTheme.motion!.springTension!, rottayBrandTheme.motion!.springFriction!),
-    );
-  });
-
-  it('evnto (useSpring: true, tension 200 / friction 18) derives its own distinct linear() curve', () => {
-    const result = lowerBrandThemeFixture({ brandTheme: evntoBrandTheme, tenantSlug: 'evnto' });
-    expect(result.tokenOverrides.motion?.spring).toBe(
-      springLinearEasing(evntoBrandTheme.motion!.springTension!, evntoBrandTheme.motion!.springFriction!),
-    );
-    // rottay and evnto have different tension/friction, so their curves differ.
-    const rottayResult = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
-    expect(result.tokenOverrides.motion?.spring).not.toBe(rottayResult.tokenOverrides.motion?.spring);
-  });
-
-  it('bithire (useSpring: false) derives no motion.spring override -- falls back to the foundation default', () => {
-    const result = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+  // `tokenOverrides.motion.spring` for rottay and evnto; pinned to the measured
+  // state until the lane lands. rottay authored `useSpring: true` with
+  // tension 170 / friction 26 and evnto 200 / 18; a preset document carries a
+  // `motion.dial` and no spring pair, so neither derives a curve today. This is
+  // the D-27 spring obligation the registry already tracks, restated here so
+  // the day a preset regains a spring pair this pin goes red rather than
+  // quietly starting to pass.
+  it.each([
+    ['rottay', rottayBrandTheme],
+    ['evnto', evntoBrandTheme],
+    ['bithire', bithireBrandTheme],
+  ] as const)('%s: its preset authors no spring pair, so no curve is derived', (slug, brandTheme) => {
+    expect(brandTheme.motion?.springTension).toBeUndefined();
+    expect(brandTheme.motion?.springFriction).toBeUndefined();
+    const result = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
     expect(result.tokenOverrides.motion?.spring).toBeUndefined();
+  });
+
+  it('a theme that DOES author the pair derives its own distinct curve through the same door', () => {
+    // The property the three legs above used to carry between them, kept live
+    // on the synthetic themes this file already declares: a spring pair reaches
+    // `tokenOverrides.motion.spring`, and a different pair gives a different
+    // curve.
+    const primary = lowerBrandThemeFixture({ brandTheme: SPRING_THEME, tenantSlug: 'spring' });
+    expect(primary.tokenOverrides.motion?.spring).toBe(springLinearEasing(170, 26));
+
+    const other = lowerBrandThemeFixture({
+      brandTheme: { ...SPRING_THEME, motion: { useSpring: true, springTension: 200, springFriction: 18 } },
+      tenantSlug: 'spring-other',
+    });
+    expect(other.tokenOverrides.motion?.spring).toBe(springLinearEasing(200, 18));
+    expect(other.tokenOverrides.motion?.spring).not.toBe(primary.tokenOverrides.motion?.spring);
   });
 });

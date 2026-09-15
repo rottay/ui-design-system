@@ -8,7 +8,7 @@
  */
 
 import React, { type ReactElement, type ReactNode } from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { EngineProvider } from '@/infrastructure/runtime/engines';
@@ -91,6 +91,7 @@ function Probe({ overrides }: { overrides?: SurfaceVisualOverrides }) {
   return (
     <>
       <span data-testid="badgeShape">{resolved.badgeShape}</span>
+      <span data-testid="animateEntrance">{String(resolved.animateEntrance)}</span>
       <span data-testid="density">{resolved.density}</span>
       <span data-testid="sectionSpacing">{resolved.sectionSpacing}</span>
       <span data-testid="entranceDuration">{String(resolved.entranceDuration)}</span>
@@ -112,16 +113,39 @@ describe('an instance selection cannot contradict a tenant decision', () => {
   });
 
   it('refuses the same selection once the tenant decides that channel', () => {
+    // `animateEntrance` speaks for `animation.intensity`, which bithire's
+    // artifact decides. D6-2c-ii-RED (2026-09-15): `accent.badgeShape` was the
+    // channel the retired authored theme decided; no preset decides it, so the
+    // law is measured on a channel the vertical really owns.
     renderWithTenant(
-      <Probe overrides={{ badgeShape: 'pill' }} />,
+      <Probe overrides={{ animateEntrance: false }} />,
       { codeOwned: 'bithire' },
     );
 
     // The instance value does not land, and the refusal is named rather than
     // silent. What DOES land is the resolution chain's own answer -- the
     // tenant's paint rides its compiled artifact, not this policy.
-    expect(screen.getByTestId('badgeShape')).not.toHaveTextContent('pill');
-    expect(screen.getByTestId('verdicts')).toHaveTextContent('badgeShape:tenant-decided');
+    const refused = screen.getByTestId('animateEntrance').textContent;
+    expect(screen.getByTestId('verdicts')).toHaveTextContent('animateEntrance:tenant-decided');
+
+    // Coincidence-proof: the same tenant with no selection at all resolves the
+    // same value, so the refusal is what held it rather than a lucky default.
+    cleanup();
+    renderWithTenant(<Probe />, { codeOwned: 'bithire' });
+    expect(screen.getByTestId('animateEntrance').textContent).toBe(refused);
+  });
+
+  it('admits a selection on a channel no preset decides', () => {
+    // The other half of the same law, and the reason the row above moved:
+    // `accent.badgeShape` is OPEN on every vertical now, so an instance may
+    // state it. A preset that decides it later turns this row red.
+    renderWithTenant(
+      <Probe overrides={{ badgeShape: 'pill' }} />,
+      { codeOwned: 'bithire' },
+    );
+
+    expect(screen.getByTestId('badgeShape')).toHaveTextContent('pill');
+    expect(screen.getByTestId('verdicts')).toHaveTextContent('badgeShape:admitted');
   });
 
   it('refuses a density selection decided through the appearance document', () => {
@@ -180,14 +204,24 @@ describe('the catalog is complete and subordination has no gap', () => {
       { density: 'compact' },
     );
 
-    expect(decided.has('accent.badgeShape')).toBe(true);
+    // D6-2c-ii-RED (2026-09-15): bithire's artifact runtime block decides
+    // `animation.intensity` and `card.paddingDensity`. `accent.badgeShape` came
+    // from the retired authored theme and no preset states it, so the open
+    // channel is asserted too -- the set is pinned on both sides.
+    expect(decided.has('animation.intensity')).toBe(true);
     expect(decided.has('card.paddingDensity')).toBe(true);
+    expect(decided.has('accent.badgeShape')).toBe(false);
 
-    expect(adjudicateInstanceOverrides({ badgeShape: 'pill', density: 'spacious' }, decided))
-      .toEqual([
-        { field: 'density', value: 'spacious', admitted: false, refusedBecause: 'tenant-decided' },
-        { field: 'badgeShape', value: 'pill', admitted: false, refusedBecause: 'tenant-decided' },
-      ]);
+    expect(
+      adjudicateInstanceOverrides(
+        { animateEntrance: false, density: 'spacious', badgeShape: 'pill' },
+        decided,
+      ),
+    ).toEqual([
+      { field: 'density', value: 'spacious', admitted: false, refusedBecause: 'tenant-decided' },
+      { field: 'animateEntrance', value: false, admitted: false, refusedBecause: 'tenant-decided' },
+      { field: 'badgeShape', value: 'pill', admitted: true },
+    ]);
   });
 
   it('decides nothing for a tenant that authored nothing', () => {

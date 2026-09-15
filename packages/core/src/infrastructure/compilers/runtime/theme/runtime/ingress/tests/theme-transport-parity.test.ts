@@ -15,6 +15,14 @@
  *
  * The assertion is EQUAL BYTES on `cssVariables` and `modeBlocks`, not "both
  * non-empty": the defect this closes was two non-empty answers.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so the
+ * unauthored document is no longer a blank rest -- it already carries the
+ * vertical preset's own silhouette, nesting law and height posture. Reach is
+ * therefore measured between two named stops of the same closed domain instead
+ * of against that rest. Measured on all three verticals: every pair of button
+ * silhouettes differs on all six channels, and the two nesting laws differ on
+ * both operands, so the rows lose no reach -- only the rest moved.
  */
 import { describe, expect, it } from "vitest";
 
@@ -82,6 +90,11 @@ describe("theme-transport-parity: shape.button-style", () => {
         expect(fromDraft.modeBlocks).toEqual(fromDocument.modeBlocks);
       });
 
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+      // so the unauthored document already rests on the vertical's own
+      // silhouette and re-stating it moves nothing. The reach is measured
+      // against the OTHER silhouettes instead, which is independent of where
+      // the preset rests and proves each style owns all six channels.
       it(`${vertical}/${buttonStyle}: the silhouette reaches the same six channels on both doors`, () => {
         const channels = [
           "--ds-radius-button",
@@ -94,12 +107,29 @@ describe("theme-transport-parity: shape.button-style", () => {
         const fromDocument = documentArm(vertical, {
           "shape.button-style": buttonStyle,
         });
-        const baseline = documentArm(vertical, {});
-        const moved = channels.filter(
-          (channel) =>
-            fromDocument.cssVariables[channel] !== baseline.cssVariables[channel]
-        );
-        expect(moved).toEqual([...channels]);
+        const fromDraft = staticArm(vertical, {
+          id: SLUG,
+          name: SLUG,
+          surfaces: { buttonStyle },
+        } as unknown as BrandTheme);
+        for (const alternative of BUTTON_STYLES.filter(
+          (style) => style !== buttonStyle
+        )) {
+          const against = documentArm(vertical, {
+            "shape.button-style": alternative,
+          });
+          const movedOnDocument = channels.filter(
+            (channel) =>
+              fromDocument.cssVariables[channel] !==
+              against.cssVariables[channel]
+          );
+          const movedOnDraft = channels.filter(
+            (channel) =>
+              fromDraft.cssVariables[channel] !== against.cssVariables[channel]
+          );
+          expect(movedOnDocument).toEqual([...channels]);
+          expect(movedOnDraft).toEqual([...channels]);
+        }
       });
     }
   }
@@ -107,10 +137,23 @@ describe("theme-transport-parity: shape.button-style", () => {
 
 describe("theme-transport-parity: shape.nesting", () => {
   for (const vertical of VERTICALS) {
-    it(`${vertical}: an unauthored theme carries neither operand of the law`, () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // every first-party preset authors `shape.nesting`, so the operands are
+    // present on an unauthored document and carry the preset's own law
+    // (undefined -> the preset's pair). Read off the explicit compile rather
+    // than restated as a literal, so a preset that moves its law moves this.
+    it(`${vertical}: an unauthored document carries the preset's own nesting law`, () => {
       const baseline = documentArm(vertical, {}, "pro");
+      const authored = documentArm(
+        vertical,
+        { "shape.nesting": "uniform" },
+        "pro"
+      );
       for (const channel of NESTING_CHANNELS) {
-        expect(baseline.cssVariables[channel]).toBeUndefined();
+        expect(baseline.cssVariables[channel]).toBeDefined();
+        expect(baseline.cssVariables[channel]).toBe(
+          authored.cssVariables[channel]
+        );
       }
     });
 
@@ -126,14 +169,27 @@ describe("theme-transport-parity: shape.nesting", () => {
         expect(fromDraft.modeBlocks).toEqual(fromDocument.modeBlocks);
       });
 
+      // D6-2c-ii (2026-09-15): measured against the OTHER law rather than the
+      // unauthored document, which now rests on the preset's own nesting.
       it(`${vertical}/${nesting}: the law reaches BOTH declared operands on both doors`, () => {
-        const baseline = documentArm(vertical, {}, "pro");
         const fromDocument = documentArm(vertical, { "shape.nesting": nesting }, "pro");
-        const moved = NESTING_CHANNELS.filter(
-          (channel) =>
-            fromDocument.cssVariables[channel] !== baseline.cssVariables[channel]
+        const fromDraft = staticArm(vertical, {
+          id: SLUG,
+          name: SLUG,
+          surfaces: { nesting },
+        } as unknown as BrandTheme);
+        const against = documentArm(
+          vertical,
+          { "shape.nesting": nesting === "uniform" ? "concentric" : "uniform" },
+          "pro"
         );
-        expect(moved).toEqual([...NESTING_CHANNELS]);
+        for (const arm of [fromDocument, fromDraft]) {
+          const moved = NESTING_CHANNELS.filter(
+            (channel) =>
+              arm.cssVariables[channel] !== against.cssVariables[channel]
+          );
+          expect(moved).toEqual([...NESTING_CHANNELS]);
+        }
       });
     }
 
@@ -157,9 +213,22 @@ describe("theme-transport-parity: shape.nesting", () => {
 
 describe("theme-transport-parity: shape.control-height", () => {
   for (const vertical of VERTICALS) {
-    it(`${vertical}: an unauthored theme carries no height factor`, () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // every first-party preset authors `shape.control-height`, so the factor is
+    // present on an unauthored document (undefined -> the preset's posture).
+    // The assertion stays a law rather than a literal: the resting factor must
+    // be one the closed domain declares, never a free number.
+    it(`${vertical}: an unauthored document rests on a declared height posture`, () => {
       const baseline = documentArm(vertical, {});
-      expect(baseline.cssVariables["--ds-control-height-scale"]).toBeUndefined();
+      const resting = baseline.cssVariables["--ds-control-height-scale"];
+      expect(resting).toBeDefined();
+      const declared = CONTROL_HEIGHTS.map(
+        (value) =>
+          documentArm(vertical, { "shape.control-height": value }).cssVariables[
+            "--ds-control-height-scale"
+          ]
+      );
+      expect(declared).toContain(resting);
     });
 
     for (const controlHeight of CONTROL_HEIGHTS) {
@@ -176,16 +245,31 @@ describe("theme-transport-parity: shape.control-height", () => {
         expect(fromDraft.modeBlocks).toEqual(fromDocument.modeBlocks);
       });
 
+      // D6-2c-ii (2026-09-15): measured against the OTHER postures rather than
+      // the unauthored document, which now rests on the preset's own posture.
       it(`${vertical}/${controlHeight}: the posture reaches its declared channel on both doors`, () => {
-        const baseline = documentArm(vertical, {});
         const fromDocument = documentArm(vertical, {
           "shape.control-height": controlHeight,
         });
-        const moved = CONTROL_HEIGHT_CHANNELS.filter(
-          (channel) =>
-            fromDocument.cssVariables[channel] !== baseline.cssVariables[channel]
-        );
-        expect(moved).toEqual([...CONTROL_HEIGHT_CHANNELS]);
+        const fromDraft = staticArm(vertical, {
+          id: SLUG,
+          name: SLUG,
+          surfaces: { controlHeight },
+        } as unknown as BrandTheme);
+        for (const alternative of CONTROL_HEIGHTS.filter(
+          (value) => value !== controlHeight
+        )) {
+          const against = documentArm(vertical, {
+            "shape.control-height": alternative,
+          });
+          for (const arm of [fromDocument, fromDraft]) {
+            const moved = CONTROL_HEIGHT_CHANNELS.filter(
+              (channel) =>
+                arm.cssVariables[channel] !== against.cssVariables[channel]
+            );
+            expect(moved).toEqual([...CONTROL_HEIGHT_CHANNELS]);
+          }
+        }
       });
     }
 

@@ -39,11 +39,33 @@ const INK_OVER_GROUND = [
   ["--ds-color-on-info", "--ds-color-info"],
 ] as const;
 
+/**
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. The
+ * dark primary `#1e84e6` used to come from bithire's authored
+ * `modes.dark.palette`; a preset document seeds no per-mode palette, so the
+ * dark block would inherit the base primary and the withdrawal case below --
+ * where the two blocks have DIFFERENT grounds -- would have no subject at all.
+ * The overlay seed is therefore planted here as a fixture. It reproduces the
+ * original measurement exactly (base ink #ffffff reads 3.82:1 over it, the
+ * `standard` arm derives 4.69:1), so the repro still bites.
+ */
+const DARK_PRIMARY = "#1e84e6";
+
 const bithireAt = (contrastPosture: string) =>
   lowerBrandThemeFixture({
     brandTheme: {
       ...bithireBrandTheme,
       palette: { ...bithireBrandTheme.palette, contrastPosture },
+      modes: {
+        ...bithireBrandTheme.modes,
+        dark: {
+          ...bithireBrandTheme.modes?.dark,
+          palette: {
+            ...(bithireBrandTheme.modes?.dark?.palette ?? {}),
+            primaryColor: DARK_PRIMARY,
+          },
+        },
+      },
     } as BrandTheme,
     tenantSlug: "bithire",
   });
@@ -106,7 +128,7 @@ describe("a raised contrast posture never lowers a rendered ratio", () => {
    */
   it("bithire dark keeps a foreground at or above AA when no ink clears 7:1", () => {
     const ground = rendered(high, "dark", "--ds-color-primary");
-    expect(ground).toBe("#1e84e6");
+    expect(ground).toBe(DARK_PRIMARY);
     for (const pure of [CONTRAST_POSTURES.high.inkLight, CONTRAST_POSTURES.high.inkDark]) {
       expect(contrastRatio(pure, ground!)).toBeLessThan(CONTRAST_POSTURES.high.minimumRatio);
     }

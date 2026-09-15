@@ -112,7 +112,13 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     const source = getKnownTenantConfig('bithire')!;
     const behavior = getCodeOwnedGovernedBehavior(source)!;
     expect(behavior.expressive?.experienceProfile).toBe('rottay/bithire-technical@1');
-    expect(behavior.expressive).toBe(bithireBrandTheme.expressive);
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the governed slice now comes from the artifact's published runtime
+    // block, a separate frozen object by construction, while the fixture is
+    // composed per call. Reference identity therefore cannot hold and is not
+    // the claim -- that the WHOLE selection travels unchanged is: toBe ->
+    // toEqual.
+    expect(behavior.expressive).toEqual(bithireBrandTheme.expressive);
 
     const axesFromSlice = resolveExpressiveAxes(
       behavior.expressive!.experienceProfile,
@@ -126,8 +132,11 @@ describe('code-owned governed behavior survives the runtime projection', () => {
     );
     expect(axesFromSlice).toEqual(axesFromSource);
     // Not vacuous: the selection resolves real axes, including the two the
-    // theme overrides on top of its experience profile.
-    expect(axesFromSlice).toMatchObject({ type: 'humanist', geometry: 'rounded' });
+    // source overrides on top of its experience profile.
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // bithire's preset authors its expressive overrides explicitly, so the
+    // two named axes move with it: humanist/rounded -> technical/sharp.
+    expect(axesFromSlice).toMatchObject({ type: 'technical', geometry: 'sharp' });
 
     expect(resolveActiveIconExpressiveProfile({ expressive: behavior.expressive }))
       .toBe(resolveActiveIconExpressiveProfile({ expressive: bithireBrandTheme.expressive }));
@@ -175,8 +184,15 @@ describe('code-owned governed behavior survives the runtime projection', () => {
       'motion',
       'recipeProfile',
     ]);
-    expect(behavior.recipeProfile).toBe('rottay/network-professional@1');
-    expect(Object.keys(behavior.motion!).sort()).toEqual(['entranceDuration', 'intensity']);
+    // D6-2c-ii: bithire's preset document decides `recipe-profile`, and it is
+    // the only vertical that decides one; the retired authored theme named a
+    // different profile.
+    expect(behavior.recipeProfile).toBe('rottay/technical-sharp@1');
+    // `entranceDuration` had no preset decision behind it: the retired authored
+    // theme supplied it directly, and `motion.dial` decides intensity, duration
+    // SCALE and ambient instead. Reported for the derivation lane; the shape of
+    // the block is pinned so a key appearing or vanishing is still visible.
+    expect(Object.keys(behavior.motion!).sort()).toEqual(['intensity']);
     expect(Object.isFrozen(behavior)).toBe(true);
     expect(Object.isFrozen(behavior.motion)).toBe(true);
   });

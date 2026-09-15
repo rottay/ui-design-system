@@ -11,9 +11,6 @@ import {
   CHART_CATEGORICAL_SIZE,
   resolveChartSeriesPaint,
 } from '..';
-import { firstPartyFixture } from "@tests/support/theme-lowering";
-
-const bithireBrandTheme = firstPartyFixture('bithire');
 
 const PATTERNS_CSS = readFileSync(
   join(__dirname, '../../../../../../../../../../foundation/tokens/css/presentation/components/patterns/index.css'),
@@ -59,7 +56,11 @@ function readModeColors(scheme: typeof SCHEMES[number]): { light: string[]; dark
 
 describe('Chart grammar foundation palette non-text contrast', () => {
   it('preserves personality selection and tenant/DB category precedence', () => {
-    expect(bithireBrandTheme.charts?.colorScheme).toBe('monochrome');
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+    // no preset decides a chart scheme, so the bithire leg of this selection has
+    // no subject left (measured: `charts` is `{}`). The selection half is carried
+    // by the customer fixture below, which still authors one; the vertical's lost
+    // one-blue decision is pinned in `charts/tests/bithire-chart-palette`.
     expect(themanagementmiamiBrandTheme.charts?.colorScheme).toBe('default');
 
     for (const scheme of SCHEMES) {

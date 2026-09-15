@@ -82,7 +82,7 @@ describe('PatternLiveFeed advanced engine coverage', () => {
 
   it.each(ENGINE_COMPONENTS)(
     'covers refresh, new-items, load-more, and auto-refresh branches in the %s engine',
-    (engine, Component) => {
+    async (engine, Component) => {
       vi.useFakeTimers();
 
       const onRefresh = vi.fn();
@@ -103,6 +103,13 @@ describe('PatternLiveFeed advanced engine coverage', () => {
           })}
         />
       );
+
+      // The engine resolves through a lazy boundary whose chunk settles on the
+      // microtask queue: yield under the fake clock so the mount completes
+      // before the first query, without moving the clock the branch advances.
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(0);
+      });
 
       const refreshButton =
         engine === 'classic'

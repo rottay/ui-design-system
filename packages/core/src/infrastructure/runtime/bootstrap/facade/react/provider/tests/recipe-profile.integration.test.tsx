@@ -131,12 +131,14 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     // selection now travels on the identity-keyed governed-behavior slot, which
     // is not paint and cannot be forged by a caller-built config; what it
     // carries is the vertical's own ARTIFACT block, byte-bound below.
-    const rottay = getKnownTenantConfig('rottay')!;
-    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(rottay))?.recipeProfile)
-      .toBe(recipeProfileInArtifactBytes('rottay'));
+    // D6-2c-ii: the profile is a preset decision and bithire is the vertical
+    // whose document decides one, so it is the subject of this reading now.
+    const codeOwned = getKnownTenantConfig('bithire')!;
+    expect(getCodeOwnedGovernedBehavior(getCodeOwnedRuntimeConfig(codeOwned))?.recipeProfile)
+      .toBe(recipeProfileInArtifactBytes('bithire'));
 
     render(
-      <DesignSystemProvider tenantConfig={rottay} vertical="rottay" forceEngine="modern">
+      <DesignSystemProvider tenantConfig={codeOwned} vertical="bithire" forceEngine="modern">
         <ProfileProbe />
       </DesignSystemProvider>,
     );
@@ -193,9 +195,12 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     }
 
     // Anti-cheat: an all-undefined roster would satisfy the identity above for
-    // free, so at least two verticals must declare, and declare DIFFERENTLY.
-    expect(declared.length).toBeGreaterThanOrEqual(2);
-    expect(new Set(declared.map((row) => row.split(':')[1])).size).toBeGreaterThanOrEqual(2);
+    // free. Since D6-2c-ii a vertical's profile is a PRESET DECISION, and only
+    // bithire's document decides one -- the retired authored themes gave rottay
+    // and evnto theirs. The population is therefore pinned exactly rather than
+    // counted: a vertical that starts or stops declaring reddens this row, and
+    // it is stronger than the "at least two" it replaces.
+    expect(declared).toEqual(['bithire:rottay/technical-sharp@1']);
   });
 
   it('gives two code-owned verticals the two different profiles their artifacts compiled', () => {
@@ -227,7 +232,12 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     );
     expect(registry).not.toMatch(/validateRecipeProfileSelection/);
     expect(registry).not.toMatch(/recipes\?\.profile/);
-    expect(registry).toMatch(/firstPartyArtifactRecipeProfile/);
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the registry reads the artifact's whole published runtime block rather
+    // than one accessor per field, so the symbol that proves "the artifact is
+    // the reader" moves: firstPartyArtifactRecipeProfile ->
+    // FIRST_PARTY_ARTIFACT_RUNTIME. The assertion is unchanged in kind.
+    expect(registry).toMatch(/FIRST_PARTY_ARTIFACT_RUNTIME/);
   });
 
   /**
@@ -238,7 +248,7 @@ describe('DesignSystemProvider recipe-profile authority', () => {
    * and `network-professional` declares a filled default-shaped primary, so the
    * two surfaces must not be attribute-identical.
    */
-  it('renders bithire and rottay as two visibly different buttons', () => {
+  it('renders a profiled vertical and a default one as two visibly different buttons', () => {
     const buttonPosture = (slug: 'rottay' | 'bithire'): Record<string, string | null> => {
       const view = render(
         <DesignSystemProvider
@@ -263,11 +273,15 @@ describe('DesignSystemProvider recipe-profile authority', () => {
     const rottay = buttonPosture('rottay');
     const bithire = buttonPosture('bithire');
 
-    expect(rottay.profile).toBe('rottay/technical-sharp@1');
-    expect(bithire.profile).toBe('rottay/network-professional@1');
+    // D6-2c-ii: only bithire's preset decides a recipe profile, so the pair the
+    // product renders is now "a vertical WITH a profile" against "a vertical
+    // on engine defaults". The property under test is unchanged and still
+    // falsifiable: the selection has to MOVE the button, not merely be read.
+    expect(bithire.profile).toBe('rottay/technical-sharp@1');
+    expect(rottay.profile).toBe('engine-defaults');
     expect(bithire).not.toEqual(rottay);
-    expect(bithire.variant).toBe('primary');
-    expect(bithire.shape).toBe('default');
+    expect(bithire.size).toBe('sm');
+    expect(bithire.variant).toBe('outline');
   });
 
   /**

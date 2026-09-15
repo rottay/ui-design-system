@@ -30,10 +30,19 @@ import {
 } from "..";
 
 const VERTICALS = ["bithire", "rottay", "evnto"] as const;
+/**
+ * Every field here speaks for a channel all three verticals actually decide.
+ *
+ * D6-2c-ii-RED (2026-09-15): the retired authored themes decided the whole
+ * animation block, so `entranceStyle` and `entranceDuration` used to be
+ * contradicted too. The presets decide `animation.intensity` and
+ * `card.paddingDensity`, and those are the channels this law is measured on --
+ * the selection is re-aimed, not shortened, so every verdict must still refuse.
+ */
 const SELECTION = {
   density: "spacious",
-  entranceStyle: "bounce",
-  entranceDuration: 4000,
+  sectionSpacing: "lg",
+  animateEntrance: false,
 } as const;
 
 function Probe(): React.ReactElement {
@@ -69,7 +78,12 @@ describe("the real DesignSystemProvider carries the tenant's decisions", () => {
       // Nothing was applied: the surface keeps the defaults the tenant's own
       // profile resolves to, whatever they happen to be.
       expect(probe.resolved).toEqual(probe.base);
-      expect(probe.resolved.entranceDuration).not.toBe(4000);
+      // Per selected field, and coincidence-proof: where the selection really
+      // differs from the tenant's own answer, the selected value must not land.
+      for (const [field, selected] of Object.entries(SELECTION)) {
+        if (probe.base[field] === selected) continue;
+        expect(probe.resolved[field], `${vertical}: ${field}`).not.toBe(selected);
+      }
       cleanup();
     }
   });

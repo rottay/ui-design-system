@@ -24,6 +24,28 @@ import {
 
 const bithireBrandTheme = firstPartyFixture('bithire');
 
+/* D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so the
+ * shipped bithire identity authors neither overlay role (`surfaceRoles.overlay`
+ * arrives empty and no palette leaf states the scrim). The two roles keep their
+ * producers -- `surfaces.surfaceRoles.overlay.background` -> `--ds-surface-overlay`
+ * and `palette.backgroundOverlayColor` -> `--ds-color-bg-overlay` -- so the static
+ * leg re-anchors on a fixture that authors both, which is the subject SC-7 needs:
+ * a theme that states the two roles must reach two channels, not one. */
+const OVERLAY_AUTHORING_FIXTURE = {
+  ...bithireBrandTheme,
+  palette: {
+    ...bithireBrandTheme.palette,
+    backgroundOverlayColor: 'rgba(20, 40, 59, 0.42)',
+  },
+  surfaces: {
+    ...bithireBrandTheme.surfaces,
+    surfaceRoles: {
+      ...bithireBrandTheme.surfaces?.surfaceRoles,
+      overlay: { background: '#ffffff' },
+    },
+  },
+} as typeof bithireBrandTheme;
+
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_overlay_role_probe',
   slug: 'overlay-role-probe',
@@ -71,8 +93,11 @@ describe('SC-7 overlay panel/scrim separation', () => {
    * la declaracion del tema aunque la separacion siguiera intacta, y la separacion
    * sola habria pasado con el panel pintando cualquier cosa. Juntas, la prueba
    * distingue los dos modos de romperse. */
-  it('static BrandTheme emits the tenant panel and veil independently', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+  it('a theme that authors both roles emits the panel and the veil independently', () => {
+    const compiled = lowerBrandThemeFixture({
+      brandTheme: OVERLAY_AUTHORING_FIXTURE,
+      tenantSlug: 'overlay-role-fixture',
+    });
     const panel = compiled.cssVariables['--ds-surface-overlay'];
     const veil = compiled.cssVariables['--ds-color-bg-overlay'];
     // El pin duro, intacto.

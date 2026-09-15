@@ -20,6 +20,10 @@ import { describe, expect, it, vi } from 'vitest';
 // process: a refusal that only happens on a cold cache is not a refusal.
 // ---------------------------------------------------------------------------
 
+// D6-2c-ii: a first-party vertical is the neutral foundation plus its preset,
+// and only bithire's preset decides a recipe profile. The tamper therefore
+// targets bithire, the one vertical whose artifact HAS a compiled profile for a
+// shipped block to disagree with; rottay decides none and is left alone.
 const TAMPERED = 'rottay/editorial-round@1';
 
 vi.mock('@/infrastructure/compilers/runtime/tenant-css/artifact-runtime', async (importOriginal) => {
@@ -29,7 +33,7 @@ vi.mock('@/infrastructure/compilers/runtime/tenant-css/artifact-runtime', async 
   return {
     ...actual,
     firstPartyArtifactRecipeProfile: (vertical: string) =>
-      vertical === 'rottay' ? TAMPERED : actual.firstPartyArtifactRecipeProfile(vertical),
+      vertical === 'bithire' ? TAMPERED : actual.firstPartyArtifactRecipeProfile(vertical),
   };
 });
 
@@ -38,8 +42,8 @@ describe('mountTenantTheme — a shipped runtime block that outran its compile',
     const { staticThemeIntent } = await import('@/infrastructure/compilers/runtime/theme');
     const { mountTenantTheme } = await import('..');
 
-    await expect(mountTenantTheme(staticThemeIntent('rottay'))).rejects.toThrow(
-      /shipped runtime block for "rottay" declares recipe profile "rottay\/editorial-round@1", but its artifact compiled "rottay\/technical-sharp@1"/,
+    await expect(mountTenantTheme(staticThemeIntent('bithire'))).rejects.toThrow(
+      /shipped runtime block for "bithire" declares recipe profile "rottay\/editorial-round@1", but its artifact compiled "rottay\/technical-sharp@1"/,
     );
   });
 
@@ -47,9 +51,9 @@ describe('mountTenantTheme — a shipped runtime block that outran its compile',
     const { staticThemeIntent } = await import('@/infrastructure/compilers/runtime/theme');
     const { mountTenantTheme } = await import('..');
 
-    const mounted = await mountTenantTheme(staticThemeIntent('bithire'));
-    expect(mounted.rootAttributes['data-recipe-profile']).toBe(
-      'rottay/network-professional@1',
-    );
+    // rottay's preset decides no recipe profile, so its block projects none and
+    // the mount has nothing to disagree with.
+    const mounted = await mountTenantTheme(staticThemeIntent('rottay'));
+    expect(mounted.rootAttributes['data-recipe-profile']).toBeUndefined();
   });
 });

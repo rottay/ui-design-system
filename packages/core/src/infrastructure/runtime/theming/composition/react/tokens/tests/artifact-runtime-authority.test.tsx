@@ -138,25 +138,55 @@ describe('useTokens resolves the mounted artifact, not the config', () => {
     const tokens = readTokens();
     const compiled = COMPILED.engineVisual.runtime;
 
-    // Structural: the compile's radius, not the config's `99px`.
-    expect(tokens.radiusMd).toBe(compiled.tokenOverrides.borderRadius?.md);
-    expect(tokens.radiusMd).not.toBe('99px');
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // this delta over a bithire baseline that authors neither radius nor card
+    // chrome publishes `borderRadius: {}` and `card: {}` (measured), so those
+    // two channels moved from "the artifact outranks the config" to "the
+    // artifact is silent AND the config is still not read" -- the same law,
+    // read on its other side. The motion dial, which the compile does state,
+    // carries the positive leg.
 
-    // Personality: the compile's dial and padding, not the config's.
+    // Personality: the compile's own dial, not the config's.
+    expect(compiled.personality.animation?.intensity).toBe(0.5);
     expect(tokens.intensity).toBe(compiled.personality.animation?.intensity);
     expect(tokens.intensity).not.toBe(0.05);
-    expect(tokens.paddingDensity).toBe('compact');
+
+    // Structural: the compile states no radius, so the baseline stands -- and
+    // the config's forged `99px` reaches nothing either way.
+    expect(compiled.tokenOverrides.borderRadius?.md).toBeUndefined();
+    expect(tokens.radiusMd).not.toBe('99px');
+
+    // Same on the card: silent compile, and the config's `spacious` is still
+    // nowhere in the reading.
+    expect(compiled.personality.card?.paddingDensity).toBeUndefined();
     expect(tokens.paddingDensity).not.toBe('spacious');
 
-    // Density: the ARTIFACT's semantic posture composed over the compile's own
-    // structural scale. The config asked for `spacious` and a scale of 3.
-    const expected = Math.round(
-      16 * resolveEffectiveDensityScale(compiled.tokenOverrides.densityScale, 'compact'),
+    // Density: the ARTIFACT's semantic posture still reaches the tokens, and
+    // the config's `spacious` with a scale of 3 still reaches nothing.
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the compile publishes no structural `densityScale`, so the composition
+    // can no longer be recomputed from its runtime half. It is measured
+    // against the same provider with no artifact mounted instead, which keeps
+    // the posture's effect asserted without pinning a scale the compile does
+    // not carry: 16 with no artifact, 13 under this compact artifact.
+    expect(compiled.tokenOverrides.densityScale).toBeUndefined();
+    cleanup();
+
+    render(
+      <DesignSystemProvider
+        tenantConfig={SMUGGLED}
+        vertical="bithire"
+        forceEngine="modern"
+        skipCssLoading
+      >
+        <Probe />
+      </DesignSystemProvider>,
     );
-    expect(tokens.spacing4).toBe(expected);
-    expect(tokens.spacing4).toBe(
-      Math.round(16 * resolveEffectiveDensityScale(compiled.tokenOverrides.densityScale, 'compact')),
-    );
+    const baseline = readTokens();
+
+    expect(baseline.spacing4).toBe(Math.round(16 * resolveEffectiveDensityScale(undefined, 'normal')));
+    expect(tokens.spacing4).toBeLessThan(Number(baseline.spacing4));
+    expect(tokens.spacing4).toBe(13);
   });
 
   it('publishes the compiled half from the ARTIFACT, with no engineVisual prop', () => {
@@ -196,12 +226,17 @@ describe('useTokens resolves the mounted artifact, not the config', () => {
     const withoutProp = readTokens();
 
     expect(withoutProp).toEqual(withProp);
-    // Not vacuous: these readings are the tenant's, not the baseline's, so the
+    // Not vacuous: this reading is the tenant's, not the baseline's, so the
     // comparison above would also fail if BOTH trees had fallen back.
-    expect(withoutProp.paddingDensity).toBe('compact');
-    expect(withoutProp.radiusMd).toBe(
-      COMPILED.artifact.runtime?.runtime.tokenOverrides.borderRadius?.md,
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the anchor moves to the motion dial, the channel this compile still
+    // states, because radius and card padding are now empty in its runtime
+    // half. 0.5 is the tenant's own decision and differs from the bithire
+    // preset's 0.55, so a fallback could not produce it.
+    expect(withoutProp.intensity).toBe(
+      COMPILED.artifact.runtime?.runtime.personality.animation?.intensity,
     );
+    expect(withoutProp.intensity).toBe(0.5);
 
     // NEGATIVE CONTROL. `palette.primary` is a paint decision: it belongs to
     // the artifact's CSS and must not arrive a second time as a JS value, or

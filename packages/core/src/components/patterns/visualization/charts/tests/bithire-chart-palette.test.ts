@@ -12,20 +12,31 @@ const bithireBrandTheme = firstPartyFixture('bithire');
 /**
  * WO-DES-12 — chart one-blue law (design-language §8.3 + Craft Bar A5.5).
  *
- * BitHire pins `charts.colorScheme: 'monochrome'` so every chart draws its
- * series from the single-hue primary scale (#3A6FB0 tonalities) instead of a
- * rainbow categorical palette. `useChartPersonality` resolves the active
- * `colorScheme` through `COLOR_SCHEME_MAP`, so asserting that map entry proves
- * the resolved BitHire chart palette is the single-hue primary scale.
+ * The law has two halves. The MECHANISM is engine-owned: `useChartPersonality`
+ * resolves the active `colorScheme` through `COLOR_SCHEME_MAP`, and the
+ * `monochrome` entry is the single-hue primary scale rather than a rainbow
+ * categorical palette. The SELECTION is a decision: which scheme BitHire picks.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and no
+ * preset document decides a chart scheme -- measured, `charts` is `{}` on all
+ * three composed baselines, where the authored BitHire theme pinned
+ * `charts.colorScheme: 'monochrome'`. The mechanism half is re-anchored on the
+ * scheme name itself, which is what the engine actually reads; the selection
+ * half is pinned to the measured state below.
  */
 describe('BitHire chart palette (WO-DES-12 one-blue law)', () => {
-  it('pins the monochrome color scheme in the brand theme', () => {
-    expect(bithireBrandTheme.charts?.colorScheme).toBe('monochrome');
+  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): `charts.colorScheme`
+  // (pending DT registration); pinned to the measured state until the lane lands.
+  // The one-blue law is a BitHire product decision with no preset decision behind
+  // it any more, so the vertical carries no chart scheme and every chart falls to
+  // the engine default. Kept as a live assertion, not deleted: when DER-07 or the
+  // vertical restores the decision this goes red and is re-adjudicated.
+  it('carries no chart scheme decision: the one-blue selection has no preset behind it', () => {
+    expect(bithireBrandTheme.charts?.colorScheme).toBeUndefined();
   });
 
-  it('resolves the pinned scheme to the single-hue primary scale', () => {
-    const scheme = bithireBrandTheme.charts?.colorScheme ?? 'default';
-    const resolved = COLOR_SCHEME_MAP[scheme];
+  it('resolves the monochrome scheme to the single-hue primary scale', () => {
+    const resolved = COLOR_SCHEME_MAP.monochrome;
 
     // The resolved palette is the monochrome (primary) scale, not the
     // multi-hue categorical default.

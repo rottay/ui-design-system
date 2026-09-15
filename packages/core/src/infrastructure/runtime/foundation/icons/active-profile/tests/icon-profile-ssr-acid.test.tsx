@@ -82,8 +82,14 @@ const DUOTONE_SELECTION = {
   profiles: { icon: 'duotone' },
 };
 
-// Plain bithire: technical posture, no icon axis — baseline weights.
-const BASELINE_SELECTION = bithireBrandTheme.expressive;
+// A governed selection that declares NO icon axis — baseline weights.
+// D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+// bithire's preset authors `profiles.icon: 'strong-outline'`, so it no longer
+// carries the no-axis shape this case needs: bithire -> rottay, whose preset
+// is structural and authors no icon axis. Bithire now serves the opposite
+// leg, asserted beside it.
+const BASELINE_SELECTION = firstPartyFixture('rottay').expressive;
+const ICON_AXIS_SELECTION = bithireBrandTheme.expressive;
 
 function NestedTree() {
   return (
@@ -244,6 +250,12 @@ describe('shared derivation (provider client value === server seam value)', () =
     expect(resolveActiveIconExpressiveProfile({ expressive: DUOTONE_SELECTION })).toBe('duotone');
     expect(resolveActiveIconExpressiveProfile({ expressive: BASELINE_SELECTION })).toBeUndefined();
     expect(resolveActiveIconExpressiveProfile(undefined)).toBeUndefined();
+    // A selection that DOES declare the axis is read from the selection, not
+    // guessed: the pair proves the resolver reads the axis rather than always
+    // answering undefined.
+    expect(resolveActiveIconExpressiveProfile({ expressive: ICON_AXIS_SELECTION })).toBe(
+      'strong-outline'
+    );
     // The artifact's appearance beats the governed static selection — the canon
     // precedence.
     expect(

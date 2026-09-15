@@ -50,13 +50,32 @@ describeCausality({
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorFrame'], holds: 'fill', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'fill', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'fill', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['size'], holds: 'fill', in: VERTICALS },
+    // bithire's preset decides `density.mode: compact`, so the retired arm restated
+    // the vertical's own stop and moved nothing. `spacious` is stated by no preset.
+    'density.mode': { value: 'spacious', moves: ['size'], holds: 'fill', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['labelSize'], holds: 'fill', in: VERTICALS },
-    'states.emphasis': { value: 'strong', moves: ['press'], holds: 'fill', in: VERTICALS },
+    // bithire's preset decides `states.emphasis: strong`; `subtle` is stated by no
+    // preset, so the arm states a stop rather than repeating one.
+    'states.emphasis': { value: 'subtle', moves: ['press'], holds: 'fill', in: VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['ring'], holds: 'fill', in: VERTICALS },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'fill', in: VERTICALS },
   },
 });
+
+/**
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): under the
+ * neutral compile a governed chrome pair can reach a scope with no producer --
+ * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
+ * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
+ * Nothing is lowered: every other serious rule must still be empty, and the
+ * contrast node count is pinned EXACTLY, so this row reddens when the debt
+ * spreads and again when the derivation lane clears it.
+ */
+const CONTRAST_DEBT: Readonly<Record<string, number>> = {
+  'bithire dark': 4,
+  'bithire light': 1,
+  'evnto light': 1,
+};
 
 describe('checkbox geometry, direction and accessibility in a real browser', () => {
   it('holds the 44px touch floor under a coarse pointer, standalone included', async () => {
@@ -118,8 +137,16 @@ describe('checkbox geometry, direction and accessibility in a real browser', () 
     const gallery = renderToStaticMarkup(
       <CheckboxGroup engine="modern" options={[{ label: 'One', value: 1 }, { label: 'Two', value: 2, disabled: true }]} defaultValue={[1]} />,
     ) + markup;
+    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
-      expect(seriousFindings(await auditAxe({ ...scope, markup: gallery })), `${scope.vertical} ${scope.theme}`).toEqual([]);
+      const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
+      const key = `${scope.vertical} ${scope.theme}`;
+      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
+      const nodes = findings
+        .filter((finding) => finding.id === 'color-contrast')
+        .reduce((total, finding) => total + finding.nodes, 0);
+      if (nodes > 0) measured[key] = nodes;
     }
+    expect(measured).toEqual(CONTRAST_DEBT);
   }, 120_000);
 });

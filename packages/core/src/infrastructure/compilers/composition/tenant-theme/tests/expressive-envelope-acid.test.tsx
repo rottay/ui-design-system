@@ -183,14 +183,29 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // BitHire static: same tree, same component, only the tenant changes — the
     // icon must come back to the baseline navigation weight.
     //
+    // D6-2c-ii (2026-09-15): that weight is `bold`, not `regular`. bithire is
+    // now the neutral foundation plus its preset document, and the preset's own
+    // `profiles.expressive` states a bolder icon posture than the retired theme
+    // did. The ACID claim is untouched and is what this case exists for: the
+    // same public icon, mounted under the two real artifacts, renders two
+    // different weights -- `duotone` above against `bold` here.
+    //
     // The registry object itself. Code-owned trust is by IDENTITY, so a
     // hand-built config with a reserved slug is deliberately untrusted. The
     // governed icon posture reaches the seam through
     // `getCodeOwnedGovernedBehavior`, which is exactly the production path.
     const bithireConfig = getKnownTenantConfig('bithire');
     if (!bithireConfig) throw new Error('Missing bundled BitHire tenant');
+    // D6-2c-ii (2026-09-15): compared by VALUE, not by reference. The fixture
+    // is now composed per call -- the neutral foundation with the preset
+    // document admitted through the compile door, cloned each time -- where it
+    // used to be a single frozen module object the registry could hand back by
+    // identity. The claim this line makes is that the seam publishes the
+    // vertical's own governed selection, which is a claim about the value; the
+    // IDENTITY trust it sits under is asserted by `getKnownTenantConfig` above,
+    // and is unaffected.
     expect(getCodeOwnedGovernedBehavior(bithireConfig)?.expressive)
-      .toBe(bithireBrandTheme.expressive);
+      .toEqual(bithireBrandTheme.expressive);
 
     const bithire = render(
       <DesignSystemProvider tenantConfig={bithireConfig} skipCssLoading>
@@ -200,7 +215,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
     await waitFor(() => {
       expect(
         bithire.getByTestId('acid-icon').getAttribute('data-icon-weight')
-      ).toBe('regular');
+      ).toBe('bold');
     });
   });
 
@@ -317,18 +332,38 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // foundation), which this test does not render/stamp and therefore does
     // not measure — that evidence lives in the R1 Button/Segmented cohort's
     // live F4C capture instead.
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
+    // registration. THE MEASURED DIVERGENCE DROPPED, from 6 axes to 4, and the
+    // cause is the frozen-channel mechanism described above operating over a
+    // WIDER baseline. bithire is now the neutral foundation plus its preset
+    // document, and that preset AUTHORS three channels the retired theme left
+    // unstated -- `--ds-edge-emphasis-width` (2px, from its `strong` state
+    // emphasis), `--ds-material-card-texture` (`none`) and
+    // `--ds-elevation-lift-strength` (`0`). Each is therefore indistinguishable
+    // from a tenant authorship by the time the profile recipe is merged below
+    // authored fields, so the Management profile cannot move it and the delta
+    // omits it: `edges`, `materials` and `elevation` join `typography` and
+    // `motifs` in the frozen set. `density` moved the other way and is the one
+    // gain: the preset states `compact`, so bithire emits 0.85 against
+    // Management's 1.15 and the axis diverges again.
+    //
+    // This stays a RATCHET, not an absorbed loss: the map is pinned exactly, so
+    // the day per-field provenance lets a profile outrank a baseline leaf, each
+    // false flips and reds here, forcing the expectation back up.
     expect(axes, JSON.stringify(axes)).toEqual({
       typography: false,
       geometry: true,
-      edges: true,
-      materials: true,
-      elevation: true,
+      edges: false,
+      materials: false,
+      elevation: false,
       motifs: false,
-      density: false,
+      density: true,
       motion: true,
       icon: true,
     });
-    expect(divergentCount).toBeGreaterThanOrEqual(6);
+    // 6 -> 4, for the reason written above. The file header's "at least 7 of 9"
+    // is the TARGET the derivation lane owes, not the measured state.
+    expect(divergentCount).toBe(4);
     expect(Object.keys(axes)).toHaveLength(9);
 
     // The two frozen channels, pinned explicitly so the defect is legible at
@@ -337,10 +372,22 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // that has bithire's baseline underneath it.
     expect(bithire['--ds-table-header-text-transform']).toBe('uppercase');
     expect(management['--ds-table-header-text-transform']).toBeUndefined();
+    // D6-2c-ii: the preset's canvas motif is a repeating-linear-gradient where
+    // the retired theme authored a radial one. Same axis, same freeze, a
+    // different authored value.
     expect(bithire['--ds-material-canvas-texture']).toContain(
-      'radial-gradient'
+      'repeating-linear-gradient'
     );
     expect(management['--ds-material-canvas-texture']).toBeUndefined();
+    // D6-2c-ii: the three channels that joined the frozen set, pinned at the
+    // same granularity -- concrete on the single-authority static leg, absent
+    // from the delta that has the preset underneath it.
+    expect(bithire['--ds-edge-emphasis-width']).toBe('2px');
+    expect(management['--ds-edge-emphasis-width']).toBeUndefined();
+    expect(bithire['--ds-material-card-texture']).toBe('none');
+    expect(management['--ds-material-card-texture']).toBeUndefined();
+    expect(bithire['--ds-elevation-lift-strength']).toBe('0');
+    expect(management['--ds-elevation-lift-strength']).toBeUndefined();
 
     // Concrete anchors so the divergence is legible, not just counted. The
     // selection itself is data, not a channel: the stylesheet carries none.
@@ -352,20 +399,16 @@ describe('C1b expressive envelope — two-system acid test', () => {
     );
     expect(bithire['--ds-experience-profile']).toBeUndefined();
     expect(management['--ds-experience-profile']).toBeUndefined();
-    expect(bithire['--ds-edge-emphasis-width']).toBe('1px');
-    expect(management['--ds-edge-emphasis-width']).toBe('2px');
-    expect(bithire['--ds-material-card-texture']).toBe('none');
-    expect(management['--ds-material-card-texture']).toContain(
-      'linear-gradient'
-    );
-    // The control for the two frozen channels above: the SAME `contour` motif
-    // emits this one too, bithire's baseline leaves it unauthored, and it
-    // reaches the Management delta. Motif expansion is therefore alive on the
-    // DB path -- what blocks the other two is baseline authorship, nothing else.
+    // D6-2c-ii: THE POSITIVE CONTROL IS GONE, and that is the part of this
+    // move worth naming. `--ds-page-header-bg` came from the same `contour`
+    // motif and used to reach the Management delta, which is what proved motif
+    // expansion was alive on the DB path and that baseline authorship was the
+    // only thing blocking the others. It is now absent from BOTH legs, so this
+    // file no longer carries a live witness for that mechanism. Pinned two-
+    // sided so the absence is a statement; restoring a witness is owed by the
+    // derivation lane along with the frozen axes themselves.
     expect(bithire['--ds-page-header-bg']).toBeUndefined();
-    expect(management['--ds-page-header-bg']).toContain('linear-gradient');
-    expect(bithire['--ds-elevation-lift-strength']).toBe('0');
-    expect(management['--ds-elevation-lift-strength']).toBe('2');
+    expect(management['--ds-page-header-bg']).toBeUndefined();
     expect(management['--ds-radius-scale']).toBe('1.15');
     expect(management['--ds-motion-intensity']).toBe('0.7');
   });
@@ -398,9 +441,6 @@ describe('C1b expressive envelope — two-system acid test', () => {
       '--ds-density-mode-factor',
       '--ds-motion-intensity',
       '--ds-motion-duration-scale',
-      '--ds-edge-emphasis-width',
-      '--ds-material-card-texture',
-      '--ds-elevation-lift-strength',
     ] as const;
 
     // Channels bithire's vertical baseline authors explicitly. The static leg
@@ -418,9 +458,21 @@ describe('C1b expressive envelope — two-system acid test', () => {
     // unopposed, absent where a baseline leaf opposes it. Folding these two
     // into `PROFILE_DECIDED` would claim a parity the model deliberately does
     // not grant; dropping them would stop asserting the rank at all.
+    //
+    // D6-2c-ii (2026-09-15): three channels crossed from `PROFILE_DECIDED` into
+    // this list, and the crossing is the whole move. The preset authors
+    // `--ds-edge-emphasis-width`, `--ds-material-card-texture` and
+    // `--ds-elevation-lift-strength` where the retired theme left them
+    // unstated, so on the DB leg the profile now LOSES to a baseline leaf on
+    // all three exactly as it already did on the two below. The parity claim is
+    // unchanged for what the profile still decides; what shrank is how much
+    // that is. Registered with the axis map above.
     const BASELINE_CONTESTED = [
       '--ds-material-canvas-texture',
       '--ds-table-header-text-transform',
+      '--ds-edge-emphasis-width',
+      '--ds-material-card-texture',
+      '--ds-elevation-lift-strength',
     ] as const;
 
     for (const channel of PROFILE_DECIDED) {
@@ -472,12 +524,20 @@ describe('C1b expressive envelope — two-system acid test', () => {
       tenantSlug: 'bithire',
     }).cssVariables;
     expect(vars['--ds-experience-profile']).toBeUndefined();
-    expect(vars['--ds-edge-emphasis-width']).toBeUndefined();
+    // D6-2c-ii (2026-09-15): the rollback target is the PRESET's own identity,
+    // and that identity changed. `--ds-edge-emphasis-width` now SURVIVES the
+    // rollback, because the preset states a `strong` state emphasis of its own
+    // and the profile was only restating it -- the law is unchanged, a profile
+    // is a fill and removing the fill returns the baseline's own value, which
+    // here is a value rather than absence.
+    expect(vars['--ds-edge-emphasis-width']).toBe('2px');
     expect(vars['--ds-material-card-texture']).toBeUndefined();
     expect(vars['--ds-elevation-lift-strength']).toBeUndefined();
-    // Authored chrome is profile-independent: bithire's own uppercase table
-    // header survives the rollback untouched.
-    expect(vars['--ds-table-header-text-transform']).toBe('uppercase');
+    // D6-2c-ii: the uppercase table header is PROFILE-derived now, not
+    // baseline-authored -- the preset does not state it, so the rollback
+    // clears it. The claim that survived the rollback here for the whole life
+    // of this file no longer holds, and is pinned inverted rather than dropped.
+    expect(vars['--ds-table-header-text-transform']).toBeUndefined();
   });
 
   it('rolls back to baseline identity when the selection is unset (DB path)', () => {

@@ -116,22 +116,47 @@ const BOUNDED_CHANNELS: readonly string[] = [
   // colour
   '--ds-color-primary',
   '--ds-button-primary-bg',
-  // corner — the dial operand, which is where authored corner geometry lives
-  '--ds-radius-sm-base',
-  '--ds-radius-md-base',
-  '--ds-radius-lg-base',
-  '--ds-radius-xl-base',
+  // corner — the dial itself, now that the vertical states its corner posture
+  // as a decision rather than as authored `*-base` operands
+  '--ds-radius-scale',
   // type
   '--ds-font-family-base',
   '--ds-font-family-heading',
   // depth
-  '--ds-shadow-md',
-  '--ds-shadow-lg',
+  '--ds-button-primary-shadow',
   // surface
   '--ds-color-bg-primary',
   '--ds-card-bg',
   '--ds-input-bg',
-  // dedicated compact-label microchannel (not inherited from filter pills)
+];
+
+/**
+ * Channels the CUSTOMER declares and the vertical leaves to the cascade.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. These
+ * eleven were bounded channels above until the authored bithire theme was
+ * retired; the preset states corner as `shape.radius-scale` and depth as
+ * `surfaces.elevation-posture`, and authors no badge chrome at all, so it emits
+ * none of them. The divergence is still real and still asserted -- one tenant
+ * pins a literal where the other inherits -- but it is an ASYMMETRY, so it is
+ * measured as one rather than by an inequality that would pass on two
+ * undefineds.
+ *
+ * `--ds-radius-sm-base` is registered in the WO-DER-06 derivation-lane registry
+ * (divergence-fixtures, divergence-matrix). The other ten are the same class
+ * and are marked pending DT registration; none is a dead name -- a theme that
+ * authors the leaf still emits every one.
+ */
+const VERTICAL_UNAUTHORED_CHANNELS: readonly string[] = [
+  // corner operands
+  '--ds-radius-sm-base',
+  '--ds-radius-md-base',
+  '--ds-radius-lg-base',
+  '--ds-radius-xl-base',
+  // depth ramp
+  '--ds-shadow-md',
+  '--ds-shadow-lg',
+  // dedicated compact-label microchannels (not inherited from filter pills)
   '--ds-badge-radius',
   '--ds-badge-frame',
   '--ds-badge-surface-hover',
@@ -160,20 +185,44 @@ describe('two tenants of the bithire vertical diverge on every bounded channel',
     expect(right, `${channel} is identical, so this tenant is wearing the vertical's clothes`).not.toBe(left);
   });
 
+  it.each(VERTICAL_UNAUTHORED_CHANNELS)(
+    '%s is the customer pinning what the vertical leaves to the cascade',
+    (channel) => {
+      expect(
+        themanagement.cssVariables[channel],
+        `themanagementmiami no longer declares ${channel}`
+      ).toBeDefined();
+      expect(
+        bithire.cssVariables[channel],
+        `bithire declares ${channel} again -- re-read the WO-DER-06 registry before re-pinning`
+      ).toBeUndefined();
+    }
+  );
+
   it('the divergence is not a hue rotation', () => {
     // Colour alone is the cheap kind of different. A customer feels the corner
-    // radius, the typeface and the shadow before they name the hue.
-    expect(themanagement.cssVariables['--ds-radius-md-base']).not.toBe(bithire.cssVariables['--ds-radius-md-base']);
+    // radius, the typeface and the shadow before they name the hue. The corner
+    // and depth legs read the channels both tenants declare, since the vertical
+    // states those postures as decisions rather than as authored operands.
+    expect(themanagement.cssVariables['--ds-radius-scale']).not.toBe(bithire.cssVariables['--ds-radius-scale']);
     expect(themanagement.cssVariables['--ds-font-family-heading']).not.toBe(
       bithire.cssVariables['--ds-font-family-heading']
     );
-    expect(themanagement.cssVariables['--ds-shadow-md']).not.toBe(bithire.cssVariables['--ds-shadow-md']);
+    expect(themanagement.cssVariables['--ds-button-primary-shadow']).not.toBe(
+      bithire.cssVariables['--ds-button-primary-shadow']
+    );
   });
 
   it('personality diverges on elevation, border treatment and motion', () => {
-    expect(themanagement.personality.card!.defaultElevation).not.toBe(bithire.personality.card!.defaultElevation);
-    expect(themanagement.personality.card!.showBorder).not.toBe(bithire.personality.card!.showBorder);
-    expect(themanagement.personality.animation!.entrance).not.toBe(bithire.personality.animation!.entrance);
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // bithire's preset decides `motion.dial` and nothing else the personality
+    // reads, so its card posture is EMPTY. Asserted as emptiness rather than
+    // left to an inequality that an undefined side would satisfy for free.
+    expect(bithire.personality.card).toEqual({});
+    expect(bithire.personality.animation!.entrance).toBeUndefined();
+    expect(themanagement.personality.card!.defaultElevation).toBeTruthy();
+    expect(themanagement.personality.card!.showBorder).toBe(false);
+    expect(themanagement.personality.animation!.entrance).toBeTruthy();
   });
 
   it('a large majority of the compiled surface actually moves', () => {
@@ -203,12 +252,18 @@ describe('The Management traverses the bounded DB document path', () => {
     expect(themanagementDbDocument.mode).toBe('simple');
   });
 
+  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+  // `--ds-radius-scale` leaves this list. The document authors
+  // `shape.radiusScale: 0.8` and the bithire preset now DECIDES 0.8 where the
+  // retired theme authored 1.25, so customer and vertical agree and the delta
+  // has nothing to carry. That is the registered bithire radius base change
+  // seen from the DB door; it is asserted as agreement below rather than
+  // dropped, so a later move on either side is still caught.
   it.each([
     '--ds-color-primary',
     '--ds-font-family-base',
     '--ds-font-family-heading',
     '--ds-radius-button',
-    '--ds-radius-scale',
     '--ds-elevation-1',
     '--ds-color-bg-primary',
   ])('%s is emitted by the DB door and overrides the vertical baseline', (channel) => {
@@ -228,7 +283,20 @@ describe('The Management traverses the bounded DB document path', () => {
     // (`visualFoundation.advanced.chrome.cardComponent`); a Simple document
     // leaves it to the vertical baseline, which is the honest outcome.
     expect(themanagementDbVariables['--ds-card-bg']).toBeUndefined();
-    expect(bithire.cssVariables['--ds-card-bg']).toBe('var(--ds-surface-card)');
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the vertical's card ground moves `var(--ds-surface-card)` ->
+    // `var(--ds-color-bg-elevated)`, the alias the neutral foundation carries
+    // where the retired theme named the surface role directly.
+    expect(bithire.cssVariables['--ds-card-bg']).toBe('var(--ds-color-bg-elevated)');
+  });
+
+  it('agrees with the vertical on the corner dial, which is the registered radius move', () => {
+    // The customer document authors `shape.radiusScale: 0.8`; the preset now
+    // decides the same. A delta that carries nothing here is the correct
+    // outcome, and both halves are asserted so neither side can drift quietly.
+    expect(themanagementDbVariables['--ds-radius-scale']).toBeUndefined();
+    expect(bithire.cssVariables['--ds-radius-scale']).toBe('0.8');
+    expect(themanagementDbDocument.appearance.shape.radiusScale).toBe(0.8);
   });
 
   it('keeps the DB document surface bounded', () => {

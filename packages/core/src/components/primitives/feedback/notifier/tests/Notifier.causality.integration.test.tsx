@@ -65,12 +65,15 @@ describeCausality({
     { id: 'duration', selector: CLOSE, property: 'transition-duration' },
   ],
   decisions: {
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['edgeInk', 'focusRing'], holds: 'radius', in: VERTICALS },
+    // `focusRing` left this arm in D6-2c-ii-RED: `--ds-focus-ring-color` is the
+    // foundation light fallback on a light-default vertical. Pinned two-sided in
+    // Modal.causality ("focus ring reach under the neutral compile"); WO-DER-06.
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['edgeInk'], holds: 'radius', in: VERTICALS },
     'palette.status-seeds': { value: { success: '#2E7D5B' }, moves: ['successWell'], holds: 'edgeInk', in: VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize', 'messageSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'titleSize', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['padding'], holds: 'radius', in: VERTICALS },
+    'density.mode': { value: 'spacious', moves: ['padding'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'elevated', moves: ['shadow'], holds: 'radius', in: ['evnto'] },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },

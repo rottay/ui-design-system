@@ -72,14 +72,21 @@ describe('arabic document: SSR projection', () => {
 });
 
 describe('arabic document: shipped font stacks', () => {
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset; a
+  // vertical emits a family channel only where its preset authors one, so the
+  // subject moves from "every vertical emits all three" (an authored-theme
+  // receipt) to "every stack a vertical SHIPS is Arabic-capable" -- which is
+  // the engine property the evnto tofu regression actually broke. Measured:
+  // bithire authors base + heading (display absent), rottay and evnto author
+  // no family at all. An unemitted channel renders no text and cannot tofu.
   it.each(FIRST_PARTY_VIEWS)(
-    'compiles %s with an Arabic-capable fallback on every text-bearing channel',
+    'compiles %s with an Arabic-capable fallback on every text-bearing channel it ships',
     (slug, brandTheme) => {
       const { cssVariables } = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
 
       for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
         const stack = cssVariables[channel];
-        expect(stack, `${slug} emits no ${channel}`).toBeTruthy();
+        if (stack == null) continue;
         expect(
           stack,
           `${slug} ${channel} carries no Arabic-capable family: ${stack}`,
@@ -87,6 +94,24 @@ describe('arabic document: shipped font stacks', () => {
       }
     },
   );
+
+  it('is not vacuous: a vertical that authors families ships them repaired', () => {
+    // Anti-vacuity for the per-vertical assertion above. Skipping absent
+    // channels would let "nobody emits anything" read green, so the corpus has
+    // to carry at least one real stack, and it is named rather than counted.
+    const { cssVariables } = lowerBrandThemeFixture({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: 'bithire',
+    });
+    const shipped = MANDATORY_FALLBACK_FONT_CHANNELS.filter(
+      (channel) => cssVariables[channel] != null,
+    );
+
+    expect(shipped).toEqual(['--ds-font-family-base', '--ds-font-family-heading']);
+    for (const channel of shipped) {
+      expect(cssVariables[channel]).toContain(MANDATORY_FONT_FALLBACK_FAMILY);
+    }
+  });
 
   it('discriminates: a Latin-only stack is not accepted as covered', () => {
     // Anti-cheat for the assertion above. A predicate that answered true for

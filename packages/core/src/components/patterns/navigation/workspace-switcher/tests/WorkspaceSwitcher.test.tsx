@@ -31,11 +31,14 @@ function createProps(overrides: Partial<WorkspaceSwitcherProps> = {}): Workspace
 describe('PatternWorkspaceSwitcher', () => {
   it.each(STABLE_ENGINES)(
     'renders trigger button with the %s engine',
-    (engine) => {
+    async (engine) => {
       const Component = COMPONENTS[engine];
       renderWithEngine(<Component {...createProps()} />, engine);
 
-      expect(screen.getByTestId('workspace-trigger')).toBeInTheDocument();
+    // The modern engine implementation is `React.lazy`, so the FIRST render of
+    // a modern component in a fresh module graph is the Suspense fallback.
+    // `findBy*` awaits that boundary; it fails just as hard if it never mounts.
+      expect(await screen.findByTestId('workspace-trigger')).toBeInTheDocument();
     },
   );
 

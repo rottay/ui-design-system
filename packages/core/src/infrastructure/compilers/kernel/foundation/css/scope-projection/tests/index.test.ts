@@ -107,7 +107,7 @@ describe('first-party static dual-scope projection', () => {
     const artifact = renderVerticalArtifact({
       tenantSlug: 'bithire',
       verticalKey: 'bithire',
-      authoredThemePath: 'foundation/tokens/ts/presentation/brand-themes/bithire/index.ts',
+      authoredThemePath: 'foundation/presets/verticals/bithire/document/index.json',
       displayName: 'BitHire',
       selector: BITHIRE_LEGACY,
       compiledCssVariables: {

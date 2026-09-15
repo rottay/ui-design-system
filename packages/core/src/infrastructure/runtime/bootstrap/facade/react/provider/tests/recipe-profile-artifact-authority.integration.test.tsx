@@ -21,12 +21,25 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const ARTIFACT_SAYS = 'rottay/editorial-round@1';
 const PRESET_SAYS = 'rottay/technical-sharp@1';
 
+// D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset; the
+// tenant registry reads the artifact's published runtime BLOCK rather than the
+// per-field accessor, so the shipped block is what has to disagree with the
+// preset for this direction to be observable. Both the block and the accessor
+// derived from it are moved together, so no reader sees a split answer.
 vi.mock('@/infrastructure/compilers/runtime/tenant-css/artifact-runtime', async (importOriginal) => {
   const actual = await importOriginal<
     typeof import('@/infrastructure/compilers/runtime/tenant-css/artifact-runtime')
   >();
+  const runtime = {
+    ...actual.FIRST_PARTY_ARTIFACT_RUNTIME,
+    bithire: Object.freeze({
+      ...actual.FIRST_PARTY_ARTIFACT_RUNTIME.bithire,
+      recipeProfile: ARTIFACT_SAYS,
+    }),
+  };
   return {
     ...actual,
+    FIRST_PARTY_ARTIFACT_RUNTIME: Object.freeze(runtime),
     firstPartyArtifactRecipeProfile: (vertical: string) =>
       vertical === 'bithire' ? ARTIFACT_SAYS : actual.firstPartyArtifactRecipeProfile(vertical),
   };

@@ -208,47 +208,22 @@ describe('contested token channels', () => {
    * is a change to what a vertical actually renders and must be reviewed, not
    * absorbed silently.
    *
-   * Counts were measured against the generated artifacts; personality-namespaced
-   * variables (`--ds-personality-*`) never appear here because the artifacts
-   * declare none of them -- the bridge is their sole emitter.
+   * D6-2c-ii (2026-09-15): the census is EMPTY on all three. The badge and card
+   * chrome that populated it was authored by the retired first-party themes; a
+   * vertical is now the neutral foundation plus its preset document, which
+   * states decisions rather than component chrome, so no artifact declares a
+   * channel the bridge also emits. Nothing is contested, which is the state the
+   * note above describes as the goal rather than a suppression -- and the row
+   * still fails the moment an artifact starts declaring one again.
    *
-   * Rottay's four badge/card-padding entries arrived with the control-plane
-   * lane, which authored the same channels BitHire already had. Reviewed and
-   * accepted: the artifact is unlayered, so the bridge stops deciding the
-   * control plane's padding and radius on the surface that authored them --
-   * which is the coverage model working, not a suppression.
+   * Personality-namespaced variables (`--ds-personality-*`) never appear here
+   * because the artifacts declare none of them -- the bridge is their sole
+   * emitter, asserted separately below.
    */
   const CONTESTED_BY_VERTICAL: Record<string, string[]> = {
-    rottay: [
-      '--ds-badge-radius',
-      '--ds-card-bg-hover',
-      '--ds-card-body-padding',
-      '--ds-card-border',
-      '--ds-card-border-hover',
-      '--ds-card-footer-padding',
-      '--ds-card-header-padding',
-      '--ds-card-shadow',
-      '--ds-card-shadow-hover',
-      '--ds-divider-color',
-    ],
-    bithire: [
-      '--ds-badge-hover-transform',
-      '--ds-badge-radius',
-      '--ds-card-bg-hover',
-      '--ds-card-body-padding',
-      '--ds-card-border',
-      '--ds-card-border-hover',
-      '--ds-card-footer-padding',
-      '--ds-card-header-padding',
-      '--ds-card-hover-transform',
-      '--ds-card-shadow',
-      '--ds-card-shadow-hover',
-    ],
-    evnto: [
-      '--ds-card-border',
-      '--ds-card-shadow',
-      '--ds-card-shadow-hover',
-    ],
+    rottay: [],
+    bithire: [],
+    evnto: [],
   };
 
   /** Variable names the personality bridge can emit. */

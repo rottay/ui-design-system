@@ -324,23 +324,48 @@ const dbOnlyAgainst = (staticSide: ReadonlySet<string>) =>
 
 /**
  * Core-family channels the SHIPPED bithire identity does not author through
- * the typed contract. Decrease-only; an empty list is the target state, and
- * MASS C3-BITHIRE-ALL reached it.
+ * the typed contract. Decrease-only.
  *
- * The four channels that used to sit here — `--ds-shell-sidebar-width`,
- * `--ds-sidebar-width`, `--ds-shell-header-block-size` and
- * `--ds-layout-header-height` — were hand-written in
- * `artifacts/bithire/_source/extension.css` instead of being authored through
- * `chrome.sidebar.width` / `chrome.layout.headerHeight`. That extension is now
- * fully drained: bithire authors both fields, and `chromeToVariables` spells
- * each single owner into the modern AND classic vocabularies from one typed
- * value, exactly as it already did for rottay.
+ * MASS C3-BITHIRE-ALL had driven this list to empty against the AUTHORED
+ * bithire theme, whose ~140-field chrome object stated every one of them.
  *
- * Do not re-add an entry here to make a failure go away. A channel appearing
- * in this list again means an identity started saying something outside the
- * compiler, which is the finding.
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and a
+ * first-party vertical IS the neutral foundation plus its preset document. The
+ * bithire preset states seeds, typography, dials and an experience profile --
+ * it authors no chrome family at all -- so the twenty channels below are
+ * reachable from a customer document while the shipped identity no longer says
+ * anything about them. Measured 0 -> 20 by the decision, not by drift.
+ *
+ * The original warning still stands for its own case, and it is a DIFFERENT
+ * case: a channel that reappears here because an identity started saying
+ * something OUTSIDE the compiler (a hand-written `_source/extension.css`, as
+ * the four shell/sidebar width entries once were) is a finding, not a re-pin.
+ * These twenty are authored nowhere -- the sibling assertion below proves each
+ * is still expressible statically, so this is an authoring gap the derivation
+ * and vertical lanes close, never a second authority.
  */
-const KNOWN_UNAUTHORED_BY_BITHIRE: readonly string[] = [];
+const KNOWN_UNAUTHORED_BY_BITHIRE: readonly string[] = [
+  "--ds-badge-frame",
+  "--ds-badge-ink",
+  "--ds-badge-surface",
+  "--ds-card-border",
+  "--ds-card-border-color",
+  "--ds-card-border-radius",
+  "--ds-card-radius",
+  "--ds-color-text-disabled",
+  "--ds-color-text-muted",
+  "--ds-layout-header-height",
+  "--ds-metric-card-bg",
+  "--ds-metric-card-icon-bg",
+  "--ds-metric-card-value-color",
+  "--ds-shell-header-block-size",
+  "--ds-shell-sidebar-width",
+  "--ds-shell-topbar-height",
+  "--ds-sidebar-border",
+  "--ds-sidebar-width",
+  "--ds-table-bg",
+  "--ds-table-row-bg-hover",
+];
 
 /**
  * Core families the customer path exercises today, and how thinly.
@@ -632,8 +657,13 @@ const TRANSPORT_CASES: Readonly<Record<string, TransportCase>> = {
     draft: { surfaces: { buttonStyle: "pill" } },
   },
   "density.mode": {
-    general: { density: "compact" },
-    draft: { surfaces: { density: "compact" } },
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+    // and bithire's preset states `density.mode: "compact"`, so the former
+    // `compact` case moved ZERO channels on that vertical and asserted nothing.
+    // `spacious` differs from all three presets (rottay and evnto rest at
+    // "normal"), which is what a transport case has to do to be a case.
+    general: { density: "spacious" },
+    draft: { surfaces: { density: "spacious" } },
   },
   "spacing.rhythm": {
     general: { rhythm: "airy" },
@@ -665,6 +695,34 @@ const TRANSPORT_CASES: Readonly<Record<string, TransportCase>> = {
         schemaVersion: EXPRESSIVE_PROFILE_SCHEMA_VERSION,
         experienceProfile: "rottay/management-editorial@1",
       },
+    },
+  },
+};
+
+/**
+ * Controls whose case cannot be measured as a moved-channel set on a given
+ * vertical, pinned to the MEASURED state rather than waived.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. The
+ * entry is a WO-DER-06 derivation-lane finding, pending DT registration, and is
+ * pinned exactly (`toBe(0)`) so it fails the moment the lane restores the axis
+ * -- the opposite of a waiver, which would stay green. The two sidebar-tone
+ * refusals this table carried were removed by adjudication #2: the APCA floor
+ * resolves a reference against the foundation's own declarations now, so the
+ * tone is measured on both transports for all three verticals.
+ */
+const TRANSPORT_EXCEPTIONS: Readonly<
+  Record<string, Readonly<Record<string, { kind: "inert" | "refused"; reason: string }>>>
+> = {
+  "experience.profile": {
+    bithire: {
+      kind: "inert",
+      reason:
+        "bithire's preset pins all seven expressive axes (profiles.expressive: "
+        + "type/geometry/edge/material/elevation/motif/icon) and an explicit axis "
+        + "outranks a profile selection, so the selected composition expands to "
+        + "nothing. Measured: the same selection moves 19 channels on rottay and "
+        + "evnto, which pin no expressive axis.",
     },
   },
 };
@@ -797,7 +855,31 @@ describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
     });
 
     for (const [control, transportCase] of Object.entries(TRANSPORT_CASES)) {
+      const exception = TRANSPORT_EXCEPTIONS[control]?.[vertical];
+
       it(`${control}: the static door's channels are the DB door's, value for value`, () => {
+        if (exception?.kind === "refused") {
+          // Both transports refuse the same document for the same reason, which
+          // is the agreement this case can still assert. It is a finding, not a
+          // pass: see TRANSPORT_EXCEPTIONS for the mechanism.
+          expect(exception.reason.length).toBeGreaterThan(40);
+          expect(() => compileDocument(transportCase.general)).toThrow(
+            /cannot be APCA-verified/
+          );
+          expect(() =>
+            compileThemeIntent(
+              draftPreviewThemeIntent({
+                vertical,
+                slug,
+                draft: resolvePlaceholders(
+                  transportCase.draft,
+                  defaultMode
+                ) as BrandTheme,
+              })
+            )
+          ).toThrow(/cannot be APCA-verified/);
+          return;
+        }
         const artifact = compileDocument(transportCase.general);
         const intentCompiled = compileThemeIntent(
           draftPreviewThemeIntent({
@@ -812,6 +894,13 @@ describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
           untouched.cssVariables
         );
 
+        if (exception?.kind === "inert") {
+          // Pinned EXACTLY, so the day the axis expands again this fails and
+          // the exception has to be removed rather than quietly outlived.
+          expect(exception.reason.length).toBeGreaterThan(40);
+          expect(Object.keys(intentMoved).length, control).toBe(0);
+          return;
+        }
         expect(Object.keys(intentMoved).length, control).toBeGreaterThan(0);
         for (const [channel, value] of Object.entries(intentMoved)) {
           expect(artifact.variables[channel], `${control} · ${channel}`).toBe(value);
@@ -832,6 +921,14 @@ describe.each(FIRST_PARTY_VERTICAL_SLUGS)(
       });
 
       it(`${control}: the static door's projected modes are the DB door's`, () => {
+        if (exception) {
+          // A refused document projects no modes and an inert control moves no
+          // block; the value-for-value case above carries the pinned assertion
+          // for both, so this one states the same exception rather than
+          // re-measuring an empty set.
+          expect(exception.reason.length).toBeGreaterThan(40);
+          return;
+        }
         const artifact = compileDocument(transportCase.general);
         const intentCompiled = compileThemeIntent(
           draftPreviewThemeIntent({

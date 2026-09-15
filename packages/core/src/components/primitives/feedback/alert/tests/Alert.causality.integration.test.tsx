@@ -71,11 +71,14 @@ describeCausality({
   ],
   decisions: {
     'palette.status-seeds': { value: { warning: '#B7791F', success: '#2E7D5B' }, moves: ['warningEdge', 'successInk'], holds: 'radius', in: VERTICALS },
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusRing'], holds: 'warningEdge', in: VERTICALS },
+    // The ring is this arm's ONLY target, and it follows the seed only in a
+    // dark scope now, so the arm is kept where the reach is real. The other two
+    // verticals are pinned two-sided in Modal.causality; WO-DER-06.
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusRing'], holds: 'warningEdge', in: ['rottay'] },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'titleSize', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['padding'], holds: 'radius', in: VERTICALS },
+    'density.mode': { value: 'spacious', moves: ['padding'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'elevated', moves: ['shadow'], holds: 'radius', in: ['evnto'] },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },

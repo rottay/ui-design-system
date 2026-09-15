@@ -45,10 +45,16 @@ describe('AlertDialog real engines', () => {
       );
 
       expect(await screen.findByText('Remove API key', {}, { timeout: 15000 })).toBeInTheDocument();
-      fireEvent.click(screen.getByRole('button', { name: /delete key/i }));
+      // The action slot holds its own engine Button, which resolves through a
+      // second lazy boundary after the dialog's own: await it.
+      fireEvent.click(
+        await screen.findByRole('button', { name: /delete key/i }, { timeout: 15000 }),
+      );
       expect(handleDelete).toHaveBeenCalledTimes(1);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+      fireEvent.click(
+        await screen.findByRole('button', { name: 'Cancel' }, { timeout: 15000 }),
+      );
 
       await waitFor(() => {
         expect(handleOpenChange).toHaveBeenCalledWith(false);

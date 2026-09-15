@@ -136,21 +136,29 @@ describe('E-2: the composed case — the tenant literal beats the tenant pairing
   });
 
   it('(iii) F4B-11 preserved: a tenant pairing still outranks the VERTICAL literal', () => {
-    // Every first-party vertical authors an explicit heading family and NONE
-    // authors a typePairing, so this is the real production shape.
-    for (const brandTheme of [rottayBrandTheme, bithireBrandTheme, evntoBrandTheme]) {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // The premise moved in both directions: rottay and evnto are structural
+    // presets that author no heading family at all, and bithire's preset
+    // authors a `typePairing` of its own beside its literal. So the contest is
+    // measured on bithire, and it is now the STRONGER claim -- the tenant's
+    // pairing outranks the vertical's literal AND the vertical's own pairing.
+    expect(bithireBrandTheme.typography?.typePairing).toBe('technical');
+    expect(bithireBrandTheme.typography?.fontFamilyHeading).toBeTruthy();
+    for (const brandTheme of [rottayBrandTheme, evntoBrandTheme]) {
       expect(brandTheme.typography?.typePairing).toBeUndefined();
-      expect(brandTheme.typography?.fontFamilyHeading).toBeTruthy();
-      const withTenantPairing = lowerBrandThemeFixture({
-        brandTheme,
-        tenantSlug: 'probe',
-        tenantPatch: { typography: { typePairing: 'editorial' } } as never,
-        tenantAuthoredPaths: new Set(['typography.typePairing']) as never,
-      } as Parameters<typeof lowerBrandThemeFixture>[0]).cssVariables;
-      // The tenant's pairing governs: the vertical's literal never travels in
-      // the patch, so the floor has nothing of the tenant's to re-apply.
-      expect(withTenantPairing[HEADING]).toContain('--ds-font-pack-editorial-display');
+      expect(brandTheme.typography?.fontFamilyHeading).toBeUndefined();
     }
+
+    const withTenantPairing = lowerBrandThemeFixture({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: 'probe',
+      tenantPatch: { typography: { typePairing: 'editorial' } } as never,
+      tenantAuthoredPaths: new Set(['typography.typePairing']) as never,
+    } as Parameters<typeof lowerBrandThemeFixture>[0]).cssVariables;
+    // The tenant's pairing governs: the vertical's literal never travels in
+    // the patch, so the floor has nothing of the tenant's to re-apply.
+    expect(withTenantPairing[HEADING]).toContain('--ds-font-pack-editorial-display');
+    expect(withTenantPairing[HEADING]).not.toContain('--ds-font-pack-grotesk-display');
   });
 
   it('(iv) the ISOLATED case is byte-identical — the re-application is same-value', () => {

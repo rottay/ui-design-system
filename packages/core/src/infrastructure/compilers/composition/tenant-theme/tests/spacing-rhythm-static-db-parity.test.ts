@@ -41,7 +41,11 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import {
+  FIRST_PARTY_BASELINES,
+  lowerBrandThemeFixture,
+  lowerTheme,
+} from "@tests/support/theme-lowering";
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
@@ -59,6 +63,27 @@ import {
 
 /** The one channel both paths must land on. */
 const CHANNEL = '--ds-rhythm-scale';
+
+/**
+ * The DB path emits a DELTA against the vertical baseline; the static path
+ * lowers a whole theme. So the DB leg withdraws a channel whose value equals
+ * the baseline's, and reading its delta alone would report "the DB path lowers
+ * nothing" for exactly the posture the baseline already rests at.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+ * the bithire preset STATES a rhythm where the retired authored theme did not,
+ * so one of the three stops is now baseline-identical and disappears from the
+ * delta. The parity law is about the EFFECTIVE value on both paths, which is
+ * the delta over the baseline -- so the baseline is read here and the delta is
+ * resolved against it, rather than loosening the comparison.
+ */
+const BASELINE_VARIABLES = lowerTheme(FIRST_PARTY_BASELINES.bithire, {
+  tenantSlug: 'rhythm-parity',
+}).cssVariables;
+
+/** What a tenant actually renders on the DB path: its delta over the baseline. */
+const dbEffective = (variables: Record<string, string>, channel: string) =>
+  variables[channel] ?? BASELINE_VARIABLES[channel];
 
 const ENVELOPE = getTenantThemeVerticalEnvelope('bithire')!;
 
@@ -132,7 +157,7 @@ describe('spacing.rhythm · both ingress paths normalize to the same channel and
     // the canon moves this test with it instead of silently disagreeing.
     for (const [posture, factor] of Object.entries(TENANT_THEME_RHYTHM_FACTORS)) {
       const fromStatic = staticVariables(posture)[CHANNEL];
-      const fromDb = dbVariables(posture)[CHANNEL];
+      const fromDb = dbEffective(dbVariables(posture), CHANNEL);
 
       // Equal to each other, not merely both present: two different numbers
       // would satisfy "both non-empty" and be the exact drift this measures.
@@ -158,7 +183,12 @@ describe('spacing.rhythm · both ingress paths normalize to the same channel and
     // fail here instead of passing unnoticed.
     for (const posture of Object.keys(TENANT_THEME_RHYTHM_FACTORS)) {
       expect(rhythmChannelsIn(staticVariables(posture))).toEqual([CHANNEL]);
-      expect(rhythmChannelsIn(dbVariables(posture))).toEqual([CHANNEL]);
+      // The delta plus the baseline it is a delta OF: a second name invented on
+      // either side still shows up, while a channel legitimately withdrawn for
+      // being baseline-identical does not read as a missing concept.
+      expect(
+        rhythmChannelsIn({ ...BASELINE_VARIABLES, ...dbVariables(posture) })
+      ).toEqual([CHANNEL]);
     }
   });
 });

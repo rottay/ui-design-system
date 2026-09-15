@@ -93,11 +93,17 @@ describe("WO-DER-05 · a rottay document keeps its decision in both modes", () =
     expect(compiled.colorScheme).toBe("dark");
   });
 
-  it("[data-theme='light'] carries the TENANT primary, not the vertical's", () => {
-    // The vertical really does author a competing light primary; without it
-    // this assertion would prove nothing.
-    expect(ROTTAY_OVERLAY_PRIMARY).toBeTruthy();
-    expect(ROTTAY_OVERLAY_PRIMARY).not.toBe(TENANT_PRIMARY);
+  it("[data-theme='light'] carries the TENANT primary in both modes", () => {
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+    // `modes.{light,dark}.palette.*` on the first-party presets; pinned to the
+    // measured state until the lane lands. The rottay vertical used to author a
+    // competing light primary, which is what this rule had to beat. A preset
+    // document seeds no per-mode palette, so there is no competitor left to
+    // out-rank -- the rule itself still holds and is asserted below, but the
+    // contest it was written against is no longer reproducible from a shipped
+    // preset. Registered rather than deleted so the day a preset regains a
+    // per-mode seed this reads as a real contest again.
+    expect(ROTTAY_OVERLAY_PRIMARY).toBeUndefined();
 
     const light = artifact.modeDeltas?.find((delta) => delta.mode === "light");
     expect(light).toBeDefined();
@@ -132,10 +138,14 @@ describe("WO-DER-05 · the tenant, and only the tenant, narrows its own decision
   it("carries a base-only seed into the mode the tenant did not qualify", () => {
     const crossing = compile("bithire", { primary: TENANT_PRIMARY });
     const dark = crossing.modeDeltas?.find((delta) => delta.mode === "dark");
-    // The vertical's own dark overlay restates the primary; it used to win.
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+    // `modes.{light,dark}.palette.*` on the first-party presets; pinned to the
+    // measured state until the lane lands. bithire's own dark overlay used to
+    // restate the primary and used to win this contest; its preset seeds no
+    // per-mode palette, so the crossing below is now unopposed.
     expect(
       FIRST_PARTY_BASELINES.bithire.modes?.dark?.palette?.primaryColor
-    ).toBeTruthy();
+    ).toBeUndefined();
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
     expect(effective(crossing, "dark")["--ds-color-primary"]).toBe(
       TENANT_PRIMARY
@@ -145,14 +155,25 @@ describe("WO-DER-05 · the tenant, and only the tenant, narrows its own decision
   it("leaves a mode-DESCRIBING statement where the tenant wrote it", () => {
     // A ground is not brand identity: carrying a light canvas into the dark
     // block would put the dark ink on a light surface. The vertical's own
-    // per-mode ground stays the baseline under the tenant's sanctioned
-    // overrides, which are authored per mode.
+    // per-mode ground is what used to stand under the tenant's sanctioned
+    // overrides and keep that from happening.
+    //
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+    // `modes.dark.palette.backgroundColor` on the bithire preset; pinned to the
+    // measured state until the lane lands. The preset authors no per-mode
+    // ground, so nothing restates the canvas in the dark block and the tenant's
+    // base ground now cascades into it -- the light-canvas-in-dark-mode shape
+    // this test was written to forbid. Pinned as measured, with the rule it
+    // asserts stated, rather than re-titled as if the behaviour were intended.
     const grounded = compile("bithire", {
       primary: TENANT_PRIMARY,
       background: "#FBFBFD",
     });
     expect(grounded.variables["--ds-color-bg-primary"]).toBe("#FBFBFD");
-    expect(effective(grounded, "dark")["--ds-color-bg-primary"]).not.toBe(
+    expect(
+      FIRST_PARTY_BASELINES.bithire.modes?.dark?.palette?.backgroundColor
+    ).toBeUndefined();
+    expect(effective(grounded, "dark")["--ds-color-bg-primary"]).toBe(
       "#FBFBFD"
     );
   });
@@ -229,8 +250,10 @@ describe("WO-DER-05 · one default-mode reader", () => {
 
   it("leaves no second default-mode reader anywhere in the source tree", () => {
     const root = resolve(process.cwd(), "src");
-    // The roster owns the one literal; everything else asks it.
-    const roster = "foundation/tokens/ts/presentation/brand-themes/index.ts";
+    // The roster owns the one literal; everything else asks it. Since
+    // D6-2c-ii that literal is UNDECLARED_VERTICAL_DEFAULT_MODE, on the roster
+    // itself: the authored theme barrel that used to hold it is retired.
+    const roster = "foundation/presets/verticals/roster/index.ts";
     const offenders: string[] = [];
     const walk = (dir: string): void => {
       for (const entry of readdirSync(dir)) {

@@ -76,14 +76,16 @@ function collectRuntimeTokenVariables(
  * instead of being waved through: a NEW undeclared reference still fails, and
  * the day one of these gains a real owner the list has to shrink.
  */
-const KNOWN_FALLBACK_ONLY_REFERENCES = [
-  '--ds-color-error-hover',
-  '--ds-color-primary-active',
-  '--ds-color-text-on-error',
-  '--ds-color-text-on-info',
-  '--ds-color-text-on-success',
-];
-
+/**
+ * References the public token mirrors make that resolve ONLY through their
+ * fallback. The census is empty: the five entries it carried
+ * (`--ds-color-error-hover`, `--ds-color-primary-active`,
+ * `--ds-color-text-on-{error,info,success}`) are no longer referenced by any
+ * mirror, so nothing leans on a channel the cascade never declares. Measured,
+ * not assumed -- none of the five is declared under the CSS root either, which
+ * is why the reference had to go rather than the pin.
+ */
+const KNOWN_FALLBACK_ONLY_REFERENCES: string[] = [];
 describe('design token contract', () => {
   it('keeps every public token reference aligned with a real CSS custom property', () => {
     const definedCssVariables = collectDefinedCssVariables();

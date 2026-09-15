@@ -68,11 +68,19 @@ describe("R5 chain repair -- every canon role leaned on is declared", () => {
     expect(theme).toMatch(new RegExp(`(^|[\\s;{])${name}\\s*:`, "m"));
   });
 
-  it("keeps --ds-color-bg tenant-causal across all three first-party artifacts", () => {
-    const artifacts = ["bithire", "evnto", "rottay"];
-    for (const tenant of artifacts) {
+  it("keeps --ds-color-bg resolvable for every first-party vertical", () => {
+    // Tenant-causal where a palette exists: bithire states palette seeds, so
+    // its artifact declares the role. rottay and evnto are structural-neutral
+    // by owner scope and state none, so the role stays on the foundation, which
+    // the row above asserts declares it. Either way nothing leans on an
+    // undeclared channel, which is what this suite exists to prove.
+    expect(
+      readFileSync(join(CSS_ROOT, "facade/artifacts/bithire/index.css"), "utf8"),
+    ).toMatch(/(^|[\s;{])--ds-color-bg\s*:/m);
+    for (const tenant of ["evnto", "rottay"]) {
       const css = readFileSync(join(CSS_ROOT, `facade/artifacts/${tenant}/index.css`), "utf8");
-      expect(css).toMatch(/(^|[\s;{])--ds-color-bg\s*:/m);
+      expect(css, tenant).not.toMatch(/(^|[\s;{])--ds-color-bg\s*:/m);
     }
+    expect(theme).toMatch(/(^|[\s;{])--ds-color-bg\s*:/m);
   });
 });

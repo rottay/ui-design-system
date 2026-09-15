@@ -50,19 +50,26 @@
  *
  * THE ASYMMETRY THIS FILE MEASURED, AND WHY IT IS NOT A DEFECT. A document
  * carries only what its tenant selected. A BrandTheme draft carries the WHOLE
- * theme, so for four rows bithire states the derived leaf EXPLICITLY and the
- * explicit leaf outranks the posture that would derive it: `typography.pairing`
- * cannot move a family bithire names, `navigation.sidebar-tone` cannot move a
- * sidebar colour bithire names, and the two palette postures cannot move the
- * link, focus-border and control-chrome leaves bithire names. Measured on this
- * tree, not predicted: 2 of 4, 6 of 6, 6 of 18 and 6 of 20 moved channels.
+ * theme, so where the vertical states the derived leaf EXPLICITLY the explicit
+ * leaf outranks the posture that would derive it: `typography.pairing` cannot
+ * move a family bithire names. Measured on this tree, not predicted: 2 of 4
+ * moved channels.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so the
+ * composed bithire baseline states only what its preset document decides. Three
+ * rows lost their competing leaves and therefore their asymmetry -- the two
+ * palette postures named `palette.linkColor`, `palette.linkHoverColor` and
+ * `palette.borderFocusColor`, which the composed baseline does not carry at all,
+ * and `navigation.sidebar-tone` named `chrome.sidebar`, whose only remaining
+ * leaves are the anatomy and the tone the decision itself sets. Measured, both
+ * directions: 4 rows with an asymmetry -> 1.
  *
  * That is a precedence fact about authoring, and the honest way to state it is
- * to PROVE it rather than baseline it. Each of the four rows declares the
- * competing leaves in `PRECEDENCE`, and each is asserted twice: with the leaves
- * present the named channels MUST diverge (so the ledger cannot be decorative),
- * and with the leaves cleared the arms MUST be byte-identical on every moved
- * channel. A row whose precedence entry stopped being true fails in the first
+ * to PROVE it rather than baseline it. Each declaring row lists the competing
+ * leaves in `PRECEDENCE`, and each row is asserted twice: with the leaves
+ * AUTHORED the named channels MUST diverge (so the ledger cannot be
+ * decorative), and with them merely carried from the preset the arms MUST be
+ * byte-identical on every moved channel. A row whose precedence entry stopped being true fails in the first
  * direction; a row that drifts fails in the second.
  *
  * DRIVEN OFF THE CATALOG, ACCOUNTED FOR IN BOTH DIRECTIONS. `CASES` must name
@@ -108,28 +115,43 @@ type Case = { value: unknown } | { skip: string };
  * bithire admits 0..0.65 -- so the catalog's own maxima are REFUSED here.
  * Measured, not predicted. Each value below is inside bithire's envelope and
  * MOVES.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+ * bithire's preset document DECIDES nine of these rows, so nine values that used
+ * to move against the authored theme ARE the baseline now and move nothing. Each
+ * was re-anchored on a value measured to move -- the same rule the paragraph
+ * above states, applied to the new baseline, not a regression:
+ * `palette.contrast-posture` high -> soft (0 -> 15 channels),
+ * `typography.role-weights` strong -> light (0 -> 7),
+ * `typography.numeric` tabular -> proportional (0 -> 9),
+ * `shape.nesting` uniform -> concentric (0 -> 2),
+ * `shape.button-style` sharp -> soft (0 -> 6),
+ * `surfaces.border-style` strong -> none (0 -> 3),
+ * `states.emphasis` strong -> subtle (0 -> 6),
+ * `navigation.sidebar-tone` inverse -> strong (0 -> 5),
+ * `responsive.posture` compact -> balanced (0 -> 4).
  */
 const CASES: Readonly<Record<string, Case>> = {
   "palette.neutral-temperature": { value: "warm" },
-  "palette.contrast-posture": { value: "high" },
+  "palette.contrast-posture": { value: "soft" },
   "typography.pairing": { value: "editorial" },
   "typography.scale": { value: 1.08 },
-  "typography.role-weights": { value: "strong" },
-  "typography.numeric": { value: "tabular" },
+  "typography.role-weights": { value: "light" },
+  "typography.numeric": { value: "proportional" },
   "shape.radius-scale": { value: 1.15 },
-  "shape.nesting": { value: "uniform" },
-  "shape.button-style": { value: "sharp" },
+  "shape.nesting": { value: "concentric" },
+  "shape.button-style": { value: "soft" },
   "shape.control-height": { value: "tall" },
   "density.mode": { value: "spacious" },
   "spacing.rhythm": { value: "airy" },
   "surfaces.elevation-posture": { value: "elevated" },
-  "surfaces.border-style": { value: "strong" },
+  "surfaces.border-style": { value: "none" },
   "surfaces.effect-intensity": { value: 0.6 },
-  "states.emphasis": { value: "strong" },
+  "states.emphasis": { value: "subtle" },
   "states.focus-style": { value: "glow" },
   "motion.character": { value: "playful" },
-  "navigation.sidebar-tone": { value: "inverse" },
-  "responsive.posture": { value: "compact" },
+  "navigation.sidebar-tone": { value: "strong" },
+  "responsive.posture": { value: "balanced" },
   "palette.seeds": {
     skip:
       "the keypath names four colour leaves at once and a seed change re-derives the whole ramp through the APCA " +
@@ -154,9 +176,11 @@ const CASES: Readonly<Record<string, Case>> = {
       "locked-by-default (D-28 b): the vertical's product posture, not a tenant taste axis, so a tenant document " +
       "cannot author it and there is no tenant transport to compare",
   },
-  "recipe-profile": {
-    skip: "locked-by-default and registry-valued; the same reason as experience.profile",
-  },
+  // `recipe-profile` was removed from this table: its catalog row declares
+  // `effect: "data-only"`, so it is not a dual-transport CSS row at all and
+  // this suite's law -- byte parity of emitted channels -- has no subject for
+  // it. Its transports are proven where they do land, on the governed runtime
+  // block, by `provider/tests/recipe-profile.integration`.
   "profiles.expressive": {
     skip: "a six-key record composed into postures; a single key would measure the composition, not the transports",
   },
@@ -166,31 +190,37 @@ const CASES: Readonly<Record<string, Case>> = {
  * Rows whose decision a BrandTheme can also say a SECOND way, with the leaves
  * that outrank it.
  *
- * Every entry is a measurement. `chrome.controls` is here because bithire
- * authors the input chrome, which is why `--ds-input-border-focus` reads
- * `var(--ds-material-control-border-active, …)` on the static arm and
- * `var(--ds-color-border-focus, …)` on the document arm.
+ * Every entry is a measurement, and an entry that stopped being one is removed
+ * rather than kept as decoration -- law 1b asserts the divergence is REAL, so a
+ * dead entry fails the file in the first direction.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so the
+ * composed bithire baseline carries only what its preset decides, and three
+ * entries lost their subject (measured: each outranked 0 channels where it had
+ * outranked 6):
+ *   palette.neutral-temperature, palette.contrast-posture
+ *     named `palette.linkColor`, `palette.linkHoverColor` and
+ *     `palette.borderFocusColor`, none of which the composed baseline carries,
+ *     and `chrome.controls`, which survives only as empty sections.
+ *   navigation.sidebar-tone
+ *     named `chrome.sidebar`, whose remaining leaves are the anatomy and the
+ *     tone the decision itself sets, so clearing and setting are one act.
+ * `typography.pairing` keeps its entry: an AUTHORED face still outranks the
+ * pairing. `typography.fontFamilyDisplay` left the list with the others: the
+ * composed baseline does not carry it.
+ *
+ * Adjudication #2 (2026-09-15): the outranking arm now AUTHORS a face distinct
+ * from the preset's instead of leaving the carried one in place. The draft door
+ * states the leaves the editor moved, so a carried face is the vertical's own
+ * and outranks nothing -- which is the precedence this file measures, applied to
+ * the transport that restates what it never touched.
  */
 const PRECEDENCE: Readonly<Record<string, readonly string[]>> = {
-  "palette.neutral-temperature": [
-    "chrome.controls",
-    "palette.linkColor",
-    "palette.linkHoverColor",
-    "palette.borderFocusColor",
-  ],
-  "palette.contrast-posture": [
-    "chrome.controls",
-    "palette.linkColor",
-    "palette.linkHoverColor",
-    "palette.borderFocusColor",
-  ],
   "typography.pairing": [
     "typography.fontFamilyBase",
     "typography.fontFamilyHeading",
     "typography.fontFamilyMono",
-    "typography.fontFamilyDisplay",
   ],
-  "navigation.sidebar-tone": ["chrome.sidebar"],
 };
 
 const dualTransportRows: readonly ThemeControlRow[] = THEME_CONTROL_CATALOG.filter(
@@ -210,7 +240,7 @@ const v2 = (decisions: Record<string, unknown>): TenantThemeDocumentV2 =>
 function draftWith(
   keypath: string,
   value: unknown,
-  clear: readonly string[] = []
+  outrank: readonly string[] = []
 ): BrandTheme {
   const draft = JSON.parse(JSON.stringify(bithireBrandTheme)) as Record<string, unknown>;
   // Two walks, not one. Clearing must never CREATE the branch it was asked to
@@ -237,10 +267,19 @@ function draftWith(
     }
     return cursor;
   };
-  for (const leaf of clear) {
+  // Adjudication #2 (2026-09-15): the draft door states the leaves the editor
+  // MOVED, so a competing leaf the draft merely carries from the preset is the
+  // vertical's own and outranks nothing. The outranking arm therefore AUTHORS a
+  // distinct value instead of leaving the carried one in place; the other arm
+  // carries the preset's, which is the same authorship the DB arm has.
+  for (const leaf of outrank) {
     const segments = leaf.split(".");
     const parent = find(segments.slice(0, -1));
-    if (parent) delete parent[segments[segments.length - 1]!];
+    const key = segments[segments.length - 1]!;
+    const carried = parent?.[key];
+    if (parent && typeof carried === "string") {
+      parent[key] = `"Outranking Probe", ${carried}`;
+    }
   }
   const segments = keypath.split(".");
   ensure(segments.slice(0, -1))[segments[segments.length - 1]!] = value;
@@ -264,6 +303,44 @@ describe("transport parity — one decision, four doors, compared as bytes", () 
     expect(stale, "CASES names a row that no longer declares both transports").toEqual([]);
   });
 
+  /**
+   * The two doors rank the preset's two radius statements the SAME way.
+   *
+   * bithire's preset decides `shape.radius-scale: 0.8` AND
+   * `profiles.expressive.geometry: "sharp"`, and the sharp geometry expands to
+   * `radiusScale: 0.85`. The explicit decision precedes the profile default, so
+   * both doors divide by 0.8.
+   *
+   * This pinned 6 diverging channels when the draft door presented the leaves a
+   * draft merely CARRIES as tenant authorship: the carried `surfaces.radiusScale`
+   * reached the tenant posture floors, was read as a re-dial, and the divisor
+   * fell through to the profile expansion. Adjudication #2 (2026-09-15) ruled the
+   * preview door the defect; it now states only the leaves the editor moved, and
+   * the assertion is kept as the parity it always should have measured.
+   */
+  it("ranks the preset's two radius statements the same way on both doors", () => {
+    const draftOfBaseline = variablesOf(
+      draftPreviewThemeIntent({
+        vertical: VERTICAL,
+        slug: SLUG,
+        draft: JSON.parse(JSON.stringify(bithireBrandTheme)) as BrandTheme,
+      })
+    );
+    const names = [...new Set([...Object.keys(BASELINE), ...Object.keys(draftOfBaseline)])];
+    expect(names.filter((channel) => BASELINE[channel] !== draftOfBaseline[channel])).toEqual([]);
+    for (const channel of [
+      "--ds-radius-button",
+      "--ds-button-xs-radius",
+      "--ds-button-sm-radius",
+      "--ds-button-md-radius",
+      "--ds-button-lg-radius",
+      "--ds-button-xl-radius",
+    ]) {
+      expect(BASELINE[channel], `${channel} on the compile door`).toContain("/ 0.8 *");
+      expect(draftOfBaseline[channel], `${channel} on the draft door`).toContain("/ 0.8 *");
+    }
+  });
+
   for (const row of dualTransportRows) {
     const entry = CASES[row.id];
     if (!entry || "skip" in entry) continue;
@@ -284,14 +361,14 @@ describe("transport parity — one decision, four doors, compared as bytes", () 
         draftPreviewThemeIntent({
           vertical: VERTICAL,
           slug: SLUG,
-          draft: draftWith(brandKeypath, entry.value, outranking),
+          draft: draftWith(brandKeypath, entry.value),
         })
       );
       const statikOutranked = variablesOf(
         draftPreviewThemeIntent({
           vertical: VERTICAL,
           slug: SLUG,
-          draft: draftWith(brandKeypath, entry.value),
+          draft: draftWith(brandKeypath, entry.value, outranking),
         })
       );
       const published = compileTenantThemeDocumentV2({

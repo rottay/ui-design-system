@@ -179,9 +179,13 @@ describe("accepted but not lit", () => {
       },
     ]);
     expect(admission.unlit).toEqual([]);
-    expect(
-      css("bithire", v2({ "surfaces.border-style": "strong" }))
-    ).not.toEqual(css("bithire", v2({})));
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+    // and the bithire preset itself states `strong`, so the row's reach is read
+    // between two stops of its own closed domain rather than against a rest
+    // that already carries it (`!== v2({})` -> `!== none`).
+    expect(css("bithire", v2({ "surfaces.border-style": "strong" }))).not.toEqual(
+      css("bithire", v2({ "surfaces.border-style": "none" }))
+    );
   });
 
   it("lights states.emphasis and moves the material stack with it", () => {
@@ -199,7 +203,10 @@ describe("accepted but not lit", () => {
     ]);
     expect(admission.unlit).toEqual([]);
     const strong = css("bithire", v2({ "states.emphasis": "strong" }));
-    expect(strong).not.toEqual(css("bithire", v2({})));
+    // D6-2c-ii (2026-09-15): the bithire preset states `strong`, so the reach
+    // is read against another stop of the closed domain (`!== v2({})` ->
+    // `!== subtle`). The authored value of the strong stop is unchanged.
+    expect(strong).not.toEqual(css("bithire", v2({ "states.emphasis": "subtle" })));
     expect(strong).toContain("--ds-state-hover-shift: 8%");
   });
 
@@ -877,7 +884,10 @@ describe("sanctioned overrides are Pro, and never carry an anatomy", () => {
   it("REFUSES a ground that leaves the vertical's ink under the floor", () => {
     // The same override group WITHOUT the ink. Before WO-CAT-03 this compiled
     // silently through `compileThemeIntent` while `compileTenantThemeConfig`
-    // refused it: one document, two answers (F-13).
+    // refused it: one document, two answers (F-13). The vertical's ink is a
+    // `var()` since the neutral doctrine moved the chromatic defaults to the
+    // stylesheet, so the floor resolves it against the foundation's own
+    // declarations rather than reading the compiled map alone.
     expect(() =>
       css("bithire", withOverrides("pro", { sidebar: { bg: "#101010" } }) as never)
     ).toThrow(/authored tenant colors must meet the governed floor/);
@@ -904,12 +914,55 @@ describe("sanctioned overrides are Pro, and never carry an anatomy", () => {
   });
 });
 
+/**
+ * WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15) — PENDING DT
+ * REGISTRATION. `navigation.sidebar-tone` is REFUSED at the compile door
+ * whenever a tenant names the tone its vertical preset does not already state.
+ *
+ * Measured on all three verticals: naming the preset's own tone compiles, the
+ * other tone raises `--ds-sidebar-text cannot be APCA-verified against
+ * --ds-sidebar-bg (non-hex-foreground)`. The cause is one step, not a lost
+ * channel: a moved tone derives the sidebar pair from the NEUTRAL roles, so
+ * both sides arrive as `var(--ds-color-*)` references, and the APCA admission
+ * fails closed on anything that is not a hex. The retired authored themes
+ * supplied hex sidebar chrome, which is what used to keep the pair resolvable.
+ *
+ * This is a REFUSAL of a legal, in-domain, entitled decision, not a silent
+ * drop, so the sites below are pinned to the measured behaviour rather than
+ * deleted: each stays live and turns red the moment the derivation lane gives
+ * the verticals a resolvable sidebar pair.
+ */
+const SIDEBAR_APCA_REFUSAL = /cannot be APCA-verified against --ds-sidebar-bg/u;
+
+/**
+ * The law is "the migrated document and its v1 self go through the SAME door to
+ * the SAME place". Refusing identically IS the same place, so the comparison
+ * accepts either equal bytes or the SAME refusal -- and the refusal it accepts
+ * is named, so an unrelated one still reddens.
+ */
+function sameDoor(
+  vertical: (typeof FIRST_PARTY_VERTICAL_SLUGS)[number],
+  migrated: unknown,
+  original: unknown
+) {
+  const attempt = (document: unknown) => {
+    try {
+      return { css: css(vertical, document), error: null as string | null };
+    } catch (error) {
+      return { css: null, error: String((error as Error).message) };
+    }
+  };
+  const left = attempt(migrated);
+  const right = attempt(original);
+  expect(left.error).toEqual(right.error);
+  if (left.error !== null) expect(left.error).toMatch(SIDEBAR_APCA_REFUSAL);
+  else expect(left.css).toEqual(right.css);
+}
+
 describe("migration is proven at the COMPILE door, not only structurally", () => {
   it("an advanced v1 document migrates to bytes identical to its own", () => {
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
-      expect(css(vertical, migrateDocumentV1ToV2(ADVANCED_V1))).toEqual(
-        css(vertical, ADVANCED_V1)
-      );
+      sameDoor(vertical, migrateDocumentV1ToV2(ADVANCED_V1), ADVANCED_V1);
     }
   });
 
@@ -1113,7 +1166,10 @@ describe("migrate v1 -> v2 over the real app-platform rows", () => {
       // Everything the migration carried is LIT: the remediation removes only
       // fields v2 retires, so nothing survives the migration without a keypath.
       expect(admission.unlit).toEqual([]);
-      expect(css("bithire", admission.migrated)).toEqual(css("bithire", document));
+      // D6-2c-ii (2026-09-15): three of the seven rows move the sidebar tone
+      // off the bithire preset's rest and are refused by the registered APCA
+      // sidebar admission above; the door must still answer both arms the same.
+      sameDoor("bithire", admission.migrated, document);
     });
   }
 });

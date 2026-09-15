@@ -58,11 +58,15 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
   });
 
   it('a theme with no clear ground emits none, leaving the DS default in place', () => {
-    // Synthetic, not a shipped theme: whether rottay declares a clear ground is
-    // a product decision that may change, and an assertion coupled to it would
-    // fail for a reason that has nothing to do with the behaviour under test.
-    const { palette, ...rest } = rottayBrandTheme;
+    // Synthetic, not a shipped theme: whether a vertical declares a clear
+    // ground is a product decision that may change, and an assertion coupled
+    // to it would fail for a reason that has nothing to do with the behaviour
+    // under test. D6-2c-ii (2026-09-15): the ground is stripped from bithire,
+    // the one vertical whose preset still authors one -- stripping rottay's
+    // would assert nothing now that its structural preset carries no palette.
+    const { palette, ...rest } = bithireBrandTheme;
     const { backgroundColor: _omitted, ...paletteWithoutGround } = palette!;
+    expect(palette!.backgroundColor).toBeDefined();
     const { cssVariables } = lowerBrandThemeFixture({
       tenantSlug: 'canvas-probe',
       brandTheme: { ...rest, palette: paletteWithoutGround },
@@ -120,18 +124,33 @@ describe('the ground field is no longer overloaded', () => {
     // was being used as "the ground" regardless of mode. There is now one
     // ground field per palette, and the mode it belongs to is the one the
     // palette is authored for.
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // bithire's ground is now its preset's #FFFFFF, not the authored #F4F8FB.
     expect(bithireBrandTheme.appearance?.defaultMode).toBe('light');
-    expect(bithireBrandTheme.palette!.backgroundColor).toBe('#F4F8FB');
+    expect(bithireBrandTheme.palette!.backgroundColor).toBe('#FFFFFF');
+    const { cssVariables } = lowerBrandThemeFixture({
+      brandTheme: bithireBrandTheme,
+      tenantSlug: 'canvas-probe',
+    });
+    expect(cssVariables['--ds-color-bg-primary']).toBe('#FFFFFF');
   });
 
   it('a genuinely dark product declares its dark ground as its ground', () => {
+    // The mirror of the light case above, on the same field: a dark-default
+    // theme's ground is a plain `palette.backgroundColor`, never a prefixed
+    // twin, and it reaches the channel -- the whole point of WO-TOK-06.
+    // D6-2c-ii (2026-09-15): anchored on the dark-default torture fixture.
+    // rottay is still the dark vertical, but its preset is structural and
+    // authors no palette at all, so it no longer carries a ground to assert.
     expect(rottayBrandTheme.appearance?.defaultMode).toBe('dark');
-    expect(rottayBrandTheme.palette!.backgroundColor).toBe('#0C0C0E');
-    // And it reaches the channel, which is the whole point of WO-TOK-06.
+    expect(rottayBrandTheme.palette?.backgroundColor).toBeUndefined();
+
+    expect(tortureDarkBrandTheme.appearance?.defaultMode).toBe('dark');
+    expect(tortureDarkBrandTheme.palette!.backgroundColor).toBe('#050307');
     const { cssVariables } = lowerBrandThemeFixture({
-      brandTheme: rottayBrandTheme,
+      brandTheme: tortureDarkBrandTheme,
       tenantSlug: 'canvas-probe',
     });
-    expect(cssVariables['--ds-color-bg-primary']).toBe('#0C0C0E');
+    expect(cssVariables['--ds-color-bg-primary']).toBe('#050307');
   });
 });

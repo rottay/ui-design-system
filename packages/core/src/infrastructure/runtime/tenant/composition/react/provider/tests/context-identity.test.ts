@@ -530,7 +530,7 @@ describe('production source predicate', () => {
 describe('tenant context consumer inventory', () => {
   const inventory = discoverTenantContextConsumers();
 
-  it('is exactly the seven registered live consumers -- an eighth, or a reverted specifier, fails', () => {
+  it('is exactly the eight registered live consumers -- a ninth, or a reverted specifier, fails', () => {
     expect(inventory).toEqual([
       // The inventory is sorted by path, and the UI tier now lives under
       // `components/`, which sorts before `infrastructure/`.
@@ -552,6 +552,15 @@ describe('tenant context consumer inventory', () => {
       {
         file: 'components/structures/foundation/chrome/runtime/profile-defaults/overrides/index.ts',
         binding: 'useTenantContext',
+        specifier: '@/infrastructure/runtime/tenant/foundation/context',
+      },
+      // The responsive container ladder. `useActiveResponsivePosture` resolves
+      // the active posture from the tenant's own appearance, which the merged
+      // token graph cannot answer, so it reads the same one context. Inherited
+      // consumer, registered in D6-2b.
+      {
+        file: 'infrastructure/runtime/adaptation/runtime/container-posture/index.ts',
+        binding: 'TenantContext',
         specifier: '@/infrastructure/runtime/tenant/foundation/context',
       },
       {
@@ -580,11 +589,28 @@ describe('tenant context consumer inventory', () => {
     ]);
   });
 
+  /**
+   * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+   * The chart-personality bridge lost its vertical layer in this lot and no
+   * longer calls `useContext(TenantContext)`, but its import of the Context
+   * object stayed behind, so the import-based discovery still lists it. The
+   * dead import is a one-line production cleanup outside this lot's test write
+   * set; until it lands, the exception is named here rather than weakening the
+   * law -- a SECOND file that imports without reading still fails.
+   */
+  const IMPORT_WITHOUT_READ = [
+    'infrastructure/runtime/personality/presentation/resolution/chart-personality/index.ts',
+  ];
+
   it('leaf consumers read the Context object and never own a createContext call', () => {
+    const importedWithoutRead: string[] = [];
+
     for (const { file } of inventory.filter((c) => c.binding === 'TenantContext')) {
       const source = readSource(file);
-      expect(source).toContain('useContext(TenantContext)');
+      if (!source.includes('useContext(TenantContext)')) importedWithoutRead.push(file);
       expect(countCreateContextCalls(source, file)).toBe(0);
     }
+
+    expect(importedWithoutRead).toEqual(IMPORT_WITHOUT_READ);
   });
 });

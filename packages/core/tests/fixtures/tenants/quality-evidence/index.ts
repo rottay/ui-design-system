@@ -296,7 +296,13 @@ export const EDITORIAL_FLAT_DOCUMENT = {
       chrome: {
         cardComponent: { anatomy: "underline" },
         table: { anatomy: "open" },
-        sidebar: { anatomy: "rail" },
+        // Authored, not inherited, for the same reason as the disabled ink
+        // below. The `subtle` tone derives both sides of the sidebar pair from
+        // the neutral ramp, and this fixture overrides that ramp's ground
+        // tokens without giving the pair an ink, so both sides resolved to the
+        // same value and measured Lc 0.0 -- a document no tenant could save.
+        // This fixture's own paper and ink measure Lc 91.6 together.
+        sidebar: { anatomy: "rail", bg: "#F2ECE0", text: "#25231F" },
         layout: { anatomy: "flat" },
       },
       tokenOverrides: {
@@ -463,8 +469,18 @@ export const TECHNICAL_DARK_DOCUMENT = {
         // above was written to remove. `#A6BCD0` measures about -63 on all
         // three grounds it is authored for.
         "--ds-material-panel-foreground-muted": "#A6BCD0",
+        // Authored for the same reason as the muted ink above it: the derived
+        // disabled ink measured Lc -10.9 against this fixture's own panel and the
+        // governed disabled floor is 45. `#8FA3BA` measures -50.2 on that panel.
+        "--ds-material-panel-foreground-disabled": "#8FA3BA",
         "--ds-material-card-foreground-muted": "#A6BCD0",
         "--ds-material-control-foreground-muted": "#A6BCD0",
+        // Authored for the same reason as the muted inks above them: the
+        // derived disabled ink measured Lc -10.1 on this fixture's card and
+        // -10.8 on its control, against a governed disabled floor of 45.
+        // `#8FA3BA` measures -49.3 and -50.0 on those same surfaces.
+        "--ds-material-card-foreground-disabled": "#8FA3BA",
+        "--ds-material-control-foreground-disabled": "#8FA3BA",
         "--ds-material-card-border": "#31506D",
         "--ds-material-card-border-strong": "#72A8D8",
         "--ds-material-card-background-hover": "#142941",
@@ -518,7 +534,10 @@ export const HUMANIST_SOFT_DOCUMENT = {
       chrome: {
         cardComponent: { anatomy: "framed" },
         table: { anatomy: "zebra" },
-        sidebar: { anatomy: "panel" },
+        // Authored, not inherited: the `subtle` tone derives both sides of the
+        // pair from the neutral ramp this fixture overrides, so they resolved
+        // to one value and measured Lc 0.0. Its own paper and ink measure 95.3.
+        sidebar: { anatomy: "panel", bg: "#F9F7F2", text: "#20303A" },
         layout: { anatomy: "floating" },
       },
       tokenOverrides: {

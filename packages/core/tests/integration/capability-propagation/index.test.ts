@@ -250,13 +250,24 @@ const MUTATORS: Record<string, Mutators> = {
   'shape.button-style': {
     db: (d) => { d.visualFoundation!.general!.shape!.buttonStyle = 'pill'; return d; },
   },
+  // The two arms start from DIFFERENT bases and therefore need different values:
+  // the DB arm mutates `BASE_DOC` (a customer document, `spacious`/`airy`), the
+  // static arm mutates the composed bithire baseline. A mutator that writes the
+  // value its own base already holds writes no leaf at all.
+  //
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+  // bithire's preset decides `density.mode: compact` and `spacing.rhythm: tight`,
+  // which is what the STATIC mutators used to write. Static re-anchored on the
+  // measured neighbours -- density `compact` -> `spacious`, rhythm `tight` ->
+  // `airy`, 1 channel each (0 -> 1). The DB values are unchanged: they already
+  // differ from `BASE_DOC`.
   'density.mode': {
     db: (d) => { d.visualFoundation!.general!.density = 'compact'; return d; },
-    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), density: 'compact' } as BrandTheme['surfaces']; return b; },
+    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), density: 'spacious' } as BrandTheme['surfaces']; return b; },
   },
   'spacing.rhythm': {
     db: (d) => { d.visualFoundation!.general!.rhythm = 'tight'; return d; },
-    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), rhythm: 'tight' } as BrandTheme['surfaces']; return b; },
+    static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), rhythm: 'airy' } as BrandTheme['surfaces']; return b; },
   },
   'motion.dial': {
     db: (d) => { d.visualFoundation!.general!.motion!.intensity = 0.11; return d; },
@@ -287,15 +298,25 @@ const MUTATORS: Record<string, Mutators> = {
     db: (d) => { d.visualFoundation!.general!.surfaces!.effectIntensity = 0.05; return d; },
     static: (b) => { b.surfaces = { ...(b.surfaces ?? {}), effectIntensity: 0.77 } as BrandTheme['surfaces']; return b; },
   },
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+  // the composed baseline states the sidebar inks as `var()` references rather
+  // than the hex the authored theme carried, so the `subtle` tone is now REFUSED
+  // at admission -- "light/dark --ds-sidebar-text cannot be APCA-verified against
+  // --ds-sidebar-bg (non-hex-foreground)" -- and the refusal threw before this
+  // leg could measure anything. DB re-anchored on `inverse` (`BASE_DOC` holds
+  // `strong`) and static on `strong` (the composed baseline holds `inverse`);
+  // both are admitted and move. The refusal itself is reported for registration:
+  // it is an admission rule that no longer has a hex pair to verify, not a
+  // property of this capability.
   'navigation.sidebar-tone': {
-    db: (d) => { d.visualFoundation!.general!.navigation!.sidebarTone = 'subtle'; return d; },
+    db: (d) => { d.visualFoundation!.general!.navigation!.sidebarTone = 'inverse'; return d; },
     // F-72: this used to write `chrome.sidebar.bg` -- a colour, not the tone.
     // The catalog's `keypath.brandTheme` for this row is `chrome.sidebar.tone`.
     static: (b) => {
       const chrome = b as unknown as { chrome?: Record<string, Record<string, unknown>> };
       chrome.chrome = {
         ...(chrome.chrome ?? {}),
-        sidebar: { ...(chrome.chrome?.sidebar ?? {}), tone: 'subtle' },
+        sidebar: { ...(chrome.chrome?.sidebar ?? {}), tone: 'strong' },
       };
       return b;
     },
@@ -349,11 +370,15 @@ const MUTATORS: Record<string, Mutators> = {
   'profiles.icon': {
     db: (d) => { (d.visualFoundation!.advanced!.profiles as Record<string, string>).icon = 'solid-active'; return d; },
   },
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+  // bithire's preset decides `responsive.posture: compact`, so the STATIC mutator
+  // wrote the value already there. Re-anchored on `expansive`, measured to move 4
+  // channels (0 -> 4). The DB value stays `compact`: `BASE_DOC` holds `expansive`.
   'responsive.posture': {
     db: (d) => { d.visualFoundation!.advanced!.responsivePosture = 'compact'; return d; },
     static: (b) => {
       const responsive = b as unknown as { responsive?: Record<string, unknown> };
-      responsive.responsive = { ...(responsive.responsive ?? {}), posture: 'compact' };
+      responsive.responsive = { ...(responsive.responsive ?? {}), posture: 'expansive' };
       return b;
     },
   },
@@ -711,6 +736,10 @@ describe('DB path — an authored change reaches the artifact', () => {
   });
 });
 
+const catalogEffectById = new Map(
+  THEME_CONTROL_CATALOG.map((row) => [row.id as string, row.effect as string])
+);
+
 describe('static path — an authored change reaches the compiled brand', () => {
   it('moves at least one channel for every capability with a static mutator', () => {
     const baseline = compileStatic(clone(bithireBrandTheme) as BrandTheme);
@@ -719,6 +748,11 @@ describe('static path — an authored change reaches the compiled brand', () => 
     for (const capability of ACTIVE) {
       const mutate = MUTATORS[capability.id]?.static;
       if (!mutate) continue;
+      // A data-only capability moves an attribute or a runtime block, never a
+      // channel, so the channel law has no subject for it. Read off the
+      // CATALOG's own `effect`, never off an id list, so a fourth data-only
+      // row is excluded here for the same stated reason.
+      if (catalogEffectById.get(capability.id) === 'data-only') continue;
       const mutated = compileStatic(mutate(clone(bithireBrandTheme) as BrandTheme));
       if (changedKeys(baseline, mutated).length === 0) inert.push(capability.id);
     }

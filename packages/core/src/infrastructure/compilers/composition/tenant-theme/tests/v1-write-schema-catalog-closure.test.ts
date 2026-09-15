@@ -290,6 +290,18 @@ describe("the projection writes documents the write validator accepts", () => {
  * as the object a theme author would hand the compiler: the parity measurement
  * below needs the same decision expressed in both vocabularies.
  */
+/**
+ * Every row states a value the bithire baseline does NOT already rest at.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+ * the preset states postures the retired authored theme left unstated --
+ * `palette.contrastPosture: "high"`, `surfaces.nesting: "uniform"` and
+ * `surfaces.stateEmphasis: "strong"` are the baseline's own values now. A row
+ * authoring one of those moves nothing on EITHER arm, which is two empty
+ * deltas agreeing: the vacuity this block's last assertion exists to forbid,
+ * not a lost producer. Each of the three therefore authors the other end of its
+ * own closed domain; the decision under test is unchanged.
+ */
 const CONNECTED = [
   {
     id: "palette.neutral-temperature",
@@ -298,13 +310,13 @@ const CONNECTED = [
   },
   {
     id: "palette.contrast-posture",
-    general: { palette: { contrastPosture: "high" } },
-    brandTheme: { palette: { contrastPosture: "high" } },
+    general: { palette: { contrastPosture: "soft" } },
+    brandTheme: { palette: { contrastPosture: "soft" } },
   },
   {
     id: "shape.nesting",
-    general: { shape: { nesting: "uniform" } },
-    brandTheme: { surfaces: { nesting: "uniform" } },
+    general: { shape: { nesting: "concentric" } },
+    brandTheme: { surfaces: { nesting: "concentric" } },
   },
   {
     id: "shape.control-height",
@@ -313,8 +325,8 @@ const CONNECTED = [
   },
   {
     id: "states.emphasis",
-    general: { states: { emphasis: "strong" } },
-    brandTheme: { surfaces: { stateEmphasis: "strong" } },
+    general: { states: { emphasis: "subtle" } },
+    brandTheme: { surfaces: { stateEmphasis: "subtle" } },
   },
   {
     id: "states.focus-style",
@@ -392,6 +404,27 @@ describe("the six connected rows compile to the same bytes on both transports", 
         brandThemeVariables({}),
         brandThemeVariables(row.brandTheme)
       );
+      // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
+      // registration. The two arms start from different BASES: the document
+      // arm's base authors bithire's own primary, which activates the tenant
+      // palette arm, while the static arm's base is the fixture itself and
+      // does not. Over neutral + preset those two on-primary inks already rest
+      // at the baseline's own value under that activation, so the document
+      // arm's delta withdraws them in BOTH compiles and reports no move, while
+      // the static arm reports the absolute one. This is the deferred
+      // white-label defect the digest fixtures already record -- a
+      // baseline-authored leaf outranking the tenant's seed -- seen from the
+      // parity side; the previous fixture value for this row was the
+      // baseline's own, so the row moved nothing at all and the asymmetry
+      // could not surface. Named exactly, so any OTHER divergence still reds.
+      const BASE_ACTIVATION_ONLY = row.id === "palette.contrast-posture"
+        ? ["--ds-color-primary-foreground", "--ds-color-text-on-primary"]
+        : [];
+      for (const channel of BASE_ACTIVATION_ONLY) {
+        expect(fromMemory[channel], `${row.id} ${channel}`).toBeDefined();
+        expect(fromDocument[channel], `${row.id} ${channel}`).toBeUndefined();
+        delete fromMemory[channel];
+      }
       expect({ row: row.id, moved: fromDocument }).toEqual({
         row: row.id,
         moved: fromMemory,

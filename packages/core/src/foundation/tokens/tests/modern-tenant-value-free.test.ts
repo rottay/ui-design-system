@@ -212,97 +212,17 @@ const key = (finding: Finding) => `${finding.file} :: ${finding.value}`;
  * defect and belongs in neither list.
  */
 const KNOWN_TENANT_LITERALS: readonly string[] = [
-  // RE-KEY (bd5723e7c). Evnto's dark neutral ramp, `modes.dark.palette.ramps
-  // .neutral.{50,100,200,300,500,600,700,800}` — a slate ladder default.css has
-  // long declared as everyone's dark ground. Steps 400 and 900 are absent
-  // because default.css never declared those two values, not because they were
-  // drained.
-  'foundation/tokens/css/foundation/themes/default/index.css :: #0b1220',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #111827',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #1f2937',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #334155',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #64748b',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #94a3b8',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #cbd5e1',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #e2e8f0',
-  // RE-KEY (bd5723e7c). Rottay's own hairline and text neutrals:
-  // `#161619` = borderSubtleColor AND borderTertiaryColor, `#96969e` =
-  // textMutedColor, `#9a9aa2` = textTertiaryColor. Same shape as the
-  // `#6b6b72`/`#a0a0a5` pair already pinned below — one vertical's greys
-  // shipped as the system default.
-  'foundation/tokens/css/foundation/themes/default/index.css :: #161619',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #96969e',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #9a9aa2',
-  // RE-KEY (bd5723e7c). Evnto's `secondaryHoverColor`/`accentHoverColor` — the
-  // hover arm of the `#7a6a5a` pair already pinned below, which arrived without
-  // it because only the resting value had been claimed.
-  'foundation/tokens/css/foundation/themes/default/index.css :: #5a4a3a',
-  // DRAINED (COH-1, 2026-08-30). The tinted status GROUNDS entry that used to
-  // sit here (`#f0fdf4`/`#fef2f2`/`#fffbeb`, claimed by
-  // `palette.{success,error,warning}BgColor` on bithire and evnto) is gone:
-  // COH-1 retired those literal fields from both verticals in favor of
-  // `deriveStatusTintFloor` (`var(--ds-color-{tone}-50)`), so no BrandTheme
-  // claims these three hex values anywhere anymore and the "no stale entry"
-  // test below would fail if the pins stayed.
-  // RE-KEY (bd5723e7c). Rottay's alpha-tinted equivalents of the same four
-  // grounds, each claimed twice over — `palette.{success,warning,error,info}
-  // BgColor` and again as `chrome.alert.*Bg` (info a third time as
-  // `chrome.liveFeed.newBg`). An alpha tint is tenant identity exactly like an
-  // opaque one: it composites against whatever ground the tenant chose.
-  'foundation/tokens/css/foundation/themes/default/index.css :: rgba(34,197,94,0.10)',
-  'foundation/tokens/css/foundation/themes/default/index.css :: rgba(59,130,246,0.10)',
-  'foundation/tokens/css/foundation/themes/default/index.css :: rgba(239,68,68,0.10)',
-  'foundation/tokens/css/foundation/themes/default/index.css :: rgba(245,158,11,0.10)',
-  // RE-KEY (bd5723e7c). Evnto's `modes.dark.palette.backgroundOverlayColor` —
-  // the scrim every modal and drawer dims the page with.
-  'foundation/tokens/css/foundation/themes/default/index.css :: rgba(2,6,23,0.88)',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #0c0c0e',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #0d0d10',
-  // Not new debt: this ground literal predates the inventory but became
-  // CLASSIFIABLE as a tenant value when the rottay palette claimed it
-  // (backgroundSecondaryColor, R1-P ground migration). Its `:root` declaration
-  // drained with the light-seed rewire; what survives is the `.dark` bg-input
-  // pin, which holds dark byte-identical and is the reason it is still observed.
-  // Its sibling #141417 (backgroundTertiaryColor) drained outright.
-  'foundation/tokens/css/foundation/themes/default/index.css :: #0f0f12',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #14532d',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #15803d',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #166534',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #16a34a',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #18181c',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #1d4ed8',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #1e3a8a',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #1e40af',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #22c55e',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #2563eb',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #3b82f6',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #475569',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #4ade80',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #60a5fa',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #6b6b72',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #78350f',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #7a6a5a',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #7f1d1d',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #86efac',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #92400e',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #93c5fd',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #991b1b',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #a0a0a5',
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+  // the inventory drops 58 -> 1. READ THE CAUSE, NOT THE COUNTER: default.css
+  // is byte-identical and none of those literals was drained. This gate
+  // measures an INTERSECTION -- literals default.css declares AND a first-party
+  // theme claims -- and the retirement emptied the second half. rottay and
+  // evnto compile from structural presets that author no colour at all, so the
+  // only surviving claim is bithire's warningColor. The debt those 57 lines
+  // described still sits in default.css; it is now invisible to this
+  // instrument, which is a scope loss to re-open when the derivation lane
+  // gives the verticals a colour authority again.
   'foundation/tokens/css/foundation/themes/default/index.css :: #b45309',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #b91c1c',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #bbf7d0',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #bfdbfe',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #d97706',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #dc2626',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #ef4444',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #f59e0b',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #f87171',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #f8fafc',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #fbbf24',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #fca5a5',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #fcd34d',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #fde68a',
-  'foundation/tokens/css/foundation/themes/default/index.css :: #fecaca',
 ];
 
 describe('MODERN-TENANT-VALUE-FREE · the engine declares no tenant color', () => {
@@ -310,7 +230,11 @@ describe('MODERN-TENANT-VALUE-FREE · the engine declares no tenant color', () =
   const files = [...modernFiles, DEFAULT_THEME_CSS];
 
   it('reads a non-trivial tenant palette and a non-trivial engine tree', () => {
-    expect(TENANT_COLORS.size).toBeGreaterThan(50);
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the tenant colour corpus is 58+ authored literals -> 7, bithire's preset
+    // seeds, because the structural presets author no colour. The floor stays
+    // as the anti-vacuous guard it always was: an empty corpus still reddens.
+    expect(TENANT_COLORS.size).toBeGreaterThanOrEqual(7);
     expect(modernFiles.length).toBeGreaterThan(50);
   });
 

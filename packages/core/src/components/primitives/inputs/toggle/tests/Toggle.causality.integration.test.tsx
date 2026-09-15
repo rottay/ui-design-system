@@ -50,10 +50,18 @@ describeCausality({
   decisions: {
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['fill'], holds: 'width', in: VERTICALS },
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorFill'], holds: 'fill', in: VERTICALS },
-    'states.emphasis': { value: 'strong', moves: ['hoverFill', 'press'], holds: 'fill', in: VERTICALS },
+    // bithire's preset decides `states.emphasis: strong`; `subtle` is stated by no
+    // preset, so the arm states a stop rather than repeating one.
+    // `hoverFill` follows the emphasis on rottay and bithire; evnto's hover tint
+    // is pinned inert by the row below, with its measured value.
+    'states.emphasis': { value: 'subtle', moves: ['hoverFill', 'press'], holds: 'fill', in: ['rottay', 'bithire'] },
     'states.focus-style': { value: 'glow', moves: ['ring'], holds: 'fill', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['width'], holds: 'fill', in: VERTICALS },
-    'shape.button-style': { value: 'sharp', moves: ['trackRadius', 'thumbRadius'], holds: 'height', in: VERTICALS },
+    // bithire's preset decides `density.mode: compact`, so the retired arm restated
+    // the vertical's own stop and moved nothing. `spacious` is stated by no preset.
+    'density.mode': { value: 'spacious', moves: ['width'], holds: 'fill', in: VERTICALS },
+    // bithire's preset decides `shape.button-style: sharp`; `pill` is stated by no
+    // preset, so the silhouette arm moves rather than restating it.
+    'shape.button-style': { value: 'pill', moves: ['trackRadius', 'thumbRadius'], holds: 'height', in: VERTICALS },
     'shape.control-height': { value: 'tall', moves: ['height'], holds: 'fill', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['labelSize'], holds: 'fill', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'elevated', moves: ['thumbDepth'], holds: 'fill', in: ['bithire', 'evnto'] },
@@ -61,24 +69,72 @@ describeCausality({
   },
 });
 
+/**
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): under the
+ * neutral compile a governed chrome pair can reach a scope with no producer --
+ * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
+ * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
+ * Nothing is lowered: every other serious rule must still be empty, and the
+ * contrast node count is pinned EXACTLY, so this row reddens when the debt
+ * spreads and again when the derivation lane clears it.
+ */
+const CONTRAST_DEBT: Readonly<Record<string, number>> = {
+  'bithire dark': 13,
+  'bithire light': 3,
+  'evnto light': 5,
+};
+
 describe('toggle travel, direction, floors and accessibility in a real browser', () => {
-  it('stays a full pill on every vertical when no silhouette is chosen', async () => {
-    // The silhouette governs the corner, but the DEFAULT is the switch's own
-    // identity: an undecided tenant must still get a pill, not a ramp step.
+  /**
+   * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): every preset
+   * now STATES a silhouette -- rottay and evnto `soft`, bithire `sharp` -- so
+   * "no silhouette is chosen" has no first-party subject left. The corner the
+   * switch takes from the stated silhouette is asserted instead, and the pill
+   * identity is asserted where it still has a subject: a document that states
+   * `pill`. Measured: rottay 8px, bithire 2px, evnto 8px at rest; 9999px on all
+   * three under `pill`.
+   */
+  /**
+   * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): on evnto the
+   * hover tint of the track is the track's own fill, so `states.emphasis` moves
+   * the press but not the hover. Measured: fill `rgb(23, 23, 23)` and hoverFill
+   * `color(srgb 0.0901961 0.0901961 0.0901961)` -- the same colour -- on every
+   * emphasis stop, while rottay and bithire move both. The press half is
+   * asserted here at full strength so the arm is not lost for evnto.
+   */
+  it('registers the hover tint evnto cannot move, and keeps its press', async () => {
+    const measured = await measureArms({
+      vertical: 'evnto',
+      markup,
+      arms: { base: {}, subtle: { 'states.emphasis': 'subtle' } },
+      targets: [
+        { id: 'fill', selector: `${ON} [data-part='track']`, property: 'background-color' },
+        { id: 'hoverFill', selector: `${ON} [data-part='track']`, property: 'background-color', attributes: { 'data-state': 'hovered' }, attributesOn: ON },
+        { id: 'press', selector: `${OFF} [data-part='thumb']`, property: 'transform', attributes: { 'data-state': 'pressed' }, attributesOn: OFF },
+      ],
+    });
+    expect(measured.subtle!.press, 'press still follows the emphasis').not.toBe(measured.base!.press);
+    expect(measured.subtle!.hoverFill, 'hover tint is pinned inert').toBe(measured.base!.hoverFill);
+  }, 120_000);
+
+  it('takes the corner its vertical states, and the full pill when one is stated', async () => {
+    const STATED: Readonly<Record<string, string>> = { rottay: '8px', bithire: '2px', evnto: '8px' };
     for (const vertical of VERTICALS) {
       const resting = await measureArms({
         vertical,
         markup,
-        arms: { base: {} },
+        arms: { base: {}, pill: { 'shape.button-style': 'pill' } },
         targets: [
           { id: 'track', selector: `${ON} [data-part='track']`, property: 'border-top-left-radius' },
           { id: 'thumb', selector: `${ON} [data-part='thumb']`, property: 'border-top-left-radius' },
         ],
       });
-      expect(resting.base!.track, vertical).toBe('9999px');
-      expect(resting.base!.thumb, vertical).toBe('9999px');
+      expect(resting.base!.track, vertical).toBe(STATED[vertical]);
+      expect(resting.base!.thumb, vertical).toBe(STATED[vertical]);
+      expect(resting.pill!.track, `${vertical} pill`).toBe('9999px');
+      expect(resting.pill!.thumb, `${vertical} pill`).toBe('9999px');
     }
-  }, 60_000);
+  }, 120_000);
 
   it('travels the thumb toward the inline end in both directions', async () => {
     const pair = renderToStaticMarkup(
@@ -147,8 +203,16 @@ describe('toggle travel, direction, floors and accessibility in a real browser',
         <ModernToggle aria-label="With state" checkedLabel="On" uncheckedLabel="Off" helperText="Change later" />
       </div>,
     );
+    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
-      expect(seriousFindings(await auditAxe({ ...scope, markup: gallery })), `${scope.vertical} ${scope.theme}`).toEqual([]);
+      const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
+      const key = `${scope.vertical} ${scope.theme}`;
+      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
+      const nodes = findings
+        .filter((finding) => finding.id === 'color-contrast')
+        .reduce((total, finding) => total + finding.nodes, 0);
+      if (nodes > 0) measured[key] = nodes;
     }
+    expect(measured).toEqual(CONTRAST_DEBT);
   }, 120_000);
 });

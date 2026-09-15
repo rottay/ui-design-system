@@ -100,10 +100,12 @@ describe('Layout-family data-part contract (WO-SKIN-05 checkpoint L)', () => {
         </Layout>,
         engine,
       );
+      // Each compound resolves through its OWN lazy engine boundary, so the
+      // root being present does not mean its children are: await each part.
       await waitForPart(container, 'root');
-      expect(container.querySelector('[data-part="header"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="content"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="footer"]')).not.toBeNull();
+      await waitForPart(container, 'header');
+      await waitForPart(container, 'content');
+      await waitForPart(container, 'footer');
     });
 
     it.each(ENGINES)(

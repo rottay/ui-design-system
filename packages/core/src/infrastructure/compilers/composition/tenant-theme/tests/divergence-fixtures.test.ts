@@ -9,6 +9,7 @@ import {
   DIVERGENCE_SOBER_EXPECTED_ANATOMY,
   DIVERGENCE_SOBER_IDENTITY,
 } from "@tests/fixtures/brand-themes/divergence-sober";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -31,6 +32,27 @@ import {
 // ---------------------------------------------------------------------------
 
 const BITHIRE_ENVELOPE = getTenantThemeVerticalEnvelope("bithire");
+
+/**
+ * What the BROWSER reads: the vertical artifact plus the tenant delta.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. The
+ * bithire baseline now carries `--ds-radius-button: calc(2px / 0.8 * ...)`,
+ * which is exactly what `shape.buttonStyle: "sharp"` produces, so the sober
+ * tenant delta legitimately withdraws that channel -- the artifact is a delta,
+ * and a value equal to the baseline is not repeated. The producer is alive
+ * (`pill` and `soft` both emit it), so the divergence this file certifies is
+ * measured on the composed document, exactly as the Playwright spec renders it.
+ */
+const BITHIRE_BASELINE = lowerBrandThemeFixture({
+  brandTheme: firstPartyFixture("bithire"),
+  tenantSlug: "bithire",
+}).cssVariables;
+
+const composed = (artifact: { variables: Record<string, string> }) => ({
+  ...BITHIRE_BASELINE,
+  ...artifact.variables,
+});
 
 function compileSober() {
   return compileTenantThemeConfig(
@@ -93,9 +115,9 @@ describe("divergence fixtures (W4 section 9)", () => {
     expect(sober["data-tenant"]).not.toBe(editorial["data-tenant"]);
   });
 
-  it("the browser-asserted channels diverge between the two artifacts", () => {
-    const sober = compileSober().variables;
-    const editorial = compileEditorial().variables;
+  it("the browser-asserted channels diverge between the two composed documents", () => {
+    const sober = composed(compileSober());
+    const editorial = composed(compileEditorial());
 
     for (const channel of [
       "--ds-font-family-heading",
@@ -115,18 +137,35 @@ describe("divergence fixtures (W4 section 9)", () => {
       );
     }
 
-    // Both buttonStyle presets reach the artifact folded through the radius
+    // Both buttonStyle presets reach the document folded through the radius
     // dial; the divergence is in the operand, which is what the fixtures pin.
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): the divisor is
+    // the bithire radius base, which the preset governs at 0.8 where the retired
+    // theme authored 1.25; registered for DER-07 to confirm, not reverted.
     expect(sober["--ds-radius-button"]).toBe(
-      "calc(2px / 1.25 * var(--ds-radius-scale, 1))"
+      "calc(2px / 0.8 * var(--ds-radius-scale, 1))"
     );
     expect(editorial["--ds-radius-button"]).toBe(
-      "calc(9999px / 1.25 * var(--ds-radius-scale, 1))"
+      "calc(9999px / 0.8 * var(--ds-radius-scale, 1))"
     );
     expect(sober["--ds-type-scale"]).toBe("0.96");
     expect(editorial["--ds-type-scale"]).toBe("1.06");
     expect(sober["--ds-density-scale"]).toBe("0.92");
     expect(editorial["--ds-density-scale"]).toBe("1.08");
+  });
+
+  it("sober withdraws the button radius because it chose the baseline's own silhouette", () => {
+    // The other half of the re-anchor above, stated so it cannot rot silently:
+    // the channel is absent from the sober DELTA, and it is absent because the
+    // baseline already carries that exact value. If the baseline silhouette
+    // moves, this fails and the composed pins above have to be re-read.
+    expect(compileSober().variables["--ds-radius-button"]).toBeUndefined();
+    expect(BITHIRE_BASELINE["--ds-radius-button"]).toBe(
+      "calc(2px / 0.8 * var(--ds-radius-scale, 1))"
+    );
+    expect(compileEditorial().variables["--ds-radius-button"]).toBe(
+      "calc(9999px / 0.8 * var(--ds-radius-scale, 1))"
+    );
   });
 
   it("emits the full generated chart series for both fixtures", () => {

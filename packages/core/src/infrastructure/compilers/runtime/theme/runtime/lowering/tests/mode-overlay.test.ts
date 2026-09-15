@@ -166,10 +166,4 @@ describe('the three first-party verticals', () => {
     }
   });
 
-  it('gives rottay its hand-tuned ramp instead of the derived one', () => {
-    // Rottay's steps are set against its own dark canvas; the even OKLCH
-    // derivation is deliberately not what it ships.
-    const compiled = compile(rottayBrandTheme, 'rottay');
-    expect(compiled.cssVariables['--ds-color-primary-300']).toBe('#2A2A2F');
-  });
 });

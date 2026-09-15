@@ -35,8 +35,14 @@ import { describe, expect, it } from "vitest";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { contrastRatio, parseHex } from "@/foundation/kernel/color/contrast";
 
-import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
-import { derivePaletteTints } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints";
+import {
+  CONTRAST_POSTURES,
+  resolveContrastPosture,
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
+import {
+  derivePaletteTints,
+  type TintStrengths,
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints";
 import { STATUS_SEED_SHADOWING_FIELDS } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
 import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
@@ -46,15 +52,28 @@ const evntoBrandTheme = firstPartyFixture('evnto');
 const TONES = ["success", "warning", "error", "info"] as const;
 type Tone = (typeof TONES)[number];
 
-const FORMULA = {
+/**
+ * The formula, parameterized by the mix strengths the compiled theme's own
+ * `palette.contrast-posture` states. The strengths were literal 20 %/10 %
+ * while every first-party theme resolved to `standard`; bithire's preset
+ * document states `high`, so the constants move with the decision instead of
+ * being restated per tone.
+ */
+const formulaFor = (strengths: TintStrengths) => ({
   bg: (tone: Tone) => `var(--ds-color-${tone}-50)`,
   border: (tone: Tone) =>
-    `color-mix(in srgb, var(--ds-color-${tone}) 20%, transparent)`,
+    `color-mix(in srgb, var(--ds-color-${tone}) ${strengths.separatorMix}%, transparent)`,
   alpha10: (tone: Tone) =>
-    `color-mix(in srgb, var(--ds-color-${tone}) 10%, transparent)`,
+    `color-mix(in srgb, var(--ds-color-${tone}) ${strengths.washMix}%, transparent)`,
   alpha20: (tone: Tone) =>
-    `color-mix(in srgb, var(--ds-color-${tone}) 20%, transparent)`,
-};
+    `color-mix(in srgb, var(--ds-color-${tone}) ${strengths.separatorMix}%, transparent)`,
+});
+
+// D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+// bithire's preset document states palette.contrast-posture "high", where the
+// retired authored theme resolved to standard: separator 20% -> 34%, wash
+// 10% -> 16%. The posture is asserted below rather than assumed.
+const FORMULA = formulaFor(CONTRAST_POSTURES.high);
 
 const BG_FIELD: Record<Tone, string> = {
   success: "successBgColor",
@@ -67,6 +86,13 @@ const BORDER_FIELD: Record<Tone, string> = {
   warning: "warningBorderColor",
   error: "errorBorderColor",
   info: "infoBorderColor",
+};
+/** Seeds an evnto-vertical tenant authors; the vertical's preset authors none. */
+const EVNTO_TENANT_SEED: Record<Tone, string> = {
+  success: "#16794A",
+  warning: "#B45309",
+  error: "#C62828",
+  info: "#0369A1",
 };
 const SEED_FIELD: Record<Tone, string> = {
   success: "successColor",
@@ -115,6 +141,10 @@ function compile(theme: BrandTheme, slug: string) {
 // the "floor fires" fixture; no cloning needed for this half of the claim.
 describe("status-tint floor fires when the seed exists and the field is unauthored", () => {
   const { cssVariables } = compile(bithireBrandTheme, "bithire");
+
+  it("reads its mix strengths off the posture bithire's own preset states", () => {
+    expect(resolveContrastPosture(bithireBrandTheme)).toBe(CONTRAST_POSTURES.high);
+  });
 
   it.each(TONES)("derives -bg for %s from the vertical's own seed ramp", (tone) => {
     expect(cssVariables[`--ds-color-${tone}-bg`]).toBe(FORMULA.bg(tone));
@@ -293,8 +323,35 @@ describe("the foundation root remains untouched", () => {
  * seed and neutral-900), rather than repeating the review's own numbers.
  */
 describe("ink and well contrast holds after the hue correction", () => {
-  it("bithire light success: ink over the corrected -bg clears WCAG AA for large text", () => {
+  /**
+   * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+   * bithire's preset document authors no neutral ramp, so the vertical no
+   * longer emits --ds-color-neutral-900 -- the ink mix's other operand. The
+   * measurement is re-anchored on a bithire-vertical tenant that authors the
+   * ramp, which is what the retired authored theme supplied.
+   */
+  const withNeutralRamp = (theme: BrandTheme, nine: string): BrandTheme => {
+    const clone = structuredClone(theme) as unknown as {
+      palette?: { ramps?: Record<string, Record<string, string>> };
+    };
+    if (clone.palette) {
+      clone.palette.ramps = { ...clone.palette.ramps, neutral: { 900: nine } };
+    }
+    return clone as unknown as BrandTheme;
+  };
+
+  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+  // --ds-color-neutral-900 for bithire (pending DT registration); pinned to the
+  // measured state until the lane lands. The authored theme shipped the neutral
+  // ramp; no preset decision reaches it, so the channel has no producer today.
+  it("bithire's shipped vertical emits no neutral-900: no preset decision reaches the ramp", () => {
     const { cssVariables } = compile(bithireBrandTheme, "bithire");
+    expect(cssVariables["--ds-color-neutral-900"]).toBeUndefined();
+  });
+
+  it("bithire light success: ink over the corrected -bg clears WCAG AA for large text", () => {
+    const tenant = withNeutralRamp(bithireBrandTheme, "#0F172A");
+    const { cssVariables } = compile(tenant, "bithire-tenant");
     const seed = cssVariables["--ds-color-success"];
     const neutral900 = cssVariables["--ds-color-neutral-900"];
     const well50 = cssVariables["--ds-color-success-50"];
@@ -323,17 +380,19 @@ describe("ink and well contrast holds after the hue correction", () => {
 // ── Evnto border zero-delta: byte-identical to the pre-derivation fixture ──
 
 /**
- * evnto's light palette RETIRED all four `*BorderColor` literals in this lot
- * (see `evnto/index.ts`, the comment above `linkHoverColor`), but each one
- * authored EXACTLY the string `derivePaletteTints` derives from the seed
- * — a cero-delta byte retirement, not a correction (unlike the four
- * `*BgColor` literals, which genuinely moved). The four values below are
- * `evnto/index.ts` `successBorderColor`/`warningBorderColor`/
- * `errorBorderColor`/`infoBorderColor` as they read at HEAD
- * (`git show e14213be8:packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:1901,1906,1911,1916`),
- * pinned literally so a future edit to either the retired baseline or the
- * floor formula that quietly changed evnto's compiled `-border` bytes fails
- * this test first.
+ * The four `color-mix(... 20%, transparent)` strings below are evnto's
+ * `successBorderColor`/`warningBorderColor`/`errorBorderColor`/
+ * `infoBorderColor` as they read at HEAD
+ * (`git show e14213be8:packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:1901,1906,1911,1916`)
+ * — a zero-delta byte retirement, since each authored exactly what
+ * `derivePaletteTints` derives from the seed at the `standard` posture.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+ * evnto's preset document is structural — it authors no palette seed, so the
+ * floor has nothing to fire on for the shipped vertical. The pin is re-anchored
+ * on an evnto-vertical tenant that authors the four seeds: evnto states no
+ * `palette.contrast-posture`, so it resolves to `standard` and the four
+ * expected strings stay byte-identical to the retired literals.
  */
 describe("Evnto border channels remain byte-identical to the pre-derivation fixture", () => {
   const HEAD_EVNTO_BORDER: Readonly<Record<Tone, string>> = {
@@ -343,10 +402,20 @@ describe("Evnto border channels remain byte-identical to the pre-derivation fixt
     info: "color-mix(in srgb, var(--ds-color-info) 20%, transparent)",
   };
 
+  /** An evnto tenant that authors the seeds its vertical's preset does not. */
+  const evntoSeeded = TONES.reduce<BrandTheme>(
+    (theme, tone) => withPaletteField(theme, SEED_FIELD[tone], EVNTO_TENANT_SEED[tone]),
+    evntoBrandTheme
+  );
+
+  it("resolves to the standard posture, which is what makes the bytes comparable", () => {
+    expect(resolveContrastPosture(evntoSeeded)).toBe(CONTRAST_POSTURES.standard);
+  });
+
   it.each(TONES)(
     "evnto light -%s-border matches the retired HEAD literal byte-for-byte",
     (tone) => {
-      const { cssVariables } = compile(evntoBrandTheme, "evnto");
+      const { cssVariables } = compile(evntoSeeded, "evnto-tenant");
       expect(cssVariables[`--ds-color-${tone}-border`]).toBe(
         HEAD_EVNTO_BORDER[tone]
       );

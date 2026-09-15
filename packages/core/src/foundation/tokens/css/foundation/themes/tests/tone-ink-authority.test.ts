@@ -87,24 +87,37 @@ const THEME_CSS = readFileSync(resolve(HERE, '../default/index.css'), 'utf8');
  * mix ratio moved -- and the `three distinct values` test below still proves
  * the authority did not flatten.
  */
+/**
+ * D6-2c-ii (2026-09-15): a first-party vertical is the neutral foundation plus
+ * its preset document, so the operands moved with their source. bithire states
+ * `palette.status-seeds`, so its mixes resolve against ITS OWN seeds (the
+ * preset's, where the retired authored theme's used to be) over the
+ * foundation's `--ds-color-neutral-900` (#171717, where bithire used to author
+ * #191919). rottay and evnto are structural-neutral by owner scope and state no
+ * status seeds, so both resolve against the foundation's. The authority is
+ * unchanged: it is still a derivation over whatever tone seeds the vertical
+ * states, which is what the anti-flattening row below measures.
+ */
 const EXPECTED_LIGHT = {
   bithire: {
-    '--ds-color-info-ink': '#3A6FB0',
-    '--ds-color-warning-ink': 'color-mix(in srgb, #D6A04E 55%, #191919 45%)',
-    '--ds-color-error-ink': 'color-mix(in srgb, #C5504C 78%, #191919 22%)',
-    '--ds-color-success-ink': 'color-mix(in srgb, #327CA8 60%, #191919 40%)',
+    '--ds-color-info-ink': '#0369A1',
+    '--ds-color-warning-ink': 'color-mix(in srgb, #B45309 55%, #171717 45%)',
+    '--ds-color-error-ink': 'color-mix(in srgb, #C62828 78%, #171717 22%)',
+    '--ds-color-success-ink': 'color-mix(in srgb, #16794A 60%, #171717 40%)',
   },
+  // Lower case as the foundation declares it: the pin used to carry #60A5FA,
+  // which was a casing difference only.
   rottay: {
-    '--ds-color-info-ink': '#60A5FA',
-    '--ds-color-warning-ink': 'color-mix(in srgb, #F59E0B 55%, #ECECEC 45%)',
-    '--ds-color-error-ink': 'color-mix(in srgb, #F87171 78%, #ECECEC 22%)',
-    '--ds-color-success-ink': 'color-mix(in srgb, #22C55E 60%, #ECECEC 40%)',
+    '--ds-color-info-ink': '#60a5fa',
+    '--ds-color-warning-ink': 'color-mix(in srgb, #d97706 55%, #171717 45%)',
+    '--ds-color-error-ink': 'color-mix(in srgb, #f87171 78%, #171717 22%)',
+    '--ds-color-success-ink': 'color-mix(in srgb, #16a34a 60%, #171717 40%)',
   },
   evnto: {
-    '--ds-color-info-ink': '#475569',
-    '--ds-color-warning-ink': 'color-mix(in srgb, #A16207 55%, #171717 45%)',
-    '--ds-color-error-ink': 'color-mix(in srgb, #B91C1C 78%, #171717 22%)',
-    '--ds-color-success-ink': 'color-mix(in srgb, #15803D 60%, #171717 40%)',
+    '--ds-color-info-ink': '#60a5fa',
+    '--ds-color-warning-ink': 'color-mix(in srgb, #d97706 55%, #171717 45%)',
+    '--ds-color-error-ink': 'color-mix(in srgb, #f87171 78%, #171717 22%)',
+    '--ds-color-success-ink': 'color-mix(in srgb, #16a34a 60%, #171717 40%)',
   },
 } as const;
 
@@ -137,14 +150,24 @@ describe('AUT-1 tone-ink authority — LIGHT leg (per shipped bundle)', () => {
   }
 
   it('follows the vertical tone seeds instead of a frozen literal', () => {
-    // The authority is a DERIVATION over tenant channels, so the three bundles
-    // must disagree. Identical values across verticals would mean the mix had
-    // been flattened to a constant — the exact failure --ds-color-on-{tone}
-    // already represents.
-    const warnings = Object.values(SHIPPED_BUNDLES).map((path) =>
-      resolveChannel(loadBundle(path), '--ds-color-warning-ink')
-    );
-    expect(new Set(warnings).size).toBe(3);
+    // The authority is a DERIVATION over the tone seeds a vertical states, so a
+    // vertical that states them must NOT resolve to the foundation's value.
+    // Flattening every bundle to one constant is the exact failure
+    // --ds-color-on-{tone} already represents, and it would collapse this set
+    // to a single member.
+    const warningOf = (path: string) =>
+      resolveChannel(loadBundle(path), '--ds-color-warning-ink');
+    const bithire = warningOf(SHIPPED_BUNDLES.bithire);
+    const rottay = warningOf(SHIPPED_BUNDLES.rottay);
+    const evnto = warningOf(SHIPPED_BUNDLES.evnto);
+
+    // bithire states `palette.status-seeds`, so its mix carries its own seed.
+    expect(bithire).toContain('#B45309');
+    expect(bithire).not.toBe(rottay);
+    // rottay and evnto state none, so both derive from the foundation's seed --
+    // the same value by construction, not a flattened constant.
+    expect(rottay).toBe(evnto);
+    expect(new Set([bithire, rottay, evnto]).size).toBe(2);
   });
 
   it('is actually consumed by both AUT-1 twins in the shipped bundles', () => {

@@ -7,9 +7,16 @@
  * Modern sidebar IS the Menu) and one was retired for having a shape no typed
  * contract can validate.
  *
- * Each assertion is causal: a typed edit must move the emitted channel, and the
- * skin must read that exact channel with a fallback that reproduces the
- * geometry a tenant who sets nothing gets today.
+ * Each assertion is causal: a typed edit must move the emitted channel, the
+ * compiled chrome must chain that exact channel behind the `--ds-menu-*` name
+ * the family owns, and the skin must read that name.
+ *
+ * The middle link is where the read MOVED. The skin used to read
+ * `--ds-sidebar-*` directly; the family cut gave the menu family its own
+ * channels, so the chrome deriver now emits `--ds-menu-group-margin-block`,
+ * `--ds-menu-group-padding-block` and `--ds-menu-child-padding-inline` with the
+ * sidebar channel as their first operand, and the skin reads those. The chain
+ * is one link longer and asserted end to end rather than shortened.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -38,32 +45,51 @@ const compile = (theme: BrandTheme) =>
 
 describe('sidebar group channels are wired to the Modern menu skin', () => {
   it.each([
-    ['groupMarginTop', '--ds-sidebar-group-margin-top', '0.5px'],
-    ['groupMarginBottom', '--ds-sidebar-group-margin-bottom', '0.5px'],
-    // The padding fallback is density-reachable rather than flat: at the
-    // default density the clamp resolves to 1, so an unset tenant still gets
-    // the 6px this rule used before wiring.
+    [
+      'groupMarginTop',
+      '--ds-sidebar-group-margin-top',
+      '--ds-menu-group-margin-block',
+      'var(--ds-spacing-1)',
+    ],
+    [
+      'groupMarginBottom',
+      '--ds-sidebar-group-margin-bottom',
+      '--ds-menu-group-margin-block',
+      'var(--ds-spacing-1)',
+    ],
     [
       'groupPaddingTop',
       '--ds-sidebar-group-padding-top',
-      'calc(6px * var(--ds-density-effective-scale, 1))',
+      '--ds-menu-group-padding-block',
+      'var(--ds-spacing-2)',
     ],
-    ['itemIndent', '--ds-sidebar-item-indent', '0px'],
-  ])('%s reaches %s and the skin reads it with the pre-wiring default', (field, channel, fallback) => {
-    const sentinel = '37px';
-    const emitted = compile({
-      ...base,
-      chrome: { sidebar: { [field]: sentinel } },
-    } as BrandTheme);
-    expect(emitted[channel]).toBe(sentinel);
-    // The unedited theme must NOT contain the sentinel: without this the
-    // assertion above would pass on a compiler that emits a constant.
-    expect(Object.values(compile(base))).not.toContain(sentinel);
+    [
+      'itemIndent',
+      '--ds-sidebar-item-indent',
+      '--ds-menu-child-padding-inline',
+      'var(--ds-spacing-2)',
+    ],
+  ])(
+    '%s reaches %s, which %s chains with the unset-tenant default the skin reads',
+    (field, channel, menuChannel, fallback) => {
+      const sentinel = '37px';
+      const emitted = compile({
+        ...base,
+        chrome: { sidebar: { [field]: sentinel } },
+      } as BrandTheme);
+      expect(emitted[channel]).toBe(sentinel);
+      // The unedited theme must NOT contain the sentinel: without this the
+      // assertion above would pass on a compiler that emits a constant.
+      expect(Object.values(compile(base))).not.toContain(sentinel);
 
-    // The skin reads exactly this channel, and its fallback is the literal the
-    // rule used before wiring, so an unset tenant keeps today's geometry.
-    expect(MENU_SKIN).toContain(`var(${channel}, ${fallback})`);
-  });
+      // The compiled chrome chains the sidebar channel behind the menu name,
+      // carrying the default an unset tenant gets.
+      expect(emitted[menuChannel]).toContain(`var(${channel}, ${fallback})`);
+
+      // And the skin reads the menu name, so the typed edit reaches paint.
+      expect(MENU_SKIN).toContain(`var(${menuChannel},`);
+    }
+  );
 
   it('retires groupBorder: no contract field, no emission, no reader', () => {
     const emitted = compile({

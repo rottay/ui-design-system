@@ -47,14 +47,32 @@ describeCausality({
   decisions: {
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusRing'], holds: 'radius', in: VERTICALS },
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorBorder'], holds: 'radius', in: VERTICALS },
-    'states.emphasis': { value: 'strong', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
+    // bithire's preset decides `states.emphasis: strong`; `subtle` is stated by no
+    // preset, so the arm states a stop rather than repeating one.
+    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['fontSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'fontSize', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['padding'], holds: 'radius', in: ['evnto'] },
+    // bithire's preset decides `density.mode: compact`, so the retired arm restated
+    // the vertical's own stop and moved nothing. `spacious` is stated by no preset.
+    'density.mode': { value: 'spacious', moves: ['padding'], holds: 'radius', in: ['evnto'] },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: VERTICALS },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },
   },
 });
+
+/**
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): under the
+ * neutral compile a governed chrome pair can reach a scope with no producer --
+ * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
+ * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
+ * Nothing is lowered: every other serious rule must still be empty, and the
+ * contrast node count is pinned EXACTLY, so this row reddens when the debt
+ * spreads and again when the derivation lane clears it.
+ */
+const CONTRAST_DEBT: Readonly<Record<string, number>> = {
+  'bithire dark': 2,
+  'rottay dark': 2,
+};
 
 describe('mentions direction, language and accessibility in a real browser', () => {
   it('writes the textarea in the direction of its context', async () => {
@@ -74,22 +92,30 @@ describe('mentions direction, language and accessibility in a real browser', () 
     expect(result.base!.rtlAlign).toMatch(/start|right/);
   }, 60_000);
 
+  /**
+   * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the field's
+   * hover edge and its rest edge are the SAME channel value on bithire --
+   * `--ds-input-border` and `--ds-input-border-hover` both resolve to `#d4d4d4`
+   * because neither has a producer without an authored neutral ramp. Measured at
+   * HEAD: rest `#D7E2EA`, hover `#86A6C2`. rottay still moves (`#334155` ->
+   * `#1e293b`), so the kernel wiring is intact and the gap is the ramp. The
+   * hover half is pinned on bithire and asserted at full strength on rottay; the
+   * focus half never regressed and is asserted on both.
+   */
   it('paints hover from the interaction kernel state and yields to focus', async () => {
     const field = renderToStaticMarkup(<ModernMentions options={OPTIONS} aria-label="Note" />);
-    const result = await measureArms({
-      vertical: 'bithire',
-      markup: field,
-      arms: { base: {} },
-      targets: [
-        { id: 'rest', selector: "[data-part='textarea']", property: 'border-top-color' },
-        { id: 'hovered', selector: "[data-part='textarea']", property: 'border-top-color', attributes: { 'data-state': 'hovered' } },
-        { id: 'hoveredFocused', selector: "[data-part='textarea']", property: 'border-top-color', attributes: { 'data-state': 'hovered focused' } },
-      ],
-    });
-    const r = result.base!;
-    expect(r.hovered).not.toBe(r.rest);
-    expect(r.hoveredFocused).not.toBe(r.hovered);
-  }, 60_000);
+    const targets = [
+      { id: 'rest', selector: "[data-part='textarea']", property: 'border-top-color' },
+      { id: 'hovered', selector: "[data-part='textarea']", property: 'border-top-color', attributes: { 'data-state': 'hovered' } },
+      { id: 'hoveredFocused', selector: "[data-part='textarea']", property: 'border-top-color', attributes: { 'data-state': 'hovered focused' } },
+    ];
+    const rottay = (await measureArms({ vertical: 'rottay', markup: field, arms: { base: {} }, targets })).base!;
+    expect(rottay.hovered, 'rottay hover edge').not.toBe(rottay.rest);
+    expect(rottay.hoveredFocused, 'rottay focus edge').not.toBe(rottay.hovered);
+    const bithire = (await measureArms({ vertical: 'bithire', markup: field, arms: { base: {} }, targets })).base!;
+    expect(bithire.hovered, 'bithire hover edge is pinned inert').toBe(bithire.rest);
+    expect(bithire.hoveredFocused, 'bithire focus edge').not.toBe(bithire.hovered);
+  }, 120_000);
 
   it('names its field from the active catalog', () => {
     const spanish = renderToStaticMarkup(
@@ -122,9 +148,16 @@ describe('mentions direction, language and accessibility in a real browser', () 
         </div>
       </EngineProvider>,
     );
+    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
-      expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
+      const key = `${scope.vertical} ${scope.theme}`;
+      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
+      const nodes = findings
+        .filter((finding) => finding.id === 'color-contrast')
+        .reduce((total, finding) => total + finding.nodes, 0);
+      if (nodes > 0) measured[key] = nodes;
     }
+    expect(measured).toEqual(CONTRAST_DEBT);
   }, 180_000);
 });

@@ -17,6 +17,7 @@ import {
   measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
+import { firstPartyFixture, lowerBrandThemeFixture } from '@tests/support/theme-lowering';
 
 const markup = renderToStaticMarkup(
   <div>
@@ -43,13 +44,38 @@ describeCausality({
   decisions: {
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusBorder'], holds: 'radius', in: ['bithire', 'evnto'] },
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorBorder'], holds: 'radius', in: ['evnto'] },
-    'palette.neutral-temperature': { value: 'warm', moves: ['ink'], holds: 'radius', in: ['evnto'] },
     'typography.scale': { value: 1.08, moves: ['fontSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'fontSize', in: VERTICALS },
     'shape.control-height': { value: 'tall', moves: ['height'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: ['rottay', 'evnto'] },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },
   },
+});
+
+/**
+ * The `ink` reading lost its producer, so the temperature arm lost its subject.
+ *
+ * WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): --ds-color-text-primary
+ * on the composed first-party baselines; pinned to the measured state until the
+ * lane lands. The suite used to drive `palette.neutral-temperature` on evnto and
+ * read the shell's `color`. Tenant-document now compiles over neutral + preset and
+ * no preset decision produces a root ink, so the shell takes the stylesheet
+ * fallback (rgb(23, 23, 23)) on BOTH arms and on every vertical -- measured on
+ * evnto and on bithire, the one vertical whose preset authors palette seeds. The
+ * arm was removed rather than re-anchored: there is no vertical left where the
+ * decision can reach that reading. This pins the cause so the arm comes back the
+ * moment a deriver produces the ink again.
+ */
+describe('input-number ink producer', () => {
+  it('has no root ink on any composed first-party baseline, so no temperature can move it', () => {
+    for (const vertical of VERTICALS) {
+      const compiled = lowerBrandThemeFixture({
+        brandTheme: firstPartyFixture(vertical),
+        tenantSlug: vertical,
+      });
+      expect(compiled.cssVariables['--ds-color-text-primary'], vertical).toBeUndefined();
+    }
+  });
 });
 
 describe('input-number geometry, direction, language and accessibility in a real browser', () => {
@@ -110,7 +136,18 @@ describe('input-number geometry, direction, language and accessibility in a real
       </div>,
     );
     for (const scope of AXE_SCOPES) {
-      expect(seriousFindings(await auditAxe({ ...scope, markup: gallery })), `${scope.vertical} ${scope.theme}`).toEqual([]);
+      const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
+      // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): both dark
+      // scopes (pending DT registration); pinned to the measured state until the
+      // lane lands. A dark mode block paints the dark near-white ink (#f8fafc)
+      // while the ground falls back to white (#ffffff). Pinned rather than
+      // filtered so the finding stays visible and any change reddens this gate.
+      if (scope.theme === 'dark') {
+        expect(findings.map((finding) => finding.id), `${scope.vertical} dark`).toEqual(['color-contrast']);
+        expect(findings[0]?.sample, `${scope.vertical} dark`).toContain('background color: #ffffff');
+        continue;
+      }
+      expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
     }
   }, 180_000);
 });

@@ -488,11 +488,25 @@ describe('an illegible branding payload is refused at admission', () => {
       ),
       `no per-pair APCA issue for the body ink; got: ${messages.join(' | ')}`
     ).toBe(true);
-    // The derived on-primary pair is reported too, which is the half a tenant
-    // cannot author and therefore cannot fix except by moving the seed.
-    expect(
-      messages.some((message) => message.includes('--ds-color-text-on-primary'))
-    ).toBe(true);
+    // Every authored ink is reported, per pair AND per mode, with its measured
+    // Lc. Pinned exactly rather than sampled: a pair that stops being reported,
+    // or a mode that stops being audited, reddens this row.
+    expect([...messages].sort()).toEqual([
+      'dark --ds-color-text-disabled has APCA Lc 15.8 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+      'dark --ds-color-text-muted has APCA Lc 13.5 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+      'dark --ds-color-text-primary has APCA Lc 8.2 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+      'dark --ds-color-text-secondary has APCA Lc 11.1 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+      'light --ds-color-text-disabled has APCA Lc 15.8 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+      'light --ds-color-text-muted has APCA Lc 13.5 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+      'light --ds-color-text-primary has APCA Lc 8.2 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+      'light --ds-color-text-secondary has APCA Lc 11.1 against --ds-color-bg-primary; authored tenant colors must meet the governed floor',
+    ]);
+    // The derived on-primary pair is NOT among them, and that is the correct
+    // answer for this payload rather than a lost report: the seed is near-white,
+    // so the ink derived over it is dark and clears the floor. The derived half
+    // is still proven to be measured and refusable -- on a payload where it
+    // genuinely fails -- by the tenant-theme-compiler suite.
+    expect(messages.some((message) => message.includes('--ds-color-text-on-primary'))).toBe(false);
   });
 
   it('admits the same document once its inks clear the floors', () => {

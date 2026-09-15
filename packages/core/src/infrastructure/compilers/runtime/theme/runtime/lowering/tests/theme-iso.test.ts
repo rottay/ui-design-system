@@ -211,6 +211,21 @@ const SEED_ROOT = "var(--ds-color-primary)";
  */
 const MODE_SEEDED_DERIVED_CHANNEL = "--ds-button-primary-color";
 
+/**
+ * What only the TENANT RANK puts in a DB artifact.
+ *
+ * The sidebar tone is arbitrated from the tenant's own authorship rather than
+ * merged as a value, so an un-arbitrated compile of the same merged theme
+ * cannot produce it: both channels sit on the vertical's alias there and on the
+ * customer's own ground/ink in the artifact. Stated as a closed set for the
+ * same reason as `SEED_DERIVED_CHANNELS` -- growing it is a behavioural change
+ * to argue at the compiler, not to absorb here.
+ */
+const TENANT_RANK_ONLY_CHANNELS = [
+  "--ds-sidebar-bg",
+  "--ds-sidebar-text",
+] as const;
+
 function simplePaletteDocument(
   palette: NonNullable<
     NonNullable<
@@ -462,14 +477,16 @@ describe("T0 v1 migration", () => {
     });
     // The silhouette is derived by the `shape` family, at the `derived` rank.
     // This fixture pre-merges the migrated patch into the Theme and compiles it
-    // with EMPTY provenance, so there is no tenant rank in this block and
-    // bithire's own authored button chrome legitimately outranks the pill --
-    // and, for the same reason, the merged 1.2 IS this block's baseline dial.
-    // The tenant-rank behaviour, pill reaching all six channels on BOTH
-    // transports, is proven by `theme-transport-parity.test.ts`; what this line
-    // grades is that the migration produced the decision, above.
+    // with EMPTY provenance, so there is no tenant rank in this block and the
+    // merged 1.2 IS this block's baseline dial. D6-2c-ii (2026-09-15):
+    // tenant-document compiles over neutral + preset; the operand moves 9px ->
+    // 9999px because bithire's authored button chrome used to sit at the
+    // baseline rank and shadow the migrated `pill`, and no preset authors it.
+    // The migrated decision now reaches the channel on this leg too; the
+    // tenant-rank behaviour, pill reaching all six channels on BOTH transports,
+    // stays proven by `theme-transport-parity.test.ts`.
     expect(compiled.cssVariables["--ds-radius-button"]).toBe(
-      "calc(9px / 1.2 * var(--ds-radius-scale, 1))"
+      "calc(9999px / 1.2 * var(--ds-radius-scale, 1))"
     );
     expect(compiled.cssVariables["--ds-elevation-2"]).toBe(
       "0 4px 8px rgba(0,0,0,0.1)"
@@ -753,41 +770,46 @@ describe("T0 DB mode projection through the common compiler", () => {
         ...modeRule,
       };
       // `compiled` is the same lowering run WITHOUT provenance, so it cannot
-      // re-derive the family the tenant's seed owns. The projection therefore
-      // agrees with it everywhere except that closed set — and in dark, where
-      // the tenant states that mode's own seed, the on-primary ink joins it.
+      // re-derive the family the tenant's seed owns.
+      //
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+      // the divergent set goes 6 channels (light) / 8 (dark) -> 0 in both. This
+      // is the `SEED_ROOT_READERS` clause above generalized: the seed deriver
+      // only outranks a value that BAKES a colour of its own, and the retired
+      // authored theme was the only thing baking one. Every channel of the set
+      // now reads the seed root or is already derived from the merged seed, so
+      // it tracks the tenant by cascade in BOTH arms -- still seed-derived,
+      // no longer divergent. The causal assertions below are what keep that
+      // from being read as the channels falling out of the tenant's reach.
       const noProvenance = effectiveModeVariables(compiled, mode);
-      const expectedDerived =
-        mode === "dark"
-          ? [
-              ...SEED_DERIVED_CHANNELS,
-              MODE_SEEDED_DERIVED_CHANNEL,
-              ...SEED_ROOT_READERS,
-            ].sort()
-          : [...SEED_DERIVED_CHANNELS].sort();
+      const expectedDerived: readonly string[] = [];
       const divergent = [
         ...new Set([...Object.keys(projected), ...Object.keys(noProvenance)]),
       ]
         .filter((channel) => projected[channel] !== noProvenance[channel])
         .sort();
       expect(divergent).toEqual(expectedDerived);
-      // In the body -- the mode whose seed the vertical already satisfies --
-      // the channel is the same alias text in both arms, which is exactly why
-      // it drops out of the divergent set there and only there.
-      if (mode !== "dark") {
-        for (const channel of SEED_ROOT_READERS) {
-          expect(projected[channel]).toBe(SEED_ROOT);
-          expect(noProvenance[channel]).toBe(SEED_ROOT);
-        }
+      // The seed-root readers are the same alias text in both arms, in every
+      // mode now rather than only in the body.
+      for (const channel of SEED_ROOT_READERS) {
+        expect(projected[channel]).toBe(SEED_ROOT);
+        expect(noProvenance[channel]).toBe(SEED_ROOT);
       }
 
-      // Causal, per mode: the projection tracks the seed THIS mode was given,
-      // and the un-arbitrated compile is still on the vertical's blue.
+      // Causal, per mode: both arms track the seed THIS mode was given. That
+      // the un-arbitrated arm reaches it too is the point -- the decision is
+      // carried by the merged theme, not by an arbitration over a baked leaf.
       const seed = mode === "dark" ? "#315D4D" : "#2F6B9A";
+      for (const channel of [
+        ...SEED_DERIVED_CHANNELS,
+        MODE_SEEDED_DERIVED_CHANNEL,
+      ]) {
+        expect(projected[channel]).toBe(noProvenance[channel]);
+      }
       expect(projected["--ds-color-link"]).toBe(seed);
       expect(projected["--ds-color-border-focus"]).toBe(seed);
-      expect(noProvenance["--ds-color-link"]).not.toBe(seed);
-      expect(noProvenance["--ds-color-border-focus"]).not.toBe(seed);
+      expect(noProvenance["--ds-color-link"]).toBe(seed);
+      expect(noProvenance["--ds-color-border-focus"]).toBe(seed);
 
       // Everything outside that set is untouched, which is the half of the
       // convergence law provenance must not disturb.
@@ -966,14 +988,23 @@ describe("T0 static/DB convergence (negative mutant)", () => {
     );
 
     // The DB artifact is a single-mode tenant overlay: it carries the variables
-    // that differ from the code-owned vertical baseline, PLUS the family its
-    // own seed re-derives. `expectedDelta` is computed from a compile that was
-    // never told the customer authored `palette.primary`, so it cannot contain
-    // that family — see SEED_DERIVED_CHANNELS.
+    // that differ from the code-owned vertical baseline, PLUS what only the
+    // TENANT RANK produces.
+    //
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // that tenant-rank remainder moves from the seed family to the sidebar
+    // tone. `expectedDelta` is computed without provenance, and it used to miss
+    // the seed family because the baseline BAKED bithire's blue into it, so
+    // only the arbitrated arm could re-derive it. The baseline bakes nothing
+    // now: four of those channels re-derive from the merged seed in the
+    // un-arbitrated arm too and so appear in `expectedDelta`, and the two input
+    // focus channels became indirections over `--ds-color-border-focus` and
+    // appear in neither. Both moves are the seed deriver leaving an
+    // already-tracking value alone, which is why nothing is dropped below.
     expect(dbArtifact.variables).toEqual({
       ...expectedDelta,
       ...Object.fromEntries(
-        SEED_DERIVED_CHANNELS.map((channel) => [
+        TENANT_RANK_ONLY_CHANNELS.map((channel) => [
           channel,
           dbArtifact.variables[channel],
         ])
@@ -994,7 +1025,7 @@ describe("T0 static/DB convergence (negative mutant)", () => {
         channel in dbArtifact.variables &&
         dbArtifact.variables[channel] !== expectedDelta[channel]
     );
-    expect(onlyInArtifact).toEqual([...SEED_DERIVED_CHANNELS].sort());
+    expect(onlyInArtifact).toEqual([...TENANT_RANK_ONLY_CHANNELS].sort());
     expect(onlyInExpected).toEqual([]);
     expect(repainted).toEqual([]);
 
@@ -1460,9 +1491,13 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
   });
 
   it("a union leaf accepts EVERY declared kind and refuses the rest", () => {
-    // `chrome.sidebar.groupFontWeight` is declared `string | number` and the
-    // bithire baseline holds the number 600. The contract, not the baseline,
-    // decides: both are legal, a boolean is not.
+    // `chrome.sidebar.groupFontWeight` is declared `string | number`. The
+    // contract, not the baseline, decides: both are legal, a boolean is not.
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the retired authored theme held the number 600 here and the baseline now
+    // holds nothing, because no preset authors chrome. That is precisely the
+    // law's claim -- an absent baseline decides nothing -- so the leaf is
+    // asserted against its DECLARATION and its emptiness is asserted too.
     const declared = SCHEMA_CHROME.get("sidebar")?.get("groupFontWeight");
     expect(declared?.alternatives.map(alternativeKind).sort()).toEqual([
       "number",
@@ -1473,7 +1508,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
       string,
       Record<string, unknown>
     >;
-    expect(typeof chromeBaseline.sidebar?.groupFontWeight).toBe("number");
+    expect(chromeBaseline.sidebar?.groupFontWeight).toBeUndefined();
     const merge = (value: unknown) =>
       mergeThemePatches(baseline, {
         chrome: { sidebar: { groupFontWeight: value } },

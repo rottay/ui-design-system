@@ -67,8 +67,18 @@ const TOGGLE_SILHOUETTE_ALIAS = "var(--ds-radius-button, var(--ds-radius-full))"
 
 /** The ground the retired appearance compiler assumed for an unstated canvas. */
 const PRE_ISO_ASSUMED_CANVAS = "#FFFFFF";
-/** The ground the single lowering reads off the merged Theme instead. */
-const BITHIRE_AUTHORED_CANVAS = "#F4F8FB";
+/**
+ * The ground the single lowering reads off the merged Theme instead.
+ *
+ * WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
+ * registration: #F4F8FB -> #FFFFFF. bithire is now the neutral foundation plus
+ * its preset document, and the preset states no canvas of its own, so the
+ * ground falls back to the foundation's white -- the same pixel the retired
+ * appearance compiler assumed. The regrounding this constant exists to measure
+ * therefore collapses to a no-op, which is asserted rather than left to be
+ * inferred from a zero.
+ */
+const BITHIRE_AUTHORED_CANVAS = "#FFFFFF";
 /**
  * The seeds `POPULATED_SIMPLE_DOCUMENT` authors AND the compiler still ramps.
  * It authors a third, `accent: "#E2725B"`; its ten steps are pinned retired in
@@ -93,8 +103,18 @@ const POPULATED_ACCENT_RAMP_RETIRED: readonly RetiredChannel[] = RAMP_STEPS.map(
   })
 );
 
-/** The compiled bithire baseline's own radius dial. */
-const BITHIRE_RADIUS_DIAL = "1.25";
+/**
+ * The compiled bithire baseline's own radius dial.
+ *
+ * WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): bithire radius
+ * base, 1.25 -> 0.8. bithire is now the neutral foundation plus its preset
+ * document, and the preset's `shape.radius-scale` is 0.8 where the retired
+ * authored theme carried 1.25. The preset deciding is the correct semantics; it
+ * is registered for DER-07 to confirm, not reverted. Every folded literal below
+ * moves with this divisor and no resting pixel law changes: the fold still
+ * divides by the baseline's own scale before multiplying by it.
+ */
+const BITHIRE_RADIUS_DIAL = "0.8";
 
 /**
  * Channels the populated document no longer restates, and the reason each one
@@ -115,6 +135,16 @@ const POPULATED_WITHDRAWN: readonly RetiredChannel[] = [
   {
     token: "--ds-color-primary-foreground",
     because: "benign: #ffffff under both the tenant seed and the baseline",
+  },
+  {
+    token: "--ds-input-border-focus",
+    because:
+      "D6-2c-ii: the preset bakes no input focus leaf, so the tenant's derivation equals the baseline",
+  },
+  {
+    token: "--ds-input-shadow-focus",
+    because:
+      "D6-2c-ii: the preset bakes no input focus leaf, so the tenant's derivation equals the baseline",
   },
   {
     token: ON_PRIMARY_INK_TOKEN,
@@ -165,9 +195,13 @@ const POPULATED_SEED_DERIVED: Readonly<Record<string, string>> = {
   "--ds-color-border-focus": "#0F766E",
   "--ds-color-link": "#0F766E",
   "--ds-color-link-hover": "#00635C",
-  "--ds-input-border-focus": "var(--ds-color-border-focus, var(--ds-color-primary))",
-  "--ds-input-shadow-focus":
-    "0 0 0 3px color-mix(in srgb, var(--ds-color-border-focus, var(--ds-color-primary)) 20%, transparent)",
+  // D6-2c-ii (2026-09-15): `--ds-input-border-focus` and
+  // `--ds-input-shadow-focus` left this list for `POPULATED_WITHDRAWN`. They
+  // were seed-derived because the retired bithire theme BAKED an input focus
+  // leaf for the tenant's derivation to displace; the preset bakes none, so the
+  // derivation now equals the baseline and the delta inherits it. The same
+  // re-partition is recorded in `provenance-acceptance.test.ts`, which owns the
+  // family's closure proof.
 };
 
 /**
@@ -184,30 +218,21 @@ const W4_RETIRED: readonly RetiredChannel[] = [
     token: "--ds-radius-md",
     because: "renamed to the dial operand `--ds-radius-md-base`",
   },
-  {
-    token: "--ds-density-scale",
-    because: "baseline-identical: the bithire baseline also rests at 0.9",
-  },
-  {
-    token: "--ds-elevation-1",
-    because: "baseline-identical: the bithire baseline is already flat",
-  },
-  {
-    token: "--ds-elevation-2",
-    because: "baseline-identical: the bithire baseline is already flat",
-  },
-  {
-    token: "--ds-elevation-3",
-    because: "baseline-identical: the bithire baseline is already flat",
-  },
-  {
-    token: "--ds-layout-header-height",
-    because: "baseline-identical: the bithire baseline also authors 56px",
-  },
-  {
-    token: "--ds-shell-header-block-size",
-    because: "baseline-identical: the bithire baseline also authors 56px",
-  },
+  // D6-2c-ii (2026-09-15): `--ds-density-scale` left this list. It was retired
+  // as baseline-identical because the retired bithire theme also rested at 0.9;
+  // the preset does not, so the tenant's authored 0.9 reaches the delta again
+  // and equals the frozen fixture's own value -- which is why it needs no
+  // declaration at all now, and is asserted by the plain equality loop.
+  // D6-2c-ii: `--ds-elevation-1`, `-2` and `-3` left this list for the same
+  // reason as `--ds-density-scale` above -- the preset states no elevation
+  // ladder where the retired theme was already flat, so this document's `flat`
+  // posture reaches the delta and lands on the frozen fixture's own values.
+  // D6-2c-ii: `--ds-layout-header-height` and `--ds-shell-header-block-size`
+  // left this list on the same ground -- the preset authors no header height,
+  // so the tenant's 56px reaches the delta and lands on the frozen fixture's
+  // own value. Every removal above collapses the same way: what the retired
+  // theme baked and the delta therefore inherited, the preset leaves to the
+  // tenant, and the frozen capture is what the tenant produces.
 ];
 
 /**
@@ -226,6 +251,27 @@ const W4_RETIRED: readonly RetiredChannel[] = [
  * back ON the fixture, and that is load-bearing". Absence would red here too,
  * so the restoration cannot be undone by dropping the channels instead.
  */
+/**
+ * The channels the `inverse` tone used to produce for the W4 pin document.
+ *
+ * WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
+ * registration: `navigation.sidebarTone: "inverse"` is INERT on bithire over
+ * neutral + preset. Its fan-out equals the baseline, so every channel it used
+ * to produce leaves the delta. The two the tenant authors EXPLICITLY are
+ * unaffected and stay in `W4_RESTORED`, which is what keeps this a statement
+ * about the tone and not about the sidebar.
+ * `canonical-digest-identity.test.ts` pins the same four.
+ */
+const W4_INERT_TONE_RETIRED: readonly RetiredChannel[] = [
+  "--ds-sidebar-item-bg-active",
+  "--ds-sidebar-item-bg-hover",
+  "--ds-sidebar-item-color-active",
+  "--ds-sidebar-text-muted",
+].map((token) => ({
+  token,
+  because: "D6-2c-ii: the `inverse` tone is inert over neutral + preset",
+}));
+
 const W4_RESTORED: readonly RetiredChannel[] = [
   {
     token: "--ds-sidebar-bg",
@@ -253,7 +299,7 @@ const W4_RESTORED: readonly RetiredChannel[] = [
  * The fold divides by the compiled baseline's own `--ds-radius-scale` before
  * multiplying by it, so the resting pixel reproduces the authored literal
  * exactly. That divisor is a property of the vertical, not a constant — the
- * bithire baseline authors `1.25` — so it is declared per call site alongside
+ * bithire baseline authors `0.8` — so it is declared per call site alongside
  * the folded channels. A vertical resting at `1` folds to the bare literal.
  */
 const dialedRadius = (authored: string, divisor: string): string =>
@@ -347,7 +393,36 @@ interface DeclaredDivergences {
   readonly seedDerived?: Readonly<Record<string, string>>;
   /** Channels a fix returned to the frozen fixture's own value. */
   readonly restored?: readonly RetiredChannel[];
+  /**
+   * Leaves of the frozen `normalizedAppearance` the compiling document had to
+   * move to stay ADMISSIBLE, keyed by dotted path to the new value.
+   *
+   * The byte-identity law is a claim about the compiler, not about the fixture
+   * files: it says the same authored decisions still normalize and emit the
+   * same way. A decision the admission floor no longer accepts cannot be
+   * carried unchanged, so it is declared here -- named, one leaf at a time, and
+   * applied to the FIXTURE side before the comparison -- rather than dropping
+   * the fixture or loosening the comparison. Everything else stays byte-exact.
+   */
+  readonly appearanceMoved?: Readonly<Record<string, string>>;
 }
+
+/** Apply a dotted-path leaf override onto a copy of a frozen value. */
+const withAppearanceMoved = (
+  appearance: unknown,
+  moved: Readonly<Record<string, string>>
+): unknown => {
+  const next = structuredClone(appearance) as Record<string, unknown>;
+  for (const [path, value] of Object.entries(moved)) {
+    const segments = path.split(".");
+    const leaf = segments.pop()!;
+    let node = next;
+    for (const segment of segments) node = node[segment] as Record<string, unknown>;
+    expect(node[leaf], `${path} must exist in the frozen fixture`).toBeDefined();
+    node[leaf] = value;
+  }
+  return next;
+};
 
 function expectStableEmission(
   artifact: TenantThemeArtifact,
@@ -360,7 +435,14 @@ function expectStableEmission(
   const moved = declared.moved ?? {};
   const retiredTokens = retired.map((entry) => entry.token);
   expect(JSON.stringify(artifact.normalizedAppearance)).toBe(
-    JSON.stringify(fixture.normalizedAppearance)
+    JSON.stringify(
+      declared.appearanceMoved
+        ? withAppearanceMoved(
+            fixture.normalizedAppearance,
+            declared.appearanceMoved
+          )
+        : fixture.normalizedAppearance
+    )
   );
   expect(JSON.stringify(artifact.scopes)).toBe(JSON.stringify(fixture.scopes));
   expect(artifact.adjustments).toBeUndefined();
@@ -480,7 +562,13 @@ const POPULATED_SIMPLE_DOCUMENT = {
     motion: { intensity: 0.62, durationScale: 1.15, ambient: "subtle" },
     shape: { buttonStyle: "soft" },
     surfaces: { elevation: "elevated" },
-    navigation: { sidebarTone: "subtle" },
+    // D6-2c-ii (2026-09-15): "subtle" -> "strong", the same move as the copy of
+    // this document in `provenance-acceptance.test.ts`. `subtle` is no longer
+    // admissible on bithire: its derived `--ds-sidebar-text` / `--ds-sidebar-bg`
+    // pair is two references the APCA checker cannot read, so admission fails
+    // closed. Pinned in `tenant-theme-compiler.test.ts` under "refusals the
+    // neutral baseline introduces" and registered pending DT adjudication.
+    navigation: { sidebarTone: "strong" },
   },
 } as const;
 
@@ -556,25 +644,43 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
         if (after[step] !== before[step]) regrounded[token] = after[step];
       }
     }
-    // The darkest steps land on the same pixel under either ground, so a
-    // silent collapse of the whole map into a no-op would be visible here.
-    // 26 -> 18: the eight that left are the accent steps this ground used to
-    // move, now retired below. The darkest steps still land on the same pixel
-    // under either ground, so a silent collapse stays visible.
-    expect(Object.keys(regrounded).length).toBe(18);
+    // 26 -> 18 (accent steps retired) -> 0. D6-2c-ii: the two grounds are now
+    // the SAME pixel, so the regrounding is a no-op by construction and the map
+    // is empty. This is the one case where an empty map is not a silent
+    // collapse, so it is stated twice -- the count below, and the identity of
+    // the two grounds above it, which is what makes the emptiness derivable
+    // rather than merely observed. Every ramp step therefore still equals the
+    // frozen fixture, which the loop above asserts step for step.
+    expect(PRE_ISO_ASSUMED_CANVAS).toBe(BITHIRE_AUTHORED_CANVAS);
+    expect(Object.keys(regrounded)).toHaveLength(0);
 
     const additions = expectStableEmission(artifact, fixture, {
-      retired: POPULATED_ACCENT_RAMP_RETIRED,
+      // D6-2c-ii (2026-09-15): the one decision this document had to move to
+      // stay admissible; see the fixture's own note above.
+      appearanceMoved: { "general.navigation.sidebarTone": "strong" },
+      retired: [
+        ...POPULATED_ACCENT_RAMP_RETIRED,
+        {
+          token: "--ds-sidebar-item-color-active",
+          because:
+            "D6-2c-ii: under the declared `strong` tone the active row's ink equals the baseline, so the delta stops restating it",
+        },
+      ],
       withdrawn: POPULATED_WITHDRAWN,
       seedDerived: POPULATED_SEED_DERIVED,
       moved: {
         ...regrounded,
-        // The canonical `sidebarToneToChrome` lowering replaced the appearance
-        // path's flat recipe. `subtle` now plates the active row on
-        // `--ds-color-primary-100` and inks it with `--ds-color-primary-900`;
-        // the old pairing put the raw primary seed on that same tint, which is
-        // the sub-floor combination the APCA text-contrast law rejects.
-        "--ds-sidebar-item-color-active": "var(--ds-color-primary-900)",
+        // D6-2c-ii (2026-09-15): the five the declared `appearanceMoved` above
+        // carries with it. `strong` plates the rail on the primary ramp where
+        // `subtle` sat on the neutral surface roles, so every channel the tone
+        // owns moves once, together, and for that one declared reason. The
+        // sixth, `--ds-sidebar-item-color-active`, is withdrawn rather than
+        // moved and is declared as such below.
+        "--ds-sidebar-bg": "var(--ds-color-primary-900)",
+        "--ds-sidebar-text": "var(--ds-color-white)",
+        "--ds-sidebar-text-muted": "var(--ds-color-neutral-400)",
+        "--ds-sidebar-item-bg-active": "var(--ds-color-primary-700)",
+        "--ds-sidebar-item-bg-hover": "var(--ds-color-primary-800)",
       },
     });
     expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(10);
@@ -619,27 +725,37 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       // join `--ds-elevation-1..3`, which the baseline already matched and
       // `W4_RETIRED` already records.
       "--ds-density-mode-factor",
+      // D6-2c-ii (2026-09-15): role 0 joined the ladder's delta. The preset
+      // states no elevation ladder of its own, where the retired theme stated
+      // `none` for role 0, so this document's `flat` posture now moves it like
+      // the other six. `provenance-acceptance.test.ts` pins the same move from
+      // the posture-floor side.
+      "--ds-elevation-0",
       "--ds-elevation-4",
       "--ds-elevation-5",
       "--ds-elevation-6",
-      "--ds-input-border-focus",
-      "--ds-input-shadow-focus",
-      // 04e835647 (toggle silhouette). The toggle deriver emits both corners,
-      // a pill unless the theme states a `surfaces.buttonStyle`; this document
-      // states `soft` and the bithire baseline states none, so the tenant's
-      // silhouette alias enters the delta. Values pinned below.
-      "--ds-toggle-dot-border-radius",
-      "--ds-toggle-track-border-radius",
+      // D6-2c-ii: `--ds-input-border-focus` and `--ds-input-shadow-focus` left
+      // this list with `POPULATED_SEED_DERIVED`, and the two toggle corners
+      // left it because the preset now STATES a silhouette -- so the tenant's
+      // `soft` matches the baseline and the alias stops being a delta member.
+      // Both are asserted two-sided below.
     ]);
     expect(artifact.variables["--ds-color-primary-rgb"]).toBe("15, 118, 110");
     expect(artifact.variables["--ds-color-secondary-rgb"]).toBe("140, 109, 70");
-    for (const corner of TOGGLE_CORNERS) {
-      expect(artifact.variables[corner], corner).toBe(TOGGLE_SILHOUETTE_ALIAS);
-    }
+    // D6-2c-ii, two-sided. The corner is the silhouette ALIAS, not a resolved
+    // radius: a theme that states any `surfaces.buttonStyle` gets the same
+    // string. The preset states one (`sharp`) where the retired theme stated
+    // none, so baseline and tenant now emit byte-identical corners and the
+    // delta withdraws them -- while the silhouettes themselves still differ,
+    // through `--ds-radius-button`, which is where that difference belongs.
     expect(
       FIRST_PARTY_BASELINES.bithire.surfaces?.buttonStyle,
-      "the baseline states no silhouette, which is why the tenant's alias is a delta member"
-    ).toBeUndefined();
+      "the baseline states a silhouette, which is why the tenant's alias is no longer a delta member"
+    ).toBe("sharp");
+    for (const corner of TOGGLE_CORNERS) {
+      expect(artifact.variables[corner], corner).toBeUndefined();
+    }
+    expect(TOGGLE_SILHOUETTE_ALIAS).toContain("--ds-radius-button");
   });
 
   it("keeps an advanced document ABSENT of every W4 field byte-identical", () => {
@@ -662,7 +778,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     const additions = expectStableEmission(artifact, fixture, {
       dialFolded,
       dialDivisor: BITHIRE_RADIUS_DIAL,
-      retired: W4_RETIRED,
+      retired: [...W4_RETIRED, ...W4_INERT_TONE_RETIRED],
       restored: W4_RESTORED,
     });
     expect(additions).toEqual([
@@ -673,14 +789,35 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-button-sm-radius",
       "--ds-button-xl-radius",
       "--ds-button-xs-radius",
-      DENSITY_MODE_FACTOR_TOKEN,
-      // 04e835647 (toggle silhouette): this document states `pill`, so the
-      // same two corners enter the delta as the silhouette alias.
-      ...TOGGLE_CORNERS,
+      // D6-2c-ii (2026-09-15): five channels joined this list and one left it,
+      // all for the one reason -- what the retired theme BAKED and the delta
+      // therefore inherited, the preset leaves unstated, so the tenant's own
+      // decision reaches the delta instead. The whole `flat` ladder now moves
+      // (role 0 and roles 4..6; 1..3 land on the frozen fixture's values and
+      // need no declaration), the `--ds-radius-md` operand no longer matches
+      // the baseline's, and the authored header height reaches the shell
+      // channel. `--ds-density-mode-factor` went the other way: the preset
+      // rests at this document's own `compact`, so the factor equals the
+      // baseline and the delta withdraws it, which the two-sided assertion
+      // below states.
+      "--ds-elevation-0",
+      "--ds-elevation-4",
+      "--ds-elevation-5",
+      "--ds-elevation-6",
+      "--ds-radius-md-base",
+      "--ds-shell-topbar-height",
     ]);
-    expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("0.85");
+    expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBeUndefined();
+    expect(
+      FIRST_PARTY_BASELINES.bithire.surfaces?.density,
+      "the factor is withdrawn because the baseline already rests at this document's density"
+    ).toBe("compact");
+    // D6-2c-ii: the silhouette alias is no longer a delta member here either.
+    // The preset states a silhouette, so baseline and tenant emit the same
+    // alias string and the corners resolve identically; see the
+    // populated-simple block for the two-sided form of this proof.
     for (const corner of TOGGLE_CORNERS) {
-      expect(artifact.variables[corner], corner).toBe(TOGGLE_SILHOUETTE_ALIAS);
+      expect(artifact.variables[corner], corner).toBeUndefined();
     }
     // `--ds-radius-md` leaving the delta must mean "equal to the baseline",
     // never "the override stopped arriving". The same document with a radius
@@ -716,30 +853,25 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     // with `neutral-100` in dark instead of the resting `white`; the other
     // four are the dark halves of the authored card/table/header chrome.
     //
-    // This block is UNCHANGED by the sidebar restoration above, and that is
-    // load-bearing rather than incidental. The tenant states
-    // `chrome.sidebar.bg`/`.text` once, at the base, without qualifying a mode
-    // — so it has stated them for every mode, and bithire's own
-    // `modes.dark.chrome.sidebar` must not take them back. The two values that
-    // would otherwise appear here are asserted to exist on the baseline, so
-    // this stays a proof that they LOSE rather than a vacuous absence.
-    const bithireDark = FIRST_PARTY_BASELINES.bithire.modes?.dark?.chrome?.sidebar;
-    expect(bithireDark?.bg, "the vertical does author a dark sidebar bg").toBe(
-      "#0a0f18"
-    );
-    expect(bithireDark?.text, "the vertical does author a dark sidebar ink").toBe(
-      "var(--ds-color-text-secondary)"
-    );
-    expect(artifact.modeDeltas?.length).toBe(1);
-    expect(artifact.modeDeltas?.[0]?.mode).toBe("dark");
-    expect(artifact.modeDeltas?.[0]?.variables).toEqual({
-      "--ds-card-bg": "#151d2b",
-      "--ds-layout-header-bg":
-        "color-mix(in srgb, var(--ds-surface-card) 92%, transparent)",
-      "--ds-sidebar-item-color-active": "var(--ds-color-neutral-100)",
-      "--ds-table-cell-padding": "0.875rem 1rem",
-      "--ds-table-header-bg": "#151d2b",
-    });
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
+    // registration: this block's subject is gone on BOTH sides, and both are
+    // pinned so the absence is a measured statement and not a vacuous pass.
+    // The preset leaves `modes.dark.chrome.sidebar` unauthored where the
+    // retired theme authored bg #0a0f18 and ink var(--ds-color-text-secondary),
+    // so there is nothing left for the tenant's base leaf to outrank; and the
+    // `inverse` tone is inert over neutral + preset, so its dark ink leaves the
+    // delta with it. The dark halves of the authored card, header and table
+    // chrome went the same way -- they were the BASELINE's `modes.dark` values
+    // re-stated over the tenant's base leaves, and the preset authors no dark
+    // chrome either -- so this document now produces NO mode delta at all.
+    // Every input to that conclusion is pinned, so a preset that starts
+    // authoring a dark block reds here rather than silently repainting.
+    const bithireDark = FIRST_PARTY_BASELINES.bithire.modes?.dark?.chrome;
+    expect(bithireDark?.sidebar?.bg, "the preset leaves the dark sidebar bg unauthored").toBeUndefined();
+    expect(bithireDark?.sidebar?.text, "the preset leaves the dark sidebar ink unauthored").toBeUndefined();
+    expect(bithireDark?.cardComponent?.bg, "and the dark card bg with it").toBeUndefined();
+    expect(bithireDark?.table?.headerBg, "and the dark table header bg with it").toBeUndefined();
+    expect(artifact.modeDeltas ?? []).toHaveLength(0);
     // With the sidebar pair restored, the css body needs no value rewrite at
     // all: retirements and the radius dial are the only two things still
     // standing between this document and the frozen fixture, byte for byte.
@@ -758,10 +890,15 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
           "--ds-button-md-radius",
           "--ds-button-lg-radius",
           "--ds-button-xl-radius",
-          // The two toggle corners (04e835647), trimmed for the same reason:
-          // the frozen fixture predates them and their values are pinned by
-          // the `additions` list above.
-          ...TOGGLE_CORNERS,
+          // D6-2c-ii: the six the preset stopped baking, trimmed on the
+          // artifact side for the same reason -- the frozen fixture predates
+          // them and the `additions` list above pins every one by name.
+          "--ds-elevation-0",
+          "--ds-elevation-4",
+          "--ds-elevation-5",
+          "--ds-elevation-6",
+          "--ds-radius-md-base",
+          "--ds-shell-topbar-height",
         ]
       )
     ).toBe(
@@ -771,7 +908,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
           dialFolded,
           BITHIRE_RADIUS_DIAL
         ),
-        W4_RETIRED.map((entry) => entry.token)
+        [...W4_RETIRED, ...W4_INERT_TONE_RETIRED].map((entry) => entry.token)
       )
     );
   });

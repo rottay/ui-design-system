@@ -80,55 +80,13 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
   },
 );
 
-// PARTIALLY EXCISED (SEV-2). This describe opened by reading the deleted
-// `artifacts/bithire/_source/extension.css` into `declared`, so it threw at
-// collection. Three assertions over `declared` are gone: "declares no custom
-// property at all", the `declared.has(property)` half of the C1-retirement
-// rows, and the `declared.get(property)` shadow check. All three were forms of
-// "the extension declares nothing", which
-// `scripts/check/verticals/single-author/index.mjs` law G2 now makes unconditional.
-// Every COMPILER-side assertion survives untouched below — those are the ones
-// that pin where the four channels went, and they never read a file.
-describe('bithire channels the retired extension used to own', () => {
-  const compiledBithire = lowerBrandThemeFixture({
-    brandTheme: bithireBrandTheme,
-    tenantSlug: 'bithire',
-  });
-  // MASS C3-BITHIRE-ALL drained the file, so "does not shadow" is no longer a
-  // per-channel question: the extension declares nothing and can shadow
-  // nothing. What is worth pinning is where the four channels it used to own
-  // alone went. Three moved to the BrandTheme with their value intact; the
-  // fourth left with the C1 roster (app-only, zero productive Core readers)
-  // and now has no author anywhere.
-  const migratedToCompiler: Record<string, string> = {
-    '--ds-surface-icon-bg':
-      'color-mix( in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card) )',
-    '--ds-premium-card-bg': 'var(--ds-surface-card)',
-    '--ds-premium-card-sheen': 'none',
-  };
-  const retiredWithC1 = ['--ds-shell-breadcrumb-bg'];
-
-  it.each(Object.entries(migratedToCompiler))(
-    'compiles %s with the value the extension used to declare',
-    (property, expected) => {
-      expect(bareCssValue(compiledBithire.cssVariables[property])).toBe(bareCssValue(expected));
-    },
-  );
-
-  it.each(retiredWithC1)('leaves %s unauthored after the C1 retirement', (property) => {
-    expect(compiledBithire.cssVariables[property]).toBeUndefined();
-  });
-
-  it('serves the previously extension-shadowed channels from the compiled block', () => {
-    const compiled = compiledBithire;
-    // `--ds-workspace-shell-shadow` is the reason this list shrank: the
-    // extension declared `0 1px 2px rgba(20,40,59,.06)` inside the CLEAR MODE
-    // GUARD, so the compiled elevation never rendered.
-    // `--ds-radius-lg` is deliberately absent: it survives in the declared dark
-    // mode block, which authors a mode the compiler does not emit and therefore
-    // shadows nothing in the shipped state.
-    for (const property of ['--ds-table-sheen', '--ds-workspace-shell-shadow', '--ds-command-glow']) {
-      expect(compiled.cssVariables[property]).toBeDefined();
-    }
-  });
-});
+// RETIRED (D6-2c-ii, 2026-09-15): the describe that pinned the four channels
+// the drained `artifacts/bithire/_source/extension.css` used to own. Its whole
+// subject was a migration between two authorities that are both gone -- the
+// extension file (drained by MASS C3-BITHIRE-ALL) and the authored bithire
+// theme (retired by this lot). Every one of those channels
+// (--ds-surface-icon-bg, --ds-premium-card-bg, --ds-premium-card-sheen,
+// --ds-table-sheen, --ds-workspace-shell-shadow, --ds-command-glow) is a
+// pass-through of an authored chrome leaf in `chrome-variables`, never a
+// derivation, so no engine property survives the values it pinned. The
+// three-vertical parity gate above is this file's live subject.

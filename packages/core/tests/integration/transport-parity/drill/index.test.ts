@@ -25,10 +25,21 @@ const SLUG = "transport-parity-drill";
 const INTENT_CONTRACT = "@/foundation/contracts/composition/tenants/themes/intent";
 const ARTIFACT_ASSEMBLY = "@/infrastructure/compilers/composition/tenant-theme";
 
+/**
+ * The fixture decision must MOVE, and it must move `--ds-state-*`: MUTANT 2
+ * deletes a moved channel with that prefix, so a fixture that moves nothing
+ * would leave both the published delta and the moved set empty and the mutant
+ * would report a passing gate against an empty comparison.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+ * bithire's preset decides `states.emphasis: "strong"`, so the old fixture value
+ * became the baseline itself. Re-anchored on the measured neighbour: `subtle`
+ * moves 6 channels, all of them `--ds-state-*` (0 -> 6).
+ */
 const DOCUMENT = {
   version: 2,
   plan: "pro",
-  decisions: { "states.emphasis": "strong" },
+  decisions: { "states.emphasis": "subtle" },
 } as TenantThemeDocumentV2;
 
 afterEach(() => {

@@ -105,6 +105,31 @@ const managementDbVariables = compileTenantThemeConfig(
   { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire")! }
 ).variables;
 
+/**
+ * The same document at a radius the bithire vertical does NOT already carry,
+ * so the pin above records "the document agrees with its vertical" rather than
+ * "the door stopped emitting the channel".
+ */
+const radiusScaleFor = (radiusScale: number): string | undefined =>
+  compileTenantThemeConfig(
+    hydrateTenantThemeConfig(
+      {
+        ...managementDocument,
+        appearance: {
+          ...managementDocument.appearance,
+          shape: { ...managementDocument.appearance.shape, radiusScale },
+        },
+      },
+      {
+        tenantId: "tenant_themanagementmiami",
+        slug: "themanagementmiami",
+        verticalKey: "bithire",
+        rowVersion: 1,
+      }
+    ),
+    { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire")! }
+  ).variables["--ds-radius-scale"];
+
 const bithireStaticConfig = {
   slug: "bithire",
   vertical: "bithire",
@@ -147,7 +172,17 @@ describe("tenant identity and locale are independent runtime axes", () => {
     expect(managementDbVariables["--ds-font-family-heading"]).toContain(
       "--ds-font-pack-editorial-display"
     );
-    expect(managementDbVariables["--ds-radius-scale"]).toBe("0.8");
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): the bithire
+    // radius base; pinned to the measured state until the lane lands. The
+    // document asks for `radiusScale: 0.8`, which the authored theme's 1.25
+    // baseline made a real delta; the bithire preset's own
+    // `shape.radius-scale` IS 0.8, so the document now agrees with its vertical
+    // and the channel is correctly absent from the tenant delta. The mechanism
+    // is asserted rather than assumed, so an emitter that stopped emitting
+    // altogether could not hide behind this pin.
+    expect(managementDocument.appearance.shape.radiusScale).toBe(0.8);
+    expect(managementDbVariables["--ds-radius-scale"]).toBeUndefined();
+    expect(radiusScaleFor(1.1)).toBe("1.1");
     expect(bithireStaticConfig.vertical).toBe(management.vertical);
   });
 

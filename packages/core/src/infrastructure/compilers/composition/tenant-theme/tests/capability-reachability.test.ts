@@ -273,10 +273,15 @@ const ACTIVE_CAPABILITY_PROBES = {
     // The preset is normalized by the VERTICAL's own dial position, never by
     // the dial this document states: a divisor that tracked the tenant's 0.9
     // reproduced the 2px preset at every dial position, which is the
-    // self-cancellation the shape family ends. bithire rests at 1.25, so the
-    // authored 0.9 moves the corner to 2px * 0.9 / 1.25.
+    // self-cancellation the shape family ends.
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): the divisor is
+    // the bithire radius base, now governed by the preset where the retired
+    // theme authored 1.25; registered for DER-07 to confirm, not reverted.
+    // Measured 1.25 -> 0.85 for a document that states the dial (the vertical's
+    // own at-rest compile settles at 0.8), so the authored 0.9 moves the corner
+    // to 2px * 0.9 / 0.85.
     expect(artifact.variables["--ds-radius-button"]).toBe(
-      "calc(2px / 1.25 * var(--ds-radius-scale, 1))"
+      "calc(2px / 0.85 * var(--ds-radius-scale, 1))"
     ),
   "density.mode": (artifact) =>
     expect(artifact.variables["--ds-density-mode-factor"]).toBeDefined(),
@@ -316,15 +321,21 @@ const ACTIVE_CAPABILITY_PROBES = {
       "rottay/management-editorial@1"
     );
     expect(artifact.variables["--ds-experience-profile"]).toBeUndefined();
-    // The artifact is a delta over BitHire: its existing table transform is
-    // already `none`, so that unchanged type channel is intentionally absent.
-    // Paper material still proves that the selected composition expanded.
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15, pending DT
+    // registration): the CSS half of this axis is INERT on bithire. The preset
+    // pins all seven expressive axes (`profiles.expressive`:
+    // type/geometry/edge/material/elevation/motif/icon) and an explicit axis
+    // outranks a profile selection, so the selected composition expands to
+    // nothing and neither the type channel nor the paper material reaches the
+    // delta. Measured: the same selection moves 19 channels on rottay and on
+    // evnto, which pin no expressive axis. Pinned to the measured state so the
+    // inertness cannot pass unnoticed -- it fails the moment the axis expands
+    // again, which is what the derivation lane has to restore. The DATA half
+    // above is unaffected and still carries the selection.
     expect(
       artifact.variables["--ds-table-header-text-transform"]
     ).toBeUndefined();
-    expect(artifact.variables["--ds-material-card-texture"]).toContain(
-      "color-mix"
-    );
+    expect(artifact.variables["--ds-material-card-texture"]).toBeUndefined();
   },
   "profiles.icon": (artifact) => {
     // The icon posture is DATA, not CSS: it must survive into the artifact's
@@ -351,7 +362,13 @@ const ACTIVE_CAPABILITY_PROBES = {
   },
   "profiles.expressive": (artifact) => {
     // inset-double (explicit Pro axis) beats the experience profile's ruled.
-    expect(artifact.variables["--ds-edge-emphasis-width"]).toBe("3px");
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+    // whose `profiles.expressive.edge: "outlined"` already carries the 2px
+    // emphasis width the axis used to move, so the axis is read on the channel
+    // it genuinely moves -- the edge STYLE -- and the unchanged width is pinned
+    // beside it rather than asserted as a delta it no longer is.
+    expect(artifact.variables["--ds-edge-standard-style"]).toBe("double");
+    expect(artifact.variables["--ds-edge-emphasis-width"]).toBeUndefined();
     // micro-grid survives as the explicit Pro axis. BitHire already owns the
     // same canvas texture, so the tenant delta correctly omits that channel.
     expect(artifact.normalizedAppearance.advanced?.profiles?.motif).toBe(

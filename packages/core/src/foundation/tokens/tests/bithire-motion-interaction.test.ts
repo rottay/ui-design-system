@@ -49,9 +49,31 @@ describe('bithire brand compiler emits the §2.6 motion vocabulary', () => {
     );
   });
 
-  it('emits the two easing families of §2.6', () => {
-    expect(cssVariables['--ds-ease-standard']).toBe('cubic-bezier(0.2, 0, 0, 1)');
-    expect(cssVariables['--ds-ease-exit']).toBe('cubic-bezier(0.4, 0, 1, 1)');
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+  // bithire's preset states `motion.character: "mechanical"`, which the
+  // character deriver defines as ONE symmetric ease for both families, where
+  // the retired authored theme left the `organic` default in place:
+  // --ds-ease-standard cubic-bezier(0.2, 0, 0, 1) -> cubic-bezier(0.4, 0, 0.2, 1),
+  // --ds-ease-exit cubic-bezier(0.4, 0, 1, 1) -> cubic-bezier(0.4, 0, 0.2, 1).
+  // The §2.6 pair is kept under test on the `organic` arm below, so the
+  // vocabulary stays pinned rather than moving with bithire's own choice.
+  it('emits one symmetric ease for both families, the mechanical character it states', () => {
+    expect(bithireBrandTheme.motion?.character).toBe('mechanical');
+    expect(cssVariables['--ds-ease-standard']).toBe('cubic-bezier(0.4, 0, 0.2, 1)');
+    expect(cssVariables['--ds-ease-exit']).toBe('cubic-bezier(0.4, 0, 0.2, 1)');
+  });
+
+  it('emits the two easing families of §2.6 on the organic character', () => {
+    const organic = structuredClone(bithireBrandTheme) as unknown as {
+      motion?: { character?: string };
+    };
+    if (organic.motion) organic.motion.character = 'organic';
+    const compiled = lowerBrandThemeFixture({
+      brandTheme: organic as unknown as typeof bithireBrandTheme,
+      tenantSlug: 'bithire-organic',
+    });
+    expect(compiled.cssVariables['--ds-ease-standard']).toBe('cubic-bezier(0.2, 0, 0, 1)');
+    expect(compiled.cssVariables['--ds-ease-exit']).toBe('cubic-bezier(0.4, 0, 1, 1)');
   });
 });
 
@@ -64,7 +86,10 @@ describe('bithire artifact carries the ledger interaction defaults (§8.2)', () 
     expect(artifact).toContain('--ds-motion-instant: 120ms');
     expect(artifact).toContain('--ds-motion-calm: 200ms');
     expect(artifact).toContain('--ds-motion-deliberate: 320ms');
-    expect(artifact).toContain('--ds-ease-standard: cubic-bezier(0.2, 0, 0, 1)');
+    // The easing follows `motion.character`, which bithire's preset states as
+    // `mechanical`; the §2.6 organic pair is asserted on the organic arm above,
+    // where the character that produces it is stated.
+    expect(artifact).toContain('--ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1)');
   });
 
   it('compiles the tone channels the ledger interaction layer binds to', () => {

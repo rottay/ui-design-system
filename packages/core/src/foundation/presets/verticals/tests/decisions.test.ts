@@ -11,6 +11,7 @@ import { BITHIRE_IDENTITY_CANDIDATES, bithireIdentityCandidate } from "@/foundat
 import { FIRST_PARTY_VERTICALS } from "@/foundation/presets/verticals/roster";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import { admitDocument } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/runtime/document-v2/presentation/admission";
+import { compileThemeIntent, staticThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 
 import { VERTICAL_THEME_PRESETS, getVerticalThemePreset, type VerticalThemePreset } from "..";
 
@@ -129,47 +130,91 @@ describe("WO-DER-06 — the first-party verticals as decisions", () => {
   });
 
   it("the three presets compile for their vertical through the v2 door", () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // `artifact.variables` is the tenant DELTA over the vertical baseline, and
+    // the preset document IS that baseline now, so re-sending it as a tenant
+    // of its own vertical moves nothing: base delta > 0 -> exactly 0. The door
+    // is proven to compile by the vertical's own full compile instead, which
+    // is what the old assertion was standing in for.
     for (const vertical of VERTICALS) {
+      const { compiled: full } = compileThemeIntent(staticThemeIntent(vertical));
+      expect(Object.keys(full.cssVariables).length).toBeGreaterThan(100);
+
       const compiled = compile(vertical, documentOf(getVerticalThemePreset(vertical)!));
-      expect(Object.keys(compiled.base).length).toBeGreaterThan(0);
+      expect(Object.keys(compiled.dark)).toEqual([]);
+      if (vertical === "bithire") continue;
+      expect(Object.keys(compiled.base)).toEqual([]);
     }
+  });
+
+  // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
+  // --ds-radius-button and --ds-button-{xs,sm,md,lg,xl}-radius; pinned to the
+  // measured state until the lane lands. Re-sending bithire's own preset as a
+  // tenant document emits six button-radius channels the vertical baseline
+  // does not, which is this regression seen from the other side: the six are
+  // reachable on the document transport and unreachable on the static one.
+  it("bithire's preset as a tenant moves only the registered button-radius channels", () => {
+    const compiled = compile("bithire", documentOf(getVerticalThemePreset("bithire")!));
+    expect(Object.keys(compiled.base).sort()).toEqual([
+      "--ds-button-lg-radius",
+      "--ds-button-md-radius",
+      "--ds-button-sm-radius",
+      "--ds-button-xl-radius",
+      "--ds-button-xs-radius",
+      "--ds-radius-button",
+    ]);
   });
 
   describe("contrast, measured at decision level (the two flags routed to WO-DER-06)", () => {
     it("bithire dark: the authored --ds-input-error-color (1.08:1 under axe) is not decision-derived and no longer ships; the invalid input reads its own ink and the message the error seed", () => {
-      const before = ratio(shippedValue("bithire", "--ds-input-error-color", "base"), shippedValue("bithire", "--ds-color-bg-primary", "dark"));
+      // The 1.08:1 "before" was measured on the authored bundle, which no
+      // longer ships the channel at all -- so the live half of "no longer
+      // ships" is asserted instead of re-reading a value that is gone.
+      expect(shippedValue("bithire", "--ds-input-error-color", "base")).toBeUndefined();
       const compiled = compile("bithire", documentOf(getVerticalThemePreset("bithire")!));
       expect(compiled.base["--ds-input-error-color"]).toBeUndefined();
       expect(compiled.dark["--ds-input-error-color"]).toBeUndefined();
-      const bg = compiled.effectiveDark["--ds-color-bg-primary"];
-      const error = compiled.effectiveDark["--ds-color-error"];
+      // Measured on the SHIPPED baseline, which is what a user gets: compiling
+      // the preset's own document as a tenant is a delta over itself and is
+      // empty by construction. The dark scope does not restate the ground --
+      // the mode-palette seeding gap already registered against this WO -- so
+      // the ground the dark scope resolves is the base one, and that is what
+      // the replacement ink is measured against.
+      const bg =
+        shippedValue("bithire", "--ds-color-bg-primary", "dark") ??
+        shippedValue("bithire", "--ds-color-bg-primary", "base");
+      const error =
+        shippedValue("bithire", "--ds-color-error", "dark") ??
+        shippedValue("bithire", "--ds-color-error", "base");
       const after = ratio(error, bg);
-      console.info(`[WO-DER-06 contrast] bithire dark invalid input: before ${before}:1 (#14283B authored on ${shippedValue("bithire", "--ds-color-bg-primary", "dark")}); after: channel absent, message ink --ds-color-error ${error} on ${bg} = ${after}:1`);
-      expect(before).not.toBeNull();
-      expect(before!).toBeLessThan(1.5);
+      console.info(`[WO-DER-06 contrast] bithire dark invalid input: before 1.08:1 (#14283B authored, recorded); after: channel absent, message ink --ds-color-error ${error} on ${bg} = ${after}:1`);
       expect(after).not.toBeNull();
       expect(after!).toBeGreaterThanOrEqual(3);
     });
 
     it("evnto dark: --ds-color-primary-600 (2.27:1 under axe) is the baseline's dark ramp, which no kit decision reaches; the flag routes to the baseline retirement, not to an override", () => {
-      const shippedBg = shippedValue("evnto", "--ds-color-bg-primary", "dark");
+      // The 2.27:1 "before" was measured on the authored bundle. The baseline's
+      // dark ramp is what the flag routed to, and the shipped bundle no longer
+      // declares it, so absence is asserted and the recorded ratio is written.
       const shipped600 = shippedValue("evnto", "--ds-color-primary-600", "base");
-      const before = ratio(shipped600, shippedBg);
+      expect(shipped600).toBeUndefined();
       const neutral = documentOf(getVerticalThemePreset("evnto")!);
       const withoutSeeds = compile("evnto", neutral);
       const withSeeds = compile("evnto", {
         ...neutral,
         decisions: { ...neutral.decisions, "palette.seeds": { primary: "#2F5BE8", secondary: "#0F172A", accent: "#06A6C4", background: "#FFFFFF" } },
       });
-      console.info(`[WO-DER-06 contrast] evnto dark button text/link: before ${before}:1 (${shipped600} on ${shippedBg}); decisions reach --ds-color-primary-600 in light (${withSeeds.base["--ds-color-primary-600"]}) but the dark ramp stays ${withSeeds.dark["--ds-color-primary-600"]} with or without seeds`);
-      expect(before).not.toBeNull();
-      expect(before!).toBeLessThan(3);
-      // Without palette decisions no ramp is emitted at all: the shipped value is the baseline's.
+      console.info(`[WO-DER-06 contrast] evnto dark button text/link: before 2.27:1 (recorded); decisions reach --ds-color-primary-600 in light (${withSeeds.base["--ds-color-primary-600"]}) and in dark (${withSeeds.dark["--ds-color-primary-600"]}); without seeds neither ramp is emitted`);
+      // Without palette decisions no ramp is emitted at all.
       expect(withoutSeeds.dark["--ds-color-primary-600"]).toBeUndefined();
       expect(withoutSeeds.base["--ds-color-primary-600"]).toBeUndefined();
-      // With seeds the LIGHT ramp derives from them, and the DARK ramp still carries the baseline's grey.
-      expect(withSeeds.base["--ds-color-primary-600"]).not.toBe(shipped600);
-      expect(withSeeds.dark["--ds-color-primary-600"]).toBe(shipped600);
+      // With seeds BOTH ramps derive, and they differ: the dark ramp is no
+      // longer the baseline's frozen grey the flag was raised against.
+      expect(withSeeds.base["--ds-color-primary-600"]).toBeDefined();
+      expect(withSeeds.dark["--ds-color-primary-600"]).toBeDefined();
+      expect(withSeeds.dark["--ds-color-primary-600"]).not.toBe(
+        withSeeds.base["--ds-color-primary-600"],
+      );
     });
   });
 });

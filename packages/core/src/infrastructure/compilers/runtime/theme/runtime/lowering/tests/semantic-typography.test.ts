@@ -302,21 +302,47 @@ describe("cross-lowering equality of the first-party themes", () => {
 describe("authored-order law", () => {
   const ROTATED_BLOCK = ["chrome", "tooltip"] as const;
 
+  /**
+   * The law's subject: a theme that AUTHORS an ordered chrome block.
+   *
+   * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset; the
+   * retired authored themes were the only source in this tree that ever handed
+   * the static transport a hand-ordered block (rottay's `chrome.tooltip`, 11
+   * keys, first divergence `--ds-tooltip-bg` / `--ds-tooltip-color`). No preset
+   * authors chrome and the ISO normalizer materializes the container in
+   * canonical order with no values, so the block is authored HERE -- the same
+   * shape the transport used to receive, four keys instead of eleven. Measured
+   * on both trees: a customer theme never carried order in either, because its
+   * chrome families are deriver-owned; only a spread-emitted block does.
+   */
+  const AUTHORED_ORDER_SUBJECT: BrandTheme = {
+    ...rottayBrandTheme,
+    chrome: {
+      ...rottayBrandTheme.chrome,
+      tooltip: {
+        bg: "#101014",
+        color: "#F5F5F7",
+        defaultBg: "#17171C",
+        defaultColor: "#E8E8EC",
+      },
+    },
+  };
+
   it("a source permutation changes authoring order and nothing else", () => {
-    const permuted = withRotatedBlock(rottayBrandTheme, ROTATED_BLOCK);
-    const before = authoredKeys(rottayBrandTheme, ROTATED_BLOCK);
+    const permuted = withRotatedBlock(AUTHORED_ORDER_SUBJECT, ROTATED_BLOCK);
+    const before = authoredKeys(AUTHORED_ORDER_SUBJECT, ROTATED_BLOCK);
     const after = authoredKeys(permuted, ROTATED_BLOCK);
 
     expect(after).not.toEqual(before);
     expect([...after].sort()).toEqual([...before].sort());
     expect(authoredBlock(permuted, ROTATED_BLOCK)).toEqual(
-      authoredBlock(rottayBrandTheme, ROTATED_BLOCK)
+      authoredBlock(AUTHORED_ORDER_SUBJECT, ROTATED_BLOCK)
     );
   });
 
   it("leg B is byte-invariant under a source permutation", () => {
-    const base = legB(rottayBrandTheme);
-    const permuted = legB(withRotatedBlock(rottayBrandTheme, ROTATED_BLOCK));
+    const base = legB(AUTHORED_ORDER_SUBJECT);
+    const permuted = legB(withRotatedBlock(AUTHORED_ORDER_SUBJECT, ROTATED_BLOCK));
 
     expect(permuted.cssString).toBe(base.cssString);
     expect(Object.keys(permuted.cssVariables)).toEqual(
@@ -326,8 +352,8 @@ describe("authored-order law", () => {
   });
 
   it("leg A carries the permutation, and the deviation is order-only", () => {
-    const base = legA(rottayBrandTheme);
-    const permuted = legA(withRotatedBlock(rottayBrandTheme, ROTATED_BLOCK));
+    const base = legA(AUTHORED_ORDER_SUBJECT);
+    const permuted = legA(withRotatedBlock(AUTHORED_ORDER_SUBJECT, ROTATED_BLOCK));
 
     // Detected: the static transport moved.
     expect(
@@ -428,14 +454,23 @@ describe("present-with-undefined role keys", () => {
     expect(explicit["--ds-type-label-text-transform"]).toBe("uppercase");
   });
 
-  // T4 (first-party leg): evnto authors `labelStyle: "capitalize"`, so the
-  // channel is a live regression surface for the real artifact, in both legs.
-  it("evnto emits its authored capitalize label case in both lowerings", () => {
-    expect(legA(evntoBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
-      "capitalize"
+  // T4 (first-party leg): the channel stays a live regression surface for a
+  // real artifact, in both legs. D6-2c-ii (2026-09-15): tenant-document
+  // compiles over neutral + preset; the subject moves from evnto's authored
+  // `labelStyle: "capitalize"` to bithire, whose expressive profile
+  // (`rottay/bithire-technical@1`, type `technical`) drives the same channel to
+  // `uppercase`. No preset authors `labelStyle`, so rottay and evnto now take
+  // the DS default `none` -- measured, and asserted here so the vertical that
+  // does drive the channel cannot go quiet unnoticed.
+  it("bithire emits its profile-driven label case in both lowerings", () => {
+    expect(legA(bithireBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
+      "uppercase"
     );
-    expect(legB(evntoBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
-      "capitalize"
+    expect(legB(bithireBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
+      "uppercase"
+    );
+    expect(legA(evntoBrandTheme).cssVariables["--ds-type-label-text-transform"]).toBe(
+      "none"
     );
   });
 });

@@ -21,12 +21,19 @@
  *
  * Which path that is matters, and is the whole design:
  *
- *   • On a theme that AUTHORS its chrome (bithire, evnto, rottay), the derived
- *     default loses and the authored value stands. Button chrome staying put
- *     when bithire's seed moves is not a defect — it is the merge order doing
- *     its job, and it is what keeps the three shipped artifacts pixel-identical.
+ *   • On a theme that AUTHORS its chrome (The Management, and any customer that
+ *     authors one), the derived default loses and the authored value stands.
+ *     Button chrome staying put when that theme's seed moves is not a defect —
+ *     it is the merge order doing its job.
  *   • On a theme that authors nothing but a palette — the white-label case the
  *     product rule is actually about — the seeds now reach.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so the
+ * three first-party verticals moved from the first bullet to the second. They
+ * author no chrome and no interaction-floor literal; what they carry is a
+ * preset's decisions, and everything below those derives. The authoring side of
+ * each contest is therefore measured on a customer theme or on a subject built
+ * in this file, never on a vertical.
  *
  * Both are pinned. The residue that is still unreachable is a much shorter,
  * explicitly-reasoned STOPPED list rather than five whole families.
@@ -49,6 +56,7 @@ import {
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 
 const bithireBrandTheme = firstPartyFixture('bithire');
 
@@ -352,29 +360,51 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
       dbVariables({ ...seeded, background: NEW_BACKGROUND }),
       DB_BACKGROUND_MOVED
     );
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15, pending DT
+    // registration): `--ds-button-primary-bg-active` leaves this set because it
+    // is no longer EMITTED at all. The retired bithire theme authored
+    // `chrome.controls.buttonPrimary.bgActive`; no preset decision produces it
+    // and no deriver covers it, while its sibling `-bg-hover` IS derived from
+    // the seed. The channel still has a producer -- a theme that authors the
+    // leaf emits it -- so this is an unauthored active state, not a dead name.
+    // Pinned at the measured state until the lane rules on it.
     expect(primaryReach.filter(FAMILIES['button primary chrome'])).toEqual([
       '--ds-button-primary-bg',
-      '--ds-button-primary-bg-active',
       '--ds-button-primary-bg-hover',
       '--ds-button-primary-border',
     ]);
-    // The field family cuts restate their focus, caret and progress ink as relations to the same seed.
+    expect(BASE['--ds-button-primary-bg-active']).toBeUndefined();
+    // The field family cuts restate their focus, caret and progress ink as
+    // relations to the same seed. D6-2c-ii (2026-09-15): tenant-document
+    // compiles over neutral + preset; the set goes 14 -> 17. Four channels JOIN
+    // (`--ds-input-loading-color`, `--ds-input-selection-bg`,
+    // `--ds-input-number-selection-bg`, `--ds-input-number-stepper-bg-hover`):
+    // bithire pinned them with authored literals and they now derive from the
+    // seed. One LEAVES, correctly -- `--ds-otp-input-slot-shadow-focus-error`
+    // reads `--ds-input-error-shadow-focus`, so it tracks the ERROR seed and
+    // has no business following the primary.
     expect(primaryReach.filter(FAMILIES.inputs)).toEqual([
       '--ds-input-border-focus',
       '--ds-input-caret-color',
+      '--ds-input-loading-color',
       '--ds-input-number-border-focus',
       '--ds-input-number-caret',
+      '--ds-input-number-selection-bg',
       '--ds-input-number-shadow-focus',
+      '--ds-input-number-stepper-bg-hover',
       '--ds-input-number-stepper-color-hover',
+      '--ds-input-selection-bg',
       '--ds-input-shadow-focus',
       '--ds-otp-input-caret-color',
       '--ds-otp-input-slot-border-focus',
       '--ds-otp-input-slot-shadow-focus',
-      '--ds-otp-input-slot-shadow-focus-error',
       '--ds-password-input-strength-good',
       '--ds-tag-input-border-focus',
       '--ds-tag-input-caret',
     ]);
+    expect(BASE['--ds-otp-input-slot-shadow-focus-error']).toContain(
+      '--ds-input-error-shadow-focus'
+    );
     // The background seed is a separate authority and gains nothing here: cards
     // still reach their ground through the alias chain, not through the primary
     // derivation. Keeping this emptiness pins that the two seeds stayed apart.
@@ -456,7 +486,11 @@ describe('TENANT-COLOR PROPAGATION · one channel, one author', () => {
       expect(BASE[channel]).toBeTruthy();
       expect(delta[channel]).not.toBe(BASE[channel]);
     }
-    expect(BASE['--ds-color-link']).toBe(bithireBrandTheme.palette!.linkColor);
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // bithire authored `palette.linkColor` and no preset does, so the vertical
+    // takes the SAME one-author floor as the tenant -- a pass-through of its
+    // own primary seed. One author, now on both sides of the comparison.
+    expect(BASE['--ds-color-link']).toBe(bithireBrandTheme.palette!.primaryColor);
   });
 });
 
@@ -515,47 +549,100 @@ describe('TENANT-COLOR PROPAGATION · the reach still withheld', () => {
   });
 });
 
+/**
+ * The authoring side of the contract, built rather than borrowed.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so no
+ * first-party vertical authors chrome or an interaction-floor literal any more.
+ * The Management still authors its button chrome and carries that half on its
+ * own; the palette floor has no authored subject left in the tree, so it is
+ * authored here on top of the bithire baseline -- the exact shape the retired
+ * theme had.
+ */
+const AUTHORS_ITS_CHROME = themanagementmiamiBrandTheme;
+const AUTHORED_CHROME_BASE = lowerBrandThemeFixture({
+  brandTheme: AUTHORS_ITS_CHROME,
+  tenantSlug: 'themanagementmiami',
+}).cssVariables;
+const AUTHORED_CHROME_PRIMARY_MOVED = movedBetween(
+  AUTHORED_CHROME_BASE,
+  lowerBrandThemeFixture({
+    brandTheme: {
+      ...AUTHORS_ITS_CHROME,
+      palette: { ...AUTHORS_ITS_CHROME.palette!, primaryColor: NEW_PRIMARY },
+    },
+    tenantSlug: 'themanagementmiami',
+  }).cssVariables
+);
+
+const AUTHORS_ITS_FLOOR: BrandTheme = withPalette({
+  borderFocusColor: '#123456',
+  linkColor: '#234567',
+  linkHoverColor: '#345678',
+});
+const AUTHORED_FLOOR_BASE = compile(AUTHORS_ITS_FLOOR);
+const AUTHORED_FLOOR_PRIMARY_MOVED = movedBetween(
+  AUTHORED_FLOOR_BASE,
+  compile({
+    ...AUTHORS_ITS_FLOOR,
+    palette: { ...AUTHORS_ITS_FLOOR.palette!, primaryColor: NEW_PRIMARY },
+  })
+);
+
 describe('TENANT-COLOR PROPAGATION · authored chrome outranks the derivation', () => {
   /**
-   * The other half of the contract, and the reason the three shipped
-   * artifacts did not move a pixel: a derived default is a DEFAULT. bithire
-   * authors its button chrome, so its buttons keep the authored value even
-   * though the derivation would have reached them.
+   * The other half of the contract: a derived default is a DEFAULT. A theme
+   * that authors its button chrome keeps the authored value even though the
+   * derivation would have reached it.
+   *
+   * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, so
+   * the subject moves from bithire to The Management -- a customer theme that
+   * still authors `chrome.controls.buttonPrimary`. No first-party preset
+   * authors chrome, which is why bithire now sits on the OTHER side of this
+   * contract and is asserted there instead.
    */
   it('a theme that authors a channel keeps its own value', () => {
-    const authored = bithireBrandTheme.chrome?.controls?.buttonPrimary?.bg;
+    const authored = AUTHORS_ITS_CHROME.chrome?.controls?.buttonPrimary?.bg;
     expect(authored).toBeTruthy();
-    expect(BASE['--ds-button-primary-bg']).toBe(authored);
-    // …and the palette-only theme, authoring nothing, gets the derivation.
+    expect(AUTHORED_CHROME_BASE['--ds-button-primary-bg']).toBe(authored);
+    expect(AUTHORED_CHROME_PRIMARY_MOVED).not.toContain('--ds-button-primary-bg');
+    // …and the palette-only themes, authoring nothing, get the derivation.
     expect(MINIMAL_BASE['--ds-button-primary-bg']).toBe('var(--ds-color-primary)');
+    expect(BASE['--ds-button-primary-bg']).toBe('var(--ds-color-primary)');
   });
 
   it('the authored value does not follow the seed, and that is the point', () => {
     // A hand-authored literal is a tenant decision; the compiler must not
     // silently retune it when a different seed moves.
-    expect(PRIMARY_MOVED).not.toContain('--ds-button-primary-bg');
+    expect(AUTHORED_CHROME_PRIMARY_MOVED).not.toContain('--ds-button-primary-bg');
     expect(MINIMAL_PRIMARY_REACH).toContain('--ds-button-primary-bg');
   });
 
-  it('the same holds for the interaction floor: bithire authors border-focus/link/link-hover by hand, and they stay put', () => {
-    // The three channels the shared floor would otherwise derive for these,
-    // fixed literals in bithire's own default palette (see
-    // extended-palette-floor.test.ts's "reaches real first-party output"
-    // section for the authored-vs-derived split across all three tenants).
-    const palette = bithireBrandTheme.palette!;
+  it('the same holds for the interaction floor: a theme that authors border-focus/link/link-hover by hand keeps them put', () => {
+    // The three channels the shared floor would otherwise derive, authored as
+    // fixed literals (see extended-palette-floor.test.ts's "reaches real
+    // first-party output" section for the authored-vs-derived split).
+    //
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the retired bithire theme authored all three in its own palette and no
+    // preset does, so the authoring side of the contest is built here. bithire
+    // itself is now the derived side and is asserted as such below.
+    const palette = AUTHORS_ITS_FLOOR.palette!;
     expect(palette.borderFocusColor).toBeTruthy();
     expect(palette.linkColor).toBeTruthy();
     expect(palette.linkHoverColor).toBeTruthy();
-    expect(BASE['--ds-color-border-focus']).toBe(palette.borderFocusColor);
-    expect(BASE['--ds-color-link']).toBe(palette.linkColor);
-    expect(BASE['--ds-color-link-hover']).toBe(palette.linkHoverColor);
-    expect(PRIMARY_MOVED).not.toContain('--ds-color-border-focus');
-    expect(PRIMARY_MOVED).not.toContain('--ds-color-link');
-    expect(PRIMARY_MOVED).not.toContain('--ds-color-link-hover');
-    // …while the palette-only theme, authoring none of the three, gets them
-    // from the floor and DOES track a primary edit.
-    expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-border-focus');
-    expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-link');
-    expect(MINIMAL_PRIMARY_REACH).toContain('--ds-color-link-hover');
+    expect(AUTHORED_FLOOR_BASE['--ds-color-border-focus']).toBe(palette.borderFocusColor);
+    expect(AUTHORED_FLOOR_BASE['--ds-color-link']).toBe(palette.linkColor);
+    expect(AUTHORED_FLOOR_BASE['--ds-color-link-hover']).toBe(palette.linkHoverColor);
+    expect(AUTHORED_FLOOR_PRIMARY_MOVED).not.toContain('--ds-color-border-focus');
+    expect(AUTHORED_FLOOR_PRIMARY_MOVED).not.toContain('--ds-color-link');
+    expect(AUTHORED_FLOOR_PRIMARY_MOVED).not.toContain('--ds-color-link-hover');
+    // …while a theme authoring none of the three -- the palette-only probe and
+    // bithire alike -- gets them from the floor and DOES track a primary edit.
+    for (const reach of [MINIMAL_PRIMARY_REACH, PRIMARY_MOVED]) {
+      expect(reach).toContain('--ds-color-border-focus');
+      expect(reach).toContain('--ds-color-link');
+      expect(reach).toContain('--ds-color-link-hover');
+    }
   });
 });

@@ -77,7 +77,11 @@ describeCausality({
     'typography.scale': { value: 1.08, moves: ['titleSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'titleSize', in: RADIUS_VERTICALS },
     'spacing.rhythm': { value: 'airy', moves: ['bodyPad'], holds: 'radius', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['extraHeight'], holds: 'radius', in: VERTICALS },
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+    // the presets decide density -- bithire `compact`, rottay and evnto `normal`
+    // -- so `compact` was the value bithire already held and moved nothing there.
+    // `spacious` is the one value in the domain that differs from all three.
+    'density.mode': { value: 'spacious', moves: ['extraHeight'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['underlineEdge'], holds: 'radius', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'elevated', moves: ['iconShadow'], holds: 'radius', in: VERTICALS },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: VERTICALS },

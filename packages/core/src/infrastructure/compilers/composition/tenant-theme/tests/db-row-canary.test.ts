@@ -175,20 +175,86 @@ describe('tenant theme — the axes a customer can actually move', () => {
    * compilation -- not the ones the axis is called in prose. `density` is the
    * trap: it emits `--ds-density-mode-factor`, not `--ds-density-scale`.
    */
-  const REACHABLE: ReadonlyArray<{ axis: string; probe: RegExp }> = [
+  const REACHABLE: ReadonlyArray<{
+    axis: string;
+    probe: RegExp;
+    /**
+     * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+     * Three axes this row authors now state EXACTLY what the bithire preset
+     * already states, so the artifact -- a delta -- correctly withdraws the
+     * channel. The axis is still reachable, and that is what `moved` proves:
+     * the same document with the axis moved off the baseline emits it again.
+     * Without this the row would read as "the axis died", which is the one
+     * thing it did not do.
+     */
+    moved?: (row: Record<string, unknown>) => void;
+    baselineAlreadyStates?: string;
+  }> = [
     { axis: 'color/semantic palette', probe: /--ds-color-primary\s*:/ },
     { axis: 'typography family', probe: /--ds-font-family-heading\s*:/ },
     { axis: 'typography scale', probe: /--ds-type-scale\s*:/ },
-    { axis: 'shape/radius', probe: /--ds-radius-scale\s*:/ },
+    {
+      axis: 'shape/radius',
+      probe: /--ds-radius-scale\s*:/,
+      // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): the row
+      // authors 0.8 and the preset's own `shape.radius-scale` is 0.8, the base
+      // the retired theme carried at 1.25; registered for DER-07 to confirm.
+      baselineAlreadyStates: '0.8',
+      moved: (general) => {
+        (general.shape as Record<string, unknown>).radiusScale = 1.15;
+      },
+    },
     { axis: 'density', probe: /--ds-density-mode-factor\s*:/ },
     { axis: 'elevation', probe: /--ds-elevation-1\s*:/ },
-    { axis: 'textures/effects', probe: /--ds-effect-intensity\s*:/ },
-    { axis: 'chrome (sidebar)', probe: /--ds-sidebar-bg\s*:/ },
+    {
+      axis: 'textures/effects',
+      probe: /--ds-effect-intensity\s*:/,
+      // The preset states `surfaces.effect-intensity: 0.2`, the same value the
+      // row authors.
+      baselineAlreadyStates: '0.2',
+      moved: (general) => {
+        (general.surfaces as Record<string, unknown>).effectIntensity = 0.55;
+      },
+    },
+    {
+      axis: 'chrome (sidebar)',
+      probe: /--ds-sidebar-bg\s*:/,
+      // The preset already selects the inverse tone this row asks for, so every
+      // sidebar channel is identical to the baseline's and none is repeated.
+      // `strong` is the tone that still moves on bithire; `subtle` is refused
+      // at admission, which is reported separately as a derivation-lane finding.
+      baselineAlreadyStates: 'inverse',
+      moved: (general) => {
+        (general.navigation as Record<string, unknown>).sidebarTone = 'strong';
+      },
+    },
   ];
 
-  it.each(REACHABLE)('emits the $axis axis from the document', ({ probe }) => {
-    expect(css).toMatch(probe);
-  });
+  /** The row with exactly one axis moved off the value the preset states. */
+  function cssWithAxisMoved(move: (general: Record<string, unknown>) => void) {
+    const row = structuredClone(readRow()) as Record<string, unknown>;
+    const visualFoundation = row.visualFoundation as Record<string, unknown>;
+    move(visualFoundation.general as Record<string, unknown>);
+    return compileRow(row).css;
+  }
+
+  it.each(REACHABLE)(
+    'emits the $axis axis from the document',
+    ({ probe, moved }) => {
+      expect(moved ? cssWithAxisMoved(moved) : css).toMatch(probe);
+    },
+  );
+
+  it.each(REACHABLE.filter((axis) => axis.moved))(
+    'withdraws the $axis axis only because the row restates the preset',
+    ({ probe, baselineAlreadyStates }) => {
+      // The other half, so the coincidence above cannot rot into a silent loss:
+      // the channel is absent from THIS row's delta, and it is absent because
+      // the row asked for what the vertical already says.
+      expect(css).not.toMatch(probe);
+      expect(baselineAlreadyStates).toBeDefined();
+    },
+  );
 
   it('reaches the recipe profile axis as runtime data, never as a channel', () => {
     const artifact = compileRow(readRow());
@@ -252,13 +318,18 @@ describe('tenant theme — divergence from the static vertical baseline', () => 
    * `tenant`/`baseline` are the variable each side uses for the axis. When they
    * differ, that difference is itself the finding and is asserted below.
    */
+  /** The row with exactly one axis moved off the value the preset states. */
+  function movedRowCss(move: (general: Record<string, unknown>) => void) {
+    const row = structuredClone(readRow()) as Record<string, unknown>;
+    const visualFoundation = row.visualFoundation as Record<string, unknown>;
+    move(visualFoundation.general as Record<string, unknown>);
+    return compileRow(row).css;
+  }
+
   const AXES = [
     { axis: 'palette', tenant: '--ds-color-primary', baseline: '--ds-color-primary' },
     { axis: 'font family', tenant: '--ds-font-family-heading', baseline: '--ds-font-family-heading' },
     { axis: 'type scale', tenant: '--ds-type-scale', baseline: '--ds-type-scale' },
-    { axis: 'radius', tenant: '--ds-radius-scale', baseline: '--ds-radius-scale' },
-    { axis: 'effect intensity', tenant: '--ds-effect-intensity', baseline: '--ds-effect-intensity' },
-    { axis: 'sidebar chrome', tenant: '--ds-sidebar-bg', baseline: '--ds-sidebar-bg' },
   ] as const;
 
   it.each(AXES)('$axis diverges from the bithire baseline', ({ tenant, baseline }) => {
@@ -272,34 +343,81 @@ describe('tenant theme — divergence from the static vertical baseline', () => 
     expect(tenantValue).not.toBe(baselineValue);
   });
 
+  /**
+   * Three axes this row authors state EXACTLY what the bithire preset states,
+   * so the artifact -- a delta -- withdraws the channel. Divergence is still
+   * asserted, on the same axis, with the row moved off the preset's value; the
+   * coincidence is asserted beside it so it cannot rot into a silent loss.
+   * Same convention as the REACHABLE table above.
+   */
+  const COINCIDENT_AXES = [
+    {
+      axis: 'radius',
+      channel: '--ds-radius-scale',
+      baselineStates: '0.8',
+      moved: (general: Record<string, unknown>) => {
+        (general.shape as Record<string, unknown>).radiusScale = 1.15;
+      },
+    },
+    {
+      axis: 'effect intensity',
+      channel: '--ds-effect-intensity',
+      baselineStates: '0.2',
+      moved: (general: Record<string, unknown>) => {
+        (general.surfaces as Record<string, unknown>).effectIntensity = 0.55;
+      },
+    },
+    {
+      axis: 'sidebar chrome',
+      channel: '--ds-sidebar-bg',
+      baselineStates: 'inverse',
+      moved: (general: Record<string, unknown>) => {
+        (general.navigation as Record<string, unknown>).sidebarTone = 'strong';
+      },
+    },
+  ] as const;
+
+  it.each(COINCIDENT_AXES)(
+    '$axis diverges once the row states something the preset does not',
+    ({ channel, moved }) => {
+      const baselineValue = read(bithireCss, channel);
+      expect(baselineValue, `bithire baseline does not declare ${channel}`).toBeDefined();
+      // Withdrawn from THIS row because the row restates the preset ...
+      expect(read(tenantCss, channel)).toBeUndefined();
+      // ... and present, and different, the moment the row states its own.
+      const movedValue = read(movedRowCss(moved), channel);
+      expect(movedValue, `DB tenant does not emit ${channel} when it moves`).toBeDefined();
+      expect(movedValue).not.toBe(baselineValue);
+    },
+  );
+
   it('density diverges through the same canonical posture channel on both paths', () => {
-    // Static BrandTheme and DB Appearance must lower through one vocabulary.
-    // `--ds-density-scale` remains the independent expressive-profile factor;
-    // the authored posture is always `--ds-density-mode-factor`.
+    // Static and DB lower through ONE vocabulary: the authored posture is
+    // always `--ds-density-mode-factor`, and `--ds-density-scale` stays the
+    // independent expressive-profile factor. bithire's preset decides
+    // `density.mode: compact`, so the static side now states the posture too --
+    // the vocabulary law is asserted on both sides rather than on one.
     const tenantDensity = read(tenantCss, '--ds-density-mode-factor');
     const baselineDensity = read(bithireCss, '--ds-density-mode-factor');
 
     expect(tenantDensity, 'DB tenant must emit --ds-density-mode-factor').toBeDefined();
-    // bithire authors `surfaces.densityScale: 0.9` and NO posture, so there is
-    // no posture for it to lower. Requiring the channel on both sides required
-    // bithire to author a posture it deliberately does not have; the vocabulary
-    // law is the real subject, and it is stated in both directions: the
-    // structural factor is present and separate, and the posture channel is
-    // absent exactly because the posture is.
-    expect(baselineDensity, 'bithire authors no posture, so it emits none').toBeUndefined();
-    expect(read(bithireCss, '--ds-density-scale')).toBeDefined();
-    expect(read(bithireCss, '--ds-density-scale')).not.toBe(tenantDensity);
-    // The posture never travels on a second channel: `--ds-density-scale` on
-    // the DB side stays the structural factor, never the posture the tenant set.
+    expect(baselineDensity, 'the bithire preset decides a posture, so it emits one').toBeDefined();
+    expect(tenantDensity).not.toBe(baselineDensity);
+    // The posture never travels on a second channel, on either side.
+    expect(read(bithireCss, '--ds-density-scale')).not.toBe(baselineDensity);
     expect(read(tenantCss, '--ds-density-scale')).not.toBe(tenantDensity);
   });
 
-  it('elevation is concrete on both paths and diverges without a vocabulary split', () => {
+  it('elevation crosses both paths on one channel name, with the tenant concrete', () => {
+    // The authored theme declared its own ramp; the preset leaves it to the
+    // foundation and READS it, which is the same channel name rather than a
+    // second vocabulary. The DB tenant declares its own concrete value, so the
+    // divergence is asserted where it exists: the tenant declares, the baseline
+    // consumes the same name (WO-DER-06 derivation-lane registry, 2026-09-15).
     const tenantElevation = read(tenantCss, '--ds-elevation-1');
-    const baselineElevation = read(bithireCss, '--ds-elevation-1');
-
     expect(tenantElevation, 'DB tenant must emit --ds-elevation-1').toBeDefined();
-    expect(baselineElevation, 'bithire must emit --ds-elevation-1').toBeDefined();
-    expect(tenantElevation).not.toBe(baselineElevation);
+    expect(read(bithireCss, '--ds-elevation-1')).toBeUndefined();
+    expect(bithireCss).toContain('var(--ds-elevation-1)');
+    expect(tenantCss).not.toBe(bithireCss);
   });
 });

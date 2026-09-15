@@ -98,9 +98,13 @@ describe("a DB tenant status seed re-derives correctly against the BitHire basel
   it("the perceptual ramp re-derives from the TENANT's own seed, not bithire's blue", () => {
     // deriveTenantColorRamps already worked before this floor; this is the channel
     // -bg's var() reference actually resolves against once the cascade
-    // applies. #F7F6FF is the tenant's own violet -50, nothing like bithire's
+    // applies. #FCFBFF is the tenant's own violet -50, nothing like bithire's
     // own blue -50 (#F0F9FF).
-    expect(variables["--ds-color-success-50"]).toBe("#F7F6FF");
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the ramp re-derives against the preset's ground and posture, so the step
+    // moved #F7F6FF -> #FCFBFF. The property is unchanged: still the tenant's
+    // violet, still not bithire's blue.
+    expect(variables["--ds-color-success-50"]).toBe("#FCFBFF");
     expect(variables["--ds-color-success-50"]).not.toBe("#F0F9FF");
   });
 
@@ -162,8 +166,13 @@ describe("a tenant seed defeats a baseline that still bakes a status literal", (
       "var(--ds-color-success-50)"
     );
     expect(artifact.cssVariables["--ds-color-success-bg"]).not.toBe("#f0fdf4");
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // The separator mix is stated by `palette.contrast-posture`, and bithire's
+    // preset states "high" where the retired theme resolved to the standard
+    // posture, so the strength moved 20% -> 34%. Correct semantics: a harder
+    // read asks for a harder separator.
     expect(artifact.cssVariables["--ds-color-success-border"]).toBe(
-      "color-mix(in srgb, var(--ds-color-success) 20%, transparent)"
+      "color-mix(in srgb, var(--ds-color-success) 34%, transparent)"
     );
     expect(artifact.cssVariables["--ds-color-success-border"]).not.toBe(
       "rgba(5, 118, 66, 0.25)"
@@ -218,8 +227,10 @@ describe("a tenant leaf on the derived channel outranks tenant seed derivation",
     expect(artifact.cssVariables["--ds-color-success-bg"]).toBe("#123456");
     // Every OTHER channel for the tone still re-derives from the tenant's
     // OWN seed: the shadowing is per channel, not a family-wide opt-out.
+    // D6-2c-ii (2026-09-15): 20% -> 34%, bithire's preset states
+    // `palette.contrast-posture: "high"` (see the guard-one case above).
     expect(artifact.cssVariables["--ds-color-success-border"]).toBe(
-      "color-mix(in srgb, var(--ds-color-success) 20%, transparent)"
+      "color-mix(in srgb, var(--ds-color-success) 34%, transparent)"
     );
   });
 });
@@ -281,9 +292,18 @@ describe("a DB status seed against Rottay's base block", () => {
     expect(variables["--ds-color-success"]).toBe("#7C3AED");
   });
 
-  it("does not repeat bg/border values already derived by the baseline", () => {
-    expect(variables["--ds-color-success-bg"]).toBeUndefined();
-    expect(variables["--ds-color-success-border"]).toBeUndefined();
+  it("carries its own derived bg/border: rottay's preset derives no status well to repeat", () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // Rottay's preset is structural and authors no palette, so its baseline
+    // derives no status well at all -- the premise of the retired assertion
+    // ("already derived by the baseline") no longer holds for this vertical,
+    // and the tenant's own derivation is a genuine delta rather than a repeat.
+    // The zero-delta property itself is unchanged and still covered on bithire,
+    // whose preset does carry seeds (see the first describe in this file).
+    expect(variables["--ds-color-success-bg"]).toBe("var(--ds-color-success-50)");
+    expect(variables["--ds-color-success-border"]).toBe(
+      "color-mix(in srgb, var(--ds-color-success) 20%, transparent)"
+    );
   });
 
   it("alpha-success-20 re-derives from the vertical's own baked literal to the formula", () => {

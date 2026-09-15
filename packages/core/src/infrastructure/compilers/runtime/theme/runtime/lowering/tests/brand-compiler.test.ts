@@ -8,6 +8,7 @@ import {
   mergePartialPersonality,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
 import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 // `BrandExpressiveSelection.schemaVersion` is REQUIRED. Derived from the
 // contract's own constant rather than restated as a literal, so a version bump
 // moves these drills with it instead of leaving them silently on v1.
@@ -266,31 +267,30 @@ describe("compileTheme", () => {
       tenantSlug: "bithire",
     });
 
-    // C1b registered delta: bithire SELECTS rottay/bithire-technical@1, whose
-    // sharp geometry retunes the radius dial to 0.85 over the neutral seed.
-    // The four visible radius steps stay byte-identical because bithire
-    // authors them as literals; the dial records the declared posture for
-    // every non-overridden consumer.
-    // R1 Cohort 1: the dial moved 0.85 -> 1.25 because BitHire's expressive
-    // geometry axis moved `sharp` -> `rounded`. That is the authorized
-    // direction change, not drift: the art-direction contract names the sharp,
-    // hairline, flat posture as this tenant's leading contradiction against an
-    // approachable professional-network north star. 'rounded' was chosen over
-    // 'soft' deliberately -- The Management already holds 'soft', and taking it
-    // here collapsed the geometry axis in the two-system acid test.
-    // The four visible radius steps are still authored as literals by the
-    // theme, so this records the declared posture for non-overridden consumers
-    // rather than repainting the authored ramp. Pill CONTROLS remain forbidden
-    // and are governed by the recipe profile, not by this dial.
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+    // so every axis here is now the value bithire's PRESET DECIDES rather than
+    // one its retired theme authored as a raw dial.
+    //   --ds-type-scale    1    -> 0.94  `typography.scale: 0.94`
+    //   --ds-radius-scale  1.25 -> 0.8   `shape.radius-scale: 0.8`
+    //   --ds-density-scale 0.9  -> 1     no preset authors the RAW dial
+    // The radius move is registered in the WO-DER-06 derivation-lane registry
+    // for DER-07 to confirm: the preset governs where the theme authored 1.25,
+    // which is the correct semantics, so it is recorded rather than reverted.
+    // The density move is not a lost decision -- `density.mode: "compact"` is
+    // in the preset and reaches `--ds-density-mode-factor` (0.85, measured and
+    // asserted below); what went away is the second, ungoverned spelling of
+    // the same posture. Pill CONTROLS remain forbidden and are governed by the
+    // recipe profile, not by these dials.
     expect(result.cssVariables).toMatchObject({
-      "--ds-type-scale": "1",
-      "--ds-radius-scale": "1.25",
-      "--ds-density-scale": "0.9",
+      "--ds-type-scale": "0.94",
+      "--ds-radius-scale": "0.8",
+      "--ds-density-scale": "1",
+      "--ds-density-mode-factor": "0.85",
     });
-    expect(result.cssString).toContain("--ds-type-scale: 1;");
-    // Same R1 Cohort 1 geometry move as the dial assertion above.
-    expect(result.cssString).toContain("--ds-radius-scale: 1.25;");
-    expect(result.cssString).toContain("--ds-density-scale: 0.9;");
+    expect(result.cssString).toContain("--ds-type-scale: 0.94;");
+    expect(result.cssString).toContain("--ds-radius-scale: 0.8;");
+    expect(result.cssString).toContain("--ds-density-scale: 1;");
+    expect(result.cssString).toContain("--ds-density-mode-factor: 0.85;");
   });
 
   it("produces a typed dark mode block instead of --ds-color-dark-* aliases", () => {
@@ -633,13 +633,34 @@ describe("parity: compileTheme with vertical baselines and real first-party tena
     expect(result.cssString).toContain("--ds-density-scale");
   });
 
-  it("compileTheme derives personality from brandTheme.motion/charts/chrome/typography", () => {
+  it("compileTheme derives personality from theme.motion/charts/chrome/typography", () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the subject moves to a theme that AUTHORS all four families. The retired
+    // bithire theme authored them and its preset decides only `motion.dial`,
+    // so grading the derivation on bithire would now grade four absences.
+    const result = lowerBrandThemeFixture({
+      brandTheme: themanagementmiamiBrandTheme,
+      tenantSlug: "themanagementmiami",
+    });
+    expect(result.personality.animation?.intensity).toBe(
+      themanagementmiamiBrandTheme.motion!.intensity
+    );
+    expect(result.personality.animation?.entrance).toBe("slideUp");
+    expect(result.personality.chart?.lineStyle).toBe("smooth");
+    expect(result.personality.card?.paddingDensity).toBe("spacious");
+    expect(result.personality.typography?.headingLetterSpacing).toBe("0em");
+  });
+
+  it("carries exactly the personality bithire's preset decides, and no more", () => {
+    // The other half of the same measurement: a preset that decides one family
+    // produces one family. Pinned so a preset that later decides a chart or
+    // card posture cannot start emitting personality unnoticed.
     const result = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
     expect(result.personality.animation?.intensity).toBe(bithireBrandTheme.motion!.intensity);
-    expect(result.personality.animation?.entrance).toBe("fade");
-    expect(result.personality.chart?.lineStyle).toBe("smooth");
-    expect(result.personality.card?.paddingDensity).toBe("compact");
-    expect(result.personality.typography?.headingLetterSpacing).toBe("-0.025em");
+    expect(result.personality.animation?.entrance).toBeUndefined();
+    expect(result.personality.chart).toEqual({});
+    expect(result.personality.card).toEqual({});
+    expect(result.personality.typography).toEqual({});
   });
 
 });
@@ -663,31 +684,62 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
   // These drills are about the floor's effect on posture, not about any claimed
   // leaf, so the claim set is empty -- which moves no byte on its own (proven in
   // `tests/index.test.ts`) and leaves the floor as the only variable.
-  const lower = (tenantPatch?: Partial<BrandTheme>) =>
+  const lowerOver = (
+    brandTheme: BrandTheme,
+    tenantPatch?: Partial<BrandTheme>
+  ) =>
     lowerBrandThemeFixture({
-      brandTheme: bithireBrandTheme,
+      brandTheme,
       tenantSlug: "b1-drill",
       ...(tenantPatch
         ? { tenantPatch, tenantAuthoredPaths: new Set<string>() }
         : {}),
     } as Parameters<typeof lowerBrandThemeFixture>[0]).cssVariables;
 
+  const lower = (tenantPatch?: Partial<BrandTheme>) =>
+    lowerOver(bithireBrandTheme, tenantPatch);
+
+  /**
+   * A baseline that BOTH selects a profile and authors a field that profile
+   * would move -- the shape drills 1 and 3 discriminate on.
+   *
+   * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. The
+   * retired bithire theme authored `-0.025em` against its own TECHNICAL
+   * profile's `0.01em`, and that contest was the drills' whole subject. The
+   * preset materializes the profile's own value into the baseline instead, so
+   * baseline and profile now AGREE and neither drill could tell a promotion
+   * from its absence. The contest is therefore authored here, on the one leaf
+   * that carries it (`typography.letterSpacing.heading`, which is the leaf
+   * `--ds-letter-spacing-heading` actually reads). No first-party vertical
+   * holds this shape any more, which is why it is built rather than borrowed.
+   */
+  const AUTHORS_AGAINST_ITS_PROFILE = {
+    ...bithireBrandTheme,
+    typography: {
+      ...bithireBrandTheme.typography,
+      letterSpacing: {
+        ...bithireBrandTheme.typography?.letterSpacing,
+        heading: "-0.025em",
+      },
+    },
+  } as BrandTheme;
+
   it("drill 1: with NO tenant floor the vertical's authoring still wins", () => {
-    const vars = lower();
-    // bithire authors both, and its baseline selects TECHNICAL. Before B-1 the
-    // authored fields won here; they must still win, because the profile that
-    // competes with them is the vertical's own, not a tenant's.
+    const vars = lowerOver(AUTHORS_AGAINST_ITS_PROFILE);
+    // The baseline authors the letter spacing and selects TECHNICAL. Before B-1
+    // the authored field won here; it must still win, because the profile that
+    // competes with it is the vertical's own, not a tenant's.
     expect(vars["--ds-letter-spacing-heading"]).toBe("-0.025em");
     expect(vars["--ds-motion-intensity"]).toBe("0.55");
   });
 
   it("drill 3: the vertical's OWN profile selection never promotes", () => {
-    // Restating bithire's own selection as a tenant patch is a no-op the packet
-    // must NOT be measured on (it would be a vacuous green), so this asserts the
-    // other half: passing a patch that selects the SAME profile the baseline
-    // already selects still lets the tenant floor win, because the selection now
-    // arrives on the tenant floor.
-    const sameProfile = lower({
+    // Restating the baseline's own selection as a tenant patch is a no-op the
+    // packet must NOT be measured on (it would be a vacuous green), so this
+    // asserts the other half: passing a patch that selects the SAME profile the
+    // baseline already selects still lets the tenant floor win, because the
+    // selection now arrives on the tenant floor.
+    const sameProfile = lowerOver(AUTHORS_AGAINST_ITS_PROFILE, {
       expressive: {
         schemaVersion: EXPRESSIVE_PROFILE_SCHEMA_VERSION,
         experienceProfile: TECHNICAL,
@@ -695,7 +747,9 @@ describe("B-1 option B: tenant floor vs vertical baseline", () => {
     });
     expect(sameProfile["--ds-letter-spacing-heading"]).toBe("0.01em");
     // ...while the baseline's own identical selection does not:
-    expect(lower()["--ds-letter-spacing-heading"]).toBe("-0.025em");
+    expect(lowerOver(AUTHORS_AGAINST_ITS_PROFILE)["--ds-letter-spacing-heading"]).toBe(
+      "-0.025em"
+    );
   });
 
   it("drill 2 + Z-4: a tenant profile wins, and the promotion is VISIBLE", () => {

@@ -175,14 +175,27 @@ describe("first-party artifact integrity", () => {
     expect(new Set(css.match(/--ds-[\w-]+/g)).size).toBeGreaterThan(60);
   });
 
-  it.each(TENANTS)("%s artifact uses canonical button color vars", (tenant) => {
+  // The naming law holds for every tenant: a button ink is spelled `-color`,
+  // never the legacy `-text`. Presence is asserted where the chrome still has a
+  // producer -- bithire seeds a palette, so it compiles the primary pair; the
+  // structural-neutral verticals seed none and compile no button chrome, and
+  // the non-primary variants have no producer on any vertical (WO-DER-06
+  // derivation-lane registry, 2026-09-15).
+  it.each(TENANTS)("%s artifact never spells a button ink `-text`", (tenant) => {
     const css = readFileSync(
       resolve(CSS_SRC, `facade/artifacts/${tenant}/index.css`),
       "utf-8"
     );
-    expect(css).toContain("--ds-button-primary-color");
-    expect(css).toContain("--ds-button-secondary-color");
     expect(css).not.toMatch(/--ds-button-[\w-]+-text\s*:/);
+  });
+
+  it("bithire compiles the canonical primary button ink, and nobody compiles a secondary", () => {
+    const cssOf = (tenant: string) =>
+      readFileSync(resolve(CSS_SRC, `facade/artifacts/${tenant}/index.css`), "utf-8");
+    expect(cssOf("bithire")).toContain("--ds-button-primary-color");
+    for (const tenant of TENANTS) {
+      expect(cssOf(tenant), tenant).not.toContain("--ds-button-secondary-color");
+    }
   });
 
   it("DB-owned tenants have no legacy CSS authority", () => {

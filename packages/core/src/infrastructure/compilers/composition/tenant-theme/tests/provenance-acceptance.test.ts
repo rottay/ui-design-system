@@ -90,6 +90,14 @@ const compileFor = (vertical: Vertical, document: unknown) =>
  * imported because this file asserts the OPPOSITE half of the same law: the
  * stability test pins what the delta no longer restates, this one pins what it
  * newly must.
+ *
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+ * `navigation.sidebarTone` moved "subtle" -> "strong" in BOTH copies. `subtle`
+ * is no longer admissible on bithire: its derived `--ds-sidebar-text` /
+ * `--ds-sidebar-bg` pair is two references the APCA checker cannot read, so
+ * admission fails closed. The refusal is pinned in `tenant-theme-compiler.test.ts`
+ * under "refusals the neutral baseline introduces" and registered pending DT
+ * adjudication; `strong` keeps the navigation axis in the fixture.
  */
 const POPULATED_SIMPLE_DOCUMENT = {
   schemaVersion: 1,
@@ -109,7 +117,7 @@ const POPULATED_SIMPLE_DOCUMENT = {
     motion: { intensity: 0.62, durationScale: 1.15, ambient: "subtle" },
     shape: { buttonStyle: "soft" },
     surfaces: { elevation: "elevated" },
-    navigation: { sidebarTone: "subtle" },
+    navigation: { sidebarTone: "strong" },
   },
 } as const;
 
@@ -133,9 +141,6 @@ const BITHIRE_SEED_DERIVED: Readonly<Record<string, string>> = {
   "--ds-color-border-focus": "#0F766E",
   "--ds-color-link": "#0F766E",
   "--ds-color-link-hover": "#00635C",
-  "--ds-input-border-focus": "var(--ds-color-border-focus, var(--ds-color-primary))",
-  "--ds-input-shadow-focus":
-    "0 0 0 3px color-mix(in srgb, var(--ds-color-border-focus, var(--ds-color-primary)) 20%, transparent)",
 };
 
 /**
@@ -152,6 +157,15 @@ const BITHIRE_SEED_INHERITED = [
   "--ds-button-primary-color",
   "--ds-color-primary-foreground",
   "--ds-color-text-on-primary",
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+  // so does the vertical. These two crossed from DERIVED to INHERITED for the
+  // reason the group above states: the bithire preset BAKES no input focus
+  // leaf, where the retired theme did, so the tenant's derivation no longer
+  // displaces a baked value -- it equals the baseline and the delta withdraws
+  // it. The law is unchanged: every channel of the family is still either
+  // moved or deliberately inherited, and the partition below stays closed.
+  "--ds-input-border-focus",
+  "--ds-input-shadow-focus",
 ] as const;
 
 /** Every schema-admitted `advanced.chrome.sidebar` COLOR field. */
@@ -267,10 +281,28 @@ describe("site A — a tenant seed re-derives the family it owns", () => {
   });
 });
 
+/**
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
+ * every block below moved from the `inverse` posture to `strong`, beside a
+ * tenant primary.
+ *
+ * WO-DER-06 derivation-lane registry, pending DT registration: `inverse` is now
+ * INERT on bithire -- its fan-out equals the baseline, so the delta withdraws
+ * every channel it used to produce -- and on rottay and evnto it derives a pair
+ * the APCA checker cannot read, so admission fails closed. Either way it can no
+ * longer carry this site's subject, which is that an explicit tenant leaf
+ * outranks the tenant's OWN tone. `strong` still fans out on all three, so the
+ * subject is preserved rather than pinned away; the tone's own values move from
+ * the neutral ramp to the primary ramp with it. The refusals themselves are
+ * pinned in `tenant-theme-compiler.test.ts` under "refusals the neutral
+ * baseline introduces".
+ */
 describe("site B — an explicit sidebar leaf outranks the tenant's own tone", () => {
-  it("case B: the authored pair survives an `inverse` posture in the same document", () => {
+  const TONE = { palette: { primary: "#0F766E" }, navigation: { sidebarTone: "strong" } };
+
+  it("case B: the authored pair survives a `strong` posture in the same document", () => {
     const document = advanced({
-      general: { navigation: { sidebarTone: "inverse" } },
+      general: TONE,
       advanced: { chrome: { sidebar: ABOVE_FLOOR_PAIR } },
     });
     for (const vertical of ["bithire", "evnto"] as const) {
@@ -286,7 +318,7 @@ describe("site B — an explicit sidebar leaf outranks the tenant's own tone", (
       // outranks the vertical's leaves, it simply no longer outranks the
       // tenant's own.
       expect(artifact.variables["--ds-sidebar-bg"]).toBe(
-        "var(--ds-color-neutral-900)"
+        "var(--ds-color-primary-900)"
       );
     }
     // rottay no longer rests at this ink literally: K1 (33efc95c0) rewired its
@@ -307,7 +339,7 @@ describe("site B — an explicit sidebar leaf outranks the tenant's own tone", (
     const artifact = compileFor(
       "bithire",
       advanced({
-        general: { navigation: { sidebarTone: "inverse" } },
+        general: TONE,
         advanced: { chrome: { sidebar: { bg: "#101014", text: "#F4F4F5" } } },
       })
     );
@@ -315,17 +347,17 @@ describe("site B — an explicit sidebar leaf outranks the tenant's own tone", (
     expect(artifact.variables["--ds-sidebar-text"]).toBe("#F4F4F5");
     expect(artifact.css).toContain("--ds-sidebar-bg: #101014;");
     expect(artifact.css).toContain("--ds-sidebar-text: #F4F4F5;");
-    // The four the tenant left unstated still carry the posture.
-    expect(artifact.variables["--ds-sidebar-item-color-active"]).toBe(
-      "var(--ds-color-white)"
+    // The ones the tenant left unstated still carry the posture.
+    expect(artifact.variables["--ds-sidebar-item-bg-active"]).toBe(
+      "var(--ds-color-primary-700)"
+    );
+    expect(artifact.variables["--ds-sidebar-item-bg-hover"]).toBe(
+      "var(--ds-color-primary-800)"
     );
   });
 
   it("every tone-produced channel has a leaf that can outrank it", () => {
-    const artifact = compileFor(
-      "bithire",
-      advanced({ general: { navigation: { sidebarTone: "inverse" } } })
-    );
+    const artifact = compileFor("bithire", advanced({ general: TONE }));
     for (const channel of Object.keys(SIDEBAR_TONE_LEAF_FIELDS)) {
       expect(
         SIDEBAR_TONE_LEAF_FIELDS[channel],
@@ -523,7 +555,23 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *        +26      +26      +26  3aea57452  card chrome deriver (WO-FAM-06 lot 1)
      *         +0       +1       +1  4aebf68f0  --ds-card-padding-base; rottay already authored it
      *   2463 / 2493 / 1874  measured 2026-09-15 (the a4bc94927 tree): 449e86e55 (texture, emission layer), 008eb19e2 (foundation retirements), b6ef4cc66 (gates) and 654fd1036 (docs) measure the same
-     * Totals: rottay +1212/-56, bithire +1226/-16, evnto +1303/-13. */
+     *  +15/-888   +6/-752  +15/-299  D6-2c-ii (WO-DER-06): the authored first-party themes are retired and a vertical is the neutral foundation plus its preset document
+     *   1590 / 1747 / 1590  measured 2026-09-15 on this tree
+     * Totals: rottay +1227/-944, bithire +1232/-768, evnto +1318/-312.
+     *
+     * The D6-2c-ii row is the largest single move this table records and it is
+     * measured, not inferred: both legs were compiled with the SAME
+     * `lowerTheme` call this test makes, the pre-lot leg on an isolated copy of
+     * the HEAD tree, which reproduced 2463 / 2493 / 1874 byte-exact. What the
+     * presets ADD is the structural decision vocabulary the retired themes
+     * never carried as channels -- the five per-size `--ds-button-*-radius`,
+     * `--ds-control-height-scale`, `--ds-density-mode-factor`,
+     * `--ds-rhythm-scale`, `--ds-radius-nest-{ratio,inset}` and
+     * `--ds-edge-emphasis-width` among them. What they REMOVE is the authored
+     * chrome the themes hand-wrote family by family (alert, badge, button and
+     * the rest). rottay and evnto land on the SAME 1590 because their presets
+     * are structural only and author no palette; bithire keeps 157 more because
+     * its preset authors palette seeds and typeface families. */
     const counts: Record<Vertical, number> = {
       // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
       // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
@@ -566,7 +614,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // FAM-05 close + FAM-06 lot 1 (measured, 2026-09-15): rottay 2350 -> 2463,
       // added 113, removed 0, rows 1ddfd6198, b5f547692, aded1f21d, 1390ebb82,
       // 3aea57452 and 4aebf68f0 in the table above.
-      rottay: 2463,
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+      // and so does the vertical itself -- the authored theme is retired.
+      // rottay 2463 -> 1590, added 15, removed 888, measured against an
+      // isolated copy of the HEAD tree that reproduced 2463 byte-exact.
+      rottay: 1590,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -597,7 +649,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // FAM-05 close + FAM-06 lot 1 (measured, 2026-09-15): bithire 2379 -> 2493,
       // added 114, removed 0, rows 1ddfd6198, b5f547692, aded1f21d, 1390ebb82,
       // 3aea57452 and 4aebf68f0 in the table above.
-      bithire: 2493,
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+      // and so does the vertical itself -- the authored theme is retired.
+      // bithire 2493 -> 1747, added 6, removed 752, measured against an
+      // isolated copy of the HEAD tree that reproduced 2493 byte-exact.
+      bithire: 1747,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -630,7 +686,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // FAM-05 close + FAM-06 lot 1 (measured, 2026-09-15): evnto 1760 -> 1874,
       // added 114, removed 0, rows 1ddfd6198, b5f547692, aded1f21d, 1390ebb82,
       // 3aea57452 and 4aebf68f0 in the table above.
-      evnto: 1874,
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+      // and so does the vertical itself -- the authored theme is retired.
+      // evnto 1874 -> 1590, added 15, removed 299, measured against an
+      // isolated copy of the HEAD tree that reproduced 1874 byte-exact.
+      evnto: 1590,
     };
     for (const vertical of VERTICALS) {
       expect(
@@ -686,12 +746,42 @@ describe("static and DB share one lowering", () => {
     },
   }) as unknown as TenantThemeDocument;
 
+  /**
+   * The populated document minus its navigation tone.
+   *
+   * The mirror law is about the LOWERING, not about the sidebar tone, so it
+   * states a document without one. The toned document is exercised on its own
+   * in the row below, on all three verticals.
+   */
+  const MIRROR_DOCUMENT = {
+    ...POPULATED_SIMPLE_DOCUMENT,
+    appearance: Object.fromEntries(
+      Object.entries(POPULATED_SIMPLE_DOCUMENT.appearance).filter(
+        ([key]) => key !== "navigation"
+      )
+    ),
+  } as unknown as TenantThemeDocument;
+
+  it("admits a sidebar tone beside a forced light mode on every vertical", () => {
+    // rottay is dark-default, so forcing light makes dark the overlay and the
+    // tone's derived pair is two references inside it. Adjudication #2
+    // (2026-09-15): the floor resolves those against the foundation's own
+    // declarations, so the pair is judged on its ratio rather than refused for
+    // its form. Asserted on all three verticals and with the tone dropped, so a
+    // regression on either side is visible.
+    const toned = POPULATED_SIMPLE_DOCUMENT as unknown as TenantThemeDocument;
+    for (const vertical of VERTICALS) {
+      expect(() => compileFor(vertical, toned), vertical).not.toThrow();
+    }
+    expect(() => compileFor("rottay", MIRROR_DOCUMENT)).not.toThrow();
+  });
+
   it("case G1: the artifact is the direct lowering minus the vertical baseline", () => {
     for (const vertical of VERTICALS) {
-      const artifact = compileFor(vertical, POPULATED_SIMPLE_DOCUMENT);
+      const artifact = compileFor(vertical, MIRROR_DOCUMENT);
       const { baseTheme, resolved, authoredPaths, authoredLeaves, floors } = lower(
         vertical,
-        POPULATED_SIMPLE_DOCUMENT as unknown as TenantThemeDocument
+        MIRROR_DOCUMENT
       );
       const direct = lowerTheme(resolved, {
         tenantSlug: IDENTITY.slug,
@@ -745,8 +835,12 @@ describe("static and DB share one lowering", () => {
     // product still got a deep modal shadow from roles 4..6.
     const PRESET = {
       flat: {
-        // Role 0 is `none` in rottay's own baseline too, so it is correctly
-        // absent from a delta that carries only what MOVED.
+        // D6-2c-ii (2026-09-15): tenant-document compiles over neutral +
+        // preset, and role 0 joined the delta. It used to be absent because
+        // rottay's retired theme stated `none` for it as well, so the tenant's
+        // flat posture moved nothing there; the preset states no elevation
+        // ladder of its own, so the posture now moves role 0 like the rest.
+        "--ds-elevation-0": "none",
         "--ds-elevation-1": "none",
         "--ds-elevation-2": "none",
         "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
@@ -755,6 +849,8 @@ describe("static and DB share one lowering", () => {
         "--ds-elevation-6": "0 2px 6px rgba(0,0,0,0.08)",
       },
       elevated: {
+        // Same move as `flat` above: role 0 joins the delta over the preset.
+        "--ds-elevation-0": "none",
         "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
         "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
         "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
@@ -839,15 +935,42 @@ describe("static and DB share one lowering", () => {
       });
       const baseline = lowerTheme(baseTheme, { tenantSlug: IDENTITY.slug });
 
-      // Provenance never touches the base block. Both legs already put the
-      // tenant's leaves there; the contest only exists inside a mode.
-      expect(asStatic.cssVariables, `${vertical} base block`).toEqual(
-        asTenant.cssVariables
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+      // and the base block joined the divergence surface. It used to be equal
+      // on both legs, because the retired theme's own sidebar leaf sat where
+      // the tenant's merged leaf landed and the two agreed. Over the preset the
+      // chrome DERIVERS own those channels, so the provenance-free leg -- a
+      // Theme the compiler has been told nothing about -- publishes the derived
+      // value and the provenance-carrying leg publishes the tenant's leaf.
+      //
+      // The law this block states is unchanged and is asserted below exactly as
+      // before: ONE lowering, one formula set, and a divergence surface that is
+      // exactly the arbitrated channels, in one direction. What moved is which
+      // blocks that surface spans. Measured on all three verticals: the base
+      // surface is these same two channels and nothing else.
+      const baseDivergent = [
+        ...new Set([
+          ...Object.keys(asStatic.cssVariables),
+          ...Object.keys(asTenant.cssVariables),
+        ]),
+      ]
+        .filter(
+          (key) => asStatic.cssVariables[key] !== asTenant.cssVariables[key]
+        )
+        .sort();
+      expect(baseDivergent, `${vertical} base surface`).toEqual(
+        [...arbitrated].sort()
       );
       for (const channel of arbitrated) {
         expect(asTenant.cssVariables[channel], `${vertical} ${channel}`).toBe(
           channel === "--ds-sidebar-bg" ? "#101014" : "#F4F4F5"
         );
+        // Direction: the provenance-free leg carries the deriver's value, and
+        // it is never the tenant's literal.
+        expect(
+          asStatic.cssVariables[channel],
+          `${vertical} ${channel} static`
+        ).not.toBe(asTenant.cssVariables[channel]);
       }
 
       const staticModes = asStatic.modeBlocks ?? [];
@@ -876,16 +999,22 @@ describe("static and DB share one lowering", () => {
 
         // The surface is closed: only the channels the tenant authored, and
         // only those the baseline actually contests in this mode.
+        //
+        // D6-2c-ii (2026-09-15): "contests" is a DEFINED value, not a present
+        // key. A baseline is now the neutral foundation plus a preset patch, so
+        // its mode chrome is a total shape whose unauthored leaves are present
+        // and `undefined`; `hasOwnProperty` counted those as contests and made
+        // this expectation claim a divergence the compile cannot produce. The
+        // predicate reads the value, which is what the sentence above always
+        // meant. Measured: no preset authors a mode sidebar leaf, so the
+        // contested set is empty on all three and the mode surface is empty
+        // with it -- the contest moved to the base block, asserted above.
         const contested = arbitrated
-          .filter((channel) =>
-            baseTheme.modes?.[staticBlock.mode as "light" | "dark"]?.chrome
-              ?.sidebar
-              ? Object.prototype.hasOwnProperty.call(
-                  baseTheme.modes[staticBlock.mode as "light" | "dark"]!.chrome!
-                    .sidebar!,
-                  channel === "--ds-sidebar-bg" ? "bg" : "text"
-                )
-              : false
+          .filter(
+            (channel) =>
+              baseTheme.modes?.[staticBlock.mode as "light" | "dark"]?.chrome
+                ?.sidebar?.[channel === "--ds-sidebar-bg" ? "bg" : "text"] !==
+              undefined
           )
           .sort();
         expect(divergent, `${vertical} ${staticBlock.mode} surface`).toEqual(
@@ -1075,8 +1204,15 @@ describe("the digest tells the truth", () => {
       sidebarLeaf: advanced({
         advanced: { chrome: { sidebar: { bg: "#101014", text: "#F4F4F5" } } },
       }),
+      // D6-2c-ii (2026-09-15): the tone is `strong`, not `inverse`. `inverse`
+      // is inert on bithire over neutral + preset, and an inert tone breaks
+      // this biconditional in the exact direction the comment below names --
+      // accepted and digested, nothing emitted. That is a real finding, so it
+      // is pinned by name in its own block after this one rather than hidden
+      // by this fixture; here the law is measured on a tone that still fans
+      // out.
       sidebarLeafPlusTone: advanced({
-        general: { navigation: { sidebarTone: "inverse" } },
+        general: { navigation: { sidebarTone: "strong" } },
         advanced: { chrome: { sidebar: { bg: "#101014", text: "#F4F4F5" } } },
       }),
       // The accept-normalize-digest-discard shape, stated as a pair. These two
@@ -1089,7 +1225,7 @@ describe("the digest tells the truth", () => {
       // paragraph. Both pairs are above the APCA floor so intake admits them
       // and the comparison is about precedence, not rejection.
       sidebarLeafPlusToneAlt: advanced({
-        general: { navigation: { sidebarTone: "inverse" } },
+        general: { navigation: { sidebarTone: "strong" } },
         advanced: { chrome: { sidebar: { bg: "#14100F", text: "#F5EFE4" } } },
       }),
     };
@@ -1122,6 +1258,40 @@ describe("the digest tells the truth", () => {
         ).toBe(left.emission === right.emission);
       }
     }
+  });
+
+  it("an INERT tone breaks the biconditional: digested, and emitting nothing", () => {
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending DT
+    // registration. `navigation.sidebarTone: "inverse"` is inert on bithire
+    // over neutral + preset: its fan-out equals the baseline, so the delta
+    // withdraws every channel it used to produce. The document is still
+    // accepted, still normalized and still digested, so two artifacts whose
+    // styled bytes are IDENTICAL carry DIFFERENT digests -- precisely the
+    // accept-normalize-digest-discard shape the block above exists to forbid.
+    //
+    // This is the measured state, pinned so it cannot pass unnoticed and so it
+    // reds the moment the derivation lane gives the tone a producer again (or
+    // the digest source stops covering a decision that emits nothing). It is a
+    // defect of the compiler, not of a fixture, so it is stated here rather
+    // than repaired in a test.
+    const leaf = { bg: "#101014", text: "#F4F4F5" };
+    const withoutTone = compileFor(
+      "bithire",
+      advanced({ advanced: { chrome: { sidebar: leaf } } })
+    );
+    const withInertTone = compileFor(
+      "bithire",
+      advanced({
+        general: { navigation: { sidebarTone: "inverse" } },
+        advanced: { chrome: { sidebar: leaf } },
+      })
+    );
+    const styled = (css: string) =>
+      css.replace(/^\/\* TenantThemeArtifact[^\n]*\n/, "");
+    expect(withInertTone.variables).toEqual(withoutTone.variables);
+    expect(withInertTone.modeDeltas).toEqual(withoutTone.modeDeltas);
+    expect(styled(withInertTone.css)).toBe(styled(withoutTone.css));
+    expect(withInertTone.digest).not.toBe(withoutTone.digest);
   });
 });
 

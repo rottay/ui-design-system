@@ -27,7 +27,9 @@ function createProps(overrides: Partial<WorkspaceSwitcherProps> = {}): Workspace
 
 /** Opens the panel and waits for the lazily-composed rows to mount. */
 async function openPanel(): Promise<void> {
-  fireEvent.click(screen.getByTestId('workspace-trigger'));
+  // The modern engine is `React.lazy`: the trigger itself only mounts once the
+  // chunk resolves, so the panel opener awaits that boundary too.
+  fireEvent.click(await screen.findByTestId('workspace-trigger'));
   await screen.findByTestId('workspace-item-ws-1');
 }
 

@@ -488,8 +488,12 @@ describe('presence -- data-part contract (communication-pattern anatomy)', () =>
     // One visible user has no image. The pattern no longer hand-rolls the
     // initials span: it composes the Avatar primitive, which owns the fallback.
     expect(q(container, '[data-part="avatar-initials"]')).toHaveLength(0);
-    expect(q(container, '[data-part="avatar"] .ds-avatar, [data-part="avatar"] [class*="avatar"]').length)
-      .toBeGreaterThanOrEqual(1);
+    // The composed Avatar is its own lazy engine component, so its class lands
+    // after the bar's root: await it rather than read the first frame.
+    await waitFor(() => {
+      expect(q(container, '[data-part="avatar"] .ds-avatar, [data-part="avatar"] [class*="avatar"]').length)
+        .toBeGreaterThanOrEqual(1);
+    });
     expect(container.textContent).toContain('B');
     expect(q(container, '[data-part="overflow-badge"]')).toHaveLength(1);
     expect(q(container, '[data-part="overflow-badge-count"]')).toHaveLength(1);

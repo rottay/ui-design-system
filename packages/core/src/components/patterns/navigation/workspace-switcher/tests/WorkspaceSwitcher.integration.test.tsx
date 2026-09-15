@@ -32,11 +32,14 @@ describe('PatternWorkspaceSwitcher integration', () => {
   describe('workspace list rendering', () => {
     it.each(STABLE_ENGINES)(
       'displays all workspaces with their names in the %s engine',
-      (engine) => {
+      async (engine) => {
         const Component = COMPONENTS[engine];
         renderWithEngine(<Component {...createProps()} />, engine);
 
-        fireEvent.click(screen.getByTestId('workspace-trigger'));
+        // The modern engine implementation is `React.lazy`, so the FIRST render of
+      // a modern component in a fresh module graph is the Suspense fallback.
+      // `findBy*` awaits that boundary; it fails just as hard if it never mounts.
+        fireEvent.click(await screen.findByTestId('workspace-trigger'));
 
         // Active workspace name may appear in both trigger and list
         expect(screen.getAllByText('Acme Corp').length).toBeGreaterThanOrEqual(1);

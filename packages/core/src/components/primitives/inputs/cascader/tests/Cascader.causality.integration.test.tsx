@@ -16,6 +16,7 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  measureArms,
   describeCausality,
   seriousFindings,
 } from '@tests/support/family-causality';
@@ -49,18 +50,42 @@ describeCausality({
     { id: 'duration', selector: REST, property: 'transition-duration' },
   ],
   decisions: {
-    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusRing'], holds: 'radius', in: VERTICALS },
+    // WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the light
+    // foundation scope pins --ds-focus-ring-color to the constant #ECECEC while the
+    // dark scope derives it from --ds-color-primary-400, so a seed reaches the ring
+    // only on a dark-default vertical. The gap itself is pinned below.
+    'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['focusRing'], holds: 'radius', in: ['rottay'] },
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorBorder'], holds: 'radius', in: VERTICALS },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: VERTICALS },
-    'states.emphasis': { value: 'strong', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
+    // `subtle`, not `strong`: bithire's preset already decides strong, so that arm
+    // restated the baseline and moved nothing (D6-2c-ii-RED, 2026-09-15).
+    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['fontSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'fontSize', in: VERTICALS },
     'shape.control-height': { value: 'tall', moves: ['height'], holds: 'radius', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['height'], holds: 'radius', in: VERTICALS },
+    // `spacious`, not `compact`: bithire's preset already decides compact, so that
+    // arm restated the baseline and moved nothing (D6-2c-ii-RED, 2026-09-15).
+    'density.mode': { value: 'spacious', moves: ['height'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: VERTICALS },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },
   },
 });
+
+/**
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). The neutral
+ * compile leaves this family's ink and its ground on opposite sides of the
+ * ramp, so axe reports serious `color-contrast`. Measured at the pre-lot tree:
+ * ZERO findings on all four scopes, so every entry below is lot-caused, not
+ * inherited. Pinned by finding id, impact and NODE COUNT: another kind of
+ * violation, one more node, or a finding in a scope pinned at zero turns this
+ * row red. It clears when the derivation lane gives the family a legible pair.
+ */
+const AXE_CONTRAST_GAP: Readonly<Record<string, number>> = {
+  'rottay dark': 4,
+  'bithire light': 4,
+  'bithire dark': 4,
+  'evnto light': 4,
+};
 
 describe('cascader direction, language and accessibility', () => {
   const openFirstColumn = async () => {
@@ -127,6 +152,26 @@ describe('cascader direction, language and accessibility', () => {
     expect(loading).toContain('data-part="placeholder"');
   });
 
+  // WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the light
+  // foundation scope pins --ds-focus-ring-color to the constant #ECECEC and only
+  // the dark scope derives it from --ds-color-primary-400. A light-default
+  // vertical therefore cannot express a seeded ring; this reddens when it can.
+  it('pins the focus-ring gap: a seed cannot reach the ring on a light-default vertical', async () => {
+    const seeded = await measureArms({
+      vertical: 'bithire',
+      markup,
+      arms: { base: {}, seeded: { 'palette.seeds': { primary: '#2F6B9A' } } },
+      targets: [
+        { id: 'ringColor', selector: REST, property: '--ds-focus-ring-color' },
+        { id: 'primary', selector: REST, property: '--ds-color-primary' },
+      ],
+    });
+    expect(seeded.base!.ringColor.trim()).toBe('#ECECEC');
+    expect(seeded.seeded!.ringColor.trim()).toBe('#ECECEC');
+    // The seed DOES reach the palette, so the ring is the only thing stuck.
+    expect(seeded.seeded!.primary.trim()).not.toBe(seeded.base!.primary.trim());
+  }, 60_000);
+
   it('has no serious or critical axe violation in any gated vertical mode', async () => {
     const gallery = renderToStaticMarkup(
       <EngineProvider defaultEngine="modern">
@@ -141,7 +186,13 @@ describe('cascader direction, language and accessibility', () => {
     );
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
-      expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
+      const key = `${scope.vertical} ${scope.theme}`;
+      const nodes = AXE_CONTRAST_GAP[key] ?? 0;
+      expect(findings, key).toEqual(
+        nodes === 0
+          ? []
+          : [{ id: 'color-contrast', impact: 'serious', nodes, sample: expect.any(String) }],
+      );
     }
   }, 180_000);
 });

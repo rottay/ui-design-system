@@ -265,7 +265,7 @@ const RESOLUTION_OWNER =
  * nothing validated. The admitted shape is `resolveTheme(intent, { baseline })`:
  * the intent is validated first, always, and the baseline by
  * `assertThemeBaseline`. The door derives that baseline from the CLOSED set
- * `THEME_BASELINE_SOURCES` through `baselineFor`, so no caller can hand the
+ * the neutral foundation plus the vertical's preset through `baselineFor`, so no caller can hand the
  * resolver a Theme of its own. Keyed on the door and not on the ingress owner:
  * the three intent producers may not pass options. The census below asserts
  * EXACT equality, so a door that stops passing options turns it red and the
@@ -634,7 +634,7 @@ describe("the theme lowering has exactly one productive door", () => {
     // `assertThemeIntent` ran: the only unvalidated ingress was also the only
     // one nobody had declared. The admitted shape validates the intent first,
     // always, and the baseline through `assertThemeBaseline`; the door derives
-    // that baseline from the closed `THEME_BASELINE_SOURCES` via `baselineFor`,
+    // that baseline from the neutral foundation and the preset via `baselineFor`,
     // so no caller hands the resolver a Theme by hand. The exact-equality half
     // keeps the exception honest: a door that stops passing options deletes it.
     const { findings, optionCallers } = resolveThemeArityCensus(SOURCES);

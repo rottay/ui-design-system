@@ -21,6 +21,7 @@ import type { BrandPalette } from '@/foundation/contracts/composition/tenants/th
 import { isDarkSurfaceTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground";
 import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
 import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
 
 const bithireBrandTheme = firstPartyFixture('bithire');
 const evntoBrandTheme = firstPartyFixture('evnto');
@@ -47,17 +48,25 @@ describe('isDarkSurfaceTheme', () => {
     expect(isDarkSurfaceTheme(bithireBrandTheme)).toBe(false);
   });
 
-  it('evnto is light-surface -- its dark ground lives in modes.dark, not a second field on the same palette', () => {
+  it('evnto is light-surface, and a light theme keeps its dark ground in modes.dark, not a second field on the same palette', () => {
     // The old test proved evnto was light-surface "even though it ALSO
     // declares darkBackgroundColor" -- a second field on the SAME palette
     // object. That shape no longer exists: a palette authors exactly one
     // mode, and the other mode's ground is a value inside `modes.dark`, a
     // sibling object entirely. There is nothing left to be misled by.
+    //
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // evnto's structural preset authors no palette, so the two-ground half of
+    // the claim is carried by the light-default torture fixture, which does.
     expect(evntoBrandTheme.appearance?.defaultMode).toBe('light');
-    expect(evntoBrandTheme.palette?.backgroundColor).toBeDefined();
     expect('darkBackgroundColor' in (evntoBrandTheme.palette ?? {})).toBe(false);
-    expect(evntoBrandTheme.modes?.dark?.palette?.backgroundColor).toBeDefined();
     expect(isDarkSurfaceTheme(evntoBrandTheme)).toBe(false);
+
+    expect(tortureLightBrandTheme.appearance?.defaultMode).toBe('light');
+    expect(tortureLightBrandTheme.palette?.backgroundColor).toBeDefined();
+    expect('darkBackgroundColor' in (tortureLightBrandTheme.palette ?? {})).toBe(false);
+    expect(tortureLightBrandTheme.modes?.dark?.palette?.backgroundColor).toBeDefined();
+    expect(isDarkSurfaceTheme(tortureLightBrandTheme)).toBe(false);
   });
 
   it('classification is purely declarative: a dark-default theme with a light-shaped palette is still dark-surface', () => {
@@ -93,16 +102,22 @@ describe('deriveTenantColorRamps wired into compileTheme', () => {
     }
   });
 
-  it('emits a 50..900 ramp for every role rottay declares a dark seed (or falls back to the light seed) for', () => {
-    const { cssVariables } = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
-    const authored = rottayBrandTheme.palette?.ramps ?? {};
+  it('emits a 50..900 ramp for every role a DARK-surface theme declares a seed for', () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the dark-surface leg moves from rottay -- whose structural preset seeds
+    // nothing, so it derives no ramp at all -- to the dark-default torture
+    // fixture, which seeds every role. The authored-step branch stays because
+    // an authored step still outranks the derivation (proved on its own in
+    // mode-overlay.test.ts).
+    const { cssVariables } = lowerBrandThemeFixture({
+      brandTheme: tortureDarkBrandTheme,
+      tenantSlug: 'torture-dark',
+    });
+    const authored = tortureDarkBrandTheme.palette?.ramps ?? {};
     for (const role of ROLES) {
       for (const step of RAMP_STEPS) {
         const value = cssVariables[`--ds-color-${role}-${step}`];
         expect(value, `--ds-color-${role}-${step}`).toBeTruthy();
-        // Rottay hand-tunes its steps, and an authored step is any CSS color —
-        // its success-50 is an alpha tint. Only the DERIVED steps are the
-        // gamut-mapped opaque hex the OKLCH ramp produces.
         if (authored[role]?.[step] === undefined) {
           expect(value, `--ds-color-${role}-${step}`).toMatch(/^#[0-9A-F]{6}$/);
         } else {
@@ -112,27 +127,40 @@ describe('deriveTenantColorRamps wired into compileTheme', () => {
     }
   });
 
-  it("rottay's primary ramp is dark-tuned: step 900 (far from its dark canvas) is high-contrast against step 50 (near canvas)", () => {
+  it('a structural preset with no palette seed derives no ramp at all', () => {
+    // The other half of the rule above, and what rottay measures today: a
+    // vertical whose preset authors no seed gets no ramp channels, rather than
+    // a placeholder ramp off some default seed.
+    for (const [slug, brandTheme] of [['rottay', rottayBrandTheme], ['evnto', evntoBrandTheme]] as const) {
+      const { cssVariables } = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });
+      const rampChannels = Object.keys(cssVariables).filter((name) =>
+        /^--ds-color-[a-z]+-\d+$/.test(name)
+      );
+      expect(rampChannels, slug).toEqual([]);
+    }
+  });
+
+  it("a dark-surface primary ramp is dark-tuned: step 900 (far from the dark canvas) is high-contrast against step 50 (near canvas)", () => {
     // `deriveTenantColorRamps` no longer infers the surface from the
     // palette's own shape -- that inference is gone along with
     // `isDarkSurfacePalette`. The CALLER now states which ground this ramp is
     // FOR, exactly as `compileTheme` does via `brandThemeRampSurface`.
     // Omitting it here would silently default to 'light', which would clamp
-    // rottay's near-black ground into the LIGHT endpoint band and invert the
+    // a near-black ground into the LIGHT endpoint band and invert the
     // whole ramp's polarity -- so this is not cosmetic, it is the argument
     // that makes the assertion below true.
-    const ramp = deriveTenantColorRamps(rottayBrandTheme.palette, 'dark');
+    const ramp = deriveTenantColorRamps(tortureDarkBrandTheme.palette, 'dark');
     // step 900 is light text on a step-50 (dark) background -- reverse polarity,
     // so APCA reports it as a large-MAGNITUDE NEGATIVE Lc. Assert magnitude, not sign.
     expect(Math.abs(apcaContrast(ramp['--ds-color-primary-900'], ramp['--ds-color-primary-50']))).toBeGreaterThan(60);
   });
 
   it('passing the wrong surface changes the ramp -- proving the explicit argument is load-bearing', () => {
-    // Deliberately NOT one of the shipped first-party palettes. All three
-    // hand-author `palette.ramps`, and an authored step overwrites the derived
-    // one, so their compiled ramps are byte-identical under either surface --
-    // which would make this drill pass vacuously (or, as written against
-    // rottay, fail for a reason that has nothing to do with the argument).
+    // Deliberately NOT one of the shipped first-party palettes: an authored
+    // step overwrites the derived one, so a hand-tuned ramp compiles
+    // byte-identically under either surface and would make this drill pass
+    // vacuously -- and two of the three presets seed nothing at all, so they
+    // would fail for a reason that has nothing to do with the argument.
     //
     // A seed on a dark ground with NO authored steps is the case the argument
     // actually governs: `rampEndpoints` clamps the ground's lightness into a
@@ -215,23 +243,17 @@ describe('APCA scorer proof: a deliberately-failing seed fails it (WO-TOK-02 ste
     expect(failures).toEqual(['primary (#F9FCFF) vs ground #F8FBFF']);
   });
 
-  it('FINDING: bithire\'s own warningColor already fails this check today, pre-existing and out of WO-TOK-02 scope', () => {
-    // Not a regression from this WO's derivation: this is bithire's existing,
-    // hand-authored warningColor (#D6A04E) against its existing, hand-authored
-    // ground (#F8FBFF) -- unrelated to the new ramp/tint-scale work. It is
-    // consistent with the pre-existing `a11y.apcaPairings` counter
-    // (engine-token-audit.mjs, baseline 6) whose own doc comment says
-    // "dark-surface saturated status colors ... sit below the bar today ...
-    // decrease-only, no hard target". Documented here, not silently
-    // discovered later, and why the compile-time gate wired into
-    // build-vertical-artifacts.mjs (step 5) checks the GENERATED RAMP's own
-    // construction rather than hard-failing on every pre-existing seed --
-    // doing the latter would break bithire's build today over a color choice
-    // this WO has no mandate to change (WO-GAT-04 already owns this exact
-    // check as a decrease-only ratchet, not a hard gate; "extend, never
-    // fork").
-    const failures = seedGroundFailures(bithireBrandTheme.palette as BrandPalette, '#F8FBFF');
-    expect(failures).toEqual(['warning (#D6A04E) vs ground #F8FBFF']);
+  it('every seed bithire ships clears the check against its own ground', () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // This used to record a FINDING -- bithire's hand-authored warningColor
+    // #D6A04E read below the bar over its hand-authored ground #F8FBFF. The
+    // preset seeds warning #B45309 over ground #FFFFFF and every role now
+    // clears, so the finding has no subject left. The assertion stays pointed
+    // at the shipped palette rather than being retired with it: this is what
+    // goes red the day a preset seed drops below the bar again.
+    const ground = bithireBrandTheme.palette!.backgroundColor!;
+    expect(ground).toBe('#FFFFFF');
+    expect(seedGroundFailures(bithireBrandTheme.palette as BrandPalette, ground)).toEqual([]);
   });
 });
 
@@ -266,26 +288,33 @@ describe('compile-time ramp gate (what is actually wired into build-vertical-art
     return failures;
   }
 
+  // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset. The
+  // grounds below are each theme's own `palette.backgroundColor`, read from the
+  // theme rather than restated, so a preset that moves its canvas cannot leave
+  // this gate measuring against a ground nobody ships.
   it('bithire: every role\'s step-900 clears the body-text threshold against its light ground', () => {
-    expect(rampFarExtremeFailures(bithireBrandTheme.palette as BrandPalette, '#F8FBFF', 'light')).toEqual([]);
+    const ground = bithireBrandTheme.palette!.backgroundColor!;
+    expect(rampFarExtremeFailures(bithireBrandTheme.palette as BrandPalette, ground, 'light')).toEqual([]);
   });
 
-  it('rottay: only its four hand-tuned status ramps miss the body-text threshold', () => {
-    // Rottay authors these four step-900s by hand against its dark canvas, and
-    // they do not clear the threshold. They ship today — the values moved from
-    // the artifact extension into palette.ramps without changing — so they are
-    // recorded in scripts/contrast-baseline/index.json rather
-    // than repainted inside an architecture wave. Anything BEYOND this list is
-    // a regression and fails here and in the build gate.
-    expect(rampFarExtremeFailures(rottayBrandTheme.palette as BrandPalette, '#0C0C0E', 'dark')).toEqual([
-      '--ds-color-success-900 vs ground #0C0C0E',
-      '--ds-color-warning-900 vs ground #0C0C0E',
-      '--ds-color-error-900 vs ground #0C0C0E',
-      '--ds-color-info-900 vs ground #0C0C0E',
-    ]);
+  it('a dark-surface theme: every role\'s step-900 clears the threshold against its dark ground', () => {
+    // The dark leg used to be rottay and pinned the four hand-tuned status
+    // step-900s it authored below the bar. Those four ramps were authored
+    // values with no derivation behind them; D6-2c-i already removed their
+    // entries from the build gate's contrast baseline when the artifacts moved
+    // to the neutral foundation, and the rottay preset seeds nothing, so the
+    // list has no subject. The dark-ground leg itself is kept -- on the
+    // fixture that does seed every role -- because a dark canvas exercises the
+    // opposite endpoint band from the two light legs.
+    const ground = tortureDarkBrandTheme.palette!.backgroundColor!;
+    expect(rampFarExtremeFailures(tortureDarkBrandTheme.palette as BrandPalette, ground, 'dark')).toEqual([]);
   });
 
-  it('evnto: every role\'s step-900 clears the body-text threshold against its light ground', () => {
-    expect(rampFarExtremeFailures(evntoBrandTheme.palette as BrandPalette, '#FFFFFF', 'light')).toEqual([]);
+  it('a structural preset derives no ramp, so the gate has nothing to measure', () => {
+    // Stated so the two empty results below read as "no ramp shipped", not as
+    // "every ramp passed" -- the difference a vacuous green would hide.
+    for (const theme of [rottayBrandTheme, evntoBrandTheme]) {
+      expect(deriveTenantColorRamps(theme.palette, 'dark')).toEqual({});
+    }
   });
 });

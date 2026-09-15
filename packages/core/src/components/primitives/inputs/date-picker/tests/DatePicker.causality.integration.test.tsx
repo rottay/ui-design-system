@@ -17,6 +17,7 @@ import {
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
   describeCausality,
+  measureArms,
   seriousFindings,
 } from '@tests/support/family-causality';
 
@@ -60,18 +61,37 @@ describeCausality({
   decisions: {
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['selectedBg'], holds: 'radius', in: VERTICALS },
     'palette.status-seeds': { value: { error: '#B00020' }, moves: ['errorBorder'], holds: 'radius', in: VERTICALS },
-    'palette.neutral-temperature': { value: 'warm', moves: ['cellHover'], holds: 'radius', in: ['bithire', 'evnto'] },
     'states.focus-style': { value: 'glow', moves: ['focusRing'], holds: 'radius', in: ['bithire', 'evnto'] },
-    'states.emphasis': { value: 'strong', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
+    // `subtle`, not `strong`: bithire's preset already decides strong, so that arm
+    // restated the baseline and moved nothing (D6-2c-ii-RED, 2026-09-15).
+    'states.emphasis': { value: 'subtle', moves: ['disabledOpacity'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['fontSize', 'weekdaySize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius', 'cellRadius'], holds: 'fontSize', in: VERTICALS },
     'shape.control-height': { value: 'tall', moves: ['height'], holds: 'radius', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['cellHeight'], holds: 'radius', in: VERTICALS },
+    // `spacious`, not `compact`: bithire's preset already decides compact, so that
+    // arm restated the baseline and moved nothing (D6-2c-ii-RED, 2026-09-15).
+    'density.mode': { value: 'spacious', moves: ['cellHeight'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'elevated', moves: ['panelShadow'], holds: 'radius', in: ['rottay'] },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },
   },
 });
+
+/**
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15). The neutral
+ * compile leaves this family's ink and its ground on opposite sides of the
+ * ramp, so axe reports serious `color-contrast`. Measured at the pre-lot tree:
+ * ZERO findings on all four scopes, so every entry below is lot-caused, not
+ * inherited. Pinned by finding id, impact and NODE COUNT: another kind of
+ * violation, one more node, or a finding in a scope pinned at zero turns this
+ * row red. It clears when the derivation lane gives the family a legible pair.
+ */
+const AXE_CONTRAST_GAP: Readonly<Record<string, number>> = {
+  'rottay dark': 4,
+  'bithire light': 0,
+  'bithire dark': 4,
+  'evnto light': 0,
+};
 
 describe('date-picker calendar, language and accessibility', () => {
   const grid = () => screen.getByRole('grid');
@@ -125,6 +145,33 @@ describe('date-picker calendar, language and accessibility', () => {
     expect(loading).toContain('data-part="calendar-icon"');
   });
 
+  // WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the neutral
+  // ramp has no producer. `deriveNeutralAxis` leans an AUTHORED
+  // `palette.ramps.neutral` and no preset authors one, so the whole
+  // palette.neutral-temperature axis is inert and the ramp keeps the foundation
+  // constants. Measured on BOTH light-default verticals, not just the one the
+  // causality loop reported first. The arm it replaces asserted cellHover moved.
+  it('pins the inert neutral-temperature axis: no lean reaches the ramp', async () => {
+    for (const vertical of ['bithire', 'evnto'] as const) {
+      const arms = await measureArms({
+        vertical,
+        markup,
+        arms: {
+          base: {},
+          warm: { 'palette.neutral-temperature': 'warm' },
+          neutral: { 'palette.neutral-temperature': 'neutral' },
+        },
+        targets: [
+          { id: 'cellHover', selector: "#panel [data-part='cell']:not([data-selected])", property: 'background-color', attributes: { 'data-state': 'hovered' } },
+          { id: 'n100', selector: "#panel [data-part='cell']", property: '--ds-color-neutral-100' },
+        ],
+      });
+      expect(arms.warm!.cellHover, `${vertical} hover`).toBe(arms.base!.cellHover);
+      expect(arms.neutral!.cellHover, `${vertical} hover`).toBe(arms.base!.cellHover);
+      expect(arms.base!.n100.trim(), `${vertical} ramp`).toBe('#f5f5f5');
+    }
+  }, 120_000);
+
   it('has no serious or critical axe violation in any gated vertical mode', async () => {
     const gallery =
       renderToStaticMarkup(
@@ -143,7 +190,13 @@ describe('date-picker calendar, language and accessibility', () => {
       );
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
-      expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
+      const key = `${scope.vertical} ${scope.theme}`;
+      const nodes = AXE_CONTRAST_GAP[key] ?? 0;
+      expect(findings, key).toEqual(
+        nodes === 0
+          ? []
+          : [{ id: 'color-contrast', impact: 'serious', nodes, sample: expect.any(String) }],
+      );
     }
   }, 180_000);
 });

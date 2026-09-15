@@ -132,10 +132,27 @@ const POST_ROTTAY_T3_ENVELOPE_DIGEST =
 /**
  * The null-override artifact digest once the artifact carries the non-CSS half
  * of its own compile. Two blocks below assert it, so it is written once here
- * rather than twice where they could drift apart.
+ * rather than twice where they could drift apart. Superseded by the constant
+ * below and kept asserted, as every pin in this file is.
  */
 const POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST =
   "sha256-a1de559005353e3b84f22bdabbdd6ed073b6c96ddc3aae222b6417f96774f825";
+
+/**
+ * D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+ *
+ * A first-party vertical is now the neutral foundation with its preset document
+ * admitted through the same door this tenant row takes, so the baseline the
+ * delta is subtracted against is a different theme and every artifact digest
+ * moves with it. This document still authors NOTHING and its `variables` are
+ * still empty: what moved is the baseline under the subtraction, not anything
+ * this artifact paints.
+ *
+ * OPERATIONAL CONSEQUENCE, unchanged: every artifact already persisted against
+ * a tenant row is invalidated and must be recompiled.
+ */
+const POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST =
+  "sha256-a1e14b859d0bc9f340ca7e87a499ef1b2b980d010949a98cd01b3870af4c6588";
 
 const NULL_OVERRIDE_DOCUMENT = {
   schemaVersion: 1,
@@ -511,11 +528,19 @@ describe("digest identity across the canonicalization extraction", () => {
     const PRE_RUNTIME_HALF_NULL_OVERRIDE_PRE_T3_DIGEST =
       "sha256-f594475c5aba01a40f2fe9f4b3f08d6343a4e2df3640ecd4d2abd9acaece8a6c";
     expect(before.digest).not.toBe(PRE_RUNTIME_HALF_NULL_OVERRIDE_PRE_T3_DIGEST);
+    // D6-2c-ii (2026-09-15): the pre-T3 reconstruction moves with the baseline
+    // exactly as the live pin does -- both sides of this comparison are
+    // compiled over neutral + preset, so the claim the block makes (the only
+    // thing separating `before` from `after` is the envelope) is untouched.
+    const PRE_NEUTRAL_BASELINE_NULL_OVERRIDE_PRE_T3_DIGEST =
+      "sha256-326bb71ca61a764f55e80cb953303c00ad4d32eb04c3c1eebfd0c33dc3efa244";
+    expect(before.digest).not.toBe(PRE_NEUTRAL_BASELINE_NULL_OVERRIDE_PRE_T3_DIGEST);
     expect(before.digest).toBe(
-      "sha256-326bb71ca61a764f55e80cb953303c00ad4d32eb04c3c1eebfd0c33dc3efa244"
+      "sha256-b0a3dc7be058c8a6d219380f92f027b07d0e8e4460546e1a8e525a84240559fa"
     );
     expect(after.digest).not.toBe(PINNED.nullOverrideDigest);
-    expect(after.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
+    expect(after.digest).not.toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
+    expect(after.digest).toBe(POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST);
 
     // Everything else in the digest source is byte-identical, so the move is
     // provenance, not paint. A tenant that renders through this artifact sees
@@ -549,7 +574,8 @@ describe("digest identity across the canonicalization extraction", () => {
       hydrateTenantThemeConfig(NULL_OVERRIDE_DOCUMENT, { ...IDENTITY })
     );
     expect(artifact.digest).not.toBe(PINNED.nullOverrideDigest);
-    expect(artifact.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
+    expect(artifact.digest).not.toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
+    expect(artifact.digest).toBe(POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST);
     expect(artifact.verticalEnvelopeDigest).toBe(
       PINNED.nullOverrideEnvelopeDigest
     );
@@ -746,7 +772,20 @@ describe("digest identity across the canonicalization extraction", () => {
     // OPERATIONAL NOTE: as with every move above, persisted rows recompile.
     const POST_TOGGLE_SILHOUETTE_DIGEST =
       "sha256-403d6044095b5f96ed2865446df613a59fff7886ac309307c00a92872c917b98";
-    expect(artifact.digest).toBe(POST_TOGGLE_SILHOUETTE_DIGEST);
+    expect(artifact.digest).not.toBe(POST_TOGGLE_SILHOUETTE_DIGEST);
+    // Declared move (D6-2c-ii): the artifact's `variables` are a DELTA against
+    // the vertical baseline, and the baseline itself changed -- a first-party
+    // vertical is now the neutral foundation with its preset document admitted
+    // through the tenant door, not an authored theme. Every channel the
+    // authored theme used to carry and the preset does not is therefore no
+    // longer subtracted, and the digest covers both the delta and the baseline
+    // it subtracts. The channel census stays owned by
+    // `tenant-theme-artifact-stability.test.ts`; what moves here is the hash.
+    // Every prior pin above stays asserted, so this is a twelfth declared move
+    // rather than a refreshed baseline.
+    const POST_NEUTRAL_PRESET_BASELINE_DIGEST =
+      "sha256-f840df29112d93598f596bdde0aea0221aec4b9e597430a09f3369418444e24b";
+    expect(artifact.digest).toBe(POST_NEUTRAL_PRESET_BASELINE_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
     expect(
@@ -757,8 +796,11 @@ describe("digest identity across the canonicalization extraction", () => {
     // runtime half reports what the compile EFFECTIVELY resolved. This document
     // selects no recipe profile, so the vertical's own is what a runtime reads.
     expect(artifact.normalizedAppearance.recipeProfile).toBeUndefined();
+    // D6-2c-ii: the vertical's own profile is its PRESET decision, and bithire
+    // decides `rottay/technical-sharp@1`; the retired authored theme named a
+    // different one.
     expect(artifact.runtime?.runtime.recipeProfile).toBe(
-      "rottay/network-professional@1"
+      "rottay/technical-sharp@1"
     );
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
@@ -787,7 +829,78 @@ describe("digest identity across the canonicalization extraction", () => {
     // 65 -> 67 (toggle silhouette, measured): added 2, removed 0 -- the two
     // toggle corners of the fourteenth declared move above, pinned by name and
     // value in `tenant-theme-artifact-stability.test.ts`.
-    expect(Object.keys(artifact.variables)).toHaveLength(67);
+    // 67 -> 63 (D6-2c-ii, measured): the delta subtracts a DIFFERENT baseline.
+    // A first-party vertical is the neutral foundation with its preset document
+    // admitted through the tenant door, so a channel this document states that
+    // the preset also states is withdrawn where the authored theme used to
+    // leave it in. Pinned BY NAME rather than counted, which is stronger than
+    // the length it replaces: a channel joining or leaving the delta is named
+    // by the diff instead of showing up as an off-by-one.
+    expect(Object.keys(artifact.variables).sort()).toEqual([
+      "--ds-button-lg-radius",
+      "--ds-button-md-radius",
+      "--ds-button-primary-bg-hover",
+      "--ds-button-sm-radius",
+      "--ds-button-xl-radius",
+      "--ds-button-xs-radius",
+      "--ds-chart-series-1",
+      "--ds-chart-series-10",
+      "--ds-chart-series-2",
+      "--ds-chart-series-3",
+      "--ds-chart-series-4",
+      "--ds-chart-series-5",
+      "--ds-chart-series-6",
+      "--ds-chart-series-7",
+      "--ds-chart-series-8",
+      "--ds-chart-series-9",
+      "--ds-color-accent",
+      "--ds-color-border-focus",
+      "--ds-color-link",
+      "--ds-color-link-hover",
+      "--ds-color-primary",
+      "--ds-color-primary-100",
+      "--ds-color-primary-200",
+      "--ds-color-primary-300",
+      "--ds-color-primary-400",
+      "--ds-color-primary-50",
+      "--ds-color-primary-500",
+      "--ds-color-primary-600",
+      "--ds-color-primary-700",
+      "--ds-color-primary-800",
+      "--ds-color-primary-900",
+      "--ds-color-primary-rgb",
+      "--ds-color-secondary",
+      "--ds-color-secondary-100",
+      "--ds-color-secondary-200",
+      "--ds-color-secondary-300",
+      "--ds-color-secondary-400",
+      "--ds-color-secondary-50",
+      "--ds-color-secondary-500",
+      "--ds-color-secondary-600",
+      "--ds-color-secondary-700",
+      "--ds-color-secondary-800",
+      "--ds-color-secondary-900",
+      "--ds-color-secondary-rgb",
+      "--ds-density-mode-factor",
+      "--ds-elevation-0",
+      "--ds-elevation-1",
+      "--ds-elevation-2",
+      "--ds-elevation-3",
+      "--ds-elevation-4",
+      "--ds-elevation-5",
+      "--ds-elevation-6",
+      "--ds-font-family-base",
+      "--ds-font-family-heading",
+      "--ds-motion-duration-scale",
+      "--ds-motion-intensity",
+      "--ds-radius-button",
+      "--ds-sidebar-bg",
+      "--ds-sidebar-item-bg-active",
+      "--ds-sidebar-item-bg-hover",
+      "--ds-sidebar-item-color-active",
+      "--ds-sidebar-text",
+      "--ds-sidebar-text-muted",
+    ]);
     expect(
       Object.keys(artifact.variables).filter((name) =>
         name.startsWith("--ds-color-accent-")
@@ -801,10 +914,15 @@ describe("digest identity across the canonicalization extraction", () => {
     // used to pin ABSENT now carry a value derived from the TENANT's seed, and
     // each is asserted against the baseline value it displaced -- pinning the
     // new value alone would also pass if the baseline had drifted onto it.
+    // D6-2c-ii: the displaced column is the baseline's own value, and the
+    // baseline is now the neutral foundation with bithire's preset, whose
+    // `palette.seeds.primary` is `#2F5BE8`. The retired authored theme seeded
+    // `#3a6fb0`. The derived column -- what the TENANT's seed produces -- is
+    // unchanged, which is the half this block exists to prove.
     for (const [channel, derived, displaced] of [
-      ["--ds-color-border-focus", "#0F766E", "#3a6fb0"],
-      ["--ds-color-link", "#0F766E", "#3a6fb0"],
-      ["--ds-color-link-hover", "#00635C", "#2c5587"],
+      ["--ds-color-border-focus", "#0F766E", "#2F5BE8"],
+      ["--ds-color-link", "#0F766E", "#2F5BE8"],
+      ["--ds-color-link-hover", "#00635C", "#2047D3"],
     ] as const) {
       expect(baseline[channel], channel).toBe(displaced);
       expect(artifact.variables[channel], channel).toBe(derived);
@@ -917,7 +1035,16 @@ describe("digest identity across the canonicalization extraction", () => {
     // and after; the same withdrawal returns this digest to the pin above.
     const POST_TOGGLE_SILHOUETTE_W4_DIGEST =
       "sha256-3504f727d63099e3baa645fcef92bf0c0bdc7971ff0d2e16ac41aca748a20dc1";
-    expect(artifact.digest).toBe(POST_TOGGLE_SILHOUETTE_W4_DIGEST);
+    expect(artifact.digest).not.toBe(POST_TOGGLE_SILHOUETTE_W4_DIGEST);
+    // CAUSE 9 -- D6-2c-ii (2026-09-15): tenant-document compiles over neutral +
+    // preset. The baseline this delta is subtracted against is the neutral
+    // foundation plus the bithire preset document, so the subtraction lands
+    // differently and the digest moves with it. Measured on this document:
+    // 27 -> 32 delta channels, the dark delta gone entirely, and the four
+    // tone-derived sidebar channels of CAUSE 3 no longer emitted at all.
+    const POST_NEUTRAL_BASELINE_W4_DIGEST =
+      "sha256-2cae5ad5680181a7cd527ae4eee0d0addefc4d0cd1aaa13f9c80153670689087";
+    expect(artifact.digest).toBe(POST_NEUTRAL_BASELINE_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -926,56 +1053,93 @@ describe("digest identity across the canonicalization extraction", () => {
     // `inverse` tone...
     expect(artifact.variables["--ds-sidebar-bg"]).toBe("#101014");
     expect(artifact.variables["--ds-sidebar-text"]).toBe("#F4F4F5");
-    // ...and the four the tenant did NOT author still carry that tone, so the
-    // ruling is a precedence fix and not a silent removal of the tone itself.
-    for (const [channel, tone] of [
-      ["--ds-sidebar-text-muted", "var(--ds-color-neutral-500)"],
-      ["--ds-sidebar-item-bg-hover", "var(--ds-color-neutral-800)"],
-      ["--ds-sidebar-item-bg-active", "var(--ds-color-neutral-700)"],
-      ["--ds-sidebar-item-color-active", "var(--ds-color-white)"],
+    // ...and the four the tenant did NOT author no longer carry the tone at
+    // all. WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15), pending
+    // DT registration: `sidebarTone: "inverse"` is INERT on bithire over
+    // neutral + preset -- its fan-out equals the baseline, so the delta
+    // withdraws every one of the four. Pinned to the measured state, two-sided,
+    // so the tone coming back reds here and is re-adjudicated rather than
+    // silently restored. The precedence ruling this block was written for is
+    // still proven by the two authored leaves above.
+    for (const channel of [
+      "--ds-sidebar-text-muted",
+      "--ds-sidebar-item-bg-hover",
+      "--ds-sidebar-item-bg-active",
+      "--ds-sidebar-item-color-active",
     ] as const) {
-      expect(artifact.variables[channel], channel).toBe(tone);
+      expect(artifact.variables[channel], channel).toBeUndefined();
     }
 
-    // Cause 4, two-sided against the vertical it outranks. bithire really does
-    // author a dark sidebar bg and ink; they are simply outranked, so the dark
-    // delta carries neither. Asserting the baseline values exist keeps this a
-    // proof that they LOSE rather than a vacuous absence.
+    // Cause 4 loses its subject, and that is the measured finding rather than
+    // a silent pass. WO-DER-06 derivation-lane registry (D6-2c-ii,
+    // 2026-09-15), pending DT registration: the bithire baseline is now the
+    // neutral foundation plus the preset document, and the preset leaves the
+    // dark sidebar bg and ink UNAUTHORED -- the retired theme authored bg
+    // #0a0f18 and ink var(--ds-color-text-secondary) resolving to #9aacbf.
+    // There is therefore nothing left for the tenant leaf to outrank in the
+    // dark block. Both halves are pinned, so a preset that starts authoring a
+    // dark sidebar reds here and the precedence ruling gets re-proven rather
+    // than assumed.
     const bithireDark = FIRST_PARTY_BASELINES.bithire.modes?.dark?.chrome?.sidebar;
-    expect(bithireDark?.bg).toBe("#0a0f18");
-    // Alias + resolution: the dark ink reads the text root, and the root's dark
-    // reading is the colour this block has always pinned.
-    expect(bithireDark?.text).toBe("var(--ds-color-text-secondary)");
-    expect(
-      FIRST_PARTY_BASELINES.bithire.modes?.dark?.palette?.textSecondaryColor ??
-        lowerTheme(FIRST_PARTY_BASELINES.bithire, IDENTITY.slug )
-          .modeBlocks?.find((block) => block.mode === "dark")
-          ?.cssVariables["--ds-color-text-secondary"],
-    ).toBe("#9aacbf");
+    expect(bithireDark?.bg).toBeUndefined();
+    expect(bithireDark?.text).toBeUndefined();
     const darkDelta = artifact.modeDeltas?.find((d) => d.mode === "dark");
-    expect(darkDelta, "the document still produces a dark delta").toBeDefined();
-    expect(darkDelta!.variables["--ds-sidebar-bg"]).toBeUndefined();
-    expect(darkDelta!.variables["--ds-sidebar-text"]).toBeUndefined();
+    expect(darkDelta?.variables["--ds-sidebar-bg"]).toBeUndefined();
+    expect(darkDelta?.variables["--ds-sidebar-text"]).toBeUndefined();
 
     // The radius dial law is the one visible-value change this delta carries,
     // so it is named here rather than left to the census: the tenant's `10px`
     // is folded onto bithire's 1.25 radius scale instead of being emitted raw,
     // which is what keeps a tenant override on the vertical's dial.
+    // WO-DER-06 registry (D6-2c-ii, 2026-09-15): bithire radius base; the
+    // preset's shape.radius-scale 0.8 governs where the retired theme authored
+    // 1.25. The law this line states -- a tenant corner folds onto the
+    // vertical's dial instead of outranking it -- is unchanged.
     expect(artifact.variables["--ds-card-radius"]).toBe(
-      "calc(10px / 1.25 * var(--ds-radius-scale, 1))"
+      "calc(10px / 0.8 * var(--ds-radius-scale, 1))"
     );
     // 20 -> 25: the same five per-size button radii.
     // 25 -> 27 (toggle silhouette): the two toggle corners of CAUSE 8.
-    expect(Object.keys(artifact.variables)).toHaveLength(27);
+    // 27 -> 32 (CAUSE 9): the neutral + preset baseline subtracts differently.
+    expect(Object.keys(artifact.variables)).toHaveLength(32);
   });
 
   it("produces one digest for a document authored in any key order", () => {
     // The whole point of canonical form: two editors that serialise the same
     // appearance with different property order must not fork the artifact.
+    //
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
+    // and this block states its OWN document pair rather than borrowing
+    // `POPULATED_SIMPLE_DOCUMENT`. That fixture's `sidebarTone: "subtle"` is no
+    // longer admissible on bithire (see "refusals the neutral baseline
+    // introduces" in `tenant-theme-compiler.test.ts`), and it belongs to the
+    // digest fence above, which is a foreign red this lot does not touch.
+    // Key-order independence needs an admissible document, not that one.
+    const declared = {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        palette: {
+          primary: "#0F766E",
+          secondary: "#8C6D46",
+          accent: "#E2725B",
+          backgroundMode: "light",
+        },
+        typography: {
+          fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
+          fontFamilyHeading: "'Fraunces', Georgia, 'Times New Roman', serif",
+        },
+        density: "normal",
+        motion: { intensity: 0.62, durationScale: 1.15, ambient: "subtle" },
+        shape: { buttonStyle: "soft" },
+        surfaces: { elevation: "elevated" },
+        navigation: { sidebarTone: "strong" },
+      },
+    } as unknown as TenantThemeDocument;
     const reordered = {
       mode: "simple",
       appearance: {
-        navigation: { sidebarTone: "subtle" },
+        navigation: { sidebarTone: "strong" },
         surfaces: { elevation: "elevated" },
         shape: { buttonStyle: "soft" },
         motion: { durationScale: 1.15, ambient: "subtle", intensity: 0.62 },
@@ -1004,9 +1168,11 @@ describe("digest identity across the canonicalization extraction", () => {
     // hash made it break every time the emission legitimately changed, which
     // is a different fact wearing this test's name.
     const declaredOrder = compileTenantThemeConfig(
-      hydrateTenantThemeConfig(POPULATED_SIMPLE_DOCUMENT, { ...IDENTITY })
+      hydrateTenantThemeConfig(declared, { ...IDENTITY })
     );
     expect(artifact.digest).toBe(declaredOrder.digest);
+    // Non-vacuous: the pair really does paint something.
+    expect(Object.keys(artifact.variables).length).toBeGreaterThan(0);
   });
 
   it("still publishes canonicalizeTenantThemeValue as a working alias", () => {

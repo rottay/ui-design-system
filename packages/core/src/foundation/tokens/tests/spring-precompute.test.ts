@@ -17,19 +17,30 @@ function springOverride(css: string): string | null {
 }
 
 describe('first-party spring precompute (useSpring-gated)', () => {
-  it('rottay (useSpring: true) ships a precomputed linear() --ds-motion-spring', () => {
-    const spring = springOverride(read('rottay'));
-    expect(spring, 'expected a tenant-scoped linear() spring override').not.toBeNull();
-    expect(spring).toMatch(/^linear\(0,/);
+  /**
+   * WO-DER-06 derivation-lane registry (the (s1) spring gap): the precomputed
+   * curve came from the retired authored themes, which stated `motion.useSpring`
+   * with a tension/friction pair. No preset document states one, so no vertical
+   * precomputes a `linear()` spring and every one resolves the foundation's
+   * cubic-bezier. Pinned to the measured state in both directions, so the row
+   * reddens the moment the lane gives a preset a spring to precompute.
+   */
+  const FOUNDATION_SPRING = '--ds-motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);';
+
+  it('rottay precomputes no linear() spring while its preset states none', () => {
+    const css = read('rottay');
+    expect(springOverride(css), 'no preset states a spring to precompute').toBeNull();
+    expect(css).toContain(FOUNDATION_SPRING);
   });
 
-  it('evnto (useSpring: true) ships its own distinct linear() curve', () => {
-    const evnto = springOverride(read('evnto'));
-    const rottay = springOverride(read('rottay'));
-    expect(evnto).not.toBeNull();
-    // evnto tunes a bouncier spring (tension 200 / friction 18) than Rottay
-    // (170 / 26), so the curves differ.
-    expect(evnto).not.toBe(rottay);
+  it('evnto is in the same state, so the two verticals cannot differ', () => {
+    const css = read('evnto');
+    expect(springOverride(css)).toBeNull();
+    expect(css).toContain(FOUNDATION_SPRING);
+    // The old claim was that the two curves DIFFER. With neither vertical
+    // stating a spring there is nothing to differ on, and asserting the shared
+    // foundation value is what keeps the row from passing vacuously.
+    expect(springOverride(read('rottay'))).toBe(springOverride(css));
   });
 
   it('bithire (useSpring: false) ships NO precomputed override -- keeps the foundation cubic-bezier', () => {

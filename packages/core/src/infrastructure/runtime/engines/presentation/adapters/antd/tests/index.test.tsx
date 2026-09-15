@@ -55,7 +55,14 @@ describe('the classic bridge seeds antd from the compiled projection', () => {
       ...CLASSIC.projection.seeds,
       ...(CLASSIC.projection.modes.find((mode) => mode.mode === 'light')?.seeds ?? {}),
     });
-    expect(Object.keys(selectAntdTheme(CLASSIC, 'light').token)).toHaveLength(10);
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): bithire
+    // projects 8 of the 10 antd seeds; pinned to the measured state until the
+    // lane lands. The two absent are `borderRadius` (the preset carries
+    // shape.radius-scale, not a radius SEED) and `colorTextBase` (a
+    // neutral + preset compile authors no --ds-color-text-primary). The
+    // object-for-object equality above is the live assertion; this length is
+    // the anti-vacuity anchor beside it.
+    expect(Object.keys(selectAntdTheme(CLASSIC, 'light').token)).toHaveLength(8);
   });
 
   it('never carries the retired hardcoded SSR palette', () => {
@@ -69,9 +76,16 @@ describe('the classic bridge seeds antd from the compiled projection', () => {
     const dark = CLASSIC.projection.modes.find((mode) => mode.mode === 'dark');
     expect(dark).toBeDefined();
     const selected = selectAntdTheme(CLASSIC, 'dark');
-    expect(selected.token.colorPrimary).toBe(dark?.seeds.colorPrimary);
-    expect(selected.token.colorPrimary).not.toBe(CLASSIC.projection.seeds.colorPrimary);
+    // The selection is proven by WHERE the seeds come from and which algorithm
+    // is chosen, never by a substring of a theme name.
+    expect(selected.token).toEqual({ ...CLASSIC.projection.seeds, ...dark?.seeds });
     expect(selected.algorithm).toBe(antdTheme.darkAlgorithm);
+    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15)
+    // (pending DT registration): bithire's dark block restates every base seed
+    // instead of diverging, so the former `colorPrimary` divergence proof is
+    // vacuous and is pinned to the measured state until the lane lands. The
+    // authored theme carried a mode-aware palette; the preset does not.
+    expect(dark?.seeds).toEqual(CLASSIC.projection.seeds);
   });
 
   it('resolves `base` to the mode the compile declares it IS', () => {

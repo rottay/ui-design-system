@@ -51,7 +51,9 @@ describeCausality({
     'palette.seeds': { value: { primary: '#2F6B9A' }, moves: ['iconInk'], holds: 'radius', in: VERTICALS },
     'typography.scale': { value: 1.08, moves: ['titleSize'], holds: 'radius', in: VERTICALS },
     'shape.radius-scale': { value: 1.2, moves: ['radius'], holds: 'titleSize', in: VERTICALS },
-    'density.mode': { value: 'compact', moves: ['padding'], holds: 'radius', in: VERTICALS },
+    // `spacious` is the one stop no first-party preset decides (rottay/evnto
+    // normal, bithire compact), so the arm discriminates on all three.
+    'density.mode': { value: 'spacious', moves: ['padding'], holds: 'radius', in: VERTICALS },
     'surfaces.border-style': { value: 'none', moves: ['edge'], holds: 'radius', in: VERTICALS },
     'surfaces.elevation-posture': { value: 'flat', moves: ['shadow'], holds: 'radius', in: ['evnto'] },
     'motion.dial': { value: { durationScale: 1.35 }, moves: ['duration'], holds: 'radius', in: ['evnto'] },

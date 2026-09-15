@@ -16,6 +16,8 @@
 
 import { describe, expect, it } from 'vitest';
 
+import { THEME_CONTROL_CATALOG } from '@/contracts/theme/runtime/catalog';
+
 import * as server from '../../../../src/entrypoints/server';
 import {
   CHROME_ANATOMY_FAMILIES,
@@ -174,14 +176,21 @@ describe('tenant document v2 is nameable through @rottay/design-system/server', 
       'appearance.general.states.emphasis',
     ]);
 
-    const unlit = admitDocument({
+    // The unlit arm no longer has a subject, and that is a MEASUREMENT, not an
+    // omission: no catalog row lacks a `keypath.brandTheme` today, so no
+    // activated decision can report `no-keypath-today`. Asserted over the whole
+    // catalog rather than through one example, which is what the example stood
+    // for -- and it reddens the moment a row is added without a keypath.
+    const noKeypath = THEME_CONTROL_CATALOG.filter(
+      (row) => (row.keypath as { brandTheme?: string | null }).brandTheme == null
+    ).map((row) => row.id);
+    expect(noKeypath).toEqual([]);
+    const everyDecision = admitDocument({
       vertical: 'rottay',
       document: v2({ 'surfaces.border-style': 'hairline' }),
     });
-    expect(unlit.unlit.map((projection) => projection.id)).toEqual([
-      'surfaces.border-style',
-    ]);
-    expect(unlit.unlit[0]?.reason).toBe('no-keypath-today');
+    expect(everyDecision.unlit).toEqual([]);
+    expect(everyDecision.decisions[0]?.lit).toBe(true);
   });
 
   it('carries the SAME intent the two producers build, and one patch per document', () => {

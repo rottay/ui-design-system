@@ -436,7 +436,11 @@ describe('SpatialExperience', () => {
     expect(screen.queryByRole('button', { name: 'Pause spatial view' })).not.toBeInTheDocument();
     enterViewport();
     await screen.findByTestId('scene-ecosystem');
-    expect(screen.getByRole('group', { name: 'Spatial inspection controls' })).toBeVisible();
+    // The scene module is loaded asynchronously, so the live-work subtree that
+    // owns the controls group can land a commit after the scene itself.
+    expect(
+      await screen.findByRole('group', { name: 'Spatial inspection controls' })
+    ).toBeVisible();
 
     const pause = screen.getByRole('button', { name: 'Pause spatial view' });
     pause.focus();

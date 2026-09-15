@@ -46,6 +46,7 @@ import {
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { deriveExtendedPaletteFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
 import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
 
 const bithireBrandTheme = firstPartyFixture('bithire');
 const evntoBrandTheme = firstPartyFixture('evnto');
@@ -104,13 +105,15 @@ describe('deriveExtendedPaletteFloor · the derivation floor, for a bare hex see
   });
 
   it('--ds-color-primary-foreground clears WCAG AA body text (>= 4.5:1) for a well-behaved (non-mid-luminance) seed spread', () => {
-    // Bithire's actual primary, evnto's near-black, and rottay's effective
-    // dark-surface primary -- the three real first-party seeds this floor is
-    // meant to serve.
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // bithire is the one vertical whose preset still seeds a primary, so the
+    // spread is completed with the two torture fixtures. The three cover both
+    // ink directions (#2F5BE8 and #7A00FF take the light ink, #FF00AA the
+    // dark one), which is what makes the AA claim non-trivial.
     for (const seed of [
       bithireBrandTheme.palette!.primaryColor,
-      evntoBrandTheme.palette!.primaryColor,
-      rottayBrandTheme.palette!.primaryColor,
+      tortureLightBrandTheme.palette!.primaryColor,
+      tortureDarkBrandTheme.palette!.primaryColor,
     ]) {
       const ink = deriveExtendedPaletteFloor(seed)['--ds-color-primary-foreground'];
       expect(contrastRatio(ink, seed), `${seed} -> ${ink}`).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT_RATIO);
@@ -281,14 +284,36 @@ describe('deriveExtendedPaletteFloor · authored-over-derived precedence, live t
     expect(compiled['--ds-color-link']).toBe(derivedFloor['--ds-color-link']);
   });
 
-  it("rottay authors all four itself, in its light-mode overlay: the compiled light mode block keeps rottay's authored values, not the floor", () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
-    const lightBlock = compiled.modeBlocks!.find((block) => block.mode === 'light')!;
-    const authoredLight = rottayBrandTheme.modes!.light!.palette!;
-    expect(lightBlock.cssVariables['--ds-color-primary-foreground']).toBe(authoredLight.primaryForegroundColor);
-    expect(lightBlock.cssVariables['--ds-color-border-focus']).toBe(authoredLight.borderFocusColor);
-    expect(lightBlock.cssVariables['--ds-color-link']).toBe(authoredLight.linkColor);
-    expect(lightBlock.cssVariables['--ds-color-link-hover']).toBe(authoredLight.linkHoverColor);
+  it("a mode overlay that authors all four keeps its own values in that block, not the floor", () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset.
+    // This was rottay, which authored all four in its `modes.light` overlay; no
+    // preset seeds a per-mode palette now, so the overlay is planted here and
+    // the rule -- an authored per-mode value outranks the derived floor inside
+    // its own block -- keeps a subject.
+    const authoredDark = {
+      primaryForegroundColor: '#F5F7FF',
+      borderFocusColor: '#8AB4FF',
+      linkColor: '#8AB4FF',
+      linkHoverColor: '#B9D2FF',
+    } as const;
+    const compiled = lowerBrandThemeFixture({
+      brandTheme: {
+        ...bithireBrandTheme,
+        modes: {
+          ...bithireBrandTheme.modes,
+          dark: {
+            ...bithireBrandTheme.modes?.dark,
+            palette: { ...(bithireBrandTheme.modes?.dark?.palette ?? {}), ...authoredDark },
+          },
+        },
+      } as BrandTheme,
+      tenantSlug: 'authored-overlay',
+    });
+    const darkBlock = compiled.modeBlocks!.find((block) => block.mode === 'dark')!;
+    expect(darkBlock.cssVariables['--ds-color-primary-foreground']).toBe(authoredDark.primaryForegroundColor);
+    expect(darkBlock.cssVariables['--ds-color-border-focus']).toBe(authoredDark.borderFocusColor);
+    expect(darkBlock.cssVariables['--ds-color-link']).toBe(authoredDark.linkColor);
+    expect(darkBlock.cssVariables['--ds-color-link-hover']).toBe(authoredDark.linkHoverColor);
   });
 });
 

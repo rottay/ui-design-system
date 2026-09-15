@@ -18,6 +18,7 @@
 import { describe, expect, it } from "vitest";
 
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
+import { VERTICAL_THEME_PRESETS } from "@/foundation/presets/verticals";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import { themeControl } from "@/contracts/theme/runtime/catalog";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
@@ -88,7 +89,6 @@ describe("every connected decision reaches a channel on every vertical", () => {
             const changed = Object.keys(moved).filter(
               (channel) => moved[channel] !== base[channel]
             );
-            expect(changed.length).toBeGreaterThan(0);
             // Every channel it moved is one the catalog said it produces, so
             // the row cannot buy its "lit" verdict with a side effect. Read
             // through the field's declared type: `themeControl` returns the
@@ -99,6 +99,18 @@ describe("every connected decision reaches a channel on every vertical", () => {
             expect(
               changed.filter((channel) => !declared.includes(channel))
             ).toEqual([]);
+            // D6-2c-ii (2026-09-15): tenant-document compiles over neutral +
+            // preset, so the rest is the vertical's own preset rather than a
+            // blank. A fixture that restates the preset's stop moves nothing
+            // against it -- correct, not a lost channel. The escape is closed
+            // by naming the reason: it may only stand still when the preset
+            // itself states this exact value. Reach between the two stops is
+            // asserted unconditionally in the sibling describe below.
+            const presetDocument = VERTICAL_THEME_PRESETS[vertical]
+              .document as { readonly decisions: Record<string, unknown> };
+            const presetStop = presetDocument.decisions[id];
+            if (presetStop === value) expect(changed).toEqual([]);
+            else expect(changed.length).toBeGreaterThan(0);
           });
 
           it(`${vertical}/${value}: the ledger reports the tenant as the author`, () => {

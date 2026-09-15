@@ -28,7 +28,7 @@ import { useTokens } from '..';
 import type { TenantConfig } from '@/foundation/contracts';
 import type { TenantThemeArtifact } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { getKnownTenantConfig } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
-import { EVNTO_CANONICAL_SURFACES } from '@/foundation/presets/policy/experience-baselines/evnto';
+import { getProductProfile } from '@/infrastructure/runtime/product-profiles';
 import { resolveEffectiveDensityScale } from '@/foundation/tokens/ts/foundation/base/density';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import {
@@ -119,6 +119,7 @@ function TokenConsumer(): React.ReactElement {
       <span data-testid="spacing-1">{tokens.spacing[1]}</span>
       <span data-testid="primary-color">{tokens.colors.primary}</span>
       <span data-testid="card-density">{tokens.personality.card.paddingDensity}</span>
+      <span data-testid="animation-intensity">{tokens.personality.animation.intensity}</span>
     </div>
   );
 }
@@ -167,19 +168,36 @@ describe('useTokens product profile resolution', () => {
       </DesignSystemProvider>
     );
 
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the tenant delta over a bithire baseline that authors no radius, no card
+    // chrome and no density scale publishes NONE of those in its JS half
+    // (measured: tokenOverrides.borderRadius {}, densityScale undefined,
+    // personality.card {}). The order is therefore read on the channel this
+    // compile does state -- the vertical's motion dial -- while the three it
+    // leaves silent prove the other direction, that the preset underneath
+    // stands. Both legs are still read off the artifact, never pinned.
+    const profile = getProductProfile('events.organizer');
+
     // The compile states this channel, so it outranks the preset...
-    expect(compiled.tokenOverrides.borderRadius?.md)
-      .not.toBe(EVNTO_CANONICAL_SURFACES.borderRadius.md);
+    expect(compiled.personality.animation?.intensity).toBeDefined();
+    expect(compiled.personality.animation?.intensity)
+      .not.toBe(profile?.personality?.animation?.intensity);
+    expect(screen.getByTestId('animation-intensity'))
+      .toHaveTextContent(String(compiled.personality.animation?.intensity));
+
+    // ...and where it states nothing, the preset underneath it stands.
+    expect(compiled.tokenOverrides.borderRadius?.md).toBeUndefined();
     expect(screen.getByTestId('radius-md'))
-      .toHaveTextContent(String(compiled.tokenOverrides.borderRadius?.md));
-
-    // ...and so does its personality, on the same order.
+      .toHaveTextContent(String(profile?.tokenOverrides?.borderRadius?.md));
+    expect(compiled.personality.card?.paddingDensity).toBeUndefined();
     expect(screen.getByTestId('card-density'))
-      .toHaveTextContent(String(compiled.personality.card?.paddingDensity));
+      .toHaveTextContent(String(profile?.personality?.card?.paddingDensity));
 
-    // Density composes the artifact's own structural scale with its posture.
+    // Density composes the structural scale that survives -- the preset's,
+    // since the compile publishes none -- with the artifact's own posture.
+    expect(compiled.tokenOverrides.densityScale).toBeUndefined();
     const expectedScale = resolveEffectiveDensityScale(
-      compiled.tokenOverrides.densityScale,
+      profile?.tokenOverrides?.densityScale,
       'compact',
     );
     expect(screen.getByTestId('spacing-1'))
@@ -272,11 +290,17 @@ describe('useTokens product profile resolution', () => {
     const normal = measure('token-test-normal', 'normal');
     const compact = measure('token-test-compact', 'compact');
 
-    // spacing[4] = round(16 * effectiveScale). The structural factor is the
-    // artifact's own compiled scale, which outranks the preset's; only the mode
-    // factor differs between the two trees.
-    const base = tokenTestArtifact('token-test-normal', 'normal').runtime?.runtime
-      .tokenOverrides.densityScale;
+    // spacing[4] = round(16 * effectiveScale).
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the artifact publishes no structural scale of its own any more, so the
+    // factor this composes with the mode posture is the PRODUCT PROFILE's --
+    // which is what this case is named for. Only the mode factor differs
+    // between the two trees, and both numbers are still derived, not pinned.
+    expect(
+      tokenTestArtifact('token-test-normal', 'normal').runtime?.runtime.tokenOverrides
+        .densityScale,
+    ).toBeUndefined();
+    const base = getProductProfile('events.organizer')?.tokenOverrides?.densityScale;
     expect(normal).toBe(String(Math.round(16 * resolveEffectiveDensityScale(base, 'normal'))));
     expect(compact).toBe(String(Math.round(16 * resolveEffectiveDensityScale(base, 'compact'))));
     // The composition must actually move the value, or the assertions above

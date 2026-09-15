@@ -72,12 +72,16 @@ describe('TenantPreview', () => {
       // as the proof axis because two presets saturate to the same clamped
       // value there -- see `runtime/preview-css/tests/preview-css.test.ts`.
       //
-      // `playful` carries `animation.intensity` 1.2, above every vertical's
-      // tenant cap of 0.8, so the compile door refuses it on the preview path
-      // exactly as it would at publish. `expressive` carries 1.0,
-      // the value rottay's own theme already declares -- a tenant that restates
-      // the vertical's value has decided nothing, so it is admitted.
-      const presets = ['formal', 'neutral', 'expressive'] as const;
+      // `playful` (1.2) and `expressive` (1.0) both carry an
+      // `animation.intensity` above every vertical's tenant cap of 0.8, so the
+      // compile door refuses them on the preview path exactly as it would at
+      // publish. The presets below are the ones a tenant on this vertical can
+      // actually select.
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+      // rottay no longer authors motion.intensity 1.0, so `expressive` stops
+      // being a restatement of the vertical's own value and is refused by the
+      // envelope like any other over-cap decision: 3 presets -> 2.
+      const presets = ['formal', 'neutral'] as const;
       const calmValues = presets.map((personality) => {
         const { css } = buildPreviewCss(
           draftPreviewSource({ ...sampleConfig, personality })!,
@@ -311,18 +315,20 @@ describe('TenantPreview', () => {
       // `--ds-motion-calm`, the same unclamped per-preset channel the
       // preview-css suite pins at the compiler boundary; here it is read back
       // through the rendered engine. Presence alone would prove nothing -- a
-      // default emits the variable too. Four pairwise-distinct values can only
-      // come from the preset itself reaching the compiler.
-      // `playful` carries `animation.intensity` 1.2, which is ABOVE every
-      // vertical's tenant `motionIntensity` cap of 0.8, so the compile door
-      // refuses it on the preview path exactly as it would at publish
-      // (WO-CAT-03). `expressive` carries 1.0, which is the value rottay's own
-      // theme already declares -- a tenant that restates the vertical's value
-      // has decided nothing, so it is admitted. The presets below are the ones
-      // a tenant on this vertical can actually select; the collision between
-      // the shipped presets and the envelope is recorded in the
-      // preview-css suite, which asserts the refusal by name.
-      const lines = (['formal', 'neutral', 'expressive'] as const).map((personality) => {
+      // default emits the variable too. Pairwise-distinct values can only come
+      // from the preset itself reaching the compiler.
+      // `playful` (1.2) and `expressive` (1.0) carry an `animation.intensity`
+      // ABOVE every vertical's tenant `motionIntensity` cap of 0.8, so the
+      // compile door refuses them on the preview path exactly as it would at
+      // publish (WO-CAT-03). The presets below are the ones a tenant on this
+      // vertical can actually select; the collision between the shipped
+      // presets and the envelope is recorded in the preview-css suite, which
+      // asserts the refusal by name.
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+      // rottay no longer authors motion.intensity 1.0, so `expressive` is no
+      // longer a restatement of the vertical's value and the envelope refuses
+      // it: 3 selectable presets -> 2.
+      const lines = (['formal', 'neutral'] as const).map((personality) => {
         const { container } = render(<Engine config={{ ...sampleConfig, personality }} />);
         const cssText = (container.querySelector('style') as HTMLStyleElement).textContent ?? '';
         const calm = cssText.split('\n').find((line) => line.trim().startsWith('--ds-motion-calm:'));
@@ -330,7 +336,7 @@ describe('TenantPreview', () => {
         return calm;
       });
 
-      expect(new Set(lines).size).toBe(3);
+      expect(new Set(lines).size).toBe(2);
     });
 
     /* The other half of the same honesty contract: what the preview could not
@@ -368,7 +374,10 @@ describe('TenantPreview', () => {
     });
 
     it('renders the same compiled tenant in every engine', () => {
-      const config: TenantCreationConfig = { ...sampleConfig, personality: 'expressive', density: 'compact' };
+      // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+      // `expressive` (intensity 1.0) is now over the vertical's tenant cap, so
+      // the fixture selects an admissible preset: expressive -> neutral.
+      const config: TenantCreationConfig = { ...sampleConfig, personality: 'neutral', density: 'compact' };
       const sheets = engines.map(([, Engine]) => {
         const { container } = render(<Engine config={config} />);
         return (container.querySelector('style') as HTMLStyleElement).textContent ?? '';
