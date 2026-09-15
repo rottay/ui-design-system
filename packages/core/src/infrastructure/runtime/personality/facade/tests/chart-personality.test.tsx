@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import type { EngineVisualDeclaration } from '../../../../../foundation/contracts/composition/tenants/themes/engine-adapter';
-import { bithireBrandTheme } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
 import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 import { EngineVisualDeclarationProvider } from '@/infrastructure/runtime/foundation/engine-visual';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
@@ -14,6 +13,9 @@ import { getVerticalPreset } from '../../../verticals';
 import { resolveChartPersonality } from '../../runtime/resolution/chart';
 import { DEFAULT_PERSONALITY } from '../../foundation/defaults';
 import { useResolvedChartPersonality } from '../../presentation/resolution/chart-personality';
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const bithireVertical = getVerticalPreset('bithire');
 const recruitingProfile = getProductProfile('recruiting.operator');
@@ -54,31 +56,83 @@ function ChartProbe({ testId }: { testId: string }): React.ReactElement {
 }
 
 describe('resolveChartPersonality', () => {
-  it('returns the neutral default standalone and composes a vertical without tenant or profile', () => {
+  it('returns the neutral default standalone; a vertical carries no chart layer of its own', () => {
     expect(resolveChartPersonality()).toEqual(DEFAULT_PERSONALITY.chart);
-    expect(resolveChartPersonality({ vertical: bithireVertical })).toEqual({
-      ...DEFAULT_PERSONALITY.chart,
-      ...bithireVertical.personality.chart,
+    expect(resolveChartPersonality({ productProfile: null })).toEqual(DEFAULT_PERSONALITY.chart);
+  });
+
+  it('present-with-undefined keys decide nothing: the eight of them never erase the profile', () => {
+    // The law the type roles already obey (semantic-typography T3): a
+    // materialized key with no value falls through instead of deleting the
+    // layer underneath, while a key that carries a value still wins.
+    const EIGHT_KEYS = [
+      'animateOnMount',
+      'mountDuration',
+      'lineStyle',
+      'showDots',
+      'useGradientFill',
+      'tooltipStyle',
+      'colorScheme',
+      'categoryColors',
+    ] as const;
+    const skeleton = Object.fromEntries(
+      EIGHT_KEYS.map((key) => [key, undefined])
+    ) as Partial<typeof DEFAULT_PERSONALITY.chart>;
+
+    const absent = resolveChartPersonality({ productProfile: recruitingProfile });
+    const present = resolveChartPersonality({
+      compiled: { chart: skeleton },
+      productProfile: recruitingProfile,
     });
+    expect(Object.keys(skeleton)).toEqual([...EIGHT_KEYS]);
+    expect(present).toEqual(absent);
+    expect(present.tooltipStyle).toBe('detailed');
+    expect(present.colorScheme).toBe(DEFAULT_PERSONALITY.chart.colorScheme);
+
+    // A profile key with no value does not delete the default either.
+    expect(
+      resolveChartPersonality({ productProfile: { personality: { chart: skeleton } } })
+    ).toEqual(DEFAULT_PERSONALITY.chart);
+
+    // ...and one decided key still wins, from either layer.
+    expect(
+      resolveChartPersonality({
+        compiled: { chart: { ...skeleton, lineStyle: 'step' } },
+        productProfile: recruitingProfile,
+      }).lineStyle
+    ).toBe('step');
+  });
+
+  it('every first-party compile decides nothing about charts, on all three verticals', () => {
+    for (const vertical of ['rottay', 'bithire', 'evnto'] as const) {
+      const compiled = brandThemeToPersonality(firstPartyFixture(vertical));
+      expect(
+        resolveChartPersonality({ compiled, productProfile: recruitingProfile })
+      ).toEqual(resolveChartPersonality({ productProfile: recruitingProfile }));
+    }
   });
 
   it('keeps BitHire and The Management Miami visibly distinct through their compiled charts', () => {
     const bithire = resolveChartPersonality({
       compiled: brandThemeToPersonality(bithireBrandTheme),
-      vertical: bithireVertical,
       productProfile: recruitingProfile,
     });
     const management = resolveChartPersonality({
       compiled: brandThemeToPersonality(themanagementmiamiBrandTheme),
-      vertical: bithireVertical,
       productProfile: recruitingProfile,
     });
 
+    // No first-party preset authors a `charts` layer, and a neutral + preset
+    // compile emits `chart` with every key PRESENT and undefined rather than
+    // omitting the family. Those keys decided nothing, so the profile beneath
+    // them stands (adjudication #2, 2026-09-15).
+    const compiledChart = brandThemeToPersonality(bithireBrandTheme).chart;
+    expect(compiledChart).toBeDefined();
+    expect(Object.values(compiledChart!).every((value) => value === undefined)).toBe(true);
     expect(bithire).toMatchObject({
-      lineStyle: 'smooth',
-      mountDuration: 400,
+      lineStyle: 'sharp',
+      mountDuration: 600,
       tooltipStyle: 'detailed',
-      colorScheme: 'monochrome',
     });
     expect(management).toMatchObject({
       lineStyle: 'smooth',
@@ -101,7 +155,6 @@ describe('resolveChartPersonality', () => {
     } as const;
 
     const noCompile = resolveChartPersonality({
-      vertical: bithireVertical,
       productProfile: legacyProfile,
     });
     // A compile that states no `chart` decides nothing on this dimension, so
@@ -110,12 +163,13 @@ describe('resolveChartPersonality', () => {
     // from silently replacing the preset.
     const compiledWithoutChart = resolveChartPersonality({
       compiled: brandThemeToPersonality({ id: 'premium-empty', name: 'Premium Empty' }),
-      vertical: bithireVertical,
       productProfile: legacyProfile,
     });
+    // The Management Miami is the arm that DOES decide: since D6-2c-ii no
+    // first-party preset authors a `charts` layer, so bithire's compile states
+    // eight keys and decides none of them.
     const compiledWithChart = resolveChartPersonality({
-      compiled: brandThemeToPersonality(bithireBrandTheme),
-      vertical: bithireVertical,
+      compiled: brandThemeToPersonality(themanagementmiamiBrandTheme),
       productProfile: legacyProfile,
     });
 
@@ -125,30 +179,39 @@ describe('resolveChartPersonality', () => {
       tooltipStyle: 'minimal',
     });
     expect(compiledWithoutChart).toEqual(noCompile);
+    expect(
+      resolveChartPersonality({
+        compiled: brandThemeToPersonality(bithireBrandTheme),
+        productProfile: legacyProfile,
+      })
+    ).toEqual(noCompile);
     // And a compile that DOES state one wins on every field it states.
-    expect(compiledWithChart).toMatchObject(brandThemeToPersonality(bithireBrandTheme).chart!);
+    expect(compiledWithChart).toMatchObject(
+      brandThemeToPersonality(themanagementmiamiBrandTheme).chart!
+    );
     expect(compiledWithChart.mountDuration).not.toBe(913);
   });
 
   it('applies a sparse compiled chart override last without erasing inherited fields', () => {
+    // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset;
+    // the override used to be spread over bithire's authored chart, which is
+    // now empty. Stating the two fields directly makes the override genuinely
+    // sparse and leaves the rest to the profile, which is what this asserts.
     const result = resolveChartPersonality({
       compiled: {
         chart: {
-          ...brandThemeToPersonality(bithireBrandTheme).chart,
           mountDuration: 120,
           showDots: false,
         },
       },
-      vertical: bithireVertical,
       productProfile: recruitingProfile,
     });
 
     expect(result).toMatchObject({
       mountDuration: 120,
       showDots: false,
-      lineStyle: 'smooth',
+      lineStyle: 'sharp',
       tooltipStyle: 'detailed',
-      colorScheme: 'monochrome',
     });
   });
 
@@ -212,7 +275,9 @@ describe('useResolvedChartPersonality', () => {
       </>,
     );
 
-    expect(screen.getByTestId('bithire-chart')).toHaveTextContent('smooth:400:detailed');
+    // bithire's compiled `chart` carries every key present and undefined, so
+    // it decides nothing and the recruiting profile beneath it stands.
+    expect(screen.getByTestId('bithire-chart')).toHaveTextContent('sharp:600:detailed');
     expect(screen.getByTestId('management-chart')).toHaveTextContent('smooth:500:glass');
   });
 });
