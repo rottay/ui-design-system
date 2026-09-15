@@ -12,7 +12,7 @@
         "letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading))",
         "border-radius: var(--_ds-card-nest-radius)"
       ],
-      "html": "<div class=\"ds-card ds-card--elevated ds-card--modern\" data-variant=\"elevated\" data-radius=\"md\" data-size=\"md\" data-padding=\"md\" data-has-header=\"true\" data-part=\"root\" data-probe=\"card-modern-md\"><div data-part=\"body\"><div data-part=\"header\"><div data-part=\"header-main\"><h3 data-part=\"title\">Card title</h3></div></div>card body</div></div>",
+      "html": "<div class=\"ds-card ds-card--elevated ds-card--modern\" data-variant=\"elevated\" data-radius=\"md\" data-size=\"md\" data-padding=\"md\" data-has-header=\"true\" data-posture=\"phone\" data-part=\"root\" data-probe=\"card-modern-md\"><div data-part=\"body\"><div data-part=\"header\"><div data-part=\"header-main\"><h3 data-part=\"title\">Card title</h3></div></div>card body</div></div>",
       "targets": [
         {
           "id": "root",
@@ -111,12 +111,12 @@
       "id": "input-modern-md",
       "why": "The modern Input as the engine actually renders it, inside the field wrapper it always ships with — the root IS the input element, not a container. Carried `.ds-input` until 2026-08-11 for the same reason the button did, and was wrong the same way. A distinct chrome family for the colour channels, and a third radius chain: border-radius <- --ds-input-resolved-radius <- the size rule's precedence between --ds-input-md-radius and --ds-radius-md.",
       "requiresSelectors": [
-        ".rottay-input.rottay-input--modern {",
+        ".ds-input-shell.ds-input-shell--modern {",
         "border-radius: var(--ds-input-resolved-radius)",
-        ".rottay-input.rottay-input--modern[data-size='md']:not([data-size-responsive])",
+        ".ds-input-shell.ds-input-shell--modern[data-size='md']:not([data-size-responsive])",
         "--ds-input-resolved-radius: var("
       ],
-      "html": "<div class=\"rottay-input-field\" data-part=\"field\"><input id=\"probe-input-modern-md\" type=\"text\" class=\"rottay-input rottay-input--modern\" data-part=\"root\" data-variant=\"outline\" data-size=\"md\" data-filled=\"true\" value=\"input\" data-probe=\"input-modern-md\" /></div>",
+      "html": "<div class=\"ds-input-field\" data-part=\"field\"><input id=\"probe-input-modern-md\" type=\"text\" class=\"ds-input-shell ds-input-shell--modern\" data-part=\"root\" data-variant=\"outline\" data-size=\"md\" data-filled=\"true\" value=\"input\" data-probe=\"input-modern-md\" /></div>",
       "targets": [
         {
           "id": "root",
