@@ -915,10 +915,8 @@
   --ds-border-color-focus: var(--ds-color-border-focus);
 
   /* Interactive colors */
-  --ds-color-interactive-border: var(--ds-color-border-secondary);
   --ds-color-interactive-bg-hover: var(--ds-color-bg-hover);
   --ds-color-interactive-bg-active: var(--ds-color-alpha-primary-10);
-  --ds-color-interactive-bg-muted: var(--ds-color-bg-subtle);
 
   /* Sidebar Colors - Uses only existing palette tokens */
   --ds-sidebar-bg: var(--ds-color-primary-900);
@@ -1264,40 +1262,25 @@
      SWITCH
      ───────────────────────────────────────────────────────────────────────────── */
 
-  /* Switch Sizes */
-  --ds-switch-sm-width: 1.75rem;
-  --ds-switch-sm-height: 1rem;
-  --ds-switch-sm-thumb-size: 0.75rem;
+  /* What the FROZEN Classic engine paints, and nothing else. Switch is a
+     deprecated Toggle alias since the D-16 merge and the Modern skin reads
+     none of these; `runtime/engines/classic/theme` reads exactly these seven
+     across nine sites on `.ant-switch`, which is reachable because the Classic
+     Toggle wraps Ant's Switch and `Switch` is still publicly exported. Frozen
+     is not dead, so they stay declared (D6-2d-resto, 2026-09-15).
 
-  --ds-switch-md-width: 2.75rem;
-  --ds-switch-md-height: 1.375rem;
-  --ds-switch-md-thumb-size: 1.125rem;
-
-  --ds-switch-lg-width: 3.5rem;
-  --ds-switch-lg-height: 1.75rem;
-  --ds-switch-lg-thumb-size: 1.5rem;
-
-  /* Switch Base */
+     The fourteen size, radius, transition, thumb-offset and label channels
+     that used to sit here had no reader anywhere and were retired in the same
+     lot. `--ds-switch-width` and `--ds-switch-height` are read by that sheet
+     and were never declared by anyone: measured unresolved at HEAD, left as
+     they are rather than given a producer a frozen engine never had. */
   --ds-switch-bg: #d4d4d4;
   --ds-switch-bg-hover: var(--ds-color-neutral-400);
-  --ds-switch-radius: 9999px;
-  --ds-switch-transition: var(--ds-transition-fast);
-
-  /* Switch Checked State */
   --ds-switch-checked-bg: #171717;
   --ds-switch-checked-bg-hover: var(--ds-color-primary-700);
-
-  /* Switch Thumb */
   --ds-switch-thumb-bg: #ffffff;
   --ds-switch-thumb-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  --ds-switch-thumb-offset: 0.125rem;
-
-  /* Switch Focus */
   --ds-switch-focus-ring: var(--ds-shadow-focus-ring);
-
-  /* Switch Label */
-  --ds-switch-label-color: #171717;
-  --ds-switch-label-gap: 0.5rem;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      SLIDER

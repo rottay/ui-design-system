@@ -519,6 +519,13 @@ describe('TENANT-COLOR PROPAGATION · one channel, one author', () => {
  * `extended-palette-floor.test.ts`), so it is claimed, not withheld.
  * `--ds-color-link-visited` stays — nothing derives it.
  *
+ * `--ds-color-interactive-bg-muted` and `--ds-color-interactive-border` left
+ * this list by RETIREMENT, not by adoption (D6-2d-resto, 2026-09-15): measured
+ * zero readers in the package, in the three apps and in the showroom, so the
+ * channels, their `themes/default` declarations and their `BrandPalette` fields
+ * went together. A withheld channel is one a sighted confirm could still ship;
+ * these had no subject left to ship.
+ *
  * `--ds-focus-ring-color` moved OUT for the same kind of reason (D6-FAM-01,
  * 2026-09-15): the ramps family now derives it, because an admitted seed like
  * `#FFFFFF` painted a 1.00:1 ring and only the family holding the seed, the
@@ -534,8 +541,6 @@ const STOPPED_PENDING_SIGHTED_CONFIRM = [
   '--ds-color-bg-surface',
   '--ds-color-interactive-bg-active',
   '--ds-color-interactive-bg-hover',
-  '--ds-color-interactive-bg-muted',
-  '--ds-color-interactive-border',
   '--ds-color-link-visited',
   '--ds-overlay-bg',
   '--ds-shadow-focus-ring',

@@ -75,4 +75,21 @@ signature .#ThemeCompilation — names the renamed flat view; BrandTheme -> Flat
 signature .#ThemeCompilationModeBlock — names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged
 signature .#ThemeSource — names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged
 signature .#VerticalTheme — names the renamed flat view; BrandTheme -> FlatTheme in the declaration text, shape unchanged
+channel --ds-switch-label-color — removed; no reader anywhere (D6-2d-resto)
+channel --ds-switch-{sm,md,lg}-{width,height,thumb-size} — removed; no reader anywhere (D6-2d-resto)
+channel --ds-switch-{radius,transition,thumb-offset,label-gap} — removed; no reader anywhere (D6-2d-resto)
+channel --ds-control-brand-tint-hover — removed; no reader anywhere (D6-2d-resto)
+channel --ds-control-ink-muted — removed; no reader anywhere (D6-2d-resto)
+channel --ds-control-surface-raised — removed; no reader anywhere (D6-2d-resto)
+channel --ds-surface-shadow-hover — removed; no reader anywhere (D6-2d-resto)
+channel --ds-color-interactive-bg-muted — removed; no reader anywhere (D6-2d-resto)
+channel --ds-color-interactive-border — removed; no reader anywhere (D6-2d-resto)
+channel --ds-color-text-page — removed; no reader anywhere (D6-2d-resto)
+signature .#BrandSwitchChrome — loses labelColor with its only producer (D6-2d-resto)
+signature .#BrandSemanticControlChrome — loses inkMuted, surfaceRaised and brandTintHover with their producers (D6-2d-resto)
+signature .#BrandSurfaceChrome — loses shadowHover with its producer (D6-2d-resto)
+signature .#BrandPalette — loses textPageColor, interactiveBorderColor and interactiveBgMutedColor with their producers (D6-2d-resto)
+signature .#TENANT_THEME_REFERENCE_TOKENS — loses the --ds-color-text-page row (D6-2d-resto)
+signature .#ThemeIntent — gains optional readonly baseline; the ingress sets it to carriedFrom ?? the vertical's baseline so authorship classification and resolution measure the same floor (D6-CORE-01)
+channel --ds-focus-ring-color — now derived by the ramps lowering owner when the theme states a seed: the nearest ramp stop that clears the 3:1 ring floor against the surface's own ground, a compliant seed resolving to itself (D6-FAM-01); the foundation sheet's declaration remains the answer for a seedless theme
 ```

@@ -363,15 +363,6 @@ export interface BrandPalette {
   textPrimaryColor?: string;
   /** Supporting copy that must remain readable at normal text sizes. */
   textSecondaryColor?: string;
-  /**
-   * Ink of the page/navigation tier: sidebar items, table headers, form labels
-   * and the rest of the chrome that reads as page furniture rather than as
-   * content. Authored in F4A-6 (nudo K3) porque los 42 canales de `tier.page.fg`
-   * no tenian raiz: coincidian en valor con `--ds-color-accent`,
-   * `--ds-color-neutral-500` y `--ds-color-secondary`, y elegir cualquiera de
-   * las tres habria sido una coincidencia, no una derivacion.
-   */
-  textPageColor?: string;
   /** Quiet metadata/captions; still expected to meet accessible text contrast. */
   textMutedColor?: string;
   /** The third ink step, between muted and disabled. */
@@ -444,14 +435,10 @@ export interface BrandPalette {
   linkHoverColor?: string;
   /** Link ink once visited. */
   linkVisitedColor?: string;
-  /** Separator of a generic interactive affordance. */
-  interactiveBorderColor?: string;
   /** Ground an interactive affordance takes on hover. */
   interactiveBgHoverColor?: string;
   /** Ground an interactive affordance takes while active/pressed. */
   interactiveBgActiveColor?: string;
-  /** The quietest interactive ground: selected-but-inactive rows and chips. */
-  interactiveBgMutedColor?: string;
   /**
    * Translucent wash steps. These are the tint/scrim layers a skin paints ON
    * a ground rather than a ground themselves, so they carry an alpha channel
@@ -920,9 +907,8 @@ export interface BrandChrome {
 export interface BrandSurfaceChrome {
   /** Corner radius of the shared medium surface step. */
   radiusMd?: string;
-  /** Resting and hovered elevation of a generic raised surface. */
+  /** Resting elevation of a generic raised surface. */
   shadow?: string;
-  shadowHover?: string;
   /** Icon tile hosted on a surface. */
   iconBg?: string;
   iconBorder?: string;
@@ -1503,12 +1489,9 @@ export interface BrandSegmentedChrome {
  */
 export interface BrandSemanticControlChrome {
   ink?: string;
-  inkMuted?: string;
   onBrand?: string;
   surface?: string;
-  surfaceRaised?: string;
   brandTint?: string;
-  brandTintHover?: string;
   brandBorder?: string;
   iconTileBorder?: string;
 }
@@ -1913,8 +1896,6 @@ export interface BrandSwitchChrome {
   checkedBgHover?: string;
   /** `--ds-switch-focus-ring` */
   focusRing?: string;
-  /** `--ds-switch-label-color` */
-  labelColor?: string;
   /** `--ds-switch-thumb-bg` */
   thumbBg?: string;
   /** `--ds-switch-thumb-shadow` */

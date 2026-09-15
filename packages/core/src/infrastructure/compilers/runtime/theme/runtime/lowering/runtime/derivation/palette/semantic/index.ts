@@ -39,8 +39,6 @@ export function derivePaletteSemanticChannels(
     vars["--ds-color-text-primary"] = palette.textPrimaryColor;
   if (palette.textSecondaryColor)
     vars["--ds-color-text-secondary"] = palette.textSecondaryColor;
-  if (palette.textPageColor)
-    vars["--ds-color-text-page"] = palette.textPageColor;
   if (palette.textMutedColor)
     vars["--ds-color-text-muted"] = palette.textMutedColor;
   if (palette.textDisabledColor)

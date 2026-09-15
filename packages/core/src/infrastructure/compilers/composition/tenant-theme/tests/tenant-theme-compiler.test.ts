@@ -465,11 +465,26 @@ describe("TenantThemeConfig v1 server contract", () => {
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-9654077d42fe6b5732527b73e28a9e47f85e156d8454d632ac91692f0de38c63"
     );
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-f1fd7588ea714b2ec559f762484849fb74ae630ec774e72fa244311f308a000e"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-902521c345aa1d798115d295249f62514b81327df3fa7ebf629182bf4bda2eed"
+    );
+    // D6-2d-resto (2026-09-15): a declared NARROWING, the first on this ratchet.
+    // The DT-adjudicated dispositions retired eight public fields whose channels
+    // had no reader anywhere -- `BrandPalette.{textPageColor,interactiveBorderColor,
+    // interactiveBgMutedColor}`, `BrandSwitchChrome.labelColor`,
+    // `BrandSemanticControlChrome.{inkMuted,surfaceRaised,brandTintHover}` and
+    // `BrandSurfaceChrome.shadowHover` -- and dropped `--ds-color-text-page` from
+    // the reference-token roster. Both schema digests therefore move, and the
+    // superseded pins drop to `not.toBe` so the ratchet keeps every prior value
+    // asserted. The widenings above are untouched: this is the only removal.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-b71db4f9fb762ec6db296399cc1b061db98968f08fef1589d6ebb26fdd1a8b7f"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-b4668db82b7cc418e469974465d7931ccd3ef98ac48b8470a898c2dc63c10507"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

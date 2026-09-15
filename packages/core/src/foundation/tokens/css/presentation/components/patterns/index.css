@@ -85,25 +85,14 @@
     var(--ds-shadow-focus-ring)
   );
   --ds-control-ink: var(--ds-color-text-primary);
-  --ds-control-ink-muted: var(--ds-color-text-secondary);
   --ds-control-on-brand: var(
     --ds-color-text-on-primary,
     var(--ds-color-text-inverse)
   );
   --ds-control-surface: var(--ds-surface-card-bg);
-  --ds-control-surface-raised: color-mix(
-    in srgb,
-    var(--ds-control-surface) 86%,
-    var(--ds-surface-panel-bg)
-  );
   --ds-control-brand-tint: color-mix(
     in srgb,
     var(--ds-color-primary) 10%,
-    var(--ds-control-surface)
-  );
-  --ds-control-brand-tint-hover: color-mix(
-    in srgb,
-    var(--ds-color-primary) 15%,
     var(--ds-control-surface)
   );
   --ds-control-brand-border: color-mix(

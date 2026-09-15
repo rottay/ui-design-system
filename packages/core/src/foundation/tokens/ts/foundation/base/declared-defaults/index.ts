@@ -104,8 +104,6 @@ export const FOUNDATION_COLOR_DEFAULTS_LIGHT: Readonly<Record<string, string>> =
   "--ds-color-info-ink": "var(--ds-color-info)",
   "--ds-color-interactive-bg-active": "var(--ds-color-alpha-primary-10)",
   "--ds-color-interactive-bg-hover": "var(--ds-color-bg-hover)",
-  "--ds-color-interactive-bg-muted": "var(--ds-color-bg-subtle)",
-  "--ds-color-interactive-border": "var(--ds-color-border-secondary)",
   "--ds-color-link": "var(--ds-color-primary)",
   "--ds-color-link-hover": "var(--ds-color-primary-hover)",
   "--ds-color-link-visited": "var(--ds-color-neutral-600)",

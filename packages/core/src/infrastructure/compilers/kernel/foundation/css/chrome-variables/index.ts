@@ -1243,8 +1243,6 @@ function setSurfaceChromeVars(
 
   if (surface.radiusMd) vars["--ds-surface-radius-md"] = surface.radiusMd;
   if (surface.shadow) vars["--ds-surface-shadow"] = surface.shadow;
-  if (surface.shadowHover)
-    vars["--ds-surface-shadow-hover"] = surface.shadowHover;
   if (surface.iconBg) vars["--ds-surface-icon-bg"] = surface.iconBg;
   if (surface.iconBorder)
     vars["--ds-surface-icon-border"] = surface.iconBorder;
@@ -1754,15 +1752,10 @@ export function chromeToVariables(
     if (c.semantic) {
       const semantic = c.semantic;
       if (semantic.ink) vars["--ds-control-ink"] = semantic.ink;
-      if (semantic.inkMuted) vars["--ds-control-ink-muted"] = semantic.inkMuted;
       if (semantic.onBrand) vars["--ds-control-on-brand"] = semantic.onBrand;
       if (semantic.surface) vars["--ds-control-surface"] = semantic.surface;
-      if (semantic.surfaceRaised)
-        vars["--ds-control-surface-raised"] = semantic.surfaceRaised;
       if (semantic.brandTint)
         vars["--ds-control-brand-tint"] = semantic.brandTint;
-      if (semantic.brandTintHover)
-        vars["--ds-control-brand-tint-hover"] = semantic.brandTintHover;
       if (semantic.brandBorder)
         vars["--ds-control-brand-border"] = semantic.brandBorder;
       if (semantic.iconTileBorder)
@@ -2334,7 +2327,6 @@ export function chromeToVariables(
       if (sw.checkedBgHover)
         vars["--ds-switch-checked-bg-hover"] = sw.checkedBgHover;
       if (sw.focusRing) vars["--ds-switch-focus-ring"] = sw.focusRing;
-      if (sw.labelColor) vars["--ds-switch-label-color"] = sw.labelColor;
       if (sw.thumbBg) vars["--ds-switch-thumb-bg"] = sw.thumbBg;
       if (sw.thumbShadow) vars["--ds-switch-thumb-shadow"] = sw.thumbShadow;
     }
