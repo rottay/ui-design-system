@@ -5325,7 +5325,7 @@
    "lane": "evidence-graph",
    "order": 5,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-CAT-03",
     "WO-DER-01",
@@ -5385,8 +5385,8 @@
    ],
    "claimedBy": "claude-admin",
    "claimedAt": "2026-09-13",
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-09-14",
+   "evidence": "CLOSED with zero applicable failures, published population and the contract review RESOLVED (both ACCEPTs on record, durable at evidence/evi-05-core-review/). Contract: the reviewed semantic-identity exclusion (closed registry, verbatim context+selector+property+value, byProperty only, admitted set pinned to exactly radio/shape) withdraws the bare radio from the shape axis; the circle/dot invariant is computed in every measured arm; at-rule context drift and producer changes re-enter the family or trip the invariant by name. Published: pilot pin 29 decision rows with shape 4 applicable + 1 N/A (never 4/4 alone), fleet floor 217->216 bound to exclusionsRevision 34bd866512177f9b (+ the E5b re-pin), physical-longhand widening with newEntrants []. Measured: pilot 8/8 Chromium both modes/orientations (failures [], exactly one N/A, negative controls 0, severed mutant detected, radio-group continuity moved), population 36/36, axis-difference 66/66, producer-mutant 256 named invariant failures with pilot verdict clean, severed-corner named movement failures in both modes, baselines restored. Review rounds: debrief -> Codex/Fable CHANGES with conditions -> compliance package -> Fable ACCEPT, Codex CHANGES (two conditions) -> E5b -> Codex ACCEPT + Fable ACCEPT stands. D-30 stays deferred; A2-pilot claiming follows with the serialized milestone checkpoint."
   },
   {
    "id": "WO-CON-01",
