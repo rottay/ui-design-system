@@ -165,3 +165,19 @@ The owner approved separating **root closure**, **family adoption** and **fleet 
 - **Do NOT** — Do not author CSS or channel values to make a candidate look right; if a decision is missing from the kit, file it as a kit amendment (D-27), never as an override.
 - **Size** — M.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-DER-07 (BitHire reference identity: three candidate decision sets rendered for the owner to pick) exactly as specified in `roadmap/derivation.md`: read first `audit/README.md` (guide for the executor) and the kit table in `audit/50-matrices/customization-inventory` §5; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.
+
+### WO-DER-08 Studio draft transport to the governed Theme (or a v2 document): the flat shape loses its authoring role
+- **Outcome** — The studio's authored draft no longer rides the flat shape that the lowering reads (FlatTheme after D6-2c-iii): the draft moves to the governed `Theme` or a v2 tenant document, with its governed ingress preserved, so "the flat shape is not an authoring surface" becomes true rather than aspirational. Registered by the D6-2c flat-type core review (Codex ACCEPT(a) guardrail 4, Fable CHANGES adopted 8; `evidence/der-06-flat-type-review/`).
+- **Why** — Until this lot, the flat shape is ALSO the studio draft transport, so it keeps an authoring role the BrandTheme retirement narrative must not deny. `liftAuthoredTheme` has zero production callers (measured 2026-09-15), so the migration surface is the studio draft itself plus its serialization.
+- **Closes** — the studio-exception residue of F-11 (the rest closes in WO-DER-06) (closure criteria in `audit/30-findings`).
+- **Wave** — 4; after WO-DER-06 (the flat type's rename lands there as D6-2c-iii).
+- **Depends on** — WO-DER-06.
+- **Steps** —
+  1. Inventory the studio draft's reads/writes of the flat shape (`value`/`onChange`, file export, `brandThemePath` — a serialized contract field, i.e. a data change, per Fable guardrail 3, unless D6-2c-iii already handled it under a written exception).
+  2. Move the draft transport to the governed `Theme` or a v2 document, preserving the governed ingress and the intake's inactive-family omission with its `charts: {}` exception.
+  3. Migrate or retire `liftAuthoredTheme`'s remaining callers (measured zero in production; confirm again at implementation time) and update the tenancy/studio docs in the same session.
+- **Files** — the studio draft transport and its serialization (paths declared by the implementer's write set); tenancy READMEs and `docs/architecture/index.md` in the same commit.
+- **Acceptance gate** — the studio draft no longer names the flat type; its transport round-trips through the governed ingress with no semantic edit to the lowering; the flat shape's documentation no longer needs the "also an authoring draft" caveat; grep for the old transport field names is zero outside registered migrations.
+- **Do NOT** — Do not retype the lowering's reads to the governed Theme in this lot (that is the (b) retype deferred by the review, a separate later lot with its own write set); do not break the studio's editability or file export to force the move.
+- **Size** — M.
+- **Delegation prompt** — In the integration checkout, execute WO-DER-08 exactly as specified in `roadmap/derivation.md`: declare your write set, keep the governed ingress intact, finish when the acceptance gate passes; report the commands you ran and their output.

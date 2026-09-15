@@ -78,29 +78,36 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | signature | `./server#TenantThemeDocumentV2` | decisions `states.emphasis` and `states.focus-style` (catalog rows 20/21) now lower to 28 emitted `--ds-state-*`/`--ds-focus-ring*`/`--ds-material-*` channels; closed enum domains, additive | minor | `der-02-states-materials.md` |
 | signature | `./server#TenantThemeSimpleConfig` | `general.states` optional input accepted (`emphasis`, `focusStyle`); the v1 lowering maps it to `surfaces.{stateEmphasis,focusStyle}` and the v2→v1 projection writes it back by name; the v1→v2 migration (`migrateDocumentV1ToV2`) does not carry it yet (dropped; gap registered for implementation) | minor | `der-02-states-materials.md` |
 | signature | `./server#Theme` | normalized surfaces gain optional `stateEmphasis` and `focusStyle`; absent means `medium`/`ring`, byte-identical to the pre-decision foundation defaults | minor | `der-02-states-materials.md` |
+| signature | `./server#Theme` | shape unchanged; its identity note no longer cites the first-party brand theme | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#admitDocument` | same optional `ranges` input field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
 | signature | `.#AlertProps` | adds `action?: ReactNode`, the action tray Callout carried, rendered by the Modern engine | major | `fam-04-family-cut-overlays-notifier.md` |
+| signature | `.#baselineFor` | loses the third parameter; always the neutral foundation with the vertical's preset admitted, labelled with the slug | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#baselineFor` | gains an optional third parameter, the baseline source ("brand-theme" by default, or "neutral-preset"); callers passing two arguments are unchanged | patch | `der-06-neutral-foundation-baseline.md` |
 | signature | `.#BrandAutocompleteChrome` | each field documents its `--ds-auto-complete-*` channel instead of `--ds-autocomplete-*` | major | `fam-03-family-cut-selection.md` |
 | signature | `.#BrandControlsChrome` | the inputNumber chrome documents its lowering to `--ds-input-number-*` | major | `fam-02-family-cut-fields.md` |
 | signature | `.#BrandControlsChrome` | the autocomplete, datePicker and timePicker chrome documents its lowering to `--ds-auto-complete-*`, `--ds-date-picker-*` and `--ds-time-picker-*` | major | `fam-03-family-cut-selection.md` |
 | signature | `.#BrandDatePickerChrome` | each field documents its `--ds-date-picker-*` channel instead of `--ds-datepicker-*` | major | `fam-03-family-cut-selection.md` |
 | signature | `.#BrandInputNumberChrome` | each field documents its `--ds-input-number-*` channel instead of `--ds-inputnumber-*` | major | `fam-02-family-cut-fields.md` |
+| signature | `.#BrandTheme` | shape unchanged; its capabilities note names ThemeSource as the required form | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#BrandTimePickerChrome` | each field documents its `--ds-time-picker-*` channel instead of `--ds-timepicker-*` | major | `fam-03-family-cut-selection.md` |
 | signature | `.#Callout` | deprecated in favour of Alert (`message`, `description`, `action`); the Modern engine renders the alert surface | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#CALLOUT_COLORS` | the colour values name the palette steps without literal hex fallbacks | major | `fam-04-family-cut-overlays-notifier.md` |
+| signature | `.#CompileThemeIntentOptions` | loses baselineSource; every intent resolves over the vertical's composed baseline | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#CompileThemeIntentOptions` | gains an optional baselineSource; absent, the intent resolves over the authored theme as before | patch | `der-06-neutral-foundation-baseline.md` |
 | signature | `.#CONFIRM_DIALOG_VARIANT_COLORS` | the colour values name the palette steps without literal hex fallbacks | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#DesignSystemProviderProps` | `engineVisual` is no longer the only route for the compiled runtime half: the provider publishes `visualAuthority.artifact.runtime` when the artifact was compiled for the rendering engine, and falls back to the prop otherwise. The prop's own type and refusals are unchanged | major | `der-07-artifact-runtime-half.md` |
 | signature | `.#DocumentAdmission` | same two required output fields on the root barrel's re-export of the same declaration | minor | `r1r2-integration-door.md` |
 | signature | `.#DocumentThemeIntentInput` | same optional `ranges` field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
+| signature | `.#DraftPreviewThemeIntentInput` | carriedFrom, when absent, is the vertical's composed baseline instead of an authored theme | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#DraftPreviewThemeIntentInput` | gains an optional carriedFrom Theme so a draft ledger can be read against a baseline other than the authored theme | patch | `der-06-neutral-foundation-baseline.md` |
 | signature | `.#DrawerProps` | adds `adapt?: Adapt<OverlayAdaptation>`; the resolved presentation and posture are stamped on the panel | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#FormProps` | adds `adapt?: Adapt<FormAdaptation>` | major | `fam-02-family-cut-fields.md` |
 | signature | `.#generateCalendarGrid` | adds an optional fourth parameter `{ weekStartsOn?: 0/1/2/3/4/5/6 }`; without it the grid still starts on Sunday | major | `fam-03-family-cut-selection.md` |
 | signature | `.#ModalProps` | adds `adapt?: Adapt<OverlayAdaptation>`; the resolved presentation and posture are stamped on the dialog | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#PreviewThemeIntentInput` | same optional `ranges` field on the root barrel's re-export | minor | `r1r2-integration-door.md` |
+| signature | `.#renderFirstPartyArtifact` | returns governed beside css and compiled: the motion dial, expressive selection and decided channels the artifact's runtime block publishes | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#resolveActiveResponsivePosture` | takes the artifact's normalized appearance (`{ advanced?: { responsivePosture? } }`) directly instead of a config; the `brandTheme.responsive` arm is gone because nothing could reach it once the config stopped carrying a theme | major | `emi-02-tenant-config-strip.md` |
+| signature | `.#ResolveThemeOptions` | baseline is required; resolveTheme validates the intent first and refuses a call without a baseline by name | major | `der-06-brand-theme-authority-retired.md` |
 | signature | `.#RuntimeVisualPayloadCensus` | reduced to `{ visualBranding: boolean }`; `tokenOverrides`, `personality`, `brandTheme` and `appearance` are gone because a `TenantConfig` can no longer carry them, leaving the branding seeds as the only raw visual channel | major | `emi-02-tenant-config-strip.md` |
 | signature | `.#SheetProps` | adds `adapt?: Adapt<OverlayAdaptation>`; side sheets default to fullscreen on a phone, a bottom sheet keeps its posture | major | `fam-04-family-cut-overlays-notifier.md` |
 | signature | `.#Skeleton` | the nine static compound members (`Avatar`, `Text`, `Button`, `Card`, `ListItem`, `Table`, `Form`, `Paragraph`, `Transition`) are removed; wrap the real component in `AnatomySkeleton` instead | major | `fam-14-anatomy-derived-skeleton.md` |
@@ -116,6 +123,8 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | signature | `.#Toggle` | the same forwarded ref on the root export | major | `fam-01-family-cut-pilot.md` |
 | signature | `.#ToggleProps` | adds `tabIndex`, `aria-label`, `aria-labelledby` and `aria-describedby` | major | `fam-01-family-cut-pilot.md` |
 | signature | `.#useMotionPersonality` | no shape change: the inferred return type prints the same `pulseSpeed` union (`"none" / "normal" / "slow" / "fast"`) with its members in a different order, because the type checker now creates those literal types in a different sequence | major | `fam-14-anatomy-derived-skeleton.md` |
+| signature | `.#VERTICAL_REGISTRY` | every entry loses personality and tokenOverrides | major | `der-06-brand-theme-authority-retired.md` |
+| signature | `.#VerticalPreset` | loses personality and tokenOverrides; a vertical's decisions reach the runtime through its compiled artifact only | major | `der-06-brand-theme-authority-retired.md` |
 | export | `./contracts/surfaces#AdaptiveConfig` | removed; superseded by SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
 | export | `./contracts/surfaces#SurfaceAdaptivePosture` | added; a posture per breakpoint on the one ladder | major | `inv-04-one-responsive-mechanism.md` |
 | export | `./contracts/surfaces#SurfaceAdaptivePosture` | added; the ./contracts/surfaces subpath publishes the new name in place of AdaptiveConfig | major | `inv-04-one-responsive-mechanism.md` |
@@ -143,6 +152,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#AnatomySkeletonProps` | added; `loading`, `children`, `animation`, `className`, `style` | major | `fam-14-anatomy-derived-skeleton.md` |
 | export | `.#artifactProvenanceOf` | added: projects a resolved ledger onto the artifact metadatum, dropping every authored value; `undefined` when the compile resolved no ledger, which is what keeps pre-existing artifacts unchanged | minor | `r2-publication-parity.md` |
 | export | `.#assembleTenantThemeArtifact` | added: the ONE artifact builder both publication transports share — digest, scopes, chart floor, CSS and the engine projection stated once; it takes `{ intent, identity, verticalEnvelope, document }` and reads provenance only from the resolution, never from a parameter beside the intent | minor | `r2-publication-parity.md` |
+| export | `.#bithireBrandTheme` | removed; same retirement | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#Breakpoint` | removed; the three device bands are ResponsiveDeviceAlias | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#CollectionWorkspaceProps` | changed; `adaptive` takes SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#ContainerPosture` | changed; the middle band is `regular`, not `standard` | major | `inv-07-adaptation-slots.md` |
@@ -153,6 +163,10 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#DataTablePatternProps` | changed; `adapt` added, `mobileBreakpoint` deprecated with no default | major | `inv-07-adaptation-slots.md` |
 | export | `.#DataTablePresentation` | added; table / cards / list | major | `inv-07-adaptation-slots.md` |
 | export | `.#DataTableRowActions` | added; inline / menu / swipe | major | `inv-07-adaptation-slots.md` |
+| export | `.#evntoBrandTheme` | removed; same retirement | major | `der-06-brand-theme-authority-retired.md` |
+| export | `.#FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS` | removed with the first-party required inventory | major | `der-06-brand-theme-authority-retired.md` |
+| export | `.#FirstPartyBrandTheme` | removed; the ISO normalizer takes a ThemeSource | major | `der-06-brand-theme-authority-retired.md` |
+| export | `.#FirstPartyBrandThemeRequiredKey` | removed with the first-party required inventory | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#GuidedDraftFormSurfaceProps` | changed; `adaptive` takes SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#Posture` | added; the viewport and container posture names in one union | major | `inv-07-adaptation-slots.md` |
 | export | `.#resolveActiveResponsivePosture` | changed; owned by the adaptation runtime, same input and result | major | `inv-07-adaptation-slots.md` |
@@ -163,6 +177,7 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#ResolveThemeOptions` | added; resolveTheme's optional second argument, an explicit baseline the caller resolved | patch | `der-06-neutral-foundation-baseline.md` |
 | export | `.#ResponsiveValue` | changed; one contract: scalar or breakpoint object, `xs`/`base` and the device aliases on one ladder | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#ResponsiveValueConfig` | removed; collapsed into the one ResponsiveValue contract | major | `inv-04-one-responsive-mechanism.md` |
+| export | `.#rottayBrandTheme` | removed; the authored theme is gone, the vertical is the neutral foundation plus its preset document | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#SkeletonAvatar` | removed; use `AnatomySkeleton` around the real avatar | major | `fam-14-anatomy-derived-skeleton.md` |
 | export | `.#SkeletonButton` | removed; use `AnatomySkeleton` around the real button | major | `fam-14-anatomy-derived-skeleton.md` |
 | export | `.#SkeletonCard` | removed; use `AnatomySkeleton` around the real card | major | `fam-14-anatomy-derived-skeleton.md` |
@@ -182,9 +197,12 @@ Recorded vs measured — 5 row(s) disagree; neither side is authority, and the d
 | export | `.#SurfaceResponsiveVisualConfig` | added; stackOnMobile/stackOnTablet, moved down to the chrome tier | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#surfaceStackingValue` | added; the stacking ladder a split layout declares | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#TenantThemeArtifactAssembly` | added: that builder's input type | minor | `r2-publication-parity.md` |
+| export | `.#THEME_BASELINE_SOURCES` | removed; there is one baseline source | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#THEME_BASELINE_SOURCES` | added; the closed set of baseline sources | patch | `der-06-neutral-foundation-baseline.md` |
+| export | `.#ThemeBaselineSource` | removed; there is one baseline source | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#ThemeBaselineSource` | added; the union over that set | patch | `der-06-neutral-foundation-baseline.md` |
 | export | `.#ThemeProvenance` | gains `authoredLeaves`, the subset of `authoredPaths` the patch states a value for | minor | `der-05-modes-from-decisions.md` |
+| export | `.#ThemeSource` | added; the flat theme the ISO normalizer lowers: appearance, palette and capabilities required, governed selections partial, identity open | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#toBreakpoint` | removed; deviceAliasForBreakpoint answers the same question on the one ladder | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#useAdaptivePosture` | removed; resolution is pure, the caller supplies the step | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#UseAdaptivePostureResult` | removed; with the hook | major | `inv-04-one-responsive-mechanism.md` |
@@ -201,7 +219,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 > WO-CRA-23 (Modern Rescue) is SEALED at this figure: its R0 instrumentation is retained, its R1+ rounds are superseded by the derivation and family-cut lanes, and this ratio is no longer the programme's acceptance metric — the indicators above are. The manifest is historical evidence, not runtime truth: the runtime chain is the typed catalog, the per-family derivators, the roles/adapters and the emitter. Family acceptance from here is owed by WO-FAM-00 (the per-family cut gate) and closed family by family in the family-cuts lane.
 
-## Work-order burn-down — 110/160 work orders done (69%)
+## Work-order burn-down — 110/161 work orders done (68%)
 
 > Delivery throughput, NOT architectural readiness. A closed work order says a lot landed and was certified; it does not say a root reaches its channels, a skin reads a role, or a tenant differs on a non-colour axis. Readiness is the indicator table above.
 
@@ -216,7 +234,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | [canon-close](./canon-close.md) | 6 | 0 | 0 | 6 |
 | [consumer-contract](./consumer-contract.md) | 6 | 0 | 1 | 7 |
 | [catalog-door](./catalog-door.md) | 3 | 0 | 0 | 3 |
-| [derivation](./derivation.md) | 5 | 2 | 0 | 7 |
+| [derivation](./derivation.md) | 5 | 2 | 1 | 8 |
 | [family-cuts](./family-cuts.md) | 7 | 1 | 7 | 15 |
 | [emission-mount](./emission-mount.md) | 2 | 0 | 1 | 3 |
 | [platform-invariants](./platform-invariants.md) | 3 | 0 | 5 | 8 |
@@ -230,7 +248,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | A · The apps can build | reached | WO-CON-04, WO-CON-05 | none | BitHire builds pages against packages/core/docs/consumer-contract while the DS continues behind the contract. |
 | A2-pilot · Architecture validated in one vertical cut (pilot population) | reached | WO-CAT-02, WO-CAT-03, WO-DER-01, WO-FAM-00, WO-FAM-01, WO-EVI-05 | none | Decisions -> derivation -> channels -> skin proven end to end on ONE family, on the pilot population only. It is not the fleet threshold: the six-axis >= 80 % obligation of WO-EVI-02 gates milestone B, never this one. |
 | B · Real cascade in Modern | not reached | WO-DER-05, WO-DER-07, WO-EVI-02, WO-FAM-01, WO-FAM-02, WO-FAM-06 | WO-DER-07, WO-EVI-02, WO-FAM-06 | Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached. |
-| C · 116/116 | not reached | all 60 work orders of the audit-2026-09-05 programme | 25 of 60 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
+| C · 116/116 | not reached | all 61 work orders of the audit-2026-09-05 programme | 26 of 61 | Re-audit with the audit/20-rubric rubric. Off-registry conditions also apply: every audit/30-findings closure criterion green and every indicator at target. |
 
 ## DS improvements burn-down — 22/82 execute source IDs done (27%)
 
@@ -256,7 +274,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-DER-06 | Vertical presets as decisions; BrandTheme retired; neutral foundation without opinion | claude-admin | 2026-09-14 | 2026-09-15 09:42 — 2026-09-15: single-door review closed — Codex ACCEPT(a) + Fable ACCEPT(a) with the guardrail union (evidence pending commit with the amendment lot). Amendment brief dispatched to implement (amended arity law keyed on COMPILE_DOOR with exact-equality, ResolveThemeOptions pinned to baseline-only, order proof test, 8-mutant battery, alias-proof census, docs/architecture §11 record). NEW REGISTERED FINDING (Fable, out of that lot's scope): intent admission measures against a floor that is not the one the resolution was made over — admission imports the two-arg baselineFor + authored theme for movedLeaves/envelopeIssues while the door hands admitThemeCompilation the correct baselineResolution.theme; under neutral-preset one tenant intent is admitted against two floors (evnto dark differs, per D6-2a's own commit message). Not hit today (static-vertical callers return at admitEngine; the only tenant-over-neutral test asserts reach, not admission). FIX DIRECTION for a later D6-2c lot: the door computes the baseline once and passes it to admitThemeIntent; the admission owner drops its baselineFor import; the single-door gate then pins that admission never calls baselineFor. |
+| WO-DER-06 | Vertical presets as decisions; BrandTheme retired; neutral foundation without opinion | claude-admin | 2026-09-14 | 2026-09-15 11:24 — 2026-09-15 (2c-ii adjudication): DB tenants resolve over neutral+preset FROM THIS LOT (single-route law: static files and DB converge on the one contract). (B) suites re-pin with provenance. (C) regressions REGISTERED as derivation-lane obligations, per channel, NOT silently accepted: --ds-radius-button and --ds-button-{xs,sm,md,lg}-radius (theme-transport-parity, divergence-fixtures), projection.seeds=0 for rottay (engine-visual, antd adapter), --ds-radius-sm-base (divergence-matrix), bithire radius base now governed by its preset shape.radius-scale 0.8 where the authored theme stated 1.25 (semantics CORRECT: the preset decides; registered for DER-07/vertical confirmation, not revert). Same class as D-27 spring and evnto-dark mode-aware. (A) receipts: re-anchor over bithire/fixtures where the engine property lives; delete only what has no subject, each named. §4 instruments: slots re-point to the neutral compile (blocking ratchet keeps its subject); variant-parity/mirror-parity/keypath-coverage re-point or retire with registration; modern-rescue sealed files are OUT of the acceptance grep (history, sealed). CLOSED by the 2c-ii execution: the Fable admission-floor finding — admission now imports baselineFor from ingress (same floor, same function, same inputs; divergence impossible). Remaining pin (admission never calls baselineFor / single computation passed by the door) stays for the registered follow-up lot. |
 | WO-FAM-06 | Family cut: card, table, badge, tag, avatar, tree, list, descriptions and typography compounds | claude-admin | 2026-09-15 | 2026-09-15 09:28 — 2026-09-15 (F6b residuals): tabs heights single-application (deriver emits step-rem x density x control-height-scale once; skin reads --_ds-tabs-current-height bare — kit row 14 green 12/12); card wires --ds-card-padding (via --ds-card-padding-base) and --ds-card-padding-xl (padding=xl on the contract); --ds-card-shadow-elevated twin RETIRED (authorable elevated root is --ds-card-elevated-shadow, same shadowElevated field). Kimi verified: shape 12/12, family-cut 41/41, RWP 1061/4547 exit 0, liveness+freeze green, cert-fence 28/28, mirror-parity clean; the 4 card-causality reds are the in-flight D6-2c-i mount mismatch, resolved by the serialized regeneration. Integration queued behind the F6c dead-writer lot. |
 | WO-EVI-02 | Causal gates: transport parity, tier rejection, computed-style propagation, tenant-difference probe by axis, coverage and liveness | Kimi K3 | 2026-09-11 | 2026-09-15 10:17 — 2026-09-15 (post-D6-2c-i inventory re-sync): engine-token-audit keyset re-anchored — 13 stale steps/** pins removed (files deleted by the steps->stepper merge 1ddfd6198), 3 stepper/compound/steps keys added at 0. Tightenings: a11y.apcaPairings 1->0 (D6-2c-i APCA cleanup), tabs inlinePaint 1->0 (FAM-05 lot 2). Widening authorized by name: pagination inlinePaint 0->1 — the style-prop passthrough is PRE-EXISTING (verified at HEAD~30, same class as the avatar=1 pin), not introduced by the cut. deadParts matcher fixed: partAttributes(ternary, state) first-argument literals now collected (tabs overflow false positive closed, exact 0 restored, dead-parts test 3/3). REGISTERED DEBT (owner: legacy/structural retirement lane per the DAG): themeCss.unreferencedSelectors=14 — .rottay-menu legacy rules in modern/theme/index.css (present since a3ba2e479 2026-08-31; no TSX renders the class in core/showroom/app-bithire/app-evnto/app-platform; app-platform's own globals.css is a separate file). The exact invariant stays red until the drain lane retires them — NOT weakened. |
 | WO-EVI-03 | Tests through the door: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines | claude-admin | 2026-09-14 | 2026-09-14 16:40 — CHECKPOINT-ADJACENT STATE: G107-03 drill repair and the emission-composer detector repair (lot E) are landed and green (family-cut 62/62, theme-contract-freeze 50/50); the G107-01 pin re-adjudication landed under this WO (liveness 108/108 at 50 pins, with the radius-button pin later discharged LIVE by the FAM-01 lot and z-index-base re-adjudicated by the FAM-04 lot; the remaining TSX-terminal extraction question for the tint steps is named in the WO-EVI-02 pins). The WO stays open for its own scope: door-parity suite, harness reduction, liveness-based channel tests, dated visual baselines (blocked only on the deferred identity pick for the showroom baselines). |
@@ -316,6 +334,7 @@ Also pending, declaring no public surface movement: `der-02-material-arm-non-vac
 | WO-INV-06 | dependencies: WO-FAM-10, WO-FAM-11 |
 | WO-FAM-12 | dependencies: WO-FAM-06, WO-FAM-07 |
 | WO-FAM-13 | dependencies: WO-FAM-08, WO-FAM-12, WO-INV-08 |
+| WO-DER-08 | dependencies: WO-DER-06 |
 
 ## Sequencing hazards (mechanically enforced)
 
