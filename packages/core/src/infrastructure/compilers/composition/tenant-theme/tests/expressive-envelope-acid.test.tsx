@@ -19,9 +19,8 @@ import { cleanup, render, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type {
@@ -41,6 +40,8 @@ import {
   validateTenantThemeDocument,
 } from '..';
 import { clearTenantThemeScope, stampTenantThemeScope } from '@/infrastructure/runtime/theming/foundation/visual-authority/tests/mount-fixture';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const MANAGEMENT_IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_the_management',

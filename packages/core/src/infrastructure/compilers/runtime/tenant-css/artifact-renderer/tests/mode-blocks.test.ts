@@ -9,8 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
@@ -23,6 +22,8 @@ import { EMPTY_PROVENANCE } from '@/foundation/contracts/composition/tenants/the
 import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
 import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const bithireSpec = () => {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === 'bithire');

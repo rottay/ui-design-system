@@ -15,7 +15,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import type { ExpressiveIconProfile } from '@/foundation/tokens/ts/presentation/expressive-profiles';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import {
@@ -23,6 +22,9 @@ import {
   provideServerIconExpressiveProfile,
   resolveActiveIconExpressiveProfile,
 } from '..';
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 function tenantConfig(overrides: Partial<TenantConfig>): TenantConfig {
   return {

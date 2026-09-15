@@ -207,8 +207,8 @@ export const INGRESS_ARMS = Object.freeze({
       '(a): this used to say "below an inline root write", which described the DB arm as it was ' +
       'then. Both arms are stylesheet arms now, so nothing sits above this one.',
     /* H-1, 2026-08-23 (V1). This arm COMPOSES the stop over the vertical's
-     * published baseline BrandTheme (`dist/index.js` -> `<vertical>BrandTheme`),
-     * it does not lower the stop alone.
+     * published baseline (`dist/index.js` -> `baselineFor(vertical)`, the
+     * neutral foundation plus the preset), it does not lower the stop alone.
      *
      * Before H-1 it compiled a ONE-FIELD theme built from the ingress keypath
      * and nothing else. The lowering was behaving correctly on that input -- its
@@ -1632,13 +1632,13 @@ function deriveTenantSlug(vertical) {
  * W-A — THE SOURCE OF THAT BOOLEAN IS THE PUBLISHED BrandTheme, and the reason
  * is REACHABILITY rather than absence. W-A asked for the source to be verified
  * and the verification corrected W-A's own evidence: it held that
- * `FIRST_PARTY_THEMES.<v>.appearance.defaultMode` is `undefined`, and measured
+ * the composed baseline's `appearance.defaultMode` is `undefined`, and measured
  * it is `'dark'` — the Theme projection DOES carry the field. What it does not
- * do is leave the package: `FIRST_PARTY_THEMES` is not exported from the
+ * do is leave the package: the roster themes were never exported from the
  * published entrypoint at all, so reading it would take the deep import this
  * harness refuses for its compilers (a deep path can be tree-shaken out from
- * under it with no gate noticing). `<v>BrandTheme` IS published, and
- * `loadStaticBaselines()` already loads exactly those themes from
+ * under it with no gate noticing). `baselineFor` IS published, and
+ * `loadStaticBaselines()` already composes exactly those baselines from
  * `dist/index.js` under the freshness law — so the caller reads it there and
  * hands it here. Both halves are asserted in R-2 drill 3 so neither claim can
  * rot silently. FAIL-CLOSED: a missing value refuses the run rather than
@@ -2375,21 +2375,26 @@ export async function loadStaticBaselines({
     );
   }
   const MODULE = 'dist/index.js';
+  const INTAKE_MODULE = 'dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js';
   const module = await importModule(resolve(CORE_ROOT, MODULE));
+  const intake = await importModule(resolve(CORE_ROOT, INTAKE_MODULE));
+  if (typeof module?.baselineFor !== 'function' || typeof intake?.readGovernedTheme !== 'function') {
+    throw new Error(
+      `resolution-probe: ${MODULE} must export baselineFor and ${INTAKE_MODULE} readGovernedTheme; ` +
+        'refusing to fall back to an empty theme: an empty base is exactly the one-field-theme ' +
+        'defect H-1 corrects, and it fails silently.',
+    );
+  }
   const baselines = {};
   // `none` is the tenant-less scope: it has no vertical and therefore no
-  // BrandTheme to compose onto. Every other roster entry must have one.
+  // baseline to compose onto. Every other roster entry composes the neutral
+  // foundation with its preset, read flat exactly as the lowering reads it.
   for (const vertical of Object.keys(VERTICALS).filter((id) => id !== 'none')) {
-    const exportName = `${vertical}BrandTheme`;
-    const theme = module?.[exportName];
+    const theme = intake.readGovernedTheme(module.baselineFor(vertical, vertical));
     if (!theme || typeof theme !== 'object') {
-      throw new Error(
-        `resolution-probe: ${MODULE} exports no BrandTheme for the "${vertical}" vertical ` +
-          `(expected ${exportName}). Refusing to fall back to an empty theme: an empty base is ` +
-          'exactly the one-field-theme defect H-1 corrects, and it fails silently.',
-      );
+      throw new Error(`resolution-probe: baselineFor("${vertical}") produced no theme`);
     }
-    baselines[vertical] = Object.freeze({ theme, source: `${MODULE}#${exportName}` });
+    baselines[vertical] = Object.freeze({ theme, source: `${MODULE}#baselineFor(${vertical})` });
   }
   return Object.freeze(baselines);
 }

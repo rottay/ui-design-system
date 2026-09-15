@@ -26,10 +26,12 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
+import { firstPartyFixture } from "@tests/support/theme-lowering";
 
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SRC = resolve(HERE, '../../..');
@@ -339,14 +341,11 @@ describe('MODERN-TENANT-VALUE-FREE · the engine declares no tenant color', () =
 
     const tmp = mkdtempSync(join(tmpdir(), 'ds-modern-tenant-drill-'));
     const planted = join(tmp, 'card.css');
-    // Rottay declares `appearance.defaultMode: 'dark'`, so its base palette IS
-    // the dark one and `palette.backgroundColor` is its dark canvas. This read
-    // `palette.darkBackgroundColor`, a field removed with the second-dark-field
-    // model: it resolved to `undefined`, so the drill planted the literal
-    // "undefined" and then threw in `normalizeColor` instead of proving the
-    // floor turns red. A drill that cannot fail on purpose proves nothing.
-    const rottayCanvas = rottayBrandTheme.palette.backgroundColor!;
-    const bithirePrimary = bithireBrandTheme.palette.primaryColor;
+    // BitHire is the one first-party vertical whose preset decides seeds; the
+    // structural presets author no colour, so the drill plants its two seeds.
+    // A drill that cannot fail on purpose proves nothing.
+    const rottayCanvas = bithireBrandTheme.palette?.secondaryColor ?? '';
+    const bithirePrimary = bithireBrandTheme.palette?.primaryColor ?? '';
     expect(rottayCanvas).toMatch(/^#[0-9A-Fa-f]{6}$/);
     expect(bithirePrimary).toMatch(/^#[0-9A-Fa-f]{6}$/);
     writeFileSync(

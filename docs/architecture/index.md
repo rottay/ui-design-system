@@ -273,9 +273,10 @@ guarantee.
 
 ## 11. Tenant and visual authority
 
-Two authority classes. Code-owned vertical baselines are static-first: their TypeScript
-theme sources compile into generated CSS artifacts, and the baselines are mirror themes —
-identical channel surface, identical names, different values. Published customer tenants
+Two authority classes. Code-owned vertical baselines are static-first: each is the neutral
+foundation with the vertical's preset document admitted, compiled into a generated CSS
+artifact, and the baselines are mirror themes — identical channel surface, identical names,
+different values. Published customer tenants
 are stored-document-owned, and a hostname chooses tenant identity, never a checked-in CSS
 file or a component branch.
 

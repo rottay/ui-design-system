@@ -188,9 +188,7 @@ describe("every connected decision still reaches a channel over the neutral foun
     vertical: (typeof FIRST_PARTY_VERTICAL_SLUGS)[number],
     document: TenantThemeDocumentV2
   ): Record<string, string> =>
-    compileThemeIntent(documentThemeIntent({ vertical, slug: SLUG, document }), {
-      baselineSource: "neutral-preset",
-    }).compiled.cssVariables;
+    compileThemeIntent(documentThemeIntent({ vertical, slug: SLUG, document })).compiled.cssVariables;
 
   for (const id of Object.keys(FIXTURES) as ConnectedId[]) {
     const row = themeControl(id);

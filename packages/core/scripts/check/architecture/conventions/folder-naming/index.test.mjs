@@ -42,7 +42,6 @@ const FIXTURE_BASE_DIRS = [
   'src/components/patterns',
   'src/components/structures',
   'src/components/surfaces',
-  'src/foundation/tokens/ts/presentation/brand-themes',
   'src/foundation/tokens/ts/runtime/mirrors',
 ];
 

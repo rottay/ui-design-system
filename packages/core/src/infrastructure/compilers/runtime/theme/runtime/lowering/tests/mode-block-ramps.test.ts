@@ -22,15 +22,16 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 import { hexToOklch } from '@/foundation/kernel/color/oklch';
 import { RAMP_STEPS } from '@/foundation/kernel/color/oklch/ramp';
 import type { BrandPalette, BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 /**
  * What a channel RESOLVES to while a mode block is active.

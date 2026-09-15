@@ -9,16 +9,17 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   MANDATORY_FALLBACK_FONT_CHANNELS,
   MANDATORY_FONT_FALLBACK_FAMILY,
   assertMandatoryFontFallback,
   hasMandatoryFontFallback,
 } from '@/foundation/kernel/typography';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const FIRST_PARTY = [
   ['bithire', bithireBrandTheme],

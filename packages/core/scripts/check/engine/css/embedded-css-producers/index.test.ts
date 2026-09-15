@@ -10,7 +10,6 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from "../../../../../src/infrastructure/compilers/runtime/tenant-css";
-import { bithireBrandTheme } from "../../../../../src/foundation/tokens/ts/presentation/brand-themes";
 import {
   compileTenantThemeConfig,
   hydrateTenantThemeConfig,
@@ -22,7 +21,10 @@ import type {
 import { isEmbeddedCssPaintProperty } from "../../../../libraries/paint/embedded/index.mjs";
 import { packageRoot as findPackageRoot } from "../../../../libraries/repo-root/index.mjs";
 import { collectSourceFiles } from "../paint/runtime-svg/index.mjs";
-import { brandThemeToTheme } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { normalizeThemeSource } from "@/foundation/contracts/composition/tenants/themes/iso";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireView = firstPartyFixture('bithire');
 
 const packageRoot = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 const componentsDir = resolve(packageRoot, "src/components");

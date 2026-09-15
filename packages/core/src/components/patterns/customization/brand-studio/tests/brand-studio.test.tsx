@@ -23,7 +23,6 @@ import {
   brandThemeToTenantAppearance,
 } from '../runtime/file-export';
 import { FIRST_PARTY_VERTICAL_SLUGS } from '@/foundation/contracts/kernel/verticals';
-import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { admitCssVariables } from '@/infrastructure/compilers/kernel/foundation/css/value-safety';
 import { themeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
 import {
@@ -33,6 +32,7 @@ import {
 } from '@/infrastructure/compilers/runtime/theme';
 import { readGovernedTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 import { ThemeAdmissionError } from '@/infrastructure/compilers/runtime/theme';
+import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 const TEST_TENANT: TenantConfig = {
   slug: 'brand-studio-test',
@@ -723,7 +723,7 @@ describe('PatternBrandStudio refuses a theme string that would escape the rule',
       evnto: { primaryColor: '#2F6B9A', accentColor: '#1F7A5A' },
     } as const;
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
-      const authored = readGovernedTheme(FIRST_PARTY_THEMES[vertical]);
+      const authored = readGovernedTheme(FIRST_PARTY_BASELINES[vertical]);
       const brand: BrandTheme = {
         ...authored,
         palette: { ...authored.palette, ...seeds[vertical] },

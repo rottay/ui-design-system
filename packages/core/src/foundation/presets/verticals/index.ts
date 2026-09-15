@@ -36,10 +36,6 @@
 
 import type { FirstPartyVerticalId, VerticalKey } from "@/foundation/contracts/kernel/verticals";
 import type { VerticalPreset } from "@/foundation/contracts/composition/tenants";
-import {
-  EVNTO_CANONICAL_MOTION,
-  EVNTO_CANONICAL_SURFACES,
-} from "@/foundation/presets/policy/experience-baselines/evnto";
 
 import { BITHIRE_PRESET_SOURCE } from "./bithire";
 import { EVNTO_PRESET_SOURCE } from "./evnto";
@@ -133,42 +129,6 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
     engine: "modern",
     motionProfile: "expressive",
     density: "comfortable",
-    personality: {
-      animation: EVNTO_CANONICAL_MOTION,
-      chart: {
-        animateOnMount: true,
-        mountDuration: 1000,
-        lineStyle: "smooth",
-        showDots: true,
-        useGradientFill: true,
-        tooltipStyle: "glass",
-      },
-      typography: {
-        headingWeightBias: "heavier",
-        headingLetterSpacing: "-0.02em",
-        labelStyle: "capitalize",
-      },
-      accent: {
-        barPosition: "top",
-        barThickness: 4,
-        barStyle: "gradient",
-        iconContainerShape: "circle",
-        badgeShape: "pill",
-        dividerStyle: "dashed",
-      },
-      card: {
-        defaultElevation: "md",
-        hoverElevation: "lift-two",
-        showBorder: false,
-        hoverTint: true,
-        paddingDensity: "spacious",
-      },
-    },
-    tokenOverrides: {
-      densityScale: EVNTO_CANONICAL_SURFACES.densityScale,
-      borderRadius: EVNTO_CANONICAL_SURFACES.borderRadius,
-      shadows: EVNTO_CANONICAL_SURFACES.shadows,
-    },
     defaultProductProfile: "events.organizer",
     features: ["events", "ticketing", "check-in", "analytics"],
     surfaceDefaults: {
@@ -192,54 +152,6 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
     engine: "modern",
     motionProfile: "calm",
     density: "comfortable",
-    personality: {
-      animation: {
-        intensity: 0.4,
-        staggerDelay: 30,
-        staggerMax: 200,
-        entrance: "fade",
-        entranceDuration: 200,
-        hoverLift: 1,
-        hoverScale: 1.0,
-        useSpring: false,
-        springTension: 170,
-        springFriction: 26,
-        pulseSpeed: "slow",
-        skeletonStyle: "pulse",
-        countUpEnabled: true,
-      },
-      chart: {
-        animateOnMount: true,
-        mountDuration: 500,
-        lineStyle: "sharp",
-        showDots: true,
-        useGradientFill: false,
-        tooltipStyle: "detailed",
-      },
-      typography: {
-        headingWeightBias: "heavier",
-        headingLetterSpacing: "-0.01em",
-        labelStyle: "sentence",
-      },
-      accent: {
-        barPosition: "none",
-        barThickness: 0,
-        barStyle: "solid",
-        iconContainerShape: "circle",
-        badgeShape: "pill",
-        dividerStyle: "solid",
-      },
-      card: {
-        defaultElevation: "sm",
-        hoverElevation: "lift-one",
-        showBorder: true,
-        hoverTint: false,
-        paddingDensity: "normal",
-      },
-    },
-    tokenOverrides: {
-      densityScale: 0.98,
-    },
     defaultProductProfile: "recruiting.operator",
     features: ["recruiting", "candidates", "interviews", "offers"],
     surfaceDefaults: {
@@ -257,8 +169,8 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
    * Engine: modern is the flagship target; classic remains a supported engine path
    *
    * The key is `rottay`, not `platform`. Slug, registry key and
-   * `BrandTheme.id` are one fact — see FIRST_PARTY_VERTICAL_ROSTER in
-   * `foundation/tokens/ts/presentation/brand-themes`. The old `platform` key
+   * theme id are one fact — see FIRST_PARTY_VERTICAL_ROSTER in
+   * `foundation/presets/verticals/roster`. The old `platform` key
    * disagreed with both the `rottay` slug the rules key on and the `rottay`
    * theme id, which is what forced every consumer touching both halves to
    * carry two spellings.
@@ -271,51 +183,6 @@ export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
     engine: "modern",
     motionProfile: "precise",
     density: "compact",
-    personality: {
-      animation: {
-        intensity: 0.4,
-        staggerDelay: 24,
-        staggerMax: 160,
-        entrance: "fade",
-        entranceDuration: 180,
-        hoverLift: 1,
-        hoverScale: 1.0,
-        useSpring: false,
-        springTension: 170,
-        springFriction: 22,
-        pulseSpeed: "normal",
-        skeletonStyle: "shimmer",
-        countUpEnabled: true,
-      },
-      chart: {
-        animateOnMount: true,
-        mountDuration: 720,
-        lineStyle: "sharp",
-        showDots: true,
-        useGradientFill: false,
-        tooltipStyle: "detailed",
-      },
-      typography: {
-        headingWeightBias: "normal",
-        headingLetterSpacing: "-0.015em",
-        labelStyle: "sentence",
-      },
-      accent: {
-        barPosition: "top",
-        barThickness: 3,
-        barStyle: "solid",
-        iconContainerShape: "rounded",
-        badgeShape: "rounded",
-        dividerStyle: "solid",
-      },
-      card: {
-        defaultElevation: "sm",
-        hoverElevation: "lift-one",
-        showBorder: true,
-        hoverTint: false,
-        paddingDensity: "compact",
-      },
-    },
     defaultProductProfile: "rottay.admin",
     features: ["admin", "settings", "users", "billing"],
     surfaceDefaults: {

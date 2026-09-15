@@ -22,19 +22,13 @@ import { describe, expect, it } from "vitest";
 
 import { themeModeSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
-import {
-  FIRST_PARTY_THEMES,
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
 import type {
   Theme,
   ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { BrandMotion } from "@/foundation/contracts/composition/tenants/themes";
 import {
-  brandThemeToTheme,
+  normalizeThemeSource,
   canonicalizeTheme,
   collectThemeKeypaths,
   governedDisabled,
@@ -61,6 +55,11 @@ import {
   containerScope,
   emitThemeCss,
 } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
+import { FIRST_PARTY_BASELINES, firstPartyFixture, themeSourceOf } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 /**
  * The canonical route this suite exercises: resolve, lower, then emit.
@@ -291,11 +290,11 @@ const SIMPLE_DOCUMENT: TenantThemeDocument = {
 describe("T0 ISO contracts", () => {
   it("brandTheme <-> Theme roundtrip preserves identity and families", () => {
     for (const brand of [
-      rottayBrandTheme,
-      bithireBrandTheme,
-      evntoBrandTheme,
+      themeSourceOf(rottayBrandTheme),
+      themeSourceOf(bithireBrandTheme),
+      themeSourceOf(evntoBrandTheme),
     ]) {
-      const theme = brandThemeToTheme(brand);
+      const theme = normalizeThemeSource(brand);
       expect(theme.id).toBe(brand.id);
       expect(theme.name).toBe(brand.name);
       expect(theme.appearance).toBe(brand.appearance);
@@ -314,13 +313,13 @@ describe("T0 ISO contracts", () => {
     const badPatch: ThemeLayerPatch = {
       unknownFamily: { backgroundColor: "#000" },
     } as ThemeLayerPatch;
-    expect(() => mergeThemePatches(FIRST_PARTY_THEMES.bithire, badPatch)).toThrow(
+    expect(() => mergeThemePatches(FIRST_PARTY_BASELINES.bithire, badPatch)).toThrow(
       /unknown key/
     );
   });
 
   it("resolveTheme applies a valid patch", () => {
-    const patched = mergeThemePatches(FIRST_PARTY_THEMES.bithire, {
+    const patched = mergeThemePatches(FIRST_PARTY_BASELINES.bithire, {
       palette: { primaryColor: "#000000" },
     });
     expect(patched.palette.primaryColor).toBe("#000000");
@@ -328,7 +327,7 @@ describe("T0 ISO contracts", () => {
   });
 
   it("governed fields accept active values and dispositions", () => {
-    const activeMotion = FIRST_PARTY_THEMES.rottay.motion;
+    const activeMotion = FIRST_PARTY_BASELINES.rottay.motion;
     expect(isGovernedActive(activeMotion)).toBe(true);
     expect(activeMotion.value.intensity).toBeDefined();
     const disabledMotion = governedDisabled("superseded", {} as BrandMotion);
@@ -336,7 +335,7 @@ describe("T0 ISO contracts", () => {
   });
 
   it("activates a governed family when a transport authors its value", () => {
-    const patched = mergeThemePatches(FIRST_PARTY_THEMES.rottay, {
+    const patched = mergeThemePatches(FIRST_PARTY_BASELINES.rottay, {
       expressive: {
         value: {
           schemaVersion: 1,
@@ -384,10 +383,10 @@ describe("T0 v1 migration", () => {
     const dbPatch = migrateV1WithMode(document, "light").patch;
     const staticPatch: ThemeLayerPatch = { chrome: { controls: { semantic } } };
     const dbCompiled = lower(
-      mergeThemePatches(FIRST_PARTY_THEMES.bithire, dbPatch)
+      mergeThemePatches(FIRST_PARTY_BASELINES.bithire, dbPatch)
     );
     const staticCompiled = lower(
-      mergeThemePatches(FIRST_PARTY_THEMES.bithire, staticPatch)
+      mergeThemePatches(FIRST_PARTY_BASELINES.bithire, staticPatch)
     );
 
     expect(dbPatch.chrome?.controls?.semantic).toEqual(semantic);
@@ -450,7 +449,7 @@ describe("T0 v1 migration", () => {
       "rottay/bithire-technical@1"
     );
 
-    const resolved = mergeThemePatches(FIRST_PARTY_THEMES.bithire, patch);
+    const resolved = mergeThemePatches(FIRST_PARTY_BASELINES.bithire, patch);
     const compiled = lower(resolved, "standard-canary");
     expect(compiled.cssVariables).toMatchObject({
       "--ds-type-scale": "1.08",
@@ -507,7 +506,7 @@ describe("T0 v1 migration", () => {
     expect(darkPatch.palette?.primaryColor).toBe("#9FD3F0");
     expect(darkPatch.modes?.dark?.palette?.primaryColor).toBeUndefined();
 
-    const resolved = mergeThemePatches(FIRST_PARTY_THEMES.rottay, lightPatch);
+    const resolved = mergeThemePatches(FIRST_PARTY_BASELINES.rottay, lightPatch);
     const compiled = lower(resolved, "rottay-mode-canary");
     expect(compiled.cssVariables["--ds-color-primary"]).not.toBe("#245B78");
     expect(
@@ -626,7 +625,7 @@ describe("T0 DB mode projection through the common compiler", () => {
   });
 
   it("routes dark seeds only to the dark overlay without rebasing the Theme", () => {
-    const base = FIRST_PARTY_THEMES.bithire;
+    const base = FIRST_PARTY_BASELINES.bithire;
     const before = lower(base, tenantSlug);
     const document = simplePaletteDocument({
       primary: "#315D4D",
@@ -710,9 +709,9 @@ describe("T0 DB mode projection through the common compiler", () => {
       backgroundColor: "#101014",
     });
 
-    const resolved = mergeThemePatches(FIRST_PARTY_THEMES.bithire, envelope.patch);
+    const resolved = mergeThemePatches(FIRST_PARTY_BASELINES.bithire, envelope.patch);
     const compiled = lower(resolved, tenantSlug);
-    const baseline = lower(FIRST_PARTY_THEMES.bithire, tenantSlug);
+    const baseline = lower(FIRST_PARTY_BASELINES.bithire, tenantSlug);
     const artifact = compileTenantThemeConfig(
       hydrateTenantThemeConfig(document, identity),
       { verticalEnvelope: getTenantThemeVerticalEnvelope("bithire")! }
@@ -850,14 +849,14 @@ describe("T0 DB mode projection through the common compiler", () => {
 
 describe("T0 structural mirror (three Themes)", () => {
   it("canonical top-level key order is identical across all first-party themes", () => {
-    const orders = Object.values(FIRST_PARTY_THEMES).map((theme) =>
+    const orders = Object.values(FIRST_PARTY_BASELINES).map((theme) =>
       Object.keys(canonicalizeTheme(theme))
     );
     expect(new Set(orders.map((o) => JSON.stringify(o))).size).toBe(1);
   });
 
   it("all canonical chrome sections are present in every first-party theme", () => {
-    const sectionSets = Object.values(FIRST_PARTY_THEMES).map(
+    const sectionSets = Object.values(FIRST_PARTY_BASELINES).map(
       (theme) =>
         new Set(
           Object.keys(mirrorChromeSections(canonicalizeTheme(theme)).chrome)
@@ -870,7 +869,7 @@ describe("T0 structural mirror (three Themes)", () => {
   });
 
   it("all first-party Themes share the exact same nested keypath set", () => {
-    const keypaths = Object.values(FIRST_PARTY_THEMES).map(
+    const keypaths = Object.values(FIRST_PARTY_BASELINES).map(
       (theme) =>
         new Set(
           collectThemeKeypaths(canonicalizeTheme(theme))
@@ -884,7 +883,7 @@ describe("T0 structural mirror (three Themes)", () => {
   });
 
   it("no product/vertical vocabulary appears in Theme keypaths", () => {
-    for (const theme of Object.values(FIRST_PARTY_THEMES)) {
+    for (const theme of Object.values(FIRST_PARTY_BASELINES)) {
       const bad = collectThemeKeypaths(
         canonicalizeTheme(mirrorChromeSections(theme))
       ).filter(
@@ -900,7 +899,7 @@ describe("T0 structural mirror (three Themes)", () => {
 
 describe("T0 hard universal-name law", () => {
   it("no first-party Theme keypath contains product/vertical/slug vocabulary", () => {
-    for (const [slug, theme] of Object.entries(FIRST_PARTY_THEMES)) {
+    for (const [slug, theme] of Object.entries(FIRST_PARTY_BASELINES)) {
       const bad = collectThemeKeypaths(theme).filter(
         (p) =>
           !p.startsWith("id") &&
@@ -912,7 +911,7 @@ describe("T0 hard universal-name law", () => {
   });
 
   it("compileTheme emits no product/vertical/slug-derived channels", () => {
-    for (const [slug, theme] of Object.entries(FIRST_PARTY_THEMES)) {
+    for (const [slug, theme] of Object.entries(FIRST_PARTY_BASELINES)) {
       const compiled = lower(theme);
       const bad = allChannels(compiled).filter(violatesThemeNameLaw);
       expect(bad, `${slug} channels`).toEqual([]);
@@ -922,7 +921,7 @@ describe("T0 hard universal-name law", () => {
 
 describe("T0 transport equality and digest invariance", () => {
   it("compileTheme is deterministic and preserves existing first-party effective values", () => {
-    for (const theme of Object.values(FIRST_PARTY_THEMES)) {
+    for (const theme of Object.values(FIRST_PARTY_BASELINES)) {
       const once = lower(theme);
       const twice = lower(theme);
       expect(digestVariables(once.cssVariables)).toBe(
@@ -933,7 +932,7 @@ describe("T0 transport equality and digest invariance", () => {
   });
 
   it("equivalent Theme inputs produce identical channel inventory and order", () => {
-    const theme = FIRST_PARTY_THEMES.rottay;
+    const theme = FIRST_PARTY_BASELINES.rottay;
     const a = lower(theme);
     const b = lower(theme);
     expect(allChannels(a)).toEqual(allChannels(b));
@@ -944,10 +943,10 @@ describe("T0 transport equality and digest invariance", () => {
 describe("T0 static/DB convergence (negative mutant)", () => {
   it("DB artifact is the tenant delta over the base vertical", () => {
     const envelope = migrateV1(CUSTOMER_DOCUMENT);
-    const resolved = mergeThemePatches(FIRST_PARTY_THEMES.bithire, envelope.patch);
+    const resolved = mergeThemePatches(FIRST_PARTY_BASELINES.bithire, envelope.patch);
     const tenantSlug = "themanagementmiami";
     const resolvedCompiled = lower(resolved, tenantSlug);
-    const baseCompiled = lower(FIRST_PARTY_THEMES.bithire, tenantSlug);
+    const baseCompiled = lower(FIRST_PARTY_BASELINES.bithire, tenantSlug);
 
     const expectedDelta: Record<string, string> = {};
     for (const [key, value] of Object.entries(resolvedCompiled.cssVariables)) {
@@ -1035,10 +1034,10 @@ describe("T0 static/DB convergence (negative mutant)", () => {
 
   it("the old subset doctrine is rejected: a customer document is not a subset of a different vertical", () => {
     const envelope = migrateV1(CUSTOMER_DOCUMENT);
-    const resolved = mergeThemePatches(FIRST_PARTY_THEMES.bithire, envelope.patch);
+    const resolved = mergeThemePatches(FIRST_PARTY_BASELINES.bithire, envelope.patch);
     const customerChannels = new Set(allChannels(lower(resolved)));
     const bithireChannels = new Set(
-      allChannels(lower(FIRST_PARTY_THEMES.bithire))
+      allChannels(lower(FIRST_PARTY_BASELINES.bithire))
     );
     const onlyInCustomer = [...customerChannels].filter(
       (ch) => !bithireChannels.has(ch)
@@ -1379,14 +1378,14 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
     const authored: Record<string, Record<string, string>> = {};
     for (const family of brandFamilies) authored[family] = {};
     const canonical = canonicalizeTheme({
-      ...FIRST_PARTY_THEMES.bithire,
+      ...FIRST_PARTY_BASELINES.bithire,
       chrome: authored as unknown as Theme["chrome"],
     });
     expect(Object.keys(canonical.chrome ?? {}).sort()).toEqual(brandFamilies);
   });
 
   it("a DB Advanced document authoring every admitted branch resolves and compiles", () => {
-    const baselineChrome = FIRST_PARTY_THEMES.bithire.chrome as unknown as Record<
+    const baselineChrome = FIRST_PARTY_BASELINES.bithire.chrome as unknown as Record<
       string,
       Record<string, unknown> | undefined
     >;
@@ -1418,10 +1417,10 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
     const staticPatch = { chrome } as unknown as ThemeLayerPatch;
 
     const dbCompiled = lower(
-      mergeThemePatches(FIRST_PARTY_THEMES.bithire, dbPatch)
+      mergeThemePatches(FIRST_PARTY_BASELINES.bithire, dbPatch)
     );
     const staticCompiled = lower(
-      mergeThemePatches(FIRST_PARTY_THEMES.bithire, staticPatch)
+      mergeThemePatches(FIRST_PARTY_BASELINES.bithire, staticPatch)
     );
     expect(dbCompiled.cssVariables).toEqual(staticCompiled.cssVariables);
     expect(dbCompiled.cssString).toBe(staticCompiled.cssString);
@@ -1448,7 +1447,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
         if (wrong === undefined) continue;
         const patch = { chrome: { [family]: { [field]: wrong } } } as unknown as ThemeLayerPatch;
         try {
-          mergeThemePatches(FIRST_PARTY_THEMES.bithire, patch);
+          mergeThemePatches(FIRST_PARTY_BASELINES.bithire, patch);
           accepted.push(`${family}.${field} accepted ${typeof wrong}`);
         } catch {
           refused.push(`${family}.${field}`);
@@ -1469,7 +1468,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
       "number",
       "string",
     ]);
-    const baseline = FIRST_PARTY_THEMES.bithire;
+    const baseline = FIRST_PARTY_BASELINES.bithire;
     const chromeBaseline = baseline.chrome as unknown as Record<
       string,
       Record<string, unknown>
@@ -1519,7 +1518,7 @@ describe("T0 chrome totality (schema ⊆ total ISO shape)", () => {
   it("fail-closed: a branch removed from the total shape rejects the transport", () => {
     // The canary proves the inclusion law is load-bearing rather than
     // decorative: drop one shape branch and the same document throws.
-    const base = structuredClone(FIRST_PARTY_THEMES.bithire) as Theme;
+    const base = structuredClone(FIRST_PARTY_BASELINES.bithire) as Theme;
     const tooltip = (base.chrome as unknown as Record<string, Record<string, unknown>>)
       .tooltip;
     expect(Object.prototype.hasOwnProperty.call(tooltip, "zIndex")).toBe(true);

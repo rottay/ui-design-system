@@ -163,10 +163,10 @@ test('treats a gradient inside a comment as prose, not as a declaration', () => 
   assert.doesNotThrow(() => run(root));
 });
 
-test('reads BrandTheme .ts sources, where the gradient is actually authored', () => {
+test('reads the generated first-party artifacts, where the gradient is actually compiled', () => {
   const root = fixture({
-    'src/foundation/tokens/ts/brand-themes/bithire/index.ts':
-      'export const vars = { "--ds-surface-raised": "linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%)" };\n',
+    'src/foundation/tokens/css/facade/artifacts/bithire/index.css':
+      ':root { --ds-surface-raised: linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%); }\n',
     'src/foundation/tokens/css/alert.css':
       '.well { background: color-mix(in srgb, #D6A04E 11%, var(--ds-surface-raised)); }\n',
   });

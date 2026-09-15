@@ -19,21 +19,22 @@
 import { describe, expect, it } from 'vitest';
 
 import { brandModeSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { projectFirstPartyArtifactScopes } from '@/infrastructure/compilers/kernel/foundation/css/scope-projection';
 import {
   compileTenantThemeConfig,
   hydrateTenantThemeConfig,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   renderVerticalArtifact,
 } from '../index';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const THEMES: readonly [string, BrandTheme][] = [
   ['bithire', bithireBrandTheme],

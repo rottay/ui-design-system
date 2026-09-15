@@ -16,19 +16,20 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { FAMILY_DERIVERS } from '../runtime/derivation';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { resolveEngine } from '@/infrastructure/runtime/engines/runtime/resolution';
 import { getVerticalPreset } from '@/foundation/presets/verticals';
 import type { TenantAppearance } from '@/foundation/contracts';
 import { brandThemeToTenantAppearance } from '@/components/patterns/customization/brand-studio/runtime/file-export';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const bithire = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
 const themanagement = lowerBrandThemeFixture({ brandTheme: themanagementmiamiBrandTheme, tenantSlug: 'themanagementmiami' });

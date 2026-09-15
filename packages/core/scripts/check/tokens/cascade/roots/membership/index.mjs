@@ -291,7 +291,7 @@ export const OWNER_STEP_RULES_PATH = join(CORE_ROOT, 'governance/manifest/cascad
  *
  * EL PREFIJO `@` NO PUEDE COLISIONAR con un paso real (el vocabulario autorado
  * no lo usa) y es el que el repo ya emplea para ausencia declarada (`@absent` /
- * `@governor` en brand-themes).
+ * `@governor` en los manifests).
  */
 export const PARENT_BY_DESIGN = '@parent';
 

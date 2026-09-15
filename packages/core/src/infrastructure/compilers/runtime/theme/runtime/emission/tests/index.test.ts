@@ -10,10 +10,8 @@ import { describe, expect, it } from "vitest";
 
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
 import { compileTheme } from "../../lowering";
-import { resolveTheme } from "../../resolution";
 import { staticThemeIntent } from "../../ingress";
 import { resolveAdapter } from "../../../presentation/adapters";
 import {
@@ -24,6 +22,7 @@ import {
   firstPartyScope,
   tenantArtifactScope,
 } from "..";
+import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const modern = resolveAdapter("modern");
 const slugs = ["rottay", "bithire", "evnto"] as const;
@@ -68,7 +67,7 @@ function referenceCss(compiled: ThemeCompilation, slug: string): string {
 describe("emitThemeCss reproduces the compiled CSS grammar", () => {
   for (const slug of slugs) {
     it(`is byte-identical to the reference grammar for ${slug}`, () => {
-      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+      const compiled = compileTheme(resolveFirstParty(staticThemeIntent(slug)), modern);
       expect(emitThemeCss(compiled, firstPartyScope(slug))).toBe(
         referenceCss(compiled, slug)
       );
@@ -76,7 +75,7 @@ describe("emitThemeCss reproduces the compiled CSS grammar", () => {
   }
 
   it("covers a theme that really has mode blocks", () => {
-    const compiled = compileTheme(resolveTheme(staticThemeIntent("rottay")), modern);
+    const compiled = compileTheme(resolveFirstParty(staticThemeIntent("rottay")), modern);
     expect(compiled.modeBlocks.length).toBeGreaterThan(0);
   });
 
@@ -220,8 +219,8 @@ describe("the guard drops no channel the first-party corpus actually emits", () 
     let total = 0;
     const dropped: string[] = [];
     const seenShapes = new Set<string>();
-    for (const slug of Object.keys(FIRST_PARTY_THEMES) as FirstPartyVerticalId[]) {
-      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+    for (const slug of Object.keys(FIRST_PARTY_BASELINES) as FirstPartyVerticalId[]) {
+      const compiled = compileTheme(resolveFirstParty(staticThemeIntent(slug)), modern);
       const blocks = [
         compiled.cssVariables,
         ...(compiled.modeBlocks ?? []).map((block) => block.cssVariables),

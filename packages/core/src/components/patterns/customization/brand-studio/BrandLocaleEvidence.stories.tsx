@@ -13,7 +13,6 @@ import { expect, within } from 'storybook/test';
 import type { TenantConfig } from '@/foundation/contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n/composition';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import { Box } from '@/components/primitives/layout/box';
 import { Grid } from '@/components/primitives/layout/grid';
@@ -23,6 +22,9 @@ import { Card } from '@/components/primitives/display/card';
 import { Text } from '@/components/primitives/display/typography';
 import { Button } from '@/components/primitives/inputs/button';
 import { Tabs } from '@/components/primitives/navigation/tabs';
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireView = firstPartyFixture('bithire');
 
 const BITHIRE_STATIC: TenantConfig = {
   slug: 'bithire',
@@ -31,7 +33,7 @@ const BITHIRE_STATIC: TenantConfig = {
   plan: 'enterprise',
   features: ['all'],
   branding: { companyName: 'BitHire' },
-  brandTheme: bithireBrandTheme,
+  brandTheme: bithireView,
 };
 
 const THE_MANAGEMENT_DB: TenantConfig = {

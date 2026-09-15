@@ -28,7 +28,7 @@ const SLUGS: readonly FirstPartyVerticalId[] = ["rottay", "bithire", "evnto"];
 
 /** The compile the artifact generator runs: the preset over the neutral foundation. */
 function compiledFor(slug: FirstPartyVerticalId) {
-  return compileThemeIntent(staticThemeIntent(slug), { baselineSource: "neutral-preset" }).compiled;
+  return compileThemeIntent(staticThemeIntent(slug)).compiled;
 }
 
 /** Every `--ds-*` declaration inside the artifact block whose selector matches. */

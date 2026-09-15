@@ -33,9 +33,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
@@ -48,7 +45,11 @@ import {
   measureReadableInk,
 } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { deriveExtendedPaletteFloor } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/palette";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const FLOOR_CHANNELS = [
   '--ds-color-primary-foreground',

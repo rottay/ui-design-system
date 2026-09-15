@@ -53,15 +53,14 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   renderFirstPartyArtifact,
 } from '@/infrastructure/compilers/runtime/tenant-css';
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import { ThemeProvider } from '@/infrastructure/runtime/theming/composition/react/provider';
-import { FIRST_PARTY_THEMES } from '@/foundation/tokens/ts/presentation/brand-themes';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
+import { firstPartyFixture, FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const PROVIDER = resolve(
   process.cwd(),

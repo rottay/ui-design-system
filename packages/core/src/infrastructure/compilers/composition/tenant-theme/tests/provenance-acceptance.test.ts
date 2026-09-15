@@ -45,7 +45,6 @@ import {
   mergeThemePatches,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   PRODUCER_RANK,
   SIDEBAR_TONE_FIELD,
@@ -68,7 +67,7 @@ import {
   hydrateTenantThemeConfig,
 } from "..";
 import { migrateV1 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
-import { lowerTheme } from "@tests/support/theme-lowering";
+import { FIRST_PARTY_BASELINES, lowerTheme } from "@tests/support/theme-lowering";
 
 const VERTICALS = ["rottay", "bithire", "evnto"] as const;
 type Vertical = (typeof VERTICALS)[number];
@@ -443,7 +442,7 @@ describe("APCA is fail-closed on authored sidebar colors", () => {
 describe("case C — no contested tenant authorship changes nothing", () => {
   it("compiles every first-party theme byte-identically with and without provenance", () => {
     for (const vertical of VERTICALS) {
-      const theme = FIRST_PARTY_THEMES[vertical];
+      const theme = FIRST_PARTY_BASELINES[vertical];
       const bare = lowerTheme(theme, { tenantSlug: IDENTITY.slug });
       const empty = lowerTheme(theme, {
         tenantSlug: IDENTITY.slug,
@@ -636,7 +635,7 @@ describe("case C — no contested tenant authorship changes nothing", () => {
     for (const vertical of VERTICALS) {
       expect(
         Object.keys(
-          lowerTheme(FIRST_PARTY_THEMES[vertical], {
+          lowerTheme(FIRST_PARTY_BASELINES[vertical], {
             tenantSlug: IDENTITY.slug,
           }).cssVariables
         ).length,
@@ -660,7 +659,7 @@ describe("case C — no contested tenant authorship changes nothing", () => {
 describe("static and DB share one lowering", () => {
   /** Rebuild the DB leg's own inputs, exactly as `compileTenantThemeConfig` does. */
   const lower = (vertical: Vertical, document: TenantThemeDocument) => {
-    const baseTheme = FIRST_PARTY_THEMES[vertical];
+    const baseTheme = FIRST_PARTY_BASELINES[vertical];
     const envelope = migrateV1(document, baseTheme.appearance.defaultMode!);
     return {
       baseTheme,
@@ -988,7 +987,7 @@ describe("static and DB share one lowering", () => {
       };
       const qualified = {
         resolved: mergeThemePatches(
-          FIRST_PARTY_THEMES[vertical],
+          FIRST_PARTY_BASELINES[vertical],
           qualifiedPatch as never
         ),
         authoredPaths: collectPatchAuthoredPaths(qualifiedPatch as never),

@@ -50,14 +50,14 @@ describe("the neutral foundation", () => {
 
   for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
     it(`${vertical}: composes with its preset into a baseline the roster names`, () => {
-      const composed = baselineFor(vertical, "acme", "neutral-preset");
+      const composed = baselineFor(vertical, "acme");
       expect(composed.id).toBe("acme");
       expect(composed.name).toBe(FIRST_PARTY_VERTICALS[vertical].name);
       expect(composed.appearance.defaultMode).toBe(FIRST_PARTY_VERTICALS[vertical].defaultMode);
       // The preset decided something the foundation left undecided.
       expect(composed.surfaces.radiusScale).not.toBeUndefined();
       // A fresh clone per request: nothing shared with the foundation or a previous call.
-      expect(baselineFor(vertical, "acme", "neutral-preset")).not.toBe(composed);
+      expect(baselineFor(vertical, "acme")).not.toBe(composed);
       expect(NEUTRAL_THEME.surfaces.radiusScale).toBeUndefined();
     });
   }

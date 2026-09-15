@@ -67,7 +67,7 @@ export function validateExecutableRoster(rows, path = '<runtime>') {
       fail(`row ${row.slug} does not keep slug, verticalKey and theme.id identical`, path);
     }
     const expected = {
-      themeSourcePath: `foundation/tokens/ts/presentation/brand-themes/${row.slug}/index.ts`,
+      themeSourcePath: `foundation/presets/verticals/${row.slug}/document/index.json`,
       artifactPath: `foundation/tokens/css/facade/artifacts/${row.slug}/index.css`,
       bundleFile: `${row.slug}.css`,
       styleEntry: `./styles/${row.slug}`,

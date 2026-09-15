@@ -21,7 +21,7 @@ test('rejects each retired identity carrier', () => {
     `./styles/${retired}`,
     `dist/${retired}.css`,
     `${retired}.admin`,
-    `brand-themes/${retired}/index.ts`,
+    `presets/${retired}/index.ts`,
     `/verticals/${retired}/overview`,
     'Rottay Platform',
     'Platform vertical',
@@ -56,7 +56,7 @@ test('walks operational manifests and unquoted CSS in the planted corpus', () =>
   const root = mkdtempSync(join(tmpdir(), 'retired-identity-'));
   try {
     mkdirSync(join(root, 'ops'), { recursive: true });
-    mkdirSync(join(root, 'ops', 'brand-themes', 'platform'), { recursive: true });
+    mkdirSync(join(root, 'ops', 'presets', 'platform'), { recursive: true });
     writeFileSync(
       join(root, 'ops', 'verticals.manifest.json'),
       JSON.stringify({ verticalKey: 'platform' }, null, 2),
@@ -66,7 +66,7 @@ test('walks operational manifests and unquoted CSS in the planted corpus', () =>
       '[data-vertical=platform] { color: red; }\n',
     );
     writeFileSync(join(root, 'ops', 'clean.mjs'), "export const app = '../app-platform';\n");
-    writeFileSync(join(root, 'ops', 'brand-themes', 'platform', 'index.ts'), 'export {};\n');
+    writeFileSync(join(root, 'ops', 'presets', 'platform', 'index.ts'), 'export {};\n');
 
     const findings = collectRetiredIdentityFindings({
       uiRoot: root,
@@ -76,7 +76,7 @@ test('walks operational manifests and unquoted CSS in the planted corpus', () =>
     assert.deepEqual(
       findings.map(({ path, rule }) => [path, rule]),
       [
-        ['ops/brand-themes/platform/index.ts', 'source-path'],
+        ['ops/presets/platform/index.ts', 'source-path'],
         ['ops/tenant.css', 'root-selector'],
         ['ops/verticals.manifest.json', 'identity-field'],
       ],
@@ -101,7 +101,7 @@ test('every source route carrying the retired identity fails', () => {
     `verticals/${retired}/overview`,
     `verticals/${retired}-dark`,
     `verticals/${retired}-identity`,
-    `brand-themes/${retired}/index.ts`,
+    `presets/${retired}/index.ts`,
     `demos/${retired}`,
   ]) {
     assert.ok(

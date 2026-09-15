@@ -29,7 +29,7 @@
  * `rottay/network-professional@1`, `evnto` -> none. Those are stamped on the
  * frame as `data-pe-authored-profile` so a capture states its own subject.
  *
- * THE EVNTO CELL RENDERS ITS REAL GAP, on purpose. `evntoBrandTheme` leaves
+ * THE EVNTO CELL RENDERS ITS REAL GAP, on purpose. Evnto's preset leaves
  * `palette.textPrimaryColor` / `textSecondaryColor` and `chrome.tabs`
  * undeclared, so dark-first foundation defaults land on evnto's light canvas
  * (washed title and body, dark-gradient tab tray). A previous version of this

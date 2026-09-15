@@ -15,7 +15,7 @@ import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/vertica
  * The patch is EMPTY, and that is the whole statement: the roster `Theme` is
  * already total, so the vertical's own compile has nothing to overlay. No
  * neutral DS Theme is invented to demote the vertical into a patch, and no
- * caller assembles `{ ...FIRST_PARTY_THEMES[slug], id }` to say the same thing.
+ * caller assembles a labelled copy of the roster baseline to say the same thing.
  *
  * `slug` defaults to the vertical because the vertical's shipped artifact is
  * scoped to its own name; it is separate so that a probe or a preview can scope

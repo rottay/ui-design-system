@@ -6,12 +6,14 @@ import { describe, expect, it } from 'vitest';
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
 
 import type { ChartPersonalityTokens } from '@/foundation/contracts';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
 import {
   CHART_CATEGORICAL_SIZE,
   resolveChartSeriesPaint,
 } from '..';
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const PATTERNS_CSS = readFileSync(
   join(__dirname, '../../../../../../../../../../foundation/tokens/css/presentation/components/patterns/index.css'),

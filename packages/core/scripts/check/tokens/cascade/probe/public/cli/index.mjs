@@ -1181,8 +1181,8 @@ async function commandCausal(options) {
   // H-1: same verified dist as the compilers (V4), loaded once for the run.
   const staticBaselines = await loadStaticBaselines();
   /* R-2 (W-A): the vertical's own default mode, read from the PUBLISHED
-   * BrandTheme that `loadStaticBaselines()` just loaded under the freshness
-   * law. It is the field `FIRST_PARTY_THEMES` does not project, and the DB arm
+   * baseline that `loadStaticBaselines()` just loaded under the freshness
+   * law. It is the field the roster row states, and the DB arm
    * needs it to declare the mode scope its document is measured in. Resolved
    * once per run so both the arm and the discrimination guard stand in the same
    * scope; fail-closed inside `verticalDefaultMode`.

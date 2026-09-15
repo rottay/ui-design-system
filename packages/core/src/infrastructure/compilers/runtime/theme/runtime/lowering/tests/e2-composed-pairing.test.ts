@@ -15,16 +15,17 @@
  */
 import { describe, it, expect } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
-import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   tenantPostureFloors,
 } from '@/infrastructure/compilers/composition/tenant-theme';
 // The contract owns the version; the compiler barrel only consumes it.
 import { TENANT_THEME_SCHEMA_VERSION } from '@/foundation/contracts/composition/tenants/themes/tenant-theme/artifact-protocol';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const rottayBrandTheme = firstPartyFixture('rottay');
+const evntoBrandTheme = firstPartyFixture('evnto');
 
 const HEADING = '--ds-font-family-heading';
 const BASE = '--ds-font-family-base';

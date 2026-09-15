@@ -41,7 +41,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -49,7 +48,9 @@ import {
 } from '@/infrastructure/compilers/composition/tenant-theme';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 /** Hues far from bithire's blues, so no derived step lands unchanged by luck. */
 const NEW_PRIMARY = '#B4322A';

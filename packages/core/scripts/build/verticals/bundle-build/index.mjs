@@ -2,14 +2,17 @@
  * Regenerate first-party vertical artifacts from their authored source.
  *
  * Each artifact (`src/foundation/tokens/css/facade/artifacts/<slug>/index.css`) is a BUILD OUTPUT:
- *   index.css = compileThemeIntent(staticThemeIntent(<slug>), { baselineSource: 'neutral-preset' })
+ *   index.css = compileThemeIntent(staticThemeIntent(<slug>))
+ * compiled over the neutral foundation with the vertical's preset admitted.
  *
  * The SAME compile has a non-CSS half, and it is written here too:
  *   src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.ts
- *     = compileThemeIntent(staticThemeIntent(<slug>), { baselineSource: 'neutral-preset' }).compiled.runtime
- * A code-owned vertical has no artifact row for the runtime to read, so the
- * governed recipe selection would otherwise have to be re-derived from the
- * authored preset by a second reader. One compile, two outputs, one gate.
+ *     = the recipe selection the compile validated, plus the governed behavior
+ *       (motion dial, expressive selection, decided channels) read off the
+ *       resolved baseline by `firstPartyGovernedBehavior`.
+ * A code-owned vertical has no artifact row for the runtime to read, so those
+ * selections would otherwise have to be re-derived from the preset by a second
+ * reader. One compile, two outputs, one gate.
  *
  * The theme compiler owns every theme variable the artifact carries (palette,
  * typography, surfaces, chrome) and every mode block, so the artifact is a pure
@@ -81,8 +84,8 @@ function firstPartyArtifacts({ FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_ARTIFACT
   return artifacts;
 }
 
-/** Every governed selection the runtime half of an artifact publishes. */
-const RUNTIME_FIELDS = ['recipeProfile'];
+/** Every governed selection the runtime half of an artifact publishes, in block order. */
+const RUNTIME_FIELDS = ['recipeProfile', 'motion', 'expressive', 'decidedChannels'];
 
 function renderBlock(runtime) {
   const fields = RUNTIME_FIELDS.filter((field) => runtime[field] !== undefined).map(
@@ -110,8 +113,8 @@ function renderFirstPartyArtifactRuntimeModule(rows, regenerateCommand) {
     ' *',
     ' * This file is a BUILD OUTPUT of the SAME compile that writes',
     ' * `src/foundation/tokens/css/facade/artifacts/<slug>/index.css`:',
-    " *   block = compileThemeIntent(staticThemeIntent(<slug>), { baselineSource: 'neutral-preset' })",
-    ' *     .compiled.runtime',
+    ' *   block = the recipe selection that compile validated, plus the governed',
+    ' *   behavior `firstPartyGovernedBehavior` reads off its resolved baseline.',
     ' *',
     ' * WHY IT EXISTS. A code-owned vertical ships its CSS inside `styles.css`, so',
     ' * the runtime has no artifact row to read the non-CSS half off — and a',
@@ -128,12 +131,22 @@ function renderFirstPartyArtifactRuntimeModule(rows, regenerateCommand) {
     ' * @package @rottay/design-system',
     ' */',
     '',
+    "import type { BrandExpressiveSelection } from '@/foundation/contracts/composition/tenants/themes';",
     "import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';",
     '',
     '/** The governed, non-CSS selections one vertical\'s artifact compiled. */',
     'export interface FirstPartyArtifactRuntimeBlock {',
     '  /** Validated recipe-profile id, absent when the vertical selects none. */',
     '  readonly recipeProfile?: string;',
+    '  /** The motion dial the vertical decided; absent when it left motion to the foundation. */',
+    '  readonly motion?: {',
+    '    readonly intensity?: number;',
+    '    readonly entranceDuration?: number;',
+    '  };',
+    '  /** The expressive selection the vertical decided. */',
+    '  readonly expressive?: BrandExpressiveSelection;',
+    '  /** Personality channels the vertical decided -- names only, nothing here can paint. */',
+    '  readonly decidedChannels?: readonly string[];',
     '}',
     '',
     'export const FIRST_PARTY_ARTIFACT_RUNTIME: Readonly<',
@@ -259,12 +272,17 @@ const RUNTIME_MODULE_PATH = resolve(
 function compileArtifacts(compiler) {
   const apcaFailures = [];
   const rows = firstPartyArtifacts(compiler).map((spec) => {
-    const { css, compiled } = compiler.renderFirstPartyArtifact({
+    const { css, compiled, governed } = compiler.renderFirstPartyArtifact({
       spec,
       regenerateCommand: compiler.REGENERATE_COMMAND,
     });
     apcaFailures.push(...checkGeneratedRampApca(compiler, spec.slug, compiled));
-    return { slug: spec.slug, css, compiled, runtime: compiled.runtime };
+    return {
+      slug: spec.slug,
+      css,
+      compiled,
+      runtime: { recipeProfile: compiled.runtime.recipeProfile, ...governed },
+    };
   });
 
   const newApcaFailures = apcaFailures.filter((failure) => !apcaBaseline.has(failure.key));

@@ -17,8 +17,9 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from '../ts/presentation/brand-themes/bithire';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const STEPS = [4, 8, 12, 16, 24] as const;
 const TONE_ROLES = [

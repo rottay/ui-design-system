@@ -272,73 +272,30 @@ export interface BrandTheme {
    * Explicit disposition for every optional capability family.
    *
    * Optional on `BrandTheme` because DB documents stay partial patches and
-   * fixtures author only what they exercise. REQUIRED on
-   * `FirstPartyBrandTheme`, which is the shape the three code-owned verticals
-   * must satisfy.
+   * fixtures author only what they exercise. REQUIRED on `ThemeSource`, the
+   * shape the ISO normalizer lowers.
    */
   capabilities?: BrandCapabilityCatalog;
 }
 
 /**
- * The mandatory common inventory every first-party BrandTheme authors, in the
- * order it must be authored.
+ * A flat theme the ISO normalizer lowers without inference.
  *
- * `motion` is deliberately NOT here. `BrandMotion` is deprecated (see its
- * declaration below): runtime choreography resolves through the vertical
- * `MotionProfile` plus the bounded `TenantMotionDial`, so promoting the
- * compatibility field to a required family would re-entrench the authority it
- * is being retired from. It is governed as a capability disposition instead.
- *
- * The order is load-bearing, not cosmetic: a normalizer that walks families in
- * a per-theme order produces per-theme output orderings, and the artifact
- * digests are order-sensitive by construction.
+ * The three families it reads directly are required, and `capabilities` states
+ * a disposition for each optional family so nothing is inferred as active. The
+ * governed selections are PARTIAL shapes because that is what the normalizer
+ * merges over its own default shape: a source that activates a family while
+ * deciding none of its leaves states exactly `{}`. Identity is open: the
+ * neutral foundation is a source and is no first-party vertical.
  */
-export const FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS = [
-  "id",
-  "name",
-  "appearance",
-  "modes",
-  "palette",
-  "typography",
-  "surfaces",
-  "charts",
-  "chrome",
-  "capabilities",
-] as const;
-
-export type FirstPartyBrandThemeRequiredKey =
-  (typeof FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS)[number];
-
-/**
- * A code-owned vertical's BrandTheme.
- *
- * Narrows `BrandTheme`'s all-optional visual families to required for the three
- * first-party identities. Product-specific EXTRAS (`recipes`, `expressive`,
- * `responsive`) stay optional on purpose — the law is equality of the common
- * required inventory, not equality of extras count. What makes
- * their absence honest is `capabilities`, which must state a disposition for
- * each of them regardless.
- */
-export interface FirstPartyBrandTheme extends BrandTheme {
-  /**
-   * The vertical this theme IS.
-   *
-   * Narrowed from `BrandTheme.id`'s open `string` to the closed contract
-   * union. This is what makes the roster's `theme.id` -> slug derivation a
-   * compile-time fact instead of a cast: a theme authored in `rottay/` whose
-   * id says something else no longer type-checks, so the folder, the artifact
-   * directory and the registry key cannot drift apart again.
-   */
-  readonly id: FirstPartyVerticalId;
-  readonly name: string;
+export interface ThemeSource
+  extends Omit<BrandTheme, "recipes" | "expressive" | "responsive"> {
   readonly appearance: BrandAppearance;
-  readonly modes: BrandThemeModes;
   readonly palette: BrandPalette;
-  readonly typography: BrandTypography;
-  readonly surfaces: BrandSurfaces;
-  readonly charts: Partial<ChartPersonalityTokens>;
-  readonly chrome: BrandChrome;
   readonly capabilities: BrandCapabilityCatalog;
+  readonly recipes?: Partial<BrandRecipeSelection>;
+  readonly expressive?: Partial<BrandExpressiveSelection>;
+  readonly responsive?: Partial<BrandResponsiveSelection>;
 }
 
 /** Palette roles that carry a `--ds-color-{role}-{50..900}` ramp. */

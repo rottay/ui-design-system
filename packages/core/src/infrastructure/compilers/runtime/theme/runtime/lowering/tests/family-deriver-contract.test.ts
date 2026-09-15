@@ -9,11 +9,6 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
 import { MERGE_RANK } from "../foundation/contract";
 import { FAMILY_DERIVERS } from "../runtime/derivation";
 import { buildLoweringContext } from "../runtime/pipeline";
@@ -22,6 +17,11 @@ import {
   FIXTURE_TENANT_FACTS,
   type FamilyFixture,
 } from "@tests/support/family-contract";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const MINIMAL_THEME: BrandTheme = { id: "minimal", name: "Minimal" };
 

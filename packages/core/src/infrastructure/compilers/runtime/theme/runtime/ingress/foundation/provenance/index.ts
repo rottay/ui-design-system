@@ -25,7 +25,6 @@ import {
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   THEME_DECISION_IDS,
   THEME_DECISION_TIER_BY_ID,
@@ -516,23 +515,23 @@ function draftChromeClaim(
  * authorship where the editor moved it. Nothing outside chrome is claimed:
  * there, moved-ness is the whole answer.
  *
- * The vertical is a parameter rather than a default because the answer has no
- * transport-independent form: bithire authors `chrome.controls.buttonGeometry
- * .radius` and the other two verticals do not, so the same draft leaf is the
- * product's own ink on one and the tenant's statement on another. Without the
- * baseline every carried leaf had to be assumed inherited, which made a radius
- * the editor really typed lose to the silhouette beside it while the ledger
- * reported the radius as the leaf's owner.
+ * The baseline is a parameter rather than a default because the answer has no
+ * transport-independent form: a vertical whose preset decides a control radius
+ * makes the same draft leaf the product's own ink, while on another vertical it
+ * is the tenant's statement. Without the baseline every carried leaf had to be
+ * assumed inherited, which made a radius the editor really typed lose to the
+ * silhouette beside it while the ledger reported the radius as the leaf's owner.
+ * The producer above derives it; this owner cannot compose one.
  */
 export function draftProvenanceLedger(
   draft: BrandTheme,
   vertical: FirstPartyVerticalId,
   options: {
-    /** The baseline the draft is a patch of; the vertical's authored theme unless the caller resolved another. */
-    readonly carriedFrom?: Theme;
-  } = {}
+    /** The baseline the draft is a patch of. */
+    readonly carriedFrom: Theme;
+  }
 ): ThemeProvenanceLedger {
-  const carriedFrom = options.carriedFrom ?? FIRST_PARTY_THEMES[vertical];
+  const { carriedFrom } = options;
   const decisions: ThemeProvenanceClaim[] = [];
   const claimed = new Set<string>();
   for (const id of THEME_DECISION_IDS) {

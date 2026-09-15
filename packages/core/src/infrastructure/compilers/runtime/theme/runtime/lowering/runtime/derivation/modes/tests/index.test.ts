@@ -29,15 +29,15 @@ import {
   themeDefaultMode,
   verticalDefaultMode,
 } from "@/infrastructure/compilers/kernel/foundation/modes";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { deriveModeThemes } from "..";
+import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 const TENANT_PRIMARY = "#2F6B9A";
 
 /** The vertical's OWN light primary, which used to win this contest. */
 const ROTTAY_OVERLAY_PRIMARY =
-  FIRST_PARTY_THEMES.rottay.modes?.light?.palette?.primaryColor;
+  FIRST_PARTY_BASELINES.rottay.modes?.light?.palette?.primaryColor;
 
 const identity = (vertical: "rottay" | "bithire"): TenantThemeConfigIdentity => ({
   tenantId: `tenant_der05_${vertical}`,
@@ -134,7 +134,7 @@ describe("WO-DER-05 · the tenant, and only the tenant, narrows its own decision
     const dark = crossing.modeDeltas?.find((delta) => delta.mode === "dark");
     // The vertical's own dark overlay restates the primary; it used to win.
     expect(
-      FIRST_PARTY_THEMES.bithire.modes?.dark?.palette?.primaryColor
+      FIRST_PARTY_BASELINES.bithire.modes?.dark?.palette?.primaryColor
     ).toBeTruthy();
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
     expect(effective(crossing, "dark")["--ds-color-primary"]).toBe(
@@ -205,7 +205,7 @@ describe("WO-DER-05 · one default-mode reader", () => {
     expect(verticalDefaultMode("rottay")).toBe("dark");
     expect(verticalDefaultMode("bithire")).toBe("light");
     expect(verticalDefaultMode("evnto")).toBe("light");
-    for (const [slug, theme] of Object.entries(FIRST_PARTY_THEMES)) {
+    for (const [slug, theme] of Object.entries(FIRST_PARTY_BASELINES)) {
       expect(verticalDefaultMode(slug)).toBe(theme.appearance?.defaultMode);
       expect(themeDefaultMode(theme)).toBe(theme.appearance?.defaultMode);
     }
@@ -293,7 +293,7 @@ describe("WO-DER-05 · the vertical baseline is compiled once, cached by digest"
 });
 
 describe("WO-DER-05 · the modes family refuses what it always refused", () => {
-  const bithire = FIRST_PARTY_THEMES.bithire as unknown as BrandTheme;
+  const bithire = FIRST_PARTY_BASELINES.bithire as unknown as BrandTheme;
 
   it("derives exactly the non-default mode for an untouched vertical", () => {
     const requests = deriveModeThemes({

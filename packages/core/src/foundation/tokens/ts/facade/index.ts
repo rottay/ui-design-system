@@ -7,13 +7,9 @@
  *   shadows, borders, and z-index layering.
  * - **Components** -- Per-component token objects (e.g. `buttonTokens`, `cardTokens`)
  *   covering sizes, variants, states, and transitions.
- * - **Brand Themes** -- Canonical authored premium sources. Each `BrandTheme`
- *   captures the full visual identity (palette, typography, surfaces, motion,
- *   charts, chrome) for a first-party product. These are the SOURCE — tenant
- *   CSS and runtime overrides are derived from them.
  * - **Tenant Mirrors** -- Reference mirrors of CSS variable handles (`var(--ds-*)`).
- *   Useful for component code and discovery, but NOT authored premium sources.
- *   The canonical authored source is `brand-themes/`.
+ *   Useful for component code and discovery, but NOT authored sources: a
+ *   first-party vertical is the neutral foundation plus its preset document.
  *
  * The combined `tokens` default export nests all tiers for exploratory use.
  * Most consumers should prefer direct named imports for tree-shaking.
@@ -22,7 +18,6 @@
 // Export all individual tokens
 export * from '../foundation/base';
 export * from '../runtime/components';
-export * from '../presentation/brand-themes';
 export * from '../../../presets/verticals/roster';
 export * from '../runtime/mirrors';
 
@@ -30,11 +25,6 @@ export * from '../runtime/mirrors';
 import { baseTokens } from '../foundation/base';
 import { componentTokens } from '../runtime/components';
 import { tenantTokens } from '../runtime/mirrors';
-import {
-  rottayBrandTheme,
-  bithireBrandTheme,
-  evntoBrandTheme,
-} from '../presentation/brand-themes';
 
 /** Nested aggregate of all token tiers for discovery and runtime introspection. */
 export const tokens = {
@@ -44,12 +34,6 @@ export const tokens = {
   tenantMirrors: tenantTokens,
   /** @deprecated Use `tenantMirrors` — kept for backward compatibility. */
   tenants: tenantTokens,
-  /** Canonical authored premium sources. */
-  brandThemes: {
-    rottay: rottayBrandTheme,
-    bithire: bithireBrandTheme,
-    evnto: evntoBrandTheme,
-  },
 } as const;
 
 export default tokens;

@@ -18,14 +18,15 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import { contrastRatio, isHexColor } from "@/foundation/kernel/color/contrast";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import {
   compileThemeIntent,
   type ThemeCompilation,
 } from "@/infrastructure/compilers/runtime/theme";
 import { documentThemeIntent } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 // ── The floor half: a raised posture never lowers a measured ratio ─────────
 

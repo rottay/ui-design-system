@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
 
 import { FIRST_PARTY_VERTICAL_ROSTER, FIRST_PARTY_VERTICALS } from "..";
+import { FIRST_PARTY_BASELINES, firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const BRAND_THEME_BY_SLUG = {
   rottay: rottayBrandTheme,
@@ -21,11 +21,10 @@ describe("the roster names a vertical and carries no theme", () => {
     }
   });
 
-  it("agrees with the authored theme it names: id, name and default mode", () => {
-    // The theme sources still carry these three facts. Until they are retired
-    // the roster is the authority and the theme must restate it exactly.
+  it("labels the baseline it names: id, name and default mode", () => {
+    // The roster is the authority; the composed baseline must restate it exactly.
     for (const row of FIRST_PARTY_VERTICAL_ROSTER) {
-      const theme = BRAND_THEME_BY_SLUG[row.slug];
+      const theme = FIRST_PARTY_BASELINES[row.slug];
       expect(theme.id).toBe(row.themeId);
       expect(theme.name).toBe(row.name);
       expect(theme.appearance.defaultMode).toBe(row.defaultMode);
@@ -35,7 +34,7 @@ describe("the roster names a vertical and carries no theme", () => {
   it("DRILL: a row whose theme disagrees on the default mode fails the agreement", () => {
     const mutated = { ...FIRST_PARTY_VERTICALS.rottay, defaultMode: "light" as const };
     expect(() => {
-      expect(BRAND_THEME_BY_SLUG.rottay.appearance.defaultMode).toBe(mutated.defaultMode);
+      expect(FIRST_PARTY_BASELINES.rottay.appearance.defaultMode).toBe(mutated.defaultMode);
     }).toThrow();
   });
 });

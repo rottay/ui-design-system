@@ -11,7 +11,7 @@
  * asserts exactly that.
  */
 
-import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import type { BrandTheme, ThemeSource } from "@/foundation/contracts/composition/tenants/themes";
 import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
 import type {
   ThemeCompilationModeBlock,
@@ -22,7 +22,15 @@ import type {
   TenantAuthoredPaths,
   ThemeLayerPatch,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
-import { liftAuthoredTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake";
+import {
+  liftAuthoredTheme,
+  readGovernedTheme,
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake";
+import {
+  FIRST_PARTY_VERTICAL_SLUGS,
+  type FirstPartyVerticalId,
+} from "@/foundation/contracts/kernel/verticals";
+import { baselineFor } from "@/infrastructure/compilers/runtime/theme";
 import type {
   TenantStatusSeedAuthorship,
   ThemeFloors,
@@ -40,6 +48,65 @@ import {
 } from "@/infrastructure/compilers/runtime/theme";
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
 import { brandTenantSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
+import type { ThemeIntent } from "@/foundation/contracts/composition/tenants/themes/intent";
+import type { ThemeResolution } from "@/foundation/contracts/composition/tenants/themes/resolved";
+import { NEUTRAL_THEME } from "@/foundation/presets/neutral-theme";
+import { isFirstPartyVerticalId } from "@/foundation/presets/verticals/roster";
+import { resolveTheme } from "@/infrastructure/compilers/runtime/theme/runtime/resolution";
+
+/**
+ * The baseline a first-party vertical compiles: the neutral foundation with
+ * the vertical's preset admitted, labelled with the slug. This is the ONLY
+ * first-party theme there is; nobody authors one.
+ */
+export function firstPartyBaseline(vertical: FirstPartyVerticalId, slug: string = vertical): Theme {
+  return baselineFor(vertical, slug);
+}
+
+/** The three first-party baselines, keyed by vertical and labelled with it. */
+export const FIRST_PARTY_BASELINES: Readonly<Record<FirstPartyVerticalId, Theme>> =
+  Object.freeze(
+    Object.fromEntries(
+      FIRST_PARTY_VERTICAL_SLUGS.map((vertical) => [vertical, baselineFor(vertical, vertical)])
+    ) as Record<FirstPartyVerticalId, Theme>
+  );
+
+/**
+ * The flat read view of a first-party baseline, for the suites that spell
+ * the legacy compile input. Lifting it back reproduces the baseline exactly
+ * (`liftAuthoredTheme(readGovernedTheme(b))` is `b` for all three verticals),
+ * so `lowerBrandThemeFixture({ brandTheme: firstPartyFixture(v) })` compiles
+ * the same Theme the artifact does.
+ */
+export function firstPartyFixture(vertical: FirstPartyVerticalId, slug: string = vertical): BrandTheme {
+  return readGovernedTheme(baselineFor(vertical, slug));
+}
+
+/** A read view as a normalizer input, proven total rather than asserted. */
+export function themeSourceOf(view: BrandTheme): ThemeSource {
+  if (!view.appearance || !view.palette || !view.capabilities) {
+    throw new Error(`${view.id}: a normalizer source declares appearance, palette and capabilities`);
+  }
+  return { ...view, appearance: view.appearance, palette: view.palette, capabilities: view.capabilities };
+}
+
+/** The three required families are present on every first-party baseline. */
+export function firstPartySource(vertical: FirstPartyVerticalId, slug: string = vertical): ThemeSource {
+  return themeSourceOf(firstPartyFixture(vertical, slug));
+}
+
+/**
+ * Resolve an intent the way the compile door does: over the vertical's own
+ * baseline. An intent naming no first-party vertical is handed the neutral
+ * foundation, so a suite probing the resolver's refusals sees the INTENT's
+ * error and never a baseline lookup's.
+ */
+export function resolveFirstParty(intent: ThemeIntent): ThemeResolution {
+  const baseline = isFirstPartyVerticalId(intent.vertical)
+    ? baselineFor(intent.vertical, intent.slug)
+    : NEUTRAL_THEME;
+  return resolveTheme(intent, { baseline });
+}
 
 /** The legacy compile input shape the suites still spell. */
 export interface BrandThemeFixtureInput {

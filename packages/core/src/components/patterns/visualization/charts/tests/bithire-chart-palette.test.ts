@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { bithireBrandTheme } from '../../../../../foundation/tokens/ts/presentation/brand-themes';
 import {
   COLOR_SCHEME_MAP,
   DEFAULT_COLORS,
   MONOCHROME_COLORS,
 } from '../foundation/palettes';
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 /**
  * WO-DES-12 — chart one-blue law (design-language §8.3 + Craft Bar A5.5).

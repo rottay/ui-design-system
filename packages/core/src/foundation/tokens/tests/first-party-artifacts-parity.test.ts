@@ -18,10 +18,11 @@ import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
 import { compileThemeIntent, staticThemeIntent } from '@/infrastructure/compilers/runtime/theme';
-import { bithireBrandTheme } from '../ts/presentation/brand-themes';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACTS_DIR = resolve(TEST_DIR, '..', 'css/facade/artifacts');
@@ -51,9 +52,7 @@ function bareCssValue(value: string | undefined): string {
 describe.each(FIRST_PARTY_ARTIFACT_SPECS.map((spec) => spec.slug))(
   '%s artifact to neutral-preset compile parity',
   (slug) => {
-    const { compiled } = compileThemeIntent(staticThemeIntent(slug), {
-      baselineSource: 'neutral-preset',
-    });
+    const { compiled } = compileThemeIntent(staticThemeIntent(slug));
     const declared = collectDeclaredValues(readFileSync(resolve(ARTIFACTS_DIR, `${slug}/index.css`), 'utf8'));
 
     it('emits a non-trivial number of compiled variables', () => {

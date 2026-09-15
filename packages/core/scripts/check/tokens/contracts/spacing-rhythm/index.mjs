@@ -1688,36 +1688,8 @@ export function runGate({
   // would let this gate claim a CSS-only completeness it has not measured.
   // The set is recomputed from the corpus every run; nothing here is an
   // allowlist or a recorded expected count.
-  /* ENMIENDA (decision 20 del owner, 2026-08-26), del mismo cuerpo que la de la
-   * exclusion de artefactos y por la misma razon. Una semilla de brand-theme que
-   * lleva el factor NO es un objetivo indecidible: su objetivo es el canal que
-   * esa semilla compila en el artefacto de su vertical, y ese artefacto lo juzga
-   * la pierna de arriba bajo la regla de forma licita. Contarla aca ademas seria
-   * juzgar dos veces el mismo hecho, y llamarle dos fallas.
-   *
-   * Lo que NO se afloja: la exencion pide la MISMA forma que exige el artefacto
-   * —el canal como multiplicando dentro de un calc()— verificada sobre el propio
-   * TS con el mismo predicado, no sobre la promesa de que compilara bien. Un
-   * `var(--ds-rhythm-effective-scale)` pelado en un tema, o un tema que declare
-   * el canal, sigue siendo indecidible y sigue bloqueando. Fuera de los
-   * brand-themes no cambia nada: el residuo honesto de siempre. */
-  const BRAND_THEME_SOURCE = /(?:^|\/)brand-themes(?:\/|$)/u;
-  const licitSeedLines = new Map();
-  const carriesFactorAtLine = (file, line) => {
-    if (!BRAND_THEME_SOURCE.test(file.split(sep).join('/'))) return false;
-    if (!licitSeedLines.has(file)) {
-      const text = readFileSync(file, 'utf8');
-      const illicit = new Set(illicitRhythmMentions(text).map((entry) => entry.line));
-      licitSeedLines.set(file, { lines: text.split('\n'), illicit });
-    }
-    const { lines, illicit } = licitSeedLines.get(file);
-    const source = (lines[line - 1] ?? '').trim();
-    return source.length > 0 && !illicit.has(source);
-  };
   const typeScriptUndecidable = typeScriptCarriers.filter(
-    (finding) =>
-      finding.classification === UNDECIDABLE_TS_CARRIER
-      && !carriesFactorAtLine(finding.file, finding.line),
+    (finding) => finding.classification === UNDECIDABLE_TS_CARRIER,
   );
   return {
     ...result,

@@ -8,14 +8,15 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import {
   READABLE_INK_DARK,
   READABLE_INK_LIGHT,
   deriveReadableInk,
 } from '@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const compile = (brandTheme: BrandTheme) =>
   lowerBrandThemeFixture({ brandTheme, tenantSlug: 'bithire' });

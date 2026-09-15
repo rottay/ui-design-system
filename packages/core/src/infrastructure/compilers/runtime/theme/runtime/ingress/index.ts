@@ -17,6 +17,7 @@ export {
 } from "./foundation/document-patch";
 export {
   admitDocument,
+  baselineFor,
   documentAnyThemePatch,
   migrateAndAdmitDocument,
   migrateDocumentV1ToV2,

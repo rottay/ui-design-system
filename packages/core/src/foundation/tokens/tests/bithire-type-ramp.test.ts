@@ -19,8 +19,9 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from '../ts/presentation/brand-themes/bithire';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 /** design-language §2.1 table — size / line-height / weight / tracking, per entry. */
 const RAMP = [

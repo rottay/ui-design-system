@@ -10,10 +10,10 @@
 
 import type {
   BrandPalette,
-  FirstPartyBrandTheme,
+  ThemeSource,
 } from "@/foundation/contracts/composition/tenants/themes";
 import {
-  brandThemeToTheme,
+  normalizeThemeSource,
   type Theme,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 
@@ -25,11 +25,13 @@ export const NEUTRAL_THEME_NAME = "Neutral foundation";
  * gives each family its total default shape, so a preset patch lands on a
  * structure that already exists instead of inventing one.
  */
-const NEUTRAL_SOURCE = {
+const NEUTRAL_SOURCE: ThemeSource = {
   id: NEUTRAL_THEME_ID,
   name: NEUTRAL_THEME_NAME,
   appearance: { defaultMode: "light" },
   modes: {},
+  // The neutral decides no seed; the palette contract requires one, so this
+  // is the one place the foundation states its emptiness explicitly.
   palette: {} as BrandPalette,
   typography: {},
   surfaces: {},
@@ -45,7 +47,7 @@ const NEUTRAL_SOURCE = {
     expressive: { status: "active" },
     responsive: { status: "active" },
   },
-} as const;
+};
 
 function deepFreezeTheme<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
@@ -58,7 +60,5 @@ function deepFreezeTheme<T>(value: T): T {
 }
 
 // The neutral is not a first-party identity; the resolver stamps the slug it
-// composes for, so the narrowed id type of the normalizer does not apply here.
-export const NEUTRAL_THEME: Theme = deepFreezeTheme(
-  brandThemeToTheme(NEUTRAL_SOURCE as unknown as FirstPartyBrandTheme)
-);
+// composes for. The source states its own dispositions, so nothing is inferred.
+export const NEUTRAL_THEME: Theme = deepFreezeTheme(normalizeThemeSource(NEUTRAL_SOURCE));

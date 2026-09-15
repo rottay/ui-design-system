@@ -9,7 +9,6 @@ import {
   TRANSLATION_CATALOG,
 } from "@/foundation/i18n/runtime/catalog";
 import { resolveTranslation } from "@/foundation/i18n/runtime/resolution";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import { brandThemeToTenantAppearance } from "@/components/patterns/customization/brand-studio/runtime/file-export";
 import {
@@ -17,6 +16,9 @@ import {
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const LOCALES = ["en", "es", "ar"] as const;
 type Locale = (typeof LOCALES)[number];

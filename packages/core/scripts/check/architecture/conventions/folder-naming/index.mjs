@@ -291,20 +291,6 @@ function walkFiles(root, visit, relativeRoot = '') {
   } catch { /* dir might not exist */ }
 }
 
-// 4c. foundation/tokens/ts/presentation/brand-themes/ is the canonical authored source
-{
-  const brandThemesDir = join(SRC_ROOT, 'foundation/tokens/ts/presentation/brand-themes');
-  try {
-    statSync(brandThemesDir);
-  } catch {
-    violations.push({
-      rule: 'brand-themes-missing',
-      path: 'foundation/tokens/ts/presentation/brand-themes/',
-      message: 'Canonical authored premium source directory is missing.',
-    });
-  }
-}
-
 // 4d. foundation/tokens/ts/ declares the local dependency layers.
 {
   const tsDir = join(SRC_ROOT, 'foundation/tokens/ts');
@@ -324,7 +310,6 @@ function walkFiles(root, visit, relativeRoot = '') {
     }
     const requiredOwners = [
       ['runtime', 'mirrors'],
-      ['presentation', 'brand-themes'],
     ];
     for (const [layer, required] of requiredOwners) {
       const layerEntries = readdirSync(join(tsDir, layer), { withFileTypes: true });

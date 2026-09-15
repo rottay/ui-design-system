@@ -21,6 +21,7 @@ import {
 import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
 
 import { resolveTheme } from "..";
+import { resolveFirstParty } from "@tests/support/theme-lowering";
 
 const patch = {
   typography: { typePairing: "geometric" },
@@ -54,16 +55,16 @@ const tenantIntent = (
 
 describe("the intent envelope admits the ledger by name", () => {
   it("accepts an intent that carries one", () => {
-    expect(() => resolveTheme(tenantIntent({ ledger }))).not.toThrow();
+    expect(() => resolveFirstParty(tenantIntent({ ledger }))).not.toThrow();
   });
 
   it("still accepts an intent that carries none", () => {
-    expect(() => resolveTheme(tenantIntent())).not.toThrow();
+    expect(() => resolveFirstParty(tenantIntent())).not.toThrow();
   });
 
   it("still refuses a key the envelope never declared", () => {
     expect(() =>
-      resolveTheme(tenantIntent({ provenance: ledger } as never))
+      resolveFirstParty(tenantIntent({ provenance: ledger } as never))
     ).toThrow(/unknown intent key\(s\) "provenance"/u);
   });
 });
@@ -71,13 +72,13 @@ describe("the intent envelope admits the ledger by name", () => {
 describe("a malformed ledger is refused, never dropped", () => {
   it("refuses a non-object", () => {
     expect(() =>
-      resolveTheme(tenantIntent({ ledger: [] as never }))
+      resolveFirstParty(tenantIntent({ ledger: [] as never }))
     ).toThrow(/resolveTheme: intent\.ledger: must be an object/u);
   });
 
   it("refuses an unknown decision id", () => {
     expect(() =>
-      resolveTheme(
+      resolveFirstParty(
         tenantIntent({
           ledger: {
             entries: [
@@ -97,7 +98,7 @@ describe("a malformed ledger is refused, never dropped", () => {
 
   it("refuses a forged tier", () => {
     expect(() =>
-      resolveTheme(
+      resolveFirstParty(
         tenantIntent({
           ledger: {
             entries: [
@@ -117,7 +118,7 @@ describe("a malformed ledger is refused, never dropped", () => {
 
   it("refuses tenant authorship recorded on the vertical's own baseline", () => {
     expect(() =>
-      resolveTheme({
+      resolveFirstParty({
         vertical: "bithire",
         slug: "bithire",
         origin: "static-vertical",
@@ -130,7 +131,7 @@ describe("a malformed ledger is refused, never dropped", () => {
 
 describe("the resolution snapshots what the intent carried", () => {
   it("carries the entries through to the provenance", () => {
-    const resolution = resolveTheme(tenantIntent({ ledger }));
+    const resolution = resolveFirstParty(tenantIntent({ ledger }));
     expect(resolution.provenance.ledger?.entries).toHaveLength(1);
     const [entry] = resolution.provenance.ledger!.entries;
     expect(entry.ref).toEqual({ kind: "decision", id: "typography.pairing" });
@@ -142,13 +143,13 @@ describe("the resolution snapshots what the intent carried", () => {
   });
 
   it("reports no ledger, rather than an invented empty one, when none was carried", () => {
-    const resolution = resolveTheme(tenantIntent());
+    const resolution = resolveFirstParty(tenantIntent());
     expect(resolution.provenance.tenantAuthored).toBe(true);
     expect(resolution.provenance.ledger).toBeUndefined();
   });
 
   it("gives a static-vertical resolution no ledger at all", () => {
-    const resolution = resolveTheme({
+    const resolution = resolveFirstParty({
       vertical: "bithire",
       slug: "bithire",
       origin: "static-vertical",
@@ -170,7 +171,7 @@ describe("the resolution snapshots what the intent carried", () => {
         },
       ],
     };
-    const resolution = resolveTheme(tenantIntent({ ledger: mutable }));
+    const resolution = resolveFirstParty(tenantIntent({ ledger: mutable }));
     (mutable.entries as unknown[]).length = 0;
     expect(resolution.provenance.ledger?.entries).toHaveLength(1);
     expect(Object.isFrozen(resolution.provenance.ledger)).toBe(true);

@@ -8,11 +8,12 @@ import userEvent from '@testing-library/user-event';
 
 import { LOCALE_CONFIGS, TRANSLATION_CATALOG } from '@/foundation/i18n/runtime/catalog';
 import { resolveTranslation } from '@/foundation/i18n/runtime/resolution';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import ModernBadge from '../engines/modern';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const skin = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/badge/index.css'),

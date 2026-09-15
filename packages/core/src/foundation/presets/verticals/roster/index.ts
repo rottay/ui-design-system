@@ -236,7 +236,7 @@ export interface FirstPartyVerticalEntry {
   readonly themeId: FirstPartyVerticalId;
   /** Human display name, the reserved first-party identity. */
   readonly name: string;
-  /** Authored theme source path, relative to `packages/core/src`. */
+  /** The preset document the vertical compiles from, relative to `packages/core/src`. */
   readonly themeSourcePath: string;
   /** Generated artifact CSS, relative to `packages/core/src`. */
   readonly artifactPath: string;
@@ -295,7 +295,7 @@ function entry(
     verticalKey: slug,
     themeId: slug,
     name: identity.name,
-    themeSourcePath: `foundation/tokens/ts/presentation/brand-themes/${slug}/index.ts`,
+    themeSourcePath: `foundation/presets/verticals/${slug}/document/index.json`,
     artifactPath: `foundation/tokens/css/facade/artifacts/${slug}/index.css`,
     bundleFile: `${slug}.css`,
     styleEntry: `./styles/${slug}`,

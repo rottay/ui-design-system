@@ -24,13 +24,16 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { brandThemeToChromeVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   isBundledTenant,
   BUNDLED_TENANT_SLUGS,
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
-import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 // ── Helpers ─────────────────────────────────────────────
 

@@ -2,13 +2,13 @@
  * @fileoverview Tenant token reference mirrors.
  *
  * These are NOT authored premium sources — that role belongs to
- * `foundation/tokens/ts/presentation/brand-themes/`. This directory contains typed catalogs of
+ * the vertical presets under `foundation/presets/verticals/`. This directory contains typed catalogs of
  * CSS variable references (`var(--ds-*)`) for discovery and component code.
  *
  * Currently only ships the Rottay reference mirror. Other tenants apply
  * their overrides via CSS class scoping at runtime.
  *
- * @see foundation/tokens/ts/presentation/brand-themes/ — the canonical authored premium source
+ * @see foundation/presets/verticals/ — the preset documents the first-party artifacts compile from
  */
 
 // Individual tenant reference mirrors

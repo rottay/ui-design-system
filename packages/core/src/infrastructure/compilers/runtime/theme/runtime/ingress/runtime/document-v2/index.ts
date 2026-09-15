@@ -15,6 +15,7 @@ export {
 export { migrateDocumentV1ToV2 } from "./foundation/migrate";
 export {
   admitDocument,
+  baselineFor,
   documentAnyThemePatch,
   migrateAndAdmitDocument,
   type DocumentAdmission,

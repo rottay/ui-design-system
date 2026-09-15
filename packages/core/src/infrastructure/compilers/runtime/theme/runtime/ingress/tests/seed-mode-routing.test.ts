@@ -19,7 +19,6 @@ import type { BrandThemeMode } from "@/foundation/contracts/composition/tenants/
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { ThemeAdmissionError } from "@/infrastructure/compilers/runtime/theme/facade/foundation/admission";
 
 import { compileThemeIntent } from "../../../facade/runtime/compile";
@@ -29,6 +28,7 @@ import {
   staticThemeIntent,
   ThemePatchMigrationError,
 } from "..";
+import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 const VERTICALS = ["rottay", "bithire", "evnto"] as const;
 
@@ -47,7 +47,7 @@ const document = (palette: Record<string, unknown>): TenantThemeDocument =>
   }) as unknown as TenantThemeDocument;
 
 const defaultModeOf = (vertical: FirstPartyVerticalId): BrandThemeMode => {
-  const mode = FIRST_PARTY_THEMES[vertical].appearance?.defaultMode;
+  const mode = FIRST_PARTY_BASELINES[vertical].appearance?.defaultMode;
   if (!mode) throw new Error(`${vertical} declares no default mode`);
   return mode;
 };

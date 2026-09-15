@@ -59,7 +59,7 @@ export function readGovernedTheme(theme: Theme): BrandTheme {
  * families and nothing else.
  *
  * This is the exact inverse of {@link readGovernedTheme}, and it is deliberately
- * NOT `brandThemeToTheme`: the ISO bridge also NORMALIZES — it materializes
+ * NOT `normalizeThemeSource`: the ISO bridge also NORMALIZES — it materializes
  * every declared palette key, completes the chrome shape and folds in the
  * default motion/chart shapes. That completion is correct for a first-party
  * theme, which is already total, and wrong for an editor draft, which is not: a

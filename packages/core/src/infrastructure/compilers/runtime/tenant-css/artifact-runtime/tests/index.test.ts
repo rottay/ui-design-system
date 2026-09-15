@@ -24,9 +24,7 @@ import {
 
 /** The selection the current pipeline computes for a first-party vertical, and proof the stylesheet carries none. */
 function recipeProfileInArtifactBytes(slug: FirstPartyVerticalId): string | undefined {
-  const { compiled } = compileThemeIntent(staticThemeIntent(slug), {
-    baselineSource: 'neutral-preset',
-  });
+  const { compiled } = compileThemeIntent(staticThemeIntent(slug));
   expect(compiled.cssVariables['--ds-recipe-profile'], `${slug} emits no selection channel`).toBeUndefined();
   return compiled.runtime.recipeProfile;
 }

@@ -6,11 +6,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // WHICH SIDE IS THE SOURCE OF TRUTH: the ARTIFACT, not the authored theme.
 //
 // F-12's own arm (D-26) says the recipe profile travels in the artifact only.
-// For a code-owned vertical both readings are derived from one BrandTheme, so
+// For a code-owned vertical both readings derive from one preset document, so
 // they normally agree -- and agreement is exactly what hides which one the
 // runtime is actually reading. The only way to state the direction is to make
 // them DISAGREE: the artifact's shipped runtime block is made to say
-// `editorial-round` while `rottay`'s authored theme still says
+// `editorial-round` while `bithire`'s preset document still selects
 // `technical-sharp`, and the product must follow the artifact.
 //
 // The mount refuses this same disagreement on the server (see
@@ -19,7 +19,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // ---------------------------------------------------------------------------
 
 const ARTIFACT_SAYS = 'rottay/editorial-round@1';
-const AUTHORED_SAYS = 'rottay/technical-sharp@1';
+const PRESET_SAYS = 'rottay/technical-sharp@1';
 
 vi.mock('@/infrastructure/compilers/runtime/tenant-css/artifact-runtime', async (importOriginal) => {
   const actual = await importOriginal<
@@ -28,11 +28,11 @@ vi.mock('@/infrastructure/compilers/runtime/tenant-css/artifact-runtime', async 
   return {
     ...actual,
     firstPartyArtifactRecipeProfile: (vertical: string) =>
-      vertical === 'rottay' ? ARTIFACT_SAYS : actual.firstPartyArtifactRecipeProfile(vertical),
+      vertical === 'bithire' ? ARTIFACT_SAYS : actual.firstPartyArtifactRecipeProfile(vertical),
   };
 });
 
-describe('DesignSystemProvider recipe profile — artifact over authored selection', () => {
+describe('DesignSystemProvider recipe profile — artifact over the preset selection', () => {
   beforeEach(() => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
@@ -42,8 +42,8 @@ describe('DesignSystemProvider recipe profile — artifact over authored selecti
     vi.restoreAllMocks();
   });
 
-  it('publishes what the artifact block says, not what the theme authored', async () => {
-    const { rottayBrandTheme } = await import('@/foundation/tokens/ts/presentation/brand-themes');
+  it('publishes what the artifact block says, not what the preset selected', async () => {
+    const { VERTICAL_THEME_PRESETS } = await import('@/foundation/presets/verticals');
     const { useRecipeProfile } = await import('@/infrastructure/runtime/foundation/recipes/profiles');
     const { getKnownTenantConfig } = await import(
       '@/infrastructure/runtime/tenant/foundation/configuration/registry'
@@ -52,10 +52,12 @@ describe('DesignSystemProvider recipe profile — artifact over authored selecti
       .default;
     const { DesignSystemProvider } = await import('..');
 
-    // The disagreement is real only if the authored side still says the other
+    // The disagreement is real only if the preset still selects the other
     // thing. Reading it here is the anti-cheat for the whole file.
-    expect(rottayBrandTheme.recipes?.profile).toBe(AUTHORED_SAYS);
-    expect(ARTIFACT_SAYS).not.toBe(AUTHORED_SAYS);
+    expect(JSON.stringify(VERTICAL_THEME_PRESETS.bithire.document)).toContain(
+      `"recipe-profile":${JSON.stringify(PRESET_SAYS)}`,
+    );
+    expect(ARTIFACT_SAYS).not.toBe(PRESET_SAYS);
 
     function Probe() {
       const profile = useRecipeProfile();
@@ -69,8 +71,8 @@ describe('DesignSystemProvider recipe profile — artifact over authored selecti
 
     render(
       <DesignSystemProvider
-        tenantConfig={getKnownTenantConfig('rottay')!}
-        vertical="rottay"
+        tenantConfig={getKnownTenantConfig('bithire')!}
+        vertical="bithire"
         forceEngine="modern"
       >
         <Probe />

@@ -385,13 +385,15 @@ Visual merge chain: `DS base -> vertical baseline -> Theme -> compileTheme -> ar
 
 ### Key rules
 
-- Both static `BrandTheme` and DB `TenantThemeDocument` transports resolve to
-  the same complete Theme and enter the single `compileTheme` lowering. No
-  second compiler, no subset parity fixture, no neutral default vertical.
+- A first-party vertical is the neutral foundation (`foundation/presets/neutral-theme`)
+  with its preset document (`foundation/presets/verticals/<slug>/document`) admitted
+  through the same door every DB `TenantThemeDocument` takes; both resolve to the
+  same complete Theme and enter the single `compileTheme` lowering. No second
+  compiler, no subset parity fixture, no authored first-party theme.
 - `ThemePatch` exists only at ingestion; it never reaches the compiler.
 - First-party tenant CSS files (`foundation/tokens/css/facade/artifacts/`) are
-  **generated snapshots**, not source of truth. The `.ts` Theme/BrandTheme
-  sources are the source.
+  **generated snapshots**, not source of truth. The preset documents over the
+  neutral foundation are the source.
 - `_source/extension.css` is temporary drain debt, not an authority. Do not
   regenerate, hand-edit or rely on it for new work.
 - Production customer styling is compiled on the server and embedded for SSR.

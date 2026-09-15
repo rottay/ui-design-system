@@ -38,9 +38,10 @@ import { contrastRatio, parseHex } from "@/foundation/kernel/color/contrast";
 import { CONTRAST_POSTURES } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/contrast-posture";
 import { derivePaletteTints } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/palette/tints";
 import { STATUS_SEED_SHADOWING_FIELDS } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/seeds";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
-import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
 
 const TONES = ["success", "warning", "error", "info"] as const;
 type Tone = (typeof TONES)[number];

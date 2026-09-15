@@ -65,8 +65,8 @@ function lineOf(text, index) {
 }
 
 /**
- * The declaration authority: authored stylesheets plus the BrandTheme sources
- * that compile into them. Tests, stories and arbitrary `.tsx` prose are not
+ * The declaration authority: authored stylesheets, the generated first-party
+ * artifacts among them. Tests, stories and arbitrary `.tsx` prose are not
  * token declarations and only inject noise.
  */
 function collectSources(dir, out = []) {
@@ -77,7 +77,6 @@ function collectSources(dir, out = []) {
     if (entry.isDirectory()) collectSources(filePath, out);
     else if (/\.(test|spec|stories)\.[tj]sx?$/.test(entry.name)) continue;
     else if (entry.name.endsWith('.css')) out.push(filePath);
-    else if (entry.name.endsWith('.ts') && filePath.includes(`${path.sep}brand-themes${path.sep}`)) out.push(filePath);
   }
   return out;
 }

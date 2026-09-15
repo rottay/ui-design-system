@@ -40,7 +40,7 @@ import {
 } from "..";
 import { TENANT_THEME_V1_COVERAGE } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { RAMP_STEPS, deriveOklchRamp } from "@/foundation/kernel/color/oklch/ramp";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 const FIXTURE_DIR = resolve(
   process.cwd(),
@@ -541,7 +541,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     // the artifact from the new one, step for step. That two-sided identity is
     // the causal reason this pin moves exactly once.
     expect(
-      FIRST_PARTY_THEMES.bithire.palette.backgroundColor,
+      FIRST_PARTY_BASELINES.bithire.palette.backgroundColor,
       "the new ground is the bithire baseline's authored canvas"
     ).toBe(BITHIRE_AUTHORED_CANVAS);
     const regrounded: Record<string, string> = {};
@@ -637,7 +637,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       expect(artifact.variables[corner], corner).toBe(TOGGLE_SILHOUETTE_ALIAS);
     }
     expect(
-      FIRST_PARTY_THEMES.bithire.surfaces?.buttonStyle,
+      FIRST_PARTY_BASELINES.bithire.surfaces?.buttonStyle,
       "the baseline states no silhouette, which is why the tenant's alias is a delta member"
     ).toBeUndefined();
   });
@@ -723,7 +723,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     // `modes.dark.chrome.sidebar` must not take them back. The two values that
     // would otherwise appear here are asserted to exist on the baseline, so
     // this stays a proof that they LOSE rather than a vacuous absence.
-    const bithireDark = FIRST_PARTY_THEMES.bithire.modes?.dark?.chrome?.sidebar;
+    const bithireDark = FIRST_PARTY_BASELINES.bithire.modes?.dark?.chrome?.sidebar;
     expect(bithireDark?.bg, "the vertical does author a dark sidebar bg").toBe(
       "#0a0f18"
     );

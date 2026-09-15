@@ -17,13 +17,14 @@ import { describe, expect, it } from 'vitest';
 
 import { apcaContrast } from '@/foundation/kernel/accessibility/branding-contrast';
 import { RAMP_STEPS } from '@/foundation/kernel/color/oklch/ramp';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { evntoBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/evnto';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
 import type { BrandPalette } from '@/foundation/contracts/composition/tenants/themes';
 import { isDarkSurfaceTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground";
 import { deriveTenantColorRamps } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ramps";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 // `accent` is not here: its ten ramp steps had no reader anywhere in the
 // package, so the ramp family stopped deriving them (WO-DER-03 palette half).

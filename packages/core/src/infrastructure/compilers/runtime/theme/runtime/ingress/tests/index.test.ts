@@ -7,7 +7,6 @@ import { describe, expect, it } from "vitest";
 
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
 import { compileThemeIntent } from "../../../facade/runtime/compile";
 import {
@@ -21,6 +20,7 @@ import {
   ThemePatchMigrationError,
   verticalEngine,
 } from "..";
+import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 const simpleDocument = (primary: string): TenantThemeDocument =>
   ({
@@ -67,8 +67,8 @@ describe("documentThemeIntent and previewThemeIntent", () => {
     // the base block -- whichever mode that is. Reading the absent selection as
     // `light` sent every rottay seed to the light overlay, so the one
     // dark-default vertical branded a canvas nobody renders.
-    expect(FIRST_PARTY_THEMES.rottay.appearance?.defaultMode).toBe("dark");
-    expect(FIRST_PARTY_THEMES.bithire.appearance?.defaultMode).toBe("light");
+    expect(FIRST_PARTY_BASELINES.rottay.appearance?.defaultMode).toBe("dark");
+    expect(FIRST_PARTY_BASELINES.bithire.appearance?.defaultMode).toBe("light");
 
     const document = simpleDocument("#123456");
     const rottay = documentThemePatch({ vertical: "rottay", document }) as Record<

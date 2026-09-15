@@ -78,7 +78,6 @@ import {
 } from "@/contracts/theme/runtime/catalog";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
 import {
@@ -87,6 +86,9 @@ import {
   previewThemeIntent,
   staticThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const VERTICAL = "bithire" as const;
 const SLUG = "transport-parity-probe";

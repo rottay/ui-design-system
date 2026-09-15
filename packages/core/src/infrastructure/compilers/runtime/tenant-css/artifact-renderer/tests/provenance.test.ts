@@ -11,9 +11,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
@@ -22,6 +20,9 @@ import {
   renderVerticalArtifact,
   type FirstPartyArtifactSpec,
 } from '../index';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 function specFor(slug: string): FirstPartyArtifactSpec {
   const spec = FIRST_PARTY_ARTIFACT_SPECS.find((candidate) => candidate.slug === slug);
@@ -71,28 +72,32 @@ describe('T1 · BrandTheme values propagate into the rendered artifact', () => {
     expect(moved.map(([name]) => name)).toEqual(['--ds-color-text-muted']);
   });
 
-  it('a channel adopted from the extension is served by the compiled block', () => {
-    // These were extension re-declarations before R1-P; the artifact carries
-    // them because the THEME says so, not because a later block did. The
-    // extension authority is gone, so the whole artifact IS the compiled block
-    // and there is no longer a section to slice off before asserting.
-    const compiledBlock = render(bithireBrandTheme, spec);
-    expect(compiledBlock).toContain('--ds-badge-radius: var(--ds-radius-full);');
-    expect(compiledBlock).toContain('--ds-color-text-muted: #8a9aaa;');
+  it('an authored chrome literal is served by the compiled block, folded through the vertical dial', () => {
+    // The artifact carries a chrome channel because the THEME says so; there is
+    // no later block to slice off before asserting. A value that is no single
+    // length is left alone.
+    const kept: BrandTheme = {
+      ...bithireBrandTheme,
+      chrome: {
+        ...bithireBrandTheme.chrome,
+        badge: { ...bithireBrandTheme.chrome?.badge, radius: 'var(--ds-radius-full)' },
+      },
+    };
+    expect(render(kept, spec)).toContain('--ds-badge-radius: var(--ds-radius-full);');
 
     const mutated: BrandTheme = {
       ...bithireBrandTheme,
       chrome: {
-        ...bithireBrandTheme.chrome!,
-        badge: { ...bithireBrandTheme.chrome!.badge!, radius: '3px' },
+        ...bithireBrandTheme.chrome,
+        badge: { ...bithireBrandTheme.chrome?.badge, radius: '3px' },
       },
     };
     // An authored literal reaches the block folded through the radius dial,
-    // divided by the scale this same compilation emits so the resting corner
-    // is still 3px — bithire's dial is 1.25. The `var(--ds-radius-full)` above
-    // is left alone, being no single length.
+    // divided by the scale this same compilation emits so the resting corner is
+    // still 3px. bithire's dial is its preset's shape.radius-scale, 0.8
+    // (WO-DER-06 derivation-lane registry, D6-2c-ii, 2026-09-15: 1.25 -> 0.8).
     expect(render(mutated, spec)).toContain(
-      '--ds-badge-radius: calc(3px / 1.25 * var(--ds-radius-scale, 1));'
+      '--ds-badge-radius: calc(3px / 0.8 * var(--ds-radius-scale, 1));'
     );
   });
 
@@ -110,10 +115,12 @@ describe('T11 · a hand-edited artifact fails the freshness comparison', () => {
 
   it('detects a stale copy without touching the committed file', () => {
     const generated = render(bithireBrandTheme, spec);
+    const primary = declarations(generated).get('--ds-color-primary');
+    expect(primary).toBeDefined();
 
     // The build script's whole staleness test is `current !== output`; drill it
     // on an in-memory copy so the repository artifact is never written.
-    const handEdited = generated.replace('--ds-color-text-muted: #8a9aaa;', '--ds-color-text-muted: #000000;');
+    const handEdited = generated.replace(`--ds-color-primary: ${primary};`, '--ds-color-primary: #000000;');
     expect(handEdited).not.toBe(generated);
     expect(generated === handEdited).toBe(false);
 
@@ -122,8 +129,14 @@ describe('T11 · a hand-edited artifact fails the freshness comparison', () => {
   });
 });
 
-describe('T12 · rottay serves its BrandTheme in the base state', () => {
+describe('T12 · a rottay tenant is served in the base state', () => {
   const spec = specFor('rottay');
+  // rottay's default mode is dark by roster; the preset authors no palette, so
+  // the palette served unconditionally is a tenant's own.
+  const darkTenant: BrandTheme = {
+    ...rottayBrandTheme,
+    palette: { ...rottayBrandTheme.palette, primaryColor: '#F5F5F7', secondaryColor: '#9A9AA0' },
+  };
 
   it('the compiled block applies unconditionally', () => {
     expect(spec.selector).toBe("html[data-tenant='rottay']");
@@ -145,11 +158,11 @@ describe('T12 · rottay serves its BrandTheme in the base state', () => {
     expect(compiledBlock).not.toContain('.light');
   });
 
-  it('the theme carries the dark palette it declares', () => {
+  it('the tenant carries the dark-default palette it declares', () => {
     expect(rottayBrandTheme.appearance?.defaultMode).toBe('dark');
-    const decls = declarations(render(rottayBrandTheme, spec));
-    expect(decls.get('--ds-color-primary')).toBe('#FFFFFF');
-    expect(decls.get('--ds-color-secondary')).toBe('#A0A0A5');
+    const decls = declarations(render(darkTenant, spec));
+    expect(decls.get('--ds-color-primary')).toBe('#F5F5F7');
+    expect(decls.get('--ds-color-secondary')).toBe('#9A9AA0');
   });
 
   it('drill · re-gating the spec on light removes the base-state author', () => {
@@ -157,12 +170,12 @@ describe('T12 · rottay serves its BrandTheme in the base state', () => {
       ...spec,
       selector: "html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light",
     };
-    const artifact = render(rottayBrandTheme, regated);
+    const artifact = render(darkTenant, regated);
 
     // This is the Round 3 defect verbatim: a dark palette emitted under a light
     // gate, so the base state (`data-theme="base"`) has no compiled author.
     expect(artifact).toContain("[data-theme='light']");
-    expect(artifact).toContain('--ds-color-primary: #FFFFFF;');
-    expect(artifact).not.toBe(render(rottayBrandTheme, spec));
+    expect(artifact).toContain('--ds-color-primary: #F5F5F7;');
+    expect(artifact).not.toBe(render(darkTenant, spec));
   });
 });

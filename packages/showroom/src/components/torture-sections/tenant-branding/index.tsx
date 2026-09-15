@@ -12,17 +12,17 @@ import {
   PatternTenantPreview,
   Stack,
   Text,
-  bithireBrandTheme,
-  rottayBrandTheme,
-  type BrandTheme,
+  baselineFor,
   type TenantAppearance,
 } from '@rottay/design-system';
+import type { Theme } from '@rottay/design-system/server';
 import { useTortureFrame } from '@/components/torture-sections/frame';
 
 // ---------------------------------------------------------------------------
 // WO-SKIN-06 tenant branding -- tenant and branding preview inert fixture (?tenantBranding=1).
 //
-// The fixture intentionally uses the real rottay/bithire BrandTheme sources.
+// The fixture intentionally uses the real rottay/bithire baselines: the neutral
+// foundation with each vertical's preset admitted, exactly what their artifacts compile.
 // TenantPreview exposes all ten steps of both palettes and every finite sample
 // state; BrandingPreviewSandbox covers its createElement-only hierarchy; Brand
 // Studio renders its editor, live ColorField swatches and both scoped grounds.
@@ -33,7 +33,7 @@ const TENANT_BRANDING_LOGO =
 
 export function TenantBrandingStates() {
   const { fixture, engine } = useTortureFrame();
-  const theme: BrandTheme = fixture === 'bithire' ? bithireBrandTheme : rottayBrandTheme;
+  const theme: Theme = fixture === 'bithire' ? baselineFor('bithire', 'bithire') : baselineFor('rottay', 'rottay');
   const primaryColor = theme.palette?.primaryColor ?? '#4f46e5';
   const secondaryColor = theme.palette?.secondaryColor ?? '#0ea5e9';
   const appearance = useMemo<TenantAppearance>(
@@ -111,7 +111,7 @@ export function TenantBrandingStates() {
                 <Button variant="primary">Primary action</Button>
                 <Input value="Deterministic input" readOnly />
                 <Badge variant="success">Active</Badge>
-                <Card title="Preview card">Scoped BrandTheme surface</Card>
+                <Card title="Preview card">Scoped tenant surface</Card>
               </Stack>
             )}
           />

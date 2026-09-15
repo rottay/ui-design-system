@@ -18,9 +18,11 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { tortureDarkBrandTheme, tortureLightBrandTheme } from '@tests/fixtures/brand-themes/torture';
-import { bithireBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 describe('the clear-mode ground is a BrandTheme channel', () => {
   it('a declared backgroundColor reaches --ds-color-bg-primary', () => {

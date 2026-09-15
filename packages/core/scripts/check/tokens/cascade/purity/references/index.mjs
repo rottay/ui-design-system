@@ -124,11 +124,17 @@ export async function loadArm({ coreRoot = CORE_ROOT, importModule = (spec) => i
   if (!freshness?.ok) {
     throw new Error(`purity: dist/ esta rancio o su frescura no esta probada:\n  ${(freshness?.failures ?? ['sin prueba']).join('\n  ')}`);
   }
-  const themes = await importModule(pathToFileURL(join(coreRoot, 'dist/foundation/tokens/ts/presentation/brand-themes/index.js')).href);
+  // The three first-party baselines: the neutral foundation with each preset
+  // admitted, read flat exactly as the lowering reads them.
+  const { baselineFor } = await importModule(pathToFileURL(join(coreRoot, 'dist/index.js')).href);
+  const { readGovernedTheme } = await importModule(
+    pathToFileURL(join(coreRoot, 'dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js')).href,
+  );
   const { compile } = await loadBrandThemeLowering({ coreRoot, importModule });
+  const baseline = (vertical) => readGovernedTheme(baselineFor(vertical, vertical));
   return {
     compile,
-    themes: { rottay: themes.rottayBrandTheme, bithire: themes.bithireBrandTheme, evnto: themes.evntoBrandTheme },
+    themes: { rottay: baseline('rottay'), bithire: baseline('bithire'), evnto: baseline('evnto') },
   };
 }
 

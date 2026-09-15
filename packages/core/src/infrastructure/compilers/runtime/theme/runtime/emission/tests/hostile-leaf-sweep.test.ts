@@ -15,12 +15,11 @@
 
 import { describe, expect, it } from "vitest";
 
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
 import { compileTheme } from "../../lowering";
-import { resolveTheme } from "../../resolution";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { containerScope, emitThemeCss } from "..";
+import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const ESCAPE = "#000; } body { display: none; } .escaped {";
 const SCOPE = ".sweep-probe";
@@ -48,7 +47,7 @@ function patchFor(path: readonly string[]): Record<string, unknown> {
 describe("no open string leaf can escape the preview rule", () => {
   it("sweeps every string leaf of a first-party theme through the public door", () => {
     const vertical = "bithire" as const;
-    const theme = FIRST_PARTY_THEMES[vertical];
+    const theme = FIRST_PARTY_BASELINES[vertical];
     const modern = resolveAdapter("modern");
     const paths = stringLeafPaths(theme).filter(
       (path) => path[0] !== "id" && path[0] !== "name"
@@ -63,7 +62,7 @@ describe("no open string leaf can escape the preview rule", () => {
       let compiled;
       try {
         compiled = compileTheme(
-          resolveTheme({
+          resolveFirstParty({
             vertical,
             slug: vertical,
             origin: "preview",

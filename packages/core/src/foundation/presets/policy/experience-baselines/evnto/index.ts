@@ -1,11 +1,11 @@
-import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+import type { BrandMotion, BrandSurfaces } from '@/foundation/contracts/composition/tenants/themes';
 
 /**
  * Canonical structural and motion axes for every bundled/custom Evnto path.
  *
- * BrandTheme, vertical, and product-profile registries intentionally retain
- * these exact references. Every object boundary is frozen so no registry
- * consumer can mutate one path and contaminate or drift the others.
+ * The product-profile registry retains these exact references. Every object
+ * boundary is frozen so no registry consumer can mutate one path and
+ * contaminate or drift the others.
  */
 export const EVNTO_CANONICAL_SURFACES = {
   densityScale: 1.125,
@@ -23,7 +23,7 @@ export const EVNTO_CANONICAL_SURFACES = {
     medium: 'rgba(0, 0, 0, 0.03)',
     heavy: 'rgba(0, 0, 0, 0.06)',
   },
-} satisfies NonNullable<BrandTheme['surfaces']>;
+} satisfies BrandSurfaces;
 
 Object.freeze(EVNTO_CANONICAL_SURFACES.borderRadius);
 Object.freeze(EVNTO_CANONICAL_SURFACES.shadows);
@@ -46,6 +46,6 @@ export const EVNTO_CANONICAL_MOTION = {
   pulseSpeed: 'fast',
   skeletonStyle: 'wave',
   countUpEnabled: true,
-} satisfies NonNullable<BrandTheme['motion']>;
+} satisfies BrandMotion;
 
 Object.freeze(EVNTO_CANONICAL_MOTION);

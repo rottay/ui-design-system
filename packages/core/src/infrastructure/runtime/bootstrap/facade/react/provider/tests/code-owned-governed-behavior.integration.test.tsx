@@ -17,13 +17,15 @@ import {
 } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 // The AUTHORED theme, read from where it is authored and deliberately not from
 // the tenant config: that is what this suite proves.
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { useMotionPolicy } from '../../../../../motion';
 import {
   resolveActiveIconExpressiveProfile,
   useActiveIconExpressiveProfile,
 } from '@/infrastructure/runtime/foundation/icons/active-profile';
 import { DesignSystemProvider } from '..';
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 function Probe(): React.ReactElement {
   const { config } = useTenantContext();

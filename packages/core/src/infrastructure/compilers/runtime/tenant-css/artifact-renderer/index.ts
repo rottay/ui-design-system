@@ -7,10 +7,12 @@
  * compilers.
  */
 
+import type { BrandExpressiveSelection } from '@/foundation/contracts/composition/tenants/themes';
 import type {
   ThemeCompilation,
   ThemeCompilationModeBlock,
 } from '@/foundation/contracts/composition/tenants/themes/compiled';
+import type { ThemeResolution } from '@/foundation/contracts/composition/tenants/themes/resolved';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
 import {
@@ -21,6 +23,8 @@ import {
   firstPartyScope,
   staticThemeIntent,
 } from '../../theme';
+import { readGovernedTheme } from '../../theme/runtime/lowering/foundation/intake';
+import { brandThemeToPersonality } from '../../theme/runtime/lowering/foundation/personality';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
 
 /** Marker written at the top of every generated vertical artifact. */
@@ -223,6 +227,58 @@ export interface RenderFirstPartyArtifactInput {
 }
 
 /**
+ * The governed, non-CSS half of a first-party compile beside its recipe
+ * selection: what the vertical DECIDED, as names and dials, never as paint.
+ */
+export interface FirstPartyGovernedBehavior {
+  readonly motion?: {
+    readonly intensity?: number;
+    readonly entranceDuration?: number;
+  };
+  readonly expressive?: BrandExpressiveSelection;
+  readonly decidedChannels?: readonly string[];
+}
+
+const PERSONALITY_DIMENSIONS = ['animation', 'typography', 'accent', 'card'] as const;
+
+/**
+ * Read the vertical's decisions off its resolved baseline. The neutral
+ * foundation states no personality leaf and no motion dial, so every defined
+ * leaf here is the preset's own decision; a channel is listed by name only.
+ */
+export function firstPartyGovernedBehavior(resolution: ThemeResolution): FirstPartyGovernedBehavior {
+  const view = readGovernedTheme(resolution.theme);
+  const personality = brandThemeToPersonality(view);
+  const decidedChannels: string[] = [];
+  for (const dimension of PERSONALITY_DIMENSIONS) {
+    const values = personality[dimension];
+    if (!values) continue;
+    for (const [field, value] of Object.entries(values)) {
+      if (value !== undefined) decidedChannels.push(`${dimension}.${field}`);
+    }
+  }
+  if (view.surfaces?.density !== undefined) decidedChannels.push('card.paddingDensity');
+  const intensity = view.motion?.intensity;
+  const entranceDuration = view.motion?.entranceDuration;
+  const motion =
+    intensity === undefined && entranceDuration === undefined
+      ? undefined
+      : {
+          ...(intensity === undefined ? {} : { intensity }),
+          ...(entranceDuration === undefined ? {} : { entranceDuration }),
+        };
+  // The neutral activates the expressive family with every leaf undecided; a
+  // selection the vertical actually made carries its schema version.
+  const expressive =
+    view.expressive?.schemaVersion === undefined ? undefined : view.expressive;
+  return {
+    ...(motion === undefined ? {} : { motion }),
+    ...(expressive === undefined ? {} : { expressive }),
+    ...(decidedChannels.length === 0 ? {} : { decidedChannels }),
+  };
+}
+
+/**
  * Compile a first-party vertical over the neutral foundation and render its
  * artifact in one call.
  *
@@ -236,6 +292,7 @@ export interface RenderFirstPartyArtifactInput {
 export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): {
   css: string;
   compiled: ThemeCompilation;
+  governed: FirstPartyGovernedBehavior;
 } {
   const { spec, regenerateCommand } = input;
   // The intent NAMES the vertical; the engine is read off that one roster row
@@ -244,11 +301,12 @@ export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): 
   // `spec.engine`, which let the two disagree -- a caller could render one
   // vertical's theme under another's spec and the artifact header would say
   // the spec's name over the theme's channels.
-  const { compiled } = compileThemeIntent(staticThemeIntent(spec.verticalKey, spec.slug), {
-    baselineSource: 'neutral-preset',
-  });
+  const { compiled, resolution } = compileThemeIntent(
+    staticThemeIntent(spec.verticalKey, spec.slug),
+  );
   return {
     compiled,
+    governed: firstPartyGovernedBehavior(resolution),
     css: renderVerticalArtifact({
       tenantSlug: spec.slug,
       verticalKey: spec.verticalKey,

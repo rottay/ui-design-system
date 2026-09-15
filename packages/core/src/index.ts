@@ -314,13 +314,6 @@ export {
 } from './infrastructure/compilers/composition/tenant-theme';
 
 // ============================================
-// BRAND THEMES (first-party authored BrandTheme sources)
-// ============================================
-// Consumers (and the in-app artifact drift test) resolve the canonical vertical
-// BrandTheme from here; the CSS artifact is a generated projection of these.
-export { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './foundation/tokens/ts/presentation/brand-themes';
-
-// ============================================
 // I18N (locales, provider, hooks)
 // ============================================
 export * from './infrastructure/runtime/i18n';

@@ -156,7 +156,7 @@ const OVERLAY_TOKENS: OverlayTokens = {
  * @returns {DesignTokens} Object containing all design tokens
  */
 export function useTokens(): DesignTokens {
-  const { config, vertical, appearance } = useTenant();
+  const { config, appearance } = useTenant();
   const { profile } = useProductProfile();
   const { engine } = useEngineContext();
   // THE TENANT LAYER, from the compile that produced the mounted artifact.
@@ -170,7 +170,7 @@ export function useTokens(): DesignTokens {
   return useMemo(() => {
     // -- Token Resolution Pipeline --
     //
-    //   engine -> vertical -> product profile -> compiled tenant layer
+    //   engine -> product profile -> compiled tenant layer
     //
     // The product profile is a UX PRESET; the compiled layer is the tenant's
     // own published decision, so it goes last. Layering rather than switching
@@ -182,42 +182,29 @@ export function useTokens(): DesignTokens {
     // with no adapter has no baseline and is refused rather than substituted.
     const engineOverrides = resolveAdapter(engine).tokenBaseline;
 
-    // 2. Vertical structural overrides.
-    const verticalTokenOverrides = vertical?.tokenOverrides;
-    const verticalBorderRadius = verticalTokenOverrides?.borderRadius
-      ? { ...engineOverrides.borderRadius, ...verticalTokenOverrides.borderRadius }
-      : engineOverrides.borderRadius;
-    const verticalShadows = verticalTokenOverrides?.shadows
-      ? { ...engineOverrides.shadows, ...verticalTokenOverrides.shadows }
-      : engineOverrides.shadows;
-    const verticalSurface = verticalTokenOverrides?.surface
-      ? { ...engineOverrides.surface, ...verticalTokenOverrides.surface }
-      : engineOverrides.surface;
-    const verticalMotion = verticalTokenOverrides?.motion
-      ? { ...engineOverrides.motion, ...verticalTokenOverrides.motion }
-      : engineOverrides.motion;
-    const verticalDensityScale = verticalTokenOverrides?.densityScale ?? engineOverrides.densityScale;
+    // 2. The vertical authors no structural override of its own: its decisions
+    // reach this hook through the compiled tenant layer, never beside it.
 
     // 3. Product-profile preset, then the compiled tenant layer over it.
     const profileOverrides = profile.tokenOverrides;
     const compiledOverrides = compiled?.tokenOverrides;
     const borderRadius = {
-      ...verticalBorderRadius,
+      ...engineOverrides.borderRadius,
       ...profileOverrides?.borderRadius,
       ...compiledOverrides?.borderRadius,
     };
     const shadows = {
-      ...verticalShadows,
+      ...engineOverrides.shadows,
       ...profileOverrides?.shadows,
       ...compiledOverrides?.shadows,
     };
     const surface = {
-      ...verticalSurface,
+      ...engineOverrides.surface,
       ...profileOverrides?.surface,
       ...compiledOverrides?.surface,
     };
     const motion = {
-      ...verticalMotion,
+      ...engineOverrides.motion,
       ...profileOverrides?.motion,
       ...compiledOverrides?.motion,
     };
@@ -225,25 +212,23 @@ export function useTokens(): DesignTokens {
     // resolution. The canonical resolver is also the source for the CSS
     // mode-factor channel, preventing JS/CSS drift.
     const densityScale = resolveEffectiveDensityScale(
-      compiledOverrides?.densityScale ?? profileOverrides?.densityScale ?? verticalDensityScale,
+      compiledOverrides?.densityScale ?? profileOverrides?.densityScale ?? engineOverrides.densityScale,
       appearance?.general?.density,
     );
 
     // 4. Personality, on the same order. Each sub-object is spread
     // independently so customizing one dimension does not wipe out another.
-    const verticalPersonality = vertical?.personality;
     const profilePersonality = profile.personality;
     const compiledPersonality = compiled?.personality;
     const personality: PersonalityTokens = {
-      animation: { ...DEFAULT_PERSONALITY.animation, ...verticalPersonality?.animation, ...profilePersonality?.animation, ...compiledPersonality?.animation },
+      animation: { ...DEFAULT_PERSONALITY.animation, ...profilePersonality?.animation, ...compiledPersonality?.animation },
       chart: resolveChartPersonality({
         compiled: compiledPersonality,
-        vertical,
         productProfile: profile,
       }),
-      typography: { ...DEFAULT_PERSONALITY.typography, ...verticalPersonality?.typography, ...profilePersonality?.typography, ...compiledPersonality?.typography },
-      accent: { ...DEFAULT_PERSONALITY.accent, ...verticalPersonality?.accent, ...profilePersonality?.accent, ...compiledPersonality?.accent },
-      card: { ...DEFAULT_PERSONALITY.card, ...verticalPersonality?.card, ...profilePersonality?.card, ...compiledPersonality?.card },
+      typography: { ...DEFAULT_PERSONALITY.typography, ...profilePersonality?.typography, ...compiledPersonality?.typography },
+      accent: { ...DEFAULT_PERSONALITY.accent, ...profilePersonality?.accent, ...compiledPersonality?.accent },
+      card: { ...DEFAULT_PERSONALITY.card, ...profilePersonality?.card, ...compiledPersonality?.card },
     };
 
     return {
@@ -333,7 +318,6 @@ export function useTokens(): DesignTokens {
     compiled,
     appearance?.general?.density,
     profile,
-    vertical,
   ]);
 }
 

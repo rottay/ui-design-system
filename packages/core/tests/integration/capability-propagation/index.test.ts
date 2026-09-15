@@ -70,9 +70,10 @@ import {
   hydrateTenantThemeConfig,
   tenantThemeAnatomyAttributes,
 } from '@/infrastructure/compilers/composition/tenant-theme';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_propagation_probe',

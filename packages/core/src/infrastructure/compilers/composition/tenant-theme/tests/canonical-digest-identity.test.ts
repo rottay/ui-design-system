@@ -19,7 +19,6 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { FIRST_PARTY_VERTICAL_ROSTER } from "@/foundation/presets/verticals/roster";
 import {
   TENANT_THEME_COMPILER_VERSION,
@@ -31,7 +30,7 @@ import {
   getFirstPartyTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "..";
-import { lowerTheme } from "@tests/support/theme-lowering";
+import { FIRST_PARTY_BASELINES, lowerTheme } from "@tests/support/theme-lowering";
 
 const FIXTURE_DIR = resolve(
   process.cwd(),
@@ -796,7 +795,7 @@ describe("digest identity across the canonicalization extraction", () => {
     ).toEqual([]);
     expect(artifact.variables["--ds-button-primary-bg"]).toBeUndefined();
 
-    const baseline = lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug).cssVariables;
+    const baseline = lowerTheme(FIRST_PARTY_BASELINES.bithire, IDENTITY.slug).cssVariables;
 
     // ...and cause 3, two-sided as well. Three of the four channels this block
     // used to pin ABSENT now carry a value derived from the TENANT's seed, and
@@ -942,14 +941,14 @@ describe("digest identity across the canonicalization extraction", () => {
     // author a dark sidebar bg and ink; they are simply outranked, so the dark
     // delta carries neither. Asserting the baseline values exist keeps this a
     // proof that they LOSE rather than a vacuous absence.
-    const bithireDark = FIRST_PARTY_THEMES.bithire.modes?.dark?.chrome?.sidebar;
+    const bithireDark = FIRST_PARTY_BASELINES.bithire.modes?.dark?.chrome?.sidebar;
     expect(bithireDark?.bg).toBe("#0a0f18");
     // Alias + resolution: the dark ink reads the text root, and the root's dark
     // reading is the colour this block has always pinned.
     expect(bithireDark?.text).toBe("var(--ds-color-text-secondary)");
     expect(
-      FIRST_PARTY_THEMES.bithire.modes?.dark?.palette?.textSecondaryColor ??
-        lowerTheme(FIRST_PARTY_THEMES.bithire, IDENTITY.slug )
+      FIRST_PARTY_BASELINES.bithire.modes?.dark?.palette?.textSecondaryColor ??
+        lowerTheme(FIRST_PARTY_BASELINES.bithire, IDENTITY.slug )
           .modeBlocks?.find((block) => block.mode === "dark")
           ?.cssVariables["--ds-color-text-secondary"],
     ).toBe("#9aacbf");

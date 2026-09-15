@@ -35,13 +35,8 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 
 import {
@@ -57,6 +52,10 @@ import { EMPTY_PROVENANCE } from '@/foundation/contracts/composition/tenants/the
 import { PRIMARY_ENGINE } from '@/foundation/contracts/kernel/engine-identity';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme';
 import { compileTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 /**
  * The ink channel, spelled as a literal ON PURPOSE.
@@ -157,7 +156,7 @@ describe.each(FIRST_PARTY_ARTIFACT_SPECS)(
       expect(css).toContain(`${spec.presetDocumentPath} (compiled via compileTheme)`);
       // The retired authority is not named: the preset over the neutral
       // foundation is the one source the header may cite.
-      expect(css).not.toContain(spec.authoredThemePath);
+      expect(css).not.toContain('brand-themes');
       expect(css).toContain('compiled from ONE authored source');
       expect(css).not.toContain('two authored sources');
       expect(css).not.toContain('Declared artifact extension');

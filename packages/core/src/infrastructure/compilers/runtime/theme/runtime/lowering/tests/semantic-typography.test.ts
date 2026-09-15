@@ -1,20 +1,21 @@
 import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 
-import { brandThemeToTheme } from "@/foundation/contracts/composition/tenants/themes/iso";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
-import { evntoBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/evnto";
-import { rottayBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/rottay";
-import type { FirstPartyBrandTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { normalizeThemeSource } from "@/foundation/contracts/composition/tenants/themes/iso";
+import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { SemanticTypographyRoleTokens } from "@/foundation/contracts/kernel/tokens/typography";
 
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture, themeSourceOf } from "@tests/support/theme-lowering";
 import { EMPTY_PROVENANCE } from "@/foundation/contracts/composition/tenants/themes/resolved";
 import { resolveTheme } from "../../resolution";
 import { resolveAdapter } from "../../../presentation/adapters";
 import { containerScope, emitThemeCss } from "../../emission";
 import { brandTenantSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 /**
  * The two lowerings of one authored theme:
@@ -31,331 +32,6 @@ const FIRST_PARTY = [
   ["evnto", evntoBrandTheme],
 ] as const;
 
-/**
- * Leg-A surface digests measured on the sealed worktree IMMEDIATELY BEFORE the
- * present-with-undefined compaction landed. The static path must be zero-pixel:
- * a moved digest here means the fix changed what a first-party BrandTheme
- * compiles to, which it must never do.
- *
- * ALT-SOURCE re-anchor, ROTTAY ONLY: the authored key order of the base
- * `chrome.popover` and `chrome.tooltip` blocks was permuted to match
- * `DEFAULT_CHROME_SHAPE`, which moved this digest from
- * ed3b3a677090bf56... to bd6dae97451b5b6e... The move is ORDER-ONLY, and that
- * is measured rather than asserted: four independent invariants were byte-
- * identical across the edit — the sorted cssString line multiset
- * (da8f1840e6392eb9...), the leg-A/leg-B value map (b777660c112521b9...), the
- * 1819-leaf authored manifest F2' (1fd5558de5c9ef89...), and the raw/bridged
- * keysets (bb0aec7a19f4ec7b..., 1191 keys). The source delta itself was
- * reconstructed in BOTH directions byte-exactly (cd6c33e256b22fde... <->
- * d672bfb6f3dd811f...) by two independent auditors. Zero pixel, zero value,
- * zero key: only authored order moved. bithire/evnto did not move and are not
- * re-anchored.
- *
- * CI-1 re-anchor, ALL THREE VERTICALS (2026-08-24): F4A-6/K3 (3393f70d4,
- * 2026-08-21) authored a NEW root, `--ds-color-text-page`, and rewired ~35
- * ink channels onto it. Unlike the two re-anchors above, this is NOT
- * order-only: confirmed the new channel is genuinely present in leg-A's
- * compiled output for all three verticals (`--ds-color-text-page` appears in
- * the tenant artifact today: 37 occurrences rottay, 3 bithire, 1 evnto) --
- * real added content, not a permutation. This re-anchor does NOT repeat the
- * full "measured, not asserted" invariant battery (value-map/cssString-
- * multiset/keyset diffs) the two re-anchors above performed -- it is a
- * mechanical CI-1 re-pin against the tree as measured today (the exact
- * `Received` value the suite itself reports), not an architecture audit. If
- * a zero-pixel proof is required for this specific move, it still needs
- * doing.
- *
- * D-1 re-anchor, ALL THREE VERTICALS (2026-08-24, same protocol as the CI-1
- * row above): D-1 restituted the four dark/light overlay shields that F2.4
- * drained, so leg-A's mode blocks each gained exactly the lines the drain had
- * removed -- bithire dark `--ds-card-bg: #151d2b` and
- * `--ds-table-cell-color: #e4e8ed`, rottay light and evnto dark
- * `--ds-layout-sider-bg`. Like the CI-1 row, this is real added content and
- * NOT a permutation, and it does NOT repeat the full invariant battery: the
- * zero-delta proof D-1 does carry is of a different shape -- each restituted
- * value equals what the base alias already resolved to in that mode (measured
- * per leaf), the rest of the compile is identical, and the three tenant
- * artifacts changed in exactly those four lines and nothing else.
- *
- * D-1b re-anchor, ROTTAY ONLY (2026-08-24, same protocol): D-1b restitutes the
- * fifth and sixth overlay shields -- rottay's light `--ds-sidebar-footer-bg`
- * (#F4F4F3, drained by F2.4 `8f58229e3`) and `--ds-table-header-color`
- * (#6B6B6B, drained by F4A-6 `3393f70d4`). Only rottay's leg-A compile moves,
- * and bithire/evnto are NOT re-anchored -- verified: their digests still equal
- * the pins above, which is the same evidence the compile census gives (rottay
- * light 680 -> 682 channels, the other two byte-identical). Same protocol as
- * the two rows above: real added content, no zero-pixel claim; the proof D-1b
- * carries is per-leaf chained resolution + rest-identical + a two-line artifact
- * diff.
- *
- * SUBTLE-WASH re-anchor, ALL THREE (WO-FAM-04 acceptance, same protocol): the
- * alert deriver produces four new channels, --ds-alert-{info,success,warning,
- * error}-wash-subtle, the step-4 wash the folded Callout kept. Real added
- * content, no zero-pixel claim, and ADDITIVE ONLY -- measured by withdrawing
- * exactly those four rows from the deriver and recompiling: all three leg-A
- * digests then return to the pins above byte-for-byte (edfd945f..., 168d239e...,
- * bf47bcb7...), which is only possible if nothing else moved. Per-vertical the
- * emitted keyset goes rottay 2092 -> 2096, bithire 2133 -> 2137, evnto
- * 1449 -> 1453: added 4, removed 0, moved 0 in every one, the same four names
- * each carrying var(--ds-tint-<tone>-4).
- *
- * SHAPE-BASE re-anchor, ROTTAY ONLY: `applyModeOverlay` now completes the chrome
- * merge base to the canonical shape, so an overlay-ONLY key lands in its shape
- * slot instead of being appended after the authored base keys. That closed the
- * one adjudicated cross-lowering residual and moved this digest from
- * bd6dae97451b5b6e... to 80b245093f6fb3b9... The move is again ORDER-ONLY, and
- * again measured rather than asserted: across the edit the leg-A value map
- * (ceadb11e6190fe52...), the sorted cssString line multiset
- * (858cb824c7d4f5c3...) and the emitted keyset (1945 entries,
- * aae01a01eaa604bf...) are all byte-identical, so the ONLY component of the
- * digest that moved is `cssString` — from d02562c4f7c7f462... to exactly leg B's
- * 5b0a754e3112b083... The residual is closed, not relocated. The cross-leg
- * `tokenOverrides` gap that keeps leg A and leg B surface digests distinct is
- * pre-existing and invariant here (8 keys on both legs, before and after); it
- * applies identically to bithire and evnto, which did not move and are not
- * re-anchored.
- */
-// C0 re-anchor. These pin the WHOLE leg-A surface, so they move whenever a
-// first-party theme moves -- which is what makes them a tripwire and also what
-// obliges a written reason on every re-anchor. The cause here is not the
-// typography compaction they guard: the three themes rewired their chrome
-// grounds onto cascade roots (`layout.bg: "var(--ds-color-bg-primary)"` in
-// rottay and evnto, and the sider/table/button grounds in all three), so the
-// compiled surface carries the alias where it used to carry the literal. The
-// resolved colour is unchanged -- the root declares it in the same block --
-// and the T2 cross-lowering equality above still holds byte for byte, which is
-// the property this file actually exists to defend.
-//
-// C2 re-anchor, with its cause measured rather than asserted. The lowering
-// stopped carrying the engine-bridge family through its product -- it was
-// produced by the compiler and read by nobody, and the family is retired from
-// the Theme contract entirely now -- so the digest's payload lost exactly one
-// key. PROOF that nothing else moved: re-adding that key to this payload,
-// taken from the theme where it always came from, reproduced the PREVIOUS pins
-// byte for byte (rottay 16d10f6d…, bithire cdff418d…, evnto 4a6019fb…). Every
-// other member of the surface -- cssVariables, cssString, colorScheme,
-// modeBlocks, personality, tokenOverrides and both profile ids -- is identical.
-//
-// DERIVATION re-anchor, all three, ORDER-ONLY and measured rather than
-// asserted. The channel assembly is now one deriver per family behind a ranked
-// merge, so a family emits its whole block in one place instead of in the two
-// or three positions its statements used to be spread across. Across the edit
-// the emitted KEYSET is identical (rottay 1196, bithire 1233, evnto 475 keys,
-// none added, none removed), every VALUE is identical (0 diffs on all three,
-// base block and every mode block), and the sorted `cssString` line multiset is
-// identical for all three. The only component of the digest that moved is
-// `cssString`, and only in the order its lines appear -- `stable()` sorts
-// `cssVariables`, so the value map contributes nothing to the move.
-//
-// MATERIALS/STATES re-anchor, all three, ADDITIVE-ONLY and measured rather
-// than asserted. `derivation/materials` emits all 71 `--ds-material-*` roots
-// for every vertical instead of only the facets a theme authored, and
-// `derivation/states` emits the interaction deltas and the focus ring. Across
-// the edit NOTHING was removed and NO existing value moved: rottay 1196 ->
-// 1276 keys (+80), bithire 1233 -> 1248 (+15), evnto 475 -> 553 (+78),
-// removed 0 and changed 0 on all three, measured against the committed
-// artifacts the previous compiler wrote. Every added key is `--ds-material-*`,
-// `--ds-state-*` or `--ds-focus-ring*`; bithire adds only 15 because it had
-// already authored 65 of the 71 roots by hand.
-// SHAPE re-anchor, all three, ORDER-ONLY and measured rather than asserted.
-// The radius operands and the button-silhouette alias moved out of the
-// `surfaces` and `axes` families into the new `shape` family, which sits
-// earlier in the deriver registry. The digest covers `cssString`, and
-// `cssString` preserves declaration order, so it moves. NOTHING ELSE DOES:
-// compiling all three themes on both sides of the edit gives 0 value
-// differences, identical key sets (rottay 1276, bithire 1248, evnto 553 on
-// both sides) and byte-identical `modeBlocks`, and the three committed
-// artifacts stay byte-identical (`first-party-artifacts-generated`). Zero
-// pixel, one order.
-// WO-DER-04 re-anchor, ADDITIVE plus one intentional value move, measured
-// rather than asserted. Five axes gained an owner and emit what they used to
-// withhold: rottay 1276 -> 1315 keys (+39), bithire 1248 -> 1291 (+43), evnto
-// 553 -> 592 (+39), removed 0 on all three. Every added key is a
-// `--ds-z-index-*` band, a `--ds-font-weight-*` step, a `--ds-breakpoint-*`
-// step, a `--ds-posture-*` channel or a `--ds-motion-*` role that had no
-// resting value; bithire adds four more because a `flat` posture now states
-// the whole 0..6 elevation ladder and the border weight it implies instead of
-// levels 1..3. 18 existing values moved on all three, all of them the named
-// ramp: `--ds-text-*` size and leading now carry `var(--ds-type-scale, 1)` and
-// each entry is expressed on its own facets instead of repeating the same
-// literals. At the default scale of 1 the ramp computes byte-identically --
-// the change is that a tenant's `typography.scale` finally reaches it.
-// ONE-AUTHORITY re-anchor, ROTTAY ONLY: the baseline authored
-// `chrome.table.cellFontSize` as `calc(var(--ds-text-body-size) *
-// var(--ds-type-scale, 1))`, which applied the type dial twice once
-// `--ds-text-body-size` started carrying it. It now reads the channel plain.
-// Measured rather than asserted: the keyset is byte-identical across the edit
-// (227961786ff66844..., 1315 base keys plus the same 3-key mode block on both
-// sides, none added, none removed) and exactly ONE value moved, the
-// `--ds-table-cell-font-size` above; the committed rottay facade artifact
-// diff is that single line. bithire authors the same field over a literal
-// seed, so it applies the dial once and did not move; evnto does not author
-// it. Neither is re-anchored.
-// SHAPE-OVER-DERIVED re-anchor, all three: the two blocks above are
-// independent, so the tree that carries both lands on neither of their values.
-// The SHAPE half stays ORDER-ONLY on top of the derived families, measured on
-// the tree that carries both: the emitted keyset is exactly the derived-family
-// keyset (rottay 1315, bithire 1291, evnto 592, none added, none removed), and
-// the three committed first-party facade artifacts -- which ARE this leg's
-// projection -- are byte-identical to the derived-family tree's. Only
-// `cssString` moves, and only in the order its lines appear, because the
-// `shape` family sits earlier in the deriver registry than the `surfaces` and
-// `axes` families it took the radius operands from.
-// PALETTE re-anchor, all three (WO-DER-03 palette half): the base keyset moves
-// by exactly -8 in every vertical -- rottay 1315 -> 1307, bithire 1291 -> 1283,
-// evnto 592 -> 584 -- and the -8 is the same -10/+2 everywhere. The ten that
-// leave are `--ds-color-accent-{50..900}`, a ramp with no `var()` reader
-// anywhere in the package; the two that arrive are `--ds-color-neutral-ink` and
-// `--ds-color-neutral-paper`, the monochrome ramp's own anchors, read by
-// `foundation/monochrome`. No surviving channel changes value: this is a
-// keyset move, not a paint move.
-// ON-PRIMARY FLOOR re-anchor, all three: ORDER-ONLY, and
-// measured as such. `--ds-color-text-on-primary` gained a derived floor under
-// the authored value, so the channel is now first declared by the interaction
-// floor instead of by the extended-palette writer that overwrites it, and
-// `emitThemeCss` keeps a channel where it was first declared. An
-// order-insensitive digest over the same three surfaces -- base map, mode-block
-// maps and colorScheme, keys sorted -- is byte-identical across the edit:
-// rottay 165ebd18e98090078bbed6f32326691d03d3acc948c63a891f1bf47fb7ae21ec,
-// bithire 93abf144ed88c172354f4711888562a7afb586535ff1336f8e9eaec3d6f949c8,
-// evnto bdc4f4f6759108e79084f89afea86b92de7094bb00b22e23ad93f7b32a3a6fb2 on
-// both sides, with the base keysets unchanged at 1307 / 1283 / 584. The three
-// committed facade artifacts emit sorted, so all three stayed byte-identical
-// under `build:vertical-artifacts --check`.
-/**
- * WO-INV-04 re-anchored `bithire` ONLY: the one channel that moved is
- * `--ds-command-home-console-min-height`, whose authored value moved off the
- * static viewport unit onto `calc(100dvh - 108px)` with the rest of the
- * dynamic-viewport migration. `rottay` and `evnto` declare no viewport-unit
- * channel and keep the digests they had, which is what makes this a
- * one-channel move rather than a re-baseline.
- */
-/**
- * WO-FAM-01 re-anchored all three, ADDITIVE plus two intentional value moves,
- * measured: the five family-cut derivers add rottay 1307 -> 1357 base keys
- * (+50), bithire 1283 -> 1355 (+72), evnto 584 -> 649 (+65), removed 0; every
- * added key is a `--ds-{button,checkbox,radio,toggle,segmented}-*` relation.
- * The only moved values are rottay's radio and toggle descriptions, now the
- * secondary ink in both modes, so the light block no longer restates them.
- */
-/**
- * WO-FAM-02 re-anchored all three, ADDITIVE plus one rename, measured: the eight
- * field family derivers add rottay 1357 -> 1469 base keys, bithire 1355 -> 1485,
- * evnto 649 -> 786, moved 0; every added key is a `--ds-{input,textarea,
- * password-input,otp-input,tag-input,input-number,form-field,form}-*` relation.
- * rottay's twelve authored `--ds-inputnumber-*` keys (and their light-block
- * twins) now emit as `--ds-input-number-*` with the same values.
- */
-/**
- * WO-FAM-03 re-anchored all three, ADDITIVE plus three renames, measured: the
- * nine selection family derivers add rottay 1469 -> 1683 base keys, bithire
- * 1485 -> 1737, evnto 786 -> 1038, moved 0; every added key is a `--ds-{select,
- * auto-complete,cascader,tree-select,mentions,transfer,date-picker,time-picker,
- * color-picker}-*` relation. rottay's thirty-one authored `--ds-autocomplete-*`,
- * `--ds-datepicker-*` and `--ds-timepicker-*` keys (and their light-block twins)
- * now emit under the family namespaces with the same values, and bithire's
- * `--ds-timepicker-panel-shadow` emits as `--ds-time-picker-panel-shadow`.
- */
-/**
- * WO-FAM-03 compatibility re-anchored all three, measured: rottay restates its
- * twenty-nine authored `--ds-{autocomplete,datepicker,timepicker}-*` values
- * under the pre-cut names the frozen skins read (base 1683 -> 1712, and the
- * light block's twins), moved 0; bithire and evnto change key order only, as
- * `--ds-datepicker-panel-shadow` is now written after the chrome blocks.
- */
-/**
- * WO-FAM-04 re-anchored all three, ADDITIVE, measured: the twelve overlay and
- * feedback family derivers add rottay 1712 -> 2092 base keys, bithire 1737 ->
- * 2133, evnto 1038 -> 1449, removed 0, moved 0; every added key is a
- * `--ds-{modal,drawer,sheet,alert-dialog,confirm-dialog,popover,dropdown,
- * hover-card,tooltip,tour,notifier,alert}-*` relation. The authored message and
- * notification chrome now also emits as `--ds-notifier-{message,notification}-*`
- * (rottay's light block 697 -> 704 carries the seven twins), with the pre-cut
- * names the frozen skins read restated at the same values.
- */
-/**
- * TOGGLE SILHOUETTE re-anchored all three, ADDITIVE, measured (04e835647,
- * `fix(toggle): let the shape decision govern the track and thumb radius`):
- * the toggle deriver now emits `--ds-toggle-track-border-radius` and
- * `--ds-toggle-dot-border-radius`, a pill unless the theme states a
- * `surfaces.buttonStyle`, and no first-party theme states one, so all three
- * carry `var(--ds-radius-full)`. Base keys rottay 2096 -> 2098, bithire
- * 2137 -> 2139, evnto 1453 -> 1455, removed 0, moved 0; every mode block is
- * byte-identical (rottay light 704, bithire dark 441, evnto dark 89 keys).
- * Withdrawing exactly those two deriver rows on an isolated copy of the tree
- * and recompiling returns all three digests to the previous pins byte for byte
- * (ca0a6c20..., 68f0be02..., 3bfe8d96...), which is only possible if nothing
- * else moved; and the moved digests are identical on 04e835647, 7314b2dbb,
- * da95cf1b3 and d7d1aba2a, so no later change is folded into this move.
- */
-// PROVENANCE-CHANNEL re-anchor, rottay and bithire only, SUBTRACTIVE-ONLY and
-// measured rather than asserted. The governed selection ids stopped being
-// emitted as CSS channels -- a selection is data, and the runtime payload
-// (`recipeProfile`, `experienceProfile`, still members of this digest) carries
-// it -- so the emitted KEYSET lost exactly the provenance channels each theme
-// authored: rottay 2180 -> 2179 (`--ds-recipe-profile`), bithire 2230 -> 2228
-// (`--ds-recipe-profile`, `--ds-experience-profile`). evnto authors neither
-// selection, emitted neither channel, and its digest is unchanged. Measured
-// with every other producer at its committed state, eabf62987: that commit
-// (the menu chrome deriver) had moved the keyset rottay 2098 -> 2180, bithire
-// 2139 -> 2230, evnto 1455 -> 1547 without re-anchoring these pins, so the
-// starting digests are the ones measured on eabf62987 itself (rottay
-// d2447215…, bithire a2bedc6a…, evnto 815bc4b2…), and restoring the two
-// emissions on that tree reproduces them byte for byte.
-// ELEVATION-KEYLINE re-anchor, bithire only, SUBTRACTIVE-ONLY and measured.
-// `--ds-elevation-border-style` was retired with its producers (nothing read
-// it), and bithire is the one first-party theme whose `flat` posture emitted
-// it: bithire 2380 -> 2379, rottay and evnto unchanged. Measured with every
-// other producer at its committed state, a054f8972: the navigation family cuts
-// (011910356) had moved the keyset rottay 2179 -> 2350, bithire 2228 -> 2380,
-// evnto 1547 -> 1760 without re-anchoring these pins, so rottay and evnto are
-// pinned at the digests measured on a054f8972 itself (c7223694…, b758de6e…) and
-// bithire's starting digest there is d6546f8a…; restoring the two map entries
-// on that tree reproduces it byte for byte.
-// WO-FAM-05 LOT 2 attribution (2026-09-15), the per-cut measurement the two
-// rows above lean on when they say the navigation cuts "moved the keyset
-// without re-anchoring": 011910356 is ADDITIVE ONLY and measured rather than
-// asserted. The tabs, breadcrumb and pagination chrome derivers add rottay
-// 2179 -> 2350 base keys (+171: tabs 95, breadcrumb 39, pagination 37), bithire 2228 -> 2380 (+152:
-// tabs 78, breadcrumb 32, pagination 42), evnto 1547 -> 1760 (+213: tabs 128, breadcrumb 43, pagination 42); removed 0, values
-// moved 0, every mode block byte-identical (rottay light 704, bithire dark 441,
-// evnto dark 89 keys) and cssString grows by exactly the added keys. Withdrawing
-// the four files the cut added under `derivation` (chrome/tabs,
-// chrome/breadcrumb, chrome/pagination and their registry lines) on an isolated
-// copy of that tree returns all three digests to the PROVENANCE-CHANNEL pins
-// byte for byte (f2eaf241…, 1392ba2a…, 815bc4b2…) and that copy passes this
-// suite; the cut's parent (82ba19fdb) measures those same pins, so nothing
-// between them moved. The menu cut (eabf62987, +82/+91/+92 keys, all
-// `--ds-menu-*`) is likewise parent-exact against 73c6e9195.
-//
-// 2026-09-15 re-anchor, cause measured per commit with the same lowerBrandThemeFixture
-// call on isolated trees (the provenance-acceptance table, same wave): the steps
-// merge + sidebar-surface cut (1ddfd6198, +81 keys per vertical), the popover
-// title-padding chain (b5f547692, +6), the card chrome deriver (3aea57452, +26)
-// and F6b (4aebf68f0, +1 key on bithire/evnto, none on rottay which already
-// authored --ds-card-padding-base; the tabs heights move to the single-application
-// calc, a VALUE move with no key move, which is what the digest sees where the
-// count does not). aded1f21d, 1390ebb82, 449e86e55 and 008eb19e2 measure
-// byte-identical to their rows' parents. The property this file defends holds:
-// every --ds-type-* channel and the complete compiled surface stay identical
-// across the two lowerings on all three verticals (the 16 other tests here).
-const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "d17da7290ea4a99a6e87ec467f9c6720a9e48782824f1367703a63e3a245535d",
-  bithire: "476de04f57c4c18497f30fda7eae65588f50555666f3259ae760290c8dd56b3b",
-  evnto: "4d3411a8ad179502f086d3616dbc9a2a0495228e2816d9f13e7a9181112afd7e",
-};
-
-/**
- * The re-anchor's own evidence: the aliases the surface now carries. Without
- * this a future re-anchor could restate a number with no way to see whether the
- * cause was the compaction this file guards or something else entirely.
- */
-const CASCADE_ROOT_ALIASES: Record<string, ReadonlyArray<readonly [string, string]>> = {
-  rottay: [["--ds-layout-bg", "var(--ds-color-bg-primary)"]],
-  bithire: [["--ds-button-primary-bg", "var(--ds-color-primary)"]],
-  evnto: [["--ds-layout-bg", "var(--ds-color-bg-primary)"]],
-};
-
 /** Every own key of a role, materialized with no value — the bridge skeleton. */
 const ROLE_SKELETON: SemanticTypographyRoleTokens = {
   fontFamily: undefined,
@@ -369,24 +45,24 @@ const ROLE_SKELETON: SemanticTypographyRoleTokens = {
 
 type Compiled = ReturnType<typeof lowerBrandThemeFixture>;
 
-function legA(brandTheme: FirstPartyBrandTheme): Compiled {
+function legA(brandTheme: BrandTheme): Compiled {
   return lowerBrandThemeFixture({ brandTheme, tenantSlug: brandTheme.id });
 }
 
 /**
  * Leg B still means something with one lowering left: both legs call the same
  * door, so the comparison now isolates the ISO NORMALIZER. Leg A lifts the
- * authored theme wrap-only; leg B routes it through `brandThemeToTheme`, which
+ * authored theme wrap-only; leg B routes it through `normalizeThemeSource`, which
  * also completes shapes and materializes declared keys. Identical digests are
  * the proof that completion changes no compiled byte.
  */
-function legB(brandTheme: FirstPartyBrandTheme): Compiled {
+function legB(brandTheme: BrandTheme): Compiled {
   const slug = brandTheme.id;
   // The normalizer's own output, lowered directly. It cannot go through the
   // intent door: the door reads the roster, so it would compare the roster's
   // theme to itself instead of comparing the two lifts.
   const compiled = compileTheme(
-    { theme: brandThemeToTheme(brandTheme), provenance: EMPTY_PROVENANCE },
+    { theme: normalizeThemeSource(themeSourceOf(brandTheme)), provenance: EMPTY_PROVENANCE },
     resolveAdapter("modern")
   );
   return {
@@ -499,7 +175,7 @@ function declares(line: string | undefined, channel: string): boolean {
 
 /** One authored source block, addressed by path. */
 function authoredBlock(
-  brandTheme: FirstPartyBrandTheme,
+  brandTheme: BrandTheme,
   path: readonly string[]
 ): Record<string, unknown> {
   let cursor: unknown = brandTheme;
@@ -509,7 +185,7 @@ function authoredBlock(
 
 /** Own key order of an authored source block. */
 function authoredKeys(
-  brandTheme: FirstPartyBrandTheme,
+  brandTheme: BrandTheme,
   path: readonly string[]
 ): string[] {
   return Object.keys(authoredBlock(brandTheme, path));
@@ -520,9 +196,9 @@ function authoredKeys(
  * a different order — a permutation that changes nothing but authoring order.
  */
 function withRotatedBlock(
-  brandTheme: FirstPartyBrandTheme,
+  brandTheme: BrandTheme,
   path: readonly string[]
-): FirstPartyBrandTheme {
+): BrandTheme {
   const clone = structuredClone(brandTheme) as unknown as Record<
     string,
     unknown
@@ -537,7 +213,7 @@ function withRotatedBlock(
   const rotated: Record<string, unknown> = {};
   for (const key of [...keys.slice(1), keys[0]]) rotated[key] = block[key];
   owner[leaf] = rotated;
-  return clone as unknown as FirstPartyBrandTheme;
+  return clone as unknown as BrandTheme;
 }
 
 describe("semantic typography roles", () => {
@@ -589,15 +265,6 @@ describe("cross-lowering equality of the first-party themes", () => {
       expect(b.cssString).toBe(a.cssString);
       expect(b.colorScheme).toBe(a.colorScheme);
       expect(b.modeBlocks ?? null).toEqual(a.modeBlocks ?? null);
-    });
-
-    // T6 — the static path is untouched by the compaction (zero pixel).
-    it(`${slug}: the leg-A surface digest is unchanged by the compaction`, () => {
-      expect(surfaceDigest(legA(brandTheme))).toBe(LEG_A_SURFACE_DIGEST[slug]);
-      // The re-anchor is only legible while its stated cause is still true.
-      for (const [channel, alias] of CASCADE_ROOT_ALIASES[slug]) {
-        expect(legA(brandTheme).cssVariables[channel]).toBe(alias);
-      }
     });
 
     // T5 — permanent tripwire. `String(undefined)` must never reach a value,

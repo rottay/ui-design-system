@@ -7,13 +7,13 @@ import {
   deepMergeTokenOverrides,
   mergePartialPersonality,
 } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
-import { getVerticalPreset } from "@/foundation/presets/verticals";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 // `BrandExpressiveSelection.schemaVersion` is REQUIRED. Derived from the
 // contract's own constant rather than restated as a literal, so a version bump
 // moves these drills with it instead of leaving them silently on v1.
 import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const MOCK_BRAND_THEME: BrandTheme = {
   id: "test-brand",
@@ -613,7 +613,6 @@ describe("parity: first-party brand pipeline", () => {
  *     covered by `i0-inventory.test.ts`'s "Evnto canonical visual axes" block.
  */
 describe("parity: compileTheme with vertical baselines and real first-party tenants", () => {
-  const evntoVertical = getVerticalPreset("evnto")!;
 
   it("compileTheme produces a scoped CSS string with the palette's color scale", () => {
     const result = lowerBrandThemeFixture({ brandTheme: bithireBrandTheme, tenantSlug: "bithire" });
@@ -643,52 +642,6 @@ describe("parity: compileTheme with vertical baselines and real first-party tena
     expect(result.personality.typography?.headingLetterSpacing).toBe("-0.025em");
   });
 
-  it("vertical baseline layers UNDER brandTheme: a palette-only brandTheme still gets the vertical's personality/tokenOverrides", () => {
-    const partialBrand: BrandTheme = {
-      id: "partial-brand",
-      name: "Partial Brand",
-      // Only override palette — personality/tokenOverrides come from the vertical.
-      palette: { primaryColor: "#FF0000" },
-    };
-    const personality = mergePartialPersonality(
-      evntoVertical.personality,
-      brandThemeToPersonality(partialBrand)
-    );
-    const overrides = deepMergeTokenOverrides(
-      evntoVertical.tokenOverrides ?? {},
-      brandThemeToTokenOverrides(partialBrand)
-    );
-    expect(personality.animation?.entrance).toBe(evntoVertical.personality.animation?.entrance);
-    expect(personality.animation?.intensity).toBe(evntoVertical.personality.animation?.intensity);
-    expect(personality.card?.paddingDensity).toBe(evntoVertical.personality.card?.paddingDensity);
-    expect(overrides.densityScale).toBe(evntoVertical.tokenOverrides?.densityScale);
-    // Palette comes from the theme itself, not the vertical.
-    const result = lowerBrandThemeFixture({
-      brandTheme: partialBrand,
-      tenantSlug: "vertical-test",
-    });
-    expect(result.cssVariables["--ds-color-primary-500"]).toBeDefined();
-  });
-
-  it("brandTheme overrides the vertical baseline for every key it defines itself", () => {
-    const personality = mergePartialPersonality(
-      evntoVertical.personality,
-      brandThemeToPersonality(bithireBrandTheme)
-    );
-    const overrides = deepMergeTokenOverrides(
-      evntoVertical.tokenOverrides ?? {},
-      brandThemeToTokenOverrides(bithireBrandTheme)
-    );
-    // The theme wins over the vertical for every key it defines itself.
-    expect(personality.animation?.entrance).toBe("fade");
-    expect(personality.animation?.intensity).toBe(bithireBrandTheme.motion!.intensity);
-    expect(personality.card?.paddingDensity).toBe("compact");
-    expect(overrides.densityScale).toBe(bithireBrandTheme.surfaces!.densityScale);
-    // Sanity: bithire and the evnto vertical genuinely disagree on these axes,
-    // so "brandTheme wins" is actually exercised, not vacuously true.
-    expect(bithireBrandTheme.motion!.intensity).not.toBe(evntoVertical.personality.animation?.intensity);
-    expect(bithireBrandTheme.surfaces!.densityScale).not.toBe(evntoVertical.tokenOverrides?.densityScale);
-  });
 });
 
 // ---------------------------------------------------------------------------

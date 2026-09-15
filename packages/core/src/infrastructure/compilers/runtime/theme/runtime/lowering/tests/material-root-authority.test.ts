@@ -15,13 +15,13 @@ import { describe, expect, it } from "vitest";
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { SEMANTIC_SURFACE_ROLES } from "@/foundation/contracts/kernel/tokens/materials";
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
 import { deriveMaterialChannels } from "../runtime/derivation/materials";
 import { lowerBlock } from "../runtime/pipeline";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const DEFAULT_THEME_CSS = join(
   dirname(fileURLToPath(import.meta.url)),

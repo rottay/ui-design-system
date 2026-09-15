@@ -31,7 +31,7 @@ import {
   movedLeaves,
   tierIssues,
 } from "../../../facade/foundation/admission";
-import { baselineFor } from "../../../runtime/resolution";
+import { baselineFor } from "@/infrastructure/compilers/runtime/theme";
 import {
   documentProvenanceLedger,
   draftProvenanceLedger,
@@ -362,7 +362,7 @@ describe("the draft door records the derivation its own transport states twice",
     ({ id: SLUG, name: "Draft provenance", ...draft }) as unknown as BrandTheme;
 
   const radiusOwner = (draft: BrandTheme) =>
-    ledgerOwnerOfLeaf(draftProvenanceLedger(draft, "rottay"), RADIUS_LEAF)?.ref;
+    ledgerOwnerOfLeaf(draftProvenanceLedger(draft, "rottay", { carriedFrom: baselineFor("rottay", SLUG) }), RADIUS_LEAF)?.ref;
 
   it("attributes the radius to the style word when the value IS the derivation", () => {
     expect(
@@ -402,7 +402,8 @@ describe("the draft door records the derivation its own transport states twice",
   it("gives a chrome leaf a decision NAMES exactly one owner", () => {
     const ledger = draftProvenanceLedger(
       draftOf({ chrome: { sidebar: { tone: "strong" } } }),
-      "rottay"
+      "rottay",
+      { carriedFrom: baselineFor("rottay", SLUG) }
     );
     expect(ledgerOwnerOfLeaf(ledger, "chrome.sidebar.tone")?.ref).toEqual({
       kind: "decision",
@@ -413,7 +414,8 @@ describe("the draft door records the derivation its own transport states twice",
   it("claims a mode overlay's chrome at its own transport path", () => {
     const ledger = draftProvenanceLedger(
       draftOf({ modes: { dark: { chrome: { cardComponent: { radius: "8px" } } } } }),
-      "rottay"
+      "rottay",
+      { carriedFrom: baselineFor("rottay", SLUG) }
     );
     expect(
       ledgerOwnerOfLeaf(ledger, "modes.dark.chrome.cardComponent.radius")?.ref

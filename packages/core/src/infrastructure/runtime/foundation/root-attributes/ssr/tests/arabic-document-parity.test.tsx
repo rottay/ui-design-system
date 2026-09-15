@@ -25,17 +25,16 @@ import {
   MANDATORY_FALLBACK_FONT_CHANNELS,
   MANDATORY_FONT_FALLBACK_FAMILY,
 } from '@/foundation/kernel/typography';
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import type { BrandTheme } from '@/foundation/contracts';
 import { resolveDocumentRootAttributes } from '..';
 
-const FIRST_PARTY_THEMES: ReadonlyArray<readonly [string, BrandTheme]> = [
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
+
+const FIRST_PARTY_VIEWS: ReadonlyArray<readonly [string, BrandTheme]> = [
   ['bithire', bithireBrandTheme],
   ['evnto', evntoBrandTheme],
   ['rottay', rottayBrandTheme],
@@ -73,7 +72,7 @@ describe('arabic document: SSR projection', () => {
 });
 
 describe('arabic document: shipped font stacks', () => {
-  it.each(FIRST_PARTY_THEMES)(
+  it.each(FIRST_PARTY_VIEWS)(
     'compiles %s with an Arabic-capable fallback on every text-bearing channel',
     (slug, brandTheme) => {
       const { cssVariables } = lowerBrandThemeFixture({ brandTheme, tenantSlug: slug });

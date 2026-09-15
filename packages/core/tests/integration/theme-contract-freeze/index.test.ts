@@ -30,7 +30,6 @@ import {
   documentThemePatch,
   migrateV1,
 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import {
   containerScope,
   emitThemeCss,
@@ -42,7 +41,6 @@ import {
 // package entrypoint re-exports it, so publishing them there kept the second
 // route open on `@rottay/design-system` after `/server` was closed (F-24).
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
-import { resolveTheme } from "@/infrastructure/compilers/runtime/theme/runtime/resolution";
 import {
   DIVERGENCE_EDITORIAL_DOCUMENT,
   DIVERGENCE_EDITORIAL_IDENTITY,
@@ -51,6 +49,7 @@ import {
   DIVERGENCE_SOBER_DOCUMENT,
   DIVERGENCE_SOBER_IDENTITY,
 } from "@tests/fixtures/brand-themes/divergence-sober";
+import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const PACKAGE_ROOT = resolve(__dirname, "../../..");
 const SRC_ROOT = join(PACKAGE_ROOT, "src");
@@ -61,19 +60,19 @@ const modern = resolveAdapter("modern");
  *
  * The `torture` and `themanagementmiami` fixtures are deliberately absent: they
  * are plain `BrandTheme` literals with no `capabilities` catalog, so they are
- * not `FirstPartyBrandTheme` and cannot honestly become a `Theme`.
+ * not `ThemeSource` and cannot honestly become a `Theme`.
  */
 const noModes = (vertical: FirstPartyVerticalId): ThemeResolution => ({
   // A family removed from a roster theme is not a roster theme, so no intent
   // can name it. The resolution is the door's own no-tenant shape.
-  theme: { ...FIRST_PARTY_THEMES[vertical], modes: undefined } as unknown as Theme,
+  theme: { ...FIRST_PARTY_BASELINES[vertical], modes: undefined } as unknown as Theme,
   provenance: EMPTY_PROVENANCE,
 });
 
 const FIXTURES: readonly [string, ThemeResolution][] = [
-  ["rottay", resolveTheme(staticThemeIntent("rottay"))],
-  ["bithire", resolveTheme(staticThemeIntent("bithire"))],
-  ["evnto", resolveTheme(staticThemeIntent("evnto"))],
+  ["rottay", resolveFirstParty(staticThemeIntent("rottay"))],
+  ["bithire", resolveFirstParty(staticThemeIntent("bithire"))],
+  ["evnto", resolveFirstParty(staticThemeIntent("evnto"))],
   ["rottay-no-modes", noModes("rottay")],
   ["evnto-no-modes", noModes("evnto")],
 ];
@@ -137,7 +136,7 @@ describe("the single chain produces a total, engine-projected compilation", () =
 
   for (const [label, vertical, patch] of TENANT_FIXTURES) {
     it(`${label} resolves to tenant-authored provenance`, () => {
-      const resolution = resolveTheme({
+      const resolution = resolveFirstParty({
         vertical,
         slug: vertical,
         origin: "tenant-document",
@@ -149,17 +148,17 @@ describe("the single chain produces a total, engine-projected compilation", () =
 
     it(`${label} really diverges from the untouched baseline`, () => {
       const tenant = compileTheme(
-        resolveTheme({ vertical, slug: vertical, origin: "tenant-document", patch }),
+        resolveFirstParty({ vertical, slug: vertical, origin: "tenant-document", patch }),
         modern
       );
-      const plain = compileTheme(resolveTheme(staticThemeIntent(vertical)), modern);
+      const plain = compileTheme(resolveFirstParty(staticThemeIntent(vertical)), modern);
       expect(tenant.cssVariables).not.toEqual(plain.cssVariables);
     });
   }
 
   it("emission scopes one compile to three different roots without recompiling", () => {
     for (const slug of ["rottay", "bithire", "evnto"] as const) {
-      const compiled = compileTheme(resolveTheme(staticThemeIntent(slug)), modern);
+      const compiled = compileTheme(resolveFirstParty(staticThemeIntent(slug)), modern);
       const root = emitThemeCss(compiled, firstPartyScope(slug));
       const container = emitThemeCss(compiled, containerScope(".preview"));
       expect(root).toContain(`html[data-tenant='${slug}'] {`);
@@ -178,9 +177,9 @@ describe("the single chain produces a total, engine-projected compilation", () =
 
 describe("the slug is a diagnostic label, not a visual input", () => {
   it("compiling the same theme under two ids yields identical channels", () => {
-    const a = compileTheme(resolveTheme(staticThemeIntent("evnto")), modern);
+    const a = compileTheme(resolveFirstParty(staticThemeIntent("evnto")), modern);
     const b = compileTheme(
-      resolveTheme(staticThemeIntent("evnto", "rottay")),
+      resolveFirstParty(staticThemeIntent("evnto", "rottay")),
       modern
     );
 
@@ -191,7 +190,7 @@ describe("the slug is a diagnostic label, not a visual input", () => {
   });
 
   it("only the emitted SELECTOR moves with the slug", () => {
-    const compiled = compileTheme(resolveTheme(staticThemeIntent("evnto")), modern);
+    const compiled = compileTheme(resolveFirstParty(staticThemeIntent("evnto")), modern);
     expect(emitThemeCss(compiled, firstPartyScope("evnto"))).not.toBe(
       emitThemeCss(compiled, firstPartyScope("rottay"))
     );
@@ -996,12 +995,12 @@ describe("the two transitional re-exports are consumer-exact", () => {
 /* -------------------------------------------------------------------------- */
 
 describe("origin decides authorship at the compiler", () => {
-  const baseline = FIRST_PARTY_THEMES.bithire;
+  const baseline = FIRST_PARTY_BASELINES.bithire;
   const patchOf = () =>
     tenantPatchOf("bithire", DIVERGENCE_EDITORIAL_DOCUMENT, DIVERGENCE_EDITORIAL_IDENTITY);
   const withOrigin = (origin: ThemeIntentOrigin, patch: ThemeLayerPatch) =>
     compileTheme(
-      resolveTheme({ vertical: "bithire", slug: "bithire", origin, patch }),
+      resolveFirstParty({ vertical: "bithire", slug: "bithire", origin, patch }),
       modern
     );
 
@@ -1043,7 +1042,7 @@ describe("origin decides authorship at the compiler", () => {
 });
 
 describe("provenance is a snapshot the caller cannot reach back into", () => {
-  const baseline = FIRST_PARTY_THEMES.bithire;
+  const baseline = FIRST_PARTY_BASELINES.bithire;
 
   it("mutating the patch afterwards moves no compiled channel", () => {
     const patch = tenantPatchOf(
@@ -1051,7 +1050,7 @@ describe("provenance is a snapshot the caller cannot reach back into", () => {
       DIVERGENCE_EDITORIAL_DOCUMENT,
       DIVERGENCE_EDITORIAL_IDENTITY
     );
-    const { provenance } = resolveTheme({
+    const { provenance } = resolveFirstParty({
       vertical: "bithire",
       slug: "bithire",
       origin: "tenant-document",
@@ -1081,7 +1080,7 @@ describe("provenance is a snapshot the caller cannot reach back into", () => {
       DIVERGENCE_SOBER_DOCUMENT,
       DIVERGENCE_SOBER_IDENTITY
     );
-    const { provenance } = resolveTheme({
+    const { provenance } = resolveFirstParty({
       vertical: "bithire",
       slug: "bithire",
       origin: "tenant-document",

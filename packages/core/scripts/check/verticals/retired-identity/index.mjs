@@ -55,7 +55,7 @@ const CONTENT_RULES = Object.freeze([
   [
     'source-route',
     new RegExp(
-      `(?:brand-themes|demos|verticals)[/\\\\]${RETIRED}\\b`,
+      `(?:presets|demos|verticals)[/\\\\]${RETIRED}\\b`,
       'gi',
     ),
   ],

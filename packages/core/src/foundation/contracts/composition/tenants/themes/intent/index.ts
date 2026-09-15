@@ -39,7 +39,7 @@ export function isTenantAuthoredOrigin(origin: ThemeIntentOrigin): boolean {
  * The single pre-resolution form, and the ONLY input the resolver accepts.
  *
  * It names the baseline instead of carrying one. A caller used to hand in a
- * `Theme` it had assembled itself — `{ ...FIRST_PARTY_THEMES[slug], id: tenant }`
+ * `Theme` it had assembled itself — a labelled copy of the vertical baseline —
  * at five sites — which made every call site an authority on three separate
  * questions: which product's baseline this compile is against, what scope the
  * result is written for, and which engine renders it. Naming the vertical moves

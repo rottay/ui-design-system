@@ -15,13 +15,14 @@ import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from '..';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const IDENTITY: TenantThemeConfigIdentity = {
   tenantId: 'tenant_overlay_role_probe',

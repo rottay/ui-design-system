@@ -3,9 +3,10 @@ import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import type { BrandChrome } from '@/foundation/contracts/composition/tenants/themes';
-import { lowerBrandThemeFixture } from '@tests/support/theme-lowering';
-import { rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/rottay';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { FROZEN_ENGINE_COMPAT_CHANNELS, chromeToVariables } from '..';
+
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 const SRC = resolve(process.cwd(), 'src');
 const FROZEN_ROOTS = [
@@ -89,10 +90,19 @@ describe('frozen engine compatibility channels', () => {
     expect(Object.keys(FROZEN_ENGINE_COMPAT_CHANNELS).sort()).toEqual(required.map(([legacy]) => legacy));
   });
 
-  it('gives the rottay dark artifact its authored Rustic autocomplete surface back', () => {
-    const compiled = lowerBrandThemeFixture({ brandTheme: rottayBrandTheme as never, tenantSlug: 'rottay' });
+  it('restates a tenant-authored Rustic autocomplete surface in the rottay dark artifact', () => {
+    // rottay's preset authors no chrome; the surface is a tenant's own literal.
+    const tenant = {
+      ...rottayBrandTheme,
+      chrome: {
+        ...rottayBrandTheme.chrome,
+        controls: { ...rottayBrandTheme.chrome?.controls, autocomplete: { bg: '#1B1B1F' } },
+      },
+    };
+    const compiled = lowerBrandThemeFixture({ brandTheme: tenant as never, tenantSlug: 'rottay' });
     expect(compiled.colorScheme).toBe('dark');
-    expect(compiled.cssVariables['--ds-autocomplete-bg']).toBe('#131316');
-    expect(compiled.cssString).toContain('--ds-autocomplete-bg: #131316;');
+    expect(compiled.cssVariables['--ds-auto-complete-bg']).toBe('#1B1B1F');
+    expect(compiled.cssVariables['--ds-autocomplete-bg']).toBe('#1B1B1F');
+    expect(compiled.cssString).toContain('--ds-autocomplete-bg: #1B1B1F;');
   });
 });

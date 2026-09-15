@@ -22,7 +22,6 @@ import { describe, expect, it } from "vitest";
 
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 import type { TenantThemeDocumentV2 } from "@/contracts/theme/presentation/document";
 import { compileTenantThemeDocumentV2 } from "@/infrastructure/compilers/composition/tenant-theme/document-v2";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
@@ -34,6 +33,8 @@ import {
 } from "@/infrastructure/compilers/runtime/theme/runtime/ingress";
 import { draftProvenanceLedger } from "@/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/provenance";
 import { compileThemeIntent } from "@/infrastructure/compilers/runtime/theme";
+import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
+import { baselineFor } from "@/infrastructure/compilers/runtime/theme";
 
 const SLUG = "radius-precedence";
 const LEAF = "chrome.controls.buttonGeometry.radius";
@@ -241,7 +242,7 @@ const draftRadiusOwner = (
   vertical: FirstPartyVerticalId,
   radius: string | undefined
 ): string =>
-  draftProvenanceLedger(draftOf(radius), vertical)
+  draftProvenanceLedger(draftOf(radius), vertical, { carriedFrom: baselineFor(vertical, vertical) })
     .entries.filter((entry) => entry.effectiveLeaves.includes(LEAF))
     .map((entry) => entry.provenance)
     .join(",") || "none";
@@ -249,7 +250,7 @@ const draftRadiusOwner = (
 /** What the vertical itself states for the contested leaf, or nothing. */
 const baselineRadius = (vertical: FirstPartyVerticalId): string | undefined =>
   (
-    FIRST_PARTY_THEMES[vertical] as unknown as {
+    FIRST_PARTY_BASELINES[vertical] as unknown as {
       chrome?: { controls?: { buttonGeometry?: { radius?: string } } };
     }
   ).chrome?.controls?.buttonGeometry?.radius;

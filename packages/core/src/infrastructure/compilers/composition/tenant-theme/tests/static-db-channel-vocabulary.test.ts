@@ -49,13 +49,10 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { FIRST_PARTY_BASELINES, firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { TENANT_CAPABILITY_REGISTRY } from "@/foundation/contracts/composition/tenants/capabilities";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import { EXPRESSIVE_PROFILE_SCHEMA_VERSION } from "@/foundation/tokens/ts/presentation/expressive-profiles";
-import {
-  FIRST_PARTY_THEMES,
-} from "@/foundation/tokens/ts/presentation/brand-themes";
 import { verticalDefaultMode } from "@/infrastructure/compilers/kernel/foundation/modes";
 import {
   compileThemeIntent,
@@ -65,7 +62,6 @@ import {
   previewThemeIntent,
   staticThemeIntent,
 } from "@/infrastructure/compilers/runtime/theme";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
@@ -75,6 +71,8 @@ import {
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "../index";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 /**
  * A maximal customer document: every chrome family the bithire envelope
@@ -869,7 +867,7 @@ describe("PREVIEW/PUBLISH · the preview door migrates with the baseline's own m
   // preview repainted the dark canvas for a change the artifact wrote into the
   // light one. One reader, one answer.
   it("rottay is the dark-default vertical this case exists for", () => {
-    expect(FIRST_PARTY_THEMES.rottay.appearance?.defaultMode).toBe("dark");
+    expect(FIRST_PARTY_BASELINES.rottay.appearance?.defaultMode).toBe("dark");
   });
 
   it("a preview intent and a persisted document produce the identical patch", () => {

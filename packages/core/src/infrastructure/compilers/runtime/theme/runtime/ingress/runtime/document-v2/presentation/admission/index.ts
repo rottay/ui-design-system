@@ -14,7 +14,14 @@
  * @package @rottay/design-system
  */
 
-import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
+import {
+  mergeThemePatches,
+  type Theme,
+  type ThemeLayerPatch,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
+import { NEUTRAL_THEME } from "@/foundation/presets/neutral-theme";
+import { VERTICAL_THEME_PRESETS } from "@/foundation/presets/verticals";
+import { FIRST_PARTY_VERTICALS } from "@/foundation/presets/verticals/roster";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import {
   assertTenantThemeDocumentV2,
@@ -251,4 +258,51 @@ export function documentAnyThemePatch(input: {
   document: TenantThemeDocumentAny;
 }): ThemeLayerPatch {
   return admitDocument(input).patch;
+}
+
+function cloneThemeValue<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => cloneThemeValue(item)) as unknown as T;
+  }
+  if (value === null || typeof value !== "object") return value;
+  const copy: Record<string, unknown> = {};
+  for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+    copy[key] = cloneThemeValue(child);
+  }
+  return copy as unknown as T;
+}
+
+const VERTICAL_BASELINES = new Map<FirstPartyVerticalId, Theme>();
+
+/**
+ * The baseline a first-party vertical resolves over: the neutral foundation
+ * with the vertical's preset document admitted through this same door.
+ *
+ * The roster row, not the foundation, names the vertical and its resting mode:
+ * the neutral states `light` only as a placeholder, and a preset never writes
+ * `appearance.defaultMode`. Composed once per vertical and cloned for every
+ * request, labelled with the slug the caller resolves for.
+ */
+export function baselineFor(vertical: FirstPartyVerticalId, slug: string): Theme {
+  let composed = VERTICAL_BASELINES.get(vertical);
+  if (composed === undefined) {
+    const row = FIRST_PARTY_VERTICALS[vertical];
+    const { patch } = admitDocument({
+      vertical,
+      document: VERTICAL_THEME_PRESETS[vertical].document as TenantThemeDocumentAny,
+    });
+    const foundation = cloneThemeValue(NEUTRAL_THEME);
+    composed = mergeThemePatches(
+      {
+        ...foundation,
+        id: vertical,
+        name: row.name,
+        appearance: { ...foundation.appearance, defaultMode: row.defaultMode },
+      },
+      patch
+    );
+    VERTICAL_BASELINES.set(vertical, composed);
+  }
+  const baseline = cloneThemeValue(composed);
+  return baseline.id === slug ? baseline : { ...baseline, id: slug };
 }

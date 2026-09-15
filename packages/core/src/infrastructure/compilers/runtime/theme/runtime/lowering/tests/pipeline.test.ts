@@ -5,10 +5,12 @@
 import { describe, expect, it } from "vitest";
 
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
 import { MERGE_RANK, type FamilyDeriver } from "../foundation/contract";
 import { FAMILY_DERIVERS } from "../runtime/derivation";
 import { buildLoweringContext, lowerBlock, runDerivation } from "../runtime/pipeline";
+import { firstPartyFixture } from "@tests/support/theme-lowering";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const THEME: BrandTheme = { id: "pipeline", name: "Pipeline" };
 

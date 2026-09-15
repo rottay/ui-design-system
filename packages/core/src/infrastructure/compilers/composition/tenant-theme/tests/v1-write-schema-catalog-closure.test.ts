@@ -34,7 +34,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   THEME_CONTROL_CATALOG,
   type ThemeControlRow,
@@ -42,7 +42,6 @@ import {
 import type { ThemeDecisions } from "@/contracts/theme/presentation/document";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
 import {
   migrateDocumentV1ToV2,
   projectDecisionsToV1,
@@ -55,6 +54,8 @@ import {
   parseTenantThemeDocument,
   validateTenantThemeDocument,
 } from "../index";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const ENVELOPE = getTenantThemeVerticalEnvelope("bithire")!;
 const IDENTITY = {

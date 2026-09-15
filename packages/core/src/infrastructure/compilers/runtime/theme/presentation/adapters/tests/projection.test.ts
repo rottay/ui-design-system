@@ -1,16 +1,15 @@
 /**
- * What an adapter may produce, measured against real compiles of the three
- * shipped verticals — never a fabricated channel bag.
+ * What an adapter may produce, measured against real compiles — the three
+ * shipped verticals over the neutral foundation and a customer document over
+ * each of them — never a fabricated channel bag.
  */
 
 import { describe, expect, it } from "vitest";
 
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { ThemeLayerPatch } from "@/foundation/contracts/composition/tenants/themes/iso";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
 
 import { compileTheme } from "../../../runtime/lowering";
-import { resolveTheme } from "../../../runtime/resolution";
 import {
   CLASSIC_RADIUS_CHANNELS,
   CLASSIC_SEED_CHANNELS,
@@ -19,17 +18,107 @@ import {
 import { staticThemeIntent } from "../../../runtime/ingress";
 import { modernThemeAdapter } from "../presentation/modern";
 import { rusticThemeAdapter } from "../presentation/rustic";
+import { FIRST_PARTY_BASELINES, resolveFirstParty } from "@tests/support/theme-lowering";
 
 const SLUGS = ["rottay", "bithire", "evnto"] as const;
 
 const compiledFor = (slug: (typeof SLUGS)[number]): ThemeCompilation =>
-  compileTheme(resolveTheme(staticThemeIntent(slug)), modernThemeAdapter);
+  compileTheme(resolveFirstParty(staticThemeIntent(slug)), modernThemeAdapter);
 
 const COMPILED: Readonly<Record<(typeof SLUGS)[number], ThemeCompilation>> = Object.freeze({
   rottay: compiledFor("rottay"),
   bithire: compiledFor("bithire"),
   evnto: compiledFor("evnto"),
 });
+
+/**
+ * A customer that authors every operand classic reads: the eight colour seeds,
+ * a mid radius and a primary for the vertical's other mode. The first-party
+ * presets author no palette (rottay, evnto) or no radius literal (bithire), so
+ * the seed vocabulary is measured on this document over each vertical.
+ */
+const CUSTOMER_PALETTE = {
+  primaryColor: "#1D4ED8",
+  secondaryColor: "#0F172A",
+  accentColor: "#F59E0B",
+  successColor: "#15803D",
+  warningColor: "#B45309",
+  errorColor: "#B91C1C",
+  infoColor: "#0369A1",
+  backgroundColor: "#FFFFFF",
+  textPrimaryColor: "#111827",
+  onPrimaryColor: "#FFFFFF",
+} as const;
+const CUSTOMER_RADIUS = { rottay: "10px", bithire: "10px", evnto: "14px" } as const;
+const OTHER_MODE = { rottay: "light", bithire: "dark", evnto: "dark" } as const;
+const CUSTOMER_MODE_PRIMARY = "#93C5FD";
+
+const customerFor = (slug: (typeof SLUGS)[number]): ThemeCompilation =>
+  compileTheme(
+    resolveFirstParty({
+      vertical: slug,
+      slug: "acme",
+      origin: "tenant-document",
+      patch: {
+        palette: CUSTOMER_PALETTE,
+        surfaces: { borderRadius: { md: CUSTOMER_RADIUS[slug] } },
+        modes: { [OTHER_MODE[slug]]: { palette: { primaryColor: CUSTOMER_MODE_PRIMARY } } },
+      },
+    }),
+    modernThemeAdapter
+  );
+
+const CUSTOMER: Readonly<Record<(typeof SLUGS)[number], ThemeCompilation>> = Object.freeze({
+  rottay: customerFor("rottay"),
+  bithire: customerFor("bithire"),
+  evnto: customerFor("evnto"),
+});
+
+// WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): projection.seeds
+// is 0 for rottay and evnto (no preset authors a palette) and 8 for bithire,
+// whose preset authors no radius literal (--ds-radius-md-base, the same family
+// as the registered --ds-radius-sm-base) and no root ink (--ds-color-text-primary,
+// left to the foundation since D6-2c-i); pinned to the measured state until the
+// lane lands.
+const FIRST_PARTY_UNPRODUCED: Readonly<Record<(typeof SLUGS)[number], readonly string[]>> = {
+  rottay: [
+    "--ds-color-bg-primary",
+    "--ds-color-error",
+    "--ds-color-info",
+    "--ds-color-primary",
+    "--ds-color-success",
+    "--ds-color-text-on-primary",
+    "--ds-color-text-primary",
+    "--ds-color-warning",
+    "--ds-radius-md-base",
+  ],
+  bithire: ["--ds-color-text-primary", "--ds-radius-md-base"],
+  evnto: [
+    "--ds-color-bg-primary",
+    "--ds-color-error",
+    "--ds-color-info",
+    "--ds-color-primary",
+    "--ds-color-success",
+    "--ds-color-text-on-primary",
+    "--ds-color-text-primary",
+    "--ds-color-warning",
+    "--ds-radius-md-base",
+  ],
+};
+const FIRST_PARTY_SEEDS: Readonly<Record<(typeof SLUGS)[number], readonly string[]>> = {
+  rottay: [],
+  bithire: [
+    "colorBgBase",
+    "colorError",
+    "colorInfo",
+    "colorLink",
+    "colorPrimary",
+    "colorSuccess",
+    "colorTextLightSolid",
+    "colorWarning",
+  ],
+  evnto: [],
+};
 
 const SHIPPED = [
   ["modern", modernThemeAdapter],
@@ -49,11 +138,18 @@ describe("a channel an adapter reads must exist in a real compile", () => {
   });
 
   for (const slug of SLUGS) {
-    it(`every channel classic names is produced by the ${slug} compile`, () => {
+    it(`every channel classic names is produced by a customer compile over ${slug}`, () => {
+      const missing = READ_CHANNELS.filter(
+        (channel) => CUSTOMER[slug].cssVariables[channel] == null
+      );
+      expect(missing).toEqual([]);
+    });
+
+    it(`the ${slug} first-party compile leaves exactly the measured channels unproduced`, () => {
       const missing = READ_CHANNELS.filter(
         (channel) => COMPILED[slug].cssVariables[channel] == null
       );
-      expect(missing).toEqual([]);
+      expect(missing).toEqual([...FIRST_PARTY_UNPRODUCED[slug]]);
     });
   }
 
@@ -69,49 +165,60 @@ describe("the `mapped` cells name seeds the projection actually produces", () =>
     for (const [id, cell] of Object.entries(adapter.controls)) {
       if (cell.posture !== "mapped") continue;
       for (const slug of SLUGS) {
-        it(`${name}/${id}: every seed and source survives the ${slug} compile`, () => {
-          const projection = adapter.project(COMPILED[slug]);
+        it(`${name}/${id}: every seed and source survives a customer compile over ${slug}`, () => {
+          const projection = adapter.project(CUSTOMER[slug]);
           for (const seed of cell.evidence.seeds)
             expect(Object.keys(projection.seeds)).toContain(seed);
           for (const channel of cell.evidence.from)
-            expect(COMPILED[slug].cssVariables[channel]).toBeDefined();
+            expect(CUSTOMER[slug].cssVariables[channel]).toBeDefined();
         });
       }
     }
+  }
+
+  for (const slug of SLUGS) {
+    it(`the ${slug} first-party compile projects exactly the measured seeds`, () => {
+      const { seeds } = classicThemeAdapter.project(COMPILED[slug]);
+      expect(Object.keys(seeds).sort()).toEqual([...FIRST_PARTY_SEEDS[slug]]);
+    });
   }
 });
 
 describe("classic projects the antd seed vocabulary, base and per mode", () => {
   for (const slug of SLUGS) {
-    it(`projects all ten seeds for ${slug}, none of them dropped`, () => {
-      const { seeds } = classicThemeAdapter.project(COMPILED[slug]);
+    it(`projects all ten seeds for a customer over ${slug}, none of them dropped`, () => {
+      const { seeds } = classicThemeAdapter.project(CUSTOMER[slug]);
       expect(Object.keys(seeds)).toHaveLength(10);
       for (const [token, channel] of Object.entries(CLASSIC_SEED_CHANNELS))
-        expect(seeds[token]).toBe(COMPILED[slug].cssVariables[channel]);
+        expect(seeds[token]).toBe(CUSTOMER[slug].cssVariables[channel]);
       expect(Number.isFinite(seeds.borderRadius as number)).toBe(true);
     });
 
-    it(`emits one projection per compiled mode block for ${slug}`, () => {
-      const projection = classicThemeAdapter.project(COMPILED[slug]);
+    it(`emits one projection per compiled mode block for a customer over ${slug}`, () => {
+      const projection = classicThemeAdapter.project(CUSTOMER[slug]);
       expect(projection.modes.map((entry) => entry.mode)).toEqual(
-        COMPILED[slug].modeBlocks.map((block) => block.mode)
+        CUSTOMER[slug].modeBlocks.map((block) => block.mode)
       );
+      expect(projection.modes).toHaveLength(1);
       for (const entry of projection.modes) expect(Object.keys(entry.seeds)).toHaveLength(10);
     });
   }
 
   it("returns the authored radius in px, dial cancelled, as antd requires", () => {
-    expect(classicThemeAdapter.project(COMPILED.rottay).seeds.borderRadius).toBe(10);
-    expect(classicThemeAdapter.project(COMPILED.bithire).seeds.borderRadius).toBe(10);
-    expect(classicThemeAdapter.project(COMPILED.evnto).seeds.borderRadius).toBe(14);
+    // bithire's preset dial is 0.8, so its operand is `calc(10px / 0.8)` and the
+    // seed folds the dial back out; rottay and evnto rest at 1.
+    expect(CUSTOMER.bithire.cssVariables["--ds-radius-md-base"]).toBe("calc(10px / 0.8)");
+    expect(classicThemeAdapter.project(CUSTOMER.rottay).seeds.borderRadius).toBe(10);
+    expect(classicThemeAdapter.project(CUSTOMER.bithire).seeds.borderRadius).toBe(10);
+    expect(classicThemeAdapter.project(CUSTOMER.evnto).seeds.borderRadius).toBe(14);
   });
 
   it("uses the mode block's own value where the mode overrides a channel", () => {
-    const compiled = COMPILED.bithire;
+    const compiled = CUSTOMER.bithire;
     const dark = compiled.modeBlocks.find((block) => block.mode === "dark");
     const projection = classicThemeAdapter.project(compiled);
     const projected = projection.modes.find((entry) => entry.mode === "dark");
-    expect(dark?.cssVariables["--ds-color-primary"]).toBeDefined();
+    expect(dark?.cssVariables["--ds-color-primary"]).toBe(CUSTOMER_MODE_PRIMARY);
     expect(projected?.seeds.colorPrimary).toBe(dark?.cssVariables["--ds-color-primary"]);
     expect(projected?.seeds.colorPrimary).not.toBe(projection.seeds.colorPrimary);
   });
@@ -144,8 +251,8 @@ describe("classic projects the antd seed vocabulary, base and per mode", () => {
   });
 
   it("drops a seed the compile did not produce, and keeps the rest", () => {
-    const { "--ds-color-info": _dropped, ...rest } = COMPILED.rottay.cssVariables;
-    const sparse: ThemeCompilation = { ...COMPILED.rottay, cssVariables: rest };
+    const { "--ds-color-info": _dropped, ...rest } = CUSTOMER.rottay.cssVariables;
+    const sparse: ThemeCompilation = { ...CUSTOMER.rottay, cssVariables: rest };
     const { seeds } = classicThemeAdapter.project(sparse);
     expect(seeds.colorInfo).toBeUndefined();
     expect(Object.keys(seeds)).toHaveLength(9);
@@ -155,7 +262,7 @@ describe("classic projects the antd seed vocabulary, base and per mode", () => {
 describe("a real tenant radius reaches antd in the unit the tenant wrote", () => {
   const tenantSeed = (patch: ThemeLayerPatch): number =>
     compileTheme(
-      resolveTheme({
+      resolveFirstParty({
         vertical: "rottay",
         slug: "rottay",
         origin: "tenant-document",
@@ -171,7 +278,7 @@ describe("a real tenant radius reaches antd in the unit the tenant wrote", () =>
 
   it("normalizes the authored radius against the VERTICAL dial, not the tenant's own", () => {
     const compiled = compileTheme(
-      resolveTheme({
+      resolveFirstParty({
         vertical: "rottay",
         slug: "rottay",
         origin: "tenant-document",
@@ -256,7 +363,7 @@ describe("adapters project, they never mint a channel name or emit CSS", () => {
 
   it("compiles engine-invariant channels: the three adapters agree exactly", () => {
     for (const slug of SLUGS) {
-      const resolution = resolveTheme(staticThemeIntent(slug));
+      const resolution = resolveFirstParty(staticThemeIntent(slug));
       const [modern, classic, rustic] = SHIPPED.map(([, adapter]) =>
         compileTheme(resolution, adapter)
       );

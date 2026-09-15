@@ -34,11 +34,7 @@ import {
   tenantProvenance,
   type ThemeResolution,
 } from "@/foundation/contracts/composition/tenants/themes/resolved";
-import {
-  FIRST_PARTY_VERTICAL_SLUGS,
-  type FirstPartyVerticalId,
-} from "@/foundation/contracts/kernel/verticals";
-import { FIRST_PARTY_THEMES } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 
 /**
  * Applies one intent to the baseline it names and records what the merge
@@ -232,32 +228,14 @@ function cloneThemeValue<T>(value: T): T {
   return copy as unknown as T;
 }
 
-/**
- * The baseline a vertical names, CLONED for this request.
- *
- * The roster `Theme` is total (the three authored themes normalize through
- * `brandThemeToTheme` at module load), so a `static-vertical` intent needs no
- * patch at all and no invented neutral Theme exists to be one. The identity is
- * stamped here, once, instead of by every caller spreading `{ ...base, id }`.
- *
- * It returned the roster object ITSELF when the slug matched, which is one
- * shared mutable graph handed to every concurrent SSR request in a process
- * (F-60). The roster is frozen at its owner now, so a mutation would throw
- * rather than leak -- but a frozen baseline is also a baseline no consumer can
- * work on, so the clone is what makes the freeze usable instead of merely safe.
- */
-export function baselineFor(vertical: FirstPartyVerticalId, slug: string): Theme {
-  const roster = cloneThemeValue(FIRST_PARTY_THEMES[vertical]);
-  return roster.id === slug ? roster : { ...roster, id: slug };
-}
-
 export interface ResolveThemeOptions {
   /**
-   * A baseline resolved by the caller instead of the vertical's authored
-   * theme. It is validated like any baseline and labelled with the intent's
-   * slug; a caller that hands one in owns where it came from.
+   * The baseline the intent resolves over, derived by the compile door from
+   * the neutral foundation and the vertical's preset. The resolver carries no
+   * baseline of its own: it validates the one it is handed and labels it with
+   * the intent's slug.
    */
-  readonly baseline?: Theme;
+  readonly baseline: Theme;
 }
 
 /**
@@ -281,16 +259,20 @@ function snapshotLedger(
 
 export function resolveTheme(
   intent: ThemeIntent,
-  options: ResolveThemeOptions = {}
+  options: ResolveThemeOptions
 ): ThemeResolution {
   assertThemeIntent(intent);
-  const supplied = options.baseline;
+  const supplied = options?.baseline;
+  if (supplied === undefined) {
+    throw new Error(
+      "resolveTheme: a baseline is required; the compile door derives it from the " +
+        "neutral foundation and the vertical's preset"
+    );
+  }
   const baseline =
-    supplied === undefined
-      ? baselineFor(intent.vertical, intent.slug)
-      : supplied.id === intent.slug
-        ? cloneThemeValue(supplied)
-        : { ...cloneThemeValue(supplied), id: intent.slug };
+    supplied.id === intent.slug
+      ? cloneThemeValue(supplied)
+      : { ...cloneThemeValue(supplied), id: intent.slug };
   assertThemeBaseline(baseline, "resolveTheme");
   return {
     theme: mergeThemePatches(baseline, intent.patch),

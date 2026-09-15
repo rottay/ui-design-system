@@ -28,8 +28,7 @@ import { resolve } from "node:path";
 
 import { describe, it, expect } from "vitest";
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import { themanagementmiamiBrandTheme } from "@tests/fixtures/brand-themes/themanagementmiami";
 import {
   isBundledTenant,
@@ -44,6 +43,8 @@ import {
   contrastRatio,
   rgbToHsl,
 } from "@/foundation/kernel/accessibility/branding-contrast";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 type Compiled = ReturnType<typeof lowerBrandThemeFixture>;
 

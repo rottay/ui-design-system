@@ -328,8 +328,8 @@ const brandThemeBody = (amount) => `${durationKey}: "${millis(amount)}",`;
 const checkboxBody = (property) => `${transitionKey}: ${property} ${['0.', '15', 's'].join('')} ease`;
 
 const RELOCATED_FROM =
-  'packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/themanagementmiami/index.ts';
-const RELOCATED_TO = 'packages/core/tests/fixtures/brand-themes/themanagementmiami/index.ts';
+  'packages/core/src/foundation/presets/verticals/fixtures/themanagementmiami/index.ts';
+const RELOCATED_TO = 'packages/core/tests/fixtures/tenants/themanagementmiami/index.ts';
 const CHECKBOX_PATH = 'packages/core/src/components/patterns/data/table-checkbox-styles/index.tsx';
 const COLLECTION_WORKSPACE_PATH =
   'packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css';

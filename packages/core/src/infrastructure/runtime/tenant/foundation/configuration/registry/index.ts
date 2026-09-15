@@ -1,9 +1,7 @@
 /**
  * @fileoverview Known tenants registry -- first-party tenants recognized by the DS.
- * @description Three built-in vertical baselines ship with authored personality:
- * - `rottay` -- Default/flagship. Monochrome dark, matte premium, fade animations, professional IT/AI SaaS.
- * - `bithire` -- Recruiting platform. Corporate blue, subtle fade animations, structured borders.
- * - `evnto` -- Event management. Black + warm beige, minimal, clean operator aesthetic.
+ * @description Three built-in verticals ship, each the neutral foundation plus
+ * its own preset document, compiled once into the artifact this package bundles.
  *
  * Customer tenants must NOT be added here. Their published `TenantThemeConfig`
  * resolves from the owning app/tenancy database and is supplied synchronously
@@ -18,23 +16,12 @@
  */
 
 import type { TenantConfig } from '../../../../../../foundation/contracts';
-import type { PersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
-import type {
-  BrandExpressiveSelection,
-  BrandTheme,
-} from '@/foundation/contracts/composition/tenants/themes';
+import type { BrandExpressiveSelection } from '@/foundation/contracts/composition/tenants/themes';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
-import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
-import {
-  bithireBrandTheme,
-  evntoBrandTheme,
-  rottayBrandTheme,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
-import { brandThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 // The generated leaf, never the `tenant-css` barrel: that barrel reaches the
 // artifact renderer and therefore the whole lowering, which this runtime owner
 // must not pull into a client bundle. `public-entrypoints:check` is the guard.
-import { firstPartyArtifactRecipeProfile } from '@/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
+import { FIRST_PARTY_ARTIFACT_RUNTIME } from '@/infrastructure/compilers/runtime/tenant-css/artifact-runtime';
 
 function deepFreeze<T>(value: T): T {
   if (value === null || typeof value !== 'object') {
@@ -69,7 +56,7 @@ export interface CodeOwnedGovernedBehavior {
   /**
    * The personality channels this tenant DECIDED -- names only, no values.
    *
-   * The authored theme is read once, at registration, and never reaches the
+   * The artifact's runtime block is read once, at registration, and never reaches the
    * config; the instance-override policy still has to know which channels the
    * tenant decided in order to refuse a selection on one of them. A list of
    * channel names is not a visual payload -- nothing here can paint.
@@ -80,7 +67,7 @@ export interface CodeOwnedGovernedBehavior {
    *
    * Read out of the artifact's own generated runtime block -- the non-CSS half
    * of the compile that produced the bundled stylesheet -- and never re-derived
-   * from the authored theme here. Deriving it a second time made the document
+   * from the preset here. Deriving it a second time made the document
    * and the product two independent readers of one decision, which is only
    * ever as true as the last person to edit one of them.
    *
@@ -92,33 +79,12 @@ export interface CodeOwnedGovernedBehavior {
 
 const CODE_OWNED_GOVERNED_BEHAVIOR = new WeakMap<object, CodeOwnedGovernedBehavior>();
 
-const PERSONALITY_DIMENSIONS = ['animation', 'typography', 'accent', 'card'] as const;
-
-function collectDeclaredChannels(
-  personality: {
-    [K in (typeof PERSONALITY_DIMENSIONS)[number]]?: Partial<PersonalityTokens[K]>;
-  } | undefined,
-  into: Set<string>,
-): void {
-  if (!personality) return;
-  for (const dimension of PERSONALITY_DIMENSIONS) {
-    const values = personality[dimension];
-    if (!values) continue;
-    for (const [field, value] of Object.entries(values as Record<string, unknown>)) {
-      // A BrandTheme lowering emits a whole dimension the moment one field of
-      // it is authored, with the rest left `undefined`. Only a declared value
-      // is a decision.
-      if (value !== undefined) into.add(`${dimension}.${field}`);
-    }
-  }
-}
-
 /**
  * The personality channels a tenant DECIDED -- what it authored, never what a
  * compile derived for it.
  *
  * A `TenantConfig` declares nothing. A code-owned vertical's decisions are
- * captured at registration, while the authored theme is still in hand, and
+ * captured at registration, off the artifact's own runtime block, and
  * travel on the identity-keyed slot. A published tenant's one remaining
  * authored channel that this policy can read is the semantic density posture
  * its artifact compiled, which decides the same padding channel the card
@@ -150,43 +116,19 @@ export interface CompiledTenantDecisions {
   readonly density?: string;
 }
 
-/** The channels an authored BrandTheme declares, read once at registration. */
-function declaredChannels(theme: BrandTheme): Set<string> {
-  const decided = new Set<string>();
-  collectDeclaredChannels(brandThemeToPersonality(theme), decided);
-  if (theme.surfaces?.density !== undefined) decided.add('card.paddingDensity');
-  return decided;
-}
-
-/** The authored theme each roster slug compiles, keyed where the roster is read. */
-const FIRST_PARTY_BRAND_THEMES: Readonly<Record<FirstPartyVerticalId, BrandTheme>> = {
-  rottay: rottayBrandTheme,
-  bithire: bithireBrandTheme,
-  evnto: evntoBrandTheme,
-};
-
 function projectGovernedBehavior(
   entry: (typeof FIRST_PARTY_VERTICAL_ROSTER)[number],
 ): CodeOwnedGovernedBehavior | undefined {
-  const theme = FIRST_PARTY_BRAND_THEMES[entry.slug];
-  const intensity = theme?.motion?.intensity;
-  const entranceDuration = theme?.motion?.entranceDuration;
-  const expressive = theme?.expressive;
-  const motion =
-    intensity === undefined && entranceDuration === undefined
-      ? undefined
-      : {
-          ...(intensity === undefined ? {} : { intensity }),
-          ...(entranceDuration === undefined ? {} : { entranceDuration }),
-        };
-  const decidedChannels = [...declaredChannels(theme)];
   // THE ARTIFACT'S ANSWER, not this module's. The vertical's compile already
-  // validated the selection and published it as the provenance channel of the
-  // bundled stylesheet; the shipped runtime block is that same compile's
-  // non-CSS half. Re-validating `theme.recipes.profile` here would put a second
-  // reader on the decision, and the mount is what refuses a block that no
-  // longer matches its own compile.
-  const recipeProfile = firstPartyArtifactRecipeProfile(entry.slug);
+  // validated every selection and published the non-CSS half of the bundled
+  // stylesheet as the shipped runtime block; reading the preset here again
+  // would put a second reader on each decision, and the mount is what refuses
+  // a block that no longer matches its own compile.
+  const block = FIRST_PARTY_ARTIFACT_RUNTIME[entry.slug];
+  const motion = block?.motion;
+  const expressive = block?.expressive;
+  const recipeProfile = block?.recipeProfile;
+  const decidedChannels = block?.decidedChannels ?? [];
   if (
     motion === undefined &&
     expressive === undefined &&
@@ -199,7 +141,7 @@ function projectGovernedBehavior(
     ...(motion === undefined ? {} : { motion }),
     ...(expressive === undefined ? {} : { expressive }),
     ...(recipeProfile === undefined ? {} : { recipeProfile }),
-    ...(decidedChannels.length === 0 ? {} : { decidedChannels }),
+    ...(decidedChannels.length === 0 ? {} : { decidedChannels: [...decidedChannels] }),
   }) as CodeOwnedGovernedBehavior;
 }
 
@@ -207,16 +149,16 @@ function projectGovernedBehavior(
  * First-party tenants that ship with the DS.
  *
  * Each entry is an identity-only `TenantConfig`. Visual differentiation comes
- * from the vertical's authored theme, compiled once into the artifact this
- * package bundles; only the governed, non-visual half of that theme travels
- * beside the config.
+ * from the vertical's baseline, compiled once into the artifact this package
+ * bundles; only the governed, non-visual half of that compile travels beside
+ * the config, read off the artifact's own runtime block.
  */
 function createKnownTenant(
   entry: (typeof FIRST_PARTY_VERTICAL_ROSTER)[number],
 ): TenantConfig {
-  // The authored theme is READ here and never placed on the config: a
-  // `TenantConfig` carries no visual payload, and the governed, non-visual
-  // half of what the theme decides travels on the identity-keyed slot below.
+  // Nothing visual is placed on the config: a `TenantConfig` carries no visual
+  // payload, and the governed, non-visual half of what the vertical decided
+  // travels on the identity-keyed slot below.
   const config = deepFreeze({
     slug: entry.slug,
     name: entry.name,

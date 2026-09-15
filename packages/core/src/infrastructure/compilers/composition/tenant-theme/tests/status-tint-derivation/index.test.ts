@@ -51,14 +51,15 @@ import { describe, expect, it } from "vitest";
 import type { TenantThemeDocument } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { BrandTheme } from "@/foundation/contracts/composition/tenants/themes";
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme } from "@/foundation/tokens/ts/presentation/brand-themes/bithire";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "@/infrastructure/compilers/composition/tenant-theme";
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 /** A tenant that authors ONLY its success seed — nothing else contested. */
 const TENANT_SUCCESS_SEED_ONLY: TenantThemeDocument = {

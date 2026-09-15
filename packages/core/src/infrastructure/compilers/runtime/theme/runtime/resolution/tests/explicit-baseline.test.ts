@@ -8,7 +8,8 @@ import { describe, expect, it } from "vitest";
 import { staticThemeIntent } from "../../ingress";
 import { NEUTRAL_THEME } from "@/foundation/presets/neutral-theme";
 
-import { baselineFor, resolveTheme } from "..";
+import { baselineFor } from "@/infrastructure/compilers/runtime/theme";
+import { resolveTheme } from "..";
 
 const RESOLUTION_OWNER = resolve(dirname(fileURLToPath(import.meta.url)), "../index.ts");
 
@@ -51,8 +52,16 @@ describe("resolveTheme over a baseline the caller supplies", () => {
     expect(resolution.theme.palette).toEqual(supplied.palette);
   });
 
-  it("keeps the authored baseline when none is supplied", () => {
-    const resolution = resolveTheme(staticThemeIntent("bithire", "acme"));
+  it("refuses a call without a baseline, by name: the resolver carries none of its own", () => {
+    expect(() =>
+      resolveTheme(staticThemeIntent("bithire", "acme"), {} as never)
+    ).toThrow(/a baseline is required/u);
+  });
+
+  it("resolves the vertical's own baseline when the door hands it in", () => {
+    const resolution = resolveTheme(staticThemeIntent("bithire", "acme"), {
+      baseline: baselineFor("bithire", "acme"),
+    });
     expect(resolution.theme).toEqual(baselineFor("bithire", "acme"));
   });
 

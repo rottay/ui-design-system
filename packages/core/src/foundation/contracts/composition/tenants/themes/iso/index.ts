@@ -43,7 +43,7 @@ import type {
   BrandThemeModeOverlay,
   BrandThemeModes,
   BrandTypography,
-  FirstPartyBrandTheme,
+  ThemeSource,
 } from "..";
 import type {
   TenantGlassTokens,
@@ -87,7 +87,7 @@ export interface Theme {
    *
    * `string`, not the first-party union: a customer's resolved theme is a
    * `Theme` too, and the DB arm labels its compile with the tenant's slug.
-   * `FirstPartyBrandTheme.id` stays narrowed — that narrowing is what makes the
+   * A roster row keeps its id narrowed — that narrowing is what makes the
    * roster's slug derivation a compile-time fact — but narrowing it HERE would
    * mean only three tenants in the world can be lowered.
    */
@@ -781,19 +781,24 @@ function normalizeModeOverlays(
 }
 
 /**
- * Convert an existing first-party BrandTheme to the ISO `Theme` shape.
- * Optional families are classified active/disabled from `capabilities`.
+ * Normalize a flat theme source into the total ISO `Theme` shape.
+ *
+ * The input declares `appearance`, `palette` and `capabilities` outright, so
+ * nothing here is inferred: optional families are classified active/disabled
+ * from the dispositions the source states, and an unstated one is
+ * `not-authored`. Identity is open, which is what lets the neutral foundation
+ * be a source without being a first-party vertical.
  */
-export function brandThemeToTheme(brand: FirstPartyBrandTheme): Theme {
+export function normalizeThemeSource(brand: ThemeSource): Theme {
   const governedFor = <T extends object>(
-    value: T | undefined,
+    value: Partial<T> | undefined,
     defaultShape: T,
     id: keyof BrandCapabilityCatalog
   ): Governed<T> => {
     const cap = brand.capabilities[id];
     if (value !== undefined && cap.status === "active") {
       return {
-        value: mergeDefaultShape(defaultShape, value as Partial<T>),
+        value: mergeDefaultShape(defaultShape, value),
         disposition: undefined,
       };
     }

@@ -183,8 +183,6 @@ export interface VerticalPreset {
   engine: EngineName;
   motionProfile?: MotionProfile;
   density: 'compact' | 'comfortable' | 'spacious';
-  personality: PersonalityTokens;
-  tokenOverrides?: TenantTokenOverrides;
   defaultProductProfile: ProductProfileKey;
   features: string[];
   surfaceDefaults: {
@@ -192,11 +190,8 @@ export interface VerticalPreset {
     density: 'compact' | 'comfortable' | 'spacious';
     schedulerView?: 'month' | 'week' | 'day';
   };
-  // A `suggestedPalette` field lived here and was authored by all three
-  // first-party presets with seeds that contradicted every shipped BrandTheme.
-  // It is removed rather than corrected: a second place to author brand colour
-  // is the defect, and leaving the slot open invites the next author to refill
-  // it. Colour belongs to the BrandTheme source.
+  // Colour, personality and token overrides are not authored here: a vertical
+  // is the neutral foundation plus its preset document, compiled once.
 }
 
 export interface TenantContextValue {

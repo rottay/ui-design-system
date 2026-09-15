@@ -22,10 +22,9 @@ import type { ThemeResolution } from "@/foundation/contracts/composition/tenants
 import type { EngineName } from "@/foundation/contracts/kernel/engine-identity";
 import { sha256Utf8 } from "@/foundation/kernel/cryptography/sha-256";
 import { resolveAdapter } from "../../../presentation/adapters";
-import { staticThemeIntent, verticalEngine } from "../../../runtime/ingress";
+import { baselineFor, staticThemeIntent, verticalEngine } from "../../../runtime/ingress";
 import { compileTheme } from "../../../runtime/lowering";
 import { resolveTheme } from "../../../runtime/resolution";
-import { baselineFor, type ThemeBaselineSource } from "../../foundation/baseline";
 import { admitThemeCompilation, admitThemeIntent } from "../../foundation/admission";
 import type { ThemeChannelDelta } from "../../foundation/admission";
 
@@ -40,8 +39,6 @@ export interface CompileThemeIntentOptions {
    * none, so a tenant cannot be rendered as a product it is not.
    */
   engine?: EngineName;
-  /** The baseline the intent resolves over; the authored theme unless the caller names the neutral foundation. */
-  baselineSource?: ThemeBaselineSource;
 }
 
 /** What the door produces: the resolution it made, and the compile from it. */
@@ -130,14 +127,10 @@ export function compileThemeIntent(
   intent: ThemeIntent,
   options?: CompileThemeIntentOptions
 ): ThemeIntentCompilation {
-  const baselineSource = options?.baselineSource ?? "brand-theme";
+  // The vertical's baseline is the neutral foundation with its preset admitted;
+  // the door derives it and the resolver never carries one of its own.
   const resolveOver = (target: ThemeIntent) =>
-    resolveTheme(
-      target,
-      baselineSource === "brand-theme"
-        ? {}
-        : { baseline: baselineFor(target.vertical, target.slug, baselineSource) }
-    );
+    resolveTheme(target, { baseline: baselineFor(target.vertical, target.slug) });
   const resolution = resolveOver(intent);
   const adapter = resolveAdapter(options?.engine ?? verticalEngine(intent.vertical));
   admitThemeIntent({ intent, resolution, adapter });

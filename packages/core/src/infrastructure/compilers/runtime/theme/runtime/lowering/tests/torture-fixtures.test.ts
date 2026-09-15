@@ -20,11 +20,7 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, it, expect } from 'vitest';
 
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import {
-  rottayBrandTheme,
-  bithireBrandTheme,
-} from '@/foundation/tokens/ts/presentation/brand-themes';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import {
   tortureDarkBrandTheme,
   tortureLightBrandTheme,
@@ -36,6 +32,9 @@ import {
 } from '@/infrastructure/runtime/tenant/foundation/configuration/registry';
 import { FIRST_PARTY_ARTIFACT_SPECS } from '@/infrastructure/compilers/runtime/tenant-css';
 import { FIRST_PARTY_VERTICAL_ROSTER } from '@/foundation/presets/verticals/roster';
+
+const rottayBrandTheme = firstPartyFixture('rottay');
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 

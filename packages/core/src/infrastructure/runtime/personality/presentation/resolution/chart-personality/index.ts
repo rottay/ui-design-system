@@ -24,13 +24,11 @@ import { resolveChartPersonality } from '../../../runtime/resolution/chart';
  * hostname, slug, or supplier coupling.
  */
 export function useResolvedChartPersonality(): ChartPersonalityTokens {
-  const tenantContext = useContext(TenantContext);
   const { profile } = useContext(ProductProfileContext);
   const compiled = useContext(EngineVisualDeclarationContext)?.runtime.personality;
-  const vertical = tenantContext?.vertical;
 
   return useMemo(
-    () => resolveChartPersonality({ compiled, vertical, productProfile: profile }),
-    [compiled, vertical, profile],
+    () => resolveChartPersonality({ compiled, productProfile: profile }),
+    [compiled, profile],
   );
 }

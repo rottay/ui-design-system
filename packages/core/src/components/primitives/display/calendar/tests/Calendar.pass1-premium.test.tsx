@@ -8,11 +8,12 @@ import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import CalendarModern from '../engines/modern';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 // The modern skin is the single paint owner for this engine. These assertions
 // pin the Pass-1 ownership contract: header-control geometry and the

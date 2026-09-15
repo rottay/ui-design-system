@@ -8,11 +8,12 @@ import { contrastRatio } from '@/foundation/kernel/color/contrast';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
-import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
 import { themanagementmiamiBrandTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 
 import { CodeBlock } from '../index';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
 
 // --- WCAG helpers for the R2 contrast measurement --------------------------
 

@@ -4,9 +4,12 @@ import {
   springLinearEasingGentle,
 } from '@/infrastructure/compilers/kernel/foundation/motion/spring-easing';
 import { brandThemeToTokenOverrides } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality";
-import { lowerBrandThemeFixture } from "@tests/support/theme-lowering";
-import { bithireBrandTheme, evntoBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes';
+import { firstPartyFixture, lowerBrandThemeFixture } from "@tests/support/theme-lowering";
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
+
+const bithireBrandTheme = firstPartyFixture('bithire');
+const evntoBrandTheme = firstPartyFixture('evnto');
+const rottayBrandTheme = firstPartyFixture('rottay');
 
 /** Parse `linear(0, 0.1, ..., 1)` back into its numeric stops for assertions. */
 function parseLinearStops(value: string): number[] {
