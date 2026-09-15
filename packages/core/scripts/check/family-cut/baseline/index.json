@@ -587,7 +587,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 132,
+        "channelsRead": 139,
         "classTokens": 2,
         "partsStamped": 5,
         "partsConsumed": 5
@@ -601,7 +601,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-04: the four material recipes (bordered, minimal, inverse, rich) by derivation/chrome/popover, constants by presentation/components/popover; the recipe travels as data-variant and a caller max width as data-custom-max-width; one ds-popover vocabulary."
+      "cutNote": "WO-FAM-04: the four material recipes (bordered, minimal, inverse, rich) by derivation/chrome/popover, constants by presentation/components/popover; the recipe travels as data-variant and a caller max width as data-custom-max-width; one ds-popover vocabulary. | 2026-09-15 title padding: channelsRead 132 -> 139, the seven --ds-popover-{bordered,minimal,rich,compact,comfortable,spacious}-title-padding-inline and --ds-popover-title-padding-inline-current the skin now reads and derivation/chrome/popover now emits (readWithoutProducer stays 0, every other denominator unchanged); measured on the committed tree c66520ce7 (132, gate exit 0) against the working tree carrying the uncommitted popover edit (skin/popover/index.css, derivation/chrome/popover/index.ts), so this pin lands in the same commit as that edit and is void without it"
     },
     "dropdown": {
       "cut": "WO-FAM-04",
