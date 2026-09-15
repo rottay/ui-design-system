@@ -4402,6 +4402,11 @@
      "at": "2026-09-13 00:05",
      "by": "Kimi K3",
      "note": "FLAGS ROUTED FROM WO-FAM-01 CLOSE (ad38a9327): (a) evnto dark palette defect — button text/link variants measure 2.27:1 (#515151 on #171615); pre-existing, outside the axe gating scope of the cut; fix belongs to the vertical preset decisions of this WO. (b) chrome.controls.switch still compiles --ds-switch-* with no Modern reader after the D-16 merge (Switch = deprecated Toggle alias); retire or reclassify explicitly in this WO's token lane — do not leave compiling unread channels without adjudication."
+    },
+    {
+     "at": "2026-09-14 22:26",
+     "by": "kimi-admin",
+     "note": "D6-1 INTEGRATED (72a1a99b6, audited): the three first-party verticals are v2 ThemeDecisions on the internal seat with closed manifests — bithire = provisional WO-DER-07 product-dense (verbatim decisions, seat raised, D-30 recorded, most-contrasting rationale), rottay/evnto structural-neutral per owner scope; SanctionedOverrides closed (zero today) with the new preset-without-derivable-values gate (11/11, post-build fresh-dist wired). Contrast at decision level: bithire-dark authored --ds-input-error-color (1.22:1 measured / 1.08:1 axe) retired as not decision-derived — invalid input now reads the error seed at 3.25:1 measured; the evnto-dark 2.27:1 lives in the baseline dark ramp that NO kit decision reaches, honestly ROUTED to the D6-3 baseline retirement (neutral foundation), not masked by an override. Also in this block: the contract-changeset roster prose re-anchored to the actual DRILLS (298fdddda). Next: D6-2 (BrandTheme retirement + the routed channel dispositions: --ds-experience-profile/--ds-recipe-profile reader-or-retire, --ds-elevation-border-style, --ds-switch-*, fanOutUnreached recipe-profile)."
     }
    ]
   },
