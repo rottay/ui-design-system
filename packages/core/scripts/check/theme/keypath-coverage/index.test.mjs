@@ -16,17 +16,28 @@ import {
   collectFindings,
   decisionPrefixes,
   expandKeypath,
+  measure,
   partition,
   themeKeypathUniverse,
+  viewKeypaths,
 } from './index.mjs';
 import { readThemeCatalog } from '../../../libraries/theme-catalog/index.mjs';
 
-test('the universe is measured from the shipped themes and is not empty', () => {
-  const universe = themeKeypathUniverse();
-  assert.ok(universe.length > 1000, `expected a real universe; got ${universe.length}`);
-  // A reader that stopped at the first identifier reference measured 13.
-  assert.ok(universe.includes('palette.primaryColor'), 'file-local bindings must be resolved');
-  assert.ok(universe.some((keypath) => keypath.startsWith('chrome.')), 'chrome must be reached');
+test('the walk stops at leaves, and an unset family IS a leaf', () => {
+  // An unset family (`recipes: {}`) is a keypath somebody still has to own, so
+  // dropping it would shrink the universe by exactly the unclaimed part.
+  assert.deepEqual(viewKeypaths({ a: { b: 1 }, recipes: {} }), ['a.b', 'recipes']);
+  assert.deepEqual(viewKeypaths({ list: ['x', 'y'] }), ['list[0]', 'list[1]']);
+  assert.deepEqual(viewKeypaths({ absent: undefined }), []);
+});
+
+test('the universe is the union of the composed baselines, deduplicated and sorted', () => {
+  const universe = themeKeypathUniverse([
+    { palette: { primaryColor: '#fff' }, chrome: { sidebar: { tone: 'inverse' } } },
+    { palette: { primaryColor: '#000' }, motion: { intensity: 0.5 } },
+  ]);
+  assert.deepEqual(universe, ['chrome.sidebar.tone', 'motion.intensity', 'palette.primaryColor']);
+  assert.deepEqual(themeKeypathUniverse([]), [], 'no views is an empty universe, never a pass');
 });
 
 test('the decision prefixes come from the catalog and expand its keypath grammar', () => {
@@ -115,8 +126,11 @@ test('DRILL: an empty universe is a broken reader, not a covered tree', () => {
   assert.match(findings[0], /universe is EMPTY/u);
 });
 
-test('the LIVE tree is red, and red is the honest state before the derivation lane', () => {
-  const { findings, result } = collectFindings();
+test('the LIVE tree is red, and red is the honest state before the derivation lane', async () => {
+  // Post-build: the universe is the composed baselines read from dist under a
+  // freshness proof, so this drill fails closed on a stale tree by design.
+  const { findings, result } = await measure();
+  assert.ok(result.universe.length > 0, 'an empty universe is a broken reader, not a covered tree');
   assert.ok(result.uncovered.length > 0, 'if this ever passes, promote the gate to blocking');
   assert.equal(findings.length > 0, true);
   assert.deepEqual(result.overlaps, [], 'the partition must be disjoint even while it is partial');

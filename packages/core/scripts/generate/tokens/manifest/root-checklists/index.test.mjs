@@ -810,8 +810,8 @@ const GENERATOR = path.resolve(CLEAN_CHECKOUT_HERE, 'index.mjs');
 
 test('the write creates its own gitignored parent directory', () => {
   // Asserted on the source rather than by deleting the directory: the
-  // end-to-end experiment lives in mirror-parity's coverage-ownership drill,
-  // and carrying it twice would make the cost of this suite ambiguous.
+  // end-to-end experiment lived in the coverage-ownership drill of
+  // mirror-parity, retired in D6-2c-ii with the authored themes it read.
   const source = readFileSync(GENERATOR, 'utf8');
   assert.match(source, /mkdirSync\(path\.dirname\(OUTPUT_PATH\), \{ recursive: true \}\)/);
   const writeIndex = source.indexOf('writeFileSync(OUTPUT_PATH, text)');

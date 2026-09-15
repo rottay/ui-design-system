@@ -64,6 +64,7 @@ import {
   LOWERING_SOURCE,
   loadBrandThemeLowering,
 } from '../../../../../../../libraries/theme-lowering/index.mjs';
+import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 /** This tests folder, so the textual fence can read the probe it owns. */
 const HERE = resolve(fileURLToPath(import.meta.url), '..');
@@ -99,7 +100,7 @@ const PRODUCED_BY = {
     // H-1 (V1): a static arm must name the vertical baseline it composed onto,
     // so every static fixture in this file carries one. The drill that proves
     // the requirement bites declares its own producedBy WITHOUT it.
-    baseline: { source: 'dist/index.js#rottayBrandTheme', digest: 'f'.repeat(64) },
+    baseline: { source: 'dist/index.js#baselineFor(rottay)', digest: 'f'.repeat(64) },
   },
 };
 
@@ -1566,9 +1567,9 @@ test('H-1 drill 5: the baseline loader fails CLOSED on a vertical it cannot supp
     () =>
       loadStaticBaselines({
         assertFresh: () => ({ ok: true, failures: [] }),
-        importModule: async () => ({ rottayBrandTheme: { surfaces: {} } }),
+        importModule: async () => ({ somethingElse: () => ({}) }),
       }),
-    /exports no BrandTheme for the "bithire" vertical/,
+    /must export baselineFor/,
     'falling back to an empty theme IS the defect H-1 corrects, and it fails silently',
   );
 });
@@ -1645,9 +1646,9 @@ test('H-1 drill 8 (V1): a static arm with no named baseline fails arm verificati
     compile: () => ({ variables: { '--ds-density-mode-factor': '0.85' } }),
     vertical: 'rottay',
     base: { surfaces: { densityScale: 1 } },
-    baselineSource: 'dist/index.js#rottayBrandTheme',
+    baselineSource: 'dist/index.js#baselineFor',
   });
-  assert.equal(lowered.producedBy.input.baseline.source, 'dist/index.js#rottayBrandTheme');
+  assert.equal(lowered.producedBy.input.baseline.source, 'dist/index.js#baselineFor');
   assert.match(lowered.producedBy.input.baseline.digest, /^[0-9a-f]{64}$/);
   assert.doesNotThrow(() => assertArmProvenance(lowered.producedBy));
 });
@@ -2381,11 +2382,20 @@ test('F4B-8 drill 6: the GROUND is not a fourth seed — it moves every role and
 
 test('W-A drill 7: an IDENTITY stop resolves against the arm own baseline, per vertical', async () => {
   const manifest = colorSetManifest([{ id: 'primary/identity', role: 'primary', identity: true }]);
-  const { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } = await import(`${CORE_ROOT}/dist/index.js`);
-  // The first identity in this programme that DIFFERS BY VERTICAL: radius
-  // `suave` and density `normal` are constant enum ids; a colour identity is
-  // "whatever this vertical already authors".
-  for (const theme of [rottayBrandTheme, bithireBrandTheme, evntoBrandTheme]) {
+  const baselines = await loadStaticBaselines();
+  // A colour identity is "whatever this vertical already authors", and since
+  // D6-2c-ii that is the COMPOSED baseline. Only bithire's preset seeds a
+  // palette, so the identity stop has a subject there and none on the other
+  // two: the list is pinned rather than assumed, and a preset that seeds a
+  // palette later reddens it (WO-DER-06 derivation-lane registry).
+  const authored = Object.entries(baselines)
+    .filter(([, entry]) => typeof entry.theme.palette?.primaryColor === 'string');
+  assert.deepEqual(
+    authored.map(([vertical]) => vertical),
+    ['bithire'],
+    'the verticals whose composed baseline authors a primary identity',
+  );
+  for (const theme of authored.map(([, entry]) => entry.theme)) {
     const input = buildIngressInput({
       armId: 'static-brand-theme',
       controlManifest: manifest,
@@ -2395,12 +2405,6 @@ test('W-A drill 7: an IDENTITY stop resolves against the arm own baseline, per v
     assert.equal(input.ingressValue, theme.palette.primaryColor);
     assert.deepEqual(input.patch, { palette: { primaryColor: theme.palette.primaryColor } });
   }
-  const distinct = new Set([
-    rottayBrandTheme.palette.primaryColor,
-    bithireBrandTheme.palette.primaryColor,
-    evntoBrandTheme.palette.primaryColor,
-  ]);
-  assert.equal(distinct.size, 3, 'the three identities really are three different values');
 });
 
 test('W-A drill 8: an identity with NO baseline to read fails CLOSED, on either arm', () => {
@@ -2922,12 +2926,12 @@ test('H-3(a) drill 10 [needs dist]: no probe artifact carries a prefers-color-sc
 
 const B2_PALETTE = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/palette/seeds/index.json'));
 
-/** The three first-party baselines, from the same dist the arms bind. */
+/** The three composed first-party baselines, through the door the arms bind. */
 async function b2Baselines() {
-  const { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } = await import(
-    `${CORE_ROOT}/dist/index.js`
+  const baselines = await loadStaticBaselines();
+  return Object.fromEntries(
+    Object.entries(baselines).map(([vertical, entry]) => [vertical, entry.theme]),
   );
-  return { rottay: rottayBrandTheme, bithire: bithireBrandTheme, evnto: evntoBrandTheme };
 }
 
 /** Channels whose value differs between two compiles, sorted. */
@@ -3407,29 +3411,25 @@ test('R-2 drill 2: empty in EVERY scope is still the finding, and the message na
   );
 });
 
-test('R-2 drill 3: the DB document declares the vertical\'s OWN default mode, from the published BrandTheme', async () => {
+test('R-2 drill 3: the DB document declares the vertical\'s OWN default mode, from the published door', async () => {
   const baselines = await loadStaticBaselines();
   /* W-A ASKED FOR THIS TO BE VERIFIED, AND THE VERIFICATION CORRECTED ITS
-   * EVIDENCE. The preaudit's reason for reading the BrandTheme was that
-   * `FIRST_PARTY_THEMES.<v>.appearance.defaultMode` is `undefined`. Measured: it
-   * is `"dark"` -- the Theme projection DOES carry the field. The prescription
-   * is right anyway, and for a stronger reason: `FIRST_PARTY_THEMES` is not on
-   * the PUBLISHED entrypoint at all, so reaching it would need a deep import --
-   * exactly what this harness refuses for its compilers, because a deep path can
-   * be tree-shaken out from under it with no gate noticing. The BrandTheme is
-   * published, and `loadStaticBaselines()` already loads it under the freshness
-   * law. Both halves are asserted so neither claim can rot silently. */
+   * EVIDENCE TWICE. The preaudit read an authored theme because it believed the
+   * Theme projection carried no `appearance.defaultMode`; measured, it did. The
+   * authored themes are now retired (D6-2c-ii): the vertical's default mode is
+   * stamped on the COMPOSED baseline by `baselineFor`, from the roster row. The
+   * claim that survives is the one that mattered -- the harness reads its
+   * baseline off the PUBLISHED entrypoint, never a deep path that can be
+   * tree-shaken out from under it with no gate noticing. Both halves are
+   * asserted so neither can rot silently. */
   const published = await import(`${CORE_ROOT}/dist/index.js`);
+  assert.equal('baselineFor' in published, true, 'the composed baseline is reached through the published door');
   assert.equal(
-    'FIRST_PARTY_THEMES' in published,
+    'rottayBrandTheme' in published,
     false,
-    'the Theme projection is not reachable from the published entrypoint',
+    'the authored first-party themes are retired; nothing publishes them',
   );
-  assert.equal('rottayBrandTheme' in published, true);
-  const { FIRST_PARTY_THEMES } = await import(
-    `${CORE_ROOT}/dist/foundation/tokens/ts/presentation/brand-themes/index.js`
-  );
-  assert.equal(FIRST_PARTY_THEMES.rottay.appearance?.defaultMode, 'dark');
+  assert.equal(baselines.rottay.theme.appearance?.defaultMode, 'dark');
   assert.equal(verticalDefaultMode(baselines.rottay, 'rottay'), 'dark');
   assert.equal(verticalDefaultMode(baselines.bithire, 'bithire'), 'light');
   assert.equal(verticalDefaultMode(baselines.evnto, 'evnto'), 'light');
@@ -4083,11 +4083,11 @@ test('B1b: the replica does not drift from the PUBLISHED product contract', asyn
 });
 
 test('B2: the emitted channel is NOT the written string -- assert discrimination, never equality', async () => {
-  const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
+  const { bithire: bithireBaseline } = await b2Baselines();
   const { compile: lowerBrandTheme } = await loadBrandThemeLowering({ coreRoot: CORE_ROOT });
   const written = 'Inter, system-ui, sans-serif';
   const compiled = lowerBrandTheme({
-    brandTheme: main.bithireBrandTheme,
+    brandTheme: bithireBaseline,
     vertical: 'bithire',
     tenantSlug: 'bithire',
     tenantPatch: { typography: { fontFamilyBase: written } },
@@ -4101,7 +4101,7 @@ test('B2: the emitted channel is NOT the written string -- assert discrimination
   // discriminates between stops.
   assert.ok(emitted.startsWith('Inter,'), 'contains the leading family');
   const other = lowerBrandTheme({
-    brandTheme: main.bithireBrandTheme,
+    brandTheme: bithireBaseline,
     vertical: 'bithire',
     tenantSlug: 'bithire',
     tenantPatch: { typography: { fontFamilyBase: "'Fira Sans', Arial, sans-serif" } },
@@ -4111,14 +4111,9 @@ test('B2: the emitted channel is NOT the written string -- assert discrimination
 });
 
 test('B4: the asymmetry is of EMISSION, not of movement (all three verticals)', async () => {
-  const main = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/index.js')).href);
   const server = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href);
   const { compile: lowerBrandTheme } = await loadBrandThemeLowering({ coreRoot: CORE_ROOT });
-  const themes = {
-    rottay: main.rottayBrandTheme,
-    bithire: main.bithireBrandTheme,
-    evnto: main.evntoBrandTheme,
-  };
+  const themes = await b2Baselines();
   const stack = 'Inter, system-ui, sans-serif';
   for (const [vertical, brandTheme] of Object.entries(themes)) {
     const before = lowerBrandTheme({ brandTheme, vertical, tenantSlug: vertical }).cssVariables;

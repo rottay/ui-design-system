@@ -7,7 +7,6 @@ import {
   analyse,
   buildBaselineDoc,
   checkContractShape,
-  checkGovernorAuthorities,
   evaluate,
   findDivergentGroups,
   findShadowingPins,
@@ -17,7 +16,7 @@ import {
 /* ── el árbol sintético ─────────────────────────────────────────────────── */
 
 const CONTRACT_OK = `
-export interface FirstPartyBrandTheme extends BrandTheme {
+export interface ThemeSource extends BrandTheme {
 ${REQUIRED_THEME_KEYS.map((key) => `  readonly ${key}: unknown;`).join('\n')}
 }
 export type BrandCapabilityCatalog = Readonly<
@@ -40,8 +39,8 @@ const MEMBERSHIP = { rows: [
 ] };
 
 const slot = (over) => ({
-  slotId: `demo:${over.slotPath}`, vertical: 'demo', currentDomicile: 'seed',
-  governor: 'dial: density.mode', authoredValue: '#ffffff', emitsChannels: [], rootId: null, ...over,
+  slotId: `demo:${over.slotPath}`, vertical: 'demo',
+  authoredValue: '#ffffff', emitsChannels: [], rootId: null, ...over,
 });
 
 /** Dos slots de raíces DISTINTAS que comparten `#ffffff`. */
@@ -61,12 +60,10 @@ const tree = (over = {}) => ({
   membership: MEMBERSHIP,
   catalog: CATALOG,
   literalPins: [],
-  controlIds: new Set(['density.mode', 'palette.seeds']),
   authorableControls: 2,
   controlsWithDbDoor: 2,
   allowlistTotal: ALLOWLIST_TOTAL,
   contractSource: CONTRACT_OK,
-  knownChannels: new Set(['--ds-control-bg', '--ds-raised-bg', '--ds-page-bg']),
   ...over,
 });
 
@@ -88,7 +85,6 @@ test('DUPLICACION REAL: dos slots de la MISMA coordenada con valores distintos f
 
 test('DUPLICACION REAL enrojece el trinquete: el grupo nuevo hace FALLAR el --check', () => {
   const baseline = { counters: {
-    unassignedSlots: { value: 0 }, governorsNamingMissingAuthority: { value: 0 },
     shadowingLiteralPins: { value: 0 }, divergentGroups: { value: 0 }, divergentSlots: { value: 0 },
   } };
   const clean = evaluate(analyse(tree()), baseline);
@@ -127,8 +123,8 @@ test('L1 — relajar una clave requerida a opcional falla', () => {
 });
 
 test('L1 — borrar una clave requerida falla', () => {
-  const cut = CONTRACT_OK.replace('  readonly chrome: unknown;\n', '');
-  assert.match(checkContractShape(cut)[0].detail, /ya no declara readonly chrome/);
+  const cut = CONTRACT_OK.replace('  readonly capabilities: unknown;\n', '');
+  assert.match(checkContractShape(cut)[0].detail, /ya no declara readonly capabilities/);
 });
 
 test('L1 — BrandCapabilityCatalog degradado a Partial falla', () => {
@@ -142,43 +138,6 @@ test('L1 — el contrato intacto no produce hallazgos', () => {
 });
 
 /* ── 4. L2: la ley prohibe la mentira, no el silencio ───────────────────── */
-
-test('L2 — un governor que NO nombra dial es legitimo y no falla', () => {
-  const rows = [slot({ slotPath: 'CHARTS.colorScheme', governor: 'seed de personalidad de charts: el compilador la copia a chartPersonality' })];
-  assert.deepEqual(checkGovernorAuthorities(rows, { controlIds: new Set(['density.mode']), knownChannels: new Set() }), []);
-});
-
-test('L2 — un governor que nombra un dial inexistente falla', () => {
-  const rows = [slot({ slotPath: 'PALETTE.x', governor: 'dial: tenant-dial (tinta de pagina)' })];
-  const findings = checkGovernorAuthorities(rows, { controlIds: new Set(['density.mode']), knownChannels: new Set() });
-  assert.equal(findings.length, 1);
-  assert.match(findings[0].detail, /"dial: tenant-dial" y no existe un control/);
-});
-
-test('L2 — un governor que nombra un canal inexistente falla, pero un PREFIJO de prosa no', () => {
-  const known = new Set(['--ds-color-primary']);
-  const bad = checkGovernorAuthorities(
-    [slot({ slotPath: 'A.b', governor: 'deriva de: --ds-color-error-hover' })],
-    { controlIds: new Set(), knownChannels: known },
-  );
-  assert.equal(bad.length, 1);
-  const wildcard = checkGovernorAuthorities(
-    [slot({ slotPath: 'A.c', governor: 'baja a canal --ds-stats-grid-* (chromeToVariables)' })],
-    { controlIds: new Set(), knownChannels: known },
-  );
-  assert.deepEqual(wildcard, [], 'un prefijo de concatenacion no es un canal: fue un falso positivo medido de 24 casos');
-});
-
-test('L2 estructural — un domicilio fuera del vocabulario o sin governor falla duro', () => {
-  const rows = [
-    slot({ slotPath: 'A.d', currentDomicile: 'inventado' }),
-    slot({ slotPath: 'A.e', governor: '   ' }),
-  ];
-  const result = analyse(tree({ inventory: { rows } }));
-  assert.equal(result.findings.filter((finding) => finding.law === 'L2').length, 2);
-});
-
-/* ── 5. L4(a): sombra medida contra la MEMBRESÍA ────────────────────────── */
 
 test('L4(a) — un literal sobre canal cuya raiz ya sabe derivar es sombra; si la raiz no sabe, no lo es', () => {
   const byChannel = new Map(MEMBERSHIP.rows.map((row) => [row.channel, row]));
@@ -218,7 +177,6 @@ test('L5 — una fila del kit sin ninguna puerta todavia NO cuenta como puerta p
 
 test('el trinquete falla en las DOS direcciones y nombra la instruccion', () => {
   const baseline = { counters: {
-    unassignedSlots: { value: 0 }, governorsNamingMissingAuthority: { value: 0 },
     shadowingLiteralPins: { value: 5 }, divergentGroups: { value: 0 }, divergentSlots: { value: 0 },
   } };
   const { drift } = evaluate(analyse(tree()), baseline);
@@ -237,12 +195,8 @@ test('sobre el arbol real: las leyes duras se sostienen y el ancla coincide', as
   for (const [name, value] of Object.entries(result.counters)) {
     assert.equal(value, baseline.counters[name].value, `${name} se movio respecto del ancla`);
   }
-  // L3: el ancla de `unassigned` es la MISMA que la del inventario. Dos anclas
-  // que se separan es como el frente pierde una ley sin que nadie lo note.
-  const inventoryBaseline = JSON.parse(
-    (await import('node:fs')).readFileSync(new URL('../slots/baseline/index.json', import.meta.url), 'utf8'),
-  );
-  assert.equal(result.counters.unassignedSlots, inventoryBaseline.counters.unassignedRows.value);
+  // L3 ataba el ancla de `unassigned` de este gate a la del inventario de
+  // slots. Las dos se retiraron en D6-2c-ii con el domicilio que contaban.
 });
 
 /* ── la puerta hacia arriba: gobernada, no abierta ───────────────────────── */
@@ -253,11 +207,10 @@ test('la unica subida legal es la RE-ATRIBUCION, y se pide por nombre', () => {
   // existe en la puerta de ESCRITURA, y por eso el gate nunca se vuelve
   // permisivo: re-anclar exige un acto explicito y con razon escrita.
   const baseline = { counters: Object.fromEntries(
-    ['unassignedSlots', 'governorsNamingMissingAuthority', 'shadowingLiteralPins', 'divergentGroups', 'divergentSlots']
+    ['shadowingLiteralPins', 'divergentGroups', 'divergentSlots']
       .map((name) => [name, { value: 0 }]),
   ) };
-  const result = { findings: [], governorFindings: [], counters: {
-    unassignedSlots: 0, governorsNamingMissingAuthority: 0,
+  const result = { findings: [], counters: {
     shadowingLiteralPins: 5, divergentGroups: 0, divergentSlots: 0,
   } };
   const { drift } = evaluate(result, baseline);
@@ -278,9 +231,9 @@ test('el ancla registra QUE CLASE de movimiento la produjo', async () => {
 /* ── la puerta escribe la razon DEL MOVIMIENTO, no la vieja ──────────────── */
 
 const doorFixture = (counters) => ({
-  result: { counters, findings: [], governorFindings: [], shadows: [], divergent: [] },
+  result: { counters, findings: [], shadows: [], divergent: [] },
   previous: { counters: {
-    unassignedSlots: { value: 10, reason: 'VIEJA unassigned' },
+    shadowingLiteralPins: { value: 10, reason: 'VIEJA shadowingLiteralPins' },
     divergentGroups: { value: 20, reason: 'VIEJA divergentGroups: solo pueden bajar' },
   } },
 });
@@ -292,7 +245,7 @@ test('PUERTA — el contador que SE MUEVE recibe la razon del movimiento', () =>
    * `divergentGroups` quedo en 242 con una razon terminada en "solo pueden
    * bajar" y hubo que reescribirla a mano al commitear. Una puerta que exige un
    * hand-edit para no mentir no esta cerrada. */
-  const { result, previous } = doorFixture({ unassignedSlots: 10, divergentGroups: 24 });
+  const { result, previous } = doorFixture({ shadowingLiteralPins: 10, divergentGroups: 24 });
   const doc = buildBaselineDoc({ result, previous, reason: 'RAZON DEL MOVIMIENTO', reattribution: true });
   assert.equal(doc.counters.divergentGroups.value, 24);
   assert.equal(doc.counters.divergentGroups.reason, 'RAZON DEL MOVIMIENTO');
@@ -301,16 +254,16 @@ test('PUERTA — el contador que SE MUEVE recibe la razon del movimiento', () =>
 });
 
 test('PUERTA — los contadores QUIETOS conservan la suya: pisarlas seria el mismo defecto al reves', () => {
-  const { result, previous } = doorFixture({ unassignedSlots: 10, divergentGroups: 24 });
+  const { result, previous } = doorFixture({ shadowingLiteralPins: 10, divergentGroups: 24 });
   const doc = buildBaselineDoc({ result, previous, reason: 'RAZON DEL MOVIMIENTO', reattribution: true });
-  assert.equal(doc.counters.unassignedSlots.value, 10);
-  assert.equal(doc.counters.unassignedSlots.reason, 'VIEJA unassigned', 'no se movio: su historia no cambio');
+  assert.equal(doc.counters.shadowingLiteralPins.value, 10);
+  assert.equal(doc.counters.shadowingLiteralPins.reason, 'VIEJA shadowingLiteralPins', 'no se movio: su historia no cambio');
 });
 
 test('PUERTA — vale en las DOS direcciones, y un contador nuevo estrena razon', () => {
-  const { result, previous } = doorFixture({ unassignedSlots: 8, divergentGroups: 20, inventado: 3 });
+  const { result, previous } = doorFixture({ shadowingLiteralPins: 8, divergentGroups: 20, inventado: 3 });
   const doc = buildBaselineDoc({ result, previous, reason: 'MOVIMIENTO', reattribution: false });
-  assert.equal(doc.counters.unassignedSlots.reason, 'MOVIMIENTO', 'bajar tambien es moverse');
+  assert.equal(doc.counters.shadowingLiteralPins.reason, 'MOVIMIENTO', 'bajar tambien es moverse');
   assert.equal(doc.counters.divergentGroups.reason, 'VIEJA divergentGroups: solo pueden bajar');
   assert.equal(doc.counters.inventado.reason, 'MOVIMIENTO', 'un contador sin ancla previa estrena la razon');
   assert.equal(doc.lastMoveKind, 'decrece-solo');

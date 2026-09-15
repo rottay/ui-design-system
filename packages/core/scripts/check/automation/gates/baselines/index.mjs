@@ -84,6 +84,21 @@ export const WIDENINGS = Object.freeze([
       'F-75: `maxSourceBytes` was raised once by name for the conn2 lot (+226 measured bytes on ./runtime/tenant-theme). '
       + 'The record is kept verbatim rather than rewritten; what is closed here is the next silent one.',
   },
+  {
+    id: 'customization-dead-writers',
+    owner: 'WO-DER-06 (2d-resto), WO-FAM-07, WO-FAM-12',
+    reason:
+      '2026-09-15 (DT-authorized, two measured movements). First: the anchor dropped 3 victories '
+      + '(--ds-card-padding and --ds-card-padding-xl wired by F6b, the --ds-card-shadow-elevated twin retired) '
+      + 'and widened ONLY 24 names with a registered owner and resolution path: 6 --ds-breakpoint-* to '
+      + 'WO-FAM-07 and 4 --ds-posture-* to WO-FAM-12 (the same registrations as the liveness dispositions), '
+      + 'and 14 --ds-switch-* to WO-DER-06 2d-resto (namespace retirement with token-lane reclassification); '
+      + 'the eleven ownerless names were resolved outside the anchor by wire-or-retire (F6c, 008eb19e2). '
+      + 'Second (D6-2c-ii): +11 names the neutral compile ships with zero readers anywhere '
+      + '(--ds-color-text-page, seven --ds-control-*, --ds-sidebar-item-color, --ds-surface-shadow(-hover)), '
+      + 'same class and same owner (WO-DER-06 2d-resto). '
+      + 'Decrease-only from here: each owner removes its names.',
+  },
 ]);
 
 /**

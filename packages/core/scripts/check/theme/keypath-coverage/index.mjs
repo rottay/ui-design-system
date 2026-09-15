@@ -11,37 +11,55 @@
  * nothing outside the three.
  *
  * IT CANNOT PASS YET, AND IT SAYS SO. The derived set is empty until the
- * derivation lane lands its per-family derivators; until then the vast majority
- * of the universe is `uncovered` and this gate is RED. It is registered in the
+ * derivation lane lands its per-family derivators; until then part of the
+ * universe is `uncovered` and this gate is RED. It is registered in the
  * gate manifest as a non-blocking entry with a written reason and an owner --
  * the sanctioned mechanism -- so the blocking matrix stays honest instead of
  * being greened by a vacuous PASS. It never fails open: `uncovered.length > 0`
  * is a failure, always, and the drill beside it proves that.
  *
- * THE UNIVERSE IS MEASURED, NOT DECLARED. It is every authored keypath of the
- * three shipped first-party themes, read from source with the TypeScript AST.
- * A keypath a theme really authors is a keypath somebody has to own.
+ * THE UNIVERSE IS MEASURED, NOT DECLARED, AND IT MOVED WITH ITS SUBJECT
+ * (D6-2c-ii, 2026-09-15). It used to be the authored keypaths of three shipped
+ * `.ts` themes, read with the TypeScript AST. Those themes are retired: a
+ * first-party vertical is now the neutral foundation with its preset document
+ * admitted through the same door a tenant takes. So the universe is the
+ * COMPOSED baselines themselves -- `baselineFor(vertical, vertical)` read flat,
+ * the same arm `purity` uses -- which is the same question asked of the theme
+ * that actually ships. Measuring the preset DOCUMENTS instead would have been
+ * vacuous: a document authors catalog decisions by construction, so every
+ * keypath would land in `decision` and the gate would pass without owning
+ * anything.
+ *
+ * WHAT THE MOVE COST, STATED SO IT IS NOT LOST. Against the authored corpus the
+ * gate measured 2501 uncovered of 2531. Those keypaths are not owned now; they
+ * are GONE, because nothing authors them any more. The capability they carried
+ * is the derivation lane's obligation (WO-DER-06/07), not this gate's counter.
+ *
+ * Reading dist makes it a POST-BUILD gate with a freshness proof, like `purity`
+ * and `slot-inventory`: there is one composition door and it is the compiled
+ * one, never a second reader of the preset JSON.
  *
  * Run: node scripts/check/theme/keypath-coverage/index.mjs [--check|--json]
  */
 
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-import ts from 'typescript';
+import { join, dirname } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 import { readThemeCatalog } from '../../../libraries/theme-catalog/index.mjs';
+import { assertDistFresh } from '../../../package/artifacts/freshness/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 
-export const THEME_SOURCES = Object.freeze([
-  'src/foundation/tokens/ts/presentation/brand-themes/rottay/index.ts',
-  'src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts',
-  'src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts',
-]);
+/** The published door the composed baseline is read through, and its intake. */
+export const BASELINE_MODULE = 'dist/index.js';
+export const INTAKE_MODULE =
+  'dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js';
+// The roster rides its own deep module: the public root no longer re-exports
+// FIRST_PARTY_VERTICALS (D6-2c-ii removed the `export *` facade), and a gate
+// reads what ships, never a convenience barrel.
+export const ROSTER_MODULE = 'dist/foundation/presets/verticals/roster/index.js';
 
 /**
  * Keypath prefixes the DS owns and no tenant may reach, each with its owner.
@@ -53,6 +71,7 @@ export const INTERNAL_PREFIXES = Object.freeze([
   { prefix: 'id', owner: 'roster row identity; stamped by resolveTheme, never authored' },
   { prefix: 'name', owner: 'roster row identity; stamped by resolveTheme, never authored' },
   { prefix: 'capabilities', owner: 'the vertical capability catalogue, not a visual value' },
+  { prefix: 'appearance', owner: 'roster row identity; the compile door stamps defaultMode from the roster, never a document' },
 ]);
 
 /**
@@ -81,99 +100,76 @@ export function decisionPrefixes(rows = readThemeCatalog()) {
   return rows.flatMap((row) => expandKeypath(row.keypath?.brandTheme ?? null));
 }
 
-function unwrapExpression(node) {
-  let current = node;
-  while (
-    current
-    && (ts.isAsExpression(current)
-      || (ts.isSatisfiesExpression?.(current) ?? false)
-      || ts.isParenthesizedExpression(current))
-  ) {
-    current = current.expression;
+/**
+ * Every leaf keypath of one flat theme view.
+ *
+ * An EMPTY object is a leaf: `recipes: {}` is a family the theme declares and
+ * leaves unset, and dropping it would shrink the universe by exactly the
+ * keypaths nobody has claimed -- the opposite of what this gate measures. A
+ * leaf is where the walk stops, not where a value happens to be a scalar.
+ */
+export function viewKeypaths(value, prefix = '', out = []) {
+  if (value === undefined) return out;
+  if (value === null || typeof value !== 'object') {
+    if (prefix) out.push(prefix);
+    return out;
   }
-  return current;
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => viewKeypaths(item, `${prefix}[${index}]`, out));
+    return out;
+  }
+  const keys = Object.keys(value);
+  if (keys.length === 0) {
+    if (prefix) out.push(prefix);
+    return out;
+  }
+  for (const key of keys) viewKeypaths(value[key], prefix ? `${prefix}.${key}` : key, out);
+  return out;
+}
+
+/** The union of the first-party baselines' keypaths, sorted and deduplicated. */
+export function themeKeypathUniverse(views) {
+  if (!Array.isArray(views) || views.length === 0) return [];
+  return [...new Set(views.flatMap((view) => viewKeypaths(view)))].sort();
 }
 
 /**
- * A shipped theme is assembled from file-local consts (`palette: PALETTE`), so
- * a reader that stopped at the identifier would measure a universe of 13 and
- * call the tree covered. References are resolved through the file's own
- * top-level bindings; `seen` stops a cyclic one from looping.
+ * The composed first-party baselines, read from `dist/` under a freshness
+ * proof -- the same arm `purity` loads, for the same reason: there is one
+ * composition door, and reading the preset JSON here would be a second one.
  */
-function literalKeypaths(node, source, prefix, out, bindings, seen = new Set()) {
-  const current = unwrapExpression(node);
-  if (!current) return;
-  if (ts.isObjectLiteralExpression(current)) {
-    for (const property of current.properties) {
-      const next = prefix
-        ? `${prefix}.${propertyKey(property, source)}`
-        : propertyKey(property, source);
-      if (ts.isPropertyAssignment(property)) {
-        literalKeypaths(property.initializer, source, next, out, bindings, seen);
-      } else if (ts.isShorthandPropertyAssignment(property)) {
-        literalKeypaths(property.name, source, next, out, bindings, seen);
-      } else if (ts.isSpreadAssignment(property)) {
-        literalKeypaths(property.expression, source, prefix, out, bindings, seen);
-      }
-    }
-    return;
-  }
-  if (ts.isIdentifier(current)) {
-    const bound = bindings.get(current.text);
-    if (bound && !seen.has(current.text)) {
-      literalKeypaths(bound, source, prefix, out, bindings, new Set([...seen, current.text]));
-      return;
-    }
-  }
-  if (prefix) out.add(prefix);
-}
+const importByUrl = (specifier) => import(specifier);
 
-function propertyKey(property, source) {
-  if (ts.isSpreadAssignment(property)) return '';
-  const name = property.name;
-  if (!name) return '';
-  if (ts.isComputedPropertyName(name)) return '*';
-  return name.getText(source).replace(/['"]/g, '');
-}
-
-/** Every keypath the three shipped themes author, measured from source. */
-export function themeKeypathUniverse(coreRoot = CORE_ROOT) {
-  const out = new Set();
-  for (const relative of THEME_SOURCES) {
-    const pathname = join(coreRoot, relative);
-    const source = ts.createSourceFile(
-      pathname,
-      readFileSync(pathname, 'utf8'),
-      ts.ScriptTarget.Latest,
-      false,
-      ts.ScriptKind.TS,
+export async function loadFirstPartyViews({
+  coreRoot = CORE_ROOT,
+  importModule = importByUrl,
+} = {}) {
+  const freshness = assertDistFresh({
+    packageRoot: coreRoot,
+    stampPath: join(coreRoot, 'dist/build-stamp.json'),
+  });
+  if (!freshness?.ok) {
+    throw new Error(
+      'theme-keypath-coverage: dist/ is stale or its freshness is unproven:\n  '
+        + `${(freshness?.failures ?? ['the freshness proof returned nothing']).join('\n  ')}`,
     );
-    const bindings = new Map();
-    const collectBindings = (node) => {
-      if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
-        bindings.set(node.name.text, node.initializer);
-      }
-      ts.forEachChild(node, collectBindings);
-    };
-    collectBindings(source);
-
-    const visit = (node) => {
-      if (
-        ts.isVariableDeclaration(node)
-        && ts.isIdentifier(node.name)
-        && /BrandTheme$/u.test(node.name.text)
-      ) {
-        const expression = unwrapExpression(node.initializer);
-        if (expression && ts.isObjectLiteralExpression(expression)) {
-          literalKeypaths(expression, source, '', out, bindings);
-        }
-      }
-      ts.forEachChild(node, visit);
-    };
-    visit(source);
   }
-  return [...out].sort();
+  const { baselineFor } = await importModule(pathToFileURL(join(coreRoot, BASELINE_MODULE)).href);
+  const { readGovernedTheme } = await importModule(
+    pathToFileURL(join(coreRoot, INTAKE_MODULE)).href,
+  );
+  const { FIRST_PARTY_VERTICALS } = await importModule(
+    pathToFileURL(join(coreRoot, ROSTER_MODULE)).href,
+  );
+  const verticals = Object.keys(FIRST_PARTY_VERTICALS ?? {});
+  if (verticals.length === 0) {
+    throw new Error('theme-keypath-coverage: the roster declares no first-party vertical');
+  }
+  return Object.fromEntries(
+    verticals.map((vertical) => [vertical, readGovernedTheme(baselineFor(vertical, vertical))]),
+  );
 }
+
 
 const under = (keypath, prefixes) =>
   prefixes.some((prefix) => keypath === prefix || keypath.startsWith(`${prefix}.`));
@@ -184,7 +180,7 @@ const under = (keypath, prefixes) =>
  * keypath with two owners has none.
  */
 export function partition({
-  universe = themeKeypathUniverse(),
+  universe = [],
   decision = decisionPrefixes(),
   derived = DERIVED_PREFIXES.map((entry) => entry.prefix),
   internal = INTERNAL_PREFIXES.map((entry) => entry.prefix),
@@ -229,11 +225,19 @@ export function collectFindings(input = {}) {
   return { findings, result };
 }
 
+/** The live measurement: load the composed baselines, then partition them. */
+export async function measure({ coreRoot = CORE_ROOT, importModule } = {}) {
+  const views = await loadFirstPartyViews({ coreRoot, importModule });
+  return collectFindings({ universe: themeKeypathUniverse(Object.values(views)) });
+}
+
 const invokedDirectly =
   process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 
-if (invokedDirectly) {
-  const { findings, result } = collectFindings();
+/* `main()` rather than a top-level await: this module is imported by readers
+ * that do not support top-level await, and a CLI guard must never decide that. */
+async function main() {
+  const { findings, result } = await measure();
   if (process.argv.includes('--json')) {
     console.log(JSON.stringify({ findings, counts: {
       universe: result.universe.length,
@@ -251,4 +255,12 @@ if (invokedDirectly) {
     for (const finding of findings) console.error(finding);
   }
   process.exit(findings.length > 0 ? 1 : 0);
+}
+
+if (invokedDirectly) {
+  main().catch((error) => {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`theme-keypath-coverage: ${message}`);
+    process.exit(1);
+  });
 }

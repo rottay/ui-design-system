@@ -5,24 +5,16 @@
   "unit": "fila del inventario = un SLOT autorado del objeto evaluado de un tema. NO es la unidad de anotacion de variant-parity ni la de canal del catalogo de cascada.",
   "counters": {
     "rows": {
-      "value": 3594,
-      "reason": "3603 -> 3594: el lote C4 retiro la familia `engineBridge` del contrato Theme/BrandTheme (contracts, ISO, schema, intake y los tres temas de primera parte). Eran 9 hojas autoradas, 3 por vertical (CAPABILITIES.engineBridge.reason, CAPABILITIES.engineBridge.status y THEME.capabilities.engineBridge.note) x rottay/bithire/evnto. Medido contra el inventario, no citado de prosa: 9 filas removidas, 0 agregadas. Ningun adaptador leia engineBridge, y los tres artifacts CSS de primera parte quedan byte-identicos, asi que no se perdio capacidad."
-    },
-    "unassignedRows": {
-      "value": 275,
-      "reason": "278 -> 275: de las 9 hojas engineBridge retiradas por C4, 3 estaban sin domicilio (los THEME.capabilities.engineBridge.note de rottay/bithire/evnto) y 6 estaban en pro-expert (24 -> 18, contador que este ledger no ancla). El desglose sale de stats.byDomicile del inventario anterior, contando las filas removidas por currentDomicile."
-    },
-    "untaggedRows": {
-      "value": 25,
-      "reason": "Hojas autoradas que ningun docblock cubre. Una hoja sin domicilio es exactamente lo que la ley F4A prohibe ('cero keypaths sin domicilio'). Decrece-solo hasta cero."
+      "value": 115,
+      "reason": "3594 -> 115. D6-2c-ii (2026-09-15): el universo pasa de las 3594 filas de los tres temas autorados a las 115 filas del baseline compuesto neutro+preset (inventario regenerado post-build, digest b874f2bfd5b3; la identidad de slot THEME.<keypath> conserva su forma, asi que las filas siguen comparables). Las filas retiradas no perdieron capacidad: son los keypaths que nadie autora ya; los que sobreviven son los que el baseline decide."
     },
     "rowsWithoutRootAttribution": {
-      "value": 1433,
-      "reason": "1437 -> 1433: tres hojas de estado sin membresia se retiraron al pasar a derivacion; el radio de Segmented se reclasifico desde sin membresia a su fallback declarado."
+      "value": 30,
+      "reason": "1433 -> 30: misma mudanza de universo (ver rows). De las 115 filas compuestas, 30 no llevan atribucion de raiz: quedan como cola de adjudicacion del carril de derivacion (WO-DER-06), medidas no escondidas."
     },
     "expressionsCarryingLiteral": {
-      "value": 70,
-      "reason": "calc()/clamp() que leen la cascada y ADEMAS llevan un literal adentro: colapso a medias. El caso testigo es calc(13px * var(--ds-type-scale)). Decrece-solo. 71 -> 70 (WO-DER-04, bajada en el commit que movio el numero): la unica fila que salio es rottay:CHROME.table.cellFontSize, autorada como calc(var(--ds-text-body-size) * var(--ds-type-scale, 1)). Aplicaba el dial de tipo DOS veces desde que --ds-text-body-size lo lleva, asi que la correccion de una-sola-autoridad la dejo leyendo el canal plano; sin calc() ya no es valueKind expression y el digito que la contaba era el 1 del fallback var(..., 1). Medido contra el inventario fila a fila: 1 salida, 0 entradas."
+      "value": 0,
+      "reason": "70 -> 0: misma mudanza de universo (ver rows). Ninguna fila del baseline compuesto carga un literal en una expresion var(); R1 mide ahora el colapso por valor, mas fuerte que el docblock retirado."
     },
     "literalPinsOnDeclaredHead": {
       "value": 20,
@@ -30,5 +22,9 @@
       "reason": "Medido cruzando css-edges.json.literalPins (1919) contra roots[].channel. NO es todavia el detector de sombra de la ley 4(a): un literal SOBRE la cabeza declarada es, muchas veces, la casa legitima de la semilla. El detector completo -- un literal en capa INFERIOR que reexpresa una decision que la raiz ya carga -- necesita la membresia por canal que hoy no existe (rowsWithoutRootAttribution). Se ancla como observacion, y el lote del gate decide su forma. UNIDAD REFINADA (lote LEDGER-GATE, 2026-08-28, ratificacion DT): el conteo es contra las cabezas de raices NO REFINADAS — una raiz de paso (tier.<nivel>.<fg|border>.<paso>) es la MISMA decision indexada mas fino (ley 2A §3.1, adjudicada para root-exposure-gate, aplicada aca). Sin el filtro el contador daba 24 contra esta ancla de 20 sin que cambiara un solo pin del CSS: los 4 de diferencia (--ds-color-text-{secondary,tertiary,muted,disabled}) se volvieron cabeza cuando 2A creo las raices de paso. Un contador que sube porque el catalogo crece no mide deuda, mide catalogo. El productor lo recomputa de css-edges + root-catalog (countLiteralPinsOnDeclaredHead): no depende de copia manual."
     }
   },
-  "reading": "Sobre 3656 filas: 760 ya colapsadas (R1), 906 colapsables con raiz y ley citada (R2), 0 variantes por vocabulario cerrado (R3), 205 pro/expert (R4) y 1785 en cola de adjudicacion (R5). R2 paso de 26 a 906 contra un piso de aceptacion de 412 computado sin adjudicar nada; el crecimiento es la membresia persistida, no una regla mas floja -- las cinco reglas R1..R5 no cambiaron una linea. Las 1707 filas que siguen sin raiz atribuible son la deuda restante y tienen tres motivos medidos: 619 canales cuyo owner no esta adjudicado todavia, 185 cuya combinacion tier.propiedad NO EXISTE como raiz en el catalogo (shadow 78, padding 31, height/width/size/gap/ring/opacity/weight/radius/duration el resto) y 53 cuya hoja no decodifica una propiedad del vocabulario cerrado. ACTUALIZACION PALETA P1 (2026-08-28): el inventario hoy tiene 3629 filas y la deuda sin raiz atribuible es 1443 (ver la razon del contador: hubo deriva silenciosa 1707->1467 entre cohorte 1 y este lote porque ningun gate verificaba la cifra). Las cifras R1..R5 de arriba quedan fechadas a la cohorte 1."
+  "reading": "Sobre 115 filas del baseline compuesto neutro+preset (digest b874f2bfd5b3): 42 con raiz medida por root-membership (digest e2e98599ceb4), 30 en cola de adjudicacion del carril (WO-DER-06), 0 variantes por vocabulario cerrado, 0 expresiones con literal. El corpus autorado anterior (3656 filas) ya no existe: sus keypaths no los autora nadie; la capacidad que llevaban es obligacion del carril de derivacion (WO-DER-06/07), no deuda de este ancla.",
+  "retired": {
+    "unassignedRows": "D6-2c-ii (2026-09-15): contaba `stats.byDomicile.unassigned`, y el domicilio lo declaraban los docblocks `@domicile` de los tres temas `.ts` autorados. Esos temas se retiraron: un vertical de primera parte es el fundamento neutro con su documento de preset admitido por la misma puerta que toma un tenant, y un JSON no lleva docblocks. El productor ya no publica `currentDomicile`, asi que el contador se retira con su dimension en vez de quedarse en cero -- un detector que dejo de detectar baja su contador y parece una mejora. Su gemelo `unassignedSlots` en el normalization-contract-gate se retira en el mismo lote, que es lo que la ley L3 pedia: las dos anclas se mueven juntas.",
+    "untaggedRows": "D6-2c-ii (2026-09-15): mismo retiro, misma causa. Contaba las hojas autoradas que ningun docblock cubria -- la cifra que la ley F4A queria llevar a cero. Sin corpus de docblocks la pregunta no tiene sujeto: la cobertura de lo que hoy autora un vertical la mide `theme-keypath-coverage` sobre el baseline compuesto (59 keypaths, 6 sin dueno), y las obligaciones de derivacion estan registradas en WO-DER-06."
+  }
 }

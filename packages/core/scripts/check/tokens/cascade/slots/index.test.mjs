@@ -6,15 +6,15 @@ import {
   classify,
   diffKeys,
   evaluatedLeaves,
+  isMetadataSlot,
+  jsPathToSlot,
   headChannelIndex,
   countLiteralPinsOnDeclaredHead,
   evaluateLedger,
   isRefinedRoot,
   measureLedger,
   readsVar,
-  resolveTag,
   sentinelFor,
-  slotCandidates,
   valueKind,
   withLeaf,
 } from './index.mjs';
@@ -71,41 +71,6 @@ function syntheticArm(themes) {
   };
 }
 
-const THEME_SOURCE = `
-export const demoBrandTheme: FirstPartyBrandTheme = {
-  chrome: {
-    sidebar: {
-      /**
-       * @domicile seed
-       * @governor dial: demo.tone
-       */
-      bg: '#ffffff',
-    },
-    controls: {
-      /**
-       * @domicile seed
-       * @governor dial: demo.shape
-       */
-      radius: '#ffffff',
-    },
-  },
-  palette: {
-    /**
-     * @domicile seed
-     * @governor none
-     */
-    textPrimaryColor: '#111111',
-  },
-  surfaces: {
-    /**
-     * @domicile derived
-     * @governor deriva de: --ds-mystery
-     */
-    mystery: 'var(--ds-mystery)',
-  },
-};
-`;
-
 const THEME_OBJECT = {
   chrome: { sidebar: { bg: '#ffffff' }, controls: { radius: '#ffffff' } },
   palette: { textPrimaryColor: '#111111' },
@@ -124,7 +89,6 @@ async function buildSynthetic({ theme = THEME_OBJECT, catalog = SYNTHETIC_CATALO
     arm: syntheticArm({ demo: theme }),
     catalog,
     controls: SYNTHETIC_CONTROLS,
-    sources: { demo: THEME_SOURCE },
     overrideTokens: new Set(),
     membership,
   });
@@ -143,7 +107,6 @@ test('un slot plantado produce su fila, con canal medido y raiz atribuida', asyn
   assert.equal(row.rootAttribution, 'head-channel-exact');
   assert.equal(row.rule, 'R2');
   assert.equal(row.verdict, 'collapse');
-  assert.equal(row.currentDomicile, 'seed');
   assert.equal(row.evidence.coincidenceGuard, 'no-value-match-used');
 });
 
@@ -219,10 +182,12 @@ test('una cabeza reclamada por dos raices no atribuye ninguna', async () => {
 
 /* ── 6. R1: lo ya colapsado se reconoce y no vuelve al backlog ──────────── */
 
-test('R1 reconoce el slot ya colapsado', async () => {
+test('R1 reconoce el slot ya colapsado POR LA FORMA DE SU VALOR', async () => {
+  // El docblock que lo declaraba `derived` se retiro con las fuentes autoradas
+  // (D6-2c-ii). La referencia sigue ahi: el valor ES la evidencia.
   const doc = await buildSynthetic();
   const row = rowFor(doc, 'demo:THEME.surfaces.mystery');
-  assert.equal(row.currentDomicile, 'derived');
+  assert.equal(row.valueKind, 'var-reference');
   assert.equal(row.rule, 'R1');
   assert.equal(row.verdict, 'already-collapsed');
 });
@@ -265,15 +230,14 @@ test('valueKind separa referencia de literal', () => {
   assert.equal(valueKind(1.5), 'number');
 });
 
-test('slotCandidates ofrece las dos formas de autoria y resolveTag toma la mas especifica', () => {
-  assert.deepEqual(slotCandidates('typography.fontFamily'), ['TYPOGRAPHY.fontFamily', 'THEME.typography.fontFamily']);
-  assert.deepEqual(slotCandidates('modes.dark.palette.x'), ['OVERLAY.palette.x', 'THEME.modes.dark.palette.x']);
-  const scopes = [
-    { scope: 'THEME.typography.fontFamily', domicile: 'seed', governor: 'g', line: 2 },
-    { scope: 'TYPOGRAPHY', domicile: 'derived', governor: 'g', line: 1 },
-  ].sort((a, b) => b.scope.length - a.scope.length);
-  const match = resolveTag(scopes, slotCandidates('typography.fontFamily'));
-  assert.equal(match.entry.scope, 'THEME.typography.fontFamily');
+test('la ruta evaluada ES la ruta del slot, y el metadato cubre por prefijo', () => {
+  assert.equal(jsPathToSlot('typography.fontFamily'), 'THEME.typography.fontFamily');
+  assert.equal(jsPathToSlot('modes.dark.palette.x'), 'THEME.modes.dark.palette.x');
+  assert.equal(isMetadataSlot('THEME.id'), true);
+  assert.equal(isMetadataSlot('THEME.capabilities.expressive.status'), true);
+  assert.equal(isMetadataSlot('THEME.appearance.defaultMode'), true);
+  assert.equal(isMetadataSlot('THEME.palette.primaryColor'), false);
+  assert.equal(isMetadataSlot('THEME.identity'), false, 'cubre por segmento, jamas por subcadena');
 });
 
 test('headChannelIndex separa la cabeza unica de la disputada', () => {
@@ -292,11 +256,12 @@ test('evaluatedLeaves ignora undefined y desciende arrays', () => {
 
 /* ── 9. cobertura del mapeo sobre el arbol REAL ─────────────────────────── */
 
-test('todo scope tageado del arbol real cubre al menos una hoja evaluada', async () => {
+test('el arbol real compila entero y su roster de metadato sigue siendo verdad', async () => {
   const doc = await buildInventory();
-  assert.equal(doc.stats.unmappedTagScopes, 0, JSON.stringify(doc.unmappedTagScopes.slice(0, 5)));
   assert.equal(doc.stats.compileFailures, 0);
-  assert.equal(doc.stats.metadataRows, doc.stats.metadataRosterSize);
+  assert.equal(doc.stats.metadataRosterUnmatched, 0,
+    'un prefijo de metadato que ninguna fila satisface dejo de ser verdad');
+  assert.ok(doc.stats.metadataRows > 0, 'los tres baselines declaran identidad y capacidades');
 });
 
 
@@ -337,7 +302,7 @@ test('un slot que abarca DOS raices no se atribuye a ninguna', async () => {
   };
   const doc = await buildInventory({
     arm, catalog: SYNTHETIC_CATALOG, controls: SYNTHETIC_CONTROLS,
-    sources: { demo: THEME_SOURCE }, overrideTokens: new Set(), membership,
+    overrideTokens: new Set(), membership,
   });
   const row = doc.rows.find((item) => item.slotId === 'demo:THEME.chrome.sidebar.bg');
   assert.equal(row.rootId, null);
@@ -355,11 +320,11 @@ test('el modo sin membresia se pide por nombre: leerla por accidente es imposibl
 /* ── 11. el LEDGER cableado: falla en las dos direcciones ────────────────── */
 
 const LEDGER_BASE = { counters: Object.fromEntries(
-  ['rows', 'unassignedRows', 'untaggedRows', 'rowsWithoutRootAttribution',
-   'expressionsCarryingLiteral', 'literalPinsOnDeclaredHead'].map((n) => [n, { value: 10 }]),
+  ['rows', 'rowsWithoutRootAttribution', 'expressionsCarryingLiteral', 'literalPinsOnDeclaredHead']
+    .map((n) => [n, { value: 10 }]),
 ) };
 const ledgerLive = (over = {}) => ({
-  rows: 10, unassignedRows: 10, untaggedRows: 10, rowsWithoutRootAttribution: 10,
+  rows: 10, rowsWithoutRootAttribution: 10,
   expressionsCarryingLiteral: 10, literalPinsOnDeclaredHead: 10, ...over,
 });
 
@@ -371,9 +336,9 @@ test('LEDGER — un contador que SUBE falla, y el mensaje prohibe re-anclar', ()
 });
 
 test('LEDGER — un contador que BAJA tambien falla, con la instruccion de re-anclar', () => {
-  const failures = evaluateLedger(ledgerLive({ untaggedRows: 9 }), LEDGER_BASE);
+  const failures = evaluateLedger(ledgerLive({ expressionsCarryingLiteral: 9 }), LEDGER_BASE);
   assert.equal(failures.length, 1);
-  assert.match(failures[0], /untaggedRows: 10 -> 9 bajo/);
+  assert.match(failures[0], /expressionsCarryingLiteral: 10 -> 9 bajo/);
   assert.match(failures[0], /MISMO commit/);
 });
 

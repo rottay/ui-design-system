@@ -1131,23 +1131,41 @@ export const CI_GATES = Object.freeze([
   // The DRILL is blocking and green; the GATE is registered non-blocking with a
   // written reason because it cannot pass before the derivation lane exists.
   // That is the sanctioned shape, and the only alternative -- leaving the law
-  // unregistered, or letting it report PASS on a partition that covers 30 of
-  // 2531 keypaths -- is the fail-open this manifest exists to make
-  // unrepresentable. The drill is what stops the measurement from rotting while
-  // the gate waits.
-  { id: 'theme-keypath-coverage-drill', run: ['node', '--test', 'scripts/check/theme/keypath-coverage/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['theme-keypath-coverage'], },
+  // unregistered, or letting it report PASS on a partition nobody owns -- is
+  // the fail-open this manifest exists to make unrepresentable. The drill is
+  // what stops the measurement from rotting while the gate waits. Both legs
+  // moved to post-build in D6-2c-ii: the universe is the COMPOSED first-party
+  // baselines, read through the compiled door under a freshness proof, because
+  // the authored `.ts` themes they used to read are retired.
+  {
+    id: 'theme-keypath-coverage-drill',
+    run: ['node', '--test', 'scripts/check/theme/keypath-coverage/index.test.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillFor: ['theme-keypath-coverage'],
+    prerequisites: ['fresh-dist'],
+  },
   {
     id: 'theme-keypath-coverage',
     run: ['node', 'scripts/check/theme/keypath-coverage/index.mjs'],
     blocking: false,
     excluded: {
-      reason: 'The three sets can only be total once a family derivator owns the subtrees no decision authors: the derived set is EMPTY by construction until the derivation lane lands, so the gate measures 2501 uncovered keypaths of 2531 and is RED by design, not by defect. It is registered here rather than left out so the debt is visible in the matrix, and its drill stays BLOCKING so the measurement cannot silently stop measuring. It flips to blocking in the lane that fills DERIVED_PREFIXES.',
+      reason: 'The three sets can only be total once a family derivator owns the subtrees no decision authors: the derived set is EMPTY by construction until the derivation lane lands, so the gate is RED by design, not by defect. It is registered here rather than left out so the debt is visible in the matrix, and its drill stays BLOCKING so the measurement cannot silently stop measuring. It flips to blocking in the lane that fills DERIVED_PREFIXES. D6-2c-ii moved the universe with its subject: the authored first-party themes are retired, so it now measures the composed baselines (neutral foundation + preset through the compile door), which is 59 keypaths with 6 uncovered instead of 2531 with 2501 uncovered. The uncovered set is now specific and readable -- two typography leaves a pairing deriver must own, three envelope schemaVersion leaves, and expressive.profiles.icon, which the catalog row lists in its `keys` but omits from its `keypath.brandTheme` -- and the capability the 2501 represented is registered as the derivation lane obligation in WO-DER-06, not carried as a counter here.',
       owner: 'derivation lane (WO-DER-*), roadmap/registry.json',
       trackedSince: '2026-09-07',
     },
-    phase: 'pre-build',
+    phase: 'post-build',
     drillId: 'theme-keypath-coverage-drill',
+    prerequisites: ['fresh-dist'],
   },
+  // The foundation's own colour declarations, projected into TypeScript so the
+  // admission contrast floor can resolve a reference the CASCADE resolves. The
+  // stylesheet is the source and the module is its projection, so the only
+  // thing that can go wrong is the two disagreeing -- which is exactly what
+  // `--check` measures. A hand-written second table is the defect class this
+  // pair exists to make unnecessary.
+  { id: 'foundation-defaults-drill', run: ['node', '--test', 'scripts/generate/tokens/foundation-defaults/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['foundation-defaults-freshness'], },
+  { id: 'foundation-defaults-freshness', run: ['node', 'scripts/generate/tokens/foundation-defaults/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'foundation-defaults-drill', },
   { id: 'customization-controls-drill', run: ['node', '--test', 'scripts/generate/theme/controls-doc/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['customization-controls-freshness'], },
   { id: 'customization-controls-freshness', run: ['node', 'scripts/generate/theme/controls-doc/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'customization-controls-drill', },
 
@@ -1267,6 +1285,11 @@ export const RETIRED_GATES = Object.freeze([
     replacedBy:
       'scripts/check/theme/artifact-coverage (per-family coverage of the compiled artifacts, measured from the '
       + 'typed catalog) and the per-family derivation cuts.',
+    producerRemoved:
+      'D6-2c-ii (2026-09-15): the producer itself is deleted, not just de-registered. Its universe was the '
+      + 'docblock tags of the three authored `.ts` themes, and those themes are retired -- a first-party '
+      + 'vertical is the neutral foundation plus its preset document, and a JSON carries no docblocks. The '
+      + 'slot inventory, its only importer, retired the domicile dimension in the same lot.',
   },
   {
     id: 'mirror-parity-freshness',
@@ -1275,6 +1298,11 @@ export const RETIRED_GATES = Object.freeze([
     reason:
       'F-54/F-04: the compiled mirror it froze is a generated view, and its agreement with the source was proof '
       + 'that one generator had been run, never that a decision reaches a family.',
+    producerRemoved:
+      'D6-2c-ii (2026-09-15): the producer itself is deleted. Its `sourceSkeleton` half read the three authored '
+      + '`.ts` themes, which are retired; the other half froze a generated artifact nothing reads, and its only '
+      + 'importer was variant-parity, deleted in the same lot. `root-checklists` keeps its own producer and is '
+      + 'left in place: it now has no importer either, which is registered as follow-up rather than settled here.',
     replacedBy:
       'scripts/check/theme/artifact-coverage, which reads the same compiled artifacts and asks the causal question '
       + 'instead: which families does each catalog decision actually cover.',

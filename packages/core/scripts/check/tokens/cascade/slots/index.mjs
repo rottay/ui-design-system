@@ -1,14 +1,26 @@
 #!/usr/bin/env node
 /**
- * slot-inventory — el JOIN de la normalizacion profunda: slot de fuente TS
- * <-> canal emitido <-> raiz del catalogo de cascada.
+ * slot-inventory — el JOIN de la normalizacion profunda: slot autorado del
+ * tema <-> canal emitido <-> raiz del catalogo de cascada.
  *
- * POR QUE EXISTE. El frente de normalizacion tenia tres capas y ninguna union.
- * Las fuentes clasifican cada slot con `@domicile`/`@governor`
- * (`scripts/generate/tokens/manifest/variant-parity/index.mjs` ya lo parsea); el catalogo de cascada
- * clasifica RAICES (`governance/manifest/cascade/catalog/index.json`); y entre las dos vive
- * el canal `--ds-*` que nadie ata a ninguna. Sin esa union, "clasificar los
- * candidatos de colapso" no es una tarea mecanica: es una opinion.
+ * POR QUE EXISTE. El frente de normalizacion tenia capas sin union. El catalogo
+ * de cascada clasifica RAICES (`governance/manifest/cascade/catalog/index.json`)
+ * y entre el slot y la raiz vive el canal `--ds-*` que nadie ata a ninguna. Sin
+ * esa union, "clasificar los candidatos de colapso" no es una tarea mecanica:
+ * es una opinion.
+ *
+ * EL DOMICILIO SE RETIRO CON SU SUJETO (D6-2c-ii, 2026-09-15). Hasta este lote
+ * cada fila llevaba ademas el `@domicile`/`@governor` que los tres temas `.ts`
+ * autorados declaraban en docblocks, parseados por `variant-parity`. Esos temas
+ * no existen: un vertical de primera parte es el fundamento neutro con su
+ * documento de preset admitido por la misma puerta que toma un tenant, y un
+ * documento JSON no lleva docblocks. La dimension se retira entera —
+ * `currentDomicile`, `governor`, `unmappedTagScopes` y los contadores
+ * `unassignedRows` / `untaggedRows` del ledger — en vez de sobrevivir como un
+ * campo siempre nulo que pareceria medir algo. Lo que R1 y R4 leian de un tag
+ * ahora se MIDE: R1 mira la forma del valor autorado (una referencia o una
+ * expresion YA colapso, lo diga o no un docblock) y R4 mira la allowlist de
+ * overrides publicada. Las cinco reglas no cambian de orden ni de nombre.
  *
  * COMO SE MIDE EL CANAL: POR DIFERENCIA, NO POR LECTURA DE CODIGO. Para cada
  * hoja evaluada del tema se compila el tema DOS veces con el UNICO lowering que
@@ -59,12 +71,6 @@ import {
   LOWERING_MODULE,
   loadBrandThemeLowering,
 } from '../../../../libraries/theme-lowering/index.mjs';
-import {
-  DOMICILES,
-  METADATA_EXCLUSION,
-  analyzeSource,
-  readSources,
-} from '../../../../../scripts/generate/tokens/manifest/variant-parity/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const CORE_ROOT = findPackageRoot(HERE);
@@ -79,50 +85,44 @@ export const CONTROLS_DIR = CATALOG_SOURCE;
 
 export const VERTICALS = Object.freeze(['rottay', 'bithire', 'evnto']);
 
-/**
- * De la ruta del objeto EVALUADO a la ruta de slot que usan los docblocks.
- *
- * Las fuentes no autoran un objeto: autoran varias constantes (`const CHROME =
- * {...}`) que el tema compone al final, y `pathIndex` las indexa por el nombre
- * de la constante. El objeto evaluado, en cambio, tiene los campos de
- * `FirstPartyBrandTheme`. Este mapa es la unica traduccion entre las dos, y su
- * cobertura se VERIFICA (`unmappedTagScopes`) en vez de suponerse.
- */
-const FIELD_TO_SLOT_ROOT = Object.freeze({
-  palette: 'PALETTE',
-  typography: 'TYPOGRAPHY',
-  surfaces: 'SURFACES',
-  motion: 'MOTION',
-  charts: 'CHARTS',
-  chrome: 'CHROME',
-  capabilities: 'CAPABILITIES',
-  recipes: 'RECIPES',
-  expressive: 'EXPRESSIVE',
-  responsive: 'RESPONSIVE',
-});
+/** La puerta publicada por la que se lee el baseline compuesto, y su intake. */
+export const BASELINE_MODULE = 'dist/index.js';
+export const INTAKE_MODULE =
+  'dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js';
 
+/**
+ * La identidad de un slot: `THEME.<keypath>` sobre la vista plana del tema.
+ *
+ * Hasta D6-2c-ii habia DOS candidatas por hoja, porque las fuentes autoraban
+ * constantes (`const CHROME = {...}`) y el docblock colgaba del nombre de la
+ * constante, no del campo. Sin fuentes autoradas no hay constantes: la vista
+ * compuesta tiene exactamente los campos del tema, y la ruta evaluada ES la
+ * ruta del slot. El prefijo `THEME.` se conserva para que el `slotId` no cambie
+ * de forma y las filas sigan siendo comparables contra los censos anteriores.
+ */
 export function jsPathToSlot(path) {
-  return slotCandidates(path)[0];
+  return `THEME.${path}`;
 }
 
 /**
- * Las rutas de slot POSIBLES para una hoja evaluada, en orden de preferencia.
+ * Hojas que NO son pintura, y por eso salen del denominador.
  *
- * Hay DOS, y suponer una sola fue un defecto medido: la misma familia puede
- * autorarse en una constante propia (`const TYPOGRAPHY = {...}` -> scope
- * `TYPOGRAPHY.x`) o en linea dentro del literal del tema (-> scope
- * `THEME.typography.x`), y los tres temas mezclan las dos formas. Se prueban
- * ambas contra el indice de tags y gana la coincidencia MAS ESPECIFICA; asi
- * ninguna hoja pierde su domicilio por donde eligio vivir su familia.
+ * Es una lista corta y VERIFICADA (`metadataRosterUnmatched`): una entrada que
+ * ninguna vertical autora dejo de ser verdad y es hallazgo. `id` y `name` los
+ * estampa la puerta desde el roster; `appearance.defaultMode` tambien; el
+ * arbol `capabilities` es el catalogo de capacidades del vertical, una
+ * declaracion, jamas un valor visual. Cubre por PREFIJO, igual que la ley de
+ * internos de `theme-keypath-coverage`, que declara los mismos tres duenos.
  */
-export function slotCandidates(path) {
-  const overlay = path.match(/^modes\.(light|dark)\.(.+)$/);
-  if (overlay) return [`OVERLAY.${overlay[2]}`, `THEME.${path}`];
-  const [head, ...rest] = path.split('.');
-  const mapped = FIELD_TO_SLOT_ROOT[head];
-  if (mapped) return [[mapped, ...rest].join('.'), `THEME.${path}`];
-  return [`THEME.${path}`];
-}
+export const METADATA_PREFIXES = Object.freeze([
+  'THEME.id',
+  'THEME.name',
+  'THEME.appearance',
+  'THEME.capabilities',
+]);
+
+export const isMetadataSlot = (slotPath) =>
+  METADATA_PREFIXES.some((prefix) => slotPath === prefix || slotPath.startsWith(`${prefix}.`));
 
 /** Hojas del objeto evaluado. Un `undefined` no es hoja: no se autoro nada. */
 export function evaluatedLeaves(value, prefix, out) {
@@ -297,37 +297,15 @@ export function readControls(controlsDir = CONTROLS_DIR) {
   return byId;
 }
 
-/** Tags por tema, resueltos al slot MAS ESPECIFICO que cubre cada hoja. */
-export function tagIndexFor(analysis) {
-  const scopes = analysis.tags
-    .filter((tag) => tag.kind === 'scope' && typeof tag.scope === 'string')
-    .map((tag) => ({ scope: tag.scope, domicile: tag.domicile, governor: tag.governor, line: tag.line }));
-  scopes.sort((a, b) => b.scope.length - a.scope.length);
-  return scopes;
-}
-
-export function resolveTag(scopes, slotPaths) {
-  const candidates = Array.isArray(slotPaths) ? slotPaths : [slotPaths];
-  let best = null;
-  for (const slotPath of candidates) {
-    for (const entry of scopes) {
-      if (slotPath !== entry.scope && !slotPath.startsWith(`${entry.scope}.`)) continue;
-      if (best === null || entry.scope.length > best.entry.scope.length) best = { entry, slotPath };
-      break;
-    }
-  }
-  return best;
-}
-
-const METADATA_SET = new Set(METADATA_EXCLUSION.map((entry) => `${entry.tenant}|${entry.path}`));
-
 /**
  * Las cinco reglas del diseno, EN ORDEN, primera que matchea gana.
  * Cada veredicto viaja con la evidencia que lo sostiene; ninguna evidencia
  * puede ser una igualdad de valor.
  */
-export function classify({ domicile, valueKindOf, rootId, root, control, authoredValue, emitsChannels, overrideTokens }) {
-  if (domicile === 'derived' && (valueKindOf === 'var-reference' || valueKindOf === 'expression')) {
+export function classify({ valueKindOf, rootId, root, control, authoredValue, emitsChannels, overrideTokens }) {
+  /* R1 se mide, no se declara: un valor que ES una referencia o una expresion
+   * ya lee la cascada, lo dijera o no el docblock que este lote retiro. */
+  if (valueKindOf === 'var-reference' || valueKindOf === 'expression') {
     return { rule: 'R1', verdict: 'already-collapsed', evidence: { collapsedAs: valueKindOf } };
   }
   if (rootId && root && root.derivationDebt === true && root.derivation) {
@@ -348,9 +326,6 @@ export function classify({ domicile, valueKindOf, rootId, root, control, authore
       };
     }
   }
-  if (domicile === 'pro-expert') {
-    return { rule: 'R4', verdict: 'pro-expert', evidence: { basis: 'domicile' } };
-  }
   const allowlisted = emitsChannels.filter((channel) => overrideTokens.has(channel.split('|')[1]));
   if (allowlisted.length > 0) {
     return { rule: 'R4', verdict: 'pro-expert', evidence: { basis: 'tenant-override-allowlist', channels: allowlisted } };
@@ -361,6 +336,7 @@ export function classify({ domicile, valueKindOf, rootId, root, control, authore
     evidence: {
       whyNotR2: rootId ? 'la raiz no tiene deuda de derivacion con ley citada' : 'sin raiz atribuible',
       whyNotR3: rootId ? 'el tema no autora un nombre de stop de un control gobernante' : 'sin raiz atribuible',
+      whyNotR4: 'ningun canal emitido esta en la allowlist de overrides publicada',
     },
   };
 }
@@ -391,8 +367,6 @@ export function classify({ domicile, valueKindOf, rootId, root, control, authore
 export function measureLedger(doc, literalPinsOnDeclaredHead) {
   return {
     rows: doc.stats.rows,
-    unassignedRows: doc.stats.byDomicile?.unassigned ?? 0,
-    untaggedRows: doc.stats.byDomicile?.untagged ?? 0,
     rowsWithoutRootAttribution: doc.stats.byRootAttribution?.['no-persisted-membership'] ?? 0,
     expressionsCarryingLiteral: doc.stats.expressionsCarryingLiteral ?? 0,
     literalPinsOnDeclaredHead,
@@ -480,27 +454,29 @@ export async function loadCompiledArm({ coreRoot = CORE_ROOT, importModule = (sp
       + `${(freshness?.failures ?? ['la prueba de frescura no devolvio nada']).join('\n  ')}`,
     );
   }
-  const themesPath = join(coreRoot, 'dist/foundation/tokens/ts/presentation/brand-themes/index.js');
-  const themes = await importModule(pathToFileURL(themesPath).href);
+  /* Los tres baselines COMPUESTOS, leidos por la misma puerta que `purity`:
+   * el fundamento neutro con el documento de preset de cada vertical admitido,
+   * en la vista plana que el lowering consume. */
+  const { baselineFor } = await importModule(pathToFileURL(join(coreRoot, BASELINE_MODULE)).href);
+  const { readGovernedTheme } = await importModule(
+    pathToFileURL(join(coreRoot, INTAKE_MODULE)).href,
+  );
   const { compile } = await loadBrandThemeLowering({ coreRoot, importModule });
+  const baseline = (vertical) => readGovernedTheme(baselineFor(vertical, vertical));
   return {
     compile,
-    themes: {
-      rottay: themes.rottayBrandTheme,
-      bithire: themes.bithireBrandTheme,
-      evnto: themes.evntoBrandTheme,
-    },
+    themes: Object.fromEntries(VERTICALS.map((vertical) => [vertical, baseline(vertical)])),
     provenance: {
       compilerModule: LOWERING_MODULE,
       compilerExport: LOWERING_EXPORT,
-      themesModule: 'dist/foundation/tokens/ts/presentation/brand-themes/index.js',
+      themesModule: `${BASELINE_MODULE}#baselineFor + ${INTAKE_MODULE}#readGovernedTheme`,
       freshnessProven: true,
     },
   };
 }
 
 /**
- * Las cuatro entradas son inyectables para que los drills corran sobre arboles
+ * Las entradas son inyectables para que los drills corran sobre arboles
  * SINTETICOS: un gate cuyo unico banco de pruebas es el arbol real solo puede
  * probar que hoy pasa, nunca que sabe fallar.
  */
@@ -509,7 +485,6 @@ export async function buildInventory({
   arm = null,
   catalog: injectedCatalog = null,
   controls: injectedControls = null,
-  sources: injectedSources = null,
   overrideTokens: injectedOverrides = null,
   membership: injectedMembership = undefined,
 } = {}) {
@@ -520,7 +495,6 @@ export async function buildInventory({
   const rootById = new Map((catalog.roots ?? []).map((root) => [root.rootId, root]));
   const controls = injectedControls ?? readControls();
   const overrideTokens = injectedOverrides ?? (await loadOverrideTokens(coreRoot));
-  const sources = injectedSources ?? readSources(coreRoot);
   const membership = injectedMembership === undefined
     ? readMembership(join(coreRoot, 'artifacts/generated/manifest/cascade/membership/index.json'))
     : injectedMembership;
@@ -532,32 +506,17 @@ export async function buildInventory({
     : membershipIndex(membership);
 
   const rows = [];
-  const unmappedTagScopes = [];
   const compileFailures = [];
 
   for (const vertical of Object.keys(loaded.themes)) {
     const theme = loaded.themes[vertical];
-    const analysis = analyzeSource({ tenant: vertical, text: sources[vertical] });
-    const scopes = tagIndexFor(analysis);
-    const covered = new Set();
 
     const baseline = flattenCompiled(loaded.compile({ brandTheme: theme, vertical, tenantSlug: vertical }));
     const leaves = evaluatedLeaves(theme, '', []);
 
     leaves.forEach((jsPath, ordinal) => {
-      const candidates = slotCandidates(jsPath);
+      const slotPath = jsPathToSlot(jsPath);
       const authoredValue = readAt(theme, jsPath);
-      const match = resolveTag(scopes, candidates);
-      const tag = match?.entry ?? null;
-      const slotPath = match?.slotPath ?? candidates[0];
-      // `covered` registra TODO scope que cubre esta hoja, no solo el que gana
-      // por especificidad: un contenedor tageado cuyos hijos llevan un tag mas
-      // fino SI cubre hojas, y contarlo como huerfano seria un falso hallazgo.
-      for (const entry of scopes) {
-        if (candidates.some((candidate) => candidate === entry.scope || candidate.startsWith(`${entry.scope}.`))) {
-          covered.add(entry.scope);
-        }
-      }
 
       let emitted = [];
       try {
@@ -609,10 +568,8 @@ export async function buildInventory({
       const root = rootId ? rootById.get(rootId) : null;
       const control = root?.governedBy ? controls.get(root.governedBy) : null;
       const kind = valueKind(authoredValue);
-      const domicile = tag?.domicile ?? null;
 
       const decision = classify({
-        domicile,
         valueKindOf: kind,
         rootId,
         root,
@@ -630,10 +587,7 @@ export async function buildInventory({
         authoredValue: typeof authoredValue === 'string' ? authoredValue : JSON.stringify(authoredValue),
         valueKind: kind,
         readsVar: readsVar(authoredValue),
-        currentDomicile: domicile,
-        governor: tag?.governor ?? null,
-        taggedAtLine: tag?.line ?? null,
-        isMetadata: candidates.some((candidate) => METADATA_SET.has(`${vertical}|${candidate}`)),
+        isMetadata: isMetadataSlot(slotPath),
         emitsChannels: channelNames.sort(),
         emitsScoped: emitted,
         rootId,
@@ -644,12 +598,6 @@ export async function buildInventory({
         evidence: decision.evidence,
       });
     });
-
-    for (const entry of scopes) {
-      if (!covered.has(entry.scope)) {
-        unmappedTagScopes.push({ vertical, scope: entry.scope, domicile: entry.domicile, line: entry.line });
-      }
-    }
   }
 
   rows.sort((a, b) => (a.slotId < b.slotId ? -1 : a.slotId > b.slotId ? 1 : 0));
@@ -660,8 +608,11 @@ export async function buildInventory({
     return acc;
   }, {});
 
+  /* La semilla literal se MIDE por la forma del valor: un hex, una funcion de
+   * color, una dimension o un numero autorado es una semilla, sin docblock que
+   * lo declare. Las filas de metadato no cuentan: no pintan. */
   const literalKinds = new Set(['hex', 'color-fn', 'dimension', 'number']);
-  const literalSeeds = rows.filter((row) => row.currentDomicile === 'seed' && literalKinds.has(row.valueKind));
+  const literalSeeds = rows.filter((row) => !row.isMetadata && literalKinds.has(row.valueKind));
   const distinctLiteralValues = new Set(literalSeeds.map((row) => row.authoredValue.toLowerCase()));
 
   return {
@@ -680,13 +631,11 @@ export async function buildInventory({
       membershipSource,
       catalog: 'governance/manifest/cascade/catalog/index.json',
       catalogRoots: (catalog.roots ?? []).length,
-      tagParser: 'scripts/generate/tokens/manifest/variant-parity/index.mjs (parseDocblocks + pathIndex + analyzeSource)',
-      domicileVocabulary: DOMICILES,
+      metadataPrefixes: METADATA_PREFIXES,
     },
     stats: {
       rows: rows.length,
       byVertical: tally((row) => row.vertical),
-      byDomicile: tally((row) => row.currentDomicile ?? 'untagged'),
       byValueKind: tally((row) => row.valueKind),
       rowsReadingVar: rows.filter((row) => row.readsVar).length,
       expressionsCarryingLiteral: rows.filter(
@@ -701,22 +650,20 @@ export async function buildInventory({
       distinctChannelsReached: new Set(rows.flatMap((row) => row.emitsChannels)).size,
       metadataRows: rows.filter((row) => row.isMetadata).length,
       /* El denominador de pintura RECOMPUTADO sobre el arbol de hoy: hojas
-       * evaluadas menos el roster de metadatos enumerado en
-       * scripts/generate/tokens/manifest/variant-parity/index.mjs (METADATA_EXCLUSION). Las dos cifras
-       * congeladas del programa (3693 y 3690) son fotos de arboles anteriores;
-       * esta se recomputa en cada corrida y por eso no puede envejecer en
-       * silencio. */
+       * evaluadas menos las de metadato. Las cifras congeladas del programa
+       * (3693 y 3690) son fotos de arboles anteriores; esta se recomputa en
+       * cada corrida y por eso no puede envejecer en silencio. */
       paintDenominator: rows.length - rows.filter((row) => row.isMetadata).length,
-      metadataRosterSize: METADATA_EXCLUSION.length,
-      metadataRosterUnmatched: METADATA_EXCLUSION.filter(
-        (entry) => !rows.some((row) => row.isMetadata && row.vertical === entry.tenant),
+      metadataRosterSize: METADATA_PREFIXES.length,
+      /* La guarda anti-rename: un prefijo declarado que ninguna fila satisface
+       * dejo de ser verdad, y una lista que quedo mentira es hallazgo. */
+      metadataRosterUnmatched: METADATA_PREFIXES.filter(
+        (prefix) => !rows.some((row) => row.slotPath === prefix || row.slotPath.startsWith(`${prefix}.`)),
       ).length,
       literalSeedRows: literalSeeds.length,
       distinctLiteralSeedValues: distinctLiteralValues.size,
-      unmappedTagScopes: unmappedTagScopes.length,
       compileFailures: compileFailures.length,
     },
-    unmappedTagScopes,
     compileFailures,
     rows,
   };

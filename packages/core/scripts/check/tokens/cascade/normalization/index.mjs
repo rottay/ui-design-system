@@ -14,30 +14,28 @@
  * `reconciliation` del baseline, nunca en silencio.
  *
  *   L1 CONTRATO TIPADO EQUIVALENTE. `tsc` ya obliga a los tres temas a
- *      satisfacer `FirstPartyBrandTheme`. Lo que `tsc` NO puede ver es que
+ *      satisfacer `ThemeSource`. Lo que `tsc` NO puede ver es que
  *      alguien relaje el contrato mismo, y ese es el unico agujero que este
- *      gate cubre: las 10 claves de FIRST_PARTY_BRAND_THEME_REQUIRED_KEYS
+ *      gate cubre: las 10 claves de REQUIRED_THEME_KEYS
  *      siguen declaradas `readonly` y sin `?`, y `BrandCapabilityCatalog` sigue
  *      siendo `Record` y no `Partial<Record>`. Un contrato relajado compila
  *      perfecto y deja de exigir nada.
  *
- *   L2 MISMA SUPERFICIE SEMANTICA. Todo slot con domicilio del vocabulario
- *      cerrado y con `@governor` no vacio -- eso ya lo hace variant-parity. Lo
- *      que este gate agrega es el ENDURECIMIENTO que F4A-close declaro y nunca
- *      ejecuto: `GOVERNOR_CLASS` dice de si mismo "En F4A-2 se REPORTA, no
- *      bloquea". Aca pasa a bloquear, pero NO como se enuncio.
- *
- *      POR QUE NO EXIJO QUE UN `seed` NOMBRE UN DIAL. Medido: 115 slots seed
- *      tienen governors legitimos y bien escritos que declaran que NO hay dial
- *      ("seed de personalidad de charts: el compilador la copia a
- *      chartPersonality...", "mixta medida en linea compartida...", "sin
- *      coincidencia medida con raiz ni canal vivo..."). Un gate que exigiera el
- *      prefijo `dial:` castigaria 115 declaraciones honestas y premiaria al que
- *      escribe la palabra magica. La forma FALSABLE de la misma ley es la
- *      inversa: un governor no puede nombrar autoridad que no existe. Si dice
- *      `dial: X`, X tiene que ser uno de los 20 controles; si nombra un canal
- *      `--ds-*`, ese canal tiene que existir. Lo que se prohibe es la mentira,
- *      no el silencio.
+ *   L2 RETIRADA CON SU SUJETO (D6-2c-ii, 2026-09-15). Medía el domicilio y el
+ *      `@governor` que los tres temas `.ts` autorados declaraban en docblocks:
+ *      vocabulario cerrado, governor no vacio, y sobre todo la forma falsable
+ *      del endurecimiento -- un governor no puede nombrar autoridad que no
+ *      existe. Esos temas se retiraron: un vertical de primera parte es el
+ *      fundamento neutro con su documento de preset, y un JSON no lleva
+ *      docblocks. El inventario de slots ya no publica `currentDomicile` ni
+ *      `governor`, asi que la ley no tiene nada que leer. Se retira ENTERA, con
+ *      sus dos contadores (`unassignedSlots`, `governorsNamingMissingAuthority`
+ *      y su deuda nombrada), en vez de quedar como un lazo que recorre filas
+ *      sin el campo y reporta cero -- que es exactamente el detector que dejo
+ *      de detectar y parece una mejora. La deuda que nombraba (10 governors
+ *      mintiendo sobre canales y diales inexistentes) se registra en WO-DER-06:
+ *      los canales que citaba siguen sin productor, y esa es la obligacion del
+ *      carril de derivacion, no un contador de este gate.
  *
  *   L3 `unassigned` DECRECE-SOLO desde su ancla. Ninguna cohorte mete un slot
  *      en unassigned; sacarlo es el unico movimiento permitido.
@@ -99,10 +97,8 @@ export const BASELINE_PATH = join(HERE, 'baseline/index.json');
 
 export const LAWS = Object.freeze(['L1', 'L2', 'L3', 'L4a', 'L4b', 'L5']);
 
-/** Las 10 claves que `FirstPartyBrandTheme` angosta a requeridas. */
-export const REQUIRED_THEME_KEYS = Object.freeze([
-  'id', 'name', 'appearance', 'modes', 'palette', 'typography', 'surfaces', 'charts', 'chrome', 'capabilities',
-]);
+/** Las claves que `ThemeSource` exige al normalizador ISO: nada se infiere. */
+export const REQUIRED_THEME_KEYS = Object.freeze(['appearance', 'palette', 'capabilities']);
 
 export const ALLOWLIST_COMPOSITION = Object.freeze({ literals: 67, surfaceRoles: 8, surfaceFacets: 20, typeRoles: 9, typeFacets: 7 });
 export const ALLOWLIST_TOTAL = ALLOWLIST_COMPOSITION.literals
@@ -114,43 +110,18 @@ const modeOf = (slotPath) => (String(slotPath).startsWith('OVERLAY.') ? 'overlay
 /** L1: el contrato no se relajo. Se lee el texto, porque `tsc` no ve esto. */
 export function checkContractShape(contractSource) {
   const findings = [];
-  const block = contractSource.match(/export interface FirstPartyBrandTheme extends BrandTheme \{([\s\S]*?)\n\}/);
-  if (!block) return [{ law: 'L1', detail: 'no encuentro la declaracion de FirstPartyBrandTheme' }];
+  const block = contractSource.match(/export interface ThemeSource\s+extends[^{]*\{([\s\S]*?)\n\}/);
+  if (!block) return [{ law: 'L1', detail: 'no encuentro la declaracion de ThemeSource' }];
   for (const key of REQUIRED_THEME_KEYS) {
     const declaration = new RegExp(`readonly ${key}(\\??):`).exec(block[1]);
-    if (!declaration) findings.push({ law: 'L1', detail: `FirstPartyBrandTheme ya no declara readonly ${key}` });
-    else if (declaration[1] === '?') findings.push({ law: 'L1', detail: `FirstPartyBrandTheme relajo ${key} a opcional` });
+    if (!declaration) findings.push({ law: 'L1', detail: `ThemeSource ya no declara readonly ${key}` });
+    else if (declaration[1] === '?') findings.push({ law: 'L1', detail: `ThemeSource relajo ${key} a opcional` });
   }
   if (/BrandCapabilityCatalog\s*=\s*Readonly<\s*Partial</.test(contractSource)) {
     findings.push({ law: 'L1', detail: 'BrandCapabilityCatalog se relajo a Partial<Record>: una clave faltante deja de ser error de tipo' });
   }
   if (!/BrandCapabilityCatalog\s*=\s*Readonly<\s*\n?\s*Record</.test(contractSource)) {
     findings.push({ law: 'L1', detail: 'BrandCapabilityCatalog ya no es Readonly<Record<...>>' });
-  }
-  return findings;
-}
-
-/**
- * L2: un governor no puede nombrar autoridad inexistente.
- * El comodin de prosa (`--ds-stats-grid-*`) NO es un canal: es un prefijo de
- * concatenacion, y contarlo fue un falso positivo medido de 24 casos.
- */
-export function checkGovernorAuthorities(rows, { controlIds, knownChannels }) {
-  const findings = [];
-  for (const row of rows) {
-    const governor = row.governor ?? '';
-    for (const match of governor.matchAll(/dial:\s*([a-z][\w.-]*)/g)) {
-      const id = match[1].replace(/[.,;]+$/, '');
-      if (!controlIds.has(id)) {
-        findings.push({ law: 'L2', detail: `${row.slotId}: el governor nombra "dial: ${id}" y no existe un control con ese id` });
-      }
-    }
-    for (const match of governor.matchAll(/(--_?ds-[a-z0-9-]+)(\*)?/g)) {
-      if (match[2] || match[1].endsWith('-')) continue;
-      if (!knownChannels.has(match[1])) {
-        findings.push({ law: 'L2', detail: `${row.slotId}: el governor nombra el canal ${match[1]}, que no existe en ninguna capa` });
-      }
-    }
   }
   return findings;
 }
@@ -192,24 +163,12 @@ export function findDivergentGroups(rows, membershipByChannel) {
   return divergent;
 }
 
-export function analyse({ inventory, membership, catalog, literalPins, controlIds, controlsWithDbDoor, authorableControls, allowlistTotal, contractSource, knownChannels }) {
+export function analyse({ inventory, membership, catalog, literalPins, controlsWithDbDoor, authorableControls, allowlistTotal, contractSource }) {
   const membershipByChannel = new Map((membership.rows ?? []).map((row) => [row.channel, row]));
   const rootById = new Map((catalog.roots ?? []).map((root) => [root.rootId, root]));
   const rows = inventory.rows ?? [];
 
   const findings = [...checkContractShape(contractSource)];
-
-  const domiciles = new Set(['seed', 'derived', 'pro-expert', 'unassigned']);
-  for (const row of rows) {
-    if (row.currentDomicile === null) continue;
-    if (!domiciles.has(row.currentDomicile)) {
-      findings.push({ law: 'L2', detail: `${row.slotId}: domicilio "${row.currentDomicile}" fuera del vocabulario cerrado` });
-    }
-    if (!String(row.governor ?? '').trim()) {
-      findings.push({ law: 'L2', detail: `${row.slotId}: domicilio ${row.currentDomicile} sin @governor` });
-    }
-  }
-  const governorFindings = checkGovernorAuthorities(rows, { controlIds, knownChannels });
 
   const shadows = findShadowingPins({ literalPins, membershipByChannel, rootById });
   const divergent = findDivergentGroups(rows, membershipByChannel);
@@ -233,13 +192,10 @@ export function analyse({ inventory, membership, catalog, literalPins, controlId
   return {
     findings,
     counters: {
-      unassignedSlots: rows.filter((row) => row.currentDomicile === 'unassigned').length,
-      governorsNamingMissingAuthority: governorFindings.length,
       shadowingLiteralPins: shadows.length,
       divergentGroups: divergent.length,
       divergentSlots: divergent.reduce((sum, group) => sum + group.slots, 0),
     },
-    governorFindings,
     shadows,
     divergent,
   };
@@ -368,7 +324,6 @@ export function buildBaselineDoc({ result, previous, reason, reattribution }) {
      * cual caso se cerro no es auditable, y un caso que reaparece con otro
      * nombre no se veria en el total. */
     namedDebt: {
-      governorsNamingMissingAuthority: result.governorFindings.map((finding) => finding.detail),
       shadowingLiteralPins: result.shadows.map((shadow) => `${shadow.channel} -> ${shadow.rootId} (${shadow.via}) @ ${shadow.site}`),
       divergentGroupsTop: result.divergent.slice(0, 15).map((group) => `${group.key}: ${group.slots} slots, ${group.positions} posiciones`),
     },
