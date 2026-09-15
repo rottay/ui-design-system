@@ -273,10 +273,25 @@ const FIRST_PARTY = [
  * (rottay's light block 697 -> 704 carries the seven twins), with the pre-cut
  * names the frozen skins read restated at the same values.
  */
+/**
+ * TOGGLE SILHOUETTE re-anchored all three, ADDITIVE, measured (04e835647,
+ * `fix(toggle): let the shape decision govern the track and thumb radius`):
+ * the toggle deriver now emits `--ds-toggle-track-border-radius` and
+ * `--ds-toggle-dot-border-radius`, a pill unless the theme states a
+ * `surfaces.buttonStyle`, and no first-party theme states one, so all three
+ * carry `var(--ds-radius-full)`. Base keys rottay 2096 -> 2098, bithire
+ * 2137 -> 2139, evnto 1453 -> 1455, removed 0, moved 0; every mode block is
+ * byte-identical (rottay light 704, bithire dark 441, evnto dark 89 keys).
+ * Withdrawing exactly those two deriver rows on an isolated copy of the tree
+ * and recompiling returns all three digests to the previous pins byte for byte
+ * (ca0a6c20..., 68f0be02..., 3bfe8d96...), which is only possible if nothing
+ * else moved; and the moved digests are identical on 04e835647, 7314b2dbb,
+ * da95cf1b3 and d7d1aba2a, so no later change is folded into this move.
+ */
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "ca0a6c20bc503939b4142c08f7e25fd07138a222968f95120fe065bc3135b864",
-  bithire: "68f0be020bdf6970ad2ea4f60d1004a4c2fc9c2ccfcbed61eb79817d1f504948",
-  evnto: "3bfe8d9655b7c9bcf4b3fcd31f662f58fe3ade815b504a3d538e67d09a83a680",
+  rottay: "6ad3fd39f4df895a1a568660e0b58b4fccf039e10c71eb5f60627b6eb058dc00",
+  bithire: "7298cb32346625a227ff18585ded3d2cf18d9da59dde325179b8e291cb9834fb",
+  evnto: "63b8a4808b1b499ade4d94b9edeba84a559c15f306c4b2a7d87105387cf87726",
 };
 
 /**

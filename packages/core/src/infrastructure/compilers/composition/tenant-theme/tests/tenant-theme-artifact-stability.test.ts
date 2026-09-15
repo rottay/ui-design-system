@@ -54,6 +54,16 @@ const CHART_SERIES_TOKEN = /^--ds-chart-series-(?:[1-9]|10)$/;
 const DENSITY_MODE_FACTOR_TOKEN = "--ds-density-mode-factor";
 const ON_PRIMARY_INK_TOKEN = "--ds-color-text-on-primary";
 const BEHAVIOR_ONLY_AMBIENT_TOKEN = "--ds-motion-ambient";
+/**
+ * The two corners the toggle deriver emits since 04e835647: a pill unless the
+ * theme states a `surfaces.buttonStyle`, in which case the button silhouette.
+ * A document that states one therefore carries them as a delta member.
+ */
+const TOGGLE_CORNERS = [
+  "--ds-toggle-dot-border-radius",
+  "--ds-toggle-track-border-radius",
+] as const;
+const TOGGLE_SILHOUETTE_ALIAS = "var(--ds-radius-button, var(--ds-radius-full))";
 
 /** The ground the retired appearance compiler assumed for an unstated canvas. */
 const PRE_ISO_ASSUMED_CANVAS = "#FFFFFF";
@@ -615,9 +625,22 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-elevation-border-style",
       "--ds-input-border-focus",
       "--ds-input-shadow-focus",
+      // 04e835647 (toggle silhouette). The toggle deriver emits both corners,
+      // a pill unless the theme states a `surfaces.buttonStyle`; this document
+      // states `soft` and the bithire baseline states none, so the tenant's
+      // silhouette alias enters the delta. Values pinned below.
+      "--ds-toggle-dot-border-radius",
+      "--ds-toggle-track-border-radius",
     ]);
     expect(artifact.variables["--ds-color-primary-rgb"]).toBe("15, 118, 110");
     expect(artifact.variables["--ds-color-secondary-rgb"]).toBe("140, 109, 70");
+    for (const corner of TOGGLE_CORNERS) {
+      expect(artifact.variables[corner], corner).toBe(TOGGLE_SILHOUETTE_ALIAS);
+    }
+    expect(
+      FIRST_PARTY_THEMES.bithire.surfaces?.buttonStyle,
+      "the baseline states no silhouette, which is why the tenant's alias is a delta member"
+    ).toBeUndefined();
   });
 
   it("keeps an advanced document ABSENT of every W4 field byte-identical", () => {
@@ -652,8 +675,14 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-button-xl-radius",
       "--ds-button-xs-radius",
       DENSITY_MODE_FACTOR_TOKEN,
+      // 04e835647 (toggle silhouette): this document states `pill`, so the
+      // same two corners enter the delta as the silhouette alias.
+      ...TOGGLE_CORNERS,
     ]);
     expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("0.85");
+    for (const corner of TOGGLE_CORNERS) {
+      expect(artifact.variables[corner], corner).toBe(TOGGLE_SILHOUETTE_ALIAS);
+    }
     // `--ds-radius-md` leaving the delta must mean "equal to the baseline",
     // never "the override stopped arriving". The same document with a radius
     // the baseline does NOT author proves the path is live: it emits the dial
@@ -730,6 +759,10 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
           "--ds-button-md-radius",
           "--ds-button-lg-radius",
           "--ds-button-xl-radius",
+          // The two toggle corners (04e835647), trimmed for the same reason:
+          // the frozen fixture predates them and their values are pinned by
+          // the `additions` list above.
+          ...TOGGLE_CORNERS,
         ]
       )
     ).toBe(

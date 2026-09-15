@@ -735,7 +735,21 @@ describe("digest identity across the canonicalization extraction", () => {
     // OPERATIONAL NOTE: as with every move above, persisted rows recompile.
     const POST_MODE_CROSSING_DIGEST =
       "sha256-c0ca6e862d043d35dac9d112a5f8d06052fcf686154fe5ade28d2c85785d09f1";
-    expect(artifact.digest).toBe(POST_MODE_CROSSING_DIGEST);
+    expect(artifact.digest).not.toBe(POST_MODE_CROSSING_DIGEST);
+    // Fourteenth declared move (04e835647, toggle silhouette), ADDITIVE and
+    // measured: the toggle deriver emits `--ds-toggle-{track,dot}-border-radius`,
+    // a pill unless the theme states a `surfaces.buttonStyle`. This document
+    // states `soft` and the bithire baseline states none, so both corners enter
+    // the delta as `var(--ds-radius-button, var(--ds-radius-full))`: base census
+    // 65 -> 67, added exactly those two, removed 0, dark delta 34 before and
+    // after. The null-override digest above is unmoved, which confines the move
+    // to documents that state a silhouette. Withdrawing the two deriver rows on
+    // an isolated copy of the tree returns this digest to the pin above.
+    //
+    // OPERATIONAL NOTE: as with every move above, persisted rows recompile.
+    const POST_TOGGLE_SILHOUETTE_DIGEST =
+      "sha256-403d6044095b5f96ed2865446df613a59fff7886ac309307c00a92872c917b98";
+    expect(artifact.digest).toBe(POST_TOGGLE_SILHOUETTE_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
     expect(
@@ -773,7 +787,10 @@ describe("digest identity across the canonicalization extraction", () => {
     // disjoint channels, so the merged census is their sum.
     // 75 -> 65 (WO-DER-03 palette half, measured): removed 10, added 0. The
     // ten are `--ds-color-accent-{50..900}`, retired for want of a reader.
-    expect(Object.keys(artifact.variables)).toHaveLength(65);
+    // 65 -> 67 (toggle silhouette, measured): added 2, removed 0 -- the two
+    // toggle corners of the fourteenth declared move above, pinned by name and
+    // value in `tenant-theme-artifact-stability.test.ts`.
+    expect(Object.keys(artifact.variables)).toHaveLength(67);
     expect(
       Object.keys(artifact.variables).filter((name) =>
         name.startsWith("--ds-color-accent-")
@@ -895,7 +912,15 @@ describe("digest identity across the canonicalization extraction", () => {
     // it. A source field, not an emission.
     const POST_ARTIFACT_RUNTIME_HALF_W4_DIGEST =
       "sha256-55e71a9f5c98fe5d4e092496a99ef53ee51215b34e68879077314b627d423199";
-    expect(artifact.digest).toBe(POST_ARTIFACT_RUNTIME_HALF_W4_DIGEST);
+    expect(artifact.digest).not.toBe(POST_ARTIFACT_RUNTIME_HALF_W4_DIGEST);
+    // CAUSE 8 -- the same toggle-silhouette move the populated-simple block
+    // pins (04e835647): this document states `shape.buttonStyle: "pill"`, so
+    // the two toggle corners join the delta as the silhouette alias. Measured:
+    // 25 -> 27 below, added exactly those two, removed 0, dark delta 5 before
+    // and after; the same withdrawal returns this digest to the pin above.
+    const POST_TOGGLE_SILHOUETTE_W4_DIGEST =
+      "sha256-3504f727d63099e3baa645fcef92bf0c0bdc7971ff0d2e16ac41aca748a20dc1";
+    expect(artifact.digest).toBe(POST_TOGGLE_SILHOUETTE_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -943,7 +968,8 @@ describe("digest identity across the canonicalization extraction", () => {
       "calc(10px / 1.25 * var(--ds-radius-scale, 1))"
     );
     // 20 -> 25: the same five per-size button radii.
-    expect(Object.keys(artifact.variables)).toHaveLength(25);
+    // 25 -> 27 (toggle silhouette): the two toggle corners of CAUSE 8.
+    expect(Object.keys(artifact.variables)).toHaveLength(27);
   });
 
   it("produces one digest for a document authored in any key order", () => {
