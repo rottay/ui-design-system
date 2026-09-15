@@ -1,0 +1,15 @@
+6840a343539ce60868ec54e0bd95ffa7bd7cfec00eb37b8612b45313ef231cab  evidence/checkpoint-2026-09-14-final/00-pin.txt
+538d395df8cfcb4be1cdbc34503a77c7491f960a8544f69e81edd4f9a612fcc8  evidence/checkpoint-2026-09-14-final/02-hashes0-network-professional.sha
+3751aef55af20ca40d7b85da6967345165ad8e2fe8a7f3f7aec7ee4285affbec  evidence/checkpoint-2026-09-14-final/03-buildB-profile-change.log
+aef69a3146951c4b3c1b4e02742ba9d4c184942b207400ff227b14452a1691b7  evidence/checkpoint-2026-09-14-final/04-projectionB.txt
+f350f61a1e47f94140b76ee7fed7540527674a2f76ccf0851509c36cfe232322  evidence/checkpoint-2026-09-14-final/05-hashesB-editorial-round.sha
+84cd536e1a642bdf14e11f6eafd75041fde23482fd7398d56e4779b80e367c2f  evidence/checkpoint-2026-09-14-final/05b-hashesB-extended.sha
+8cf1983866311aab6ee7ba7bb34d33f2ad9bbacfb76086af8968a2713fb25406  evidence/checkpoint-2026-09-14-final/06-mount-on-editorial.log
+9297e443ed0f8a6180ee38f5d805039bfdf4bcb64863838aab0927c7e3912885  evidence/checkpoint-2026-09-14-final/07-buildC-restored.log
+538d395df8cfcb4be1cdbc34503a77c7491f960a8544f69e81edd4f9a612fcc8  evidence/checkpoint-2026-09-14-final/08-hashesC-restored.sha
+4d437dc23b940fdfcce1851fafac2a0a9f6080f3995838a9dbe3937016e9e7b3  evidence/checkpoint-2026-09-14-final/09-idempotence.txt
+7fbfeb3dc98225eb5fae8431b1419ac4e33bede4670bb4ce2109c333a7292458  evidence/checkpoint-2026-09-14-final/10-mount-restored.txt
+a188cc1e451e2308f3fa9eaab7479c65c40425af9e66a10648a3a1643f53b736  evidence/checkpoint-2026-09-14-final/11-decisions-lit-run.log
+f22d43f7e681b09d675a4acd2e1be06f307fe64a3258e7034387ce7cee1108e8  evidence/checkpoint-2026-09-14-final/12-decisions-lit-check.log
+16d0d9742a7fe5599fa0dc1b54cb1b2f2afbbcc392b5f913f653c396db065e3d  evidence/checkpoint-2026-09-14-final/13-fullsuite.json
+e58e871acf97dc237cf034f872da2ea20ca88679e86bb25b3b2bb9ee2b5d9d17  evidence/checkpoint-2026-09-14-final/13-fullsuite.log

@@ -1,0 +1,1 @@
+IDEMPOTENCE PASS: restored build byte-identical to the original on all 12 tracked outputs

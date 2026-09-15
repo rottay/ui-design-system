@@ -1,0 +1,11 @@
+--- proyección editorial-round@1:
+src/foundation/tokens/css/facade/artifacts/bithire/index.css: 1 ocurrencia(s); network-professional: 0
+src/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.ts: 1 ocurrencia(s); network-professional: 0
+dist/styles.css: 1 ocurrencia(s); network-professional: 0
+dist/index.js: 0 ocurrencia(s); network-professional: 0
+dist/index.cjs: 0 ocurrencia(s); network-professional: 0
+--- proyección editorial-round@1 en dist (extendida):
+dist/styles.css: 1 ocurrencia(s)
+dist/bithire.css: 1 ocurrencia(s)
+dist/infrastructure/compilers/runtime/tenant-css/artifact-runtime/index.js: 1 ocurrencia(s)
+dist/foundation/tokens/ts/presentation/brand-themes/bithire/index.js: 1 ocurrencia(s)

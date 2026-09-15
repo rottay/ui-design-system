@@ -1,0 +1,5 @@
+pin: 9f45d7d9874a728f9ba257f5b486b7136ac6b67c
+date: 2026-09-15T00:45:28Z
+node: v22.17.0 pnpm: 9.15.9
+vitest: vitest/3.2.4 darwin-arm64 node-v22.17.0
+buildA (fresh, this pin): exit 0 (log /tmp/build-final3.log, exports-gate OK 322 targets)
