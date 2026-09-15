@@ -15,6 +15,9 @@ test('dead-part audit recognizes JSX, createElement, forwarded and D3 anatomy', 
     const props = { 'data-part': 'brush-selection' };
     const forwarded = <SkeletonBlock part="skeleton-row" />;
     const governed = <select {...partAttributes('format-select', state)} />;
+    const governedChoice = (
+      <button {...partAttributes(isPrevious ? 'overflow-previous' : 'overflow-next', interaction.state)} />
+    );
     g.append('line')
       .attr('data-part', 'axis-tick')
       .attr("data-part", "axis-domain");

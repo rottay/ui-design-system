@@ -327,10 +327,22 @@ const FIRST_PARTY = [
 // suite; the cut's parent (82ba19fdb) measures those same pins, so nothing
 // between them moved. The menu cut (eabf62987, +82/+91/+92 keys, all
 // `--ds-menu-*`) is likewise parent-exact against 73c6e9195.
+//
+// 2026-09-15 re-anchor, cause measured per commit with the same lowerBrandThemeFixture
+// call on isolated trees (the provenance-acceptance table, same wave): the steps
+// merge + sidebar-surface cut (1ddfd6198, +81 keys per vertical), the popover
+// title-padding chain (b5f547692, +6), the card chrome deriver (3aea57452, +26)
+// and F6b (4aebf68f0, +1 key on bithire/evnto, none on rottay which already
+// authored --ds-card-padding-base; the tabs heights move to the single-application
+// calc, a VALUE move with no key move, which is what the digest sees where the
+// count does not). aded1f21d, 1390ebb82, 449e86e55 and 008eb19e2 measure
+// byte-identical to their rows' parents. The property this file defends holds:
+// every --ds-type-* channel and the complete compiled surface stay identical
+// across the two lowerings on all three verticals (the 16 other tests here).
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "c7223694115e1a36504401b43426dde79d69b8a081a104f7b392e64a8966e0d0",
-  bithire: "e384038826da0c9147fa0d9fe94b07bb66aae0052084545efc4f5d8ed3677600",
-  evnto: "b758de6e74775dbcd0ef28bcac68d9a51698407560dc2899d7b33ad2fc4bb455",
+  rottay: "d17da7290ea4a99a6e87ec467f9c6720a9e48782824f1367703a63e3a245535d",
+  bithire: "476de04f57c4c18497f30fda7eae65588f50555666f3259ae760290c8dd56b3b",
+  evnto: "4d3411a8ad179502f086d3616dbc9a2a0495228e2816d9f13e7a9181112afd7e",
 };
 
 /**

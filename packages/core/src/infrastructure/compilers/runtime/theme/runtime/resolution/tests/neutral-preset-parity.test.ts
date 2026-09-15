@@ -149,6 +149,12 @@ describe("neutral foundation + preset, measured against the authored theme", () 
     // only-authored column is what the authored themes state beyond the kit;
     // the only-neutral column is what the presets decide that the themes never
     // authored. Identity is not the target of this lot.
+    // Re-measured on a4bc94927 (2026-09-15): the FAM-05-close / FAM-06 wave
+    // (rows 1ddfd6198, b5f547692, 3aea57452 and 4aebf68f0 in the
+    // provenance-acceptance table) moves both surfaces by the same family
+    // channels; rottay's authored count gains nothing from 4aebf68f0 (it
+    // already authored --ds-card-padding-base), and the base/light
+    // only-authored cells shift by the tabs single-application restatement.
     const shape = Object.fromEntries(
       FIRST_PARTY_VERTICAL_SLUGS.map((vertical) => {
         const authored = surfaceOf(vertical, false);
@@ -166,9 +172,9 @@ describe("neutral foundation + preset, measured against the authored theme", () 
       })
     );
     expect(shape).toEqual({
-      rottay: { authored: 2462, neutral: 1588, base: [1573, 227, 889, 15], dark: [0, 0, 0, 0], light: [1, 1, 703, 0] },
-      bithire: { authored: 2491, neutral: 1745, base: [1739, 331, 752, 6], dark: [39, 39, 402, 32], light: [0, 0, 0, 0] },
-      evnto: { authored: 1872, neutral: 1588, base: [1573, 71, 299, 15], dark: [0, 0, 89, 1], light: [0, 0, 0, 0] },
+      rottay: { authored: 2463, neutral: 1590, base: [1575, 227, 888, 15], dark: [0, 0, 0, 0], light: [1, 1, 702, 0] },
+      bithire: { authored: 2493, neutral: 1747, base: [1741, 331, 752, 6], dark: [39, 39, 402, 32], light: [0, 0, 0, 0] },
+      evnto: { authored: 1874, neutral: 1590, base: [1575, 71, 299, 15], dark: [0, 0, 89, 1], light: [0, 0, 0, 0] },
     });
   });
 });

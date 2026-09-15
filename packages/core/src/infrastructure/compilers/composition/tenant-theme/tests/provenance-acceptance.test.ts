@@ -517,7 +517,14 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *   2350 / 2380 / 1760  the WO-FAM-05 lot 2 tree (011910356; a054f8972 is docs-only and measures the same)
      *         +0    +0/-1       +0  95a85b080  --ds-elevation-border-style retired with its producers (WO-DER-06 2d-ii); bithire is the one first-party theme whose flat posture emitted it
      *   2350 / 2379 / 1760  measured today (7b35276d5)
-     * Totals: rottay +1099/-56, bithire +1112/-16, evnto +1189/-13. */
+     *        +81      +81      +81  1ddfd6198  steps merge into stepper + sidebar-surface cut + sidebar roots wired (WO-FAM-05 close)
+     *         +6       +6       +6  b5f547692  popover title padding consumed through the recipe chain
+     *         +0       +0       +0  aded1f21d  roster and identity out of brand-themes (WO-DER-06 D6-2b); no channel moves
+     *         +0       +0       +0  1390ebb82  the neutral foundation (WO-DER-06 D6-2a); lowerTheme's default baseline source is unchanged
+     *        +26      +26      +26  3aea57452  card chrome deriver (WO-FAM-06 lot 1)
+     *         +0       +1       +1  4aebf68f0  --ds-card-padding-base; rottay already authored it
+     *   2463 / 2493 / 1874  measured 2026-09-15 (the a4bc94927 tree): 449e86e55 (texture, emission layer), 008eb19e2 (foundation retirements), b6ef4cc66 (gates) and 654fd1036 (docs) measure the same
+     * Totals: rottay +1212/-56, bithire +1226/-16, evnto +1303/-13. */
     const counts: Record<Vertical, number> = {
       // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
       // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
@@ -557,7 +564,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // 55, commit by commit in the table above.
       // WO-FAM-05 lots 1 and 2 plus DER-06 2d-i (measured, 2026-09-15): rottay 2098 -> 2350,
       // added 253, removed 1, rows eabf62987, 61280a253 and 011910356 in the table above.
-      rottay: 2350,
+      // FAM-05 close + FAM-06 lot 1 (measured, 2026-09-15): rottay 2350 -> 2463,
+      // added 113, removed 0, rows 1ddfd6198, b5f547692, aded1f21d, 1390ebb82,
+      // 3aea57452 and 4aebf68f0 in the table above.
+      rottay: 2463,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -585,7 +595,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // WO-FAM-05 lots 1 and 2 plus DER-06 2d-i and 2d-ii (measured, 2026-09-15): bithire
       // 2139 -> 2379, added 243, removed 3, rows eabf62987, 61280a253, 011910356 and
       // 95a85b080 in the table above.
-      bithire: 2379,
+      // FAM-05 close + FAM-06 lot 1 (measured, 2026-09-15): bithire 2379 -> 2493,
+      // added 114, removed 0, rows 1ddfd6198, b5f547692, aded1f21d, 1390ebb82,
+      // 3aea57452 and 4aebf68f0 in the table above.
+      bithire: 2493,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -615,7 +628,10 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // 13, commit by commit in the table above.
       // WO-FAM-05 lots 1 and 2 plus DER-06 2d-i (measured, 2026-09-15): evnto 1455 -> 1760,
       // added 305, removed 0, rows eabf62987, 61280a253 and 011910356 in the table above.
-      evnto: 1760,
+      // FAM-05 close + FAM-06 lot 1 (measured, 2026-09-15): evnto 1760 -> 1874,
+      // added 114, removed 0, rows 1ddfd6198, b5f547692, aded1f21d, 1390ebb82,
+      // 3aea57452 and 4aebf68f0 in the table above.
+      evnto: 1874,
     };
     for (const vertical of VERTICALS) {
       expect(

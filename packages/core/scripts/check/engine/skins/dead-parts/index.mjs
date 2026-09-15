@@ -75,6 +75,16 @@ export function collectStampedPartsFromSource(src) {
   for (const m of src.matchAll(/\bpart\s*=\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
   // The anatomy kernel stamps `data-part` from its first argument: `partAttributes('trigger', state)`.
   for (const m of src.matchAll(/\bpartAttributes\(\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
+  // The same kernel choosing between stable names at runtime:
+  // `partAttributes(isPrevious ? 'overflow-previous' : 'overflow-next', state)`. Both
+  // branches are literal production stamps; the literal-only pattern above cannot
+  // see them, and treating the whole call as dynamic creates the same dead-part
+  // false positives the data-part ternary pattern above exists to prevent.
+  for (const call of src.matchAll(/\bpartAttributes\(\s*([^,]+?),/gi)) {
+    for (const literal of call[1].matchAll(/["'`]([a-z0-9-]+)["'`]/gi)) {
+      stamped.add(literal[1]);
+    }
+  }
   return stamped;
 }
 
