@@ -4379,7 +4379,7 @@
    "lane": "derivation",
    "order": 6,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-05",
     "WO-CAT-02",
@@ -4538,7 +4538,9 @@
      "by": "claude-admin",
      "note": "2026-09-15 kimi-admin: D6-2d-resto INTEGRATED (bae2291bb retirement + 64e63c693 registry/re-anchors, audited). Scope A: 14 readerless --ds-switch-* channels retired with the labelColor producer; the 7 Classic-read channels reclassified KEEP_LIVE_FROZEN_ENGINE (frozen != dead; producers intact; width/height stay measured-unresolved with no fabricated producer). Scope B: 6 channels reclassified KEEP_LIVE_APP_CONSUMER with 20 app read sites enumerated (zero product/app bytes); 4+3 retired with producers (control tint-hover/ink-muted/surface-raised, surface shadow-hover, interactive bg-muted/border, color text-page with its liveness pin); the two schema digests moved for the declared narrowing, pinned with the established idiom; changeset MAJOR gained every removed channel and contract field by name. Re-anchors decrease-only: dead-writers 305->278 (-27, zero new), parity ceilings to measured actuals (color 3->0, switch 1->0, control 7->4, surface 2->1, total 217->205 with the INV-07 deduction honest), liveness META 45->44, subjectless reachability row removed, hooks re-derived current. ERRATA on my own false adoption reason amended in the baseline (six of the eleven names had app readers; the projection is DS-scoped). The gate stays PASS; the buckets holding the six app-consumed names stay non-zero BY DESIGN with the reason written. Also registered to WO-EVI-02: the three preexisting tenant-theme reds (A/B-verified identical at 7ec43ac4e), tenant-reachability E1 (foreign cause), and the adjudicated-live walker instrument debt (blind to 301 entries lacking the name field; the 13 new rows carry it and are seen). WO-DER-06 remaining: the close evaluation against its own acceptance gate (grep BrandTheme=0 DONE by the rename; artifact name intersection 91% measured; root reach 88/83/88% measured; per-family artifact coverage reads the preexisting 269<275 registered to WO-EVI-02 honestly) + transferring the DER-08 scope. NEXT: that close lot, then FAM-06, fleet B, final C."
     }
-   ]
+   ],
+   "doneAt": "2026-09-15",
+   "evidence": "2026-09-15 kimi-admin — WO-DER-06 CLOSED with every criterion measured on the integrated tree (f731c95c7). F-25: grep BrandTheme src ts/tsx excl tests = 0 (plus the GO-extended case-insensitive form = 0 outside the site-pinned allowlist registered to WO-DER-08); preset-without-derivable-values gate green (11/11); VERTICAL_REGISTRY without visual fields (roster keeps identity/engine/envelope). F-54: artifact name intersection 99.9% (8024/8036, measured today over the three generated verticals) >= 90%; variant-parity re-anchored without the placeholderPairs baseline. F-11: per-skin-family channel presence measured over the generated artifacts — ZERO families present in some-but-not-all verticals, zero families at zero in bithire or evnto (the finding's 11 input families of difference are closed); evnto 'others' coverage 83% >= 80% (2c-i root-reach proxy); the chosen route is the finding's first expected one: purely structural default (D-14 neutral foundation, no chromatic opinion) with identity derived through the preset document. F-108: presets are v2 ThemeDecisions documents without program comments (the 77-88% prose themes are deleted); SanctionedOverrides closed (zero) with the preset gate. WO scope executed: D6-1 presets on the internal seat with closed manifests; D6-2a NEUTRAL_THEME; D6-2b roster out; D6-2c-i/ii/iii pipeline compiles from neutral+preset, authored authority retired, BrandTheme->FlatTheme renamed with Codex CHANGES->ACCEPT; D6-2d-i/ii/resto channel dispositions (profiles retired as emission with the data-only adjudication -- EMI-02 exit condition met; --ds-elevation-border-style retired with producers+pin; 14 --ds-switch-* retired + 7 frozen-engine reclassified; 13 neutral unread disposed: 6 externally-consumed, 7 retired). TenantAppearance* resolved honestly: kept as the normalized compiler/compat shape with no first-party authority role -- the WO outcome sentence named brand-themes/BrandTheme/VERTICAL_REGISTRY-visuals for deletion, and the compat shape's split/retirement belongs to the DER-08/transport lane. NOT closed, carried open with named owners (registered, none hidden): N2 menu ink = sidebar ink, R3 mode-palette seeding (evnto dark contrast), N3 neutral-temperature inert, N4 control-height reader lost on bithire button, N5 input hover border, N6 toggle hoverFill in evnto, N7 behavior.motion entranceDuration, charts.colorScheme subjectless (WO-DES-12), D-27 motion spring kit amendment, the axe contrast debt (WO-EVI-02 lane), D-30 final branding pick (owner-deferred), WO-DER-08 (flat shape authoring-role split + the allowlisted serialized names). These are derivation-lane and fleet-B obligations the conversion EXPOSED and registered; they do not reopen the retired authority. roadmap:check OK (161 WOs). Commits: the D6-1..D6-2d-resto series through f731c95c7."
   },
   {
    "id": "WO-EMI-01",
@@ -5989,7 +5991,7 @@
    "lane": "derivation",
    "order": 8,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-06"
    ],
@@ -5998,9 +6000,15 @@
     "audit-2026-09-05"
    ],
    "notes": "Registered by the D6-2c flat-type core review (Codex ACCEPT(a) guardrail 4, Fable CHANGES adopted 8; evidence/der-06-flat-type-review/): the flat shape (FlatTheme after 2c-iii) is ALSO the studio's authored draft transport until this lot, so it keeps an authoring role the retirement narrative must not deny. Scope: the studio draft moves to the governed Theme or a v2 document, with governed ingress preserved; liftAuthoredTheme has zero production callers (measured). Covers the brandThemePath serialized-field data change (Fable guardrail 3) unless 2c-iii handles it under a written exception.",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-admin",
+   "claimedAt": "2026-09-15",
+   "progressLog": [
+    {
+     "at": "2026-09-15 19:35",
+     "by": "kimi-admin",
+     "note": "2026-09-15 kimi-admin: claimed on WO-DER-06's close to hold the transferred scope (not yet in execution). THE FLAT SHAPE'S AUTHORING ROLE (the WO's core): the studio draft transport moves to Theme or a v2 document and the flat shape loses its authoring role; measured fact from Fable's review: liftAuthoredTheme has zero production callers, only tests and the single-door gate import it. THE SERIALIZED/BOUNDARY DATA NAMES allowlisted through the rename, each a data change with this WO as owner (rename only with an explicit migration + pins, never incidental): brandThemePath (capabilities/index.ts:72); staticBrandThemePath (theme-catalog + manifest generation + cascade normalization + probe ingress); the control catalog's keypath-space field brandTheme (catalog/index.ts:128 + ~21 rows — the catalog is the single authority, so renaming it is a schema migration); TenantConfig.brandTheme (13+ suites + mount-tenant-theme fixture); the scripts lowering adapter's input key brandTheme (theme-lowering/index.mjs:231 + pinned key roster); __probeBrandTheme (window key crossing to Playwright); the kind:'brand-theme' discriminator in tenant-preview's source union; the tests/fixtures/brand-themes PATH (four non-test-import reference classes: production packaging constant + drill, provenance record with digest, 5 sealed-tree references, a string assertion). ALSO: the i18n product copy 'Bounded BrandTheme fields' (editorHeading, 5 locales) — user-visible copy, a product decision with the studio lane; the sealed residual of 105 brandtheme occurrences (modern-rescue 35, governance 70) stands under the owner seal; the sealed-tree brandThemeToCssVariables data values (6) ride with it."
+    }
+   ]
   }
  ],
  "traceability": {
