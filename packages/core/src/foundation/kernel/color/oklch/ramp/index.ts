@@ -12,6 +12,7 @@
  * ends (an extreme lightness cannot carry full chroma in sRGB) and every
  * step is gamut-mapped individually.
  */
+import { contrastRatio, relativeLuminance } from '../../contrast';
 import { hexToOklch, oklchToHex, type Oklch } from '..';
 
 export const RAMP_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
@@ -93,4 +94,58 @@ export function deriveOklchRamp(seedHex: string, groundHex: string, surface: Ram
     result[step] = oklchToHex(oklch);
   });
   return result;
+}
+
+/**
+ * The WCAG 2.2 non-text floor a focus indicator owes its own canvas (1.4.11).
+ * The same number the chart-series palette clears, for the same reason: an
+ * indicator a viewer cannot find is not an indicator.
+ */
+export const FOCUS_RING_MIN_CONTRAST = 3;
+
+/** Passes iff the floor test does not fire, epsilon-guarded like every other floor here. */
+function clearsRingFloor(hex: string, groundHex: string): boolean {
+  return !(contrastRatio(hex, groundHex) + Number.EPSILON < FOCUS_RING_MIN_CONTRAST);
+}
+
+/**
+ * The colour a focus ring may actually paint on this ground: the preferred one
+ * when it clears the floor, else the nearest ramp stop that does.
+ *
+ * A seed is a BRAND statement, not a contrast statement, and the admitted seed
+ * domain contains colours that vanish on their own canvas -- `#FFFFFF` on a
+ * white ground measures 1.00:1. Taking the raw seed therefore hands a tenant a
+ * focused control with no visible focus. Rejecting the seed is not the answer
+ * either: the ramp is already the seed's own hue rendered against this exact
+ * ground, so a stop of it is the same brand colour at the lightness this ground
+ * can carry.
+ *
+ * "Nearest" is measured in relative luminance, which is the axis the floor is
+ * stated on and the axis the ramp is built along -- so the chosen stop is the
+ * smallest visible change from the preferred colour that clears the law. Hue is
+ * not a choice here: every stop already holds the seed's hue.
+ *
+ * If no stop clears the floor -- which a full 50..900 ramp against a real
+ * ground does not do -- the highest-contrast stop is returned rather than a
+ * failure, because a ring that is as visible as the ramp allows is still a
+ * ring, and refusing an admitted seed is a contract decision this owner does
+ * not get to make.
+ */
+export function safeFocusRingColor(
+  preferredHex: string,
+  ramp: ColorRamp,
+  groundHex: string
+): string {
+  if (clearsRingFloor(preferredHex, groundHex)) return preferredHex;
+  const preferredLuminance = relativeLuminance(preferredHex);
+  const byNearness = RAMP_STEPS.map((step) => ramp[step]).sort(
+    (left, right) =>
+      Math.abs(relativeLuminance(left) - preferredLuminance) -
+      Math.abs(relativeLuminance(right) - preferredLuminance)
+  );
+  const compliant = byNearness.find((candidate) => clearsRingFloor(candidate, groundHex));
+  if (compliant !== undefined) return compliant;
+  return byNearness.reduce((best, candidate) =>
+    contrastRatio(candidate, groundHex) > contrastRatio(best, groundHex) ? candidate : best
+  );
 }

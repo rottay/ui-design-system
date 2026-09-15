@@ -61,8 +61,8 @@
     },
     "rowsWithRoot": 26,
     "rowsEmittingNoChannel": 52,
-    "channelEmissions": 323,
-    "distinctChannelsReached": 176,
+    "channelEmissions": 325,
+    "distinctChannelsReached": 177,
     "metadataRows": 21,
     "paintDenominator": 94,
     "metadataRosterSize": 4,
@@ -811,7 +811,8 @@
         "--ds-color-warning-500",
         "--ds-color-warning-600",
         "--ds-color-warning-700",
-        "--ds-color-warning-800"
+        "--ds-color-warning-800",
+        "--ds-focus-ring-color"
       ],
       "emitsScoped": [
         "base|--ds-chart-series-8",
@@ -930,7 +931,8 @@
         "dark|--ds-color-warning-500",
         "dark|--ds-color-warning-600",
         "dark|--ds-color-warning-700",
-        "dark|--ds-color-warning-800"
+        "dark|--ds-color-warning-800",
+        "dark|--ds-focus-ring-color"
       ],
       "rootId": null,
       "headRootIds": [
@@ -1186,7 +1188,8 @@
         "--ds-color-primary-700",
         "--ds-color-primary-800",
         "--ds-color-primary-900",
-        "--ds-color-primary-rgb"
+        "--ds-color-primary-rgb",
+        "--ds-focus-ring-color"
       ],
       "emitsScoped": [
         "base|--ds-button-primary-bg-hover",
@@ -1215,6 +1218,7 @@
         "base|--ds-color-primary-800",
         "base|--ds-color-primary-900",
         "base|--ds-color-primary-rgb",
+        "base|--ds-focus-ring-color",
         "dark|--ds-chart-series-1",
         "dark|--ds-chart-series-10",
         "dark|--ds-chart-series-2",
@@ -1234,7 +1238,8 @@
         "dark|--ds-color-primary-600",
         "dark|--ds-color-primary-700",
         "dark|--ds-color-primary-800",
-        "dark|--ds-color-primary-900"
+        "dark|--ds-color-primary-900",
+        "dark|--ds-focus-ring-color"
       ],
       "rootId": null,
       "headRootIds": [
@@ -3640,5 +3645,5 @@
       }
     }
   ],
-  "digest": "b874f2bfd5b3b7e8c253a1c419f9cf45618dd07d5c8134ca6fbdc30502deb94b"
+  "digest": "38a45faa089f083d92a50e1df37e4d0ddccacd074f5e480d2acb372f676d7c4e"
 }

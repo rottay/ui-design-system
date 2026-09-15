@@ -2072,7 +2072,16 @@
      canvas, where the seed itself would not). No tenant re-declares the
      channel — a tenant moves the ring by moving its seed. Measured against
      each first-party canvas: light 17.18:1 rottay, 5.55:1 bithire, 17.18:1
-     evnto; dark 7.42:1, 5.02:1, 7.42:1 (WO-DER-06 N1, 2026-09-15). */
+     evnto; dark 7.42:1, 5.02:1, 7.42:1 (WO-DER-06 N1, 2026-09-15).
+
+     These two declarations are the answer for a theme with NO seed of its own.
+     A tenant that states one compiles its ring here instead, because CSS cannot
+     measure contrast and the seed domain admits colours that vanish on their
+     own canvas (#FFFFFF on white measured 1.00:1). The lowering checks these
+     same two preferences against the ground each block renders on and moves to
+     the nearest stop of the seed's own ramp only when the preference fails, so
+     a compliant seed still paints exactly itself — see
+     `lowering/foundation/ramps` (D6-FAM-01, 2026-09-15). */
   --ds-focus-ring-color: var(--ds-color-primary);
   --ds-focus-ring:
     0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary),
@@ -3283,7 +3292,8 @@ html.dark {
   --ds-color-border-secondary: #1e293b;
   --ds-color-border-focus: var(--ds-color-primary-400);
   /* Dark-surface focus ring must read >=3:1 on the dark canvas; the primary-400
-     tint clears it on #0b1220 (WO-ENG-04). */
+     tint clears it on #0b1220 (WO-ENG-04). A seeded tenant compiles its own
+     ring from this same preference, ground-checked (D6-FAM-01). */
   --ds-focus-ring-color: var(--ds-color-primary-400);
 
   --ds-color-neutral-0: #020617;
@@ -118315,6 +118325,7 @@ html[lang]:lang(ar) {
   --ds-effect-intensity: 0.2;
   --ds-elevation-lift-strength: 0;
   --ds-focus-ring: 0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary), 0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
+  --ds-focus-ring-color: #2F5BE8;
   --ds-focus-ring-offset: 2px;
   --ds-focus-ring-width: 2px;
   --ds-font-family-base: var(--ds-font-pack-humanist-text), "Noto Sans Arabic", sans-serif;
@@ -119618,5 +119629,6 @@ html[lang]:lang(ar) {
   --ds-color-warning-700: #FCA87A;
   --ds-color-warning-800: #FFCEB4;
   --ds-color-warning-900: #FFF2EC;
+  --ds-focus-ring-color: #3563EF;
   --ds-sidebar-item-color-active: var(--ds-color-neutral-100);
 }

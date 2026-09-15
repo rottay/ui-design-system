@@ -10,8 +10,12 @@ import type { BrandPalette } from "@/foundation/contracts/composition/tenants/th
 import {
   RAMP_STEPS,
   deriveOklchRamp,
+  safeFocusRingColor,
 } from "@/foundation/kernel/color/oklch/ramp";
-import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
+import type {
+  ColorRamp,
+  RampSurface,
+} from "@/foundation/kernel/color/oklch/ramp";
 import {
   DARK_DEFAULT_GROUND,
   LIGHT_DEFAULT_GROUND,
@@ -89,5 +93,42 @@ export function deriveTenantColorRamps(
       if (value) vars[`--ds-color-${role}-${step}`] = value;
     }
   }
+
+  const ring = focusRingColor(palette.primaryColor, vars, ground, surface);
+  if (ring) vars["--ds-focus-ring-color"] = ring;
   return vars;
+}
+
+/**
+ * The focus ring this surface can actually show, derived where the seed, the
+ * ramp and THIS surface's ground are all in hand.
+ *
+ * The sheet states the ring as the seed in a light scope and as step 400 in a
+ * dark one, and those are the right preferences: the seed IS the brand, and on
+ * a dark canvas the lighter tint of it reads where the seed does not. What
+ * neither scope can do is check itself, because CSS cannot measure contrast --
+ * so an admitted seed like `#FFFFFF` painted a 1.00:1 ring on a white canvas.
+ * Here the preference is checked against the ground this block compiles for and
+ * moved to the nearest ramp stop only when it fails, so a compliant seed
+ * resolves to itself and nothing about the six first-party cells moves.
+ *
+ * Emitted only when the tenant states a seed: a vertical that states none has
+ * no ramp either, and the sheet's own declaration is the answer for it.
+ */
+function focusRingColor(
+  seed: string | undefined,
+  vars: Readonly<Record<string, string>>,
+  ground: string,
+  surface: RampSurface
+): string | undefined {
+  if (!seed) return undefined;
+  const ramp = {} as ColorRamp;
+  for (const step of RAMP_STEPS) {
+    const value = vars[`--ds-color-primary-${step}`];
+    if (!value) return undefined;
+    ramp[step] = value;
+  }
+  // The same preference each scope of the sheet states, checked before it ships.
+  const preferred = surface === "dark" ? ramp[400] : seed;
+  return safeFocusRingColor(preferred, ramp, ground);
 }

@@ -532,6 +532,7 @@
   --ds-effect-intensity: 0.2;
   --ds-elevation-lift-strength: 0;
   --ds-focus-ring: 0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary), 0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
+  --ds-focus-ring-color: #2F5BE8;
   --ds-focus-ring-offset: 2px;
   --ds-focus-ring-width: 2px;
   --ds-font-family-base: var(--ds-font-pack-humanist-text), "Noto Sans Arabic", sans-serif;
@@ -1835,5 +1836,6 @@
   --ds-color-warning-700: #FCA87A;
   --ds-color-warning-800: #FFCEB4;
   --ds-color-warning-900: #FFF2EC;
+  --ds-focus-ring-color: #3563EF;
   --ds-sidebar-item-color-active: var(--ds-color-neutral-100);
 }

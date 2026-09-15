@@ -28,21 +28,21 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 176,
+    "rows": 177,
     "byVia": {
       "unattributed": 134,
       "head-exact": 23,
-      "declared-fallback": 19
+      "declared-fallback": 20
     },
     "byTier": {
-      "sin-tier": 170,
+      "sin-tier": 171,
       "control": 1,
       "base": 4,
       "page": 1
     },
     "byProperty": {
       "radius": 7,
-      "fg": 89,
+      "fg": 90,
       "sin-propiedad": 57,
       "seed.error": 1,
       "seed.info": 1,
@@ -61,7 +61,7 @@
       "delta.selected": 1,
       "scale": 1
     },
-    "withRoot": 42,
+    "withRoot": 43,
     "withoutRoot": 134,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
@@ -72,7 +72,7 @@
     "rowsRefinedByStep": 0,
     "rowsParentByDesign": 0,
     "byStep": {
-      "sin-paso": 176
+      "sin-paso": 177
     },
     "r2Floor": 13,
     "r2FloorRoots": [
@@ -177,7 +177,7 @@
   },
   "byOwner": {
     "THEME.palette": {
-      "channels": 100,
+      "channels": 101,
       "unattributed": 76,
       "properties": {
         "fg": 67,
@@ -3088,6 +3088,32 @@
       "stepNote": "sin raiz que refinar"
     },
     {
+      "channel": "--ds-focus-ring-color",
+      "rootId": "ramp.seed.primary",
+      "via": "declared-fallback",
+      "evidence": {
+        "fallbackFrom": "--ds-color-primary",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/activity-cards/index.css:107",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-focus-ring-color",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "fg",
+      "state": null,
+      "owners": [
+        "THEME.palette"
+      ],
+      "contributingSlots": [
+        "bithire:THEME.palette.backgroundColor",
+        "bithire:THEME.palette.primaryColor"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+    },
+    {
       "channel": "--ds-font-family-base",
       "rootId": "type.family.base",
       "via": "head-exact",
@@ -4632,5 +4658,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "e2e98599ceb4534f0ca0b2e874750f3550169d8cae37c51af06c444e242b8b5a"
+  "digest": "be8d3d23746784f27878a31be7f7bc39f20a8298664461bda56bdc22f21b5d6b"
 }

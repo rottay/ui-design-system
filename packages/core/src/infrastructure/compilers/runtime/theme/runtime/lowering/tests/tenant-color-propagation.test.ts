@@ -380,9 +380,16 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
     // (`--ds-input-loading-color`, `--ds-input-selection-bg`,
     // `--ds-input-number-selection-bg`, `--ds-input-number-stepper-bg-hover`):
     // bithire pinned them with authored literals and they now derive from the
-    // seed. One LEAVES, correctly -- `--ds-otp-input-slot-shadow-focus-error`
-    // reads `--ds-input-error-shadow-focus`, so it tracks the ERROR seed and
-    // has no business following the primary.
+    // seed.
+    //
+    // D6-FAM-01 (2026-09-15) brings the set to 18.
+    // `--ds-otp-input-slot-shadow-focus-error` is back, and this time for a
+    // stated reason rather than by accident: it is
+    // `var(--ds-input-error-shadow-focus, var(--ds-focus-ring))`, nothing
+    // authors the error shadow, so what it PAINTS is the generic ring -- and the
+    // ring now follows the seed instead of resting on a frozen constant. The
+    // error seed still owns the authored branch; this is the fallback branch
+    // moving with the channel it names.
     expect(primaryReach.filter(FAMILIES.inputs)).toEqual([
       '--ds-input-border-focus',
       '--ds-input-caret-color',
@@ -398,6 +405,7 @@ describe('TENANT-COLOR PROPAGATION · the reach a palette-only tenant has', () =
       '--ds-otp-input-caret-color',
       '--ds-otp-input-slot-border-focus',
       '--ds-otp-input-slot-shadow-focus',
+      '--ds-otp-input-slot-shadow-focus-error',
       '--ds-password-input-strength-good',
       '--ds-tag-input-border-focus',
       '--ds-tag-input-caret',
@@ -510,6 +518,14 @@ describe('TENANT-COLOR PROPAGATION · one channel, one author', () => {
  * (see `NOW_CLAIMED_BY_THIS_COMPILER` above and
  * `extended-palette-floor.test.ts`), so it is claimed, not withheld.
  * `--ds-color-link-visited` stays — nothing derives it.
+ *
+ * `--ds-focus-ring-color` moved OUT for the same kind of reason (D6-FAM-01,
+ * 2026-09-15): the ramps family now derives it, because an admitted seed like
+ * `#FFFFFF` painted a 1.00:1 ring and only the family holding the seed, the
+ * ramp and the ground can pick a stop that clears the 3:1 floor. It is not a
+ * repaint deferred for sighted confirm: a seed that already clears the floor
+ * still resolves to itself, which is what keeps the six first-party cells at
+ * the ratios `Button.focus-customization.causality` measures.
  */
 const STOPPED_PENDING_SIGHTED_CONFIRM = [
   '--ds-button-primary-bg-active',
@@ -521,7 +537,6 @@ const STOPPED_PENDING_SIGHTED_CONFIRM = [
   '--ds-color-interactive-bg-muted',
   '--ds-color-interactive-border',
   '--ds-color-link-visited',
-  '--ds-focus-ring-color',
   '--ds-overlay-bg',
   '--ds-shadow-focus-ring',
   '--ds-table-bg',
