@@ -1,0 +1,8 @@
+
+
+ Test Files  74 failed | 1269 passed (1343)
+      Tests  171 failed | 16326 passed | 19 skipped (16516)
+   Start at  13:30:17
+   Duration  3647.17s (transform 29.65s, setup 1324.87s, collect 466.81s, tests 1422.15s, environment 186.17s, prepare 61.37s)
+
+SUITE_EXIT=1
