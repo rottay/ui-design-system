@@ -17,7 +17,7 @@
       }
     }
   },
-  "exclusionsRevision": "34bd866512177f9b",
+  "exclusionsRevision": "ef3de957d72fda22",
   "runs": {
     "product-dense->warm-humanist": {
       "pilotPopulation": {
@@ -25,7 +25,7 @@
         "cut": "WO-FAM-01",
         "catalogRevision": "2a25f7c6068407fb",
         "decisionRows": 29,
-        "exclusionsRevision": "34bd866512177f9b",
+        "exclusionsRevision": "ef3de957d72fda22",
         "families": {
           "button": [
             "shape",
@@ -1403,7 +1403,78 @@
         }
       ],
       "refusals": [],
-      "failures": []
+      "failures": [],
+      "excludedPartInvariant": {
+        "expected": "9999px",
+        "parts": [
+          "radio/circle",
+          "radio/dot"
+        ],
+        "readings": 128,
+        "observed": {
+          "light": {
+            "circle": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            },
+            "dot": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            }
+          },
+          "dark": {
+            "circle": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            },
+            "dot": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            }
+          }
+        },
+        "failures": []
+      }
     },
     "warm-humanist->product-dense": {
       "pilotPopulation": {
@@ -1411,7 +1482,7 @@
         "cut": "WO-FAM-01",
         "catalogRevision": "2a25f7c6068407fb",
         "decisionRows": 29,
-        "exclusionsRevision": "34bd866512177f9b",
+        "exclusionsRevision": "ef3de957d72fda22",
         "families": {
           "button": [
             "shape",
@@ -2789,7 +2860,438 @@
         }
       ],
       "refusals": [],
-      "failures": []
+      "failures": [],
+      "excludedPartInvariant": {
+        "expected": "9999px",
+        "parts": [
+          "radio/circle",
+          "radio/dot"
+        ],
+        "readings": 128,
+        "observed": {
+          "light": {
+            "circle": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            },
+            "dot": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            }
+          },
+          "dark": {
+            "circle": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            },
+            "dot": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            }
+          }
+        },
+        "failures": []
+      }
+    },
+    "producer-mutant": {
+      "css": ".ds-radio.ds-radio--modern[data-part='root'] { --ds-radius-full: 0px; }",
+      "delivery": "a <style> element inside the radio mount, shipped with the scene to Chromium",
+      "pilotVerdict": [],
+      "invariantFailures": [
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/circle: border-top-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/circle: border-top-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/circle: border-bottom-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/circle: border-bottom-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light shape arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light shape arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light typography arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light typography arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light rhythm arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light rhythm arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light depth arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light depth arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light states arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light states arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light motion arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light motion arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light palette-only arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light palette-only arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/light states-emphasis-only arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark shape arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark shape arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark typography arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark typography arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark rhythm arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark rhythm arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark depth arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark depth arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark states arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark states arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark motion arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark motion arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark palette-only arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark palette-only arm B",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/dot: border-top-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/dot: border-top-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/dot: border-bottom-left-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm A",
+        "radio/dot: border-bottom-right-radius computed 0px != 9999px in bithire/dark states-emphasis-only arm B"
+      ],
+      "observed": {
+        "light": {
+          "circle": {
+            "border-top-left-radius": [
+              "0px"
+            ],
+            "border-top-right-radius": [
+              "0px"
+            ],
+            "border-bottom-left-radius": [
+              "0px"
+            ],
+            "border-bottom-right-radius": [
+              "0px"
+            ]
+          },
+          "dot": {
+            "border-top-left-radius": [
+              "0px"
+            ],
+            "border-top-right-radius": [
+              "0px"
+            ],
+            "border-bottom-left-radius": [
+              "0px"
+            ],
+            "border-bottom-right-radius": [
+              "0px"
+            ]
+          }
+        },
+        "dark": {
+          "circle": {
+            "border-top-left-radius": [
+              "0px"
+            ],
+            "border-top-right-radius": [
+              "0px"
+            ],
+            "border-bottom-left-radius": [
+              "0px"
+            ],
+            "border-bottom-right-radius": [
+              "0px"
+            ]
+          },
+          "dot": {
+            "border-top-left-radius": [
+              "0px"
+            ],
+            "border-top-right-radius": [
+              "0px"
+            ],
+            "border-bottom-left-radius": [
+              "0px"
+            ],
+            "border-bottom-right-radius": [
+              "0px"
+            ]
+          }
+        }
+      },
+      "restored": {
+        "invariantFailures": [],
+        "observed": {
+          "light": {
+            "circle": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            },
+            "dot": {
+              "border-top-left-radius": [
+                "9999px"
+              ],
+              "border-top-right-radius": [
+                "9999px"
+              ],
+              "border-bottom-left-radius": [
+                "9999px"
+              ],
+              "border-bottom-right-radius": [
+                "9999px"
+              ]
+            }
+          }
+        }
+      }
     },
     "radio-group-continuity": {
       "family": "radio-group",
@@ -2881,6 +3383,95 @@
           ]
         }
       ]
+    },
+    "severed-corner": {
+      "css": ".ds-radio-group.ds-radio-group--button [data-part='option'] { border-radius: 6px !important; }",
+      "delivery": "a <style> element inside the radio-group mount, shipped with the scene to Chromium",
+      "applicable": true,
+      "failures": [
+        "radio-group/shape: the button-style option corner did not move in bithire/light",
+        "radio-group/shape: the button-style option corner did not move in bithire/dark"
+      ],
+      "cells": [
+        {
+          "vertical": "bithire",
+          "theme": "light",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 206,
+          "compiledB": 206,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 206,
+          "appliedB": 206,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 4,
+          "percent": 80,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "segmented",
+            "toggle"
+          ]
+        },
+        {
+          "vertical": "bithire",
+          "theme": "dark",
+          "scenario": "shape",
+          "kind": "positive",
+          "axis": "shape",
+          "compiledA": 216,
+          "compiledB": 216,
+          "baseA": 206,
+          "baseB": 206,
+          "appliedA": 216,
+          "appliedB": 216,
+          "evidential": true,
+          "witness": null,
+          "denominator": 5,
+          "excludedUnsettled": [
+            "affix",
+            "card",
+            "cockpit-header",
+            "detail-header",
+            "input",
+            "layout-primitives",
+            "mobile-header"
+          ],
+          "moved": 4,
+          "percent": 80,
+          "movedIds": [
+            "button",
+            "checkbox",
+            "segmented",
+            "toggle"
+          ]
+        }
+      ],
+      "restored": {
+        "failures": [],
+        "movedIds": [
+          [
+            "button",
+            "checkbox",
+            "radio-group",
+            "segmented",
+            "toggle"
+          ]
+        ]
+      }
     }
   }
 }

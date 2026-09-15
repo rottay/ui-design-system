@@ -1,8 +1,11 @@
 {
-  "purpose": "The CLOSED registry of semantic-identity exclusions of the population owner: a declaration listed here does not count as that family's authored position on that axis. An entry is bound to one family, one axis, one skin file and the exact rule selector, property and value it was reviewed with (whitespace-normalized, comments removed). It acts on the byProperty derivation only; a head-channel read is never excluded. A declaration that changes value, gains a channel, is repeated under the same selector or moves to another part no longer matches and the family re-enters the axis by itself.",
+  "purpose": "The CLOSED registry of semantic-identity exclusions of the population owner: a declaration listed here does not count as that family's authored position on that axis. An entry is bound to one family, one axis, one skin file and the exact rule it was reviewed with: its at-rule context (an empty list means a top-level rule), selector, property and value, whitespace-normalized, comments removed. It acts on the byProperty derivation only; a head-channel read is never excluded. A declaration that changes value, gains a channel, is repeated under the same selector, moves under an at-rule or moves to another part no longer matches and the family re-enters the axis by itself.",
   "review": "WO-EVI-05 core review 2026-09-14 (Codex CHANGES + Fable CHANGES, conditions consolidated by the DT; owner direction 2026-09-14)",
   "admitted": [
-    { "family": "radio", "axis": "shape" }
+    {
+      "family": "radio",
+      "axis": "shape"
+    }
   ],
   "entries": [
     {
@@ -12,11 +15,13 @@
       "skin": "src/foundation/tokens/css/runtime/engines/modern/skin/radio/index.css",
       "declarations": [
         {
+          "context": [],
           "selector": ".ds-radio.ds-radio--modern [data-part='circle']",
           "property": "border-radius",
           "value": "var(--ds-radius-full)"
         },
         {
+          "context": [],
           "selector": ".ds-radio.ds-radio--modern [data-part='dot']",
           "property": "border-radius",
           "value": "var(--ds-radius-full)"
@@ -26,8 +31,11 @@
       "review": "WO-EVI-05 core review 2026-09-14",
       "reviewedOn": "2026-09-14",
       "reviewedAt": {
-        "commit": "0867fb986",
-        "skinLines": [64, 203]
+        "commit": "44b79e41e",
+        "skinLines": [
+          64,
+          203
+        ]
       },
       "lawfulShapeOwner": "radio-group (presentation/components/skin/radio-group/index.css, the buttonStyle option corner), a separate population family that stays shape-applicable"
     }

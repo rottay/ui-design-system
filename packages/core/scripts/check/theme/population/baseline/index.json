@@ -2,7 +2,7 @@
   "purpose": "The per-axis denominator of the by-axis tenant-difference probe (kit-2026-09 section 5 rule 4), pinned so it cannot be shrunk to reach a threshold (WO-EVI-02 R4 amendment 3).",
   "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets. A reviewed semantic-identity exclusion is the one lawful subtraction: it is pinned beside the denominator it subtracts from (notApplicable per axis) and under the exclusion revision it was reviewed at, so neither can drift on its own.",
   "catalogRevision": "2a25f7c6068407fb",
-  "exclusionsRevision": "34bd866512177f9b",
+  "exclusionsRevision": "ef3de957d72fda22",
   "pinnedOn": "2026-09-14",
   "skinFamilies": 270,
   "axes": {
@@ -22,7 +22,7 @@
     "motion": 0
   },
   "provenance": {
-    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary",
+    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned",
     "sourceCommit": "0867fb986",
     "computedOn": "2026-09-14",
     "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed family by family against the same computation over the previous pin's tree (HEAD owner, identical corpus)",

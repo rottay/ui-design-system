@@ -367,22 +367,29 @@ export function exclusionsRevision(path = EXCLUSIONS_PATH) {
   return createHash('sha256').update(readFileSync(path)).digest('hex').slice(0, 16);
 }
 
+/** The at-rule chain enclosing a rule, normalized; a top-level rule has an empty context. */
+export const contextKey = (context) => (context ?? []).map(normalizeCssText).join(' > ');
+
 const declarationKey = (declaration) =>
-  `${normalizeCssText(declaration.selector)} { ${declaration.property.toLowerCase()}: ${normalizeCssText(declaration.value)} }`;
+  `[${contextKey(declaration.context)}] ${normalizeCssText(declaration.selector)} `
+  + `{ ${declaration.property.toLowerCase()}: ${normalizeCssText(declaration.value)} }`;
 
 /**
  * The exclusion entry that names this exact declaration for this family, axis
- * and file, or null. Verbatim means selector, property AND value: a value that
- * gains a channel or changes token stops matching, and so does the same
+ * and file, or null. Verbatim means context, selector, property AND value: a
+ * value that gains a channel or changes token stops matching, so does the same
  * selector authored again with another radius, because that second
- * declaration is a declaration of its own and nothing in the registry names it.
+ * declaration is a declaration of its own and nothing in the registry names
+ * it, and so does the reviewed rule moved under an at-rule, because a rule
+ * that applies only in print or under a media condition is not the rule the
+ * review read.
  */
-function matchingExclusion(registry, family, axis, file, selector, declaration) {
-  const key = declarationKey({ selector, ...declaration });
+function matchingExclusion(registry, family, axis, file, rule, declaration) {
+  const key = declarationKey({ selector: rule.selector, context: rule.atRules, ...declaration });
   for (const entry of registry.entries) {
     if (entry.family !== family || entry.axis !== axis || entry.skin !== file) continue;
     if ((entry.path ?? 'byProperty') !== 'byProperty') continue;
-    if ((entry.declarations ?? []).some((reviewed) => declarationKey(reviewed) === key)) return entry;
+    if ((entry.declarations ?? []).some((reviewed) => Array.isArray(reviewed.context) && declarationKey(reviewed) === key)) return entry;
   }
   return null;
 }
@@ -422,9 +429,11 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
         for (const rule of rules) {
           for (const declaration of rule.declarations) {
             if (!authored.has(declaration.property)) continue;
-            const entry = matchingExclusion(registry, family, axis, file, rule.selector, declaration);
+            const entry = matchingExclusion(registry, family, axis, file, rule, declaration);
             if (entry) {
-              excluded.push({ file, selector: rule.selector, property: declaration.property, value: declaration.value, review: entry.review });
+              excluded.push({
+                file, context: rule.atRules, selector: rule.selector, property: declaration.property, value: declaration.value, review: entry.review,
+              });
             } else {
               declaredNames.add(declaration.property);
             }
@@ -530,26 +539,39 @@ export function checkExclusionRegistry(root = DEFAULT_ROOT, exclusionsPath = EXC
     }
     const rules = cssRules(readFileSync(join(root, entry.skin), 'utf8'));
     const selectors = new Set(rules.map((rule) => rule.selector));
+    const contextsOf = (selector) => [...new Set(rules
+      .filter((rule) => rule.selector === selector)
+      .map((rule) => `[${contextKey(rule.atRules)}]`))];
     const authoredKeys = new Set();
     for (const rule of rules) {
-      for (const declaration of rule.declarations) authoredKeys.add(declarationKey({ selector: rule.selector, ...declaration }));
+      for (const declaration of rule.declarations) {
+        authoredKeys.add(declarationKey({ selector: rule.selector, context: rule.atRules, ...declaration }));
+      }
     }
     const declarations = entry.declarations ?? [];
     if (declarations.length === 0) failures.push(`${label}: names no declaration`);
     const seenDeclarations = new Set();
     for (const reviewed of declarations) {
+      if (!Array.isArray(reviewed.context)) {
+        failures.push(`${label}: the reviewed declaration ${reviewed.selector} names no at-rule context (an empty list means top-level)`);
+        continue;
+      }
       const key = declarationKey(reviewed);
       if (seenDeclarations.has(key)) failures.push(`${label}: declaration listed twice: ${key}`);
       seenDeclarations.add(key);
       if (!AXES[entry.axis]?.authored.includes(reviewed.property.toLowerCase())) {
         failures.push(`${label}: ${reviewed.property} is not an authored longhand of ${entry.axis}`);
       }
-      if (!selectors.has(normalizeCssText(reviewed.selector))) {
+      const selector = normalizeCssText(reviewed.selector);
+      if (!selectors.has(selector)) {
         failures.push(`${label}: selector not authored in ${entry.skin} (comments removed): ${reviewed.selector}`);
         continue;
       }
       if (!authoredKeys.has(key)) {
-        failures.push(`${label}: STALE — ${entry.skin} no longer authors ${key} verbatim; the family has re-entered ${entry.axis} and the entry must be re-reviewed or removed`);
+        failures.push(
+          `${label}: STALE — ${entry.skin} no longer authors ${key} verbatim (the selector is authored under `
+          + `${contextsOf(selector).join(', ')}); the family has re-entered ${entry.axis} and the entry must be re-reviewed or removed`,
+        );
       }
     }
   });

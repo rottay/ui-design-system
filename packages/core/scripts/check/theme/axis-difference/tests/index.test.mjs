@@ -58,7 +58,9 @@ import {
   NEGATIVE_CONTROLS,
   STATE_VARIANTS,
   effectiveMapDifference,
+  denominatorLine,
   evaluatePilot,
+  partInvariantFailures,
   pairScenarios,
   pilotReadings,
   sceneHtml,
@@ -1008,5 +1010,42 @@ describe('axis-difference BROWSER drill — a document does not differ from itse
       assert.equal(entry.denominator, 1, `${entry.axis}: the mounted family is in the denominator`);
       assert.equal(entry.moved, 0, `${entry.axis}: ${JSON.stringify(entry.movedFamilies)}`);
     }
+  });
+});
+
+describe('axis-difference — computed invariants over mounted parts, and the N/A beside every printed denominator', () => {
+  const reading = (over = {}) => ({
+    vertical: 'bithire', theme: 'light', scenario: 'shape-only', kind: 'positive',
+    family: 'radio', part: 'circle', selector: "[data-part='circle']", property: 'border-top-left-radius',
+    a: ['9999px', '9999px', '9999px'], b: ['9999px', '9999px', '9999px'],
+    ...over,
+  });
+  const CIRCLE = { family: 'radio', part: 'circle', selector: "[data-part='circle']", expected: '9999px' };
+
+  it('a part that reads the expected value in every arm of every cell passes', () => {
+    assert.deepEqual(partInvariantFailures({ partReadings: [reading(), reading({ theme: 'dark' })] }, [CIRCLE]), []);
+  });
+
+  it('MUTANT: a producer change that squares one arm is named by part, value, cell and arm', () => {
+    const failures = partInvariantFailures({ partReadings: [reading({ b: ['0px', '9999px', '0px'] })] }, [CIRCLE]);
+    assert.deepEqual(failures, ['radio/circle: border-top-left-radius computed 0px != 9999px in bithire/light shape-only arm B']);
+  });
+
+  it('MUTANT: a part nobody measured, or a selector that matched no element, is a failure rather than a pass', () => {
+    assert.deepEqual(partInvariantFailures({ partReadings: [] }, [CIRCLE]),
+      ["radio/circle: not measured — no reading was taken for [data-part='circle']"]);
+    const failures = partInvariantFailures({ partReadings: [reading({ a: [] })] }, [CIRCLE]);
+    assert.ok(failures.some((line) => line.includes('not measured in bithire/light shape-only arm A')), failures.join(' | '));
+  });
+
+  it('prints every denominator with its N/A, effective and declared alike', () => {
+    const result = {
+      populations: { shape: 4, typography: 5 },
+      declaredPopulations: { shape: 216, typography: 181 },
+      notApplicable: { shape: 1, typography: 0 },
+    };
+    assert.equal(denominatorLine(result), 'shape 4 (1 N/A), typography 5 (0 N/A)');
+    assert.equal(denominatorLine(result, 'declaredPopulations'), 'shape 216 (1 N/A), typography 181 (0 N/A)');
+    assert.equal(denominatorLine({ populations: { shape: 4 } }), 'shape 4 (0 N/A)');
   });
 });

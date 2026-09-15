@@ -5,6 +5,12 @@
  * rule 4. Every figure it publishes is a pilot figure, never a fleet one, and
  * every denominator is read beside the not-applicable set the population owner
  * publishes with it: 29 applicable pairs plus one reviewed N/A, never 30.
+ *
+ * Mutated CSS reaches Chromium through the mount itself: a `<style>` element
+ * inside a family's markup ships with the scene, so a producer change or a
+ * severed corner is measured by the same browser, bundle and comparison as the
+ * real pair. Rewiring `run({root})` into `resolveBundle` stays out by DT
+ * adjudication (WO-EVI-05 lot E5b, presented to Codex under iii-f).
  */
 import React from 'react';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -26,10 +32,11 @@ import { resolveMotionPolicy } from '@/infrastructure/runtime/foundation/motion/
 import {
   evaluatePilot,
   pairScenarios,
+  partInvariantFailures,
   pilotReadings,
   run,
 } from '@checks/theme/axis-difference/index.mjs';
-import { checkPilotPopulation, withNotApplicable } from '@checks/theme/population/index.mjs';
+import { AXES, checkPilotPopulation, readExclusions, withNotApplicable } from '@checks/theme/population/index.mjs';
 
 const CORE = resolve(__dirname, '../../..');
 const RECORD = resolve(CORE, '../../test-artifacts/gates/axis-difference-pilot/index.json');
@@ -42,12 +49,14 @@ const ROSTER = 'scripts/check/family-cut/baseline/index.json';
 const PAIR = ['product-dense', 'warm-humanist'] as const;
 
 type ProbeResult = Awaited<ReturnType<typeof run>>;
+type PartProbe = { family: string; part: string; selector: string; properties: string[] };
 type ProbeOptions = {
   verticals: string[];
   themes: string[];
   families: string[];
   scenarios: ReturnType<typeof pairScenarios>;
   mounts: Record<string, { markup: string }>;
+  parts?: PartProbe[];
   compile: typeof compileTenantThemeDocumentV2;
 };
 /** The probe's defaults are `null`, which TypeScript reads as its whole parameter type; the run is typed by what it is handed. */
@@ -140,6 +149,41 @@ const RADIO_GROUP_MOUNT = {
   ),
 };
 
+/** The tenant-independent resolution of `--ds-radius-full` (foundation/themes/default): the geometry the two reviewed radii were excluded with. */
+const FULL_RADIUS = '9999px';
+const CORNERS = [...AXES.shape.computed];
+
+/** The excluded parts, read from the registry so the invariant follows the review and not a second listing. */
+const EXCLUDED_PARTS: PartProbe[] = (readExclusions().entries as Array<{ family: string; axis: string; declarations: Array<{ selector: string }> }>)
+  .filter((entry) => entry.family === 'radio' && entry.axis === 'shape')
+  .flatMap((entry) => entry.declarations.map((declaration) => ({
+    family: entry.family,
+    part: /data-part='([^']+)'/u.exec(declaration.selector)![1]!,
+    selector: declaration.selector,
+    properties: CORNERS,
+  })));
+const EXCLUDED_PART_INVARIANTS = EXCLUDED_PARTS.map((probe) => ({ ...probe, expected: FULL_RADIUS }));
+
+/** A producer change on the excluded parts: the reviewed declarations stay verbatim and the circle still squares. */
+const PRODUCER_MUTANT_CSS = ".ds-radio.ds-radio--modern[data-part='root'] { --ds-radius-full: 0px; }";
+/** A severed corner on the real button-style option: applicable, authored, and unable to follow any shape decision. */
+const SEVERED_CORNER_CSS = ".ds-radio-group.ds-radio-group--button [data-part='option'] { border-radius: 6px !important; }";
+const withStyle = (mount: { markup: string }, css: string) => ({ markup: `<style>${css}</style>${mount.markup}` });
+
+const shapeCellsOf = (result: ProbeResult) => result.cells.filter((cell) => cell.kind === 'positive' && cell.axis === 'shape');
+const continuityFailures = (result: ProbeResult) => shapeCellsOf(result)
+  .filter((cell) => !cell.movedIds.includes('radio-group'))
+  .map((cell) => `radio-group/shape: the button-style option corner did not move in ${cell.vertical}/${cell.theme}`);
+const observedParts = (result: ProbeResult) => {
+  const observed: Record<string, Record<string, Record<string, string[]>>> = {};
+  for (const reading of result.partReadings) {
+    const byPart = (observed[reading.theme] ??= {});
+    const byProperty = (byPart[reading.part] ??= {});
+    byProperty[reading.property] = [...new Set([...(byProperty[reading.property] ?? []), ...reading.a, ...reading.b])].sort();
+  }
+  return observed;
+};
+
 const decisionsOf = (id: string) =>
   (bithireIdentityCandidate(id).document as { decisions: Record<string, unknown> }).decisions;
 
@@ -188,6 +232,7 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
 
   it('measures exactly the published pilot population, with its N/A read from the live derivation and equal to the pin', () => {
     expect(populationFailures).toEqual([]);
+    expect(EXCLUDED_PARTS.map((probe) => probe.part)).toEqual(['circle', 'dot']);
     expect(Object.keys(MOUNTS).sort()).toEqual(Object.keys(pilot.families).sort());
     expect(notApplicable).toEqual(pin.notApplicable);
     expect(notApplicablePairs).toEqual(['radio/shape']);
@@ -207,9 +252,11 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
         families: Object.keys(pilot.families),
         scenarios: pairScenarios({ base: decisionsOf(baseId), other: decisionsOf(otherId) }),
         mounts: MOUNTS,
+        parts: EXCLUDED_PARTS,
         compile: compileTenantThemeDocumentV2,
       });
       const failures = evaluatePilot(result, pilot);
+      const invariantFailures = partInvariantFailures(result, EXCLUDED_PART_INVARIANTS);
       record[`${baseId}->${otherId}`] = {
         pilotPopulation: pilot,
         revision: { digest: result.revision.digest, decisionRows: result.revision.decisionRows },
@@ -219,9 +266,20 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
         cells: result.cells.map(({ movedFamilies: _moved, ...cell }) => cell),
         refusals: result.refusals,
         failures,
+        excludedPartInvariant: {
+          expected: FULL_RADIUS,
+          parts: EXCLUDED_PARTS.map((probe) => `${probe.family}/${probe.part}`),
+          readings: result.partReadings.length,
+          observed: observedParts(result),
+          failures: invariantFailures,
+        },
       };
       writeRecord();
       expect(failures).toEqual([]);
+      // The excluded parts keep the geometry they were reviewed with, in every arm of every measured cell.
+      expect(invariantFailures).toEqual([]);
+      expect(result.partReadings.length).toBeGreaterThan(0);
+      for (const reading of result.partReadings) expect(reading.a.length).toBe(3);
       // The N/A pair is outside the applicable denominator, not silently inside it.
       expect(result.effectiveFamilies.shape).not.toContain('radio');
       expect(result.effectiveFamilies.typography).toContain('radio');
@@ -265,6 +323,41 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
     expect(failures).not.toContain('button: declares shape and did not move on it in bithire/light');
   }, 900_000);
 
+  it('MUTANT (producer): `--ds-radius-full: 0px` on the radio root squares the excluded parts, the pilot verdict cannot see it, and the invariant names both parts; the baseline returns once the style is gone', async () => {
+    const options = {
+      verticals: ['bithire'],
+      themes: ['light', 'dark'],
+      families: Object.keys(pilot.families),
+      scenarios: pairScenarios({ base: decisionsOf(PAIR[0]), other: decisionsOf(PAIR[1]) }),
+      parts: EXCLUDED_PARTS,
+      compile: compileTenantThemeDocumentV2,
+    };
+    const mutated = await probe({ ...options, mounts: { ...MOUNTS, radio: withStyle(MOUNTS.radio!, PRODUCER_MUTANT_CSS) } });
+    const mutantFailures = partInvariantFailures(mutated, EXCLUDED_PART_INVARIANTS);
+    const restored = await probe({ ...options, themes: ['light'], mounts: MOUNTS });
+    const restoredFailures = partInvariantFailures(restored, EXCLUDED_PART_INVARIANTS);
+    record['producer-mutant'] = {
+      css: PRODUCER_MUTANT_CSS,
+      delivery: 'a <style> element inside the radio mount, shipped with the scene to Chromium',
+      pilotVerdict: evaluatePilot(mutated, pilot),
+      invariantFailures: mutantFailures,
+      observed: observedParts(mutated),
+      restored: { invariantFailures: restoredFailures, observed: observedParts(restored) },
+    };
+    writeRecord();
+    // The pilot verdict is blind to it: radio is N/A on shape, so nothing but the invariant can see the squared circle.
+    expect(evaluatePilot(mutated, pilot)).toEqual([]);
+    expect(mutantFailures.length).toBeGreaterThan(0);
+    for (const part of ['circle', 'dot']) {
+      expect(mutantFailures.some((line) => line.startsWith(`radio/${part}: `) && line.includes('computed 0px != 9999px'))).toBe(true);
+    }
+    for (const theme of ['light', 'dark']) {
+      expect(mutantFailures.some((line) => line.includes(`bithire/${theme} `))).toBe(true);
+    }
+    expect(mutantFailures.every((line) => /^radio\/(circle|dot): /u.test(line))).toBe(true);
+    expect(restoredFailures).toEqual([]);
+  }, 900_000);
+
   it('radio-group continuity: the population family the exclusion never reaches is mounted button-style and its option corner measured on the shape positive', async () => {
     expect(RADIO_GROUP_MOUNT.markup).toContain('ds-radio-group--button');
     expect(RADIO_GROUP_MOUNT.markup).toContain('data-part="option"');
@@ -297,8 +390,42 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
     writeRecord();
     for (const cell of shapeCells) expect(cell.evidential).toBe(true);
     // A correctly wired corner PASSES: the option corner moves with the shape decision in both modes.
+    expect(continuityFailures(result)).toEqual([]);
     for (const cell of shapeCells) expect(cell.movedIds).toContain('radio-group');
     // Its presence changes no pilot verdict: the pilot denominators are the roster's alone.
     expect(evaluatePilot(result, pilot)).toEqual([]);
+  }, 900_000);
+
+  it('MUTANT (severed corner): a constant radius on the real button-style option keeps radio-group shape-applicable and fails its movement by name; the baseline returns once the style is gone', async () => {
+    const options = {
+      verticals: ['bithire'],
+      themes: ['light', 'dark'],
+      families: [...Object.keys(pilot.families), 'radio-group'],
+      scenarios: pairScenarios({ base: decisionsOf(PAIR[0]), other: decisionsOf(PAIR[1]) }),
+      compile: compileTenantThemeDocumentV2,
+    };
+    const severed = await probe({ ...options, mounts: { ...MOUNTS, 'radio-group': withStyle(RADIO_GROUP_MOUNT, SEVERED_CORNER_CSS) } });
+    const severedFailures = continuityFailures(severed);
+    const restored = await probe({ ...options, themes: ['light'], mounts: { ...MOUNTS, 'radio-group': RADIO_GROUP_MOUNT } });
+    const restoredFailures = continuityFailures(restored);
+    record['severed-corner'] = {
+      css: SEVERED_CORNER_CSS,
+      delivery: 'a <style> element inside the radio-group mount, shipped with the scene to Chromium',
+      applicable: (severed.effectiveFamilies.shape as string[]).includes('radio-group'),
+      failures: severedFailures,
+      cells: shapeCellsOf(severed).map(({ movedFamilies: _moved, ...cell }) => cell),
+      restored: { failures: restoredFailures, movedIds: shapeCellsOf(restored).map((cell) => cell.movedIds) },
+    };
+    writeRecord();
+    // Severed, not withdrawn: the family still declares shape and stays in the applicable denominator.
+    expect(severed.effectiveFamilies.shape).toContain('radio-group');
+    expect(severedFailures).toEqual([
+      'radio-group/shape: the button-style option corner did not move in bithire/light',
+      'radio-group/shape: the button-style option corner did not move in bithire/dark',
+    ]);
+    for (const cell of shapeCellsOf(severed)) expect(cell.evidential).toBe(true);
+    // The pilot verdict is unchanged either way: radio-group is not a pilot family.
+    expect(evaluatePilot(severed, pilot)).toEqual([]);
+    expect(restoredFailures).toEqual([]);
   }, 900_000);
 });

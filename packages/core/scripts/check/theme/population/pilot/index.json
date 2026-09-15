@@ -5,7 +5,7 @@
   "cut": "WO-FAM-01",
   "catalogRevision": "2a25f7c6068407fb",
   "decisionRows": 29,
-  "exclusionsRevision": "34bd866512177f9b",
+  "exclusionsRevision": "ef3de957d72fda22",
   "exclusionsReview": "WO-EVI-05 core review 2026-09-14",
   "families": {
     "button": [
@@ -73,7 +73,7 @@
     "motion": 0
   },
   "provenance": {
-    "republishedFor": "WO-EVI-05 lot E5 (2026-09-14): the reviewed exclusion of radio/shape, bound to the two verbatim declarations of scripts/check/theme/population/exclusions/index.json",
+    "republishedFor": "WO-EVI-05 lot E5 (2026-09-14): the reviewed exclusion of radio/shape, bound to the two verbatim declarations of scripts/check/theme/population/exclusions/index.json | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned",
     "sourceCommit": "0867fb986",
     "computedBy": "node scripts/check/theme/population/index.mjs --pilot (pilotPopulation), membership diffed family by family against the same computation over the previous pin's tree",
     "previousPin": {

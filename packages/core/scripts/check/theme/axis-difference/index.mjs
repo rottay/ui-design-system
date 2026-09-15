@@ -81,6 +81,7 @@ import {
   AXIS_IDS,
   EXCLUDED_GROUP,
   axisControls,
+  axisNotApplicable,
   axisPopulations,
   catalogRevision,
   groupControls,
@@ -527,6 +528,26 @@ const readComputed = (properties) => {
   return out;
 };
 
+/**
+ * The computed values of named parts inside mounted families, read under
+ * whatever arm is applied. A part is a selector below the family mount, so a
+ * reviewed exclusion can be held to the geometry it was reviewed with.
+ */
+const readParts = (parts) => {
+  void document.documentElement.offsetHeight;
+  const out = {};
+  for (const probe of parts) {
+    const node = document.querySelector(`[data-axis-family="${probe.family}"]`);
+    const targets = node ? [...node.querySelectorAll(probe.selector)] : [];
+    out[probe.family] = out[probe.family] ?? {};
+    out[probe.family][probe.part] = {};
+    for (const property of probe.properties) {
+      out[probe.family][probe.part][property] = targets.map((target) => getComputedStyle(target).getPropertyValue(property));
+    }
+  }
+  return out;
+};
+
 const applyVariables = (variables) => {
   const root = document.documentElement;
   for (const name of [...root.style]) {
@@ -945,6 +966,9 @@ export async function run({
   /* family -> { markup }: the family's own server-rendered anatomy, measured in
    * place of the single element read off its skin. */
   mounts = null,
+  /* [{ family, part, selector, properties }]: parts below a mount whose computed
+   * values are published per arm, for invariants the verdict does not read. */
+  parts = null,
   /* The same export of the same compiler, handed in by a runner that reads the
    * source tree instead of `dist/`; absent, the published door is imported. */
   compile: compileOverride = null,
@@ -969,6 +993,7 @@ export async function run({
     .filter(([family, element]) => element === null && !isMounted(family))
     .map(([family]) => family);
   const populations = axisPopulations(root);
+  const notApplicable = axisNotApplicable(root);
   const properties = allProperties();
   const effective = (axis) => populations
     .get(axis)
@@ -976,6 +1001,7 @@ export async function run({
 
   const { browser, close, provenance } = await launchBrowser();
   const cells = [];
+  const partReadings = [];
   const refusals = [];
   const observedUnsettled = new Set();
   const newlyUnsettled = new Set();
@@ -997,6 +1023,8 @@ export async function run({
           let baseB = 0;
           let variablesA = {};
           let variablesB = {};
+          let partsA = null;
+          let partsB = null;
           try {
             const artifactA = await compileDocument({
               compile, vertical, slug: `${scenario.id}-a`, decisions: scenario.a,
@@ -1015,7 +1043,9 @@ export async function run({
             compiledA = Object.keys(variablesA).length;
             compiledB = Object.keys(variablesB).length;
             before = await measureCell({ page, variables: variablesA, properties });
+            partsA = parts ? await page.evaluate(readParts, parts) : null;
             after = await measureCell({ page, variables: variablesB, properties });
+            partsB = parts ? await page.evaluate(readParts, parts) : null;
           } catch (error) {
             refusals.push({
               vertical,
@@ -1028,6 +1058,22 @@ export async function run({
           for (const family of [...before.unsettled, ...after.unsettled]) {
             if (!UNSETTLED_FAMILIES.includes(family)) newlyUnsettled.add(family);
             observedUnsettled.add(family);
+          }
+          for (const probe of parts ?? []) {
+            for (const property of probe.properties) {
+              partReadings.push({
+                vertical,
+                theme,
+                scenario: scenario.id,
+                kind: scenario.kind,
+                family: probe.family,
+                part: probe.part,
+                selector: probe.selector,
+                property,
+                a: partsA?.[probe.family]?.[probe.part]?.[property] ?? [],
+                b: partsB?.[probe.family]?.[probe.part]?.[property] ?? [],
+              });
+            }
           }
           // Measured once per (vertical, mode, control) and carried by every
           // cell that control publishes there, because it is that cell's
@@ -1106,6 +1152,9 @@ export async function run({
       newlyUnsettled: [...newlyUnsettled].sort(),
     },
     populations: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis).length])),
+    // The families a reviewed exclusion withdrew from each axis, counted beside
+    // every denominator so no line of this run can be read without them.
+    notApplicable: Object.fromEntries(AXIS_IDS.map((axis) => [axis, notApplicable.get(axis).length])),
     effectiveFamilies: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis)])),
     // THE DENOMINATOR, RECONCILED. `populations` above is the EFFECTIVE bottom
     // of every fraction this run publishes; `declaredPopulations` is the pinned
@@ -1126,6 +1175,7 @@ export async function run({
     })),
     refusals,
     cells,
+    partReadings,
     limits: { states: STATES_AXIS_LIMITS },
     statesNote:
       'The states axis is measured under [data-state] only. The :hover half of the rule needs one real '
@@ -1369,6 +1419,47 @@ export function pilotReadings(result, pilot) {
   });
 }
 
+/**
+ * The failures of a computed invariant over mounted parts: every element the
+ * part selector matched, in every measured arm, must read exactly the expected
+ * value, and a part nobody measured is a failure rather than a pass.
+ */
+export function partInvariantFailures(result, invariants) {
+  const failures = [];
+  for (const invariant of invariants) {
+    const readings = (result.partReadings ?? []).filter((reading) =>
+      reading.family === invariant.family
+      && reading.part === invariant.part
+      && (invariant.properties === undefined || invariant.properties.includes(reading.property)));
+    const where = `${invariant.family}/${invariant.part}`;
+    if (readings.length === 0) {
+      failures.push(`${where}: not measured — no reading was taken for ${invariant.selector ?? 'its selector'}`);
+      continue;
+    }
+    for (const reading of readings) {
+      const cell = `${reading.vertical}/${reading.theme} ${reading.scenario}`;
+      for (const [arm, values] of [['A', reading.a], ['B', reading.b]]) {
+        if (values.length === 0) {
+          failures.push(`${where}: ${reading.property} not measured in ${cell} arm ${arm} — no element matched ${reading.selector}`);
+          continue;
+        }
+        const off = [...new Set(values.filter((value) => value !== invariant.expected))];
+        if (off.length > 0) {
+          failures.push(`${where}: ${reading.property} computed ${off.join(', ')} != ${invariant.expected} in ${cell} arm ${arm}`);
+        }
+      }
+    }
+  }
+  return failures;
+}
+
+/** One denominator per axis with the N/A of that axis beside it, as every printed line of this run states them. */
+export function denominatorLine(result, key = 'populations') {
+  return Object.entries(result[key] ?? {})
+    .map(([axis, count]) => `${axis} ${count} (${result.notApplicable?.[axis] ?? 0} N/A)`)
+    .join(', ');
+}
+
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
   const argument = (name) =>
@@ -1386,13 +1477,8 @@ if (isMain) {
     + `${result.verticals.length} vertical(s) x ${result.themes.length} mode(s); bundle ${result.bundleMode}; `
     + `chromium ${result.browser.browserVersion}`,
   );
-  console.log(
-    `  denominators (effective): ${Object.entries(result.populations).map(([axis, n]) => `${axis} ${n}`).join(', ')}`,
-  );
-  console.log(
-    `  denominators (declared by check/theme/population): `
-    + `${Object.entries(result.declaredPopulations).map(([axis, n]) => `${axis} ${n}`).join(', ')}`,
-  );
+  console.log(`  denominators (effective): ${denominatorLine(result)}`);
+  console.log(`  denominators (declared by check/theme/population): ${denominatorLine(result, 'declaredPopulations')}`);
   for (const [axis, row] of Object.entries(result.denominatorReconciliation)) {
     console.log(
       `    ${axis.padEnd(11)} ${row.declared} declared − ${row.excludedUnmountable} unmountable `

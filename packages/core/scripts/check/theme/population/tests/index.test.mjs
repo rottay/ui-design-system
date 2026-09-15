@@ -83,7 +83,9 @@ const writeRegistry = (dir, registry, name = 'exclusions.json') => {
 const radiiOf = (file) => cssRules(readFileSync(file, 'utf8')).flatMap((rule) =>
   rule.declarations
     .filter((declaration) => AXES.shape.authored.includes(declaration.property))
-    .map((declaration) => ({ selector: rule.selector, property: declaration.property, value: declaration.value })));
+    .map((declaration) => ({ context: rule.atRules, selector: rule.selector, property: declaration.property, value: declaration.value })));
+const CIRCLE_RULE = /\.ds-radio\.ds-radio--modern \[data-part='circle'\] \{[^}]*\}/u;
+const ROOT_RULE = /\.ds-radio\.ds-radio--modern\[data-part='root'\] \{[^}]*\}/u;
 
 describe('theme population — the denominator is read, not assumed', () => {
   it('publishes a content revision of the catalog it read', () => {
@@ -523,7 +525,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(before.axes.shape, { properties: ['border-radius'], headChannels: ['--ds-radius-md'], stateSelectors: [], stateChannels: [] });
     assert.deepEqual(before.notApplicable, {});
     assert.deepEqual(radiiOf(join(dir, RADIO_GROUP_SKIN)), [
-      { selector: ".ds-radio-group.ds-radio-group--button [data-part='option']", property: 'border-radius', value: 'var(--ds-radius-md)' },
+      { context: [], selector: ".ds-radio-group.ds-radio-group--button [data-part='option']", property: 'border-radius', value: 'var(--ds-radius-md)' },
     ]);
 
     const skin = join(dir, RADIO_GROUP_SKIN);
@@ -541,7 +543,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const aimed = baseRegistry();
     aimed.entries[0].skin = RADIO_GROUP_SKIN;
     aimed.entries[0].declarations = [
-      { selector: ".ds-radio-group.ds-radio-group--button [data-part='option']", property: 'border-radius', value: 'var(--ds-radius-md)' },
+      { context: [], selector: ".ds-radio-group.ds-radio-group--button [data-part='option']", property: 'border-radius', value: 'var(--ds-radius-md)' },
     ];
     assert.ok(checkExclusionRegistry(dir, writeRegistry(dir, aimed, 'aimed.json')).failures
       .some((line) => line.includes('is not a skin file of radio')), 'the entry is keyed by family id and file path');
@@ -594,11 +596,78 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.equal(mismatches, 0, 'a family gained or lost a property by the change of reader');
     assert.equal(unattributed, 0, 'a selector the probe can read is a selector the population attributes');
 
+    assert.deepEqual(cssRules('@media   print {\n .a { border-radius: 1px } }')[0].atRules, ['@media print']);
     const rules = cssRules('@media (x) { .a { border-radius: 1px; } }\n.b, .c { color: red; }\n/* .z { border-radius: 9px } */\n.d { content: ";"; padding: 0 }');
     assert.deepEqual(rules, [
       { selector: '.a', atRules: ['@media (x)'], declarations: [{ property: 'border-radius', value: '1px' }] },
       { selector: '.b, .c', atRules: [], declarations: [{ property: 'color', value: 'red' }] },
       { selector: '.d', atRules: [], declarations: [{ property: 'content', value: '";"' }, { property: 'padding', value: '0' }] },
     ]);
+  });
+});
+
+describe('theme population — the reviewed exclusion is bound to the rule context it was read in', () => {
+  it('names the top-level context of both reviewed declarations, and the skin authors them there', () => {
+    const [entry] = readExclusions().entries;
+    assert.ok(entry.declarations.every((declaration) => Array.isArray(declaration.context) && declaration.context.length === 0));
+    assert.deepEqual(radiiOf(join(ROOT, entry.skin)).map((declaration) => declaration.context), [[], []]);
+    assert.deepEqual(checkExclusionRegistry().failures, []);
+  });
+
+  it('MUTANT (A1): the reviewed circle rule moved inside @media print stops matching — radio re-enters shape, the pin refuses it and the registry is stale by context', () => {
+    const dir = sandbox();
+    const skin = join(dir, RADIO_SKIN);
+    const source = readFileSync(skin, 'utf8');
+    const moved = source.replace(CIRCLE_RULE, (rule) => `@media print {\n${rule}\n}`);
+    assert.notEqual(moved, source, 'the mutation must reach the circle rule');
+    writeFileSync(skin, moved);
+    const radio = familyAxisDeclarations(dir, catalogIn(dir)).get('radio');
+    assert.ok(radio.axes.shape, 'radio must re-enter shape');
+    assert.deepEqual(radio.axes.shape.properties, ['border-radius']);
+    assert.equal(radio.axes.shape.excludedDeclarations.length, 1, 'only the dot still matches the review');
+    assert.deepEqual(radio.notApplicable, {});
+    const { failures } = checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN);
+    assert.ok(failures.includes('shape: published pilot denominator 4 != 5'), failures.join(' | '));
+    assert.ok(failures.some((line) => line.startsWith('radio/shape: published NOT APPLICABLE and now declared')), failures.join(' | '));
+    assert.ok(failures.some((line) => line.includes('STALE') && line.includes("[data-part='circle']") && line.includes('authored under [@media print]')),
+      `the registry names the drifted context: ${failures.join(' | ')}`);
+    assert.ok(checkPopulationFloor(dir, catalogIn(dir), FLOOR).failures.some((line) => line.includes('STALE')));
+  });
+
+  it('MUTANT (A2): another rule of the same skin moved under an at-rule changes nothing — identical top-level context keeps matching', () => {
+    const dir = sandbox();
+    const skin = join(dir, RADIO_SKIN);
+    const source = readFileSync(skin, 'utf8');
+    const moved = source.replace(ROOT_RULE, (rule) => `@media print {\n${rule}\n}`);
+    assert.notEqual(moved, source);
+    writeFileSync(skin, moved);
+    const radio = familyAxisDeclarations(dir, catalogIn(dir)).get('radio');
+    assert.deepEqual(Object.keys(radio.axes), ['typography', 'rhythm', 'depth', 'states', 'motion']);
+    assert.equal(radio.notApplicable.shape.excludedDeclarations.length, 2);
+    assert.deepEqual(checkPilotPopulation(dir, catalogIn(dir), PILOT_PIN).failures, []);
+    assert.deepEqual(checkExclusionRegistry(dir).failures, []);
+  });
+
+  it('MUTANT (A3): a registry entry that reviews the circle under @media print while the skin authors it top-level is stale, and excludes nothing', () => {
+    const dir = sandbox();
+    const registry = baseRegistry();
+    registry.entries[0].declarations[0].context = ['@media print'];
+    const path = writeRegistry(dir, registry);
+    const { failures } = checkExclusionRegistry(dir, path);
+    assert.ok(failures.some((line) => line.includes('STALE') && line.includes('[@media print]') && line.includes('authored under []')), failures.join(' | '));
+    const radio = familyAxisDeclarations(dir, catalogIn(dir), path).get('radio');
+    assert.ok(radio.axes.shape, 'the circle radius counts again');
+    assert.equal(radio.axes.shape.excludedDeclarations.length, 1);
+  });
+
+  it('MUTANT (A4): a reviewed declaration without a context is refused by the registry check and matches nothing', () => {
+    const dir = sandbox();
+    const registry = baseRegistry();
+    delete registry.entries[0].declarations[0].context;
+    const path = writeRegistry(dir, registry);
+    assert.ok(checkExclusionRegistry(dir, path).failures.some((line) => line.includes('names no at-rule context')));
+    const radio = familyAxisDeclarations(dir, catalogIn(dir), path).get('radio');
+    assert.ok(radio.axes.shape, 'a context-less declaration excludes nothing');
+    assert.equal(radio.axes.shape.excludedDeclarations.length, 1);
   });
 });
