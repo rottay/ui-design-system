@@ -34,12 +34,79 @@
  * chain.
  */
 
-import type { VerticalKey } from "@/foundation/contracts/kernel/verticals";
+import type { FirstPartyVerticalId, VerticalKey } from "@/foundation/contracts/kernel/verticals";
 import type { VerticalPreset } from "@/foundation/contracts/composition/tenants";
 import {
   EVNTO_CANONICAL_MOTION,
   EVNTO_CANONICAL_SURFACES,
 } from "@/foundation/presets/policy/experience-baselines/evnto";
+
+import { BITHIRE_PRESET_SOURCE } from "./bithire";
+import { EVNTO_PRESET_SOURCE } from "./evnto";
+import { ROTTAY_PRESET_SOURCE } from "./rottay";
+
+/**
+ * The manifest beside a vertical's decision document: its provenance and the
+ * written reason of every sanctioned override, keyed by chrome path
+ * (`chrome.<family>.<channel>`). Closed: a leaf without a reason and a reason
+ * without a leaf are both refused by `preset-without-derivable-values`.
+ */
+export interface VerticalThemePresetManifest {
+  readonly workOrder: string;
+  readonly vertical: FirstPartyVerticalId;
+  /** The vertical seat of the kit, never a customer plan. */
+  readonly plan: "internal";
+  readonly publishedOn: string;
+  readonly provenance: Readonly<Record<string, string>>;
+  readonly overrideReasons: Readonly<Record<string, string>>;
+}
+
+/**
+ * A first-party vertical as DECISIONS (WO-DER-06). The document stays
+ * `unknown` at this tier on purpose -- its type lives in `contracts/`, which
+ * `foundation/` may not reach -- and is validated by the door every other
+ * origin takes.
+ */
+export interface VerticalThemePreset {
+  readonly vertical: FirstPartyVerticalId;
+  readonly plan: "internal";
+  readonly document: unknown;
+  readonly manifest: VerticalThemePresetManifest;
+}
+
+const FIRST_PARTY_THEME_VERTICALS: readonly FirstPartyVerticalId[] = ["rottay", "bithire", "evnto"];
+
+function defineVerticalThemePreset(source: { readonly document: unknown; readonly manifest: unknown }): VerticalThemePreset {
+  const manifest = source.manifest as VerticalThemePresetManifest;
+  if (!FIRST_PARTY_THEME_VERTICALS.includes(manifest.vertical)) {
+    throw new Error(
+      `[design-system] vertical theme preset names ${JSON.stringify(manifest.vertical)}, which is not a first-party vertical`
+    );
+  }
+  if (manifest.plan !== "internal") {
+    throw new Error(
+      `[design-system] vertical theme preset ${manifest.vertical} must sit on the internal seat, not plan ${JSON.stringify(manifest.plan)}`
+    );
+  }
+  return Object.freeze({ vertical: manifest.vertical, plan: manifest.plan, document: source.document, manifest });
+}
+
+/**
+ * The three first-party verticals as DECISIONS: one v2 document per vertical,
+ * on the internal seat, with every sanctioned override carrying a written
+ * reason. BitHire is the provisional WO-DER-07 pick; rottay and evnto are
+ * structural-neutral until their identity program.
+ */
+export const VERTICAL_THEME_PRESETS: Readonly<Record<FirstPartyVerticalId, VerticalThemePreset>> =
+  Object.freeze({
+    rottay: defineVerticalThemePreset(ROTTAY_PRESET_SOURCE),
+    bithire: defineVerticalThemePreset(BITHIRE_PRESET_SOURCE),
+    evnto: defineVerticalThemePreset(EVNTO_PRESET_SOURCE),
+  });
+
+export function getVerticalThemePreset(key: VerticalKey): VerticalThemePreset | undefined {
+  return (VERTICAL_THEME_PRESETS as Readonly<Record<string, VerticalThemePreset>>)[key];
+}
 
 /**
  * Registry of all known vertical presets.

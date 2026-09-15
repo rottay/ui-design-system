@@ -65,6 +65,27 @@ export const CI_GATES = Object.freeze([
   { id: 'scripts-tree', run: ['node', 'scripts/check/architecture/conventions/scripts-tree/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'scripts-tree-drill', ratchet: 'scripts/check/architecture/conventions/scripts-tree/baseline/index.json', },
   { id: 'retired-vertical-identity-drill', run: ['node', '--test', 'scripts/check/verticals/retired-identity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['retired-vertical-identity'], },
   { id: 'retired-vertical-identity', run: ['node', 'scripts/check/verticals/retired-identity/index.mjs'], blocking: true, phase: 'pre-build', drillId: 'retired-vertical-identity-drill', },
+  // WO-DER-06: a first-party vertical preset is decisions and nothing the
+  // compiler already produces from them. The derivability half compiles each
+  // override against the decisions alone through dist/server.js, so gate and
+  // drill both run post-build behind fresh-dist; the structural half (shape,
+  // closed domains, override reasons) needs no build and the drill covers it too.
+  {
+    id: 'preset-without-derivable-values-drill',
+    run: ['node', '--test', 'scripts/check/verticals/preset-without-derivable-values/index.test.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillFor: ['preset-without-derivable-values'],
+    prerequisites: ['fresh-dist'],
+  },
+  {
+    id: 'preset-without-derivable-values',
+    run: ['node', 'scripts/check/verticals/preset-without-derivable-values/index.mjs'],
+    blocking: true,
+    phase: 'post-build',
+    drillId: 'preset-without-derivable-values-drill',
+    prerequisites: ['fresh-dist'],
+  },
   { id: 'graphics-licenses-drill', run: ['node', '--test', 'scripts/package/graphics/licenses/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['graphics-licenses:check'], },
   { id: 'graphics-licenses:check', run: ['pnpm', 'run', 'graphics-licenses:check'], blocking: true, phase: 'pre-build', drillId: 'graphics-licenses-drill', },
   { id: 'graphics-packaging-drill', run: ['node', '--test', 'scripts/check/graphics-packaging/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['graphics-packaging-integrity'], },

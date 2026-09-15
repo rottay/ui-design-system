@@ -1,0 +1,12 @@
+{
+  "workOrder": "WO-DER-06",
+  "vertical": "bithire",
+  "plan": "internal",
+  "publishedOn": "2026-09-14",
+  "provenance": {
+    "source": "WO-DER-07 candidate `product-dense` (src/foundation/presets/candidates/bithire/documents/product-dense), decisions copied verbatim; plan raised from the customer `pro` seat to the vertical `internal` seat",
+    "provisional": "D-30 (2026-09-10 amendment on WO-DER-07): the owner's pick is deferred, so this is the pilot's provisional identity and the final look remains an open obligation of the branding stage, not of this conversion",
+    "whyThisCandidate": "the most contrasting of the three for the pilot: contrast-posture high, role-weights strong, states strong, border-style strong; and the only candidate whose typography.families (grotesk-display, humanist-text, plex-mono) are exactly the packs the bithire roster ships"
+  },
+  "overrideReasons": {}
+}

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "plan": "internal",
+  "decisions": {
+    "typography.scale": 1.0,
+    "typography.role-weights": "regular",
+    "typography.numeric": "proportional",
+    "shape.radius-scale": 1.0,
+    "shape.nesting": "uniform",
+    "shape.button-style": "soft",
+    "shape.control-height": "standard",
+    "density.mode": "normal",
+    "spacing.rhythm": "normal",
+    "surfaces.elevation-posture": "soft",
+    "surfaces.border-style": "hairline",
+    "surfaces.effect-intensity": 0.2,
+    "states.emphasis": "medium",
+    "states.focus-style": "ring",
+    "motion.dial": {
+      "intensity": 0.5,
+      "durationScale": 1.0,
+      "ambient": "off"
+    },
+    "motion.character": "mechanical",
+    "navigation.sidebar-tone": "subtle",
+    "responsive.posture": "balanced"
+  }
+}
