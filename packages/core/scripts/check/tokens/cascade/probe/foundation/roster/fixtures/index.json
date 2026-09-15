@@ -8,7 +8,7 @@
       "requiresSelectors": [
         ".ds-card.ds-card--modern[data-part='root'][data-radius='md']",
         "--ds-card-border-radius: var(--ds-radius-lg)",
-        "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)",
+        "inset 0 var(--ds-edge-hairline-width) 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent)",
         "letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading))",
         "border-radius: var(--_ds-card-nest-radius)"
       ],
