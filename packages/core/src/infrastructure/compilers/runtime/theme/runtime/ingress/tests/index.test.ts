@@ -11,6 +11,7 @@ import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/vertic
 import { compileThemeIntent } from "../../../facade/runtime/compile";
 import {
   authoredThemePatch,
+  baselineFor,
   documentThemeIntent,
   documentThemePatch,
   draftPreviewThemeIntent,
@@ -172,6 +173,9 @@ describe("authoredThemePatch", () => {
       // A draft that authored no chrome captured no claim; the ledger is empty
       // rather than absent, which is what tells the caps this door records one.
       ledger: { entries: [] },
+      // The baseline this draft is a patch OF, computed once by this door and
+      // handed to the resolution. No `carriedFrom`, so it is the vertical's own.
+      baseline: baselineFor("evnto", "acme"),
     });
   });
 });

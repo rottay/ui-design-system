@@ -73,10 +73,15 @@ const INTENT_KEYS: readonly string[] = [
   "patch",
   "entitlement",
   "ledger",
+  "baseline",
 ];
 
 /** The optional keys; every other one must be present. */
-const OPTIONAL_INTENT_KEYS: readonly string[] = ["entitlement", "ledger"];
+const OPTIONAL_INTENT_KEYS: readonly string[] = [
+  "entitlement",
+  "ledger",
+  "baseline",
+];
 
 /**
  * Reject the intent before it can decide anything.

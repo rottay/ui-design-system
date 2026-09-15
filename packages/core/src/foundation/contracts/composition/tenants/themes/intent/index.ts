@@ -8,7 +8,7 @@
  */
 
 import type { FirstPartyVerticalId } from "../../../../kernel/verticals";
-import type { ThemeLayerPatch } from "../iso";
+import type { Theme, ThemeLayerPatch } from "../iso";
 import type { DecisionProvenanceLedger } from "../provenance";
 
 /**
@@ -85,6 +85,19 @@ export interface ThemeIntent {
    * name rather than reading absence as an empty answer.
    */
   readonly ledger?: DecisionProvenanceLedger;
+  /**
+   * The effective baseline this patch composes over.
+   *
+   * A patch is only meaningful against the theme it is a patch OF, and for a
+   * draft that theme is not always the vertical's own: a studio opens a tenant's
+   * ALREADY CUSTOMIZED theme, and the leaves it did not touch this time are
+   * carried by that theme rather than by the preset. The ingress computes this
+   * once -- `carriedFrom` when the caller supplied one, the vertical's baseline
+   * otherwise -- and hands it down, so the station that classifies authorship
+   * and the station that resolves the theme measure against the SAME baseline.
+   * Absent, the compile door derives the vertical's own.
+   */
+  readonly baseline?: Theme;
 }
 
 /**

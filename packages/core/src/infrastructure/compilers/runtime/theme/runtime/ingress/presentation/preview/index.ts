@@ -34,7 +34,16 @@ export interface DraftPreviewThemeIntentInput {
   vertical: FirstPartyVerticalId;
   slug: string;
   draft: FlatTheme;
-  /** The baseline the draft is a patch of; the vertical's own baseline unless the caller resolved another. */
+  /**
+   * The baseline the draft is a patch of; the vertical's own unless the caller
+   * resolved another.
+   *
+   * When supplied it is the EFFECTIVE baseline, not merely the prune's
+   * yardstick: a leaf equal to it is not authorship AND keeps the carried
+   * value in the compiled theme, because the intent hands this same baseline to
+   * the resolution. A studio that opens a tenant's customized theme and edits
+   * one field therefore keeps every other customization it inherited.
+   */
   carriedFrom?: Theme;
 }
 
@@ -105,6 +114,12 @@ export function previewThemeAdmission(
  * The vertical goes to the ledger too, because a draft restates values it never
  * touched: only the baseline it was opened on separates a chrome leaf the
  * editor moved from the product's own ink carried along with it.
+ *
+ * That baseline is computed ONCE here -- `carriedFrom`, or the vertical's own --
+ * and travels on the intent, so the station that prunes the patch and the
+ * station that resolves the theme cannot disagree about what this draft is a
+ * patch OF. A leaf equal to the carried baseline is not authorship and is still
+ * in the compiled theme; a leaf the editor moved is authorship and moves.
  */
 export function draftPreviewThemeIntent(
   input: DraftPreviewThemeIntentInput
@@ -120,5 +135,9 @@ export function draftPreviewThemeIntent(
     // moved the tenant posture floors the compile door never sees.
     patch: movedThemePatch(authoredThemePatch(input.draft), carriedFrom),
     ledger: draftProvenanceLedger(input.draft, input.vertical, { carriedFrom }),
+    // The SAME baseline the prune measured against, handed down: what the draft
+    // carried is carried by the compiled theme too, not re-derived from the
+    // preset by the next station.
+    baseline: carriedFrom,
   };
 }

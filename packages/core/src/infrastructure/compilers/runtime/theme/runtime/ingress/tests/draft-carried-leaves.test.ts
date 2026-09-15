@@ -105,3 +105,81 @@ describe("the draft door carries what it did not move", () => {
     expect(Object.keys(intent.patch)).toEqual([]);
   });
 });
+
+/**
+ * `carriedFrom` is the EFFECTIVE baseline, not just the prune's yardstick.
+ *
+ * The prune was right that a leaf equal to `carriedFrom` is not authorship this
+ * time, but the next station resolved the pruned patch over the VERTICAL's
+ * baseline -- so a customization the tenant made on an earlier visit, and did
+ * not touch on this one, was classified correctly and then thrown away: bithire
+ * opened a theme dialled to 1.15 and compiled 0.8, its preset's value.
+ *
+ * One baseline, computed once by the ingress and handed down, answers both
+ * questions. Both directions are asserted: the untouched customization survives,
+ * and a leaf the editor really moved is still authorship.
+ */
+describe("the draft door composes over the baseline it was opened on", () => {
+  /** A tenant's saved, already customized theme: the preset plus one dialled leaf. */
+  const customizedBithire = () => {
+    const draft = draftOf("bithire");
+    draft.surfaces = { ...draft.surfaces, radiusScale: 1.15 };
+    const theme = compileThemeIntent(
+      draftPreviewThemeIntent({ vertical: "bithire", slug: SLUG, draft })
+    ).resolution.theme;
+    // The premise: the preset states 0.8 and this theme carries 1.15.
+    expect(baselineFor("bithire", SLUG).surfaces.radiusScale).toBe(0.8);
+    expect(theme.surfaces.radiusScale).toBe(1.15);
+    return { draft, theme };
+  };
+
+  it("keeps an untouched customization in the effective theme, and out of the patch", () => {
+    const { draft, theme } = customizedBithire();
+    // The studio re-opens the tenant's theme and touches nothing.
+    const reopened = JSON.parse(JSON.stringify(draft)) as FlatTheme;
+    const intent = draftPreviewThemeIntent({
+      vertical: "bithire",
+      slug: SLUG,
+      draft: reopened,
+      carriedFrom: theme,
+    });
+    // Not edited this time -- so not authorship ...
+    expect(intent.patch).toEqual({});
+    // ... and still the tenant's value, because the resolution composes over
+    // the theme it was opened on rather than over the preset.
+    expect(varsOf(intent)["--ds-radius-scale"]).toBe("1.15");
+  });
+
+  it("moves the edited field and still carries the untouched customization", () => {
+    const { draft, theme } = customizedBithire();
+    const reopened = JSON.parse(JSON.stringify(draft)) as FlatTheme;
+    // A DIFFERENT field, dialled this visit; the radius is left alone.
+    reopened.surfaces = { ...reopened.surfaces, effectIntensity: 0.6 };
+    const intent = draftPreviewThemeIntent({
+      vertical: "bithire",
+      slug: SLUG,
+      draft: reopened,
+      carriedFrom: theme,
+    });
+    const patch = intent.patch as { surfaces?: Record<string, unknown> };
+    expect(Object.keys(intent.patch)).toEqual(["surfaces"]);
+    expect(patch.surfaces).toEqual({ effectIntensity: 0.6 });
+    const vars = varsOf(intent);
+    expect(vars["--ds-effect-intensity"]).toBe("0.6");
+    expect(vars["--ds-radius-scale"]).toBe("1.15");
+  });
+
+  it("without a carried baseline the draft still states its own value as authorship", () => {
+    // The control that keeps the fix from becoming "always carry": a draft
+    // opened on the VERTICAL still answers for the leaf it dialled.
+    const { draft } = customizedBithire();
+    const intent = draftPreviewThemeIntent({
+      vertical: "bithire",
+      slug: SLUG,
+      draft: JSON.parse(JSON.stringify(draft)) as FlatTheme,
+    });
+    const patch = intent.patch as { surfaces?: { radiusScale?: number } };
+    expect(patch.surfaces?.radiusScale).toBe(1.15);
+    expect(varsOf(intent)["--ds-radius-scale"]).toBe("1.15");
+  });
+});
