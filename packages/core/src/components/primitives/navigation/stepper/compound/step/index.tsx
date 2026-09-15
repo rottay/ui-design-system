@@ -49,6 +49,7 @@
 import React from 'react';
 import type { StepProps } from '../../contracts';
 import { SIZE_MAP } from '../../contracts';
+import { serializeState, useInteractionState } from '@/foundation/behavior';
 import { ActionConfirmIcon } from '@/graphics/icons/semantic/generated/roles/action-confirm';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 
@@ -93,11 +94,10 @@ interface StepInternalProps extends StepProps {
  * - Supports keyboard navigation (Enter/Space to activate)
  * - Includes ARIA attributes for accessibility
  * - Status glyphs are the governed `action.confirm` / `action.close` facade
- *   roles (the former local SVG pair violated the icons law); the indicator
- *   geometry, typography, connector and every state transition live in
- *   `stepper-compounds.css`, keyed on the stamped `data-size` /
- *   `data-direction` / `data-label-placement` / `data-status` hooks — no
- *   inline paint, no raw durations, logical properties only.
+ *   roles; the indicator geometry, typography, connector and every state
+ *   transition live in the stepper compound skin, keyed on the stamped
+ *   `data-size` / `data-direction` / `data-label-placement` / `data-status`
+ *   hooks and the interaction kernel's `data-state`; no inline paint.
  *
  * @param props - {@link StepInternalProps}
  * @returns Individual step element with indicator and content
@@ -129,6 +129,7 @@ export function StepperStep({
   const iconSize = SIZE_MAP[size];
 
   const isClickable = Boolean(onClick) && !disabled;
+  const interaction = useInteractionState({ disabled });
 
   // ========================================================================
   // Event Handlers
@@ -191,7 +192,8 @@ export function StepperStep({
     <>
       <div
         {...rest}
-        className={`rottay-stepper-step rottay-stepper-step--${status} ${active ? 'rottay-stepper-step--active' : ''} ${disabled ? 'rottay-stepper-step--disabled' : ''} ${className}`}
+        {...interaction.handlers}
+        className={`ds-stepper-step ${className}`.trim()}
         style={style}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
@@ -201,6 +203,7 @@ export function StepperStep({
         aria-current={status === 'process' ? 'step' : undefined}
         data-step={stepIndex}
         data-part="item"
+        data-state={serializeState(interaction.state)}
         data-status={status}
         data-active={active || undefined}
         data-disabled={disabled || undefined}
@@ -210,26 +213,16 @@ export function StepperStep({
         data-label-placement={labelPlacement}
         data-last={isLast || undefined}
       >
-        {/* Step Icon/Number */}
-        <div className="rottay-stepper-step__icon" data-part="icon" data-variant={variant}>
+        <div data-part="icon" data-variant={variant}>
           {renderIcon()}
         </div>
 
-        {/* Step Content */}
-        <div className="rottay-stepper-step__content">
-          <div className="rottay-stepper-step__title" data-part="label">
+        <div data-part="content">
+          <div data-part="label">
             {title}
-            {subTitle && (
-              <span className="rottay-stepper-step__subtitle" data-part="subtitle">
-                {subTitle}
-              </span>
-            )}
+            {subTitle && <span data-part="subtitle">{subTitle}</span>}
           </div>
-          {description && (
-            <div className="rottay-stepper-step__description" data-part="description">
-              {description}
-            </div>
-          )}
+          {description && <div data-part="description">{description}</div>}
         </div>
 
         {/* Additional Children */}
@@ -241,7 +234,7 @@ export function StepperStep({
           orientation used to be a dead inline branch — it renders now. */}
       {!isLast && (
         <div
-          className="rottay-stepper-connector"
+          className="ds-stepper-connector"
           data-part="connector"
           data-status={status}
           data-direction={direction}

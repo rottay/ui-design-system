@@ -725,7 +725,6 @@ test("the tier resolver, not the marker, is what places a structure above the en
   assert.deepEqual(disagreeing.sort(), [
     "collection-shell/index.css",
     "layout-header/index.css",
-    "layout-sidebar/index.css",
     "surface-section-card/index.css",
     "surface-states/index.css",
   ]);

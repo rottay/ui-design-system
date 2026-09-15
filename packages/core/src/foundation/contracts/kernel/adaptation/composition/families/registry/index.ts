@@ -75,6 +75,12 @@ export const LAYOUT_SENSITIVE_FAMILIES = Object.freeze([
     layoutSensitive: true,
     cut: 'WO-FAM-09',
   },
+  {
+    family: 'sidebar-surface',
+    owner: 'src/components/structures/shell/navigation/sidebar-surface',
+    layoutSensitive: true,
+    cut: 'WO-FAM-05',
+  },
 ] as const satisfies readonly LayoutSensitiveFamily[]);
 
 export type LayoutSensitiveFamilyId = (typeof LAYOUT_SENSITIVE_FAMILIES)[number]['family'];

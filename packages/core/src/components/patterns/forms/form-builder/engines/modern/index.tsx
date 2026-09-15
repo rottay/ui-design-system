@@ -60,7 +60,7 @@ import type { Color } from '../../../../../primitives/inputs/color-picker/contra
 import { Slider } from '../../../../../primitives/inputs/slider';
 import { Rate } from '../../../../../primitives/feedback/rate';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
-import ModernSteps from '../../../../../primitives/navigation/steps/engines/modern';
+import ModernStepper from '../../../../../primitives/navigation/stepper/engines/modern';
 import { Empty } from '../../../../../primitives/display/empty';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -853,13 +853,13 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           item -- keyboard-reachable by construction). */}
       {adaptedLayout === 'steps' && stepLabels && (
         <div data-part="step-list">
-          <ModernSteps
+          <ModernStepper
             items={stepLabels.map((label) => ({ title: label }))}
             current={currentStep}
+            clickable
             onChange={(step) => handleStepChange(step)}
             direction="horizontal"
-            size="small"
-            responsive
+            size="sm"
           />
         </div>
       )}

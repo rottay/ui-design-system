@@ -25,7 +25,7 @@ import { StickyWizardActions } from '../../runtime/sticky-actions';
 import type { StepWizardProps } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernProgress from '../../../../../primitives/feedback/progress/engines/modern';
-import ModernSteps from '../../../../../primitives/navigation/steps/engines/modern';
+import ModernStepper from '../../../../../primitives/navigation/stepper/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -359,13 +359,12 @@ export default function ModernStepWizard(props: StepWizardProps) {
             navigation happens through the nav buttons, so no onChange). */}
         {showProgressChrome && progressPosture === 'rail' && !isVertical && (
           <div data-part="step-rail" data-orientation="horizontal">
-            <ModernSteps
+            <ModernStepper
               items={steps.map((s) => ({ title: s.title, description: s.description, icon: s.icon }))}
               current={current}
               status={railStatus}
               direction="horizontal"
-              size="small"
-              responsive
+              size="sm"
             />
           </div>
         )}
@@ -375,12 +374,12 @@ export default function ModernStepWizard(props: StepWizardProps) {
           <div data-part="wizard-split">
             {/* Vertical step rail */}
             <div data-part="step-rail" data-orientation="vertical">
-              <ModernSteps
+              <ModernStepper
                 items={steps.map((s) => ({ title: s.title, description: s.description, icon: s.icon }))}
                 current={current}
                 status={railStatus}
                 direction="vertical"
-                size="small"
+                size="sm"
               />
             </div>
 

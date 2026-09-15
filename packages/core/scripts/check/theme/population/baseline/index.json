@@ -4,13 +4,13 @@
   "catalogRevision": "d50537e438bdbcfa",
   "exclusionsRevision": "ef3de957d72fda22",
   "pinnedOn": "2026-09-15",
-  "skinFamilies": 270,
+  "skinFamilies": 269,
   "axes": {
-    "shape": 216,
-    "typography": 181,
-    "rhythm": 214,
-    "depth": 194,
-    "states": 156,
+    "shape": 215,
+    "typography": 180,
+    "rhythm": 213,
+    "depth": 193,
+    "states": 155,
     "motion": 200
   },
   "notApplicable": {
@@ -22,7 +22,7 @@
     "motion": 0
   },
   "provenance": {
-    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned | WO-FAM-05 lot 2 (2026-09-15): rhythm 213 -> 214, depth 193 -> 194, states 155 -> 156, one family entering each -- breadcrumb-compounds (presentation/components/skin/breadcrumb-compounds), which read only --ds-color-primary-500 before the cut and now reads --ds-breadcrumb-item-gap, --ds-breadcrumb-focus-ring and the compound's box-shadow ring through the breadcrumb chrome deriver; tabs, breadcrumb and pagination were already members of every axis they belong to, so their skin rewrites move no membership. shape, typography and motion unchanged; catalog revision left as pinned (the live digest differs through another lot's uncommitted catalog edit, not through this cut) | catalog revision 2a25f7c6068407fb -> d50537e438bdbcfa (2026-09-15), republished at HEAD 7b35276d5 with membership UNCHANGED: two catalog edits moved the content digest and neither moved a row or a family -- b68389160 (the recipe-profile row declares runtime scope via data-only, WO-DER-06 owner pick) 2a25f7c6068407fb -> 5fbbeface23f6b76, then 95a85b080 (--ds-elevation-border-style retired from the surfaces.border-style row, WO-DER-06 2d-ii) 5fbbeface23f6b76 -> d50537e438bdbcfa; 29 decision rows and identical row ids on every side, and populationReport on isolated copies of 61280a253, b68389160, 011910356 and 7b35276d5 gives the same axes, N/A set and 270 skin families at each step (breadcrumb-compounds +1 in rhythm, depth and states is the WO-FAM-05 lot 2 row already pinned here, not a catalog move). Measured with catalogRevision() over the checked-out bytes, which is what the gate hashes",
+    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned | WO-FAM-05 lot 2 (2026-09-15): rhythm 213 -> 214, depth 193 -> 194, states 155 -> 156, one family entering each -- breadcrumb-compounds (presentation/components/skin/breadcrumb-compounds), which read only --ds-color-primary-500 before the cut and now reads --ds-breadcrumb-item-gap, --ds-breadcrumb-focus-ring and the compound's box-shadow ring through the breadcrumb chrome deriver; tabs, breadcrumb and pagination were already members of every axis they belong to, so their skin rewrites move no membership. shape, typography and motion unchanged; catalog revision left as pinned (the live digest differs through another lot's uncommitted catalog edit, not through this cut) | catalog revision 2a25f7c6068407fb -> d50537e438bdbcfa (2026-09-15), republished at HEAD 7b35276d5 with membership UNCHANGED: two catalog edits moved the content digest and neither moved a row or a family -- b68389160 (the recipe-profile row declares runtime scope via data-only, WO-DER-06 owner pick) 2a25f7c6068407fb -> 5fbbeface23f6b76, then 95a85b080 (--ds-elevation-border-style retired from the surfaces.border-style row, WO-DER-06 2d-ii) 5fbbeface23f6b76 -> d50537e438bdbcfa; 29 decision rows and identical row ids on every side, and populationReport on isolated copies of 61280a253, b68389160, 011910356 and 7b35276d5 gives the same axes, N/A set and 270 skin families at each step (breadcrumb-compounds +1 in rhythm, depth and states is the WO-FAM-05 lot 2 row already pinned here, not a catalog move). Measured with catalogRevision() over the checked-out bytes, which is what the gate hashes | WO-FAM-05 lot 3 (2026-09-15): skin families 270 -> 269 and every axis but motion down by one (shape 216 -> 215, typography 181 -> 180, rhythm 214 -> 213, depth 194 -> 193, states 156 -> 155): the retired modern steps skin (engines/modern/skin/steps) was a member of all six axes and leaves the corpus with the steps family absorbed into stepper (D-16 idiom); stepper stays a member of every axis it belonged to. Measured family by family against 38409b3b2 with populationReport over both trees: `steps` is the only exit on shape, typography, depth and states; on rhythm `layout-sidebar` exits and `sidebar-surface` enters (the sidebar structure's skin moved from presentation/components/skin/layout-sidebar to presentation/components/skin/sidebar-surface), so rhythm is net -1 for steps alone; on motion `steps` exits and `sidebar-surface` enters (the track transition), so motion holds at 200",
     "sourceCommit": "7b35276d5",
     "computedOn": "2026-09-15",
     "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed family by family against the same computation over the previous pin's tree (HEAD owner, identical corpus)",

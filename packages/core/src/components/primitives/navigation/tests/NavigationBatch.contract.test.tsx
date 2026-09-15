@@ -5,8 +5,7 @@ import { render, waitFor } from '@testing-library/react';
 import { Menu } from '../menu';
 import { FloatButton } from '../float-button';
 import { Tabs } from '../tabs';
-import { Steps } from '../steps';
-import { Stepper } from '../stepper';
+import { Stepper, Steps } from '../stepper';
 import { Pagination } from '../pagination';
 import { Segmented } from '../segmented';
 import { BackTop } from '../back-top';
@@ -167,7 +166,9 @@ describe('Navigation-family data-part contract (WO-SKIN-04 checkpoint N)', () =>
         await waitForPart(container, 'root');
         expect(container.querySelector('[data-part="tab-list"]')).not.toBeNull();
         expect(container.querySelector('[data-part="tab-button"][data-selected="true"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="tab-button"][data-disabled="true"]')).not.toBeNull();
+        // Modern decides disabled through the interaction kernel's data-state; the frozen rustic engine keeps data-disabled.
+        const disabledTab = engine === 'modern' ? '[data-part="tab-button"][data-state~="disabled"]' : '[data-part="tab-button"][data-disabled="true"]';
+        expect(container.querySelector(disabledTab)).not.toBeNull();
         expect(container.querySelector('[data-part="tab-panel"]')).not.toBeNull();
       },
     );

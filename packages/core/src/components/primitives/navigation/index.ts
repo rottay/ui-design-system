@@ -43,10 +43,10 @@ export type {
 } from './stepper';
 export { STEPPER_DEFAULTS, SIZE_MAP as STEPPER_SIZE_MAP, FONT_SIZE_MAP as STEPPER_FONT_SIZE_MAP } from './stepper';
 
-// Wave 4 - New Navigation Components
-export { Steps } from './steps';
-export type { StepsProps, StepItem, StepStatus, ProgressDotInfo } from './steps';
-export { STEPS_DEFAULTS } from './steps';
+// Steps: the deprecated name of Stepper (D-16 idiom), served by its compound
+export { Steps } from './stepper';
+export type { StepsProps, StepItem, StepStatus, ProgressDotInfo } from './stepper';
+export { STEPS_DEFAULTS } from './stepper';
 
 export { Affix } from './affix';
 export type { AffixProps } from './affix';

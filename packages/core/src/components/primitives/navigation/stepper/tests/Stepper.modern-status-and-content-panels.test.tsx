@@ -56,8 +56,11 @@ describe('Stepper modern: status carries a name, not only a hue and a dingbat', 
   it('clips the name from paint instead of drawing new text', () => {
     const { container } = render(<ModernStepper items={ITEMS} current={2} />);
 
-    const name = container.querySelector<HTMLElement>("[data-part='status-name']");
-    expect(name?.classList.contains('ds-visually-hidden')).toBe(true);
+    const name = Array.from(container.querySelectorAll<HTMLElement>('.ds-visually-hidden')).find(
+      (node) => node.textContent === 'Completed',
+    );
+    expect(name).toBeDefined();
+    expect(name?.closest("[data-part='item']")?.getAttribute('data-status')).toBe('finish');
   });
 });
 

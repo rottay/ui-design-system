@@ -4,11 +4,11 @@
  *
  * @remarks
  * The engine stamps anatomy (`data-part` hooks) and step state
- * (`data-status`, `aria-current="step"`); the modern skin
- * (`modern/skin/stepper.css`) owns 100% of layout and paint — INCLUDING the
- * step circle and the connector, which are skin pseudo-elements keyed on
- * `data-part`/`data-status`, never DaisyUI `.step::before/::after` hooks.
- * No DaisyUI classes, no Tailwind utilities, no inline style objects.
+ * (`data-status`, `aria-current="step"`, the interaction kernel's
+ * `data-state` on a clickable step's trigger); the modern skin
+ * (`modern/skin/stepper`) owns 100% of layout and paint, including the step
+ * circle and the connector, which are skin pseudo-elements keyed on
+ * `data-part`/`data-status`. No inline style objects.
  *
  * Contract notes:
  * - The landmark is a wrapping `<nav>` with a localizable accessible name
@@ -87,6 +87,7 @@
 import React, { useState, useCallback } from 'react';
 import type { StepperProps, StepItem, StepStatus } from '../../contracts';
 import { STEPPER_DEFAULTS } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { VisuallyHidden } from '@/components/primitives/foundation/visually-hidden';
 
@@ -96,6 +97,30 @@ const STATUS_ANNOUNCEMENT: Partial<Record<StepStatus, { key: string; floor: stri
   finish: { key: 'stepper.status.finish', floor: 'Completed' },
   error: { key: 'stepper.status.error', floor: 'Error' },
 };
+
+/** A clickable step's trigger: hover, press and focus decided once by the interaction kernel. */
+function StepTrigger({
+  current,
+  onActivate,
+  children,
+}: {
+  current: boolean;
+  onActivate: () => void;
+  children: React.ReactNode;
+}): React.ReactElement {
+  const interaction = useInteractionState();
+  return (
+    <button
+      type="button"
+      {...partAttributes('trigger', interaction.state)}
+      {...interaction.handlers}
+      aria-current={current ? 'step' : undefined}
+      onClick={onActivate}
+    >
+      {children}
+    </button>
+  );
+}
 
 // ============================================================================
 // Utility Functions
@@ -149,9 +174,7 @@ function renderModernSteps(
         <span data-part="label">{item.title}</span>
         {/* Status must not be color-and-glyph only: the name rides with the
             step title, clipped from paint and out of flow. */}
-        {statusName ? (
-          <VisuallyHidden data-part="status-name">{statusName}</VisuallyHidden>
-        ) : null}
+        {statusName ? <VisuallyHidden>{statusName}</VisuallyHidden> : null}
         {item.subTitle && <span data-part="subtitle">{item.subTitle}</span>}
         {item.description && <span data-part="description">{item.description}</span>}
       </>
@@ -180,14 +203,9 @@ function renderModernSteps(
           </span>
         )}
         {isClickable ? (
-          <button
-            type="button"
-            data-part="trigger"
-            aria-current={status === 'process' ? 'step' : undefined}
-            onClick={() => onChange?.(index)}
-          >
+          <StepTrigger current={status === 'process'} onActivate={() => onChange?.(index)}>
             {text}
-          </button>
+          </StepTrigger>
         ) : (
           <span data-part="content">{text}</span>
         )}
@@ -372,7 +390,7 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
       style={style}
     >
       <ul
-        className="rottay-stepper rottay-stepper--modern"
+        className="ds-stepper ds-stepper--modern"
         data-part={dataPart ?? 'root'}
         data-direction={direction}
         data-size={size}

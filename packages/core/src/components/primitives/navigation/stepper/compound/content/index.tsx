@@ -82,9 +82,9 @@ interface StepContentInternalProps extends StepContentProps {
  *
  * @remarks
  * - Animation direction is determined by step navigation direction
- * - The state paint (opacity / transform / display) lives in
- *   `stepper-compounds.css`, keyed on `data-state` / `data-animation` /
- *   `data-direction` — no inline animation styles, no raw durations
+ * - The presence paint (opacity / transform / display) lives in the stepper
+ *   compound skin, keyed on `data-presence` / `data-animation` /
+ *   `data-direction`; no inline animation styles, no raw durations
  * - The exit lifecycle is GOVERNED: `transitionend` on the panel is the
  *   primary path and the fallback timer reads the resolved duration from the
  *   element's computed style, replacing the two desynced `setTimeout(200)`
@@ -208,7 +208,7 @@ export function StepperContent({
     <div
       {...rest}
       ref={panelRef}
-      className={`rottay-stepper-content ${isActive ? 'rottay-stepper-content--active' : ''} ${className}`}
+      className={`ds-stepper-content ${className}`.trim()}
       style={style}
       role="tabpanel"
       aria-hidden={!isActive}
@@ -216,7 +216,7 @@ export function StepperContent({
       data-step={stepIndex}
       data-part="panel"
       data-active={isActive || undefined}
-      data-state={animationState}
+      data-presence={animationState}
       data-direction={direction}
       data-animation={animation}
     >

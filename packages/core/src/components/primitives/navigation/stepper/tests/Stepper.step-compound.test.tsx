@@ -29,7 +29,7 @@ describe('StepperStep compound coverage', () => {
 
     expect(screen.getByText('Optional')).toBeInTheDocument();
     expect(screen.getByText('Extra child')).toBeInTheDocument();
-    expect(container.querySelectorAll('.rottay-stepper-connector').length).toBe(2);
+    expect(container.querySelectorAll('.ds-stepper-connector').length).toBe(2);
     expect(container.querySelectorAll('svg').length).toBeGreaterThanOrEqual(2);
   });
 
@@ -55,8 +55,8 @@ describe('StepperStep compound coverage', () => {
     );
 
     expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
-    const customStep = screen.getByText('Custom').closest('.rottay-stepper-step');
-    expect(customStep?.nextElementSibling).not.toHaveClass('rottay-stepper-connector');
+    const customStep = screen.getByText('Custom').closest('.ds-stepper-step');
+    expect(customStep?.nextElementSibling).not.toHaveClass('ds-stepper-connector');
 
     const disabledStep = screen.getByText('Disabled').closest('[aria-disabled=\"true\"]');
     expect(disabledStep).toHaveAttribute('role', 'button');

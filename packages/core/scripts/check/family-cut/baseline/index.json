@@ -812,6 +812,48 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-05 lot 2: toolbar, joined controls, current page, range readout, quick jumper and size changer relations by derivation/chrome/pagination (42 --ds-pagination-* channels on the spacing ramp, the body and supporting type roles, the card material and the focus ring; the former --_ds-pagination-* prototokens are produced channels now); skin/pagination paints the engine tree on one ds-pagination vocabulary; nav and page buttons, the jumper input and the native size select decide state through the interaction kernel; the ellipsis is inert readout and no longer a pointer target; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+    },
+    "stepper": {
+      "cut": "WO-FAM-05",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 7,
+        "channelsRead": 87,
+        "classTokens": 5,
+        "partsStamped": 12,
+        "partsConsumed": 12
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-05 lot 3: the unified steps/stepper family. Stepper absorbs Steps (the D-16 idiom: Steps is a deprecated compound under stepper/compound/steps that maps its legacy props onto Stepper, one StepStatus, no engine, skin or namespace of its own); track, circle, connector, text column, dot slot, compound Step and Content relations by derivation/chrome/stepper (71 --ds-stepper-* channels, the wait-label ink folded from the retired steps skin, on the spacing ramp, the type roles, the card material, the elevation scale and the intent cadences, the tenant's authored --ds-steps-* roots chained ahead of the seeds); skin/stepper paints the engine track and skin/stepper-compounds the compounds, both on one ds-stepper vocabulary; the trigger and the compound step decide state through the interaction kernel; the content panel carries its lifecycle as data-presence, never as the kernel's data-state; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+    },
+    "sidebar-surface": {
+      "cut": "WO-FAM-05",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 0,
+        "classTokens": 4,
+        "partsStamped": 4,
+        "partsConsumed": 4
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-05 lot 3: the collapsible sidebar structure (structures/shell/navigation/sidebar-surface). Tracks, region gap, stacked posture and the panel-to-main separator by derivation/chrome/sidebar-surface (10 --ds-sidebar-surface-* channels on the spacing ramp scaled by the rhythm dial, the tenant's authored --ds-sidebar-width and --ds-sidebar-collapsed-width chained ahead of the family's own tracks, the separator on the edge decision and --ds-sidebar-border, the track change on the rearrange cadence); one presentation skin (presentation/components/skin/sidebar-surface, the structures layer; channelsRead is 0 because the gate's read census walks engine skins only and the presentation skin reads its ten channels with a producer) on one ds-sidebar-surface vocabulary; the panel, aside and toggle are Card and Button and paint their own material and states; declared layout-sensitive (WO-INV-07): adapt: Adapt<SidebarSurfaceAdaptation> on the props, the legacy stackOnMobile/stackOnTablet config as the per-posture defaults, data-posture resolved through useAdaptation; the config-stated widths are the only inline channels; every part carries a skeleton role."
     }
   }
 }

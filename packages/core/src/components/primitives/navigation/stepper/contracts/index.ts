@@ -12,8 +12,9 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { BaseComponentProps, WithChildren } from '../../../../../foundation/contracts/kernel/common';
+import type { EngineName } from '../../../../../foundation/contracts/kernel/engine-identity';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 
 // ============================================================================
@@ -399,6 +400,81 @@ export interface StepContentProps extends BaseComponentProps, WithChildren {
    */
   keepMounted?: boolean;
 }
+
+// ============================================================================
+// The deprecated Steps name (D-16 idiom): its props map onto Stepper's
+// ============================================================================
+
+/**
+ * Information passed to the deprecated `Steps` render-function `progressDot`.
+ * @deprecated since 2026-09-15: `Stepper`'s `progressDot` receives `(dot, info)`.
+ */
+export interface ProgressDotInfo {
+  /** Step index (0-based). */
+  index: number;
+  /** Current status of the step. */
+  status: StepStatus;
+  /** Step title. */
+  title: ReactNode;
+  /** Step description. */
+  description: ReactNode;
+}
+
+/**
+ * Props of the deprecated `Steps` name.
+ *
+ * @deprecated since 2026-09-15: import `Stepper`. `size` `'small' | 'default'`
+ * becomes `'sm' | 'md'`, `onChange` alone implies `clickable`, `initial`
+ * becomes `defaultCurrent`, the render-function `progressDot` receives
+ * `(dot, info)`, and `type` has no Stepper equivalent.
+ */
+export interface StepsProps {
+  /** Current step index (0-based), controlled. */
+  current?: number;
+  /** Direction of the steps layout. @default 'horizontal' */
+  direction?: StepperDirection;
+  /** Initial step index for uncontrolled mode. @default 0 */
+  initial?: number;
+  /** Label placement relative to the step icon. @default 'horizontal' */
+  labelPlacement?: LabelPlacement;
+  /** Progress of the current step (0-100). */
+  percent?: number;
+  /** Dot mode, or a render function over {@link ProgressDotInfo}. */
+  progressDot?: boolean | ((info: ProgressDotInfo) => ReactNode);
+  /** Responsive behavior. @default true */
+  responsive?: boolean;
+  /** Legacy size scale. @default 'default' */
+  size?: 'default' | 'small';
+  /** Overall status of the current step. @default 'process' */
+  status?: StepStatus;
+  /** Legacy display type; `navigation` and `inline` have no Stepper equivalent. */
+  type?: 'default' | 'navigation' | 'inline';
+  /** Step change callback; its presence makes the steps clickable. */
+  onChange?: (current: number) => void;
+  /** Step items. */
+  items: StepItem[];
+  /** Additional class name on the root. */
+  className?: string;
+  /** Inline styles on the root. */
+  style?: CSSProperties;
+  /** Rendering engine override. */
+  engine?: EngineName;
+}
+
+/**
+ * Defaults of the deprecated `Steps` name.
+ * @deprecated since 2026-09-15: see {@link STEPPER_DEFAULTS}.
+ */
+export const STEPS_DEFAULTS: Partial<StepsProps> = {
+  current: 0,
+  direction: 'horizontal',
+  initial: 0,
+  labelPlacement: 'horizontal',
+  responsive: true,
+  size: 'default',
+  status: 'process',
+  type: 'default',
+};
 
 // ============================================================================
 // Default Values

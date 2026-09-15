@@ -4,7 +4,8 @@
  * selection washes from the palette, the current-row markers on the
  * primary ink, and every geometry channel on the spacing ramp so density
  * reaches the rail. A sidebar tone reaches the rail through the produced
- * `--ds-sidebar-*` roots the menu color channels chain to.
+ * `--ds-sidebar-*` roots the menu colour, group, child and indent channels
+ * chain to, so a tenant's authored `chrome.sidebar` leaves keep painting.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/menu
  * @category Compilers
@@ -150,8 +151,8 @@ export function deriveMenuChannels(): Record<string, string> {
   // Rows: ink and washes from the palette, geometry from the spacing ramp.
   vars["--ds-menu-item-color"] = "var(--ds-sidebar-text, var(--ds-color-text-secondary))";
   vars["--ds-menu-item-color-hover"] = "var(--ds-color-text-primary)";
-  vars["--ds-menu-item-color-active"] = "var(--ds-color-primary)";
-  vars["--ds-menu-item-color-disabled"] = "var(--ds-color-text-secondary)";
+  vars["--ds-menu-item-color-active"] = "var(--ds-sidebar-item-color-active, var(--ds-color-primary))";
+  vars["--ds-menu-item-color-disabled"] = "var(--ds-sidebar-text-muted, var(--ds-color-text-secondary))";
   vars["--ds-menu-item-bg-hover"] = "var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card))))";
   vars["--ds-menu-item-bg-pressed"] = "var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))))";
   vars["--ds-menu-item-bg-active"] = "var(--ds-sidebar-item-bg-active, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card))))";
@@ -164,13 +165,13 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-item-gap"] = "var(--ds-sidebar-item-gap, var(--ds-spacing-2))";
   vars["--ds-menu-item-padding-inline"] = "var(--ds-sidebar-item-padding-inline, var(--ds-spacing-4))";
   vars["--ds-menu-item-height"] = "var(--ds-spacing-12)";
-  vars["--ds-menu-item-child-height"] = "var(--ds-spacing-10)";
+  vars["--ds-menu-item-child-height"] = "var(--ds-sidebar-item-child-height, var(--ds-spacing-10))";
   vars["--ds-menu-item-horizontal-height"] = "var(--ds-spacing-11)";
-  vars["--ds-menu-child-padding-inline"] = "var(--ds-spacing-2)";
+  vars["--ds-menu-child-padding-inline"] = "var(--ds-sidebar-item-indent, var(--ds-spacing-2))";
   vars["--ds-menu-inline-indent"] = "var(--ds-spacing-6)";
   vars["--ds-menu-item-font-family"] = "var(--ds-type-body-font-family)";
   vars["--ds-menu-item-font-size"] = "var(--ds-type-body-font-size)";
-  vars["--ds-menu-item-font-size-child"] = "var(--ds-type-supporting-font-size)";
+  vars["--ds-menu-item-font-size-child"] = "var(--ds-sidebar-item-font-size-child, var(--ds-type-supporting-font-size))";
   vars["--ds-menu-item-font-weight"] = "var(--ds-font-weight-medium)";
   vars["--ds-menu-item-font-weight-selected"] = "var(--ds-font-weight-semibold)";
   vars["--ds-menu-item-line-height"] = "var(--ds-type-body-line-height)";
@@ -226,14 +227,14 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-group-color"] = "var(--ds-sidebar-text, var(--ds-color-text-secondary))";
   vars["--ds-menu-group-bg"] = "color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)";
   vars["--ds-menu-group-font-family"] = "var(--ds-type-caption-font-family)";
-  vars["--ds-menu-group-font-size"] = "var(--ds-type-caption-font-size)";
+  vars["--ds-menu-group-font-size"] = "var(--ds-sidebar-group-font-size, var(--ds-type-caption-font-size))";
   vars["--ds-menu-group-font-weight"] = "var(--ds-font-weight-semibold)";
   vars["--ds-menu-group-letter-spacing"] = "var(--ds-letter-spacing-wider)";
   vars["--ds-menu-group-line-height"] = "var(--ds-type-caption-line-height)";
   vars["--ds-menu-group-text-transform"] = "var(--ds-page-header-eyebrow-text-transform, var(--ds-typography-label-transform, uppercase))";
-  vars["--ds-menu-group-padding-block"] = "var(--ds-spacing-2) var(--ds-spacing-1)";
+  vars["--ds-menu-group-padding-block"] = "var(--ds-sidebar-group-padding-top, var(--ds-spacing-2)) var(--ds-spacing-1)";
   vars["--ds-menu-group-padding-inline"] = "var(--ds-sidebar-item-padding-inline, var(--ds-spacing-4))";
-  vars["--ds-menu-group-margin-block"] = "var(--ds-spacing-1)";
+  vars["--ds-menu-group-margin-block"] = "var(--ds-sidebar-group-margin-top, var(--ds-spacing-1)) var(--ds-sidebar-group-margin-bottom, var(--ds-spacing-1))";
   vars["--ds-menu-group-radius"] = "var(--ds-radius-sm)";
 
   // Dividers fade at both ends so they never touch the rail's frame.

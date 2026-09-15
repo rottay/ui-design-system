@@ -36,22 +36,22 @@ describe('SidebarSurface anatomy', () => {
     expect(nav).toHaveAttribute('data-part', 'navigation');
 
     // Anti-vacuity: the role query and the data-part query must resolve to the exact same element, not two unrelated nodes that both happen to satisfy th...
-    const navByPart = withAside.container.querySelector('.ds-sidebar__navigation[data-part="navigation"]');
+    const navByPart = withAside.container.querySelector('[data-part="navigation"]');
     expect(navByPart).toBe(nav);
 
     // Card's own root always self-stamps `data-part="root"` in every engine (classic hardcodes it; modern/rustic spread `partAttributes('root', ...)` aft...
-    const panel = withAside.container.querySelector('.ds-sidebar__panel[data-part="root"]');
+    const panel = withAside.container.querySelector('.ds-sidebar-surface-panel[data-part="root"]');
     expect(panel).not.toBeNull();
     expect(panel?.contains(nav)).toBe(true);
 
-    const aside = withAside.container.querySelector('.ds-sidebar__aside[data-part="root"]');
+    const aside = withAside.container.querySelector('.ds-sidebar-surface-aside[data-part="root"]');
     expect(aside).not.toBeNull();
     expect(aside?.textContent).toContain('Context rail');
     // Anti-vacuity: panel and aside must be two distinct 'root'-tagged
     // elements, not the same node matched twice by an overlapping selector.
     expect(aside).not.toBe(panel);
 
-    const main = withAside.container.querySelector('.ds-sidebar__main[data-part="main"]');
+    const main = withAside.container.querySelector('[data-part="main"]');
     expect(main).not.toBeNull();
     expect(main?.textContent).toContain('Workspace header');
     expect(main?.textContent).toContain('Main content');
@@ -64,7 +64,7 @@ describe('SidebarSurface anatomy', () => {
       engine: 'modern',
     });
     await withoutAside.findByRole('navigation');
-    expect(withoutAside.container.querySelector('.ds-sidebar__aside')).toBeNull();
+    expect(withoutAside.container.querySelector('.ds-sidebar-surface-aside')).toBeNull();
   });
 
   it('keeps the collapse toggle keyboard-reachable and its aria-controls linkage real', async () => {
@@ -110,7 +110,7 @@ describe('SidebarSurface anatomy', () => {
       { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT },
     );
     await defaultStacking.findByRole('navigation');
-    const stackedRoot = defaultStacking.container.querySelector('.ds-surface.ds-sidebar[data-part="root"]');
+    const stackedRoot = defaultStacking.container.querySelector('.ds-sidebar-surface[data-part="root"]');
     expect(stackedRoot).toHaveAttribute('data-stacked', 'true');
     defaultStacking.unmount();
 
@@ -121,7 +121,7 @@ describe('SidebarSurface anatomy', () => {
       responsiveContext: RESOLVED_PHONE_TEST_CONTEXT,
     });
     await optedOut.findByRole('navigation');
-    const unstackedRoot = optedOut.container.querySelector('.ds-surface.ds-sidebar[data-part="root"]');
+    const unstackedRoot = optedOut.container.querySelector('.ds-sidebar-surface[data-part="root"]');
     expect(unstackedRoot).toHaveAttribute('data-stacked', 'false');
   });
 
@@ -146,7 +146,7 @@ describe('SidebarSurface anatomy', () => {
 
     const panel = await (async () => {
       await screen.findByText('Approve');
-      return container.querySelector('.ds-sidebar__panel');
+      return container.querySelector('.ds-sidebar-surface-panel');
     })();
     expect(panel).not.toBeNull();
 

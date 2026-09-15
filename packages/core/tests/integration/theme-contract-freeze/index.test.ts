@@ -386,6 +386,8 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/chrome/segmented/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/select/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/sheet/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/chrome/sidebar-surface/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/chrome/stepper/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/tabs/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/tag-input/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/textarea/index.ts`,

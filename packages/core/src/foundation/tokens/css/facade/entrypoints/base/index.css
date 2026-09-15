@@ -333,8 +333,6 @@
 @import "../../../runtime/engines/rustic/skin/sheet/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/stepper/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/stepper/index.css" layer(rottay-engines);
-@import "../../../runtime/engines/modern/skin/steps/index.css" layer(rottay-engines);
-@import "../../../runtime/engines/rustic/skin/steps/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/tabs/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/tabs/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/tour/index.css" layer(rottay-engines);
@@ -601,7 +599,7 @@
 @import "../../../presentation/components/skin/command-center/index.css" layer(rottay-surfaces);
 @import "../../../presentation/components/skin/decision-inbox/index.css" layer(rottay-surfaces);
 @import "../../../presentation/components/skin/layout-header/index.css" layer(rottay-structures);
-@import "../../../presentation/components/skin/layout-sidebar/index.css" layer(rottay-structures);
+@import "../../../presentation/components/skin/sidebar-surface/index.css" layer(rottay-structures);
 @import "../../../presentation/components/skin/record-workbench/index.css" layer(rottay-surfaces);
 @import "../../../presentation/components/skin/audit/index.css" layer(rottay-surfaces);
 @import "../../../presentation/components/skin/billing/index.css" layer(rottay-surfaces);

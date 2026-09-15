@@ -1,0 +1,84 @@
+/**
+ * SidebarSurface skin.
+ *
+ * The one paint owner of the `ds-sidebar-surface` structure: the sidebar,
+ * main and aside tracks, the region gap, the stacked posture and the panel to
+ * main separator. It selects on the anatomy the TSX stamps (`data-part`,
+ * `data-collapsed`, `data-stacked`, `data-aside`, `data-bordered`,
+ * `data-posture`) and reads every `--ds-sidebar-surface-*` channel the
+ * sidebar-surface chrome deriver produces. The resolved track sizes arrive as
+ * runtime channels the root declares here and the TSX overrides inline when
+ * a config states a width. The panel and aside are Cards and paint their own
+ * material, states and forced-colors treatment.
+ */
+
+.ds-structure.ds-sidebar-surface[data-part='root'] {
+  --ds-sidebar-surface-inline-size: var(--ds-sidebar-surface-width);
+  --ds-sidebar-surface-aside-inline-size: var(--ds-sidebar-surface-aside-width);
+  display: grid;
+  grid-template-columns: var(--ds-sidebar-surface-inline-size) minmax(0, 1fr);
+  gap: var(--ds-sidebar-surface-gap);
+  align-items: start;
+  transition: grid-template-columns var(--ds-sidebar-surface-motion-duration) var(--ds-sidebar-surface-motion-easing);
+}
+
+.ds-structure.ds-sidebar-surface[data-part='root'][data-collapsed='true'] {
+  --ds-sidebar-surface-inline-size: var(--ds-sidebar-surface-collapsed-width);
+}
+
+.ds-structure.ds-sidebar-surface[data-part='root'][data-aside='true'] {
+  grid-template-columns: var(--ds-sidebar-surface-inline-size) minmax(0, 1fr) var(--ds-sidebar-surface-aside-inline-size);
+}
+
+/* The stacked posture is a column; `align-items: start` would collapse every child to content width here. */
+.ds-structure.ds-sidebar-surface[data-part='root'][data-stacked='true'] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ds-sidebar-surface-stacked-gap);
+}
+
+.ds-sidebar-surface[data-part='root'] > .ds-sidebar-surface-panel {
+  min-block-size: 100%;
+}
+
+.ds-sidebar-surface[data-part='root'] [data-part='panel-body'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-sidebar-surface-panel-gap);
+}
+
+.ds-sidebar-surface[data-part='root'] [data-part='navigation'] {
+  display: block;
+  min-inline-size: 0;
+}
+
+.ds-sidebar-surface[data-part='root'] [data-part='main'] {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: var(--ds-sidebar-surface-main-gap);
+}
+
+/* The separator lives on the main region's inline-start edge so the Card keeps its own frame. */
+.ds-sidebar-surface[data-part='root'][data-bordered='true']:not([data-stacked='true']) [data-part='main'] {
+  border-inline-start: var(--ds-sidebar-surface-divider);
+  padding-inline-start: var(--ds-sidebar-surface-gap);
+  margin-inline-start: calc(-1 * var(--ds-sidebar-surface-gap));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-sidebar-surface[data-part='root'] {
+    transition: none;
+  }
+}
+
+html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'] {
+  transition: none;
+}
+
+@media (forced-colors: active) {
+  .ds-sidebar-surface[data-part='root'][data-bordered='true']:not([data-stacked='true']) [data-part='main'] {
+    border-inline-start-color: CanvasText;
+  }
+}

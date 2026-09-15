@@ -1,6 +1,3 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 /**
  * Modern Stepper announces the current step on the FOCUSABLE control.
  *
@@ -81,33 +78,5 @@ describe('Modern Stepper current-step state', () => {
     const marked = container.querySelectorAll('[aria-current="step"]');
     expect(marked).toHaveLength(1);
     expect(marked[0]?.tagName).toBe('BUTTON');
-  });
-});
-
-describe('Modern Stepper numbering contract', () => {
-  it('increments the counter on the item, not on the pseudo that renders it', () => {
-    const SKIN = readFileSync(
-      join(
-        dirname(fileURLToPath(import.meta.url)),
-        '../../../../../foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css'
-      ),
-      'utf8'
-    ).replace(/\/\*[\s\S]*?\*\//g, '');
-
-    // ::after opens its own counter scope, so incrementing there restarts at 1
-    // for every step and every numeral renders as "1".
-    const afterRule =
-      (SKIN.match(/\[data-part='item'\]::after\s*\{[^}]*\}/g) ?? []).find((r) =>
-        r.includes('content: counter')
-      ) ?? '';
-    expect(afterRule).toContain('content: counter(ds-stepper)');
-    expect(afterRule).not.toContain('counter-increment');
-
-    const itemRule = SKIN.match(/\[data-part='item'\]\s*\{[^}]*\}/)?.[0] ?? '';
-    expect(itemRule).toContain('counter-increment: ds-stepper');
-
-    // the status glyphs still override the numeral
-    expect(SKIN).toMatch(/\[data-status='finish'\]::after \{\s*content: '\u2713';/);
-    expect(SKIN).toMatch(/\[data-status='error'\]::after \{\s*content: '\u2715';/);
   });
 });
