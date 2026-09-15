@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-14",
+ "updated": "2026-09-15",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -4417,6 +4417,11 @@
      "at": "2026-09-14 22:46",
      "by": "kimi-admin",
      "note": "RE-SLICE ADOPTED (DT, on the writer's measured proposal at .tmp/dispatch-2026-09-14/d6-2-slicing-proposal.md): the D6-2->D6-3 order was inverted — baselineFor clones FIRST_PARTY_THEMES, so the neutral foundation must exist BEFORE the compiler stops reading BrandThemes. Adopted sequence: D6-2d-i (independent channel dispositions, now dispatched) -> D6-2b (roster/identity out of brand-themes) -> D6-2a (neutral foundation as resolver base) -> D6-2c (brand-themes deletion + compiler reads presets, the real L lot) -> D6-2d-rest (--ds-switch-* with 2a + artifact regeneration). DT adjudications: the two profiles retire CSS emission keeping runtime data (a STRUCTURAL_CONSTANT would be fabricated — no measured invariant site exists); --ds-elevation-border-style retires channel+producers+pin in the same commit (decision-reach witness rewritten onto --ds-elevation-1..3); fanOutUnreached closes via the recipe-profile catalog row, whose two options are presented uncommitted for DT/core review; --ds-switch-* rides with 2a (its 21 readers live in themes/default); evnto-dark contrast gets measured in 2a (dark ramp from seeds, else a mode-aware derivation obligation opens in the derivation lane)."
+    },
+    {
+     "at": "2026-09-15 00:06",
+     "by": "kimi-admin",
+     "note": "recipe-profile catalog row DECIDED (owner 2026-09-15, option a of the writer's measured two-option doc): the row goes effect: 'data-only' — a class that ALREADY EXISTS in ThemeControlEffect (catalog/index.ts:104-114, F-35's disposition for axes that reach the lowering and emit nothing, unused until now, so NO new contract vocabulary and no core debrief required) — with produces.channels emptied and the 10 declared families kept (the selection's scope is read by runtime: RecipeProfileDefaultsByFamily, provider, artifact runtime block); fanOutFor stops counting data-only rows as cascade fan-out (one new gate rule); fanOutUnreached re-pins 1 -> 0 with provenance in the 6 family cutNotes; the dead provenance.selection semantic-owner rule leaves in the same commit. Option (b) owner-pending measured and rejected (catalog 14/15 by the kit's mechanical rule, and it would leave the scope unnamed). Measured dry-run effects before applying (byte-restored): family-cut 6 SHRANK in both options; single-listing/schema/tokens-catalog/population/decision-reach green in (a)."
     }
    ]
   },
