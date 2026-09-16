@@ -1015,6 +1015,86 @@
       "unpairedStatePseudoSelectors": 4,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0
+    },
+    "container": {
+      "cut": "WO-FAM-07",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 17,
+        "classTokens": 2,
+        "partsStamped": 1,
+        "partsConsumed": 1
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
+    },
+    "aspect-ratio": {
+      "cut": "WO-FAM-07",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 11,
+        "classTokens": 2,
+        "partsStamped": 1,
+        "partsConsumed": 1
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
+    },
+    "space": {
+      "cut": "WO-FAM-07",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 6,
+        "classTokens": 3,
+        "partsStamped": 2,
+        "partsConsumed": 2
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
+    },
+    "splitter": {
+      "cut": "WO-FAM-07",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 16,
+        "classTokens": 2,
+        "partsStamped": 3,
+        "partsConsumed": 3
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 6,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
     }
   }
 }
