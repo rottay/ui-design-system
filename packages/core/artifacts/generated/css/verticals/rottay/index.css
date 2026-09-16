@@ -65253,6 +65253,10 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * sheet, so this whole arm was Modern's; it now lives in Modern's own file and
  * the shared sheet carries no Grid rule at all.
  *
+ * NOT THE PART. `data-part` belongs to the caller: a composite names the Grid it
+ * renders so its own skin can address it. Every rule keys on the owned
+ * `data-component='grid'` stamp, which the engine writes after the caller spread.
+ *
  * A RUNG SCALES, A MEASUREMENT DOES NOT. A numeric gap is written inline by the
  * engine, which is the strongest means CSS has, and stamps no preset — so the
  * enumerated selectors below can never reach exact geometry. The axis seams are
@@ -65270,22 +65274,22 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * decides, which is the law every sister family states.
  */
 
-.rottay-grid.rottay-grid--modern[data-part='root'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'] {
   display: grid;
   min-inline-size: 0;
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-inline='true'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-inline='true'] {
   display: inline-grid;
 }
 
 /* ---- the uniform gap ---- */
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset] {
   gap: var(--ds-grid-gap);
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset]:where(
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset]:where(
   [data-gap-preset='xs'],
   [data-gap-preset='sm'],
   [data-gap-preset='md'],
@@ -65300,11 +65304,11 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 
 /* ---- the split axes ---- */
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-column-gap-preset] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-column-gap-preset] {
   column-gap: var(--_ds-grid-column-gap);
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-column-gap-preset]:where(
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-column-gap-preset]:where(
   [data-column-gap-preset='xs'],
   [data-column-gap-preset='sm'],
   [data-column-gap-preset='md'],
@@ -65317,11 +65321,11 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   column-gap: calc(var(--_ds-grid-column-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-row-gap-preset] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-row-gap-preset] {
   row-gap: var(--_ds-grid-row-gap);
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-row-gap-preset]:where(
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-row-gap-preset]:where(
   [data-row-gap-preset='xs'],
   [data-row-gap-preset='sm'],
   [data-row-gap-preset='md'],
@@ -65339,19 +65343,19 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * nested inside a table would otherwise be reached by its descendant rules and
  * drawn as a table cell's bone by the shared skeleton renderer. */
 
-.rottay-grid.rottay-grid--modern[data-part='root'] > [data-part='grid-cell'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'] > [data-part='grid-cell'] {
   min-inline-size: 0;
   min-block-size: 0;
 }
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-layout-motion='rearrange'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-layout-motion='rearrange'] {
   transition: var(--ds-grid-reflow-transition);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-grid.rottay-grid--modern[data-part='root'][data-layout-motion='rearrange'] {
+  .rottay-grid.rottay-grid--modern[data-component='grid'][data-layout-motion='rearrange'] {
     transition: none;
   }
 }
@@ -67550,11 +67554,15 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * stays there is scoped to `--classic`/`--rustic` with its declarations
  * unchanged, so the frozen engines keep the cascade position they always had.
  *
+ * NOT THE PART. `data-part` belongs to the caller: a composite names the Stack
+ * it renders so its own skin can address it. Every rule keys on the owned
+ * `data-component='stack'` stamp, which the engine writes after the caller spread.
+ *
  * A RUNG SCALES, A MEASUREMENT DOES NOT: `data-spacing='custom'` reads
  * `--ds-stack-gap`, which the engine writes inline from the caller's number.
  */
 
-.rottay-stack.rottay-stack--modern[data-part='root'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'] {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -67573,108 +67581,108 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   --_ds-stack-divider-gap-inline: var(--ds-stack-divider-gutter);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-direction='horizontal'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-direction='horizontal'] {
   flex-direction: row;
   --_ds-stack-divider-gap-block: var(--ds-stack-divider-gutter);
   --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-reverse='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-reverse='true'] {
   flex-direction: column-reverse;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-direction='horizontal'][data-reverse='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-direction='horizontal'][data-reverse='true'] {
   flex-direction: row-reverse;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-wrap='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-wrap='true'] {
   flex-wrap: wrap;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='start'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='start'] {
   align-items: flex-start;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='center'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='center'] {
   align-items: center;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='end'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='end'] {
   align-items: flex-end;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='baseline'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='baseline'] {
   align-items: baseline;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='center'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='center'] {
   justify-content: center;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='end'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='end'] {
   justify-content: flex-end;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-between'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='space-between'] {
   justify-content: space-between;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-around'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='space-around'] {
   justify-content: space-around;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-evenly'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='space-evenly'] {
   justify-content: space-evenly;
 }
 
 /* ---- the rungs ---- */
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='none'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='none'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-none);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='xs'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xs'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-xs);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='sm'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='sm'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-sm);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='md'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='md'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-md);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='lg'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='lg'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-lg);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-xl);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='2xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='2xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-2xl);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='3xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='3xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-3xl);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='4xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='4xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-4xl);
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never scaled. */
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='custom'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='custom'] {
   --_ds-stack-gap-current: var(--ds-stack-gap);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-full-width='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-full-width='true'] {
   inline-size: 100%;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-full-height='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-full-height='true'] {
   block-size: 100%;
 }
 
@@ -67685,7 +67693,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * half the current gap center the hairline INSIDE the governed rhythm: two
  * neighbours keep exactly one gap between them instead of gap + divider + gap.
  */
-.rottay-stack.rottay-stack--modern[data-part='root'] > [data-part='divider'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
   align-self: stretch;
   flex: 0 0 var(--ds-stack-divider-thickness);
   min-inline-size: 0;
@@ -67699,19 +67707,19 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-layout-motion='rearrange'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-layout-motion='rearrange'] {
   transition: var(--ds-stack-reflow-transition);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-stack.rottay-stack--modern[data-part='root'][data-layout-motion='rearrange'] {
+  .rottay-stack.rottay-stack--modern[data-component='stack'][data-layout-motion='rearrange'] {
     transition: none;
   }
 }
 
 @media (forced-colors: active) {
   /* The hairline is structural: it must survive colour stripping. */
-  .rottay-stack.rottay-stack--modern[data-part='root'] > [data-part='divider'] {
+  .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
     background: ButtonText;
     opacity: 1;
   }
@@ -92808,7 +92816,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   overflow-wrap: anywhere;
 }
 
-.ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider'] {
+.ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
   /* was an inline 6px paddingTop -- snapped to the canonical step */
   padding-block-start: var(--ds-spacing-2);
   border-top: 1px solid var(--ds-color-border);
@@ -92903,7 +92911,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background: ButtonText;
     box-shadow: none;
   }
-  .ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider'] {
+  .ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
     border-top-color: ButtonText;
   }
 }
