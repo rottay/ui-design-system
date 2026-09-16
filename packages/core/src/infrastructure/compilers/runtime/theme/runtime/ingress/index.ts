@@ -39,6 +39,8 @@ export {
 export type { DocumentThemeIntentInput } from "./presentation/document";
 export {
   draftPreviewThemeIntent,
+  draftTenantTheme,
+  governedTenantTheme,
   previewThemeAdmission,
   previewThemeIntent,
 } from "./presentation/preview";

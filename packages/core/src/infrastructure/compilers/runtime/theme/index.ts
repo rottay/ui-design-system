@@ -26,6 +26,8 @@ export {
   documentThemeIntent,
   documentThemePatch,
   draftPreviewThemeIntent,
+  draftTenantTheme,
+  governedTenantTheme,
   migrateAndAdmitDocument,
   migrateDocumentV1ToV2,
   migrateV1,

@@ -31,10 +31,10 @@
  * caller that knows which of the two producers it wants) or a raw
  * `TenantConfig`, whose only remaining visual channel is its bounded branding.
  * The resolution from `TenantConfig` to `PreviewSource` happens internally in
- * `resolvePreviewInput`/`liftTenantConfigToFlatTheme` below, so callers stay
+ * `resolvePreviewInput`/`liftTenantConfigToTheme` below, so callers stay
  * dumb call sites. An authoring draft that wants its personality preset and
  * density painted resolves through `draftPreviewSource` instead: those are
- * FlatTheme channels, not `TenantConfig` ones.
+ * theme channels, not `TenantConfig` ones.
  */
 
 import type { TenantConfig } from '../../../../../../foundation/contracts/composition/tenants';
@@ -54,6 +54,8 @@ import {
   compileThemeIntent,
   containerScope,
   draftPreviewThemeIntent,
+  draftTenantTheme,
+  governedTenantTheme,
   emitThemeCss,
 } from '@/infrastructure/compilers/runtime/theme';
 import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/runtime/theming/foundation/visual-authority';
@@ -68,6 +70,8 @@ import {
 } from '../../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
 
 /** One generated declaration: `  <property>: <value>;` on a single line. */
+import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
+
 const DECLARATION_PATTERN = /^\s*(--[A-Za-z0-9_-]+|[A-Za-z][A-Za-z0-9-]*)\s*:\s*(.+);\s*$/;
 
 /** Characters permitted in a selector suffix after the tenant base selector. */
@@ -111,7 +115,7 @@ export interface PreviewCss {
    * caller-supplied `PreviewSource` (the caller already resolved that arm and
    * is responsible for what it chose to include). Populated only when
    * `buildPreviewCss` resolves a `TenantConfig` itself -- see
-   * `resolvePreviewInput` and `liftTenantConfigToFlatTheme` below.
+   * `resolvePreviewInput` and `liftTenantConfigToTheme` below.
    */
   unsupportedAxes: readonly string[];
 }
@@ -122,29 +126,66 @@ export interface PreviewCss {
  * `buildPreviewCss` also accepts a raw `TenantConfig` (see below) and
  * resolves it into one of these two arms internally, but a `PreviewSource`
  * itself never gains a third "TenantConfig" variant: every producer this
- * module re-anchors is either a compiled `FlatTheme` or a compiled
+ * module re-anchors is either a compiled governed `Theme` or a compiled
  * `TenantThemeArtifact`, and nothing else has ever emitted CSS this module
  * knows how to re-scope.
  */
 export type PreviewSource =
   | {
-      kind: 'brand-theme';
       /**
-       * The first-party vertical the draft is a patch of. A FlatTheme is not
-       * a baseline of its own: the publish path resolves it over the vertical's
+       * WO-DER-08 renamed this discriminator from `brand-theme`, and the
+       * payload from `flatTheme` to `theme`, because the draft is now the
+       * governed `Theme` and the old names stated a transport that no longer
+       * exists. It is a serialized union tag, so `readPreviewSource` below
+       * migrates the old shape by name rather than letting it fail silently.
+       */
+      kind: 'theme-draft';
+      /**
+       * The first-party vertical the draft is a patch of. A draft is not a
+       * baseline of its own: the publish path resolves it over the vertical's
        * theme, so a preview that does not name one is previewing a compile that
        * cannot be published.
        */
       vertical: FirstPartyVerticalId;
       slug: string;
-      flatTheme: FlatTheme;
+      theme: Theme;
     }
   | { kind: 'tenant-theme'; artifact: TenantThemeArtifact };
 
+/** The superseded shape, kept only so the migration below can name it. */
+type LegacyBrandThemeSource = {
+  kind: 'brand-theme';
+  vertical: FirstPartyVerticalId;
+  slug: string;
+  flatTheme: FlatTheme;
+};
+
 /**
- * Lift an authoring draft into the FlatTheme the static compiler accepts.
+ * Accept the superseded `brand-theme` source and carry it forward.
  *
- * The authoring surface collects a slug and two seed colors; a FlatTheme
+ * A REGISTERED MIGRATION, not a compatibility shim that stays: the union tag
+ * and its payload key are serialized data, so WO-DER-08 renames them with a
+ * reader that lifts the old flat payload into the governed Theme through the
+ * same `liftAuthoredTheme` the intake owns. A caller still on the old shape
+ * therefore previews the same compile instead of throwing, and the grep for
+ * `flatTheme` outside this migration is zero.
+ */
+export function readPreviewSource(
+  source: PreviewSource | LegacyBrandThemeSource,
+): PreviewSource {
+  if (source.kind !== 'brand-theme') return source;
+  return {
+    kind: 'theme-draft',
+    vertical: source.vertical,
+    slug: source.slug,
+    theme: governedTenantTheme(source.flatTheme),
+  };
+}
+
+/**
+ * Lift an authoring draft into the governed `Theme` the compile door accepts.
+ *
+ * The authoring surface collects a slug and two seed colors; a theme
  * palette IS those seeds. Routing the draft through `compileTheme`
  * instead of a preview-only generator is what makes the preview honest: the
  * OKLCH ramps, the readable-ink floor and the palette semantics a compiled
@@ -157,34 +198,30 @@ export type PreviewSource =
  * carries far more (branding's dark/semantic/font fields, personality,
  * tokenOverrides), and this function has no parameter to receive any of it,
  * so every one of those fields would be silently dropped. The TenantConfig
- * path in `buildPreviewCss` below uses `liftTenantConfigToFlatTheme`
+ * path in `buildPreviewCss` below uses `liftTenantConfigToTheme`
  * instead, which is the same idea applied to that richer shape.
  *
  * `density` deliberately does not participate here: it is a semantic posture
  * the runtime resolves from `appearance`/`surfaces.density`, and inventing a
  * `surfaces` block here would put a second interpretation of it in the tree.
  */
-export function draftFlatTheme(draft: {
+export function draftTheme(draft: {
   slug: string;
   name: string;
   primaryColor: string;
   secondaryColor?: string;
-}): FlatTheme {
-  return {
-    id: draft.slug,
-    name: draft.name,
-    palette: {
-      primaryColor: draft.primaryColor,
-      ...(draft.secondaryColor ? { secondaryColor: draft.secondaryColor } : {}),
-    },
-  };
+}): Theme {
+  // The four authored fields, handed straight to the owner that builds the
+  // governed Theme from them. The palette assembly moved WITH the lift so this
+  // module holds no second interpretation of the same bounded set.
+  return draftTenantTheme(draft);
 }
 
 /**
- * Lift a `TenantConfig`'s bounded branding into the `FlatTheme` shape the
+ * Lift a `TenantConfig`'s bounded branding into the governed `Theme` the
  * lowering's intake accepts.
  *
- * This is NOT `draftFlatTheme` above. That function lifts a narrow 4-field
+ * This is NOT `draftTheme` above. That function lifts a narrow 4-field
  * AUTHORING DRAFT (slug/name/primaryColor/secondaryColor). This one lifts every
  * visual field a `TenantConfig` still has, which is exactly `branding`:
  *   - `branding.{primary,secondary,accent,success,warning,error,info}Color`
@@ -201,7 +238,7 @@ export function draftFlatTheme(draft: {
  *
  * `logo`, `logoMark`, `favicon`, `companyName` (routed to `name` instead),
  * `plan`, `features`, `domain`, `vertical`, and `componentPack` are
- * intentionally NOT lifted and NOT reported: per `FlatTheme`'s own doc comment
+ * intentionally NOT lifted and NOT reported: per the flat projection's own doc comment
  * it "does NOT include tenant identity" -- those fields have no CSS-variable
  * channel to lose in the first place, so naming them as an unsupported VISUAL
  * axis would misrepresent what they are.
@@ -211,7 +248,7 @@ export function draftFlatTheme(draft: {
  * would be exactly the DS-baseline-wearing-the-tenant's-name preview this
  * module refuses to produce (see `PreviewSource`'s doc comment above).
  */
-function liftTenantConfigToFlatTheme(config: TenantConfig): FlatTheme | null {
+function liftTenantConfigToTheme(config: TenantConfig): Theme | null {
   const branding = config.branding;
   if (!branding.primaryColor) return null;
 
@@ -251,7 +288,11 @@ function liftTenantConfigToFlatTheme(config: TenantConfig): FlatTheme | null {
   }
   const hasDarkPalette = Object.keys(darkPalette).length > 0;
 
-  return {
+  // The bounded branding is assembled in the flat vocabulary it is written in,
+  // then lifted ONCE. Assembling a governed Theme field by field here would be a
+  // second interpretation of the same bounded set, which is what the intake's
+  // `liftAuthoredTheme` already owns.
+  return governedTenantTheme({
     id: config.slug,
     name: branding.companyName,
     palette,
@@ -264,13 +305,13 @@ function liftTenantConfigToFlatTheme(config: TenantConfig): FlatTheme | null {
     // overlay on a dark-default vertical is refused by the overlay law, which
     // is the correct answer: there, a tenant's dark seeds ARE the base palette.
     ...(hasDarkPalette ? { modes: { dark: { palette: darkPalette } } } : {}),
-  };
+  });
 }
 
 /**
  * The preview source an AUTHORING DRAFT compiles to.
  *
- * A draft's personality preset and density posture are FlatTheme channels --
+ * A draft's personality preset and density posture are theme channels --
  * `motion`, `typography`, `chrome`, `surfaces` -- so the honest preview of a
  * draft is a compile of the theme it would publish, not of the identity config
  * it would publish beside it.
@@ -282,10 +323,10 @@ function liftTenantConfigToFlatTheme(config: TenantConfig): FlatTheme | null {
 export function draftPreviewSource(draft: TenantCreationConfig): PreviewSource | null {
   if (!isFirstPartyVerticalId(draft.vertical)) return null;
   return {
-    kind: 'brand-theme',
+    kind: 'theme-draft',
     vertical: draft.vertical,
     slug: draft.slug,
-    flatTheme: createTenantFlatTheme(draft),
+    theme: governedTenantTheme(createTenantFlatTheme(draft)),
   };
 }
 
@@ -302,15 +343,15 @@ function isPreviewSource(input: TenantConfig | PreviewSource): input is PreviewS
  * silence is the reason no production caller uses this arm and none should:
  * `unsupportedAxes: []` on a pre-resolved source is true by definition, not by
  * inspection, so a caller that narrowed its input first (say, through
- * `draftFlatTheme`, which has no parameter for `personality` or
+ * `draftTheme`, which has no parameter for `personality` or
  * `tokenOverrides`) would drop those axes and be told nothing was dropped. All
  * three engines pass their `TenantConfig` and let the lift below place each
  * axis on its verified channel and NAME whatever it cannot represent. The arm
  * exists for a caller that genuinely already holds a compiled artifact.
  *
  * A `TenantConfig` carries exactly one visual channel -- its bounded
- * `branding` -- so it resolves by lifting that onto an equivalent FlatTheme
- * (`liftTenantConfigToFlatTheme`). If there is not even a
+ * `branding` -- so it resolves by lifting that onto an equivalent theme
+ * (`liftTenantConfigToTheme`). If there is not even a
  * `branding.primaryColor` to seed a palette from, there is no producer for this
  * config, and a null source is returned rather than one invented.
  */
@@ -331,14 +372,14 @@ function resolvePreviewInput(
   }
   const vertical: FirstPartyVerticalId = input.vertical;
 
-  const lifted = liftTenantConfigToFlatTheme(input);
+  const lifted = liftTenantConfigToTheme(input);
   if (lifted === null) {
     // Not even a primary color to seed a palette from: nothing this module can
     // honestly compile a preview from.
     return { source: null, unsupportedAxes: ['palette'] };
   }
   return {
-    source: { kind: 'brand-theme', vertical, slug: input.slug, flatTheme: lifted },
+    source: { kind: 'theme-draft', vertical, slug: input.slug, theme: lifted },
     unsupportedAxes: [],
   };
 }
@@ -412,7 +453,7 @@ function resolveCompiledOutput(source: PreviewSource): {
         draftPreviewThemeIntent({
           vertical: source.vertical,
           slug: safeSlug,
-          draft: source.flatTheme,
+          draft: source.theme,
         }),
       ).compiled,
       containerScope(brandTenantSelector(safeSlug)),

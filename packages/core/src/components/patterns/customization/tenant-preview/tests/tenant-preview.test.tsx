@@ -14,7 +14,7 @@ import {
   createTenantConfig,
   type TenantCreationConfig,
 } from '../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
-import { buildPreviewCss, draftFlatTheme, draftPreviewSource } from '../runtime/preview-css';
+import { buildPreviewCss, draftTheme, draftPreviewSource } from '../runtime/preview-css';
 import { PREVIEW_SCOPE_ATTRIBUTE } from '../../../../../infrastructure/runtime/tenant/runtime/preview-scope';
 import RusticTenantPreview from '../engines/rustic';
 import ClassicTenantPreview from '../engines/classic';
@@ -120,7 +120,7 @@ describe('TenantPreview', () => {
     // `includeDarkSelector`/`includeSystemDarkSelector`, options of the
     // retired the retired runtime tenant-CSS generator call the old buildPreviewCss(TenantConfig)
     // made internally. buildPreviewCss has no such option anymore, and
-    // draftFlatTheme never authors a FlatTheme.modes overlay for an
+    // draftTheme never authors a FlatTheme.modes overlay for an
     // authoring draft -- there is nothing for compileTheme to compile a
     // dark block FROM, so the toggle has no equivalent to migrate onto.
     // Replaced below with the structural guarantee that follows from that:
@@ -136,12 +136,12 @@ describe('TenantPreview', () => {
     it('emits no dark overlay of its own: an authoring draft has no mode field', () => {
       // Rottay's own default mode is dark, so its overlay is the LIGHT one.
       // What the draft must not do is add a dark block, and it structurally
-      // cannot: `draftFlatTheme` has no field a dark seed could arrive in.
+      // cannot: `draftTheme` has no field a dark seed could arrive in.
       const { css } = buildPreviewCss({
-        kind: 'brand-theme',
+        kind: 'theme-draft',
         vertical: 'rottay',
         slug: sampleConfig.slug,
-        flatTheme: draftFlatTheme(sampleConfig),
+        theme: draftTheme(sampleConfig),
       });
 
       expect(css).not.toContain("data-theme='dark'");
@@ -151,10 +151,10 @@ describe('TenantPreview', () => {
     it('should include secondary color scale when provided', () => {
       const draft = { ...sampleConfig, secondaryColor: '#10B981' };
       const { css } = buildPreviewCss({
-        kind: 'brand-theme',
+        kind: 'theme-draft',
       vertical: 'rottay',
         slug: draft.slug,
-        flatTheme: draftFlatTheme(draft),
+        theme: draftTheme(draft),
       });
 
       expect(css).toContain('--ds-color-secondary');
@@ -305,7 +305,7 @@ describe('TenantPreview', () => {
        preview-css suite pins that at the compiler boundary; these two pin it
        at the engine boundary, which is where it can actually regress. Since
        `buildPreviewCss` gained a `PreviewSource` arm, an engine could narrow
-       its own input before calling (`draftFlatTheme` carries no
+       its own input before calling (`draftTheme` carries no
        `personality`/`tokenOverrides`) and lose axes SILENTLY, because a
        pre-resolved source reports `unsupportedAxes: []` by definition. Then
        the preset this very component renders as metadata would be missing
@@ -365,10 +365,10 @@ describe('TenantPreview', () => {
     it('has an empty-loss case to be absent for', () => {
       const config = createTenantConfig(sampleConfig);
       const { unsupportedAxes } = buildPreviewCss({
-        kind: 'brand-theme',
+        kind: 'theme-draft',
       vertical: 'rottay',
         slug: config.slug,
-        flatTheme: draftFlatTheme(sampleConfig),
+        theme: draftTheme(sampleConfig),
       });
       expect(unsupportedAxes).toEqual([]);
     });

@@ -45,6 +45,7 @@ import {
   ThemeAdmissionError,
   compileThemeIntent,
   draftPreviewThemeIntent,
+  governedTenantTheme,
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import {
@@ -369,7 +370,11 @@ export function buildSurfaceVariables(theme: FlatTheme, surface: BrandStudioSurf
   const intent = draftPreviewThemeIntent({
     vertical: surface.vertical,
     slug: surface.tenantSlug,
-    draft: theme,
+    // WO-DER-08: the door takes the governed Theme. The editor's own panel math
+    // still reads the flat projection -- that is a VIEW, not an authoring
+    // transport -- so the lift happens here, at the one boundary that crosses
+    // into the compiler.
+    draft: governedTenantTheme(theme),
   });
   const { compiled } = compileThemeIntent(intent);
   const { compiled: untouched } = compileThemeIntent(

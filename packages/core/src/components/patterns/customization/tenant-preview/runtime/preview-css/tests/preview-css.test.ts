@@ -1,3 +1,5 @@
+import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
+import { liftAuthoredTheme, readGovernedTheme } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake';
 /**
  * preview-css unit tests -- scoping and sanitization contract (audit CMP-02).
  *
@@ -22,7 +24,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildPreviewCss, draftFlatTheme, draftPreviewSource } from '..';
+import { buildPreviewCss, draftTheme, draftPreviewSource } from '..';
 import {
   PREVIEW_SCOPE_ATTRIBUTE,
   buildPreviewScopeSelector,
@@ -88,7 +90,7 @@ const sampleDraft = {
   secondaryColor: '#34C494',
 };
 
-describe('buildPreviewCss scoping (brand-theme source)', () => {
+describe('buildPreviewCss scoping (theme-draft source)', () => {
   it('re-anchors every rule to the preview scope selector and keeps all generated declarations', () => {
     const drafts = [
       sampleDraft,
@@ -97,7 +99,7 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
     ];
 
     for (const draft of drafts) {
-      const flatTheme = draftFlatTheme(draft);
+      const themeDraft = draftTheme(draft);
       const safeSlug = sanitizePreviewSlug(draft.slug);
       // Same call `resolveCompiledOutput` makes internally, so this is a
       // faithful "raw" baseline rather than a second interpretation of it. The
@@ -108,7 +110,7 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
           draftPreviewThemeIntent({
             vertical: 'rottay',
             slug: safeSlug,
-            draft: flatTheme,
+            draft: themeDraft,
           }),
         ).compiled,
         containerScope(brandTenantSelector(safeSlug)),
@@ -118,10 +120,10 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
         .filter((line) => /^ {2}\S.*;$/.test(line)).length;
 
       const { css, safeSlug: outSlug, scopeSelector } = buildPreviewCss({
-        kind: 'brand-theme',
+        kind: 'theme-draft',
       vertical: 'rottay',
         slug: draft.slug,
-        flatTheme,
+        theme: themeDraft,
       });
       const keptDeclarationCount = css
         .split('\n')
@@ -139,9 +141,9 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
   });
 
   it('emits no html[data-tenant] rule even when previewing the active tenant slug', () => {
-    const flatTheme = draftFlatTheme({ ...sampleDraft, slug: 'bithire' });
-    const { css, scopeSelector } = buildPreviewCss({ kind: 'brand-theme',
-      vertical: 'rottay', slug: 'bithire', flatTheme });
+    const themeDraft = draftTheme({ ...sampleDraft, slug: 'bithire' });
+    const { css, scopeSelector } = buildPreviewCss({ kind: 'theme-draft',
+      vertical: 'rottay', slug: 'bithire', theme: themeDraft });
 
     expect(css).not.toContain('html');
     expect(css).toContain('--ds-color-primary');
@@ -151,7 +153,7 @@ describe('buildPreviewCss scoping (brand-theme source)', () => {
   });
 });
 
-describe('buildPreviewCss hostile input neutralization (brand-theme source)', () => {
+describe('buildPreviewCss hostile input neutralization (theme-draft source)', () => {
   /**
    * THE DEFENCE MOVED EARLIER AGAIN, and these two cases are where it shows.
    *
@@ -166,13 +168,13 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
    * The residual property is asserted with it: nothing is emitted at all, so
    * there is no CSS for a later pass to have to neutralize.
    */
-  const refusalOf = (flatTheme: FlatTheme) => {
+  const refusalOf = (theme: Theme) => {
     try {
       buildPreviewCss({
-        kind: 'brand-theme',
+        kind: 'theme-draft',
         vertical: 'rottay',
         slug: sampleDraft.slug,
-        flatTheme,
+        theme,
       });
     } catch (error) {
       return error as Error;
@@ -181,24 +183,28 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
   };
 
   it('refuses BY NAME a value that could close the block and restyle the document', () => {
-    const flatTheme: FlatTheme = {
-      ...draftFlatTheme(sampleDraft),
+    // The hostile value is authored in the flat vocabulary it is written in,
+    // then lifted once -- the same single lift the studio's own transport does.
+    const theme: Theme = liftAuthoredTheme({
+      ...readGovernedTheme(draftTheme(sampleDraft)),
       surfaces: { shadows: { md: 'red;} html{background:black}' } },
-    };
+    });
 
-    const refusal = refusalOf(flatTheme);
+    const refusal = refusalOf(theme);
     expect(refusal?.name).toBe('ThemeAdmissionError');
     expect(refusal?.message).toContain('--ds-shadow-md');
     expect(refusal?.message).toContain('unsafe variable declaration');
   });
 
   it('refuses BY NAME a multi-line value, naming the channel it was authored on', () => {
-    const flatTheme: FlatTheme = {
-      ...draftFlatTheme(sampleDraft),
+    // The hostile value is authored in the flat vocabulary it is written in,
+    // then lifted once -- the same single lift the studio's own transport does.
+    const theme: Theme = liftAuthoredTheme({
+      ...readGovernedTheme(draftTheme(sampleDraft)),
       surfaces: { borderRadius: { md: 'red;\n} zz9{--pwn9:1}\n' } },
-    };
+    });
 
-    const refusal = refusalOf(flatTheme);
+    const refusal = refusalOf(theme);
     expect(refusal?.name).toBe('ThemeAdmissionError');
     expect(refusal?.message).toContain('unsafe variable declaration');
     // The channel is named, so an author is told WHICH value to fix.
@@ -218,12 +224,14 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     // The stronger fact is asserted instead. `rescopeSelectorLine`'s rejection
     // branch survives as defence in depth behind the emission grammar, no
     // longer as the first line of it.
-    const flatTheme: FlatTheme = {
-      ...draftFlatTheme(sampleDraft),
+    // The hostile value is authored in the flat vocabulary it is written in,
+    // then lifted once -- the same single lift the studio's own transport does.
+    const theme: Theme = liftAuthoredTheme({
+      ...readGovernedTheme(draftTheme(sampleDraft)),
       surfaces: { shadows: { md: 'red;\n}\nzz9, * {\n  --pwn9: 1;\n' } },
-    };
+    });
     const safeSlug = sanitizePreviewSlug(sampleDraft.slug);
-    const raw = lowerFlatThemeFixture({ flatTheme, tenantSlug: safeSlug }).cssString;
+    const raw = lowerFlatThemeFixture({ flatTheme: readGovernedTheme(theme), tenantSlug: safeSlug }).cssString;
     expect(raw).not.toContain('zz9');
     expect(raw).not.toContain('--pwn9');
     // The DECLARATION, not the name: the material roots READ `--ds-shadow-md`
@@ -238,10 +246,10 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     let refusal: Error | undefined;
     try {
       buildPreviewCss({
-        kind: 'brand-theme',
+        kind: 'theme-draft',
         vertical: 'rottay',
         slug: sampleDraft.slug,
-        flatTheme,
+        theme,
       });
     } catch (error) {
       refusal = error as Error;
@@ -252,7 +260,7 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     // JSON-quoted string in an error message, never CSS text -- no stylesheet
     // was produced at all, so there is nothing for the rescope pass to read.
     expect(refusal?.message).toContain('--ds-shadow-md');
-    expect(refusal?.message).toContain(JSON.stringify(flatTheme.surfaces?.shadows?.md));
+    expect(refusal?.message).toContain(JSON.stringify(readGovernedTheme(theme).surfaces?.shadows?.md));
   });
 
   it('never lets a hostile slug reach the selector', () => {
@@ -266,12 +274,12 @@ describe('buildPreviewCss hostile input neutralization (brand-theme source)', ()
     // above, where the emission grammar refuses the hostile value before any
     // foreign selector can be assembled.
     const hostileSlug = "x'] , * { --pwn9: 1 } [q9='";
-    const flatTheme = draftFlatTheme({ ...sampleDraft, slug: hostileSlug });
+    const themeDraft = draftTheme({ ...sampleDraft, slug: hostileSlug });
     const { css, safeSlug, scopeSelector } = buildPreviewCss({
-      kind: 'brand-theme',
+      kind: 'theme-draft',
       vertical: 'rottay',
       slug: hostileSlug,
-      flatTheme,
+      theme: themeDraft,
     });
 
     expect(safeSlug).toMatch(/^[a-z0-9-]+$/);
@@ -613,10 +621,10 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
 
     const direct = buildPreviewCss(source!);
     const fromTheme = buildPreviewCss({
-      kind: 'brand-theme',
+      kind: 'theme-draft',
       vertical: 'bithire',
       slug: 'acme',
-      flatTheme: createTenantFlatTheme(draft),
+      theme: createTenantFlatTheme(draft),
     });
 
     expect(direct.css).toBe(fromTheme.css);

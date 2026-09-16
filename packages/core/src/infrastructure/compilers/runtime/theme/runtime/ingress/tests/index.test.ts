@@ -1,3 +1,5 @@
+import { createTenantFlatTheme } from "@/infrastructure/runtime/tenant/runtime/authoring/configuration";
+import { liftAuthoredTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake";
 /**
  * The ingress owner is the only producer of a ThemeIntent, and each of its
  * three named producers states a domain the others do not.
@@ -337,5 +339,34 @@ describe("every producer reaches the same door, and the same refusal", () => {
         document: simpleDocument("#2F6B9A"),
       }).entitlement
     ).toBeUndefined();
+  });
+});
+
+describe("WO-DER-08: the draft transport is the governed Theme", () => {
+  it("a governed draft is NOT lifted a second time, and a flat one still is", () => {
+    /* The first discriminator tested for an `appearance` block, which a lifted
+       Theme does not carry, so every governed draft took the flat arm and was
+       lifted twice. It stayed green because the second lift is near-idempotent.
+       This pins the arm itself rather than its happy outcome. */
+    const flat = createTenantFlatTheme({
+      slug: "der08", name: "Der08", vertical: "bithire",
+      primaryColor: "#3355ff", secondaryColor: "#22aa88",
+    } as never);
+    const governed = liftAuthoredTheme(flat);
+
+    expect(typeof (governed as { motion?: unknown }).motion).toBe("object");
+    expect((governed as { motion: object }).motion).toHaveProperty("disposition");
+    expect((flat as { motion?: unknown }).motion).not.toHaveProperty("disposition");
+
+    /* Both transports name the same compile: the door's answer does not depend
+       on which shape it was handed. */
+    const viaTheme = draftPreviewThemeIntent({ vertical: "bithire", slug: "der08", draft: governed });
+    const viaFlat = draftPreviewThemeIntent({ vertical: "bithire", slug: "der08", draft: flat });
+    const canon = (v: unknown): unknown =>
+      Array.isArray(v) ? v.map(canon)
+        : v && typeof v === "object"
+          ? Object.fromEntries(Object.keys(v as object).sort().map((k) => [k, canon((v as never)[k])]))
+          : v;
+    expect(JSON.stringify(canon(viaTheme))).toEqual(JSON.stringify(canon(viaFlat)));
   });
 });
