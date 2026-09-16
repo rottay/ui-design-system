@@ -57,7 +57,6 @@ import {
   normalizeLineClamp,
   resolveFluidTypographySize,
   resolveTypeRoleStyle,
-  resolveTypographyCraftStyle,
   typographyDataAttributes,
 } from '../../runtime';
 
@@ -308,24 +307,19 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       .filter(Boolean)
       .join(' ');
 
-    // The tier's size and leading are painted by the skin on the `data-size`
-    // this element stamps. Tracking cannot join them: `rottay-personality`
-    // sorts after `rottay-engines` and paints bare `h1..h6`, so only an inline
-    // declaration outranks it. It reads the tier channel all the same, so a
-    // decision reaches the ramp either way.
-    const headingTracking = HEADING_LETTER_SPACING[effectiveSize];
+    // The tier's size, leading and tracking are painted by the skin on the
+    // `data-size` this element stamps. What stays here is the role binding:
+    // the facet the role already resolves to, which depends on the weight
+    // class this render picked and so cannot be decided by a selector.
     const typographyStyle: React.CSSProperties =
       !sizeIsResponsive && !textStyle
-        ? {
-            ...(!suppressTracking && headingTracking && headingTracking !== '0'
-              ? { letterSpacing: `var(--ds-type-tier-${effectiveSize}-letter-spacing, ${headingTracking})` }
-              : {}),
-            ...resolveTypeRoleStyle({
-              role: HEADING_TYPE_ROLE[effectiveSize] ?? HEADING_TYPE_ROLE.md,
-              lineHeight: HEADING_LINE_HEIGHT[effectiveSize] || '1.25',
-              weight: CLASS_FONT_WEIGHT[resolvedWeightClass],
-            }),
-          }
+        ? resolveTypeRoleStyle({
+            role: HEADING_TYPE_ROLE[effectiveSize] ?? HEADING_TYPE_ROLE.md,
+            // A caller-declared leading owns the line box, so the role is never
+            // offered it: the skin paints that leading on the stamped state.
+            lineHeight: leading ? undefined : HEADING_LINE_HEIGHT[effectiveSize] || '1.25',
+            weight: CLASS_FONT_WEIGHT[resolvedWeightClass],
+          })
         : {};
 
     const craftProps = {
@@ -340,18 +334,11 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       motion,
       lang,
     };
-    const nonRoleStyle = resolveTypographyCraftStyle({
-      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
-      // engine estampa; pedirla aca la escribiria dos veces.
-      includeRoleMatrix: false,
-      ...craftProps,
-      kind: 'heading',
-      size: effectiveSize,
-      align,
-      truncate,
-      lineClamp,
-      responsive: sizeIsResponsive,
-    });
+    // The skin paints every craft block on the state stamped below; the clamp
+    // depth is the one value only this render knows.
+    const nonRoleStyle: React.CSSProperties = normalizedClamp
+      ? ({ '--ds-type-line-clamp': normalizedClamp } as React.CSSProperties)
+      : {};
 
     // Truncated plain-string content self-declares its full value through the
     // native `title` disclosure when the caller forgot one, so the ellipsis
@@ -373,8 +360,11 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
+          data-align={align}
           data-size={effectiveSize}
+          data-ramp={!sizeIsResponsive && textStyle === undefined ? 'tier' : undefined}
           data-line-clamp={normalizedClamp}
+          data-truncate={truncate || undefined}
           {...typographyDataAttributes(craftProps)}
           style={{ ...typographyStyle, ...nonRoleStyle, ...style, ...responsive.channels }}
         >
@@ -512,18 +502,11 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       motion,
       lang,
     };
-    const nonRoleStyle = resolveTypographyCraftStyle({
-      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
-      // engine estampa; pedirla aca la escribiria dos veces.
-      includeRoleMatrix: false,
-      ...craftProps,
-      kind: 'text',
-      size,
-      align,
-      truncate,
-      lineClamp,
-      responsive: sizeIsResponsive,
-    });
+    // The skin paints every craft block on the state stamped below; the clamp
+    // depth is the one value only this render knows.
+    const nonRoleStyle: React.CSSProperties = normalizedClamp
+      ? ({ '--ds-type-line-clamp': normalizedClamp } as React.CSSProperties)
+      : {};
 
     // Truncated plain-string content self-declares its full value through the
     // native `title` disclosure when the caller forgot one (explicit wins).
@@ -544,8 +527,11 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
           {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
+          data-align={align}
           data-size={size}
+          data-ramp={!sizeIsResponsive && textStyle === undefined ? 'tier' : undefined}
           data-line-clamp={normalizedClamp}
+          data-truncate={truncate || undefined}
           {...typographyDataAttributes(craftProps)}
           style={{ ...textSizeStyle, ...nonRoleStyle, ...style, ...responsive.channels }}
         >
@@ -661,18 +647,11 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       motion,
       lang,
     };
-    const nonRoleStyle = resolveTypographyCraftStyle({
-      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
-      // engine estampa; pedirla aca la escribiria dos veces.
-      includeRoleMatrix: false,
-      ...craftProps,
-      kind: 'text',
-      size,
-      align,
-      truncate,
-      lineClamp,
-      responsive: sizeIsResponsive,
-    });
+    // The skin paints every craft block on the state stamped below; the clamp
+    // depth is the one value only this render knows.
+    const nonRoleStyle: React.CSSProperties = normalizedClamp
+      ? ({ '--ds-type-line-clamp': normalizedClamp } as React.CSSProperties)
+      : {};
 
     // Truncated plain-string content self-declares its full value through the
     // native `title` disclosure when the caller forgot one (explicit wins).
@@ -693,8 +672,11 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           {...responsive.attrs}
           data-part={dataPart ?? "root"}
           data-color={color}
+          data-align={align}
           data-size={size}
+          data-ramp={!sizeIsResponsive && textStyle === undefined ? 'tier' : undefined}
           data-line-clamp={normalizedClamp}
+          data-truncate={truncate || undefined}
           {...typographyDataAttributes(craftProps)}
           style={{ ...paragraphSizeStyle, ...nonRoleStyle, ...style, ...responsive.channels }}
         >
@@ -821,16 +803,9 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       motion,
       lang,
     };
-    const nonRoleStyle = resolveTypographyCraftStyle({
-      // La matriz de rol la pinta el skin sobre el `data-text-style` que este
-      // engine estampa; pedirla aca la escribiria dos veces.
-      includeRoleMatrix: false,
-      ...craftProps,
-      kind: 'text',
-      size,
-      truncate: false,
-      responsive: sizeIsResponsive,
-    });
+    // A link never clamps, so it carries none of the craft style the skin
+    // paints on the states stamped below.
+    const nonRoleStyle: React.CSSProperties = {};
 
     return (
       <>
@@ -853,6 +828,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
           {...partAttributes(dataPart ?? 'root', interaction.state)}
           data-color={color}
           data-size={size}
+          data-ramp={!sizeIsResponsive && textStyle === undefined ? 'tier' : undefined}
           data-disabled={disabled || undefined}
           {...typographyDataAttributes(craftProps)}
           style={{ ...linkSizeStyle, ...nonRoleStyle, ...style, ...responsive.channels }}

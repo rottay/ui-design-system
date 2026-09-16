@@ -168,9 +168,10 @@ describe('Typography semantic roles — what the engine renders', () => {
     expect(style).not.toContain('font-size:');
     expect(style).not.toContain('line-height:var(--ds-type-section-title');
     expect(style).not.toContain(`letter-spacing:var(--ds-type-${size === '2xl' || size === '3xl' ? 'display' : 'section-title'}-`);
-    if (HEADING_LETTER_SPACING_TIER[size]) {
-      expect(style).toContain(`letter-spacing:var(--ds-type-tier-${size}-letter-spacing`);
-    }
+    // The tier tracking is the skin's now, keyed on `data-size`; the engine
+    // emits none of it. What must never appear is a ROLE's tracking.
+    expect(style).not.toContain('letter-spacing:');
+    expect(HEADING_LETTER_SPACING_TIER[size] ?? false).toBe(SIZES.indexOf(size) >= 2);
   });
 
   it('hands the display tiers their leading and holds the rest on the literal', () => {

@@ -364,60 +364,80 @@
    and a responsive size each suppressed that inline block, so neither may be
    painted here. Tracking is declared only from `md` up, because `xs`/`sm`
    declared none and inherit theirs. */
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='xs'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-size='xs'] {
   font-size: var(--ds-font-size-base);
   line-height: var(--ds-type-tier-xs-line-height, 1.4);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='sm'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-size='sm'] {
   font-size: var(--ds-font-size-lg);
   line-height: var(--ds-type-tier-sm-line-height, 1.3);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='md'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-size='md'] {
   font-size: var(--ds-font-size-xl);
   line-height: var(--ds-type-tier-md-line-height, 1.25);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='lg'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-size='lg'] {
   font-size: var(--ds-font-size-2xl);
   line-height: var(--ds-type-tier-lg-line-height, 1.2);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='xl'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-size='xl'] {
   font-size: var(--ds-font-size-3xl);
   line-height: var(--ds-type-tier-xl-line-height, 1.15);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='2xl'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-size='2xl'] {
   font-size: var(--ds-font-size-4xl);
   line-height: var(--ds-type-tier-2xl-line-height, 1.1);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='3xl'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-size='3xl'] {
   font-size: var(--ds-font-size-5xl);
   line-height: var(--ds-type-tier-3xl-line-height, 1.1);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='xs'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:not(:is(h1, h2, h3, h4, h5, h6))[data-size='xs'] {
   font-size: var(--ds-font-size-xs);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='sm'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:not(:is(h1, h2, h3, h4, h5, h6))[data-size='sm'] {
   font-size: var(--ds-font-size-sm);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='md'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:not(:is(h1, h2, h3, h4, h5, h6))[data-size='md'] {
   font-size: var(--ds-font-size-base);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='lg'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:not(:is(h1, h2, h3, h4, h5, h6))[data-size='lg'] {
   font-size: var(--ds-font-size-lg);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='xl'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:not(:is(h1, h2, h3, h4, h5, h6))[data-size='xl'] {
   font-size: var(--ds-font-size-xl);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='2xl'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:not(:is(h1, h2, h3, h4, h5, h6))[data-size='2xl'] {
   font-size: var(--ds-font-size-2xl);
 }
-.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='3xl'] {
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:not(:is(h1, h2, h3, h4, h5, h6))[data-size='3xl'] {
   font-size: var(--ds-font-size-3xl);
 }
 
-/* The tier's TRACKING is not declared here. `rottay-personality` sorts after
-   `rottay-engines` and paints `letter-spacing` on bare `h1..h6`, so a rule in
-   this file can never win it; the engine keeps that one facet inline, reading
-   the same tier channel. */
+/* ---- Heading tracking ---------------------------------------------------
+   The family owns it now. The floor is the per-tenant heading channel the
+   personality sheet resolves -- which is what every heading rendered before,
+   whatever its tier, its `textStyle` or its script. The tier ramp then takes
+   over exactly where the engine used to declare one inline: from `md` up, and
+   only where the script admits tracking. */
+.rottay-typography.rottay-typography--modern[data-part='root']:is(h1, h2, h3, h4, h5, h6) {
+  letter-spacing: var(--ds-typography-heading-letter-spacing);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:is(h1, h2, h3, h4, h5, h6)[data-size='md']:not([data-joining-script]) {
+  letter-spacing: var(--ds-type-tier-md-letter-spacing, -0.01em);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:is(h1, h2, h3, h4, h5, h6)[data-size='lg']:not([data-joining-script]) {
+  letter-spacing: var(--ds-type-tier-lg-letter-spacing, -0.015em);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:is(h1, h2, h3, h4, h5, h6)[data-size='xl']:not([data-joining-script]) {
+  letter-spacing: var(--ds-type-tier-xl-letter-spacing, -0.02em);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:is(h1, h2, h3, h4, h5, h6)[data-size='2xl']:not([data-joining-script]) {
+  letter-spacing: var(--ds-type-tier-2xl-letter-spacing, -0.025em);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:is(h1, h2, h3, h4, h5, h6)[data-size='3xl']:not([data-joining-script]) {
+  letter-spacing: var(--ds-type-tier-3xl-letter-spacing, -0.025em);
+}
 
 /* ---- The names this skin reads and nobody else writes --------------------
    Declared at the family root so every read has a producer WITHOUT the
@@ -437,4 +457,165 @@
   --ds-type-paragraph-measure: 68ch;
   --ds-type-line-clamp: initial;
   --ds-type-selection-color: initial;
+}
+
+/* ---- Fluid sizes -------------------------------------------------------
+   The same ramp the engine emitted inline, keyed on the two stamps it already
+   carries. Doubled `data-fluid` so a fluid render outranks its own tier rule,
+   which is exactly the order the inline declaration had. */
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='xs']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-base, var(--ds-font-size-base));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='sm']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-lg, var(--ds-font-size-lg));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='md']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-xl, var(--ds-font-size-xl));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='lg']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-2xl, var(--ds-font-size-2xl));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='xl']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-3xl, var(--ds-font-size-3xl));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='2xl']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-4xl, var(--ds-font-size-4xl));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='3xl']:is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--ds-font-size-fluid-5xl, var(--ds-font-size-5xl));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='xs']:not(:is(h1, h2, h3, h4, h5, h6)) {
+  font-size: var(--ds-font-size-fluid-sm, var(--ds-font-size-xs));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='sm']:not(:is(h1, h2, h3, h4, h5, h6)) {
+  font-size: var(--ds-font-size-fluid-sm, var(--ds-font-size-sm));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='md']:not(:is(h1, h2, h3, h4, h5, h6)) {
+  font-size: var(--ds-font-size-fluid-base, var(--ds-font-size-base));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='lg']:not(:is(h1, h2, h3, h4, h5, h6)) {
+  font-size: var(--ds-font-size-fluid-lg, var(--ds-font-size-lg));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='xl']:not(:is(h1, h2, h3, h4, h5, h6)) {
+  font-size: var(--ds-font-size-fluid-xl, var(--ds-font-size-xl));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='2xl']:not(:is(h1, h2, h3, h4, h5, h6)) {
+  font-size: var(--ds-font-size-fluid-2xl, var(--ds-font-size-2xl));
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-fluid='true'][data-fluid='true'][data-size='3xl']:not(:is(h1, h2, h3, h4, h5, h6)) {
+  font-size: var(--ds-font-size-fluid-3xl, var(--ds-font-size-3xl));
+}
+
+/* ---- Truncation --------------------------------------------------------
+   One line with an ellipsis. Structure, not paint: the same declarations the
+   engine emitted, on the state it stamps. A clamp owns the element instead. */
+.rottay-typography.rottay-typography--modern[data-part='root'][data-truncate]:not([data-line-clamp]) {
+  display: inline-block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+/* ---- Alignment ---------------------------------------------------------
+   The vendor `text-*` utilities the engine still lists are not part of this
+   bundle, so the inline declaration was the only thing painting it. Same
+   values, on the state the render stamps. */
+.rottay-typography.rottay-typography--modern[data-part='root'][data-align='left'] {
+  text-align: left;
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-align='center'] {
+  text-align: center;
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-align='right'] {
+  text-align: right;
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-align='justify'] {
+  text-align: justify;
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-align='start'] {
+  text-align: start;
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-align='end'] {
+  text-align: end;
+}
+
+/* ---- The caller's own leading and tracking ------------------------------
+   They outrank the tier ramp, which is the order the engine's inline
+   declaration used to give them. Each is stated twice and only twice: once for
+   every compound, and once at the heading tier's own weight so source order --
+   not invented specificity -- decides between them. */
+.rottay-typography.rottay-typography--modern[data-part='root'][data-leading='none'] {
+  line-height: var(--ds-line-height-none);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-leading='none'] {
+  line-height: var(--ds-line-height-none);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-leading='tight'] {
+  line-height: var(--ds-line-height-tight);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-leading='tight'] {
+  line-height: var(--ds-line-height-tight);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-leading='snug'] {
+  line-height: var(--ds-line-height-snug);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-leading='snug'] {
+  line-height: var(--ds-line-height-snug);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-leading='normal'] {
+  line-height: var(--ds-line-height-normal);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-leading='normal'] {
+  line-height: var(--ds-line-height-normal);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-leading='relaxed'] {
+  line-height: var(--ds-line-height-relaxed);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-leading='relaxed'] {
+  line-height: var(--ds-line-height-relaxed);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-leading='loose'] {
+  line-height: var(--ds-line-height-loose);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-leading='loose'] {
+  line-height: var(--ds-line-height-loose);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-tracking='tighter']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-tighter);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-tracking='tighter']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-tighter);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-tracking='tight']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-tight);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-tracking='tight']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-tight);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-tracking='normal']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-normal);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-tracking='normal']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-normal);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-tracking='wide']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-wide);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-tracking='wide']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-wide);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-tracking='wider']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-wider);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-tracking='wider']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-wider);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-tracking='widest']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-widest);
+}
+.rottay-typography.rottay-typography--modern[data-part='root'][data-ramp='tier']:is(h1, h2, h3, h4, h5, h6)[data-tracking='widest']:not([data-joining-script]) {
+  letter-spacing: var(--ds-letter-spacing-widest);
 }

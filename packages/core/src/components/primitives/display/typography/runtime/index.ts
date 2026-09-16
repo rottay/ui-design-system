@@ -10,9 +10,9 @@ import type {
   TypographyWrap,
 } from '../contracts';
 
-type TypographyKind = 'heading' | 'text';
+export type TypographyKind = 'heading' | 'text';
 
-const ROLE_TOKEN_KEYS: Record<TypographyStyle, string> = {
+export const ROLE_TOKEN_KEYS: Record<TypographyStyle, string> = {
   display: 'display',
   pageTitle: 'page-title',
   sectionTitle: 'section-title',
@@ -280,90 +280,6 @@ export function resolveFluidTypographySize(kind: TypographyKind, size: TextSize)
   return kind === 'heading' ? HEADING_FLUID_SIZE_MAP[size] : TEXT_FLUID_SIZE_MAP[size];
 }
 
-/**
- * Cross-engine typography resolver. It emits references to public tokens,
- * never tenant values, so the exact same DOM can be re-skinned at runtime.
- */
-export function resolveTypographyCraftStyle({
-  textStyle,
-  includeRoleMatrix = true,
-  family,
-  fluid,
-  leading,
-  tracking,
-  wrap,
-  hyphenate,
-  contrast,
-  align,
-  lang,
-  kind,
-  size,
-  truncate,
-  lineClamp,
-  responsive,
-}: ResolveTypographyStyleOptions): CSSProperties {
-  const roleKey = textStyle ? ROLE_TOKEN_KEYS[textStyle] : undefined;
-  const normalizedClamp = normalizeLineClamp(lineClamp);
-  const suppressTracking = isJoiningScriptLang(lang);
-  const style: CSSProperties = {
-    // Matriz de rol: primera, y sigue primera -- `family` pisa su `fontFamily` y
-    // `fluid` su `fontSize` justamente porque vienen despues.
-    ...(includeRoleMatrix && roleKey
-      ? {
-          fontFamily: `var(--ds-type-${roleKey}-font-family)`,
-          fontSize: `var(--ds-type-${roleKey}-font-size)`,
-          fontWeight: `var(--ds-type-${roleKey}-font-weight)`,
-          lineHeight: `var(--ds-type-${roleKey}-line-height)`,
-          ...(suppressTracking
-            ? {}
-            : { letterSpacing: `var(--ds-type-${roleKey}-letter-spacing)` }),
-          textTransform: `var(--ds-type-${roleKey}-text-transform)` as CSSProperties['textTransform'],
-          fontVariantNumeric: `var(--ds-type-${roleKey}-font-variant-numeric)`,
-        }
-      : {}),
-    ...(family ? { fontFamily: FAMILY_MAP[family] } : {}),
-    ...(fluid && size && !responsive
-      ? {
-          fontSize: resolveFluidTypographySize(kind, size),
-        }
-      : {}),
-    ...(leading ? { lineHeight: LEADING_MAP[leading] } : {}),
-    ...(tracking && !suppressTracking ? { letterSpacing: TRACKING_MAP[tracking] } : {}),
-    ...(align ? { textAlign: align } : {}),
-    ...(wrap === 'balance'
-      ? { textWrap: 'balance' }
-      : wrap === 'pretty'
-        ? { textWrap: 'pretty' }
-        : wrap === 'nowrap'
-          ? { whiteSpace: 'nowrap' }
-          : {}),
-    // `hyphens`, `overflow-wrap` and the three optical channels are painted by
-    // the skin on the scope and on the `data-hyphenate` this render stamps.
-    ...(truncate && !normalizedClamp
-      ? {
-          display: 'inline-block',
-          maxWidth: '100%',
-          minWidth: 0,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          verticalAlign: 'bottom',
-        }
-      : {}),
-    ...(normalizedClamp
-      ? {
-          ['--ds-type-line-clamp' as any]: normalizedClamp,
-          display: '-webkit-box',
-          WebkitLineClamp: normalizedClamp,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-        }
-      : {}),
-  };
-
-  return style;
-}
-
 export function typographyDataAttributes({
   textStyle,
   family,
@@ -373,6 +289,8 @@ export function typographyDataAttributes({
   fluid,
   lang,
   hyphenate,
+  leading,
+  tracking,
 }: TypographyCraftProps) {
   return {
     'data-text-style': textStyle,
@@ -385,5 +303,7 @@ export function typographyDataAttributes({
     // script carries no tracking.
     'data-joining-script': isJoiningScriptLang(lang) || undefined,
     'data-hyphenate': hyphenate || undefined,
+    'data-leading': leading,
+    'data-tracking': tracking,
   } as const;
 }

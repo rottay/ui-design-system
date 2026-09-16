@@ -247,6 +247,27 @@ h6,
 .ant-typography h6,
 [data-engine] .ds-heading {
   font-weight: var(--ds-typography-heading-font-weight);
+}
+
+/* Tracking is the heading's own family's to paint wherever that family owns a
+   skin: this sheet sorts above the engine layer, so declaring it here took the
+   choice away from the modern typography skin, which reads this very channel
+   per tier. Every heading this sheet still reaches keeps it. */
+:is(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .ant-typography h1,
+    .ant-typography h2,
+    .ant-typography h3,
+    .ant-typography h4,
+    .ant-typography h5,
+    .ant-typography h6,
+    [data-engine] .ds-heading
+  ):not(.rottay-typography--modern) {
   letter-spacing: var(--ds-typography-heading-letter-spacing);
 }
 

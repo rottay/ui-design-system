@@ -51,7 +51,9 @@ describe('Typography premium contract — pass 1 semantics and resilience', () =
     const paragraph = screen.getByText('القرار التالي جاهز للمراجعة');
     expect(paragraph).toHaveAttribute('lang', 'ar');
     expect(paragraph).toHaveAttribute('dir', 'rtl');
-    expect(paragraph).toHaveStyle({ textAlign: 'start' });
+    // Logical alignment is the skin's now, on the state the render stamps.
+    expect(paragraph).toHaveAttribute('data-align', 'start');
+    expect(modernTypographyCss).toMatch(/\[data-align='start'\] \{\s*text-align: start;/);
     // Hyphenation is the skin's now; the render states the request.
     expect(paragraph).toHaveAttribute('data-hyphenate', 'true');
   });
@@ -79,7 +81,8 @@ describe('Typography premium contract — pass 1 semantics and resilience', () =
     expect(paragraph).toHaveAttribute('data-line-clamp', '2');
     expect(paragraph.getAttribute('style')).toContain('--ds-type-line-clamp: 2');
     expect(modernTypographyCss).toContain('-webkit-line-clamp: var(--ds-type-line-clamp');
-    expect(paragraph.style.overflow).toBe('hidden');
+    // The clamp's paint is the skin's; the render carries only the channel.
+    expect(modernTypographyCss).toMatch(/\[data-line-clamp\][^{]*\{[^}]*overflow: hidden;/);
   });
 
   it('keeps long user-authored values inside their available width', () => {
@@ -142,7 +145,10 @@ describe('Typography premium contract — pass 2 tokenized craft', () => {
 
     const text = screen.getByText('Premium hierarchy');
     const inlineStyle = text.getAttribute('style') ?? '';
-    expect(inlineStyle).toContain('--ds-font-family-display');
+    // `family` is painted by the skin on `data-family`; `leading` and
+    // `tracking` are still the engine's, reading the same public channels.
+    expect(text).toHaveAttribute('data-family', 'display');
+    expect(modernTypographyCss).toContain("[data-family='display']");
     expect(inlineStyle).toContain('--ds-line-height-snug');
     expect(inlineStyle).toContain('--ds-letter-spacing-tight');
     expect(text).toHaveAttribute('data-contrast', 'strong');
