@@ -74,6 +74,37 @@ describe("the family registry", () => {
     expect([...new Set(collisions)].sort()).toEqual([]);
   });
 
+  it("keeps every family chrome deriver inside its own channel namespace", () => {
+    const root = join(
+      dirname(fileURLToPath(import.meta.url)),
+      "../runtime/derivation/chrome",
+    );
+    const chromeFamilies = new Set(
+      readdirSync(root, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name),
+    );
+    const strays: string[] = [];
+    for (const fixture of FIXTURES) {
+      const context = buildLoweringContext({
+        theme: fixture.theme,
+        tenant: fixture.tenant,
+      });
+      for (const deriver of FAMILY_DERIVERS) {
+        if (!chromeFamilies.has(deriver.family)) continue;
+        for (const channel of Object.keys(deriver.derive(context, {}))) {
+          if (
+            channel !== `--ds-${deriver.family}` &&
+            !channel.startsWith(`--ds-${deriver.family}-`)
+          ) {
+            strays.push(`${deriver.family} produces ${channel}`);
+          }
+        }
+      }
+    }
+    expect([...new Set(strays)].sort()).toEqual([]);
+  });
+
   it("has no deriver that imports another deriver", () => {
     const root = join(
       dirname(fileURLToPath(import.meta.url)),

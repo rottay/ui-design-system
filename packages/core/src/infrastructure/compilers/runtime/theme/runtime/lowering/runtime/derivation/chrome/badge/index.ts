@@ -108,17 +108,6 @@ export const badgeChromeDeriver: FamilyDeriver = {
     "--ds-badge-spinner-duration",
     "--ds-badge-surface",
     "--ds-badge-surface-pressed",
-    "--ds-color-alpha-black-100",
-    "--ds-filter-pill-active-bg",
-    "--ds-filter-pill-active-border",
-    "--ds-filter-pill-active-color",
-    "--ds-filter-pill-active-shadow",
-    "--ds-filter-pill-count-active-bg",
-    "--ds-filter-pill-count-active-border",
-    "--ds-filter-pill-count-active-ring",
-    "--ds-filter-pill-count-bg",
-    "--ds-filter-pill-count-border",
-    "--ds-filter-pill-count-ring",
   ],
   derive: () => deriveBadgeChannels(),
 };
@@ -126,8 +115,10 @@ export const badgeChromeDeriver: FamilyDeriver = {
 /**
  * NOT produced here, by design: the channels the divergence law keeps
  * UNAUTHORED by the vertical, so a customer can still pin what the cascade
- * otherwise resolves. Their resting values live in the family's skin root,
- * which gives the gate a producer without putting them in the artifact.
+ * otherwise resolves; and the names another owner already writes -- the
+ * palette's alpha ramp, and the pill channels the kernel itself lowers from
+ * `chrome.filterPill`. Their resting values live in authored CSS, which gives
+ * the gate a producer without a second writer in the artifact.
  */
 export function deriveBadgeChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
@@ -213,16 +204,5 @@ export function deriveBadgeChannels(): Record<string, string> {
   vars["--ds-badge-spinner-duration"] = "calc(var(--ds-motion-slow) * 2)";
   vars["--ds-badge-surface"] = "var(--ds-color-neutral-200)";
   vars["--ds-badge-surface-pressed"] = "var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback))";
-  vars["--ds-color-alpha-black-100"] = "color-mix(in srgb, var(--ds-color-text-primary) 20%, transparent)";
-  vars["--ds-filter-pill-active-bg"] = "var(--ds-color-alpha-primary-10)";
-  vars["--ds-filter-pill-active-border"] = "color-mix(in srgb, var(--ds-color-primary) 34%, transparent)";
-  vars["--ds-filter-pill-active-color"] = "var(--ds-color-primary)";
-  vars["--ds-filter-pill-active-shadow"] = "inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent)";
-  vars["--ds-filter-pill-count-active-bg"] = "var(--ds-surface-raised)";
-  vars["--ds-filter-pill-count-active-border"] = "currentColor";
-  vars["--ds-filter-pill-count-active-ring"] = "none";
-  vars["--ds-filter-pill-count-bg"] = "var(--ds-surface-raised, var(--ds-color-bg-elevated))";
-  vars["--ds-filter-pill-count-border"] = "color-mix(in srgb, currentColor 16%, transparent)";
-  vars["--ds-filter-pill-count-ring"] = "none";
   return vars;
 }

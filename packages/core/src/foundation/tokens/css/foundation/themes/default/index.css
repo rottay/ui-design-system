@@ -202,6 +202,14 @@
   --ds-color-alpha-error-20: rgba(239, 68, 68, 0.20);
   --ds-color-alpha-info-10: rgba(59, 130, 246, 0.10);
 
+  /* Not the opaque end of the black ramp above: every skin that reads this
+     name reads it as the ink tint below, so the default states that value. */
+  --ds-color-alpha-black-100: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 20%,
+    transparent
+  );
+
   --ds-color-bg-primary: var(--ds-color-neutral-50);
   --ds-color-bg-secondary: var(--ds-color-neutral-100);
   --ds-color-bg-tertiary: var(--ds-color-neutral-200);
