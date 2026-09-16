@@ -5095,6 +5095,11 @@
      "at": "2026-09-16 09:33",
      "by": "kimi-admin",
      "note": "B2+B3 parcial verde integrado en arbol (pendiente de commit tras paridad): 9/10 BLOCKING cerrados por causa real (geometria saved-views-menu via canales --ds-saved-views-menu-panel-* con fisicas deliberadas por rect de viewport; probes a11y en 3 familias; data-state de dominio renombrado a data-filter-state liberando la autoridad compartida, 23 selectores re-clavados; 32 selectores list-toolbar dejan de pedir prestado el contrato de Button via .ds-button.ds-button). STOP 2: 10 headers de skin pineados. Censo externo: solo filter-panel (4 escrituras !important en app-bithire, registradas). PENDIENTE registrado: derivers + suites de causalidad de list-toolbar (96 ch + 8 lit + 1 BLOCKING), saved-views (29+8), column-settings (21), filter-panel (11); paridad de navegador list-toolbar en ejecucion. Seis familias sin canales quedan listas para pin de baseline."
+    },
+    {
+     "at": "2026-09-16 09:38",
+     "by": "kimi-admin",
+     "note": "B2+B3 parcial integrado (e8c78c576, 14 archivos, sin list-toolbar). HALLAZGO DE AUDITORIA: 7 tests skin-reachability rojos PREEXISTENTES (A/B verificado: identicos en HEAD 533e3c290 y en arbol, heredados de la consolidacion a3ba2e479) en active-filters-bar x3, column-menu x2, field-filters-panel x2 — los engines no estampan parts que los skins nombran (actions/chips/rail/clear-all/row-content). El writer los reporto verdes: misreport; se le devuelve como alcance de corte de esas 3 familias, a arreglar por stamping real o adjudicacion de selectores, nunca bajando el test. Regla nueva para writers: la suite de familia se corre ENTERA incluyendo archivos skin-reachability antes de reportar verde."
     }
    ]
   },
