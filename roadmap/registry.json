@@ -5219,6 +5219,11 @@
      "at": "2026-09-16 09:53",
      "by": "kimi-admin",
      "note": "Migracion lote 1 INTEGRADA (8a9711cb4, 41 archivos). Auditoria completa contra codigo: suites de las 13 familias 99 archivos/983 tests verdes en mi propia corrida; gate 21->17 probes con filas retiradas; drill 15/15; grep agnostico 0/0 en ambos kernels; remedy time-picker segun regla 3; changeset con contract-diff. Lote 2 en ejecucion (15 probes en 7 archivos + Tabs re-armado con contra-factual rojo; fence active-filters-bar mientras FAM-08 estampa parts ahi)."
+    },
+    {
+     "at": "2026-09-16 10:13",
+     "by": "kimi-admin",
+     "note": "Migracion lote 2 INTEGRADA (30c36e036, 14 archivos). Auditoria propia: suites 42 archivos/449 tests verdes; gate 2 probes/1 archivo (solo active-filters-bar pineado, fence mientras el lote flex esta en vuelo); drill 15/15 con re-ancla auditada (piso sobre las 3 excepciones permanentes, no sobre deuda que llega a cero); grep 0/7; Group C con sus primeras 3 coberturas RTL + 3 contra-factuales LTR; Tabs con fixture discriminante y contra-factual rojo permanente; censo Group D (provider reclama documentElement.dir, scope=element mejora). ERRATA MIA registrada: 8a9711cb4 llevo el baseline final un commit antes (slip de staging al no re-leer el archivo compartido; queda anotado en el propio commit 30c36e036). Restan: 2 probes de active-filters-bar (tras lote flex) + gate de propiedades fisicas (censo en curso) + cierre."
     }
    ]
   },
