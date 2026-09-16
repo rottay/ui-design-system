@@ -1071,6 +1071,40 @@ test('CONTROL: a class no owner claims stays this family\'s candidate whatever t
   });
 });
 
+const plantTierSkin = (sandbox, dir, css) => {
+  const skin = join(sandbox, `src/foundation/tokens/css/runtime/engines/modern/skin/${dir}/index.css`);
+  mkdirSync(dirname(skin), { recursive: true });
+  writeFileSync(skin, css);
+};
+
+test('PLANT: a `pattern-<family>` skin painting the family\'s tier class is the family\'s', () => {
+  withResolvedSandbox((sandbox) => {
+    plantTierSkin(
+      sandbox,
+      'pattern-button',
+      ".ds-pattern-button[data-part='root'] { color: var(--ds-button-tier-unproduced, var(--ds-color-primary)); }\n",
+    );
+  }, {}, (findings, resolved) => {
+    // A pattern names its skin and its class for the TIER, never for the owner;
+    // reading the directory literally left those families measuring zero skins.
+    assert.ok(resolved.skins.some((file) => file.includes('pattern-button')), 'the tier skin is measured');
+    expectFinding(findings, grew('readWithoutProducer'), "the tier skin's debt is the family's");
+  });
+});
+
+test("CONTROL: a `pattern-<other>` skin is still another family's", () => {
+  withResolvedSandbox((sandbox) => {
+    plantTierSkin(
+      sandbox,
+      'pattern-planted',
+      ".ds-pattern-planted[data-part='root'] { color: inherit; }\n",
+    );
+  }, {}, (findings, resolved) => {
+    assert.ok(!resolved.skins.some((file) => file.includes('pattern-planted')));
+    assert.deepEqual(findings, []);
+  });
+});
+
 const PLANTED_CRAFT = 'src/components/primitives/inputs/button/runtime/planted-craft/index.tsx';
 
 /** A module that paints inline, and the two import shapes that decide its fate. */

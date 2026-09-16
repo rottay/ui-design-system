@@ -153,8 +153,23 @@ const toPosix = (value) => value.split(sep).join('/');
  * compound of it (`button` owns `button-group`, `button-icon`; it does NOT own
  * `export-button`, which is a different family that merely ends in the word).
  */
+/**
+ * The UI tier a class carries between its vocabulary and the family name. A
+ * pattern paints `.ds-pattern-<family>`, a structure `.ds-structure-<family>`,
+ * and its skin directory is named for the class, not for the owner. Neither
+ * the token nor the directory names the family until this comes off.
+ */
+const TIER_PREFIXES = Object.freeze(['pattern', 'structure']);
+
+const withoutTier = (name) => {
+  for (const tier of TIER_PREFIXES) {
+    if (name.startsWith(`${tier}-`)) return name.slice(tier.length + 1);
+  }
+  return name;
+};
+
 function skinBelongsToFamily(file, family) {
-  const owner = basename(dirname(file));
+  const owner = withoutTier(basename(dirname(file)));
   return owner === family || owner.startsWith(`${family}-`);
 }
 
@@ -166,10 +181,10 @@ function skinBelongsToFamily(file, family) {
  * measured family, and every exclusion is reported.
  */
 function foreignCompoundReason(file, family, ownerNames, familyClassTokens) {
-  const owner = basename(dirname(file));
+  const owner = withoutTier(basename(dirname(file)));
   if (owner === family) return undefined;
   const underName = (token, name) => {
-    const remainder = token.slice(token.indexOf('-') + 1);
+    const remainder = withoutTier(token.slice(token.indexOf('-') + 1));
     return remainder === name || remainder.startsWith(`${name}-`) || remainder.startsWith(`${name}_`);
   };
   // A token belongs to ANOTHER family when some other component owner carries
