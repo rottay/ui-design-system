@@ -232,8 +232,13 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loadi
   animation-direction: reverse;
 }
 
+/* Reduced motion, on the same law the bones above follow: the guard names the
+   selectors that actually animate, one per variant, rather than every bar under a
+   loading row. The flat fill is the bar's own base background, so naming `pulse`
+   -- which never overrode it -- collapses the sweep without repainting anything. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-skeleton-anatomy-rows[data-loading='true'] [data-part='skeleton-bar'] {
+  .ds-skeleton-anatomy-rows[data-loading='true'][data-animation='pulse'] [data-part='skeleton-bar'],
+  .ds-skeleton-anatomy-rows[data-loading='true'][data-animation='shimmer'] [data-part='skeleton-bar'] {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     background: var(

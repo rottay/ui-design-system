@@ -110,17 +110,34 @@ function productiveSelectors(blanked: string): Set<string> {
   return out;
 }
 
-/** Body of the first `prefers-reduced-motion: reduce` block, brace-balanced. */
-function reduceBlock(blanked: string): string | null {
-  const open = blanked.match(/@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)\s*\{/);
-  if (open?.index === undefined) return null;
-  let i = open.index + open[0].length;
-  const start = i;
-  for (let depth = 1; i < blanked.length && depth > 0; i += 1) {
-    if (blanked[i] === "{") depth += 1;
-    else if (blanked[i] === "}") depth -= 1;
+/** The bodies of EVERY `prefers-reduced-motion: reduce` block in the file, brace-balanced
+ *  and concatenated; `null` when the file has none.
+ *
+ *  ALL of them, not the first. This read used to stop at the first block, which made a
+ *  second one invisible: a file could guard its motion correctly and still be reported as
+ *  an owner with a gap, and -- worse in the other direction -- a guard could be deleted
+ *  from the second block without the roster noticing. The skeleton-anatomy skin is the
+ *  worked example: its bones are guarded near the top and the table-rows mode, added
+ *  later, carries its own block near the bottom. Six of its eight animating selectors were
+ *  read as guarded and two as a gap, when all eight were collapsed on disk.
+ *
+ *  One block per section is the shape this file's authors actually write, because a guard
+ *  belongs next to the motion it collapses. The instrument has to read the file the way it
+ *  is written. */
+function reduceBlocks(blanked: string): string | null {
+  const opens = [...blanked.matchAll(/@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)\s*\{/g)];
+  if (opens.length === 0) return null;
+  const bodies: string[] = [];
+  for (const open of opens) {
+    let i = (open.index ?? 0) + open[0].length;
+    const start = i;
+    for (let depth = 1; i < blanked.length && depth > 0; i += 1) {
+      if (blanked[i] === "{") depth += 1;
+      else if (blanked[i] === "}") depth -= 1;
+    }
+    bodies.push(blanked.slice(start, i - 1));
   }
-  return blanked.slice(start, i - 1);
+  return bodies.join("\n");
 }
 
 /** The conventional near-zero a reduce guard collapses to. Held once, here, so the roster's
@@ -171,7 +188,7 @@ describe("R5 motion batch -- the guarded roster is exactly the 23 motion-owning 
 
   it.each(ROSTER)("%s carries a reduce guard collapsing duration without killing the event", (path) => {
     const blanked = blankComments(readFileSync(join(CSS_ROOT, path), "utf8"));
-    const block = reduceBlock(blanked);
+    const block = reduceBlocks(blanked);
     expect(block).not.toBeNull();
     /* Near-zero, not `none`: transitionend/animationend still fire, so no state machine stalls. */
     expect(block).toMatch(reducedMotionDuration("transition-duration"));
@@ -194,7 +211,7 @@ describe("R5 motion batch -- the guarded roster is exactly the 23 motion-owning 
        motion, so the weaker probe is no longer needed to keep this green. */
     expect(productive.size).toBeGreaterThan(0);
 
-    const block = reduceBlock(blanked) ?? "";
+    const block = reduceBlocks(blanked) ?? "";
     /* Exact ownership, both directions at once. Forward: every animating selector is collapsed,
        or the file has a real gap. Backward: the guard names NOTHING else, because a prelude entry
        with no motion behind it is an absentee owner -- the longhands are `!important`, so they
@@ -269,7 +286,7 @@ describe("header hero -- three files, one guard per declared motion, no selector
        guarded) rather than riding along unguarded. */
     expect([...productiveSelectors(blanked)].sort()).toEqual(expected);
 
-    const block = reduceBlock(blanked);
+    const block = reduceBlocks(blanked);
     expect(block).not.toBeNull();
 
     /* Exact in the other direction: guarding a neighbour's selector would make two files own
@@ -300,7 +317,7 @@ describe("record-facts -- the shimmer is guarded by the file that declares it", 
        along on a prelude written for the sweep alone. */
     expect([...productiveSelectors(owner)]).toEqual([RECORD_FACTS_SWEEP]);
 
-    const block = reduceBlock(owner);
+    const block = reduceBlocks(owner);
     expect(block).not.toBeNull();
 
     /* Exact in the other direction too. The prelude is deliberately the base selector ONLY: the
@@ -323,7 +340,7 @@ describe("record-facts -- the shimmer is guarded by the file that declares it", 
 
     /* The modern skin animates nothing, so it owes no guard and carries no sentinel. */
     expect([...productiveSelectors(skin)]).toEqual([]);
-    expect(reduceBlock(skin)).toBeNull();
+    expect(reduceBlocks(skin)).toBeNull();
     expect(SENTINEL.test(skinSource)).toBe(false);
 
     /* ...and it is motionless because its only shorthand CANCELS motion, not because the paint
@@ -367,7 +384,7 @@ describe("relocated motion -- a guard follows its rule out of the batch's path s
       expect([...productiveSelectors(blanked)]).toContain(selector);
 
       /* And the collapse names it, in the same file, with the canonical longhand triple. */
-      const block = reduceBlock(blanked);
+      const block = reduceBlocks(blanked);
       expect(block).not.toBeNull();
       expect(guardedSelectors(block ?? "")).toContain(selector);
       expect(block).toMatch(reducedMotionDuration("transition-duration"));
@@ -381,7 +398,7 @@ describe("relocated motion -- a guard follows its rule out of the batch's path s
     /* The origin left the roster because its motion left, not because someone deleted a
        sentinel: both directions are asserted so a half-done relocation is caught. */
     expect([...productiveSelectors(blanked)]).toEqual([]);
-    expect(reduceBlock(blanked)).toBeNull();
+    expect(reduceBlocks(blanked)).toBeNull();
     expect(SENTINEL.test(source)).toBe(false);
   });
 
@@ -395,7 +412,7 @@ describe("relocated motion -- a guard follows its rule out of the batch's path s
     }`;
     const selector = ".rottay-scroll-area-classic::-webkit-scrollbar-thumb";
     expect([...productiveSelectors(withoutGuard)]).toContain(selector);
-    expect(reduceBlock(withoutGuard)).toBeNull();
+    expect(reduceBlocks(withoutGuard)).toBeNull();
 
     const withGuard = `${withoutGuard}
     @media (prefers-reduced-motion: reduce) {
@@ -405,7 +422,7 @@ describe("relocated motion -- a guard follows its rule out of the batch's path s
         animation-iteration-count: 1 !important;
       }
     }`;
-    expect(guardedSelectors(reduceBlock(withGuard) ?? "")).toContain(selector);
+    expect(guardedSelectors(reduceBlocks(withGuard) ?? "")).toContain(selector);
   });
 
   it("PLANTED: a relocation that dropped the motion on the way is caught", () => {
@@ -415,5 +432,138 @@ describe("relocated motion -- a guard follows its rule out of the batch's path s
       background: red;
     }`;
     expect([...productiveSelectors(destinationMissingTheRule)]).toEqual([]);
+  });
+});
+
+/** The skeleton-anatomy table-rows guard, and the two defects that hid it.
+ *
+ *  The reported symptom was an accessibility gap: the roster said this file animated eight
+ *  selectors and collapsed six. The motion was in fact collapsed on disk the whole time --
+ *  the table-rows mode carries its own reduce block, and its guard reached both variants --
+ *  so nothing ever swept for a reader who asked for reduced motion. What was wrong was the
+ *  SHAPE, in two independent places, and a 2x2 over (CSS, reader) shows neither fix alone
+ *  is enough: HEAD's CSS stays red under either reader, and the every-block reader on
+ *  HEAD's CSS turns the two missing rows into one absentee owner instead.
+ *
+ *    - the reader stopped at the FIRST reduce block, so the second was invisible; and
+ *    - the guard named every bar under a loading row, not the two that animate, which the
+ *      file's own ownership law forbids: an `!important` collapse reaching an element whose
+ *      motion this file does not own is how a stylesheet ends up cancelling a neighbour's.
+ *
+ *  Both are covered below on synthetic sources, so the cases keep biting after the tree is
+ *  right. */
+describe("skeleton-anatomy table rows -- a second guard block, and a guard that named too much", () => {
+  const TWO_BLOCK_SOURCE = `
+    .bones[data-loading='true'] [data-part='bone'] { animation: pulse 1s infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .bones[data-loading='true'] [data-part='bone'] {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+    .rows[data-loading='true'][data-animation='pulse'] [data-part='bar'] { animation: pulse 1s infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .rows[data-loading='true'][data-animation='pulse'] [data-part='bar'] {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }`;
+
+  /** The read as it was: stops at the first block. Kept here, and nowhere else, so the
+   *  regression it caused stays reproducible instead of becoming a story in a comment. */
+  const firstBlockOnly = (blanked: string): string | null => {
+    const open = blanked.match(/@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)\s*\{/);
+    if (open?.index === undefined) return null;
+    let i = open.index + open[0].length;
+    const start = i;
+    for (let depth = 1; i < blanked.length && depth > 0; i += 1) {
+      if (blanked[i] === "{") depth += 1;
+      else if (blanked[i] === "}") depth -= 1;
+    }
+    return blanked.slice(start, i - 1);
+  };
+
+  it("PLANTED: a second reduce block is read, and the superseded reader proves it was not", () => {
+    const productive = [...productiveSelectors(TWO_BLOCK_SOURCE)].sort();
+    expect(productive).toHaveLength(2);
+
+    /* The defect, reproduced: the old read sees one of the two collapses. */
+    expect(guardedSelectors(firstBlockOnly(TWO_BLOCK_SOURCE) ?? "").sort()).toEqual([
+      ".bones[data-loading='true'] [data-part='bone']",
+    ]);
+
+    /* And the read in force sees both, so the file balances. */
+    expect(guardedSelectors(reduceBlocks(TWO_BLOCK_SOURCE) ?? "").sort()).toEqual(productive);
+  });
+
+  it("PLANTED: a guard broader than its motion is still an absentee owner", () => {
+    /* The exactness law is NOT relaxed by reading more blocks. A guard that collapses every
+       bar under a loading row -- including bars no rule in this file animates -- reaches
+       elements whose motion it does not own, and the two sides must disagree. */
+    const broad = `
+      .rows[data-loading='true'][data-animation='pulse'] [data-part='bar'] { animation: pulse 1s infinite; }
+      @media (prefers-reduced-motion: reduce) {
+        .rows[data-loading='true'] [data-part='bar'] {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }`;
+    const productive = [...productiveSelectors(broad)].sort();
+    const guarded = guardedSelectors(reduceBlocks(broad) ?? "").sort();
+    expect(guarded).not.toEqual(productive);
+    expect(guarded.filter((s) => !productive.includes(s))).toEqual([
+      ".rows[data-loading='true'] [data-part='bar']",
+    ]);
+  });
+
+  it("the narrowing collapses exactly what the broad guard did, measured with a selector engine", () => {
+    /* Containment, not an argument about it. Every element the superseded broad selector
+       collapsed either still matches one of the two named selectors, or never animated --
+       so no reader who asked for reduced motion loses a collapse by this change. */
+    const BROAD = ".ds-skeleton-anatomy-rows[data-loading='true'] [data-part='skeleton-bar']";
+    const NAMED = [
+      ".ds-skeleton-anatomy-rows[data-loading='true'][data-animation='pulse'] [data-part='skeleton-bar']",
+      ".ds-skeleton-anatomy-rows[data-loading='true'][data-animation='shimmer'] [data-part='skeleton-bar']",
+    ];
+
+    const bar = (animation: string | null): Element => {
+      const row = document.createElement("div");
+      row.className = "ds-skeleton-anatomy-rows";
+      row.setAttribute("data-loading", "true");
+      if (animation !== null) row.setAttribute("data-animation", animation);
+      const cell = document.createElement("div");
+      cell.setAttribute("data-part", "skeleton-bar");
+      row.append(cell);
+      document.body.append(row);
+      return cell;
+    };
+
+    for (const animation of ["pulse", "shimmer"]) {
+      const element = bar(animation);
+      expect(element.matches(BROAD)).toBe(true);
+      expect(NAMED.some((selector) => element.matches(selector))).toBe(true);
+    }
+
+    /* The one case the narrowing drops: a bar under a loading row with no animation chosen.
+       It matched the broad guard and has nothing to collapse, which is exactly the reach the
+       ownership law objects to. */
+    const inert = bar(null);
+    expect(inert.matches(BROAD)).toBe(true);
+    expect(NAMED.some((selector) => inert.matches(selector))).toBe(false);
+  });
+
+  it("the shipped file balances, and its rows guard names both variants", () => {
+    const source = readFileSync(
+      join(CSS_ROOT, "presentation/components/skin/skeleton-anatomy/index.css"),
+      "utf8",
+    );
+    const blanked = blankComments(source);
+    const productive = [...productiveSelectors(blanked)].sort();
+    expect(productive).toHaveLength(8);
+    expect(guardedSelectors(reduceBlocks(blanked) ?? "").sort()).toEqual(productive);
+
+    /* Two blocks, not one: the guard lives beside the motion it collapses, which is the
+       shape the reader was taught to expect. */
+    expect(blanked.match(/@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)/g)).toHaveLength(2);
   });
 });
