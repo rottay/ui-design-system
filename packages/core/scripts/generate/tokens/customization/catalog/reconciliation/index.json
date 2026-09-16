@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/catalog/index.mjs --write",
-  "basedOnReportDigest": "46ac528748391c46e9f97cc3f6605219b85c44d37fd961f8acbe3c393f5caf0e",
+  "basedOnReportDigest": "5a6d0ccb3bbed6d5540542305ae9c02ea0be61bc777cecdcca74949f59f0e8e3",
   "normative": {
-    "writers": 4693,
-    "deadWriters": 283,
+    "writers": 6350,
+    "deadWriters": 277,
     "definition": "writer names and productive reads are derived by the customization surface census"
   },
   "familyAdjudication": [
@@ -51,7 +51,7 @@
     {
       "family": "--ds-input-*",
       "disposition": "COMPONENT_PRIVATE",
-      "count": 5
+      "count": 4
     },
     {
       "family": "--ds-button-*",
@@ -86,7 +86,7 @@
     {
       "family": "remainder",
       "disposition": "KEEP_INTERNAL",
-      "count": 98
+      "count": 93
     }
   ],
   "preservationManifest": "../preservation/manifest/index.json"
