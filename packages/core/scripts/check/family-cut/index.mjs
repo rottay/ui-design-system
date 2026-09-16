@@ -842,11 +842,14 @@ export function analyzeSkin(file) {
     }
   }
 
+  const maskValues = maskImageValueRanges(text);
   const colorLiterals = [];
+  const maskAlphaStops = [];
   for (const match of text.matchAll(
     /(?<![\w-])(#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?|oklch|oklab|lab|lch)\s*\()/gu,
   )) {
-    colorLiterals.push({
+    const inMask = maskValues.some(([start, end]) => match.index >= start && match.index < end);
+    (inMask ? maskAlphaStops : colorLiterals).push({
       value: match[1],
       line: text.slice(0, match.index).split('\n').length,
       file,
@@ -895,7 +898,28 @@ export function analyzeSkin(file) {
     skeletonSigns.push({ what: `selector \`${match[0]}\``, line: lineAt(match.index), file });
   }
 
-  return { file, parts, states, classTokens, selectsVariant, colorLiterals, unpairedPseudo, antReads, skeletonSigns };
+  return { file, parts, states, classTokens, selectsVariant, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
+}
+
+/**
+ * The value spans of `mask-image` / `-webkit-mask-image` declarations. A mask
+ * reads only alpha, so its gradient stops are not paint and no decision moves them.
+ */
+function maskImageValueRanges(text) {
+  const ranges = [];
+  for (const match of text.matchAll(/(?<![\w-])(?:-webkit-)?mask-image\s*:/gu)) {
+    const start = match.index + match[0].length;
+    let depth = 0;
+    let end = start;
+    for (; end < text.length; end += 1) {
+      const char = text[end];
+      if (char === '(') depth += 1;
+      else if (char === ')') depth = Math.max(0, depth - 1);
+      else if (depth === 0 && (char === ';' || char === '}' || char === '{')) break;
+    }
+    ranges.push([start, end]);
+  }
+  return ranges;
 }
 
 // ---------------------------------------------------------------------------
@@ -1053,6 +1077,7 @@ export function measureFamily(resolved, { producers } = {}) {
 
   const unpairedStatePseudo = skins.flatMap((skin) => skin.unpairedPseudo);
   const colorLiteralsInSkin = skins.flatMap((skin) => skin.colorLiterals);
+  const maskAlphaStops = skins.flatMap((skin) => skin.maskAlphaStops);
   const antReads = skins.flatMap((skin) => skin.antReads);
   const inlineStyleViolations = sources.flatMap((entry) => entry.inlineStyleViolations);
   const visualLiterals = sources.flatMap((entry) => entry.visualLiterals);
@@ -1113,6 +1138,8 @@ export function measureFamily(resolved, { producers } = {}) {
       partsConsumedNotStamped,
       statesConsumedNotStamped,
       unpairedStatePseudo,
+      colorLiteralsInSkin,
+      maskAlphaStops,
       readWithoutProducer: readWithoutProducer.debt,
       fanOut,
       owners: resolved.componentDirs.map((dir) => toPosix(relative(root, dir))),

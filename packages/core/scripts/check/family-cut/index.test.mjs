@@ -862,6 +862,98 @@ test('SHAPE: an empty roster is refused', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Mask alpha stops: a mask reads only alpha, so no decision can move its stops
+// ---------------------------------------------------------------------------
+
+const SKIN_ROOT = 'src/foundation/tokens/css/runtime/engines/modern/skin';
+
+function analyzeCss(css) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-mask-'));
+  try {
+    const file = join(sandbox, 'index.css');
+    writeFileSync(file, css);
+    return analyzeSkin(file);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+const MASK_STOP_SPELLINGS = ['#000', '#fff', '#000000cc', 'rgb(0 0 0)', 'rgba(0, 0, 0, 0.5)', 'hsl(0 0% 0%)', 'oklch(0 0 0)', 'black'];
+
+for (const spelling of MASK_STOP_SPELLINGS) {
+  test(`CONTROL: a \`${spelling}\` stop inside \`mask-image\` and \`-webkit-mask-image\` is not a colour literal`, () => {
+    const analyzed = analyzeCss(
+      `.x {\n  -webkit-mask-image: linear-gradient(to right, ${spelling} 0%, ${spelling} calc(100% - 1rem), transparent 100%);\n`
+        + `  mask-image: linear-gradient(\n    to right,\n    ${spelling} 0%,\n    transparent 100%\n  )\n}\n`,
+    );
+    assert.deepEqual(analyzed.colorLiterals, [], 'a mask stop is alpha, not paint');
+  });
+
+  test(`PLANT: the same \`${spelling}\` OUTSIDE a mask still counts when its spelling is a literal`, () => {
+    const analyzed = analyzeCss(`.x {\n  background-image: linear-gradient(to right, ${spelling} 0%, transparent 100%);\n}\n`);
+    assert.equal(analyzed.colorLiterals.length, spelling === 'black' ? 0 : 1, 'the exclusion is by declaration, not by spelling');
+  });
+}
+
+test('PLANT: a literal in the declaration AFTER a mask, or in the next rule, still counts', () => {
+  const analyzed = analyzeCss(
+    '.a { mask-image: linear-gradient(#000, transparent); color: #111; }\n'
+      + '.b { -webkit-mask-image: linear-gradient(#000, transparent) }\n.c { border-color: #222; }\n',
+  );
+  assert.deepEqual(analyzed.colorLiterals.map((entry) => entry.value), ['#111', '#222']);
+});
+
+test('PLANT: a custom property whose NAME ends in mask-image is not a mask declaration', () => {
+  const analyzed = analyzeCss('.a { --ds-x-mask-image: linear-gradient(#000, transparent); mask: linear-gradient(#333, transparent); }\n');
+  assert.deepEqual(analyzed.colorLiterals.map((entry) => entry.value), ['#000', '#333']);
+});
+
+test('PLANT: a new mask `#fff` stop in the calibration skin does not grow the counter; a `#000` background does', () => {
+  withPlantedFamily(
+    (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
+      `${text}\n.ds-planted-fade { mask-image: linear-gradient(to right, #fff 0%, #fff 90%, transparent 100%); }\n`),
+    (findings) => expectNoFinding(findings, 'colorLiteralsInSkin', 'a mask stop is not a colour literal'),
+  );
+  withPlantedFamily(
+    (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
+      `${text}\n.ds-planted-fade { background-image: linear-gradient(to right, #000 0%, transparent 100%); }\n`),
+    (findings) => expectFinding(findings, grew('colorLiteralsInSkin'), 'a background stop is paint'),
+  );
+});
+
+const MASK_PRECEDENTS = [
+  ['auto-complete', 'black', '#000'],
+  ['time-picker', 'black', '#000'],
+  ['pattern-kanban-board', 'black', '#000'],
+  ['list-toolbar', '#000', 'black'],
+  ['saved-views', '#000', 'black'],
+];
+
+for (const [skin, from, to] of MASK_PRECEDENTS) {
+  test(`CONSISTENT: ${skin} mask stops measure the same as \`${from}\` and respelled \`${to}\`, and count once no longer a mask`, () => {
+    const live = readFileSync(join(ROOT, SKIN_ROOT, skin, 'index.css'), 'utf8');
+    const masks = /(?<![\w-])((?:-webkit-)?mask-image\s*:[^;}]*)/gu;
+    assert.ok((live.match(masks) ?? []).length > 0, `${skin} writes a mask-image declaration`);
+    const respell = (text, a, b) => text.replace(masks, (declaration) => declaration.replaceAll(a, b));
+    const hexed = respell(live, 'black', '#000');
+    const stops = (hexed.match(masks) ?? []).join('').split('#000').length - 1;
+    assert.ok(stops > 0, `${skin} has mask stops to measure`);
+
+    const liveCount = analyzeSkin(join(ROOT, SKIN_ROOT, skin, 'index.css')).colorLiterals.length;
+    assert.equal(analyzeCss(respell(live, from, to)).colorLiterals.length, liveCount, 'spelling moves nothing inside a mask');
+    assert.equal(analyzeCss(hexed).colorLiterals.length, liveCount, 'the hex spelling is excluded too');
+    const unmasked = hexed.replace(/(?<![\w-])(?:-webkit-)?mask-image(\s*:)/gu, 'background-image$1');
+    assert.equal(analyzeCss(unmasked).colorLiterals.length, liveCount + stops, 'the same stops outside a mask are literals');
+  });
+}
+
+test('LIVE: list-toolbar and saved-views skins carry no colour literal once mask stops are read as alpha', () => {
+  for (const skin of ['list-toolbar', 'saved-views']) {
+    assert.deepEqual(analyzeSkin(join(ROOT, SKIN_ROOT, skin, 'index.css')).colorLiterals, [], skin);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Reading discipline
 // ---------------------------------------------------------------------------
 

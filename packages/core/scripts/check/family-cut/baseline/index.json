@@ -1235,6 +1235,69 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0
+    },
+    "saved-views": {
+      "cut": "WO-FAM-08",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 51,
+        "classTokens": 1,
+        "partsStamped": 12,
+        "partsConsumed": 11
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 3,
+      "partsConsumedNotStamped": 2,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 13,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-08: the saved-views bar measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; colorLiteralsInSkin is 0 because the 8 #000 stops of the inline-end scroll fade live in mask-image / -webkit-mask-image and a mask reads only alpha (the gate reads them as maskAlphaStops); the decision-causality suite is PatternSavedViewsBar.causality.integration.test.tsx."
+    },
+    "column-settings": {
+      "cut": "WO-FAM-08",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 38,
+        "classTokens": 2,
+        "partsStamped": 14,
+        "partsConsumed": 13
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 9,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-08: the column-settings panel measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; the decision-causality suite is ColumnSettings.causality.integration.test.tsx."
+    },
+    "filter-panel": {
+      "cut": "WO-FAM-08",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 37,
+        "classTokens": 0,
+        "partsStamped": 20,
+        "partsConsumed": 19
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 2,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 2,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-08: the filter panel measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; the decision-causality suite is FilterPanel.causality.integration.test.tsx."
     }
   }
 }
