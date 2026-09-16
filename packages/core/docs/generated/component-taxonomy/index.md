@@ -12,16 +12,16 @@
 |---|---|
 | `display/` | 24 (avatar, badge, calendar, callout, card, ...) |
 | `feedback/` | 11 (alert, drawer, message, modal, notification, ...) |
-| `inputs/` | 25 (auto-complete, button, cascader, checkbox, color-picker, ...) |
+| `inputs/` | 24 (auto-complete, button, cascader, checkbox, color-picker, ...) |
 | `layout/` | 16 (ascii-frame, aspect-ratio, box, collapse, container, ...) |
-| `navigation/` | 12 (affix, anchor, back-top, breadcrumb, float-button, ...) |
+| `navigation/` | 11 (affix, anchor, back-top, breadcrumb, float-button, ...) |
 | `overlay/` | 10 (alert-dialog, confirm-dialog, context-menu, dropdown, hover-card, ...) |
 
-**Total**: 6 categories containing 98 governed primitive components.
+**Total**: 6 categories containing 96 governed primitive components.
 
 ### Exclusions by rule (not governed components)
 
-- Not exported by the category barrel (support/unexposed): `navigation/examples`.
+- Not exported by the category barrel (support/unexposed): `feedback/notifier`, `navigation/examples`.
 
 Tier support: `facade/`, `foundation/`, `runtime/`.
 
@@ -248,7 +248,6 @@ Support: `shell/contracts/`.
 
 ### runtime/
 
-- `runtime/adaptive-posture/`
 - `runtime/builders/`
 - `runtime/collection-workspace/`
 - `runtime/helpers/`
@@ -312,4 +311,4 @@ Support: `shell/contracts/`.
 
 ---
 
-**Summary**: 6 primitive categories (98 components), 132 families across structures/patterns/surfaces.
+**Summary**: 6 primitive categories (96 components), 132 families across structures/patterns/surfaces.
