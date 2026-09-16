@@ -681,6 +681,8 @@
     "decisions-lit": "node scripts/check/decisions-lit/public-cli/index.mjs run",
     "decisions-lit:check": "node scripts/check/decisions-lit/public-cli/index.mjs check",
     "decisions-lit:report": "node scripts/check/decisions-lit/public-cli/index.mjs report",
+    "ds:derive": "node scripts/generate/theme-graph/index.mjs run",
+    "ds:derive:check": "node scripts/generate/theme-graph/index.mjs --check",
     "cascade:extract": "node scripts/check/modern-rescue/cascade/extraction/index.mjs",
     "cascade:producers": "node scripts/check/modern-rescue/cascade/producers/index.mjs",
     "cascade:rewiring": "node scripts/check/modern-rescue/cascade/probe/orchestration/index.mjs",
