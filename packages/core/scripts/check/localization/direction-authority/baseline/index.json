@@ -1,0 +1,56 @@
+{
+  "_comment": "Decrease-only ledger for direction-authority/index.mjs. Every file here still derives the reading direction by measuring the DOM instead of asking `useOptionalDirection`. `probes` is a COUNT PER FILE, not a line list: growth fails --check, a probe in an unpinned file fails as a new owner, and a shrink fails with an instruction to lower the pin, which is how the pin follows the tree DOWN. Anchor/portal readers are NOT pinned here -- they are declared in NAMED_EXCEPTIONS in the gate source, with the reason each one is a different read. Population measured 2026-09-16 after the WO-INV-01 sweep migrated twelve sites across eleven families.",
+  "authority": "src/infrastructure/runtime/i18n/composition/direction",
+  "pinnedDebt": {
+    "patterns/data/detail-panel/engines/modern/index.tsx": {
+      "probes": 1,
+      "group": "C",
+      "reason": "Tablist arrow mirroring reads `getComputedStyle(e.currentTarget).direction` with no `closest` arm at all. Strictly weaker than the twelve already migrated: jsdom does not cascade a `dir` attribute into computed style, so this family's RTL keyboard behaviour is currently untestable in a unit suite."
+    },
+    "patterns/data/file-manager/engines/modern/index.tsx": {
+      "probes": 1,
+      "group": "C",
+      "reason": "Grid-card arrow mirroring, computed-style only, same class and same untestability as detail-panel."
+    },
+    "patterns/navigation/environment-toggle/engines/modern/index.tsx": {
+      "probes": 1,
+      "group": "C",
+      "reason": "APG radiogroup arrow mirroring, computed-style only, same class as detail-panel and file-manager."
+    },
+    "primitives/foundation/scroll-reveal/index.ts": {
+      "probes": 2,
+      "group": "A",
+      "reason": "`elementDirection(scroller)` inside a SHARED pure geometry helper consumed by tabs, pagination, segmented and anchor. It takes an element and is called from event paths, so migrating it is an API change at every consumer, not a substitution -- it belongs with roving-focus in one lot."
+    },
+    "primitives/overlay/context-menu/engines/modern/index.tsx": {
+      "probes": 6,
+      "group": "A",
+      "reason": "Three inline probes (item keydown, menu-level keydown, and the source element captured at open), each reading its own element's context for logical submenu keys. Ordinary migrations."
+    },
+    "primitives/runtime/collection/roving-focus/index.ts": {
+      "probes": 2,
+      "group": "A",
+      "reason": "`resolveReadingDirectionIsRtl` is the SHARED kernel behind 19 call sites in 13 families (tabs, dropdown, calendar, menu, anchor, breadcrumb, hover-card, tree-select, time-picker, cascader, date-picker). One probe is the direction authority for all of them, which makes it the highest-leverage site and the one that needs its own lot: it is a pure resolver taking an element, so the shape of its replacement is an adjudication, not a rewrite."
+    },
+    "structures/workspace/action-dock/runtime/rendering/index.tsx": {
+      "probes": 2,
+      "group": "A",
+      "reason": "`elementDirection(container)` for the APG toolbar arrow model, one call site. Ordinary migration."
+    },
+    "structures/workspace/active-filters-bar/runtime/rendering/index.tsx": {
+      "probes": 2,
+      "group": "A",
+      "reason": "`elementDirection(container)` for the chip-group arrow model, one call site. Ordinary migration."
+    },
+    "structures/workspace/table-toolbar/runtime/rendering/index.tsx": {
+      "probes": 2,
+      "group": "A",
+      "reason": "`elementDirection(container)` for the control-cluster arrow model, one call site. Ordinary migration."
+    },
+    "surfaces/presentation/pages/workspace/collection-workspace/index.tsx": {
+      "probes": 2,
+      "group": "D",
+      "reason": "Preview-rail drag and arrow resize read `getComputedStyle(document.documentElement).direction` -- the document attribute the i18n provider itself writes. The authority returns the same value with SSR correctness, so this is a migration, but it is a surface and needs the same consumer census as a family."
+    }
+  }
+}

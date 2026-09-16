@@ -192,6 +192,13 @@ export const CI_GATES = Object.freeze([
   { id: 'responsive-single-authority-drill', run: ['node', '--test', 'scripts/check/responsive/single-authority/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['responsive-single-authority'], },
   { id: 'responsive-single-authority', run: ['node', 'scripts/check/responsive/single-authority/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'responsive-single-authority-drill', },
 
+  // --- one direction authority (WO-INV-01) ---
+  // Keyed on the `[dir]` SELECTOR LITERAL in any call spelling plus the
+  // computed-style read, because the WO's own roster was built by a grep for
+  // one spelling and went green with sixteen probes still live.
+  { id: 'direction-authority-drill', run: ['node', '--test', 'scripts/check/localization/direction-authority/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['direction-authority'], },
+  { id: 'direction-authority', run: ['node', 'scripts/check/localization/direction-authority/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'direction-authority-drill', ratchet: 'scripts/check/localization/direction-authority/baseline/index.json', },
+
   // --- source-owned artifact freshness: this manifest runs before Build ---
   // These gates execute the authored TypeScript roster and compile CSS from
   // source in memory. A dist/-backed check here is invalid on a clean clone and
