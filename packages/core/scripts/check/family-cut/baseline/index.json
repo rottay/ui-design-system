@@ -895,6 +895,66 @@
       "unpairedStatePseudoSelectors": 20,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 1
+    },
+    "badge": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 193,
+        "classTokens": 3,
+        "partsStamped": 11,
+        "partsConsumed": 9
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 3,
+      "partsStampedNotConsumed": 2,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 5,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
+    },
+    "tag": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 5,
+        "channelsRead": 77,
+        "classTokens": 4,
+        "partsStamped": 5,
+        "partsConsumed": 4
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 4,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 10,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
+    },
+    "avatar": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 7,
+        "channelsRead": 84,
+        "classTokens": 5,
+        "partsStamped": 9,
+        "partsConsumed": 9
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 5,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 7,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
     }
   }
 }

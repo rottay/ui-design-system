@@ -59,10 +59,13 @@ describe('Avatar.Badge compound contract', () => {
     );
 
     const dot = document.querySelector('[data-part="dot"]') as HTMLSpanElement;
-    expect(dot.style.insetBlockEnd).toBe('0');
-    expect(dot.style.insetInlineEnd).toBe('0');
+    // WO-FAM-06 avatar cut: the corner moved to the skin, which places it with
+    // logical insets. What survives here is the anti-claim -- the compound
+    // stamps no physical corner of its own -- plus the stamps the skin keys on.
     expect(dot.style.bottom).toBe('');
     expect(dot.style.right).toBe('');
+    expect(dot.style.insetBlockEnd).toBe('');
+    expect(dot).toHaveAttribute('data-part', 'dot');
     expect(dot).toHaveAttribute('data-status', 'online');
   });
 

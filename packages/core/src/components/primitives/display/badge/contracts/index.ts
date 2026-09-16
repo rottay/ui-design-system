@@ -482,13 +482,13 @@ export const DOT_SIZE_MAP: Record<string, string> = {
  */
 export const STATUS_COLOR_MAP: Record<string, string> = {
   /** Animated pulsing dot indicating an in-progress operation. */
-  processing: 'var(--ds-color-primary-500, #1890ff)',
+  processing: 'var(--ds-color-primary-500)',
   /** Neutral dot for idle / inactive status. */
-  default: 'var(--ds-color-neutral-300, #d9d9d9)',
+  default: 'var(--ds-color-neutral-300)',
   /** Green dot for successful / healthy status. */
-  success: 'var(--ds-color-success-500, #52c41a)',
+  success: 'var(--ds-color-success-500)',
   /** Red dot for failed / critical status. */
-  error: 'var(--ds-color-error-500, #ff4d4f)',
+  error: 'var(--ds-color-error-500)',
   /** Amber dot for degraded / attention-needed status. */
-  warning: 'var(--ds-color-warning-500, #faad14)',
+  warning: 'var(--ds-color-warning-500)',
 } as const;

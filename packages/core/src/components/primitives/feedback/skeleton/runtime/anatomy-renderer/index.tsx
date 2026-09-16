@@ -32,6 +32,15 @@ export type SkeletonPartRole = 'frame' | 'pass' | 'block' | 'line' | 'round' | '
  * missing here fails the family-cut gate until the name is given a role.
  */
 export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = Object.freeze({
+  // ---- badge, tag and avatar anatomy (WO-FAM-06 badge/tag/avatar cut) ----
+  // A dismiss control is a pill; the avatar silhouette is the mask, measured
+  // with its own corner so a rounded square stays square; what fills the
+  // silhouette adds nothing over it.
+  close: 'round',
+  mask: 'block',
+  fallback: 'omit',
+  'status-dot': 'round',
+  surplus: 'round',
   // ---- table anatomy (WO-FAM-06 table cut) ----
   // Containers read their parts; the header title is the only text line; the
   // affordances that mean nothing without data draw nothing.

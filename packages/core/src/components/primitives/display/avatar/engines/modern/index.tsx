@@ -142,10 +142,8 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
 
   // Dimensions come from CSS custom properties so tenant themes can override sizes.
   // Root and mask share the same token-driven dimensions (see the skin header).
-  const sizeStyle = {
-    width: `var(--ds-avatar-${size}-size)`,
-    height: `var(--ds-avatar-${size}-size)`,
-  };
+  // The size is stamped; the skin resolves the step. Nothing travels inline.
+  const sizeStyle = {};
 
   // The variant fill and ink are painted by
   // foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css, keyed on the
@@ -213,9 +211,6 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
       onKeyDown={handleKeyDown}
       style={{
         ...sizeStyle,
-        // PINNED (Avatar.modern-engine-advanced): the interactive cursor rides
-        // the root's inline style.
-        cursor: isInteractive ? "pointer" : undefined,
         ...style,
       }}
     >
@@ -247,10 +242,10 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
             data-part="fallback"
             style={{
               ...customBgStyle,
-              // An explicit textColor is a caller's value, like `style`: it stays
-              // inline and outranks the skin's per-variant ink.
-              ...(textColor ? { color: textColor } : {}),
-            }}
+              // A caller's ink arrives as the family's channel, and the skin
+              // reads it above its own per-variant step.
+              ...(textColor ? ({ '--ds-avatar-ink': textColor } as React.CSSProperties) : {}),
+            } as React.CSSProperties}
           >
             {/*
               Empty-fallback anatomy (P2): with no initials and no children the

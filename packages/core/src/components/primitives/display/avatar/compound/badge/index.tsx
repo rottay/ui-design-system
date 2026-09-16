@@ -50,12 +50,9 @@ export function AvatarBadge({
   style,
 }: AvatarBadgeProps): React.ReactElement {
   const i18n = useOptionalTranslation('components');
-  // Relative container so the badge dot can be absolutely positioned.
-  const containerStyle: CSSProperties = {
-    position: 'relative',
-    display: 'inline-block',
-    ...style,
-  };
+  // The anchor's relative box and the dot's corner are the skin's, keyed on the
+  // stamps below. Only the caller's own `style` travels inline.
+  const containerStyle: CSSProperties = { ...style };
 
   // The dot is sized based on the `dot` prop: 10px for a subtle indicator,
   // 14px for a larger, more prominent one (both tenant-tunable channels). Its
@@ -63,14 +60,6 @@ export function AvatarBadge({
   // by foundation/tokens/css/presentation/components/skin/avatar-compounds/index.css,
   // keyed on the data-status stamp. Positioning is logical: the dot rides the
   // inline-end corner in both writing directions.
-  const badgeStyle: CSSProperties = {
-    position: 'absolute',
-    insetBlockEnd: 0,
-    insetInlineEnd: 0,
-    width: dot ? 'var(--ds-avatar-badge-dot-size, 10px)' : 'var(--ds-avatar-badge-size, 14px)',
-    height: dot ? 'var(--ds-avatar-badge-dot-size, 10px)' : 'var(--ds-avatar-badge-size, 14px)',
-  };
-
   return (
     <div className={`rottay-avatar-badge ${className}`} data-part="anchor" style={containerStyle}>
       {children}
@@ -81,7 +70,7 @@ export function AvatarBadge({
         className="rottay-avatar-badge-dot"
         data-part="dot"
         data-status={status}
-        style={badgeStyle}
+        data-dot={dot ? 'true' : undefined}
         role="img"
         aria-label={i18n ? i18n.t(`avatar.status.${status}`) : `Status: ${status}`}
       />

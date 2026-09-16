@@ -66,11 +66,7 @@ export function AvatarGroup({
 
   // row-reverse causes the first child in the DOM to sit on top visually,
   // producing the standard "stacked left-to-right" avatar overlap.
-  const groupStyle: CSSProperties = {
-    display: 'inline-flex',
-    flexDirection: 'row-reverse',
-    ...style,
-  };
+  const groupStyle: CSSProperties = { ...style };
 
   // Negative left margin creates the horizontal overlap between avatars. The 2px
   // "cut-out" frame that separates each circle is painted by
@@ -78,14 +74,8 @@ export function AvatarGroup({
   // The margin stays physical (never logical): row-reverse already mirrors the
   // visual order in RTL, so the overlap direction is correct in both writing
   // directions. Tenants tune the overlap through the spacing channel.
-  const overlap = 'var(--ds-avatar-group-overlap, var(--ds-avatar-group-compact-spacing, -0.5rem))';
-  const childStyle: CSSProperties = {
-    marginLeft: overlap,
-  };
-  // The last DOM child renders as the visually FIRST (top-most) avatar. Giving
-  // it the negative margin would drag the whole stack past the container's
-  // start edge, so it alone stays at zero.
-  const leadingChildStyle: CSSProperties = {};
+  // The overlap, and the zero margin the leading child alone takes, are the
+  // skin's, keyed on `data-stack-lead`.
 
   // The surplus badge inherits the overlap styling; its neutral fill and secondary
   // ink for the "+N" count live in the skin alongside the frame, and its corner
@@ -93,18 +83,7 @@ export function AvatarGroup({
   // count uses tabular figures so multi-digit overflows stay digit-aligned, and
   // centers its label; consumers size the badge to match their avatars via
   // `maxStyle`. The default tile matches the md avatar.
-  const surplusStyle: CSSProperties = {
-    ...childStyle,
-    display: 'inline-grid',
-    placeItems: 'center',
-    boxSizing: 'border-box',
-    inlineSize: 'var(--ds-avatar-group-surplus-size, var(--ds-avatar-md-size))',
-    blockSize: 'var(--ds-avatar-group-surplus-size, var(--ds-avatar-md-size))',
-    fontSize: 'var(--ds-avatar-group-surplus-font-size, var(--ds-avatar-sm-font-size))',
-    fontWeight: 'var(--ds-avatar-group-overflow-font-weight, var(--ds-font-weight-medium))' as CSSProperties['fontWeight'],
-    fontVariantNumeric: 'tabular-nums',
-    ...maxStyle,
-  };
+  const surplusStyle: CSSProperties = { ...maxStyle };
 
   return (
     <div className={`rottay-avatar-group ${className}`} data-part="root" style={groupStyle}>
@@ -124,7 +103,6 @@ export function AvatarGroup({
           key={index}
           data-part="item"
           data-stack-lead={index === displayChildren.length - 1 ? 'true' : undefined}
-          style={index === displayChildren.length - 1 ? leadingChildStyle : childStyle}
         >
           {child}
         </div>

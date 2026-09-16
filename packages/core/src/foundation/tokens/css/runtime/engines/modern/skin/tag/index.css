@@ -384,3 +384,10 @@
     background: Canvas;
   }
 }
+
+
+/* The caller's own channel, declared so every name the skin reads has a
+   producer. A consumer states its own chip fill; this is the resting value. */
+.rottay-tag-shell.rottay-tag-shell--modern {
+  --ds-tag-custom-bg: initial;
+}

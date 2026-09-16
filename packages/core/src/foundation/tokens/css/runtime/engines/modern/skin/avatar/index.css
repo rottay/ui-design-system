@@ -352,3 +352,54 @@
     outline-offset: 2px;
   }
 }
+
+
+/* The caller's own channels, declared so every name the skin reads has a
+   producer. A consumer overrides them per element; these are the resting
+   values the family paints when no caller states one. */
+.rottay-avatar.rottay-avatar--modern {
+  --ds-avatar-ink: initial;
+  --ds-avatar-custom-bg: initial;
+}
+
+/* ---------------------------------------------------------------------------
+ * WO-FAM-06 avatar cut: the geometry the engine used to stamp inline. The size
+ * step is keyed on the `data-size` the root already stamps, so root and mask
+ * keep sharing one resolved dimension; the interactive cursor keys on
+ * `data-interactive`; a caller's ink arrives as `--ds-avatar-ink` and outranks
+ * the per-variant step without travelling as a raw colour.
+ * ------------------------------------------------------------------------- */
+
+.rottay-avatar.rottay-avatar--modern[data-size='xs'],
+.rottay-avatar.rottay-avatar--modern[data-size='xs'] > [data-part='mask'] {
+  inline-size: var(--ds-avatar-xs-size);
+  block-size: var(--ds-avatar-xs-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='sm'],
+.rottay-avatar.rottay-avatar--modern[data-size='sm'] > [data-part='mask'] {
+  inline-size: var(--ds-avatar-sm-size);
+  block-size: var(--ds-avatar-sm-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='md'],
+.rottay-avatar.rottay-avatar--modern[data-size='md'] > [data-part='mask'] {
+  inline-size: var(--ds-avatar-md-size);
+  block-size: var(--ds-avatar-md-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='lg'],
+.rottay-avatar.rottay-avatar--modern[data-size='lg'] > [data-part='mask'] {
+  inline-size: var(--ds-avatar-lg-size);
+  block-size: var(--ds-avatar-lg-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='xl'],
+.rottay-avatar.rottay-avatar--modern[data-size='xl'] > [data-part='mask'] {
+  inline-size: var(--ds-avatar-xl-size);
+  block-size: var(--ds-avatar-xl-size);
+}
+
+.rottay-avatar.rottay-avatar--modern[data-interactive='true'] {
+  cursor: pointer;
+}
+
+.rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'][data-part='fallback'] {
+  color: var(--ds-avatar-ink, inherit);
+}

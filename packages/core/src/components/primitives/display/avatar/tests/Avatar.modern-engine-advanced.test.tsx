@@ -26,7 +26,8 @@ describe('Avatar modern advanced coverage', () => {
     const status = avatarRoot.querySelector('[data-part="status-dot"]') as HTMLSpanElement;
 
     expect(avatarRoot).toHaveClass('rottay-avatar', 'rottay-avatar--modern', 'avatar-shell');
-    expect(avatarRoot).toHaveStyle({ cursor: 'pointer' });
+    // The interactive cursor is the skin's now, keyed on the stamp.
+    expect(avatarRoot).toHaveAttribute('data-interactive', 'true');
     // Corner grammar, clipping and the ring are owned by the modern skin keyed on
     // the data contract -- the engine stamps no DaisyUI mask/avatar classes and
     // no Tailwind utilities, so identical markup renders identically in apps
@@ -87,7 +88,9 @@ describe('Avatar modern advanced coverage', () => {
     // A caller's backgroundColor rides the `--ds-avatar-custom-bg` hatch, which the
     // skin consumes -- the caller's value still wins, byte for byte.
     expect(initials.style.getPropertyValue('--ds-avatar-custom-bg')).toBe('var(--ds-tint-8)');
-    expect(initials.style.color).toBe('var(--ds-color-primary)');
+    // A caller's ink rides `--ds-avatar-ink`, the same way its background
+    // rides the hatch above; the caller's value still wins byte for byte.
+    expect(initials.style.getPropertyValue('--ds-avatar-ink')).toBe('var(--ds-color-primary)');
   });
 
   it('stamps an owned ring contract and preserves a caller ring color', () => {

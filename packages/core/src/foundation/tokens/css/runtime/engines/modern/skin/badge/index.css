@@ -632,3 +632,15 @@
     box-shadow: none;
   }
 }
+
+
+/* The channels the vertical deliberately leaves UNAUTHORED so a customer can
+   pin them (tenant-divergence-matrix). Declared here, at the family root, so
+   every name the skin reads has a producer WITHOUT the vertical's artifact
+   declaring it. A tenant's own value still outranks this. */
+.rottay-badge.rottay-badge--modern {
+  --ds-badge-chip-radius: var(--ds-badge-radius, var(--ds-radius-md));
+  --ds-badge-frame: color-mix(in srgb, currentColor 14%, transparent);
+  --ds-badge-surface-hover: var(--_ds-badge-hover-bg-fallback);
+  --ds-badge-count-radius: var(--ds-radius-full);
+}

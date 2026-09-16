@@ -65,13 +65,6 @@ export function AvatarFallback({
     setError(true);
   };
 
-  // The image fills its parent container; object-fit: cover prevents distortion.
-  const imgStyle: CSSProperties = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  };
-
   // Show fallback when there is no src at all, or when loading failed.
   if (!src || error) {
     return (
@@ -87,7 +80,6 @@ export function AvatarFallback({
       src={src}
       alt={alt || i18n?.tOr(IMG_ALT.key, IMG_ALT.fallback) || IMG_ALT.fallback}
       onError={handleError}
-      style={imgStyle}
       className={className}
     />
   );

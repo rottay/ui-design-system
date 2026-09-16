@@ -76,3 +76,69 @@
     color: CanvasText;
   }
 }
+
+
+/* ---------------------------------------------------------------------------
+ * WO-FAM-06 avatar cut: the layout the compounds used to stamp inline. Kept
+ * unlayered with the rest of this file so it still outranks preflight and still
+ * yields to a caller's own inline `style`.
+ * ------------------------------------------------------------------------- */
+
+/* Scoped by what it contains, so the rule adds no legacy-namespace selector. */
+[data-part='anchor']:has(> [data-part='dot']) {
+  position: relative;
+  display: inline-block;
+}
+
+[data-part='anchor'] > .rottay-avatar-badge-dot[data-part='dot'] {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  inline-size: var(--ds-avatar-badge-size, 14px);
+  block-size: var(--ds-avatar-badge-size, 14px);
+}
+
+/* The subtler indicator. */
+[data-part='anchor'] > .rottay-avatar-badge-dot[data-part='dot'][data-dot='true'] {
+  inline-size: var(--ds-avatar-badge-dot-size, 10px);
+  block-size: var(--ds-avatar-badge-dot-size, 10px);
+}
+
+/* The image fills its silhouette; `cover` keeps it undistorted. */
+.rottay-avatar [data-part='img'],
+[data-part='mask'] > [data-part='img'] {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* row-reverse puts the first DOM child on top, which is the stacked
+   left-to-right reading. The margin stays physical: row-reverse already
+   mirrors the visual order under RTL. */
+.rottay-avatar-group[data-part='root'] {
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+
+.rottay-avatar-group[data-part='root'] > [data-part='item'],
+.rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
+  margin-left: var(--ds-avatar-group-overlap, var(--ds-avatar-group-compact-spacing, -0.5rem));
+}
+
+/* The leading child renders visually first, so the overlap would drag the whole
+   stack past the start edge. It alone sits at zero. */
+.rottay-avatar-group[data-part='root'] > [data-part='item'][data-stack-lead='true'] {
+  margin-left: 0;
+}
+
+.rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  inline-size: var(--ds-avatar-group-surplus-size, var(--ds-avatar-md-size));
+  block-size: var(--ds-avatar-group-surplus-size, var(--ds-avatar-md-size));
+  font-size: var(--ds-avatar-group-surplus-font-size, var(--ds-avatar-sm-font-size));
+  font-weight: var(--ds-avatar-group-overflow-font-weight, var(--ds-font-weight-medium));
+  /* Multi-digit overflows stay digit-aligned. */
+  font-variant-numeric: tabular-nums;
+}
