@@ -5214,6 +5214,11 @@
      "at": "2026-09-16 09:46",
      "by": "kimi-admin",
      "note": "Migracion lote 1 auditada e integrada en arbol (pendiente commit tras suites): 41 archivos, resolveReadingDirectionIsRtl ELIMINADO, scroll-reveal/reveal-bindings toman isRtl, wrapper unico useReadingDirectionIsRtl junto a la autoridad, gate 21->17 probes en 10->8 archivos con las 2 filas retiradas (no pineadas en 0), drill 15/15, grep agnostico 0/0, time-picker resuelto por curry desde TimePanel (regla 3). HALLAZGO registrado: Tabs.modern-anatomy 'walks the tablist mirrored under RTL' es VACUO — pasa tambien bajo locale LTR (contra-factual corrido por el writer): con billing deshabilitado el set habilitado es 2 tabs y ambas flechas caen en el mismo elemento; NO discrimina direccion. Remedio adjudicado: tercer tab habilitado en el fixture para que el mirror discrimine (el caso hermano de Menu SI discrimina). Va con el lote 2 de migracion."
+    },
+    {
+     "at": "2026-09-16 09:53",
+     "by": "kimi-admin",
+     "note": "Migracion lote 1 INTEGRADA (8a9711cb4, 41 archivos). Auditoria completa contra codigo: suites de las 13 familias 99 archivos/983 tests verdes en mi propia corrida; gate 21->17 probes con filas retiradas; drill 15/15; grep agnostico 0/0 en ambos kernels; remedy time-picker segun regla 3; changeset con contract-diff. Lote 2 en ejecucion (15 probes en 7 archivos + Tabs re-armado con contra-factual rojo; fence active-filters-bar mientras FAM-08 estampa parts ahi)."
     }
    ]
   },
