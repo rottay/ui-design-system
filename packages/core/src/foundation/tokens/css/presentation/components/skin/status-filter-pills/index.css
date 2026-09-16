@@ -1,3 +1,7 @@
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-status-filter-pills`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * StatusFilterPills skin — deliberately unlayered (P-47).
  * Layered rules sort before Tailwind's base layer and cannot reliably paint

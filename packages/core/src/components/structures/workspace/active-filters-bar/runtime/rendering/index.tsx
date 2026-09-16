@@ -191,7 +191,7 @@ export function ActiveFiltersBar({
                 tone="primary"
                 closable
                 data-part="chip"
-                data-state={state !== "applied" ? state : undefined}
+                data-filter-state={state !== "applied" ? state : undefined}
                 onClose={() => onRemoveFilter(filter.key)}
                 closeLabel={tOr(
                   "activeFiltersBar.remove_filter_named",

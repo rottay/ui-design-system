@@ -1,3 +1,7 @@
+/* NAMESPACE (WO-FAM-08): this family is `ds-structure-saved-views-menu`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * SavedViewsMenu skin — engine-agnostic.
  * LAYERING: imported by `facade/entrypoints/base.css` into
@@ -133,6 +137,12 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+  /* The clamp the render measures against the viewport, placed here and never
+     inline. Physical on purpose: the measurement is a viewport rect, so a
+     logical property would flip it under RTL. */
+  top: var(--ds-saved-views-menu-panel-top, 0);
+  left: var(--ds-saved-views-menu-panel-left, 0);
+  width: var(--ds-saved-views-menu-panel-width, 26.25rem);
   border-radius: var(--ds-radius-xl, 18px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, var(--ds-color-bg-elevated) 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
   box-shadow: var(

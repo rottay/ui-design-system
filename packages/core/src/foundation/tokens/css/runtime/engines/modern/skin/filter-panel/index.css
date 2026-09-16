@@ -1,3 +1,7 @@
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-filter-panel`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * Modern FilterPanel skin (WO-ARC-09 checkpoint 3; Lote-2 composition uplift).
  *

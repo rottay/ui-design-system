@@ -24,6 +24,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 
 // Compatibility-catalog residue, all three blocked on a missing governed role:
 // `Sparkles` marks the two empty states, `Bookmark` the custom-view glyph.
@@ -524,12 +525,15 @@ export function SavedViewsMenu({
             aria-label={labels.panelLabel}
             ref={panelRef}
             tabIndex={-1}
-            /* Measured viewport clamp only; position/stacking/clipping are skin-owned. */
-            style={{
-              top: panelPosition.top,
-              left: panelPosition.left,
-              width: panelPosition.width,
-            }}
+            /* The measured viewport clamp travels as channels; where the panel
+               sits and how it is clipped stay the skin's. */
+            style={
+              {
+                '--ds-saved-views-menu-panel-top': `${panelPosition.top}px`,
+                '--ds-saved-views-menu-panel-left': `${panelPosition.left}px`,
+                '--ds-saved-views-menu-panel-width': `${panelPosition.width}px`,
+              } as CSSProperties
+            }
           >
             <Box data-part="header">
               <Flex align="start" justify="between" gap={12}>

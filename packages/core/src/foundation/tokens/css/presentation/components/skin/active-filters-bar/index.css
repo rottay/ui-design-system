@@ -1,3 +1,7 @@
+/* NAMESPACE (WO-FAM-08): this family is `ds-structure-active-filters-bar`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
  * Unlayered paint outranks Tailwind preflight while caller inline styles keep
@@ -231,7 +235,7 @@
         - draft: dashed underline + quieter weight — chosen, not committed;
         - invalid: wavy error underline — the universal "needs repair" mark. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="draft"]
+  [data-part="chip"][data-filter-state="draft"]
   [data-part="chip-value"] {
   /* C1: draft must read at two meters — REGULAR weight + quieted ink under
      the dashed underline, so the provisional chip is visibly ghosted next
@@ -243,24 +247,24 @@
   text-underline-offset: 0.2em;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="invalid"]
+  [data-part="chip"][data-filter-state="invalid"]
   [data-part="chip-value"] {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
   text-underline-offset: 0.2em;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="invalid"]
+  [data-part="chip"][data-filter-state="invalid"]
   [data-part="chip-label"] {
   color: var(--ds-color-error);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="draft"]
+  [data-part="chip"][data-filter-state="draft"]
   [data-part="icon"] {
   color: var(--ds-color-text-muted);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="invalid"]
+  [data-part="chip"][data-filter-state="invalid"]
   [data-part="icon"] {
   color: var(--ds-color-error);
 }
@@ -347,26 +351,26 @@
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state="draft"]
+    [data-part="chip"][data-filter-state="draft"]
     [data-part="chip-value"] {
     color: CanvasText;
     text-decoration: underline dashed;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state="invalid"]
+    [data-part="chip"][data-filter-state="invalid"]
     [data-part="chip-value"] {
     color: CanvasText;
     text-decoration: underline wavy;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state="invalid"]
+    [data-part="chip"][data-filter-state="invalid"]
     [data-part="chip-label"] {
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state]
+    [data-part="chip"][data-filter-state]
     [data-part="icon"] {
     color: CanvasText;
   }
