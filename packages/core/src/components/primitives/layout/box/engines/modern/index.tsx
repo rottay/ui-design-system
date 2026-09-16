@@ -96,11 +96,13 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (paddingBlock !== undefined) {
     style.paddingBlock = resolveSpacing(paddingBlock);
   }
-  const paddingInlineStart = scalarOrUndefined(props.paddingInlineStart);
+  const paddingInlineStart =
+    scalarOrUndefined(props.paddingInlineStart) ?? scalarOrUndefined(props.ps);
   if (paddingInlineStart !== undefined) {
     style.paddingInlineStart = resolveSpacing(paddingInlineStart);
   }
-  const paddingInlineEnd = scalarOrUndefined(props.paddingInlineEnd);
+  const paddingInlineEnd =
+    scalarOrUndefined(props.paddingInlineEnd) ?? scalarOrUndefined(props.pe);
   if (paddingInlineEnd !== undefined) {
     style.paddingInlineEnd = resolveSpacing(paddingInlineEnd);
   }
@@ -146,11 +148,13 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (marginBlock !== undefined) {
     style.marginBlock = resolveSpacing(marginBlock);
   }
-  const marginInlineStart = scalarOrUndefined(props.marginInlineStart);
+  const marginInlineStart =
+    scalarOrUndefined(props.marginInlineStart) ?? scalarOrUndefined(props.ms);
   if (marginInlineStart !== undefined) {
     style.marginInlineStart = resolveSpacing(marginInlineStart);
   }
-  const marginInlineEnd = scalarOrUndefined(props.marginInlineEnd);
+  const marginInlineEnd =
+    scalarOrUndefined(props.marginInlineEnd) ?? scalarOrUndefined(props.me);
   if (marginInlineEnd !== undefined) {
     style.marginInlineEnd = resolveSpacing(marginInlineEnd);
   }
@@ -345,7 +349,9 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     paddingInline: _paddingInline,
     paddingBlock: _paddingBlock,
     paddingInlineStart: _paddingInlineStart,
+    ps: _ps,
     paddingInlineEnd: _paddingInlineEnd,
+    pe: _pe,
     paddingBlockStart: _paddingBlockStart,
     paddingBlockEnd: _paddingBlockEnd,
     paddingX: _paddingX,
@@ -365,7 +371,9 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     marginInline: _marginInline,
     marginBlock: _marginBlock,
     marginInlineStart: _marginInlineStart,
+    ms: _ms,
     marginInlineEnd: _marginInlineEnd,
+    me: _me,
     marginBlockStart: _marginBlockStart,
     marginBlockEnd: _marginBlockEnd,
     marginX: _marginX,

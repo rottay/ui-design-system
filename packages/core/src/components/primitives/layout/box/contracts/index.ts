@@ -195,11 +195,16 @@ export interface BoxProps
 
   /**
    * Padding on right
+   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
+   *   step 4), because `right` does not follow the reading direction: under
+   *   RTL it lands on the wrong edge of the box. Use `paddingInlineEnd` / `pe`.
+   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   paddingRight?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingRight
+   * @deprecated Physical edge; use `pe`. See {@link BoxProps.paddingRight}.
    */
   pr?: ResponsiveValue<BoxSpacing>;
 
@@ -215,11 +220,16 @@ export interface BoxProps
 
   /**
    * Padding on left
+   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
+   *   step 4), because `left` does not follow the reading direction: under
+   *   RTL it lands on the wrong edge of the box. Use `paddingInlineStart` / `ps`.
+   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   paddingLeft?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for paddingLeft
+   * @deprecated Physical edge; use `ps`. See {@link BoxProps.paddingLeft}.
    */
   pl?: ResponsiveValue<BoxSpacing>;
 
@@ -232,8 +242,14 @@ export interface BoxProps
   /** Padding at the writing-mode-aware inline start edge. */
   paddingInlineStart?: ResponsiveValue<BoxSpacing>;
 
+  /** Shorthand for paddingInlineStart -- the logical replacement for `pl`. */
+  ps?: ResponsiveValue<BoxSpacing>;
+
   /** Padding at the writing-mode-aware inline end edge. */
   paddingInlineEnd?: ResponsiveValue<BoxSpacing>;
+
+  /** Shorthand for paddingInlineEnd -- the logical replacement for `pr`. */
+  pe?: ResponsiveValue<BoxSpacing>;
 
   /** Padding at the writing-mode-aware block start edge. */
   paddingBlockStart?: ResponsiveValue<BoxSpacing>;
@@ -284,11 +300,16 @@ export interface BoxProps
 
   /**
    * Margin on right
+   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
+   *   step 4), because `right` does not follow the reading direction: under
+   *   RTL it lands on the wrong edge of the box. Use `marginInlineEnd` / `me`.
+   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   marginRight?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginRight
+   * @deprecated Physical edge; use `me`. See {@link BoxProps.marginRight}.
    */
   mr?: ResponsiveValue<BoxSpacing>;
 
@@ -304,11 +325,16 @@ export interface BoxProps
 
   /**
    * Margin on left
+   * @deprecated Physical edge. A public layout API is logical only (WO-FAM-07
+   *   step 4), because `left` does not follow the reading direction: under
+   *   RTL it lands on the wrong edge of the box. Use `marginInlineStart` / `ms`.
+   *   Retained because the frozen Classic and Rustic engines still read it.
    */
   marginLeft?: ResponsiveValue<BoxSpacing>;
 
   /**
    * Shorthand for marginLeft
+   * @deprecated Physical edge; use `ms`. See {@link BoxProps.marginLeft}.
    */
   ml?: ResponsiveValue<BoxSpacing>;
 
@@ -321,8 +347,14 @@ export interface BoxProps
   /** Margin at the writing-mode-aware inline start edge. */
   marginInlineStart?: ResponsiveValue<BoxSpacing>;
 
+  /** Shorthand for marginInlineStart -- the logical replacement for `ml`. */
+  ms?: ResponsiveValue<BoxSpacing>;
+
   /** Margin at the writing-mode-aware inline end edge. */
   marginInlineEnd?: ResponsiveValue<BoxSpacing>;
+
+  /** Shorthand for marginInlineEnd -- the logical replacement for `mr`. */
+  me?: ResponsiveValue<BoxSpacing>;
 
   /** Margin at the writing-mode-aware block start edge. */
   marginBlockStart?: ResponsiveValue<BoxSpacing>;

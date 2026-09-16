@@ -40,7 +40,9 @@
  */
 'use client';
 
-import React, { forwardRef, useCallback, useRef } from 'react';
+import React, { forwardRef, useCallback } from 'react';
+
+import { useOptionalDirection } from '@/infrastructure/runtime/i18n';
 
 import {
   RESIZE_HANDLE_DEFAULTS,
@@ -49,19 +51,6 @@ import {
   type ResizeHandleOrientation,
   type ResizeHandleProps,
 } from './contracts';
-
-/** The writing direction at the handle. The `dir` attribute chain is read
- *  first (the common RTL channel, and the only one jsdom resolves); a CSS-only
- *  `direction: rtl` with no dir attribute falls back to the computed style. */
-function readDirection(node: HTMLElement | null): 'ltr' | 'rtl' {
-  if (!node) return 'ltr';
-  const dirAttr = node.closest('[dir]')?.getAttribute('dir');
-  if (dirAttr === 'rtl' || dirAttr === 'ltr') return dirAttr;
-  if (typeof getComputedStyle === 'function') {
-    return getComputedStyle(node).direction === 'rtl' ? 'rtl' : 'ltr';
-  }
-  return 'ltr';
-}
 
 /**
  * Translate a key into an adjustment intent. Inline arrows mirror in RTL so
@@ -117,10 +106,15 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
       id,
     } = props;
 
-    const nodeRef = useRef<HTMLDivElement | null>(null);
+    // The writing direction comes from the shared authority, not from a DOM
+    // probe of this node's `dir` chain: the locale knows it on the server too,
+    // and a probe re-derives from paint a fact the provider already holds.
+    const direction = useOptionalDirection();
+
+    // The node was only ever held to probe its `dir` chain; the forward is
+    // all that is left of it.
     const setNode = useCallback(
       (node: HTMLDivElement | null) => {
-        nodeRef.current = node;
         if (typeof ref === 'function') ref(node);
         else if (ref) ref.current = node;
       },
@@ -133,17 +127,12 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
         // Alt/Ctrl/Meta arrow chords are browser and OS commands (history
         // navigation, document scroll); only Shift stays with the separator.
         if (event.altKey || event.ctrlKey || event.metaKey) return;
-        const intent = resolveResizeIntent(
-          event.key,
-          orientation,
-          arrows,
-          readDirection(nodeRef.current)
-        );
+        const intent = resolveResizeIntent(event.key, orientation, arrows, direction);
         if (!intent) return;
         event.preventDefault();
         onAdjust(intent, event);
       },
-      [arrows, onAdjust, orientation]
+      [arrows, direction, onAdjust, orientation]
     );
 
     // A pointer-only hit area carries no role and no tab stop: duplicating the

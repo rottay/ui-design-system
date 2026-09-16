@@ -17,6 +17,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import { Splitter, Panel } from '../engines/modern';
 
 function renderSplitter(
@@ -123,7 +125,7 @@ describe('Splitter modern contract: keyboard resize', () => {
 
   it('mirrors the arrow mapping in RTL', () => {
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <Splitter>
           <Panel>
             <span>panel-0</span>
@@ -132,7 +134,7 @@ describe('Splitter modern contract: keyboard resize', () => {
             <span>panel-1</span>
           </Panel>
         </Splitter>
-      </div>
+      </I18nProvider>
     );
     const [gutter] = gutters();
     // In RTL, ArrowLeft increases the leading panel (mirror of LTR ArrowRight).
@@ -223,7 +225,7 @@ describe('Splitter modern contract: pointer drag', () => {
 
   it('mirrors horizontal drag math in RTL (offset from the inline-end)', () => {
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <Splitter>
           <Panel>
             <span>panel-0</span>
@@ -232,7 +234,7 @@ describe('Splitter modern contract: pointer drag', () => {
             <span>panel-1</span>
           </Panel>
         </Splitter>
-      </div>
+      </I18nProvider>
     );
     const [gutter] = gutters();
     fireEvent.pointerDown(gutter, { clientX: 500, clientY: 200 });

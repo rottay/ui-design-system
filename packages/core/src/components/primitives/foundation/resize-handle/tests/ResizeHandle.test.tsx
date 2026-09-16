@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import { ResizeHandle } from '..';
 import type { ResizeHandleIntent } from '../contracts';
 
@@ -25,8 +27,14 @@ function intents(
   );
   // Scoped to this render's own container: the helper mounts several handles
   // per test and a document-wide role query would find all of them.
+  //
+  // Direction arrives through the i18n authority, not a bare `dir` wrapper:
+  // the handle reads `useOptionalDirection`, and the provider stamps `dir`
+  // itself, so the DOM still says what the locale says.
   const { container } = render(
-    wrapper ? <div dir={wrapper.dir}>{handle}</div> : handle
+    wrapper
+      ? <I18nProvider locale={wrapper.dir === 'rtl' ? 'ar' : 'en'} fallbackLocale="en">{handle}</I18nProvider>
+      : handle
   );
   const node = container.querySelector('[role="separator"]') as HTMLElement;
   for (const key of keys) {

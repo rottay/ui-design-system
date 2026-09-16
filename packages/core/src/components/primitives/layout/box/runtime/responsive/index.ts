@@ -80,8 +80,8 @@ export function collectBoxResponsiveEntries(
     ["padding-left", props.paddingLeft ?? props.pl],
     ["padding-inline", props.paddingInline],
     ["padding-block", props.paddingBlock],
-    ["padding-inline-start", props.paddingInlineStart],
-    ["padding-inline-end", props.paddingInlineEnd],
+    ["padding-inline-start", props.paddingInlineStart ?? props.ps],
+    ["padding-inline-end", props.paddingInlineEnd ?? props.pe],
     ["padding-block-start", props.paddingBlockStart],
     ["padding-block-end", props.paddingBlockEnd],
   ];
@@ -137,8 +137,8 @@ export function collectBoxResponsiveEntries(
     ["margin-left", props.marginLeft ?? props.ml],
     ["margin-inline", props.marginInline],
     ["margin-block", props.marginBlock],
-    ["margin-inline-start", props.marginInlineStart],
-    ["margin-inline-end", props.marginInlineEnd],
+    ["margin-inline-start", props.marginInlineStart ?? props.ms],
+    ["margin-inline-end", props.marginInlineEnd ?? props.me],
     ["margin-block-start", props.marginBlockStart],
     ["margin-block-end", props.marginBlockEnd],
   ];

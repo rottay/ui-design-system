@@ -53,7 +53,7 @@
  */
 import React, { useState, useRef, useEffect, useCallback, Children, cloneElement, isValidElement } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ResizeHandle, type ResizeHandleIntent } from '../../../../foundation/resize-handle';
 import type { SplitterProps, SplitterPanelProps } from '../../contracts';
 import { SPLITTER_DEFAULTS } from '../../contracts';
@@ -305,20 +305,10 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 
     const isVertical = layout === 'vertical';
 
-    /** The writing direction at the container. The `dir` attribute chain is
-     *  read first (the common RTL channel -- and the only one jsdom
-     *  resolves); a CSS-only `direction: rtl` with no dir attribute falls
-     *  back to the computed style. */
-    const readDirection = (): 'ltr' | 'rtl' => {
-      const node = containerRef.current;
-      if (!node) return 'ltr';
-      const dirAttr = node.closest('[dir]')?.getAttribute('dir');
-      if (dirAttr === 'rtl' || dirAttr === 'ltr') return dirAttr;
-      if (typeof getComputedStyle === 'function') {
-        return getComputedStyle(node).direction === 'rtl' ? 'rtl' : 'ltr';
-      }
-      return 'ltr';
-    };
+    // The writing direction comes from the shared authority, not from a DOM
+    // probe of the container's `dir` chain: the locale knows it on the server
+    // too, and a probe re-derives from paint a fact the provider already holds.
+    const direction = useOptionalDirection();
 
     /** Redistribute `deltaPercent` between the two panels adjacent to gutter
      *  `index`, honoring each side's [min, max] contract range. Reads the
@@ -389,7 +379,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
         const totalSize = isVertical ? rect.height : rect.width;
         const offset = isVertical
           ? moveEvent.clientY - rect.top
-          : readDirection() === 'rtl'
+          : direction === 'rtl'
             ? rect.right - moveEvent.clientX
             : moveEvent.clientX - rect.left;
         const percentage = (offset / totalSize) * 100;
