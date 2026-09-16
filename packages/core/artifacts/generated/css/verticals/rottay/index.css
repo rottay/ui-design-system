@@ -11410,6 +11410,27 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-filter-pill-count-active-bg: var(--ds-surface-raised);
   --ds-filter-pill-count-active-border: currentColor;
   --ds-filter-pill-count-active-ring: none;
+  --ds-filter-pill-bg: transparent;
+  --ds-filter-pill-color: var(--ds-color-text-secondary);
+  --ds-filter-pill-hover-bg: var(
+    --ds-surface-highlight,
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
+  --ds-filter-pill-shadow: none;
+  /* The search field's resting chrome. `chrome.search` is kernel-lowered too,
+     so a tenant's unlayered value outranks every declaration here. */
+  --ds-search-clear-color: var(--ds-color-text-muted);
+  --ds-search-clear-color-hover: var(--ds-color-text-secondary);
+  --ds-search-icon-color: var(--ds-color-text-muted);
+  --ds-search-input-bg: var(
+    --ds-search-bg,
+    var(--ds-surface-control, var(--ds-color-bg-input))
+  );
+  --ds-search-input-border: var(--ds-search-border, var(--ds-color-border));
+  --ds-search-input-color: var(--ds-search-color, var(--ds-color-text-primary));
+  --ds-search-placeholder-color: var(--ds-color-text-muted);
+  --ds-search-radius: var(--ds-toolbar-radius, var(--ds-radius-sm, 6px));
+  --ds-search-shadow: none;
   --ds-cell-pill-bg: color-mix(
     in srgb,
     var(--ds-color-primary) 6%,
@@ -93639,7 +93660,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-list-toolbar__filter-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
-    var(--ds-radius-pill, 999px)
+    var(--ds-radius-full, 999px)
   );
   /* Per-pill active count reads quiet (soft): the trigger's own active border
      and tint already carry the state; the global count badge in the search
@@ -94260,7 +94281,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-list-toolbar__count-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
-    var(--ds-radius-pill, 999px)
+    var(--ds-radius-full, 999px)
   );
   background: var(
     --ds-filter-pill-count-active-bg,
@@ -119616,6 +119637,8 @@ html[lang]:lang(ar) {
   --ds-edge-hairline-width: 1px;
   --ds-edge-standard-width: 1px;
   --ds-effect-intensity: 0.2;
+  --ds-filter-chip-bg: var(--ds-surface-card);
+  --ds-filter-chip-border: var(--ds-toolbar-control-border, var(--ds-color-border));
   --ds-filter-panel-content-max-height: 125rem;
   --ds-filter-panel-field-gap: var(--ds-spacing-2);
   --ds-filter-panel-inline-control-width: 0px;
@@ -120731,6 +120754,48 @@ html[lang]:lang(ar) {
   --ds-toggle-track-bg-checked: var(--ds-color-primary);
   --ds-toggle-track-bg-hover: color-mix(in srgb, var(--ds-toggle-track-bg, var(--ds-color-border-secondary)), var(--ds-color-text-primary) var(--ds-state-hover-shift));
   --ds-toggle-track-border-radius: var(--ds-radius-button, var(--ds-radius-full));
+  --ds-toolbar-control-focus-ring: var(--ds-material-control-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 20%, transparent));
+  --ds-toolbar-control-pressed-scale: 0.975;
+  --ds-toolbar-controls-bg: transparent;
+  --ds-toolbar-controls-blur: 0px;
+  --ds-toolbar-controls-border: transparent;
+  --ds-toolbar-controls-padding: 0;
+  --ds-toolbar-controls-shadow: none;
+  --ds-toolbar-count-radius: var(--ds-radius-full, 999px);
+  --ds-toolbar-divider-opacity: 0.6;
+  --ds-toolbar-entry-animation: none;
+  --ds-toolbar-focus-border: var(--ds-material-panel-border-hover, var(--ds-color-primary));
+  --ds-toolbar-focus-ring: var(--ds-material-panel-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
+  --ds-toolbar-header-gradient: linear-gradient(118deg, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 96%, var(--ds-color-primary) 4%) 0%, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 48%, color-mix(in srgb, var(--ds-toolbar-bg, var(--ds-material-panel-background, var(--ds-surface-card))) 94%, var(--ds-surface-inset, var(--ds-color-bg-secondary)) 6%) 100%);
+  --ds-toolbar-icon-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card));
+  --ds-toolbar-icon-border: var(--ds-toolbar-control-border, var(--ds-color-border));
+  --ds-toolbar-icon-color: var(--ds-color-primary);
+  --ds-toolbar-menu-item-radius: var(--ds-button-sm-radius, var(--ds-radius-sm, 6px));
+  --ds-toolbar-mobile-actions-bg: transparent;
+  --ds-toolbar-mobile-actions-border: transparent;
+  --ds-toolbar-mobile-actions-padding: 0;
+  --ds-toolbar-mobile-rail-bg: transparent;
+  --ds-toolbar-mobile-rail-border: transparent;
+  --ds-toolbar-mobile-rail-padding: var(--ds-toolbar-rail-focus-clearance, 0.25rem);
+  --ds-toolbar-popover-radius: var(--ds-radius-md, 0.5rem);
+  --ds-toolbar-primary-action-max-width: 18rem;
+  --ds-toolbar-rail-focus-clearance: 0.25rem;
+  --ds-toolbar-saved-views-bg: color-mix(in srgb, var(--ds-surface-inset) 45%, transparent);
+  --ds-toolbar-saved-views-border: transparent;
+  --ds-toolbar-search-font-size: var(--ds-button-sm-font-size, 0.8125rem);
+  --ds-toolbar-search-height: var(--ds-button-sm-height, 2rem);
+  --ds-toolbar-search-max-width: 20rem;
+  --ds-toolbar-search-min-width: 11.25rem;
+  --ds-toolbar-search-wide-max-width: 30rem;
+  --ds-toolbar-sheen: linear-gradient(105deg, transparent 18%, color-mix(in srgb, var(--ds-color-primary) 7%, transparent) 48%, transparent 76%);
+  --ds-toolbar-sheen-animation: none;
+  --ds-toolbar-title-font-family: var(--ds-type-section-title-font-family, var(--ds-font-family-heading));
+  --ds-toolbar-title-font-size: var(--ds-font-size-md);
+  --ds-toolbar-title-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-toolbar-title-icon-size: 2rem;
+  --ds-toolbar-title-max-width: 18rem;
+  --ds-toolbar-title-section-padding: 0.25rem;
+  --ds-toolbar-touch-target: 2.75rem;
   --ds-tooltip-bordered-background: var(--ds-material-overlay-background);
   --ds-tooltip-bordered-border: var(--ds-color-border-primary);
   --ds-tooltip-bordered-foreground: var(--ds-color-text-primary);

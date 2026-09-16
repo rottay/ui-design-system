@@ -234,7 +234,7 @@
     },
     {
       "channels": 143,
-      "channelsThroughAliases": 1593,
+      "channelsThroughAliases": 1594,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -956,8 +956,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1643,
-      "channelsThroughAliases": 3268,
+      "channels": 1687,
+      "channelsThroughAliases": 3301,
       "decision": "palette.contrast-posture",
       "derivers": [
         "alert",
@@ -978,6 +978,7 @@
         "divider",
         "drawer",
         "dropdown",
+        "filter-chip",
         "filter-panel",
         "form",
         "form-field",
@@ -1008,6 +1009,7 @@
         "textarea",
         "time-picker",
         "toggle",
+        "toolbar",
         "tooltip",
         "tour",
         "transfer",
@@ -1272,8 +1274,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1643,
-      "channelsThroughAliases": 3268,
+      "channels": 1687,
+      "channelsThroughAliases": 3301,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "alert",
@@ -1294,6 +1296,7 @@
         "divider",
         "drawer",
         "dropdown",
+        "filter-chip",
         "filter-panel",
         "form",
         "form-field",
@@ -1324,6 +1327,7 @@
         "textarea",
         "time-picker",
         "toggle",
+        "toolbar",
         "tooltip",
         "tour",
         "transfer",
@@ -1580,8 +1584,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1739,
-      "channelsThroughAliases": 3465,
+      "channels": 1783,
+      "channelsThroughAliases": 3498,
       "decision": "palette.seeds",
       "derivers": [
         "alert",
@@ -1603,6 +1607,7 @@
         "divider",
         "drawer",
         "dropdown",
+        "filter-chip",
         "filter-panel",
         "form",
         "form-field",
@@ -1636,6 +1641,7 @@
         "time-picker",
         "tint",
         "toggle",
+        "toolbar",
         "tooltip",
         "tour",
         "transfer",
@@ -1892,8 +1898,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1729,
-      "channelsThroughAliases": 3445,
+      "channels": 1773,
+      "channelsThroughAliases": 3478,
       "decision": "palette.status-seeds",
       "derivers": [
         "alert",
@@ -1914,6 +1920,7 @@
         "divider",
         "drawer",
         "dropdown",
+        "filter-chip",
         "filter-panel",
         "form",
         "form-field",
@@ -1947,6 +1954,7 @@
         "time-picker",
         "tint",
         "toggle",
+        "toolbar",
         "tooltip",
         "tour",
         "transfer",
@@ -2204,7 +2212,7 @@
     },
     {
       "channels": 143,
-      "channelsThroughAliases": 1593,
+      "channelsThroughAliases": 1594,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2480,7 +2488,7 @@
     },
     {
       "channels": 54,
-      "channelsThroughAliases": 661,
+      "channelsThroughAliases": 662,
       "decision": "shape.button-style",
       "derivers": [
         "axes",
@@ -2828,8 +2836,8 @@
       "tier": "pro"
     },
     {
-      "channels": 708,
-      "channelsThroughAliases": 1294,
+      "channels": 750,
+      "channelsThroughAliases": 1332,
       "decision": "shape.radius-scale",
       "derivers": [
         "avatar",
@@ -2852,6 +2860,7 @@
         "tabs",
         "tag",
         "tenant",
+        "toolbar",
         "tree"
       ],
       "families": [
@@ -3352,8 +3361,8 @@
       "tier": "standard"
     },
     {
-      "channels": 214,
-      "channelsThroughAliases": 941,
+      "channels": 256,
+      "channelsThroughAliases": 978,
       "decision": "states.focus-style",
       "derivers": [
         "avatar",
@@ -3365,7 +3374,8 @@
         "states",
         "surfaces",
         "tag",
-        "tenant"
+        "tenant",
+        "toolbar"
       ],
       "families": [
         "action-dock",
@@ -4173,7 +4183,7 @@
     },
     {
       "channels": 131,
-      "channelsThroughAliases": 859,
+      "channelsThroughAliases": 860,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -4565,7 +4575,7 @@
     },
     {
       "channels": 131,
-      "channelsThroughAliases": 859,
+      "channelsThroughAliases": 860,
       "decision": "typography.scale",
       "derivers": [
         "axes",
