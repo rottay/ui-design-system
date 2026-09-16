@@ -5,11 +5,11 @@
  *
  * Renders List, Item, and Meta as semantic markup (`<ul>`/`<li>`) whose paint
  * and static geometry (item padding, meta gaps, header/footer chrome, size
- * steps, loading posture) live in the modern skin
+ * steps) live in the modern skin
  * (`foundation/tokens/css/runtime/engines/modern/skin/list/index.css`), keyed on the
  * `data-part` / `data-size` / `data-bordered` / `data-loading` hooks stamped
- * here. Tailwind structural utilities (`flex`, `min-w-0`, skeleton shapes)
- * remain; inline styles are reserved for the data-driven CSS Grid projection
+ * here. The loading state is derived from the item anatomy by the shared
+ * `AnatomySkeleton`; inline styles are reserved for the CSS Grid projection
  * (`grid.column` / `grid.gutter`) and the public `style` override channel.
  *
  * @example
@@ -23,6 +23,7 @@ import React from 'react';
 import type { ListProps, ListGridConfig, ListItemProps, ListItemMetaProps } from '../../contracts';
 import { LIST_DEFAULTS } from '../../contracts';
 import { Empty } from '../../../../facade';
+import { AnatomySkeleton } from '../../../../feedback/skeleton';
 
 /**
  * `ListGridConfig`'s per-breakpoint column counts, smallest first. `xxl` is the
@@ -219,16 +220,12 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     const isDataDrivenEmpty = dataSource && renderItem && dataSource.length === 0;
     const gridProjection = grid ? projectGrid(grid) : undefined;
 
-    // Three-row skeleton with avatar circle + two text bars to match typical list layouts
     if (loading) {
       return (
         <div
           {...rest}
           ref={ref}
-          // `animate-pulse` stays as a test-pinned bridge string; the skin's
-          // own motion-channel pulse OVERRIDES the vendor animation by layer
-          // ownership, so the paint/motion authority is the skin (motion law).
-          className={`rottay-list rottay-list--modern animate-pulse ${className}`}
+          className={`rottay-list rottay-list--modern ${className}`}
           data-part={dataPart ?? 'root'}
           data-loading="true"
           // The loading posture is the SAME list: the stamps below must stay
@@ -244,23 +241,18 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
               {header}
             </div>
           )}
-          {/* Grid lists reserve their real tracks while loading, so the
-              skeleton does not reflow from a stack into N columns on resolve. */}
+          {/* Grid lists reserve their real tracks while loading, so the rows
+              do not reflow from a stack into N columns on resolve. */}
           <div
-            data-part="skeleton"
+            data-part="loading-grid"
             data-grid={gridProjection?.mode}
             style={gridProjection?.style}
           >
             {[1, 2, 3].map((i) => (
-              <div key={i} data-part="skeleton-row">
-                <div data-part="skeleton-row-inner">
-                  <div data-part="skeleton-avatar" />
-                  <div data-part="skeleton-lines">
-                    <div data-part="skeleton-line" />
-                    <div data-part="skeleton-line" />
-                  </div>
-                </div>
-              </div>
+              // The host root above owns the single busy announcement.
+              <AnatomySkeleton key={i} busy={false}>
+                <Meta title={'\u00a0'} description={'\u00a0'} />
+              </AnatomySkeleton>
             ))}
           </div>
           {footer && (

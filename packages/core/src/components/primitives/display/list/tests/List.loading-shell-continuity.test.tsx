@@ -8,7 +8,7 @@ import { render } from '@testing-library/react';
 
 import ModernList, { Item as ModernItem } from '../engines/modern';
 
-// Loading is the SAME shell with skeleton content: frame, size, layout stamps, header
+// Loading is the SAME shell with derived rows: frame, size, layout stamps, header
 // and footer all survive, or the list jumps on every load.
 
 const SKIN = readFileSync(
@@ -41,6 +41,22 @@ describe('List modern — loading shell continuity', () => {
     expect(rootOf(busy)).toHaveAttribute('aria-busy', 'true');
   });
 
+  it('announces busy exactly once, whether or not the skeleton rows are mounted', () => {
+    // The rows are shared AnatomySkeletons; the shell owns the announcement,
+    // so a screen reader hears one busy region, never one per row.
+    const { container, rerender } = render(<ModernList loading />);
+    expect(container.querySelectorAll('[aria-busy]')).toHaveLength(1);
+    expect(container.querySelectorAll('.ds-skeleton-anatomy')).toHaveLength(3);
+
+    rerender(
+      <ModernList>
+        <ModernItem>one</ModernItem>
+      </ModernList>
+    );
+    expect(container.querySelectorAll('[aria-busy]')).toHaveLength(0);
+    expect(container.querySelectorAll('.ds-skeleton-anatomy')).toHaveLength(0);
+  });
+
   it('keeps the header and footer visible while the rows load', () => {
     const { container } = render(
       <ModernList loading header={<span>Recent activity</span>} footer={<span>4 of 40</span>} />
@@ -50,7 +66,7 @@ describe('List modern — loading shell continuity', () => {
     // unnamed busy region and sighted users with an unlabelled block.
     expect(container.querySelector('[data-part="header"]')).toHaveTextContent('Recent activity');
     expect(container.querySelector('[data-part="footer"]')).toHaveTextContent('4 of 40');
-    expect(container.querySelectorAll('[data-part="skeleton-row"]')).toHaveLength(3);
+    expect(container.querySelectorAll('.ds-skeleton-anatomy')).toHaveLength(3);
   });
 
   it('reserves the grid tracks a fixed-count grid list will resolve into', () => {
@@ -58,10 +74,10 @@ describe('List modern — loading shell continuity', () => {
       <ModernList loading grid={{ column: 4, gutter: 24 }} />
     );
 
-    const skeleton = container.querySelector('[data-part="skeleton"]') as HTMLElement;
-    expect(skeleton).toHaveAttribute('data-grid', 'fixed');
-    expect(skeleton.style.gridTemplateColumns).toBe('repeat(4, 1fr)');
-    expect(skeleton.style.gap).toBe('24px');
+    const loadingGrid = container.querySelector('[data-part="loading-grid"]') as HTMLElement;
+    expect(loadingGrid).toHaveAttribute('data-grid', 'fixed');
+    expect(loadingGrid.style.gridTemplateColumns).toBe('repeat(4, 1fr)');
+    expect(loadingGrid.style.gap).toBe('24px');
   });
 
   it('hands the per-breakpoint tiers to the skin exactly as the loaded list does', () => {
@@ -69,31 +85,31 @@ describe('List modern — loading shell continuity', () => {
       <ModernList loading grid={{ xs: 1, md: 2, xl: 4, gutter: 16 }} />
     );
 
-    const skeleton = container.querySelector('[data-part="skeleton"]') as HTMLElement;
-    expect(skeleton).toHaveAttribute('data-grid', 'responsive');
+    const loadingGrid = container.querySelector('[data-part="loading-grid"]') as HTMLElement;
+    expect(loadingGrid).toHaveAttribute('data-grid', 'responsive');
     // An inline track list would outrank the queries, so the responsive
     // posture publishes counts only — the same law as the loaded `<ul>`.
-    expect(skeleton.style.gridTemplateColumns).toBe('');
-    expect(skeleton.style.getPropertyValue('--_ds-list-grid-columns-xs')).toBe('1');
-    expect(skeleton.style.getPropertyValue('--_ds-list-grid-columns-md')).toBe('2');
-    expect(skeleton.style.getPropertyValue('--_ds-list-grid-columns-xl')).toBe('4');
+    expect(loadingGrid.style.gridTemplateColumns).toBe('');
+    expect(loadingGrid.style.getPropertyValue('--_ds-list-grid-columns-xs')).toBe('1');
+    expect(loadingGrid.style.getPropertyValue('--_ds-list-grid-columns-md')).toBe('2');
+    expect(loadingGrid.style.getPropertyValue('--_ds-list-grid-columns-xl')).toBe('4');
   });
 
   it('adds no grid posture to an ungridded loading list', () => {
     const { container } = render(<ModernList loading />);
-    const skeleton = container.querySelector('[data-part="skeleton"]') as HTMLElement;
-    expect(skeleton.hasAttribute('data-grid')).toBe(false);
-    expect(skeleton.getAttribute('style')).toBeNull();
+    const loadingGrid = container.querySelector('[data-part="loading-grid"]') as HTMLElement;
+    expect(loadingGrid.hasAttribute('data-grid')).toBe(false);
+    expect(loadingGrid.getAttribute('style')).toBeNull();
   });
 
-  it('gives the skeleton container the grid display and the tier queries in the skin', () => {
+  it('gives the loading grid its display and the tier queries in the skin', () => {
     expect(SKIN).toMatch(
-      /\[data-loading='true'\] > \[data-part='skeleton'\]\[data-grid\]\s*\{\s*display:\s*grid;/
+      /\[data-loading='true'\] > \[data-part='loading-grid'\]\[data-grid\]\s*\{\s*display:\s*grid;/
     );
     for (const tier of ['sm', 'md', 'lg', 'xl', 'xxl'] as const) {
       expect(SKIN).toMatch(
         new RegExp(
-          `\\[data-part='skeleton'\\]\\[data-grid='responsive'\\]\\s*\\{\\s*grid-template-columns:\\s*repeat\\(var\\(--_ds-list-grid-columns-${tier}`
+          `\\[data-part='loading-grid'\\]\\[data-grid='responsive'\\]\\s*\\{\\s*grid-template-columns:\\s*repeat\\(var\\(--_ds-list-grid-columns-${tier}`
         )
       );
     }

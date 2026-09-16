@@ -47,6 +47,13 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'meta-avatar': 'round',
   'meta-title': 'line',
   'meta-description': 'line',
+  // The item's own wrappers pass through; one action is a control-sized box;
+  // the loading grid host is the stand-in itself, so it draws nothing.
+  'item-content': 'pass',
+  'item-extra': 'pass',
+  'item-actions': 'pass',
+  'item-action': 'block',
+  'loading-grid': 'omit',
   // ---- badge, tag and avatar anatomy (WO-FAM-06 badge/tag/avatar cut) ----
   // A dismiss control is a pill; the avatar silhouette is the mask, measured
   // with its own corner so a rounded square stays square; what fills the

@@ -16,7 +16,9 @@ describe('List advanced engine coverage', () => {
       <ModernList loading className="loading-shell" />
     );
 
-    expect(container.querySelector('.animate-pulse')).toBeTruthy();
+    // The vendor pulse bridge is gone: the shared anatomy renderer owns the
+    // loading motion, and the rows are the skeletons it derives.
+    expect(container.querySelectorAll('.ds-skeleton-anatomy')).toHaveLength(3);
 
     rerender(
       <ModernList
