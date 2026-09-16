@@ -172,8 +172,17 @@ function foreignCompoundReason(file, family, ownerNames, familyClassTokens) {
     const remainder = token.slice(token.indexOf('-') + 1);
     return remainder === name || remainder.startsWith(`${name}-`) || remainder.startsWith(`${name}_`);
   };
+  // A token belongs to ANOTHER family when some other component owner carries
+  // its name. The skin's own directory is not the only candidate: a skin may be
+  // named anything (`tree-view-connector` paints `tree-view`), so asking only
+  // `underName(token, owner)` swallowed a sibling's classes into this family.
+  const claimedByOtherOwner = (token) =>
+    [...ownerNames].some((name) => name !== family && underName(token, name));
   const selected = [...analyzeSkin(file).classTokens].filter((token) => underName(token, family));
-  const targetsFamily = selected.filter((token) => familyClassTokens.has(token) || !underName(token, owner));
+  const targetsFamily = selected.filter(
+    (token) => familyClassTokens.has(token)
+      || (!underName(token, owner) && !claimedByOtherOwner(token)),
+  );
   if (targetsFamily.length > 0) return undefined;
   const sibling = ownerNames.has(owner) ? `sibling family \`${owner}\` has its own component owner; ` : '';
   return `${sibling}selects no class of the family (${JSON.stringify(selected.slice(0, 4))})`;

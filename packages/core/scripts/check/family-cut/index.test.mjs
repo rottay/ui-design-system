@@ -1024,6 +1024,53 @@ test('PLANT: a prefixed skin that selects no class the family names is another o
   });
 });
 
+const plantSkinNamedAfterNoOwner = (sandbox, dir, css) => {
+  const skin = join(sandbox, `src/foundation/tokens/css/presentation/components/skin/${dir}/index.css`);
+  mkdirSync(dirname(skin), { recursive: true });
+  writeFileSync(skin, css);
+};
+
+test("PLANT: a skin directory nobody owns does not make another owner's class this family's paint", () => {
+  withResolvedSandbox((sandbox) => {
+    plantSiblingOwner(sandbox);
+    plantSkinNamedAfterNoOwner(
+      sandbox,
+      'button-planted-connector',
+      ".rt-button-planted [data-part='planted'] { color: inherit; }\n",
+    );
+  }, {}, (findings, resolved) => {
+    assert.ok(
+      !resolved.skins.some((file) => file.includes('button-planted-connector')),
+      "a skin named after no owner still paints the owner whose class it selects",
+    );
+    assert.match(
+      resolved.foreignSkins.find((entry) => entry.skin.includes('button-planted-connector')).reason,
+      /selects no class/u,
+    );
+    expectNoFinding(findings, grew('classVocabularies'), "a sibling's vocabulary never enters this family");
+    expectNoFinding(findings, grew('legacyNamespaceClasses'), "nor does its legacy class");
+    assert.deepEqual(findings, []);
+  });
+});
+
+test('CONTROL: a class no owner claims stays this family\'s candidate whatever the skin directory is called', () => {
+  withResolvedSandbox((sandbox) => {
+    plantSiblingOwner(sandbox);
+    plantSkinNamedAfterNoOwner(
+      sandbox,
+      'button-planted-connector',
+      ".ds-button-unclaimed[data-part='root'] { color: var(--ds-button-audit-unproduced, var(--ds-color-primary)); }\n",
+    );
+  }, {}, (findings, resolved) => {
+    assert.ok(
+      resolved.skins.some((file) => file.includes('button-planted-connector')),
+      'no owner is named button-unclaimed, so the paint stays the measured family\'s',
+    );
+    assert.deepEqual(resolved.foreignSkins, []);
+    expectFinding(findings, 'denominator `classTokens` moved', 'the unclaimed paint enters this family\'s census');
+  });
+});
+
 test('CONTROL: a data-only row that declares the family and produces no channel is not a fan-out claim', () => {
   const catalog = [{
     id: 'recipe-profile',
