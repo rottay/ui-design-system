@@ -32,6 +32,30 @@ export type SkeletonPartRole = 'frame' | 'pass' | 'block' | 'line' | 'round' | '
  * missing here fails the family-cut gate until the name is given a role.
  */
 export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = Object.freeze({
+  // ---- table anatomy (WO-FAM-06 table cut) ----
+  // Containers read their parts; the header title is the only text line; the
+  // affordances that mean nothing without data draw nothing.
+  table: 'pass',
+  'scroll-container': 'pass',
+  'header-cell': 'pass',
+  'header-content': 'pass',
+  'header-title': 'line',
+  'sort-indicator': 'omit',
+  'resize-handle': 'omit',
+  'filter-row': 'pass',
+  'filter-cell': 'pass',
+  'filter-spacer': 'omit',
+  'expand-cell': 'pass',
+  'expand-button': 'block',
+  'expand-indicator': 'omit',
+  'expanded-row': 'omit',
+  'selection-cell': 'pass',
+  'selection-control': 'block',
+  'selection-hit': 'omit',
+  'empty-cell': 'omit',
+  'virtual-spacer': 'omit',
+  pagination: 'pass',
+  'pagination-button': 'block',
   root: 'frame',
   surface: 'frame',
   bubble: 'frame',
@@ -372,19 +396,40 @@ const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : us
 const INERT: Readonly<Record<string, string>> = { inert: 'inert' };
 const INTERACTIVE: Readonly<Record<string, string>> = {};
 
+/**
+ * Where the skeleton hosts itself. `block` is the wrapper every consumer has
+ * today. `table-rows` renders `tr`/`td` placeholder rows for a loading state
+ * that must live inside a `tbody`, where a wrapper element is not valid HTML.
+ */
+export type AnatomySkeletonMode = 'block' | 'table-rows';
+
+/** One cell of a `table-rows` placeholder row. */
+export interface AnatomySkeletonCell {
+  /** Stamped as `data-kind`, so a control well can paint narrower than a data cell. */
+  readonly kind?: string;
+  /** A stable React key; the index is used when absent. */
+  readonly key?: string;
+}
+
 export interface AnatomySkeletonProps {
   /** While true the component is replaced by the skeleton built from its anatomy. @default true */
   loading?: boolean;
   /** The component the loading state stands in for; its `data-part` anatomy shapes the bones. */
-  children: ReactNode;
+  children?: ReactNode;
   /** Overrides the tenant `skeletonStyle`; `false` holds a static surface. */
   animation?: SkeletonAnimation;
+  /** @default 'block' */
+  mode?: AnatomySkeletonMode;
+  /** `table-rows` only: how many placeholder rows to draw. @default 4 */
+  rowCount?: number;
+  /** `table-rows` only: one entry per cell of every placeholder row. */
+  cells?: readonly AnatomySkeletonCell[];
   className?: string;
   style?: CSSProperties;
 }
 
 export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
-  ({ loading = true, children, animation, className, style }, ref) => {
+  ({ loading = true, children, animation, mode = 'block', rowCount = 4, cells, className, style }, ref) => {
     const tokens = useOptionalTokens();
     const sourceRef = useRef<HTMLDivElement>(null);
     const [bones, setBones] = useState<AnatomyBone[] | null>(null);
@@ -458,6 +503,39 @@ export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
         mutation?.disconnect();
       };
     }, [loading, measure]);
+
+    if (mode === 'table-rows') {
+      // A `tbody` admits no wrapper element, so the rows ARE the skeleton. They
+      // carry no `aria-busy`: the host that owns the loading state keeps the
+      // single one, and every row is hidden so the placeholder count is never
+      // announced as data.
+      const row = cells ?? [{}];
+      return (
+        <>
+          {Array.from({ length: rowCount }, (_, index) => (
+            <tr
+              key={index}
+              className={['ds-skeleton-anatomy-rows', className].filter(Boolean).join(' ')}
+              data-part="skeleton-row"
+              data-loading={loading ? 'true' : 'false'}
+              data-animation={animationStyle}
+              aria-hidden="true"
+              style={style}
+            >
+              {row.map((cell, cellIndex) => (
+                <td
+                  key={cell.key ?? cellIndex}
+                  data-part="skeleton-cell"
+                  {...(cell.kind ? { 'data-kind': cell.kind } : {})}
+                >
+                  <span data-part="skeleton-bar" data-bone="line" />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </>
+      );
+    }
 
     return (
       <div

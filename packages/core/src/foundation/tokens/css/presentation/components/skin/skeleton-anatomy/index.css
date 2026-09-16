@@ -160,3 +160,92 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loadi
     border-color: GrayText;
   }
 }
+
+
+/* ---------------------------------------------------------------------------
+ * TABLE-ROWS MODE. A `tbody` admits no wrapper element, so the placeholder
+ * rows ARE the skeleton: same motion vocabulary as the bones above, same
+ * reduced-motion and forced-colors handling, no second keyframe. The host
+ * states its own cell padding through `--ds-skeleton-cell-padding`.
+ * ------------------------------------------------------------------------- */
+
+.ds-skeleton-anatomy-rows [data-part='skeleton-cell'] {
+  padding: var(--ds-skeleton-cell-padding, var(--ds-spacing-2) var(--ds-spacing-3));
+}
+
+.ds-skeleton-anatomy-rows [data-part='skeleton-bar'] {
+  display: block;
+  block-size: var(--ds-skeleton-bar-height, var(--ds-spacing-3));
+  inline-size: 72%;
+  border-radius: var(--ds-skeleton-line-radius, calc(4px * var(--ds-radius-scale, 1)));
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+  );
+}
+
+/* Widths vary per row so the stack reads as data, not a striped box. */
+.ds-skeleton-anatomy-rows:nth-child(2n) [data-part='skeleton-bar'] {
+  inline-size: 58%;
+}
+.ds-skeleton-anatomy-rows:nth-child(3n) [data-part='skeleton-bar'] {
+  inline-size: 66%;
+}
+/* The control well comes last at equal specificity so its square beats the
+   per-row width variants. */
+.ds-skeleton-anatomy-rows [data-part='skeleton-cell'][data-kind='control'] [data-part='skeleton-bar'] {
+  inline-size: var(--ds-skeleton-control-size, var(--ds-spacing-4));
+  block-size: var(--ds-skeleton-control-size, var(--ds-spacing-4));
+  margin-inline: auto;
+}
+
+.ds-skeleton-anatomy-rows[data-loading='true'][data-animation='pulse'] [data-part='skeleton-bar'] {
+  animation: ds-foundation-pulse calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
+}
+
+.ds-skeleton-anatomy-rows[data-loading='true'][data-animation='shimmer'] [data-part='skeleton-bar'] {
+  background: var(
+    --ds-skeleton-wave-gradient,
+    linear-gradient(
+      90deg,
+      var(--ds-material-panel-background, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))) 25%,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 8%,
+        var(--ds-material-card-background, var(--ds-surface-card-bg, var(--ds-surface-card)))
+      ) 50%,
+      var(--ds-material-panel-background, var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))) 75%
+    )
+  );
+  background-size: 200% 100%;
+  animation: ds-foundation-shimmer calc(var(--ds-motion-attention) * 5) var(--ds-motion-ease-in-out) infinite;
+}
+
+:dir(rtl) .ds-skeleton-anatomy-rows[data-loading='true'] [data-part='skeleton-bar'] {
+  animation-direction: reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-skeleton-anatomy-rows[data-loading='true'] [data-part='skeleton-bar'] {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    background: var(
+      --ds-skeleton-bg,
+      var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+    );
+  }
+}
+
+html[data-ds-motion='reduced'] .ds-skeleton-anatomy-rows[data-loading='true'] [data-part='skeleton-bar'] {
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+  );
+}
+
+@media (forced-colors: active) {
+  .ds-skeleton-anatomy-rows [data-part='skeleton-bar'][data-part='skeleton-bar'] {
+    background: GrayText;
+    animation: none;
+  }
+}
