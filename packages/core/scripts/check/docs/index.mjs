@@ -426,6 +426,21 @@ export const GENERATED_DOCUMENTS = Object.freeze([
     verification: 'command',
     check: ['node', 'scripts/generate/taxonomy/index.mjs', '--check'],
   },
+  {
+    document: 'packages/core/docs/generated/theme-graph/controls.md',
+    // --check-views compares the view against a fresh render of the committed
+    // by-control/by-family JSON and never touches the build; the deriving
+    // --check owns the compiler freshness assertion instead.
+    verification: 'command',
+    check: ['node', 'scripts/generate/theme-graph/index.mjs', '--check-views'],
+  },
+  {
+    document: 'packages/core/docs/generated/theme-graph/families.md',
+    // Same cheap check as its sibling: the view is a pure function of the
+    // committed graph JSON.
+    verification: 'command',
+    check: ['node', 'scripts/generate/theme-graph/index.mjs', '--check-views'],
+  },
 ]);
 
 /** Runs the whole gate and returns findings plus the census that proves scope. */
