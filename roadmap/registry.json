@@ -5085,6 +5085,11 @@
      "at": "2026-09-16 02:40",
      "by": "kimi-admin",
      "note": "2026-09-16 kimi-admin: census received (writer: fix-fam02; zero edits). 18 families measured; 465 BLOCKING that are really THREE classes: 371 skeleton-part roles (281 unique data-part names in the shared renderer map; the same operation as table/list but an order of magnitude larger), 54 inline paint, ~10 others (4 families without executable a11y assertions: column-menu, status-filter-pills, field-filters-panel, grid-view; 3 partAttributes gaps: data-table, list-toolbar, active-filters-bar). TWO STOPS registered for adjudication: STOP 1 -- the gate cannot see the pattern-* skins (kanban-board, calendar-view, pattern-map-view, pattern-timeline, pattern-tree-view): skinBelongsToFamily only matches dir==family or family-*, never a prefix -- mirror of the tree T1 bug, fixed first (B0, instrument with drill); STOP 2 -- the WO's ds-<family> namespace has LIVE external consumers (ds-pattern-data-table in 12 app-bithire files + app-evnto, ds-pattern-kanban-board, --ds-filter-panel-* written with !important by app-bithire) -- the .rottay-badge precedent applies: a namespace migration with a live external consumer is REGISTERED, never executed in the cut; the pattern tier's real namespace is ds-pattern-<family>, pinned with its reason. The 196/266 readWithoutProducer concentration lives in data-table (100) and list-toolbar (96). The shared DnD kernel exists with ZERO adoption (file-manager, saved-views, kanban-board each reimplement it -- step 4 is real adoption of three sites, not dead-code unification); export-button in structures/workspace is the live one (file-manager rustic's is frozen; charts have their own). The owner's adjudication of the two STOPs and the detailed GO are pending in-session (owner took the adjudication seat on this WO). Batching proposed by the writer: B0 instrument, B1 the 281 roles (prerequisites), then B2 toolbars / B3 column+views / B4 data-table / B5 views / B6 boards, disjoint."
+    },
+    {
+     "at": "2026-09-16 09:07",
+     "by": "kimi-admin",
+     "note": "B0+B1 integrados (6e9dd9aa6): instrumento lee prefijo de tier pattern-/structure- en directorio y token de clase; 281 roles de esqueleto adjudicados por nombre; blocking 465->171, cero has-no-role en las 18; gate 59/59 drill 72/72. B2+B3 despachados."
     }
    ]
   },
@@ -5184,6 +5189,11 @@
      "at": "2026-09-16 08:40",
      "by": "kimi-admin",
      "note": "2026-09-16 kimi-admin: the closest('[dir]') sweep INTEGRATED (430898f77, audited): 12 probe sites / 16 call sites across 11 families migrated to useOptionalDirection with private probes deleted and RTL cases moved to I18nProvider locale='ar'; closest('[dir]') is now EXACTLY 0 in src/components (the fiche's criterion); the measured consequence declared per family; attribution proven by a same-command four-tier run on pristine HEAD vs the lot's tree (56 failed / 24 failing files on both, byte-identical sets, zero title diff). data-icon-mirrored exists and is used (13 sites). MEASURED STATE of the remaining fiche conditions, honestly: (1) getComputedStyle().direction has 16 sites across 13 owners -- census dispatched to fam07 FIRST per the owner's instruction (a portal reading its anchor's direction may not be the same defect), migrations follow; (2) the PROHIBITION GATE for closest('[dir]')/getComputedStyle().direction does NOT exist yet and is owed by this WO's own outcome -- to be built with planted red; (3) the physical-property gate = 0 outside a written allowlist also does not exist yet -- the layout families' geometry went logical in the L5/L3 cuts (divider margin-block/inline-size/border-inline-start), but the full 66-declaration set still needs its census and the gate. (4) dir='rtl' cases per family group landed via the sweep's I18nProvider wraps. NEXT: the getComputedStyle census, then the two gates lot, then the close evaluation. ALSO noted: the theme-graph views landed (65b98753c) with the writer catching my own invalid 'run' flag as a silent false-green and hardening the CLI against it."
+    },
+    {
+     "at": "2026-09-16 09:07",
+     "by": "kimi-admin",
+     "note": "direction-authority gate integrada (368113f66): deteccion agnostica de ortografia, 3 excepciones nombradas ancla/portal, 21 probes pineados decrease-only en 10 archivos, blocking pre-build con drill 15/15. Lote migracion 1 (roving-focus+scroll-reveal) despachado."
     }
    ]
   },
