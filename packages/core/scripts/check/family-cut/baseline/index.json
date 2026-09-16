@@ -961,7 +961,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 49,
+        "channelsRead": 50,
         "classTokens": 5,
         "partsStamped": 12,
         "partsConsumed": 13
@@ -1182,6 +1182,26 @@
         "skinFiles": 1,
         "sourceFiles": 9,
         "channelsRead": 127,
+        "classTokens": 2,
+        "partsStamped": 1,
+        "partsConsumed": 1
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 2,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
+    },
+    "box": {
+      "cut": "WO-FAM-07",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 5,
+        "channelsRead": 13,
         "classTokens": 2,
         "partsStamped": 1,
         "partsConsumed": 1
