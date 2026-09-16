@@ -41,13 +41,16 @@ const SKIN_HASHES = {
   'form-placeholders': '84a168a4fd5f3a3cb42f7d5c149642c724774e3a66e458fefacd921a934248f0',
   'navigation-static': 'a35d19035d60d802a89771759fe3a584deea6e982ac4fba08bfd6a52f5884d12',
   'primitive-motion': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
-  // CI-1 re-pin: 449ad4ba9 (2026-08-10) added a `@media
-  // (prefers-reduced-motion: reduce)` block for the classic thumb -- purely
-  // additive, no PAINT_PROPERTIES member touched (transition/animation
-  // timing only), so `paintCount` and every individual `ruleContract` below
-  // are unaffected; only this byte-exact hash moves. Verified with
-  // `shasum -a 256` against the tree today.
-  'scroll-area': '6dfac96aa06cb593864c66d9993da7564a2c340c8f9af62d5c6ccaedba277ded',
+  // L6 / STOP-3 re-pin: the classic and rustic paint left this file for the
+  // engines that own it, so the file is now the modern legacy class and
+  // nothing else. Superseded hash, kept as the record of the pre-relocation
+  // state: 6dfac96aa06cb593864c66d9993da7564a2c340c8f9af62d5c6ccaedba277ded
+  // (which itself superseded the pre-449ad4ba9 state, before the classic
+  // thumb's reduced-motion block). Verified with `shasum -a 256` against the
+  // tree today. The relocated halves are contract-pinned below against their
+  // new owners, declaration by declaration, so the bytes that left this file
+  // are still asserted -- they are just asserted where they now live.
+  'scroll-area': 'a729ee7ee623d383b35c76b7a43eee44dd2c030ba7b315080138e08003b237c5',
   'toast-animation-keyframes': 'a18d974060652fda28e40aa14d46173de1f766ac067cec4a689b43124c33c62a',
 } as const;
 
@@ -178,6 +181,16 @@ const SKINS = {
 /** New owners of the relocated modern payload. */
 const RELOCATED = {
   scrollAreaModern: readEngineSkin('scroll-area'),
+  /* L6 / STOP-3: the classic and rustic halves of the scroll-area skin left the shared
+     bucket for the engines that own them, so a frozen engine's paint stops living at a
+     path the freeze gate cannot see. Classic landed in the engine theme that already
+     owned `.rottay-sheet-classic`; rustic got its own skin file beside its twenty
+     siblings. Declarations byte-identical -- the contracts below are the same objects,
+     read from the new owners. */
+  scrollAreaClassic: readSource('foundation/tokens/css/runtime/engines/classic/theme/index.css'),
+  scrollAreaRustic: readSource(
+    'foundation/tokens/css/runtime/engines/rustic/skin/scroll-area/index.css'
+  ),
   tabsModern: readEngineSkin('tabs'),
   inputModern: readEngineSkin('input'),
   foundationKeyframes: readSource('foundation/tokens/css/foundation/animations/keyframes/index.css'),
@@ -212,7 +225,12 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       dataTable: 34,
       primitiveMotion: 8,
       toast: 20,
-      scrollArea: 18,
+      // L6 / STOP-3: 18 -> 0. The decomposition was measured before the move and
+      // is exact -- 0 shared + 7 classic + 11 rustic -- so the whole count left
+      // with the two engine halves and the four rules that stayed declare only
+      // custom properties and `width`/`height`, none of which is paint-countable.
+      // The 18 are not lost: they are pinned on the new owners below.
+      scrollArea: 0,
       navigation: 3,
       // CI-1 re-pin: 4afa74b353 (2026-08-11) removed the modern Input's
       // `::placeholder` rule from this file (superseded by
@@ -597,36 +615,36 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       background: modernThumb,
     });
 
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-classic::-webkit-scrollbar-track')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaClassic, '.rottay-scroll-area-classic::-webkit-scrollbar-track')).toEqual({
       background: 'var(--ds-color-neutral-100, #f5f5f5)',
       'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
     });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-classic::-webkit-scrollbar-thumb')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaClassic, '.rottay-scroll-area-classic::-webkit-scrollbar-thumb')).toEqual({
       background: 'var(--ds-color-neutral-400, #bfbfbf)',
       'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
       transition: 'background 0.2s ease',
     });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-classic::-webkit-scrollbar-thumb:hover')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaClassic, '.rottay-scroll-area-classic::-webkit-scrollbar-thumb:hover')).toEqual({
       background: 'var(--ds-color-neutral-500, #8c8c8c)',
     });
     expect(
-      ruleContract(SKINS.scrollArea, ".rottay-scroll-area-classic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb")
+      ruleContract(RELOCATED.scrollAreaClassic, ".rottay-scroll-area-classic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb")
     ).toEqual({
       background: 'transparent',
     });
     expect(
       ruleContract(
-        SKINS.scrollArea,
+        RELOCATED.scrollAreaClassic,
         ".rottay-scroll-area-classic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb"
       )
     ).toEqual({
       background: 'var(--ds-color-neutral-400, #bfbfbf)',
     });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-classic')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaClassic, '.rottay-scroll-area-classic')).toEqual({
       'scrollbar-width': 'auto',
       'scrollbar-color': 'var(--ds-color-neutral-400, #bfbfbf) var(--ds-color-neutral-100, #f5f5f5)',
     });
-    expect(ruleContracts(SKINS.scrollArea, ".rottay-scroll-area-classic[data-scrollbar-size='thin']")).toEqual([
+    expect(ruleContracts(RELOCATED.scrollAreaClassic, ".rottay-scroll-area-classic[data-scrollbar-size='thin']")).toEqual([
       {
         '--ds-scroll-area-scrollbar-size': '4px',
         '--ds-scroll-area-scrollbar-radius': '2px',
@@ -636,30 +654,30 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       },
     ]);
 
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-rustic::-webkit-scrollbar-track')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaRustic, '.rottay-scroll-area-rustic::-webkit-scrollbar-track')).toEqual({
       background: 'var(--ds-color-neutral-100, #f5f5f5)',
       'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
     });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-rustic::-webkit-scrollbar-thumb')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaRustic, '.rottay-scroll-area-rustic::-webkit-scrollbar-thumb')).toEqual({
       background: 'var(--ds-color-neutral-400, #bfbfbf)',
       'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
       border: '1px solid var(--ds-color-neutral-100, #f5f5f5)',
     });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-rustic::-webkit-scrollbar-thumb:hover')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaRustic, '.rottay-scroll-area-rustic::-webkit-scrollbar-thumb:hover')).toEqual({
       background: 'var(--ds-color-neutral-500, #8c8c8c)',
     });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-rustic::-webkit-scrollbar-corner')).toEqual({
+    expect(ruleContract(RELOCATED.scrollAreaRustic, '.rottay-scroll-area-rustic::-webkit-scrollbar-corner')).toEqual({
       background: 'var(--ds-color-neutral-100, #f5f5f5)',
     });
     expect(
-      ruleContract(SKINS.scrollArea, ".rottay-scroll-area-rustic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb")
+      ruleContract(RELOCATED.scrollAreaRustic, ".rottay-scroll-area-rustic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb")
     ).toEqual({
       background: 'transparent',
       'border-color': 'transparent',
     });
     expect(
       ruleContract(
-        SKINS.scrollArea,
+        RELOCATED.scrollAreaRustic,
         ".rottay-scroll-area-rustic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb"
       )
     ).toEqual({
@@ -669,19 +687,34 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
   });
 
   it('preserves the ScrollArea size and hidden-thumb state matrix', () => {
-    for (const [size, width, radius] of [
-      ['thin', '4px', '2px'],
-      ['normal', '8px', '4px'],
-      ['wide', '12px', '6px'],
-    ] as const) {
-      const block = new RegExp(
-        `\\[data-scrollbar-size='${size}'\\][^{]*\\{[^}]*--ds-scroll-area-scrollbar-size:\\s*${width};[^}]*--ds-scroll-area-scrollbar-radius:\\s*${radius};`
-      );
-      expect(SKINS.scrollArea).toMatch(block);
+    /* One owner per engine since L6 / STOP-3, so the matrix is asserted three times
+       rather than once: the closed enum was a single three-selector rule list and the
+       relocation split the LIST, never the declarations. A size that resolved for an
+       engine before must still resolve for it, from whichever file now carries it. */
+    const ENUM_OWNERS = [
+      ['modern', SKINS.scrollArea],
+      ['classic', RELOCATED.scrollAreaClassic],
+      ['rustic', RELOCATED.scrollAreaRustic],
+    ] as const;
+
+    for (const [engine, owner] of ENUM_OWNERS) {
+      for (const [size, width, radius] of [
+        ['thin', '4px', '2px'],
+        ['normal', '8px', '4px'],
+        ['wide', '12px', '6px'],
+      ] as const) {
+        const block = new RegExp(
+          `\\.rottay-scroll-area-${engine}\\[data-scrollbar-size='${size}'\\][^{]*\\{[^}]*--ds-scroll-area-scrollbar-size:\\s*${width};[^}]*--ds-scroll-area-scrollbar-radius:\\s*${radius};`
+        );
+        expect(owner).toMatch(block);
+      }
     }
 
-    for (const engine of ['classic', 'rustic']) {
-      expect(SKINS.scrollArea).toContain(`.rottay-scroll-area-${engine}[data-hide-scrollbar='true']`);
+    for (const [engine, owner] of ENUM_OWNERS.filter(([name]) => name !== 'modern')) {
+      expect(owner).toContain(`.rottay-scroll-area-${engine}[data-hide-scrollbar='true']`);
+      /* ...and the shared file kept none of it: the relocation MOVED the rules, it did
+         not copy them, so a stale duplicate left behind would be caught here. */
+      expect(SKINS.scrollArea).not.toContain(`.rottay-scroll-area-${engine}`);
     }
     expect(RELOCATED.scrollAreaModern).toContain(
       `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']`

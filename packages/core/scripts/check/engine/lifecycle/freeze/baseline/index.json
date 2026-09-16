@@ -485,9 +485,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css": {
-      "blob": "dc3a186b780d906e72168c72869312b7c58bae41f8189bb1950de9098b2daed3",
-      "relocationDigest": "8e39942b4e4a9699c768c14a630a836328e18bf32c0d77a90ec493284c6dd087",
-      "reason": "1b4653f5d: the @supports (height: 100dvh) block is flattened into the base rule. Equivalent on every browser that supports dvh, which that block already won on; the package declares no browserslist and builds to esnext, so the removed fallback covers no supported target.",
+      "blob": "1c833bd8e1579755494be8733526f9694a0193e31a2f8b5060be022d3d7fd608",
+      "relocationDigest": "63a9e5e3cbb30784dd49bbedb96efa72c8eb98cd975c06032f9b83773cc008af",
+      "reason": "L6/STOP-3, on the STOP-2 precedent: the seven classic scrollbar rules, their prefers-reduced-motion guard and the classic third of the shared size enum move into the engine theme that already owns .rottay-sheet-classic, declarations byte-identical and the same producer at scroll-area/engines/classic/index.tsx:70. Same layer promotion, measured inert. The relocated guard stays observed: reduced-motion-guard.test.ts follows it by named selector rather than by roster membership, because this file animates an antd surface it does not guard and a roster row would claim coverage it lacks.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css": {
@@ -554,6 +554,12 @@
       "blob": "832409c6eb211b0b0b94614b7445ea06e5c14594b28e4611f0ff6e6164614f86",
       "relocationDigest": "a08b514a23658e7244bf69bf97cc30fe3ceb039fdccd23cc716a5608c0583c68",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/scroll-area/index.css": {
+      "blob": "e909af1b485bbac86781c86f77f6e7bc229bb724a61093516c696609646f0989",
+      "relocationDigest": "67a97eba000bcb40ae2085a761ae80101cd682e138c8e4f916cb6ca625ddd14f",
+      "reason": "L6/STOP-3, on the STOP-2 precedent: the six rustic scrollbar rules and the rustic third of the shared size enum move out of presentation/components/skin/scroll-area into the engine that owns them, declarations byte-identical and the same producer at scroll-area/engines/rustic/index.tsx:77. The rules were outside the freeze gate's reach at their old path; this brings them under it. Cascade measured inert: layer(rottay-components) -> layer(rottay-engines), and no rule in that layer or later targets .rottay-scroll-area-rustic anywhere in src. Per-engine cascade projection byte-identical against HEAD.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css": {

@@ -328,6 +328,7 @@
 @import "../../../runtime/engines/rustic/skin/popover/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/scroll-area/index.css"
   layer(rottay-engines);
+@import "../../../runtime/engines/rustic/skin/scroll-area/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/segmented/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/rustic/skin/segmented/index.css" layer(rottay-engines);
 @import "../../../runtime/engines/modern/skin/sheet/index.css" layer(rottay-engines);

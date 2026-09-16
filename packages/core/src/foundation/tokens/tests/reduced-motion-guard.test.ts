@@ -25,7 +25,10 @@ const blankComments = (css: string): string =>
 
 const norm = (s: string): string => s.replace(/\s+/g, " ").trim();
 
-/* Classic and Rustic are read-only this programme, so the batch's scope is Modern plus shared. */
+/* Classic and Rustic are read-only this programme, so the batch's scope is Modern plus shared.
+   A rule that LEAVES this scope by relocation does not leave the guard: it is followed by a
+   named row instead (RELOCATED_MOTION_ROWS, below), because the frozen file it lands in is
+   not a roster member and must not be read as one. */
 const IN_SCOPE = walk(CSS_ROOT)
   .filter((f) => f.includes("/engines/modern/") || f.includes("/components/"))
   .sort();
@@ -51,7 +54,6 @@ const ROSTER = [
   "presentation/components/skin/markdown-view/index.css",
   "presentation/components/skin/record-facts/index.css",
   "presentation/components/skin/record-workbench/index.css",
-  "presentation/components/skin/scroll-area/index.css",
   "presentation/components/skin/skeleton-anatomy/index.css",
   "runtime/engines/modern/framework-bridge/index.css",
   "runtime/engines/modern/skin/collapse/index.css",
@@ -327,5 +329,91 @@ describe("record-facts -- the shimmer is guarded by the file that declares it", 
     /* ...and it is motionless because its only shorthand CANCELS motion, not because the paint
        was emptied out. Without this, a deleted forced-colors block would read as success. */
     expect(skin).toMatch(/animation:\s*none/);
+  });
+});
+
+/** Motion that LEFT the batch's path-shaped scope by relocation, and the guard that followed it.
+ *
+ *  L6 / STOP-3 moved the classic ScrollArea scrollbar paint out of
+ *  `presentation/components/skin/scroll-area` -- which was a roster member, and is not one any
+ *  more because it no longer animates anything -- into the engine that owns it. The destination
+ *  is a FROZEN file, so `IN_SCOPE` does not reach it and must not: measured on this tree, the
+ *  frozen stylesheets hold 7 files with productive motion and 6 of them carry no guard at all
+ *  (the rustic button, card, input, progress and stats-grid skins, and the rustic theme). Those
+ *  are real debt, but they are not this batch's and the freeze forbids this lane from fixing
+ *  them, so widening the scope would only redden the sweep on work nobody here may do.
+ *
+ *  A roster row would be just as wrong in the other direction: the classic theme animates a
+ *  large antd surface it does not guard, so declaring it a motion OWNER would claim a coverage
+ *  it does not have. The row below is therefore scoped to the relocated SELECTOR, not the file:
+ *  it asserts the rule still animates, and that the same file collapses exactly that selector.
+ *  A guarded rule cannot become unobserved by moving house, and nothing else is claimed. */
+const RELOCATED_MOTION_ROWS = [
+  {
+    path: "runtime/engines/classic/theme/index.css",
+    from: "presentation/components/skin/scroll-area/index.css",
+    selector: ".rottay-scroll-area-classic::-webkit-scrollbar-thumb",
+  },
+];
+
+describe("relocated motion -- a guard follows its rule out of the batch's path scope", () => {
+  it.each(RELOCATED_MOTION_ROWS)(
+    "$selector still animates in $path, and that file collapses it",
+    ({ path, selector }) => {
+      const blanked = blankComments(readFileSync(join(CSS_ROOT, path), "utf8"));
+
+      /* Forward: the motion is really there. Without this the guard assertion below would pass
+         vacuously on a file that had quietly lost the transition in the move. */
+      expect([...productiveSelectors(blanked)]).toContain(selector);
+
+      /* And the collapse names it, in the same file, with the canonical longhand triple. */
+      const block = reduceBlock(blanked);
+      expect(block).not.toBeNull();
+      expect(guardedSelectors(block ?? "")).toContain(selector);
+      expect(block).toMatch(reducedMotionDuration("transition-duration"));
+      expect(block).not.toMatch(KILLS_MOTION);
+    },
+  );
+
+  it.each(RELOCATED_MOTION_ROWS)("$from no longer animates, so it owes no guard", ({ from }) => {
+    const source = readFileSync(join(CSS_ROOT, from), "utf8");
+    const blanked = blankComments(source);
+    /* The origin left the roster because its motion left, not because someone deleted a
+       sentinel: both directions are asserted so a half-done relocation is caught. */
+    expect([...productiveSelectors(blanked)]).toEqual([]);
+    expect(reduceBlock(blanked)).toBeNull();
+    expect(SENTINEL.test(source)).toBe(false);
+  });
+
+  /* PLANTED. The two rows above read the tree, so they go green the moment the tree is right and
+     say nothing about whether the reading would catch a tree that is wrong. These plant both
+     failures on synthetic sources and prove the same helpers report them. */
+  it("PLANTED: a relocated rule whose guard did not follow is caught", () => {
+    const withoutGuard = `.rottay-scroll-area-classic::-webkit-scrollbar-thumb {
+      background: red;
+      transition: background 0.2s ease;
+    }`;
+    const selector = ".rottay-scroll-area-classic::-webkit-scrollbar-thumb";
+    expect([...productiveSelectors(withoutGuard)]).toContain(selector);
+    expect(reduceBlock(withoutGuard)).toBeNull();
+
+    const withGuard = `${withoutGuard}
+    @media (prefers-reduced-motion: reduce) {
+      ${selector} {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }`;
+    expect(guardedSelectors(reduceBlock(withGuard) ?? "")).toContain(selector);
+  });
+
+  it("PLANTED: a relocation that dropped the motion on the way is caught", () => {
+    /* The origin is clean and the destination never received the transition. The forward
+       assertion is what bites: without it, an empty destination reads as a successful move. */
+    const destinationMissingTheRule = `.rottay-scroll-area-classic::-webkit-scrollbar-thumb {
+      background: red;
+    }`;
+    expect([...productiveSelectors(destinationMissingTheRule)]).toEqual([]);
   });
 });

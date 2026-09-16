@@ -3,98 +3,39 @@
  *
  * The closed `thin|normal|wide` enum replaces the former per-instance selector
  * interpolation.  Each declaration keeps the exact prior pixel and token value.
+ *
+ * SCOPE IS MODERN ONLY. This file used to carry the same rule list for the
+ * three engines and, below it, the whole classic and rustic scrollbar paint.
+ * L6 / STOP-3 moved each engine's share to the engine that owns it -- classic
+ * into `runtime/engines/classic/theme`, rustic into
+ * `runtime/engines/rustic/skin/scroll-area` -- because a frozen engine's paint
+ * sitting at this path is outside the freeze gate's reach. The declarations did
+ * not change; only the selector lists were split.
+ *
+ * What remains is the legacy `rottay-scroll-area-modern` class, which the
+ * modern engine still stamps alongside its `--modern[data-part='root']` form.
+ * `runtime/engines/modern/skin/scroll-area` declares the same three enum steps
+ * and the same scrollbar geometry in a LATER layer, so these four rules no
+ * longer decide anything for Modern; they are kept, not retired, because
+ * retiring a legacy class is its own adjudication and not this lot's.
  */
 
-.rottay-scroll-area-modern[data-scrollbar-size='thin'],
-.rottay-scroll-area-classic[data-scrollbar-size='thin'],
-.rottay-scroll-area-rustic[data-scrollbar-size='thin'] {
+.rottay-scroll-area-modern[data-scrollbar-size='thin'] {
   --ds-scroll-area-scrollbar-size: 4px;
   --ds-scroll-area-scrollbar-radius: 2px;
 }
 
-.rottay-scroll-area-modern[data-scrollbar-size='normal'],
-.rottay-scroll-area-classic[data-scrollbar-size='normal'],
-.rottay-scroll-area-rustic[data-scrollbar-size='normal'] {
+.rottay-scroll-area-modern[data-scrollbar-size='normal'] {
   --ds-scroll-area-scrollbar-size: 8px;
   --ds-scroll-area-scrollbar-radius: 4px;
 }
 
-.rottay-scroll-area-modern[data-scrollbar-size='wide'],
-.rottay-scroll-area-classic[data-scrollbar-size='wide'],
-.rottay-scroll-area-rustic[data-scrollbar-size='wide'] {
+.rottay-scroll-area-modern[data-scrollbar-size='wide'] {
   --ds-scroll-area-scrollbar-size: 12px;
   --ds-scroll-area-scrollbar-radius: 6px;
 }
 
-.rottay-scroll-area-modern::-webkit-scrollbar,
-.rottay-scroll-area-classic::-webkit-scrollbar,
-.rottay-scroll-area-rustic::-webkit-scrollbar {
+.rottay-scroll-area-modern::-webkit-scrollbar {
   width: var(--ds-scroll-area-scrollbar-size);
   height: var(--ds-scroll-area-scrollbar-size);
-}
-
-/* Modern scrollbar paint (track/thumb/hover/hide) moved to the single owner:
-   foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css (K3-C
-   lane). This file remains the classic/rustic owner + shared size enum. */
-
-/* Classic */
-.rottay-scroll-area-classic::-webkit-scrollbar-track {
-  background: var(--ds-color-neutral-100, #f5f5f5);
-  border-radius: var(--ds-scroll-area-scrollbar-radius);
-}
-.rottay-scroll-area-classic::-webkit-scrollbar-thumb {
-  background: var(--ds-color-neutral-400, #bfbfbf);
-  border-radius: var(--ds-scroll-area-scrollbar-radius);
-  transition: background 0.2s ease;
-}
-.rottay-scroll-area-classic::-webkit-scrollbar-thumb:hover {
-  background: var(--ds-color-neutral-500, #8c8c8c);
-}
-.rottay-scroll-area-classic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
-  background: transparent;
-}
-.rottay-scroll-area-classic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
-  background: var(--ds-color-neutral-400, #bfbfbf);
-}
-.rottay-scroll-area-classic {
-  scrollbar-width: auto;
-  scrollbar-color: var(--ds-color-neutral-400, #bfbfbf) var(--ds-color-neutral-100, #f5f5f5);
-}
-.rottay-scroll-area-classic[data-scrollbar-size='thin'] {
-  scrollbar-width: thin;
-}
-
-/* Rustic */
-.rottay-scroll-area-rustic::-webkit-scrollbar-track {
-  background: var(--ds-color-neutral-100, #f5f5f5);
-  border-radius: var(--ds-scroll-area-scrollbar-radius);
-}
-.rottay-scroll-area-rustic::-webkit-scrollbar-thumb {
-  background: var(--ds-color-neutral-400, #bfbfbf);
-  border-radius: var(--ds-scroll-area-scrollbar-radius);
-  border: 1px solid var(--ds-color-neutral-100, #f5f5f5);
-}
-.rottay-scroll-area-rustic::-webkit-scrollbar-thumb:hover {
-  background: var(--ds-color-neutral-500, #8c8c8c);
-}
-.rottay-scroll-area-rustic::-webkit-scrollbar-corner {
-  background: var(--ds-color-neutral-100, #f5f5f5);
-}
-.rottay-scroll-area-rustic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-color: transparent;
-}
-.rottay-scroll-area-rustic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
-  background: var(--ds-color-neutral-400, #bfbfbf);
-  border-color: var(--ds-color-neutral-100, #f5f5f5);
-}
-
-/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
-   relaid out, or left waiting on an event that never arrives. */
-@media (prefers-reduced-motion: reduce) {
-  .rottay-scroll-area-classic::-webkit-scrollbar-thumb {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-  }
 }

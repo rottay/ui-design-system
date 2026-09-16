@@ -1,0 +1,64 @@
+/**
+ * Rustic ScrollArea skin (L6 / STOP-3).
+ *
+ * WHY THIS FILE EXISTS. These rules used to sit in
+ * `presentation/components/skin/scroll-area`, an engine-agnostic file that
+ * owned the classic and rustic paint for this family. That path is outside the
+ * freeze gate's reach, so a frozen engine's paint could be edited with no
+ * exception and no reviewer. Moving it to the engine that owns it is what puts
+ * it under the gate, on the STOP-2 precedent: declarations byte-identical,
+ * same producer, relocation authorized per file.
+ *
+ * SCOPE is the legacy `rottay-scroll-area-rustic` class, which is exactly what
+ * `components/primitives/layout/scroll-area/engines/rustic/index.tsx` stamps.
+ * No `data-part` form is minted here: minting anatomy would be content work on
+ * a frozen engine, which the policy reserves for Modern.
+ *
+ * The size enum is the rustic third of a rule list the shared file used to
+ * carry for all three engines. The declarations are unchanged; only the
+ * selector list was split so each engine's copy lives with its engine.
+ */
+
+.rottay-scroll-area-rustic[data-scrollbar-size='thin'] {
+  --ds-scroll-area-scrollbar-size: 4px;
+  --ds-scroll-area-scrollbar-radius: 2px;
+}
+
+.rottay-scroll-area-rustic[data-scrollbar-size='normal'] {
+  --ds-scroll-area-scrollbar-size: 8px;
+  --ds-scroll-area-scrollbar-radius: 4px;
+}
+
+.rottay-scroll-area-rustic[data-scrollbar-size='wide'] {
+  --ds-scroll-area-scrollbar-size: 12px;
+  --ds-scroll-area-scrollbar-radius: 6px;
+}
+
+.rottay-scroll-area-rustic::-webkit-scrollbar {
+  width: var(--ds-scroll-area-scrollbar-size);
+  height: var(--ds-scroll-area-scrollbar-size);
+}
+
+.rottay-scroll-area-rustic::-webkit-scrollbar-track {
+  background: var(--ds-color-neutral-100, #f5f5f5);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+.rottay-scroll-area-rustic::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+  border: 1px solid var(--ds-color-neutral-100, #f5f5f5);
+}
+.rottay-scroll-area-rustic::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-color-neutral-500, #8c8c8c);
+}
+.rottay-scroll-area-rustic::-webkit-scrollbar-corner {
+  background: var(--ds-color-neutral-100, #f5f5f5);
+}
+.rottay-scroll-area-rustic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-color: transparent;
+}
+.rottay-scroll-area-rustic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+  border-color: var(--ds-color-neutral-100, #f5f5f5);
+}

@@ -2449,3 +2449,70 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: transparent;
   border: none;
 }
+
+/* =============================================================================
+   SCROLL AREA - .rottay-scroll-area-classic
+
+   Relocated here by L6 / STOP-3 from presentation/components/skin/scroll-area,
+   an engine-agnostic file that owned this frozen engine's paint outside the
+   freeze gate's reach. Declarations are byte-identical and the producer is
+   unchanged (scroll-area/engines/classic/index.tsx). The size enum below is the
+   classic third of a rule list that shared one selector list across the three
+   engines; only the list was split.
+   ============================================================================= */
+
+.rottay-scroll-area-classic[data-scrollbar-size='thin'] {
+  --ds-scroll-area-scrollbar-size: 4px;
+  --ds-scroll-area-scrollbar-radius: 2px;
+}
+
+.rottay-scroll-area-classic[data-scrollbar-size='normal'] {
+  --ds-scroll-area-scrollbar-size: 8px;
+  --ds-scroll-area-scrollbar-radius: 4px;
+}
+
+.rottay-scroll-area-classic[data-scrollbar-size='wide'] {
+  --ds-scroll-area-scrollbar-size: 12px;
+  --ds-scroll-area-scrollbar-radius: 6px;
+}
+
+.rottay-scroll-area-classic::-webkit-scrollbar {
+  width: var(--ds-scroll-area-scrollbar-size);
+  height: var(--ds-scroll-area-scrollbar-size);
+}
+
+.rottay-scroll-area-classic::-webkit-scrollbar-track {
+  background: var(--ds-color-neutral-100, #f5f5f5);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+.rottay-scroll-area-classic::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+  transition: background 0.2s ease;
+}
+.rottay-scroll-area-classic::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-color-neutral-500, #8c8c8c);
+}
+.rottay-scroll-area-classic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.rottay-scroll-area-classic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+}
+.rottay-scroll-area-classic {
+  scrollbar-width: auto;
+  scrollbar-color: var(--ds-color-neutral-400, #bfbfbf) var(--ds-color-neutral-100, #f5f5f5);
+}
+.rottay-scroll-area-classic[data-scrollbar-size='thin'] {
+  scrollbar-width: thin;
+}
+
+/* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
+   relaid out, or left waiting on an event that never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-scroll-area-classic::-webkit-scrollbar-thumb {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
