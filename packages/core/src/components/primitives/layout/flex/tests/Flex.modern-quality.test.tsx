@@ -28,14 +28,18 @@ describe("Modern Flex quality contract", () => {
     expect(flex).toHaveAttribute("data-gap", "split");
     expect(flex).toHaveAttribute("dir", "rtl");
     expect(flex).not.toHaveAttribute("engine");
-    expect(flex.style.minInlineSize).toBe("0");
+    // The shrink-safe formatting context and the reflow transition are the
+    // Modern skin's now, keyed on `data-part` and `data-layout-motion`; the
+    // computed proof is in Flex.causality.integration.test.tsx.
+    expect(flex).toHaveAttribute("data-part", "root");
+    expect(flex).toHaveAttribute("data-layout-motion", "rearrange");
     expect(flex.getAttribute("style")).toContain(
       "--ds-flex-column-gap: var(--ds-spacing-2"
     );
     expect(flex.getAttribute("style")).toContain(
       "--ds-flex-row-gap: var(--ds-spacing-6"
     );
-    expect(flex.style.transition).toBe("var(--ds-transition-rearrange)");
+    expect(flex.style.transition).toBe("");
   });
 
   it("projects responsive gap, width and overflow from one scoped rule set", () => {

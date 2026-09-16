@@ -56,8 +56,14 @@ import React, {
   type Ref,
   type CSSProperties,
 } from "react";
-import type { GridProps, GridItemProps, GridGap } from "../../contracts";
+import type {
+  GridProps,
+  GridItemProps,
+  GridGap,
+  GridAdaptation,
+} from "../../contracts";
 import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from "../../contracts";
+import { useAdaptation } from "@/infrastructure/runtime/adaptation";
 import {
   projectResponsiveGrid,
   isResponsiveGridValue,
@@ -195,14 +201,13 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
     maxWidth,
     overflow,
     inline,
-    motion,
     style,
   } = props;
   const effectiveGap = gap ?? spacing ?? GRID_DEFAULTS.gap;
-  const computedStyle: CSSProperties = {
-    display: inline ? "inline-grid" : "grid",
-    minInlineSize: 0,
-  };
+  // The formatting context, the shrink floor and the reflow are the Modern
+  // skin's, keyed on `data-part`, `data-inline` and `data-layout-motion`. What
+  // stays here is the track geometry, which is arbitrary by contract.
+  const computedStyle: CSSProperties = {};
   if (templateColumns) computedStyle.gridTemplateColumns = templateColumns;
   else if (minColumnWidth !== undefined) {
     const trackMinimum =
@@ -283,9 +288,7 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   if (minWidth !== undefined) computedStyle.minWidth = minWidth;
   if (maxWidth !== undefined) computedStyle.maxWidth = maxWidth;
   if (overflow) computedStyle.overflow = overflow;
-  if (motion === "rearrange")
-    computedStyle.transition = "var(--ds-transition-rearrange)";
-  else if (motion === "none") computedStyle.transition = "none";
+
   if (style) Object.assign(computedStyle, style);
   return computedStyle;
 };
@@ -311,10 +314,8 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
     zIndex,
     style,
   } = props;
-  const computedStyle: CSSProperties = {
-    minInlineSize: 0,
-    minBlockSize: 0,
-  };
+  // The shrink floors are the Modern skin's, on the `cell` part.
+  const computedStyle: CSSProperties = {};
   // Named area takes full precedence over col/row placement
   if (area) computedStyle.gridArea = area;
   else {
@@ -410,10 +411,22 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
     motion: _motion,
     style: _style,
     engine: _engine,
+    adapt,
     ...htmlAttributes
   } = props;
 
   const reactId = useId();
+  // The posture the grid is actually in, resolved through the shared runtime.
+  // The app declares deltas only; the thresholds are the platform's.
+  const containerRef = React.useRef<HTMLElement | null>(null);
+  const adaptationBase: GridAdaptation = React.useMemo(
+    () => ({ columns: props.columns, gap: props.gap ?? props.spacing }),
+    [props.columns, props.gap, props.spacing]
+  );
+  const { adaptation, postureAttribute } = useAdaptation<GridAdaptation>(adapt, {
+    base: adaptationBase,
+    containerRef,
+  });
   const gridId = `grid-${reactId.replace(/:/g, "")}`;
   const hasResponsiveColumns =
     minColumnWidth === undefined && isResponsiveGridValue(columns);
@@ -432,6 +445,9 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
   }
   const baseStyle = buildGridStyles({
     ...props,
+    // The posture may move the track count and the room between tracks.
+    columns: adaptation.columns,
+    gap: adaptation.gap,
     style: needsResponsiveCSS
       ? { ...props.style, ...responsiveStyleOverrides }
       : props.style,
@@ -470,13 +486,20 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
     ElementType,
     {
       ...htmlAttributes,
-      ref: ref as Ref<HTMLElement>,
+      ref: (node: HTMLElement | null) => {
+        containerRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+      },
       className: `rottay-grid rottay-grid--modern ${className}`.trim(),
       style: computedStyle,
       id,
+      "data-part": "root",
+      "data-posture": postureAttribute,
+      "data-inline": props.inline ? "true" : undefined,
       "data-component": "grid",
       "data-gap-preset": gridGapPresetSpelling(
-        props.gap ?? props.spacing ?? GRID_DEFAULTS.gap
+        adaptation.gap ?? GRID_DEFAULTS.gap
       ),
       // Stamped per axis and only for a rung. A numeric axis resolves to
       // `undefined`, which React omits -- and, because these are written
@@ -538,6 +561,7 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
         `rottay-grid-item rottay-grid-item--modern ${className}`.trim(),
       style: computedStyle,
       id,
+      "data-part": "grid-cell",
       "data-component": "grid-item",
     },
     children

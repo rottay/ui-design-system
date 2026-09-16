@@ -1,0 +1,185 @@
+/**
+ * Modern Stack skin.
+ *
+ * Imported into the canonical `rottay-engines` layer. React projects the scalar
+ * props onto the owned `data-*` namespace; this file owns every value through
+ * the `--ds-stack-*` channels `derivation/chrome/stack` produces.
+ *
+ * THE CLASS IS STILL `rottay-stack`. app-bithire selects it in live CSS and in
+ * `querySelectorAll` (`ui/tables/collection/**`), so renaming it here would
+ * break that product silently. The namespace migration is registered to the
+ * consumer-readiness lane and the family's `legacyNamespaceClasses` pin says so.
+ *
+ * WHY THE RULES MOVED HERE. The same scalar projection runs in all three
+ * engines, so the shared `layout-primitives` sheet painted Modern and the two
+ * frozen engines from one unscoped rule set, with Modern's rhythm arm chained on
+ * as a second `:where()` clause per rung. Modern's arm is here now, whole; what
+ * stays there is scoped to `--classic`/`--rustic` with its declarations
+ * unchanged, so the frozen engines keep the cascade position they always had.
+ *
+ * A RUNG SCALES, A MEASUREMENT DOES NOT: `data-spacing='custom'` reads
+ * `--ds-stack-gap`, which the engine writes inline from the caller's number.
+ */
+
+.rottay-stack.rottay-stack--modern[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  /* Pinned by the quality contract so flexible content can shrink and ellipsize. */
+  min-inline-size: 0;
+  --_ds-stack-gap-current: var(--ds-stack-gap-md);
+  gap: var(--_ds-stack-gap-current);
+  /*
+   * The divider's axis flags live on the ROOT so a RESPONSIVE direction, which
+   * stamps no `data-direction`, still lands the hairline on the right axis at
+   * every breakpoint.
+   */
+  --_ds-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
+  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-gutter);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-direction='horizontal'] {
+  flex-direction: row;
+  --_ds-stack-divider-gap-block: var(--ds-stack-divider-gutter);
+  --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-reverse='true'] {
+  flex-direction: column-reverse;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-direction='horizontal'][data-reverse='true'] {
+  flex-direction: row-reverse;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-wrap='true'] {
+  flex-wrap: wrap;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-align='start'] {
+  align-items: flex-start;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-align='center'] {
+  align-items: center;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-align='end'] {
+  align-items: flex-end;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-align='baseline'] {
+  align-items: baseline;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='center'] {
+  justify-content: center;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='end'] {
+  justify-content: flex-end;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-between'] {
+  justify-content: space-between;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-around'] {
+  justify-content: space-around;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-evenly'] {
+  justify-content: space-evenly;
+}
+
+/* ---- the rungs ---- */
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='none'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-none);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='xs'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-xs);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='sm'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-sm);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='md'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-md);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='lg'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-lg);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='xl'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-xl);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='2xl'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-2xl);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='3xl'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-3xl);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='4xl'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap-4xl);
+}
+
+/* A consumer's numeric gap is exact geometry: honored as-is, never scaled. */
+.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='custom'] {
+  --_ds-stack-gap-current: var(--ds-stack-gap);
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-full-width='true'] {
+  inline-size: 100%;
+}
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-full-height='true'] {
+  block-size: 100%;
+}
+
+/*
+ * Optional separators are structural children. Their size follows the active
+ * flex axis automatically, so one contract works in LTR, RTL, horizontal and
+ * vertical stacks without physical-side paint. The negative main-axis margins of
+ * half the current gap center the hairline INSIDE the governed rhythm: two
+ * neighbours keep exactly one gap between them instead of gap + divider + gap.
+ */
+.rottay-stack.rottay-stack--modern[data-part='root'] > [data-part='divider'] {
+  align-self: stretch;
+  flex: 0 0 var(--ds-stack-divider-thickness);
+  min-inline-size: 0;
+  min-block-size: 0;
+  margin-block: var(--_ds-stack-divider-gap-block);
+  margin-inline: var(--_ds-stack-divider-gap-inline);
+  background: var(--ds-stack-divider-ink);
+  opacity: var(--ds-stack-divider-veil);
+  pointer-events: none;
+}
+
+/* ---- reflow: the only motion this primitive owns ---- */
+
+.rottay-stack.rottay-stack--modern[data-part='root'][data-layout-motion='rearrange'] {
+  transition: var(--ds-stack-reflow-transition);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-stack.rottay-stack--modern[data-part='root'][data-layout-motion='rearrange'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* The hairline is structural: it must survive colour stripping. */
+  .rottay-stack.rottay-stack--modern[data-part='root'] > [data-part='divider'] {
+    background: ButtonText;
+    opacity: 1;
+  }
+}

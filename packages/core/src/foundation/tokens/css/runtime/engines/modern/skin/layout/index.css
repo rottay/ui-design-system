@@ -307,53 +307,8 @@
   padding-block: var(--ds-layout-footer-padding-block, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
-/* ---- Box: token radius/shadow selected by engine-stamped attributes. ---- */
-.rottay-box.rottay-box--modern[data-radius='xs'] {
-  border-radius: var(--ds-radius-xs);
-}
-.rottay-box.rottay-box--modern[data-radius='sm'] {
-  border-radius: var(--ds-radius-sm);
-}
-.rottay-box.rottay-box--modern[data-radius='md'] {
-  border-radius: var(--ds-radius-md);
-}
-.rottay-box.rottay-box--modern[data-radius='lg'] {
-  border-radius: var(--ds-radius-lg);
-}
-.rottay-box.rottay-box--modern[data-radius='xl'] {
-  border-radius: var(--ds-radius-xl);
-}
-.rottay-box.rottay-box--modern[data-radius='2xl'] {
-  border-radius: var(--ds-radius-2xl);
-}
-.rottay-box.rottay-box--modern[data-radius='full'] {
-  border-radius: var(--ds-radius-full);
-}
-
-/* Shadows ride the DS elevation scale only -- the tenant re-themes depth from
-   one place, and no Tailwind shadow literal sneaks back in. The scale now runs
-   to SIX: `--ds-elevation-6` is declared in the default theme, so `2xl` mounts
-   its own rung bare. The old `var(--ds-elevation-5)` fallback described a
-   token layer that no longer exists and could never fire, so it is dropped
-   (fallback parity, the same law as the PHASE-B P2 addendum above). */
-.rottay-box.rottay-box--modern[data-shadow='xs'] {
-  box-shadow: var(--ds-elevation-1);
-}
-.rottay-box.rottay-box--modern[data-shadow='sm'] {
-  box-shadow: var(--ds-elevation-2);
-}
-.rottay-box.rottay-box--modern[data-shadow='md'] {
-  box-shadow: var(--ds-elevation-3);
-}
-.rottay-box.rottay-box--modern[data-shadow='lg'] {
-  box-shadow: var(--ds-elevation-4);
-}
-.rottay-box.rottay-box--modern[data-shadow='xl'] {
-  box-shadow: var(--ds-elevation-5);
-}
-.rottay-box.rottay-box--modern[data-shadow='2xl'] {
-  box-shadow: var(--ds-elevation-6);
-}
+/* Box moved out: it is its own family, not a part of the Layout shell, and its
+   corner/depth rungs now live in `runtime/engines/modern/skin/box`. */
 
 /* ===========================================================================
  * Anatomy variants (W4-A). `sidebar.anatomy` and `layout.anatomy` in the tenant

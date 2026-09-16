@@ -36,11 +36,26 @@ import { TENANT_THEME_RHYTHM_FACTORS } from "../../../../../foundation/contracts
 import { responsiveCss } from "@tests/support/responsive";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+/**
+ * Modern's arm of this contract moved out of the shared
+ * `layout-primitives` sheet and into the family's own skin (WO-FAM-07 L5).
+ * What this file still reads from CSS TEXT is the structural half -- that the
+ * scaled rules are enumerated and held at the base specificity, and that the
+ * frozen engines can never match them. The CASCADE half, which text can only
+ * approximate, is measured in a real browser by
+ * `Flex.causality.integration.test.tsx`: a rung answers rhythm and density, a
+ * measurement answers neither, and the reflow answers the motion dial.
+ */
+const MODERN_SKIN = resolve(
+  HERE,
+  "../../../../../foundation/tokens/css/runtime/engines/modern/skin/flex/index.css"
+);
 const LAYOUT_PRIMITIVES = resolve(
   HERE,
   "../../../../../foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
 );
-const CSS = readFileSync(LAYOUT_PRIMITIVES, "utf8");
+const CSS = readFileSync(MODERN_SKIN, "utf8");
+const FROZEN_CSS = readFileSync(LAYOUT_PRIMITIVES, "utf8");
 const RHYTHM = "--ds-rhythm-effective-scale";
 
 describe("leg 1 -- a preset rung scales with rhythm", () => {
@@ -69,7 +84,7 @@ describe("leg 1 -- a preset rung scales with rhythm", () => {
 
   it("the stylesheet scales that channel once, for every enumerated rung", () => {
     for (const rung of FLEX_GAP_RHYTHM_PRESETS) {
-      expect(CSS, rung).toContain(`[data-gap-preset="${rung}"]`);
+      expect(CSS, rung).toContain(`[data-gap-preset='${rung}']`);
     }
     expect(CSS).toContain(
       `gap: calc(var(--ds-flex-gap) * var(${RHYTHM}, 1))`
@@ -87,8 +102,8 @@ describe("leg 1 -- a preset rung scales with rhythm", () => {
     // Escalating instead would make the preset rule beat a later consumer
     // stylesheet, which is the opposite of the unlayered contract this file
     // declares. Source order, not weight, decides.
-    expect(CSS).toContain('.rottay-flex[data-gap="uniform"]:where(');
-    expect(CSS).toContain('.rottay-flex[data-gap="split"]:where(');
+    expect(CSS).toContain("[data-gap='uniform']:where(");
+    expect(CSS).toContain("[data-gap='split']:where(");
   });
 });
 
@@ -380,13 +395,20 @@ describe("leg 6 -- the SCALAR path is Modern-only too (Finding 3)", () => {
     }
   });
 
-  it("the scaled rule's selector requires the modern-only class, chained via a second zero-specificity :where()", () => {
-    expect(CSS).toContain(
-      '.rottay-flex[data-gap="uniform"]:where(.rottay-flex--modern):where('
-    );
-    expect(CSS).toContain(
-      '.rottay-flex[data-gap="split"]:where(.rottay-flex--modern):where('
-    );
+  it("the scaled rules live in the Modern skin and the frozen sheet keeps none", () => {
+    // The Modern-only `:where(.rottay-flex--modern)` clause is gone because the
+    // whole arm moved: every rule that scales a rung now sits in a file only the
+    // Modern engine's class can match, and what stays in the shared sheet is
+    // scoped to the two frozen engines by name.
+    expect(CSS).toContain(".rottay-flex.rottay-flex--modern[data-part='root']");
+    expect(CSS).toContain(RHYTHM);
+    expect(FROZEN_CSS).not.toContain(RHYTHM + ") ");
+    for (const line of FROZEN_CSS.split("\n")) {
+      if (!line.trim().startsWith(".rottay-flex")) continue;
+      expect(line, line.trim()).toContain(
+        ":where(.rottay-flex--classic, .rottay-flex--rustic)"
+      );
+    }
   });
 
   it("Modern stamps the --modern class; Classic and Rustic never do", () => {

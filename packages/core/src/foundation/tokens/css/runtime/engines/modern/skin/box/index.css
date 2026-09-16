@@ -1,0 +1,81 @@
+/**
+ * Modern Box skin.
+ *
+ * Imported into the canonical `rottay-engines` layer. React stamps the rung
+ * decision (`data-radius`, `data-shadow`); this file owns every value through
+ * the `--ds-box-*` channels `derivation/chrome/box` produces, which are in turn
+ * pure projections of the radius and elevation ramps.
+ *
+ * THE CLASS IS STILL `rottay-box`. app-bithire selects it in live CSS
+ * (`ui/tables/collection/**`), so renaming it here would break that product
+ * silently. The namespace migration is registered to the consumer-readiness
+ * lane and the family's `legacyNamespaceClasses` pin says so.
+ *
+ * These rules were part of the shared `layout` skin, beside the Layout family
+ * they have nothing to do with. Box is its own family and now has its own file.
+ *
+ * BOX ANCHORS ON ITS CLASS, NOT ON A `data-part`, and it is the one family in
+ * this cut that does. Box is the style-injection escape hatch 75 DS components
+ * and 113 showroom modules compose with, so a default part would land on every
+ * nested Box in the fleet: a descendant rule of the form
+ * `.rottay-x [data-part='root']` would reach into X's Boxes, a query for X's own
+ * root would match them, and the shared anatomy-skeleton renderer -- which walks
+ * every descendant `data-part` -- would draw a bone for each one. The family-cut
+ * gate's `stampsAnatomy`/`skinReadsAnatomy` arms therefore stay red for this
+ * family pending an owner ruling; the alternative is a fleet-wide side effect,
+ * which is worse than a red arm with a written reason.
+ */
+
+.rottay-box.rottay-box--modern[data-radius='xs'] {
+  border-radius: var(--ds-box-corner-xs);
+}
+
+.rottay-box.rottay-box--modern[data-radius='sm'] {
+  border-radius: var(--ds-box-corner-sm);
+}
+
+.rottay-box.rottay-box--modern[data-radius='md'] {
+  border-radius: var(--ds-box-corner-md);
+}
+
+.rottay-box.rottay-box--modern[data-radius='lg'] {
+  border-radius: var(--ds-box-corner-lg);
+}
+
+.rottay-box.rottay-box--modern[data-radius='xl'] {
+  border-radius: var(--ds-box-corner-xl);
+}
+
+.rottay-box.rottay-box--modern[data-radius='2xl'] {
+  border-radius: var(--ds-box-corner-2xl);
+}
+
+.rottay-box.rottay-box--modern[data-radius='full'] {
+  border-radius: var(--ds-box-corner-full);
+}
+
+/* Depth rides the DS elevation scale only, so a tenant re-themes it from one place. */
+
+.rottay-box.rottay-box--modern[data-shadow='xs'] {
+  box-shadow: var(--ds-box-depth-xs);
+}
+
+.rottay-box.rottay-box--modern[data-shadow='sm'] {
+  box-shadow: var(--ds-box-depth-sm);
+}
+
+.rottay-box.rottay-box--modern[data-shadow='md'] {
+  box-shadow: var(--ds-box-depth-md);
+}
+
+.rottay-box.rottay-box--modern[data-shadow='lg'] {
+  box-shadow: var(--ds-box-depth-lg);
+}
+
+.rottay-box.rottay-box--modern[data-shadow='xl'] {
+  box-shadow: var(--ds-box-depth-xl);
+}
+
+.rottay-box.rottay-box--modern[data-shadow='2xl'] {
+  box-shadow: var(--ds-box-depth-2xl);
+}

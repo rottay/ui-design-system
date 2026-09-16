@@ -7,10 +7,10 @@ import { render } from "@testing-library/react";
 import ModernStack from "../engines/modern";
 import { responsiveCss } from "@tests/support/responsive";
 
-const layoutSkin = readFileSync(
+const modernSkin = readFileSync(
   resolve(
     process.cwd(),
-    "src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
+    "src/foundation/tokens/css/runtime/engines/modern/skin/stack/index.css"
   ),
   "utf8"
 );
@@ -40,13 +40,18 @@ describe("Modern Stack quality contract", () => {
     ) as HTMLElement;
     expect(stack).toHaveAttribute("data-component", "stack");
     expect(stack).toHaveAttribute("dir", "rtl");
-    expect(stack.style.minInlineSize).toBe("0");
-    expect(stack.style.transition).toBe("var(--ds-transition-rearrange)");
+    // The shrink-safe formatting context and the reflow transition are the
+    // Modern skin's now, keyed on `data-part` and `data-layout-motion`; the
+    // computed proof is in Stack.causality.integration.test.tsx.
+    expect(stack).toHaveAttribute("data-part", "root");
+    expect(stack).toHaveAttribute("data-layout-motion", "rearrange");
+    expect(stack.style.minInlineSize).toBe("");
+    expect(stack.style.transition).toBe("");
     expect(divider).toHaveAttribute("aria-hidden", "true");
     expect(divider).toHaveClass("rottay-stack-divider");
     expect(divider).not.toHaveAttribute("style");
-    expect(layoutSkin).toContain("--ds-stack-divider-size");
-    expect(layoutSkin).toContain("--ds-stack-divider-color");
+    expect(modernSkin).toContain("--ds-stack-divider-thickness");
+    expect(modernSkin).toContain("--ds-stack-divider-ink");
     expect(divider.getAttribute("style") ?? "").not.toMatch(
       /border-(left|inline-start)/
     );

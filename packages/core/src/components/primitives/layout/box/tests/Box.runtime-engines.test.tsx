@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import type { BoxProps } from "../contracts";
-import { RADIUS_MAP, SHADOW_MAP, SPACING_MAP } from "../contracts";
+import { RADIUS_MAP, SPACING_MAP } from "../contracts";
+import { CLASSIC_BOX_SHADOWS } from "../engines/classic";
 import ClassicBox from "../engines/classic";
 import ModernBox from "../engines/modern";
 import RusticBox from "../engines/rustic";
@@ -161,7 +162,7 @@ describe("Box runtime engines", () => {
           padding: `${SPACING_MAP.xs} ${SPACING_MAP.md} ${SPACING_MAP["2xl"]} ${SPACING_MAP["3xl"]}`,
           margin: `${SPACING_MAP.xs} ${SPACING_MAP.xl} ${SPACING_MAP["2xl"]} ${SPACING_MAP["3xl"]}`,
           borderRadius: RADIUS_MAP.xl,
-          boxShadow: SHADOW_MAP.lg,
+          boxShadow: CLASSIC_BOX_SHADOWS.lg,
         });
       }
 

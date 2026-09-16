@@ -88,7 +88,7 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
     "vertical"
   );
 
-  const presentation = resolveStackPresentation(props);
+  const presentation = resolveStackPresentation(props, { motion: "stamped" });
   const renderedChildren = renderStackChildren(
     flattenFragments(children),
     divider,
@@ -122,9 +122,10 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
           ...htmlAttributes,
           ref: ref as Ref<HTMLElement>,
           className: classNames,
-          style: { minInlineSize: 0, ...presentation.style, ...responsive.channels },
+          style: { ...presentation.style, ...responsive.channels },
           ...presentation.attributes,
           ...responsive.attrs,
+          "data-part": "root",
           "data-component": "stack",
         },
         renderedChildren

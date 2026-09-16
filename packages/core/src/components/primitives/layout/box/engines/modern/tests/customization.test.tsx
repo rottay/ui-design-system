@@ -9,7 +9,10 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from "../../../contracts";
+import { SPACING_MAP, RADIUS_MAP } from "../../../contracts";
+import { deriveBoxChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/box";
+
+const DERIVED = deriveBoxChannels();
 
 // Lazy import to avoid circular deps in test — the engine is loaded dynamically
 // by createEngineComponent, so we import the Modern implementation directly.
@@ -35,10 +38,10 @@ describe("Modern Box customization regression", () => {
     }
   });
 
-  it("SHADOW_MAP values reference DS CSS custom properties for xs-xl", () => {
+  it("the depth ladder references DS elevation channels for xs-xl", () => {
     const tokenized = ["xs", "sm", "md", "lg", "xl"] as const;
     for (const key of tokenized) {
-      expect(SHADOW_MAP[key]).toMatch(/var\(--ds-elevation-/);
+      expect(DERIVED[`--ds-box-depth-${key}`]).toMatch(/var\(--ds-elevation-/);
     }
   });
 

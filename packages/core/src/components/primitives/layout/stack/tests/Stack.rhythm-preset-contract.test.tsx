@@ -39,6 +39,10 @@ import {
 } from "../contracts";
 import type { StackSpacing } from "../contracts";
 import { resolveFlexGapValue } from "../../flex/contracts";
+import { deriveStackChannels } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack";
+
+/** The rung magnitudes, read from the owner that now decides them. */
+const DERIVED = deriveStackChannels();
 import {
   collectStackResponsiveEntries,
   resolveStackSpacingWithRhythm,
@@ -60,7 +64,20 @@ const LAYOUT_PRIMITIVES = resolve(
  * JS-GENERATED responsive `<style>` text via `emittedCSS`, which is a
  * separate mechanism from this file (see that leg's own doc comment).
  */
-const CSS = readFileSync(LAYOUT_PRIMITIVES, "utf8");
+/**
+ * Modern's arm of this contract moved out of the shared `layout-primitives`
+ * sheet and into the family's own skin (WO-FAM-07 L5): the nine rungs are one
+ * rule each reading `--ds-stack-gap-<rung>`, and the deriver -- not the sheet --
+ * is where the ramp is multiplied by rhythm. What this file still reads from
+ * CSS TEXT is the structural half; the CASCADE half is measured in a real
+ * browser by `Stack.causality.integration.test.tsx`.
+ */
+const MODERN_SKIN = resolve(
+  HERE,
+  "../../../../../foundation/tokens/css/runtime/engines/modern/skin/stack/index.css"
+);
+const CSS = readFileSync(MODERN_SKIN, "utf8");
+const FROZEN_CSS = readFileSync(LAYOUT_PRIMITIVES, "utf8");
 
 const RHYTHM_CHANNEL = "--ds-rhythm-effective-scale";
 const RHYTHM_READ = `var(${RHYTHM_CHANNEL}, 1)`;
@@ -400,37 +417,46 @@ describe("leg -- the SCALAR path is Modern-only too (Finding 3)", () => {
     }
   });
 
-  it("the root default and every rung's override are gated on the modern-only class", () => {
-    expect(CSS).toContain(".rottay-stack:where(.rottay-stack--modern) {");
+  it("every rung lives in the Modern skin and the frozen sheet keeps none", () => {
+    // The Modern-only `:where(.rottay-stack--modern)` clause is gone because the
+    // whole arm moved: each rung is one rule in a file only the Modern engine's
+    // class can match, and what stays in the shared sheet is scoped to the two
+    // frozen engines by name.
     for (const rung of RUNGS) {
       expect(CSS, rung).toContain(
-        `.rottay-stack[data-spacing="${rung}"]:where(.rottay-stack--modern) {`
+        `.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='${rung}'] {`
+      );
+      expect(CSS, rung).toContain(`--_ds-stack-gap-current: var(--ds-stack-gap-${rung});`);
+    }
+    expect(FROZEN_CSS).not.toContain("rottay-stack--modern");
+    for (const line of FROZEN_CSS.split("\n")) {
+      if (!line.trim().startsWith(".rottay-stack")) continue;
+      expect(line, line.trim()).toContain(
+        ":where(.rottay-stack--classic, .rottay-stack--rustic)"
       );
     }
   });
 
-  it("each pair's unscaled base carries the identical magnitude the old single rule declared", () => {
-    // The fix must not change WHICH token a rung resolves to -- only WHETHER
-    // rhythm multiplies it. Same law leg "unsafe numeric spacing..." already
-    // pins for the numeric case; this is the preset-rung half.
+  it("each rung still resolves to the ramp step it always did", () => {
+    // The cut must not change WHICH token a rung resolves to -- only WHERE the
+    // rhythm multiplication happens. The deriver now owns it, so the magnitude
+    // is asserted against the deriver rather than against the sheet.
     const EXPECTED_BASE: Record<(typeof RUNGS)[number], string> = {
-      xs: "var(--ds-spacing-1)",
-      sm: "var(--ds-spacing-2)",
-      md: "var(--ds-spacing-4)",
-      lg: "var(--ds-spacing-6)",
-      xl: "var(--ds-spacing-8)",
-      "2xl": "var(--ds-spacing-10)",
-      "3xl": "var(--ds-spacing-12)",
-      "4xl": "var(--ds-spacing-16)",
+      xs: "1",
+      sm: "2",
+      md: "4",
+      lg: "6",
+      xl: "8",
+      "2xl": "10",
+      "3xl": "12",
+      "4xl": "16",
     };
     for (const rung of RUNGS) {
-      expect(CSS, rung).toContain(
-        `.rottay-stack[data-spacing="${rung}"] {\n  --_ds-stack-gap-current: ${EXPECTED_BASE[rung]};\n}`
-      );
-      expect(CSS, rung).toContain(
-        `--_ds-stack-gap-current: calc(${EXPECTED_BASE[rung]} * var(${RHYTHM_CHANNEL}, 1));`
+      expect(DERIVED[`--ds-stack-gap-${rung}`], rung).toBe(
+        `calc(var(--ds-spacing-${EXPECTED_BASE[rung]}) * var(${RHYTHM_CHANNEL}, 1))`
       );
     }
+    expect(DERIVED["--ds-stack-gap-none"]).toBe("0");
   });
 
   it("Modern stamps the --modern class; Classic and Rustic never do", () => {
@@ -502,7 +528,8 @@ describe("leg -- the tri-stop rhythm law: 0.85 / 1 / 1.2, monotonicity, exact re
 
   it("EXACT REMOVAL: `normal` is the identity factor the CSS fallback already defaults to", () => {
     expect(TENANT_THEME_RHYTHM_FACTORS.normal).toBe(1);
-    expect(CSS).toContain(`var(${RHYTHM_CHANNEL}, 1)`);
+    // The identity fallback now lives where the rung magnitude is decided.
+    expect(DERIVED["--ds-stack-gap-md"]).toContain(`var(${RHYTHM_CHANNEL}, 1)`);
   });
 
   it("EXACT REMOVAL: the unscaled base rule IS what calc(base * 1) evaluates to", () => {
@@ -517,18 +544,22 @@ describe("leg -- the tri-stop rhythm law: 0.85 / 1 / 1.2, monotonicity, exact re
     // "Modern stamps the --modern class..." above), which is the strongest
     // form of "exact removal": not a value that happens to equal the
     // pre-rhythm one when unset, but the ONE rule that ever applies to them.
-    const BASE: Record<string, string> = {
-      xs: "var(--ds-spacing-1)",
-      md: "var(--ds-spacing-4)",
-      "4xl": "var(--ds-spacing-16)",
-    };
-    for (const [rung, base] of Object.entries(BASE)) {
-      expect(CSS, rung).toContain(
-        `.rottay-stack[data-spacing="${rung}"] {\n  --_ds-stack-gap-current: ${base};\n}`
+    const BASE: Record<string, string> = { xs: "1", md: "4", "4xl": "16" };
+    for (const [rung, step] of Object.entries(BASE)) {
+      // The frozen engines get the UNSCALED rule and nothing else, by
+      // construction: their sheet carries no rhythm channel at all.
+      expect(FROZEN_CSS, rung).toContain(
+        `[data-spacing="${rung}"] {\n  --_ds-stack-gap-current: var(--ds-spacing-${step});\n}`
       );
-      expect(CSS, rung).toContain(
-        `.rottay-stack[data-spacing="${rung}"]:where(.rottay-stack--modern) {\n  --_ds-stack-gap-current: calc(${base} * var(${RHYTHM_CHANNEL}, 1));\n}`
-      );
+      expect(DERIVED[`--ds-stack-gap-${rung}`], rung).toContain(RHYTHM_CHANNEL);
+    }
+    // Scoped to STACK's own rules: the shared sheet still carries other
+    // families' arms, and this leg is about what reaches a frozen Stack.
+    const stackBlock = FROZEN_CSS.split("\n").filter((line) =>
+      line.includes(".rottay-stack") || line.includes("--_ds-stack-gap-current")
+    );
+    for (const line of stackBlock) {
+      expect(line, line.trim()).not.toContain(RHYTHM_CHANNEL);
     }
   });
 });

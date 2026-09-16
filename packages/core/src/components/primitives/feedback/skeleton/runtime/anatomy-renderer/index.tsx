@@ -117,6 +117,8 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'extra-footer': 'pass',
   'format-field': 'pass',
   grid: 'pass',
+  // A grid cell is a container: its children are drawn, it is not (WO-FAM-07).
+  'grid-cell': 'pass',
   'group-options': 'pass',
   'hex-field': 'pass',
   'input-wrapper': 'pass',

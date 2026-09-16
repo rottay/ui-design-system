@@ -127,7 +127,7 @@ export type { ResponsiveValue } from "@/foundation/contracts/kernel/responsive/v
  * Re-export default values and mapping constants.
  * Useful for building custom components that extend Box behavior.
  */
-export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from "./contracts";
+export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_RUNGS } from "./contracts";
 
 // ============================================================================
 // BASE COMPONENT EXPORTS

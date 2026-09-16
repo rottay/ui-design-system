@@ -31,10 +31,16 @@ describe("Modern Grid quality contract", () => {
     expect(grid).toHaveAttribute("data-component", "grid");
     expect(grid).toHaveAttribute("dir", "rtl");
     expect(grid.style.gridTemplateColumns).toBe("repeat(3, minmax(0, 1fr))");
-    expect(grid.style.minInlineSize).toBe("0");
+    // The shrink floors, the formatting context and the reflow are the Modern
+    // skin's now, keyed on `data-part` and `data-layout-motion`; the computed
+    // proof is in Grid.causality.integration.test.tsx.
+    expect(grid).toHaveAttribute("data-part", "root");
+    expect(grid).toHaveAttribute("data-layout-motion", "rearrange");
+    expect(item).toHaveAttribute("data-part", "grid-cell");
+    expect(grid.style.minInlineSize).toBe("");
     expect(grid.style.overflow).toBe("clip");
-    expect(grid.style.transition).toBe("var(--ds-transition-rearrange)");
-    expect(item.style.minInlineSize).toBe("0");
+    expect(grid.style.transition).toBe("");
+    expect(item.style.minInlineSize).toBe("");
     expect(item).toHaveAttribute("data-component", "grid-item");
     expect(grid.className).not.toMatch(/grid-cols-/);
     expect(item.className).not.toMatch(/col-span-|row-span-/);

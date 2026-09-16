@@ -626,17 +626,23 @@ export const RADIUS_MAP: Record<BoxBorderRadius, string> = {
 };
 
 /**
- * Shadow value mapping — resolves through DS CSS custom properties.
+ * The depth rungs a caller may name.
+ *
+ * The VALUES used to sit here too, as literal elevation fallbacks read by one
+ * frozen engine. They now live in `engines/classic` as `CLASSIC_BOX_SHADOWS`,
+ * byte-identical and with the same single consumer: the Modern engine selects
+ * its depth through `data-shadow` and the `--ds-box-depth-*` ladder, and Rustic
+ * resolves no shadow at all. What stays here is the closed domain itself.
  */
-export const SHADOW_MAP: Record<BoxShadow, string> = {
-  none: "none",
-  xs: "var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))",
-  sm: "var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1))",
-  md: "var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))",
-  lg: "var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1))",
-  xl: "var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))",
-  "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-};
+export const SHADOW_RUNGS: readonly BoxShadow[] = [
+  "none",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+];
 
 /**
  * The complete set of HTML void (self-closing) elements. Per the HTML spec

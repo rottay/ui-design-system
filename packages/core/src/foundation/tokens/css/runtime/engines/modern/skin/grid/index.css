@@ -1,0 +1,119 @@
+/**
+ * Modern Grid skin.
+ *
+ * Imported into the canonical `rottay-engines` layer. React resolves the track
+ * geometry — which is arbitrary by contract — and publishes the rung decision as
+ * `data-gap-preset` / `data-column-gap-preset` / `data-row-gap-preset`; this
+ * file owns the room between the tracks and the reflow.
+ *
+ * THE CLASS IS STILL `rottay-grid`. app-bithire selects it in live CSS
+ * (`ui/tables/collection/**`), so renaming it here would break that product
+ * silently. The namespace migration is registered to the consumer-readiness lane.
+ *
+ * WHY THE RULES MOVED HERE. Every one of them already carried a
+ * `:where(.rottay-grid--modern)` scope inside the shared `layout-primitives`
+ * sheet, so this whole arm was Modern's; it now lives in Modern's own file and
+ * the shared sheet carries no Grid rule at all.
+ *
+ * A RUNG SCALES, A MEASUREMENT DOES NOT. A numeric gap is written inline by the
+ * engine, which is the strongest means CSS has, and stamps no preset — so the
+ * enumerated selectors below can never reach exact geometry. The axis seams are
+ * private (`--_ds-`) because a family writer does not mint a public channel for
+ * an intermediate; the public dial is the rhythm scale every rule reads.
+ *
+ * The four axis rules sort AFTER the uniform ones on purpose: an axis longhand
+ * and the `gap` shorthand tie, so SOURCE ORDER is what makes an explicit axis
+ * override the uniform gap, exactly as the prop contract promises.
+ *
+ * Each SCALED rule repeats its pair's own `[data-*-gap-preset]` compound before
+ * the enumerated `:where()`. That is not escalation -- `:where()` contributes no
+ * specificity, so without the repeat the scaled rule would sit one attribute
+ * BELOW its unscaled base and never win. With it the pair ties and source order
+ * decides, which is the law every sister family states.
+ */
+
+.rottay-grid.rottay-grid--modern[data-part='root'] {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-inline='true'] {
+  display: inline-grid;
+}
+
+/* ---- the uniform gap ---- */
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset] {
+  gap: var(--ds-grid-gap);
+}
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset]:where(
+  [data-gap-preset='xs'],
+  [data-gap-preset='sm'],
+  [data-gap-preset='md'],
+  [data-gap-preset='lg'],
+  [data-gap-preset='xl'],
+  [data-gap-preset='2xl'],
+  [data-gap-preset='3xl'],
+  [data-gap-preset='4xl']
+) {
+  gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+/* ---- the split axes ---- */
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-column-gap-preset] {
+  column-gap: var(--_ds-grid-column-gap);
+}
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-column-gap-preset]:where(
+  [data-column-gap-preset='xs'],
+  [data-column-gap-preset='sm'],
+  [data-column-gap-preset='md'],
+  [data-column-gap-preset='lg'],
+  [data-column-gap-preset='xl'],
+  [data-column-gap-preset='2xl'],
+  [data-column-gap-preset='3xl'],
+  [data-column-gap-preset='4xl']
+) {
+  column-gap: calc(var(--_ds-grid-column-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-row-gap-preset] {
+  row-gap: var(--_ds-grid-row-gap);
+}
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-row-gap-preset]:where(
+  [data-row-gap-preset='xs'],
+  [data-row-gap-preset='sm'],
+  [data-row-gap-preset='md'],
+  [data-row-gap-preset='lg'],
+  [data-row-gap-preset='xl'],
+  [data-row-gap-preset='2xl'],
+  [data-row-gap-preset='3xl'],
+  [data-row-gap-preset='4xl']
+) {
+  row-gap: calc(var(--_ds-grid-row-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+/* ---- the cell ----
+ * `grid-cell`, not `cell`: `cell` belongs to the table family, and a Grid.Item
+ * nested inside a table would otherwise be reached by its descendant rules and
+ * drawn as a table cell's bone by the shared skeleton renderer. */
+
+.rottay-grid.rottay-grid--modern[data-part='root'] > [data-part='grid-cell'] {
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+
+/* ---- reflow: the only motion this primitive owns ---- */
+
+.rottay-grid.rottay-grid--modern[data-part='root'][data-layout-motion='rearrange'] {
+  transition: var(--ds-grid-reflow-transition);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-grid.rottay-grid--modern[data-part='root'][data-layout-motion='rearrange'] {
+    transition: none;
+  }
+}

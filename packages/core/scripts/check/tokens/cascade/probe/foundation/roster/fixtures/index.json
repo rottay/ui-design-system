@@ -293,13 +293,14 @@
     },
     {
       "id": "flex-modern-preset-gap",
-      "why": "The modern Flex as the engine actually renders it, with a preset ('md') uniform gap. Chain: gap <- calc(--ds-flex-gap * --ds-rhythm-effective-scale). One hop: the scaled rule multiplies the md rung directly by the tenant rhythm dial in the gap declaration itself, held at the base rule's specificity by `:where()` so source order -- not escalation -- decides. Proves the rhythm dial reaches Flex's layout gap the way the six fixtures above prove the radius dial reaches radius.",
+      "why": "The modern Flex with a preset ('md') gap. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The rung rides `--ds-flex-gap` and the enumerated selector multiplies it by the rhythm scale once; the pair ties in specificity so source order decides.",
       "requiresSelectors": [
-        ".rottay-flex[data-gap=\"uniform\"]:where(",
-        "[data-gap-preset=\"md\"]",
-        "gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1))"
+        ".rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform'] {",
+        "gap: var(--ds-flex-gap);",
+        "[data-gap-preset='md'],",
+        "gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));"
       ],
-      "html": "<div class=\"rottay-flex rottay-flex--modern\" style=\"min-inline-size:0;--ds-flex-gap:var(--ds-spacing-4, 1rem)\" data-gap=\"uniform\" data-gap-preset=\"md\" data-component=\"flex\" data-probe=\"flex-modern-preset-gap\"><span>a</span><span>b</span></div>",
+      "html": "<div class=\"rottay-flex rottay-flex--modern\" style=\"--ds-flex-gap:var(--ds-spacing-4, 1rem)\" data-gap=\"uniform\" data-gap-preset=\"md\" data-part=\"root\" data-component=\"flex\" data-probe=\"flex-modern-preset-gap\"><span>a</span><span>b</span></div>",
       "targets": [
         {
           "id": "root",
@@ -314,13 +315,13 @@
     },
     {
       "id": "grid-modern-preset-gap",
-      "why": "The modern Grid as the engine actually renders it, with a preset ('md') gap routed through --ds-grid-gap rather than the inline gap a numeric measurement would use. Chain: gap <- calc(--ds-grid-gap * --ds-rhythm-effective-scale). One hop, anchored on the engine class (rottay-grid--modern) rather than a repeated attribute, so the scaled rule outranks the unscaled base rule by source order alone -- the same law Flex's `:where()` enforces by specificity parity instead.",
+      "why": "The modern Grid with a preset ('md') gap. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. Each scaled rule repeats its own `[data-*-gap-preset]` compound before the enumerated `:where()`, so the pair ties and source order decides.",
       "requiresSelectors": [
-        ".rottay-grid.rottay-grid--modern:where(",
-        "[data-gap-preset=\"md\"]",
-        "gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1))"
+        ".rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset] {",
+        "gap: var(--ds-grid-gap);",
+        "gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1));"
       ],
-      "html": "<div class=\"rottay-grid rottay-grid--modern\" style=\"display:grid;min-inline-size:0;grid-template-columns:repeat(2, minmax(0, 1fr));--ds-grid-gap:var(--ds-spacing-4, 1rem)\" data-component=\"grid\" data-gap-preset=\"md\" data-probe=\"grid-modern-preset-gap\"><div>a</div><div>b</div></div>",
+      "html": "<div class=\"rottay-grid rottay-grid--modern\" style=\"grid-template-columns:repeat(2, minmax(0, 1fr));--ds-grid-gap:var(--ds-spacing-4, 1rem)\" data-part=\"root\" data-component=\"grid\" data-gap-preset=\"md\" data-probe=\"grid-modern-preset-gap\"><div>a</div><div>b</div></div>",
       "targets": [
         {
           "id": "root",
@@ -335,13 +336,13 @@
     },
     {
       "id": "stack-modern-preset-gap",
-      "why": "The modern Stack as the engine actually renders it, with a preset ('md') spacing rung -- the one layout primitive where rhythm reaches the paint with no inline value at all: the data-spacing attribute alone selects the scaled rule. Chain: gap <- var(--_ds-stack-gap-current) <- calc(--ds-spacing-4 * --ds-rhythm-effective-scale). Two hops, one more than Flex/Grid/Space, because the rung is mirrored into a private channel so the divider can center itself inside the same governed rhythm instead of adding its own separation on top of it.",
+      "why": "The modern Stack with a preset ('md') rung. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The rung is a STAMP: the skin repoints `--_ds-stack-gap-current` at `--ds-stack-gap-md`, which `derivation/chrome/stack` derives as the ramp step multiplied by rhythm.",
       "requiresSelectors": [
-        ".rottay-stack[data-spacing=\"md\"]",
-        "--_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
-        "gap: var(--_ds-stack-gap-current)"
+        ".rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='md'] {",
+        "--_ds-stack-gap-current: var(--ds-stack-gap-md);",
+        "gap: var(--_ds-stack-gap-current);"
       ],
-      "html": "<div class=\"rottay-stack rottay-stack--modern\" style=\"min-inline-size:0\" data-spacing=\"md\" data-component=\"stack\" data-probe=\"stack-modern-preset-gap\"><div>a</div><div>b</div></div>",
+      "html": "<div class=\"rottay-stack rottay-stack--modern\" data-spacing=\"md\" data-part=\"root\" data-component=\"stack\" data-probe=\"stack-modern-preset-gap\"><div>a</div><div>b</div></div>",
       "targets": [
         {
           "id": "root",
@@ -378,13 +379,12 @@
     },
     {
       "id": "flex-modern-numeric-gap",
-      "why": "The negative half of flex-modern-preset-gap: the modern Flex with a NUMERIC gap (8), not a preset rung. `resolveFlexAttributes`/`flexGapPresetSpelling` stamp NO data-gap-preset for a number (the function returns undefined for typeof 'number'), so the rhythm-scaled rule cannot match at all -- only the unscaled base rule `.rottay-flex[data-gap='uniform'] { gap: var(--ds-flex-gap); }` reaches it. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "why": "The negative half: a NUMERIC gap (8). After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The bare number stamps no preset, so the enumerated rung selectors stay unreached and only the unscaled base rule applies.",
       "requiresSelectors": [
-        ".rottay-flex[data-gap=\"uniform\"] {",
-        "gap: var(--ds-flex-gap)",
-        "gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1))"
+        ".rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform'] {",
+        "gap: var(--ds-flex-gap);"
       ],
-      "html": "<div class=\"rottay-flex rottay-flex--modern\" style=\"min-inline-size:0;--ds-flex-gap:8px\" data-gap=\"uniform\" data-component=\"flex\" data-probe=\"flex-modern-numeric-gap\"><span>a</span><span>b</span></div>",
+      "html": "<div class=\"rottay-flex rottay-flex--modern\" style=\"--ds-flex-gap:8px\" data-gap=\"uniform\" data-part=\"root\" data-component=\"flex\" data-probe=\"flex-modern-numeric-gap\"><span>a</span><span>b</span></div>",
       "targets": [
         {
           "id": "root",
@@ -399,12 +399,12 @@
     },
     {
       "id": "grid-modern-numeric-gap",
-      "why": "The negative half of grid-modern-preset-gap: the modern Grid with a NUMERIC gap (8), not a preset rung. A numeric grid gap never reaches --ds-grid-gap or a data-gap-preset attribute at all -- `buildGridStyles` writes it as a plain inline `gap` CSS property, the strongest position in the cascade, so no stylesheet rule (scaled or not) can reach it. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "why": "The negative half: a NUMERIC gap (8) written inline, the strongest means CSS has. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live.",
       "requiresSelectors": [
-        ".rottay-grid.rottay-grid--modern:where(",
-        "gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1))"
+        ".rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset] {",
+        "gap: var(--ds-grid-gap);"
       ],
-      "html": "<div class=\"rottay-grid rottay-grid--modern\" style=\"display:grid;min-inline-size:0;grid-template-columns:repeat(2, minmax(0, 1fr));gap:8px\" data-component=\"grid\" data-probe=\"grid-modern-numeric-gap\"><div>a</div><div>b</div></div>",
+      "html": "<div class=\"rottay-grid rottay-grid--modern\" style=\"grid-template-columns:repeat(2, minmax(0, 1fr));gap:8px\" data-part=\"root\" data-component=\"grid\" data-probe=\"grid-modern-numeric-gap\"><div>a</div><div>b</div></div>",
       "targets": [
         {
           "id": "root",
@@ -419,13 +419,12 @@
     },
     {
       "id": "stack-modern-numeric-gap",
-      "why": "The negative half of stack-modern-preset-gap: the modern Stack with a NUMERIC gap (8), which stamps `data-spacing='custom'` rather than a named rung. `.rottay-stack[data-spacing='custom']` has specificity (0,2,0) and carries no `:where(.rottay-stack--modern)` scaled companion, so it outranks the unscoped modern-default override at (0,1,0) and reads the caller's own --ds-stack-gap channel with no rhythm multiplication anywhere in the chain. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "why": "The negative half: a caller's numeric gap on the `custom` rung. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. `--ds-stack-gap` is written inline and carries the measurement unscaled.",
       "requiresSelectors": [
-        ".rottay-stack[data-spacing=\"custom\"]",
-        "--_ds-stack-gap-current: var(--ds-stack-gap)",
-        "--_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))"
+        ".rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='custom'] {",
+        "--_ds-stack-gap-current: var(--ds-stack-gap);"
       ],
-      "html": "<div class=\"rottay-stack rottay-stack--modern\" style=\"min-inline-size:0;--ds-stack-gap:8px\" data-spacing=\"custom\" data-component=\"stack\" data-probe=\"stack-modern-numeric-gap\"><div>a</div><div>b</div></div>",
+      "html": "<div class=\"rottay-stack rottay-stack--modern\" style=\"--ds-stack-gap:8px\" data-spacing=\"custom\" data-part=\"root\" data-component=\"stack\" data-probe=\"stack-modern-numeric-gap\"><div>a</div><div>b</div></div>",
       "targets": [
         {
           "id": "root",

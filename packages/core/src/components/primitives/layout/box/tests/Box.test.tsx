@@ -497,11 +497,14 @@ describe("Box Types", () => {
     expect(RADIUS_MAP.full).toBe("var(--ds-radius-full, 9999px)");
   });
 
-  it("exports SHADOW_MAP constant", async () => {
-    const { SHADOW_MAP } = await import("../contracts");
-    expect(SHADOW_MAP).toBeDefined();
-    expect(SHADOW_MAP.none).toBe("none");
-    expect(SHADOW_MAP.md).toContain("rgba");
+  it("exports the depth domain, and the frozen engine owns its values", async () => {
+    const { SHADOW_RUNGS } = await import("../contracts");
+    const { CLASSIC_BOX_SHADOWS } = await import("../engines/classic");
+    expect(SHADOW_RUNGS).toContain("none");
+    expect(SHADOW_RUNGS).toContain("2xl");
+    // The literal fallbacks belong to the one frozen engine that reads them.
+    expect(CLASSIC_BOX_SHADOWS.none).toBe("none");
+    expect(CLASSIC_BOX_SHADOWS.md).toContain("rgba");
   });
 });
 

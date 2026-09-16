@@ -138,17 +138,20 @@ describe("Grid advanced engine coverage", () => {
       "rottay-grid",
       "rottay-grid--modern"
     );
+    // `display` is the Modern skin's, on the root part; the template is not.
     expect(screen.getByTestId("modern-auto-grid")).toHaveStyle({
-      display: "grid",
       gridTemplateColumns: "auto",
     });
+    expect(screen.getByTestId("modern-auto-grid")).toHaveAttribute(
+      "data-part",
+      "root"
+    );
     // The rung travels the channel, not an inline `gap` a stylesheet cannot
     // reach; the resolved value is unchanged.
     expect(
       screen.getByTestId("modern-auto-grid").getAttribute("style")
     ).toContain("--ds-grid-gap: var(--ds-spacing-1, 0.25rem)");
     expect(screen.getByTestId("modern-none-grid")).toHaveStyle({
-      display: "grid",
       gridTemplateColumns: "none",
     });
     expect(

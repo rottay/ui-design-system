@@ -59,6 +59,10 @@ import { containerChromeDeriver } from "./chrome/container";
 import { aspectRatioChromeDeriver } from "./chrome/aspect-ratio";
 import { spaceChromeDeriver } from "./chrome/space";
 import { dividerChromeDeriver } from "./chrome/divider";
+import { flexChromeDeriver } from "./chrome/flex";
+import { stackChromeDeriver } from "./chrome/stack";
+import { boxChromeDeriver } from "./chrome/box";
+import { gridChromeDeriver } from "./chrome/grid";
 import { splitterChromeDeriver } from "./chrome/splitter";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
@@ -160,6 +164,10 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   aspectRatioChromeDeriver,
   spaceChromeDeriver,
   dividerChromeDeriver,
+  flexChromeDeriver,
+  stackChromeDeriver,
+  boxChromeDeriver,
+  gridChromeDeriver,
   splitterChromeDeriver,
   seedsDeriver,
 ]);

@@ -28,7 +28,22 @@ import {
 } from "../../../../../foundation/contracts/kernel/responsive/breakpoints";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+/**
+ * Grid's whole arm moved out of the shared `layout-primitives` sheet and into
+ * the family's own skin (WO-FAM-07 L5): every rule already carried a
+ * `:where(.rottay-grid--modern)` scope, so none of it ever reached the frozen
+ * engines, and the shared sheet now carries no Grid rule at all. The CASCADE
+ * half of this contract is measured in a real browser by
+ * `Grid.causality.integration.test.tsx`.
+ */
 const CSS = readFileSync(
+  resolve(
+    HERE,
+    "../../../../../foundation/tokens/css/runtime/engines/modern/skin/grid/index.css"
+  ),
+  "utf8"
+);
+const SHARED_CSS = readFileSync(
   resolve(
     HERE,
     "../../../../../foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
@@ -88,11 +103,13 @@ describe("leg 1 -- a preset rung scales with rhythm", () => {
   });
 
   it("the stylesheet scales the channel once, at the base rule's specificity", () => {
-    expect(CSS).toContain(".rottay-grid[data-gap-preset]");
-    expect(CSS).toContain(".rottay-grid.rottay-grid--modern:where(");
+    expect(CSS).toContain("[data-gap-preset] {");
+    expect(CSS).toContain("[data-gap-preset]:where(");
+    // The shared sheet keeps no Grid rule at all now.
+    expect(SHARED_CSS).not.toContain(".rottay-grid");
     expect(CSS).toContain(`gap: calc(var(--ds-grid-gap) * var(${RHYTHM}, 1))`);
     for (const rung of RUNGS) {
-      expect(CSS, rung).toContain(`[data-gap-preset="${rung}"]`);
+      expect(CSS, rung).toContain(`[data-gap-preset='${rung}']`);
     }
   });
 
@@ -156,7 +173,10 @@ describe("leg 3 -- tracks, wrapping and logical behaviour are untouched", () => 
     );
     const grid = container.querySelector(".rottay-grid") as HTMLElement;
     expect(grid.style.gridTemplateColumns).toBe("repeat(3, minmax(0, 1fr))");
-    expect(grid.style.minInlineSize).toBe("0");
+    // The shrink floor is the Modern skin's now, on the root part; the computed
+    // proof is in Grid.causality.integration.test.tsx.
+    expect(grid).toHaveAttribute("data-part", "root");
+    expect(grid.style.minInlineSize).toBe("");
   });
 
   it("keeps NUMERIC columnGap/rowGap on their own inline path, unscaled", () => {
@@ -222,8 +242,8 @@ describe("leg 4 -- a preset AXIS rung scales with rhythm, like the uniform one",
   });
 
   it("the stylesheet scales each axis exactly once", () => {
-    expect(CSS).toContain(".rottay-grid[data-column-gap-preset]");
-    expect(CSS).toContain(".rottay-grid[data-row-gap-preset]");
+    expect(CSS).toContain("[data-column-gap-preset] {");
+    expect(CSS).toContain("[data-row-gap-preset] {");
     expect(CSS).toContain(
       `column-gap: calc(var(--_ds-grid-column-gap) * var(${RHYTHM}, 1))`
     );
@@ -231,8 +251,8 @@ describe("leg 4 -- a preset AXIS rung scales with rhythm, like the uniform one",
       `row-gap: calc(var(--_ds-grid-row-gap) * var(${RHYTHM}, 1))`
     );
     for (const rung of RUNGS) {
-      expect(CSS, rung).toContain(`[data-column-gap-preset="${rung}"]`);
-      expect(CSS, rung).toContain(`[data-row-gap-preset="${rung}"]`);
+      expect(CSS, rung).toContain(`[data-column-gap-preset='${rung}']`);
+      expect(CSS, rung).toContain(`[data-row-gap-preset='${rung}']`);
     }
   });
 
@@ -250,12 +270,8 @@ describe("leg 4 -- a preset AXIS rung scales with rhythm, like the uniform one",
     // the whole mechanism behind `columnGap` overriding `gap`.
     const uniform = CSS.indexOf(`gap: calc(var(--ds-grid-gap) * var(${RHYTHM}`);
     expect(uniform).toBeGreaterThan(-1);
-    expect(CSS.indexOf(".rottay-grid[data-column-gap-preset]")).toBeGreaterThan(
-      uniform
-    );
-    expect(CSS.indexOf(".rottay-grid[data-row-gap-preset]")).toBeGreaterThan(
-      uniform
-    );
+    expect(CSS.indexOf("[data-column-gap-preset] {")).toBeGreaterThan(uniform);
+    expect(CSS.indexOf("[data-row-gap-preset] {")).toBeGreaterThan(uniform);
   });
 });
 
@@ -410,29 +426,24 @@ describe("leg 8 -- the axis fix is provably Modern-only", () => {
     }
   });
 
-  it("the unscaled base rules are ALSO Modern-scoped, via a zero-specificity :where()", () => {
-    // AGED_EXPECTATION, corrected. This drill used to assert the opposite --
-    // that these three base rules carried NO modern scope at all -- reasoning
-    // that they were "inert for classic/rustic because those engines never
-    // stamp the attribute". That inertness is still true today (proven by the
-    // two engine cases above) and is exactly why this was a LATENT hazard
-    // rather than a live one: `extractSemanticDOMAttributes`
-    // (Grid/runtime/dom-attributes/index.ts) forwards ANY caller `data-*` prop
-    // onto Classic/Rustic verbatim, so a caller-authored `data-gap-preset`
-    // WOULD have reached this rule on a read-only engine's element even though
-    // no engine code emits it there. The old assertion measured "nothing
-    // exploits this today" and mistook it for "this is safe by construction",
-    // which is the exact gap a stale test can hide. `:where()` is
-    // zero-specificity, so scoping these three rules changes nothing about
-    // WHICH selector wins wherever they already matched -- only whether a
-    // Classic/Rustic element can match them at all.
+  it("the unscaled base rules live in a file only the Modern class can match", () => {
+    // AGED_EXPECTATION, corrected twice. This drill first asserted these rules
+    // carried NO modern scope, then that they carried a zero-specificity
+    // `:where(.rottay-grid--modern)` clause. Both were about a shared sheet that
+    // painted three engines. The whole arm now lives in the Modern skin, whose
+    // every selector begins with the engine class pair, so a Classic or Rustic
+    // element cannot match any of it -- including through
+    // `extractSemanticDOMAttributes`, which forwards a caller's `data-*` verbatim
+    // onto the read-only engines and was the latent hazard the `:where()` scope
+    // was added to close.
     for (const declaration of [
       "gap: var(--ds-grid-gap)",
       "column-gap: var(--_ds-grid-column-gap)",
       "row-gap: var(--_ds-grid-row-gap)",
     ]) {
-      expect(owningSelector(declaration), declaration).toContain(
-        ":where(.rottay-grid--modern)"
+      const selector = owningSelector(declaration);
+      expect(selector, declaration).toContain(
+        ".rottay-grid.rottay-grid--modern"
       );
     }
   });

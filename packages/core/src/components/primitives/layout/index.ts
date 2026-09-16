@@ -13,7 +13,7 @@ export type {
   BoxPosition,
   BoxOverflow,
 } from './box';
-export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './box';
+export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_RUNGS } from './box';
 
 export {
   SemanticSurface,

@@ -239,9 +239,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx": {
-      "blob": "e69dbfa595ce5f4a5b824f71df09c4521f3d18780ceb5ba34042187e36dfe263",
-      "relocationDigest": "651a292331e3fed859ee4a556a92f2d265745099100d6ac19dfa25b4951ac658",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "a8dbfb8ca2f37e4d68bf77c64ea45556af236beb13e237eb907f87ffd50f7c64",
+      "relocationDigest": "fba326a36fab52a6c35e41955b0f3c7d3bcfa5f596589a13a8d83c1cc4c2bb20",
+      "reason": "the frozen engine's own depth ladder moves into the engine file that owns it, values and consumer unchanged; the shared contract keeps only the closed rung domain and stops carrying frozen-engine paint",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx": {

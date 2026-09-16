@@ -40,6 +40,7 @@ import type {
   BaseComponentProps,
 } from "../../../../../foundation/contracts";
 import type { ResponsiveValueObject } from "@/foundation/contracts/kernel/responsive/values";
+import type { Adapt } from "../../../../../foundation/contracts/kernel/adaptation";
 
 /**
  * Breakpoint object for grid properties.
@@ -213,6 +214,9 @@ export interface GridProps
    * @default 12
    */
   columns?: GridColumns;
+
+  /** Posture deltas the app declares; the family has no default of its own. */
+  adapt?: Adapt<GridAdaptation>;
 
   /**
    * Number of rows in the grid
@@ -503,6 +507,16 @@ export interface GridItemProps extends WithChildrenProps, BaseComponentProps {
 /**
  * Default values for Grid props
  */
+/**
+ * The grid's layout-sensitive axes. A posture delta may move either: how many
+ * tracks the grid keeps, and how much room it leaves between them. The app
+ * declares the delta; it never declares a threshold of its own.
+ */
+export interface GridAdaptation {
+  readonly columns?: GridColumns;
+  readonly gap?: GridGapValue;
+}
+
 export const GRID_DEFAULTS: Partial<GridProps> = {
   columns: 12,
   gap: "md",

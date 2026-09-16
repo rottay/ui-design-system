@@ -34,11 +34,26 @@ export interface StackPresentation {
 }
 
 /**
+ * How the caller wants motion delivered.
+ *
+ * `inline` is the default because the FROZEN Classic and Rustic engines call
+ * this same resolver and their rendered output may not move: they keep the
+ * `transition` declaration they have always written. Modern passes `stamped`,
+ * because its own skin owns the reflow off `data-layout-motion`.
+ */
+export interface StackPresentationOptions {
+  readonly motion?: "inline" | "stamped";
+}
+
+/**
  * Projects scalar Stack props to neutral attributes. Preset spacing resolves
  * in CSS through the tenant spacing ramp; arbitrary numeric gaps use one
  * bounded custom property instead of owning the structural `gap` declaration.
  */
-export function resolveStackPresentation(props: StackProps): StackPresentation {
+export function resolveStackPresentation(
+  props: StackProps,
+  options: StackPresentationOptions = {}
+): StackPresentation {
   const attributes: StackPresentationAttributes = {};
   const style: StackParameterStyle = {};
 
@@ -82,9 +97,13 @@ export function resolveStackPresentation(props: StackProps): StackPresentation {
   }
   if (props.motion === "rearrange") {
     attributes["data-layout-motion"] = "rearrange";
-    style.transition = "var(--ds-transition-rearrange)";
-  } else if (props.motion === "none") {
-    style.transition = "none";
+  }
+  if (options.motion !== "stamped") {
+    if (props.motion === "rearrange") {
+      style.transition = "var(--ds-transition-rearrange)";
+    } else if (props.motion === "none") {
+      style.transition = "none";
+    }
   }
   if (props.style) {
     Object.assign(style, props.style);

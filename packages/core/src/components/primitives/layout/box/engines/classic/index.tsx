@@ -54,9 +54,25 @@ import {
   BOX_DEFAULTS,
   SPACING_MAP,
   RADIUS_MAP,
-  SHADOW_MAP,
   isVoidElement,
 } from "../../contracts";
+
+/**
+ * This engine's own depth ladder, byte-identical to the map the shared contract
+ * used to carry as `SHADOW_MAP`. It lives here because this engine is its only
+ * consumer: Modern selects its depth through `data-shadow` and the elevation
+ * ramp, Rustic never resolves a shadow at all, and a frozen engine's paint is
+ * not the family contract's to hold.
+ */
+export const CLASSIC_BOX_SHADOWS: Record<string, string> = {
+  none: "none",
+  xs: "var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05))",
+  sm: "var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1))",
+  md: "var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))",
+  lg: "var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1))",
+  xl: "var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))",
+  "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+};
 import {
   generateResponsiveCSS,
   isResponsiveValue,
@@ -212,7 +228,7 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
 
   // Shadow
   if (props.shadow && props.shadow !== "none") {
-    style.boxShadow = SHADOW_MAP[props.shadow];
+    style.boxShadow = CLASSIC_BOX_SHADOWS[props.shadow];
   }
 
   // Display & Position - only apply display inline when NOT responsive

@@ -12,7 +12,7 @@
  */
 
 /* Flex defaults. Omitted props intentionally carry no data attribute. */
-.rottay-flex {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic) {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -20,277 +20,98 @@
   align-items: stretch;
 }
 
-.rottay-flex[data-inline="true"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-inline="true"] {
   display: inline-flex;
 }
 
-.rottay-flex[data-direction="row-reverse"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-direction="row-reverse"] {
   flex-direction: row-reverse;
 }
 
-.rottay-flex[data-direction="column"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-direction="column"] {
   flex-direction: column;
 }
 
-.rottay-flex[data-direction="column-reverse"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-direction="column-reverse"] {
   flex-direction: column-reverse;
 }
 
-.rottay-flex[data-wrap="wrap"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-wrap="wrap"] {
   flex-wrap: wrap;
 }
 
-.rottay-flex[data-wrap="wrap-reverse"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-wrap="wrap-reverse"] {
   flex-wrap: wrap-reverse;
 }
 
-.rottay-flex[data-justify="end"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-justify="end"] {
   justify-content: flex-end;
 }
 
-.rottay-flex[data-justify="center"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-justify="center"] {
   justify-content: center;
 }
 
-.rottay-flex[data-justify="between"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-justify="between"] {
   justify-content: space-between;
 }
 
-.rottay-flex[data-justify="around"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-justify="around"] {
   justify-content: space-around;
 }
 
-.rottay-flex[data-justify="evenly"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-justify="evenly"] {
   justify-content: space-evenly;
 }
 
-.rottay-flex[data-align="start"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-align="start"] {
   align-items: flex-start;
 }
 
-.rottay-flex[data-align="end"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-align="end"] {
   align-items: flex-end;
 }
 
-.rottay-flex[data-align="center"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-align="center"] {
   align-items: center;
 }
 
-.rottay-flex[data-align="baseline"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-align="baseline"] {
   align-items: baseline;
 }
 
-.rottay-flex[data-gap="uniform"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-gap="uniform"] {
   gap: var(--ds-flex-gap);
 }
 
-.rottay-flex[data-gap="split"] {
+.rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-gap="split"] {
   column-gap: var(--ds-flex-column-gap);
   row-gap: var(--ds-flex-row-gap);
 }
 
-/* Rhythm-aware preset gaps. `--ds-flex-gap` carries BOTH a rung
-   (`var(--ds-spacing-4, 1rem)`) and a caller's measurement (`16px`), so the
-   channel alone cannot say which it is holding. The contract now stamps the
-   preset SPELLING per axis (`data-gap-preset`, `data-column-gap-preset`,
-   `data-row-gap-preset`) and only for rungs -- a numeric gap stamps nothing and
-   never matches below, which is how exact geometry stays exact. Keyed on the
-   enumerated spellings only, exactly the law Space declares for `data-size` and
-   Stack for its `custom` rung. `none` is absent on purpose: zero has no room to
-   scale. `:where()` holds these at the base rules' specificity so source order
-   -- not escalation -- decides, and the split axes are separate rules because
-   `[column, row]` may mix a rung with a measurement.
+/* Flex's rhythm-aware preset gaps moved to the Modern skin
+   (`runtime/engines/modern/skin/flex`) with the rest of Modern's arm: the
+   scaled rung was always Modern-only, so nothing here ever reached the frozen
+   engines. What stays above is their unscaled base, now scoped to them by
+   name. */
+/* Stack defaults for the FROZEN engines.
 
-   MODERN-ONLY, via a SECOND zero-specificity `:where(.rottay-flex--modern)`
-   clause chained onto the first. `resolveFlexAttributes` is the SHARED scalar
-   projection all three engines call, so Classic and Rustic stamp the identical
-   `data-gap="uniform"`/`data-gap-preset="md"` attributes on the identical
-   shared `.rottay-flex` class -- without this clause the rule below would
-   multiply THEIR gap too, since a plain object-literal selector match does not
-   know which engine rendered the element. `:where()` contributes NO
-   specificity regardless of what it contains, so chaining a second one keeps
-   this rule tied with the unscaled base rule above (both (0,2,0)) exactly as
-   the source-order law already declared; it only narrows WHICH elements can
-   match at all. */
-.rottay-flex[data-gap="uniform"]:where(.rottay-flex--modern):where(
-  [data-gap-preset="xs"],
-  [data-gap-preset="sm"],
-  [data-gap-preset="md"],
-  [data-gap-preset="lg"],
-  [data-gap-preset="xl"],
-  [data-gap-preset="2xl"],
-  [data-gap-preset="3xl"],
-  [data-gap-preset="4xl"]
-) {
-  gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));
-}
+   Modern's arm -- the rhythm-scaled rungs, the divider geometry and the
+   shrink-safe formatting context -- moved to
+   `runtime/engines/modern/skin/stack`. What remains is the unscaled base the
+   read-only engines have always had, byte-identical, now scoped to them by
+   name so Modern's paint has exactly one owner.
 
-.rottay-flex[data-gap="split"]:where(.rottay-flex--modern):where(
-  [data-column-gap-preset="xs"],
-  [data-column-gap-preset="sm"],
-  [data-column-gap-preset="md"],
-  [data-column-gap-preset="lg"],
-  [data-column-gap-preset="xl"],
-  [data-column-gap-preset="2xl"],
-  [data-column-gap-preset="3xl"],
-  [data-column-gap-preset="4xl"]
-) {
-  column-gap: calc(var(--ds-flex-column-gap) * var(--ds-rhythm-effective-scale, 1));
-}
+   Preset spacing stays connected to the tenant spacing ramp, whose channels are
+   ALREADY density-scaled at the token layer (foundation/base/spacing.css:
+   --ds-spacing-N = rung * --ds-density-effective-scale, clamped 0.5..3).
 
-.rottay-flex[data-gap="split"]:where(.rottay-flex--modern):where(
-  [data-row-gap-preset="xs"],
-  [data-row-gap-preset="sm"],
-  [data-row-gap-preset="md"],
-  [data-row-gap-preset="lg"],
-  [data-row-gap-preset="xl"],
-  [data-row-gap-preset="2xl"],
-  [data-row-gap-preset="3xl"],
-  [data-row-gap-preset="4xl"]
-) {
-  row-gap: calc(var(--ds-flex-row-gap) * var(--ds-rhythm-effective-scale, 1));
-}
-
-/* Grid presets ride the same contract. The modern Grid engine used to write an
-   inline `gap`, which no stylesheet can reach; it now routes a RUNG through
-   `--ds-grid-gap` + `data-gap-preset` and keeps writing inline `gap` for a
-   numeric value, so a measurement is still sovereign by the strongest means CSS
-   has (an inline declaration) and never appears in the channel at all.
-
-   MODERN-ONLY, via a zero-specificity `:where(.rottay-grid--modern)` clause --
-   the SAME idiom Flex uses above and Stack uses below, not a new one. Classic
-   and Rustic never set `--ds-grid-gap`/`--_ds-grid-column-gap`/
-   `--_ds-grid-row-gap` and never stamp `data-gap-preset`/
-   `data-column-gap-preset`/`data-row-gap-preset` themselves (confirmed in
-   Grid/engines/{classic,rustic}/index.tsx, both read-only), so today these
-   three base rules are inert for them in practice. They were still a LATENT
-   hazard left unscoped: `data-gap-preset` is a plain `data-*` name a caller
-   can hand-stamp through either read-only engine's forwarded rest props (the
-   identical class of forgery leg 6/"COUNTERFACTUAL" in
-   Grid.rhythm-preset-contract.test.tsx already proves the MODERN engine
-   clears), and nothing about an unscoped attribute selector match depends on
-   which engine rendered the element. `:where()` adds no specificity, so this
-   scope keeps each rule tied with its own former (unscoped) specificity --
-   it only narrows WHICH elements can match at all, exactly like Flex's base
-   rules four sections above. */
-.rottay-grid[data-gap-preset]:where(.rottay-grid--modern) {
-  gap: var(--ds-grid-gap);
-}
-
-/* Anchored on the engine class, NOT on a second `[data-gap-preset]`: repeating
-   the attribute to climb specificity is forbidden, and `:where()` contributes
-   nothing, so matching the base rule's (0,2,0) and sorting later is what makes
-   this win. */
-.rottay-grid.rottay-grid--modern:where(
-  [data-gap-preset="xs"],
-  [data-gap-preset="sm"],
-  [data-gap-preset="md"],
-  [data-gap-preset="lg"],
-  [data-gap-preset="xl"],
-  [data-gap-preset="2xl"],
-  [data-gap-preset="3xl"],
-  [data-gap-preset="4xl"]
-) {
-  gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1));
-}
-
-/* `columnGap`/`rowGap` ride the identical split. They used to resolve INLINE
-   even for a RUNG, so a caller who split the axes silently opted out of the
-   tenant rhythm axis while the uniform `gap` obeyed it -- the split-axis half
-   of the same blocker `gap` already had. Each axis now routes its rung through
-   a private seam plus its OWN stamp, asked separately because the two axes may
-   mix a rung with a measurement, exactly as Flex declares for `[column, row]`.
-   A measurement still resolves inline and therefore never matches below;
-   `none` (0) is absent for the same reason it is absent above -- zero has no
-   room to scale. The seams are private (`--_ds-`) because a family writer does
-   not mint public channels; the public dial stays the rhythm scale the uniform
-   rule already reads.
-
-   These four rules sort AFTER the uniform `gap` rules on purpose. An axis
-   longhand and the `gap` shorthand tie at (0,2,0), so SOURCE ORDER is what
-   makes an explicit axis override the uniform gap, exactly as the prop
-   contract promises. Same anchoring law as above: the engine class, never a
-   repeated attribute, and `:where()` contributes nothing.
-
-   The two UNSCALED base rules below carry the identical `:where(.rottay-grid--modern)`
-   scope the uniform `gap` base rule above now carries, for the identical
-   reason: Classic/Rustic never set `--_ds-grid-column-gap`/`--_ds-grid-row-gap`
-   or stamp these attributes themselves, but leaving the base rule unscoped
-   was still a latent hazard against a caller-forwarded `data-*` attribute
-   reaching either read-only engine. `:where()` adds no specificity, so
-   sorting relative to the uniform rules above is unaffected. */
-.rottay-grid[data-column-gap-preset]:where(.rottay-grid--modern) {
-  column-gap: var(--_ds-grid-column-gap);
-}
-
-.rottay-grid.rottay-grid--modern:where(
-  [data-column-gap-preset="xs"],
-  [data-column-gap-preset="sm"],
-  [data-column-gap-preset="md"],
-  [data-column-gap-preset="lg"],
-  [data-column-gap-preset="xl"],
-  [data-column-gap-preset="2xl"],
-  [data-column-gap-preset="3xl"],
-  [data-column-gap-preset="4xl"]
-) {
-  /* One line, like the uniform rule above: a wrapped `calc(` hides the
-     multiplication from every grep-shaped reader. */
-  column-gap: calc(var(--_ds-grid-column-gap) * var(--ds-rhythm-effective-scale, 1));
-}
-
-.rottay-grid[data-row-gap-preset]:where(.rottay-grid--modern) {
-  row-gap: var(--_ds-grid-row-gap);
-}
-
-.rottay-grid.rottay-grid--modern:where(
-  [data-row-gap-preset="xs"],
-  [data-row-gap-preset="sm"],
-  [data-row-gap-preset="md"],
-  [data-row-gap-preset="lg"],
-  [data-row-gap-preset="xl"],
-  [data-row-gap-preset="2xl"],
-  [data-row-gap-preset="3xl"],
-  [data-row-gap-preset="4xl"]
-) {
-  row-gap: calc(var(--_ds-grid-row-gap) * var(--ds-rhythm-effective-scale, 1));
-}
-
-/* Stack defaults. Preset spacing stays connected to the tenant spacing ramp,
-   whose channels are ALREADY density-scaled at the token layer
-   (foundation/base/spacing.css: --ds-spacing-N = rung *
-   --ds-density-effective-scale, clamped 0.5..3) -- multiplying by the density
-   factor again here scaled Stack quadratically against Box/Flex, which read
-   the same channels once (Phase B B7-03 fix). The gap mirrors into
-   --_ds-stack-gap-current so the divider can center itself in the governed
-   rhythm instead of adding its own separation on top of it. The divider axis
-   flags (proto, private) live on the root so the responsive runtime can
-   re-project them per breakpoint -- a responsive direction stamps no
-   data-direction attribute for the horizontal rule below to select on, and
-   custom properties inherit to the generated divider.
-
-   Layout rhythm rides the PRESETS, not the consume site. Each preset rung is
-   multiplied by --ds-rhythm-effective-scale where it is assigned, so every
-   rung, the `gap` and the divider centering that reads the same private
-   channel all stay in agreement. `none` (0) and `custom` are deliberately
-   untouched: a consumer's numeric gap is exact geometry under rhythm for the
-   same reason it is under density. This is NOT double-scaling against the
-   density factor already inside --ds-spacing-N -- density sized the control,
-   rhythm sizes the room between controls.
-
-   MODERN-ONLY. `resolveStackPresentation` is the SHARED scalar projection all
-   three engines call, so Classic and Rustic stamp the identical
-   `data-spacing="md"` attribute on the identical shared `.rottay-stack` class
-   -- and every Stack element matches the root rule below regardless of
-   engine, `data-spacing` present or not. A rung's multiplication therefore
-   cannot live in the same declaration every engine reads: each rung below is
-   an UNSCALED base (what Classic/Rustic keep, byte-identical to the
-   pre-rhythm cascade) paired with a second rule scoped by a zero-specificity
-   `:where(.rottay-stack--modern)` clause that overrides it with the scaled
-   value. Both rules of a pair tie in specificity -- the base rule's own
-   compound (class, or class+attribute for a named rung) is unchanged by a
-   `:where()` addition -- so source order alone decides, and the override
-   comes second on purpose. */
-.rottay-stack {
+   The gap mirrors into --_ds-stack-gap-current so the divider can center itself
+   in the governed rhythm instead of adding its own separation on top of it. The
+   divider axis flags live on the root so a responsive direction (which stamps no
+   data-direction attribute) still lands the hairline on the right axis; custom
+   properties inherit to the generated divider. */
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic) {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -302,146 +123,120 @@
   --_ds-stack-divider-gap-inline: var(--ds-stack-divider-inset, 0px);
 }
 
-/* Ties the root rule above (0,1,0) exactly, so source order decides: this
-   wins for Modern, and the read-only engines never carry the class that
-   would let it match at all. */
-.rottay-stack:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
-}
+/* Stack's Modern arm -- the rhythm-scaled rungs and the divider geometry --
+   moved to `runtime/engines/modern/skin/stack`. What stays here is the frozen
+   engines' unscaled base, now scoped to them by name. */
 
-.rottay-stack[data-direction="horizontal"] {
+
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-direction="horizontal"] {
   flex-direction: row;
   --_ds-stack-divider-gap-block: var(--ds-stack-divider-inset, 0px);
   --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
-.rottay-stack[data-reverse="true"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-reverse="true"] {
   flex-direction: column-reverse;
 }
 
-.rottay-stack[data-direction="horizontal"][data-reverse="true"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-direction="horizontal"][data-reverse="true"] {
   flex-direction: row-reverse;
 }
 
-.rottay-stack[data-wrap="true"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-wrap="true"] {
   flex-wrap: wrap;
 }
 
-.rottay-stack[data-align="start"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-align="start"] {
   align-items: flex-start;
 }
 
-.rottay-stack[data-align="center"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-align="center"] {
   align-items: center;
 }
 
-.rottay-stack[data-align="end"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-align="end"] {
   align-items: flex-end;
 }
 
-.rottay-stack[data-align="baseline"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-align="baseline"] {
   align-items: baseline;
 }
 
-.rottay-stack[data-justify="center"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-justify="center"] {
   justify-content: center;
 }
 
-.rottay-stack[data-justify="end"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-justify="end"] {
   justify-content: flex-end;
 }
 
-.rottay-stack[data-justify="space-between"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-justify="space-between"] {
   justify-content: space-between;
 }
 
-.rottay-stack[data-justify="space-around"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-justify="space-around"] {
   justify-content: space-around;
 }
 
-.rottay-stack[data-justify="space-evenly"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-justify="space-evenly"] {
   justify-content: space-evenly;
 }
 
-.rottay-stack[data-spacing="none"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="none"] {
   --_ds-stack-gap-current: 0;
 }
 
-.rottay-stack[data-spacing="xs"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="xs"] {
   --_ds-stack-gap-current: var(--ds-spacing-1);
 }
 
-.rottay-stack[data-spacing="xs"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1));
-}
 
-.rottay-stack[data-spacing="sm"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="sm"] {
   --_ds-stack-gap-current: var(--ds-spacing-2);
 }
 
-.rottay-stack[data-spacing="sm"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1));
-}
 
-.rottay-stack[data-spacing="md"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="md"] {
   --_ds-stack-gap-current: var(--ds-spacing-4);
 }
 
-.rottay-stack[data-spacing="md"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
-}
 
-.rottay-stack[data-spacing="lg"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="lg"] {
   --_ds-stack-gap-current: var(--ds-spacing-6);
 }
 
-.rottay-stack[data-spacing="lg"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
-}
 
-.rottay-stack[data-spacing="xl"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="xl"] {
   --_ds-stack-gap-current: var(--ds-spacing-8);
 }
 
-.rottay-stack[data-spacing="xl"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1));
-}
 
-.rottay-stack[data-spacing="2xl"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="2xl"] {
   --_ds-stack-gap-current: var(--ds-spacing-10);
 }
 
-.rottay-stack[data-spacing="2xl"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-10) * var(--ds-rhythm-effective-scale, 1));
-}
 
-.rottay-stack[data-spacing="3xl"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="3xl"] {
   --_ds-stack-gap-current: var(--ds-spacing-12);
 }
 
-.rottay-stack[data-spacing="3xl"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-12) * var(--ds-rhythm-effective-scale, 1));
-}
 
-.rottay-stack[data-spacing="4xl"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="4xl"] {
   --_ds-stack-gap-current: var(--ds-spacing-16);
 }
 
-.rottay-stack[data-spacing="4xl"]:where(.rottay-stack--modern) {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-16) * var(--ds-rhythm-effective-scale, 1));
-}
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never
    density-scaled. */
-.rottay-stack[data-spacing="custom"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="custom"] {
   --_ds-stack-gap-current: var(--ds-stack-gap);
 }
 
-.rottay-stack[data-full-width="true"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-full-width="true"] {
   width: 100%;
 }
 
-.rottay-stack[data-full-height="true"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-full-height="true"] {
   height: 100%;
 }
 
@@ -454,7 +249,7 @@
    margins ride the root-declared axis flags so a RESPONSIVE direction (which
    stamps no data-direction attribute) still lands the hairline on the right
    axis at every breakpoint. */
-.rottay-stack > .rottay-stack-divider[data-part="divider"] {
+.rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic) > .rottay-stack-divider[data-part="divider"] {
   align-self: stretch;
   flex: 0 0 var(--ds-stack-divider-size, 1px);
   min-inline-size: 0;
@@ -477,7 +272,7 @@
 
 @media (forced-colors: active) {
   /* The hairline is structural: it must survive color stripping. */
-  .rottay-stack > .rottay-stack-divider[data-part="divider"] {
+  .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic) > .rottay-stack-divider[data-part="divider"] {
     background: ButtonText;
     opacity: 1;
   }

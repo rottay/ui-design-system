@@ -1,0 +1,163 @@
+/**
+ * Modern Flex skin.
+ *
+ * Imported into the canonical `rottay-engines` layer. React projects the scalar
+ * props onto the owned `data-*` namespace and writes the resolved gap onto
+ * `--ds-flex-{gap,column-gap,row-gap}`; this file owns every value.
+ *
+ * THE CLASS IS STILL `rottay-flex`. app-bithire selects it in live CSS and in
+ * `querySelectorAll`, so renaming it here would break that product silently.
+ * The namespace migration is registered to the consumer-readiness lane and the
+ * family's `legacyNamespaceClasses` pin says so; it is not this cut's to make.
+ *
+ * WHY THE RULES MOVED HERE. The same scalar projection runs in all three
+ * engines, so `presentation/components/skin/layout-primitives` painted Modern
+ * and the two frozen engines from one unscoped rule set. Modern's arm is here
+ * now, keyed on the engine class and the root part; what stays there is scoped
+ * to `--classic`/`--rustic` with its declarations unchanged, so the frozen
+ * engines keep the cascade position they always had.
+ *
+ * A RUNG SCALES, A MEASUREMENT DOES NOT. `--ds-flex-gap` carries both a rung
+ * (`var(--ds-spacing-4)`) and a caller's measurement (`16px`), so the channel
+ * alone cannot say which it holds. The engine stamps the preset SPELLING per
+ * axis and only for a rung, so the enumerated selectors below reach a rung and
+ * can never reach exact geometry. The split axes are separate rules because
+ * `[column, row]` may mix a rung with a measurement.
+ */
+
+.rottay-flex.rottay-flex--modern[data-part='root'] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  /* Pinned by the quality contract so flexible content can shrink and ellipsize. */
+  min-inline-size: 0;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-inline='true'] {
+  display: inline-flex;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='row-reverse'] {
+  flex-direction: row-reverse;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='column'] {
+  flex-direction: column;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='column-reverse'] {
+  flex-direction: column-reverse;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-wrap='wrap'] {
+  flex-wrap: wrap;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-wrap='wrap-reverse'] {
+  flex-wrap: wrap-reverse;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='end'] {
+  justify-content: flex-end;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='center'] {
+  justify-content: center;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='between'] {
+  justify-content: space-between;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='around'] {
+  justify-content: space-around;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='evenly'] {
+  justify-content: space-evenly;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-align='start'] {
+  align-items: flex-start;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-align='end'] {
+  align-items: flex-end;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-align='center'] {
+  align-items: center;
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-align='baseline'] {
+  align-items: baseline;
+}
+
+/* ---- gap: the unscaled base, then the rung that rhythm may size ---- */
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform'] {
+  gap: var(--ds-flex-gap);
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split'] {
+  column-gap: var(--ds-flex-column-gap);
+  row-gap: var(--ds-flex-row-gap);
+}
+
+/*
+ * `:where()` holds each scaled rule at its base rule's specificity, so source
+ * order -- not escalation -- decides. `none` is absent on purpose: zero has no
+ * room to scale.
+ */
+.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform']:where(
+  [data-gap-preset='xs'],
+  [data-gap-preset='sm'],
+  [data-gap-preset='md'],
+  [data-gap-preset='lg'],
+  [data-gap-preset='xl'],
+  [data-gap-preset='2xl'],
+  [data-gap-preset='3xl'],
+  [data-gap-preset='4xl']
+) {
+  gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split']:where(
+  [data-column-gap-preset='xs'],
+  [data-column-gap-preset='sm'],
+  [data-column-gap-preset='md'],
+  [data-column-gap-preset='lg'],
+  [data-column-gap-preset='xl'],
+  [data-column-gap-preset='2xl'],
+  [data-column-gap-preset='3xl'],
+  [data-column-gap-preset='4xl']
+) {
+  column-gap: calc(var(--ds-flex-column-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split']:where(
+  [data-row-gap-preset='xs'],
+  [data-row-gap-preset='sm'],
+  [data-row-gap-preset='md'],
+  [data-row-gap-preset='lg'],
+  [data-row-gap-preset='xl'],
+  [data-row-gap-preset='2xl'],
+  [data-row-gap-preset='3xl'],
+  [data-row-gap-preset='4xl']
+) {
+  row-gap: calc(var(--ds-flex-row-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+/* ---- reflow: the only motion this primitive owns ---- */
+
+.rottay-flex.rottay-flex--modern[data-part='root'][data-layout-motion='rearrange'] {
+  transition: var(--ds-flex-reflow-transition);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-flex.rottay-flex--modern[data-part='root'][data-layout-motion='rearrange'] {
+    transition: none;
+  }
+}

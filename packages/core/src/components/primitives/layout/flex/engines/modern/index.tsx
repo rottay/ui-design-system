@@ -17,11 +17,10 @@
  * - **Grid** owns two-dimensional tracks.
  *
  * Scalar geometry projects to neutral `data-*` attributes consumed by the
- * shared declarative skin (`presentation/components/skin/layout-primitives/index.css`),
+ * Modern skin (`runtime/engines/modern/skin/flex/index.css`),
  * so tenant and white-label layers participate in the normal cascade; only
  * numeric parameters, the gap custom properties and the consumer's own
- * `style` remain inline (plus `min-inline-size: 0`, pinned by the quality
- * contract so flexible content can shrink and ellipsize).
+ * `style` remain inline.
  *
  * @module Flex/Engines/Modern
  * @category Layout
@@ -99,7 +98,7 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     // the omission bug.
     const resolved = resolveFlexAttributes(props);
     const presentationAttributes: FlexPresentationAttributes = resolved;
-    const parameterStyle = resolveFlexParameterStyle(props);
+    const parameterStyle = resolveFlexParameterStyle(props, { motion: "stamped" });
     const resolvedStyle =
       parameterStyle || consumerStyle
         ? { ...parameterStyle, ...consumerStyle }
@@ -120,10 +119,6 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     const combinedClassName = ["rottay-flex", "rottay-flex--modern", className]
       .filter(Boolean)
       .join(" ");
-    const modernStyle = {
-      minInlineSize: 0,
-      ...resolvedStyle,
-    };
 
     return (
       <>
@@ -131,9 +126,10 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
           {...rest}
           ref={ref}
           className={combinedClassName}
-          style={{ ...modernStyle, ...responsive.channels }}
+          style={{ ...resolvedStyle, ...responsive.channels }}
           {...presentationAttributes}
           {...responsive.attrs}
+          data-part="root"
           data-component="flex"
         >
           {children}

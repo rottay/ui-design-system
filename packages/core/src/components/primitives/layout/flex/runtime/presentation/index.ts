@@ -98,9 +98,22 @@ export function resolveFlexAttributes(
   };
 }
 
+/**
+ * How the caller wants motion delivered.
+ *
+ * `inline` is the default because the FROZEN Classic and Rustic engines call
+ * this same resolver and their rendered output may not move: they keep the
+ * `transition` declaration they have always written. Modern passes `stamped`,
+ * because its own skin owns the reflow off `data-layout-motion`.
+ */
+export interface FlexParameterStyleOptions {
+  readonly motion?: "inline" | "stamped";
+}
+
 /** Projects arbitrary scalar layout values through bounded custom properties. */
 export function resolveFlexParameterStyle(
-  props: FlexProps
+  props: FlexProps,
+  options: FlexParameterStyleOptions = {}
 ): FlexParameterStyle | undefined {
   const style: FlexParameterStyle = {};
 
@@ -133,10 +146,12 @@ export function resolveFlexParameterStyle(
   if (overflow !== undefined) {
     style.overflow = overflow;
   }
-  if (props.motion === "rearrange") {
-    style.transition = "var(--ds-transition-rearrange)";
-  } else if (props.motion === "none") {
-    style.transition = "none";
+  if (options.motion !== "stamped") {
+    if (props.motion === "rearrange") {
+      style.transition = "var(--ds-transition-rearrange)";
+    } else if (props.motion === "none") {
+      style.transition = "none";
+    }
   }
   return Object.keys(style).length > 0 ? style : undefined;
 }
