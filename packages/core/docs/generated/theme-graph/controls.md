@@ -8,7 +8,7 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: b5ba48ad97260b698fb2b30784b692cc28f051ae3c54c97227bc750819c8e1d7
+digest: ec5b867dda7774cca0ab5e019c37b9af3b16dfe7e4b1f0dc3d66c26e9b1c0255
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
@@ -18,21 +18,21 @@ digest: b5ba48ad97260b698fb2b30784b692cc28f051ae3c54c97227bc750819c8e1d7
 | `motion.character` | pro | 17 | 506 | 720 | 200 |
 | `motion.dial` | standard | 17 | 506 | 720 | 200 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 13 | 3 |
-| `palette.contrast-posture` | pro | 50 | 1583 | 3210 | 245 |
+| `palette.contrast-posture` | pro | 53 | 1643 | 3268 | 245 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 50 | 1583 | 3210 | 245 |
-| `palette.seeds` | standard | 54 | 1679 | 3407 | 245 |
-| `palette.status-seeds` | standard | 53 | 1669 | 3387 | 245 |
+| `palette.neutral-temperature` | standard | 53 | 1643 | 3268 | 245 |
+| `palette.seeds` | standard | 57 | 1739 | 3465 | 245 |
+| `palette.status-seeds` | standard | 56 | 1729 | 3445 | 245 |
 | `profiles.expressive` | pro | 7 | 143 | 1593 | 238 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 26 | 26 | 1 |
 | `shape.button-style` | standard | 7 | 54 | 661 | 215 |
 | `shape.control-height` | standard | 7 | 73 | 139 | 43 |
 | `shape.nesting` | pro | 5 | 33 | 97 | 42 |
-| `shape.radius-scale` | standard | 18 | 648 | 1237 | 216 |
+| `shape.radius-scale` | standard | 21 | 708 | 1294 | 216 |
 | `spacing.rhythm` | standard | 5 | 25 | 119 | 41 |
 | `states.emphasis` | standard | 7 | 82 | 824 | 204 |
-| `states.focus-style` | standard | 9 | 186 | 913 | 204 |
+| `states.focus-style` | standard | 10 | 214 | 941 | 204 |
 | `surfaces.border-style` | standard | 5 | 38 | 173 | 78 |
 | `surfaces.effect-intensity` | standard | 4 | 24 | 59 | 25 |
 | `surfaces.elevation-posture` | standard | 35 | 1249 | 1442 | 101 |
