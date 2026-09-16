@@ -149,16 +149,51 @@ export function previewThemeAdmission(
  * and was lifted twice. The suites stayed green because the second lift is
  * near-idempotent -- a silent wrong arm that happens to work.
  *
- * `liftAuthoredTheme` ALWAYS wraps `motion` as `{ value, disposition }`, even
- * when the draft authored none. A flat draft's `motion` is the raw value and
- * never carries `disposition`. That is a structural difference the lift itself
- * guarantees, not a heuristic.
+ * The discriminant is the wrapper's key vocabulary (`value` / `disposition`), which
+ * serialization preserves; mixed or foreign-keyed families are refused by name.
  */
+const GOVERNED_FAMILIES = [
+  "motion",
+  "charts",
+  "recipes",
+  "expressive",
+  "responsive",
+] as const;
+
+const WRAPPER_KEYS: ReadonlySet<string> = new Set(["value", "disposition"]);
+
+type FamilyShape = "absent" | "wrapped" | "flat";
+
+function familyShape(slot: unknown): FamilyShape {
+  if (slot === undefined) return "absent";
+  if (typeof slot !== "object" || slot === null || Array.isArray(slot)) {
+    return "flat";
+  }
+  const keys = Object.keys(slot);
+  if (!keys.some((key) => WRAPPER_KEYS.has(key))) {
+    return keys.length === 0 ? "absent" : "flat";
+  }
+  return keys.every((key) => WRAPPER_KEYS.has(key)) ? "wrapped" : "flat";
+}
+
 function governedDraft(draft: Theme | FlatTheme): Theme {
-  const motion: unknown = (draft as { motion?: unknown }).motion;
-  const governed =
-    typeof motion === "object" && motion !== null && "disposition" in motion;
-  return governed ? (draft as Theme) : liftAuthoredTheme(draft as FlatTheme);
+  const shapes = GOVERNED_FAMILIES.map((family) => ({
+    family,
+    shape: familyShape((draft as unknown as Record<string, unknown>)[family]),
+  }));
+  const wrapped = shapes.filter(({ shape }) => shape === "wrapped");
+  if (wrapped.length === 0) return liftAuthoredTheme(draft as FlatTheme);
+  const unwrapped = shapes.filter(({ shape }) => shape === "flat");
+  if (unwrapped.length > 0) {
+    throw new Error(
+      `draftPreviewThemeIntent: draft mixes governed families (${wrapped
+        .map(({ family }) => family)
+        .join(", ")}) with unwrapped ones (${unwrapped
+        .map(({ family }) => family)
+        .join(", ")}); a draft is either a governed Theme or a FlatTheme`
+    );
+  }
+  return draft as Theme;
 }
 
 export function draftPreviewThemeIntent(
