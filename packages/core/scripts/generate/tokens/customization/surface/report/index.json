@@ -3,35 +3,35 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "d81b2842f98cb2cd8e9f8df78ef1c815d91f4fcd900622900289d72cbb6e31e3",
+    "inputsDigest": "76d0a2730302095d2d77bd2c2dab97be76112614db94e07cd957281f84557434",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 484,
-      "productionTsFiles": 2176,
-      "testFiles": 1439,
+      "productionTsFiles": 2180,
+      "testFiles": 1443,
       "artifactFiles": 3
     }
   },
   "counts": {
-    "universe": 8228,
-    "writers": 6281,
+    "universe": 8238,
+    "writers": 6350,
     "foundationTokens": 4102,
     "componentTokens": 612,
     "tenantChannels": 3284,
     "publicHooks": 91,
     "unadjudicatedReads": 1909,
-    "deadWriters": 278,
+    "deadWriters": 277,
     "frontierReserved": 0,
-    "modernConsumedUnique": 4568,
-    "tsReadNames": 2783,
-    "tsWriteNames": 2613,
-    "tsMetadataNames": 2222,
+    "modernConsumedUnique": 4581,
+    "tsReadNames": 2790,
+    "tsWriteNames": 2754,
+    "tsMetadataNames": 2300,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
   "frontierFamilies": [],
   "deadByClass": {
-    "foundation": 132,
+    "foundation": 131,
     "component": 0,
     "tenantChannel": 200,
     "authoredCssLocal": 6
@@ -297,7 +297,6 @@
     "--ds-error-state-bg",
     "--ds-error-state-border",
     "--ds-error-state-icon-bg",
-    "--ds-input-placeholder",
     "--ds-input-search-clear-color",
     "--ds-input-success-message-color",
     "--ds-input-success-message-font-size",
@@ -5217,7 +5216,7 @@
       "writer": false,
       "reads": {
         "css": 0,
-        "ts": 9,
+        "ts": 7,
         "tests": true,
         "modern": false,
         "artifact": false
@@ -5352,7 +5351,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -5441,8 +5440,8 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 0,
-        "ts": 2,
+        "css": 2,
+        "ts": 0,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -5501,8 +5500,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 3,
+        "css": 2,
+        "ts": 1,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -5676,10 +5675,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-error-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -5687,8 +5686,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-error-shadow": {
       "category": "canonical-authority",
@@ -5706,10 +5705,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-error-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -5717,8 +5716,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-fallback-icon-color": {
       "category": "canonical-authority",
@@ -5751,10 +5750,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-focus-ring": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -5762,8 +5761,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-focus-ring-color": {
       "category": "canonical-authority",
@@ -5772,7 +5771,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -5787,7 +5786,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 1,
+        "ts": 3,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -5802,7 +5801,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -5906,8 +5905,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
-        "ts": 2,
+        "css": 3,
+        "ts": 1,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -6011,8 +6010,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 2,
+        "css": 1,
+        "ts": 1,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -6026,8 +6025,8 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 0,
-        "ts": 1,
+        "css": 1,
+        "ts": 0,
         "tests": true,
         "modern": false,
         "artifact": false
@@ -6056,8 +6055,8 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 0,
-        "ts": 1,
+        "css": 1,
+        "ts": 0,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -6066,10 +6065,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-group-surplus-radius": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6077,8 +6076,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-group-surplus-size": {
       "category": "unadjudicated-read",
@@ -6086,8 +6085,8 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 0,
-        "ts": 2,
+        "css": 2,
+        "ts": 0,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -6117,7 +6116,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -6141,10 +6140,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-hover-transform": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6152,8 +6151,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-image-object-fit": {
       "category": "canonical-authority",
@@ -6186,10 +6185,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-initials-tracking": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6197,8 +6196,23 @@
         "modern": true,
         "artifact": false
       },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-avatar-ink": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": true,
+        "modern": true,
+        "artifact": false
+      },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-lg-border-width": {
       "category": "canonical-authority",
@@ -6236,10 +6250,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 6,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -6326,10 +6340,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
-        "ts": 3,
+        "css": 8,
+        "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -6351,10 +6365,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-press-transform": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6362,8 +6376,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-primary-bg": {
       "category": "compiler-derived-channel",
@@ -6411,10 +6425,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-primary-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6422,8 +6436,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-primary-shadow": {
       "category": "canonical-authority",
@@ -6441,10 +6455,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-primary-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6452,8 +6466,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-radius-circle": {
       "category": "canonical-authority",
@@ -6591,10 +6605,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-secondary-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6602,8 +6616,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-secondary-shadow": {
       "category": "canonical-authority",
@@ -6621,10 +6635,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-secondary-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6632,8 +6646,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-sm-border-width": {
       "category": "canonical-authority",
@@ -6656,8 +6670,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
-        "ts": 2,
+        "css": 4,
+        "ts": 1,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -6671,10 +6685,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 7,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -6966,10 +6980,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-success-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -6977,8 +6991,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-success-shadow": {
       "category": "canonical-authority",
@@ -6996,10 +7010,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-success-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -7007,8 +7021,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-surplus-bg": {
       "category": "unadjudicated-read",
@@ -7146,10 +7160,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-warning-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -7157,8 +7171,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-warning-shadow": {
       "category": "canonical-authority",
@@ -7176,10 +7190,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-avatar-warning-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -7187,8 +7201,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-avatar-xl-border-width": {
       "category": "canonical-authority",
@@ -7226,10 +7240,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -7286,10 +7300,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 5,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -7682,8 +7696,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-avatar-bleed": {
       "category": "compiler-derived-channel",
@@ -7712,8 +7726,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-avatar-border-width": {
       "category": "compiler-derived-channel",
@@ -7727,8 +7741,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-avatar-radius": {
       "category": "compiler-derived-channel",
@@ -7742,8 +7756,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-avatar-shadow": {
       "category": "compiler-derived-channel",
@@ -7757,8 +7771,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-avatar-size": {
       "category": "compiler-derived-channel",
@@ -7772,8 +7786,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-bg": {
       "category": "component-channel",
@@ -7847,8 +7861,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-chip-max-inline-size": {
       "category": "compiler-derived-channel",
@@ -7866,10 +7880,10 @@
       "tsMetadataMentions": 1
     },
     "--ds-badge-chip-min-height": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -7877,8 +7891,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-badge-chip-radius": {
       "category": "compiler-derived-channel",
@@ -7926,10 +7940,10 @@
       "tsMetadataMentions": 1
     },
     "--ds-badge-compact-font-weight": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -7937,8 +7951,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-badge-container-padding-inline": {
       "category": "compiler-derived-channel",
@@ -7952,8 +7966,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-bg": {
       "category": "compiler-derived-channel",
@@ -7967,8 +7981,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-border": {
       "category": "compiler-derived-channel",
@@ -7982,8 +7996,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-border-width": {
       "category": "compiler-derived-channel",
@@ -7997,8 +8011,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-color": {
       "category": "compiler-derived-channel",
@@ -8012,8 +8026,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-font-family": {
       "category": "compiler-derived-channel",
@@ -8027,8 +8041,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-font-size": {
       "category": "compiler-derived-channel",
@@ -8042,8 +8056,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-font-weight": {
       "category": "compiler-derived-channel",
@@ -8057,8 +8071,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-min-size": {
       "category": "compiler-derived-channel",
@@ -8117,8 +8131,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-selected-bg": {
       "category": "compiler-derived-channel",
@@ -8132,8 +8146,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-selected-border": {
       "category": "compiler-derived-channel",
@@ -8147,8 +8161,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-selected-ring": {
       "category": "compiler-derived-channel",
@@ -8162,8 +8176,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-count-size": {
       "category": "compiler-derived-channel",
@@ -8222,8 +8236,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-disabled-opacity": {
       "category": "compiler-derived-channel",
@@ -8252,8 +8266,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-dot-border": {
       "category": "compiler-derived-channel",
@@ -8267,8 +8281,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-dot-border-width": {
       "category": "compiler-derived-channel",
@@ -8282,8 +8296,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-dot-lg-size": {
       "category": "canonical-authority",
@@ -8307,7 +8321,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 2,
+        "ts": 3,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -8327,8 +8341,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-dot-size": {
       "category": "compiler-derived-channel",
@@ -8342,8 +8356,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 2
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 3
     },
     "--ds-badge-dot-sm-size": {
       "category": "canonical-authority",
@@ -8432,8 +8446,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-font-family": {
       "category": "compiler-derived-channel",
@@ -8502,13 +8516,13 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-frame-pressed": {
       "category": "compiler-derived-channel",
@@ -8522,8 +8536,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-frame-width": {
       "category": "compiler-derived-channel",
@@ -8567,8 +8581,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-ghost-border": {
       "category": "compiler-derived-channel",
@@ -8582,8 +8596,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-ghost-color": {
       "category": "compiler-derived-channel",
@@ -8597,8 +8611,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-ghost-shadow": {
       "category": "compiler-derived-channel",
@@ -8612,8 +8626,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-height": {
       "category": "compiler-derived-channel",
@@ -8642,8 +8656,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-highlight-hover": {
       "category": "compiler-derived-channel",
@@ -8657,8 +8671,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-hover-ink-fallback": {
       "category": "component-channel",
@@ -8667,7 +8681,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 0,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -8702,8 +8716,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-icon-border": {
       "category": "compiler-derived-channel",
@@ -8717,8 +8731,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-icon-border-width": {
       "category": "compiler-derived-channel",
@@ -8732,8 +8746,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-icon-color": {
       "category": "compiler-derived-channel",
@@ -8747,8 +8761,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-icon-gap": {
       "category": "canonical-authority",
@@ -8777,8 +8791,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-icon-shadow": {
       "category": "compiler-derived-channel",
@@ -8792,8 +8806,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-icon-size": {
       "category": "compiler-derived-channel",
@@ -8822,8 +8836,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-indicator-max-inline-size": {
       "category": "compiler-derived-channel",
@@ -8837,8 +8851,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-indicator-radius": {
       "category": "compiler-derived-channel",
@@ -8852,8 +8866,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-info-bg": {
       "category": "compiler-derived-channel",
@@ -8897,8 +8911,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-ink-hover": {
       "category": "compiler-derived-channel",
@@ -8907,13 +8921,13 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-ink-pressed": {
       "category": "compiler-derived-channel",
@@ -8927,8 +8941,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-letter-spacing": {
       "category": "compiler-derived-channel",
@@ -9197,8 +9211,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-outline-border": {
       "category": "compiler-derived-channel",
@@ -9212,8 +9226,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-outline-color": {
       "category": "compiler-derived-channel",
@@ -9227,8 +9241,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-outline-shadow": {
       "category": "compiler-derived-channel",
@@ -9242,8 +9256,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-padding": {
       "category": "canonical-authority",
@@ -9306,10 +9320,10 @@
       "tsMetadataMentions": 1
     },
     "--ds-badge-pill-min-height": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -9317,8 +9331,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-badge-pill-radius": {
       "category": "compiler-derived-channel",
@@ -9332,8 +9346,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-position-transform": {
       "category": "component-channel",
@@ -9347,8 +9361,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 8
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 9
     },
     "--ds-badge-press-transform": {
       "category": "compiler-derived-channel",
@@ -9362,8 +9376,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-primary-bg": {
       "category": "compiler-derived-channel",
@@ -9446,8 +9460,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
-        "ts": 0,
+        "css": 10,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -9542,8 +9556,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-bleed": {
       "category": "compiler-derived-channel",
@@ -9572,8 +9586,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-border-width": {
       "category": "compiler-derived-channel",
@@ -9587,8 +9601,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-color": {
       "category": "compiler-derived-channel",
@@ -9602,8 +9616,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-focus-ring": {
       "category": "compiler-derived-channel",
@@ -9617,8 +9631,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-hover-bg": {
       "category": "compiler-derived-channel",
@@ -9632,8 +9646,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-hover-transform": {
       "category": "compiler-derived-channel",
@@ -9647,8 +9661,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-opacity": {
       "category": "compiler-derived-channel",
@@ -9662,8 +9676,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-radius": {
       "category": "compiler-derived-channel",
@@ -9677,8 +9691,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-remove-size": {
       "category": "compiler-derived-channel",
@@ -9707,8 +9721,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-resolved-font-size": {
       "category": "component-channel",
@@ -9732,7 +9746,7 @@
       "writer": true,
       "reads": {
         "css": 10,
-        "ts": 0,
+        "ts": 3,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -9797,8 +9811,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-selected-ink": {
       "category": "compiler-derived-channel",
@@ -9812,8 +9826,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-selected-shadow": {
       "category": "compiler-derived-channel",
@@ -9827,8 +9841,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-selected-surface": {
       "category": "compiler-derived-channel",
@@ -9842,8 +9856,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-shadow": {
       "category": "compiler-derived-channel",
@@ -9857,8 +9871,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-shadow-hover": {
       "category": "compiler-derived-channel",
@@ -9872,8 +9886,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-shadow-pressed": {
       "category": "compiler-derived-channel",
@@ -9887,8 +9901,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-sm-font-size": {
       "category": "canonical-authority",
@@ -9962,8 +9976,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 2
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 3
     },
     "--ds-badge-soft-border": {
       "category": "compiler-derived-channel",
@@ -9977,8 +9991,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-soft-color": {
       "category": "compiler-derived-channel",
@@ -9992,8 +10006,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 2
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 3
     },
     "--ds-badge-solid-bg": {
       "category": "compiler-derived-channel",
@@ -10007,8 +10021,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-solid-border": {
       "category": "compiler-derived-channel",
@@ -10022,8 +10036,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-solid-color": {
       "category": "compiler-derived-channel",
@@ -10037,8 +10051,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-spinner-duration": {
       "category": "compiler-derived-channel",
@@ -10052,8 +10066,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-status-default-color": {
       "category": "canonical-authority",
@@ -10172,8 +10186,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-surface-hover": {
       "category": "compiler-derived-channel",
@@ -10182,7 +10196,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -10202,8 +10216,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-badge-text-color": {
       "category": "compiler-derived-channel",
@@ -10227,7 +10241,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -10242,7 +10256,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 0,
+        "ts": 1,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -10257,7 +10271,7 @@
       "writer": true,
       "reads": {
         "css": 7,
-        "ts": 0,
+        "ts": 4,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -10272,7 +10286,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -10287,7 +10301,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -28389,8 +28403,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 1
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 2
     },
     "--ds-color-alpha-black-20": {
       "category": "canonical-authority",
@@ -28579,7 +28593,7 @@
       "writer": true,
       "reads": {
         "css": 8,
-        "ts": 3,
+        "ts": 5,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -28924,7 +28938,7 @@
       "writer": true,
       "reads": {
         "css": 312,
-        "ts": 29,
+        "ts": 35,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -29254,7 +29268,7 @@
       "writer": true,
       "reads": {
         "css": 351,
-        "ts": 96,
+        "ts": 99,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -29988,7 +30002,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 72,
+        "css": 77,
         "ts": 12,
         "tests": true,
         "modern": true,
@@ -30004,7 +30018,7 @@
       "writer": true,
       "reads": {
         "css": 99,
-        "ts": 11,
+        "ts": 12,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -30124,7 +30138,7 @@
       "writer": true,
       "reads": {
         "css": 83,
-        "ts": 13,
+        "ts": 24,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -30948,8 +30962,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1232,
-        "ts": 256,
+        "css": 1233,
+        "ts": 265,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -31054,7 +31068,7 @@
       "writer": true,
       "reads": {
         "css": 99,
-        "ts": 40,
+        "ts": 41,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -31144,7 +31158,7 @@
       "writer": true,
       "reads": {
         "css": 10,
-        "ts": 1,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -31204,7 +31218,7 @@
       "writer": true,
       "reads": {
         "css": 48,
-        "ts": 18,
+        "ts": 21,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -31414,7 +31428,7 @@
       "writer": true,
       "reads": {
         "css": 251,
-        "ts": 55,
+        "ts": 58,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -31744,7 +31758,7 @@
       "writer": true,
       "reads": {
         "css": 39,
-        "ts": 9,
+        "ts": 10,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -31804,7 +31818,7 @@
       "writer": true,
       "reads": {
         "css": 735,
-        "ts": 185,
+        "ts": 188,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -31864,7 +31878,7 @@
       "writer": true,
       "reads": {
         "css": 192,
-        "ts": 61,
+        "ts": 64,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -32074,7 +32088,7 @@
       "writer": true,
       "reads": {
         "css": 56,
-        "ts": 12,
+        "ts": 20,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -36334,7 +36348,7 @@
       "writer": true,
       "reads": {
         "css": 57,
-        "ts": 4,
+        "ts": 5,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -44333,7 +44347,7 @@
       "writer": true,
       "reads": {
         "css": 80,
-        "ts": 12,
+        "ts": 17,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -46538,13 +46552,13 @@
       "writer": true,
       "reads": {
         "css": 6,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-active-border": {
       "category": "compiler-derived-channel",
@@ -46553,13 +46567,13 @@
       "writer": true,
       "reads": {
         "css": 5,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-active-color": {
       "category": "compiler-derived-channel",
@@ -46568,13 +46582,13 @@
       "writer": true,
       "reads": {
         "css": 13,
-        "ts": 2,
+        "ts": 3,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-active-shadow": {
       "category": "compiler-derived-channel",
@@ -46583,13 +46597,13 @@
       "writer": true,
       "reads": {
         "css": 3,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-bg": {
       "category": "compiler-derived-channel",
@@ -46643,13 +46657,13 @@
       "writer": true,
       "reads": {
         "css": 4,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-count-active-border": {
       "category": "compiler-derived-channel",
@@ -46658,13 +46672,13 @@
       "writer": true,
       "reads": {
         "css": 4,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-count-active-ring": {
       "category": "compiler-derived-channel",
@@ -46673,13 +46687,13 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-count-bg": {
       "category": "compiler-derived-channel",
@@ -46688,13 +46702,13 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 1,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-count-border": {
       "category": "compiler-derived-channel",
@@ -46703,13 +46717,13 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-count-ring": {
       "category": "compiler-derived-channel",
@@ -46718,13 +46732,13 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 1
     },
     "--ds-filter-pill-focus-ring": {
       "category": "compiler-derived-channel",
@@ -46733,7 +46747,7 @@
       "writer": true,
       "reads": {
         "css": 3,
-        "ts": 1,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -47468,7 +47482,7 @@
       "writer": true,
       "reads": {
         "css": 101,
-        "ts": 38,
+        "ts": 40,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -47603,7 +47617,7 @@
       "writer": true,
       "reads": {
         "css": 87,
-        "ts": 21,
+        "ts": 22,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -48443,7 +48457,7 @@
       "writer": true,
       "reads": {
         "css": 52,
-        "ts": 4,
+        "ts": 5,
         "tests": false,
         "modern": true,
         "artifact": true
@@ -48532,8 +48546,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 82,
-        "ts": 9,
+        "css": 83,
+        "ts": 8,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -48578,7 +48592,7 @@
       "writer": true,
       "reads": {
         "css": 155,
-        "ts": 13,
+        "ts": 17,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -54829,7 +54843,7 @@
     "--ds-input-placeholder": {
       "category": "canonical-authority",
       "tier": "internal",
-      "status": "dead-writer",
+      "status": "adjudicated-live",
       "writer": true,
       "reads": {
         "css": 0,
@@ -57053,7 +57067,7 @@
       "writer": true,
       "reads": {
         "css": 10,
-        "ts": 2,
+        "ts": 3,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -60187,7 +60201,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 17,
+        "css": 18,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -61462,7 +61476,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 14,
+        "css": 16,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -69517,7 +69531,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 42,
+        "css": 43,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -69622,7 +69636,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 68,
+        "css": 69,
         "ts": 4,
         "tests": true,
         "modern": true,
@@ -69863,7 +69877,7 @@
       "writer": true,
       "reads": {
         "css": 54,
-        "ts": 1,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -80872,8 +80886,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 155,
-        "ts": 15,
+        "css": 156,
+        "ts": 23,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -80932,7 +80946,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 375,
+        "css": 376,
         "ts": 29,
         "tests": true,
         "modern": true,
@@ -81037,7 +81051,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 3,
         "tests": true,
         "modern": false,
@@ -81052,7 +81066,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 211,
+        "css": 210,
         "ts": 19,
         "tests": true,
         "modern": true,
@@ -92131,13 +92145,28 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 2
     },
+    "--ds-skeleton-bar-height": {
+      "category": "consumed-external-origin",
+      "tier": "internal",
+      "status": "active",
+      "writer": false,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
     "--ds-skeleton-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 20,
+        "css": 23,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -92236,6 +92265,36 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-skeleton-cell-padding": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-skeleton-control-size": {
+      "category": "consumed-external-origin",
+      "tier": "internal",
+      "status": "active",
+      "writer": false,
+      "reads": {
+        "css": 2,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
     "--ds-skeleton-gap": {
       "category": "component-channel",
       "tier": "internal",
@@ -92302,7 +92361,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -92362,7 +92421,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -93037,7 +93096,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 18,
+        "css": 19,
         "ts": 8,
         "tests": true,
         "modern": true,
@@ -93112,8 +93171,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 583,
-        "ts": 47,
+        "css": 584,
+        "ts": 53,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -93187,8 +93246,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 387,
-        "ts": 28,
+        "css": 389,
+        "ts": 29,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -93247,8 +93306,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 314,
-        "ts": 35,
+        "css": 316,
+        "ts": 39,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -93323,7 +93382,7 @@
       "writer": true,
       "reads": {
         "css": 79,
-        "ts": 14,
+        "ts": 15,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -97627,8 +97686,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 267,
-        "ts": 45,
+        "css": 268,
+        "ts": 46,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -97642,8 +97701,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 169,
-        "ts": 0,
+        "css": 170,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -98122,7 +98181,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 98,
+        "css": 97,
         "ts": 12,
         "tests": true,
         "modern": true,
@@ -98152,7 +98211,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 135,
+        "css": 138,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -98167,7 +98226,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 76,
+        "css": 81,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -98273,7 +98332,7 @@
       "writer": true,
       "reads": {
         "css": 5,
-        "ts": 3,
+        "ts": 8,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -98762,15 +98821,15 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-cell-ellipsis-max-width": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 1,
+        "css": 1,
+        "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -98807,10 +98866,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-cell-numeric": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -98818,8 +98877,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-cell-padding": {
       "category": "compiler-derived-channel",
@@ -98835,6 +98894,36 @@
       },
       "tsWriteSites": 1,
       "tsMetadataMentions": 0
+    },
+    "--ds-table-col-min-width": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 2
+    },
+    "--ds-table-col-width": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 5
     },
     "--ds-table-collapsed-min-inline-size": {
       "category": "unadjudicated-read",
@@ -99332,10 +99421,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-footer-margin-block-start": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -99343,8 +99432,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-group-count-font-size": {
       "category": "unadjudicated-read",
@@ -100007,10 +100096,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-pagination-current-font-weight": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -100018,38 +100107,38 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-pagination-font-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-pagination-margin-block-start": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-pagination-min-height": {
       "category": "component-channel",
@@ -100067,10 +100156,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-pagination-numeric": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -100078,8 +100167,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-pagination-padding": {
       "category": "unadjudicated-read",
@@ -100501,6 +100590,36 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-table-scroll-x": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 1
+    },
+    "--ds-table-scroll-y": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 1
+    },
     "--ds-table-selection-cell-padding-comfortable": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -100547,10 +100666,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-selection-control-coarse-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -100558,8 +100677,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-shadow": {
       "category": "component-channel",
@@ -100816,11 +100935,11 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-table-title-font-weight": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+    "--ds-table-sticky-top": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -100829,22 +100948,37 @@
         "artifact": false
       },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 3
+    },
+    "--ds-table-title-font-weight": {
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": true,
+        "artifact": false
+      },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-title-margin-block-end": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-table-toolbar-gap": {
       "category": "unadjudicated-read",
@@ -100892,10 +101026,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-touch-target-min": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -100903,8 +101037,23 @@
         "modern": true,
         "artifact": false
       },
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
+    },
+    "--ds-table-virtual-spacer": {
+      "category": "authored-css-local",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": true,
+        "artifact": false
+      },
       "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 2
     },
     "--ds-tabs-active-bg": {
       "category": "public-app-hook",
@@ -102928,8 +103077,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-border-width": {
       "category": "canonical-authority",
@@ -102947,10 +103096,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-close-focus-ring": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -102958,8 +103107,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-close-gap": {
       "category": "canonical-authority",
@@ -102977,10 +103126,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-close-radius": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -102988,14 +103137,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-close-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -103003,14 +103152,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-close-touch-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103018,14 +103167,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-compact-font-weight": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103033,8 +103182,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-custom-bg": {
       "category": "component-channel",
@@ -103187,10 +103336,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-error-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103198,14 +103347,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-error-outlined-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103213,14 +103362,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-error-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103228,14 +103377,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-focus-ring": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103243,8 +103392,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-font-weight": {
       "category": "canonical-authority",
@@ -103277,10 +103426,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-icon-radius": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103288,14 +103437,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-icon-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -103303,8 +103452,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-input-bg": {
       "category": "compiler-derived-channel",
@@ -103877,10 +104026,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-lg-padding-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103888,8 +104037,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-line-height": {
       "category": "canonical-authority",
@@ -103907,10 +104056,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-max-inline-size": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103918,8 +104067,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-md-font-size": {
       "category": "canonical-authority",
@@ -103967,10 +104116,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-md-padding-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -103978,8 +104127,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-md-padding-x": {
       "category": "canonical-authority",
@@ -103997,10 +104146,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-outlined-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104008,14 +104157,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-press-transform": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104023,8 +104172,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-primary-bg": {
       "category": "compiler-derived-channel",
@@ -104087,10 +104236,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-primary-outlined-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104098,14 +104247,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-primary-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104113,8 +104262,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-radius": {
       "category": "canonical-authority",
@@ -104184,7 +104333,7 @@
       "reads": {
         "css": 3,
         "ts": 2,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -104267,10 +104416,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-secondary-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104278,14 +104427,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-secondary-outlined-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104293,14 +104442,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-secondary-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104308,14 +104457,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-shadow": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 2,
         "ts": 0,
@@ -104323,8 +104472,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-sm-font-size": {
       "category": "canonical-authority",
@@ -104372,10 +104521,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-sm-padding-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104383,8 +104532,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-success-bg": {
       "category": "compiler-derived-channel",
@@ -104432,10 +104581,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-success-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104443,14 +104592,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-success-outlined-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104458,14 +104607,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-success-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104473,14 +104622,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-touch-target": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104488,8 +104637,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-transition": {
       "category": "canonical-authority",
@@ -104582,10 +104731,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-warning-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104593,14 +104742,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-warning-outlined-ink": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104608,14 +104757,14 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-warning-solid-bg": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104623,8 +104772,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-xl-font-size": {
       "category": "canonical-authority",
@@ -104672,10 +104821,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-xl-padding-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104683,8 +104832,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tag-xs-font-size": {
       "category": "canonical-authority",
@@ -104732,10 +104881,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-tag-xs-padding-inline": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "ts-emission-site",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -104743,8 +104892,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
+      "tsWriteSites": 1,
+      "tsMetadataMentions": 1
     },
     "--ds-tall-card-action-bg": {
       "category": "compiler-derived-channel",
@@ -115976,7 +116125,7 @@
       "writer": true,
       "reads": {
         "css": 193,
-        "ts": 6,
+        "ts": 9,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -121061,7 +121210,7 @@
       "writer": true,
       "reads": {
         "css": 30,
-        "ts": 13,
+        "ts": 14,
         "tests": false,
         "modern": true,
         "artifact": true

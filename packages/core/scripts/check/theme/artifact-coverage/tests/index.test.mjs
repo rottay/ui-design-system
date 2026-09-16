@@ -7,6 +7,11 @@
  * better coverage than yesterday, and a ratchet pointed the wrong way calls
  * that an improvement. So every case below makes the measurement WORSE in a
  * specific way and asserts the gate says so.
+ *
+ * The roster cases are newer and answer a third failure that also happened: a
+ * family population pinned as a COUNT went six families stale for four days,
+ * and three of the eight commits responsible netted to zero, so no count could
+ * ever have caught them.
  */
 import assert from 'node:assert/strict';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -54,6 +59,9 @@ function pinnedFor(dir) {
   return {
     verticals: result.verticals,
     families: result.families,
+    familyRoster: result.familyNames,
+    retiredFamilies: {},
+    familiesEverPinned: result.families,
     reads: result.reads,
     covered: result.covered,
     uncovered: result.uncovered,
@@ -204,6 +212,110 @@ describe('artifact coverage drills — a worse tree is refused, and so is a lyin
     delete pinned.covered;
     const failures = evaluate(measure(dir), pinned);
     assert.ok(failures.some((line) => line.includes('an unpinned counter is not a ratchet')), failures.join(' | '));
+  });
+
+  it('MUTANT: a family that disappears is named, and the reasoned re-anchor passes', () => {
+    // The case that actually happened: eleven skins merged into five over eight
+    // commits and the count pin said only "coverage got WORSE". Here the gate
+    // must NAME the family, and accept it only once the reason is written.
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    assert.deepEqual(evaluate(measure(dir), pinned), [], 'the sandbox must be green first');
+
+    rmSync(join(dir, SKIN_ROOT, 'popconfirm'), { recursive: true, force: true });
+    const unreasoned = evaluate(measure(dir), pinned);
+    assert.ok(
+      unreasoned.some((line) => line.startsWith('popconfirm:') && line.includes('its skin is gone')),
+      `a vanished family must be named: ${unreasoned.join(' | ')}`,
+    );
+
+    // The re-anchor, as a real one is written: every counter re-measured (a
+    // vanished skin takes its reads with it) and the family's departure
+    // recorded with its reason. Only then is the gate green.
+    const reanchored = {
+      ...pinnedFor(dir),
+      retiredFamilies: { popconfirm: 'drill: merged into the confirm-dialog family by the planted cut' },
+      familiesEverPinned: pinned.familiesEverPinned,
+    };
+    assert.deepEqual(evaluate(measure(dir), reanchored), [], 'the reasoned re-anchor must pass');
+
+    // ...and the same re-anchor WITHOUT the reason is refused, because the
+    // eleven families that left this roster left it with one.
+    const unrecorded = { ...pinnedFor(dir), familiesEverPinned: pinned.familiesEverPinned };
+    const silent = evaluate(measure(dir), unrecorded);
+    assert.ok(
+      silent.some((line) => line.startsWith('familiesEverPinned:') && line.includes('without a record')),
+      `a silent deletion from the roster must be refused: ${silent.join(' | ')}`,
+    );
+  });
+
+  it('MUTANT: a RENAME is red, and it is exactly what the count pin could not see', () => {
+    // autocomplete -> auto-complete, overlay-modal -> modal and
+    // skeleton-compounds -> skeleton-anatomy all netted to zero. A count pin is
+    // blind to all three by construction; the roster names both sides.
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    cpSync(join(dir, SKIN_ROOT, 'popconfirm'), join(dir, SKIN_ROOT, 'pop-confirm'), { recursive: true });
+    rmSync(join(dir, SKIN_ROOT, 'popconfirm'), { recursive: true, force: true });
+
+    const mutant = measure(dir);
+    assert.equal(mutant.families, pinned.families, 'a rename nets to zero — this is the blindness being closed');
+    const failures = evaluate(mutant, pinned);
+    assert.ok(
+      failures.some((line) => line.startsWith('pop-confirm:') && line.includes('nobody pinned')),
+      failures.join(' | '),
+    );
+    assert.ok(
+      failures.some((line) => line.startsWith('popconfirm:') && line.includes('its skin is gone')),
+      failures.join(' | '),
+    );
+  });
+
+  it('MUTANT: a retirement with an empty reason is refused — the reason IS the re-anchor', () => {
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    rmSync(join(dir, SKIN_ROOT, 'popconfirm'), { recursive: true, force: true });
+    const failures = evaluate(measure(dir), {
+      ...pinned,
+      families: pinned.families - 1,
+      familyRoster: pinned.familyRoster.filter((family) => family !== 'popconfirm'),
+      retiredFamilies: { popconfirm: '   ' },
+    });
+    assert.ok(failures.some((line) => line.includes('retired with no written reason')), failures.join(' | '));
+  });
+
+  it('MUTANT: a retired family that comes back is refused', () => {
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    const failures = evaluate(measure(dir), {
+      ...pinned,
+      retiredFamilies: { popconfirm: 'drill: recorded as merged, but its skin is still on disk' },
+    });
+    assert.ok(failures.some((line) => line.includes('its skin is back')), failures.join(' | '));
+    assert.ok(failures.some((line) => line.includes('the two sets are disjoint')), failures.join(' | '));
+  });
+
+  it('MUTANT: a pinned count that disagrees with its own roster is refused', () => {
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    const failures = evaluate(measure(dir), { ...pinned, families: pinned.families + 1 });
+    assert.ok(failures.some((line) => line.includes('names disagree')), failures.join(' | '));
+  });
+
+  it('MUTANT: a baseline with no ever-pinned anchor is refused', () => {
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    delete pinned.familiesEverPinned;
+    const failures = evaluate(measure(dir), pinned);
+    assert.ok(failures.some((line) => line.includes('a family can leave the roster with no record')), failures.join(' | '));
+  });
+
+  it('MUTANT: an unrostered family population is refused rather than counted', () => {
+    const dir = sandbox();
+    const pinned = pinnedFor(dir);
+    delete pinned.familyRoster;
+    const failures = evaluate(measure(dir), pinned);
+    assert.ok(failures.some((line) => line.includes('cannot see a rename')), failures.join(' | '));
   });
 
   it('MUTANT: a fourth artifact nobody pinned is refused', () => {

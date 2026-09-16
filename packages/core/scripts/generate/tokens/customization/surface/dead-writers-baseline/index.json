@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
-  "lastMove": "D6-2d-resto (2026-09-15, DT-adjudicated GO): -27, decrease-only. RETIRED with their producers (21): the fourteen --ds-switch-* size/radius/transition/thumb-offset/label channels with no reader anywhere, plus --ds-control-brand-tint-hover, --ds-control-ink-muted, --ds-control-surface-raised, --ds-surface-shadow-hover, --ds-color-interactive-bg-muted, --ds-color-interactive-border and --ds-color-text-page. RECLASSIFIED externally-consumed (6): --ds-control-brand-border, --ds-control-brand-tint, --ds-control-ink, --ds-control-on-brand, --ds-sidebar-item-color and --ds-surface-shadow have zero readers in this package and twenty live read sites in app-bithire and app-platform, enumerated per channel in governance/tokens/decisions/writers/unused/system; this projection is DS-scoped by its own docblock and cannot call them dead. The seven --ds-switch-* channels the frozen Classic theme reads were never in this anchor: they measure active.",
-  "lastMoveKind": "decrece-solo: -27 nombre(s)",
+  "lastMove": "EVI-02 instruments (2026-09-15, DT-adjudicated option (b)): -1, decrease-only. --ds-input-placeholder leaves the anchor because the adjudicatedAlive walker now reads the registry's index KEY when a row carries no name field. Its row in governance/tokens/decisions/writers/unused/system is decision EXECUTED_DEFECT_FIX, executed true, zero readers in core/showroom/apps, successor --ds-input-color-placeholder chain; the adjudication was written long ago and the walker simply could not see it -- 525 of the 538 rows are keyed by channel with no name field, so the mechanism measured 0 adjudicated-live tree-wide since it was built. The same change raises the adjudicated-alive SET from 13 to 34 names; this is the only one of the 21 newly-seen names that was in this anchor.",
+  "lastMoveKind": "decrece-solo: -1 nombre(s)",
   "names": [
     "--ds-action-dock-reserved-block-end",
     "--ds-action-dock-reserved-block-start",
@@ -111,7 +111,6 @@
     "--ds-error-state-bg",
     "--ds-error-state-border",
     "--ds-error-state-icon-bg",
-    "--ds-input-placeholder",
     "--ds-input-search-clear-color",
     "--ds-input-success-message-color",
     "--ds-input-success-message-font-size",

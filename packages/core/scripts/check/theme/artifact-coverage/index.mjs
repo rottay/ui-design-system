@@ -31,11 +31,13 @@
  * question that already has an owner; what this gate adds is the coverage read
  * off whatever those files say today.
  *
- * DIRECTION. The pins are EXACT, like every ratchet in this tree: growth is a
- * regression, and shrinkage is red with the instruction to lower the pin in the
- * same commit. The vacuity guards are separate and blocking -- an artifact that
- * declares nothing, or a corpus with no families, is a broken scanner reporting
- * a clean tree.
+ * DIRECTION. The read counters are EXACT pins, like every ratchet in this tree:
+ * growth is a regression, and shrinkage is red with the instruction to lower the
+ * pin in the same commit. The family POPULATION is not a counter at all -- it is
+ * a named roster, because a count cannot see a rename (see `evaluateRoster`).
+ * The vacuity guards are separate and blocking -- an artifact that declares
+ * nothing, or a corpus with no families, is a broken scanner reporting a clean
+ * tree.
  *
  * Usage:
  *   node scripts/check/theme/artifact-coverage/index.mjs            exit 1 on drift
@@ -129,6 +131,9 @@ export function measure(root = DEFAULT_ROOT) {
     unionChannels: union.size,
     everyVerticalChannels: everyVertical.size,
     families: families.length,
+    // The population is pinned BY NAME, so the names are part of the
+    // measurement rather than something a reader has to recover from `rows`.
+    familyNames: families.map((row) => row.family),
     reads,
     covered,
     uncovered: reads - covered,
@@ -144,6 +149,81 @@ export function measure(root = DEFAULT_ROOT) {
     ])),
     rows: families,
   };
+}
+
+/**
+ * THE FAMILY POPULATION IS A NAMED SET, NOT A COUNTER, and the hole this closes
+ * is why. `families` was pinned at 275 on 2026-09-11, when the tree held 275.
+ * Eight family-cut commits then merged eleven skins into five, the counter read
+ * 269 for four days, and all the gate could say was "coverage got WORSE" -- the
+ * wrong verb for a merge, and without a single name to check. Worse, THREE of
+ * those eight netted to zero (autocomplete -> auto-complete, overlay-modal ->
+ * modal, skeleton-compounds -> skeleton-anatomy): a count pin cannot see a
+ * rename at all, so a family could be replaced by an entirely different one and
+ * nothing would move.
+ *
+ * So the pin is the roster, in the shape `unreachableFamilies` already uses. A
+ * family arriving or leaving is named. It leaves only through `retiredFamilies`,
+ * whose value is the written reason -- the lot and commit that merged it -- and
+ * an empty reason is refused. What this CANNOT check is whether a reason is
+ * true or still current; it enforces that the re-anchor is deliberate and
+ * attributed, not that the author was honest.
+ */
+function evaluateRoster(result, baseline, failures) {
+  const roster = baseline.familyRoster;
+  if (!Array.isArray(roster)) {
+    failures.push('familyRoster: no roster — a family count without its names cannot see a rename');
+    return;
+  }
+  const retired = baseline.retiredFamilies ?? {};
+  if (baseline.families !== roster.length) {
+    failures.push(
+      `families: the pin ${baseline.families} and the roster of ${roster.length} names disagree `
+      + '— re-anchor both in this commit',
+    );
+  }
+  // EVERY NAME EVER PINNED stays in exactly one of the two sets, so a family
+  // cannot leave the baseline by being quietly deleted from the roster: that
+  // lowers the union and is refused by name here. Writing the reason into
+  // `retiredFamilies` is the only move that keeps the union whole. What this
+  // cannot do is stop an author who edits this integer too — like every
+  // baseline in this tree, it makes the concession deliberate and reviewable,
+  // it does not make it impossible.
+  const union = roster.length + Object.keys(retired).length;
+  if (typeof baseline.familiesEverPinned !== 'number') {
+    failures.push('familiesEverPinned: no pin — without it a family can leave the roster with no record');
+  } else if (union !== baseline.familiesEverPinned) {
+    failures.push(
+      `familiesEverPinned: ${union} families are accounted for (${roster.length} live + `
+      + `${Object.keys(retired).length} retired) against the pinned ${baseline.familiesEverPinned} — a family `
+      + 'left the baseline without a record, or a new one arrived and nobody raised the pin',
+    );
+  }
+  const measured = new Set(result.familyNames);
+  for (const family of result.familyNames) {
+    if (!roster.includes(family)) {
+      failures.push(`${family}: a skin family nobody pinned — add it to familyRoster in this commit`);
+    }
+  }
+  for (const family of [...roster].sort()) {
+    if (!measured.has(family)) {
+      failures.push(
+        `${family}: pinned as a skin family and its skin is gone — restore it, or move it to retiredFamilies `
+        + 'with the lot and commit that merged it',
+      );
+    }
+  }
+  for (const [family, reason] of Object.entries(retired)) {
+    if (measured.has(family)) {
+      failures.push(`${family}: recorded as retired and its skin is back — move it to familyRoster`);
+    }
+    if (typeof reason !== 'string' || reason.trim() === '') {
+      failures.push(`${family}: retired with no written reason — the reason IS the re-anchor`);
+    }
+    if (roster.includes(family)) {
+      failures.push(`${family}: in familyRoster and retiredFamilies at once — the two sets are disjoint`);
+    }
+  }
 }
 
 export function evaluate(result, baseline) {
@@ -188,7 +268,7 @@ export function evaluate(result, baseline) {
   compare('uncovered reads (union)', result.uncovered, baseline.uncovered, 'down');
   compare('covered reads (union)', result.covered, baseline.covered, 'up');
   compare('covered reads (every artifact)', result.coveredEveryVertical, baseline.coveredEveryVertical, 'up');
-  compare('families', result.families, baseline.families, 'up');
+  evaluateRoster(result, baseline, failures);
 
   // PER ARTIFACT. Without these three, a channel can leave one artifact and no
   // published counter moves, because the other two still carry it into the

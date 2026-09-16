@@ -463,6 +463,48 @@ function computeInputsDigest(corpus) {
   return sha256(parts.join('\n'));
 }
 
+const ADJUDICATED_ALIVE = /^(KEEP_LIVE|EXECUTED)/;
+
+/**
+ * The names an adjudication registry marks live, read out of ONE registry
+ * document.
+ *
+ * THE INDEX KEY IS THE NAME. These registries are objects keyed by channel,
+ * and 525 of their 538 rows never duplicated that key into a `name` field --
+ * only the thirteen written in D6-2d-resto did. Requiring the field therefore
+ * measured ZERO adjudicated-live names tree-wide for as long as the registries
+ * have existed: the mechanism was built, wired and never once fired. So a node
+ * addressed by a channel-shaped key IS that channel.
+ *
+ * The key is trusted narrowly, in two ways that were verified against both
+ * documents before this was written (0 keys that are not a channel, 0 rows
+ * whose own name/token/channel/variable field contradicts their key):
+ *   - only when it LOOKS like a channel, so structural keys such as `entries`
+ *     or `evidence` can never be mistaken for a name; and
+ *   - only for the node the key directly addresses, never inherited by that
+ *     node's children -- otherwise a nested sub-decision inside a row would
+ *     speak for the whole row. Array items inherit nothing for the same
+ *     reason.
+ * An explicit `name`/`token` still wins over the key, so a row that disagrees
+ * with its own index is read as it is written, not as it is filed.
+ */
+export function adjudicatedAliveNames(registry) {
+  const alive = new Set();
+  const walk = (node, key) => {
+    if (Array.isArray(node)) { for (const item of node) walk(item, undefined); return; }
+    if (typeof node !== 'object' || node === null) return;
+    const decision = node.decision ?? node.verdict;
+    const keyed = typeof key === 'string' && key.startsWith('--') ? key : undefined;
+    const name = node.name ?? node.token ?? keyed;
+    if (typeof name === 'string' && typeof decision === 'string' && ADJUDICATED_ALIVE.test(decision)) {
+      alive.add(name);
+    }
+    for (const [childKey, value] of Object.entries(node)) walk(value, childKey);
+  };
+  walk(registry, undefined);
+  return alive;
+}
+
 function buildReport({ drill } = {}) {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
   // Adjudication registries are AUTHORITIES: a name a versioned, evidence-
@@ -474,19 +516,9 @@ function buildReport({ drill } = {}) {
     const full = join(ROOT, registryPath);
     if (!existsSync(full)) continue;
     try {
-      const registry = JSON.parse(readFileSync(full, 'utf8'));
-      const walk = (node) => {
-        if (Array.isArray(node)) { for (const item of node) walk(item); return; }
-        if (typeof node !== 'object' || node === null) return;
-        const decision = node.decision ?? node.verdict;
-        const name = node.name ?? node.token;
-        if (typeof name === 'string' && typeof decision === 'string' &&
-            /^(KEEP_LIVE|EXECUTED)/.test(decision)) {
-          adjudicatedAlive.add(name);
-        }
-        for (const value of Object.values(node)) walk(value);
-      };
-      walk(registry);
+      for (const name of adjudicatedAliveNames(JSON.parse(readFileSync(full, 'utf8')))) {
+        adjudicatedAlive.add(name);
+      }
     } catch { /* malformed registry: census stays independent */ }
   }
 
