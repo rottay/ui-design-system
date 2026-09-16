@@ -14,68 +14,76 @@
  * These rules were part of the shared `layout` skin, beside the Layout family
  * they have nothing to do with. Box is its own family and now has its own file.
  *
- * BOX ANCHORS ON ITS CLASS, NOT ON A `data-part`, and it is the one family in
- * this cut that does. Box is the style-injection escape hatch 75 DS components
- * and 113 showroom modules compose with, so a default part would land on every
- * nested Box in the fleet: a descendant rule of the form
- * `.rottay-x [data-part='root']` would reach into X's Boxes, a query for X's own
- * root would match them, and the shared anatomy-skeleton renderer -- which walks
- * every descendant `data-part` -- would draw a bone for each one. The family-cut
- * gate's `stampsAnatomy`/`skinReadsAnatomy` arms therefore stay red for this
- * family pending an owner ruling; the alternative is a fleet-wide side effect,
- * which is worse than a red arm with a written reason.
+ * BOX ANCHORS ON `data-part='box-surface'`, and the name is the whole point.
+ *
+ * Box is the escape hatch 75 DS components and 113 showroom modules compose
+ * with, so whatever part it stamps lands on every nested Box in the fleet. That
+ * rules out `root`: every family reads its own root, so `.rottay-x
+ * [data-part='root']` would reach into X's Boxes and any query for X's own root
+ * would match them. It also rules out the obvious `box`, which is NOT free --
+ * `checkbox` owns that name for its indicator and reads it with DESCENDANT
+ * selectors in both engine skins, and a contract test pins exactly one such node
+ * inside a Checkbox tree.
+ *
+ * A part name is a GLOBAL namespace. Census a candidate against three axes
+ * before adopting it: what stamps it, which skins READ it (a descendant selector
+ * is the hazard), and whether `SKELETON_PART_ROLES` already names it -- an
+ * existing role is not evidence the name is free, it is evidence another family
+ * already needed it. `box-surface` was measured clear on all three, and takes
+ * the `pass` role: a Box is a container, so its children are drawn and it is
+ * not -- unlike checkbox's `box`, which is a solid `block` square.
  */
 
-.rottay-box.rottay-box--modern[data-radius='xs'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='xs'] {
   border-radius: var(--ds-box-corner-xs);
 }
 
-.rottay-box.rottay-box--modern[data-radius='sm'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='sm'] {
   border-radius: var(--ds-box-corner-sm);
 }
 
-.rottay-box.rottay-box--modern[data-radius='md'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='md'] {
   border-radius: var(--ds-box-corner-md);
 }
 
-.rottay-box.rottay-box--modern[data-radius='lg'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='lg'] {
   border-radius: var(--ds-box-corner-lg);
 }
 
-.rottay-box.rottay-box--modern[data-radius='xl'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='xl'] {
   border-radius: var(--ds-box-corner-xl);
 }
 
-.rottay-box.rottay-box--modern[data-radius='2xl'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='2xl'] {
   border-radius: var(--ds-box-corner-2xl);
 }
 
-.rottay-box.rottay-box--modern[data-radius='full'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='full'] {
   border-radius: var(--ds-box-corner-full);
 }
 
 /* Depth rides the DS elevation scale only, so a tenant re-themes it from one place. */
 
-.rottay-box.rottay-box--modern[data-shadow='xs'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='xs'] {
   box-shadow: var(--ds-box-depth-xs);
 }
 
-.rottay-box.rottay-box--modern[data-shadow='sm'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='sm'] {
   box-shadow: var(--ds-box-depth-sm);
 }
 
-.rottay-box.rottay-box--modern[data-shadow='md'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='md'] {
   box-shadow: var(--ds-box-depth-md);
 }
 
-.rottay-box.rottay-box--modern[data-shadow='lg'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='lg'] {
   box-shadow: var(--ds-box-depth-lg);
 }
 
-.rottay-box.rottay-box--modern[data-shadow='xl'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='xl'] {
   box-shadow: var(--ds-box-depth-xl);
 }
 
-.rottay-box.rottay-box--modern[data-shadow='2xl'] {
+.rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='2xl'] {
   box-shadow: var(--ds-box-depth-2xl);
 }

@@ -44,12 +44,22 @@ async function waitForPart(container: HTMLElement, part: string): Promise<Elemen
 
 describe('Layout-family data-part contract (WO-SKIN-05 checkpoint L)', () => {
   describe('Box', () => {
-    // Box stamps NO part of its own. It is the escape hatch every other component
-    // composes with, so a default part would put `data-part="root"` on every nested
-    // Box in the fleet: a skin rule of the form `.rottay-x [data-part='root']` would
-    // reach into X's Boxes, and any query for X's own root would match them too.
-    it.each(ENGINES)('stamps no data-part of its own under the %s engine', async (engine) => {
-      const { container } = renderWithEngine(<Box data-testid="bare-box">content</Box>, engine);
+    // Box stamps `box-surface` under the Modern engine, and the NAME is the
+    // contract. Whatever part the escape hatch stamps lands on every nested Box
+    // in the fleet, which rules out `root` (every family reads its own root, so
+    // `.rottay-x [data-part='root']` would reach into X's Boxes) and rules out
+    // `box` (checkbox owns it for its indicator and reads it with descendant
+    // selectors; a Box in a checkbox label would take the indicator's paint).
+    // The frozen engines stamp nothing, as they always did.
+    it('stamps box-surface under the modern engine, and never root or box', async () => {
+      const { container } = renderWithEngine(<Box data-testid="bare-box">content</Box>, 'modern');
+      await waitForPart(container, 'box-surface');
+      expect(container.querySelector('[data-part="root"]')).toBeNull();
+      expect(container.querySelector('[data-part="box"]')).toBeNull();
+    });
+
+    it('stamps no data-part of its own under the rustic engine', async () => {
+      const { container } = renderWithEngine(<Box data-testid="bare-box">content</Box>, 'rustic');
       await waitFor(() => {
         expect(container.querySelector('[data-testid="bare-box"]')).not.toBeNull();
       });
@@ -59,11 +69,15 @@ describe('Layout-family data-part contract (WO-SKIN-05 checkpoint L)', () => {
     it.each(ENGINES)(
       'passes a caller-supplied data-part through under the %s engine',
       async (engine) => {
+        // P-79: an explicit caller part names what the COMPOSING component owns,
+        // so it wins over the engine's default and the composite takes over the
+        // paint. Box writes its default BEFORE the rest spread for exactly this.
         const { container } = renderWithEngine(<Box data-part="icon">content</Box>, engine);
         await waitFor(() => {
           expect(container.querySelector('[data-part="icon"]')).not.toBeNull();
         });
         expect(container.querySelector('[data-part="root"]')).toBeNull();
+        expect(container.querySelector('[data-part="box-surface"]')).toBeNull();
       },
     );
   });

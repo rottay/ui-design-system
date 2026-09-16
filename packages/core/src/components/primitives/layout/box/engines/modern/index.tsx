@@ -441,11 +441,25 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     .filter(Boolean)
     .join(" ");
 
-  // Box stamps NO data-part of its own. It is the style-injection escape hatch
-  // every other component composes with, so a default part would put
-  // `data-part='root'` on every nested Box in the fleet: a skin rule of the form
-  // `.rottay-x [data-part='root']` would then reach into X's Boxes, and any query
-  // for X's own root would match them too. Box's skin anchors on its class.
+  // Box stamps `box-surface`, and the name is the whole point.
+  //
+  // It is the style-injection escape hatch every other component composes with,
+  // so whatever part it stamps lands on every nested Box in the fleet. That
+  // rules out `root`: every family reads its own root, so `.rottay-x
+  // [data-part='root']` would reach into X's Boxes and any query for X's own
+  // root would match them. It also rules out the obvious `box`, which is NOT
+  // free: `checkbox` owns that name for its indicator and reads it with
+  // descendant selectors (`.ds-checkbox--modern [data-part='box']`, both
+  // engines), and `FieldsBatch.contract.test.tsx` asserts exactly one such node
+  // inside a Checkbox tree -- a Box nested in a checkbox label would take the
+  // indicator's paint and break that contract.
+  //
+  // A part name is a GLOBAL namespace. Census a candidate against three axes
+  // before adopting it: what stamps it, which skins READ it (descendant
+  // selectors are the hazard), and whether `SKELETON_PART_ROLES` already gives
+  // it a role -- an existing role is not evidence the name is free, it is
+  // evidence some other family already needed it. `box-surface` was measured
+  // clear on all three.
   const ElementType = Component as ElementType;
   const radiusValue = props.borderRadius || props.rounded;
   // Caller ownership is decided by the painted value, not by key presence:
@@ -453,6 +467,12 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const callerOwnsRadius = props.style?.borderRadius !== undefined;
   const callerOwnsShadow = props.style?.boxShadow !== undefined;
   const elementProps = {
+    // P-79: the default part lands BEFORE the spread, so an explicit caller
+    // `data-part` reaches the DOM and wins -- and a composite that renames it
+    // takes ownership of the paint, which is what the law intends. The OWNED
+    // attributes below stay after the spread: a caller may not hand-stamp a
+    // radius or a shadow rung onto exact geometry.
+    "data-part": "box-surface",
     ...htmlAttributes,
     ref: ref as Ref<HTMLElement>,
     className: classNames,

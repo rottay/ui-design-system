@@ -119,6 +119,9 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   grid: 'pass',
   // A grid cell is a container: its children are drawn, it is not (WO-FAM-07).
   'grid-cell': 'pass',
+  // A Box is a container: its children are drawn and it is not. Deliberately
+  // NOT the `box` role above, which is checkbox's solid indicator square.
+  'box-surface': 'pass',
   'group-options': 'pass',
   'hex-field': 'pass',
   'input-wrapper': 'pass',

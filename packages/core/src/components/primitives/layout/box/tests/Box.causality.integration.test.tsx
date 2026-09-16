@@ -37,13 +37,13 @@ const markup = [
 const MD = '#md .rottay-box';
 
 /**
- * MEASURED, registered: `box` is the one family in this cut whose skin anchors
- * on its CLASS, not on a `data-part`. Box is the escape hatch 75 DS components
- * compose with, so a default part would land on every nested Box in the fleet.
- * The gate's `stampsAnatomy`/`skinReadsAnatomy` arms are red for that reason and
- * the roster row says so; this suite proves the paint reaches the element anyway.
+ * Box anchors on `data-part='box-surface'`, not on `root` and not on `box`:
+ * whatever part the escape hatch stamps lands on every nested Box in the fleet,
+ * every family reads its own root, and `checkbox` already owns `box` and reads
+ * it with descendant selectors. The name was censused clear against stamps,
+ * skin reads and skeleton roles before it was adopted.
  *
- * NOT this family's debt either: in bithire's dark mode the harness ground
+ * NOT this family's debt: in bithire's dark mode the harness ground
  * `--ds-color-bg-primary` stays #FFFFFF while the ink follows the mode, so ANY
  * text in that scope fails the contrast floor. A bare `<p>` with no box fails
  * identically (measured control). Box paints no ground of its own.
@@ -51,8 +51,8 @@ const MD = '#md .rottay-box';
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
     'color-contrast': [
-      '#caller > .rottay-box.rottay-box--modern[data-component="box"]',
-      '#flat > .rottay-box.rottay-box--modern[data-component="box"]',
+      '#caller > .rottay-box.rottay-box--modern[data-part="box-surface"]',
+      '#flat > .rottay-box.rottay-box--modern[data-part="box-surface"]',
       'div[data-radius="full"]',
       'div[data-radius="md"]',
       'div[data-radius="sm"]',
