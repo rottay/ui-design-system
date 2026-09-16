@@ -683,6 +683,7 @@
     "decisions-lit:report": "node scripts/check/decisions-lit/public-cli/index.mjs report",
     "ds:derive": "node scripts/generate/theme-graph/index.mjs --write",
     "ds:derive:views": "node scripts/generate/theme-graph/index.mjs --views",
+    "ds:derive:views:check": "node scripts/generate/theme-graph/index.mjs --check-views",
     "ds:derive:check": "node scripts/generate/theme-graph/index.mjs --check",
     "cascade:extract": "node scripts/check/modern-rescue/cascade/extraction/index.mjs",
     "cascade:producers": "node scripts/check/modern-rescue/cascade/producers/index.mjs",

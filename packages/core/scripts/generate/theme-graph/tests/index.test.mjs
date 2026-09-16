@@ -9,13 +9,15 @@
  * or plants a placeholder that the graph MUST refuse.
  */
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it } from "node:test";
 
 import { assertNoUnknown, canonical, stableStringify } from "../schema.mjs";
 import { expandKeypath, familyOfFile } from "../derive.mjs";
-import { assertDistIsFresh, buildGraph, byControl, byFamily, OUT_DIR, render, renderViews, VIEWS_DIR } from "../index.mjs";
+import {
+  assertDistIsFresh, buildGraph, byControl, byFamily, compareViews, OUT_DIR, render, renderViews, VIEWS_DIR,
+} from "../index.mjs";
 import { renderControlsView, renderFamiliesView } from "../views.mjs";
 
 const read = (name) => readFileSync(join(OUT_DIR, `${name}.json`), "utf8");
@@ -211,5 +213,60 @@ describe("theme-graph views -- generated, never authored", () => {
         `invoking with ${JSON.stringify(argv)} must refuse`,
       );
     }
+  });
+});
+
+describe("theme-graph --check-views -- the pure half, verified without a build", () => {
+  const SCRIPT = join(VIEWS_DIR, "../../../scripts/generate/theme-graph/index.mjs");
+
+  const run = async (...argv) => {
+    const { spawnSync } = await import("node:child_process");
+    const result = spawnSync(process.execPath, [SCRIPT, ...argv], { encoding: "utf8" });
+    return { status: result.status, out: `${result.stdout}${result.stderr}` };
+  };
+
+  it("positive: the committed views pass, and the command says what it did NOT check", async () => {
+    const { status, out } = await run("--check-views");
+    assert.equal(status, 0, out);
+    /* The narrower guarantee is stated in the output on purpose. A reader of a
+       green line must not come away believing the JSON was checked against the
+       compiler, because it was not. */
+    assert.match(out, /does NOT check the JSON against the compiler/);
+  });
+
+  it("MUTANT: a view edited by hand turns it red, and regeneration restores the bytes", async () => {
+    const path = join(VIEWS_DIR, "controls.md");
+    const original = readFileSync(path, "utf8");
+    try {
+      writeFileSync(path, original.replace("| `chrome.anatomy` |", "| `chrome.anatomy` (edited) |"));
+      const red = await run("--check-views");
+      assert.notEqual(red.status, 0, "a hand-edited view must fail");
+      assert.match(red.out, /controls\.md differs from the derivation/);
+
+      const regenerated = await run("--views");
+      assert.equal(regenerated.status, 0, regenerated.out);
+      assert.equal(readFileSync(path, "utf8"), original, "regeneration restores the bytes exactly");
+
+      const green = await run("--check-views");
+      assert.equal(green.status, 0, green.out);
+    } finally {
+      writeFileSync(path, original);
+    }
+  });
+
+  it("MUTANT: a missing view is named, not silently passed", () => {
+    const failures = compareViews({ "controls.md": "x" }, join(VIEWS_DIR, "nowhere"));
+    assert.equal(failures.length, 1);
+    assert.match(failures[0], /is missing/);
+  });
+
+  it("it needs no build, which is the whole reason it exists", async () => {
+    /* `--check` asserts a fresh `dist` and refuses without one; this verb must
+       not, because the coordinator owns the serialized build and a view is a
+       pure function of JSON that is already committed. Asserted by running it
+       with the build in whatever state this tree has it. */
+    const { status } = await run("--check-views");
+    assert.equal(status, 0, "--check-views must not depend on the build state");
+    assert.equal(typeof assertDistIsFresh, "function", "...while the deriving check still owns that assertion");
   });
 });

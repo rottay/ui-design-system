@@ -61,6 +61,26 @@ export function renderViews(files) {
   };
 }
 
+/**
+ * Compare the rendered views against what is on disk.
+ *
+ * ONE comparison, called by both checks. `--check` hands it the views it just
+ * re-rendered from a fresh derivation; `--check-views` hands it the views
+ * rendered from the committed JSON. Two copies of this loop would be two
+ * answers to one question, which is the defect this whole WO replaces.
+ */
+export function compareViews(views, dir = VIEWS_DIR) {
+  const failures = [];
+  for (const [name, text] of Object.entries(views)) {
+    const path = join(dir, name);
+    if (!existsSync(path)) { failures.push(`views/${name} is missing -- run --views`); continue; }
+    if (readFileSync(path, "utf8") !== text) {
+      failures.push(`views/${name} differs from the derivation -- a view is generated, never edited; run --views`);
+    }
+  }
+  return failures;
+}
+
 /** The JSON views as committed, for a render that does not derive. */
 function readJsonViews() {
   const files = {};
@@ -387,7 +407,7 @@ function main() {
      package script shipped as `ds:derive ... run`, and `run` is not a flag: it
      exited 0 having written nothing and checked nothing, which is precisely the
      shape of false green this WO was written against. */
-  const KNOWN = new Set(["--write", "--views", "--check", "--json"]);
+  const KNOWN = new Set(["--write", "--views", "--check-views", "--check", "--json"]);
   const unknown = args.filter((arg) => !KNOWN.has(arg) && !arg.startsWith("--drill="));
   if (unknown.length > 0) {
     throw new Error(`unknown argument(s) ${unknown.join(", ")} -- expected some of ${[...KNOWN].join(", ")}`);
@@ -407,6 +427,26 @@ function main() {
      still exactly the JSON it came from. Every verb that DERIVES asserts the
      build first. */
   const derives = args.some((arg) => arg === "--write" || arg === "--check" || arg === "--json");
+
+  /* `--check-views` is the pure half: JSON -> view, compared. It answers "has
+     anybody edited a view by hand", which needs no compiler, and it deliberately
+     does NOT answer "is the JSON still what the compiler says" -- that is
+     `--check`'s question and it keeps its build assertion. Naming the narrower
+     guarantee is the point: a reader of a green `--check-views` learns that the
+     views match their source, and nothing more. */
+  if (!derives && args.includes("--check-views")) {
+    const failures = compareViews(renderViews(readJsonViews()));
+    if (failures.length > 0) {
+      for (const failure of failures) console.error(`theme-graph FAIL -- ${failure}`);
+      process.exit(1);
+    }
+    console.log(
+      "theme-graph --check-views OK -- both views match a fresh render of the committed by-control/by-family. "
+      + "This does NOT check the JSON against the compiler; --check does, and asserts the build.",
+    );
+    return Promise.resolve();
+  }
+
   if (!derives) {
     const views = renderViews(readJsonViews());
     mkdirSync(VIEWS_DIR, { recursive: true });
@@ -443,13 +483,7 @@ function main() {
         if (!existsSync(path)) { failures.push(`${name}.json is missing -- run --write`); continue; }
         if (readFileSync(path, "utf8") !== text) failures.push(`${name}.json differs from the derivation -- regenerate with --write`);
       }
-      for (const [name, text] of Object.entries(views)) {
-        const path = join(VIEWS_DIR, name);
-        if (!existsSync(path)) { failures.push(`views/${name} is missing -- run --views`); continue; }
-        if (readFileSync(path, "utf8") !== text) {
-          failures.push(`views/${name} differs from the derivation -- a view is generated, never edited; run --views`);
-        }
-      }
+      failures.push(...compareViews(views));
       if (total > SIZE_BUDGET_BYTES) {
         failures.push(
           `the graph is ${(total / 1024 / 1024).toFixed(2)} MB, over the pinned ${(SIZE_BUDGET_BYTES / 1024 / 1024).toFixed(2)} MB`,
