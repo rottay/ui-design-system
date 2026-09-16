@@ -680,6 +680,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
   const states = new Set();
   const variants = new Set();
   const classTokens = new Set();
+  const componentAnchors = [];
   const inlineStyleViolations = [];
   const visualLiterals = [];
   let usesPartAttributes = false;
@@ -693,7 +694,25 @@ export function analyzeSource(file, source = ts.createSourceFile(
   const skeletonSigns = [];
   const lineOf = (node) => source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
 
+  const anchorOn = (entries) => {
+    const parts = entries.filter(([key]) => key === 'data-part').flatMap(([, values]) => values);
+    const components = entries.filter(([key]) => key === 'data-component').flatMap(([, values]) => values);
+    for (const part of parts) for (const component of components) componentAnchors.push({ part, component });
+  };
+
   const visit = (node) => {
+    if (ts.isObjectLiteralExpression(node)) {
+      anchorOn(node.properties.filter(ts.isPropertyAssignment).map((property) => [
+        property.name.getText(source).replace(/^['"]|['"]$/gu, ''),
+        literalsIn(property.initializer),
+      ]));
+    }
+    if (ts.isJsxAttributes(node)) {
+      anchorOn(node.properties.filter(ts.isJsxAttribute).map((attribute) => [
+        attributeName(attribute),
+        attributeLiterals(attribute),
+      ]));
+    }
     if ((ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)
       || (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name)))
       && node.name && SKELETON_WORD.test(node.name.text)) {
@@ -807,6 +826,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
     states,
     variants,
     classTokens,
+    componentAnchors,
     inlineStyleViolations,
     visualLiterals: visualLiterals.map((entry) => ({ ...entry, file })),
     skeletonSigns: skeletonSigns.map((entry) => ({ ...entry, file })),
@@ -827,13 +847,17 @@ export function analyzeSkin(file) {
   const parts = new Set();
   const states = new Set();
   const classTokens = new Set();
+  const components = new Set();
   let selectsVariant = false;
 
   for (const match of text.matchAll(/\[data-part\s*[~^*$|]?=\s*['"]([^'"]+)['"]/gu)) parts.add(match[1]);
   for (const match of text.matchAll(/\[data-state\s*[~^*$|]?=\s*['"]([^'"]+)['"]/gu)) {
     for (const token of match[1].split(/\s+/u).filter(Boolean)) states.add(token);
   }
+  for (const match of text.matchAll(/\[data-component\s*=\s*['"]([^'"]+)['"]/gu)) components.add(match[1]);
   if (/\[data-variant/u.test(text)) selectsVariant = true;
+  const variantCompounds = [...text.matchAll(/\[data-variant/gu)]
+    .map((match) => compoundClassTokensBefore(text, match.index));
   for (const prefix of CLASS_PREFIXES) {
     for (const match of text.matchAll(
       new RegExp(`\\.(${prefix}-[a-zA-Z0-9]+(?:-{1,2}[a-zA-Z0-9]+)*)`, 'gu'),
@@ -898,7 +922,52 @@ export function analyzeSkin(file) {
     skeletonSigns.push({ what: `selector \`${match[0]}\``, line: lineAt(match.index), file });
   }
 
-  return { file, parts, states, classTokens, selectsVariant, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
+  return { file, parts, states, classTokens, components, selectsVariant, variantCompounds, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
+}
+
+/** The prefixed classes of the compound selector that ends at `index`, outside any parentheses. */
+function compoundClassTokensBefore(text, index) {
+  let start = index;
+  let depth = 0;
+  while (start > 0) {
+    const char = text[start - 1];
+    if (char === ')') depth += 1;
+    else if (char === '(') {
+      if (depth === 0) break;
+      depth -= 1;
+    } else if (depth === 0 && /[\s,>+~{};]/u.test(char)) break;
+    start -= 1;
+  }
+  let compound = text.slice(start, index);
+  while (/\([^()]*\)/u.test(compound)) compound = compound.replace(/\([^()]*\)/gu, '');
+  const tokens = [];
+  for (const prefix of CLASS_PREFIXES) {
+    for (const match of compound.matchAll(new RegExp(`\\.(${prefix}-[a-zA-Z0-9]+(?:-{1,2}[a-zA-Z0-9]+)*)`, 'gu'))) {
+      tokens.push(match[1]);
+    }
+  }
+  return tokens;
+}
+
+const composedVariantStampCache = new Map();
+
+/**
+ * A composed primitive owns the `data-variant` it stamps: a family skin that
+ * reaches it through the primitive's class reads that stamp, not a family one.
+ */
+function composedPrimitiveStampsVariant(token, root) {
+  const name = withoutTier(token.slice(token.indexOf('-') + 1)).replace(/--.*$/u, '');
+  const key = `${root}\0${name}`;
+  if (!composedVariantStampCache.has(key)) {
+    const owners = findComponentDirs(root, name);
+    const frozenOnly = collectFrozenOnlyModules(owners);
+    composedVariantStampCache.set(key, owners.length === 1 && walkFiles(owners[0], isFamilySource)
+      .filter((file) => !frozenOnly.has(file))
+      .some((file) => analyzeSource(file).stampsVariantAttribute)
+      ? name
+      : undefined);
+  }
+  return composedVariantStampCache.get(key);
 }
 
 /**
@@ -1043,9 +1112,29 @@ export function measureFamily(resolved, { producers } = {}) {
   const stampedParts = union(sources, 'parts');
   const stampedStates = union(sources, 'states');
   const stampedVariants = union(sources, 'variants');
-  const consumedParts = union(skins, 'parts');
+  /* A default part a caller may rename (P-79) is read through the owned
+   * `data-component` stamped on the same element, never through the part. */
+  const consumedComponents = union(skins, 'components');
+  const anchoredParts = new Set(sources.flatMap((entry) => entry.componentAnchors)
+    .filter((anchor) => consumedComponents.has(anchor.component))
+    .map((anchor) => anchor.part));
+  const consumedParts = new Set([...union(skins, 'parts'), ...anchoredParts]);
   const consumedStates = union(skins, 'states');
   const skinSelectsVariant = skins.some((skin) => skin.selectsVariant);
+  const ownsClass = (token) => {
+    const remainder = withoutTier(token.slice(token.indexOf('-') + 1));
+    return remainder === family || remainder.startsWith(`${family}-`);
+  };
+  const variantComposedFrom = new Set();
+  let familyVariantSelections = 0;
+  for (const tokens of skins.flatMap((skin) => skin.variantCompounds)) {
+    const backer = tokens
+      .filter((token) => !ownsClass(token))
+      .map((token) => composedPrimitiveStampsVariant(token, root))
+      .find(Boolean);
+    if (backer) variantComposedFrom.add(backer);
+    else familyVariantSelections += 1;
+  }
   const usesPartAttributes = sources.some((entry) => entry.usesPartAttributes);
   const dynamicParts = sources.reduce((total, entry) => total + entry.dynamicParts, 0);
   const skinUsesStateAttribute = consumedStates.size > 0;
@@ -1112,7 +1201,7 @@ export function measureFamily(resolved, { producers } = {}) {
       owners: resolved.componentDirs.length,
       stampsAnatomy: stampsPartAttribute,
       skinReadsAnatomy: consumedParts.size > 0,
-      variantContract: stampsVariantAttribute === skinSelectsVariant,
+      variantContract: stampsVariantAttribute ? skinSelectsVariant : familyVariantSelections === 0,
       stateContract: stampsStateAttribute === skinUsesStateAttribute,
       stateGoverned: skinUsesStateAttribute ? usesPartAttributes : true,
       a11yProbes: resolved.a11yProbes.length,
@@ -1140,6 +1229,8 @@ export function measureFamily(resolved, { producers } = {}) {
       unpairedStatePseudo,
       colorLiteralsInSkin,
       maskAlphaStops,
+      variantComposedFrom: [...variantComposedFrom].sort(),
+      partsReadThroughComponent: [...anchoredParts].sort(),
       readWithoutProducer: readWithoutProducer.debt,
       fanOut,
       owners: resolved.componentDirs.map((dir) => toPosix(relative(root, dir))),

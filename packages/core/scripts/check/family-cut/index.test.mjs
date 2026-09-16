@@ -1283,3 +1283,154 @@ test('LIVE: the real recipe-profile row is data-only, so no family under the cut
     assert.deepEqual(fanOutFor(family, new Set()).filter((row) => row.control === 'recipe-profile'), [], family);
   }
 });
+
+// ---------------------------------------------------------------------------
+// A composed primitive's variant, and a default part read through its component
+// ---------------------------------------------------------------------------
+
+const COMPOSER = 'planted-bar';
+const COMPOSER_TSX = `src/components/patterns/data/${COMPOSER}/index.tsx`;
+const COMPOSER_SKIN = `src/foundation/tokens/css/runtime/engines/modern/skin/${COMPOSER}/index.css`;
+const COMPOSER_DEFAULT_TSX = [
+  "export function PlantedBar() {",
+  "  return <div className=\"ds-planted-bar\" data-part=\"bar\"><button className=\"ds-planted-bar__trigger\" /></div>;",
+  "}",
+  "",
+].join('\n');
+
+/**
+ * Measures a composing family beside a sandbox copy of Button, the primitive it
+ * composes. `edit` may rewrite either tree before the measurement.
+ */
+function measureComposer({ tsx = COMPOSER_DEFAULT_TSX, skin, edit = () => {} }) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-composer-'));
+  try {
+    for (const relativePath of SANDBOX_SOURCES) {
+      const target = join(sandbox, relativePath);
+      mkdirSync(dirname(target), { recursive: true });
+      cpSync(join(ROOT, relativePath), target, { recursive: true });
+    }
+    for (const [relativePath, text] of [[COMPOSER_TSX, tsx], [COMPOSER_SKIN, skin]]) {
+      mkdirSync(dirname(join(sandbox, relativePath)), { recursive: true });
+      writeFileSync(join(sandbox, relativePath), text);
+    }
+    edit(sandbox);
+    return measureFamily(resolveFamily(COMPOSER, sandbox), { producers: PRODUCERS });
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+const BAR_RULE = ".ds-planted-bar[data-part='bar'] { display: flex; }\n";
+
+test('CONTROL: a skin painting the composed `.ds-button[data-variant]` holds the variant arm on Button\'s own stamp', () => {
+  for (const selector of [
+    '.ds-planted-bar__trigger.ds-button[data-variant]',
+    ':is(.ds-planted-bar__trigger, .ds-planted-bar__menu).ds-button[data-variant]:focus-visible',
+    '.ds-planted-bar .ds-button--sm.ds-button[data-variant] > span',
+  ]) {
+    const measured = measureComposer({ skin: `${BAR_RULE}${selector} { color: inherit; }\n` });
+    assert.equal(measured.blocking.variantContract, true, selector);
+    assert.deepEqual(measured.detail.variantComposedFrom, ['button'], selector);
+  }
+});
+
+test('PLANT: a variant the family skin paints on its own class, with no family stamp, is still BLOCKING', () => {
+  const measured = measureComposer({ skin: `${BAR_RULE}.ds-planted-bar__trigger[data-variant] { color: inherit; }\n` });
+  assert.equal(measured.blocking.variantContract, false);
+  assert.deepEqual(measured.detail.variantComposedFrom, []);
+});
+
+test('PLANT: a variant painted through a class no source owns is still BLOCKING', () => {
+  const measured = measureComposer({ skin: `${BAR_RULE}.ds-planted-bar__trigger.ds-ghost-widget[data-variant] { color: inherit; }\n` });
+  assert.equal(measured.blocking.variantContract, false);
+});
+
+test('PLANT: the composed primitive must really stamp -- Button without its `data-variant` stamp does not discharge the arm', () => {
+  const measured = measureComposer({
+    skin: `${BAR_RULE}.ds-planted-bar__trigger.ds-button[data-variant] { color: inherit; }\n`,
+    edit: (sandbox) => patch(sandbox, MODERN_TSX, (text) =>
+      text.replace("    'data-variant': effectiveVariant,", "    'data-not-a-variant': effectiveVariant,")),
+  });
+  assert.equal(measured.blocking.variantContract, false);
+});
+
+test('PLANT: one family-owned variant rule beside composed ones is still BLOCKING', () => {
+  const measured = measureComposer({
+    skin: `${BAR_RULE}.ds-planted-bar__trigger.ds-button[data-variant] { color: inherit; }\n.ds-planted-bar[data-variant='x'] { color: inherit; }\n`,
+  });
+  assert.equal(measured.blocking.variantContract, false);
+});
+
+test('CONTROL: a family that stamps its own variant keeps the two-sided arm it always had', () => {
+  const measured = measureComposer({
+    tsx: COMPOSER_DEFAULT_TSX.replace('data-part="bar"', 'data-part="bar" data-variant="quiet"'),
+    skin: `${BAR_RULE}.ds-planted-bar__trigger.ds-button[data-variant] { color: inherit; }\n`,
+  });
+  assert.equal(measured.blocking.variantContract, true, 'any variant rule answers a stamping family, as before');
+  const unpainted = measureComposer({
+    tsx: COMPOSER_DEFAULT_TSX.replace('data-part="bar"', 'data-part="bar" data-variant="quiet"'),
+    skin: BAR_RULE,
+  });
+  assert.equal(unpainted.blocking.variantContract, false);
+});
+
+const ANCHORED_TSX = [
+  "export function PlantedBar(props) {",
+  "  return <div data-part=\"root\" {...props} className=\"ds-planted-bar\" data-component=\"planted-bar\" />;",
+  "}",
+  "",
+].join('\n');
+const ANCHORED_SKIN = ".ds-planted-bar[data-component='planted-bar'] { display: flex; }\n";
+
+test('CONTROL: a default part the skin reads through the `data-component` stamped on the same element is consumed', () => {
+  for (const tsx of [
+    ANCHORED_TSX,
+    [
+      "import React from 'react';",
+      "export function PlantedBar(props) {",
+      "  return React.createElement('div', { 'data-part': 'root', ...props, 'data-component': 'planted-bar' });",
+      "}",
+      "",
+    ].join('\n'),
+  ]) {
+    const measured = measureComposer({ tsx, skin: ANCHORED_SKIN });
+    assert.equal(measured.blocking.skinReadsAnatomy, true);
+    assert.deepEqual(measured.detail.partsStampedNotConsumed, []);
+    assert.deepEqual(measured.detail.partsReadThroughComponent, ['root']);
+  }
+});
+
+test('PLANT: a skin keyed on a component the part is NOT stamped with does not consume the part', () => {
+  const measured = measureComposer({ tsx: ANCHORED_TSX, skin: ".ds-planted-bar[data-component='other'] { display: flex; }\n" });
+  assert.equal(measured.blocking.skinReadsAnatomy, false);
+  assert.deepEqual(measured.detail.partsStampedNotConsumed, ['root']);
+});
+
+test('PLANT: a part and a component on DIFFERENT elements do not anchor each other', () => {
+  const measured = measureComposer({
+    tsx: [
+      "export function PlantedBar() {",
+      "  return <div data-component=\"planted-bar\"><span data-part=\"root\" /></div>;",
+      "}",
+      "",
+    ].join('\n'),
+    skin: ANCHORED_SKIN,
+  });
+  assert.equal(measured.blocking.skinReadsAnatomy, false);
+  assert.deepEqual(measured.detail.partsStampedNotConsumed, ['root']);
+});
+
+test('LIVE: flex, stack and grid read their default root through the owned component stamp', () => {
+  for (const family of ['flex', 'stack', 'grid']) {
+    const measured = measureFamily(resolveFamily(family, ROOT), { producers: PRODUCERS });
+    assert.deepEqual(measured.detail.partsReadThroughComponent, ['root'], family);
+    assert.deepEqual(measured.detail.partsStampedNotConsumed, [], family);
+  }
+});
+
+test('LIVE: list-toolbar holds the variant arm only through the composed Button', () => {
+  const measured = measureFamily(resolveFamily('list-toolbar', ROOT), { producers: PRODUCERS });
+  assert.equal(measured.blocking.variantContract, true);
+  assert.deepEqual(measured.detail.variantComposedFrom, ['button']);
+});

@@ -1298,6 +1298,27 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-08: the filter panel measured at HEAD b8b8fc6ef, unfixed debt pinned as measured; the decision-causality suite is FilterPanel.causality.integration.test.tsx."
+    },
+    "list-toolbar": {
+      "cut": "WO-FAM-08",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 172,
+        "classTokens": 1,
+        "partsStamped": 37,
+        "partsConsumed": 23
+      },
+      "readWithoutProducer": 20,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 17,
+      "partsConsumedNotStamped": 3,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 11,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "cutNote": "WO-FAM-08: the list toolbar measured at HEAD 55e61c96a, unfixed debt pinned as measured; the family stamps no data-variant and every [data-variant] rule in its skin reaches the composed Button through .ds-button, so the variant arm holds on Button's own stamp (detail.variantComposedFrom); colorLiteralsInSkin is 0 because the 8 #000 stops live in mask-image (maskAlphaStops); the decision-causality suite is ListToolbar.causality.integration.test.tsx."
     }
   }
 }
