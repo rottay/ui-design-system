@@ -4999,7 +4999,7 @@
    "lane": "family-cuts",
    "order": 8,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5055,7 +5055,9 @@
      "by": "kimi-admin",
      "note": "2026-09-16 kimi-admin: L7 collapse INTEGRATED (700cd127b + cfe750c54 bridge deletion, audited; gate 59/59) -- the Modern path owns its tokens (deriver + skin + shared runtime + shared renderer), the bridge relocated byte-identical to engines/classic/skin/collapse with the layer rise proven inert by A/B render, and THREE real defects fixed in-lot: dark mode (1.05:1 measured; idle-bg channels resolved to white while the header label read near-black over a flipping ground -- all three now deriver-minted mode-aware channels), rhythm never reached the family with density counted twice (20 padding factors to --ds-rhythm-effective-scale), and transition:none under reduced motion REMOVING the motion instead of shortening it (one guard naming all four animating selectors). The serialized chain completed by the coordinator: hooks contract (93 hooks/1747 fenced with the collapse+badge channels), build exit 0, cascade edges + tokens:catalog regenerated, artifact-coverage roster +7 L5 families (b4ce3fe61). CLOSE EVALUATION, measured honestly -- the WO does NOT close yet, with the remaining obligations named: (1) box still exposes PHYSICAL public props (marginLeft/marginRight/paddingLeft/paddingRight + shorthands) and the fiche requires logical-only public props (ps/pe/ms/me) -- the L5 cut did not drain them; (2) splitter and resize-handle still resolve direction via closest('[dir]') instead of the single direction authority; both dispatched to fam07-opus as the follow-up lot. The other 11 closest('[dir]') sites belong to other lanes (kanban-board/calendar-view -> WO-FAM-08's census, workbench-header/page-shell -> WO-FAM-11, workspace-switcher/locale-switcher/notification-center/tree/carousel/slider -> registered to WO-INV-01, the cross-WO direction authority lane). F-41's pair check and F-80's compound state measured at the same evaluation (no new findings). The WO stays in-progress on exactly those two obligations."
     }
-   ]
+   ],
+   "doneAt": "2026-09-16",
+   "evidence": "2026-09-16 kimi-admin — WO-FAM-07 CLOSED with every family cut and every close condition measured on the integrated tree (8768a22b7). ALL ELEVEN FAMILIES: container (the G103-02 breakpoint handoff discharged with a real effect route, duration on the dial-aware --ds-motion-resize), aspect-ratio, space (rung as stamp, compat aliases kept, probe fixtures re-anchored), divider (21 inline -> 0, overline label on the label typographic role, STOP-2 freeze exception with the frozen engines keeping their own colour defaults byte-identical), splitter (locked grip with its OWN channel so a tenant cannot silently erase the operable/locked distinction), flex (reflow answers motion.dial), stack (9 rungs + hairline authorable inputs), box (corner and depth ladders as pure ramp projections -- shape.radius-scale and surfaces.elevation-posture now reach every Box; the SHADOW_MAP twin resolved on the STOP-2 precedent), grid (the real adapt slot, adaptSlot arm green, grid-cell instead of cell), scroll-area (STOP-3: the frozen scrollbar paint relocated to its owning engines with per-engine cascade byte-identical and the reduced-motion guard following by named selector), collapse (L7: the Modern path owns its tokens, the last bridge retired byte-identical to engines/classic/skin/collapse with the layer rise measured inert, and three real defects fixed in-lot: dark mode at 1.05:1, rhythm never reaching the family, transition:none REMOVING motion instead of shortening it). ACCEPTANCE GATE per family, rostered at the gate's own measured values (59/59): readWithout-producer=0, one class vocabulary, contract census 0, causality probes green for every declared decision, axe with preexisting debt pinned by node identity and registered (never excluded). F-41: one owner per concept measured -- the layout tier's families are single owners (the merges that existed, Switch->Toggle and Steps->stepper, were already adjudicated and done). F-38: the direction authority is single (useOptionalDirection) in every FAM-07 family -- splitter and resize-handle adopted it in the follow-up lot with the bare-dir consequence measured and stated; Box/Stack/Flex expose a logical-only public API (ps/pe/ms/me) with the physical four retained as FORMALLY DEPRECATED aliases per the program's deprecation law, forced by measurement: the frozen Classic/Rustic engines read all four by name and deleting them would stop the frozen engines compiling (the retention reason named in the deprecation itself; the frozen engines' DOM strip not learning the logical longhands is registered, a frozen-engine edit no cut may make). F-80: the compound-components infrastructure exists with consumers (PolymorphicProps exported and used). The data-gap-preset forgery test fails as required. NAMESPACE caveat, honest and registered: the WO's 'no rottay-* emitted' resolves as adjudicated legacy debt -- flex/stack/box/grid keep legacyNamespaceClasses 2/3/2/2 with live app-bithire selectors AND querySelectorAll measured (.rottay-stack in 15 files, .rottay-flex in 7, .rottay-box in 7, .rottay-grid in 3; the migration belongs to the consumer-readiness lane, never to a cut), and collapse keeps 6 with classVocabularies 2 (the frozen classic path occupies ds-collapse*, so modern's rottay-* cannot rename). Registered not swept: the 11 closest('[dir]') sites in other lanes (to WO-INV-01, claimed with them named); the reduced-motion guard's narrowed selector class (fam04's lot showed the honest form); the css/paint/layers and reduced-motion-universal runtime/bridges/ branches that can no longer fire (residue for a later sweep); the cascade-wiring ratchet's +8/+44 attributed growth (the family's own channels and the relocated skin joining the corpus, with reasons written). Commits: 89976e4c7, 2cce2c2e4, f56020c58, d495324e5, eacea332b, 700cd127b, cfe750c54, 8768a22b7, and their roster/baseline commits; gate 59/59; roadmap:check OK."
   },
   {
    "id": "WO-FAM-08",
@@ -5388,7 +5390,7 @@
    "lane": "evidence-graph",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -5397,9 +5399,11 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-04, F-53; supersedes: WO-ARC-13, WO-GAT-12",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-admin",
+   "claimedAt": "2026-09-16",
+   "progressLog": [],
+   "doneAt": "2026-09-16",
+   "evidence": "2026-09-16 kimi-admin — WO-EVI-01 CLOSED (2f5ac2d6e, audited): theme-graph derived, never authored (29 decisions, 77 derivers, 8229 channels, 16960 consumers, 276 families, 54437 edges, 8.95MB). --check green over the integrated tree; planted mutants in a deriver AND a skin both go red; 0 UNKNOWN cells with the structural guard (walks values, rejects UNKNOWN/UNATTRIBUTED/null); drill 13/13; ds:derive entries in package.json. The three measured join/alias/absence defects fixed by the writer's own measurement. DT adjudications recorded: the 9MB exact pin over the pre-measurement 5MB estimate (the selector provenance stays; growth goes red); F-04 closes 1 of its 3 criteria here -- manifest/controls at 21 files and du governance at 42MB stay open, owned by the manifest retirement when its seven gates read the typed catalog (the fiche forbids completing it). Commits: 2f5ac2d6e + the serialized build that landed its freshness."
   },
   {
    "id": "WO-EVI-02",
