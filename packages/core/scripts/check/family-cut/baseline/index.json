@@ -523,7 +523,7 @@
       "cut": "WO-FAM-04",
       "denominators": {
         "skinFiles": 1,
-        "sourceFiles": 4,
+        "sourceFiles": 3,
         "channelsRead": 87,
         "classTokens": 3,
         "partsStamped": 10,
@@ -1160,7 +1160,7 @@
       "cut": "WO-FAM-07",
       "denominators": {
         "skinFiles": 1,
-        "sourceFiles": 6,
+        "sourceFiles": 5,
         "channelsRead": 3,
         "classTokens": 2,
         "partsStamped": 2,

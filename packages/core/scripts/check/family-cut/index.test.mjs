@@ -1071,6 +1071,65 @@ test('CONTROL: a class no owner claims stays this family\'s candidate whatever t
   });
 });
 
+const PLANTED_CRAFT = 'src/components/primitives/inputs/button/runtime/planted-craft/index.tsx';
+
+/** A module that paints inline, and the two import shapes that decide its fate. */
+const plantCraftModule = (sandbox, importers) => {
+  const target = join(sandbox, PLANTED_CRAFT);
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(
+    target,
+    "export const PlantedCraft = () => <span style={{ fontSize: '12px' }} />;\n",
+  );
+  for (const [relativePath, specifier] of importers) {
+    const file = join(sandbox, relativePath);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(
+      file,
+      `import { PlantedCraft } from '${specifier}';\nexport const Use = () => <PlantedCraft />;\n`,
+    );
+  }
+};
+
+test('PLANT: a module the LIVE engine imports is censused, inline paint and all', () => {
+  withResolvedSandbox((sandbox) => {
+    plantCraftModule(sandbox, [
+      ['src/components/primitives/inputs/button/engines/classic/planted.tsx', '../../runtime/planted-craft'],
+      ['src/components/primitives/inputs/button/engines/modern/planted.tsx', '../../runtime/planted-craft'],
+    ]);
+  }, {}, (findings, resolved) => {
+    assert.ok(resolved.sources.some((file) => file.includes('planted-craft')), 'a live importer keeps it in');
+    expectFinding(findings, 'BLOCKING inline paint', 'its paint is the family\'s to answer for');
+  });
+});
+
+test('CONTROL: a module only the FROZEN engines import leaves the census with its paint', () => {
+  withResolvedSandbox((sandbox) => {
+    plantCraftModule(sandbox, [
+      ['src/components/primitives/inputs/button/engines/classic/planted.tsx', '../../runtime/planted-craft'],
+      ['src/components/primitives/inputs/button/engines/rustic/planted.tsx', '../../runtime/planted-craft'],
+    ]);
+  }, {}, (findings, resolved) => {
+    assert.ok(
+      !resolved.sources.some((file) => file.includes('planted-craft')),
+      'classic and rustic are already out by name; what only they paint through goes with them',
+    );
+    expectNoFinding(findings, 'BLOCKING inline paint', 'a frozen-only module raises nothing');
+  });
+});
+
+test('CONTROL: a module nobody imports stays in the census', () => {
+  withResolvedSandbox((sandbox) => {
+    plantCraftModule(sandbox, []);
+  }, {}, (findings, resolved) => {
+    assert.ok(
+      resolved.sources.some((file) => file.includes('planted-craft')),
+      'the exclusion is earned by a frozen-only consumer graph, never by the absence of one',
+    );
+    expectFinding(findings, 'BLOCKING inline paint', 'an unimported module is still the family\'s');
+  });
+});
+
 test('CONTROL: a data-only row that declares the family and produces no channel is not a fan-out claim', () => {
   const catalog = [{
     id: 'recipe-profile',

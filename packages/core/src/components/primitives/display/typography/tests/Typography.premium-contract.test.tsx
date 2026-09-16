@@ -149,8 +149,12 @@ describe('Typography premium contract — pass 2 tokenized craft', () => {
     // `tracking` are still the engine's, reading the same public channels.
     expect(text).toHaveAttribute('data-family', 'display');
     expect(modernTypographyCss).toContain("[data-family='display']");
-    expect(inlineStyle).toContain('--ds-line-height-snug');
-    expect(inlineStyle).toContain('--ds-letter-spacing-tight');
+    // `leading` and `tracking` are the skin's now, on the states the render
+    // stamps, reading the same public channels the engine used to inline.
+    expect(text).toHaveAttribute('data-leading', 'snug');
+    expect(text).toHaveAttribute('data-tracking', 'tight');
+    expect(modernTypographyCss).toContain('line-height: var(--ds-line-height-snug)');
+    expect(modernTypographyCss).toContain('letter-spacing: var(--ds-letter-spacing-tight)');
     expect(text).toHaveAttribute('data-contrast', 'strong');
     expect(modernTypographyCss).toContain('--ds-type-color-strong');
   });

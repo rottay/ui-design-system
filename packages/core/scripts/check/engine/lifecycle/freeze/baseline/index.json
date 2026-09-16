@@ -143,15 +143,15 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx": {
-      "blob": "f53ee9018af20bfbcc4530e44de344a908417c92482ac525f5406b192f863d25",
-      "relocationDigest": "429a3985a79881b9357e3d015bbf1351a1bd4c8c21b11f0af7c14555410ae179",
-      "reason": "cambio sancionado de la era de remediacion (Typography craft); classic queda congelado desde aca",
+      "blob": "11114fa5495242f591896d7ed46fe3e07a47e4885313aae43eb56bb9abec6601",
+      "relocationDigest": "ff7f5a5c6ec23d5328b68f182a155537c195bf786f769044768d014b1a94eb31",
+      "reason": "the craft resolver moved to runtime/legacy-craft (WO-FAM-06 typography-rest craft split); this engine's import follows it to the identical module, behavior unchanged, frozen paint preserved",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx": {
-      "blob": "ad5ab7c78544bde747082f22a00e8f55fa9e69146955d40d16ce1c0b518127e1",
-      "relocationDigest": "33d5c11ee9c85e33f3b3a09086ddaa0b4f2999fcedc4b3d6135b4df7ca3d76c4",
-      "reason": "idem classic — sancionado",
+      "blob": "262ee80a1bd635504e233b367a095da9b3c7ace3b7fa002016dc8c6ab358f647",
+      "relocationDigest": "18954fd278ff7114eceb316ecf61027470e2dc0ec37a925ba89f8380356d0016",
+      "reason": "the craft resolver moved to runtime/legacy-craft (WO-FAM-06 typography-rest craft split); this engine's import follows it to the identical module, behavior unchanged, frozen paint preserved",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/feedback/message/engines/rustic/index.tsx": {

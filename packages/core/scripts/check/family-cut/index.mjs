@@ -62,7 +62,7 @@
  */
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { basename, dirname, join, relative, sep } from 'node:path';
+import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import ts from 'typescript';
@@ -250,6 +250,53 @@ function findComponentDirs(root, family, ownerDirs = collectOwnerDirs(root)) {
  * engine. Classic and Rustic are frozen and never enter a Modern measurement;
  * tests, stories and fixtures are evidence, not the family's source.
  */
+const FROZEN_ENGINE_SEGMENT = /\/engines\/(?:classic|rustic)\//u;
+
+/** Every authored module of the family, frozen engines included. */
+function isFamilyModule(file) {
+  const posix = toPosix(file);
+  if (/\/(?:tests|__snapshots__|fixtures)\//u.test(posix)) return false;
+  if (/\.stories\.tsx?$/u.test(posix)) return false;
+  if (/\.test\.tsx?$/u.test(posix)) return false;
+  return /\.tsx?$/u.test(posix);
+}
+
+/** The file a relative specifier names, trying the four shapes the tree uses. */
+function resolveSpecifier(fromFile, specifier) {
+  const base = resolve(dirname(fromFile), specifier);
+  for (const candidate of [`${base}.ts`, `${base}.tsx`, join(base, 'index.ts'), join(base, 'index.tsx')]) {
+    if (existsSync(candidate)) return candidate;
+  }
+  return undefined;
+}
+
+/**
+ * A module whose only remaining importers are FROZEN engines is not the live
+ * family's source: classic and rustic are already out of the census by name,
+ * and what they alone still paint through is theirs. A module with no importer
+ * at all, or with one live importer, stays -- the exclusion is earned by the
+ * consumer graph, never by a path.
+ */
+function collectFrozenOnlyModules(componentDirs) {
+  const files = componentDirs.flatMap((dir) => walkFiles(dir, isFamilyModule));
+  const importers = new Map();
+  for (const file of files) {
+    const source = readFileSync(file, 'utf8');
+    for (const match of source.matchAll(/from\s+['"](\.[^'"]+)['"]/gu)) {
+      const target = resolveSpecifier(file, match[1]);
+      if (!target) continue;
+      if (!importers.has(target)) importers.set(target, new Set());
+      importers.get(target).add(file);
+    }
+  }
+  const frozenOnly = new Set();
+  for (const [target, from] of importers) {
+    if (FROZEN_ENGINE_SEGMENT.test(toPosix(target))) continue;
+    if ([...from].every((file) => FROZEN_ENGINE_SEGMENT.test(toPosix(file)))) frozenOnly.add(target);
+  }
+  return frozenOnly;
+}
+
 function isFamilySource(file) {
   const posix = toPosix(file);
   if (/\/(?:tests|__snapshots__|fixtures)\//u.test(posix)) return false;
@@ -441,8 +488,10 @@ export function resolveFamily(family, root = DEFAULT_ROOT, pin = {}) {
   const componentDirs = pin.owner
     ? candidates.filter((dir) => toPosix(relative(root, dir)) === pin.owner)
     : candidates;
+  const frozenOnly = collectFrozenOnlyModules(componentDirs);
   const sources = componentDirs
     .flatMap((dir) => walkFiles(dir, isFamilySource))
+    .filter((file) => !frozenOnly.has(file))
     .sort();
   const ownerNames = new Set(ownerDirs.map((dir) => basename(dir)));
   const familyClassTokens = new Set(sources.flatMap((file) => [...readFileSync(file, 'utf8')

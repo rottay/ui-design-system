@@ -51,9 +51,9 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   resolveFluidTypographySize,
-  resolveTypographyCraftStyle,
   typographyDataAttributes,
 } from '../../runtime';
+import { resolveTypographyCraftStyle } from '../../runtime/legacy-craft';
 
 const { Title, Text: AntText, Paragraph: AntParagraph, Link: AntLink } = AntTypography;
 

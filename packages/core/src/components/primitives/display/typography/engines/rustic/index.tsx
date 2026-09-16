@@ -47,9 +47,9 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   resolveFluidTypographySize,
-  resolveTypographyCraftStyle,
   typographyDataAttributes,
 } from '../../runtime';
+import { resolveTypographyCraftStyle } from '../../runtime/legacy-craft';
 
 /**
  * Scope class carried by all four exports. Text color is selected from
