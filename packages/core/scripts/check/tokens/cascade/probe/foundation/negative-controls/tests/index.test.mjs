@@ -569,20 +569,27 @@ test('honesty check: the CSS-only claim is bounded against real inline style car
     assert.ok(result.filesScanned.includes(carrier.file), JSON.stringify(carrier));
     assert.ok(carrier.line > 0, JSON.stringify(carrier));
   }
-  // Measured, 2026-08-11: Flex's modern engine unconditionally inlines
-  // `min-inline-size: 0` (a fixed anti-overflow floor, not derived from any
-  // control -- `primitives/layout/flex/engines/modern/index.tsx`, `const
-  // modernStyle = { minInlineSize: 0, ...resolvedStyle }`). That is exactly
-  // the kind of carrier this harness's CSS-only view cannot see, recorded
-  // here so the "CSS-only" claim stays bounded rather than silently
-  // overstated. It is not, by itself, evidence that any control reaches it.
+  // Pins what scanInlineStyleCarriers() finds, measured 2026-09-16; when it changes,
+  // update this list to the new finding instead of deleting it.
+  const grid = 'src/components/primitives/layout/grid/engines/modern/index.tsx';
+  const skeleton = 'src/components/primitives/feedback/skeleton/engines/modern/index.tsx';
+  const assignment = 'local-style-object-assignment';
+  assert.deepEqual(
+    result.carriers.map((carrier) => `${carrier.file} ${carrier.property} ${carrier.kind}`).sort(),
+    [
+      ...['column-gap', 'row-gap', 'gap', 'column-gap', 'row-gap', 'grid-auto-flow', 'align-items',
+        'justify-content', 'width', 'height', 'min-height', 'min-width', 'max-width']
+        .map((property) => `${grid} ${property} ${assignment}`),
+      `${skeleton} width jsx-style-object`,
+      `${skeleton} height jsx-style-object`,
+      `${skeleton} width ${assignment}`,
+      `${skeleton} height ${assignment}`,
+    ].sort(),
+    'these are the KNOWN carriers as of 2026-09-16',
+  );
   assert.ok(
-    result.carriers.some(
-      (carrier) => carrier.property === 'min-inline-size' && carrier.file.includes('flex/engines/modern'),
-    ),
-    'this is a KNOWN carrier as of 2026-08-11; if it is gone, the scanner or the component ' +
-      'changed -- update this assertion to whatever scanInlineStyleCarriers() now finds instead ' +
-      'of deleting it',
+    !result.carriers.some((carrier) => carrier.file.includes('flex/engines/modern')),
+    'the Flex floor moved into its skin; an inline Flex carrier returning is a change to record here',
   );
 });
 
