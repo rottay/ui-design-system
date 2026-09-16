@@ -222,12 +222,14 @@ export function resolveDividerTextPosition(
 }
 
 /**
- * Default colors for different themes/engines.
+ * The Modern engine's last-resort line colour.
+ *
+ * The Classic and Rustic defaults used to sit beside it here, which put two
+ * frozen engines' paint inside the family contract. Each now lives in the
+ * engine that is its only consumer, byte-identical: `CLASSIC_DIVIDER_COLOR` in
+ * `engines/classic` and `RUSTIC_DIVIDER_COLOR` in `engines/rustic`.
  */
 export const DEFAULT_COLORS = {
-  classic:
-    "var(--ds-divider-color, var(--ds-color-border, rgba(5, 5, 5, 0.06)))",
   modern:
     "var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))",
-  rustic: "var(--ds-divider-color, #d9d9d9)",
 };

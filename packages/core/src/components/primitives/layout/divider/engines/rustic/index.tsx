@@ -27,9 +27,16 @@ import {
   DIVIDER_DEFAULTS,
   SPACING_MAP,
   getThicknessValue,
-  DEFAULT_COLORS,
   resolveDividerTextPosition,
 } from "../../contracts";
+
+/**
+ * This engine's own last-resort line colour, byte-identical to the value the
+ * shared contract used to carry as `DEFAULT_COLORS.rustic`. It lives here
+ * because this engine is its only consumer: a frozen engine's paint is not the
+ * family contract's to hold.
+ */
+export const RUSTIC_DIVIDER_COLOR = "var(--ds-divider-color, #d9d9d9)";
 
 /**
  * Rustic (vanilla CSS) Divider with full ARIA accessibility.
@@ -78,7 +85,7 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
     React.Children.toArray(children).length > 0 && isHorizontal;
 
   const lineThickness = getThicknessValue(thickness);
-  const lineColor = color || DEFAULT_COLORS.rustic;
+  const lineColor = color || RUSTIC_DIVIDER_COLOR;
   const spacingValue = SPACING_MAP[spacing];
 
   // The generic DaisyUI `.divider` classname is intentionally absent. Rustic

@@ -3,14 +3,24 @@ import { describe, expect, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 
 import { DEFAULT_COLORS, SPACING_MAP } from "../contracts";
-import ClassicDivider from "../engines/classic";
+import ClassicDivider, { CLASSIC_DIVIDER_COLOR } from "../engines/classic";
 import ModernDivider from "../engines/modern";
-import RusticDivider from "../engines/rustic";
+import RusticDivider, { RUSTIC_DIVIDER_COLOR } from "../engines/rustic";
 
 const ENGINE_COMPONENTS = {
   classic: ClassicDivider,
   modern: ModernDivider,
   rustic: RusticDivider,
+} as const;
+
+/**
+ * Each engine's own last-resort line colour. The two frozen engines carry
+ * theirs; the shared contract carries only Modern's.
+ */
+const ENGINE_COLORS = {
+  classic: CLASSIC_DIVIDER_COLOR,
+  modern: DEFAULT_COLORS.modern,
+  rustic: RUSTIC_DIVIDER_COLOR,
 } as const;
 
 describe("Divider runtime engines", () => {
@@ -82,7 +92,7 @@ describe("Divider runtime engines", () => {
           data-testid={`divider-vertical-${engine}`}
           orientation="vertical"
           variant="dotted"
-          color={DEFAULT_COLORS[engine as keyof typeof DEFAULT_COLORS]}
+          color={ENGINE_COLORS[engine as keyof typeof ENGINE_COLORS]}
           margin="lg"
           thickness={3}
           style={{ minHeight: 48 }}

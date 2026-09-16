@@ -269,15 +269,15 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/divider/engines/classic/index.tsx": {
-      "blob": "51b757512cd1bcd52fc24bcfb815ec0567186cf12bf9e5b0964057980969fa3d",
-      "relocationDigest": "6817203b8b3c22b2aaea3a3ff77c252ed3cc5d54e256a7e03c9e7a87b1fe939c",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "eeb18bafc91c13c9e06f924fa9916e67c9de77b7f53272ad8620372a16075226",
+      "relocationDigest": "c22aefc5fbeee21ecc99249e931baec478e24efc387c1f0b0a734303aab8e848",
+      "reason": "the frozen engine's own last-resort colour default moves into the engine file that owns it, value and consumer unchanged; the shared contract stops carrying frozen-engine paint",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/divider/engines/rustic/index.tsx": {
-      "blob": "e621f431804ae54823d26bed3fc65bf8fd6b655168877e34da1764be45ba0007",
-      "relocationDigest": "60cd67ed72303f8442a74f8868a463d2a864b0778ea994d5faf6284edc8a11cf",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "fd12795efb3acae8bb5c615442c7f26b125233fd4c162a9d78dd487313d627f0",
+      "relocationDigest": "15b67b2b9f02a1af7afde5e9c8be2ba8219a73ab34c892e80dfcae8d87fcf0bb",
+      "reason": "the frozen engine's own last-resort colour default moves into the engine file that owns it, value and consumer unchanged; the shared contract stops carrying frozen-engine paint",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/flex/engines/classic/index.tsx": {

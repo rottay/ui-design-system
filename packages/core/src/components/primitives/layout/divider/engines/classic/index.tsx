@@ -26,9 +26,17 @@ import {
   DIVIDER_DEFAULTS,
   SPACING_MAP,
   getThicknessValue,
-  DEFAULT_COLORS,
   resolveDividerTextPosition,
 } from "../../contracts";
+
+/**
+ * This engine's own last-resort line colour, byte-identical to the value the
+ * shared contract used to carry as `DEFAULT_COLORS.classic`. It lives here
+ * because this engine is its only consumer: a frozen engine's paint is not the
+ * family contract's to hold.
+ */
+export const CLASSIC_DIVIDER_COLOR =
+  "var(--ds-divider-color, var(--ds-color-border, rgba(5, 5, 5, 0.06)))";
 
 /**
  * Classic Divider component styled to match Ant Design conventions.
@@ -80,7 +88,7 @@ const ClassicDivider = forwardRef<HTMLDivElement, DividerProps>(
     const hasChildren = !!children && isHorizontal;
 
     const lineThickness = getThicknessValue(thickness);
-    const lineColor = color || DEFAULT_COLORS.classic;
+    const lineColor = color || CLASSIC_DIVIDER_COLOR;
     const spacingValue = SPACING_MAP[spacing];
 
     // Build Ant Design class names for external CSS overrides
