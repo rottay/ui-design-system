@@ -296,7 +296,7 @@
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'][data-empty='true']::before {
   content: '—';
   color: var(--ds-color-text-muted);
-  font-weight: var(--ds-font-weight-regular, 400);
+  font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {

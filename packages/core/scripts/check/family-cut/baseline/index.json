@@ -955,6 +955,46 @@
       "unpairedStatePseudoSelectors": 7,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0
+    },
+    "tree": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 6,
+        "channelsRead": 49,
+        "classTokens": 5,
+        "partsStamped": 12,
+        "partsConsumed": 13
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 5,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 3,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
+    },
+    "descriptions": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 5,
+        "channelsRead": 76,
+        "classTokens": 8,
+        "partsStamped": 9,
+        "partsConsumed": 9
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 8,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 4,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
     }
   }
 }

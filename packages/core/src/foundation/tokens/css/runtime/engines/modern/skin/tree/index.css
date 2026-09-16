@@ -75,7 +75,7 @@
   background: var(--ds-tree-bg);
 }
 
-/* ---- hierarchy lines (their per-node logical offsets stay inline) ---- */
+/* ---- hierarchy lines (their per-node logical offset arrives as a channel) ---- */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'] {
   position: absolute;
   border-color: var(--ds-tree-line-color, var(--ds-color-border));
@@ -385,4 +385,64 @@
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div {
     background: Highlight;
   }
+}
+
+
+/* ---------------------------------------------------------------------------
+ * WO-FAM-06 tree cut: the geometry the engine and the node compound used to
+ * stamp inline. What only the runtime knows -- a node's depth -- arrives as a
+ * channel; every span and edge is keyed on the stamps beside it.
+ * ------------------------------------------------------------------------- */
+
+.rottay-tree.rottay-tree--modern {
+  /* Declared so every name the skin reads has a producer; the TSX overrides
+     them per node with the measured depth. */
+  --ds-tree-node-opacity: initial;
+  --ds-tree-connector-inset: 0;
+  --ds-tree-row-indent: 0;
+}
+
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'] {
+  inset-inline-start: var(--ds-tree-connector-inset);
+}
+/* A full-span guide runs the whole row; a half-span stops at the elbow. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'][data-span='full'] {
+  inset-block: 0;
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'][data-span='half'] {
+  inset-block-start: 0;
+  block-size: 50%;
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal'] {
+  inset-block-start: 50%;
+  inline-size: var(--ds-tree-connector-elbow, var(--ds-spacing-3));
+}
+
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] {
+  padding-inline-start: var(--ds-tree-row-indent);
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'][data-position='before'] {
+  inset-block-start: calc(-1 * var(--ds-edge-hairline-width, 1px));
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'][data-position='after'] {
+  inset-block-end: calc(-1 * var(--ds-edge-hairline-width, 1px));
+}
+
+/* The node row carries its own depth. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [role='treeitem'] {
+  padding-inline-start: var(--ds-tree-row-indent);
+}
+
+/* The node compound's own box: layout, rhythm, the disabled dial and the
+   affordance cursor, all keyed on what the compound stamps. */
+.rottay-tree-node {
+  display: flex;
+  align-items: center;
+  padding: var(--ds-tree-node-padding-block, var(--ds-spacing-1))
+    var(--ds-tree-node-padding-inline, var(--ds-spacing-2));
+  opacity: var(--ds-tree-node-opacity, 1);
+  cursor: pointer;
+}
+.rottay-tree-node.rottay-tree-node--disabled {
+  cursor: not-allowed;
 }

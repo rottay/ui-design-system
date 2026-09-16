@@ -54,15 +54,9 @@ export const TreeNode = forwardRef<HTMLDivElement, TreeNodeProps>(
       '--ds-tree-node-opacity': disabled ? '0.5' : '1',
     } as React.CSSProperties;
 
-    const nodeStyle: React.CSSProperties = {
-      ...nodeVars,
-      display: 'flex',
-      alignItems: 'center',
-      padding: '4px 8px',
-      opacity: 'var(--ds-tree-node-opacity)',
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      ...style,
-    };
+    // Layout, padding, opacity and cursor are the skin's, keyed on the stamps
+    // below; only the disabled dial and the caller's own style travel inline.
+    const nodeStyle: React.CSSProperties = { ...nodeVars, ...style };
 
     return (
       <div

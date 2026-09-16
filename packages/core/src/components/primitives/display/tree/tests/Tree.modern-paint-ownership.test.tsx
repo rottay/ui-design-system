@@ -71,12 +71,17 @@ describe('Tree modern — connectors and checkbox are the skin, offsets are logi
     const childRow = Array.from(rows).find((row) =>
       row.getAttribute('data-tree-node-key') === '0-0'
     ) as HTMLElement;
-    expect(childRow.style.paddingInlineStart).toContain('var(--ds-tree-indent');
+    // The depth now travels as a channel and the skin applies it logically, so
+    // what survives is the anti-claim -- no physical edge is ever stamped --
+    // plus the channel carrying the measured indent.
+    expect(childRow.style.getPropertyValue('--ds-tree-row-indent')).toContain('var(--ds-tree-indent');
     expect(childRow.style.paddingLeft).toBe('');
+    expect(childRow.style.paddingInlineStart).toBe('');
 
     const connector = container.querySelector('[data-part="connector"]') as HTMLElement;
-    expect(connector.style.insetInlineStart).toContain('var(--ds-tree-indent');
+    expect(connector.style.getPropertyValue('--ds-tree-connector-inset')).toContain('var(--ds-tree-indent');
     expect(connector.style.left).toBe('');
+    expect(connector.style.insetInlineStart).toBe('');
   });
 
   it('keeps the translated-label fallback contract on the toggle and checkbox', () => {

@@ -410,3 +410,21 @@
     outline-offset: -1px;
   }
 }
+
+
+/* The channels the family's still-hand-written loading state reads, and the
+   empty-state minimum it forwards, declared at the family root so every name
+   the skin reads has a producer. They are NOT derived: the loading subtree is
+   slated to move to the shared anatomy renderer once the `aria-busy` ownership
+   collision is adjudicated, and derived relations for it would be deleted. */
+.rottay-list.rottay-list--modern {
+  --ds-list-skeleton-avatar-size: var(--ds-spacing-10);
+  --ds-list-skeleton-line-height: var(--ds-spacing-4);
+  --ds-list-skeleton-line-height-sm: var(--ds-spacing-3);
+  --ds-list-skeleton-line-gap: var(--ds-spacing-2);
+  --ds-list-skeleton-line-radius: var(--ds-radius-sm);
+  --ds-list-skeleton-row-gap: var(--ds-spacing-3);
+  --ds-list-skeleton-row-padding-block: var(--ds-spacing-3);
+  --ds-list-skeleton-pulse-duration: calc(var(--ds-motion-glacial) * 4);
+  --ds-empty-simple-min-height: calc(var(--ds-spacing-8) * 4);
+}

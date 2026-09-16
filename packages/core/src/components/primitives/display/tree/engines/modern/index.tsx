@@ -136,13 +136,11 @@ const DropIndicator: React.FC<{
   return (
     <div
       data-part="drop-indicator"
-      style={{
-        top: position === 'before' ? -1 : undefined,
-        bottom: position === 'after' ? -1 : undefined,
-        // The indentation tracks the node's logical inline-start so the
-        // indicator lines up under the title in both LTR and RTL.
-        paddingInlineStart: indent,
-      }}
+      data-position={position}
+      // The indentation tracks the node's logical inline-start so the indicator
+      // lines up under the title in both LTR and RTL. The edge it sits on is
+      // the skin's, keyed on `data-position`.
+      style={{ '--ds-tree-row-indent': `${indent}px` } as React.CSSProperties}
     >
       <div />
     </div>
@@ -329,43 +327,30 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 key={i}
                 data-part="connector"
                 data-axis="vertical"
-                style={{
-                  insetInlineStart: `calc(${i} * ${indentStep} + 12px)`,
-                  top: 0,
-                  bottom: 0,
-                }}
+                data-span="full"
+                style={{ '--ds-tree-connector-inset': `calc(${i} * ${indentStep} + 12px)` } as React.CSSProperties}
               />
             ) : null
           )}
           <div
             data-part="connector"
             data-axis="horizontal"
-            style={{
-              insetInlineStart: `calc(${level - 1} * ${indentStep} + 12px)`,
-              top: '50%',
-              width: 12,
-            }}
+            style={{ '--ds-tree-connector-inset': `calc(${level - 1} * ${indentStep} + 12px)` } as React.CSSProperties}
           />
           {isLast && (
             <div
               data-part="connector"
               data-axis="vertical"
-              style={{
-                insetInlineStart: `calc(${level - 1} * ${indentStep} + 12px)`,
-                top: 0,
-                height: '50%',
-              }}
+              data-span="half"
+              style={{ '--ds-tree-connector-inset': `calc(${level - 1} * ${indentStep} + 12px)` } as React.CSSProperties}
             />
           )}
           {!isLast && (
             <div
               data-part="connector"
               data-axis="vertical"
-              style={{
-                insetInlineStart: `calc(${level - 1} * ${indentStep} + 12px)`,
-                top: 0,
-                bottom: 0,
-              }}
+              data-span="full"
+              style={{ '--ds-tree-connector-inset': `calc(${level - 1} * ${indentStep} + 12px)` } as React.CSSProperties}
             />
           )}
         </>
@@ -382,9 +367,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           drained. The selected row never carries a left accent rail (product
           law; the skin's framed-surface treatment replaced it). */}
       <div
-        style={{
-          paddingInlineStart,
-        }}
+        style={{ '--ds-tree-row-indent': paddingInlineStart } as React.CSSProperties}
         onClick={handleClick}
         role="treeitem"
         aria-selected={isSelected}

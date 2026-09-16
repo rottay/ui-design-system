@@ -45,6 +45,9 @@ import { stepperChromeDeriver } from "./chrome/stepper";
 import { sidebarSurfaceChromeDeriver } from "./chrome/sidebar-surface";
 import { cardChromeDeriver } from "./chrome/card";
 import { tableChromeDeriver } from "./chrome/table";
+import { listChromeDeriver } from "./chrome/list";
+import { descriptionsChromeDeriver } from "./chrome/descriptions";
+import { treeChromeDeriver } from "./chrome/tree";
 import { avatarChromeDeriver } from "./chrome/avatar";
 import { tagChromeDeriver } from "./chrome/tag";
 import { badgeChromeDeriver } from "./chrome/badge";
@@ -138,6 +141,9 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   sidebarSurfaceChromeDeriver,
   cardChromeDeriver,
   tableChromeDeriver,
+  listChromeDeriver,
+  descriptionsChromeDeriver,
+  treeChromeDeriver,
   avatarChromeDeriver,
   tagChromeDeriver,
   badgeChromeDeriver,

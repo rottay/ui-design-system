@@ -41,7 +41,9 @@ function stemHeights(): Array<[string, string]> {
           child.getAttribute('data-axis') === 'vertical'
       );
       const own = verticals[verticals.length - 1];
-      const kind = !own ? 'none' : own.style.height === '50%' ? 'stem' : 'through';
+      // WO-FAM-06 tree cut: the span moved to the skin, keyed on the stamp the
+      // engine sets. Reading the stamp is the contract, not the resolved height.
+      const kind = !own ? 'none' : own.getAttribute('data-span') === 'half' ? 'stem' : 'through';
       return [row?.textContent?.trim() ?? '', kind] as [string, string];
     })
     .filter(([label]) => label !== '');
