@@ -224,7 +224,7 @@
       "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
     },
     {
-      "key": "splitter/index.css :: .rottay-splitter.rottay-splitter--modern :: [data-part='gutter']",
+      "key": "splitter/index.css :: .ds-splitter.ds-splitter--modern :: [data-part='gutter']",
       "kind": "exempt",
       "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
     },

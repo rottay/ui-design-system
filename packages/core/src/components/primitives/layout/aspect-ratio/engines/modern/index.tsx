@@ -15,8 +15,8 @@
  *   channels decide crop and focal point. If the content is not media-shaped,
  *   you wanted Box.
  * The engine projects only instance geometry (`--ds-aspect-ratio-instance-*`);
- * structure, material and motion live in the shared declarative skin
- * (`presentation/components/skin/layout-primitives/index.css`, AspectRatio section).
+ * structure, material and motion live in the Modern skin
+ * (`runtime/engines/modern/skin/aspect-ratio/index.css`).
  *
  * @example
  * ```tsx
@@ -91,7 +91,7 @@ const ModernAspectRatio = React.forwardRef<HTMLDivElement, AspectRatioProps>(
       <div
         ref={ref}
         {...rest}
-        className={`rottay-aspect-ratio rottay-aspect-ratio--modern ${className}`.trim()}
+        className={`ds-aspect-ratio ds-aspect-ratio--modern ${className}`.trim()}
         style={containerStyle}
         data-testid={dataTestId}
         data-part={dataPart ?? "root"}

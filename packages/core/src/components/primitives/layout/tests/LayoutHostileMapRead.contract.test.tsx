@@ -214,30 +214,33 @@ describe("A2. Stack/runtime/responsive align/justify -- FIXED (was bare ALIGN_MA
   });
 });
 
-describe("A3. Space/engines/modern legacy-size lookup -- FIXED (was SPACE_SIZE_MAP[legacySize || 'small'] || SPACE_SIZE_MAP.small)", () => {
-  // The old expression's trailing `||` looked identical to the "already
-  // fail-closed" sites in section B, but it is NOT: "toString" resolves
-  // through Object.prototype to a truthy FUNCTION, which slips straight past
-  // `|| SPACE_SIZE_MAP.small` too -- this site was not named as pre-cleared
-  // in the work order, so it was fixed with the own-property guard.
+describe("A3. Space/engines/modern legacy-size lookup -- REMOVED (WO-FAM-07)", () => {
+  // The old expression read `SPACE_SIZE_MAP[legacySize || 'small']`, where
+  // "toString" resolves through Object.prototype to a truthy FUNCTION and
+  // slipped past the trailing `|| SPACE_SIZE_MAP.small`. The own-property guard
+  // that closed it is gone because the LOOKUP is gone: the modern engine no
+  // longer resolves a rung to a value at all. It stamps the caller's spelling
+  // and the Modern skin enumerates the rungs it answers, so a hostile string
+  // reaches no map, writes no declaration, and falls closed in the cascade to
+  // the rung `--ds-space-gap` rests on. That is a stronger guarantee than a
+  // guarded read, and these cases measure it rather than assume it.
   const STRING_HOSTILE: readonly unknown[] = ["huge", "toString", "constructor", "__proto__"];
 
-  it("resolves every hostile size string to the declared small rung", () => {
+  it("writes no inline declaration for any hostile size string", () => {
     for (const value of STRING_HOSTILE) {
       const { getByRole, unmount } = render(
         <Space role="group" aria-label="hostile" size={value as never}>
           <span>a</span>
         </Space>
       );
-      const gap = getByRole("group").style.getPropertyValue(
-        "--ds-space-instance-gap"
-      );
-      expect(gap, label(value)).toBe(SPACE_SIZE_MAP.small);
+      const root = getByRole("group");
+      expect(root.getAttribute("style"), label(value)).toBeNull();
+      expect(root.getAttribute("data-size"), label(value)).toBe(String(value));
       unmount();
     }
   });
 
-  it("never stamps a function/object into the instance-gap channel", () => {
+  it("never stamps a function/object into the gap channel", () => {
     for (const value of ["toString", "constructor", "__proto__"]) {
       const { getByRole, unmount } = render(
         <Space role="group" aria-label="hostile" size={value as never}>
@@ -251,39 +254,35 @@ describe("A3. Space/engines/modern legacy-size lookup -- FIXED (was SPACE_SIZE_M
     }
   });
 
-  it("a legitimate preset (either spelling) is untouched by the guard", () => {
-    const legacy = render(
-      <Space role="group" aria-label="legacy" size="middle">
-        <span>a</span>
-      </Space>
-    );
-    expect(
-      legacy.getByRole("group").style.getPropertyValue("--ds-space-instance-gap")
-    ).toBe(SPACE_SIZE_MAP.middle);
-    legacy.unmount();
-
-    const canonical = render(
-      <Space role="group" aria-label="canonical" size="md">
-        <span>a</span>
-      </Space>
-    );
-    expect(
-      canonical.getByRole("group").style.getPropertyValue("--ds-space-instance-gap")
-    ).toBe(SPACE_SIZE_MAP.middle);
-    canonical.unmount();
+  it("a legitimate preset (either spelling) is stamped verbatim and stays inline-free", () => {
+    for (const [spelling, expected] of [
+      ["middle", "middle"],
+      ["md", "md"],
+    ] as const) {
+      const { getByRole, unmount } = render(
+        <Space role="group" aria-label={spelling} size={spelling}>
+          <span>a</span>
+        </Space>
+      );
+      const root = getByRole("group");
+      expect(root.getAttribute("data-size"), spelling).toBe(expected);
+      expect(root.getAttribute("style"), spelling).toBeNull();
+      unmount();
+    }
+    // The compat aliases the rung formula still reads stay exported.
+    expect(SPACE_SIZE_MAP.middle).toContain("--ds-space-middle-size");
   });
 
   it("the array [h, v] branch is a different, unrelated code path and stays safe", () => {
-    // Array.isArray wins before the string lookup this fix guards, exactly
-    // the same domain split proven for Flex's resolveFlexGap/
-    // resolveFlexGapWithRhythm in Flex.hostile-gap-input.test.tsx. Confirmed
-    // here for completeness, not because it shares the fixed defect.
+    // Array.isArray wins before the string branch, exactly the same domain
+    // split proven for Flex's resolveFlexGap/resolveFlexGapWithRhythm in
+    // Flex.hostile-gap-input.test.tsx.
     const { getByRole } = render(
       <Space role="group" aria-label="array" size={[] as never}>
         <span>a</span>
       </Space>
     );
-    const gap = getByRole("group").style.getPropertyValue("--ds-space-instance-gap");
+    const gap = getByRole("group").style.getPropertyValue("--ds-space-gap");
     expect(gap).toBe("0px 0px");
     expect(gap).not.toContain("NaN");
   });

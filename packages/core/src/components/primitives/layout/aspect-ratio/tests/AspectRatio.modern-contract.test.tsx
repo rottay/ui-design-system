@@ -1,18 +1,8 @@
 import React, { createRef } from "react";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import ModernAspectRatio from "../engines/modern";
-
-const layoutSkin = readFileSync(
-  resolve(
-    process.cwd(),
-    "src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
-  ),
-  "utf8"
-);
 
 describe("AspectRatio modern premium contract", () => {
   it("forwards semantics, ref, and caller-owned anatomy", () => {
@@ -83,20 +73,20 @@ describe("AspectRatio modern premium contract", () => {
       frame.style.getPropertyValue("--ds-aspect-ratio-instance-max-width")
     ).toBe("640px");
     expect(frame).toHaveAttribute("data-component", "aspect-ratio");
-    expect(layoutSkin).toContain("inline-size: 100%");
-    expect(layoutSkin).toContain("min-inline-size: 0");
   });
 
-  it("exposes only token-backed visual craft and reduced-motion behavior", () => {
+  it("carries the reserved ratio and nothing else inline", () => {
     render(<ModernAspectRatio data-testid="frame">Content</ModernAspectRatio>);
 
     const frame = screen.getByTestId("frame");
     const inlineStyle = frame.getAttribute("style") ?? "";
     expect(inlineStyle).toContain("--ds-aspect-ratio-instance-ratio");
-    expect(layoutSkin).toContain("--ds-aspect-ratio-background");
-    expect(layoutSkin).toContain("--ds-aspect-ratio-border");
-    expect(layoutSkin).toContain("--ds-aspect-ratio-radius");
-    expect(layoutSkin).toContain("--ds-aspect-ratio-shadow");
-    expect(layoutSkin).toContain("prefers-reduced-motion: reduce");
+    expect(inlineStyle).not.toContain("--ds-aspect-ratio-instance-max-width");
+    const declared = inlineStyle
+      .split(";")
+      .map((entry) => entry.split(":")[0]?.trim())
+      .filter((name): name is string => Boolean(name));
+    expect(declared.every((name) => name.startsWith("--ds-"))).toBe(true);
+    expect(frame.className).toContain("ds-aspect-ratio--modern");
   });
 });

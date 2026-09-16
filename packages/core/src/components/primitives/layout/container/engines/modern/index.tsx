@@ -2,20 +2,20 @@
 
 /**
  * @fileoverview Container Modern Engine - Rottay Design System.
- * Token-driven implementation: the engine projects only the instance values
- * (`--ds-container-instance-*` custom properties) and stamps the anatomy
- * (`data-part`/`data-centered`/`data-fluid`); the shared declarative skin
- * (`presentation/components/skin/layout-primitives/index.css`, Container section)
- * owns structure, paint and motion. No Tailwind utility classes.
+ * The engine stamps the anatomy (`data-part`, `data-max-width`, `data-padding`,
+ * `data-centered`, `data-fluid`); the Modern skin
+ * (`runtime/engines/modern/skin/container/index.css`) owns every value through
+ * the `--ds-container-*` channels. A caller's arbitrary measure or inset is the
+ * only thing that travels inline, on those same two channels.
  *
  * @remarks
  * **When to use Container vs the layout sisters (kept in sync with Box/flex/Grid):**
  * - **Box** is the polymorphic single-element escape hatch.
  * - **Stack/Flex** own child rhythm along one axis; **Grid** owns two axes.
  * - **Container** owns the page-level measure: a max-inline-size on the
- *   tenant container scale (`--ds-container-{sm..2xl}`), logical auto
- *   margins when centered, and scale padding — the quiet canvas a view is
- *   framed inside. It composes AROUND the sisters, never instead of them.
+ *   tenant container scale (`--ds-container-{sm..2xl}`, the breakpoint ladder),
+ *   logical auto margins when centered, and ramp padding — the quiet canvas a
+ *   view is framed inside. It composes AROUND the sisters, never instead of them.
  *
  * @example
  * ```tsx
@@ -31,34 +31,41 @@
  */
 
 import React from "react";
-import type { ContainerProps } from "../../contracts";
-import {
-  CONTAINER_DEFAULTS,
-  CONTAINER_MAX_WIDTHS,
-  CONTAINER_PADDINGS,
-} from "../../contracts";
+import type { ContainerMaxWidth, ContainerPadding, ContainerProps } from "../../contracts";
+import { CONTAINER_DEFAULTS } from "../../contracts";
 
-function toSafePixels(value: number, fallback: string): string {
-  return Number.isFinite(value) && value >= 0 ? `${value}px` : fallback;
-}
+const MAX_WIDTH_RUNGS: readonly ContainerMaxWidth[] = [
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "full",
+];
+const PADDING_RUNGS: readonly ContainerPadding[] = ["none", "sm", "md", "lg"];
+
+/** The rung an unusable number falls back to, read off the declared defaults. */
+const FALLBACK_MAX_WIDTH =
+  typeof CONTAINER_DEFAULTS.maxWidth === "string" ? CONTAINER_DEFAULTS.maxWidth : "lg";
+const FALLBACK_PADDING =
+  typeof CONTAINER_DEFAULTS.padding === "string" ? CONTAINER_DEFAULTS.padding : "md";
 
 function isSafeLength(value: number): boolean {
   return Number.isFinite(value) && value >= 0;
 }
 
 type ContainerInstanceStyle = React.CSSProperties & {
-  "--ds-container-instance-max-width"?: string;
-  "--ds-container-instance-padding"?: string;
+  "--ds-container-measure"?: string;
+  "--ds-container-pad"?: string;
 };
 
 /**
  * Modern Container component.
  *
- * Projects the named presets for maxWidth and padding onto the
- * `--ds-container-instance-*` custom properties the declarative skin
- * consumes; raw numbers become safe pixel values on the same channel
- * (arbitrary values a preset cannot name). The skin owns structure, paint
- * and motion, so every tenant restyles the same markup through Appearance.
+ * A named rung is stamped, never resolved here: the skin maps `data-max-width`
+ * onto the breakpoint ladder and `data-padding` onto the spacing ramp. Only an
+ * arbitrary number — the value no rung can name — is projected inline, and an
+ * unusable number falls back to the rung the defaults declare.
  *
  * @param props - {@link ContainerProps} with maxWidth, padding, center, fluid, and styling overrides.
  * @returns A container div whose only inline declarations are the instance channels and the caller's style.
@@ -77,33 +84,29 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
       ...rest
     } = props;
 
-    const classes = ["rottay-container", "rottay-container--modern"];
-
-    // React owns only the instance values. The skin owns structure, paint and
-    // motion so every tenant can restyle the same markup through Appearance.
     const customStyle: ContainerInstanceStyle = {};
-    if (!fluid) {
-      if (typeof maxWidth === "string") {
-        customStyle["--ds-container-instance-max-width"] =
-          CONTAINER_MAX_WIDTHS[maxWidth] || CONTAINER_MAX_WIDTHS.lg;
-      } else if (typeof maxWidth === "number") {
-        customStyle["--ds-container-instance-max-width"] = toSafePixels(
-          maxWidth,
-          CONTAINER_MAX_WIDTHS.lg
-        );
-      }
-    }
-    if (typeof padding === "string") {
-      customStyle["--ds-container-instance-padding"] =
-        CONTAINER_PADDINGS[padding] || CONTAINER_PADDINGS.md;
-    } else if (typeof padding === "number") {
-      customStyle["--ds-container-instance-padding"] = toSafePixels(
-        padding,
-        CONTAINER_PADDINGS.md
-      );
+
+    const namedMaxWidth =
+      typeof maxWidth === "string" && MAX_WIDTH_RUNGS.includes(maxWidth)
+        ? maxWidth
+        : undefined;
+    const customMaxWidth =
+      typeof maxWidth === "number" && isSafeLength(maxWidth) ? maxWidth : undefined;
+    if (!fluid && customMaxWidth !== undefined) {
+      customStyle["--ds-container-measure"] = `${customMaxWidth}px`;
     }
 
-    const combinedClassName = [classes.join(" "), className]
+    const namedPadding =
+      typeof padding === "string" && PADDING_RUNGS.includes(padding)
+        ? padding
+        : undefined;
+    const customPadding =
+      typeof padding === "number" && isSafeLength(padding) ? padding : undefined;
+    if (customPadding !== undefined) {
+      customStyle["--ds-container-pad"] = `${customPadding}px`;
+    }
+
+    const combinedClassName = ["ds-container", "ds-container--modern", className]
       .filter(Boolean)
       .join(" ");
 
@@ -117,12 +120,14 @@ export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
         data-max-width={
           fluid
             ? "fluid"
-            : typeof maxWidth === "number" && !isSafeLength(maxWidth)
-            ? "lg"
-            : maxWidth
+            : customMaxWidth !== undefined
+              ? "custom"
+              : (namedMaxWidth ?? FALLBACK_MAX_WIDTH)
         }
         data-padding={
-          typeof padding === "number" && !isSafeLength(padding) ? "md" : padding
+          customPadding !== undefined
+            ? "custom"
+            : (namedPadding ?? FALLBACK_PADDING)
         }
         data-centered={center || undefined}
         data-fluid={fluid || undefined}

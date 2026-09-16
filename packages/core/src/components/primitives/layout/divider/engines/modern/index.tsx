@@ -1,7 +1,11 @@
 /**
  * @fileoverview Divider Modern Engine - Rottay Design System.
- * DS-owned implementation for the Modern engine. Layout and paint are
- * token-driven and do not depend on DaisyUI's generic `.divider` anatomy.
+ * The engine owns semantics and anatomy; the Modern skin
+ * (`runtime/engines/modern/skin/divider/index.css`) owns every value through the
+ * `--ds-divider-*` channels. Only the resolved hairline travels inline, on
+ * `--ds-divider-line`: `color`, `thickness` and `variant` are free-form props,
+ * so the shorthand they compose cannot be enumerated into a closed `data-*`
+ * domain the way orientation, inset and label placement can.
  *
  * @example
  * ```tsx
@@ -23,11 +27,14 @@ import type {
 } from "../../contracts";
 import {
   DIVIDER_DEFAULTS,
-  SPACING_MAP,
   getThicknessValue,
   DEFAULT_COLORS,
   resolveDividerTextPosition,
 } from "../../contracts";
+
+type DividerLineStyle = React.CSSProperties & {
+  "--ds-divider-line"?: string;
+};
 
 /**
  * Modern Divider component.
@@ -38,7 +45,7 @@ import {
  * branching.
  *
  * @param props - {@link DividerProps} with orientation, variant, text, and styling options.
- * @returns A separator element with `role="separator"` and DaisyUI classes.
+ * @returns A separator element with `role="separator"` and the divider anatomy.
  */
 const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
   const {
@@ -55,7 +62,7 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
     spacing: spacingProp,
     margin,
     className = "",
-    style = {},
+    style,
     "data-testid": testId,
     "aria-label": ariaLabel,
     ...rest
@@ -78,78 +85,18 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
 
   const lineThickness = getThicknessValue(thickness);
   const lineColor = color || DEFAULT_COLORS.modern;
-  const spacingValue = SPACING_MAP[spacing];
 
-  const classNames = ["rottay-divider", "rottay-divider--modern", className]
+  const classNames = ["ds-divider", "ds-divider--modern", className]
     .filter(Boolean)
     .join(" ");
 
-  // Flex container with alignSelf: stretch so vertical dividers fill
-  // the height of their parent flex container. The vertical root hugs its
-  // own hairline (`fit-content`): in a block parent a flex div would
-  // otherwise stretch full-width and leave the mark glued to the
-  // inline-start edge of an oversized box (pre-flag 4) -- a box the width
-  // of the line is trivially centered.
-  const containerStyle: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    alignSelf: "stretch",
-    flexDirection: isHorizontal ? "row" : "column",
-    width: isHorizontal ? "100%" : "fit-content",
-    height: isHorizontal ? "auto" : "100%",
-    minWidth: 0,
-    // A percentage block-size cannot resolve inside intrinsically-sized
-    // inline containers such as Space separators. Keep a tokenized 1em floor
-    // so vertical dividers remain visible there, while `height: 100%` still
-    // lets them stretch in parents with a definite block-size.
-    minHeight: isHorizontal
-      ? 0
-      : "var(--ds-divider-vertical-min-block-size, 1em)",
-    // Fallback parity: `--ds-spacing-4` is a declared, density-scaled ramp
-    // channel and resolves to its default bare; only the undeclared
-    // `--ds-divider-content-gap` hook carries a (channel) fallback.
-    gap: "var(--ds-divider-content-gap, var(--ds-spacing-4))",
-    margin: isHorizontal ? `${spacingValue} 0` : `0 ${spacingValue}`,
-    ...style,
-  };
-
-  // Line uses border (not a pseudo-element) for inline style portability.
-  // `color`/`thickness` are caller-overridable free-form props (see
-  // Divider.types.ts), so the resolved value can't be enumerated into a
-  // finite data-* lookup -- it rides `--ds-divider-line` instead, read via
-  // `var()` by engines/modern/skin/divider.css and gated on
-  // `data-orientation` there to land on border-top vs border-left.
-  const lineStyle: React.CSSProperties = {
-    flex: 1,
-    height: isHorizontal ? "0" : "100%",
-    // A horizontal line is sized by flex, not by a physical 100% width.
-    // Giving both segments width:100% forces the label to absorb all flex
-    // shrink on narrow canvases, turning short localized labels into one
-    // character per line. `auto` preserves a readable, intrinsic label while
-    // the segments still consume the remaining inline space through flex: 1.
-    width: isHorizontal ? "auto" : "0",
+  // The one runtime-computed channel: the resolved hairline shorthand. The skin
+  // gates it on `data-orientation` so it lands on the block edge or the inline
+  // start edge, and on `data-with-text` so it lands on the root or on the two
+  // segments.
+  const lineStyle: DividerLineStyle = {
     "--ds-divider-line": `${lineThickness} ${variant} ${lineColor}`,
-  } as React.CSSProperties;
-
-  // flexGrow/flexBasis control asymmetric line lengths around the text
-  const lineBeforeStyle: React.CSSProperties = {
-    ...lineStyle,
-    flexGrow: textPosition === "start" ? 0 : 1,
-    flexBasis:
-      textPosition === "start"
-        ? "var(--ds-divider-edge-segment, 5%)"
-        : undefined,
-    minWidth: isHorizontal ? "var(--ds-divider-min-segment, 5%)" : 0,
-    minHeight: isHorizontal ? 0 : "var(--ds-divider-min-segment, 5%)",
-  };
-
-  const lineAfterStyle: React.CSSProperties = {
-    ...lineStyle,
-    flexGrow: textPosition === "end" ? 0 : 1,
-    flexBasis:
-      textPosition === "end" ? "var(--ds-divider-edge-segment, 5%)" : undefined,
-    minWidth: isHorizontal ? "var(--ds-divider-min-segment, 5%)" : 0,
-    minHeight: isHorizontal ? 0 : "var(--ds-divider-min-segment, 5%)",
+    ...style,
   };
 
   const inferredLabel =
@@ -170,50 +117,42 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
         aria-labelledby={labelsFromContent ? contentId : undefined}
         {...rest}
         className={classNames}
-        style={containerStyle}
+        style={lineStyle}
         role="separator"
         aria-orientation={orientation}
         aria-label={ariaLabel || inferredLabel}
         data-testid={testId}
         data-part="root"
         data-orientation={orientation}
+        data-spacing={spacing}
         data-with-text="true"
         data-text-position={textPosition}
         data-plain={plain ? "true" : "false"}
         data-component="divider"
       >
-        <span
-          aria-hidden="true"
-          className="divider-line divider-line-before"
-          data-part="line-before"
-          style={lineBeforeStyle}
-        />
-        <span className="divider-content" data-part="text" id={contentId}>
+        <span aria-hidden="true" data-part="line-before" />
+        <span data-part="text" id={contentId}>
           {children}
         </span>
-        <span
-          aria-hidden="true"
-          className="divider-line divider-line-after"
-          data-part="line-after"
-          style={lineAfterStyle}
-        />
+        <span aria-hidden="true" data-part="line-after" />
       </div>
     );
   }
 
-  // Simple divider: merge container and line styles into one element
+  // Simple divider: the root IS the line.
   return (
     <div
       ref={ref}
       {...rest}
       className={classNames}
-      style={{ ...containerStyle, ...lineStyle }}
+      style={lineStyle}
       role="separator"
       aria-orientation={orientation}
       aria-label={ariaLabel}
       data-testid={testId}
       data-part="root"
       data-orientation={orientation}
+      data-spacing={spacing}
       data-with-text="false"
       data-text-position={undefined}
       data-plain={plain ? "true" : "false"}

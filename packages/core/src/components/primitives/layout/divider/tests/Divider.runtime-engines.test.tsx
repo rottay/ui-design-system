@@ -57,7 +57,7 @@ describe("Divider runtime engines", () => {
       }
 
       if (engine === "modern") {
-        expect(divider).toHaveClass("rottay-divider--modern");
+        expect(divider).toHaveClass("ds-divider--modern");
         expect(divider).not.toHaveClass("divider");
         expect(divider).toHaveAttribute("data-text-position", "start");
       }
@@ -109,7 +109,7 @@ describe("Divider runtime engines", () => {
       }
 
       if (engine === "modern") {
-        expect(divider).toHaveClass("rottay-divider--modern");
+        expect(divider).toHaveClass("ds-divider--modern");
         expect(divider).toHaveAttribute("data-orientation", "vertical");
       }
 
@@ -152,7 +152,7 @@ describe("Divider runtime engines", () => {
       }
 
       if (engine === "modern") {
-        expect(divider).toHaveClass("rottay-divider--modern");
+        expect(divider).toHaveClass("ds-divider--modern");
         expect(divider).toHaveAttribute("data-text-position", "end");
         expect(divider).toHaveAttribute("data-plain", "false");
         expect(within(divider).getByText("Aliased")).toHaveAttribute(

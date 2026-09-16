@@ -19,9 +19,8 @@
  * CHILD COMBINATORS outside the loading branch: `data-part` is a shared
  * vocabulary and List renders arbitrary caller content inside its items, so a
  * descendant selector could reach a `data-part` belonging to a nested component.
- * Inside `[data-loading='true']` the tree is a pure skeleton with no caller
- * content, so the skeleton rules may safely use descendants (their targets sit
- * under unclassed layout divs).
+ * Inside `[data-loading='true']` the tree carries no caller content, so the
+ * loading rules may safely use descendants.
  *
  * BORDERS ARE ATOMIC SHORTHANDS. The inline styles set `borderWidth` +
  * `borderColor` as separate longhands and leaned on preflight's
@@ -45,7 +44,7 @@
 
 /* The root is the named container the grid tracks below adapt to. It is the
    only skin-owned ancestor of both `[data-part='list']` and
-   `[data-part='skeleton']`, and it is never the scroll container (the list
+   `[data-part='loading-grid']`, and it is never the scroll container (the list
    body scrolls inside it), which is the one place a size container must not
    sit. Named rather than anonymous so a List nested inside another List's item
    still resolves to the nearest LIST box rather than to whichever ancestor
@@ -84,64 +83,17 @@
   padding: var(--ds-list-lg-padding-vertical) var(--ds-list-lg-padding-horizontal);
 }
 
-/* loading posture (the vendor `animate-pulse` string is a test-pinned bridge:
-   THIS animation declaration wins over the utilities-layer pulse by layer
-   ownership, so the cadence rides the motion authority -- 4× glacial = the
-   vendor pulse's 2s -- and reduced-motion can silence it) */
+/* loading posture: the shared anatomy renderer animates the bones, so this
+   is the static dim the whole region carries while the rows resolve. */
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] {
-  /* Static posture when motion is off; the pulse animates over it. */
   opacity: var(--ds-list-loading-opacity);
-  animation: ds-list-skeleton-pulse-modern var(--ds-list-skeleton-pulse-duration, calc(var(--ds-motion-glacial) * 4)) var(--ds-motion-ease-in-out) infinite;
 }
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row'] {
-  padding-block: var(--ds-list-skeleton-row-padding-block, 12px);
-}
-/* A grid list must reserve its real tracks while loading, or the skeleton
-   reflows from a stack into N columns the moment data lands. The single-count
+/* A grid list must reserve its real tracks while loading, or the rows
+   reflow from a stack into N columns the moment data lands. The single-count
    projection stays inline (as on the loaded `<ul>`); the per-breakpoint tiers
    are read by the responsive-grid block further down, which this part joins. */
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] > [data-part='skeleton'][data-grid] {
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] > [data-part='loading-grid'][data-grid] {
   display: grid;
-}
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row-inner'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-list-skeleton-row-gap, 12px);
-}
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-lines'] {
-  flex: 1;
-  min-inline-size: 0;
-}
-
-/* loading skeleton: avatar disc + text bars share one fill (layout drained
-   from the `w-10 h-10 rounded-full` / `h-4 rounded w-1/3 mb-2` / `h-3 rounded
-   w-2/3` / `flex-1` utilities) */
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'] {
-  inline-size: var(--ds-list-skeleton-avatar-size, 40px);
-  block-size: var(--ds-list-skeleton-avatar-size, 40px);
-  flex-shrink: 0;
-  border-radius: var(--ds-radius-full);
-}
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
-  border-radius: var(--ds-list-skeleton-line-radius, var(--ds-radius-sm));
-}
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:first-child {
-  inline-size: 33.333%;
-  block-size: var(--ds-list-skeleton-line-height, 16px);
-  margin-block-end: var(--ds-list-skeleton-line-gap, 8px);
-}
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:last-child {
-  inline-size: 66.666%;
-  block-size: var(--ds-list-skeleton-line-height-sm, 12px);
-}
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
-.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
-  background: var(--ds-list-item-hover-background-color, var(--ds-surface-panel));
-}
-
-@keyframes ds-list-skeleton-pulse-modern {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
 }
 
 /* header + footer: geometry + surface always; the separator line (width,
@@ -201,37 +153,37 @@
    one track into a full-bleed list on a tablet. The authored numbers did not
    change; the thing they are measured against did. */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='loading-grid'][data-grid='responsive'] {
   display: grid;
   grid-template-columns: repeat(var(--_ds-list-grid-columns-xs, 1), minmax(0, 1fr));
 }
 @container ds-list (min-width: 640px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='loading-grid'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-sm, 1), minmax(0, 1fr));
   }
 }
 @container ds-list (min-width: 768px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='loading-grid'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-md, 1), minmax(0, 1fr));
   }
 }
 @container ds-list (min-width: 1024px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='loading-grid'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-lg, 1), minmax(0, 1fr));
   }
 }
 @container ds-list (min-width: 1280px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='loading-grid'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xl, 1), minmax(0, 1fr));
   }
 }
 @container ds-list (min-width: 1536px) {
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'][data-grid='responsive'],
-.rottay-list.rottay-list--modern[data-part='root'] > [data-part='skeleton'][data-grid='responsive'] {
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='loading-grid'][data-grid='responsive'] {
     grid-template-columns: repeat(var(--_ds-list-grid-columns-xxl, 1), minmax(0, 1fr));
   }
 }
@@ -376,30 +328,21 @@
   );
 }
 
-/* ---- reduced motion: the skeleton pulse and the item transition go quiet
-        (the static loading opacity keeps the posture). ---- */
+/* ---- reduced motion: the item transition goes quiet. ---- */
 @media (prefers-reduced-motion: reduce) {
-  .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] {
-    animation: none;
-  }
   .rottay-list-item.rottay-list-item--modern[data-part='item'] {
     transition: none;
   }
 }
 
 /* ---- forced colors (system colors only): the bordered frame, header/footer
-        separators and split dividers keep system-color boundaries; the
-        skeleton bars stay perceivable as shapes. ---- */
+        separators and split dividers keep system-color boundaries. ---- */
 @media (forced-colors: active) {
   .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'],
   .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header'],
   .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer'],
   .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider'] {
     border-color: ButtonText;
-  }
-  .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
-  .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
-    border: 1px solid ButtonText;
   }
   /* The selected tint + inset shadow wash out under forced colors; the
      selected row keeps a system-color keyline so selection never depends on
@@ -412,19 +355,8 @@
 }
 
 
-/* The channels the family's still-hand-written loading state reads, and the
-   empty-state minimum it forwards, declared at the family root so every name
-   the skin reads has a producer. They are NOT derived: the loading subtree is
-   slated to move to the shared anatomy renderer once the `aria-busy` ownership
-   collision is adjudicated, and derived relations for it would be deleted. */
+/* The empty-state minimum the family forwards to the composed Empty, declared
+   at the family root so the name the skin reads has a producer. */
 .rottay-list.rottay-list--modern {
-  --ds-list-skeleton-avatar-size: var(--ds-spacing-10);
-  --ds-list-skeleton-line-height: var(--ds-spacing-4);
-  --ds-list-skeleton-line-height-sm: var(--ds-spacing-3);
-  --ds-list-skeleton-line-gap: var(--ds-spacing-2);
-  --ds-list-skeleton-line-radius: var(--ds-radius-sm);
-  --ds-list-skeleton-row-gap: var(--ds-spacing-3);
-  --ds-list-skeleton-row-padding-block: var(--ds-spacing-3);
-  --ds-list-skeleton-pulse-duration: calc(var(--ds-motion-glacial) * 4);
   --ds-empty-simple-min-height: calc(var(--ds-spacing-8) * 4);
 }

@@ -88,14 +88,16 @@ describe('Modern Splitter panel flex contract', () => {
     const panels = [...container.querySelectorAll('[data-part="panel"]')] as HTMLElement[];
     expect(panels).toHaveLength(3);
 
-    // A percentage basis summing to 100% plus N gutters cannot fit the container.
+    // A percentage basis summing to 100% plus N gutters cannot fit the
+    // container, so the skin gives every panel a zero basis and the engine
+    // publishes the share as a grow factor. Nothing about the basis travels
+    // inline any more; what the engine owes is the ratio.
     for (const panel of panels) {
-      expect(panel.style.flexBasis).toBe('0%');
-      expect(panel.style.flexShrink).not.toBe('0');
+      expect(panel.style.flexBasis).toBe('');
     }
 
     // The declared ratio survives: grow factors carry the sizes.
-    expect(panels.map((p) => p.style.flexGrow)).toEqual(['33', '34', '33']);
+    expect(panels.map((p) => p.style.getPropertyValue('--ds-splitter-panel-grow'))).toEqual(['33', '34', '33']);
   });
 });
 
@@ -180,7 +182,7 @@ describe('Modern Splitter collapsible endpoints', () => {
     fireEvent.keyDown(sep(container), { key: 'Home' });
     expect(Number(sep(container).getAttribute('aria-valuenow'))).toBe(20);
     const lead = container.querySelectorAll('[data-part="panel"]')[0] as HTMLElement;
-    expect(lead.style.flexGrow).toBe('20');
+    expect(lead.style.getPropertyValue('--ds-splitter-panel-grow')).toBe('20');
     expect(lead.hasAttribute('aria-hidden')).toBe(false);
   });
 
@@ -196,7 +198,7 @@ describe('Modern Splitter collapsible endpoints', () => {
     fireEvent.keyDown(sep(container), { key: 'Home' });
     expect(Number(sep(container).getAttribute('aria-valuenow'))).toBe(0);
     const lead = container.querySelectorAll('[data-part="panel"]')[0] as HTMLElement;
-    expect(lead.style.flexGrow).toBe('0');
+    expect(lead.style.getPropertyValue('--ds-splitter-panel-grow')).toBe('0');
     expect(lead.getAttribute('aria-hidden')).toBe('true');
     expect(lead.hasAttribute('inert')).toBe(true);
   });
@@ -234,7 +236,7 @@ describe('Modern Splitter End collapses the trailing panel', () => {
 
     expect(Number(sep.getAttribute('aria-valuenow'))).toBe(100);
     const trail = container.querySelectorAll('[data-part="panel"]')[1] as HTMLElement;
-    expect(trail.style.flexGrow).toBe('0');
+    expect(trail.style.getPropertyValue('--ds-splitter-panel-grow')).toBe('0');
     expect(trail.getAttribute('aria-hidden')).toBe('true');
     expect(trail.hasAttribute('inert')).toBe(true);
   });

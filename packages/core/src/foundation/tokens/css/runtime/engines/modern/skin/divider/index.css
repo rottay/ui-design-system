@@ -1,141 +1,193 @@
 /**
- * Modern Divider skin (WO-SKIN-05 checkpoint L).
+ * Modern Divider skin.
  *
- * Imported into `rottay-engines`, above the Modern framework's bounded
- * `rottay-framework` layer. The engine emits no generic DaisyUI `.divider`
- * classname: protected DS anatomy owns both line segments, preventing
- * duplicate framework pseudo-elements and keeping RTL logical positioning in
- * the component contract rather than the application.
+ * Imported into the canonical `rottay-engines` layer. The engine emits no
+ * generic framework `.divider` classname: protected DS anatomy owns both line
+ * segments, which is what keeps duplicate framework pseudo-elements out and
+ * RTL positioning in the component contract rather than in the application.
  *
- * `color`/`thickness` are caller-overridable free-form props (`DividerProps`
- * accepts any CSS color string and either a preset or a raw px number), so
- * the resolved line value cannot be enumerated into a finite `data-*`
- * lookup the way a closed-enum channel can. It rides the `--ds-divider-line`
- * custom-property hatch instead -- set inline, every render, to the exact
- * string the removed `borderTop`/`borderLeft` keys used to hold (the same
- * hatch the migration kit sanctions for a runtime-computed value); the
- * fallback below matches `DEFAULT_COLORS.modern` + `THICKNESS_MAP.thin` +
- * the default `solid` variant so it is never actually reached in practice.
- * Label styling is keyed by the protected `data-plain` anatomy signal, so
- * typography and color remain tenant-remappable CSS rather than inline paint.
+ * `color`, `thickness` and `variant` are caller-overridable free-form props, so
+ * the resolved hairline cannot be enumerated into a closed `data-*` domain. It
+ * rides `--ds-divider-line`, which `derivation/chrome/divider` rests at the
+ * default hairline and the engine overwrites inline per render. Every other
+ * value -- the inset rungs, the content gap, the segment geometry and the
+ * overline label -- is a derived channel keyed on the anatomy the engine stamps.
  *
- * Layer ownership, not specificity escalation, makes this first-party paint
- * authoritative while inline caller geometry remains the final local seam.
+ * Geometry is logical throughout (`inline-size`, `margin-block`,
+ * `border-inline-start`), so a vertical rule mirrors under RTL without the
+ * component branching on direction.
  */
 
-/* ---- line: with-text spans (horizontal only -- `hasChildren` in the engine
-        requires the horizontal orientation, so a vertical divider never
-        renders these parts; the vertical line lives on the root rule below). ---- */
-.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
-  [data-part="line-before"],
-.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
-  [data-part="line-after"] {
-  border-top: var(
-    --ds-divider-line,
-    1px solid var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))
-  );
-  border-left: none;
+.ds-divider.ds-divider--modern[data-part='root'] {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  min-inline-size: 0;
+  gap: var(--ds-divider-gap);
+  transition:
+    gap var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
+    margin var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
+    opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);
 }
 
-/* ---- line: plain divider, merged onto the root itself (was the simple-
-        divider return path's `{ ...containerStyle, ...lineStyle }`). Gated
-        to `data-with-text='false'` -- the with-text root never carries this
-        channel (see header). The vertical hairline is logical
-        (`border-inline-start`): the box hugs the line (engine `fit-content`),
-        so the mark stays centered in its own box and mirrors under RTL. ---- */
-.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"][data-with-text="false"] {
-  border-top: var(
-    --ds-divider-line,
-    1px solid var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))
-  );
+/* ---- orientation: the axis, the box it hugs, and the inset it keeps ---- */
+
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'] {
+  flex-direction: row;
+  inline-size: 100%;
+  block-size: auto;
+  min-block-size: 0;
+  margin-block: var(--ds-divider-inset);
+  margin-inline: 0;
+}
+
+/*
+ * The vertical root hugs its own hairline (`fit-content`): in a block parent a
+ * stretched flex div would leave the mark glued to the inline-start edge of an
+ * oversized box. A percentage block-size cannot resolve inside an
+ * intrinsically-sized inline container, so the 1em floor keeps the rule visible
+ * there while `block-size: 100%` still stretches it in a definite parent.
+ */
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='vertical'] {
+  flex-direction: column;
+  inline-size: fit-content;
+  block-size: 100%;
+  min-block-size: var(--ds-divider-vertical-min);
+  margin-block: 0;
+  margin-inline: var(--ds-divider-inset);
+}
+
+/* ---- inset rungs ---- */
+
+.ds-divider.ds-divider--modern[data-part='root'][data-spacing='none'] {
+  --ds-divider-inset: var(--ds-divider-inset-none);
+}
+
+.ds-divider.ds-divider--modern[data-part='root'][data-spacing='xs'] {
+  --ds-divider-inset: var(--ds-divider-inset-xs);
+}
+
+.ds-divider.ds-divider--modern[data-part='root'][data-spacing='sm'] {
+  --ds-divider-inset: var(--ds-divider-inset-sm);
+}
+
+.ds-divider.ds-divider--modern[data-part='root'][data-spacing='md'] {
+  --ds-divider-inset: var(--ds-divider-inset-md);
+}
+
+.ds-divider.ds-divider--modern[data-part='root'][data-spacing='lg'] {
+  --ds-divider-inset: var(--ds-divider-inset-lg);
+}
+
+.ds-divider.ds-divider--modern[data-part='root'][data-spacing='xl'] {
+  --ds-divider-inset: var(--ds-divider-inset-xl);
+}
+
+/* ---- the hairline ---- */
+
+/*
+ * A plain divider has no label, so the line is merged onto the root itself.
+ * Horizontal draws the rule on the block edge; vertical draws it on the inline
+ * start edge, which mirrors under RTL.
+ */
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-with-text='false'] {
+  border-top: var(--ds-divider-line);
   border-inline-start: none;
 }
-.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"][data-with-text="false"] {
-  border-inline-start: var(
-    --ds-divider-line,
-    1px solid var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))
-  );
+
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='vertical'][data-with-text='false'] {
+  border-inline-start: var(--ds-divider-line);
   border-top: none;
 }
 
-/* ---- text: color (was textStyle.color's `plain` ternary). ---- */
-.rottay-divider.rottay-divider--modern[data-part="root"] [data-part="text"] {
+/*
+ * With a label the two segments carry the rule. `hasChildren` requires the
+ * horizontal orientation in the engine, so a vertical divider never renders
+ * these parts.
+ */
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-before'],
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-after'] {
+  flex: 1;
+  /*
+   * Sized by flex, never by a physical 100%: giving both segments a full
+   * inline size forces the label to absorb all shrink on a narrow canvas,
+   * which turns a short localized label into one character per line.
+   */
+  inline-size: auto;
+  block-size: 0;
+  min-inline-size: var(--ds-divider-segment-min);
+  min-block-size: 0;
+  border-top: var(--ds-divider-line);
+  border-left: none;
+  transition:
+    border-color var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
+    opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);
+}
+
+/*
+ * Asymmetric segments: the named side keeps a short, fixed basis. Both
+ * selectors carry `data-orientation` so they TIE with the segment rule above
+ * and source order -- not escalation -- decides which `flex-grow` wins.
+ */
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-text-position='start'] [data-part='line-before'],
+.ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-text-position='end'] [data-part='line-after'] {
+  flex-grow: 0;
+  flex-basis: var(--ds-divider-edge-basis);
+}
+
+/* ---- the label ---- */
+
+.ds-divider.ds-divider--modern[data-part='root'] [data-part='text'] {
   display: flex;
   align-items: center;
   justify-content: center;
   min-inline-size: 0;
-  max-inline-size: var(--ds-divider-label-max-width, 100%);
+  max-inline-size: var(--ds-divider-label-measure);
   white-space: normal;
   overflow-wrap: anywhere;
   text-align: center;
   text-wrap: balance;
 }
 
-.rottay-divider.rottay-divider--modern[data-part="root"][data-plain="false"]
-  [data-part="text"] {
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-divider-label-font-size, var(--ds-font-size-sm));
-  font-weight: var(
-    --ds-divider-label-font-weight,
-    var(--ds-font-weight-semibold)
-  );
-  line-height: var(--ds-divider-label-line-height, var(--ds-line-height-snug));
-  text-transform: var(--ds-divider-label-transform, uppercase);
-  letter-spacing: var(
-    --ds-divider-label-tracking,
-    var(--ds-letter-spacing-wider)
-  );
+.ds-divider.ds-divider--modern[data-part='root'][data-plain='false'] [data-part='text'] {
+  color: var(--ds-divider-label-ink);
+  font-size: var(--ds-divider-label-size);
+  font-weight: var(--ds-divider-label-weight);
+  line-height: var(--ds-divider-label-leading);
+  text-transform: var(--ds-divider-label-case);
+  letter-spacing: var(--ds-divider-label-track);
 }
 
-.rottay-divider.rottay-divider--modern[data-part="root"][data-plain="true"]
-  [data-part="text"] {
+.ds-divider.ds-divider--modern[data-part='root'][data-plain='true'] [data-part='text'] {
   color: inherit;
   font: inherit;
   text-transform: none;
   letter-spacing: normal;
 }
 
-.rottay-divider.rottay-divider--modern[data-part="root"] {
-  transition: gap
-      var(--ds-divider-motion-duration, var(--ds-motion-fast))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-out)),
-    margin var(--ds-divider-motion-duration, var(--ds-motion-fast))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-out)),
-    opacity var(--ds-divider-motion-duration, var(--ds-motion-fast))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-out));
-}
-
-.rottay-divider.rottay-divider--modern[data-part="root"] [data-part^="line-"] {
-  transition: border-color
-      var(--ds-divider-motion-duration, var(--ds-motion-fast))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-out)),
-    opacity var(--ds-divider-motion-duration, var(--ds-motion-fast))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-out));
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .rottay-divider.rottay-divider--modern[data-part="root"],
-  .rottay-divider.rottay-divider--modern[data-part="root"]
-    [data-part^="line-"] {
+  .ds-divider.ds-divider--modern[data-part='root'],
+  .ds-divider.ds-divider--modern[data-part='root'] [data-part='line-before'],
+  .ds-divider.ds-divider--modern[data-part='root'] [data-part='line-after'] {
     transition: none;
   }
 }
 
-/* Forced colors: the hairline is structural -- it must survive color
-   stripping as a ButtonText mark, and the label inherits system ink. */
+/*
+ * Forced colors: the hairline is structural -- it must survive colour
+ * stripping as a ButtonText mark, and the label inherits system ink.
+ */
 @media (forced-colors: active) {
-  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"][data-with-text="false"] {
+  .ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-with-text='false'] {
     border-top-color: ButtonText;
   }
 
-  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"][data-with-text="false"] {
+  .ds-divider.ds-divider--modern[data-part='root'][data-orientation='vertical'][data-with-text='false'] {
     border-inline-start-color: ButtonText;
   }
 
-  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
-    [data-part="line-before"],
-  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
-    [data-part="line-after"] {
+  .ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-before'],
+  .ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-after'] {
     border-top-color: ButtonText;
   }
 }

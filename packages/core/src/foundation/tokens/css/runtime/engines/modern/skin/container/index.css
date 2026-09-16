@@ -1,0 +1,84 @@
+/**
+ * Modern Container skin.
+ *
+ * Imported into the canonical `rottay-engines` layer. React owns the measure
+ * and inset DECISION and publishes it as `data-max-width` / `data-padding`;
+ * this file owns every value, through the `--ds-container-*` channels
+ * `derivation/chrome/container` produces and BrandTheme / TenantTheme move.
+ *
+ * The measure rungs resolve to `--ds-breakpoint-*`: a container framed at `lg`
+ * is exactly the viewport step it frames, never a second ladder. An arbitrary
+ * measure or inset arrives inline on the same two channels, so a caller's
+ * number is sovereign without a second declaration path.
+ */
+
+.ds-container.ds-container--modern[data-part='root'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  /* Logical, so `data-fluid` below actually lifts the cap and RTL stays neutral. */
+  max-inline-size: var(--ds-container-measure);
+  padding: var(--ds-container-pad);
+  background: var(--ds-container-surface);
+  border: var(--ds-container-frame);
+  border-radius: var(--ds-container-corner);
+  box-shadow: var(--ds-container-depth);
+  transition:
+    max-inline-size var(--ds-container-transition-duration) var(--ds-container-transition-timing),
+    padding var(--ds-container-transition-duration) var(--ds-container-transition-timing),
+    margin var(--ds-container-transition-duration) var(--ds-container-transition-timing),
+    background-color var(--ds-container-transition-duration) var(--ds-container-transition-timing),
+    border-color var(--ds-container-transition-duration) var(--ds-container-transition-timing),
+    box-shadow var(--ds-container-transition-duration) var(--ds-container-transition-timing);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-max-width='sm'] {
+  --ds-container-measure: var(--ds-container-sm);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-max-width='md'] {
+  --ds-container-measure: var(--ds-container-md);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-max-width='lg'] {
+  --ds-container-measure: var(--ds-container-lg);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-max-width='xl'] {
+  --ds-container-measure: var(--ds-container-xl);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-max-width='2xl'] {
+  --ds-container-measure: var(--ds-container-2xl);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-max-width='full'],
+.ds-container.ds-container--modern[data-part='root'][data-fluid='true'] {
+  max-inline-size: none;
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-padding='none'] {
+  --ds-container-pad: var(--ds-container-padding-none);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-padding='sm'] {
+  --ds-container-pad: var(--ds-container-padding-sm);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-padding='md'] {
+  --ds-container-pad: var(--ds-container-padding-md);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-padding='lg'] {
+  --ds-container-pad: var(--ds-container-padding-lg);
+}
+
+.ds-container.ds-container--modern[data-part='root'][data-centered='true'] {
+  margin-inline: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-container.ds-container--modern[data-part='root'] {
+    transition: none;
+  }
+}

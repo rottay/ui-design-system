@@ -1,0 +1,71 @@
+/**
+ * Modern Space skin.
+ *
+ * Imported into the canonical `rottay-engines` layer. React stamps the rung
+ * decision (`data-size`) and the axis flags; this file owns every value through
+ * the `--ds-space-*` channels `derivation/chrome/space` produces.
+ *
+ * A named rung rides the tenant rhythm; a number or a `[column, row]` pair is
+ * exact geometry and arrives inline on the same channel, unscaled -- the law
+ * Stack states for its own custom gap.
+ */
+
+.ds-space.ds-space--modern[data-part='root'] {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  gap: var(--ds-space-gap);
+  transition:
+    gap var(--ds-space-transition-duration) var(--ds-space-transition-timing),
+    align-items var(--ds-space-transition-duration) var(--ds-space-transition-timing);
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-size='small'],
+.ds-space.ds-space--modern[data-part='root'][data-size='sm'] {
+  --ds-space-gap: var(--ds-space-gap-sm);
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-size='middle'],
+.ds-space.ds-space--modern[data-part='root'][data-size='md'] {
+  --ds-space-gap: var(--ds-space-gap-md);
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-size='large'],
+.ds-space.ds-space--modern[data-part='root'][data-size='lg'] {
+  --ds-space-gap: var(--ds-space-gap-lg);
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-direction='vertical'] {
+  flex-direction: column;
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-wrap='true'] {
+  flex-wrap: wrap;
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-align='start'] {
+  align-items: flex-start;
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-align='end'] {
+  align-items: flex-end;
+}
+
+.ds-space.ds-space--modern[data-part='root'][data-align='baseline'] {
+  align-items: baseline;
+}
+
+.ds-space.ds-space--modern[data-part='root'] > [data-part='separator'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-space.ds-space--modern[data-part='root'] {
+    transition: none;
+  }
+}

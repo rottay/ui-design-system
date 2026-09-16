@@ -3,12 +3,11 @@
 /**
  * @fileoverview Space Modern Engine - Rottay Design System
  * @description Modern, token-driven implementation of the Space component.
- * The engine projects only the instance gap channel
- * (`--ds-space-instance-gap`, from the contract's token map or a safe pixel
- * value) and stamps the anatomy (`data-direction`/`data-align`/`data-wrap`);
- * the shared declarative skin (`presentation/components/skin/layout-primitives/index.css`,
- * Space section) owns layout, alignment and motion. No Tailwind utility
- * classes.
+ * The engine stamps the rung decision (`data-size`) and the anatomy
+ * (`data-direction`/`data-align`/`data-wrap`); the Modern skin
+ * (`runtime/engines/modern/skin/space/index.css`) owns layout, alignment and
+ * motion through the `--ds-space-*` channels. Only exact geometry -- a number
+ * or a `[column, row]` pair -- travels inline, on `--ds-space-gap`.
  *
  * @remarks
  * **When to use Space vs Stack (kept in sync with the layout sisters):**
@@ -42,8 +41,7 @@
  */
 import React, { Children } from "react";
 import type { SpaceProps } from "../../contracts";
-import { SPACE_DEFAULTS, SPACE_SIZE_MAP } from "../../contracts";
-import { toLegacySize } from "../../../../../../foundation/contracts/kernel/common";
+import { SPACE_DEFAULTS } from "../../contracts";
 
 function safeGap(value: number): string {
   return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
@@ -68,15 +66,15 @@ function flattenFragments(node: React.ReactNode): React.ReactNode[] {
 }
 
 type SpaceInstanceStyle = React.CSSProperties & {
-  "--ds-space-instance-gap": string;
+  "--ds-space-gap"?: string;
 };
 
 /**
  * Modern engine implementation of the Space component.
- * Projects the resolved gap onto the `--ds-space-instance-gap` channel the
- * declarative skin consumes: the size prop can be a number, an array tuple,
- * or a preset token -- the contract's map keeps presets on token channels
- * while raw numbers become safe pixels.
+ * A named rung is stamped, never resolved here: the skin maps `data-size` onto
+ * the rhythm-aware rungs the deriver produces. A number or an array tuple is
+ * exact geometry, so it -- and only it -- is projected inline onto the same
+ * `--ds-space-gap` channel.
  *
  * @param props - Space configuration (size, direction, wrap, align, split)
  * @returns A div stamped with the space anatomy and the instance gap channel
@@ -95,39 +93,21 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       ...rest
     } = props;
 
-    const classes = ["rottay-space", "rottay-space--modern"];
+    const classes = ["ds-space", "ds-space--modern"];
 
-    // Resolve the gap as an inline CSS value rather than a Tailwind class because
-    // the size prop can be a number, an array tuple, or a CSS variable token string --
-    // none of which map cleanly to static Tailwind gap-* classes.
-    let gapValue: string;
+    // Exact geometry only. A preset spelling resolves through the cascade, and
+    // a spelling no rung rule enumerates falls closed to the declared rung the
+    // deriver rests `--ds-space-gap` on.
+    let gapValue: string | undefined;
     if (typeof size === "number") {
       gapValue = safeGap(size);
     } else if (Array.isArray(size)) {
       // CSS gap shorthand: row-gap first, then column-gap
       gapValue = `${safeGap(size[1])} ${safeGap(size[0])}`;
-    } else {
-      // SPACE_SIZE_MAP is keyed by the legacy 'small' | 'middle' | 'large' spelling;
-      // toLegacySize resolves either spelling to it.
-      //
-      // An own-property guard, not just the trailing `||`: a bare
-      // `SPACE_SIZE_MAP[key]` read is a lookup on a plain object literal, so an
-      // INHERITED member name ("toString", "constructor") resolves through
-      // `Object.prototype` to a FUNCTION, which is TRUTHY and therefore slips
-      // straight past a `|| SPACE_SIZE_MAP.small` fallback -- the same defect
-      // `resolveFlexGapValue` closes for Flex's gap map. An unrecognized value
-      // fails closed to the declared `small` rung instead.
-      const legacySize = toLegacySize(size);
-      gapValue = Object.prototype.hasOwnProperty.call(
-        SPACE_SIZE_MAP,
-        legacySize as string
-      )
-        ? SPACE_SIZE_MAP[legacySize as keyof typeof SPACE_SIZE_MAP]
-        : SPACE_SIZE_MAP.small;
     }
 
     const customStyle: SpaceInstanceStyle = {
-      "--ds-space-instance-gap": gapValue,
+      ...(gapValue === undefined ? {} : { "--ds-space-gap": gapValue }),
       ...style,
     };
 
@@ -153,7 +133,7 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
                 aria-hidden="true"
                 role="presentation"
                 data-part="separator"
-                className="rottay-space-separator"
+                className="ds-space-separator"
               >
                 {split}
               </span>

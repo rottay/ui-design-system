@@ -26,7 +26,7 @@
  *   (`aria-hidden` + `inert`), like every collapsed disclosure region
  *
  * Implementation details:
- * - Panels use `flex: 0 0 {size}%` for sizing
+ * - Panels publish their measured share on `--ds-splitter-panel-grow`
  * - Gutter cursor/sizing/hit expansion live in the skin per orientation
  * - Uses React refs for container measurements
  * - Clones children to inject calculated sizes
@@ -207,14 +207,10 @@ export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { siz
         data-part="panel"
         aria-hidden={clampedSize === 0 ? true : undefined}
         inert={clampedSize === 0 ? true : undefined}
-        style={{
-          // Grow from zero: a basis summing to 100% overflowed by the gutters.
-          flex: `${clampedSize} 1 0%`,
-          // Prevent content from forcing the panel wider than its flex-basis
-          minInlineSize: 0,
-          minBlockSize: 0,
-          ...style,
-        }}
+        // The measured share is the only thing the engine publishes; the skin
+        // spends it (`flex: var(--ds-splitter-panel-grow) 1 0%`) and owns the
+        // zero-basis and min-size policy that goes with it.
+        style={{ '--ds-splitter-panel-grow': clampedSize, ...style } as React.CSSProperties}
       >
         {children}
       </div>
@@ -456,7 +452,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`rottay-splitter rottay-splitter--modern ${className}`}
+        className={`ds-splitter ds-splitter--modern ${className}`}
         style={style}
         data-part="root"
         data-orientation={isVertical ? 'vertical' : 'horizontal'}

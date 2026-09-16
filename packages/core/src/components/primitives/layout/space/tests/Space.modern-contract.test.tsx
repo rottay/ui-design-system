@@ -1,30 +1,20 @@
 import React from "react";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { Space as ModernSpace } from "../engines/modern";
 
-const layoutSkin = readFileSync(
-  resolve(
-    process.cwd(),
-    "src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
-  ),
-  "utf8"
-);
-
 describe("Space modern premium contract", () => {
-  it("resolves preset gaps as valid token values rather than malformed var()px CSS", () => {
+  it("resolves a preset rung through the cascade rather than an inline value", () => {
     render(
       <ModernSpace size="middle" data-testid="space">
         Content
       </ModernSpace>
     );
 
-    const style = screen.getByTestId("space").getAttribute("style") ?? "";
-    expect(style).toContain("--ds-space-middle-size");
-    expect(style).not.toContain(")px");
+    const space = screen.getByTestId("space");
+    expect(space).toHaveAttribute("data-size", "middle");
+    expect(space.getAttribute("style")).toBeNull();
   });
 
   it("preserves numeric zero children and marks visual split items as decorative", () => {
@@ -41,6 +31,7 @@ describe("Space modern premium contract", () => {
     expect(space.querySelectorAll('[data-part="separator"]')).toHaveLength(2);
     space.querySelectorAll('[data-part="separator"]').forEach((separator) => {
       expect(separator).toHaveAttribute("aria-hidden", "true");
+      expect(separator.className).toBe("ds-space-separator");
     });
   });
 
@@ -62,8 +53,6 @@ describe("Space modern premium contract", () => {
     expect(space).toHaveAttribute("lang", "he");
     expect(space).toHaveAttribute("data-part", "root");
     expect(space).toHaveAttribute("data-component", "space");
-    expect(layoutSkin).toContain("--ds-space-motion-duration");
-    expect(layoutSkin).toContain("prefers-reduced-motion: reduce");
   });
 
   it("normalizes unsafe negative and non-finite gaps", () => {
@@ -73,9 +62,7 @@ describe("Space modern premium contract", () => {
       </ModernSpace>
     );
     expect(
-      screen
-        .getByTestId("space")
-        .style.getPropertyValue("--ds-space-instance-gap")
+      screen.getByTestId("space").style.getPropertyValue("--ds-space-gap")
     ).toBe("0px");
 
     rerender(
@@ -84,9 +71,7 @@ describe("Space modern premium contract", () => {
       </ModernSpace>
     );
     expect(
-      screen
-        .getByTestId("space")
-        .style.getPropertyValue("--ds-space-instance-gap")
+      screen.getByTestId("space").style.getPropertyValue("--ds-space-gap")
     ).toBe("8px 0px");
   });
 });

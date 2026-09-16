@@ -356,13 +356,14 @@
     },
     {
       "id": "space-modern-preset-gap",
-      "why": "The modern Space as the engine actually renders it, with a preset ('md') gap. Chain: gap <- calc(--ds-space-instance-gap * --ds-density-effective-scale * --ds-rhythm-effective-scale). One hop, but the only one of the four where rhythm compounds with density in the same declaration -- density sizes the md token, rhythm sizes the room around it -- held at the base rule's specificity by `:where()` so source order decides, exactly as Flex's split-gap rules do.",
+      "why": "The modern Space as the engine actually renders it, with a preset ('md') gap. After the WO-FAM-07 cut the rung is a STAMP, not an inline value: the root reads `gap: var(--ds-space-gap)` and the rung rule repoints that one channel at `--ds-space-gap-md`, which `derivation/chrome/space` derives as the alias (or the ramp) multiplied by density and then by rhythm -- density sizes the token, rhythm sizes the room around it. Two hops, both in the cascade, none inline.",
       "requiresSelectors": [
-        ".rottay-space.rottay-space--modern[data-part=\"root\"]:where(",
-        "[data-size=\"md\"]",
-        "gap: calc(var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2))) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))"
+        ".ds-space.ds-space--modern[data-part='root'] {",
+        "gap: var(--ds-space-gap);",
+        ".ds-space.ds-space--modern[data-part='root'][data-size='md'] {",
+        "--ds-space-gap: var(--ds-space-gap-md);"
       ],
-      "html": "<div class=\"rottay-space rottay-space--modern\" style=\"--ds-space-instance-gap:var(--ds-space-middle-size)\" data-part=\"root\" data-direction=\"horizontal\" data-align=\"center\" data-size=\"md\" data-with-split=\"false\" data-component=\"space\" data-probe=\"space-modern-preset-gap\"><span>a</span><span>b</span></div>",
+      "html": "<div class=\"ds-space ds-space--modern\" data-part=\"root\" data-direction=\"horizontal\" data-align=\"center\" data-size=\"md\" data-with-split=\"false\" data-component=\"space\" data-probe=\"space-modern-preset-gap\"><span>a</span><span>b</span></div>",
       "targets": [
         {
           "id": "root",
@@ -439,13 +440,13 @@
     },
     {
       "id": "space-modern-numeric-gap",
-      "why": "The negative half of space-modern-preset-gap: the modern Space with a NUMERIC size (8), not a preset spelling. The bare number lands in `data-size` unmatched by the enumerated `:where([data-size='small'], ..., [data-size='lg'])` scaled-rule list, so only the unscaled root rule `gap: var(--ds-space-instance-gap, ...)` reaches it. Proves numeric-instance-gaps-exact instead of asserting it in prose.",
+      "why": "The negative half of space-modern-preset-gap: the modern Space with a NUMERIC size (8), not a preset spelling. The bare number lands in `data-size`, which no rung rule enumerates, and the engine writes the measurement inline on the SAME `--ds-space-gap` channel the root reads -- so an inline declaration, the strongest means CSS has, keeps exact geometry exact while the rung rules stay unreached.",
       "requiresSelectors": [
-        ".rottay-space.rottay-space--modern[data-part=\"root\"] {",
-        "gap: var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2)))",
-        "gap: calc(var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2))) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))"
+        ".ds-space.ds-space--modern[data-part='root'] {",
+        "gap: var(--ds-space-gap);",
+        "--ds-space-gap: var(--ds-space-gap-sm);"
       ],
-      "html": "<div class=\"rottay-space rottay-space--modern\" style=\"--ds-space-instance-gap:8px\" data-part=\"root\" data-direction=\"horizontal\" data-align=\"center\" data-size=\"8\" data-with-split=\"false\" data-component=\"space\" data-probe=\"space-modern-numeric-gap\"><span>a</span><span>b</span></div>",
+      "html": "<div class=\"ds-space ds-space--modern\" style=\"--ds-space-gap:8px\" data-part=\"root\" data-direction=\"horizontal\" data-align=\"center\" data-size=\"8\" data-with-split=\"false\" data-component=\"space\" data-probe=\"space-modern-numeric-gap\"><span>a</span><span>b</span></div>",
       "targets": [
         {
           "id": "root",

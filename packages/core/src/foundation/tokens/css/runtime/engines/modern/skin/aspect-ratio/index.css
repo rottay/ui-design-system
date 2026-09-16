@@ -1,0 +1,70 @@
+/**
+ * Modern AspectRatio skin.
+ *
+ * Imported into the canonical `rottay-engines` layer. React reserves the box by
+ * publishing the caller's ratio on `--ds-aspect-ratio-instance-ratio`; this file
+ * owns every value through the `--ds-aspect-ratio-*` channels
+ * `derivation/chrome/aspect-ratio` produces and BrandTheme / TenantTheme move.
+ *
+ * Replaced media fills the reserved box without distortion, and the two crop
+ * channels are forwarded to an art-directed `<picture>`'s own image so a format
+ * fallback frames exactly like a direct child.
+ */
+
+.ds-aspect-ratio.ds-aspect-ratio--modern[data-part='root'] {
+  position: relative;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: var(--ds-aspect-ratio-instance-max-width);
+  aspect-ratio: var(--ds-aspect-ratio-instance-ratio);
+  overflow: var(--ds-aspect-ratio-clip);
+  box-sizing: border-box;
+  background: var(--ds-aspect-ratio-surface);
+  border: var(--ds-aspect-ratio-frame);
+  border-radius: var(--ds-aspect-ratio-corner);
+  box-shadow: var(--ds-aspect-ratio-depth);
+  transition:
+    aspect-ratio var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
+    max-inline-size var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
+    border-radius var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
+    background-color var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
+    border-color var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
+    box-shadow var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing);
+}
+
+/*
+ * `display: block` removes the inline baseline strut, whose extra line-box
+ * slack paints a letterbox sliver the moment a tenant opens the clip channel to
+ * `visible` -- the reserved box must match the media box exactly.
+ */
+.ds-aspect-ratio.ds-aspect-ratio--modern[data-part='root'] > :where(img, video, canvas, iframe) {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: var(--ds-aspect-ratio-object-fit);
+  object-position: var(--ds-aspect-ratio-object-position);
+}
+
+/*
+ * A `<picture>` wrapper is an inline, non-replaced element: left at its defaults
+ * it collapses to the baseline strut and its `<img>` never receives the frame.
+ */
+.ds-aspect-ratio.ds-aspect-ratio--modern[data-part='root'] > :where(picture) {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.ds-aspect-ratio.ds-aspect-ratio--modern[data-part='root'] > :where(picture) > img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: var(--ds-aspect-ratio-object-fit);
+  object-position: var(--ds-aspect-ratio-object-position);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-aspect-ratio.ds-aspect-ratio--modern[data-part='root'] {
+    transition: none;
+  }
+}

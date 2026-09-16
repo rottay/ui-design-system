@@ -1,19 +1,9 @@
 import React from "react";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { getThicknessValue, THICKNESS_MAP } from "../contracts";
 import ModernDivider from "../engines/modern";
-
-const dividerSkin = readFileSync(
-  resolve(
-    process.cwd(),
-    "src/foundation/tokens/css/runtime/engines/modern/skin/divider/index.css"
-  ),
-  "utf8"
-);
 
 describe("Divider modern premium contract", () => {
   it("keeps a numeric zero label and derives an accessible separator name", () => {
@@ -28,7 +18,7 @@ describe("Divider modern premium contract", () => {
     });
   });
 
-  it("uses tenant-remappable thickness and label typography channels", () => {
+  it("carries the resolved hairline on its one channel and nothing else inline", () => {
     render(
       <ModernDivider data-testid="divider">Localized section</ModernDivider>
     );
@@ -37,27 +27,34 @@ describe("Divider modern premium contract", () => {
     expect(THICKNESS_MAP.thin).toContain("--ds-divider-thickness-thin");
     expect(divider).toHaveAttribute("data-plain", "false");
     expect(divider).toHaveAttribute("data-component", "divider");
-    expect(dividerSkin).toContain("--ds-divider-label-font-size");
-    expect(dividerSkin).toContain("--ds-divider-label-tracking");
-    expect(dividerSkin).toContain("prefers-reduced-motion: reduce");
+    expect(divider.style.getPropertyValue("--ds-divider-line")).toContain(
+      "--ds-divider-thickness-thin"
+    );
+    const declared = (divider.getAttribute("style") ?? "")
+      .split(";")
+      .map((entry) => entry.split(":")[0]?.trim())
+      .filter((name): name is string => Boolean(name));
+    expect(declared).toEqual(["--ds-divider-line"]);
   });
 
-  it("keeps localized labels intrinsic instead of shrinking behind full-width line segments", () => {
+  it("stamps both segments and the label placement the skin keys on", () => {
     render(
       <ModernDivider data-testid="divider" textPosition="left">
         Key metrics
       </ModernDivider>
     );
 
-    const lines = screen
-      .getByTestId("divider")
-      .querySelectorAll<HTMLElement>('[data-part^="line-"]');
+    const divider = screen.getByTestId("divider");
+    const lines = divider.querySelectorAll<HTMLElement>('[data-part^="line-"]');
     expect(lines).toHaveLength(2);
+    expect(lines[0]).toHaveAttribute("data-part", "line-before");
+    expect(lines[1]).toHaveAttribute("data-part", "line-after");
+    // The legacy physical alias normalizes onto the logical contract.
+    expect(divider).toHaveAttribute("data-text-position", "start");
+    // No segment carries a value of its own any more.
     lines.forEach((line) => {
-      expect(line.style.width).toBe("auto");
+      expect(line.getAttribute("style")).toBeNull();
     });
-    expect(lines[0]?.style.flexGrow).toBe("0");
-    expect(lines[1]?.style.flexGrow).toBe("1");
   });
 
   it("forwards locale and direction while preserving the owned root part", () => {
@@ -83,10 +80,9 @@ describe("Divider modern premium contract", () => {
     const divider = screen.getByTestId("divider");
     const lines = divider.querySelectorAll<HTMLElement>('[data-part^="line-"]');
     expect(divider).toHaveAttribute("data-text-position", "start");
-    expect(divider).toHaveClass("rottay-divider--modern");
+    expect(divider).toHaveClass("ds-divider--modern");
     expect(divider).not.toHaveClass("divider");
-    expect(lines[0]?.style.flexGrow).toBe("0");
-    expect(lines[1]?.style.flexGrow).toBe("1");
+    expect(lines).toHaveLength(2);
 
     rerender(
       <ModernDivider data-testid="divider" dir="rtl" textPosition="left">
@@ -106,11 +102,8 @@ describe("Divider modern premium contract", () => {
     );
 
     const divider = screen.getByTestId("divider");
-    expect(divider).toHaveStyle({ height: "100%" });
-    expect(divider.style.minHeight).toBe(
-      "var(--ds-divider-vertical-min-block-size, 1em)"
-    );
     expect(divider).toHaveAttribute("data-orientation", "vertical");
+    expect(divider).toHaveAttribute("data-spacing", "none");
     expect(divider).not.toHaveClass("divider", "divider-vertical");
   });
 
