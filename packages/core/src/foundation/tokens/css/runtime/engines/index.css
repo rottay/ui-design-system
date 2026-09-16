@@ -17,8 +17,9 @@
  * @version 0.4.0
  */
 
-/* Collapse bridge imported in foundation/base.css, not here.
-   Engine themes map --ds-* tokens to library-specific classes. */
+/* The classic Collapse skin is imported by `facade/entrypoints/base/index.css`,
+   not here: it must keep the exact position the retired `runtime/bridges/`
+   authority held. Engine themes map --ds-* tokens to library-specific classes. */
 
 /* Engine-specific themes */
 @import './classic/theme/index.css';

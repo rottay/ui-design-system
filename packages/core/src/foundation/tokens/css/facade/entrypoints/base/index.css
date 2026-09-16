@@ -125,11 +125,25 @@
   layer(rottay-components);
 @import "../../../presentation/components/skin/widget-board/index.css"
   layer(rottay-components);
-/* Collapse token authorship. The bridge below reads 50 `--ds-collapse-*`
-   channels this sheet declares; without it the bridge paints from nothing. */
+/* Collapse token authorship. The frozen classic skin below reads 50
+   `--ds-collapse-*` channels this sheet declares; without it that skin paints
+   from nothing. Modern reads its own deriver-minted channels and is imported
+   with the other engine skins further down. */
 @import "../../../presentation/components/collapse/index.css"
   layer(rottay-components);
-@import "../../../runtime/bridges/collapse/index.css" layer(rottay-components);
+/* The classic Collapse skin, byte-identical, at its owning engine's address:
+   it was `runtime/bridges/collapse/index.css` until WO-FAM-07/L7, and a
+   bridge is not a third authority beside the engines that stamp its classes.
+   Only the frozen classic engine stamps `.ds-collapse*` (`useCollapseTokens`;
+   measured: zero other consumers in core, showroom and the three apps).
+   The address decides the layer, so this rises from `rottay-components` to
+   `rottay-engines`. Proven inert: every non-custom computed property of 19
+   nodes of the classic anatomy -- default, active, disabled, ghost, small,
+   large, borderless -- plus one really-hovered header, across all three
+   first-party verticals, is identical in both layers. `classic/theme`'s
+   `html[data-tenant]` selectors outrank every rule here on specificity, so
+   they already won where the two overlap and they still do. */
+@import "../../../runtime/engines/classic/skin/collapse/index.css" layer(rottay-engines);
 
 /* Layer 3: Engine themes */
 @import "../../../runtime/engines/index.css" layer(rottay-engines);

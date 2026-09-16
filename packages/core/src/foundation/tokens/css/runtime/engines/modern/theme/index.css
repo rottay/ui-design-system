@@ -193,24 +193,16 @@
    COLLAPSE / ACCORDION
    ============================================================================= */
 
-/* Bridge: .rottay-collapse (modern engine) */
-[data-engine='modern'] .rottay-collapse {
-  border-color: var(--ds-collapse-border);
-  border-radius: var(--ds-collapse-radius);
-}
-
-[data-engine='modern'] .rottay-collapse .rottay-collapse-content {
-  background-color: var(--ds-collapse-content-bg);
-  color: var(--ds-text-primary);
-}
-
-[data-engine='modern'] .rottay-collapse--ghost {
-  background-color: transparent;
-}
-
-[data-engine='modern'] .rottay-collapse--borderless {
-  border: none;
-}
+/* Bridge removed (WO-FAM-07 / L7 collapse cut): the modern skin
+   (`skin/collapse/index.css`) is the family's single paint owner. Three of
+   these four rules painted nothing — the root element carries no border-width
+   and no background, so its `border-color`, `border-radius`, `--ghost`
+   transparent and `--borderless` `border: none` had no surface to reach. The
+   fourth was live and wrong: `--ds-collapse-content-bg` is a mode-blind
+   `#ffffff` at `:root` in the default theme, shared with the frozen engines,
+   so every Modern content track painted white in dark mode over the panel's
+   tenant-tuned material. The panel surface is the skin's, and the track is
+   transparent above it. */
 
 /* =============================================================================
    RANGE / SLIDER - .range

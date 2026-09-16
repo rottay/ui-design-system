@@ -122,6 +122,11 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   // A Box is a container: its children are drawn and it is not. Deliberately
   // NOT the `box` role above, which is checkbox's solid indicator square.
   'box-surface': 'pass',
+  // ---- collapse anatomy (WO-FAM-07 L7) ----
+  // A disclosure's header row and its content wrapper are containers: what they
+  // hold is drawn, they are not.
+  'header-row': 'pass',
+  'content-inner': 'pass',
   'group-options': 'pass',
   'hex-field': 'pass',
   'input-wrapper': 'pass',

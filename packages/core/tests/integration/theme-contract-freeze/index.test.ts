@@ -365,6 +365,7 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/chrome/card/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/cascader/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/checkbox/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/chrome/collapse/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/color-picker/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/confirm-dialog/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/container/index.ts`,
@@ -769,7 +770,11 @@ describe("channel minting and CSS text have declared owners", () => {
     "components/patterns/customization/tenant-preview/engines/modern/index.tsx": ["preview.css"],
     "components/patterns/customization/tenant-preview/engines/rustic/index.tsx": ["preview.css"],
     "components/primitives/feedback/toast/compound/animated-check/index.tsx": ["keyframes"],
-    "components/primitives/layout/collapse/engines/modern/index.tsx": ["COLLAPSE_STYLES"],
+    // The MODERN collapse engine used to sit here with `COLLAPSE_STYLES`. Its
+    // family cut (WO-FAM-07/L7) moved the reveal into the modern skin, so the
+    // engine injects no stylesheet at all: a per-instance <style> tag is a
+    // fourth paint plane no tenant layer can reach. Rustic is FROZEN and keeps
+    // its own.
     "components/primitives/layout/collapse/engines/rustic/index.tsx": ["RUSTIC_REDUCED_MOTION_STYLES"],
   };
 
@@ -798,7 +803,7 @@ describe("channel minting and CSS text have declared owners", () => {
     const declared: Record<string, string[]> = {};
     for (const [file, feeders] of census) declared[file] = [...feeders].sort();
     expect(declared).toEqual(HTML_STYLE_SINKS);
-    expect(occurrences).toBe(9);
+    expect(occurrences).toBe(8);
   });
 
   it("every productive <style> that carries its CSS as a child is declared", () => {

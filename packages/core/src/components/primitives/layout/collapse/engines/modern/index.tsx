@@ -3,9 +3,10 @@
 /**
  * @fileoverview Collapse Modern Engine - Rottay Design System.
  * Token-driven implementation using React Context for shared accordion
- * state between Collapse and Panel. No DaisyUI classes -- paint lives in
- * the modern skin (`collapse.css`); the engine keeps layout/token-channel
- * inline styles and a <style> block for the expand/collapse transition.
+ * state between Collapse and Panel. The engine owns structure, accordion
+ * state and the toggle semantics; every visual value belongs to the modern
+ * skin, keyed on the `data-part` / `data-expanded` / `data-state` anatomy
+ * stamped here.
  *
  * Contract coverage (K3-C pass 1):
  * - `size` (`sm|md|lg`, legacy `small|middle|large` aliases) is normalized
@@ -35,8 +36,17 @@
  *   accessible name (decorative glyph only): it now takes one from the
  *   header label via `aria-labelledby`.
  * - Disabled opacity/cursor and the header cursor policy/user-select moved
- *   from inline styles to the skin (keyed on data-disabled/data-collapsible);
- *   inline style is reserved for instance geometry (the 0fr/1fr track).
+ *   from inline styles to the skin (keyed on data-disabled/data-collapsible).
+ *
+ * Family cut (WO-FAM-07 / L7):
+ * - The reveal is the skin's: the grid track (0fr -> 1fr), the inner fade and
+ *   the arrow turn are keyed on `data-expanded`, not written as an inline
+ *   `style` and not injected as a per-instance `<style>` tag. A tag is a
+ *   fourth paint plane -- it cannot be themed, cannot be overridden by a
+ *   tenant layer, and repeats once per mounted Collapse.
+ * - Hover, press and the focus ring come from the shared interaction-state
+ *   kernel and are stamped as `data-state`, so the skin decides each state in
+ *   one place instead of a second time in a bare pseudo-class.
  *
  * @example
  * ```tsx
@@ -55,25 +65,7 @@ import React, { useState, createContext, useContext, Children, cloneElement, isV
 import type { CollapseProps, CollapsePanelProps } from '../../contracts';
 import { COLLAPSE_DEFAULTS } from '../../contracts';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
-
-/**
- * Collapse expand/collapse transition, expressed on `grid-template-rows`
- * (0fr -> 1fr). The previous pixel-bound-height technique required an
- * arbitrary upper bound and animated a non-linear timing curve near that
- * bound (most of the transition duration spent animating pixels the content
- * never reaches); the fr-unit track animates uniformly regardless of content
- * height and needs no bound. The `.rottay-collapse-content` element is the
- * grid row track; its `.rottay-collapse-content-inner` child needs
- * `min-height:0` because grid items default to `min-height:auto`, which
- * would keep the inner content's intrinsic height as a floor and prevent the
- * track from ever reaching 0fr.
- */
-const COLLAPSE_STYLES = `
-.rottay-collapse-content{display:grid;transition:grid-template-rows var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,var(--ds-motion-ease-out))}
-.rottay-collapse-content-inner{min-height:0;overflow:hidden;transition:opacity var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,var(--ds-motion-ease-out)),padding var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,var(--ds-motion-ease-out))}
-.rottay-collapse-arrow{display:inline-block;transition:var(--ds-collapse-icon-default-idle-transition,transform var(--ds-motion-normal) var(--ds-motion-ease-out))}
-@media (prefers-reduced-motion: reduce){.rottay-collapse-content,.rottay-collapse-content-inner,.rottay-collapse-arrow{transition:none}}
-`.trim();
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 /** Shared state between Collapse and its Panel children via React Context */
 interface CollapseContextValue {
@@ -132,6 +124,19 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     // Panel requires a parent Collapse to provide context; bail if orphaned
     const context = useContext(CollapseContext);
     const reactId = useId();
+
+    // `collapsible='disabled'` renders every header inert; a disabled panel is
+    // inert on its own. `collapsible='icon'` moves the toggle affordance to
+    // the arrow alone (the header keeps no button role in that mode).
+    const inert = disabled || context?.collapsible === 'disabled';
+    const iconOnly = context?.collapsible === 'icon';
+
+    // The hover/press/focus triad is decided once, by the shared kernel, and
+    // only for the element that actually IS the toggle: in `icon` mode the
+    // header is presentation and the arrow is the control, so each reports no
+    // state while the other owns it.
+    const headerInteraction = useInteractionState({ disabled: inert || iconOnly });
+    const arrowInteraction = useInteractionState({ disabled: inert || !iconOnly });
     if (!context) return null;
 
     // Use explicit panelKey when provided, otherwise derive from render index
@@ -142,12 +147,6 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     // The header label's id doubles as the accessible-name source for the
     // arrow when `collapsible='icon'` makes the arrow the toggle button.
     const labelId = `collapse-label-${reactId.replace(/:/g, '')}`;
-
-    // `collapsible='disabled'` renders every header inert; a disabled panel is
-    // inert on its own. `collapsible='icon'` moves the toggle affordance to
-    // the arrow alone (the header keeps no button role in that mode).
-    const inert = disabled || context.collapsible === 'disabled';
-    const iconOnly = context.collapsible === 'icon';
 
     const handleClick = () => {
       if (!inert && !iconOnly) {
@@ -192,7 +191,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
-        data-part="arrow"
+        {...partAttributes('arrow', arrowInteraction.state)}
         data-expanded={isActive ? 'true' : 'false'}
         aria-hidden={iconOnly && !inert ? undefined : true}
         {...(iconOnly && !inert
@@ -204,6 +203,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
               'aria-labelledby': labelId,
               onClick: handleArrowClick,
               onKeyDown: handleArrowKeyDown,
+              ...arrowInteraction.handlers,
             }
           : {})}
       >
@@ -226,18 +226,8 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             nested-interactive; K3-C pass-2 remediation). Padding rhythm is
             skin-owned on the row (collapse.css, keyed on data-size/--ghost);
             paint never lives here. */}
-        <div
-          data-part="header-row"
-          style={{ display: 'flex', alignItems: 'center' }}
-        >
+        <div data-part="header-row">
           <div
-            style={{
-              flex: '1 1 auto',
-              minWidth: 0,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-collapse-header-gap, var(--ds-spacing-2))',
-            }}
             onClick={handleClick}
             {...(iconOnly
               ? {}
@@ -248,21 +238,24 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
                   'aria-controls': contentId,
                   'aria-disabled': inert ? true : undefined,
                   onKeyDown: handleKeyDown,
+                  ...headerInteraction.handlers,
                 })}
-            data-part="header"
+            {...partAttributes('header', headerInteraction.state)}
             data-expanded={isActive ? 'true' : 'false'}
             data-disabled={disabled ? 'true' : 'false'}
             data-collapsible={context.collapsible ?? 'header'}
           >
             {context.expandIconPosition === 'start' && arrowIcon}
-            <span data-part="label" id={labelId} style={{ flex: 1 }}>{header}</span>
+            <span data-part="label" id={labelId}>
+              {header}
+            </span>
             {context.expandIconPosition === 'end' && arrowIcon}
           </div>
           {extra && <span data-part="extra">{extra}</span>}
         </div>
         {/* Content area: the outer element is the grid-template-rows track
             (0fr collapsed / 1fr expanded); the inner element carries
-            min-height:0 (see COLLAPSE_STYLES) plus the opacity/padding fade
+            min-height:0 (skin-owned) plus the opacity/padding fade
             so the whole reveal reads as one motion. While collapsed the
             region is also aria-hidden + inert: invisible content must leave
             the tab order and the accessibility tree, not just the viewport. */}
@@ -273,17 +266,11 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
           id={contentId}
           aria-hidden={isActive ? undefined : true}
           inert={isActive ? undefined : true}
-          style={{
-            gridTemplateRows: isActive ? '1fr' : '0fr',
-          }}
         >
           <div
             className="rottay-collapse-content-inner"
             data-part="content-inner"
             data-expanded={isActive ? 'true' : 'false'}
-            style={{
-              opacity: isActive ? 1 : 0,
-            }}
           >
             {children}
           </div>
@@ -364,19 +351,12 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       <CollapseContext.Provider
         value={{ activeKeys, toggleKey, accordion, expandIconPosition, bordered, ghost, collapsible }}
       >
-        {/* Inject transition styles -- safe static string */}
-        <style dangerouslySetInnerHTML={{ __html: COLLAPSE_STYLES }} />
         <div
           ref={ref}
           className={`rottay-collapse${ghost ? ' rottay-collapse--ghost' : ''}${!bordered ? ' rottay-collapse--borderless' : ''} ${className}`.trim() || undefined}
           data-part="root"
           data-size={normalizeCollapseSize(size)}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 'var(--ds-spacing-1)',
-            ...style,
-          }}
+          style={style}
         >
           {/* Inject index into each Panel child for fallback key generation */}
           {childArray.map((child, index) =>

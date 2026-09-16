@@ -8,15 +8,14 @@
  * the unlayered compiled tenant artifact wins over all of them.
  *
  * SCOPE ROOT keeps the component's existing bare `rottay-collapse` class
- * (plus conditional `--ghost`/`--borderless` modifiers) -- this is the SAME
- * class `engines/modern/theme.css:654-671`'s live bridge already targets on
- * `border-color`/`border-radius` (a real, measured 14px radius today per the
- * WO-SKIN-05 orchestrator adjudication A1). An unlayered rule anchored to
- * that class outranks the layered bridge outright, so nothing here needs to
- * out-fight it; it simply wins going forward the same way every other
- * unlayered skin already does. Rustic's Collapse could NOT reuse this class
- * for the identical reason in reverse (it would hand rustic a radius it
- * never had) -- see `engines/rustic/skin/collapse.css`.
+ * (plus conditional `--ghost`/`--borderless` modifiers). The `ds-collapse*`
+ * vocabulary is NOT free to move into: the frozen classic path stamps it
+ * through `useCollapseTokens`, and `personality/index.css` reads
+ * `.ds-collapse-header`/`.ds-collapse-content` off those stamps. So the
+ * legacy `rottay-*` names stay pinned rather than renamed, and this file is
+ * the single owner of what they paint. Rustic's Collapse could NOT reuse this
+ * class (it would hand rustic a radius it never had) -- see
+ * `engines/rustic/skin/collapse/index.css`.
  *
  * SPECIFICITY (P-48): the only border-color-bearing rule here is the
  * bordered panel (below) -- the two root classes + `[data-part='root']`
@@ -78,6 +77,21 @@
  *    semantic-icon facade's auto-mirror that double-flipped the glyph in
  *    RTL (and made the expanded 90deg turn point UP there) — Tree
  *    precedent (`mirrored={false}` + skin-owned flip).
+ *
+ * WO-FAM-07 / L7 (the family cut):
+ *  - the reveal itself lives here. It used to be a per-instance `<style>` tag
+ *    the engine injected once per mounted Collapse -- a fourth paint plane no
+ *    tenant layer could reach -- plus seven inline `style` objects;
+ *  - MOTION IS THE FAMILY'S OWN. `--ds-collapse-transition-{duration,timing}`
+ *    is the frozen classic path's channel, pinned at a literal `0.2s` by
+ *    `presentation/components/collapse`; re-pointing it would move classic's
+ *    paint. The reveal, the state change and the arrow turn read the
+ *    `--ds-collapse-{reveal,state,arrow}-motion-*` channels the family's
+ *    deriver mints off the semantic motion ramp, so the motion dial reaches
+ *    this family for the first time;
+ *  - `engines/modern/theme/index.css` no longer paints this family at all
+ *    (see the note left there): its content-track `background-color` was a
+ *    mode-blind `#ffffff` competing with the panel material painted here.
  */
 
 /* ---- arrow: rotation (was the inline `transform` ternary on `isActive`). ---- */
@@ -99,8 +113,8 @@
 }
 
 /* ---- coarse pointers: interactive headers and the icon-only toggle meet
-        the physical 44px floor (the arrow is inline-block in the engine's
-        transition block; this rule's (0,5,0) outranks it). ---- */
+        the physical 44px floor (the arrow is inline-block in the structure
+        block below; this rule's (0,5,0) outranks it). ---- */
 @media (hover: none), (pointer: coarse) {
   .rottay-collapse[data-part='root'] [data-part='header'][role='button'] {
     min-block-size: var(--ds-collapse-touch-target-min, var(--ds-touch-target-min, 44px));
@@ -119,18 +133,15 @@
         Ghost overrides both to its own token pair; the extra
         `.rottay-collapse--ghost` class naturally out-specifies the default
         rule below, no guard needed since only two mutually distinct states
-        exist. The K3-C pass-2 contrast remediation inserts the MATERIAL
-        channel between the component channel and the raw surface: the raw
-        `--ds-surface-card` is the brand's dark chrome surface on some
-        tenants (TMM: #18181c), which pairs incoherently with the inherited
-        text ink; the material card channel is the tenant-tuned content
-        surface (TMM: #FFFEFB, BitHire: #fff via its own fallback). ---- */
+        exist. The SURFACE is `--ds-collapse-panel-surface`, minted by the
+        family's deriver off the material card channel: the recipe's
+        `--ds-collapse-root-default-idle-bg` resolves to `--ds-color-white`,
+        which does not flip with the mode, so the K3-C material fallback
+        chained behind it could never fire and dark mode painted a white
+        card. The recipe keeps its declaration for its other readers. ---- */
 .rottay-collapse[data-part='root'] [data-part='panel'] {
   border-radius: var(--ds-collapse-root-default-idle-border-radius, var(--ds-radius-md));
-  background: var(
-    --ds-collapse-root-default-idle-bg,
-    var(--ds-material-card-background, var(--ds-surface-card))
-  );
+  background: var(--ds-collapse-panel-surface);
   box-shadow: var(--ds-collapse-root-default-idle-shadow, none);
 }
 .rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='panel'] {
@@ -188,8 +199,12 @@
 .rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
   cursor: var(--ds-collapse-header-default-disabled-cursor, not-allowed);
 }
+/* The expanded ink is a tint of the MODE's own ink (see the deriver): the
+   recipe's `--ds-collapse-header-default-expanded-color` is a fixed brand
+   step that the frozen bridge also reads, and on a dark ground it read
+   1.05:1. */
 .rottay-collapse[data-part='root'] [data-part='header'][data-expanded='true']:not([data-disabled='true']) {
-  color: var(--ds-collapse-header-default-expanded-color, var(--ds-color-primary));
+  color: var(--ds-collapse-header-expanded-ink);
 }
 .rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
   color: var(--ds-collapse-header-default-disabled-color, var(--ds-color-text-disabled));
@@ -214,10 +229,15 @@
 
 /* ---- content-inner: color (was a STATIC, unconditional inline value, no
         ternary in the source) + background (was the `context.ghost`
-        ternary) + typography (Phase-B: moved out of the engine inline). ---- */
+        ternary) + typography (Phase-B: moved out of the engine inline). The
+        background is the family's own `--ds-collapse-content-surface` for the
+        same reason as the panel above: the recipe's
+        `--ds-collapse-content-default-idle-bg` is `--ds-color-white`, and the
+        FROZEN bridge reads it, so it stays declared and Modern stops reading
+        it. The content area sits on the panel's card. ---- */
 .rottay-collapse[data-part='root'] [data-part='content-inner'] {
   color: var(--ds-collapse-content-default-idle-color, inherit);
-  background: var(--ds-collapse-content-default-idle-bg, transparent);
+  background: var(--ds-collapse-content-surface);
   font-size: var(--ds-collapse-content-default-idle-font-size, inherit);
   line-height: var(--ds-collapse-content-default-idle-line-height, normal);
 }
@@ -230,12 +250,14 @@
  * `data-size` (sm|md|lg); ghost sorts last and wins every tie, mirroring the
  * former `ghost ? ghostPadding : defaultPadding` ternary. The content-inner
  * vertical padding collapses to 0 when closed so the grid-template-rows
- * 0fr track plus the padding transition (engine-injected COLLAPSE_STYLES)
- * read as one motion.
+ * 0fr track and the padding transition read as one motion.
  *
- * PHASE-B: every length scales by `--ds-density-effective-scale` (clamped
- * 0.5..3 global×local dial), so the tenant density profile reaches the
- * rhythm instead of leaving fixed px frozen at one density.
+ * WO-FAM-07 / L7: the second factor is `--ds-rhythm-effective-scale`, not
+ * `--ds-density-effective-scale`. Measured in a browser: `--ds-spacing-3`
+ * resolves 11.25px -> 12.9375px under `density.mode: spacious` and does NOT
+ * move under `spacing.rhythm`. The ramp already carries density once, so the
+ * Phase-B factor was counting it twice and the rhythm decision reached this
+ * family not at all. One factor each, applied once (the card/stack precedent).
  * ======================================================================== */
 
 /* ---- header ROW: padding, default (md) rhythm. The row is the plain flex
@@ -244,20 +266,20 @@
         — the rhythm must cover the whole row so the extra lands inside the
         same padding boundary the toggle had when it was the row. ---- */
 .rottay-collapse[data-part='root'] [data-part='header-row'] {
-  padding: calc(var(--ds-collapse-header-default-idle-padding-y, 12px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-header-default-idle-padding-x, 16px) * var(--ds-density-effective-scale));
+  padding: calc(var(--ds-collapse-header-default-idle-padding-y, 12px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-header-default-idle-padding-x, 16px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse[data-part='root'][data-size='sm'] [data-part='header-row'] {
-  padding: calc(var(--ds-collapse-header-sm-idle-padding-y, 8px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-header-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale));
+  padding: calc(var(--ds-collapse-header-sm-idle-padding-y, 8px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-header-sm-idle-padding-x, 12px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse[data-part='root'][data-size='lg'] [data-part='header-row'] {
-  padding: calc(var(--ds-collapse-header-lg-idle-padding-y, 16px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-header-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale));
+  padding: calc(var(--ds-collapse-header-lg-idle-padding-y, 16px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-header-lg-idle-padding-x, 20px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='header-row'] {
-  padding: calc(var(--ds-collapse-header-ghost-idle-padding-y, 8px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-header-ghost-idle-padding-x, 12px) * var(--ds-density-effective-scale));
+  padding: calc(var(--ds-collapse-header-ghost-idle-padding-y, 8px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-header-ghost-idle-padding-x, 12px) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* ---- extra: the actions slot is the toggle's SIBLING (never nested in the
@@ -268,28 +290,28 @@
 
 /* ---- content-inner: padding, default (md) rhythm; 0 vertical while collapsed. ---- */
 .rottay-collapse[data-part='root'] [data-part='content-inner'] {
-  padding: 0 calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-density-effective-scale));
+  padding: 0 calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse[data-part='root'] [data-part='content-inner'][data-expanded='true'] {
-  padding: 0 calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-content-default-idle-padding-y, 16px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-density-effective-scale));
+  padding: 0 calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-content-default-idle-padding-y, 16px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse[data-part='root'][data-size='sm'] [data-part='content-inner'] {
-  padding: 0 calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale));
+  padding: 0 calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse[data-part='root'][data-size='sm'] [data-part='content-inner'][data-expanded='true'] {
-  padding: 0 calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-content-sm-idle-padding-y, 12px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale));
+  padding: 0 calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-content-sm-idle-padding-y, 12px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse[data-part='root'][data-size='lg'] [data-part='content-inner'] {
-  padding: 0 calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale));
+  padding: 0 calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-rhythm-effective-scale, 1));
 }
 .rottay-collapse[data-part='root'][data-size='lg'] [data-part='content-inner'][data-expanded='true'] {
-  padding: 0 calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-content-lg-idle-padding-y, 20px) * var(--ds-density-effective-scale))
-    calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale));
+  padding: 0 calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-content-lg-idle-padding-y, 20px) * var(--ds-rhythm-effective-scale, 1))
+    calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* ===========================================================================
@@ -298,19 +320,23 @@
  * The motion rides the collapse transition token channel; the global
  * reduced-motion clamp (personality.css) collapses it for reduced-motion
  * users.
+ *
+ * WO-FAM-07 / L7: each state is decided ONCE. `:is([data-state~='hovered'],
+ * :hover)` is the shared interaction-state kernel's answer plus the platform's
+ * own as a fallback -- one decision, not two places that can disagree. `:is()`
+ * takes the specificity of its most specific argument, and both arms are a
+ * single (0,1,0), so no rule moved in the cascade.
  * ======================================================================== */
 
 .rottay-collapse[data-part='root'] [data-part='header'] {
   transition:
-    background var(--ds-collapse-transition-duration, var(--ds-motion-fast))
-      var(--ds-collapse-transition-timing, var(--ds-motion-ease-out)),
-    color var(--ds-collapse-transition-duration, var(--ds-motion-fast))
-      var(--ds-collapse-transition-timing, var(--ds-motion-ease-out));
+    background var(--ds-collapse-state-motion-duration) var(--ds-collapse-arrow-motion-easing),
+    color var(--ds-collapse-state-motion-duration) var(--ds-collapse-arrow-motion-easing);
 }
 /* Hover is hover-capable-only (4th-wave law); the pressed rule below already
    gives touch and keyboard the equivalent deepened surface on :active. */
 @media (hover: hover) {
-  .rottay-collapse[data-part='root'] [data-part='header']:hover:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
+  .rottay-collapse[data-part='root'] [data-part='header']:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']):is([data-state~='hovered'], :hover) {
     /* `--ds-color-bg-hover` is a dark inset under both first-party themes
        (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
        from the paired card chrome instead (pagination.css adjudication:
@@ -321,7 +347,7 @@
     );
   }
 }
-.rottay-collapse[data-part='root'] [data-part='header']:active:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
+.rottay-collapse[data-part='root'] [data-part='header']:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']):is([data-state~='pressed'], :active) {
   /* `--ds-color-bg-active` is consumed-but-UNDEFINED (orphan, spec §2): the
      pressed surface takes the same card-paired mix one step deeper. */
   background: var(
@@ -329,7 +355,7 @@
     color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
   );
 }
-.rottay-collapse[data-part='root'] [data-part='header']:focus-visible {
+.rottay-collapse[data-part='root'] [data-part='header']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-offset));
   border-radius: var(--ds-collapse-header-focus-ring-radius, var(--ds-radius-md));
@@ -341,22 +367,22 @@
   cursor: var(--ds-collapse-header-default-idle-cursor, pointer);
 }
 @media (hover: hover) {
-  .rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:hover {
+  .rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:is([data-state~='hovered'], :hover) {
     color: var(--ds-collapse-arrow-hover-color, var(--ds-color-primary));
   }
 }
-.rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:active {
+.rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:is([data-state~='pressed'], :active) {
   color: var(--ds-collapse-arrow-hover-color, var(--ds-color-primary));
 }
-.rottay-collapse[data-part='root'] [data-part='arrow']:focus-visible {
+.rottay-collapse[data-part='root'] [data-part='arrow']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-collapse-arrow-focus-ring-radius, var(--ds-radius-sm));
 }
 
 @media (forced-colors: active) {
-  .rottay-collapse[data-part='root'] [data-part='header']:focus-visible,
-  .rottay-collapse[data-part='root'] [data-part='arrow']:focus-visible {
+  .rottay-collapse[data-part='root'] [data-part='header']:is([data-state~='focus-visible'], :focus-visible),
+  .rottay-collapse[data-part='root'] [data-part='arrow']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
@@ -369,11 +395,81 @@
 }
 
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
-   relaid out, or left waiting on an event that never arrives. */
+   relaid out, or left waiting on an event that never arrives. Every selector this file
+   animates is named: the header's state change, the grid track that IS the reveal, the
+   inner fade and the arrow's turn. The reveal used to be collapsed with `transition: none`
+   in the engine's injected tag, which removes the motion instead of shortening it and
+   leaves `transitionend` unfired. */
 @media (prefers-reduced-motion: reduce) {
-  .rottay-collapse[data-part='root'] [data-part='header'] {
+  .rottay-collapse[data-part='root'] [data-part='header'],
+  .rottay-collapse[data-part='root'] [data-part='content'],
+  .rottay-collapse[data-part='root'] [data-part='content-inner'],
+  .rottay-collapse[data-part='root'] [data-part='arrow'] {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* ---- structure: what the engine used to write inline, and the reveal it used
+        to inject as a per-instance `<style>` tag. A tag cannot be themed, cannot
+        be overridden by a tenant layer, and repeats once per mounted Collapse. */
+
+.rottay-collapse[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1);
+}
+
+.rottay-collapse[data-part='root'] [data-part='header-row'] {
+  display: flex;
+  align-items: center;
+}
+
+.rottay-collapse[data-part='root'] [data-part='header'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-collapse-header-gap);
+}
+
+.rottay-collapse[data-part='root'] [data-part='label'] {
+  flex: 1;
+}
+
+/*
+ * The reveal is one motion: the outer element is the grid row track (0fr
+ * collapsed, 1fr expanded) and the inner one fades. The inner needs
+ * `min-block-size: 0` because a grid item defaults to `auto`, which would keep
+ * the content's intrinsic height as a floor and stop the track reaching 0fr.
+ */
+.rottay-collapse[data-part='root'] [data-part='content'] {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--ds-collapse-reveal-motion-duration)
+    var(--ds-collapse-reveal-motion-easing);
+}
+
+.rottay-collapse[data-part='root'] [data-part='content'][data-expanded='true'] {
+  grid-template-rows: 1fr;
+}
+
+.rottay-collapse[data-part='root'] [data-part='content-inner'] {
+  min-block-size: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--ds-collapse-reveal-motion-duration) var(--ds-collapse-reveal-motion-easing),
+    padding var(--ds-collapse-reveal-motion-duration) var(--ds-collapse-reveal-motion-easing);
+}
+
+.rottay-collapse[data-part='root'] [data-part='content-inner'][data-expanded='true'] {
+  opacity: 1;
+}
+
+.rottay-collapse[data-part='root'] [data-part='arrow'] {
+  display: inline-block;
+  transition: transform var(--ds-collapse-arrow-motion-duration)
+    var(--ds-collapse-arrow-motion-easing);
 }

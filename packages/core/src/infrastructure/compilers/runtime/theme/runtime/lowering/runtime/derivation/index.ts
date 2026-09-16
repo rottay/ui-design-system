@@ -63,6 +63,7 @@ import { flexChromeDeriver } from "./chrome/flex";
 import { stackChromeDeriver } from "./chrome/stack";
 import { boxChromeDeriver } from "./chrome/box";
 import { gridChromeDeriver } from "./chrome/grid";
+import { collapseChromeDeriver } from "./chrome/collapse";
 import { splitterChromeDeriver } from "./chrome/splitter";
 import { radioChromeDeriver } from "./chrome/radio";
 import { segmentedChromeDeriver } from "./chrome/segmented";
@@ -168,6 +169,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   stackChromeDeriver,
   boxChromeDeriver,
   gridChromeDeriver,
+  collapseChromeDeriver,
   splitterChromeDeriver,
   seedsDeriver,
 ]);

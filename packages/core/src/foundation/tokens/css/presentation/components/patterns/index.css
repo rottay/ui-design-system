@@ -2780,7 +2780,7 @@
  * an `obsolete paint bridge import`, so the split file reached no bundle and
  * these channels stopped painting in every vertical. The sibling bridges were
  * completed at the time (the personality bridge was deleted and the Collapse
- * bridge was folded into `runtime/bridges/collapse/index.css`); this one was
+ * bridge was folded into `runtime/engines/classic/skin/collapse/index.css`); this one was
  * not, so the restore is a
  * pre-existing-defect fix, not a new design.
  *

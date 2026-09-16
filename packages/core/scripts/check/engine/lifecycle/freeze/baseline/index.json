@@ -484,6 +484,12 @@
       "reason": "WO-CAN-06 one-anatomy-truth (F-29): this file is a prose SUPPORT MANIFEST with zero runtime consumers -- its only readers are anatomy-variant-gate and that gate's self-test -- and it claimed 'supported'/'approximated' for all ten rows while the classic theme adapter declares chrome.anatomy 'unsupported' and admission refuses by name any tenant that would select a variant. CI was validating a document the runtime contradicts. All ten support values are set to the adapter's truth; every original Ant-wrapper sentence is preserved verbatim as supplierNote, so no evidence is destroyed. No Classic implementation, skin, token, test or a11y work was added, removed or improved: the classic surface stamps no data-anatomy-* attribute and accepts no anatomy prop before or after this edit.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/classic/skin/collapse/index.css": {
+      "blob": "2d7e85873923aee09ca26c2b535a9681e86fa8831ed7b661390a395d81c1bb26",
+      "relocationDigest": "5f754cf9c78a938e14b55dc1b536e97392dd1ab070fb2abbaaeb074dad7d4e23",
+      "reason": "WO-FAM-07/L7 relocation, not content: byte-identical to runtime/bridges/collapse/index.css at the sealed base. The bridge's only consumer is the frozen classic engine (useCollapseTokens stamps .ds-collapse*; zero other consumers measured in core, showroom and the three apps), and a bridge is not a third authority beside the engine that stamps its classes. The address raises the import from layer(rottay-components) to layer(rottay-engines) as css-layer-paint-gate requires; proven inert by an A/B render -- 19 nodes of the classic anatomy plus a hovered header, on all three first-party verticals, identical in both layers. No declaration, selector, value or comment changed.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css": {
       "blob": "1c833bd8e1579755494be8733526f9694a0193e31a2f8b5060be022d3d7fd608",
       "relocationDigest": "63a9e5e3cbb30784dd49bbedb96efa72c8eb98cd975c06032f9b83773cc008af",

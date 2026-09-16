@@ -444,11 +444,16 @@ test('el vocabulario no deja hueco: unclassified esta vacio', () => {
   );
   assert.equal(facts.summary.unclassifiedReads, 0);
 
-  // todo lo que alguna vez cayo fuera del vocabulario tiene plano hoy
+  // todo lo que alguna vez cayo fuera del vocabulario tiene plano hoy.
+  // El skin classic de collapse vivia en `runtime/bridges/collapse/` hasta
+  // WO-FAM-07/L7: el puente lo consumia solo el engine congelado, asi que se
+  // mudo byte a byte a su dueno. La fila nueva la ve este test recien cuando
+  // el artifact se regenere -- hoy esta viejo (2575 archivos contra 2687 en
+  // disco) y por eso el ORACULO 6 ya venia en rojo.
   const clasificados = new Set(facts.channels.flatMap((c) => c.readers.map((r) => r.file)));
   for (const antes of [
     'src/foundation/tokens/css/runtime/personality/index.css',
-    'src/foundation/tokens/css/runtime/bridges/collapse/index.css',
+    'src/foundation/tokens/css/runtime/engines/classic/skin/collapse/index.css',
     'src/foundation/tokens/css/facade/entrypoints/base/index.css',
     'src/graphics/icons/glyphs/runtime/factory/index.tsx',
     'src/infrastructure/runtime/engines/presentation/component-factory/error-boundary/index.tsx',

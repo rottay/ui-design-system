@@ -15,6 +15,12 @@
  *  - RTL-safe header extras (`margin-inline-start`, never `margin-left`);
  *  - padding ownership: the engine inlines NO padding on header or
  *    content-inner (the modern skin owns the rhythm via data-size/--ghost).
+ *
+ * WO-FAM-07 / L7: the two cases that read the track's inline
+ * `grid-template-rows` now read the `data-expanded` the engine stamps. The
+ * reveal moved to the skin, so the inline value was the engine's copy of a
+ * decision it no longer makes; the computed track is measured in a real
+ * browser by `Collapse.causality.integration.test.tsx`.
  */
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
@@ -90,10 +96,12 @@ describe('Collapse modern contract: keyboard headers', () => {
 
     fireEvent.keyDown(header, { key: 'Enter' });
     expect(handleChange).toHaveBeenCalledWith(['one']);
-    expect(track.getAttribute('style')).toContain('grid-template-rows: 1fr');
+    // The reveal is the skin's, keyed on this attribute; the computed
+    // 0fr -> 1fr track is measured in Collapse.causality.integration.
+    expect(track).toHaveAttribute('data-expanded', 'true');
 
     fireEvent.keyDown(header, { key: ' ' });
-    expect(track.getAttribute('style')).toContain('grid-template-rows: 0fr');
+    expect(track).toHaveAttribute('data-expanded', 'false');
   });
 
   it('does not toggle on unrelated keys', () => {
@@ -113,7 +121,7 @@ describe('Collapse modern contract: keyboard headers', () => {
     fireEvent.click(header);
     fireEvent.keyDown(header, { key: 'Enter' });
     expect(handleChange).not.toHaveBeenCalled();
-    expect(contentTrackOf('One body').getAttribute('style')).toContain('grid-template-rows: 0fr');
+    expect(contentTrackOf('One body')).toHaveAttribute('data-expanded', 'false');
   });
 });
 
