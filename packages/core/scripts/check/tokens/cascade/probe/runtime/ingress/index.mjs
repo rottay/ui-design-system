@@ -66,6 +66,10 @@ import {
   flatThemeLoweringAdapter,
 } from '../../../../../../libraries/theme-lowering/index.mjs';
 
+/** Mirrors the adapter's private `LOWERING_OWNER_MODULE`; see the static arm spec. */
+const STATIC_LOWERING_OWNER_MODULE =
+  'dist/infrastructure/compilers/runtime/theme/runtime/lowering/index.js';
+
 /**
  * THE CLOSED SET OF REASONS A STOP MAY BE PUBLISHED AS "EXCLUDED" (R-2 hardening).
  *
@@ -234,10 +238,11 @@ export const INGRESS_ARMS = Object.freeze({
      * and must never carry a receipt from this arm; keep it as an advisory,
      * non-receipted run. */
     composesOverVerticalBaseline: true,
-    // A PUBLISHED entrypoint, like the DB arm: the static lowering is
-    // `compileTheme` on `@rottay/design-system/server`. The retired
+    // compileTheme is internal: bound by absolute path off its dist owner,
+    // never off the published module and never re-published.
     // `compileBrandTheme` deep path no longer exists in dist.
     compilerModule: LOWERING_MODULE,
+    compilerOwnerModule: STATIC_LOWERING_OWNER_MODULE,
     compilerModuleSubpath: LOWERING_MODULE_SUBPATH,
     compilerSource: LOWERING_SOURCE,
     compilerExport: LOWERING_EXPORT,
@@ -289,8 +294,9 @@ export const RETIRED_DB_COMPILER_EXPORTS = Object.freeze([
  * that no longer exists — and a missing export fails with an import error at
  * some later moment, not with the reason. The productive static lowering is
  * `compileTheme` -> `emitThemeCss` — reached by a first-party vertical through
- * `compileThemeIntent`, and here through a synthesized resolution — all
- * published on `@rottay/design-system/server`.
+ * `compileThemeIntent`, and here through a synthesized resolution. The emitter
+ * is published on `@rottay/design-system/server`; `compileTheme` is internal and
+ * reached by path off its dist owner (F-24).
  */
 export const RETIRED_STATIC_COMPILER_EXPORTS = Object.freeze([
   'compileBrandTheme',
@@ -323,7 +329,11 @@ export function assertNoRetiredCompilerBinding(arms) {
       );
     }
     for (const { pattern, owner } of RETIRED_COMPILER_MODULE_PATTERNS) {
-      if (pattern.test(spec.compilerModule) || pattern.test(spec.compilerSource ?? '')) {
+      if (
+        pattern.test(spec.compilerModule) ||
+        pattern.test(spec.compilerOwnerModule ?? '') ||
+        pattern.test(spec.compilerSource ?? '')
+      ) {
         throw new Error(
           `resolution-probe: ingress arm "${spec.id}" deep-imports the retired ${owner} ` +
             `("${spec.compilerModule}" / "${spec.compilerSource}"). Bind a published entrypoint ` +
@@ -2039,10 +2049,17 @@ export async function loadCompilerArms({
   for (const spec of Object.values(INGRESS_ARMS)) {
     const absolute = resolve(CORE_ROOT, spec.compilerModule);
     const module = await importModule(absolute);
-    const exported = module?.[spec.compilerExport];
+    // An arm whose compiler is internal names its dist owner; it is never read off
+    // the published module, which does not carry it.
+    const ownerModule = spec.compilerOwnerModule ?? spec.compilerModule;
+    const owner =
+      ownerModule === spec.compilerModule
+        ? module
+        : await importModule(resolve(CORE_ROOT, ownerModule));
+    const exported = owner?.[spec.compilerExport];
     if (typeof exported !== 'function') {
       throw new Error(
-        `resolution-probe: ${spec.compilerModule} exports no callable ${spec.compilerExport}. ` +
+        `resolution-probe: ${ownerModule} exports no callable ${spec.compilerExport}. ` +
           'Refusing to fabricate the arm payload.',
       );
     }
@@ -2083,6 +2100,7 @@ export async function loadCompilerArms({
       provenance: {
         module: fromCoreRoot(absolute),
         moduleSubpath: spec.compilerModuleSubpath ?? null,
+        ...(spec.compilerOwnerModule ? { ownerModule: spec.compilerOwnerModule } : {}),
         sourceOfTruth: spec.compilerSource,
         exportName: spec.compilerExport,
         ...(spec.id === 'db-tenant-theme' ? { schemaVersion } : {}),

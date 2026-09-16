@@ -64,7 +64,6 @@ import {
   LOWERING_SOURCE,
   loadFlatThemeLowering,
 } from '../../../../../../../libraries/theme-lowering/index.mjs';
-import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
 /** This tests folder, so the textual fence can read the probe it owns. */
 const HERE = resolve(fileURLToPath(import.meta.url), '..');
@@ -532,6 +531,7 @@ test('loadCompilerArms claims freshness only after the dist gate proves it', asy
       emitThemeCss: () => '',
       containerScope: () => ({}),
       brandTenantSelector: () => '',
+      verticalEngine: () => 'modern',
       EMPTY_PROVENANCE: {},
       deriveTenantStatusSeedAuthorship: () => ({ base: {}, modes: {} }),
       // `importModule` answers every path with this one double, so it also
@@ -2350,17 +2350,27 @@ test('F4B-8 drill 5: each role seed moves its OWN ten steps and CROSSES ZERO', a
     errorColor: '#DC2626', infoColor: '#0EA5E9',
   };
   const before = deriveTenantColorRamps(palette, 'light');
-  for (const [field, role] of [['primaryColor', 'primary'], ['secondaryColor', 'secondary'], ['accentColor', 'accent']]) {
+  /* The focus ring is derived from the PRIMARY seed against the ground, so it
+   * belongs to primary's footprint and to no other role's. */
+  const ownFootprint = { primary: ['--ds-focus-ring-color'], secondary: [] };
+  for (const [field, role] of [['primaryColor', 'primary'], ['secondaryColor', 'secondary']]) {
     const after = deriveTenantColorRamps({ ...palette, [field]: '#DC2626' }, 'light');
     const moved = Object.keys(before).filter((key) => before[key] !== after[key]);
-    const own = moved.filter((key) => key.startsWith(`--ds-color-${role}-`));
-    assert.equal(own.length, 10, `${role} must move its ten steps`);
-    assert.equal(
-      moved.length - own.length,
-      0,
-      `${role} must cross ZERO into another role; crossed: ${moved.filter((k) => !own.includes(k)).join(', ')}`,
+    const own = moved.filter(
+      (key) => key.startsWith(`--ds-color-${role}-`) || ownFootprint[role].includes(key),
+    );
+    assert.equal(own.length, 10 + ownFootprint[role].length, `${role} must move its ten steps`);
+    assert.deepEqual(
+      moved.filter((key) => !key.startsWith(`--ds-color-${role}-`)),
+      ownFootprint[role],
+      `${role} must cross ZERO into another role`,
     );
   }
+  /* Accent's ten steps have no reader, so they are not emitted and its seed
+   * moves no channel of this derivation at all. */
+  const accentAfter = deriveTenantColorRamps({ ...palette, accentColor: '#DC2626' }, 'light');
+  assert.deepEqual(Object.keys(before).filter((key) => before[key] !== accentAfter[key]), []);
+  assert.equal(Object.keys(before).some((key) => key.startsWith('--ds-color-accent-')), false);
 });
 
 test('F4B-8 drill 6: the GROUND is not a fourth seed — it moves every role and no seed', async () => {
@@ -2372,7 +2382,8 @@ test('F4B-8 drill 6: the GROUND is not a fourth seed — it moves every role and
     backgroundColor: '#FFFFFF', successColor: '#16A34A', warningColor: '#F59E0B',
     errorColor: '#DC2626', infoColor: '#0EA5E9',
   };
-  const seededRoles = ['primary', 'secondary', 'accent', 'success', 'warning', 'error', 'info'];
+  // `accent` is a seed with no derived ramp, so the ground cannot reach it.
+  const seededRoles = ['primary', 'secondary', 'success', 'warning', 'error', 'info'];
   const before = deriveTenantColorRamps(palette, 'light');
   const after = deriveTenantColorRamps({ ...palette, backgroundColor: '#123456' }, 'light');
   const moved = Object.keys(before).filter((key) => before[key] !== after[key]);
@@ -2970,9 +2981,12 @@ test('B-2 drill 1 [needs dist]: the authorship IS the stop path, read back from 
 });
 
 test('B-2 drill 2 [needs dist]: a BASELINE compile is untouched — production invariance', async () => {
-  const { compile: lowerFlatTheme, module: lowering } = await loadFlatThemeLowering({
-    coreRoot: CORE_ROOT,
-  });
+  const { compile: lowerFlatTheme } = await loadFlatThemeLowering({ coreRoot: CORE_ROOT });
+  // The lift is internal, so it is read off its own dist owner, exactly as the
+  // support adapter reads it.
+  const { liftAuthoredTheme } = await import(
+    `${CORE_ROOT}/dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js`
+  );
   const { renderFirstPartyArtifact, FIRST_PARTY_ARTIFACT_SPECS } = await import(
     `${CORE_ROOT}/dist/index.js`
   );
@@ -2994,7 +3008,7 @@ test('B-2 drill 2 [needs dist]: a BASELINE compile is untouched — production i
     // ... and the production entry point takes that same no-provenance path.
     const { compiled } = renderFirstPartyArtifact({
       spec,
-      theme: lowering.liftAuthoredTheme(brandTheme),
+      theme: liftAuthoredTheme(brandTheme),
     });
     assert.deepEqual(compiled.cssVariables, bare.cssVariables);
     // The vertical's OWN authored button bg survives, read from the theme
@@ -4125,6 +4139,12 @@ test('B4: the asymmetry is of EMISSION, not of movement (all three verticals)', 
   const { compile: lowerFlatTheme } = await loadFlatThemeLowering({ coreRoot: CORE_ROOT });
   const themes = await b2Baselines();
   const stack = 'Inter, system-ui, sans-serif';
+  // Only bithire's preset authors a heading family; pinned so a preset that
+  // starts authoring one fails here instead of silently changing the claim.
+  const authorsHeading = Object.entries(themes)
+    .filter(([, theme]) => theme.typography?.fontFamilyHeading !== undefined)
+    .map(([vertical]) => vertical);
+  assert.deepEqual(authorsHeading, ['bithire']);
   for (const [vertical, brandTheme] of Object.entries(themes)) {
     const before = lowerFlatTheme({ brandTheme, vertical, tenantSlug: vertical }).cssVariables;
     const after = lowerFlatTheme({
@@ -4142,7 +4162,11 @@ test('B4: the asymmetry is of EMISSION, not of movement (all three verticals)', 
      * base-only patch never touches `fontFamilyHeading`), so the static arm
      * EMITS the heading without moving it. */
     assert.equal(after['--ds-font-family-heading'], before['--ds-font-family-heading'], vertical);
-    assert.notEqual(after['--ds-font-family-heading'], undefined, `${vertical} static EMITS heading`);
+    if (authorsHeading.includes(vertical)) {
+      assert.notEqual(after['--ds-font-family-heading'], undefined, `${vertical} static EMITS heading`);
+    } else {
+      assert.equal(after['--ds-font-family-heading'], undefined, `${vertical} authors no heading to emit`);
+    }
     // The DB door does not emit it at all: its document is a pure delta.
     const artifact = server.compileTenantThemeConfig({
       schemaVersion: server.TENANT_THEME_SCHEMA_VERSION,
