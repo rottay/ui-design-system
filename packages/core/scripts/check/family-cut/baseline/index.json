@@ -1175,6 +1175,26 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0
+    },
+    "typography": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 9,
+        "channelsRead": 127,
+        "classTokens": 2,
+        "partsStamped": 1,
+        "partsConsumed": 1
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 2,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0
     }
   }
 }
