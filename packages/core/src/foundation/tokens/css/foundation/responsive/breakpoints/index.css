@@ -11,15 +11,22 @@
  * constraint, not an omission -- so a threshold that must appear inside a
  * prelude is written as the literal this file names, and the test is what
  * makes the literal a projection of the contract rather than a second scale.
- * Everything that CAN read a token (container padding ladders, JS, the
+ * Everything that CAN read a token (the Container measure ladder, JS, the
  * compiled tenant block) reads `--ds-breakpoint-*`.
+ *
+ * THE ZERO STEP IS NOT PROJECTED. `xs` is `0`: the floor the other steps are
+ * measured from, and the one rung nothing can read -- a prelude cannot, and the
+ * routes that can (the Container ladder, JS) have no use for a zero. It was
+ * declared here and emitted into every tenant artifact with zero readers
+ * anywhere, so it is retired as a channel. The STEP is untouched: `xs` is still
+ * a member of `RESPONSIVE_BREAKPOINTS` and of the order every responsive hook
+ * cascades over; only its CSS projection is gone.
  *
  * The container ladder a tenant selects (`responsive.posture`) is a separate,
  * bounded axis and is emitted per tenant on `--ds-posture-*` by the compiler.
  */
 
 :root {
-  --ds-breakpoint-xs: 0px;
   --ds-breakpoint-sm: 640px;
   --ds-breakpoint-md: 768px;
   --ds-breakpoint-lg: 1024px;

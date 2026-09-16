@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "note": "Decrease-only dead-writer inventory (name-keyed). A NEW name here fails the gate; deletions are the goal. Regenerate only with --write-baseline after reviewing the diff.",
-  "lastMove": "EVI-02 instruments (2026-09-15, DT-adjudicated option (b)): -1, decrease-only. --ds-input-placeholder leaves the anchor because the adjudicatedAlive walker now reads the registry's index KEY when a row carries no name field. Its row in governance/tokens/decisions/writers/unused/system is decision EXECUTED_DEFECT_FIX, executed true, zero readers in core/showroom/apps, successor --ds-input-color-placeholder chain; the adjudication was written long ago and the walker simply could not see it -- 525 of the 538 rows are keyed by channel with no name field, so the mechanism measured 0 adjudicated-live tree-wide since it was built. The same change raises the adjudicated-alive SET from 13 to 34 names; this is the only one of the 21 newly-seen names that was in this anchor.",
+  "lastMove": "WO-FAM-07 (2026-09-16): -1, decrease-only. `--ds-breakpoint-xs` is retired, not reclassified. The ladder's zero step is the floor the other steps are measured from and the one rung nothing can read -- a @media/@container prelude cannot read a custom property, and the routes that can (the Container measure ladder this cut wired to --ds-breakpoint-{sm..2xl}, JS, the compiled tenant block) have no use for a zero. Measured 0 readers in core, showroom and all three apps, so the emitter now skips the floor and the contract sheet no longer declares it. The STEP stays in RESPONSIVE_BREAKPOINTS; only its CSS projection is gone. The three vertical artifacts still carry the stale declaration until the coordinator regenerates them with the serialized build.",
   "lastMoveKind": "decrece-solo: -1 nombre(s)",
   "names": [
     "--ds-action-dock-reserved-block-end",
@@ -12,7 +12,6 @@
     "--ds-breakpoint-md",
     "--ds-breakpoint-sm",
     "--ds-breakpoint-xl",
-    "--ds-breakpoint-xs",
     "--ds-button-primary-border-color",
     "--ds-cell-meter-fill",
     "--ds-cell-meter-shadow",

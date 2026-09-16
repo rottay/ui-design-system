@@ -198,25 +198,45 @@ function withPlantedSheet<T>(css: string, run: (root: string) => T): T {
 
 const contractCss = readFileSync(CONTRACT, "utf8");
 
+/**
+ * The zero step is a member of the ladder but NOT of its CSS projection.
+ *
+ * `xs` is `0`: the floor the other steps are measured from. A `@media` prelude
+ * cannot read a custom property, and the routes that can -- the Container
+ * measure ladder, JS, the compiled tenant block -- have no use for a zero, so it
+ * was emitted into every tenant artifact with zero readers anywhere. WO-FAM-07
+ * retired the CHANNEL and left the STEP, which is why this file now asserts the
+ * projection against `PROJECTED_STEPS` while every other assertion below keeps
+ * reading the full `RESPONSIVE_BREAKPOINTS` ladder.
+ */
+const PROJECTION_FLOOR = "xs";
+const PROJECTED_STEPS = Object.entries(RESPONSIVE_BREAKPOINTS).filter(
+  ([step]) => step !== PROJECTION_FLOOR
+);
+
 describe("the breakpoint contract", () => {
-  it("projects every contract step as a --ds-breakpoint-* token", () => {
-    for (const [step, px] of Object.entries(RESPONSIVE_BREAKPOINTS)) {
+  it("projects every contract step above the floor as a --ds-breakpoint-* token", () => {
+    for (const [step, px] of PROJECTED_STEPS) {
       expect(contractCss).toContain(`--ds-breakpoint-${step}: ${px}px;`);
     }
   });
 
-  it("declares no step the contract does not name", () => {
+  it("declares no step the contract does not name, and never the zero floor", () => {
     const declared = [...contractCss.matchAll(/--ds-breakpoint-([a-z0-9]+):/g)]
       .map((match) => match[1])
       .sort();
-    expect(declared).toEqual(Object.keys(RESPONSIVE_BREAKPOINTS).sort());
+    expect(declared).toEqual(PROJECTED_STEPS.map(([step]) => step).sort());
+    expect(declared).not.toContain(PROJECTION_FLOOR);
+    // The STEP itself is untouched: only its projection retired.
+    expect(RESPONSIVE_BREAKPOINTS[PROJECTION_FLOOR]).toBe(0);
   });
 
-  it("emits the same ladder from the theme compiler", () => {
+  it("emits the same ladder from the theme compiler, floor excluded", () => {
     const channels = deriveResponsiveChannels({ id: "t", name: "T" });
-    for (const [step, px] of Object.entries(RESPONSIVE_BREAKPOINTS)) {
+    for (const [step, px] of PROJECTED_STEPS) {
       expect(channels[`--ds-breakpoint-${step}`]).toBe(`${px}px`);
     }
+    expect(channels[`--ds-breakpoint-${PROJECTION_FLOOR}`]).toBeUndefined();
   });
 
   it("keeps every literal threshold under foundation/responsive on a contract step", () => {

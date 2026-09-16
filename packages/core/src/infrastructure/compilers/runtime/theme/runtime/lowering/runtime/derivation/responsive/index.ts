@@ -33,6 +33,21 @@ import type { FamilyDeriver } from "../../../foundation/contract";
  * the thresholds a `@media` prelude spells out; the responsive token sheet is
  * the single place those literals are allowed to live.
  */
+/**
+ * The ladder's zero step is NOT projected as a channel.
+ *
+ * `xs` is `0`: the floor every other step is measured from, and the one rung a
+ * consumer can never read. A `@media`/`@container` prelude cannot read a custom
+ * property at all, and the routes that CAN read one -- the container measure
+ * ladder that `derivation/chrome/container` wires to `--ds-breakpoint-{sm..2xl}`,
+ * JS, a compiled tenant block -- have no use for a zero. It was emitted into
+ * every tenant artifact and read by nobody (measured: 0 readers in core, the
+ * showroom and all three apps), so it retires here rather than staying a
+ * permanent dead writer. The STEP itself is untouched: `xs` remains a member of
+ * `RESPONSIVE_BREAKPOINTS` and of the order every responsive hook cascades over.
+ */
+const PROJECTION_FLOOR = "xs";
+
 export const responsiveDeriver: FamilyDeriver = {
   family: "responsive",
   rank: "derived",
@@ -52,6 +67,7 @@ export function deriveResponsiveChannels(
 ): Record<string, string> {
   const vars: Record<string, string> = {};
   for (const [step, px] of Object.entries(RESPONSIVE_BREAKPOINTS)) {
+    if (step === PROJECTION_FLOOR) continue;
     vars[`--ds-breakpoint-${step}`] = `${px}px`;
   }
   const selection = bt.responsive;

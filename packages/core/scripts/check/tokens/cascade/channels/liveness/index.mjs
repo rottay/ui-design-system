@@ -1532,14 +1532,13 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     classification: LIVENESS.unreadEmittedNoRoute,
     registered: '2026-09-12',
     reason:
-      'CSS @media/@container preludes cannot read custom properties (WO-INV-07 evidence), so the only productive route is a family cut that paints or style-queries these values; the layout primitives this cut owns are where that adoption belongs, or where the channels are retired',
+      'CSS @media/@container preludes cannot read custom properties (WO-INV-07 evidence), so the only productive route was a family cut that paints or style-queries these values. WO-FAM-07 discharged it both ways: the Container measure ladder now reads --ds-breakpoint-{sm..2xl} (a rung resolves to the viewport step it frames, probed in Container.causality), and the zero floor --ds-breakpoint-xs was retired from emission and from the contract sheet rather than kept as a permanent dead writer. This row stays only until the five wired channels are re-measured as read',
     channels: Object.freeze([
       '--ds-breakpoint-2xl',
       '--ds-breakpoint-lg',
       '--ds-breakpoint-md',
       '--ds-breakpoint-sm',
       '--ds-breakpoint-xl',
-      '--ds-breakpoint-xs',
     ]),
   }),
   Object.freeze({
