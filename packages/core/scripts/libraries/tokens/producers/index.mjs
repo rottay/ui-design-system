@@ -15,21 +15,28 @@
  *       `var(--ds-x, …)` nunca hace match porque tras el nombre viene `,` o
  *       `)`, jamas `:`.
  *
- *   (b) EMISION DEL COMPILADOR. Un canal que un derivador de familia escribe
- *       (`vars["--ds-x"] = …`) o que la rampa de tintes registra. Se leen del
- *       registro de derivacion con el MISMO extractor que usa
- *       `channel-liveness`, importado y no reimplementado.
+ *   (b) EMISION DEL COMPILADOR. Un canal que el compilador escribe
+ *       (`vars["--ds-x"] = …`) o que la rampa de tintes registra, leido con los
+ *       MISMOS extractores que usa `channel-liveness`, importados y no
+ *       reimplementados. Tres raices, cada una con su clase
+ *       (`COMPILER_PRODUCER_ROOTS`): el registro de derivacion, el kernel del
+ *       compilador y `lowering/foundation`. Fuera del registro, una clave
+ *       interpolada o no literal se resuelve sobre un dominio literal cerrado o
+ *       se reporta en `unresolved`; nunca se descarta en silencio.
  *
  * Lo que NO cuenta como productor: un `var()` en un skin (eso es una lectura),
  * un nombre citado en un comentario, un fixture, un test o un artefacto
  * generado. Un conjunto de productores inflado convierte deuda real en verde.
  */
 import { readFileSync, readdirSync } from 'node:fs';
-import { join, sep } from 'node:path';
+import { join, relative, sep } from 'node:path';
 
 import {
   collectFlatThemeCompilerSources,
   extractDirectVarsAssignments,
+  extractIdentifierVarsAssignments,
+  extractInterpolatedAssignments,
+  extractKeyedVarsEmissions,
   extractTintRampEmissions,
 } from '../../../check/tokens/cascade/channels/liveness/index.mjs';
 import { packageRoot as findPackageRoot } from '../../repo-root/index.mjs';
@@ -91,13 +98,124 @@ export function collectCompiledChannels(sources = collectFlatThemeCompilerSource
   return emitted;
 }
 
-/** (a) ∪ (b): el conjunto que las dos preguntas comparten. */
+/**
+ * Las raices del compilador que emiten canales, con la clase de productor de
+ * cada una. `derived` es el registro de derivacion de `channel-liveness`, que
+ * ya vigila sus propias claves no literales; las otras dos raices no las vigila
+ * nadie mas, y por eso aqui se resuelven o se reportan.
+ */
+export const COMPILER_PRODUCER_ROOTS = Object.freeze([
+  Object.freeze({
+    kind: 'derived',
+    root: 'src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation',
+  }),
+  Object.freeze({ kind: 'kernel', root: 'src/infrastructure/compilers/kernel' }),
+  Object.freeze({
+    kind: 'lowering-foundation',
+    root: 'src/infrastructure/compilers/runtime/theme/runtime/lowering/foundation',
+  }),
+]);
+
+const TEST_OWNER = /(?:^|\/)tests(?:\/|$)/u;
+
+const countByLine = (lines) => {
+  const counts = new Map();
+  for (const line of lines) counts.set(line, (counts.get(line) ?? 0) + 1);
+  return counts;
+};
+
+/** Cada `vars[<clave>] =` del fuente, con la clave entre corchetes equilibrados. */
+function assignmentSites(sourceText) {
+  const sites = [];
+  const opener = /\bvars\[/gu;
+  let match;
+  while ((match = opener.exec(sourceText)) !== null) {
+    let depth = 1;
+    let index = match.index + match[0].length;
+    let quote = null;
+    for (; index < sourceText.length && depth > 0; index += 1) {
+      const ch = sourceText[index];
+      if (quote) {
+        if (ch === '\\') index += 1;
+        else if (ch === quote) quote = null;
+      } else if (ch === '"' || ch === "'" || ch === '`') quote = ch;
+      else if (ch === '[') depth += 1;
+      else if (ch === ']') depth -= 1;
+    }
+    if (depth !== 0 || !/^\s*=/u.test(sourceText.slice(index))) continue;
+    const key = sourceText.slice(match.index + match[0].length, index - 1).trim();
+    sites.push({ key, line: sourceText.slice(0, match.index).split('\n').length });
+  }
+  return sites;
+}
+
+/**
+ * Las claves que ningun extractor de `channel-liveness` lee (p. ej.
+ * `vars[TABLE[key]]`): cada sitio de asignacion que sobra por linea.
+ */
+function unreadKeyShapes(sourceText) {
+  const read = countByLine([
+    ...[...extractDirectVarsAssignments(sourceText).values()].flat().map((site) => site.line),
+    ...extractInterpolatedAssignments(sourceText).map((site) => site.line),
+    ...extractIdentifierVarsAssignments(sourceText).map((site) => site.line),
+  ]);
+  const residual = [];
+  for (const site of assignmentSites(sourceText)) {
+    const left = read.get(site.line) ?? 0;
+    if (left > 0) read.set(site.line, left - 1);
+    else residual.push(site);
+  }
+  return residual;
+}
+
+/**
+ * (b) por clase: lo que emite cada raiz de `COMPILER_PRODUCER_ROOTS`, y los
+ * sitios cuya clave no se pudo enumerar.
+ */
+export function collectCompilerEmissions({ coreRoot = DEFAULT_ROOT, roots = COMPILER_PRODUCER_ROOTS } = {}) {
+  const byKind = {};
+  const unresolved = [];
+  for (const { kind, root } of roots) {
+    const absoluteRoot = join(coreRoot, root);
+    if (kind === 'derived') {
+      byKind[kind] = collectCompiledChannels(collectFlatThemeCompilerSources(absoluteRoot));
+      continue;
+    }
+    const sources = collectFlatThemeCompilerSources(absoluteRoot).filter(
+      (source) => !TEST_OWNER.test(relative(absoluteRoot, source.path).split(sep).join('/')),
+    );
+    const emitted = collectCompiledChannels(sources);
+    for (const source of sources) {
+      const path = relative(coreRoot, source.path).split(sep).join('/');
+      const keyed = extractKeyedVarsEmissions(source.text, { file: source.path, coreRoot });
+      for (const name of keyed.resolved.keys()) emitted.add(name);
+      for (const site of keyed.unresolved) unresolved.push({ kind, path, ...site });
+      for (const site of unreadKeyShapes(source.text)) {
+        unresolved.push({
+          kind,
+          path,
+          raw: site.key,
+          line: site.line,
+          reason: 'no channel-liveness extractor reads this key shape',
+        });
+      }
+    }
+    byKind[kind] = emitted;
+  }
+  unresolved.sort((a, b) => a.path.localeCompare(b.path) || a.line - b.line);
+  return { byKind, unresolved };
+}
+
+/** (a) ∪ (b): el conjunto que las preguntas comparten. */
 export function collectChannelProducers(options = {}) {
   const declared = options.declared ?? collectDeclaredChannels();
-  const compiled = options.compiled ?? collectCompiledChannels();
+  const emissions = collectCompilerEmissions();
+  const compiled = options.compiled ?? new Set(Object.values(emissions.byKind).flatMap((set) => [...set]));
   return {
     declared,
     compiled,
+    compiledByKind: emissions.byKind,
+    unresolved: emissions.unresolved,
     producers: new Set([...declared, ...compiled]),
   };
 }
