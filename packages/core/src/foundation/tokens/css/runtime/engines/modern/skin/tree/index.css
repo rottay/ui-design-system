@@ -102,7 +102,7 @@
    primary accent — one of the scarce places the accent is structural. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div {
   height: 2px;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
   animation: rottay-drop-indicator var(--ds-motion-slow) ease-out;
 }
