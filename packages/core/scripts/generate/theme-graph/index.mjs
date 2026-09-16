@@ -27,15 +27,17 @@
  * A writer (--write, --views) and a checker (--check, --check-views) are refused
  * together: the check would compare against the bytes the write just produced.
  */
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import { assertDistFresh } from "../../package/artifacts/freshness/index.mjs";
 import { assertNoUnknown, EDGE_KINDS, stableStringify } from "./schema.mjs";
 import { VIEWS } from "./views.mjs";
 import {
-  channelNodes, decisionNodes, deriverNodes, dryRun, familyNodes, familyOfFile,
-  readCascade, sha256, VERTICALS,
+  cascadeDrift, channelNodes, CSS_ROOT, CSS_ROOT_REL, decisionNodes, deriverNodes, dryRun, familyNodes,
+  familyOfFile, measureCascade, readCascade, sha256, VERTICALS,
 } from "./derive.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -98,6 +100,24 @@ export function compareGraph(files, dir = OUT_DIR) {
   return failures;
 }
 
+/**
+ * Everything `--check` compares, and nothing it writes: the committed census against
+ * the CSS source, the graph and views against the derivation, and the size pin.
+ */
+export function checkFailures({ files, views, committed, measured, outDir = OUT_DIR, viewsDir = VIEWS_DIR }) {
+  const failures = cascadeDrift(committed, measured);
+  failures.push(...compareGraph(files, outDir), ...compareViews(views, viewsDir));
+  const total = Object.values(files).reduce((n, text) => n + Buffer.byteLength(text), 0);
+  if (total > SIZE_BUDGET_BYTES) {
+    failures.push(
+      `the graph is ${(total / 1024 / 1024).toFixed(2)} MB, over the pinned ${(SIZE_BUDGET_BYTES / 1024 / 1024).toFixed(2)} MB`,
+    );
+  }
+  return failures;
+}
+
+export const DRILLS = Object.freeze(["deriver", "skin"]);
+
 /** The JSON views as committed, for a render that does not derive. */
 function readJsonViews() {
   const files = {};
@@ -130,22 +150,57 @@ export const SIZE_BUDGET_BYTES = 9 * 1024 * 1024;
 /** A key no id can collide with, used only to sort and de-duplicate pairs. */
 const SEP = "\u241F";
 
-/** The built door has to be the tree's own build, or the dry-run measures yesterday. */
+/**
+ * The built door has to be the tree's own build, or the dry-run measures yesterday.
+ * Proven by the build stamp's content hash of the build inputs and dist bytes, not by mtime.
+ */
 export function assertDistIsFresh(root = ROOT) {
   const dist = join(root, "dist");
   if (!existsSync(dist)) throw new Error("theme-graph: dist/ is missing -- run the build; the dry-run compiles the built door");
-  const distTime = statSync(dist).mtimeMs;
-  const stale = [];
-  const walk = (dir) => {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const full = join(dir, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else if (/[.]tsx?$/.test(entry.name) && statSync(full).mtimeMs > distTime) stale.push(full);
+  const proof = assertDistFresh({ packageRoot: root, stampPath: join(dist, "build-stamp.json") });
+  if (!proof.ok) {
+    throw new Error(`theme-graph: dist/ is not proven fresh by its build stamp -- ${proof.failures.join("; ")}`);
+  }
+}
+
+/** The modern skin a real-source drill mutates: the reference paint implementation. */
+export const MUTANT_SKIN = "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css";
+
+/**
+ * Plant a source-level skin mutant: copy the CSS tree, delete the first read site
+ * the extractor measures in MUTANT_SKIN (keeping its line breaks, so no other site
+ * moves), and hand back the copy to be re-measured.
+ */
+export function plantSkinMutant(root = ROOT) {
+  const cssRoot = join(root, CSS_ROOT);
+  const target = `packages/core/${MUTANT_SKIN}`;
+  const site = measureCascade(root, { cssRoot }).document.readSites.find((row) => row.file === target);
+  if (site === undefined) throw new Error(`theme-graph: ${MUTANT_SKIN} has no measured read site to mutate`);
+
+  const copy = mkdtempSync(join(tmpdir(), "theme-graph-skin-"));
+  const cleanup = () => rmSync(copy, { recursive: true, force: true });
+  try {
+    cpSync(cssRoot, copy, {
+      recursive: true,
+      filter: (path) => !relative(cssRoot, path).split(sep).join("/").startsWith("facade/artifacts"),
+    });
+    const file = join(copy, relative(CSS_ROOT_REL, site.file));
+    const lines = readFileSync(file, "utf8").split("\n");
+    const row = lines[site.line - 1];
+    const start = site.column - 1;
+    if (!row.slice(start).startsWith(`${site.property}:`)) {
+      throw new Error(`theme-graph: ${site.file}:${site.line}:${site.column} is not the ${site.property} declaration the census names`);
     }
-  };
-  walk(join(root, "src"));
-  if (stale.length > 0) {
-    throw new Error(`theme-graph: ${stale.length} source file(s) are newer than dist/ -- rebuild, or the graph describes a tree that is not this one`);
+    const text = lines.join("\n");
+    const offset = lines.slice(0, site.line - 1).reduce((n, line) => n + line.length + 1, 0) + start;
+    const end = text.indexOf(";", offset);
+    if (end === -1) throw new Error(`theme-graph: the ${site.property} declaration at ${site.file}:${site.line} never terminates`);
+    const removed = text.slice(offset, end + 1).replace(/[^\n]/g, "");
+    writeFileSync(file, `${text.slice(0, offset)}${removed}${text.slice(end + 1)}`);
+    return { cssRoot: copy, site, cleanup };
+  } catch (error) {
+    cleanup();
+    throw error;
   }
 }
 
@@ -178,9 +233,8 @@ function consumesCovers(pattern, keypath) {
   return keypath.startsWith(`${pattern}.`) || pattern.startsWith(`${keypath}.`);
 }
 
-export async function buildGraph({ root = ROOT, drill } = {}) {
+export async function buildGraph({ root = ROOT, drill, cascade = readCascade(root) } = {}) {
   const door = await loadDoor(root);
-  const cascade = readCascade(root);
 
   const decisions = decisionNodes(door.catalog);
   const derivers = deriverNodes(door.derivation, root);
@@ -203,8 +257,7 @@ export async function buildGraph({ root = ROOT, drill } = {}) {
   // DRILL: a deriver stops producing one channel. The graph must move, which is
   // what proves it is derived rather than transcribed.
   if (drill === "deriver") channels.splice(0, 1);
-  // DRILL: a skin stops reading a channel.
-  const readSites = drill === "skin" ? cascade.document.readSites.slice(1) : cascade.document.readSites;
+  const readSites = cascade.document.readSites;
 
   const channelNames = new Set(channels.map((c) => c.name));
   const familyIds = new Set(families.map((f) => f.id));
@@ -444,6 +497,12 @@ function main() {
       + "run the write and the check as separate commands (ds:derive, then ds:derive:check)",
     );
   }
+  if (drill !== undefined && !DRILLS.includes(drill)) {
+    throw new Error(`unknown drill ${drill} -- expected one of ${DRILLS.join(", ")}`);
+  }
+  if (drill !== undefined && writers.length > 0) {
+    throw new Error(`--drill=${drill} + ${writers.join(" + ")} -- a planted mutant is never written`);
+  }
 
   /* The dry-run compiles the BUILT door, so a stale build would publish a graph
      of yesterday's compiler under today's digest -- the exact failure mode that
@@ -486,7 +545,20 @@ function main() {
   }
 
   assertDistIsFresh();
-  return buildGraph({ drill }).then((graph) => {
+  const committed = readCascade(ROOT);
+  const mutant = drill === "skin" ? plantSkinMutant() : undefined;
+  let measured;
+  try {
+    measured = measureCascade(ROOT, mutant === undefined ? {} : { cssRoot: mutant.cssRoot });
+  } finally {
+    mutant?.cleanup();
+  }
+  const drift = cascadeDrift(committed, measured);
+  if (args.includes("--write") && drift.length > 0) {
+    throw new Error(`${drift[0]}; refusing to write a graph over a census that is not this tree's`);
+  }
+
+  return buildGraph({ drill, cascade: mutant === undefined ? committed : measured }).then((graph) => {
     const { files, counts } = render(graph);
     const total = Object.values(files).reduce((n, text) => n + Buffer.byteLength(text), 0);
 
@@ -506,13 +578,7 @@ function main() {
     if (args.includes("--json")) console.log(JSON.stringify(counts, null, 2));
 
     if (args.includes("--check")) {
-      const failures = compareGraph(files);
-      failures.push(...compareViews(views));
-      if (total > SIZE_BUDGET_BYTES) {
-        failures.push(
-          `the graph is ${(total / 1024 / 1024).toFixed(2)} MB, over the pinned ${(SIZE_BUDGET_BYTES / 1024 / 1024).toFixed(2)} MB`,
-        );
-      }
+      const failures = checkFailures({ files, views, committed, measured });
       if (failures.length > 0) {
         for (const failure of failures) console.error(`theme-graph FAIL -- ${failure}`);
         process.exit(1);
@@ -520,7 +586,8 @@ function main() {
       console.log(
         `theme-graph --check OK -- ${counts.decisions} decisions, ${counts.derivers} derivers, ${counts.channels} channels, `
         + `${counts.consumers} consumers, ${counts.families} families; ${Object.values(counts.edges).reduce((a, b) => a + b, 0)} edges; `
-        + `${(total / 1024 / 1024).toFixed(2)} MB`,
+        + `${(total / 1024 / 1024).toFixed(2)} MB. Read census re-measured from CSS source and byte-equal to the committed one; `
+        + "compiler read from dist/ under its build-stamp content proof.",
       );
     }
   });

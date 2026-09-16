@@ -9,16 +9,16 @@
  * or plants a placeholder that the graph MUST refuse.
  */
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, it } from "node:test";
 
 import { assertNoUnknown, canonical, stableStringify } from "../schema.mjs";
-import { expandKeypath, familyOfFile } from "../derive.mjs";
+import { cascadeDrift, expandKeypath, familyOfFile, measureCascade } from "../derive.mjs";
 import {
-  assertDistIsFresh, buildGraph, byControl, byFamily, compareGraph, compareViews, OUT_DIR, OUT_FILES, render,
-  renderViews, VIEWS_DIR,
+  assertDistIsFresh, buildGraph, byControl, byFamily, checkFailures, compareGraph, compareViews, MUTANT_SKIN, OUT_DIR,
+  OUT_FILES, plantSkinMutant, render, renderViews, VIEWS_DIR,
 } from "../index.mjs";
 import { renderControlsView, renderFamiliesView } from "../views.mjs";
 
@@ -49,6 +49,16 @@ describe("theme-graph -- the emitted graph is the derivation", () => {
     assert.throws(() => assertDistIsFresh("/nonexistent-root-for-this-drill"), /dist\/ is missing/);
   });
 
+  it("MUTANT: a dist/ whose freshness no build stamp proves is refused, however new its mtime", () => {
+    const root = mkdtempSync(join(tmpdir(), "theme-graph-dist-"));
+    try {
+      mkdirSync(join(root, "dist"));
+      assert.throws(() => assertDistIsFresh(root), /not proven fresh by its build stamp -- build stamp missing/);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it("the dry-run covered three verticals in two modes each", async () => {
     const graph = await buildGraph();
     assert.equal(graph.run.blocks.length, 6, "3 verticals x 2 modes is the stated coverage");
@@ -71,12 +81,69 @@ describe("theme-graph drills -- a graph that cannot move is not derived", () => 
     assert.equal(mutant.counts.channels, clean.counts.channels - 1);
   });
 
-  it("MUTANT: a skin that stops reading a channel moves the graph", async () => {
-    const clean = render(await buildGraph());
-    const mutant = render(await buildGraph({ drill: "skin" }));
-    assert.notEqual(mutant.files.nodes, clean.files.nodes, "a lost read site must move the nodes");
-    assert.notEqual(mutant.files.edges, clean.files.edges, "...and its read edges");
-    assert.equal(mutant.counts.consumers, clean.counts.consumers - 1);
+  it("MUTANT: a read site deleted from a real skin's source reddens the census and moves the graph", async () => {
+    const skin = join(OUT_DIR, "../../..", MUTANT_SKIN);
+    const skinBytes = readFileSync(skin);
+    const clean = measureCascade(join(OUT_DIR, "../../.."));
+    const planted = plantSkinMutant();
+    let mutant;
+    try {
+      mutant = measureCascade(join(OUT_DIR, "../../.."), { cssRoot: planted.cssRoot });
+    } finally {
+      planted.cleanup();
+    }
+    assert.deepEqual(readFileSync(skin), skinBytes, "the drill mutates a copy, never the tree");
+    assert.equal(planted.site.file, `packages/core/${MUTANT_SKIN}`);
+
+    const lostIds = (from, to) => {
+      const kept = new Set(to.document.readSites.map((site) => site.readSiteId));
+      return from.document.readSites.map((site) => site.readSiteId).filter((id) => !kept.has(id));
+    };
+    assert.deepEqual(lostIds(clean, mutant), [planted.site.readSiteId], "exactly the planted site leaves the census");
+    assert.deepEqual(lostIds(mutant, clean), [], "and no other site moves");
+
+    const drift = cascadeDrift(clean, mutant);
+    assert.equal(drift.length, 1);
+    assert.match(drift[0], /is stale against the CSS source \(read-site ids -1 \+0,/);
+
+    const cleanGraph = render(await buildGraph({ cascade: clean }));
+    const mutantGraph = render(await buildGraph({ cascade: mutant }));
+    const short = planted.site.readSiteId.slice(0, 12);
+    const consumerIds = (rendered) => new Set(JSON.parse(rendered.files.nodes).nodes
+      .filter((node) => node.kind === "consumer").map((node) => node.id));
+    assert.ok(consumerIds(cleanGraph).has(short), "the clean source graph carries the site");
+    assert.ok(!consumerIds(mutantGraph).has(short), "the mutant source graph does not");
+    assert.equal(mutantGraph.counts.consumers, cleanGraph.counts.consumers - 1);
+    assert.equal(mutantGraph.counts.edges.reads, cleanGraph.counts.edges.reads - planted.site.refs.length);
+    assert.notEqual(mutantGraph.files.digest, cleanGraph.files.digest);
+
+    const outDir = mkdtempSync(join(tmpdir(), "theme-graph-out-"));
+    const viewsDir = mkdtempSync(join(tmpdir(), "theme-graph-views-"));
+    try {
+      for (const [name, text] of Object.entries(cleanGraph.files)) writeFileSync(join(outDir, `${name}.json`), text);
+      const cleanViews = renderViews(cleanGraph.files);
+      for (const [name, text] of Object.entries(cleanViews)) writeFileSync(join(viewsDir, name), text);
+
+      assert.deepEqual(
+        checkFailures({ files: cleanGraph.files, views: cleanViews, committed: clean, measured: clean, outDir, viewsDir }),
+        [],
+        "a census and graph that match their source pass",
+      );
+      const censusOnly = checkFailures({
+        files: cleanGraph.files, views: cleanViews, committed: clean, measured: mutant, outDir, viewsDir,
+      });
+      assert.equal(censusOnly.length, 1, "a skin edited after the census was cut is red even while the graph matches it");
+      assert.match(censusOnly[0], /stale against the CSS source/);
+
+      const regenerated = checkFailures({
+        files: mutantGraph.files, views: renderViews(mutantGraph.files), committed: mutant, measured: mutant, outDir, viewsDir,
+      });
+      assert.ok(regenerated.some((failure) => /nodes\.json differs from the derivation/.test(failure)));
+      assert.ok(regenerated.some((failure) => /edges\.json differs from the derivation/.test(failure)));
+    } finally {
+      rmSync(outDir, { recursive: true, force: true });
+      rmSync(viewsDir, { recursive: true, force: true });
+    }
   });
 
   it("MUTANT: a placeholder anywhere in the graph is refused", () => {
@@ -308,8 +375,24 @@ describe("theme-graph -- a check never repairs what it compares", () => {
         const { status, out } = await run(...argv);
         assert.notEqual(status, 0, `${argv.join(" ")} must exit nonzero`);
         assert.match(out, /incompatible arguments/, `${argv.join(" ")} must name the incompatibility`);
-        assert.doesNotMatch(out, /wrote|newer than dist|dist\/ is missing/, `${argv.join(" ")} must refuse before any work`);
+        assert.doesNotMatch(out, /wrote|not proven fresh|dist\/ is missing/, `${argv.join(" ")} must refuse before any work`);
         assert.deepEqual(readFileSync(DIGEST), planted, `${argv.join(" ")} must not repair the planted drift`);
+      }
+    });
+  });
+
+  it("MUTANT: a drill is never written, and an unknown drill is refused, before any work", async () => {
+    await withPlantedDrift(async (planted) => {
+      for (const [argv, pattern] of [
+        [["--drill=skin", "--write"], /a planted mutant is never written/],
+        [["--drill=deriver", "--views"], /a planted mutant is never written/],
+        [["--drill=nope", "--check"], /unknown drill nope/],
+      ]) {
+        const { status, out } = await run(...argv);
+        assert.notEqual(status, 0, `${argv.join(" ")} must exit nonzero`);
+        assert.match(out, pattern);
+        assert.doesNotMatch(out, /wrote|not proven fresh|dist\/ is missing/, `${argv.join(" ")} must refuse before any work`);
+        assert.deepEqual(readFileSync(DIGEST), planted);
       }
     });
   });
@@ -320,7 +403,7 @@ describe("theme-graph -- a check never repairs what it compares", () => {
       assert.notEqual(status, 0, out);
       /* A stale build refuses before the comparison; a fresh one reaches it and
          names the drift. Neither path may write. */
-      assert.match(out, /digest\.json differs from the derivation|newer than dist|dist\/ is missing/);
+      assert.match(out, /digest\.json differs from the derivation|not proven fresh by its build stamp|dist\/ is missing/);
       assert.deepEqual(readFileSync(DIGEST), planted, "--check must not repair the artefact it compares");
     });
   });

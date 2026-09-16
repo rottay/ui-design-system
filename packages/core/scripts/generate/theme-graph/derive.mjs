@@ -12,6 +12,8 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { buildEdges, serialize } from "../../check/modern-rescue/cascade/extraction/index.mjs";
+
 export const VERTICALS = Object.freeze(["bithire", "evnto", "rottay"]);
 
 const SKIN_ROOTS = Object.freeze([
@@ -22,6 +24,8 @@ const COMPONENT_ROOT = "src/components";
 const DERIVATION_ROOT =
   "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation";
 const CASCADE_EDGES = "artifacts/generated/manifest/cascade/edges/index.json";
+const CSS_ROOT = "src/foundation/tokens/css";
+const CSS_ROOT_REL = "packages/core/src/foundation/tokens/css";
 
 export const sha256 = (text) => createHash("sha256").update(text).digest("hex");
 
@@ -151,14 +155,37 @@ export function channelNodes(producedBy) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-/** The measured read census. Its own digest travels with the graph as provenance. */
+/** The committed read census. Its own digest travels with the graph as provenance. */
 export function readCascade(root) {
   const path = join(root, CASCADE_EDGES);
   if (!existsSync(path)) {
-    throw new Error(`theme-graph: ${CASCADE_EDGES} is missing — the read census is an input, never re-measured here`);
+    throw new Error(`theme-graph: ${CASCADE_EDGES} is missing -- run cascade:extract --write`);
   }
   const text = readFileSync(path, "utf8");
   return { document: JSON.parse(text), digest: sha256(text) };
+}
+
+/**
+ * The read census measured from the CSS source by the extractor that owns it,
+ * serialized exactly as that extractor commits it.
+ */
+export function measureCascade(root, { cssRoot = join(root, CSS_ROOT) } = {}) {
+  const text = serialize(buildEdges({ cssRoot, cssRootRel: CSS_ROOT_REL }));
+  return { document: JSON.parse(text), digest: sha256(text) };
+}
+
+/** Is the committed census the one the skin source measures today? Read-only. */
+export function cascadeDrift(committed, measured) {
+  if (committed.digest === measured.digest) return [];
+  const had = new Set(committed.document.readSites.map((site) => site.readSiteId));
+  const has = new Set(measured.document.readSites.map((site) => site.readSiteId));
+  const lost = [...had].filter((id) => !has.has(id)).length;
+  const gained = [...has].filter((id) => !had.has(id)).length;
+  return [
+    `${CASCADE_EDGES} is stale against the CSS source (read-site ids -${lost} +${gained}, `
+    + `committed ${committed.digest.slice(0, 12)}, source ${measured.digest.slice(0, 12)}) -- `
+    + "run cascade:extract --write, then ds:derive",
+  ];
 }
 
 /**
@@ -205,4 +232,4 @@ export function familyOfFile(file) {
   return component ? component[1] : undefined;
 }
 
-export { CASCADE_EDGES, DERIVATION_ROOT, SKIN_ROOTS };
+export { CASCADE_EDGES, CSS_ROOT, CSS_ROOT_REL, DERIVATION_ROOT, SKIN_ROOTS };
