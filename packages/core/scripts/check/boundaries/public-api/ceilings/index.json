@@ -178,11 +178,11 @@
     },
     "./primitives/message": {
       "maxReachableModules": 64,
-      "maxSourceBytes": 268796
+      "maxSourceBytes": 269450
     },
     "./primitives/modal": {
       "maxReachableModules": 52,
-      "maxSourceBytes": 185881
+      "maxSourceBytes": 186535
     },
     "./primitives/progress": {
       "maxReachableModules": 20,
@@ -190,7 +190,7 @@
     },
     "./primitives/radio": {
       "maxReachableModules": 47,
-      "maxSourceBytes": 158333
+      "maxSourceBytes": 158987
     },
     "./primitives/responsive": {
       "maxReachableModules": 5,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "2026-09-15 (D6-2c-i texture lot, commit 449e86e55): ./runtime/visual-authority source bytes 73141 -> 73544 (+403, one leaf): kernel/foundation/css/value-safety gains the export keyword, the two repeating-gradient names and the single-source doctrine docblock that closes the admission/emission function-class drift (focused core review: Codex ACCEPT + Fable ACCEPT, evidence/der-06-texture-review/). Reachable modules unchanged (9); no new import enters the graph. Measured pre/post 449e86e55: 6303 -> 6706 bytes on the single changed leaf; the declared budget in contracts/package/entrypoints moves with it.",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
+  "lastMove": "2026-09-16 (WO-INV-01 migration 1, commit 8a9711cb4): the single reading-direction wrapper useReadingDirectionIsRtl lands beside the i18n authority — infrastructure/runtime/i18n/composition/direction 1930 -> 2556 (+626: the wrapper plus its docblock) and the composition barrel 494 -> 522 (+28: the re-export) — and the three exactly-pinned subpaths that reach that leaf through the root i18n barrel grow by exactly +654 each: ./primitives/radio 158333 -> 158987, ./primitives/modal 185881 -> 186535, ./primitives/message 268796 -> 269450. Reachable modules unchanged (45, 52, 64); no new import enters any of the three graphs, and none of the three families uses a direction hook — they reach the leaf only through the root i18n barrel they already imported for useOptionalTranslation. Measured with the gate's own walker at each subpath's anchor commit (05ee86dd8 radio, 12ff2f696 modal, f461a1587 message) and at HEAD 03519b71e. The other 15 governed subpaths that reach the same leaf absorb the +654 inside existing slack.",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 3 subido(s), 0 sin ancla valida"
 }
