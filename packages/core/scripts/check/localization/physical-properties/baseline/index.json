@@ -1,0 +1,65 @@
+{
+  "_comment": "Three-band ledger for physical-properties/index.mjs, the paint half of the one-direction law. Every band pins a COUNT PER FILE, not a line list: an edit above a site would move every number without changing anything the law cares about. `pinnedDebt` is a physical edge that should be logical -- growth fails, a fix fails with an instruction to lower the pin. `inert` is a symmetric pair or a centred offset, where flipping the direction moves nothing: it is COUNTED rather than excluded by rule, because proving symmetry pair-by-pair is fragile and a pinned band is what stops tomorrow's unpaired `left: 0` arriving unnoticed; clearing one is a zero-pixel change. `namedExceptions` are measured coordinate space, where the migration would BE the bug. Frozen engines (223 of the 245 measured sites) are excluded by path in the gate source, because the freeze gate already governs them with written, content-pinned exceptions. Population measured 2026-09-16.",
+  "namedExceptions": {
+    "patterns/customization/token-inspector/index.tsx": {
+      "sites": 1,
+      "reason": "The inspector panel anchors to the POINTER (`left: state.position.x`). Pointer space is physical: the number is a viewport coordinate, and `insetInlineStart` would reinterpret it from the other edge under RTL and put the panel across the screen from the cursor. The file already carries this reason at the call site."
+    },
+    "primitives/overlay/context-menu/engines/modern/index.tsx": {
+      "sites": 1,
+      "reason": "The zero-size pointer anchor the overlay positions against (`left: point.x`), placed at the contextmenu event's viewport coordinates. Same class as token-inspector: a measured pointer position, not a declared edge."
+    },
+    "structures/workspace/export-button/index.tsx": {
+      "sites": 1,
+      "reason": "`left: dropdownPos.left` is a measured `getBoundingClientRect()` edge clamped to the viewport, the saved-views-menu precedent. The rect is already in physical coordinates; re-reading it as a logical inset would mirror an already-mirrored number."
+    },
+    "surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/index.tsx": {
+      "sites": 1,
+      "reason": "`left: position?.left` is the same measured-rect clamp as export-button: the value comes from a viewport measurement, so it is physical by construction."
+    },
+    "structures/workspace/export-button/runtime/file-export/index.ts": {
+      "sites": 1,
+      "reason": "`textarea.style.left = '-9999px'` parks the legacy clipboard-copy textarea offscreen. Not paint: -9999px is offscreen in both reading directions, and the element is removed on the next tick."
+    },
+    "patterns/visualization/charts/presentation/tooltip/index.tsx": {
+      "sites": 1,
+      "reason": "`left: adjusted.left` is the chart tooltip's own auto-flip result -- a viewport coordinate the component computed and clamped against the chart rect. Same class as the other measured-rect readers; it happens to live under charts, where the surrounding coordinate space is physical anyway."
+    }
+  },
+  "pinnedDebt": {
+    "primitives/display/statistic/compound/countdown/index.tsx": {
+      "sites": 2,
+      "reason": "The prefix carries `marginRight` and the suffix `marginLeft` -- the gap between an affix and its value is inline-axis, so under RTL each lands on the wrong side of the number. Migrates to marginInlineEnd/marginInlineStart in the corrections lot, where the hardcoded `4px` also moves onto the spacing ramp."
+    },
+    "primitives/feedback/progress/compound/line/index.tsx": {
+      "sites": 1,
+      "reason": "`textAlign: 'right'` on the percentage label. The number should hug the inline END, which is the LEFT under RTL; `textAlign: 'end'` is the same pixel in LTR and the correct one in RTL."
+    },
+    "patterns/foundation/engine-styles/modern/index.ts": {
+      "sites": 1,
+      "reason": "`menuItemStyle`'s `textAlign: 'left'`. DEAD EXPORT: measured 0 consumers across all of src, alongside popupPanelStyle (0), menuListStyle (0) and pillBadgeStyle (0); only panelCardStyle (10) and pillBadgeSmStyle (5) are live. It retires under WO-RET-04 with the other three rather than being made logical, and this pin drops to zero when that retirement lands."
+    }
+  },
+  "inert": {
+    "patterns/data/virtual-list/presentation/list/index.tsx": {
+      "sites": 4,
+      "reason": "Two absolutely-positioned rows pinned on BOTH inline edges (`left: 0` with `right: 0`), for the virtual item and the end sentinel. Both edges fixed means the direction moves nothing; `inset-inline: 0` is the idiom and a zero-pixel change."
+    },
+    "primitives/inputs/slider/engines/modern/index.tsx": {
+      "sites": 3,
+      "reason": "`left: '50%'` on the VERTICAL branch of the rail, track and handle, where the skin supplies `transform: translateX(-50%)` -- a centred cross-axis offset, symmetric by construction. The horizontal branch beside it already uses insetInlineStart and says why, so this is a consistency nit rather than a defect."
+    },
+    "primitives/feedback/toast/compound/undo-toast/index.tsx": {
+      "sites": 2,
+      "reason": "The countdown bar track is pinned on BOTH inline edges (`left: 0` with `right: 0`) inside the toast surface, so it spans the full width and the reading direction moves neither edge. Clearing it to `inset-inline: 0` is a zero-pixel change."
+    },
+    "primitives/runtime/overlay/backdrop/index.tsx": {
+      "sites": 2,
+      "reason": "The fixed backdrop pins all four edges (`top/left/right/bottom: 0`) so it covers the viewport; both inline edges are fixed, so the reading direction moves nothing. Clearing it to `inset: 0` is a zero-pixel change."
+    },
+    "primitives/feedback/progress/compound/circle/index.tsx": {
+      "sites": 1,
+      "reason": "`left: '50%'` centres the percentage label over the progress ring, paired with a translate that pulls it back by half its own width. A centred offset is symmetric, so the reading direction moves nothing; `insetInlineStart: '50%'` would be the idiom and a zero-pixel change."
+    }
+  }
+}

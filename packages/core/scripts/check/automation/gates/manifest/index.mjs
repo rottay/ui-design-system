@@ -199,6 +199,14 @@ export const CI_GATES = Object.freeze([
   { id: 'direction-authority-drill', run: ['node', '--test', 'scripts/check/localization/direction-authority/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['direction-authority'], },
   { id: 'direction-authority', run: ['node', 'scripts/check/localization/direction-authority/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'direction-authority-drill', ratchet: 'scripts/check/localization/direction-authority/baseline/index.json', },
 
+  // --- the paint half of the same law (WO-INV-01) ---
+  // `direction-authority` governs how a component ASKS for the direction; this
+  // one governs what it writes with the answer. Three bands, because a
+  // symmetric `left: 0` and a measured pointer coordinate are not the defect a
+  // physical margin is, and collapsing them would make the count unreadable.
+  { id: 'physical-properties-drill', run: ['node', '--test', 'scripts/check/localization/physical-properties/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['physical-properties'], },
+  { id: 'physical-properties', run: ['node', 'scripts/check/localization/physical-properties/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'physical-properties-drill', ratchet: 'scripts/check/localization/physical-properties/baseline/index.json', },
+
   // --- source-owned artifact freshness: this manifest runs before Build ---
   // These gates execute the authored TypeScript roster and compile CSS from
   // source in memory. A dist/-backed check here is invalid on a clean clone and
