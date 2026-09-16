@@ -76,11 +76,14 @@ describeCausality({
     { id: 'titleGap', selector: TITLE, property: 'margin-bottom' },
     { id: 'pageSize', selector: PAGE_BUTTON, property: 'font-size' },
     { id: 'pageGap', selector: PAGINATION, property: 'margin-top' },
+    { id: 'tableFont', selector: "#table [data-part='table']", property: 'font-size' },
   ],
   decisions: {
     // `--ds-table-pagination-font-size` derives from the supporting type role,
     // so the type scale moves it while the spacing ramp holds.
-    'typography.scale': { value: 1.08, moves: ['pageSize'], holds: 'titleWeight', in: VERTICALS },
+    // `tableFont` moving is the single-font-authority proof: a literal fallback
+    // embedded in the skin would hold it still.
+    'typography.scale': { value: 1.08, moves: ['pageSize', 'tableFont'], holds: 'titleWeight', in: VERTICALS },
     // `--ds-table-title-margin-block-end` and `--ds-table-pagination-margin-block-start`
     // derive from the spacing ramp, which carries the density scale.
     'density.mode': { value: 'spacious', moves: ['titleGap', 'pageGap'], holds: 'pageSize', in: VERTICALS },
@@ -132,6 +135,32 @@ describe('table derived channels and accessibility', () => {
     // Figures align in a column on both the cell and the page counter.
     expect(r.cellNumeric).toBe('tabular-nums');
     expect(r.pageNumeric).toBe('tabular-nums');
+  }, 60_000);
+
+  it('paints the geometry the skin owns, measured rather than read off the stylesheet', async () => {
+    const result = await measureArms({
+      vertical: 'bithire',
+      markup,
+      arms: { base: {} },
+      targets: [
+        { id: 'cellPadTop', selector: "#table [data-part='cell']", property: 'padding-top' },
+        { id: 'cellPadLeft', selector: "#table [data-part='cell']", property: 'padding-left' },
+        { id: 'numericAlign', selector: "#table [data-part='cell'][data-align='right']", property: 'text-align' },
+        { id: 'sortRing', selector: "#table [data-sortable='true']", property: 'outline-style', attributes: { 'data-state': 'focused focus-visible' } },
+        { id: 'loadingOpacity', selector: "#table [data-part='scroll-container']", property: 'opacity', attributes: { 'data-loading': 'true' } },
+        { id: 'pageHeight', selector: PAGE_BUTTON, property: 'height' },
+      ],
+    });
+    const r = result.base!;
+    // The sticky header is NOT measured here: this markup mounts no sticky
+    // table, so that claim stays with its text pin until a sticky arm exists.
+    // Size-keyed padding resolves, rather than the rule merely existing in text.
+    expect(Number.parseFloat(r.cellPadTop)).toBeGreaterThan(0);
+    expect(Number.parseFloat(r.cellPadLeft)).toBeGreaterThan(Number.parseFloat(r.cellPadTop));
+    expect(r.numericAlign).toBe('right');
+    expect(r.sortRing).not.toBe('none');
+    expect(Number(r.loadingOpacity)).toBeLessThan(1);
+    expect(Number.parseFloat(r.pageHeight)).toBeGreaterThan(0);
   }, 60_000);
 
   it('carries no serious axe finding beyond the pinned contrast debt', async () => {

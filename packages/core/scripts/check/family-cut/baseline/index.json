@@ -875,6 +875,26 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "cutNote": "WO-FAM-06 lot 1: the display card (primitives/display/card). Size steps on the type roles, the five toned title inks on the palette's 900 steps (--ds-card-{primary,success,warning,error,info}-title-color, painted on the engine title and the Card.Header title under [data-tone]), the tenant-authored --ds-card-header-color and --ds-card-border-accent-hover wired as inputs of --ds-card-header-ink, --ds-card-header-eyebrow-color and --ds-card-outlined-border-hover, the header icon and extra well on the elevation scale, the edge weight and the spacing ramp scaled by density, the underline anatomy edge and the nested shadow, and the Card.Image runtime channels (--ds-card-image-block-size, --ds-card-image-aspect-ratio) with their resting defaults, all by derivation/chrome/card (25 channels); constants stay in presentation/components/card. One ds-card vocabulary: the compounds are ds-card-{header,body,footer,image} with their inner anatomy as data-part (content, header-main, icon, avatar, eyebrow, title, subtitle, extra, actions, img, placeholder, spinner, error-icon, gradient, overlay); the kernel decides hovered/pressed/focused/disabled on the root as data-state; the hand-made skeleton (four inline bars, ds-card-skeleton-sweep) is retired and the loading state is the reserved anatomy (loading-content on --ds-card-loading-min-height) under the frosted spinner scrim -- the shared anatomy renderer stays a WO decision because a primitive may not depend on the sibling feedback/skeleton owner (structure:check sibling-owner-dependency); Card.Image paints object-fit and radius from data-fit and data-radius instead of inline style; declared layout-sensitive: adapt: Adapt<CardAdaptation> (coverPosition, padding) on the props, no family default, data-posture resolved through useAdaptation. channelsRead 191 -> 174: the eleven skeleton channels the engine no longer stamps, the two -current intermediates now written as --_ds- privates, and the four unwritten names repointed to produced channels. | 2026-09-15 F6b: channelsRead 174 -> 176 -- the md inset now falls to --ds-card-padding-base (derivation/chrome/card chains the tenant-authored --ds-card-padding ahead of the md constant, so the authored base inset paints and the skin stops reading --ds-card-md-padding directly) and the card gains its xl padding step (padding='xl' on the contract, [data-padding='xl'] reading --ds-card-padding-xl over --ds-card-xl-padding); --ds-card-header-extra-min-height is respelled 2rem x density x control-height (the ramp already carries density)."
+    },
+    "table": {
+      "cut": "WO-FAM-06",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 57,
+        "classTokens": 2,
+        "partsStamped": 30,
+        "partsConsumed": 30
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 20,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 1
     }
   }
 }

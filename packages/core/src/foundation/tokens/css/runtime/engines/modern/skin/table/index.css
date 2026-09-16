@@ -85,23 +85,29 @@
 .ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='header-cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='expand-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='selection-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='skeleton-cell'] {
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='selection-cell'] {
   padding: 4px 8px;
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] {
+  --ds-skeleton-cell-padding: 4px 8px;
 }
 .ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='header-cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='expand-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='selection-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='skeleton-cell'] {
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='selection-cell'] {
   padding: 8px 12px;
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] {
+  --ds-skeleton-cell-padding: 8px 12px;
 }
 .ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='header-cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='expand-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='selection-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='skeleton-cell'] {
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='selection-cell'] {
   padding: 12px 16px;
+}
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] {
+  --ds-skeleton-cell-padding: 12px 16px;
 }
 
 /* ---- per-column alignment, stamped as `data-align` (left is the default) ---- */
@@ -541,38 +547,6 @@
   animation: ds-table-expand-modern var(--ds-motion-slow) ease-out;
 }
 
-/* ---- first-load skeleton: row-shaped placeholders that mirror the real
-        anatomy (control wells + one bar per column), painted with the
-        canonical `ds-skeleton-shimmer` keyframes (the stats-grid.css idiom).
-        Widths vary per row so the stack reads as data, not a striped box.
-        The control-well override comes last at equal specificity so the
-        16px square beats the per-row width variants. ---- */
-.ds-table.ds-table--modern [data-part='skeleton-bar'] {
-  display: block;
-  block-size: 12px;
-  inline-size: 72%;
-  border-radius: var(--ds-radius-sm);
-  background: linear-gradient(
-    90deg,
-    var(--ds-surface-panel) 25%,
-    var(--ds-surface-inset) 50%,
-    var(--ds-surface-panel) 75%
-  );
-  background-size: 200% 100%;
-  animation: ds-skeleton-shimmer var(--ds-motion-attention) var(--ds-motion-ease-in-out) infinite;
-}
-.ds-table.ds-table--modern [data-part='skeleton-row']:nth-child(2n) [data-part='skeleton-bar'] {
-  inline-size: 58%;
-}
-.ds-table.ds-table--modern [data-part='skeleton-row']:nth-child(3n) [data-part='skeleton-bar'] {
-  inline-size: 66%;
-}
-.ds-table.ds-table--modern [data-part='skeleton-row'] [data-part='skeleton-cell'][data-kind='control'] [data-part='skeleton-bar'] {
-  inline-size: 16px;
-  block-size: 16px;
-  margin-inline: auto;
-}
-
 /* ---- loading overlay + spinner. The spinner needs (0,4,0): its
         `border-top-color` longhand would otherwise lose to the tenant `*`
         border-color floor and never show the primary colour. ---- */
@@ -738,10 +712,6 @@
   .ds-table.ds-table--modern [data-part='spinner'] {
     animation: none;
   }
-
-  .ds-table.ds-table--modern [data-part='skeleton-bar'] {
-    animation: none;
-  }
 }
 
 /* ---- forced colors (system colors only): background washes disappear, so
@@ -773,10 +743,65 @@
   .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
     background: ButtonText;
   }
-  /* the shimmer gradient is forced away; the bars keep a system-color fill
-     (the stats-grid.css idiom) so the loading anatomy still reads */
-  .ds-table.ds-table--modern [data-part='skeleton-bar'] {
-    background: GrayText;
-    animation: none;
-  }
+}
+
+
+/* ---------------------------------------------------------------------------
+ * The runtime channels, declared at the family root so every one the skin
+ * reads has a producer. The TSX overrides them per element with what only the
+ * runtime can know (a resized column, a sticky offset, a virtual spacer); these
+ * are the resting values the family paints when it knows nothing yet.
+ * ------------------------------------------------------------------------- */
+
+.ds-table.ds-table--modern {
+  --ds-table-col-width: auto;
+  --ds-table-col-min-width: 0;
+  --ds-table-sticky-top: 0;
+  --ds-table-scroll-x: 100%;
+  --ds-table-scroll-y: none;
+  --ds-table-virtual-spacer: 0;
+  --ds-table-cell-ellipsis-max-width: calc(var(--ds-spacing-10) * 8);
+}
+
+/* ---------------------------------------------------------------------------
+ * Measured geometry. The TSX stamps what only the runtime can know as
+ * `--ds-table-*` channels and the skin paints from them, so no visual value
+ * travels inline. Each falls back to the value the engine used before.
+ * ------------------------------------------------------------------------- */
+
+.ds-table.ds-table--modern [data-part='table'] {
+  inline-size: var(--ds-table-scroll-x, 100%);
+}
+
+.ds-table.ds-table--modern [data-part='table'][data-layout='fixed'] {
+  table-layout: fixed;
+}
+
+.ds-table.ds-table--modern col,
+.ds-table.ds-table--modern [data-part='header-cell'],
+.ds-table.ds-table--modern [data-part='cell'] {
+  inline-size: var(--ds-table-col-width);
+  min-inline-size: var(--ds-table-col-min-width);
+}
+
+.ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'] {
+  inset-block-start: var(--ds-table-sticky-top);
+}
+
+/* A truncating column: the cap rides its own channel, the rest is the rule. */
+.ds-table.ds-table--modern [data-part='cell'][data-ellipsis='true'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-inline-size: var(--ds-table-cell-ellipsis-max-width, 320px);
+}
+
+/* Virtualization spacers hold the scroll height above and below the window. */
+.ds-table.ds-table--modern [data-part='virtual-spacer'] {
+  block-size: var(--ds-table-virtual-spacer, 0);
+}
+
+.ds-table.ds-table--modern [data-part='scroll-container'][data-scroll-y='true'] {
+  max-block-size: var(--ds-table-scroll-y);
+  overflow-y: auto;
 }

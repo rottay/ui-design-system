@@ -100,10 +100,10 @@ describe.each([
 
     const table = screen.getByRole('grid');
     if (_engine === 'modern') {
-      expect((table as HTMLTableElement).style.tableLayout).toBe('fixed');
-      expect(screen.getByText('Bea Stone').closest('td')).toHaveStyle({
-        textOverflow: 'ellipsis',
-      });
+      // The modern engine stamps the request and the skin paints it: the fixed
+      // layout and the truncation are hooks now, not inline style.
+      expect(table).toHaveAttribute('data-layout', 'fixed');
+      expect(screen.getByText('Bea Stone').closest('td')).toHaveAttribute('data-ellipsis', 'true');
     } else {
       expect((table as HTMLTableElement).style.tableLayout).toBe('fixed');
       expect(screen.getByText('Bea Stone').closest('td')).toHaveStyle({

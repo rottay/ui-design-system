@@ -36,6 +36,7 @@ import {
   columnFieldKey,
   type HeaderCell,
 } from '../../runtime/table-features';
+import { AnatomySkeleton } from '../../../../feedback/skeleton';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { ActionSortIcon } from '@/graphics/icons/semantic/generated/roles/action-sort';
@@ -44,8 +45,6 @@ import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/na
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { resolveSubmitIntent } from "@/foundation/behavior";
 
-/** Row-shaped skeleton placeholders rendered while the first page loads. */
-const SKELETON_ROW_COUNT = 4;
 
 
 /**
@@ -340,15 +339,17 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
           data-align={column.align || undefined}
           style={{
-            width,
-            minWidth: column.minWidth,
-            // Sticky header offsets are computed per header row, so only the
-            // `top` stays inline; position/z-index are the skin's, keyed on
-            // `data-sticky`. 40px is the estimated header-row height used for
-            // stacking multi-row group headers.
-            ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40 } : {}),
+            // Measured geometry travels as channels; the skin paints from them.
+            // 40px is the estimated header-row height for multi-row group headers.
+            ...(width === undefined ? {} : { '--ds-table-col-width': typeof width === 'number' ? `${width}px` : width }),
+            ...(column.minWidth === undefined
+              ? {}
+              : { '--ds-table-col-min-width': typeof column.minWidth === 'number' ? `${column.minWidth}px` : column.minWidth }),
+            ...(stickyConfig.enabled
+              ? { '--ds-table-sticky-top': `${stickyConfig.offsetHeader + rowIndex * 40}px` }
+              : {}),
             ...column.style,
-          }}
+          } as React.CSSProperties}
           onClick={() => isSortable && handleSort(column)}
           // Sortable headers are keyboard-operable: the header IS the sort
           // button (the grid pattern has no nested control), so it takes a tab
@@ -470,29 +471,18 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               pending state reads as a table, not a blank box. The empty cell
               stays rendered underneath -- it carries the locale-aware text
               and keeps the spatial contract once the overlay fades. */}
-          {isLoading &&
-            Array.from({ length: SKELETON_ROW_COUNT }, (_, rowIdx) => (
-              <tr key={`skeleton-${rowIdx}`} data-part="skeleton-row" aria-hidden="true">
-                {showExpandCol && (
-                  <td data-part="skeleton-cell" data-kind="control">
-                    <span data-part="skeleton-bar" />
-                  </td>
-                )}
-                {rowSelection && (
-                  <td data-part="skeleton-cell" data-kind="control">
-                    <span data-part="skeleton-bar" />
-                  </td>
-                )}
-                {leafColumns.map((column, colIdx) => (
-                  <td
-                    key={column.key || columnFieldKey(column) || colIdx}
-                    data-part="skeleton-cell"
-                  >
-                    <span data-part="skeleton-bar" />
-                  </td>
-                ))}
-              </tr>
-            ))}
+          {isLoading && (
+            <AnatomySkeleton
+              mode="table-rows"
+              cells={[
+                ...(showExpandCol ? [{ key: 'expand', kind: 'control' }] : []),
+                ...(rowSelection ? [{ key: 'selection', kind: 'control' }] : []),
+                ...leafColumns.map((column, colIdx) => ({
+                  key: String(column.key || columnFieldKey(column) || colIdx),
+                })),
+              ]}
+            />
+          )}
           <tr>
             <td colSpan={totalColSpan} data-part="empty-cell">
               {locale?.emptyText || t('table.empty')}
@@ -629,14 +619,11 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-align={column.align || undefined}
                   data-field-type={column.fieldType || undefined}
                   title={ellipsisTitle}
+                  data-ellipsis={column.ellipsis ? 'true' : undefined}
                   style={{
-                    width,
-                    // Ellipsis is a per-column prop projection (overflow +
-                    // max-width cap); it stays inline next to the column's own
-                    // style overrides. The cap rides a token channel.
-                    ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, maxWidth: 'var(--ds-table-cell-ellipsis-max-width, 320px)' } : {}),
+                    ...(width === undefined ? {} : { '--ds-table-col-width': typeof width === 'number' ? `${width}px` : width }),
                     ...column.style,
-                  }}
+                  } as React.CSSProperties}
                   role="gridcell"
                   onClick={
                     cellEditable && !cellIsEditing
@@ -678,21 +665,44 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       data-size={sizeKey}
       aria-busy={isLoading || undefined}
       aria-rowcount={isPartialGrid ? headerRowCount + totalItems : undefined}
+      data-layout={props.tableLayout === 'fixed' ? 'fixed' : undefined}
       style={{
-        // The table's own width is a projection of the consumer's `scroll.x`
-        // contract, and `tableLayout` is a direct prop -- both stay inline.
-        width: scrollXValue ? (typeof scrollXValue === 'number' ? scrollXValue : scrollXValue === true ? '100%' : scrollXValue) : '100%',
-        tableLayout: props.tableLayout === 'fixed' ? 'fixed' : undefined,
-      }}
+        // The consumer's `scroll.x` contract, measured, as a channel.
+        '--ds-table-scroll-x': scrollXValue
+          ? typeof scrollXValue === 'number'
+            ? `${scrollXValue}px`
+            : scrollXValue === true
+              ? '100%'
+              : scrollXValue
+          : '100%',
+      } as React.CSSProperties}
     >
       {/* Column group for widths */}
       <colgroup>
-        {showExpandCol && <col style={{ width: expandable?.columnWidth || 48 }} />}
-        {rowSelection && <col style={{ width: rowSelection.columnWidth || 48 }} />}
+        {showExpandCol && (
+          <col
+            style={{ '--ds-table-col-width': `${expandable?.columnWidth || 48}px` } as React.CSSProperties}
+          />
+        )}
+        {rowSelection && (
+          <col
+            style={{ '--ds-table-col-width': `${rowSelection.columnWidth || 48}px` } as React.CSSProperties}
+          />
+        )}
         {leafColumns.map((col, i) => {
           const field = columnFieldKey(col) || String(col.key) || String(i);
           const w = getColumnWidth(col);
-          return <col key={field} style={{ width: w, minWidth: col.minWidth }} />;
+          return (
+            <col
+              key={field}
+              style={{
+                ...(w === undefined ? {} : { '--ds-table-col-width': typeof w === 'number' ? `${w}px` : w }),
+                ...(col.minWidth === undefined
+                  ? {}
+                  : { '--ds-table-col-min-width': typeof col.minWidth === 'number' ? `${col.minWidth}px` : col.minWidth }),
+              } as React.CSSProperties}
+            />
+          );
         })}
       </colgroup>
 
@@ -708,7 +718,11 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-cell-kind="expand"
                   data-hairline={showHeaderHairline ? 'true' : undefined}
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
-                  style={stickyConfig.enabled ? { top: stickyConfig.offsetHeader } : undefined}
+                  style={
+                    stickyConfig.enabled
+                      ? ({ '--ds-table-sticky-top': `${stickyConfig.offsetHeader}px` } as React.CSSProperties)
+                      : undefined
+                  }
                   data-sticky={stickyConfig.enabled ? 'true' : undefined}
                 >
                   {expandable?.columnTitle || ''}
@@ -720,7 +734,11 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-cell-kind="selection"
                   data-hairline={showHeaderHairline ? 'true' : undefined}
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
-                  style={stickyConfig.enabled ? { top: stickyConfig.offsetHeader } : undefined}
+                  style={
+                    stickyConfig.enabled
+                      ? ({ '--ds-table-sticky-top': `${stickyConfig.offsetHeader}px` } as React.CSSProperties)
+                      : undefined
+                  }
                   data-sticky={stickyConfig.enabled ? 'true' : undefined}
                 >
                   {rowSelection.type !== 'radio' && !rowSelection.hideSelectAll && (
@@ -754,21 +772,28 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           estimated average row height used for offset calculations. */}
       <tbody>
         {virtualEnabled && virtualSlice.offsetTop > 0 && (
-          <tr style={{ height: virtualSlice.offsetTop }} aria-hidden="true">
+          <tr
+            data-part="virtual-spacer"
+            style={{ '--ds-table-virtual-spacer': `${virtualSlice.offsetTop}px` } as React.CSSProperties}
+            aria-hidden="true"
+          >
             <td colSpan={totalColSpan} />
           </tr>
         )}
         {renderBodyRows()}
         {virtualEnabled && (
           <tr
-            style={{
-              height: Math.max(
-                0,
-                virtualSlice.totalHeight -
-                  virtualSlice.offsetTop -
-                  (virtualSlice.end - virtualSlice.start) * 48
-              ),
-            }}
+            data-part="virtual-spacer"
+            style={
+              {
+                '--ds-table-virtual-spacer': `${Math.max(
+                  0,
+                  virtualSlice.totalHeight -
+                    virtualSlice.offsetTop -
+                    (virtualSlice.end - virtualSlice.start) * 48
+                )}px`,
+              } as React.CSSProperties
+            }
             aria-hidden="true"
           >
             <td colSpan={totalColSpan} />
@@ -815,10 +840,14 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         data-part="scroll-container"
         data-loading={isLoading ? 'true' : undefined}
         data-resizing={resizingColumn ? 'true' : undefined}
-        style={{
-          maxHeight: scrollYValue,
-          overflowY: scrollYValue ? 'auto' : undefined,
-        }}
+        data-scroll-y={scrollYValue ? 'true' : undefined}
+        style={
+          scrollYValue === undefined
+            ? undefined
+            : ({
+                '--ds-table-scroll-y': typeof scrollYValue === 'number' ? `${scrollYValue}px` : scrollYValue,
+              } as React.CSSProperties)
+        }
       >
         {tableContent}
       </div>

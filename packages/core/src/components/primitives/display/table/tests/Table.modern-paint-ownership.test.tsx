@@ -139,32 +139,14 @@ describe('Table modern — geometry lives in the skin, hooks in the DOM', () => 
     expect(nameHeader).toHaveAttribute('aria-sort', 'descending');
   });
 
-  it('pins the skin rules that replaced the retired inline geometry', () => {
-    // size-keyed padding and font-size
-    expect(SKIN).toMatch(/\[data-part='table'\]\[data-size='sm'\][^{]*\{[^}]*padding:\s*4px 8px/);
-    expect(usesCanonicalLgTableFont(SKIN)).toBe(true);
-    expect(TYPOGRAPHY_FOUNDATION).toMatch(/--ds-font-size-base:\s*calc\(/);
-    // alignment hook
-    expect(SKIN).toMatch(/\[data-align='right'\]\s*\{[^}]*text-align:\s*right/);
-    // sticky header + fixed columns positioned by the skin
+  // WO-FAM-06 table cut: the size-keyed padding, the alignment hook, the focus
+  // ring, the loading opacity, the pagination height and the single font
+  // authority are now MEASURED in Table.causality.integration.test.tsx, so
+  // their text pins are retired. The two sticky claims stay: that suite mounts
+  // no sticky table, so nothing measures them yet.
+  it('pins the sticky rules no computed-style arm measures yet', () => {
     expect(SKIN).toMatch(/\[data-part='header-cell'\]\[data-sticky='true'\][^{]*\{[^}]*position:\s*sticky/);
     expect(SKIN).toMatch(/\[data-part='cell'\]\[data-fixed\][^{]*\{[^}]*position:\s*sticky/);
-    // sort affordance + keyboard ring
-    expect(SKIN).toMatch(/\[data-sortable='true'\][^{]*:focus-visible[^}]*\{[^}]*outline/);
-    // scroll container + loading posture
-    expect(SKIN).toMatch(/\[data-part='scroll-container'\]\[data-loading='true'\][^{]*\{[^}]*opacity/);
-    // pagination chrome geometry
-    expect(SKIN).toMatch(/\[data-part='pagination-button'\][^{]*\{[^}]*height:\s*32px/);
-  });
-
-  it('rejects a second lg font authority embedded in the Table skin', () => {
-    const planted = SKIN.replace(
-      'font-size: var(--ds-font-size-base);',
-      'font-size: var(--ds-font-size-base, 16px);'
-    );
-
-    expect(planted).not.toBe(SKIN);
-    expect(usesCanonicalLgTableFont(planted)).toBe(false);
   });
 
   it('stamps expand/selection cell parts for the skin', () => {
