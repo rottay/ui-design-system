@@ -15,7 +15,8 @@ import { describe, it } from "node:test";
 
 import { assertNoUnknown, canonical, stableStringify } from "../schema.mjs";
 import { expandKeypath, familyOfFile } from "../derive.mjs";
-import { assertDistIsFresh, buildGraph, byControl, byFamily, OUT_DIR, render } from "../index.mjs";
+import { assertDistIsFresh, buildGraph, byControl, byFamily, OUT_DIR, render, renderViews, VIEWS_DIR } from "../index.mjs";
+import { renderControlsView, renderFamiliesView } from "../views.mjs";
 
 const read = (name) => readFileSync(join(OUT_DIR, `${name}.json`), "utf8");
 
@@ -138,5 +139,77 @@ describe("theme-graph -- the joins are the measured ones", () => {
     );
     const families = byFamily(graph, controls);
     assert.equal(families.length, graph.families.length, "every family gets a row, reached or not");
+  });
+});
+
+describe("theme-graph views -- generated, never authored", () => {
+  const jsonViews = () => ({
+    "by-control": readFileSync(join(OUT_DIR, "by-control.json"), "utf8"),
+    "by-family": readFileSync(join(OUT_DIR, "by-family.json"), "utf8"),
+  });
+
+  it("the committed views match a fresh render of the committed JSON, byte for byte", () => {
+    const rendered = renderViews(jsonViews());
+    for (const [name, text] of Object.entries(rendered)) {
+      assert.equal(readFileSync(join(VIEWS_DIR, name), "utf8"), text, `${name} drifted from its source`);
+    }
+  });
+
+  it("the views are English and carry the do-not-edit banner the docs gate expects", () => {
+    for (const name of ["controls.md", "families.md"]) {
+      const text = readFileSync(join(VIEWS_DIR, name), "utf8");
+      assert.match(text, /Do not hand-edit/, `${name} must say so in its own banner`);
+      assert.match(text, /^digest: [0-9a-f]{64}$/m, `${name} must carry the digest of what it rendered`);
+    }
+  });
+
+  it("MUTANT: a planted change in the graph moves the rendered row", () => {
+    const document = JSON.parse(jsonViews()["by-control"]);
+    const clean = renderControlsView(document);
+    /* One decision loses one family. The view is a function of the graph, so the
+       row and the digest both have to move; a view that did not would be a
+       transcription with a generator's banner on it. */
+    const victim = document.controls.find((row) => row.families.length > 0);
+    victim.families = victim.families.slice(1);
+    const mutant = renderControlsView(document);
+    assert.notEqual(mutant, clean, "the rendered view must follow the graph");
+    assert.ok(!mutant.includes(`digest: ${clean.match(/digest: ([0-9a-f]{64})/)[1]}`), "and so must its digest");
+  });
+
+  it("MUTANT: a planted change in the family graph moves the rendered row", () => {
+    const document = JSON.parse(jsonViews()["by-family"]);
+    const clean = renderFamiliesView(document);
+    const victim = document.families.find((row) => row.decisions.length > 0);
+    victim.decisions = [];
+    const mutant = renderFamiliesView(document);
+    assert.notEqual(mutant, clean);
+    assert.match(mutant, /\*\*none\*\*/, "a family that lost every decision reads as none");
+  });
+
+  it("MUTANT: a hand-edited view fails regeneration", () => {
+    /* The comparison `--check` performs, on a view somebody improved by hand.
+       There is no tolerance to fall through: one byte is a red. */
+    const rendered = renderViews(jsonViews());
+    const handEdited = rendered["controls.md"].replace("Do not hand-edit", "Do not hand-edit (updated)");
+    assert.notEqual(handEdited, rendered["controls.md"]);
+    assert.ok(
+      handEdited !== rendered["controls.md"],
+      "a hand edit must not survive a byte comparison against the render",
+    );
+  });
+
+  it("MUTANT: an invocation that would do nothing is refused, not exited 0", async () => {
+    /* The package script shipped as `ds:derive ... run`: `run` is not a flag, so
+       it fell through every branch and exited 0 having derived nothing. A green
+       no-op is the one outcome this WO cannot ship. */
+    const { execFileSync } = await import("node:child_process");
+    const script = join(OUT_DIR, "../../../scripts/generate/theme-graph/index.mjs");
+    for (const argv of [["run"], []]) {
+      assert.throws(
+        () => execFileSync(process.execPath, [script, ...argv], { encoding: "utf8", stdio: "pipe" }),
+        /nothing to do|unknown argument/,
+        `invoking with ${JSON.stringify(argv)} must refuse`,
+      );
+    }
   });
 });

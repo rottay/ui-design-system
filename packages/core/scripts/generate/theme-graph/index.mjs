@@ -29,6 +29,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { assertNoUnknown, EDGE_KINDS, stableStringify } from "./schema.mjs";
+import { VIEWS } from "./views.mjs";
 import {
   channelNodes, decisionNodes, deriverNodes, dryRun, familyNodes, familyOfFile,
   readCascade, sha256, VERTICALS,
@@ -38,6 +39,38 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "../../..");
 export const OUT_DIR = join(ROOT, "artifacts/generated/theme-graph");
 export const OUT_FILES = Object.freeze(["nodes", "edges", "by-control", "by-family", "digest"]);
+export const VIEWS_DIR = join(ROOT, "docs/generated/theme-graph");
+
+/**
+ * The two Markdown views: a PURE function of the two JSON views.
+ *
+ * They need no build, because they add no measurement -- every number in them is
+ * already in `by-control.json` / `by-family.json`. What keeps them honest is not
+ * a second freshness check of their own but `--check`, which re-derives the JSON
+ * from the compiler AND re-renders the views from that derivation, so a drift in
+ * either half is one red. Rendering here from the files on disk is therefore the
+ * same single chain one step later, not a second door: if the JSON is stale,
+ * `--check` says so about the JSON, which is where the staleness is.
+ */
+export function renderViews(files) {
+  const controls = JSON.parse(files["by-control"]);
+  const families = JSON.parse(files["by-family"]);
+  return {
+    "controls.md": VIEWS["controls.md"](controls),
+    "families.md": VIEWS["families.md"](families),
+  };
+}
+
+/** The JSON views as committed, for a render that does not derive. */
+function readJsonViews() {
+  const files = {};
+  for (const name of ["by-control", "by-family"]) {
+    const path = join(OUT_DIR, `${name}.json`);
+    if (!existsSync(path)) throw new Error(`${name}.json is missing -- derive the graph first with --write`);
+    files[name] = readFileSync(path, "utf8");
+  }
+  return files;
+}
 
 /**
  * The size pin, measured rather than estimated.
@@ -349,20 +382,57 @@ function main() {
   const drillArg = args.find((a) => a.startsWith("--drill="));
   const drill = drillArg ? drillArg.slice("--drill=".length) : undefined;
 
+  /* A GREEN NO-OP IS THE WORST OUTCOME HERE, so an invocation this command does
+     not understand is refused instead of falling through every branch. The
+     package script shipped as `ds:derive ... run`, and `run` is not a flag: it
+     exited 0 having written nothing and checked nothing, which is precisely the
+     shape of false green this WO was written against. */
+  const KNOWN = new Set(["--write", "--views", "--check", "--json"]);
+  const unknown = args.filter((arg) => !KNOWN.has(arg) && !arg.startsWith("--drill="));
+  if (unknown.length > 0) {
+    throw new Error(`unknown argument(s) ${unknown.join(", ")} -- expected some of ${[...KNOWN].join(", ")}`);
+  }
+  if (!args.some((arg) => KNOWN.has(arg))) {
+    throw new Error(`nothing to do -- name one of ${[...KNOWN].join(", ")}; a silent exit 0 would say the graph was derived when it was not`);
+  }
+
   /* The dry-run compiles the BUILT door, so a stale build would publish a graph
      of yesterday's compiler under today's digest -- the exact failure mode that
      let the manifest describe a cascade nobody had. Asserted here, at the
      command, so the library stays a pure function of the tree it is handed and
      the drill can build a graph without owning the build. */
+  /* `--views` alone renders the committed JSON and derives nothing, so it does
+     not need the build and must not demand it: the coordinator owns the
+     serialized build, and a view regenerated between two of their builds is
+     still exactly the JSON it came from. Every verb that DERIVES asserts the
+     build first. */
+  const derives = args.some((arg) => arg === "--write" || arg === "--check" || arg === "--json");
+  if (!derives) {
+    const views = renderViews(readJsonViews());
+    mkdirSync(VIEWS_DIR, { recursive: true });
+    for (const [name, text] of Object.entries(views)) writeFileSync(join(VIEWS_DIR, name), text);
+    const bytes = Object.values(views).reduce((n, text) => n + Buffer.byteLength(text), 0);
+    console.log(`theme-graph: wrote ${Object.keys(views).length} view(s) from the committed JSON, ${(bytes / 1024).toFixed(1)} KB`);
+    return Promise.resolve();
+  }
+
   assertDistIsFresh();
   return buildGraph({ drill }).then((graph) => {
     const { files, counts } = render(graph);
     const total = Object.values(files).reduce((n, text) => n + Buffer.byteLength(text), 0);
 
+    const views = renderViews(files);
+
     if (args.includes("--write")) {
       mkdirSync(OUT_DIR, { recursive: true });
       for (const [name, text] of Object.entries(files)) writeFileSync(join(OUT_DIR, `${name}.json`), text);
       console.log(`theme-graph: wrote ${OUT_FILES.length} file(s), ${(total / 1024 / 1024).toFixed(2)} MB`);
+    }
+    if (args.includes("--write") || args.includes("--views")) {
+      mkdirSync(VIEWS_DIR, { recursive: true });
+      for (const [name, text] of Object.entries(views)) writeFileSync(join(VIEWS_DIR, name), text);
+      const bytes = Object.values(views).reduce((n, text) => n + Buffer.byteLength(text), 0);
+      console.log(`theme-graph: wrote ${Object.keys(views).length} view(s), ${(bytes / 1024).toFixed(1)} KB`);
     }
     if (args.includes("--json")) console.log(JSON.stringify(counts, null, 2));
 
@@ -372,6 +442,13 @@ function main() {
         const path = join(OUT_DIR, `${name}.json`);
         if (!existsSync(path)) { failures.push(`${name}.json is missing -- run --write`); continue; }
         if (readFileSync(path, "utf8") !== text) failures.push(`${name}.json differs from the derivation -- regenerate with --write`);
+      }
+      for (const [name, text] of Object.entries(views)) {
+        const path = join(VIEWS_DIR, name);
+        if (!existsSync(path)) { failures.push(`views/${name} is missing -- run --views`); continue; }
+        if (readFileSync(path, "utf8") !== text) {
+          failures.push(`views/${name} differs from the derivation -- a view is generated, never edited; run --views`);
+        }
       }
       if (total > SIZE_BUDGET_BYTES) {
         failures.push(
