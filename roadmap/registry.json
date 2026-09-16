@@ -5044,6 +5044,16 @@
      "at": "2026-09-16 02:26",
      "by": "kimi-admin",
      "note": "2026-09-16 kimi-admin: L6 scroll-area INTEGRATED (d495324e5, audited): the 18 rules of the shared sheet split to their owners (6 rustic + enum third to the new rustic/skin/scroll-area at layer(rottay-engines) beside modern; 7 classic incl. the reduced-motion guard + enum third into classic/theme where .rottay-sheet-classic already lived; the shared file reduced to modern-only 41 lines with an assertion that it keeps no classic/rustic class). Per-engine cascade projection byte-identical (12/10/35); layer promotion measured inert. The reduced-motion guard follows the relocated rule by NAMED SELECTOR, not roster membership (the theme file animates an unguarded antd surface; a roster row would claim coverage it lacks) with planted cases. Both files authorized in the freeze baseline with written reasons; freeze gate OK. ALSO integrated: box-surface (eacea332b) -- the escape hatch stamps data-part='box-surface' with a 'pass' role (a container: children drawn, not itself; deliberately NOT checkbox's 'block'), the amended refusal carrying the corrected uniqueness analysis (the DT's first 'box' ruling was stopped on a falsified premise measured by the writer: checkbox owns it); box rostered at full values (ef50846c1, gate 58/58). The skeleton-anatomy reduced-motion GAP fam04 flagged during L6 (the table-rows mode left pulse and shimmer animating without collapse -- PREEXISTING, fails identically at HEAD) is dispatched to fam04-notifier as its own lot. NEXT: L7 collapse (owner dispatched it in-session; it is this WO's last open batch), then the close evaluation."
+    },
+    {
+     "at": "2026-09-16 02:43",
+     "by": "kimi-admin",
+     "note": "2026-09-16 kimi-admin: skeleton reduced-motion lot INTEGRATED (b5226905d, audited) -- the reported hole was NOT an a11y gap (the table-rows commit shipped motion AND its guard in the same commit; two prefers-reduced-motion blocks already existed): the two real defects were the instrument's reduceBlock() reading only the FIRST @media block (now reduceBlocks() concatenates all) and the rows guard's selector naming every bar instead of the two animating variants (violating the file's own ownership law with !important longhands; now mirrors the bones' law, pulse verified safe with a byte-identical substituted fill). The 2x2 proves only fixed-CSS + new-reader goes green; drill with the old reader embedded as a mutant. 59/59 guard tests, 97/97 skeleton, 48/48 list. ALSO from fam04: artifact-coverage red because the L5 layout lot created seven new skin families and never re-anchored -- the re-anchor with the seven names (aspect-ratio, box, container, flex, grid, space, stack) and fam04's computed counters (families 269->276, everPinned 280->287, reads 11545->11609, covered 9837->10207, uncovered 1708->1402, coveredEveryVertical 9822->10192, zero removals) is dispatched to fam04 (the owner instructed the same in-session). L7 collapse dispatched to fam07-opus with the full brief (bridge relocates per-owner in the STOP-2 form if only the frozen engine consumes it; NEVER deleted with a live consumer; the Modern path owns its tokens). NEXT: L7 lands, then the close evaluation."
+    },
+    {
+     "at": "2026-09-16 03:57",
+     "by": "kimi-admin",
+     "note": "2026-09-16 kimi-admin: L7 collapse INTEGRATED (700cd127b + cfe750c54 bridge deletion, audited; gate 59/59) -- the Modern path owns its tokens (deriver + skin + shared runtime + shared renderer), the bridge relocated byte-identical to engines/classic/skin/collapse with the layer rise proven inert by A/B render, and THREE real defects fixed in-lot: dark mode (1.05:1 measured; idle-bg channels resolved to white while the header label read near-black over a flipping ground -- all three now deriver-minted mode-aware channels), rhythm never reached the family with density counted twice (20 padding factors to --ds-rhythm-effective-scale), and transition:none under reduced motion REMOVING the motion instead of shortening it (one guard naming all four animating selectors). The serialized chain completed by the coordinator: hooks contract (93 hooks/1747 fenced with the collapse+badge channels), build exit 0, cascade edges + tokens:catalog regenerated, artifact-coverage roster +7 L5 families (b4ce3fe61). CLOSE EVALUATION, measured honestly -- the WO does NOT close yet, with the remaining obligations named: (1) box still exposes PHYSICAL public props (marginLeft/marginRight/paddingLeft/paddingRight + shorthands) and the fiche requires logical-only public props (ps/pe/ms/me) -- the L5 cut did not drain them; (2) splitter and resize-handle still resolve direction via closest('[dir]') instead of the single direction authority; both dispatched to fam07-opus as the follow-up lot. The other 11 closest('[dir]') sites belong to other lanes (kanban-board/calendar-view -> WO-FAM-08's census, workbench-header/page-shell -> WO-FAM-11, workspace-switcher/locale-switcher/notification-center/tree/carousel/slider -> registered to WO-INV-01, the cross-WO direction authority lane). F-41's pair check and F-80's compound state measured at the same evaluation (no new findings). The WO stays in-progress on exactly those two obligations."
     }
    ]
   },
@@ -5053,7 +5063,7 @@
    "lane": "family-cuts",
    "order": 9,
    "size": "XL",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5066,9 +5076,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-22, F-81, F-69, F-82 R4 2026-09-08: this cut inherits the runtime that WO-CRA-24 repairs (CD-01, restored-record identity) — `upload/runtime/upload-behavior`; do not re-derive its identity allocation inside the cut.",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-admin",
+   "claimedAt": "2026-09-16",
+   "progressLog": [
+    {
+     "at": "2026-09-16 02:40",
+     "by": "kimi-admin",
+     "note": "2026-09-16 kimi-admin: census received (writer: fix-fam02; zero edits). 18 families measured; 465 BLOCKING that are really THREE classes: 371 skeleton-part roles (281 unique data-part names in the shared renderer map; the same operation as table/list but an order of magnitude larger), 54 inline paint, ~10 others (4 families without executable a11y assertions: column-menu, status-filter-pills, field-filters-panel, grid-view; 3 partAttributes gaps: data-table, list-toolbar, active-filters-bar). TWO STOPS registered for adjudication: STOP 1 -- the gate cannot see the pattern-* skins (kanban-board, calendar-view, pattern-map-view, pattern-timeline, pattern-tree-view): skinBelongsToFamily only matches dir==family or family-*, never a prefix -- mirror of the tree T1 bug, fixed first (B0, instrument with drill); STOP 2 -- the WO's ds-<family> namespace has LIVE external consumers (ds-pattern-data-table in 12 app-bithire files + app-evnto, ds-pattern-kanban-board, --ds-filter-panel-* written with !important by app-bithire) -- the .rottay-badge precedent applies: a namespace migration with a live external consumer is REGISTERED, never executed in the cut; the pattern tier's real namespace is ds-pattern-<family>, pinned with its reason. The 196/266 readWithoutProducer concentration lives in data-table (100) and list-toolbar (96). The shared DnD kernel exists with ZERO adoption (file-manager, saved-views, kanban-board each reimplement it -- step 4 is real adoption of three sites, not dead-code unification); export-button in structures/workspace is the live one (file-manager rustic's is frozen; charts have their own). The owner's adjudication of the two STOPs and the detailed GO are pending in-session (owner took the adjudication seat on this WO). Batching proposed by the writer: B0 instrument, B1 the 281 roles (prerequisites), then B2 toolbars / B3 column+views / B4 data-table / B5 views / B6 boards, disjoint."
+    }
+   ]
   },
   {
    "id": "WO-FAM-09",
