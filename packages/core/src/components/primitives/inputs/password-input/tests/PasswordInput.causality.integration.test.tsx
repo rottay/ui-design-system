@@ -13,6 +13,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -58,14 +60,37 @@ describeCausality({
  * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
  * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast node count is pinned EXACTLY, so this row reddens when the debt
- * spreads and again when the derivation lane clears it.
+ * contrast debt is pinned by the IDENTITY of every failing node, so this row
+ * reddens when the debt spreads, when a node is repaired, and when one node is
+ * fixed while another starts failing in its place -- the substitution a count
+ * could not see (EVI-02, 2026-09-15).
  */
-const CONTRAST_DEBT: Readonly<Record<string, number>> = {
-  'bithire dark': 4,
-  'bithire light': 1,
-  'evnto light': 2,
-  'rottay dark': 2,
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
+  'rottay dark': {
+    'color-contrast': [
+      '#password-modern-_R_1_',
+      '#password-modern-_R_2_',
+    ],
+  },
+  'bithire light': {
+    'color-contrast': [
+      'span[data-part="strength-label"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '#password-modern-_R_1_',
+      '#password-modern-_R_2_',
+      '#password-modern-_R_3_-error',
+      'span[data-part="strength-label"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      '#password-modern-_R_3_-error',
+      'span[data-part="strength-label"]',
+    ],
+  },
 };
 
 /**
@@ -132,7 +157,7 @@ describe('password-input geometry, direction, language and accessibility in a re
     expect(loading).toContain('data-part="strength-track"');
   });
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery = renderToStaticMarkup(
       <div>
         <ModernPasswordInput aria-label="Plain" placeholder="Password" />
@@ -141,16 +166,10 @@ describe('password-input geometry, direction, language and accessibility in a re
         <ModernPasswordInput aria-label="Disabled" defaultValue="x" disabled />
       </div>,
     );
-    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
-      const nodes = findings
-        .filter((finding) => finding.id === 'color-contrast')
-        .reduce((total, finding) => total + finding.nodes, 0);
-      if (nodes > 0) measured[key] = nodes;
+      expect(axeDebt(findings), key).toEqual(CONTRAST_DEBT[key] ?? {});
     }
-    expect(measured).toEqual(CONTRAST_DEBT);
   }, 180_000);
 });

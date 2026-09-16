@@ -15,6 +15,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -82,13 +84,34 @@ describeCausality({
  * ink and ground come from opposite ends of the ramp. Measured against a
  * pristine HEAD archive, every scope below audited CLEAN there, so each entry
  * is lot-caused and none is a pre-existing finding. The gap is pinned by axe
- * rule id AND node count: another rule, or one more node, reddens the scope,
- * and a scope absent from this map must still audit clean.
+ * rule id AND the identity of every failing node: another rule, one more node,
+ * a repaired node or a same-count swap reddens the scope, and a scope absent
+ * from this map must still audit clean (EVI-02, 2026-09-15).
  */
-const CONTRAST_GAP: Readonly<Record<string, readonly string[]>> = {
-  'bithire light': ['color-contrast:3'],
-  'bithire dark': ['color-contrast:5'],
-  'evnto light': ['color-contrast:3'],
+const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
+  'bithire light': {
+    'color-contrast': [
+      '#track > div[dir="ltr"] > nav > ul > li[data-status="finish"][data-clickable="true"] > button > span[data-part="description"]',
+      'div[data-part="label"]',
+      'ul[data-progress-dot="true"] > li[data-status="finish"][data-clickable="true"] > button > span[data-part="description"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '#track > div[dir="ltr"] > nav > ul > li[data-status="finish"][data-clickable="true"] > button > span[data-part="description"]',
+      '#track > div[dir="ltr"] > nav > ul > li[data-status="finish"][data-clickable="true"] > button > span[data-part="label"]',
+      'div[data-part="label"]',
+      'ul[data-progress-dot="true"] > li[data-status="finish"][data-clickable="true"] > button > span[data-part="description"]',
+      'ul[data-progress-dot="true"] > li[data-status="finish"][data-clickable="true"] > button > span[data-part="label"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      '#track > div[dir="ltr"] > nav > ul > li[data-status="finish"][data-clickable="true"] > button > span[data-part="description"]',
+      'div[data-part="label"]',
+      'ul[data-progress-dot="true"] > li[data-status="finish"][data-clickable="true"] > button > span[data-part="description"]',
+    ],
+  },
 };
 
 describe('stepper direction, state governance and accessibility', () => {
@@ -135,7 +158,7 @@ describe('stepper direction, state governance and accessibility', () => {
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.map((f) => `${f.id}:${f.nodes}`), key).toEqual(CONTRAST_GAP[key] ?? []);
+      expect(axeDebt(findings), key).toEqual(CONTRAST_GAP[key] ?? {});
     }
   }, 180_000);
 });

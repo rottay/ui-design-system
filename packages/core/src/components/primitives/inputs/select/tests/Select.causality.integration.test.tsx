@@ -15,6 +15,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -75,13 +77,35 @@ describeCausality({
  * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
  * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast node count is pinned EXACTLY, so this row reddens when the debt
- * spreads and again when the derivation lane clears it.
+ * contrast debt is pinned by the IDENTITY of every failing node, so this row
+ * reddens when the debt spreads, when a node is repaired, and when one node is
+ * fixed while another starts failing in its place -- the substitution a count
+ * could not see (EVI-02, 2026-09-15).
  */
-const CONTRAST_DEBT: Readonly<Record<string, number>> = {
-  'bithire dark': 5,
-  'bithire light': 3,
-  'evnto light': 3,
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
+  'bithire light': {
+    'color-contrast': [
+      'div[aria-label="Approver"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+      'div[aria-label="Loading owner"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+      'div[aria-label="Reviewer"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '#native-owner',
+      'div[aria-label="Approver"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+      'div[aria-label="Loading owner"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+      'div[aria-label="Reviewer"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+      'label',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      'div[aria-label="Approver"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+      'div[aria-label="Loading owner"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+      'div[aria-label="Reviewer"] > div[data-part="trigger-value"] > span[data-part="placeholder"]',
+    ],
+  },
 };
 
 /**
@@ -176,7 +200,7 @@ describe('select geometry, direction, language and accessibility in a real brows
     expect(loading).toContain('data-part="tag"');
   });
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery = renderToStaticMarkup(
       <EngineProvider defaultEngine="modern">
         <div>
@@ -190,16 +214,10 @@ describe('select geometry, direction, language and accessibility in a real brows
         </div>
       </EngineProvider>,
     );
-    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
-      const nodes = findings
-        .filter((finding) => finding.id === 'color-contrast')
-        .reduce((total, finding) => total + finding.nodes, 0);
-      if (nodes > 0) measured[key] = nodes;
+      expect(axeDebt(findings), key).toEqual(CONTRAST_DEBT[key] ?? {});
     }
-    expect(measured).toEqual(CONTRAST_DEBT);
   }, 180_000);
 });

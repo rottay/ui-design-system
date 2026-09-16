@@ -14,6 +14,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -89,13 +91,36 @@ describeCausality({
  * ink and ground come from opposite ends of the ramp. Measured against a
  * pristine HEAD archive, every scope below audited CLEAN there, so each entry
  * is lot-caused and none is a pre-existing finding. The gap is pinned by axe
- * rule id AND node count: another rule, or one more node, reddens the scope,
- * and a scope absent from this map must still audit clean.
+ * rule id AND the identity of every failing node: another rule, one more node,
+ * a repaired node or a same-count swap reddens the scope, and a scope absent
+ * from this map must still audit clean (EVI-02, 2026-09-15).
  */
-const CONTRAST_GAP: Readonly<Record<string, readonly string[]>> = {
-  'rottay dark': ['color-contrast:3'],
-  'bithire light': ['color-contrast:4'],
-  'bithire dark': ['color-contrast:6'],
+const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
+  'rottay dark': {
+    'color-contrast': [
+      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
+      'ul[aria-orientation="vertical"] > li[data-part="group"][role="presentation"] > div[data-part="group-label"]',
+      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
+    ],
+  },
+  'bithire light': {
+    'color-contrast': [
+      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
+      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
+      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
+      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      'ul[aria-orientation="horizontal"] > li[data-part="group"][role="presentation"] > div[data-part="group-label"]',
+      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
+      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
+      'ul[aria-orientation="vertical"] > li[data-part="group"][role="presentation"] > div[data-part="group-label"]',
+      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
+      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(2) > div[data-part="trigger"][aria-controls="menu-panel-_R_2_"][data-open="true"] > span[data-part="label"]',
+    ],
+  },
 };
 
 describe('menu direction, state governance and accessibility', () => {
@@ -158,7 +183,7 @@ describe('menu direction, state governance and accessibility', () => {
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.map((f) => `${f.id}:${f.nodes}`), key).toEqual(CONTRAST_GAP[key] ?? []);
+      expect(axeDebt(findings), key).toEqual(CONTRAST_GAP[key] ?? {});
     }
   }, 180_000);
 });

@@ -13,6 +13,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   seriousFindings,
 } from '@tests/support/family-causality';
@@ -95,26 +97,23 @@ describe('hover-card direction, loading and accessibility', () => {
    * seeds a per-mode palette, so the tenant's base (light) canvas cascades into
    * the dark block and the dark ink lands on it. Measured here: bithire dark
    * paints #f3f4f6 on #ffffff, one node, 1.1:1. Every other gated scope stays
-   * clean, and the shape below still fails on a new finding id, a new scope or
-   * a growing node count -- it is the measured state, not a waiver.
+   * clean, and the shape below fails on a new finding id, a new scope, one more
+   * node, a repaired node or a same-count swap: the pin is the IDENTITY of the
+   * failing node, not its count (EVI-02, 2026-09-15). It is the measured state,
+   * not a waiver.
    */
-  const PINNED_CONTRAST_SCOPES: Readonly<Record<string, number>> = {
-    'bithire dark': 1,
+  const PINNED_CONTRAST_SCOPES: Readonly<Record<string, AxeDebt>> = {
+    'bithire dark': { 'color-contrast': ['a'] },
   };
 
   it('has no serious or critical axe violation beyond the pinned contrast gap', async () => {
     for (const scope of AXE_SCOPES) {
       const label = `${scope.vertical} ${scope.theme}`;
       const findings = seriousFindings(await auditAxe({ ...scope, markup }));
-      const pinned = PINNED_CONTRAST_SCOPES[label] ?? 0;
       expect(
-        findings.filter((finding) => finding.id !== 'color-contrast'),
-        `${label}: no serious finding outside the registered contrast gap`,
-      ).toEqual([]);
-      expect(
-        findings.filter((finding) => finding.id === 'color-contrast').reduce((sum, f) => sum + f.nodes, 0),
-        `${label}: contrast nodes held at the measured state`,
-      ).toBe(pinned);
+        axeDebt(findings),
+        `${label}: the registered contrast gap, by node identity, and nothing else`,
+      ).toEqual(PINNED_CONTRAST_SCOPES[label] ?? {});
     }
   }, 180_000);
 });

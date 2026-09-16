@@ -16,6 +16,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -72,15 +74,38 @@ describeCausality({
  * compile leaves this family's ink and its ground on opposite sides of the
  * ramp, so axe reports serious `color-contrast`. Measured at the pre-lot tree:
  * ZERO findings on all four scopes, so every entry below is lot-caused, not
- * inherited. Pinned by finding id, impact and NODE COUNT: another kind of
- * violation, one more node, or a finding in a scope pinned at zero turns this
- * row red. It clears when the derivation lane gives the family a legible pair.
+ * inherited. Pinned by finding id and the IDENTITY of every failing node:
+ * another kind of violation, one more node, one node repaired, a same-count
+ * swap, or a finding in a scope pinned clean turns this row red. It clears when
+ * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
  */
-const AXE_CONTRAST_GAP: Readonly<Record<string, number>> = {
-  'rottay dark': 3,
-  'bithire light': 2,
-  'bithire dark': 3,
-  'evnto light': 2,
+const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
+  'rottay dark': {
+    'color-contrast': [
+      'div[aria-label="Team"] > span[data-part="placeholder"]',
+      'div[data-status="error"] > span[data-part="placeholder"]',
+      'span[data-part="value"]',
+    ],
+  },
+  'bithire light': {
+    'color-contrast': [
+      'div[aria-label="Team"] > span[data-part="placeholder"]',
+      'div[data-status="error"] > span[data-part="placeholder"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      'div[aria-label="Team"] > span[data-part="placeholder"]',
+      'div[data-status="error"] > span[data-part="placeholder"]',
+      'span[data-part="value"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      'div[aria-label="Team"] > span[data-part="placeholder"]',
+      'div[data-status="error"] > span[data-part="placeholder"]',
+    ],
+  },
 };
 
 describe('tree-select direction, indent, language and accessibility', () => {
@@ -176,7 +201,7 @@ describe('tree-select direction, indent, language and accessibility', () => {
     }
   }, 180_000);
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery = renderToStaticMarkup(
       <EngineProvider defaultEngine="modern">
         <div>
@@ -190,12 +215,7 @@ describe('tree-select direction, indent, language and accessibility', () => {
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      const nodes = AXE_CONTRAST_GAP[key] ?? 0;
-      expect(findings, key).toEqual(
-        nodes === 0
-          ? []
-          : [{ id: 'color-contrast', impact: 'serious', nodes, sample: expect.any(String) }],
-      );
+      expect(axeDebt(findings), key).toEqual(AXE_CONTRAST_GAP[key] ?? {});
     }
   }, 180_000);
 });

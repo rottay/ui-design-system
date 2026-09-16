@@ -13,6 +13,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -73,13 +75,38 @@ describeCausality({
  * ink and ground come from opposite ends of the ramp. Measured against a
  * pristine HEAD archive, every scope below audited CLEAN there, so each entry
  * is lot-caused and none is a pre-existing finding. The gap is pinned by axe
- * rule id AND node count: another rule, or one more node, reddens the scope,
- * and a scope absent from this map must still audit clean.
+ * rule id AND the identity of every failing node: another rule, one more node,
+ * a repaired node or a same-count swap reddens the scope, and a scope absent
+ * from this map must still audit clean (EVI-02, 2026-09-15).
  */
-const CONTRAST_GAP: Readonly<Record<string, readonly string[]>> = {
-  'bithire light': ['color-contrast:5'],
-  'bithire dark': ['color-contrast:5'],
-  'evnto light': ['color-contrast:5'],
+const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
+  'bithire light': {
+    'color-contrast': [
+      'button[data-selected="false"]:nth-child(2) > span',
+      'div[data-size="middle"] > button[data-selected="false"]:nth-child(1) > span',
+      'div[data-size="middle"] > button[data-selected="false"]:nth-child(3) > span',
+      'div[data-size="small"] > button[data-selected="false"]:nth-child(1) > span',
+      'div[data-size="small"] > button[data-selected="false"]:nth-child(3) > span',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      'button[data-selected="false"]:nth-child(2) > span',
+      'div[data-size="middle"] > button[data-selected="false"]:nth-child(1) > span',
+      'div[data-size="middle"] > button[data-selected="false"]:nth-child(3) > span',
+      'div[data-size="small"] > button[data-selected="false"]:nth-child(1) > span',
+      'div[data-size="small"] > button[data-selected="false"]:nth-child(3) > span',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      'button[data-selected="false"]:nth-child(2) > span',
+      'div[data-size="middle"] > button[data-selected="false"]:nth-child(1) > span',
+      'div[data-size="middle"] > button[data-selected="false"]:nth-child(3) > span',
+      'div[data-size="small"] > button[data-selected="false"]:nth-child(1) > span',
+      'div[data-size="small"] > button[data-selected="false"]:nth-child(3) > span',
+    ],
+  },
 };
 
 describe('segmented composition, direction and accessibility in a real browser', () => {
@@ -135,7 +162,7 @@ describe('segmented composition, direction and accessibility in a real browser',
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.map((f) => `${f.id}:${f.nodes}`), key).toEqual(CONTRAST_GAP[key] ?? []);
+      expect(axeDebt(findings), key).toEqual(CONTRAST_GAP[key] ?? {});
     }
   }, 120_000);
 });

@@ -13,6 +13,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -75,13 +77,45 @@ describeCausality({
  * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
  * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast node count is pinned EXACTLY, so this row reddens when the debt
- * spreads and again when the derivation lane clears it.
+ * contrast debt is pinned by the IDENTITY of every failing node, so this row
+ * reddens when the debt spreads, when a node is repaired, and when one node is
+ * fixed while another starts failing in its place -- the substitution a count
+ * could not see (EVI-02, 2026-09-15).
  */
-const CONTRAST_DEBT: Readonly<Record<string, number>> = {
-  'bithire dark': 13,
-  'bithire light': 3,
-  'evnto light': 5,
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
+  'bithire light': {
+    'color-contrast': [
+      '#toggle-modern-_R_1_-description',
+      '#toggle-modern-_R_4_-helper',
+      'span[data-part="state-label"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '#toggle-modern-_R_11_-label',
+      '#toggle-modern-_R_19_-label',
+      '#toggle-modern-_R_1_-description',
+      '#toggle-modern-_R_1_-label',
+      '#toggle-modern-_R_1h_-label',
+      '#toggle-modern-_R_3_-error',
+      '#toggle-modern-_R_4_-helper',
+      '#toggle-modern-_R_9_-label',
+      '#toggle-modern-_R_h_-label',
+      '#toggle-modern-_R_p_-label',
+      '.ds-toggle-field[data-part="field"]:nth-child(2) > label[data-checked="false"][data-color="primary"][data-disabled="false"] > span[data-part="text"] > span[data-part="label"]',
+      'label[data-error="true"] > span[data-part="text"] > span[data-part="label"]',
+      'span[data-part="state-label"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      '#toggle-modern-_R_1_-description',
+      '#toggle-modern-_R_3_-error',
+      '#toggle-modern-_R_4_-helper',
+      'label[data-error="true"] > span[data-part="text"] > span[data-part="label"]',
+      'span[data-part="state-label"]',
+    ],
+  },
 };
 
 describe('toggle travel, direction, floors and accessibility in a real browser', () => {
@@ -192,7 +226,7 @@ describe('toggle travel, direction, floors and accessibility in a real browser',
     expect(loading).toContain('data-part="track"');
   });
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery = markup + renderToStaticMarkup(
       <div>
         {(['primary', 'secondary', 'success', 'warning', 'error', 'default'] as const).map((color) => (
@@ -203,16 +237,10 @@ describe('toggle travel, direction, floors and accessibility in a real browser',
         <ModernToggle aria-label="With state" checkedLabel="On" uncheckedLabel="Off" helperText="Change later" />
       </div>,
     );
-    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
-      const nodes = findings
-        .filter((finding) => finding.id === 'color-contrast')
-        .reduce((total, finding) => total + finding.nodes, 0);
-      if (nodes > 0) measured[key] = nodes;
+      expect(axeDebt(findings), key).toEqual(CONTRAST_DEBT[key] ?? {});
     }
-    expect(measured).toEqual(CONTRAST_DEBT);
   }, 120_000);
 });

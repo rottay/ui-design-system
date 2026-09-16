@@ -212,10 +212,33 @@ export async function measureArms(request: ProbeRequest): Promise<ProbeReadings>
   return readings;
 }
 
+/**
+ * One offending node, identified by the key that survives a re-render.
+ *
+ * `target` is axe's own CSS path to the node. It is the most stable identity
+ * this harness can capture: `html` changes with any attribute or text edit, and
+ * the failure summary changes with every colour move, while the path only
+ * changes when the MARKUP changes -- and the markup of a causality suite is a
+ * fixed string in the suite itself. Its failure mode is the mirror of that: two
+ * nodes that swap positions in the same container swap identities, and an
+ * inserted sibling shifts every `:nth-child` after it. Both are edits to the
+ * suite's own markup, which is exactly when a debt pin SHOULD be re-measured.
+ */
+export interface AxeFindingNode {
+  /** axe's CSS path, joined when the node is inside a shadow/iframe chain. */
+  readonly target: string;
+  /** The ink and ground axe measured, when the rule reports them. */
+  readonly foreground?: string;
+  readonly background?: string;
+  readonly ratio?: number;
+}
+
 export interface AxeFinding {
   readonly id: string;
   readonly impact: string | null;
   readonly nodes: number;
+  /** Every offending node, in axe's order; the identity a debt pin compares. */
+  readonly targets: readonly AxeFindingNode[];
   /** The first offending node's markup and axe's own summary of it. */
   readonly sample?: string;
 }
@@ -251,13 +274,39 @@ export async function auditAxe(request: AxeRequest): Promise<AxeFinding[]> {
         main.setAttribute('dir', dir);
         main.innerHTML = markup;
         document.body.append(main);
-        type Violation = { id: string; impact: string | null; nodes: Array<{ html: string; failureSummary?: string }> };
+        type CheckResult = { data?: { fgColor?: string; bgColor?: string; contrastRatio?: number } };
+        type ViolationNode = {
+          html: string;
+          failureSummary?: string;
+          target?: unknown[];
+          any?: CheckResult[];
+          all?: CheckResult[];
+          none?: CheckResult[];
+        };
+        type Violation = { id: string; impact: string | null; nodes: ViolationNode[] };
         const runner = (window as unknown as { axe: { run(node: Element): Promise<{ violations: Violation[] }> } }).axe;
         const result = await runner.run(main);
+        const pathOf = (node: ViolationNode): string =>
+          (node.target ?? [])
+            .map((entry) => (Array.isArray(entry) ? entry.join(' ') : String(entry)))
+            .join(' >>> ');
+        const dataOf = (node: ViolationNode) =>
+          [...(node.any ?? []), ...(node.all ?? []), ...(node.none ?? [])]
+            .map((check) => check.data)
+            .find((data) => data?.fgColor !== undefined || data?.bgColor !== undefined);
         return result.violations.map((violation) => ({
           id: violation.id,
           impact: violation.impact,
           nodes: violation.nodes.length,
+          targets: violation.nodes.map((node) => {
+            const data = dataOf(node);
+            return {
+              target: pathOf(node),
+              ...(data?.fgColor === undefined ? {} : { foreground: data.fgColor }),
+              ...(data?.bgColor === undefined ? {} : { background: data.bgColor }),
+              ...(data?.contrastRatio === undefined ? {} : { ratio: data.contrastRatio }),
+            };
+          }),
           sample: `${violation.nodes[0]?.html ?? ''} :: ${violation.nodes[0]?.failureSummary ?? ''}`,
         }));
       },
@@ -289,6 +338,30 @@ export const AXE_SCOPES: ReadonlyArray<{ vertical: ProbeVertical; theme: 'light'
 /** The findings axe classifies as serious or critical. */
 export function seriousFindings(findings: readonly AxeFinding[]): AxeFinding[] {
   return findings.filter((finding) => finding.impact === 'serious' || finding.impact === 'critical');
+}
+
+/** One scope's accepted debt: every failing rule, and WHICH nodes fail it. */
+export type AxeDebt = Readonly<Record<string, readonly string[]>>;
+
+/**
+ * The shape a debt pin compares: rule id -> the sorted identities of its nodes.
+ *
+ * A count is not an identity. A pin that only counts stays green when one known
+ * bad node is repaired and a different, previously good node starts failing the
+ * same rule -- the substitution the EVI-02 audit proved this harness allowed.
+ * Comparing the SET makes all four moves red: a new node, a repaired node (debt
+ * improving is still a change that must be re-adjudicated), a same-count swap,
+ * and a finding of any other rule, which arrives as a key the pin does not have.
+ *
+ * A clean scope is `{}`, so a scope that goes dirty fails against its own pin
+ * without needing an entry.
+ */
+export function axeDebt(findings: readonly AxeFinding[]): AxeDebt {
+  const debt: Record<string, string[]> = {};
+  for (const finding of findings) {
+    debt[finding.id] = [...finding.targets.map((node) => node.target)].sort();
+  }
+  return debt;
 }
 
 export interface DecisionArm {

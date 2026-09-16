@@ -14,6 +14,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -60,13 +62,33 @@ describeCausality({
  * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
  * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast node count is pinned EXACTLY, so this row reddens when the debt
- * spreads and again when the derivation lane clears it.
+ * contrast debt is pinned by the IDENTITY of every failing node, so this row
+ * reddens when the debt spreads, when a node is repaired, and when one node is
+ * fixed while another starts failing in its place -- the substitution a count
+ * could not see (EVI-02, 2026-09-15).
  */
-const CONTRAST_DEBT: Readonly<Record<string, number>> = {
-  'bithire dark': 5,
-  'bithire light': 2,
-  'evnto light': 2,
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
+  'bithire light': {
+    'color-contrast': [
+      'span[data-error="false"]',
+      'span[data-part="extra-text"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      'label[for="form-email"] > span[data-part="label-text"]',
+      'label[for="form-name"] > span[data-part="label-text"]',
+      'label[for="form-nick"] > span[data-part="label-text"]',
+      'span[data-error="false"]',
+      'span[data-part="extra-text"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      'span[data-error="false"]',
+      'span[data-part="extra-text"]',
+    ],
+  },
 };
 
 /**
@@ -157,7 +179,7 @@ describe('form adaptation, direction, language and accessibility in a real brows
     expect(loading).toContain('data-part="label-text"');
   });
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery = english(
       <Form requiredMark="optional" hasFeedback>
         <Form.Item name="name" label="Name" required help="As on your ID" tooltip="Legal name"><input aria-label="Name" /></Form.Item>
@@ -165,16 +187,10 @@ describe('form adaptation, direction, language and accessibility in a real brows
         <Form.Item name="nick" label="Nickname" extra="Shown to others"><input aria-label="Nickname" /></Form.Item>
       </Form>,
     );
-    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
-      const nodes = findings
-        .filter((finding) => finding.id === 'color-contrast')
-        .reduce((total, finding) => total + finding.nodes, 0);
-      if (nodes > 0) measured[key] = nodes;
+      expect(axeDebt(findings), key).toEqual(CONTRAST_DEBT[key] ?? {});
     }
-    expect(measured).toEqual(CONTRAST_DEBT);
   }, 180_000);
 });

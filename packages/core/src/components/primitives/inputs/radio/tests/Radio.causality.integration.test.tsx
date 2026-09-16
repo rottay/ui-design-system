@@ -14,6 +14,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -67,13 +69,41 @@ describeCausality({
  * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
  * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast node count is pinned EXACTLY, so this row reddens when the debt
- * spreads and again when the derivation lane clears it.
+ * contrast debt is pinned by the IDENTITY of every failing node, so this row
+ * reddens when the debt spreads, when a node is repaired, and when one node is
+ * fixed while another starts failing in its place -- the substitution a count
+ * could not see (EVI-02, 2026-09-15).
  */
-const CONTRAST_DEBT: Readonly<Record<string, number>> = {
-  'bithire dark': 15,
-  'bithire light': 1,
-  'evnto light': 1,
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
+  'bithire light': {
+    'color-contrast': [
+      '#radio-modern-_R_1_-description',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '#radio-modern-_R_1_-description',
+      '#radio-modern-_R_1_-label',
+      '#radio-modern-_R_2_-label',
+      '#radio-modern-_R_3_-label',
+      '.ds-radio-group--button[data-color="primary"][data-button-style="solid"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="default"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="default"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="error"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="error"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="secondary"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="secondary"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="success"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="success"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="warning"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
+      'div[data-color="warning"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      '#radio-modern-_R_1_-description',
+    ],
+  },
 };
 
 describe('radio segments, geometry, direction and accessibility in a real browser', () => {
@@ -140,7 +170,7 @@ describe('radio segments, geometry, direction and accessibility in a real browse
     expect(loading).toContain('data-part="circle"');
   });
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const allColours = (['primary', 'default', 'secondary', 'success', 'warning', 'error'] as const)
       .map((color) => renderToStaticMarkup(
         <RadioGroup buttonStyle="solid" color={color} defaultValue="a" options={[{ label: `On ${color}`, value: 'a' }, { label: 'Off', value: 'b' }]} />,
@@ -149,16 +179,10 @@ describe('radio segments, geometry, direction and accessibility in a real browse
     const gallery = allColours + renderToStaticMarkup(
       <RadioGroup engine="modern" defaultValue={1} options={[{ label: 'One', value: 1 }, { label: 'Two', value: 2, disabled: true }]} />,
     ) + markup;
-    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
-      const nodes = findings
-        .filter((finding) => finding.id === 'color-contrast')
-        .reduce((total, finding) => total + finding.nodes, 0);
-      if (nodes > 0) measured[key] = nodes;
+      expect(axeDebt(findings), key).toEqual(CONTRAST_DEBT[key] ?? {});
     }
-    expect(measured).toEqual(CONTRAST_DEBT);
   }, 120_000);
 });

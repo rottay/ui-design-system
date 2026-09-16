@@ -16,6 +16,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -61,15 +63,53 @@ describeCausality({
  * compile leaves this family's ink and its ground on opposite sides of the
  * ramp, so axe reports serious `color-contrast`. Measured at the pre-lot tree:
  * ZERO findings on all four scopes, so every entry below is lot-caused, not
- * inherited. Pinned by finding id, impact and NODE COUNT: another kind of
- * violation, one more node, or a finding in a scope pinned at zero turns this
- * row red. It clears when the derivation lane gives the family a legible pair.
+ * inherited. Pinned by finding id and the IDENTITY of every failing node:
+ * another kind of violation, one more node, one node repaired, a same-count
+ * swap, or a finding in a scope pinned clean turns this row red. It clears when
+ * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
  */
-const AXE_CONTRAST_GAP: Readonly<Record<string, number>> = {
-  'rottay dark': 2,
-  'bithire light': 7,
-  'bithire dark': 9,
-  'evnto light': 7,
+const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
+  'rottay dark': {
+    'color-contrast': [
+      'div[data-panel="source"][data-part="panel"] > div[data-part="panel-search-field"] > input[type="text"][data-part="panel-search"][placeholder="Search"]',
+      'div[data-panel="target"][data-part="panel"] > div[data-part="panel-search-field"] > input[type="text"][data-part="panel-search"][placeholder="Search"]',
+    ],
+  },
+  'bithire light': {
+    'color-contrast': [
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      'div[data-panel="source"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      'div[data-panel="target"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      'div[data-part="panel-empty"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '#checkbox-modern-_R_dt_-label',
+      '#checkbox-modern-_R_ll_-label',
+      '#checkbox-modern-_R_lm_-label',
+      '#checkbox-modern-_R_pl_-label',
+      '#checkbox-modern-_R_pm_-label',
+      'div[data-panel="source"][data-part="panel"] > div[data-part="panel-search-field"] > input[type="text"][data-part="panel-search"][placeholder="Search"]',
+      'div[data-panel="target"][data-part="panel"] > div[data-part="panel-search-field"] > input[type="text"][data-part="panel-search"][placeholder="Search"]',
+      'div[data-part="panel-empty"]',
+      'span[data-part="panel-item-label"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(1) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="source"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      '.ds-transfer.ds-transfer--modern[data-part="root"]:nth-child(2) > div[data-panel="target"][data-part="panel"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      'div[data-panel="source"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      'div[data-panel="target"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
+      'div[data-part="panel-empty"]',
+    ],
+  },
 };
 
 describe('transfer direction, keyboard, language and accessibility', () => {
@@ -124,7 +164,7 @@ describe('transfer direction, keyboard, language and accessibility', () => {
     expect(loading).toContain('data-part="panel-item"');
   });
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery = renderToStaticMarkup(
       <EngineProvider defaultEngine="modern">
         <div>
@@ -137,12 +177,7 @@ describe('transfer direction, keyboard, language and accessibility', () => {
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      const nodes = AXE_CONTRAST_GAP[key] ?? 0;
-      expect(findings, key).toEqual(
-        nodes === 0
-          ? []
-          : [{ id: 'color-contrast', impact: 'serious', nodes, sample: expect.any(String) }],
-      );
+      expect(axeDebt(findings), key).toEqual(AXE_CONTRAST_GAP[key] ?? {});
     }
   }, 180_000);
 });

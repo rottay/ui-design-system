@@ -14,6 +14,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -61,13 +63,36 @@ describeCausality({
  * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
  * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
- * contrast node count is pinned EXACTLY, so this row reddens when the debt
- * spreads and again when the derivation lane clears it.
+ * contrast debt is pinned by the IDENTITY of every failing node, so this row
+ * reddens when the debt spreads, when a node is repaired, and when one node is
+ * fixed while another starts failing in its place -- the substitution a count
+ * could not see (EVI-02, 2026-09-15).
  */
-const CONTRAST_DEBT: Readonly<Record<string, number>> = {
-  'bithire dark': 6,
-  'evnto light': 1,
-  'rottay dark': 5,
+const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
+  'rottay dark': {
+    'color-contrast': [
+      '#taginput-modern-_R_1_',
+      '#taginput-modern-_R_2_',
+      'div[data-error="false"] > .rottay-tag-shell.rottay-tag-shell--modern[data-part="tag-chip"]:nth-child(1) > span[title="one"][data-part="content"]',
+      'div[data-error="true"] > .rottay-tag-shell.rottay-tag-shell--modern[data-part="tag-chip"] > span[title="one"][data-part="content"]',
+      'span[title="two"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '#taginput-modern-_R_1_',
+      '#taginput-modern-_R_2_',
+      '#taginput-modern-_R_2_-error',
+      'div[data-error="false"] > .rottay-tag-shell.rottay-tag-shell--modern[data-part="tag-chip"]:nth-child(1) > span[title="one"][data-part="content"]',
+      'div[data-error="true"] > .rottay-tag-shell.rottay-tag-shell--modern[data-part="tag-chip"] > span[title="one"][data-part="content"]',
+      'span[title="two"]',
+    ],
+  },
+  'evnto light': {
+    'color-contrast': [
+      '#taginput-modern-_R_2_-error',
+    ],
+  },
 };
 
 describe('tag-input geometry, direction, language and accessibility in a real browser', () => {
@@ -108,23 +133,17 @@ describe('tag-input geometry, direction, language and accessibility in a real br
     expect(loading).toContain('data-part="tag-chip"');
   });
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery = modern(
       <div>
         <ModernTagInput value={['one', 'two']} onChange={noop} aria-label="Skills" />
         <ModernTagInput value={['one']} error errorMessage="Tag is not allowed" onChange={noop} aria-label="Topics" />
       </div>,
     );
-    const measured: Record<string, number> = {};
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      expect(findings.filter((finding) => finding.id !== 'color-contrast'), key).toEqual([]);
-      const nodes = findings
-        .filter((finding) => finding.id === 'color-contrast')
-        .reduce((total, finding) => total + finding.nodes, 0);
-      if (nodes > 0) measured[key] = nodes;
+      expect(axeDebt(findings), key).toEqual(CONTRAST_DEBT[key] ?? {});
     }
-    expect(measured).toEqual(CONTRAST_DEBT);
   }, 180_000);
 });

@@ -16,6 +16,8 @@ import {
   AXE_SCOPES,
   FIRST_PARTY_VERTICALS as VERTICALS,
   auditAxe,
+  axeDebt,
+  type AxeDebt,
   describeCausality,
   measureArms,
   seriousFindings,
@@ -82,15 +84,28 @@ describeCausality({
  * compile leaves this family's ink and its ground on opposite sides of the
  * ramp, so axe reports serious `color-contrast`. Measured at the pre-lot tree:
  * ZERO findings on all four scopes, so every entry below is lot-caused, not
- * inherited. Pinned by finding id, impact and NODE COUNT: another kind of
- * violation, one more node, or a finding in a scope pinned at zero turns this
- * row red. It clears when the derivation lane gives the family a legible pair.
+ * inherited. Pinned by finding id and the IDENTITY of every failing node:
+ * another kind of violation, one more node, one node repaired, a same-count
+ * swap, or a finding in a scope pinned clean turns this row red. It clears when
+ * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
  */
-const AXE_CONTRAST_GAP: Readonly<Record<string, number>> = {
-  'rottay dark': 4,
-  'bithire light': 0,
-  'bithire dark': 4,
-  'evnto light': 0,
+const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
+  'rottay dark': {
+    'color-contrast': [
+      '.ds-date-picker.ds-date-picker--modern[data-part="root"]:nth-child(1) > input[value=""][placeholder="Select date"][aria-label="Select date"]',
+      'input[data-range-input="end"]',
+      'input[data-range-input="start"]',
+      'input[data-status="error"]',
+    ],
+  },
+  'bithire dark': {
+    'color-contrast': [
+      '.ds-date-picker.ds-date-picker--modern[data-part="root"]:nth-child(1) > input[value=""][placeholder="Select date"][aria-label="Select date"]',
+      'input[data-range-input="end"]',
+      'input[data-range-input="start"]',
+      'input[data-status="error"]',
+    ],
+  },
 };
 
 describe('date-picker calendar, language and accessibility', () => {
@@ -172,7 +187,7 @@ describe('date-picker calendar, language and accessibility', () => {
     }
   }, 120_000);
 
-  it('has no serious or critical axe violation in any gated vertical mode', async () => {
+  it('audits clean in every gated vertical mode, apart from the pinned contrast debt', async () => {
     const gallery =
       renderToStaticMarkup(
         <EngineProvider defaultEngine="modern">
@@ -191,12 +206,7 @@ describe('date-picker calendar, language and accessibility', () => {
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
       const key = `${scope.vertical} ${scope.theme}`;
-      const nodes = AXE_CONTRAST_GAP[key] ?? 0;
-      expect(findings, key).toEqual(
-        nodes === 0
-          ? []
-          : [{ id: 'color-contrast', impact: 'serious', nodes, sample: expect.any(String) }],
-      );
+      expect(axeDebt(findings), key).toEqual(AXE_CONTRAST_GAP[key] ?? {});
     }
   }, 180_000);
 });
