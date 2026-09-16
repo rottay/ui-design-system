@@ -4,6 +4,18 @@
   "schemaVersion": 3,
   "baseRevision": "ef269d71db916d0063ea8a87b08240f8b13e99ca",
   "entries": {
+    "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx": {
+      "blob": "722d429da9a1f366568db8e971dd4180b047ee8dcc03f945379f2ad0b2109ea5",
+      "relocationDigest": "9e5bbe278889b4c0e779ccba56f14f90bad8fb0e846de763cc6a5aa2475b834d",
+      "reason": "441477d3a: TenantConfig no longer carries the visual payload, so the preview reads personality from personalityInfo.tokens and composes through draftPreviewSource(creationConfig) ?? tenantConfig. A shared-contract follow. One deliberate delta: the engine label is the file's own literal rather than creationConfig.engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx": {
+      "blob": "2aebfec56d09bd07b1dae21f9fb0f292b940a9573bb22c008028f5d81d61d541",
+      "relocationDigest": "b80154b79a1fa22a4a68bc3894d6d25e2ef060535ff2bd6fa95697b0bf1afd33",
+      "reason": "441477d3a: TenantConfig no longer carries the visual payload, so the preview reads personality from personalityInfo.tokens and composes through draftPreviewSource(creationConfig) ?? tenantConfig. A shared-contract follow. One deliberate delta: the engine label is the file's own literal rather than creationConfig.engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx": {
       "blob": "3d667d0ae993d67483e61049a4b79048020b9944deb89e58531f652db471f05d",
       "relocationDigest": "a19bdd8ac0032234cc2fc15158e039a83367bf36c6940d39ad23aa5b87dad450",
@@ -118,6 +130,36 @@
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/components/primitives/display/badge/engines/classic/index.tsx": {
+      "blob": "ef8abeae88240d92296b1c860375f48cd78c7aaff5a9de0268d1218098decffc",
+      "relocationDigest": "1b7416c1496678a703a3f7307c25a24a370931dbc1b62035d6a9d1c89f3906a0",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/display/badge/engines/rustic/index.tsx": {
+      "blob": "5a01f3cf936114a5d5fde06869b3f9c467bce1fbe5a398364704b4add1aa2ff6",
+      "relocationDigest": "f90a53c171f8f3e689ade99eb919dcbe385639e8c7326045747a7fd51cf4b781",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/display/card/engines/classic/index.tsx": {
+      "blob": "a555ef03334989a920e68c1084fec478e4cf2f9d5eb9c30e10bdd38ac63b5c7e",
+      "relocationDigest": "9c6dd61c2d6f7094934ce2d1f648c9d5609e23dcbf3f3370c64fe91e2deecfe5",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/display/card/engines/rustic/index.tsx": {
+      "blob": "36491e63eb0c038ee8dce285ca4c0974008fb813ca1c968c9ae133fa9b3e2fb3",
+      "relocationDigest": "e1e3c7801bd74064dc0f9bc74a967f7a05872e729ce1ab14930239dad7ddc5cd",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/display/image/engines/rustic/index.tsx": {
+      "blob": "d934f24c6ea06525e458f9897d7ced5258c289999334d3bc32dca08d6ebd9a98",
+      "relocationDigest": "921a59b69ea106af15c38a77628349d829f25a0156f6eec1ad610c39120d446b",
+      "reason": "1b4653f5d: the 100vw/100vh literals become var(--ds-viewport-inline-size)/var(--ds-viewport-block-size). The channel is declared once and ships in all three artifacts at 100dvw/100dvh. Identical on desktop; on a phone the surface tracks the visible area instead of including collapsing browser chrome. The literal leaves the TSX, which the skin-first law asks.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/components/primitives/display/tag/engines/classic/index.tsx": {
       "blob": "5d943bababf89e30f81e6120682d7d0c218ed77e79ab41dbe6aff2f102c66d58",
       "relocationDigest": "a19d9263ec2a591eb75a0976ce5ea705cd2ee313ee1b125396661c71a506f4b7",
@@ -154,6 +196,24 @@
       "reason": "the craft resolver moved to runtime/legacy-craft (WO-FAM-06 typography-rest craft split); this engine's import follows it to the identical module, behavior unchanged, frozen paint preserved",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/components/primitives/feedback/alert/engines/classic/index.tsx": {
+      "blob": "c62441565ca8adee73671ba6a69c30e7f4abef377c43f552b31e87f4f2a6ed8f",
+      "relocationDigest": "864486a6ac840f9d27ebe0834fa77872487d9cf23935a2cbf12370fb5a23c25c",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/feedback/alert/engines/rustic/index.tsx": {
+      "blob": "f0f5bf75c1354086b22c31c43d0bb104b11377ce25ab4558a71ef1bab14215e4",
+      "relocationDigest": "6742a9d60c1cbf29f100f2f5f0122e22e5e52c4e87ba69f98aa35de6a3e6e2e5",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/feedback/drawer/engines/rustic/index.tsx": {
+      "blob": "e1ff2a3786778abaf20a2fabe12523bef04669f62a53ae37e7ab67b408f1e19b",
+      "relocationDigest": "98dd5d33f6cf9f0bfffd769372e3dbf86af682d68f7b4d9861b143798010902b",
+      "reason": "1b4653f5d: the 100vw/100vh literals become var(--ds-viewport-inline-size)/var(--ds-viewport-block-size). The channel is declared once and ships in all three artifacts at 100dvw/100dvh. Identical on desktop; on a phone the surface tracks the visible area instead of including collapsing browser chrome. The literal leaves the TSX, which the skin-first law asks.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/components/primitives/feedback/message/engines/rustic/index.tsx": {
       "blob": "e82a76391d70d777957ef79f0f1b3c99785299eb79bc63beb61ae13e4e888f11",
       "relocationDigest": "66fa4cef1ef4068c0e737c12c4e6cfaa8af995d3dad953c3bc981cd72779967e",
@@ -167,9 +227,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/feedback/modal/engines/rustic/index.tsx": {
-      "blob": "6a61784b883a37055ecf8f4ca410219dbcd91a7ec820de1ae3ac817de3e7bc1b",
-      "relocationDigest": "b8ceda48270cc18f43cc38b2d7e2c7ea95d95ff4dfe9650da951d432daa77b29",
-      "reason": "Preserve the consolidated legacy Rustic Modal API while removing internal inline paint; behavior covered by Modal lifecycle, motion, and branch tests.",
+      "blob": "3e0da9de544f9e1a59d4d357bd7cb48d1ef965c383fbe1ede95ac13211fd8ce5",
+      "relocationDigest": "7942feeee661201dbd2ce810bbfa0478f73d8017474db6e16d6cb4afd6613d53",
+      "reason": "1b4653f5d: the 100vw/100vh literals become var(--ds-viewport-inline-size)/var(--ds-viewport-block-size). The channel is declared once and ships in all three artifacts at 100dvw/100dvh. Identical on desktop; on a phone the surface tracks the visible area instead of including collapsing browser chrome. The literal leaves the TSX, which the skin-first law asks.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/feedback/notification/engines/rustic/index.tsx": {
@@ -185,27 +245,39 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/inputs/button/engines/classic/index.tsx": {
-      "blob": "8c9b450284e0f9c7f1a640ce996cffbfb7375fdbf32b63c808d8be9bed7b31c5",
-      "relocationDigest": "3d44410ab45a62627976e004baafb6dd5f836f5111e8aafb4731001d2ed2ae45",
-      "reason": "1c5d58c76/093671457: data-part por la frontera imperativa canonica y ley de pass-through — sancionado",
+      "blob": "d63aa07b092997e514ec166386f69db5a9d94a2eaf0bd95b5e165b5c379624fe",
+      "relocationDigest": "b6d6d393523d18fe4961ad1b324c49f217abc22d9486c733ed492884dcf22986",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/inputs/button/engines/rustic/index.tsx": {
-      "blob": "62b895e96f4ad25f1f22159205f8ec5bbd1fdf9e5db72c7389cec98c12676ed6",
-      "relocationDigest": "b3a18db32720c25917765976075f31aa9b745ff012d5a5e9c5ac8d35ddd90809",
-      "reason": "misma ley de pass-through data-part que classic — sancionado",
+      "blob": "662b69d72e9a5cd82692c6fdec2b55e88e028cf347429522b6173c92c1ceb7c3",
+      "relocationDigest": "07edd0aaadf1854061c50e75cd71f6c815f4408a7c75836167119ad637bb5d5c",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/inputs/form/engines/rustic/index.tsx": {
-      "blob": "f12f8c9eb3a6ad23646a0c0d66b282faae52be78cce915352c54127a249e3eb6",
-      "relocationDigest": "cd65732e5b64f0c58f1da2ac46568c878a0422b47ac861db3aa3527322365f1f",
-      "reason": "WO-FAM-02 lot FAM02-C3 rustic-form-shared-runtime (DT-adjudicated, audit/102-resumption-2026-09-12 codex-response-fam02-deltas): Rustic Form's state, validation and useForm move to the shared owner form/runtime/{state,validation} that Modern renders from (F-78). Initial markup stays byte-identical across the six rendered layouts and Rustic keeps its components validation catalog. The shared runtime changes exactly these Rustic behaviours, nothing else: (1) an unmounted Form.Item unregisters its rules and errors, so a removed field no longer blocks submit; (2) the instance validateFields validates the registered rules and rejects with errorFields, and scrollToField scrolls the field into view (smooth, center) instead of a no-op; (3) a user change marks the field touched, which makes the hasFeedback success icon reachable and, through the same touched gate, re-runs a dependent field's rules when its dependency changes. Evidence: form/tests/Form.rustic-runtime.test.tsx (6/6 on this state, 6/6 red on 7dc65733a).",
+      "blob": "bd46b2763692e61114523c14040109963f816096ecd73e535f54e2c2aa61a267",
+      "relocationDigest": "050ff45501e63ea9287b22baae4c158cab73397cac858b2513e328241a758393",
+      "reason": "b9d9362e4 (WO-FAM-02): the shared form/runtime validation owner grows its messages catalog (158 tokens of i18n strings) inside the shape the FAM02-C3 exception already covers -- Rustic keeps its components validation catalog; the catalog's content grew with the FAM-02 validation work, validation behavior unchanged",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx": {
       "blob": "6382dad976114b759260777c6f15aa82a8fe0beb7e75683be357021e440044c2",
       "relocationDigest": "13e1eb113e64366a6c073d61bb93e5c3f837ebbb8665f6f908400acc786ca437",
       "reason": "WO-FAM-02 lot FAM02-C3 input-number-namespace-rename (DT-adjudicated): mechanical rename of every --ds-inputnumber-* read to --ds-input-number-*, the one family namespace the vertical chrome emission and neutral theme floors now produce. The single non-textual consequence: the corner-radius floor read inside the Rustic inline --ds-input-number-radius value and the addon corners becomes --ds-input-number-corner-radius (declared in themes/default as var(--ds-radius-md)), because the renamed inline property would otherwise reference itself. No other token, selector, markup or behaviour changes.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/inputs/input/engines/classic/index.tsx": {
+      "blob": "93caeb3173ce7b1cb690d671f0a6981b4f6f824e277e96ecb2a2b16a47605ab1",
+      "relocationDigest": "26485a20d6780e781d1ffaba295229cd73c41455787b0d4f3a2d350cac8f591b",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/inputs/input/engines/rustic/index.tsx": {
+      "blob": "ae106428408f16b34614b71ecdeb707af1737b0df8a234aa024d358043b96b23",
+      "relocationDigest": "0eaf8c03dc7e5958774e3a5e05e3d11b778e0c97c4d4b7f2b2b08a565c2235d9",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/inputs/mentions/engines/classic/index.tsx": {
@@ -218,6 +290,18 @@
       "blob": "6990ba07dd99694896f657635e8ea9b2ccc57340a8b79c7e70a37c84e7b6dd4b",
       "relocationDigest": "3c4c45a9bdeada48968d89d30794ab0117278b5ca1485575bf74959a8ef7c07f",
       "reason": "Shared props contract: id and aria-labelledby were added to MentionsProps. An engine that accepts the prop and drops it loses the accessible name, so the passthrough belongs in every engine, not only modern.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/inputs/select/engines/classic/index.tsx": {
+      "blob": "2c405e5000cbee9f1ea4f17a8c3d47cc6803af89ee4a96aafa1512584d0b612d",
+      "relocationDigest": "768657f025d1cf70d0a8b4e30563d82c9a6f27765b318382aeef73fe12c94660",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/inputs/select/engines/rustic/index.tsx": {
+      "blob": "d26ce29f95cf03d5a3fea9a100dec0c3ce7ec3b62e68efc4e3b20e15c5c9a40b",
+      "relocationDigest": "e306422390c186a5d5dfe7435ce593ef31367dd40ee9a2302ebcce290b966604",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/inputs/tree-select/engines/rustic/index.tsx": {
@@ -245,9 +329,9 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx": {
-      "blob": "fe84c4593455d490c8998e38a77b54e24220d66da15b8ec1860468418229d0aa",
-      "relocationDigest": "25aaefb750932d0254c3f48b7a68bd83ca09ceb54ff1d8f0f309467f4f49794f",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "87ec9576a07034ea27e13739037a2151c882f3a082966392bb48bd203b9e0dd9",
+      "relocationDigest": "bf70f731cb71e544db7cf79d1ff859e8d6405c1ba0272d1bb312effc79f15b1e",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/collapse/engines/rustic/index.tsx": {
@@ -281,15 +365,15 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/flex/engines/classic/index.tsx": {
-      "blob": "eda0be0ec3f9d44f6ae18250894130d6b2378ac2827d405ea36c3a687513f7aa",
-      "relocationDigest": "fd0f8d1037518b57db6bfd11f1e2725574c4717f07be631dd09f521b654ca0ea",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "2ca8c9df5ba660795567515531e479cf637b723e113db8089bcafcc8b1bb07b4",
+      "relocationDigest": "bbf91c86243f91a079eb275b1871cdabd41f96bacc21412655be9d6ef14ae92d",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/flex/engines/rustic/index.tsx": {
-      "blob": "86d7ff28fea03d541a5393fd33f3ef72b7abf8aa1ae7e9abe4b23dd433e2b5e9",
-      "relocationDigest": "449609e05b46a38b4c360ffd3a04f794a6faf61a92e7681e86f1239d5e79f406",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "8d0dbd9cd757fe71e49b58b37b66362594ce13e7da44a6bb8c79f7200f7ec91b",
+      "relocationDigest": "c04abf4a4256588986573bf4b44608cd87b8820efd83b4d435310532d9329942",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/grid/engines/classic/index.tsx": {
@@ -317,15 +401,21 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/stack/engines/classic/index.tsx": {
-      "blob": "8f723f431d5b1413422a12df98b448bc9452788ac575e4464567566078728f73",
-      "relocationDigest": "da83818519ac689842205dd84dc158983999554741ac8f81c17c1ee7d6d740bf",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "042d0ac3c64fe7fdf6c6ba9195b527c7411b573001a78f467448bb4baf400591",
+      "relocationDigest": "11da9691736aa87b443b4a19f7a248488ffabc034c44140d704be6731fd410f7",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/layout/stack/engines/rustic/index.tsx": {
-      "blob": "f3610a1a1343ae2cba1725a6af75b0a531cd65e8c4cc2d1f931759c328d73307",
-      "relocationDigest": "12eb967f109dbbfd5ce2bba885226caedcfbdfb66f52c4c25913c7348df08a5a",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "2ebcebde35da2e496b37a7cc600d855bf2c4dcd6319943678e65f269af524731",
+      "relocationDigest": "d1af78ba30839b6acdb8098fef47c371d17c3f6a1f3b27cf6a3fa524a17ad29b",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/components/primitives/layout/system/engines/rustic/index.tsx": {
+      "blob": "827c3a13107f6a67ae64901a9f42cf7b53f03769490a46b776782653d7cbdd2d",
+      "relocationDigest": "a4a9223f1fca1d52e72f4b347b4fafc3083f1c8661f3a0c3981c34de49320b2c",
+      "reason": "1b4653f5d: the 100vw/100vh literals become var(--ds-viewport-inline-size)/var(--ds-viewport-block-size). The channel is declared once and ships in all three artifacts at 100dvw/100dvh. Identical on desktop; on a phone the surface tracks the visible area instead of including collapsing browser chrome. The literal leaves the TSX, which the skin-first law asks.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/navigation/link/engines/classic/index.tsx": {
@@ -347,15 +437,15 @@
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/navigation/tabs/engines/classic/index.tsx": {
-      "blob": "fdde425f05441f510aaa0cd2cd4bc984313a317f1aadcf68607e36cd0c3d7eb3",
-      "relocationDigest": "a3b11abf65a1b9d1a2d5b8997987308dca154a01ce425762ff96f0665a4bb098",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "eff040530e2c09550535feed70493152d26fc64258374528c8c808391dfeebb3",
+      "relocationDigest": "a1a5dfc9c6ee402ff5097791ed0caacea35c017840dd70084817b26370c0f9a5",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/navigation/tabs/engines/rustic/index.tsx": {
-      "blob": "ec502be38e528bb3873535dbf902889c204af5245f5ea76365f83b966936f7a1",
-      "relocationDigest": "24be1524f357f81fa69ace7e5f7ed9580c73fd01e7f8afefa53fca44a8fb4236",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "blob": "820487d9a644254697c7ef12286926b18ccabcd51ccb1bdd7cf76b8dc62dda98",
+      "relocationDigest": "1f2f7bb464c41ff0a1208f1b7fdebfad47c937db5dfe3be1d13cf6367eafdcee",
+      "reason": "1b4653f5d: one responsive mechanism. The per-instance <style dangerouslySetInnerHTML> is replaced by the governed channels; the instance publishes --_ds-rsp-* values plus data-ds-responsive and foundation/responsive/channels/index.css owns the @media preludes for every engine. Mechanical and identical in all 19 frozen files. It closes the CSP-blocked per-instance stylesheet. The sheet is engine-agnostic by design: its docblock names the frozen classic engines and antd as the reason data-ds-responsive-hard exists. Residual named, not resolved: cascade position moves from an unlayered per-instance sheet to the last design-system layer, and only flex and stack have a test asserting the projection on a frozen engine.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/primitives/overlay/alert-dialog/engines/rustic/index.tsx": {
@@ -392,6 +482,12 @@
       "blob": "c7ff268378873fcd97e51ebf28b743e8718934f61ca8589efaef79edb5b6a173",
       "relocationDigest": "1b65eeb62da7cca27557010a933f126c2a722e9ce835ec5e170c30d4fb157865",
       "reason": "WO-CAN-06 one-anatomy-truth (F-29): this file is a prose SUPPORT MANIFEST with zero runtime consumers -- its only readers are anatomy-variant-gate and that gate's self-test -- and it claimed 'supported'/'approximated' for all ten rows while the classic theme adapter declares chrome.anatomy 'unsupported' and admission refuses by name any tenant that would select a variant. CI was validating a document the runtime contradicts. All ten support values are set to the adapter's truth; every original Ant-wrapper sentence is preserved verbatim as supplierNote, so no evidence is destroyed. No Classic implementation, skin, token, test or a11y work was added, removed or improved: the classic surface stamps no data-anatomy-* attribute and accepts no anatomy prop before or after this edit.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css": {
+      "blob": "dc3a186b780d906e72168c72869312b7c58bae41f8189bb1950de9098b2daed3",
+      "relocationDigest": "8e39942b4e4a9699c768c14a630a836328e18bf32c0d77a90ec493284c6dd087",
+      "reason": "1b4653f5d: the @supports (height: 100dvh) block is flattened into the base rule. Equivalent on every browser that supports dvh, which that block already won on; the package declares no browserslist and builds to esnext, so the removed fallback covers no supported target.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css": {
@@ -466,6 +562,18 @@
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/sheet/index.css": {
+      "blob": "d8429918c49e1278c983e2c1d51fe6d9b480a18202a15dcfceec20e67ab8f2e6",
+      "relocationDigest": "00ebbaec13b09f921c77dc82d9a1585fb8472321f94eb69e8de98caff68172da",
+      "reason": "1b4653f5d: the @supports (height: 100dvh) block is flattened into the base rule. Equivalent on every browser that supports dvh, which that block already won on; the package declares no browserslist and builds to esnext, so the removed fallback covers no supported target.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/steps.css": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "1ddfd6198 (WO-FAM-05): the Steps family merges into the stepper family cut -- the frozen Steps implementation is retired with its successor live in components/primitives/navigation/stepper, a family-merge footprint, no content lost",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css": {
       "blob": null,
       "relocationDigest": null,
@@ -502,6 +610,12 @@
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css": {
+      "blob": "37978f3806cdad542eb963a717b18ace7e338feb49c2920dfea7a66c9643152d",
+      "relocationDigest": "fd2f49d594f893e65470d0f3aee38ce60a79f30b363441d680e6a477085d6abe",
+      "reason": "9d924e9f2 (WO-FAM-01): the .ds-switch block is deleted, 52 lines removed and none added, following the D-16 merge of Switch into Toggle. Measured: no ds-switch__* class has a consumer anywhere in packages/core/src.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/ui/primitives/inputs/Switch/engines/classic/index.tsx": {
       "blob": null,
       "relocationDigest": null,
@@ -512,6 +626,24 @@
       "blob": null,
       "relocationDigest": null,
       "reason": "WO-FAM-01 (D-16, landed ad38a9327): Switch merged into Toggle; the frozen rustic Switch engine is deleted with its family. DT authorization, owner may veto.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/layout/Layout/engines/rustic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "1b4653f5d: the 100vh literal becomes var(--ds-viewport-block-size) in the layout family's move from src/ui to src/components (the Layout family is system today -- same file, rename+move pair the relocation learner could not pair). The channel ships in all three artifacts at 100dvh, identical on desktop",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/navigation/Steps/engines/classic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "1ddfd6198 (WO-FAM-05): the Steps family merges into the stepper family cut -- the frozen Steps implementation is retired with its successor live in components/primitives/navigation/stepper, a family-merge footprint, no content lost",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/navigation/Steps/engines/rustic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "1ddfd6198 (WO-FAM-05): the Steps family merges into the stepper family cut -- the frozen Steps implementation is retired with its successor live in components/primitives/navigation/stepper, a family-merge footprint, no content lost",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/primitives/overlay/Modal/engines/classic/index.tsx": {
