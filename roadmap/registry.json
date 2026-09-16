@@ -5224,6 +5224,11 @@
      "at": "2026-09-16 10:13",
      "by": "kimi-admin",
      "note": "Migracion lote 2 INTEGRADA (30c36e036, 14 archivos). Auditoria propia: suites 42 archivos/449 tests verdes; gate 2 probes/1 archivo (solo active-filters-bar pineado, fence mientras el lote flex esta en vuelo); drill 15/15 con re-ancla auditada (piso sobre las 3 excepciones permanentes, no sobre deuda que llega a cero); grep 0/7; Group C con sus primeras 3 coberturas RTL + 3 contra-factuales LTR; Tabs con fixture discriminante y contra-factual rojo permanente; censo Group D (provider reclama documentElement.dir, scope=element mejora). ERRATA MIA registrada: 8a9711cb4 llevo el baseline final un commit antes (slip de staging al no re-leer el archivo compartido; queda anotado en el propio commit 30c36e036). Restan: 2 probes de active-filters-bar (tras lote flex) + gate de propiedades fisicas (censo en curso) + cierre."
+    },
+    {
+     "at": "2026-09-16 10:46",
+     "by": "kimi-admin",
+     "note": "Gate physical-properties INTEGRADA (9fc426c2f): la mitad de pintura de la ley de direccion. 4 deuda/3 archivos decrease-only + 12 inertes en banda propia + 6 excepciones medidas + frozen por path; drill 21/21 con controles negativos (textAlign:center/float:none/logicas NUNCA disparan); manifest 24/24; direction-authority sigue verde. Correction aceptada a mi razon: charts tooltip es measured-rect (como export-button), no 'SVG por definicion'. Sigue: lote correcciones Class D (countdown x2 + progress, con contra-factual RTL y literal 4px a rampa spacing), luego cleanup active-filters-bar (2 probes, tras lote flex) y cierre."
     }
    ]
   },
@@ -5623,6 +5628,11 @@
      "at": "2026-09-16 10:44",
      "by": "kimi-admin",
      "note": "Tercer rojo preexistente de gate blocking verificado A/B esta semana: theme-lowering-single-door falla 4 (resolveTheme arity) identico en HEAD prístino y en arbol (60 pasan). Ninguna lane viva lo causa. Queda en el registro de reds de flota con dueno por adjudicar; no se baja umbral."
+    },
+    {
+     "at": "2026-09-16 10:46",
+     "by": "kimi-admin",
+     "note": "Registro para WO-RET-04 (todo, bloqueada por RET-01, no reclamable sin falsear estado): patterns/foundation/engine-styles/modern tiene 4 exports MUERTOS medidos (popupPanelStyle 0, menuListStyle 0, menuItemStyle 0, pillBadgeStyle 0 consumidores en todo src) contra 2 vivos (panelCardStyle 10, pillBadgeSmStyle 5). Disposicion adjudicada: retirar los 4 bajo WO-RET-04, NUNCA hacerlos logicos (censo fisicas fam07, 2026-09-16). La deuda queda pineada en physical-properties/baseline con esa razon; el pin baja a cero cuando el retiro aterrice."
     }
    ]
   },
