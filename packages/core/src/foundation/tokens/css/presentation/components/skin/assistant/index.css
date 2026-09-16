@@ -283,7 +283,7 @@
   overflow-wrap: anywhere;
 }
 
-.ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider'] {
+.ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
   /* was an inline 6px paddingTop -- snapped to the canonical step */
   padding-block-start: var(--ds-spacing-2);
   border-top: 1px solid var(--ds-color-border);
@@ -378,7 +378,7 @@
     background: ButtonText;
     box-shadow: none;
   }
-  .ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider'] {
+  .ds-assistant-preview-diff-card [data-part='diff-row'][data-part='diff-row'][data-part='diff-row'] {
     border-top-color: ButtonText;
   }
 }

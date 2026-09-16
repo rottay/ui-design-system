@@ -510,7 +510,7 @@ export function PreviewDiffCard({
             return (
               <Stack
                 key={`diff-row-${index}`}
-                data-part="divider"
+                data-part="diff-row"
                 direction="horizontal"
                 spacing="sm"
                 align="center"
