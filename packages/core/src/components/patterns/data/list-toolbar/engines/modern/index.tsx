@@ -591,8 +591,9 @@ function MobileOverflow({
       onOpenChange={setOpen}
       arrow={false}
       content={
-        <Stack
-          spacing='sm'
+        <Flex
+          direction='column'
+          gap='sm'
           className='ds-list-toolbar__mobile-overflow-panel'
           data-part='mobile-overflow-panel'
         >
@@ -645,7 +646,7 @@ function MobileOverflow({
               }}
             />
           )}
-        </Stack>
+        </Flex>
       }
     >
       <IconButton
@@ -844,10 +845,11 @@ export default function ModernListToolbar({
         /* ================================================================ */
         /* MOBILE LAYOUT                                                    */
         /* ================================================================ */
-        <Stack
+        <Flex
           data-part='mobile-layout'
           className='ds-list-toolbar__mobile-layout'
-          spacing='sm'
+          direction='column'
+          gap='sm'
         >
           {/* Row 1: Title + actions */}
           <Flex
@@ -966,7 +968,7 @@ export default function ModernListToolbar({
               </Flex>
             </Box>
           )}
-        </Stack>
+        </Flex>
       ) : (
         /* ================================================================ */
         /* DESKTOP LAYOUT                                                   */

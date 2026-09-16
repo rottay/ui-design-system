@@ -36,6 +36,7 @@ import {
   containerScope,
   draftPreviewThemeIntent,
   emitThemeCss,
+  governedTenantTheme,
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import { brandTenantSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
@@ -624,7 +625,7 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
       kind: 'theme-draft',
       vertical: 'bithire',
       slug: 'acme',
-      theme: createTenantFlatTheme(draft),
+      theme: governedTenantTheme(createTenantFlatTheme(draft)),
     });
 
     expect(direct.css).toBe(fromTheme.css);

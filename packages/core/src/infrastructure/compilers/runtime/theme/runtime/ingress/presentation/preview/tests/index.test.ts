@@ -64,7 +64,7 @@ describe("draftPreviewThemeIntent transport discriminant", () => {
     expectSameIntent(intentOf(serialized), expected);
     expect(
       compileThemeIntent(intentOf(serialized)).compiled.runtime.personality
-        .animation.hoverScale
+        .animation?.hoverScale
     ).toBe(1.01);
   });
 
