@@ -5161,7 +5161,7 @@
    "lane": "platform-invariants",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -5170,9 +5170,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-38; supersedes: WO-GAT-11",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "kimi-admin",
+   "claimedAt": "2026-09-16",
+   "progressLog": [
+    {
+     "at": "2026-09-16 03:58",
+     "by": "kimi-admin",
+     "note": "2026-09-16 kimi-admin: claimed to hold the cross-WO direction-authority lane. From the WO-FAM-07 close evaluation (its own two obligations -- box physical props, splitter/resize-handle -- dispatched there): the OTHER 11 closest('[dir]') sites measured across the tree, registered here per lane so the count drains honestly: patterns/visualization/kanban-board + calendar-view (WO-FAM-08's census already carries them), patterns/shell/workbench-header + page-shell (WO-FAM-11), patterns/navigation/workspace-switcher + locale-switcher, patterns/communication/notification-center, primitives/display/tree (WO-FAM-06 done -- follow-up), primitives/display/carousel (x2), primitives/inputs/slider. F-38's criterion (grep closest('[dir]') src/components = 0) is cross-WO and lands when these adopt useOptionalDirection."
+    }
+   ]
   },
   {
    "id": "WO-INV-02",
