@@ -58,6 +58,7 @@ import {
   useCollectionWorkspace,
 } from '../../../../runtime/collection-workspace';
 import { useSurfaceTranslations } from '../../../../../structures/foundation/chrome/runtime/i18n';
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import {
   resolveSurfacePermission,
   hasSurfaceError,
@@ -734,6 +735,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   const surfaceAccess = access;
   const { tSurfaceOr, locale } = useSurfaceTranslations();
+  // The reading direction comes from the shared i18n authority. It used to be
+  // read off `document.documentElement`, which the provider CLAIMS from the
+  // locale in its default scope -- so the value is the same one, minus the
+  // layout read. In `directionScope="element"` the provider deliberately leaves
+  // `<html>` alone, and there the authority is the only correct answer: a
+  // locale island must not take its direction from the shell it sits in.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const capabilityColumns = useMemo(
     () =>
       columns.filter((column) =>
@@ -1026,8 +1034,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       // The rail sits at the inline-end edge: in RTL that flips it to the
       // left side of the row, so the same physical drag has the opposite
       // effect on the rail width.
-      const directionFactor =
-        window.getComputedStyle(document.documentElement).direction === 'rtl' ? -1 : 1;
+      const directionFactor = directionIsRtl ? -1 : 1;
 
       previewRailDragActiveRef.current = true;
 
@@ -1063,11 +1070,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       // Logical arrows: ArrowLeft always moves the separator towards the
       // inline-start, which widens the inline-end rail in LTR and shrinks it
       // in RTL.
-      const directionFactor =
-        typeof window !== 'undefined'
-          && window.getComputedStyle(document.documentElement).direction === 'rtl'
-          ? -1
-          : 1;
+      const directionFactor = directionIsRtl ? -1 : 1;
 
       if (event.key === 'ArrowLeft') {
         event.preventDefault();

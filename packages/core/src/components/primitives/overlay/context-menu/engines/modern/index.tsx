@@ -41,6 +41,7 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback, useId, isValidElement, cloneElement } from 'react';
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
@@ -113,6 +114,9 @@ const MenuItem: React.FC<{
   item: ContextMenuItem;
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const itemRef = useRef<HTMLButtonElement | null>(null);
   const submenuRef = useRef<HTMLUListElement | null>(null);
@@ -194,11 +198,8 @@ const MenuItem: React.FC<{
         onKeyDown={(event) => {
           // Submenu keys are LOGICAL: forward opens, backward closes. Forward
           // is ArrowRight in LTR and ArrowLeft in RTL (Dropdown/Tabs
-          // precedent), resolved from the item's context -- nearest `[dir]`
-          // owner first, computed style as a fallback.
-          const isRtl =
-            event.currentTarget.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
-            window.getComputedStyle(event.currentTarget).direction === 'rtl';
+          // precedent), taken from the i18n authority.
+          const isRtl = directionIsRtl;
           const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
           const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
           if (event.key === forwardKey && hasChildren) {
@@ -244,10 +245,7 @@ const MenuItem: React.FC<{
               handleMenuLevelKeyDown(event);
               return;
             }
-            const isRtl =
-              event.currentTarget.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
-              window.getComputedStyle(event.currentTarget).direction === 'rtl';
-            const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
+            const backwardKey = directionIsRtl ? 'ArrowRight' : 'ArrowLeft';
             if (event.key === 'Escape' || event.key === backwardKey) {
               event.preventDefault();
               event.stopPropagation();
@@ -296,10 +294,16 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   // position: fixed, so these are viewport coordinates (clientX/clientY).
   // Viewport geometry is PHYSICAL by nature -- the anchor's `left: point.x`
   // is a measured coordinate, not a declared placement, so it stays physical
-  // in both directions. The READING DIRECTION captured at open time drives
-  // the logical panel alignment below instead.
+  // in both directions. The READING DIRECTION drives the logical panel
+  // alignment below instead. It used to be CAPTURED into state at open time,
+  // because the DOM probe behind it needed a source element to measure; the
+  // authority needs none, so a menu left open across a locale switch now
+  // realigns instead of keeping the direction it opened with.
   const [point, setPoint] = useState({ x: 0, y: 0 });
-  const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
+  const direction: 'ltr' | 'rtl' = directionIsRtl ? 'rtl' : 'ltr';
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [menuEl, setMenuEl] = useState<HTMLUListElement | null>(null);
   const menuRef = useRef<HTMLUListElement | null>(null);
@@ -358,15 +362,9 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   } = overlay;
 
   // Every open path funnels here: pointer (contextmenu event) or keyboard
-  // (Shift+F10 / the Menu key), so the direction capture stays single-source.
-  const openMenu = useCallback((x: number, y: number, sourceEl: HTMLElement) => {
+  // (Shift+F10 / the Menu key).
+  const openMenu = useCallback((x: number, y: number) => {
     setPoint({ x, y });
-    setDirection(
-      sourceEl.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
-        window.getComputedStyle(sourceEl).direction === 'rtl'
-        ? 'rtl'
-        : 'ltr'
-    );
     setIsOpen(true);
   }, []);
 
@@ -375,7 +373,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
     e.preventDefault();
-    openMenu(e.clientX, e.clientY, e.currentTarget as HTMLElement);
+    openMenu(e.clientX, e.clientY);
   }, [disabled, openMenu]);
 
   // Keyboard parity for the pointer's right-click: Shift+F10 or the Menu key
@@ -385,7 +383,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     if (e.key === 'ContextMenu' || (e.key === 'F10' && e.shiftKey)) {
       e.preventDefault();
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      openMenu(rect.left + rect.width / 2, rect.top + rect.height / 2, e.currentTarget as HTMLElement);
+      openMenu(rect.left + rect.width / 2, rect.top + rect.height / 2);
     }
   }, [disabled, openMenu]);
 

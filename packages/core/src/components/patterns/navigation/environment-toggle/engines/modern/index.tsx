@@ -33,7 +33,7 @@
 
 import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import type { EnvironmentToggleProps } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { NavigationExpandIcon } from '@/graphics/icons/semantic/generated/roles/navigation-expand';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
@@ -52,6 +52,11 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
   // Optional channel with an English floor: the toggle renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own. The computed-style probe it replaces could
+  // not answer in jsdom either, which is why the RTL keyboard behaviour here
+  // had no test until now.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? floor;
 
@@ -223,7 +228,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       const currentIndex = options.findIndex(o => o === group.ownerDocument.activeElement);
       if (currentIndex === -1) return;
       event.preventDefault();
-      const rtl = getComputedStyle(group).direction === 'rtl';
+      const rtl = directionIsRtl;
       let nextIndex = currentIndex;
       if (event.key === 'Home') nextIndex = 0;
       else if (event.key === 'End') nextIndex = options.length - 1;

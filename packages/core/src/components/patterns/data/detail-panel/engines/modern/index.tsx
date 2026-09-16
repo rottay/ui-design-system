@@ -27,7 +27,7 @@ import Skeleton from '../../../../../primitives/feedback/skeleton/engines/modern
 import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
 /* SkeletonBlock                                                       */
@@ -338,6 +338,11 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   // English floor otherwise (a missing key echoes the full key back, which
   // the endsWith guard detects). Pattern-owned strings, never page copy.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own. The computed-style probe it replaces could
+  // not answer in jsdom either, which is why the RTL keyboard behaviour here
+  // had no test until now.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const tOr = (key: string, fallback: string): string => {
     const translated = i18n?.t(key);
     return translated && !translated.endsWith(key) ? translated : fallback;
@@ -542,8 +547,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                     // Direction-aware arrows (data-table/action-dock precedent):
                     // in RTL the visual-forward key is ArrowLeft, so the same
                     // physical cue always moves the selection the same way.
-                    const isRtl =
-                      getComputedStyle(e.currentTarget).direction === 'rtl';
+                    const isRtl = directionIsRtl;
                     const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
                     const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
                     let nextIdx = -1;

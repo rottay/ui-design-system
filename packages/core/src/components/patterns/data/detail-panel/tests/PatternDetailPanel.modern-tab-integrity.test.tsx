@@ -3,6 +3,8 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import type { DetailPanelProps, DetailTab } from '../contracts';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernDetailPanel from '../engines/modern';
 
 type Customer = { id: string };
@@ -110,6 +112,57 @@ describe('Modern DetailPanel — instance-scoped tab focus', () => {
     // the key, not fall through to the first DOM match across panels.
     expect(secondTabs[1]).toHaveFocus();
     expect(second.contains(document.activeElement)).toBe(true);
+  });
+
+  /**
+   * NEW COVERAGE (WO-INV-01 migration 2). This family resolved direction with
+   * `getComputedStyle(...).direction` and nothing else, which jsdom never
+   * answers -- a `dir` attribute does not cascade into computed style there --
+   * so its RTL keyboard contract had no test at all. Reading the i18n
+   * authority makes the behaviour reachable, and this is that behaviour.
+   *
+   * Three tabs, deliberately: with two, `ArrowRight` and `ArrowLeft` from the
+   * first both land on the same element and the case cannot tell the
+   * directions apart.
+   */
+  it('mirrors the tablist arrows under an RTL locale', () => {
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernDetailPanel {...createProps({ tabs: TABS })} />
+      </I18nProvider>,
+    );
+
+    const tabs = screen.getAllByRole('tab');
+    const tablist = screen.getByRole('tablist');
+
+    // RTL: ArrowLeft is the visual-forward key, so it advances the selection.
+    fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+    expect(tabs[1]).toHaveFocus();
+    fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+    expect(tabs[2]).toHaveFocus();
+    fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+    expect(tabs[1]).toHaveFocus();
+  });
+
+  it('walks the same tablist the other way under an LTR locale', () => {
+    // The counterfactual for the case above: the same keys, the same fixture,
+    // the opposite locale. Without it the RTL case could pass on a mapping
+    // that never consulted the direction at all.
+    render(
+      <I18nProvider locale="en" fallbackLocale="en">
+        <ModernDetailPanel {...createProps({ tabs: TABS })} />
+      </I18nProvider>,
+    );
+
+    const tabs = screen.getAllByRole('tab');
+    const tablist = screen.getByRole('tablist');
+
+    fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+    expect(tabs[1]).toHaveFocus();
+    fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+    expect(tabs[2]).toHaveFocus();
+    fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+    expect(tabs[1]).toHaveFocus();
   });
 });
 

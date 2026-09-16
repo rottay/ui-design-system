@@ -46,7 +46,7 @@
 
 import type { KeyboardEvent as ReactKeyboardEvent, ReactElement } from 'react';
 
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { ActionAddIcon } from '@/graphics/icons/semantic/generated/roles/action-add';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { ActionSearchIcon } from '@/graphics/icons/semantic/generated/roles/action-search';
@@ -58,13 +58,6 @@ const FOCUSABLE_SELECTOR =
   'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const ARROW_KEYS = new Set(['ArrowRight', 'ArrowLeft', 'Home', 'End']);
-
-/** Resolve writing direction from semantic markup before computed CSS (Tabs precedent). */
-function elementDirection(element: HTMLElement): 'ltr' | 'rtl' {
-  const directionOwner = element.closest<HTMLElement>('[dir]');
-  if (directionOwner?.dir === 'rtl') return 'rtl';
-  return getComputedStyle(element).direction === 'rtl' ? 'rtl' : 'ltr';
-}
 
 /** Border-relief vertical separator between toolbar sections */
 function ToolbarDivider(): ReactElement {
@@ -90,6 +83,9 @@ export function TableToolbar({
   actionsLabel,
 }: TableToolbarProps): ReactElement {
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this owner
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
   /**
    * Catalog lookup with an honest English floor: when the provider is absent
    * or echoes the raw key (missing entry), the historical default wins.
@@ -113,7 +109,7 @@ export function TableToolbar({
     const currentIndex = items.indexOf(document.activeElement as HTMLElement);
     if (currentIndex === -1) return;
 
-    const isRtl = elementDirection(container) === 'rtl';
+    const isRtl = directionIsRtl;
     const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
     const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
     let nextIndex: number | undefined;

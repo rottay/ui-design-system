@@ -35,7 +35,7 @@ import { Button } from '@/components/primitives/inputs/button';
 import { Dropdown } from '@/components/primitives/overlay/dropdown';
 import { NavigationMoreIcon } from '@/graphics/icons/semantic/generated/roles/navigation-more';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 
 import type { ActionDockAction, ActionDockPriority, ActionDockProps } from '../../contracts';
 
@@ -61,13 +61,6 @@ const PRIORITY_VARIANT: Record<ActionDockPriority, 'primary' | 'secondary' | 'da
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-/** Resolve writing direction from semantic markup before computed CSS (Tabs precedent). */
-function elementDirection(element: HTMLElement): 'ltr' | 'rtl' {
-  const directionOwner = element.closest<HTMLElement>('[dir]');
-  if (directionOwner?.dir === 'rtl') return 'rtl';
-  return getComputedStyle(element).direction === 'rtl' ? 'rtl' : 'ltr';
-}
 
 function actionPriority(action: ActionDockAction): ActionDockPriority {
   return action.priority ?? 'secondary';
@@ -127,6 +120,9 @@ export function ActionDock({
   // detects it, and the English literals render, so behavior is
   // byte-identical to the pre-i18n contract. Explicit props always win.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this owner
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const dockLabel = (key: string, fallback: string): string => {
     const translated = i18n?.t(key);
     return translated && !translated.endsWith(key) ? translated : fallback;
@@ -190,7 +186,7 @@ export function ActionDock({
     const currentIndex = items.indexOf(document.activeElement as HTMLElement);
     if (currentIndex === -1) return;
 
-    const isRtl = elementDirection(container) === 'rtl';
+    const isRtl = directionIsRtl;
     const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
     const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
     let nextIndex: number | undefined;

@@ -38,6 +38,8 @@ vi.mock('../../../runtime/overlay/positioning', async (importOriginal) => {
   };
 });
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernContextMenu from '../engines/modern';
 import type { ContextMenuItem } from '../contracts';
 
@@ -149,11 +151,15 @@ describe('ContextMenu modern engine — the opening side is logical', () => {
     expect(lastCall.placement).toBe('bottom-start');
   });
 
-  it('opens bottom-end inside a dir="rtl" subtree so the panel mirrors', () => {
+  it('opens bottom-end under an RTL locale so the panel mirrors', () => {
+    // Direction arrives through the i18n authority the engine now reads. It is
+    // no longer CAPTURED at open time either -- the probe needed a source
+    // element to measure, the authority does not -- so a menu left open across
+    // a locale switch realigns instead of keeping the direction it opened with.
     const { container } = render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernContextMenu items={ITEMS} trigger={<button type="button">Target</button>} />
-      </div>,
+      </I18nProvider>,
     );
     openMenu(container);
 

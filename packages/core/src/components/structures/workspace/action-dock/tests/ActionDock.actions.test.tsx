@@ -149,10 +149,11 @@ describe('ActionDock structured actions', () => {
   });
 
   it('mirrors the arrow model in RTL (ArrowLeft moves forward)', async () => {
+    // Direction arrives through the i18n authority this owner now reads.
     const { findByTestId } = renderDock(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ActionDock actions={GRAMMAR_ACTIONS} />
-      </div>,
+      </I18nProvider>,
       'modern'
     );
     const dock = await findByTestId('action-dock');

@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import type { FileManagerProps } from '../contracts';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernFileManager from '../engines/modern';
 
 function createProps(overrides: Partial<FileManagerProps> = {}): FileManagerProps {
@@ -119,6 +121,47 @@ describe('ModernFileManager grid roving tab stop', () => {
     expect(gridCards(container)[1].tabIndex).toBe(0);
     expect(gridCards(container)[0].tabIndex).toBe(-1);
 
+    fireEvent.keyDown(gridCards(container)[1], { key: 'ArrowLeft' });
+    expect(gridCards(container)[0]).toHaveFocus();
+  });
+
+  /**
+   * NEW COVERAGE (WO-INV-01 migration 2). This family resolved direction with
+   * `getComputedStyle(...).direction` and nothing else, which jsdom never
+   * answers, so its RTL grid contract had no test. Three cards, so the two
+   * inline arrows land on different cards and the case can tell the directions
+   * apart; the LTR counterfactual below is the control.
+   */
+  it('mirrors the grid arrows under an RTL locale', () => {
+    const { container } = render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernFileManager {...createProps({ viewMode: 'grid' })} />
+      </I18nProvider>
+    );
+
+    const cards = gridCards(container);
+    expect(cards).toHaveLength(3);
+    act(() => cards[0].focus());
+
+    // RTL: ArrowLeft is the visual-forward key.
+    fireEvent.keyDown(cards[0], { key: 'ArrowLeft' });
+    expect(gridCards(container)[1]).toHaveFocus();
+    fireEvent.keyDown(gridCards(container)[1], { key: 'ArrowRight' });
+    expect(gridCards(container)[0]).toHaveFocus();
+  });
+
+  it('walks the same grid the other way under an LTR locale', () => {
+    const { container } = render(
+      <I18nProvider locale="en" fallbackLocale="en">
+        <ModernFileManager {...createProps({ viewMode: 'grid' })} />
+      </I18nProvider>
+    );
+
+    const cards = gridCards(container);
+    act(() => cards[0].focus());
+
+    fireEvent.keyDown(cards[0], { key: 'ArrowRight' });
+    expect(gridCards(container)[1]).toHaveFocus();
     fireEvent.keyDown(gridCards(container)[1], { key: 'ArrowLeft' });
     expect(gridCards(container)[0]).toHaveFocus();
   });

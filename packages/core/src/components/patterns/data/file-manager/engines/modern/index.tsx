@@ -33,7 +33,7 @@
 
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { FileManagerProps, FileItem, FileSystemItem } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { formatDate as formatDateIntl, formatFileSize } from '@/foundation/i18n/runtime/formatting';
 import { LayoutGridIcon } from '@/graphics/icons/semantic/generated/roles/layout-grid';
 import { LayoutListIcon } from '@/graphics/icons/semantic/generated/roles/layout-list';
@@ -96,6 +96,11 @@ export default function ModernFileManager(props: FileManagerProps) {
   // Optional channel with an English floor: the manager renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own. The computed-style probe it replaces could
+  // not answer in jsdom either, which is why the RTL keyboard behaviour here
+  // had no test until now.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? fillPlaceholders(floor, params);
   const localeTag = i18n?.locale ?? 'en-US';
@@ -215,8 +220,7 @@ export default function ModernFileManager(props: FileManagerProps) {
       return;
     }
 
-    const isRtl = typeof window !== 'undefined'
-      && window.getComputedStyle(event.currentTarget).direction === 'rtl';
+    const isRtl = directionIsRtl;
     const forward = isRtl ? 'ArrowLeft' : 'ArrowRight';
     const backward = isRtl ? 'ArrowRight' : 'ArrowLeft';
 

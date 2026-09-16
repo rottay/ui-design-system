@@ -4,6 +4,8 @@ import { act, fireEvent, screen } from '@testing-library/react';
 
 import { renderWithEngine } from '@tests/support/engine';
 import type { EnvironmentToggleProps } from '../contracts';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernEnvironmentToggle from '../engines/modern';
 
 function createProps(overrides: Partial<EnvironmentToggleProps> = {}): EnvironmentToggleProps {
@@ -160,5 +162,58 @@ describe('PatternEnvironmentToggle - modern production gate layering', () => {
     // The pills variant has no trigger, so the invoker is the radiogroup tab
     // stop; without it focus falls to <body> after the gate unmounts.
     expect(document.activeElement).toBe(screen.getByTestId('env-option-test'));
+  });
+
+  /**
+   * NEW COVERAGE (WO-INV-01 migration 2). The APG radiogroup arrows resolved
+   * direction with `getComputedStyle(...).direction` and nothing else, which
+   * jsdom never answers -- a `dir` attribute does not cascade into computed
+   * style there -- so this family's RTL keyboard contract had no test. Three
+   * environments, so the two inline arrows land on different options and the
+   * case can tell the directions apart; the LTR counterfactual is the control.
+   */
+  it('mirrors the radiogroup arrows under an RTL locale', async () => {
+    const onChange = vi.fn();
+    renderWithEngine(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernEnvironmentToggle
+          {...createProps({ variant: 'pills', showBanner: false, onChange })}
+        />
+      </I18nProvider>,
+      'modern',
+    );
+
+    const test = await screen.findByTestId('env-option-test');
+    act(() => test.focus());
+
+    // RTL: ArrowLeft is the visual-forward key, so it advances the selection.
+    fireEvent.keyDown(test, { key: 'ArrowLeft' });
+    expect(screen.getByTestId('env-option-stage')).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith('stage');
+
+    fireEvent.keyDown(screen.getByTestId('env-option-stage'), { key: 'ArrowRight' });
+    expect(screen.getByTestId('env-option-test')).toHaveFocus();
+  });
+
+  it('walks the same radiogroup the other way under an LTR locale', async () => {
+    const onChange = vi.fn();
+    renderWithEngine(
+      <I18nProvider locale="en" fallbackLocale="en">
+        <ModernEnvironmentToggle
+          {...createProps({ variant: 'pills', showBanner: false, onChange })}
+        />
+      </I18nProvider>,
+      'modern',
+    );
+
+    const test = await screen.findByTestId('env-option-test');
+    act(() => test.focus());
+
+    fireEvent.keyDown(test, { key: 'ArrowRight' });
+    expect(screen.getByTestId('env-option-stage')).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith('stage');
+
+    fireEvent.keyDown(screen.getByTestId('env-option-stage'), { key: 'ArrowLeft' });
+    expect(screen.getByTestId('env-option-test')).toHaveFocus();
   });
 });

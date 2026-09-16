@@ -18,6 +18,11 @@ import { TabPane } from '../compound';
 const ITEMS = [
   { key: 'overview', label: 'Overview', children: 'Overview body' },
   { key: 'details', label: 'Details 4', icon: <span>i</span>, children: 'Details body' },
+  // A THIRD enabled tab, and the reason is the arrow case below: with only
+  // `overview` and `details` navigable (billing is disabled, audit is loading)
+  // ArrowLeft and ArrowRight from the first tab both landed on `details`, so
+  // the case asserted nothing about direction and passed under either locale.
+  { key: 'history', label: 'History', children: 'History body' },
   { key: 'billing', label: 'Billing', disabled: true, children: 'Billing body' },
   { key: 'audit', label: 'Audit', loading: true, children: 'Audit body' },
 ];
@@ -158,8 +163,16 @@ describe('direction and locale', () => {
     );
     const overview = screen.getByRole('tab', { name: 'Overview' });
     const details = screen.getByRole('tab', { name: /Details/ });
+    const history = screen.getByRole('tab', { name: 'History' });
     overview.focus();
+    // RTL: ArrowLeft is the visual-forward key, so it walks FORWARD through
+    // the enabled set. Three enabled tabs make that distinguishable from the
+    // LTR mapping, which walks the other way -- see the counterfactual below.
     fireEvent.keyDown(overview, { key: 'ArrowLeft' });
+    expect(details).toHaveFocus();
+    fireEvent.keyDown(details, { key: 'ArrowLeft' });
+    expect(history).toHaveFocus();
+    fireEvent.keyDown(history, { key: 'ArrowRight' });
     expect(details).toHaveFocus();
     fireEvent.keyDown(details, { key: 'ArrowRight' });
     expect(overview).toHaveFocus();
@@ -168,9 +181,31 @@ describe('direction and locale', () => {
     fireEvent.keyDown(details, { key: 'ArrowUp' });
     expect(overview).toHaveFocus();
     fireEvent.keyDown(overview, { key: 'End' });
-    expect(details).toHaveFocus();
-    fireEvent.keyDown(details, { key: 'Home' });
+    expect(history).toHaveFocus();
+    fireEvent.keyDown(history, { key: 'Home' });
     expect(overview).toHaveFocus();
+  });
+
+  it('walks the same tablist the other way under an LTR locale', () => {
+    // THE COUNTERFACTUAL. The case above used to pass under either locale --
+    // two enabled tabs meant both inline arrows landed on the same element --
+    // so it asserted nothing about direction. This is the control that makes
+    // the pair bite: same keys, same fixture, opposite locale, opposite result.
+    render(
+      <I18nProvider locale="en" fallbackLocale="en">
+        <ModernTabs items={ITEMS} defaultActiveKey="overview" />
+      </I18nProvider>,
+    );
+    const overview = screen.getByRole('tab', { name: 'Overview' });
+    const details = screen.getByRole('tab', { name: /Details/ });
+    const history = screen.getByRole('tab', { name: 'History' });
+    overview.focus();
+    fireEvent.keyDown(overview, { key: 'ArrowRight' });
+    expect(details).toHaveFocus();
+    fireEvent.keyDown(details, { key: 'ArrowRight' });
+    expect(history).toHaveFocus();
+    fireEvent.keyDown(history, { key: 'ArrowLeft' });
+    expect(details).toHaveFocus();
   });
 
   it('keeps an Arabic label as the tab name and the chrome copy from accessibilityLabels', () => {

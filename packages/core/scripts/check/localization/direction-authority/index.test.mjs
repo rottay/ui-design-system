@@ -85,8 +85,15 @@ test('the sandbox mirror measures exactly what the real tree measures', () => {
 });
 
 test('the corpus is not vacuous and the clean file really is clean', () => {
+  // The floor is the NAMED EXCEPTIONS, not the debt: debt is supposed to reach
+  // zero, and a floor tied to it would have to be lowered on every migration
+  // until it eventually asserted nothing. The three anchor/portal readers are
+  // permanent by adjudication, so six probes is the honest "the scan really
+  // ran" signal. WO-INV-01's migrations took the debt from 21 to 2.
   const sites = probeSites();
-  assert.ok(sites.length >= 20, `only ${sites.length} probe sites found -- an empty scan is never a pass`);
+  const exceptionSites = sites.filter((site) => NAMED_EXCEPTIONS[site.path]);
+  assert.ok(sites.length >= 6, `only ${sites.length} probe sites found -- an empty scan is never a pass`);
+  assert.equal(exceptionSites.length, 6, 'the three anchor/portal readers carry two probes each');
   assert.equal(probeCounts()[CLEAN_FILE], undefined, `${CLEAN_FILE} must hold no probe of its own`);
 });
 
@@ -129,7 +136,9 @@ for (const [label, line] of SPELLINGS) {
 }
 
 test('a SECOND probe in an already-pinned file grows its count and fails', () => {
-  const pinnedPath = 'structures/workspace/table-toolbar/runtime/rendering/index.tsx';
+  // The one row the baseline still pins: FAM-08 is stamping parts in this exact
+  // file, so WO-INV-01 fenced its two probes for the follow-up sweep.
+  const pinnedPath = 'structures/workspace/active-filters-bar/runtime/rendering/index.tsx';
   const pin = readBaseline().pinnedDebt[pinnedPath].probes;
   withPlantedTree(
     (sandbox) => plant(sandbox, pinnedPath, "const planted = element.closest('[dir]');"),
@@ -159,13 +168,13 @@ test('a NAMED EXCEPTION file is not counted as debt, in either direction', () =>
 test('a migration that removes a probe fails with an instruction to LOWER the pin', () => {
   // The ratchet direction: shrinking is red too, so the pin follows the tree
   // down instead of quietly keeping room for the probe to come back.
-  const pinnedPath = 'patterns/data/detail-panel/engines/modern/index.tsx';
+  const pinnedPath = 'structures/workspace/active-filters-bar/runtime/rendering/index.tsx';
   withPlantedTree(
     (sandbox) => {
       const file = join(sandbox, SCAN_ROOT, pinnedPath);
       writeFileSync(
         file,
-        readFileSync(file, 'utf8').replace(/getComputedStyle\(e\.currentTarget\)\.direction/, "direction"),
+        readFileSync(file, 'utf8').replace(/getComputedStyle\(element\)\.direction/, "'ltr'"),
       );
     },
     (findings) => {
