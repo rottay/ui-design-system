@@ -89,6 +89,45 @@ test('evaluate: a baseline entry without a live finding is STALE and fails (decr
   assert.match(failures[0], /^STALE baseline entry/);
 });
 
+/**
+ * AN ADJUDICATION'S REASON HAS TO STAY TRUE, not merely stay long.
+ *
+ * The integrity check above proves a reason exists and is not a token. It cannot
+ * prove the reason is still the case, and a baseline whose prose has quietly
+ * stopped describing the tree is the exact shape of debt this gate replaces: the
+ * entry keeps passing while the sentence justifying it has become false.
+ *
+ * The three `generate/theme-graph` entries are adjudicated on ONE mechanical
+ * claim -- "index.mjs remains the only entry point" -- so that claim is asserted
+ * here. Give any of the three a CLI entry guard, or wire one into a package
+ * script, and the adjudication's premise is gone and this says so.
+ */
+test('adjudication premise: the theme-graph split keeps index.mjs as the only entry point', () => {
+  const split = BASELINE.entries.filter((entry) => entry.path.startsWith('generate/theme-graph/'));
+  assert.ok(split.length > 0, 'the theme-graph split entries are the subject of this check');
+
+  for (const entry of split) {
+    const source = readFileSync(join(SCRIPTS_ROOT, entry.path), 'utf8');
+    assert.ok(
+      !source.includes('process.argv[1]'),
+      `${entry.path} now carries a CLI entry guard, so "index.mjs remains the only entry point" is false`,
+    );
+    assert.match(entry.reason, /index\.mjs remains the only entry point/);
+  }
+
+  /* ...and the entry it defers to really is one. A split justified by an entry
+     point that stopped being an entry point would pass every check above. */
+  const entryPoint = readFileSync(join(SCRIPTS_ROOT, 'generate/theme-graph/index.mjs'), 'utf8');
+  assert.ok(entryPoint.includes('process.argv[1]'), 'generate/theme-graph/index.mjs must still be the entry');
+  for (const entry of split) {
+    const module = entry.path.split('/').pop();
+    assert.ok(
+      entryPoint.includes(`./${module}`),
+      `${module} is adjudicated as part of this subdomain but the entry no longer imports it`,
+    );
+  }
+});
+
 test('the baseline never absorbs silently: live findings match the baseline exactly, entry by entry', () => {
   const live = new Set(collectFindings(SCRIPTS_ROOT).map((f) => `${f.rule} ${f.path}`));
   const recorded = new Set(BASELINE.entries.map((e) => `${e.rule} ${e.path}`));
