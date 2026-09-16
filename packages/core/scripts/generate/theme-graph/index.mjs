@@ -23,6 +23,9 @@
  *   node scripts/generate/theme-graph/index.mjs --check    exit 1 on any drift
  *   node scripts/generate/theme-graph/index.mjs --json     the counts, no write
  *   node scripts/generate/theme-graph/index.mjs --drill=<case>   plant a mutation; must exit 1
+ *
+ * A writer (--write, --views) and a checker (--check, --check-views) are refused
+ * together: the check would compare against the bytes the write just produced.
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -77,6 +80,20 @@ export function compareViews(views, dir = VIEWS_DIR) {
     if (readFileSync(path, "utf8") !== text) {
       failures.push(`views/${name} differs from the derivation -- a view is generated, never edited; run --views`);
     }
+  }
+  return failures;
+}
+
+/**
+ * Read-only: `--check` compares the derived files against the artefact on disk
+ * and reports; it never repairs what it compares.
+ */
+export function compareGraph(files, dir = OUT_DIR) {
+  const failures = [];
+  for (const [name, text] of Object.entries(files)) {
+    const path = join(dir, `${name}.json`);
+    if (!existsSync(path)) { failures.push(`${name}.json is missing -- run --write`); continue; }
+    if (readFileSync(path, "utf8") !== text) failures.push(`${name}.json differs from the derivation -- regenerate with --write`);
   }
   return failures;
 }
@@ -416,6 +433,18 @@ function main() {
     throw new Error(`nothing to do -- name one of ${[...KNOWN].join(", ")}; a silent exit 0 would say the graph was derived when it was not`);
   }
 
+  /* A check that runs after a write compares the tree against bytes it just
+     wrote, so it can only ever pass. The combination is refused before any
+     build assertion, derivation or write. */
+  const writers = args.filter((arg) => arg === "--write" || arg === "--views");
+  const checkers = args.filter((arg) => arg === "--check" || arg === "--check-views");
+  if (writers.length > 0 && checkers.length > 0) {
+    throw new Error(
+      `incompatible arguments ${[...writers, ...checkers].join(" + ")} -- a check must never run after a write; `
+      + "run the write and the check as separate commands (ds:derive, then ds:derive:check)",
+    );
+  }
+
   /* The dry-run compiles the BUILT door, so a stale build would publish a graph
      of yesterday's compiler under today's digest -- the exact failure mode that
      let the manifest describe a cascade nobody had. Asserted here, at the
@@ -477,12 +506,7 @@ function main() {
     if (args.includes("--json")) console.log(JSON.stringify(counts, null, 2));
 
     if (args.includes("--check")) {
-      const failures = [];
-      for (const [name, text] of Object.entries(files)) {
-        const path = join(OUT_DIR, `${name}.json`);
-        if (!existsSync(path)) { failures.push(`${name}.json is missing -- run --write`); continue; }
-        if (readFileSync(path, "utf8") !== text) failures.push(`${name}.json differs from the derivation -- regenerate with --write`);
-      }
+      const failures = compareGraph(files);
       failures.push(...compareViews(views));
       if (total > SIZE_BUDGET_BYTES) {
         failures.push(

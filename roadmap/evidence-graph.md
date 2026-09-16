@@ -25,7 +25,7 @@ Lane-wide rules (binding on every WO):
 
 
 ### WO-EVI-01 theme-graph: derived cascade graph with a byte-exact check
-- **Outcome** — `scripts/generate/theme-graph` runs a dry-run of the pipeline (3 verticals × 2 modes) plus a static read of the skins (postcss `var()` with file:line) and TSX `data-part` stamps, and emits `artifacts/generated/theme-graph/{nodes,edges,by-control,by-family}.json` + digest (< 5 MB, not tracked if > 1 MB; release asset); `ds:derive --check` fails on any drift; views regenerated for `docs/` and `docs-engineering`; it is never read at runtime nor used as acceptance authority (`audit/40-architecture/manifest`).
+- **Outcome** — `scripts/generate/theme-graph` runs a dry-run of the pipeline (3 verticals × 2 modes) plus a static read of the skins (postcss `var()` with file:line) and TSX `data-part` stamps, and emits `artifacts/generated/theme-graph/{nodes,edges,by-control,by-family}.json` + digest (< 5 MB, not tracked if > 1 MB; release asset); `ds:derive:check` fails on any drift; views regenerated for `docs/` and `docs-engineering`; it is never read at runtime nor used as acceptance authority (`audit/40-architecture/manifest`).
 - **Why** — F-04: the manifest prescribes 4,035 channels of which 32 exist; the measured graph (10,513 edges) had no consumer.
 - **Closes** — F-04, F-53 (closure criteria in `audit/30-findings`).
 - **Wave** — 4; parallel with the other WOs of the same wave whose write sets are disjoint.
@@ -33,7 +33,7 @@ Lane-wide rules (binding on every WO):
 - **Steps** —
   1. Schema `CascadeNode/CascadeEdge`; generator over existing measured artifacts; `--check`; views.
 - **Files** — `packages/core/scripts/generate/theme-graph/** (new)`; `packages/core/artifacts/generated/theme-graph/** (new)`; `docs/generated/theme-graph/** (new)`.
-- **Acceptance gate** — `ds:derive --check` green; a planted change in a deriver or a skin turns it red; 0 UNKNOWN cells (the graph only contains measured facts).
+- **Acceptance gate** — `ds:derive:check` green; a planted change in a deriver or a skin turns it red; 0 UNKNOWN cells (the graph only contains measured facts).
 - **Do NOT** — Do not hand-author any node or edge; do not "complete" the old manifest.
 - **Size** — M.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, execute WO-EVI-01 (theme-graph: derived cascade graph with a byte-exact check) exactly as specified in `roadmap/evidence-graph.md`: read first `audit/README.md` (guide for the executor) and the fiches of F-04, F-53 in `audit/30-findings`; declare your write set; Modern is the only engine you may touch; finish when the acceptance gate and every closure criterion pass; report the commands you ran and their output.

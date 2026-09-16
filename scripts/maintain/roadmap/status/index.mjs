@@ -3232,7 +3232,7 @@ const PROGRAM_INDICATORS = [
     id: "root-reach",
     metric: "Root reach per vertical (derived channels / total)",
     owner: "WO-EVI-01",
-    gate: "`ds:derive --check`, theme-graph by family",
+    gate: "`ds:derive:check`, theme-graph by family",
   },
   {
     id: "channels-without-producer",

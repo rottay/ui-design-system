@@ -9,14 +9,16 @@
  * or plants a placeholder that the graph MUST refuse.
  */
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, it } from "node:test";
 
 import { assertNoUnknown, canonical, stableStringify } from "../schema.mjs";
 import { expandKeypath, familyOfFile } from "../derive.mjs";
 import {
-  assertDistIsFresh, buildGraph, byControl, byFamily, compareViews, OUT_DIR, render, renderViews, VIEWS_DIR,
+  assertDistIsFresh, buildGraph, byControl, byFamily, compareGraph, compareViews, OUT_DIR, OUT_FILES, render,
+  renderViews, VIEWS_DIR,
 } from "../index.mjs";
 import { renderControlsView, renderFamiliesView } from "../views.mjs";
 
@@ -268,5 +270,83 @@ describe("theme-graph --check-views -- the pure half, verified without a build",
     const { status } = await run("--check-views");
     assert.equal(status, 0, "--check-views must not depend on the build state");
     assert.equal(typeof assertDistIsFresh, "function", "...while the deriving check still owns that assertion");
+  });
+});
+
+describe("theme-graph -- a check never repairs what it compares", () => {
+  const SCRIPT = join(OUT_DIR, "../../../scripts/generate/theme-graph/index.mjs");
+  const DIGEST = join(OUT_DIR, "digest.json");
+
+  const run = async (...argv) => {
+    const { spawnSync } = await import("node:child_process");
+    const result = spawnSync(process.execPath, [SCRIPT, ...argv], { encoding: "utf8" });
+    return { status: result.status, out: `${result.stdout}${result.stderr}` };
+  };
+
+  const withPlantedDrift = async (body) => {
+    const original = readFileSync(DIGEST);
+    const planted = Buffer.concat([original, Buffer.from("\n")]);
+    writeFileSync(DIGEST, planted);
+    try {
+      await body(planted);
+    } finally {
+      writeFileSync(DIGEST, original);
+    }
+  };
+
+  it("MUTANT: a writer combined with a checker is refused before any work, and the drift survives", async () => {
+    const combinations = [
+      ["--write", "--check"],
+      ["--check", "--write"],
+      ["--write", "--check-views"],
+      ["--views", "--check"],
+      ["--views", "--check-views"],
+      ["--write", "--views", "--check", "--json"],
+    ];
+    await withPlantedDrift(async (planted) => {
+      for (const argv of combinations) {
+        const { status, out } = await run(...argv);
+        assert.notEqual(status, 0, `${argv.join(" ")} must exit nonzero`);
+        assert.match(out, /incompatible arguments/, `${argv.join(" ")} must name the incompatibility`);
+        assert.doesNotMatch(out, /wrote|newer than dist|dist\/ is missing/, `${argv.join(" ")} must refuse before any work`);
+        assert.deepEqual(readFileSync(DIGEST), planted, `${argv.join(" ")} must not repair the planted drift`);
+      }
+    });
+  });
+
+  it("MUTANT: pure --check on a drifted artefact exits nonzero and leaves its bytes untouched", async () => {
+    await withPlantedDrift(async (planted) => {
+      const { status, out } = await run("--check");
+      assert.notEqual(status, 0, out);
+      /* A stale build refuses before the comparison; a fresh one reaches it and
+         names the drift. Neither path may write. */
+      assert.match(out, /digest\.json differs from the derivation|newer than dist|dist\/ is missing/);
+      assert.deepEqual(readFileSync(DIGEST), planted, "--check must not repair the artefact it compares");
+    });
+  });
+
+  it("MUTANT: the comparison --check runs reports the drift and writes nothing", () => {
+    const dir = mkdtempSync(join(tmpdir(), "theme-graph-check-"));
+    try {
+      cpSync(OUT_DIR, dir, { recursive: true });
+      const derived = Object.fromEntries(OUT_FILES.map((name) => [name, read(name)]));
+      assert.deepEqual(compareGraph(derived, dir), [], "an identical copy has no drift");
+
+      const path = join(dir, "digest.json");
+      const planted = Buffer.from(`${derived.digest}\n`);
+      writeFileSync(path, planted);
+      const before = OUT_FILES.map((name) => readFileSync(join(dir, `${name}.json`)));
+
+      const failures = compareGraph(derived, dir);
+      assert.equal(failures.length, 1);
+      assert.match(failures[0], /digest\.json differs from the derivation/);
+      assert.deepEqual(
+        OUT_FILES.map((name) => readFileSync(join(dir, `${name}.json`))),
+        before,
+        "the comparison must leave every artefact byte-identical",
+      );
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

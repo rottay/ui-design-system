@@ -20,7 +20,7 @@
    "name": "Root reach per vertical (derived channels / total)",
    "baseline": "rottay 8 % / bithire 33 % / evnto 8 %",
    "target": ">= 80 % per vertical",
-   "measure": "n/a until WO-EVI-01 (ds:derive --check, theme-graph by family)",
+   "measure": "n/a until WO-EVI-01 (ds:derive:check, theme-graph by family)",
    "asOf": "2026-09-05"
   },
   {

@@ -2374,12 +2374,12 @@ test("an indicator with a published artifact reads MEASURED with its own provena
   fs.mkdirSync(`${directory}/root-reach`, { recursive: true });
   fs.writeFileSync(`${directory}/root-reach/index.json`, JSON.stringify({
     value: "rottay 84 % / bithire 88 % / evnto 81 %",
-    gate: "ds:derive --check",
+    gate: "ds:derive:check",
     producedAt: "2026-09-06T00:00:00.000Z",
   }));
   const measurement = readProgramIndicatorMeasurement("root-reach", directory);
   assert.equal(measurement.measured, true);
-  assert.equal(measurement.gate, "ds:derive --check");
+  assert.equal(measurement.gate, "ds:derive:check");
   const lines = programIndicatorLines(registryForIndicators(), () => measurement).join("\n");
   assert.ok(lines.includes("rottay 84 % / bithire 88 % / evnto 81 %"));
   assert.ok(lines.includes("run of 2026-09-06T00:00:00.000Z"));
