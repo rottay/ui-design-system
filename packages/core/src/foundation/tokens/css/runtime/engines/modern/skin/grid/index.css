@@ -15,6 +15,10 @@
  * sheet, so this whole arm was Modern's; it now lives in Modern's own file and
  * the shared sheet carries no Grid rule at all.
  *
+ * NOT THE PART. `data-part` belongs to the caller: a composite names the Grid it
+ * renders so its own skin can address it. Every rule keys on the owned
+ * `data-component='grid'` stamp, which the engine writes after the caller spread.
+ *
  * A RUNG SCALES, A MEASUREMENT DOES NOT. A numeric gap is written inline by the
  * engine, which is the strongest means CSS has, and stamps no preset — so the
  * enumerated selectors below can never reach exact geometry. The axis seams are
@@ -32,22 +36,22 @@
  * decides, which is the law every sister family states.
  */
 
-.rottay-grid.rottay-grid--modern[data-part='root'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'] {
   display: grid;
   min-inline-size: 0;
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-inline='true'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-inline='true'] {
   display: inline-grid;
 }
 
 /* ---- the uniform gap ---- */
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset] {
   gap: var(--ds-grid-gap);
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset]:where(
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset]:where(
   [data-gap-preset='xs'],
   [data-gap-preset='sm'],
   [data-gap-preset='md'],
@@ -62,11 +66,11 @@
 
 /* ---- the split axes ---- */
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-column-gap-preset] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-column-gap-preset] {
   column-gap: var(--_ds-grid-column-gap);
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-column-gap-preset]:where(
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-column-gap-preset]:where(
   [data-column-gap-preset='xs'],
   [data-column-gap-preset='sm'],
   [data-column-gap-preset='md'],
@@ -79,11 +83,11 @@
   column-gap: calc(var(--_ds-grid-column-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-row-gap-preset] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-row-gap-preset] {
   row-gap: var(--_ds-grid-row-gap);
 }
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-row-gap-preset]:where(
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-row-gap-preset]:where(
   [data-row-gap-preset='xs'],
   [data-row-gap-preset='sm'],
   [data-row-gap-preset='md'],
@@ -101,19 +105,19 @@
  * nested inside a table would otherwise be reached by its descendant rules and
  * drawn as a table cell's bone by the shared skeleton renderer. */
 
-.rottay-grid.rottay-grid--modern[data-part='root'] > [data-part='grid-cell'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'] > [data-part='grid-cell'] {
   min-inline-size: 0;
   min-block-size: 0;
 }
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
-.rottay-grid.rottay-grid--modern[data-part='root'][data-layout-motion='rearrange'] {
+.rottay-grid.rottay-grid--modern[data-component='grid'][data-layout-motion='rearrange'] {
   transition: var(--ds-grid-reflow-transition);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-grid.rottay-grid--modern[data-part='root'][data-layout-motion='rearrange'] {
+  .rottay-grid.rottay-grid--modern[data-component='grid'][data-layout-motion='rearrange'] {
     transition: none;
   }
 }

@@ -424,7 +424,7 @@ describe("leg -- the SCALAR path is Modern-only too (Finding 3)", () => {
     // frozen engines by name.
     for (const rung of RUNGS) {
       expect(CSS, rung).toContain(
-        `.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='${rung}'] {`
+        `.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='${rung}'] {`
       );
       expect(CSS, rung).toContain(`--_ds-stack-gap-current: var(--ds-stack-gap-${rung});`);
     }

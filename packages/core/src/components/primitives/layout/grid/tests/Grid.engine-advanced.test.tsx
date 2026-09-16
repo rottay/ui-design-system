@@ -138,7 +138,7 @@ describe("Grid advanced engine coverage", () => {
       "rottay-grid",
       "rottay-grid--modern"
     );
-    // `display` is the Modern skin's, on the root part; the template is not.
+    // `display` is the Modern skin's, on the owned `data-component` stamp; the template is not.
     expect(screen.getByTestId("modern-auto-grid")).toHaveStyle({
       gridTemplateColumns: "auto",
     });

@@ -32,7 +32,7 @@ describe("Modern Grid quality contract", () => {
     expect(grid).toHaveAttribute("dir", "rtl");
     expect(grid.style.gridTemplateColumns).toBe("repeat(3, minmax(0, 1fr))");
     // The shrink floors, the formatting context and the reflow are the Modern
-    // skin's now, keyed on `data-part` and `data-layout-motion`; the computed
+    // skin's now, keyed on `data-component` and `data-layout-motion`; the computed
     // proof is in Grid.causality.integration.test.tsx.
     expect(grid).toHaveAttribute("data-part", "root");
     expect(grid).toHaveAttribute("data-layout-motion", "rearrange");

@@ -205,7 +205,7 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   } = props;
   const effectiveGap = gap ?? spacing ?? GRID_DEFAULTS.gap;
   // The formatting context, the shrink floor and the reflow are the Modern
-  // skin's, keyed on `data-part`, `data-inline` and `data-layout-motion`. What
+  // skin's, keyed on `data-component`, `data-inline` and `data-layout-motion`. What
   // stays here is the track geometry, which is arbitrary by contract.
   const computedStyle: CSSProperties = {};
   if (templateColumns) computedStyle.gridTemplateColumns = templateColumns;
@@ -485,6 +485,9 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
   return React.createElement(
     ElementType,
     {
+      // P-79: the default part precedes the spread, so a caller's own
+      // `data-part` reaches the DOM and owns that node's paint.
+      "data-part": "root",
       ...htmlAttributes,
       ref: (node: HTMLElement | null) => {
         containerRef.current = node;
@@ -494,7 +497,6 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
       className: `rottay-grid rottay-grid--modern ${className}`.trim(),
       style: computedStyle,
       id,
-      "data-part": "root",
       "data-posture": postureAttribute,
       "data-inline": props.inline ? "true" : undefined,
       "data-component": "grid",

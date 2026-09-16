@@ -173,8 +173,8 @@ describe("leg 3 -- tracks, wrapping and logical behaviour are untouched", () => 
     );
     const grid = container.querySelector(".rottay-grid") as HTMLElement;
     expect(grid.style.gridTemplateColumns).toBe("repeat(3, minmax(0, 1fr))");
-    // The shrink floor is the Modern skin's now, on the root part; the computed
-    // proof is in Grid.causality.integration.test.tsx.
+    // The shrink floor is the Modern skin's now, on the owned `data-component`
+    // stamp; the computed proof is in Grid.causality.integration.test.tsx.
     expect(grid).toHaveAttribute("data-part", "root");
     expect(grid.style.minInlineSize).toBe("");
   });

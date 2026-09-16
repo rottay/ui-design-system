@@ -17,11 +17,15 @@
  * stays there is scoped to `--classic`/`--rustic` with its declarations
  * unchanged, so the frozen engines keep the cascade position they always had.
  *
+ * NOT THE PART. `data-part` belongs to the caller: a composite names the Stack
+ * it renders so its own skin can address it. Every rule keys on the owned
+ * `data-component='stack'` stamp, which the engine writes after the caller spread.
+ *
  * A RUNG SCALES, A MEASUREMENT DOES NOT: `data-spacing='custom'` reads
  * `--ds-stack-gap`, which the engine writes inline from the caller's number.
  */
 
-.rottay-stack.rottay-stack--modern[data-part='root'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'] {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -40,108 +44,108 @@
   --_ds-stack-divider-gap-inline: var(--ds-stack-divider-gutter);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-direction='horizontal'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-direction='horizontal'] {
   flex-direction: row;
   --_ds-stack-divider-gap-block: var(--ds-stack-divider-gutter);
   --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-reverse='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-reverse='true'] {
   flex-direction: column-reverse;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-direction='horizontal'][data-reverse='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-direction='horizontal'][data-reverse='true'] {
   flex-direction: row-reverse;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-wrap='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-wrap='true'] {
   flex-wrap: wrap;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='start'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='start'] {
   align-items: flex-start;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='center'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='center'] {
   align-items: center;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='end'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='end'] {
   align-items: flex-end;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-align='baseline'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-align='baseline'] {
   align-items: baseline;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='center'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='center'] {
   justify-content: center;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='end'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='end'] {
   justify-content: flex-end;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-between'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='space-between'] {
   justify-content: space-between;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-around'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='space-around'] {
   justify-content: space-around;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-justify='space-evenly'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-justify='space-evenly'] {
   justify-content: space-evenly;
 }
 
 /* ---- the rungs ---- */
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='none'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='none'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-none);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='xs'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xs'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-xs);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='sm'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='sm'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-sm);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='md'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='md'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-md);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='lg'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='lg'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-lg);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-xl);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='2xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='2xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-2xl);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='3xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='3xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-3xl);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='4xl'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='4xl'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-4xl);
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never scaled. */
-.rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='custom'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='custom'] {
   --_ds-stack-gap-current: var(--ds-stack-gap);
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-full-width='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-full-width='true'] {
   inline-size: 100%;
 }
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-full-height='true'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-full-height='true'] {
   block-size: 100%;
 }
 
@@ -152,7 +156,7 @@
  * half the current gap center the hairline INSIDE the governed rhythm: two
  * neighbours keep exactly one gap between them instead of gap + divider + gap.
  */
-.rottay-stack.rottay-stack--modern[data-part='root'] > [data-part='divider'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
   align-self: stretch;
   flex: 0 0 var(--ds-stack-divider-thickness);
   min-inline-size: 0;
@@ -166,19 +170,19 @@
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
-.rottay-stack.rottay-stack--modern[data-part='root'][data-layout-motion='rearrange'] {
+.rottay-stack.rottay-stack--modern[data-component='stack'][data-layout-motion='rearrange'] {
   transition: var(--ds-stack-reflow-transition);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-stack.rottay-stack--modern[data-part='root'][data-layout-motion='rearrange'] {
+  .rottay-stack.rottay-stack--modern[data-component='stack'][data-layout-motion='rearrange'] {
     transition: none;
   }
 }
 
 @media (forced-colors: active) {
   /* The hairline is structural: it must survive colour stripping. */
-  .rottay-stack.rottay-stack--modern[data-part='root'] > [data-part='divider'] {
+  .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
     background: ButtonText;
     opacity: 1;
   }

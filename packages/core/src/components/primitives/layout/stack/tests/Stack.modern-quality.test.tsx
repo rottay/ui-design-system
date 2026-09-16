@@ -41,7 +41,7 @@ describe("Modern Stack quality contract", () => {
     expect(stack).toHaveAttribute("data-component", "stack");
     expect(stack).toHaveAttribute("dir", "rtl");
     // The shrink-safe formatting context and the reflow transition are the
-    // Modern skin's now, keyed on `data-part` and `data-layout-motion`; the
+    // Modern skin's now, keyed on `data-component` and `data-layout-motion`; the
     // computed proof is in Stack.causality.integration.test.tsx.
     expect(stack).toHaveAttribute("data-part", "root");
     expect(stack).toHaveAttribute("data-layout-motion", "rearrange");

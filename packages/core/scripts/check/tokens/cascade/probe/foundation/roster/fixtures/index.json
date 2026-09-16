@@ -315,9 +315,9 @@
     },
     {
       "id": "grid-modern-preset-gap",
-      "why": "The modern Grid with a preset ('md') gap. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. Each scaled rule repeats its own `[data-*-gap-preset]` compound before the enumerated `:where()`, so the pair ties and source order decides.",
+      "why": "The modern Grid with a preset ('md') gap. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the owned `data-component` stamp; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. Each scaled rule repeats its own `[data-*-gap-preset]` compound before the enumerated `:where()`, so the pair ties and source order decides.",
       "requiresSelectors": [
-        ".rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset] {",
+        ".rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset] {",
         "gap: var(--ds-grid-gap);",
         "gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1));"
       ],
@@ -336,9 +336,9 @@
     },
     {
       "id": "stack-modern-preset-gap",
-      "why": "The modern Stack with a preset ('md') rung. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The rung is a STAMP: the skin repoints `--_ds-stack-gap-current` at `--ds-stack-gap-md`, which `derivation/chrome/stack` derives as the ramp step multiplied by rhythm.",
+      "why": "The modern Stack with a preset ('md') rung. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the owned `data-component` stamp; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The rung is a STAMP: the skin repoints `--_ds-stack-gap-current` at `--ds-stack-gap-md`, which `derivation/chrome/stack` derives as the ramp step multiplied by rhythm.",
       "requiresSelectors": [
-        ".rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='md'] {",
+        ".rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='md'] {",
         "--_ds-stack-gap-current: var(--ds-stack-gap-md);",
         "gap: var(--_ds-stack-gap-current);"
       ],
@@ -399,9 +399,9 @@
     },
     {
       "id": "grid-modern-numeric-gap",
-      "why": "The negative half: a NUMERIC gap (8) written inline, the strongest means CSS has. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live.",
+      "why": "The negative half: a NUMERIC gap (8) written inline, the strongest means CSS has. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the owned `data-component` stamp; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live.",
       "requiresSelectors": [
-        ".rottay-grid.rottay-grid--modern[data-part='root'][data-gap-preset] {",
+        ".rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset] {",
         "gap: var(--ds-grid-gap);"
       ],
       "html": "<div class=\"rottay-grid rottay-grid--modern\" style=\"grid-template-columns:repeat(2, minmax(0, 1fr));gap:8px\" data-part=\"root\" data-component=\"grid\" data-probe=\"grid-modern-numeric-gap\"><div>a</div><div>b</div></div>",
@@ -419,9 +419,9 @@
     },
     {
       "id": "stack-modern-numeric-gap",
-      "why": "The negative half: a caller's numeric gap on the `custom` rung. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. `--ds-stack-gap` is written inline and carries the measurement unscaled.",
+      "why": "The negative half: a caller's numeric gap on the `custom` rung. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the owned `data-component` stamp; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. `--ds-stack-gap` is written inline and carries the measurement unscaled.",
       "requiresSelectors": [
-        ".rottay-stack.rottay-stack--modern[data-part='root'][data-spacing='custom'] {",
+        ".rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='custom'] {",
         "--_ds-stack-gap-current: var(--ds-stack-gap);"
       ],
       "html": "<div class=\"rottay-stack rottay-stack--modern\" style=\"--ds-stack-gap:8px\" data-spacing=\"custom\" data-part=\"root\" data-component=\"stack\" data-probe=\"stack-modern-numeric-gap\"><div>a</div><div>b</div></div>",

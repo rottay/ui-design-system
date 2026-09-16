@@ -119,13 +119,15 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
       {React.createElement(
         ElementType,
         {
+          // P-79: the default part precedes the spread, so a caller's own
+          // `data-part` reaches the DOM and owns that node's paint.
+          "data-part": "root",
           ...htmlAttributes,
           ref: ref as Ref<HTMLElement>,
           className: classNames,
           style: { ...presentation.style, ...responsive.channels },
           ...presentation.attributes,
           ...responsive.attrs,
-          "data-part": "root",
           "data-component": "stack",
         },
         renderedChildren
