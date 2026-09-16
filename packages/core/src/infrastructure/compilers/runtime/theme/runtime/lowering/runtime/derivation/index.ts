@@ -52,6 +52,8 @@ import { treeChromeDeriver } from "./chrome/tree";
 import { savedViewsChromeDeriver } from "./chrome/saved-views";
 import { columnSettingsChromeDeriver } from "./chrome/column-settings";
 import { filterPanelChromeDeriver } from "./chrome/filter-panel";
+import { filterChipChromeDeriver } from "./chrome/filter-chip";
+import { toolbarChromeDeriver } from "./chrome/toolbar";
 import { descriptionsChromeDeriver } from "./chrome/descriptions";
 import { listChromeDeriver } from "./chrome/list";
 import { tooltipChromeDeriver } from "./chrome/tooltip";
@@ -161,6 +163,8 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   savedViewsChromeDeriver,
   columnSettingsChromeDeriver,
   filterPanelChromeDeriver,
+  filterChipChromeDeriver,
+  toolbarChromeDeriver,
   descriptionsChromeDeriver,
   listChromeDeriver,
   tooltipChromeDeriver,

@@ -145,3 +145,73 @@ test('the producer set is the SHARED one, not a second measurement', () => {
   assert.ok(compiled.size > 0, 'los derivadores de familia emiten canales');
   assert.equal(producers.size, new Set([...declared, ...compiled]).size);
 });
+
+/** Corre `collectFindings` contra una copia del baseline editada por `edit`. */
+function withEditedBaseline(edit, run) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'read-without-producer-residue-'));
+  const path = join(sandbox, 'index.json');
+  const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
+  edit(baseline);
+  writeFileSync(path, JSON.stringify(baseline));
+  try {
+    run(path);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+const RESIDUE = JSON.parse(readFileSync(BASELINE_PATH, 'utf8')).namedResidue['list-toolbar'];
+const CHANNELS = collectChannelProducers();
+
+for (const arm of ['readWithoutProducer', 'kernelAuthorableWithoutRest']) {
+  test(`RESIDUE ${arm}: an unpinned residue name fails as growth`, () => {
+    const [name] = Object.keys(RESIDUE[arm]);
+    withEditedBaseline(
+      (baseline) => delete baseline.namedResidue['list-toolbar'][arm][name],
+      (baselinePath) =>
+        expectFinding(
+          collectFindings({ baselinePath, channelProducers: CHANNELS }),
+          `residue list-toolbar.${arm} GREW: ${name}`,
+          'un residuo que nadie pino tiene que enrojecer',
+        ),
+    );
+  });
+}
+
+test('RESIDUE readWithoutProducer: a pinned name that gains a producer fails as a silent fix', () => {
+  const [name] = Object.keys(RESIDUE.readWithoutProducer);
+  expectFinding(
+    collectFindings({ producers: new Set([...CHANNELS.producers, name]), channelProducers: CHANNELS }),
+    `residue list-toolbar.readWithoutProducer: ${name} is no longer residue`,
+    'dar productor a un residuo pineado sin el checkpoint del owner tiene que enrojecer',
+  );
+});
+
+test('RESIDUE kernelAuthorableWithoutRest: a pinned name that gains a rest declaration fails as a silent fix', () => {
+  const [name] = Object.keys(RESIDUE.kernelAuthorableWithoutRest);
+  const declared = new Set([...CHANNELS.declared, name]);
+  expectFinding(
+    collectFindings({ channelProducers: { ...CHANNELS, declared } }),
+    `residue list-toolbar.kernelAuthorableWithoutRest: ${name} is no longer residue`,
+    'declarar el reposo de un residuo pineado sin el checkpoint del owner tiene que enrojecer',
+  );
+});
+
+test('RESIDUE language scope: --ds-toolbar-title-letter-spacing fails on growth and on a silent fix', () => {
+  const name = '--ds-toolbar-title-letter-spacing';
+  assert.ok(name in RESIDUE.readWithoutProducer, 'el residuo de idioma esta pineado');
+  withEditedBaseline(
+    (baseline) => delete baseline.namedResidue['list-toolbar'].readWithoutProducer[name],
+    (baselinePath) =>
+      expectFinding(
+        collectFindings({ baselinePath, channelProducers: CHANNELS }),
+        `residue list-toolbar.readWithoutProducer GREW: ${name}`,
+        'despinear el residuo de idioma tiene que enrojecer',
+      ),
+  );
+  expectFinding(
+    collectFindings({ producers: new Set([...CHANNELS.producers, name]), channelProducers: CHANNELS }),
+    `residue list-toolbar.readWithoutProducer: ${name} is no longer residue`,
+    'derivarlo en la raiz sin el checkpoint del owner tiene que enrojecer',
+  );
+});

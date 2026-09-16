@@ -533,6 +533,27 @@
   --ds-filter-pill-count-active-bg: var(--ds-surface-raised);
   --ds-filter-pill-count-active-border: currentColor;
   --ds-filter-pill-count-active-ring: none;
+  --ds-filter-pill-bg: transparent;
+  --ds-filter-pill-color: var(--ds-color-text-secondary);
+  --ds-filter-pill-hover-bg: var(
+    --ds-surface-highlight,
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
+  --ds-filter-pill-shadow: none;
+  /* The search field's resting chrome. `chrome.search` is kernel-lowered too,
+     so a tenant's unlayered value outranks every declaration here. */
+  --ds-search-clear-color: var(--ds-color-text-muted);
+  --ds-search-clear-color-hover: var(--ds-color-text-secondary);
+  --ds-search-icon-color: var(--ds-color-text-muted);
+  --ds-search-input-bg: var(
+    --ds-search-bg,
+    var(--ds-surface-control, var(--ds-color-bg-input))
+  );
+  --ds-search-input-border: var(--ds-search-border, var(--ds-color-border));
+  --ds-search-input-color: var(--ds-search-color, var(--ds-color-text-primary));
+  --ds-search-placeholder-color: var(--ds-color-text-muted);
+  --ds-search-radius: var(--ds-toolbar-radius, var(--ds-radius-sm, 6px));
+  --ds-search-shadow: none;
   --ds-cell-pill-bg: color-mix(
     in srgb,
     var(--ds-color-primary) 6%,

@@ -91,9 +91,54 @@ export function shapeFailures(result, producers) {
   return { failures };
 }
 
-export function collectFindings({ baselinePath = BASELINE_PATH, files, producers } = {}) {
-  const producerSet = producers ?? collectChannelProducers().producers;
-  const result = classifyReadWithoutProducer(files ?? collectModernSkinFiles(), producerSet);
+/**
+ * Residuo nombrado por skin: lo que queda sin productor (o solo con la puerta
+ * autorable del kernel) por decision abierta, contado nombre por nombre.
+ */
+export function residueFindings(residue, { files, producers, compiledByKind }) {
+  const findings = [];
+  for (const [family, pin] of Object.entries(residue ?? {})) {
+    const skin = files.find((file) => file.split(sep).join('/').endsWith(pin.skin));
+    if (!skin) {
+      findings.push(`residue ${family}: skin ${pin.skin} is not in the Modern corpus`);
+      continue;
+    }
+    const reads = new Set();
+    for (const call of varCalls(stripComments(readFileSync(skin, 'utf8')))) {
+      if (call.name.startsWith('--ds-')) reads.add(call.name);
+    }
+    const kernelOnly = (name) =>
+      compiledByKind.kernel?.has(name) &&
+      Object.entries(compiledByKind).every(([kind, set]) => kind === 'kernel' || !set.has(name)) &&
+      !producers.declared.has(name);
+    const arms = [
+      ['readWithoutProducer', (name) => !producers.all.has(name)],
+      ['kernelAuthorableWithoutRest', kernelOnly],
+    ];
+    for (const [arm, measured] of arms) {
+      const pinned = new Set(Object.keys(pin[arm] ?? {}));
+      const actual = [...reads].filter(measured).sort();
+      for (const name of actual) {
+        if (!pinned.has(name)) findings.push(`residue ${family}.${arm} GREW: ${name} is not pinned`);
+      }
+      for (const name of [...pinned].sort()) {
+        if (!actual.includes(name)) {
+          findings.push(
+            `residue ${family}.${arm}: ${name} is no longer residue -- a pinned open decision was resolved ` +
+              'without its owner checkpoint; remove the pin only with that ruling',
+          );
+        }
+      }
+    }
+  }
+  return findings;
+}
+
+export function collectFindings({ baselinePath = BASELINE_PATH, files, producers, channelProducers } = {}) {
+  const measured = channelProducers ?? collectChannelProducers();
+  const producerSet = producers ?? measured.producers;
+  const corpus = files ?? collectModernSkinFiles();
+  const result = classifyReadWithoutProducer(corpus, producerSet);
   const findings = [...shapeFailures(result, producerSet).failures];
 
   if (!existsSync(baselinePath)) return ['baseline/index.json is missing'];
@@ -123,6 +168,13 @@ export function collectFindings({ baselinePath = BASELINE_PATH, files, producers
         '(decrease-only means the baseline follows the tree DOWN, never up)',
     );
   }
+  findings.push(
+    ...residueFindings(baseline.namedResidue, {
+      files: corpus,
+      producers: { all: producerSet, declared: measured.declared },
+      compiledByKind: measured.compiledByKind,
+    }),
+  );
   if (typeof baseline.denominator === 'number' && baseline.denominator !== result.denominator.length) {
     findings.push(
       `denominator moved from ${baseline.denominator} to ${result.denominator.length}; re-read the census before touching \`debt\``,
