@@ -35,8 +35,13 @@ const ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 
 /** A file no band declares, so a planted site is unambiguously the drill's. */
 const CLEAN_FILE = 'primitives/layout/box/engines/modern/index.tsx';
-/** The debt row the corrections lot will clear first. */
-const PINNED_DEBT = 'primitives/feedback/progress/compound/line/index.tsx';
+/**
+ * The one debt row left. The corrections lot cleared the two live ones; this is
+ * `menuItemStyle`'s `textAlign: 'left'`, a DEAD export that retires under
+ * WO-RET-04 rather than being made logical, so it is the row that stays put.
+ * It is a `.ts` file, hence the CSSProperties plant below rather than a JSX one.
+ */
+const PINNED_DEBT = 'patterns/foundation/engine-styles/modern/index.ts';
 
 function withPlantedTree(edit, assertFindings) {
   const sandbox = mkdtempSync(join(tmpdir(), 'physical-properties-drill-'));
@@ -51,13 +56,17 @@ function withPlantedTree(edit, assertFindings) {
   }
 }
 
-/** Appends a component whose style object carries the planted site. */
+/**
+ * Appends a style object carrying the planted site. A `.tsx` file gets a
+ * component, a `.ts` file a typed constant -- the gate reads both shapes, and
+ * planting JSX into a `.ts` module would be testing the parser, not the law.
+ */
 const plant = (sandbox, relativePath, styleBody) => {
   const file = join(sandbox, SCAN_ROOT, relativePath);
-  writeFileSync(
-    file,
-    `${readFileSync(file, 'utf8')}\nexport const PlantedDrill = () => <div style={{ ${styleBody} }} />;\n`,
-  );
+  const planted = relativePath.endsWith('.tsx')
+    ? `export const PlantedDrill = () => <div style={{ ${styleBody} }} />;`
+    : `export const plantedDrillStyle: CSSProperties = { ${styleBody} };`;
+  writeFileSync(file, `${readFileSync(file, 'utf8')}\n${planted}\n`);
 };
 
 const mentions = (findings, fragment) => findings.filter((finding) => finding.includes(fragment));
@@ -208,7 +217,7 @@ test('a correction that removes a site fails with an instruction to LOWER the pi
       const file = join(sandbox, SCAN_ROOT, PINNED_DEBT);
       writeFileSync(
         file,
-        readFileSync(file, 'utf8').replace("textAlign: 'right'", "textAlign: 'end'"),
+        readFileSync(file, 'utf8').replace("textAlign: 'left' as const", "textAlign: 'start' as const"),
       );
     },
     (findings) => {

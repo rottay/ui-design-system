@@ -1,5 +1,5 @@
 {
-  "_comment": "Three-band ledger for physical-properties/index.mjs, the paint half of the one-direction law. Every band pins a COUNT PER FILE, not a line list: an edit above a site would move every number without changing anything the law cares about. `pinnedDebt` is a physical edge that should be logical -- growth fails, a fix fails with an instruction to lower the pin. `inert` is a symmetric pair or a centred offset, where flipping the direction moves nothing: it is COUNTED rather than excluded by rule, because proving symmetry pair-by-pair is fragile and a pinned band is what stops tomorrow's unpaired `left: 0` arriving unnoticed; clearing one is a zero-pixel change. `namedExceptions` are measured coordinate space, where the migration would BE the bug. Frozen engines (223 of the 245 measured sites) are excluded by path in the gate source, because the freeze gate already governs them with written, content-pinned exceptions. Population measured 2026-09-16.",
+  "_comment": "Three-band ledger for physical-properties/index.mjs, the paint half of the one-direction law. Every band pins a COUNT PER FILE, not a line list: an edit above a site would move every number without changing anything the law cares about. `pinnedDebt` is a physical edge that should be logical -- growth fails, a fix fails with an instruction to lower the pin. `inert` is a symmetric pair or a centred offset, where flipping the direction moves nothing: it is COUNTED rather than excluded by rule, because proving symmetry pair-by-pair is fragile and a pinned band is what stops tomorrow's unpaired `left: 0` arriving unnoticed; clearing one is a zero-pixel change. `namedExceptions` are measured coordinate space, where the migration would BE the bug. Frozen engines (223 of the 245 measured sites) are excluded by path in the gate source, because the freeze gate already governs them with written, content-pinned exceptions. Population measured 2026-09-16; the Class D corrections lot then cleared the two LIVE debt rows -- the countdown affix gap to marginInlineEnd/marginInlineStart on --ds-spacing-1 (the rung its own modern skin already uses for the same gap) and the progress label to textAlign:'end' -- leaving ONE debt row: engine-styles' menuItemStyle, a dead export that retires under WO-RET-04 rather than being made logical.",
   "namedExceptions": {
     "patterns/customization/token-inspector/index.tsx": {
       "sites": 1,
@@ -27,14 +27,6 @@
     }
   },
   "pinnedDebt": {
-    "primitives/display/statistic/compound/countdown/index.tsx": {
-      "sites": 2,
-      "reason": "The prefix carries `marginRight` and the suffix `marginLeft` -- the gap between an affix and its value is inline-axis, so under RTL each lands on the wrong side of the number. Migrates to marginInlineEnd/marginInlineStart in the corrections lot, where the hardcoded `4px` also moves onto the spacing ramp."
-    },
-    "primitives/feedback/progress/compound/line/index.tsx": {
-      "sites": 1,
-      "reason": "`textAlign: 'right'` on the percentage label. The number should hug the inline END, which is the LEFT under RTL; `textAlign: 'end'` is the same pixel in LTR and the correct one in RTL."
-    },
     "patterns/foundation/engine-styles/modern/index.ts": {
       "sites": 1,
       "reason": "`menuItemStyle`'s `textAlign: 'left'`. DEAD EXPORT: measured 0 consumers across all of src, alongside popupPanelStyle (0), menuListStyle (0) and pillBadgeStyle (0); only panelCardStyle (10) and pillBadgeSmStyle (5) are live. It retires under WO-RET-04 with the other three rather than being made logical, and this pin drops to zero when that retirement lands."

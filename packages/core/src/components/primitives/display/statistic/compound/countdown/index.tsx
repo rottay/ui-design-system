@@ -273,9 +273,9 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
           </div>
         )}
         <div className="rottay-statistic__value" data-part="value" data-trend={valueType || 'default'} style={valueContainerStyle}>
-          {prefix && <span className="rottay-statistic__prefix" data-part="prefix" style={{ marginRight: '4px' }}>{prefix}</span>}
+          {prefix && <span className="rottay-statistic__prefix" data-part="prefix" style={{ marginInlineEnd: 'var(--ds-spacing-1)' }}>{prefix}</span>}
           <span className="rottay-statistic__content">{formatTime(timeLeft, format)}</span>
-          {suffix && <span className="rottay-statistic__suffix" data-part="suffix" style={{ marginLeft: '4px' }}>{suffix}</span>}
+          {suffix && <span className="rottay-statistic__suffix" data-part="suffix" style={{ marginInlineStart: 'var(--ds-spacing-1)' }}>{suffix}</span>}
         </div>
       </div>
     );

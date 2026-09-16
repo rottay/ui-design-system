@@ -283,7 +283,7 @@ export const ProgressLine = forwardRef<HTMLDivElement, ProgressLineProps>(
 
         {/* Percentage Info */}
         {showInfo && (
-          <span data-part="label" style={{ fontSize: '14px', minWidth: '40px', textAlign: 'right' }}>
+          <span data-part="label" style={{ fontSize: '14px', minWidth: '40px', textAlign: 'end' }}>
             {format ? format(percent) : `${percent}%`}
           </span>
         )}
