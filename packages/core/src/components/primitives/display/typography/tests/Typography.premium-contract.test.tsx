@@ -51,7 +51,9 @@ describe('Typography premium contract — pass 1 semantics and resilience', () =
     const paragraph = screen.getByText('القرار التالي جاهز للمراجعة');
     expect(paragraph).toHaveAttribute('lang', 'ar');
     expect(paragraph).toHaveAttribute('dir', 'rtl');
-    expect(paragraph).toHaveStyle({ textAlign: 'start', hyphens: 'auto' });
+    expect(paragraph).toHaveStyle({ textAlign: 'start' });
+    // Hyphenation is the skin's now; the render states the request.
+    expect(paragraph).toHaveAttribute('data-hyphenate', 'true');
   });
 
   it('supports meaningful inline elements and native label association', () => {
@@ -85,7 +87,10 @@ describe('Typography premium contract — pass 1 semantics and resilience', () =
       <ModernText>candidate-with-a-very-long-unbroken-identifier@example.enterprise</ModernText>,
     );
 
-    expect(screen.getByText(/candidate-with/)).toHaveStyle({ overflowWrap: 'anywhere' });
+    // `overflow-wrap: anywhere` is declared once, by the skin on the scope; the
+    // engine no longer repeats it inline. The long value still cannot escape.
+    expect(screen.getByText(/candidate-with/).getAttribute('style')).not.toContain('overflow-wrap');
+    expect(modernTypographyCss).toMatch(/\.rottay-typography--modern\.rottay-typography--modern \{[^}]*overflow-wrap: anywhere;/);
   });
 
   it('keeps the legacy default size until a semantic role is selected explicitly', () => {

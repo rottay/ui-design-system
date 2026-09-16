@@ -15,11 +15,13 @@ import { numericOverlay } from "./numeric";
 import { deriveTypePairingChannels } from "./pairing";
 import { deriveTypeRoleChannels } from "./roles";
 import { deriveTypeScaleChannels } from "./scale";
+import { deriveTypeTierChannels } from "./tier";
 import { deriveTypeWeightChannels, roleWeightOverlay } from "./weights";
 
 export { deriveTypePairingChannels } from "./pairing";
 export { deriveTypeRoleChannels } from "./roles";
 export { deriveTypeScaleChannels } from "./scale";
+export { deriveTypeTierChannels } from "./tier";
 export { deriveTypeWeightChannels, roleWeightOverlay } from "./weights";
 export { NUMERIC_POSTURE, numericOverlay } from "./numeric";
 
@@ -63,6 +65,7 @@ export const typographyDeriver: FamilyDeriver = {
     "--ds-line-height-*",
     "--ds-text-*",
     "--ds-type-*",
+    "--ds-type-tier-*",
   ],
   derive: (context) =>
     deriveTypographyChannels(
@@ -80,6 +83,7 @@ export function deriveTypographyChannels(
   return {
     ...deriveTypePairingChannels(bt, expansion),
     ...deriveTypeScaleChannels(),
+    ...deriveTypeTierChannels(),
     ...deriveTypeWeightChannels(bt),
     ...deriveTypeRoleChannels(bt, typeRoleOverlay, {
       numeric: numericOverlay(bt),

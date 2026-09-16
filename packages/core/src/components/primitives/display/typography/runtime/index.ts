@@ -337,12 +337,8 @@ export function resolveTypographyCraftStyle({
         : wrap === 'nowrap'
           ? { whiteSpace: 'nowrap' }
           : {}),
-    hyphens: hyphenate ? 'auto' : undefined,
-    overflowWrap: wrap === 'nowrap' || truncate ? undefined : 'anywhere',
-    // Declared in foundation/base/typography/index.css -> bare references (fallback parity).
-    fontOpticalSizing: 'var(--ds-type-optical-sizing)' as CSSProperties['fontOpticalSizing'],
-    fontSynthesis: 'var(--ds-type-font-synthesis)',
-    fontVariationSettings: 'var(--ds-type-font-variation-settings)',
+    // `hyphens`, `overflow-wrap` and the three optical channels are painted by
+    // the skin on the scope and on the `data-hyphenate` this render stamps.
     ...(truncate && !normalizedClamp
       ? {
           display: 'inline-block',
@@ -375,6 +371,8 @@ export function typographyDataAttributes({
   motion,
   wrap,
   fluid,
+  lang,
+  hyphenate,
 }: TypographyCraftProps) {
   return {
     'data-text-style': textStyle,
@@ -383,5 +381,9 @@ export function typographyDataAttributes({
     'data-motion': motion && motion !== 'none' ? motion : undefined,
     'data-wrap': wrap,
     'data-fluid': fluid || undefined,
+    // The fact, not its consequence: the skin is what decides that a joining
+    // script carries no tracking.
+    'data-joining-script': isJoiningScriptLang(lang) || undefined,
+    'data-hyphenate': hyphenate || undefined,
   } as const;
 }

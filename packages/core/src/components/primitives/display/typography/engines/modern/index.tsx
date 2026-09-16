@@ -48,6 +48,7 @@ import React, { forwardRef, useId } from 'react';
 import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../../contracts';
 import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP, WEIGHT_MAP } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   HEADING_TYPE_ROLE,
@@ -307,24 +308,18 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       .filter(Boolean)
       .join(' ');
 
-    // Apply premium typographic refinements: font-size from DS tokens,
-    // negative letter-spacing, and tighter line-height for larger heading
-    // sizes. Each channel now reads the ramp role the tier renders as, and
-    // falls back to the exact value it painted before, so the editorial feel of
-    // Linear/Vercel/Stripe typography survives an untenanted render while a
-    // brand that retunes the role finally moves the heading.
-    const headingLetterSpacing = HEADING_LETTER_SPACING[effectiveSize];
+    // The tier's size and leading are painted by the skin on the `data-size`
+    // this element stamps. Tracking cannot join them: `rottay-personality`
+    // sorts after `rottay-engines` and paints bare `h1..h6`, so only an inline
+    // declaration outranks it. It reads the tier channel all the same, so a
+    // decision reaches the ramp either way.
+    const headingTracking = HEADING_LETTER_SPACING[effectiveSize];
     const typographyStyle: React.CSSProperties =
       !sizeIsResponsive && !textStyle
         ? {
-            // Size and tracking stay where they are: the scale already carries
-            // the brand's `--ds-type-scale` dial, and no role's tracking equals
-            // what any tier renders, so neither may be handed to a role.
-            fontSize: HEADING_SIZE_STYLES[effectiveSize] || HEADING_SIZE_STYLES.md,
-            ...(!suppressTracking && headingLetterSpacing && headingLetterSpacing !== '0'
-              ? { letterSpacing: headingLetterSpacing }
+            ...(!suppressTracking && headingTracking && headingTracking !== '0'
+              ? { letterSpacing: `var(--ds-type-tier-${effectiveSize}-letter-spacing, ${headingTracking})` }
               : {}),
-            lineHeight: HEADING_LINE_HEIGHT[effectiveSize] || '1.25',
             ...resolveTypeRoleStyle({
               role: HEADING_TYPE_ROLE[effectiveSize] ?? HEADING_TYPE_ROLE.md,
               lineHeight: HEADING_LINE_HEIGHT[effectiveSize] || '1.25',
@@ -497,16 +492,13 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
     const effectiveTextStyle = textStyle;
     const textSizeStyle: React.CSSProperties =
       !sizeIsResponsive && effectiveTextStyle === undefined
-        ? {
-            fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
-            ...resolveTypeRoleStyle({
-              role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
-              // Inline text declares no leading and inherits it, which no role
-              // resolves to, so the channel stays correctly unbound.
-              lineHeight: 'inherit',
-              weight: WEIGHT_MAP[weight],
-            }),
-          }
+        ? resolveTypeRoleStyle({
+            role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
+            // Inline text declares no leading and inherits it, which no role
+            // resolves to, so the channel stays correctly unbound.
+            lineHeight: 'inherit',
+            weight: WEIGHT_MAP[weight],
+          })
         : {};
     const craftProps = {
       textStyle: effectiveTextStyle,
@@ -646,18 +638,16 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     }
     const responsive = generateResponsiveCSS(responsiveEntries);
     const size = scalarOrUndefined(sizeProp) ?? TYPOGRAPHY_DEFAULTS.paragraph.size;
-    const paragraphSizeStyle: React.CSSProperties = !sizeIsResponsive
-      ? {
-          fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
-          ...resolveTypeRoleStyle({
-            role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
-            // `leading-relaxed` owns the paragraph leading and resolves through
-            // a utility this lane cannot restate exactly, so the role is never
-            // offered it. Draining that utility is the skin-adoption lane's call.
-            lineHeight: undefined,
-            weight: WEIGHT_MAP[weight],
-          }),
-        }
+    const paragraphSizeStyle: React.CSSProperties =
+      !sizeIsResponsive && textStyle === undefined
+      ? resolveTypeRoleStyle({
+          role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
+          // `leading-relaxed` owns the paragraph leading and resolves through
+          // a utility this lane cannot restate exactly, so the role is never
+          // offered it. Draining that utility is the skin-adoption lane's call.
+          lineHeight: undefined,
+          weight: WEIGHT_MAP[weight],
+        })
       : {};
     const craftProps = {
       textStyle,
@@ -808,15 +798,16 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
     // A link declares no weight of its own unless the caller asks or `strong`
     // is set, so anywhere else it inherits one and the role must not seize it.
     const linkWeight = weight ? WEIGHT_MAP[weight] : strong ? WEIGHT_MAP.semibold : undefined;
-    const linkSizeStyle: React.CSSProperties = !sizeIsResponsive
-      ? {
-          fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
-          ...resolveTypeRoleStyle({
-            role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
-            lineHeight: 'inherit',
-            weight: linkWeight,
-          }),
-        }
+    // The press and focus cues the skin paints are reachable as a stamped
+    // state, not only as a device pseudo-class.
+    const interaction = useInteractionState({ disabled });
+    const linkSizeStyle: React.CSSProperties =
+      !sizeIsResponsive && textStyle === undefined
+      ? resolveTypeRoleStyle({
+          role: TEXT_TYPE_ROLE[size] ?? TEXT_TYPE_ROLE.md,
+          lineHeight: 'inherit',
+          weight: linkWeight,
+        })
       : {};
     const craftProps = {
       textStyle,
@@ -851,6 +842,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
           target={target}
           rel={computedRel}
           onClick={disabled ? undefined : onClick}
+          {...interaction.handlers}
           className={classes}
           lang={lang}
           dir={dir}
@@ -858,7 +850,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
           title={title}
           {...props}
           {...responsive.attrs}
-          data-part={dataPart ?? "root"}
+          {...partAttributes(dataPart ?? 'root', interaction.state)}
           data-color={color}
           data-size={size}
           data-disabled={disabled || undefined}

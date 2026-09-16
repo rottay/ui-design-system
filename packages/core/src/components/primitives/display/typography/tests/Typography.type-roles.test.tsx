@@ -30,7 +30,16 @@ import { HEADING_TYPE_ROLE, TEXT_TYPE_ROLE, resolveTypeRoleStyle } from '../runt
 
 const SIZES: TextSize[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'];
 
-/** What `HEADING_LINE_HEIGHT` paints, unchanged by this wiring. */
+/** The tiers that declare a tracking of their own; `xs`/`sm` inherit theirs. */
+const HEADING_LETTER_SPACING_TIER: Partial<Record<TextSize, boolean>> = {
+  md: true,
+  lg: true,
+  xl: true,
+  '2xl': true,
+  '3xl': true,
+};
+
+/** What the skin now paints on `data-size`, unchanged by this wiring. */
 const HEADING_LINE_HEIGHT: Record<TextSize, string> = {
   xs: '1.4',
   sm: '1.3',
@@ -145,16 +154,23 @@ describe('Typography semantic roles — a facet binds only on equality', () => {
 });
 
 describe('Typography semantic roles — what the engine renders', () => {
-  it.each(SIZES)('keeps the heading scale and tracking untouched at size %s', (size) => {
+  // The scale and the leading are painted by the skin on `data-size`; the
+  // tracking stays inline because `rottay-personality` sorts after the engine
+  // layer and paints bare `h1..h6`. Neither is handed to a role: the tracking
+  // reads its own TIER channel, never `--ds-type-<role>-letter-spacing`.
+  it.each(SIZES)('keeps the heading scale and tracking off the roles at size %s', (size) => {
     const style = styleAttributeOf(
       <ModernHeading level="h2" size={size}>
         Heading
       </ModernHeading>
     );
 
-    expect(style).toContain(`font-size:${HEADING_FONT_SIZE[size]}`);
-    expect(style).not.toContain('font-size:var(--ds-type-');
-    expect(style).not.toContain('letter-spacing:var(--ds-type-');
+    expect(style).not.toContain('font-size:');
+    expect(style).not.toContain('line-height:var(--ds-type-section-title');
+    expect(style).not.toContain(`letter-spacing:var(--ds-type-${size === '2xl' || size === '3xl' ? 'display' : 'section-title'}-`);
+    if (HEADING_LETTER_SPACING_TIER[size]) {
+      expect(style).toContain(`letter-spacing:var(--ds-type-tier-${size}-letter-spacing`);
+    }
   });
 
   it('hands the display tiers their leading and holds the rest on the literal', () => {
@@ -174,10 +190,31 @@ describe('Typography semantic roles — what the engine renders', () => {
           Heading
         </ModernHeading>
       );
-      expect(style).toContain(`line-height:${HEADING_LINE_HEIGHT[size]}`);
-      expect(style).not.toContain('line-height:var(--ds-type-');
+      // The tier's leading is the skin's now; what must not appear is a role's.
+      expect(style).not.toContain('line-height:');
     }
   });
+
+  // Invariant #3, held by ALL FOUR compounds. Paragraph and Link used to break
+  // it: their tier block was guarded on the responsive size alone, so the tier's
+  // font-size outranked the role the caller asked for, and Paragraph stamped the
+  // BODY role's weight while rendering another role.
+  it.each(['display', 'pageTitle', 'sectionTitle', 'label', 'numeric', 'code'] as const)(
+    'lets an explicit textStyle=%s outrank the tier on every compound',
+    (textStyle) => {
+      const rendered = [
+        styleAttributeOf(<ModernHeading textStyle={textStyle}>Heading</ModernHeading>),
+        styleAttributeOf(<ModernText textStyle={textStyle}>Text</ModernText>),
+        styleAttributeOf(<ModernParagraph textStyle={textStyle}>Paragraph</ModernParagraph>),
+        styleAttributeOf(<ModernLink href="/roles" textStyle={textStyle}>Link</ModernLink>),
+      ];
+      for (const style of rendered) {
+        expect(style).not.toContain('font-size:');
+        expect(style).not.toContain('font-weight:var(--ds-type-');
+        expect(style).not.toContain('letter-spacing:var(--ds-type-tier-');
+      }
+    },
+  );
 
   it('gives every default heading level its weight channel', () => {
     // h1 and h2 render 700, which is the display role's weight.

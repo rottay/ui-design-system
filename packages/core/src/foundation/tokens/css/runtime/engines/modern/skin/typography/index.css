@@ -151,6 +151,11 @@
 .rottay-typography.rottay-typography--modern[data-wrap='nowrap'] {
   white-space: nowrap;
 }
+/* Hyphenation is opt-in: the render stamps the request, the skin breaks the
+   word. Without the stamp the UA default (`manual`) stands. */
+.rottay-typography.rottay-typography--modern[data-hyphenate] {
+  hyphens: auto;
+}
 .rottay-typography.rottay-typography--modern[data-line-clamp] {
   display: -webkit-box;
   overflow: hidden;
@@ -243,14 +248,18 @@
    grammar as anchor.css), and the press cue is a decoration-thickness step
    that works on touch (no hover there) without depending on the link's
    resolved ink. Geometry never moves: outline + decoration only. ---- */
-.rottay-typography.rottay-typography--modern:is(a):focus-visible {
+/* Paired with the stamped state so the ring is reachable without a real
+   keyboard, which is how it is probed. */
+.rottay-typography.rottay-typography--modern:is(a):focus-visible,
+.rottay-typography.rottay-typography--modern:is(a)[data-state~='focus-visible'] {
   outline: var(--ds-focus-ring-width) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-radius-sm);
 }
 
-.rottay-typography.rottay-typography--modern:is(a):not([data-disabled='true']):active {
+.rottay-typography.rottay-typography--modern:is(a):not([data-disabled='true']):active,
+.rottay-typography.rottay-typography--modern:is(a):not([data-disabled='true'])[data-state~='pressed'] {
   text-decoration-line: underline;
   text-decoration-thickness: calc(var(--ds-type-decoration-thickness) * 2);
 }
@@ -347,4 +356,85 @@
     animation: none;
     transition: none;
   }
+}
+
+/* ---- The tier ramp ----------------------------------------------------- */
+/* It left the engine's inline `style` so a decision can reach it. The two
+   guards restate the engine's own precedence exactly: an explicit `textStyle`
+   and a responsive size each suppressed that inline block, so neither may be
+   painted here. Tracking is declared only from `md` up, because `xs`/`sm`
+   declared none and inherit theirs. */
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='xs'] {
+  font-size: var(--ds-font-size-base);
+  line-height: var(--ds-type-tier-xs-line-height, 1.4);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='sm'] {
+  font-size: var(--ds-font-size-lg);
+  line-height: var(--ds-type-tier-sm-line-height, 1.3);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='md'] {
+  font-size: var(--ds-font-size-xl);
+  line-height: var(--ds-type-tier-md-line-height, 1.25);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='lg'] {
+  font-size: var(--ds-font-size-2xl);
+  line-height: var(--ds-type-tier-lg-line-height, 1.2);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='xl'] {
+  font-size: var(--ds-font-size-3xl);
+  line-height: var(--ds-type-tier-xl-line-height, 1.15);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='2xl'] {
+  font-size: var(--ds-font-size-4xl);
+  line-height: var(--ds-type-tier-2xl-line-height, 1.1);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):is(h1, h2, h3, h4, h5, h6)[data-size='3xl'] {
+  font-size: var(--ds-font-size-5xl);
+  line-height: var(--ds-type-tier-3xl-line-height, 1.1);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='xs'] {
+  font-size: var(--ds-font-size-xs);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='sm'] {
+  font-size: var(--ds-font-size-sm);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='md'] {
+  font-size: var(--ds-font-size-base);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='lg'] {
+  font-size: var(--ds-font-size-lg);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='xl'] {
+  font-size: var(--ds-font-size-xl);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='2xl'] {
+  font-size: var(--ds-font-size-2xl);
+}
+.rottay-typography.rottay-typography--modern[data-part='root']:not([data-text-style]):not([data-ds-responsive]):not(:is(h1, h2, h3, h4, h5, h6))[data-size='3xl'] {
+  font-size: var(--ds-font-size-3xl);
+}
+
+/* The tier's TRACKING is not declared here. `rottay-personality` sorts after
+   `rottay-engines` and paints `letter-spacing` on bare `h1..h6`, so a rule in
+   this file can never win it; the engine keeps that one facet inline, reading
+   the same tier channel. */
+
+/* ---- The names this skin reads and nobody else writes --------------------
+   Declared at the family root so every read has a producer WITHOUT the
+   vertical's artifact declaring one; none of them is a kernel-authorable
+   name, so no tenant value is shadowed. The two below carry `initial`
+   instead of a value: their reads fall back to `attr()` and to a CSS-wide
+   keyword, and a real value would short-circuit both. */
+.rottay-typography.rottay-typography--modern {
+  --ds-type-code-inline-padding: 0.25em;
+  --ds-type-code-inline-radius: var(--ds-radius-sm);
+  --ds-type-code-inline-bg: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+  --ds-type-code-inline-size: 0.92em;
+  --ds-type-mark-padding: 0.125em;
+  --ds-type-mark-radius: var(--ds-radius-xs);
+  --ds-type-mark-bg: color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
+  --ds-type-selection-bg: color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  --ds-type-paragraph-measure: 68ch;
+  --ds-type-line-clamp: initial;
+  --ds-type-selection-color: initial;
 }
