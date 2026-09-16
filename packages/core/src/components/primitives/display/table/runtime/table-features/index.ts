@@ -12,6 +12,7 @@
  */
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import type { Key, RefObject } from 'react';
+import { resolveSubmitIntent } from "@/foundation/behavior";
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { TableProps, ColumnType, SortOrder, EditingCell } from '../../contracts';
 
@@ -684,6 +685,9 @@ export function useTableFeatures<T extends object>(
         setEditingCell(null);
         return;
       }
+
+      // An IME confirming a candidate with Enter is not a commit.
+      if (resolveSubmitIntent(e) === 'composing') return;
 
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();

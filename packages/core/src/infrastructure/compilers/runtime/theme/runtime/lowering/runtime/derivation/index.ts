@@ -44,6 +44,7 @@ import { paginationChromeDeriver } from "./chrome/pagination";
 import { stepperChromeDeriver } from "./chrome/stepper";
 import { sidebarSurfaceChromeDeriver } from "./chrome/sidebar-surface";
 import { cardChromeDeriver } from "./chrome/card";
+import { tableChromeDeriver } from "./chrome/table";
 import { tooltipChromeDeriver } from "./chrome/tooltip";
 import { tourChromeDeriver } from "./chrome/tour";
 import { notifierChromeDeriver } from "./chrome/notifier";
@@ -133,6 +134,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   stepperChromeDeriver,
   sidebarSurfaceChromeDeriver,
   cardChromeDeriver,
+  tableChromeDeriver,
   tooltipChromeDeriver,
   tourChromeDeriver,
   notifierChromeDeriver,

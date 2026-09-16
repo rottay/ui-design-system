@@ -42,6 +42,7 @@ import { ActionSortIcon } from '@/graphics/icons/semantic/generated/roles/action
 import { NavigationUpIcon } from '@/graphics/icons/semantic/generated/roles/navigation-up';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
+import { resolveSubmitIntent } from "@/foundation/behavior";
 
 /** Row-shaped skeleton placeholders rendered while the first page loads. */
 const SKELETON_ROW_COUNT = 4;
@@ -208,6 +209,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     // (via handleCellKeyNav). Escape discards changes. This keyboard model
     // follows spreadsheet conventions so power users can tab through rows.
     const onKeyDown = (e: React.KeyboardEvent) => {
+      // An IME confirming a candidate with Enter must not commit the cell.
+      if (resolveSubmitIntent(e) === 'composing') return;
       if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Escape') {
         if (e.key !== 'Escape') {
           save();
