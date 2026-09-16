@@ -5100,6 +5100,11 @@
      "at": "2026-09-16 09:38",
      "by": "kimi-admin",
      "note": "B2+B3 parcial integrado (e8c78c576, 14 archivos, sin list-toolbar). HALLAZGO DE AUDITORIA: 7 tests skin-reachability rojos PREEXISTENTES (A/B verificado: identicos en HEAD 533e3c290 y en arbol, heredados de la consolidacion a3ba2e479) en active-filters-bar x3, column-menu x2, field-filters-panel x2 — los engines no estampan parts que los skins nombran (actions/chips/rail/clear-all/row-content). El writer los reporto verdes: misreport; se le devuelve como alcance de corte de esas 3 familias, a arreglar por stamping real o adjudicacion de selectores, nunca bajando el test. Regla nueva para writers: la suite de familia se corre ENTERA incluyendo archivos skin-reachability antes de reportar verde."
+    },
+    {
+     "at": "2026-09-16 09:51",
+     "by": "kimi-admin",
+     "note": "Integrado 9d0458d58: list-toolbar (paridad Chromium 360/360, 3 verticales x 10 selectores x 12 props) + derivers chrome de saved-views/column-settings/filter-panel (valores de reposo == fallbacks del skin, verificado por mi; contract 405/405; gate 59/59; lowering 60/61 con el shape red preexistente A/B-verificado). RULINGS del DT: (1) FLEX GO — causa raiz de los 7 reachability reds es flex/engines/modern:132 estampando data-part=root DESPUES del spread (Box ya tiene la ley correcta documentada P-79: el default va ANTES del spread y el data-part del llamador gana). Lote propio: censo de los 79 sitios + paridad medida + ripple esperado en partsStampedNotConsumed de familias pineadas (sus filas se re-pinean con razon). (2) LIST-TOOLBAR rwp=96: los 96 canales son vocabulario COMPARTIDO (censo mio: --ds-toolbar-* lo leen 8 skins, --ds-search-* y --ds-filter-pill-* tambien multiples) — 31 nombres autorables del kernel van declarados en :root en capa rottay-* (precedente filter-pill, tenant gana); los 65 restantes van a derivers dueños de vocabulario (lote B7 registrado; si family-deriver-contract exige familia con skin para un deriver de vocabulario sin skin, STOP y adjudico). (3) Ceguera del instrumento registrada: el censo de productores de family-cut NO escanea el kernel, por eso saved-views quedo rwp=1 pese a que --ds-type-scale lo produce appearance-posture:139 — lote de instrumento propio tras flex. (4) Suites de causalidad de las 4 familias despues del lote flex (el DOM esta por moverse). SECUENCIA fix-fam02: flex -> instrumento kernel-census -> B7 vocabularios -> suites causalidad + literales -> B4 data-table."
     }
    ]
   },
@@ -5204,6 +5209,11 @@
      "at": "2026-09-16 09:07",
      "by": "kimi-admin",
      "note": "direction-authority gate integrada (368113f66): deteccion agnostica de ortografia, 3 excepciones nombradas ancla/portal, 21 probes pineados decrease-only en 10 archivos, blocking pre-build con drill 15/15. Lote migracion 1 (roving-focus+scroll-reveal) despachado."
+    },
+    {
+     "at": "2026-09-16 09:46",
+     "by": "kimi-admin",
+     "note": "Migracion lote 1 auditada e integrada en arbol (pendiente commit tras suites): 41 archivos, resolveReadingDirectionIsRtl ELIMINADO, scroll-reveal/reveal-bindings toman isRtl, wrapper unico useReadingDirectionIsRtl junto a la autoridad, gate 21->17 probes en 10->8 archivos con las 2 filas retiradas (no pineadas en 0), drill 15/15, grep agnostico 0/0, time-picker resuelto por curry desde TimePanel (regla 3). HALLAZGO registrado: Tabs.modern-anatomy 'walks the tablist mirrored under RTL' es VACUO — pasa tambien bajo locale LTR (contra-factual corrido por el writer): con billing deshabilitado el set habilitado es 2 tabs y ambas flechas caen en el mismo elemento; NO discrimina direccion. Remedio adjudicado: tercer tab habilitado en el fixture para que el mirror discrimine (el caso hermano de Menu SI discrimina). Va con el lote 2 de migracion."
     }
    ]
   },
@@ -5593,6 +5603,11 @@
      "at": "2026-09-16 01:54",
      "by": "Kimi K3",
      "note": "2026-09-16 kimi-admin: FREEZE-DEBT DRAINED (3009a4d47): the 33 standing violations re-authorized to ZERO with measured per-file reasons (fam04's legitimacy measurement held: every delta an adjudicated lot's footprint; 19 one-responsive-mechanism swaps, 5 viewport channels, 2 @supports flattenings, 1 dead .ds-switch block, 2 TenantConfig follows, form rustic under the FAM02-C3 shape, Steps under the WO-FAM-05 merge, the deleted ui/Layout side under the viewport reason with the rename+move pair named). Freeze gate: OK, 109 written exceptions, 0 violations. Registered alongside: the gate's double-count of the Layout->system renamed file (relocation learner instrument debt); the 19 computed-never-read residues (reactId/needsResponsiveCSS -- own micro-cleanup lot); the projection-test evidence gap on 17 of 19 frozen engines (to the responsive lane). ALSO from the badge/avatar close-prep (d4b1579be): two new axe debts pinned by node identity and registered to the mode-aware ink derivation lane -- badge soft-tone ink (rottay dark: span[title=Done] 1 node; bithire dark: .rottay-badge-anchor, span[title=Chip], span[title=Inbox] 3 nodes) and avatar solid tone-ramp inks + surplus counter (bithire light 4: primary/success/.rottay-avatar-surplus/square silhouette; evnto light 2: success+surplus; rottay dark 1 + bithire dark 1: success). Same class as the tag/table debt already in this lane."
+    },
+    {
+     "at": "2026-09-16 09:46",
+     "by": "kimi-admin",
+     "note": "Dos rojos preexistentes verificados A/B contra HEAD prístino 533e3c290 (ninguna lane viva los causa; quedan registrados con dueño por adjudicar): (1) FloatButton.test.tsx 'shows back-to-top when scroll crosses the threshold and triggers smooth scroll' — 1 rojo idéntico en arbol y prístino. (2) shape/control-height (kit row 14) 'is consumed as a SECOND factor beside density' — los 3 artefactos facade (bithire/evnto/rottay) listan --ds-table-selection-control-coarse-size con calc(spacing-5 * control-height-scale); causa por adjudicar: artefactos stale (regenerar) vs drift real de contrato; toca la narrativa EMI-02 de orden de build. Ninguno baja umbral; ambos quedan en el registro de reds conocidos de flota."
     }
    ]
   },
