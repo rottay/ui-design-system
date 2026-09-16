@@ -28587,6 +28587,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 }
 @layer rottay-structures {
+/* NAMESPACE (WO-FAM-08): this family is `ds-structure-field-filters-panel`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * FieldFiltersPanel skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/field-filters-panel.css — the structures/
@@ -28967,6 +28971,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 }
 @layer rottay-engines {
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-filter-panel`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * Modern FilterPanel skin (WO-ARC-09 checkpoint 3; Lote-2 composition uplift).
  *
@@ -65075,9 +65083,13 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * WHY THE RULES MOVED HERE. The same scalar projection runs in all three
  * engines, so `presentation/components/skin/layout-primitives` painted Modern
  * and the two frozen engines from one unscoped rule set. Modern's arm is here
- * now, keyed on the engine class and the root part; what stays there is scoped
- * to `--classic`/`--rustic` with its declarations unchanged, so the frozen
- * engines keep the cascade position they always had.
+ * now, keyed on the engine class and the owned `data-component='flex'` stamp;
+ * what stays there is scoped to `--classic`/`--rustic` with its declarations
+ * unchanged, so the frozen engines keep the cascade position they always had.
+ *
+ * NOT THE PART. `data-part` belongs to the caller: a composite names the Flex it
+ * renders (`header`, `title-group`) so its own skin can address it. The engine
+ * stamps `data-component` after the caller spread, so it cannot be forged away.
  *
  * A RUNG SCALES, A MEASUREMENT DOES NOT. `--ds-flex-gap` carries both a rung
  * (`var(--ds-spacing-4)`) and a caller's measurement (`16px`), so the channel
@@ -65087,7 +65099,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * `[column, row]` may mix a rung with a measurement.
  */
 
-.rottay-flex.rottay-flex--modern[data-part='root'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'] {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -65097,73 +65109,73 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   min-inline-size: 0;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-inline='true'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-inline='true'] {
   display: inline-flex;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='row-reverse'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-direction='row-reverse'] {
   flex-direction: row-reverse;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='column'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-direction='column'] {
   flex-direction: column;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='column-reverse'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-direction='column-reverse'] {
   flex-direction: column-reverse;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-wrap='wrap'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-wrap='wrap'] {
   flex-wrap: wrap;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-wrap='wrap-reverse'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-wrap='wrap-reverse'] {
   flex-wrap: wrap-reverse;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='end'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='end'] {
   justify-content: flex-end;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='center'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='center'] {
   justify-content: center;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='between'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='between'] {
   justify-content: space-between;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='around'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='around'] {
   justify-content: space-around;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='evenly'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='evenly'] {
   justify-content: space-evenly;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='start'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='start'] {
   align-items: flex-start;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='end'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='end'] {
   align-items: flex-end;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='center'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='center'] {
   align-items: center;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='baseline'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='baseline'] {
   align-items: baseline;
 }
 
 /* ---- gap: the unscaled base, then the rung that rhythm may size ---- */
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform'] {
   gap: var(--ds-flex-gap);
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split'] {
   column-gap: var(--ds-flex-column-gap);
   row-gap: var(--ds-flex-row-gap);
 }
@@ -65173,7 +65185,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  * order -- not escalation -- decides. `none` is absent on purpose: zero has no
  * room to scale.
  */
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform']:where(
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform']:where(
   [data-gap-preset='xs'],
   [data-gap-preset='sm'],
   [data-gap-preset='md'],
@@ -65186,7 +65198,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split']:where(
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
   [data-column-gap-preset='xs'],
   [data-column-gap-preset='sm'],
   [data-column-gap-preset='md'],
@@ -65199,7 +65211,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   column-gap: calc(var(--ds-flex-column-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split']:where(
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
   [data-row-gap-preset='xs'],
   [data-row-gap-preset='sm'],
   [data-row-gap-preset='md'],
@@ -65214,12 +65226,12 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-layout-motion='rearrange'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-layout-motion='rearrange'] {
   transition: var(--ds-flex-reflow-transition);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-flex.rottay-flex--modern[data-part='root'][data-layout-motion='rearrange'] {
+  .rottay-flex.rottay-flex--modern[data-component='flex'][data-layout-motion='rearrange'] {
     transition: none;
   }
 }
@@ -93138,6 +93150,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* workspace-chrome anatomy: workspace chrome paints from layered skins. */
 @layer rottay-engines {
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-list-toolbar`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * Modern ListToolbar skin.
  *
@@ -93343,7 +93359,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.ds-button[data-variant] {
+  .ds-list-toolbar__icon-button.ds-button.ds-button {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -93374,7 +93390,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.ds-button[data-variant]:hover {
+    .ds-list-toolbar__icon-button.ds-button.ds-button:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -93591,12 +93607,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    dash; an invalid value needs repair, so its frame tightens to a dotted rule
    and the ink shifts to the semantic error role. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='draft'] {
+  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'] {
   border-style: dashed;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='invalid'] {
+  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'] {
   border-style: dotted;
   border-color: var(--ds-color-error);
   color: var(--ds-color-error);
@@ -94172,7 +94188,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* Filter lifecycle on the applied-chips strip. The engine stamps
-   data-state='draft'|'invalid' and mounts the governed status-draft /
+   data-filter-state='draft'|'invalid' and mounts the governed status-draft /
    status-error glyph inside the Tag's icon slot; the skin completes the
    multimodal grammar with border style and text treatment, so the state
    survives hue stripping and forced colors:
@@ -94181,30 +94197,30 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    - invalid: error-role frame and ink plus a wavy underline on the value —
      the universal "needs repair" mark that reads without color. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft'] {
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft'] {
   border-style: dashed;
   background: transparent;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid'] {
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid'] {
   border-color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
   [data-part='icon'] {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
   [data-part='icon'] {
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
   .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   /* C1: draft must read at two meters — hollow dashed frame + REGULAR weight
      + quieted ink, so the provisional chip is visibly ghosted next to the
@@ -94214,7 +94230,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
   .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
@@ -94575,30 +94591,30 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      rule (wide enough to render both lines) plus the wavy value underline,
      which forced colors preserves by remapping it to CanvasText. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='draft'],
+    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='draft'] {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='draft'] {
     border-style: dashed;
     background: Canvas;
     color: CanvasText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='invalid'],
+    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
     border-color: ButtonText;
     color: CanvasText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
     border-style: double;
     border-width: 3px;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
     .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
     color: CanvasText;
     text-decoration-color: CanvasText;
@@ -94625,6 +94641,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 }
 @layer rottay-engines {
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-saved-views`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * Modern SavedViews skin — filled-pill engine treatment (Lote 2 rewrite).
  *
@@ -95566,6 +95586,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 }
 @layer rottay-structures {
+/* NAMESPACE (WO-FAM-08): this family is `ds-structure-active-filters-bar`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
  * Unlayered paint outranks Tailwind preflight while caller inline styles keep
@@ -95799,7 +95823,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         - draft: dashed underline + quieter weight — chosen, not committed;
         - invalid: wavy error underline — the universal "needs repair" mark. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="draft"]
+  [data-part="chip"][data-filter-state="draft"]
   [data-part="chip-value"] {
   /* C1: draft must read at two meters — REGULAR weight + quieted ink under
      the dashed underline, so the provisional chip is visibly ghosted next
@@ -95811,24 +95835,24 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-underline-offset: 0.2em;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="invalid"]
+  [data-part="chip"][data-filter-state="invalid"]
   [data-part="chip-value"] {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
   text-underline-offset: 0.2em;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="invalid"]
+  [data-part="chip"][data-filter-state="invalid"]
   [data-part="chip-label"] {
   color: var(--ds-color-error);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="draft"]
+  [data-part="chip"][data-filter-state="draft"]
   [data-part="icon"] {
   color: var(--ds-color-text-muted);
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
-  [data-part="chip"][data-state="invalid"]
+  [data-part="chip"][data-filter-state="invalid"]
   [data-part="icon"] {
   color: var(--ds-color-error);
 }
@@ -95915,26 +95939,26 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state="draft"]
+    [data-part="chip"][data-filter-state="draft"]
     [data-part="chip-value"] {
     color: CanvasText;
     text-decoration: underline dashed;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state="invalid"]
+    [data-part="chip"][data-filter-state="invalid"]
     [data-part="chip-value"] {
     color: CanvasText;
     text-decoration: underline wavy;
     text-decoration-color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state="invalid"]
+    [data-part="chip"][data-filter-state="invalid"]
     [data-part="chip-label"] {
     color: CanvasText;
   }
   .ds-structure.ds-active-filters-bar[data-part="root"]
-    [data-part="chip"][data-state]
+    [data-part="chip"][data-filter-state]
     [data-part="icon"] {
     color: CanvasText;
   }
@@ -95942,6 +95966,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 }
 @layer rottay-structures {
+/* NAMESPACE (WO-FAM-08): this family is `ds-structure-column-menu`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * ColumnMenu skin — engine-agnostic structure chrome.
  *
@@ -96562,6 +96590,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 }
 @layer rottay-structures {
+/* NAMESPACE (WO-FAM-08): this family is `ds-structure-saved-views-menu`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * SavedViewsMenu skin — engine-agnostic.
  * LAYERING: imported by `facade/entrypoints/base.css` into
@@ -96697,6 +96729,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+  /* The clamp the render measures against the viewport, placed here and never
+     inline. Physical on purpose: the measurement is a viewport rect, so a
+     logical property would flip it under RTL. */
+  top: var(--ds-saved-views-menu-panel-top, 0);
+  left: var(--ds-saved-views-menu-panel-left, 0);
+  width: var(--ds-saved-views-menu-panel-width, 26.25rem);
   border-radius: var(--ds-radius-xl, 18px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, var(--ds-color-bg-elevated) 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
   box-shadow: var(
@@ -98017,6 +98055,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 }
 @layer rottay-components {
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-status-filter-pills`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * StatusFilterPills skin — deliberately unlayered (P-47).
  * Layered rules sort before Tailwind's base layer and cannot reliably paint
@@ -98259,6 +98301,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 }
 @layer rottay-structures {
+/* NAMESPACE (WO-FAM-08): this family is `ds-structure-table-toolbar`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * TableToolbar skin — engine-agnostic.
  * LAYERING: imported by `facade/entrypoints/base.css` and `styles.css` into
@@ -101410,6 +101456,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 }
 @layer rottay-engines {
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-column-settings`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * Modern ColumnSettings skin.
  *
@@ -119362,6 +119412,27 @@ html[lang]:lang(ar) {
   --ds-color-picker-swatch-shadow: var(--ds-elevation-1);
   --ds-color-picker-swatch-shadow-hover: var(--ds-elevation-2);
   --ds-color-picker-text-ink: var(--ds-color-text-primary);
+  --ds-column-settings-empty-padding-block: 8px;
+  --ds-column-settings-empty-padding-inline: 12px;
+  --ds-column-settings-footer-padding-block: 8px;
+  --ds-column-settings-footer-padding-inline: 12px;
+  --ds-column-settings-hairline: var(--ds-color-border-subtle);
+  --ds-column-settings-header-padding-block: 10px;
+  --ds-column-settings-header-padding-block-end: 8px;
+  --ds-column-settings-header-padding-inline: 12px;
+  --ds-column-settings-label-font-size: var(--ds-font-size-sm);
+  --ds-column-settings-list-max-block-size: 320px;
+  --ds-column-settings-list-padding-block: 4px;
+  --ds-column-settings-motion-duration: var(--ds-motion-fast);
+  --ds-column-settings-motion-timing: var(--ds-motion-ease-out);
+  --ds-column-settings-pin-side-font-size: 10px;
+  --ds-column-settings-row-bg-hover: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  --ds-column-settings-row-gap: var(--ds-spacing-2, 8px);
+  --ds-column-settings-row-padding-block: 6px;
+  --ds-column-settings-row-padding-inline: 12px;
+  --ds-column-settings-row-radius: var(--ds-radius-sm);
+  --ds-column-settings-search-padding-block: 8px;
+  --ds-column-settings-search-padding-inline: 12px;
   --ds-confirm-dialog-bg: var(--ds-modal-bg, var(--ds-material-overlay-background));
   --ds-confirm-dialog-border-color: var(--ds-color-border-subtle);
   --ds-confirm-dialog-danger-icon-bg: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
@@ -119568,6 +119639,17 @@ html[lang]:lang(ar) {
   --ds-edge-hairline-width: 1px;
   --ds-edge-standard-width: 1px;
   --ds-effect-intensity: 0.2;
+  --ds-filter-panel-content-max-height: 125rem;
+  --ds-filter-panel-field-gap: var(--ds-spacing-2);
+  --ds-filter-panel-inline-control-width: 0px;
+  --ds-filter-panel-inline-flex: 1 1 268px;
+  --ds-filter-panel-inline-gap: var(--ds-spacing-3);
+  --ds-filter-panel-inline-min-width: 196px;
+  --ds-filter-panel-inline-wrap: wrap;
+  --ds-filter-panel-option-gap: var(--ds-spacing-2);
+  --ds-filter-panel-range-gap: var(--ds-spacing-2);
+  --ds-filter-panel-stacked-gap: var(--ds-spacing-3);
+  --ds-filter-panel-touch-target: 2.75rem;
   --ds-flex-column-gap: 0px;
   --ds-flex-gap: 0px;
   --ds-flex-reflow-transition: var(--ds-transition-rearrange);
@@ -120129,6 +120211,34 @@ html[lang]:lang(ar) {
   --ds-radius-nest-ratio: 0;
   --ds-radius-scale: 1;
   --ds-rhythm-scale: 1;
+  --ds-saved-views-bar-min-height: 40px;
+  --ds-saved-views-bar-padding-inline: 8px;
+  --ds-saved-views-bar-padding-inline-compact: 4px;
+  --ds-saved-views-create-button-font-weight: var(--ds-font-weight-medium, 500);
+  --ds-saved-views-create-button-gap: 4px;
+  --ds-saved-views-create-button-padding-block: 4px;
+  --ds-saved-views-create-button-padding-inline: 10px;
+  --ds-saved-views-create-form-gap: 4px;
+  --ds-saved-views-create-form-padding-block: 4px;
+  --ds-saved-views-drag-handle-opacity: 0.4;
+  --ds-saved-views-focus-ring-radius: var(--ds-radius-sm);
+  --ds-saved-views-gap: 6px;
+  --ds-saved-views-gap-compact: 4px;
+  --ds-saved-views-input-font-size: 13px;
+  --ds-saved-views-input-height: 26px;
+  --ds-saved-views-input-padding-inline: 8px;
+  --ds-saved-views-input-width: 130px;
+  --ds-saved-views-menu-trigger-size: 20px;
+  --ds-saved-views-pill-font-size: 13px;
+  --ds-saved-views-pill-font-weight: 400;
+  --ds-saved-views-pill-font-weight-active: var(--ds-font-weight-semibold, 600);
+  --ds-saved-views-pill-gap: 6px;
+  --ds-saved-views-pill-label-max-width: 14rem;
+  --ds-saved-views-pill-line-height: 20px;
+  --ds-saved-views-pill-padding-block: 4px;
+  --ds-saved-views-pill-padding-inline: 12px;
+  --ds-saved-views-touch-target-min: var(--ds-touch-target-min, 44px);
+  --ds-saved-views-unsaved-dot-size: 7px;
   --ds-segmented-border: var(--ds-material-control-border);
   --ds-segmented-border-hover: var(--ds-material-control-border-hover);
   --ds-segmented-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift), var(--ds-card-bg, var(--ds-color-bg-secondary)));
