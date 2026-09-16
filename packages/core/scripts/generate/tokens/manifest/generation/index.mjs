@@ -280,7 +280,9 @@ function buildControl(entry, existing = {}) {
       defaultBehavior: entry.defaultBehavior,
     },
     ingress: {
-      staticBrandThemePath: entry.brandThemePath,
+      // Readers still accept the superseded `staticBrandThemePath` until the window trigger in
+      // probe/runtime/ingress/tests/superseded-ingress-key fails (WO-DER-08).
+      staticThemePath: entry.brandThemePath,
       dbTenantThemePath: entry.documentPath,
     },
     declaredOutputs: {

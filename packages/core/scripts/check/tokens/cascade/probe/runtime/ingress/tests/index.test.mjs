@@ -73,6 +73,13 @@ const CONTROL_MANIFEST = readManifest(
   resolve(CORE_ROOT, 'governance/manifest/controls/spacing/rhythm/index.json'),
 );
 
+// Every manifest read goes through the arm's own lookup, superseded key included.
+const declaredIngressPath = (manifest, spec) =>
+  manifest?.ingress?.[spec.manifestIngressKey] ??
+  (spec.supersededIngressKey ? manifest?.ingress?.[spec.supersededIngressKey] : undefined);
+const staticDoorPath = (manifest) =>
+  declaredIngressPath(manifest, INGRESS_ARMS['static-brand-theme']);
+
 /* FASE-A: the advanced manifest these drills lower is SYNTHETIC, and it has to
  * be. Censused over the seven advanced controls: every one declares either zero
  * normalized stops or zero CSS output channels -- `responsive.posture` is the
@@ -112,7 +119,7 @@ test('the two arms are the two doors the manifest declares, and they land in dif
   );
   for (const spec of Object.values(INGRESS_ARMS)) {
     assert.ok(
-      CONTROL_MANIFEST.ingress[spec.manifestIngressKey],
+      declaredIngressPath(CONTROL_MANIFEST, spec),
       `${spec.id} names a manifest ingress key the control does not declare`,
     );
   }
@@ -195,7 +202,7 @@ test('the lowering input is built at the path the MANIFEST declares, not a remem
     controlManifest: CONTROL_MANIFEST,
     stopId: 'airy',
   });
-  assert.equal(staticInput.path, CONTROL_MANIFEST.ingress.staticBrandThemePath);
+  assert.equal(staticInput.path, staticDoorPath(CONTROL_MANIFEST));
   assert.deepEqual(staticInput.document, { surfaces: { rhythm: 'airy' } });
 
   const dbInput = buildIngressInput({
@@ -1070,7 +1077,7 @@ const RADIUS_MANIFEST = readManifest(
 );
 
 test('regression fence: the radius-scale static door is a literal path, never a wildcard or prose', () => {
-  const path = RADIUS_MANIFEST.ingress.staticBrandThemePath;
+  const path = staticDoorPath(RADIUS_MANIFEST);
   assert.equal(
     path,
     'surfaces.radiusScale',
@@ -1153,7 +1160,7 @@ const DENSITY_MANIFEST = readManifest(
 );
 
 test('regression fence: the density.mode static door is a literal path, and it is the ENUM', () => {
-  const path = DENSITY_MANIFEST.ingress.staticBrandThemePath;
+  const path = staticDoorPath(DENSITY_MANIFEST);
   assert.equal(
     path,
     'surfaces.density',
@@ -1702,7 +1709,7 @@ test('H-2 drill 1 [needs dist]: the radius anti-door lowers a CONSTANT and is re
   // the ramp OPERANDS and is divided by the live scale, so it cancels the dial.
   const antiDoor = {
     ...RADIUS_H2,
-    ingress: { ...RADIUS_H2.ingress, staticBrandThemePath: 'surfaces.borderRadius' },
+    ingress: { ...RADIUS_H2.ingress, staticThemePath: 'surfaces.borderRadius' },
   };
   await assert.rejects(
     () => discriminate(antiDoor, 'static-brand-theme', 'rottay'),
@@ -1716,7 +1723,7 @@ test('H-2 drill 2 [needs dist]: the density anti-door is refused, and the mechan
     ...DENSITY_MANIFEST_H1,
     ingress: {
       ...DENSITY_MANIFEST_H1.ingress,
-      staticBrandThemePath: 'surfaces.density / surfaces.densityScale',
+      staticThemePath: 'surfaces.density / surfaces.densityScale',
     },
   };
   await assert.rejects(() => discriminate(antiDoor, 'static-brand-theme', 'rottay'), /encodes NO stop/);
@@ -1862,7 +1869,7 @@ test('H-2 drill 6 [needs dist]: the verdict is PER ARM — a broken door on ONE 
   // the other passes in one run. Same anti-door shape as drills 1 and 2.
   const brokenStaticDoor = {
     ...TYPO_H2,
-    ingress: { ...TYPO_H2.ingress, staticBrandThemePath: 'typography (ramp channels)' },
+    ingress: { ...TYPO_H2.ingress, staticThemePath: 'typography (ramp channels)' },
   };
   for (const vertical of FIRST_PARTY) {
     await assert.rejects(
@@ -2220,7 +2227,7 @@ const DB_SET = 'appearance.general.palette.{primary,secondary,accent,background}
 const colorSetManifest = (stops) => ({
   controlId: 'palette.seeds',
   domain: { kind: 'color-set', enumValues: [], bounds: null },
-  ingress: { staticBrandThemePath: STATIC_SET, dbTenantThemePath: DB_SET },
+  ingress: { staticThemePath: STATIC_SET, dbTenantThemePath: DB_SET },
   declaredOutputs: { channels: ['--ds-color-primary'] },
   calibration: { normalizedStops: stops },
 });
@@ -2319,7 +2326,7 @@ test('F4B-8 drill 4: manifest agreement accepts a MEMBER and still refuses a non
   });
   const check = (path) =>
     assertArmsMatchManifest({ controlManifest: PALETTE_MANIFEST, arms: [armLike(path)] });
-  for (const member of ingressPathMembers(PALETTE_MANIFEST.ingress.staticBrandThemePath)) {
+  for (const member of ingressPathMembers(staticDoorPath(PALETTE_MANIFEST))) {
     assert.equal(check(member).ok, true, `${member} is a declared member`);
   }
   // The half that makes the widening safe: not-a-member is still a failure.
@@ -2328,7 +2335,7 @@ test('F4B-8 drill 4: manifest agreement accepts a MEMBER and still refuses a non
   assert.match(bad.failures[0].reason, /but the manifest declares/);
   assert.match(bad.failures[0].reason, /members: /);
   // And the whole SET is not itself a member: an arm that never resolved fails.
-  assert.equal(check(PALETTE_MANIFEST.ingress.staticBrandThemePath).ok, false);
+  assert.equal(check(staticDoorPath(PALETTE_MANIFEST)).ok, false);
 });
 
 test('F4B-8 drill 5: each role seed moves its OWN ten steps and CROSSES ZERO', async () => {
@@ -3109,13 +3116,16 @@ test('B-2 drill 6: the CLOSED consulted vocabulary is what bounds the blast radi
 
   const controlDir = resolve(CORE_ROOT, 'governance/manifest/controls');
   const intersections = [];
+  let staticDoors = 0;
   for (const { document: manifest } of readManifestRecords(controlDir, 'controlId')) {
-    const declared = manifest?.ingress?.staticBrandThemePath;
+    const declared = staticDoorPath(manifest);
     if (typeof declared !== 'string' || declared.length === 0) continue;
+    staticDoors += 1;
     for (const member of ingressPathMembers(declared)) {
       if (consulted.has(member)) intersections.push(`${manifest.controlId} -> ${member}`);
     }
   }
+  assert.ok(staticDoors > 0, 'no control declared a static door, so this fence would check nothing');
   /* Measured across EVERY control the registry declares a static door for, not
    * just the controls that carry stops today: six doors land on fields the
    * compiler consults -- the primary seed, the four status seeds added by
@@ -3191,7 +3201,7 @@ test('F4B-12 drill: the registry keypath is exactly SIDEBAR_TONE_FIELD, read fro
   const manifest = readManifest(
     resolve(CORE_ROOT, 'governance/manifest/controls/navigation/sidebar-tone/index.json'),
   );
-  assert.equal(manifest.ingress.staticBrandThemePath, sidebarToneField);
+  assert.equal(staticDoorPath(manifest), sidebarToneField);
 
   // The closed six-channel leaf table is the other half of this control's
   // authority; pin its membership the same way so a future rename of the
@@ -4235,7 +4245,7 @@ const mapEntryManifest = ({
 }) => ({
   controlId: 'synthetic.map-entry',
   domain: { kind: 'map-entry', enumValues: [], bounds: null },
-  ingress: { dbTenantThemePath: path, staticBrandThemePath: path },
+  ingress: { dbTenantThemePath: path, staticThemePath: path },
   declaredOutputs: { channels, rootAttributes: [], representativeOnly: true },
   calibration: {
     entryCatalog: catalog ?? [{ role, valueType, channel: role, ...(min !== undefined ? { min } : {}), ...(max !== undefined ? { max } : {}) }],
@@ -4492,4 +4502,24 @@ test('PACKET-K drill 6 [needs dist]: an APCA-paired chrome entry DIVERGES betwee
     Object.hasOwn(STOP_EXCLUSION_CLASSES, 'GOVERNED_CONTRAST_FLOOR'),
     'the class this refusal maps to already exists -- no new class is needed',
   );
+});
+
+// Superseded key, open until the window trigger in superseded-ingress-key/ fails;
+// that sibling is the executed copy, since this file does not load under node --test.
+test("the superseded staticBrandThemePath still resolves the static arm", () => {
+  const domain = { kind: "closed-enum", enumValues: ["compact"] };
+  const calibration = { normalizedStops: [{ id: "compact" }] };
+  const superseded = { domain, calibration, ingress: { staticBrandThemePath: "surfaces.density" } };
+  const current = { domain, calibration, ingress: { staticThemePath: "surfaces.density" } };
+  const fromOld = buildIngressInput({
+    armId: "static-brand-theme",
+    controlManifest: superseded,
+    stopId: "compact",
+  });
+  const fromNew = buildIngressInput({
+    armId: "static-brand-theme",
+    controlManifest: current,
+    stopId: "compact",
+  });
+  assert.deepEqual(fromOld, fromNew);
 });

@@ -197,7 +197,10 @@ export const INGRESS_ARMS = Object.freeze({
   'static-brand-theme': Object.freeze({
     id: 'static-brand-theme',
     door: 'static',
-    manifestIngressKey: 'staticBrandThemePath',
+    manifestIngressKey: 'staticThemePath',
+    // Also consulted until the window trigger in tests/superseded-ingress-key fails,
+    // so a not-yet-regenerated manifest resolves its door instead of "declares no path".
+    supersededIngressKey: 'staticBrandThemePath',
     position: 'tenant-scoped-stylesheet-block',
     positionMeaning:
       'Appended to the measured bundle behind the same unlayered tenant selector the compiled ' +
@@ -608,7 +611,9 @@ export function assertArmsMatchManifest({ controlManifest, arms }) {
       failures.push({ armId: arm.armId, reason: 'not a declared ingress arm' });
       continue;
     }
-    const path = declared[spec.manifestIngressKey];
+    const path =
+      declared[spec.manifestIngressKey] ??
+      (spec.supersededIngressKey ? declared[spec.supersededIngressKey] : undefined);
     if (typeof path !== 'string' || path.length === 0) {
       failures.push({
         armId: arm.armId,
@@ -667,7 +672,7 @@ export function assertArmsMatchManifest({ controlManifest, arms }) {
  * declares.
  *
  * The stop value is not written by this harness — only its LOCATION is, and
- * that location is read from `ingress.staticBrandThemePath` /
+ * that location is read from `ingress.staticThemePath` /
  * `ingress.dbTenantThemePath`. So a manifest that moves the door moves this
  * input, and a harness that lowered the old path would be lowering a path the
  * contract no longer names.
@@ -828,7 +833,11 @@ function readKeypath(document, path) {
 export function buildIngressInput({ armId, controlManifest, stopId, base = {} }) {
   const spec = INGRESS_ARMS[armId];
   if (!spec) throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
-  const path = controlManifest?.ingress?.[spec.manifestIngressKey];
+  const path =
+    controlManifest?.ingress?.[spec.manifestIngressKey] ??
+    (spec.supersededIngressKey
+      ? controlManifest?.ingress?.[spec.supersededIngressKey]
+      : undefined);
   if (typeof path !== 'string' || path.length === 0) {
     throw new Error(
       `resolution-probe: the control manifest declares no ${spec.manifestIngressKey}, so this ` +
@@ -1322,7 +1331,7 @@ function resolveIdentityValue({ controlManifest, stop, base, resolvedPath, armId
  * the DB leg and the wrong one here: it normalises from ThemePatch space into
  * FlatTheme space, unwrapping `.value` for six governed roots, and this patch
  * is ALREADY in FlatTheme space because `buildIngressInput` writes it at the
- * keypath `staticBrandThemePath` declares. Its own doc names the failure mode
+ * keypath `staticThemePath` declares. Its own doc names the failure mode
  * — "Collecting in one space and consuming in another is how a provenance set
  * silently stops matching."
  *
@@ -1393,7 +1402,7 @@ export function staticTenantAuthoredPaths({ patch, authoredPath }) {
  *     synthesized `ThemeResolution` and calls `compileTheme` -> `emitThemeCss`
  *     in `infrastructure/compilers/runtime/theme`), takes
  *     `{ brandTheme, vertical, tenantSlug, ... }` and destructures it
- *     immediately. `document` built from `staticBrandThemePath` (e.g.
+ *     immediately. `document` built from `staticThemePath` (e.g.
  *     `surfaces.rhythm`) IS a `FlatTheme` fragment, so it becomes
  *     `input.brandTheme`; `vertical` and `tenantSlug` are required SIBLING
  *     fields the manifest path does not carry at all, so the caller must supply

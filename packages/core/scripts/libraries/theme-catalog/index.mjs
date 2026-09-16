@@ -163,7 +163,9 @@ export function readThemeCatalogRecords(sourcePath = CATALOG_SOURCE) {
     title: row.title,
     domain: domainOf(row),
     ingress: {
-      staticBrandThemePath: row.keypath?.brandTheme ?? null,
+      // Readers still accept the superseded `staticBrandThemePath` until the window trigger in
+      // probe/runtime/ingress/tests/superseded-ingress-key fails (WO-DER-08).
+      staticThemePath: row.keypath?.brandTheme ?? null,
       dbTenantThemePath: row.keypath?.document ?? null,
     },
     declaredOutputs: {
@@ -181,7 +183,7 @@ export function readThemeCatalogRecords(sourcePath = CATALOG_SOURCE) {
       scope: 'tenant',
       title: entry.id,
       domain: { kind: 'retired', enumValues: [], bounds: null, defaultBehavior: entry.replacedBy },
-      ingress: { staticBrandThemePath: null, dbTenantThemePath: null },
+      ingress: { staticThemePath: null, dbTenantThemePath: null },
       declaredOutputs: { channels: entry.channels ?? [], rootAttributes: [], representativeOnly: true },
       dependsOn: [],
     });
@@ -195,7 +197,7 @@ export function readThemeCatalogRecords(sourcePath = CATALOG_SOURCE) {
       scope: 'tenant',
       title: entry.id,
       domain: { kind: 'conditional', enumValues: entry.values ?? [], bounds: null, defaultBehavior: entry.reason },
-      ingress: { staticBrandThemePath: null, dbTenantThemePath: null },
+      ingress: { staticThemePath: null, dbTenantThemePath: null },
       declaredOutputs: { channels: entry.channels ?? [], rootAttributes: [], representativeOnly: true },
       dependsOn: [],
     });
