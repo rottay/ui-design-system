@@ -10,10 +10,18 @@
  * (`marginInlineStart`, `insetInlineStart`, `textAlign: 'start'`) already are
  * the house idiom: six live owners use them today.
  *
- * SCOPE: TSX STYLE OBJECTS UNDER `src/components`. There is no `.css` under
- * that root -- skin stylesheets live in `src/foundation/tokens/css` and are
- * governed by their own owners -- so this gate reads what a component writes
- * inline, which is the only physical paint a component itself decides.
+ * SCOPE: STYLE OBJECTS UNDER `src/components`. There is no `.css` under that
+ * root -- skin stylesheets live in `src/foundation/tokens/css` and are governed
+ * by their own owners -- so this gate reads what a component writes inline,
+ * which is the only physical paint a component itself decides.
+ *
+ * SYNTAX, NOT SPELLING. The scan reads the TypeScript syntax tree, so a key
+ * counts however it is written: bare, quoted, computed string or template,
+ * shorthand or kebab; and a style object counts however it reaches paint:
+ * inline in `style`, through a same-file binding, spread, branch, memo or
+ * style-returning function, as a `CSSProperties`-typed value, or as an
+ * imperative `.style` write. A computed key whose name is only known at runtime
+ * is not a site this scanner can name.
  *
  * FROZEN ENGINES ARE EXCLUDED BY PATH, not pinned. 223 of the 245 measured
  * sites live under `engines/classic/` or `engines/rustic/`, and the freeze law
@@ -28,7 +36,10 @@
  *       pointer position, a `getBoundingClientRect()` edge, an offscreen
  *       sentinel. Rewriting one as `insetInlineStart` would reinterpret the
  *       same number under RTL and put the panel on the wrong side -- the
- *       migration would be the bug. Each is declared by path WITH its reason.
+ *       migration would be the bug. Each is declared per SITE -- path plus a
+ *       locator (`scope property: value`) -- with its reason, and exempts that
+ *       site only: any other physical site in the same file is judged as if
+ *       the exception did not exist, and a locator that stops matching fails.
  *
  *   PINNED DEBT. A physical edge that should be logical. Count per file,
  *       decrease-only: growth fails, a site in an unpinned file fails as a new
@@ -48,6 +59,8 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import ts from 'typescript';
 
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
@@ -78,27 +91,15 @@ export const PHYSICAL_PROPERTIES = Object.freeze([
 ]);
 
 const PHYSICAL = new Set(PHYSICAL_PROPERTIES);
-
-/**
- * A key inside a style object, in ANY spelling: bare (`left:`), single- or
- * double-quoted (`'left':`), and backtick (`` `left`: ``). The quote is matched
- * rather than assumed away, because a spelling-bound detector is exactly how
- * WO-INV-01's own roster missed ten sites.
- */
-const KEY = /(?:^|[{,;\s])(['"`]?)([A-Za-z-]+)\1\s*:/g;
-
-/** `textAlign` / `float` count only for a physical value. */
-const PHYSICAL_VALUE = /^\s*['"`]?(left|right)\b/;
-
 const VALUE_GATED = new Set(['textAlign', 'float']);
-
-/** `element.style.left = ...` and `setProperty('margin-left', ...)`. */
-const STYLE_ASSIGN = /\.style\.([A-Za-z]+)\s*=/g;
-const SET_PROPERTY = /setProperty\(\s*['"]([a-z-]+)['"]/g;
+const PHYSICAL_VALUE = /^\s*(left|right)\b/;
+const CSS_PROPERTIES_TYPE = /\bCSSProperties\b/;
 
 const toPosix = (value) => value.split(sep).join('/');
 const isAuthored = (name) =>
   /\.tsx?$/.test(name) && !/\.(test|spec|stories)\.tsx?$/.test(name);
+const camel = (name) => name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+const squash = (text) => text.replace(/\s+/g, ' ').trim();
 
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir)) {
@@ -113,33 +114,215 @@ function walk(dir, out = []) {
   return out;
 }
 
-/** Comments are blanked, never deleted, so prose can never satisfy a check and line numbers survive. */
-function blankComments(text) {
-  return text
-    .replace(/\/\*[\s\S]*?\*\//g, (match) => match.replace(/[^\n]/g, ' '))
-    .replace(/(^|\n)(\s*)\/\/[^\n]*/g, (match, head, indent) => head + indent);
+function unwrap(node) {
+  let current = node;
+  while (
+    current
+    && (ts.isParenthesizedExpression(current) || ts.isAsExpression(current) || ts.isSatisfiesExpression(current)
+      || ts.isNonNullExpression(current) || ts.isTypeAssertionExpression(current))
+  ) {
+    current = current.expression;
+  }
+  return current;
 }
 
-/** Every `style={{ … }}` / `: CSSProperties = { … }` body, brace-balanced. */
-function styleObjectSpans(text) {
-  const spans = [];
-  const opener = /style=\{\s*\{|:\s*(?:React\.)?CSSProperties\s*=\s*\{/g;
-  let match;
-  while ((match = opener.exec(text)) !== null) {
-    const start = text.indexOf('{', match.index + (match[0].startsWith('style=') ? 'style='.length : 0));
-    let depth = 0;
-    for (let index = start; index < text.length; index += 1) {
-      if (text[index] === '{') depth += 1;
-      else if (text[index] === '}') {
-        depth -= 1;
-        if (depth === 0) {
-          spans.push([start, index]);
-          break;
+const isScopeContainer = (node) =>
+  ts.isSourceFile(node) || ts.isBlock(node) || ts.isModuleBlock(node) || ts.isCaseClause(node) || ts.isDefaultClause(node);
+
+const isFunctionValue = (node) =>
+  Boolean(node) && (ts.isArrowFunction(node) || ts.isFunctionExpression(node) || ts.isFunctionDeclaration(node));
+
+/** Lexical same-file resolution of a name to its initializer; a parameter of that name shadows and stops it. */
+function resolveName(identifier) {
+  const name = identifier.text;
+  for (let node = identifier.parent; node; node = node.parent) {
+    if (ts.isFunctionLike(node)
+      && node.parameters?.some((parameter) => ts.isIdentifier(parameter.name) && parameter.name.text === name)) {
+      return null;
+    }
+    if (!isScopeContainer(node)) continue;
+    for (const statement of node.statements) {
+      if (ts.isVariableStatement(statement)) {
+        for (const declaration of statement.declarationList.declarations) {
+          if (ts.isIdentifier(declaration.name) && declaration.name.text === name) return declaration.initializer ?? null;
         }
+      } else if (ts.isFunctionDeclaration(statement) && statement.name?.text === name) {
+        return statement;
       }
     }
   }
-  return spans;
+  return null;
+}
+
+/** The strings an expression can spell: literals, hole-free templates, branches and same-file constants. */
+function literalStrings(node, seen = new Set()) {
+  const target = unwrap(node);
+  if (!target || seen.has(target)) return [];
+  seen.add(target);
+  if (ts.isStringLiteral(target) || ts.isNoSubstitutionTemplateLiteral(target)) return [target.text];
+  if (ts.isConditionalExpression(target)) {
+    return [...literalStrings(target.whenTrue, seen), ...literalStrings(target.whenFalse, seen)];
+  }
+  if (ts.isBinaryExpression(target)
+    && [ts.SyntaxKind.BarBarToken, ts.SyntaxKind.QuestionQuestionToken, ts.SyntaxKind.AmpersandAmpersandToken]
+      .includes(target.operatorToken.kind)) {
+    return [...literalStrings(target.left, seen), ...literalStrings(target.right, seen)];
+  }
+  if (ts.isIdentifier(target)) {
+    const initializer = resolveName(target);
+    return initializer && !isFunctionValue(initializer) ? literalStrings(initializer, seen) : [];
+  }
+  return [];
+}
+
+function keyNames(name) {
+  if (ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isNoSubstitutionTemplateLiteral(name)) return [name.text];
+  if (ts.isComputedPropertyName(name)) return literalStrings(name.expression);
+  return [];
+}
+
+function returnedExpressions(fn) {
+  if (!fn.body) return [];
+  if (!ts.isBlock(fn.body)) return [fn.body];
+  const out = [];
+  const visit = (node) => {
+    if (node !== fn.body && ts.isFunctionLike(node)) return;
+    if (ts.isReturnStatement(node) && node.expression) out.push(node.expression);
+    ts.forEachChild(node, visit);
+  };
+  visit(fn.body);
+  return out;
+}
+
+function scopeOf(node) {
+  for (let current = node.parent; current; current = current.parent) {
+    if ((ts.isVariableDeclaration(current) || ts.isFunctionDeclaration(current) || ts.isMethodDeclaration(current)
+      || ts.isClassDeclaration(current) || ts.isPropertyDeclaration(current))
+      && current.name && ts.isIdentifier(current.name)) {
+      return current.name.text;
+    }
+  }
+  return '(module)';
+}
+
+/** The physical sites one source file writes. Exported so a drill can measure a single fixture. */
+export function fileSites(path, text) {
+  const source = ts.createSourceFile(
+    path, text, ts.ScriptTarget.Latest, true, path.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+  );
+  const sites = [];
+  const recorded = new Set();
+  const visited = new Set();
+
+  const consider = (node, rawName, valueNode, valueText) => {
+    const property = camel(rawName);
+    if (!PHYSICAL.has(property)) return;
+    if (VALUE_GATED.has(property) && !literalStrings(valueNode).some((value) => PHYSICAL_VALUE.test(value))) return;
+    const start = node.getStart(source);
+    if (recorded.has(start)) return;
+    recorded.add(start);
+    sites.push({
+      path,
+      line: source.getLineAndCharacterOfPosition(start).line + 1,
+      property,
+      locator: `${scopeOf(node)} ${property}: ${squash(valueText)}`,
+    });
+  };
+
+  const styleObject = (node) => {
+    const target = unwrap(node);
+    if (!target || visited.has(target)) return;
+    visited.add(target);
+    if (ts.isObjectLiteralExpression(target)) {
+      for (const member of target.properties) {
+        if (ts.isPropertyAssignment(member)) {
+          for (const name of keyNames(member.name)) {
+            consider(member, name, member.initializer, member.initializer.getText(source));
+          }
+          if (ts.isObjectLiteralExpression(unwrap(member.initializer))) styleObject(member.initializer);
+        } else if (ts.isShorthandPropertyAssignment(member)) {
+          consider(member, member.name.text, member.name, member.name.text);
+        } else if (ts.isSpreadAssignment(member)) {
+          styleObject(member.expression);
+        }
+      }
+    } else if (ts.isConditionalExpression(target)) {
+      styleObject(target.whenTrue);
+      styleObject(target.whenFalse);
+    } else if (ts.isBinaryExpression(target)) {
+      styleObject(target.left);
+      styleObject(target.right);
+    } else if (ts.isArrayLiteralExpression(target)) {
+      target.elements.forEach(styleObject);
+    } else if (ts.isIdentifier(target)) {
+      const resolved = resolveName(target);
+      if (resolved) styleObject(resolved);
+    } else if (ts.isPropertyAccessExpression(target) && ts.isIdentifier(target.expression)) {
+      const owner = unwrap(resolveName(target.expression));
+      const member = owner && ts.isObjectLiteralExpression(owner)
+        ? owner.properties.find((property) => property.name && keyNames(property.name).includes(target.name.text))
+        : null;
+      if (member && ts.isPropertyAssignment(member)) styleObject(member.initializer);
+    } else if (isFunctionValue(target)) {
+      returnedExpressions(target).forEach(styleObject);
+    } else if (ts.isCallExpression(target)) {
+      const callee = unwrap(target.expression);
+      if (ts.isIdentifier(callee)) {
+        const resolved = unwrap(resolveName(callee));
+        if (isFunctionValue(resolved)) styleObject(resolved);
+      }
+      const objectAssign = callee.getText(source) === 'Object.assign';
+      for (const argument of target.arguments) {
+        if (objectAssign || isFunctionValue(unwrap(argument))) styleObject(argument);
+      }
+    }
+  };
+
+  const typeMentionsCss = (type) => Boolean(type) && CSS_PROPERTIES_TYPE.test(type.getText(source));
+  const isStyleTarget = (node) => {
+    const target = unwrap(node);
+    return (ts.isPropertyAccessExpression(target) && target.name.text === 'style')
+      || (ts.isElementAccessExpression(target) && literalStrings(target.argumentExpression).includes('style'));
+  };
+
+  const visit = (node) => {
+    if (ts.isJsxAttribute(node) && node.name.getText(source) === 'style'
+      && node.initializer && ts.isJsxExpression(node.initializer) && node.initializer.expression) {
+      styleObject(node.initializer.expression);
+    } else if ((ts.isVariableDeclaration(node) || ts.isPropertyDeclaration(node) || ts.isParameter(node))
+      && node.initializer && typeMentionsCss(node.type)) {
+      styleObject(node.initializer);
+    } else if (ts.isFunctionLike(node) && typeMentionsCss(node.type)) {
+      returnedExpressions(node).forEach(styleObject);
+    } else if ((ts.isAsExpression(node) || ts.isSatisfiesExpression(node) || ts.isTypeAssertionExpression(node))
+      && typeMentionsCss(node.type)) {
+      styleObject(node.expression);
+    } else if (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+      const left = unwrap(node.left);
+      if (ts.isPropertyAccessExpression(left) && isStyleTarget(left.expression)) {
+        consider(left, left.name.text, node.right, node.right.getText(source));
+      } else if (ts.isElementAccessExpression(left) && isStyleTarget(left.expression)) {
+        for (const name of literalStrings(left.argumentExpression)) {
+          consider(left, name, node.right, node.right.getText(source));
+        }
+      } else if (isStyleTarget(left)) {
+        styleObject(node.right);
+      }
+    } else if (ts.isCallExpression(node)) {
+      const callee = unwrap(node.expression);
+      if (ts.isPropertyAccessExpression(callee) && callee.name.text === 'setProperty' && node.arguments.length > 0) {
+        const value = node.arguments[1];
+        for (const name of literalStrings(node.arguments[0])) {
+          consider(node, name, value ?? node.arguments[0], value ? value.getText(source) : '');
+        }
+      } else if (callee.getText(source) === 'Object.assign' && node.arguments.length > 1 && isStyleTarget(node.arguments[0])) {
+        node.arguments.slice(1).forEach(styleObject);
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return sites.sort((a, b) => a.line - b.line || a.locator.localeCompare(b.locator));
 }
 
 /**
@@ -153,51 +336,20 @@ export function physicalSites(root = ROOT) {
   for (const file of walk(scanRoot)) {
     const path = toPosix(relative(scanRoot, file));
     if (FROZEN.test(`/${path}`)) continue;
-    const text = blankComments(readFileSync(file, 'utf8'));
-    const lineAt = (index) => text.slice(0, index).split('\n').length;
-    const seen = new Set();
-    const record = (index, property) => {
-      const line = lineAt(index);
-      const key = `${line}:${property}`;
-      if (seen.has(key)) return;
-      seen.add(key);
-      sites.push({ path, line, property });
-    };
-
-    for (const [start, end] of styleObjectSpans(text)) {
-      const body = text.slice(start, end + 1);
-      KEY.lastIndex = 0;
-      let match;
-      while ((match = KEY.exec(body)) !== null) {
-        const property = match[2];
-        if (!PHYSICAL.has(property)) continue;
-        if (VALUE_GATED.has(property) && !PHYSICAL_VALUE.test(body.slice(match.index + match[0].length))) {
-          continue;
-        }
-        record(start + match.index, property);
-      }
-    }
-
-    for (const [regex, transform] of [
-      [STYLE_ASSIGN, (value) => value],
-      [SET_PROPERTY, (value) => value.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())],
-    ]) {
-      regex.lastIndex = 0;
-      let match;
-      while ((match = regex.exec(text)) !== null) {
-        const property = transform(match[1]);
-        if (PHYSICAL.has(property)) record(match.index, property);
-      }
-    }
+    sites.push(...fileSites(path, readFileSync(file, 'utf8')));
   }
   return sites;
 }
 
-/** Site COUNT per file -- the unit the baseline pins. */
-export function physicalCounts(root = ROOT) {
+/** Site COUNT per file -- the unit the debt and inert bands pin. */
+export function countSites(sites) {
   const counts = {};
-  for (const site of physicalSites(root)) counts[site.path] = (counts[site.path] ?? 0) + 1;
+  for (const site of sites) counts[site.path] = (counts[site.path] ?? 0) + 1;
   return counts;
+}
+
+export function physicalCounts(root = ROOT) {
+  return countSites(physicalSites(root));
 }
 
 export function readBaseline(baselinePath = BASELINE_PATH) {
@@ -208,27 +360,47 @@ export function namedExceptions(baseline = readBaseline()) {
   return baseline.namedExceptions;
 }
 
+const isExcepted = (site, exceptions) =>
+  Boolean(exceptions[site.path]?.sites.some((row) => row.locator === site.locator));
+
 /**
- * The verdict. Each band answers for its own files; a file belongs to exactly
- * one band, which is what keeps the pin readable.
+ * The verdict, over SITES: an exception exempts exactly the one site its
+ * locator names; every other site is judged by the per-file debt and inert pins.
  */
-export function judge(counts, baseline = readBaseline()) {
+export function judge(sites, baseline = readBaseline()) {
+  if (!Array.isArray(sites)) {
+    throw new TypeError('judge() takes the site list: a count map cannot bind an exception to its site');
+  }
   const findings = [];
   const { namedExceptions: exceptions, pinnedDebt, inert } = baseline;
 
-  const bandOf = (path) =>
-    exceptions[path] ? 'exception' : pinnedDebt[path] ? 'debt' : inert[path] ? 'inert' : null;
+  for (const [path, row] of Object.entries(exceptions).sort()) {
+    for (const { locator } of row.sites) {
+      const matches = sites.filter((site) => site.path === path && site.locator === locator).length;
+      if (matches === 0) {
+        findings.push(
+          `${path}: named exception \`${locator}\` matches no physical site -- retire it, or adjudicate the site that replaced it.`,
+        );
+      } else if (matches > 1) {
+        findings.push(`${path}: named exception \`${locator}\` matches ${matches} sites -- an exception names exactly one.`);
+      }
+    }
+  }
+
+  const residual = sites.filter((site) => !isExcepted(site, exceptions));
+  const counts = countSites(residual);
+  const bandOf = (path) => (pinnedDebt[path] ? 'debt' : inert[path] ? 'inert' : null);
 
   for (const [path, count] of Object.entries(counts).sort()) {
     const band = bandOf(path);
     if (band === null) {
+      const named = residual.filter((site) => site.path === path).map((site) => `\`${site.locator}\``).join(', ');
       findings.push(
-        `${path}: ${count} physical-property site(s) in a file no band declares. `
-          + 'Write the logical spelling, or declare the file in the baseline with the reason it must stay physical.',
+        `${path}: ${count} physical-property site(s) in a file no band declares: ${named}. `
+          + 'Write the logical spelling, or declare the site in the baseline with the reason it must stay physical.',
       );
       continue;
     }
-    if (band === 'exception') continue;
     const pin = band === 'debt' ? pinnedDebt[path] : inert[path];
     if (count > pin.sites) {
       findings.push(`${path}: physical sites GREW from ${pin.sites} to ${count} (${band}).`);
@@ -245,38 +417,34 @@ export function judge(counts, baseline = readBaseline()) {
     }
   }
 
-  for (const path of Object.keys(exceptions).sort()) {
-    if (counts[path] === undefined) {
-      findings.push(`${path}: declared a named exception but holds no physical site -- retire the exception.`);
-    }
-  }
-
   return findings;
 }
 
-export function run(root = ROOT) {
-  const counts = physicalCounts(root);
-  return { counts, findings: judge(counts) };
+export function run(root = ROOT, baseline = readBaseline()) {
+  const sites = physicalSites(root);
+  return { sites, counts: countSites(sites), findings: judge(sites, baseline) };
 }
 
 function main() {
-  const { counts, findings } = run();
   const baseline = readBaseline();
+  const { sites, counts, findings } = run(ROOT, baseline);
   const band = (rows) => Object.entries(counts).filter(([path]) => rows[path]);
   const total = (entries) => entries.reduce((sum, [, count]) => sum + count, 0);
-  const debt = band(baseline.pinnedDebt);
-  const inert = band(baseline.inert);
-  const exceptions = band(baseline.namedExceptions);
+  const excepted = sites.filter((site) => isExcepted(site, baseline.namedExceptions));
+  const residual = countSites(sites.filter((site) => !isExcepted(site, baseline.namedExceptions)));
+  const debt = band(baseline.pinnedDebt).map(([path]) => [path, residual[path] ?? 0]);
+  const inert = band(baseline.inert).map(([path]) => [path, residual[path] ?? 0]);
 
   const lines = [
     '[physical-properties]',
     `  debt awaiting the logical spelling : ${total(debt)} in ${debt.length} file(s)`,
     `  inert (symmetric / centred)        : ${total(inert)} in ${inert.length} file(s)`,
-    `  named exceptions (measured space)  : ${total(exceptions)} in ${exceptions.length} file(s)`,
+    `  named exceptions (measured space)  : ${excepted.length} site(s) in ${new Set(excepted.map((site) => site.path)).size} file(s)`,
     `  frozen engines                     : excluded by path (the freeze gate owns them)`,
   ];
   for (const [path, count] of debt.sort()) lines.push(`  DEBT  ${path}: ${count}`);
   for (const [path, count] of inert.sort()) lines.push(`  INERT ${path}: ${count}`);
+  for (const site of excepted) lines.push(`  EXCEPTION ${site.path}:${site.line} \`${site.locator}\``);
   for (const finding of findings) lines.push(`  FINDING ${finding}`);
   lines.push(findings.length > 0 ? '[physical-properties] FAIL' : '[physical-properties] OK');
 
