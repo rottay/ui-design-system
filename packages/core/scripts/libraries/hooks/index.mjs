@@ -1230,6 +1230,45 @@ export const PROMOTIONS = Object.freeze([
       'Progress communicates different semantic roles in one page. The product selects ' +
       'the role while the tenant palette continues to provide the actual colour.',
   }),
+  Object.freeze({
+    id: 'skeleton-row-bar-height',
+    properties: Object.freeze(['--ds-skeleton-bar-height']),
+    owner:
+      'the placeholder bar of a table-rows skeleton, ' +
+      "`.ds-skeleton-anatomy-rows [data-part='skeleton-bar']` in " +
+      'presentation/components/skin/skeleton-anatomy/index.css',
+    slot: 'one table-rows loading surface',
+    valueType: '<length> resolving through the DS spacing ramp',
+    fallback: 'var(--ds-spacing-3), which is also the DS default declaration',
+    sinceVersion: '2.19.36',
+    whiteLabelCompat: 'derives-from-spacing',
+    subtreeRepaint:
+      'the placeholder bars of the rows in that one loading table. No text, control ' +
+      'or surface below the scope changes: the rows carry no content while they load.',
+    rationale:
+      'A dense table and a comfortable one want different bone weights, and the row ' +
+      'height they stand in for is the host row height, not a global. The sibling ' +
+      '`--ds-skeleton-cell-padding` is already fenced for the same reason.',
+  }),
+  Object.freeze({
+    id: 'skeleton-row-control-size',
+    properties: Object.freeze(['--ds-skeleton-control-size']),
+    owner:
+      'the control well of a table-rows skeleton, ' +
+      "`[data-part='skeleton-cell'][data-kind='control'] [data-part='skeleton-bar']` in " +
+      'presentation/components/skin/skeleton-anatomy/index.css',
+    slot: 'one table-rows loading surface',
+    valueType: '<length> resolving through the DS spacing ramp',
+    fallback: 'var(--ds-spacing-4), which is also the DS default declaration',
+    sinceVersion: '2.19.36',
+    whiteLabelCompat: 'derives-from-spacing',
+    subtreeRepaint:
+      'the square placeholder in the selection and expand wells of that one loading ' +
+      'table. No text, control or surface below the scope changes.',
+    rationale:
+      'The well stands in for a checkbox or a chevron, whose size the host already ' +
+      'chooses; the square must follow it rather than a global bone width.',
+  }),
 ]);
 
 function assertAnchorExists(coreRoot, anchor) {

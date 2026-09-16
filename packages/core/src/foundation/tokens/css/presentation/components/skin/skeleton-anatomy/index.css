@@ -169,6 +169,13 @@ html[data-ds-motion='reduced'] .ds-skeleton-anatomy[data-part='root'][data-loadi
  * states its own cell padding through `--ds-skeleton-cell-padding`.
  * ------------------------------------------------------------------------- */
 
+/* The two bone dimensions this mode owns, declared at its root so every read
+   has a producer and a tenant has one place to retune them. */
+.ds-skeleton-anatomy-rows {
+  --ds-skeleton-bar-height: var(--ds-spacing-3);
+  --ds-skeleton-control-size: var(--ds-spacing-4);
+}
+
 .ds-skeleton-anatomy-rows [data-part='skeleton-cell'] {
   padding: var(--ds-skeleton-cell-padding, var(--ds-spacing-2) var(--ds-spacing-3));
 }
