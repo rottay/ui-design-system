@@ -635,12 +635,20 @@
 
 
 /* The channels the vertical deliberately leaves UNAUTHORED so a customer can
-   pin them (tenant-divergence-matrix). Declared here, at the family root, so
-   every name the skin reads has a producer WITHOUT the vertical's artifact
-   declaring it. A tenant's own value still outranks this. */
-.rottay-badge.rottay-badge--modern {
+   pin them (tenant-divergence-matrix). They are declared HERE, on `:root`,
+   and not on the family's own element: a declaration on the element itself
+   always beats a value inherited from an ancestor, whatever the layers say,
+   because layers only arbitrate between declarations competing for the SAME
+   element. The tenant artifact declares on the document root and carries no
+   layer, so on `:root` its value wins over this one and every name the skin
+   reads still has a producer. Only this family reads these four. */
+:root {
   --ds-badge-chip-radius: var(--ds-badge-radius, var(--ds-radius-md));
   --ds-badge-frame: color-mix(in srgb, currentColor 14%, transparent);
-  --ds-badge-surface-hover: var(--_ds-badge-hover-bg-fallback);
+  /* `initial`, not a value: the real resting hover is stated PER TREATMENT on
+     the element as `--_ds-badge-hover-bg-fallback`, which every read already
+     carries in its chain. A value here would resolve at `:root`, where that
+     private name does not exist, and silence the hover. */
+  --ds-badge-surface-hover: initial;
   --ds-badge-count-radius: var(--ds-radius-full);
 }
