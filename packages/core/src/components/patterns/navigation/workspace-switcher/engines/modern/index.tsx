@@ -43,15 +43,7 @@ import { ActionAddIcon } from '@/graphics/icons/semantic/generated/roles/action-
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
 import { StatusVerifiedIcon } from '@/graphics/icons/semantic/generated/roles/status-verified';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-
-/** Reading-direction probe (house idiom): nearest explicit `dir` wins,
-    otherwise the document direction applies. */
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest('[dir]');
-  if (scoped) return scoped.getAttribute('dir') === 'rtl';
-  return document.documentElement.dir === 'rtl';
-}
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Modern engine workspace switcher composed on DS primitives (see the module
@@ -78,6 +70,11 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
 
   /* ---- localized copy (components catalog, English floor) ---- */
   const translation = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const direction = useOptionalDirection();
+
   const switchLabel = translation?.tOr('workspaceSwitcher.switch', 'Switch workspace') ?? 'Switch workspace';
   const panelLabel = translation?.tOr('workspaceSwitcher.panel', 'Workspaces') ?? 'Workspaces';
   const selectLabel = translation?.tOr('workspaceSwitcher.select', 'Select workspace') ?? 'Select workspace';
@@ -225,7 +222,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   // inline-END arrow crosses to that row's own gear (mirrored under RTL).
   const handleItemKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>, index: number, workspaceId: string) => {
-      const toTrailing = isRtlContext(e.currentTarget) ? 'ArrowLeft' : 'ArrowRight';
+      const toTrailing = direction === 'rtl' ? 'ArrowLeft' : 'ArrowRight';
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
@@ -270,7 +267,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   // inline-START arrow returns to the gear's own row (mirrored under RTL).
   const handleSettingsKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
-      const toLeading = isRtlContext(e.currentTarget) ? 'ArrowRight' : 'ArrowLeft';
+      const toLeading = direction === 'rtl' ? 'ArrowRight' : 'ArrowLeft';
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();

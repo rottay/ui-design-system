@@ -41,17 +41,7 @@ import type { PageShellProps } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-
-/* ------------------------------------------------------------------ */
-/* RTL-aware direction reading (same contract as the data-table engine) */
-/* ------------------------------------------------------------------ */
-
-function readDirectionAt(node: Element): 'ltr' | 'rtl' {
-  const explicit = node.closest('[dir]')?.getAttribute('dir');
-  if (explicit === 'rtl' || explicit === 'ltr') return explicit;
-  return getComputedStyle(node).direction === 'rtl' ? 'rtl' : 'ltr';
-}
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
 /* maxWidth channel                                                     */
@@ -298,6 +288,11 @@ export default function ModernPageShell(props: PageShellProps) {
           English floor renders, byte-identical to the pre-i18n contract. ---- */
   const i18nCommon = useOptionalTranslation('common');
   const i18nComponents = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const direction = useOptionalDirection();
+
   const breadcrumbLabel = i18nCommon?.tOr('breadcrumb', 'Breadcrumb') ?? 'Breadcrumb';
   const backFallbackLabel = i18nCommon?.tOr('back', 'Back') ?? 'Back';
   const pageTabsLabel =
@@ -426,7 +421,7 @@ export default function ModernPageShell(props: PageShellProps) {
       nextIndex = buttons.length - 1;
     } else {
       const delta = event.key === 'ArrowRight' ? 1 : -1;
-      const logicalDelta = readDirectionAt(list) === 'rtl' ? -delta : delta;
+      const logicalDelta = direction === 'rtl' ? -delta : delta;
       nextIndex = (fromIndex + logicalDelta + buttons.length) % buttons.length;
     }
     const target = buttons[nextIndex];

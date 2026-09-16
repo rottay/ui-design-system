@@ -50,7 +50,7 @@ import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { TreeProps, TreeDataNode } from '../../contracts';
 import { TREE_DEFAULTS } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
@@ -66,16 +66,6 @@ import {
   computeHalfCheckedKeys,
   filterTree,
 } from '../../runtime/tree-behavior';
-
-// ---------------------------------------------------------------------------
-// Reading-direction probe (Segmented engine idiom): the nearest explicit
-// `dir` wins; otherwise the document direction applies.
-// ---------------------------------------------------------------------------
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest('[dir]');
-  if (scoped) return scoped.getAttribute('dir') === 'rtl';
-  return document.documentElement.dir === 'rtl';
-}
 
 // ---------------------------------------------------------------------------
 // Highlight helper
@@ -588,6 +578,11 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   // Accessible tree name from the catalog (APG: role=tree needs a name);
   // the English floor keeps bare renders byte-identical in behavior.
   const rootI18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const direction = useOptionalDirection();
+
   const rootLabelTranslated = rootI18n?.t('tree.label');
   const rootLabel = rootLabelTranslated && !rootLabelTranslated.endsWith('tree.label') ? rootLabelTranslated : 'Tree';
 
@@ -872,7 +867,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
       // Expand/collapse arrows mirror in RTL (the Segmented engine's idiom):
       // in a right-to-left tree ArrowLeft expands and ArrowRight collapses.
-      const rtl = isRtlContext(e.currentTarget as HTMLElement);
+      const rtl = direction === 'rtl';
       const directionalKey =
         rtl && e.key === 'ArrowRight'
           ? 'ArrowLeft'

@@ -33,7 +33,7 @@ import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/mo
 import ModernScrollArea from '../../../../../primitives/layout/scroll-area/engines/modern';
 import { VisuallyHidden } from '../../../../../primitives/foundation';
 import type { NotificationCenterProps, Notification } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 import { CommunicationNotificationIcon } from '@/graphics/icons/semantic/generated/roles/communication-notification';
 import { StatusInfoIcon } from '@/graphics/icons/semantic/generated/roles/status-info';
@@ -45,14 +45,6 @@ import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/actio
 // Measure before paint so the panel never shows in the overflowing placement.
 const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
-
-/** Reading-direction probe (house idiom): nearest explicit `dir` wins,
-    otherwise the document direction applies. */
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest('[dir]');
-  if (scoped) return scoped.getAttribute('dir') === 'rtl';
-  return document.documentElement.dir === 'rtl';
-}
 
 /** Semantic per-type iconography (the skin owns the per-type accent color). */
 const TYPE_ICON: Record<Notification['type'], React.ReactNode> = {
@@ -129,6 +121,11 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
   // Optional channel with an English floor: the center renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const direction = useOptionalDirection();
+
   // Standalone (no provider) the floor is all there is, and it carries the same
   // `{count}` placeholders as catalog copy -- raw, it prints the template.
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
@@ -229,7 +226,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       const anchor = anchorEl.getBoundingClientRect();
       const panelWidth = panel.getBoundingClientRect().width;
       if (!viewport || panelWidth <= 0) return;
-      const rtl = isRtlContext(anchorEl);
+      const rtl = direction === 'rtl';
       const roomFromEndAnchor = rtl ? viewport - anchor.left : anchor.right;
       const roomFromStartAnchor = rtl ? anchor.right : viewport - anchor.left;
       setPlacement(

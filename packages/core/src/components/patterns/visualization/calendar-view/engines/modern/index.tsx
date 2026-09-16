@@ -26,7 +26,7 @@
  * so the seven-column geometry is untouched). Day cells are `role="gridcell"`
  * with `aria-selected` tracking the controlled `currentDate`, a full-date
  * localized `aria-label`, and a roving tabindex: arrow keys move by day /
- * week (inline arrows mirror under RTL via the house `isRtlContext` idiom),
+ * week (inline arrows mirror under RTL via the shared direction authority),
  * Enter/Space fires `onDateClick`. Focus never leaves the displayed month —
  * month navigation stays parent-owned through the toolbar.
  *
@@ -44,7 +44,7 @@
 
 import React, { useId, useMemo, useRef, useState } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
@@ -131,14 +131,6 @@ function startTime(d: Date | string): number {
   return Number.isNaN(time) ? 0 : time;
 }
 
-/** Reading-direction probe (Tree primitive idiom): the nearest explicit
-    `dir` wins; otherwise the document direction applies. */
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest('[dir]');
-  if (scoped) return scoped.getAttribute('dir') === 'rtl';
-  return document.documentElement.dir === 'rtl';
-}
-
 /**
  * Modern calendar view rendering a month grid with event chips.
  * @param props - CalendarViewProps including events array, navigation callbacks,
@@ -151,6 +143,11 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   // locale drives weekday/month names; without a provider it floors to the
   // browser default locale (the engine's historical behaviour).
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const direction = useOptionalDirection();
+
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string => {
     const resolved = i18n?.tOr(key, floor, params);
     if (resolved !== undefined) return resolved;
@@ -336,7 +333,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   const handleCellKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, cell: Date) => {
     // Inline arrows mirror under RTL: ArrowLeft always moves visually left,
     // which is the NEXT day in an RTL grid (Tree primitive idiom).
-    const rtl = isRtlContext(e.currentTarget);
+    const rtl = direction === 'rtl';
     if (e.key === 'F2') {
       if (!eventsInteractive) return;
       if (enterCell(e.currentTarget)) e.preventDefault();

@@ -56,7 +56,7 @@
 import React, { useState, useCallback } from 'react';
 import type { SliderProps } from '../../contracts';
 import { SLIDER_DEFAULTS } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Keys the native range input treats as value commands (the APG slider
@@ -112,6 +112,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     } = props;
 
     const i18n = useOptionalTranslation('components');
+    // The reading direction comes from the shared i18n authority, not a DOM
+    // probe of a node's `dir` chain: the locale knows it on the server too, and
+    // a probe re-derives from paint a fact the provider already holds.
+    const direction = useOptionalDirection();
+
     /**
      * Localized label with an English floor: when the catalogue entry has not
      * landed yet the provider echoes the full key, which must never reach an
@@ -446,10 +451,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         if (vertical) {
           ratio = rect.height > 0 ? (rect.bottom - e.clientY) / rect.height : 0;
         } else {
-          const scoped = (e.currentTarget as HTMLElement).closest('[dir]');
-          const rtl = scoped
-            ? scoped.getAttribute('dir') === 'rtl'
-            : document.documentElement.dir === 'rtl';
+          const rtl = direction === 'rtl';
           ratio = rect.width > 0
             ? (rtl ? (rect.right - e.clientX) : (e.clientX - rect.left)) / rect.width
             : 0;

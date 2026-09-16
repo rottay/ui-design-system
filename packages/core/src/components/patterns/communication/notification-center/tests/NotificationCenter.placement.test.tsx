@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernNotificationCenter from '../engines/modern';
 import type { Notification, NotificationCenterProps } from '../contracts';
 
@@ -97,11 +99,17 @@ describe('NotificationCenter (modern) panel placement', () => {
   });
 
   it('mirrors the overflow test under RTL', () => {
-    document.documentElement.dir = 'rtl';
+    // Direction arrives through the i18n authority the engine now reads, not
+    // `documentElement.dir`; the provider stamps that attribute itself, so the
+    // document still says what the locale says.
     // Under RTL the end anchor grows toward the viewport's right edge: a bell
     // at x=1392 leaves 48px of room, so it must flip to the start anchor.
     measureAt(1392, 1440);
-    render(<ModernNotificationCenter {...buildProps()} />);
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernNotificationCenter {...buildProps()} />
+      </I18nProvider>,
+    );
 
     expect(panel()).toHaveAttribute('data-placement', 'start');
   });

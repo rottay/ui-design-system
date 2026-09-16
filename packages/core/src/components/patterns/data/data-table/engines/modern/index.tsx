@@ -50,7 +50,10 @@ import {
   XIcon as X,
 } from "../../../../../../graphics/icons";
 import { arrayValueAt } from "@/foundation/kernel/collections";
-import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
+import {
+  useOptionalDirection,
+  useOptionalTranslation,
+} from "@/infrastructure/runtime/i18n";
 import type { DataTablePatternProps } from "../../contracts";
 import { resolveAccessor, resolveRowKey } from "../../runtime/row-resolution";
 import ModernCheckbox from "../../../../../primitives/inputs/checkbox/engines/modern";
@@ -98,21 +101,6 @@ function isValidTableBodyRowOutput(node: React.ReactNode): boolean {
  * scroll (remediation W7 / blocking defect D3).
  */
 const DEFAULT_PINNED_COLUMN_WIDTH = 150;
-
-/**
- * Writing direction at a node. The `dir` attribute chain is read first (the
- * common RTL channel — and the only one jsdom resolves); a CSS-only
- * `direction: rtl` with no dir attribute falls back to the computed style.
- * Same resolution strategy as the Splitter modern engine.
- */
-function readDirectionAt(node: Element): "ltr" | "rtl" {
-  const dirAttr = node.closest("[dir]")?.getAttribute("dir");
-  if (dirAttr === "rtl" || dirAttr === "ltr") return dirAttr;
-  if (typeof getComputedStyle === "function") {
-    return getComputedStyle(node).direction === "rtl" ? "rtl" : "ltr";
-  }
-  return "ltr";
-}
 
 /**
  * Resolves the EditableConfig for a column.
@@ -242,6 +230,11 @@ export default function ModernDataTable<T extends object>(
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(
     []
   );
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const textDirection = useOptionalDirection();
+
   // Expanded rows tracked as a Set for O(1) has/add/delete during toggle.
   const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
@@ -599,7 +592,7 @@ export default function ModernDataTable<T extends object>(
     ) => {
       e.preventDefault();
       e.stopPropagation();
-      const direction = readDirectionAt(e.currentTarget);
+      const direction = textDirection;
       resizeRef.current = {
         key,
         startX: e.clientX,
@@ -759,7 +752,7 @@ export default function ModernDataTable<T extends object>(
           : processedColumns.map((column) => column.key);
       const sourceIndex = currentOrder.indexOf(key);
       if (sourceIndex < 0) return;
-      const isRtl = readDirectionAt(event.currentTarget) === "rtl";
+      const isRtl = textDirection === "rtl";
       const arrowDelta = event.key === "ArrowLeft" ? -1 : 1;
       const logicalArrowDelta = isRtl ? -arrowDelta : arrowDelta;
 
@@ -1638,9 +1631,7 @@ export default function ModernDataTable<T extends object>(
                                   e.key === "ArrowLeft"
                                 ) {
                                   e.preventDefault();
-                                  const isRtl =
-                                    readDirectionAt(e.currentTarget) ===
-                                    "rtl";
+                                  const isRtl = textDirection === "rtl";
                                   const physicalDelta =
                                     e.key === "ArrowRight" ? 10 : -10;
                                   const logicalDelta = isRtl

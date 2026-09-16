@@ -7,6 +7,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen, within } from '@testing-library/react';
 import { renderWithEngineContext } from '@tests/support/engine';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import type { ColumnDef } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 import ModernDataTable from '../engines/modern';
 
@@ -371,7 +373,9 @@ describe('W7 — resize keyboard parity (LTR + RTL)', () => {
       />
     );
     render(
-      direction === 'rtl' ? <div dir="rtl">{table}</div> : table
+      direction === 'rtl'
+        ? <I18nProvider locale="ar" fallbackLocale="en">{table}</I18nProvider>
+        : table
     );
     // The resize handle lives inside the lazily-dispatched Tooltip engine.
     const handles = await screen.findAllByRole('separator');
@@ -436,7 +440,11 @@ describe('W7 — reorder keyboard parity (LTR + RTL)', () => {
         onColumnReorder={onColumnReorder}
       />
     );
-    render(direction === 'rtl' ? <div dir="rtl">{table}</div> : table);
+    render(
+      direction === 'rtl'
+        ? <I18nProvider locale="ar" fallbackLocale="en">{table}</I18nProvider>
+        : table,
+    );
     // The drag grip lives inside the lazily-dispatched Tooltip engine.
     const grips = await screen.findAllByRole('button', {
       name: /drag to reorder column/i,

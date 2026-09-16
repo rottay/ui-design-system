@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernLocaleSwitcher from '../engines/modern';
 
 /**
@@ -75,11 +77,17 @@ describe('LocaleSwitcher (modern) panel placement', () => {
   });
 
   it('mirrors the overflow test under RTL', () => {
-    document.documentElement.dir = 'rtl';
+    // Direction arrives through the i18n authority the engine now reads, not
+    // `documentElement.dir`; the provider stamps that attribute itself, so the
+    // document still says what the locale says.
     // Under RTL the panel grows toward x=0 from the trigger's right edge:
     // right = 60 leaves 60px of room for a 200px panel, so it must flip.
     measureAt(0, 320);
-    render(<ModernLocaleSwitcher locale="en" onChange={vi.fn()} />);
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernLocaleSwitcher locale="en" onChange={vi.fn()} />
+      </I18nProvider>,
+    );
 
     expect(openPanel()).toHaveAttribute('data-placement', 'end');
   });

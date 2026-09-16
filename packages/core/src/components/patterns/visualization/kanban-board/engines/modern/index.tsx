@@ -15,7 +15,7 @@
  * `role="list"`, `aria-roledescription` "Movable card"). Arrow keys move the
  * focused card — Up/Down reorders inside the column, Left/Right moves it to
  * the adjacent column (inline arrows mirror under RTL via the house
- * `isRtlContext` idiom) — through the same controlled `onItemMove` contract
+ * the shared direction authority) — through the same controlled `onItemMove` contract
  * as drag-and-drop; Enter/Space fires `onItemClick`. Every move (and every
  * blocked edge) is announced through a visually-hidden `aria-live="polite"`
  * region (`data-part="move-announcer"`); focus follows the card to its new
@@ -67,7 +67,7 @@ import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/na
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { useMediaQuery } from '@/infrastructure/runtime/responsive';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useFlipLayout } from '@/graphics/motion/react/runtime';
 import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 
@@ -86,14 +86,6 @@ function toCssLength(value: number | string): string {
   return typeof value === 'number' ? `${value}px` : value;
 }
 
-/** Reading-direction probe (Tree primitive idiom): the nearest explicit
-    `dir` wins; otherwise the document direction applies. */
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest('[dir]');
-  if (scoped) return scoped.getAttribute('dir') === 'rtl';
-  return document.documentElement.dir === 'rtl';
-}
-
 /**
  * Modern Kanban board composed on DS primitives (see the module docblock).
  * Generic over `T` so any item shape can be used with a string key extractor.
@@ -105,6 +97,11 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   // Optional channel with an English floor: the board renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const direction = useOptionalDirection();
+
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
 
@@ -158,7 +155,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   /* Touch move rail: HTML5 drag never fires on a coarse pointer and the arrow
      protocol needs a keyboard, so without these the board is read-only there. */
   const isCoarsePointer = useMediaQuery(TOUCH_POINTER_QUERY);
-  const [boardIsRtl, setBoardIsRtl] = useState(false);
 
   // FLIP layout motion for card moves: a card moving to a different column
   // re-parents in the DOM (React unmounts it from the old column's subtree
@@ -273,7 +269,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         return;
       }
 
-      const rtl = isRtlContext(e.currentTarget);
+      const rtl = direction === 'rtl';
       let intent: KanbanMoveIntent;
       if (e.key === 'ArrowUp') intent = 'prev-item';
       else if (e.key === 'ArrowDown') intent = 'next-item';
@@ -297,13 +293,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
       setPendingFocusId(null);
     }
   }, [columns, pendingFocusId]);
-
-  /* The rail's inline arrows are glyphs, so their direction has to be read
-     from the live tree (the same probe the arrow keys use). */
-  useEffect(() => {
-    const el = boardRef.current;
-    if (el) setBoardIsRtl(isRtlContext(el));
-  }, [isCoarsePointer, columns.length]);
 
   /* Keep the board's scroll-edge posture current: scroll listener for
      position, ResizeObserver for content/container size changes. */
@@ -349,7 +338,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     {
       intent: 'prev-column',
       label: tOr('kanbanBoard.move_prev_column', 'Move to previous column'),
-      icon: boardIsRtl ? (
+      icon: direction === 'rtl' ? (
         <NavigationForwardIcon decorative size={14} />
       ) : (
         <NavigationBackIcon decorative size={14} />
@@ -358,7 +347,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     {
       intent: 'next-column',
       label: tOr('kanbanBoard.move_next_column', 'Move to next column'),
-      icon: boardIsRtl ? (
+      icon: direction === 'rtl' ? (
         <NavigationBackIcon decorative size={14} />
       ) : (
         <NavigationForwardIcon decorative size={14} />

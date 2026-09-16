@@ -79,7 +79,7 @@ import React, {
 import type { CarouselProps, CarouselRef } from '../../contracts';
 import { VisuallyHidden } from '../../../../foundation';
 import { CAROUSEL_DEFAULTS } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useMotionPolicy } from '@/infrastructure/runtime/motion';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
@@ -189,6 +189,11 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     // the channel ahead of the locale JSONs, so behavior is byte-identical
     // until they land).
     const i18n = useOptionalTranslation('components');
+    // The reading direction comes from the shared i18n authority, not a DOM
+    // probe of a node's `dir` chain: the locale knows it on the server too, and
+    // a probe re-derives from paint a fact the provider already holds.
+    const direction = useOptionalDirection();
+
     const carouselLabel = (
       key: string,
       fallback: string,
@@ -314,7 +319,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       const target = event.target as HTMLElement;
       if (target.closest('input, textarea, select, [contenteditable]')) return;
 
-      const isRtl = event.currentTarget.closest('[dir]')?.getAttribute('dir') === 'rtl';
+      const isRtl = direction === 'rtl';
       switch (event.key) {
         case 'ArrowLeft':
           if (vertical) return;
@@ -379,7 +384,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         return;
       }
       if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX || Math.abs(deltaX) <= Math.abs(deltaY)) return;
-      const isRtl = event.currentTarget.closest('[dir]')?.getAttribute('dir') === 'rtl';
+      const isRtl = direction === 'rtl';
       const towardNext = isRtl ? deltaX > 0 : deltaX < 0;
       if (towardNext) next(); else prev();
     };

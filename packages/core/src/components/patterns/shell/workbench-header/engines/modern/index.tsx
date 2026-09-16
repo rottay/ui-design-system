@@ -29,7 +29,7 @@ import React from 'react';
 import type { WorkbenchHeaderProps, WorkbenchQuickAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
 /* English accessibility floors (translatable via `components` ns)     */
@@ -39,16 +39,6 @@ const SAVED_VIEWS_LABEL_KEY = 'workbenchHeader.savedViews';
 const SAVED_VIEWS_LABEL_FALLBACK = 'Saved views';
 const EXCEPTIONS_LABEL_KEY = 'workbenchHeader.exceptions';
 const EXCEPTIONS_LABEL_FALLBACK = '{count} exceptions';
-
-/* ------------------------------------------------------------------ */
-/* RTL-aware direction reading (same contract as the page-shell engine) */
-/* ------------------------------------------------------------------ */
-
-function readDirectionAt(node: Element): 'ltr' | 'rtl' {
-  const explicit = node.closest('[dir]')?.getAttribute('dir');
-  if (explicit === 'rtl' || explicit === 'ltr') return explicit;
-  return getComputedStyle(node).direction === 'rtl' ? 'rtl' : 'ltr';
-}
 
 /* ------------------------------------------------------------------ */
 /* QuickActionButton                                                   */
@@ -171,6 +161,11 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
   // Optional i18n: without an I18nProvider the hook returns null and the
   // English floor renders, byte-identical to the pre-i18n contract.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority, not a DOM
+  // probe of a node's `dir` chain: the locale knows it on the server too, and a
+  // probe re-derives from paint a fact the provider already holds.
+  const direction = useOptionalDirection();
+
   const savedViewsLabel =
     i18n?.tOr(SAVED_VIEWS_LABEL_KEY, SAVED_VIEWS_LABEL_FALLBACK) ?? SAVED_VIEWS_LABEL_FALLBACK;
   // ONE parametric message for the exception badge's accessible name — never
@@ -202,7 +197,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
       nextIndex = buttons.length - 1;
     } else {
       const delta = event.key === 'ArrowRight' ? 1 : -1;
-      const logicalDelta = readDirectionAt(list) === 'rtl' ? -delta : delta;
+      const logicalDelta = direction === 'rtl' ? -delta : delta;
       nextIndex = (fromIndex + logicalDelta + buttons.length) % buttons.length;
     }
     const target = buttons[nextIndex];

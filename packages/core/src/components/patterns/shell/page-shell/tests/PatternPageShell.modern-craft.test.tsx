@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernPageShell from '../engines/modern';
 import type { PageShellProps } from '../contracts';
 import skinStyles from '../../../../../foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css?raw';
@@ -86,13 +88,19 @@ describe('PatternPageShell modern — wave R2+R3 craft contract', () => {
 
   it('mirrors arrow keys under RTL and supports Home/End', () => {
     const onTabChange = vi.fn();
+    // Direction arrives through the i18n authority the engine now reads, not a
+    // bare `dir` wrapper; the provider stamps `dir` itself, so the DOM still
+    // says what the locale says.
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernPageShell {...buildProps({ onTabChange })} />
-      </div>,
+      </I18nProvider>,
     );
 
-    const tablist = screen.getByRole('tablist', { name: 'Page tabs' });
+    // The tablist's accessible name is translated, and this locale is the one
+    // that carries the Arabic dictionary; the tab labels are caller strings, so
+    // they stay. The subject here is the arrow mirroring, not the label.
+    const tablist = screen.getByRole('tablist');
     const billing = screen.getByRole('tab', { name: 'Billing' });
 
     // RTL: ArrowRight is the logical "previous" — from the first tab it wraps

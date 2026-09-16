@@ -9,6 +9,8 @@ import axe from 'axe-core';
 
 import { renderWithEngine } from '@tests/support/engine';
 import type { WorkspaceSwitcherProps } from '../contracts';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernWorkspaceSwitcher from '../engines/modern';
 
 function createProps(overrides: Partial<WorkspaceSwitcherProps> = {}): WorkspaceSwitcherProps {
@@ -301,12 +303,14 @@ describe('ModernWorkspaceSwitcher — settings affordance', () => {
   });
 
   it('mirrors the crossing arrows under RTL', async () => {
-    // Scoped `dir` rather than the document's: the provider owns
-    // documentElement.dir and rewrites it from the tenant locale on mount.
+    // Through the i18n authority the engine now reads. A scoped `dir` used to
+    // be the channel here precisely because the provider owns
+    // documentElement.dir; now the provider is the channel, and it stamps that
+    // attribute itself.
     renderWithEngine(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernWorkspaceSwitcher {...createProps()} />
-      </div>,
+      </I18nProvider>,
       'modern',
     );
     await openPanel();

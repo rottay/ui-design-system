@@ -3,6 +3,8 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { mockMatchMedia } from '@tests/support/browser/match-media';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernKanbanBoard from '../engines/modern';
 
 /**
@@ -23,16 +25,23 @@ function renderBoard(
   onItemClick?: (item: Task, columnId: string) => void,
   dir?: 'rtl',
 ) {
+  const board = (
+    <ModernKanbanBoard<Task>
+      columns={columns}
+      itemKey={(task) => task.id}
+      renderCard={(task) => <span>{task.title}</span>}
+      onItemMove={onItemMove}
+      onItemClick={onItemClick}
+    />
+  );
+  // Direction arrives through the i18n authority the engine now reads. A bare
+  // `dir` wrapper would leave the RTL case VACUOUS: the board would resolve
+  // LTR and the assertion below -- that the intent stays logical -- would hold
+  // for the wrong reason.
   const utils = render(
-    <div dir={dir}>
-      <ModernKanbanBoard<Task>
-        columns={columns}
-        itemKey={(task) => task.id}
-        renderCard={(task) => <span>{task.title}</span>}
-        onItemMove={onItemMove}
-        onItemClick={onItemClick}
-      />
-    </div>,
+    dir === 'rtl'
+      ? <I18nProvider locale="ar" fallbackLocale="en">{board}</I18nProvider>
+      : board,
   );
   return { ...utils, onItemMove };
 }
