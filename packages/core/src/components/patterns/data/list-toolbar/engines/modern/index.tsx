@@ -310,7 +310,7 @@ function FilterButton({
         className='ds-list-toolbar__filter-trigger'
         data-active={!!isActive}
         data-open={open}
-        data-state={isActive && chipState !== 'applied' ? chipState : undefined}
+        data-filter-state={isActive && chipState !== 'applied' ? chipState : undefined}
         aria-expanded={open}
         aria-haspopup='listbox'
         aria-label={activeLabel ? `${pill.label}: ${activeLabel}` : pill.label}
@@ -1173,7 +1173,7 @@ export default function ModernListToolbar({
               key={chip.key}
               data-part='filter-chip'
               className='ds-list-toolbar__filter-chip'
-              data-state={chip.state !== 'applied' ? chip.state : undefined}
+              data-filter-state={chip.state !== 'applied' ? chip.state : undefined}
               closable
               onClose={() => onFilterChange?.(chip.key, '')}
               size='sm'

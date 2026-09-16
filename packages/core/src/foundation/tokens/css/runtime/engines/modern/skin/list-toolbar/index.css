@@ -1,3 +1,7 @@
+/* NAMESPACE (WO-FAM-08): this family is `ds-pattern-list-toolbar`, pinned as it
+   stands. A `ds-<family>` rename would be a rename of the tier's public
+   class, which consumers outside this package select on; the migration is
+   registered for the consumer-readiness lane, never executed inside a cut. */
 /**
  * Modern ListToolbar skin.
  *
@@ -203,7 +207,7 @@
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.ds-button[data-variant] {
+  .ds-list-toolbar__icon-button.ds-button.ds-button {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -234,7 +238,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.ds-button[data-variant]:hover {
+    .ds-list-toolbar__icon-button.ds-button.ds-button:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -451,12 +455,12 @@
    dash; an invalid value needs repair, so its frame tightens to a dotted rule
    and the ink shifts to the semantic error role. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='draft'] {
+  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'] {
   border-style: dashed;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='invalid'] {
+  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'] {
   border-style: dotted;
   border-color: var(--ds-color-error);
   color: var(--ds-color-error);
@@ -1032,7 +1036,7 @@
 }
 
 /* Filter lifecycle on the applied-chips strip. The engine stamps
-   data-state='draft'|'invalid' and mounts the governed status-draft /
+   data-filter-state='draft'|'invalid' and mounts the governed status-draft /
    status-error glyph inside the Tag's icon slot; the skin completes the
    multimodal grammar with border style and text treatment, so the state
    survives hue stripping and forced colors:
@@ -1041,30 +1045,30 @@
    - invalid: error-role frame and ink plus a wavy underline on the value —
      the universal "needs repair" mark that reads without color. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft'] {
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft'] {
   border-style: dashed;
   background: transparent;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid'] {
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid'] {
   border-color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
   [data-part='icon'] {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
   [data-part='icon'] {
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='draft']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
   .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   /* C1: draft must read at two meters — hollow dashed frame + REGULAR weight
      + quieted ink, so the provisional chip is visibly ghosted next to the
@@ -1074,7 +1078,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
   .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
@@ -1435,30 +1439,30 @@
      rule (wide enough to render both lines) plus the wavy value underline,
      which forced colors preserves by remapping it to CanvasText. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='draft'],
+    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='draft'] {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='draft'] {
     border-style: dashed;
     background: Canvas;
     color: CanvasText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-state='invalid'],
+    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
     border-color: ButtonText;
     color: CanvasText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-state='invalid'] {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
     border-style: double;
     border-width: 3px;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-state='invalid']
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
     .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
     color: CanvasText;
     text-decoration-color: CanvasText;
