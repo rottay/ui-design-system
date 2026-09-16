@@ -5618,6 +5618,11 @@
      "at": "2026-09-16 09:46",
      "by": "kimi-admin",
      "note": "Dos rojos preexistentes verificados A/B contra HEAD prístino 533e3c290 (ninguna lane viva los causa; quedan registrados con dueño por adjudicar): (1) FloatButton.test.tsx 'shows back-to-top when scroll crosses the threshold and triggers smooth scroll' — 1 rojo idéntico en arbol y prístino. (2) shape/control-height (kit row 14) 'is consumed as a SECOND factor beside density' — los 3 artefactos facade (bithire/evnto/rottay) listan --ds-table-selection-control-coarse-size con calc(spacing-5 * control-height-scale); causa por adjudicar: artefactos stale (regenerar) vs drift real de contrato; toca la narrativa EMI-02 de orden de build. Ninguno baja umbral; ambos quedan en el registro de reds conocidos de flota."
+    },
+    {
+     "at": "2026-09-16 10:44",
+     "by": "kimi-admin",
+     "note": "Tercer rojo preexistente de gate blocking verificado A/B esta semana: theme-lowering-single-door falla 4 (resolveTheme arity) identico en HEAD prístino y en arbol (60 pasan). Ninguna lane viva lo causa. Queda en el registro de reds de flota con dueno por adjudicar; no se baja umbral."
     }
    ]
   },
@@ -6190,6 +6195,11 @@
      "at": "2026-09-15 19:35",
      "by": "kimi-admin",
      "note": "2026-09-15 kimi-admin: claimed on WO-DER-06's close to hold the transferred scope (not yet in execution). THE FLAT SHAPE'S AUTHORING ROLE (the WO's core): the studio draft transport moves to Theme or a v2 document and the flat shape loses its authoring role; measured fact from Fable's review: liftAuthoredTheme has zero production callers, only tests and the single-door gate import it. THE SERIALIZED/BOUNDARY DATA NAMES allowlisted through the rename, each a data change with this WO as owner (rename only with an explicit migration + pins, never incidental): brandThemePath (capabilities/index.ts:72); staticBrandThemePath (theme-catalog + manifest generation + cascade normalization + probe ingress); the control catalog's keypath-space field brandTheme (catalog/index.ts:128 + ~21 rows — the catalog is the single authority, so renaming it is a schema migration); TenantConfig.brandTheme (13+ suites + mount-tenant-theme fixture); the scripts lowering adapter's input key brandTheme (theme-lowering/index.mjs:231 + pinned key roster); __probeBrandTheme (window key crossing to Playwright); the kind:'brand-theme' discriminator in tenant-preview's source union; the tests/fixtures/brand-themes PATH (four non-test-import reference classes: production packaging constant + drill, provenance record with digest, 5 sealed-tree references, a string assertion). ALSO: the i18n product copy 'Bounded BrandTheme fields' (editorHeading, 5 locales) — user-visible copy, a product decision with the studio lane; the sealed residual of 105 brandtheme occurrences (modern-rescue 35, governance 70) stands under the owner seal; the sealed-tree brandThemeToCssVariables data values (6) ride with it."
+    },
+    {
+     "at": "2026-09-16 10:44",
+     "by": "kimi-admin",
+     "note": "Nucleo semantico INTEGRADO (6e9ef72de, 9 archivos + changeset con 3 contract-diff rows). Auditoria propia: suites 24/554 verdes en mi corrida; single-door 4=4 A/B (preexistente, resolveTheme arity, registrado en EVI-02); authoring/configuration byte-identico a HEAD tras limpieza; discriminador estructural (motion.disposition garantizado por el lift) con test que pinea el BRAZO; brand-studio levanta en la unica frontera al compilador (flat queda como VISTA de panel, no transporte). PENDIENTE (el WO sigue abierto hasta grep-cero): 8 renames serializados (~130 archivos), vocabulario interno brand-studio + prop value, retiro de liftAuthoredTheme, docs tenancy/architecture. Despacho: staticBrandThemePath primero (mayor superficie, cero riesgo semantico, palabra del writer)."
     }
    ]
   }
