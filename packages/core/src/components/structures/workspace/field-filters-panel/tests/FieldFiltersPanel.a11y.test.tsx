@@ -7,15 +7,15 @@ import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-import { FieldFiltersPanel } from '..';
+import { FieldFiltersPanel, type FieldFilterDefinition } from '..';
 import { EngineProvider } from '@/infrastructure/runtime/engines/composition/react/provider';
 
 const mount = (ui: React.ReactElement) =>
   render(<EngineProvider defaultEngine="modern">{ui}</EngineProvider>);
 
-const FILTERS = [
-  { key: 'stage', label: 'Stage', options: [{ value: 'open', label: 'Open' }] },
-  { key: 'owner', label: 'Owner', options: [{ value: 'ada', label: 'Ada' }] },
+const FILTERS: FieldFilterDefinition[] = [
+  { key: 'stage', label: 'Stage', type: 'select', options: [{ value: 'open', label: 'Open' }] },
+  { key: 'owner', label: 'Owner', type: 'select', options: [{ value: 'ada', label: 'Ada' }] },
 ];
 
 describe('FieldFiltersPanel accessibility', () => {

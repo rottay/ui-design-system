@@ -293,9 +293,9 @@
     },
     {
       "id": "flex-modern-preset-gap",
-      "why": "The modern Flex with a preset ('md') gap. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The rung rides `--ds-flex-gap` and the enumerated selector multiplies it by the rhythm scale once; the pair ties in specificity so source order decides.",
+      "why": "The modern Flex with a preset ('md') gap. After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the owned `data-component` stamp; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The rung rides `--ds-flex-gap` and the enumerated selector multiplies it by the rhythm scale once; the pair ties in specificity so source order decides.",
       "requiresSelectors": [
-        ".rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform'] {",
+        ".rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform'] {",
         "gap: var(--ds-flex-gap);",
         "[data-gap-preset='md'],",
         "gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));"
@@ -379,9 +379,9 @@
     },
     {
       "id": "flex-modern-numeric-gap",
-      "why": "The negative half: a NUMERIC gap (8). After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the root part; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The bare number stamps no preset, so the enumerated rung selectors stay unreached and only the unscaled base rule applies.",
+      "why": "The negative half: a NUMERIC gap (8). After the WO-FAM-07 L5 cut the family's Modern arm lives in its own skin (`runtime/engines/modern/skin/<family>`), keyed on the engine class pair plus the owned `data-component` stamp; the shared `layout-primitives` sheet keeps only the frozen engines' scoped base. The class itself is unchanged -- `rottay-*` stays, pinned, because app-bithire selects it live. The bare number stamps no preset, so the enumerated rung selectors stay unreached and only the unscaled base rule applies.",
       "requiresSelectors": [
-        ".rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform'] {",
+        ".rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform'] {",
         "gap: var(--ds-flex-gap);"
       ],
       "html": "<div class=\"rottay-flex rottay-flex--modern\" style=\"--ds-flex-gap:8px\" data-gap=\"uniform\" data-part=\"root\" data-component=\"flex\" data-probe=\"flex-modern-numeric-gap\"><span>a</span><span>b</span></div>",

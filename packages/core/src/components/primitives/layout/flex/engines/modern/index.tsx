@@ -123,13 +123,15 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     return (
       <>
         <div
+          // P-79: the default part precedes the spread, so a caller's own
+          // `data-part` reaches the DOM and owns that node's paint.
+          data-part="root"
           {...rest}
           ref={ref}
           className={combinedClassName}
           style={{ ...resolvedStyle, ...responsive.channels }}
           {...presentationAttributes}
           {...responsive.attrs}
-          data-part="root"
           data-component="flex"
         >
           {children}

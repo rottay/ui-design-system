@@ -400,7 +400,7 @@ describe("leg 6 -- the SCALAR path is Modern-only too (Finding 3)", () => {
     // whole arm moved: every rule that scales a rung now sits in a file only the
     // Modern engine's class can match, and what stays in the shared sheet is
     // scoped to the two frozen engines by name.
-    expect(CSS).toContain(".rottay-flex.rottay-flex--modern[data-part='root']");
+    expect(CSS).toContain(".rottay-flex.rottay-flex--modern[data-component='flex']");
     expect(CSS).toContain(RHYTHM);
     expect(FROZEN_CSS).not.toContain(RHYTHM + ") ");
     for (const line of FROZEN_CSS.split("\n")) {

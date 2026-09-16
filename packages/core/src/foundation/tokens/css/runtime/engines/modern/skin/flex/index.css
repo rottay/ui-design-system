@@ -13,9 +13,13 @@
  * WHY THE RULES MOVED HERE. The same scalar projection runs in all three
  * engines, so `presentation/components/skin/layout-primitives` painted Modern
  * and the two frozen engines from one unscoped rule set. Modern's arm is here
- * now, keyed on the engine class and the root part; what stays there is scoped
- * to `--classic`/`--rustic` with its declarations unchanged, so the frozen
- * engines keep the cascade position they always had.
+ * now, keyed on the engine class and the owned `data-component='flex'` stamp;
+ * what stays there is scoped to `--classic`/`--rustic` with its declarations
+ * unchanged, so the frozen engines keep the cascade position they always had.
+ *
+ * NOT THE PART. `data-part` belongs to the caller: a composite names the Flex it
+ * renders (`header`, `title-group`) so its own skin can address it. The engine
+ * stamps `data-component` after the caller spread, so it cannot be forged away.
  *
  * A RUNG SCALES, A MEASUREMENT DOES NOT. `--ds-flex-gap` carries both a rung
  * (`var(--ds-spacing-4)`) and a caller's measurement (`16px`), so the channel
@@ -25,7 +29,7 @@
  * `[column, row]` may mix a rung with a measurement.
  */
 
-.rottay-flex.rottay-flex--modern[data-part='root'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'] {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -35,73 +39,73 @@
   min-inline-size: 0;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-inline='true'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-inline='true'] {
   display: inline-flex;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='row-reverse'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-direction='row-reverse'] {
   flex-direction: row-reverse;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='column'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-direction='column'] {
   flex-direction: column;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-direction='column-reverse'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-direction='column-reverse'] {
   flex-direction: column-reverse;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-wrap='wrap'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-wrap='wrap'] {
   flex-wrap: wrap;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-wrap='wrap-reverse'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-wrap='wrap-reverse'] {
   flex-wrap: wrap-reverse;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='end'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='end'] {
   justify-content: flex-end;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='center'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='center'] {
   justify-content: center;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='between'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='between'] {
   justify-content: space-between;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='around'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='around'] {
   justify-content: space-around;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-justify='evenly'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-justify='evenly'] {
   justify-content: space-evenly;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='start'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='start'] {
   align-items: flex-start;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='end'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='end'] {
   align-items: flex-end;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='center'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='center'] {
   align-items: center;
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-align='baseline'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-align='baseline'] {
   align-items: baseline;
 }
 
 /* ---- gap: the unscaled base, then the rung that rhythm may size ---- */
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform'] {
   gap: var(--ds-flex-gap);
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split'] {
   column-gap: var(--ds-flex-column-gap);
   row-gap: var(--ds-flex-row-gap);
 }
@@ -111,7 +115,7 @@
  * order -- not escalation -- decides. `none` is absent on purpose: zero has no
  * room to scale.
  */
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='uniform']:where(
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform']:where(
   [data-gap-preset='xs'],
   [data-gap-preset='sm'],
   [data-gap-preset='md'],
@@ -124,7 +128,7 @@
   gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split']:where(
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
   [data-column-gap-preset='xs'],
   [data-column-gap-preset='sm'],
   [data-column-gap-preset='md'],
@@ -137,7 +141,7 @@
   column-gap: calc(var(--ds-flex-column-gap) * var(--ds-rhythm-effective-scale, 1));
 }
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-gap='split']:where(
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
   [data-row-gap-preset='xs'],
   [data-row-gap-preset='sm'],
   [data-row-gap-preset='md'],
@@ -152,12 +156,12 @@
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
-.rottay-flex.rottay-flex--modern[data-part='root'][data-layout-motion='rearrange'] {
+.rottay-flex.rottay-flex--modern[data-component='flex'][data-layout-motion='rearrange'] {
   transition: var(--ds-flex-reflow-transition);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-flex.rottay-flex--modern[data-part='root'][data-layout-motion='rearrange'] {
+  .rottay-flex.rottay-flex--modern[data-component='flex'][data-layout-motion='rearrange'] {
     transition: none;
   }
 }

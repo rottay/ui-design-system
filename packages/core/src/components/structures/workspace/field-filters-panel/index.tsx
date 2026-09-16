@@ -112,7 +112,7 @@ export function FieldFiltersPanel({
     >
       <Flex align="center" justify="between" gap={12} wrap="wrap" data-part="header">
         <Box data-part="header-copy">
-          <Flex align="center" gap={8} wrap="wrap">
+          <Flex align="center" gap={8} wrap="wrap" data-part="title-group">
             <Text
               data-part="title-pill"
               size="xs"
@@ -137,7 +137,7 @@ export function FieldFiltersPanel({
 
       {presets && presets.length > 0 && (
         <Box data-part="presets-region">
-          <Flex align="center" gap={10} wrap="wrap">
+          <Flex align="center" gap={10} wrap="wrap" data-part="presets-row">
             <Text
               data-part="presets-pill"
               size="xs"
