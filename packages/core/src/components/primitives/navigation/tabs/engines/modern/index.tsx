@@ -26,7 +26,6 @@ import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   resolveNavigationIntent,
-  resolveReadingDirectionIsRtl,
 } from '@/components/primitives/runtime/collection/roving-focus';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
 import { TABS_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
@@ -40,7 +39,7 @@ import {
   useDirectionalViewTransition,
 } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import {
   generateResponsiveCSS,
   isResponsiveValue,
@@ -337,6 +336,11 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   // `components.tabs.*` catalogue, then the documented English floor. Without
   // a provider the optional hook is null and the floor answers directly.
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
+  const writingDirection: 'ltr' | 'rtl' = directionIsRtl ? 'rtl' : 'ltr';
+
   const chromeLabels = {
     previous:
       accessibilityLabels?.previous ??
@@ -390,7 +394,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   );
   const [indicatorPosition, setIndicatorPosition] = useState<IndicatorPosition | null>(null);
   const [overflowState, setOverflowState] = useState<OverflowState>(EMPTY_OVERFLOW);
-  const [writingDirection, setWritingDirection] = useState<'ltr' | 'rtl'>('ltr');
 
   const requestedKey = activeKey ?? internalActive;
   const currentKey = items.some((item) => item.key === requestedKey)
@@ -435,9 +438,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         (candidate) => candidate.key === previousKey
       );
       const nextIndex = items.findIndex((candidate) => candidate.key === key);
-      const isRtl = tabListRef.current
-        ? resolveReadingDirectionIsRtl(tabListRef.current)
-        : false;
+      const isRtl = directionIsRtl;
       const direction = directionFromIndexDelta(
         isRtl ? nextIndex : previousIndex,
         isRtl ? previousIndex : nextIndex
@@ -477,7 +478,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       // the horizontal pair follows the reading direction.
       const intent = resolveNavigationIntent(event.key, {
         orientation: 'both',
-        rtl: resolveReadingDirectionIsRtl(event.currentTarget),
+        rtl: directionIsRtl,
       });
 
       // A pointer can land DOM focus on a loading destination that the roving
@@ -537,10 +538,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       return;
     }
 
-    const isRtl = resolveReadingDirectionIsRtl(list);
-    setWritingDirection((current) =>
-      current === (isRtl ? 'rtl' : 'ltr') ? current : isRtl ? 'rtl' : 'ltr'
-    );
+    const isRtl = directionIsRtl;
 
     if (!first || !last || overflow === 'wrap') {
       setOverflowState(EMPTY_OVERFLOW);
@@ -568,7 +566,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         ? previous
         : nextState
     );
-  }, [items, overflow]);
+  }, [directionIsRtl, items, overflow]);
 
   useLayoutEffect(() => {
     const list = tabListRef.current;
@@ -577,9 +575,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     refreshOverflow();
     const activeTab = currentKey ? tabRefs.current.get(currentKey) : null;
     // Scrollport-local: `scrollIntoView` walks every ancestor and yanked the
-    // document even when the tablist did not overflow — see `runtime/reveal`,
-    // which resolves the tablist's own direction for the RTL delta.
-    if (activeTab) revealTabWithinList(list, activeTab);
+    // document even when the tablist did not overflow — see `runtime/reveal`.
+    // The RTL delta takes its direction from the i18n authority, passed in.
+    if (activeTab) revealTabWithinList(list, activeTab, directionIsRtl);
 
     if (recipe !== 'underline' || indicator === 'none' || !currentKey) {
       setIndicatorPosition(null);
@@ -610,7 +608,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       // props and cannot see that; only the observer can. Writing `scrollLeft`
       // changes no element's size, so this cannot re-trigger itself.
       const activeTab = currentKey ? tabRefs.current.get(currentKey) : null;
-      if (activeTab) revealTabWithinList(list, activeTab);
+      if (activeTab) revealTabWithinList(list, activeTab, directionIsRtl);
     });
     observer.observe(list);
     for (const node of tabRefs.current.values()) {
@@ -622,7 +620,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   const scrollRail = (visualDirection: -1 | 1) => {
     const list = tabListRef.current;
     if (!list) return;
-    const isRtl = resolveReadingDirectionIsRtl(list);
+    const isRtl = directionIsRtl;
     const physicalDirection = isRtl ? -visualDirection : visualDirection;
     list.scrollBy?.({
       left: physicalDirection * list.clientWidth * 0.72,

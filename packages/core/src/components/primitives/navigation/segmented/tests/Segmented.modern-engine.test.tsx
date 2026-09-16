@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernSegmented from '../engines/modern';
 
 /**
@@ -88,9 +90,9 @@ describe('Modern Segmented public anatomy', () => {
   it('mirrors ArrowLeft/ArrowRight in an RTL context', () => {
     const onChange = vi.fn();
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernSegmented options={['A', 'B', 'C']} defaultValue="A" onChange={onChange} />
-      </div>
+      </I18nProvider>
     );
 
     const first = screen.getByRole('radio', { name: 'A' });

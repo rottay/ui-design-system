@@ -16,6 +16,8 @@ import React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import { Dropdown as ModernDropdown } from '../engines/modern';
 import type { DropdownPlacement } from '../contracts';
 
@@ -32,12 +34,14 @@ const SUBMENU = {
 afterEach(() => cleanup());
 
 function renderOpen(placement: DropdownPlacement, rtl = false) {
+  // Direction arrives through the i18n authority the engine now reads, not a
+  // bare `dir` wrapper; the provider stamps `dir` itself.
   return render(
-    <div dir={rtl ? 'rtl' : 'ltr'}>
+    <I18nProvider locale={rtl ? 'ar' : 'en'} fallbackLocale="en">
       <ModernDropdown open placement={placement} menu={SUBMENU}>
         <button type="button">Actions</button>
       </ModernDropdown>
-    </div>,
+    </I18nProvider>,
   );
 }
 

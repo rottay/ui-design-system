@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import CalendarModern from '../engines/modern';
 
 function tabStops(): HTMLElement[] {
@@ -53,9 +55,9 @@ describe('Calendar modern roving tab stop', () => {
 
   it('mirrors the arrow axis under dir=rtl', () => {
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <CalendarModern defaultValue={new Date(2026, 2, 15)} />
-      </div>,
+      </I18nProvider>,
     );
     const grid = screen.getByRole('grid');
 

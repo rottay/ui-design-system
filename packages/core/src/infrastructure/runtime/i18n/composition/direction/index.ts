@@ -50,3 +50,17 @@ export function useOptionalDirection(): TextDirection {
     return 'ltr';
   }
 }
+
+/**
+ * The same answer as a boolean, for the mirroring arithmetic that is most of
+ * what reads direction: arrow-key mapping, a scroll delta's sign, a drag axis.
+ *
+ * It exists so a consumer writes `useReadingDirectionIsRtl()` instead of
+ * `useOptionalDirection() === 'rtl'` at nineteen call sites, each of which is a
+ * place the comparison could be written backwards. ONE wrapper, here, beside
+ * the authority -- never one per family, which is how the DOM probe it replaced
+ * ended up re-implemented thirteen times.
+ */
+export function useReadingDirectionIsRtl(): boolean {
+  return useOptionalDirection() === 'rtl';
+}

@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, screen } from '@testing-library/react';
 
 import { renderWithEngine, STABLE_ENGINES } from '@tests/support/engine';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
 
 const items = [
   { key: 'overview', label: 'Overview', children: <div>Overview content</div> },
@@ -160,18 +161,23 @@ describe('Tabs integration', () => {
   it('publishes writing direction and keeps localized controls contract-owned', async () => {
     const { Tabs } = await import('..');
     renderWithEngine(
-      <div dir="rtl" lang="ar" data-tenant="the-management">
-        <Tabs
-          engine="modern"
-          items={items.slice(0, 2)}
-          accessibilityLabels={{
-            previous: 'علامات التبويب السابقة',
-            next: 'علامات التبويب التالية',
-            more: 'جميع علامات التبويب',
-            loading: 'قيد التحميل',
-          }}
-        />
-      </div>,
+      // Direction arrives through the i18n authority the engine now reads; the
+      // provider stamps `dir`/`lang` itself, so the DOM still says what the
+      // locale says. The tenant attribute stays a plain wrapper.
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <div data-tenant="the-management">
+          <Tabs
+            engine="modern"
+            items={items.slice(0, 2)}
+            accessibilityLabels={{
+              previous: 'علامات التبويب السابقة',
+              next: 'علامات التبويب التالية',
+              more: 'جميع علامات التبويب',
+              loading: 'قيد التحميل',
+            }}
+          />
+        </div>
+      </I18nProvider>,
       'modern'
     );
 

@@ -64,10 +64,10 @@ import type { MenuProps, MenuItem as MenuItemInterface, MenuEntry as MenuEntryIn
 import { MENU_DEFAULTS } from '../../contracts';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import {
   resolveNavigationIntent,
   resolveNavigationTarget,
-  resolveReadingDirectionIsRtl,
   useRovingFocus,
   type CollectionOrientation,
   type RovingFocus,
@@ -211,7 +211,7 @@ function MenuItemRow({
             parentKey &&
             resolveNavigationIntent(e.key, {
               orientation: disclosureAxis,
-              rtl: roving.resolveIsRtl(e.currentTarget),
+              rtl: roving.resolveIsRtl(),
             }) === 'previous'
           ) {
             e.preventDefault();
@@ -321,7 +321,7 @@ function SubmenuRow({
           // capture, never from a key-name flip here.
           const disclosure = resolveNavigationIntent(e.key, {
             orientation: disclosureAxis,
-            rtl: roving.resolveIsRtl(e.currentTarget),
+            rtl: roving.resolveIsRtl(),
           });
 
           if (!item.disabled) {
@@ -606,6 +606,10 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
 
   const navigableRows = collectNavigableRows(items ?? [], openKeys);
 
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
+
   const roving = useRovingFocus({
     ids: navigableRows.ids,
     orientation,
@@ -626,7 +630,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
       const row = (e.target as HTMLElement).closest("[data-part='item'], [data-part='trigger']");
       if (!row || !root.contains(row)) return;
 
-      const rtl = resolveReadingDirectionIsRtl(root);
+      const rtl = directionIsRtl;
       const intent = resolveNavigationIntent(e.key, { orientation, rtl });
 
       if (intent === null) {

@@ -9,6 +9,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernMenu from '../engines/modern';
 import { MenuDivider, MenuGroup, MenuItem, MenuSubMenu } from '../compound';
 
@@ -137,8 +139,14 @@ describe('a menu axe accepts', () => {
 
 describe('direction and locale', () => {
   it('walks a horizontal menubar with the arrows mirrored under RTL', () => {
-    document.documentElement.dir = 'rtl';
-    render(<ModernMenu items={items} mode="horizontal" />);
+    // Direction arrives through the i18n authority the kernel now reads.
+    // `document.documentElement.dir` is what the provider WRITES, not what the
+    // components read.
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernMenu items={items} mode="horizontal" />
+      </I18nProvider>,
+    );
     const dashboard = screen.getByText('Dashboard').closest('[data-part="item"]') as HTMLElement;
     const settings = screen.getByText('Settings').closest('[data-part="trigger"]') as HTMLElement;
     fireEvent.focus(dashboard);

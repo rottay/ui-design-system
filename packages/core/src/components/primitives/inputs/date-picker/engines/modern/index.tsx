@@ -29,9 +29,8 @@ import {
   useFieldOverlay,
 } from '../../../../runtime/overlay/field-overlay';
 import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
-import { resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
 import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { TimeDateIcon } from '@/graphics/icons/semantic/generated/roles/time-date';
@@ -311,6 +310,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   superNextIcon,
 }) => {
   const { t, label, locale } = useDatePickerCopy();
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const today = useMemo(() => new Date(), []);
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -349,7 +351,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   const handleGridKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       const base = focusedDate || selectedDate || today;
-      const rtl = resolveReadingDirectionIsRtl(e.currentTarget as HTMLElement);
+      const rtl = directionIsRtl;
       const newDate = resolveEnabledCalendarKeyDate(base, e, isDisabled, { rtl, weekStartsOn: weekStart });
 
       if (newDate) {

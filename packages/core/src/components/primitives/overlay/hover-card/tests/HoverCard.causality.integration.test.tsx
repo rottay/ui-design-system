@@ -8,6 +8,8 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { readAnatomyBones } from '@/components/primitives/feedback/skeleton/runtime/anatomy-renderer';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernHoverCard from '../engines/modern';
 import {
   AXE_SCOPES,
@@ -20,8 +22,9 @@ import {
 } from '@tests/support/family-causality';
 
 function cardMarkup(dir: 'ltr' | 'rtl' = 'ltr'): { html: string; placement: string } {
+  // Direction arrives through the i18n authority the engine now reads.
   const view = render(
-    <div dir={dir}>
+    <I18nProvider locale={dir === 'rtl' ? 'ar' : 'en'} fallbackLocale="en">
       <ModernHoverCard
         open
         side="bottom"
@@ -29,7 +32,7 @@ function cardMarkup(dir: 'ltr' | 'rtl' = 'ltr'): { html: string; placement: stri
         content={<p>Ada Lovelace, platform owner</p>}
         trigger={<a href="#ada">@ada</a>}
       />
-    </div>,
+    </I18nProvider>,
   );
   const trigger = view.container.querySelector<HTMLElement>("[data-part='trigger']")!;
   const placement = trigger.querySelector("[data-part='surface']")!.getAttribute('data-placement')!;

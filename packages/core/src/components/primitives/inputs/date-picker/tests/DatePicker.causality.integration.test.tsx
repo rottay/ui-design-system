@@ -126,8 +126,14 @@ describe('date-picker calendar, language and accessibility', () => {
     expect(screen.getByText('April 2026')).toBeInTheDocument();
     ltr.unmount();
 
-    render(<ModernDatePicker open defaultValue="2026-03-10" aria-label="Start" />);
-    grid().closest('[data-part="panel"]')?.setAttribute('dir', 'rtl');
+    // Direction arrives through the i18n authority these families now read.
+    // The manual `dir` stamp on the portalled panel existed only to feed the
+    // DOM probe across the portal boundary; the locale crosses it by context.
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernDatePicker open defaultValue="2026-03-10" aria-label="Start" />
+      </I18nProvider>,
+    );
     const rtlSelected = within(grid()).getByRole('gridcell', { selected: true });
     rtlSelected.focus();
     fireEvent.keyDown(rtlSelected, { key: 'ArrowRight' });

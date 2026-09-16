@@ -57,7 +57,8 @@ import React, { useId, useState } from 'react';
 import type { MenuSubMenuProps } from '../../contracts';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
-import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '@/components/primitives/runtime/collection/roving-focus';
+import { resolveNavigationIntent } from '@/components/primitives/runtime/collection/roving-focus';
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // MenuSubMenu Component
@@ -79,6 +80,9 @@ export function MenuSubMenu({
 }: MenuSubMenuProps): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
   const interaction = useInteractionState({ disabled });
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const panelId = `menu-submenu-${useId().replace(/:/g, '')}`;
 
   const handleTitleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -101,7 +105,7 @@ export function MenuSubMenu({
     }
     const intent = resolveNavigationIntent(e.key, {
       orientation: 'horizontal',
-      rtl: resolveReadingDirectionIsRtl(e.currentTarget),
+      rtl: directionIsRtl,
     });
     if (intent === 'next' && !isOpen) {
       e.preventDefault();

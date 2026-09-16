@@ -25,10 +25,13 @@ export const SELECTED_OPTION_SELECTOR = '[data-part="option"][aria-checked="true
  * Reveal the selected option inside a Segmented root.
  *
  * @returns The element revealed, or `null` when there is no selection.
+ *
+ * `isRtl` arrives from the caller, which is a component and reads the i18n
+ * authority; nothing here measures direction.
  */
-export function revealSelectedOption(root: HTMLElement): HTMLElement | null {
+export function revealSelectedOption(root: HTMLElement, isRtl: boolean): HTMLElement | null {
   const selected = root.querySelector<HTMLElement>(SELECTED_OPTION_SELECTOR);
   if (!selected) return null;
-  revealInlineWithinScroller(root, selected);
+  revealInlineWithinScroller(root, selected, isRtl);
   return selected;
 }

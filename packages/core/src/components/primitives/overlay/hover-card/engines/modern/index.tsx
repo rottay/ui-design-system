@@ -41,7 +41,7 @@ import React, { useState, useRef, useCallback, useEffect, useId, isValidElement,
 import type { HoverCardProps } from '../../contracts';
 import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
-import { resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { usePresence } from '@/graphics/motion/react/runtime';
 
 /**
@@ -70,6 +70,10 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     overlayClassName,
     overlayStyle,
   } = props;
+
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
 
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;
@@ -189,7 +193,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       return placement;
     }
     if (!anchorEl) return placement;
-    if (!resolveReadingDirectionIsRtl(anchorEl)) return placement;
+    if (!directionIsRtl) return placement;
     return (placement.endsWith('-start')
       ? placement.replace('-start', '-end')
       : placement.replace('-end', '-start')) as ReturnType<typeof resolveOverlayPlacement>;

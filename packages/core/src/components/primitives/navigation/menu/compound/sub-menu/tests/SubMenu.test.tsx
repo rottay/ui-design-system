@@ -10,18 +10,22 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import { MenuSubMenu } from '../index';
 import { MenuItem } from '../../item';
 
 function renderSub(props: Partial<React.ComponentProps<typeof MenuSubMenu>> = {}, dir: 'ltr' | 'rtl' = 'ltr') {
+  // Direction arrives through the i18n authority the kernel now reads, not a
+  // bare `dir` wrapper; the provider stamps `dir` itself.
   return render(
-    <div dir={dir}>
+    <I18nProvider locale={dir === 'rtl' ? 'ar' : 'en'} fallbackLocale="en">
       <ul role="menu">
         <MenuSubMenu itemKey="sub" title="Sub" {...props}>
           <MenuItem itemKey="child">Child</MenuItem>
         </MenuSubMenu>
       </ul>
-    </div>,
+    </I18nProvider>,
   );
 }
 

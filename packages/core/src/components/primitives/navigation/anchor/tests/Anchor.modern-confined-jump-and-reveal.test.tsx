@@ -4,6 +4,8 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import { Anchor, Link } from '../engines/modern';
 
 const originalScrollTo = window.scrollTo;
@@ -176,13 +178,13 @@ describe('Anchor modern: horizontal scrollport reveal', () => {
 describe('Anchor modern: direction resolution', () => {
   it('mirrors the horizontal arrows from the dir markup, not only computed style', () => {
     const { container } = render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <Anchor direction="horizontal">
           <Link href="#a" title="Alpha" />
           <Link href="#b" title="Bravo" />
           <Link href="#c" title="Charlie" />
         </Anchor>
-      </div>
+      </I18nProvider>
     );
     const root = container.querySelector("[data-part='root']") as HTMLElement;
 

@@ -10,6 +10,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernTabs from '../engines/modern';
 import { TabPane } from '../compound';
 
@@ -145,8 +147,15 @@ describe('a tab tree axe accepts', () => {
 
 describe('direction and locale', () => {
   it('walks the tablist with the horizontal arrows mirrored under RTL and both vertical arrows live', () => {
-    document.documentElement.dir = 'rtl';
-    render(<ModernTabs items={ITEMS} defaultActiveKey="overview" />);
+    // Direction arrives through the i18n authority the kernel now reads.
+    // `document.documentElement.dir` is what the provider WRITES, not what the
+    // components read, so setting it by hand left this case asserting LTR
+    // behaviour under an RTL title.
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernTabs items={ITEMS} defaultActiveKey="overview" />
+      </I18nProvider>,
+    );
     const overview = screen.getByRole('tab', { name: 'Overview' });
     const details = screen.getByRole('tab', { name: /Details/ });
     overview.focus();
@@ -167,12 +176,12 @@ describe('direction and locale', () => {
   it('keeps an Arabic label as the tab name and the chrome copy from accessibilityLabels', () => {
     const label = 'نظرة عامة';
     render(
-      <div dir="rtl" lang="ar">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernTabs
           items={[{ key: 'ar', label, children: 'body' }, { key: 'b', label: 'ب', loading: true }]}
           accessibilityLabels={{ loading: 'قيد التحميل' }}
         />
-      </div>,
+      </I18nProvider>,
     );
     const tab = screen.getByRole('tab', { name: label });
     expect(tab.querySelector('[data-part="tab-label"]')).toHaveTextContent(label);

@@ -4,6 +4,8 @@ import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernBreadcrumb from '../engines/modern';
 import type { BreadcrumbItem } from '../contracts';
 
@@ -110,9 +112,9 @@ describe('Breadcrumb modern trail parking', () => {
 
   it('parks toward the negative end under RTL declared in markup', () => {
     const { container } = render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernBreadcrumb items={ITEMS} />
-      </div>
+      </I18nProvider>
     );
     const root = container.querySelector("[data-part='root']") as HTMLElement;
     makeClipped(root);

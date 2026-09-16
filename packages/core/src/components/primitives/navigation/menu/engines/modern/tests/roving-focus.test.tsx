@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernMenu from '../index';
 
 const items = [
@@ -88,9 +90,9 @@ describe('Modern Menu roving focus', () => {
     unmount();
 
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernMenu items={items} mode="horizontal" />
-      </div>
+      </I18nProvider>
     );
 
     fireEvent.keyDown(row('Dashboard'), { key: 'ArrowRight' });

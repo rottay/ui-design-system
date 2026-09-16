@@ -30,6 +30,8 @@ vi.mock('../../../runtime/overlay/positioning', async (importOriginal) => {
   };
 });
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernHoverCard from '../engines/modern';
 
 afterEach(() => {
@@ -77,27 +79,27 @@ describe('HoverCard modern engine — align mirrors along the inline axis', () =
 
   it('mirrors bottom-start to bottom-end inside a dir="rtl" subtree', () => {
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernHoverCard open side="bottom" align="start" content={<div>Card</div>} trigger={<span>Hover</span>} />
-      </div>,
+      </I18nProvider>,
     );
     expect(lastPlacement()).toBe('bottom-end');
   });
 
   it('mirrors top-end to top-start inside a dir="rtl" subtree', () => {
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernHoverCard open side="top" align="end" content={<div>Card</div>} trigger={<span>Hover</span>} />
-      </div>,
+      </I18nProvider>,
     );
     expect(lastPlacement()).toBe('top-start');
   });
 
   it('does NOT mirror block-axis alignment (side=left stays left-start)', () => {
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernHoverCard open side="left" align="start" content={<div>Card</div>} trigger={<span>Hover</span>} />
-      </div>,
+      </I18nProvider>,
     );
     expect(lastPlacement()).toBe('left-start');
   });

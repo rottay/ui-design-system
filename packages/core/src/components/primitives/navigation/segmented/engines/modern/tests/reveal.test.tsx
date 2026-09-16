@@ -3,6 +3,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernSegmented from '../index';
 
 /**
@@ -333,9 +335,9 @@ describe('Modern Segmented reveal', () => {
     layout.direction = 'rtl';
 
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernSegmented ariaLabel="Stage" options={['A', 'B', 'C']} defaultValue="C" />
-      </div>
+      </I18nProvider>
     );
 
     // Under the spec-compliant RTL model the offsets run from -(max) to 0, so
@@ -387,9 +389,9 @@ describe('Modern Segmented reveal', () => {
     layout.widths = [100, 400];
 
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernSegmented ariaLabel="Stage" options={['A', 'B']} defaultValue="B" />
-      </div>
+      </I18nProvider>
     );
 
     expect(groupRoot().scrollLeft).toBe(-100);
@@ -397,24 +399,24 @@ describe('Modern Segmented reveal', () => {
     expect(selected.right).toBe(viewBounds().end);
   });
 
-  it('re-reveals when an ancestor flips direction on a live tree', () => {
+  it('re-reveals when the locale flips direction on a live tree', () => {
     // The locale-switch case. Same value, same options, same sizes — so neither
     // a dependency list nor a ResizeObserver has anything to react to — but the
     // scroll origin and every physical placement have just inverted. A test that
     // sets RTL before mount cannot see this; the flip has to happen live.
     layout.widths = [100, 400];
 
-    const tree = (dir: 'ltr' | 'rtl') => (
-      <div dir={dir}>
+    const tree = (locale: 'en' | 'ar') => (
+      <I18nProvider locale={locale} fallbackLocale="en">
         <ModernSegmented ariaLabel="Stage" options={['A', 'B']} defaultValue="B" />
-      </div>
+      </I18nProvider>
     );
 
-    const { rerender } = render(tree('ltr'));
+    const { rerender } = render(tree('en'));
     expect(groupRoot().scrollLeft).toBe(100);
 
     layout.direction = 'rtl';
-    rerender(tree('rtl'));
+    rerender(tree('ar'));
 
     expect(groupRoot().scrollLeft).toBe(-100);
     expect(radio('B').getBoundingClientRect().right).toBe(viewBounds().end);

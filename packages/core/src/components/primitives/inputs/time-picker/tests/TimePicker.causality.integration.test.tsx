@@ -112,9 +112,15 @@ describe('time-picker keyboard, language and accessibility', () => {
     expect(minutes.contains(document.activeElement)).toBe(true);
     ltr.unmount();
 
-    render(<ModernTimePicker defaultValue="09:30:00" aria-label="Start" />);
+    // Direction arrives through the i18n authority these families now read.
+    // The manual `dir` stamp on the portalled panel existed only to feed the
+    // DOM probe across the portal boundary; the locale crosses it by context.
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernTimePicker defaultValue="09:30:00" aria-label="Start" />
+      </I18nProvider>,
+    );
     [hours, minutes] = openColumns();
-    hours.closest('[data-part="panel"]')?.setAttribute('dir', 'rtl');
     const selected = hours.querySelector<HTMLElement>('[data-selected="true"]')!;
     selected.focus();
     fireEvent.keyDown(selected, { key: 'ArrowLeft' });

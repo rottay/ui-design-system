@@ -64,6 +64,7 @@ import type { SegmentedProps, SegmentedOption } from "../../contracts";
 import { SEGMENTED_DEFAULTS } from "../../contracts";
 import { useRovingFocus } from "@/components/primitives/runtime/collection/roving-focus";
 import { revealSelectedOption } from "../../runtime/reveal";
+import { useReadingDirectionIsRtl } from "@/infrastructure/runtime/i18n";
 import { composeRefs } from "@/components/primitives/foundation/compose-refs";
 import { partAttributes, useInteractionState } from "../../../../../../foundation/behavior";
 
@@ -201,6 +202,10 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
      * Internal state for uncontrolled mode.
      * Only used when `value` prop is not provided.
      */
+    // The reading direction comes from the shared i18n authority; this family
+    // measures nothing of its own.
+    const directionIsRtl = useReadingDirectionIsRtl();
+
     const [internalValue, setInternalValue] = useState(defaultValue);
 
     /** Resolved current value - controlled or uncontrolled */
@@ -340,7 +345,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     // writes `scrollLeft`, and a scroll write schedules no React render.
     useIsomorphicLayoutEffect(() => {
       const root = rootRef.current;
-      if (root) revealSelectedOption(root);
+      if (root) revealSelectedOption(root, directionIsRtl);
     });
 
     // The OBSERVER answers the opposite case — geometry changing with no render
@@ -350,7 +355,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       const root = rootRef.current;
       if (!root || typeof ResizeObserver === "undefined") return;
 
-      const observer = new ResizeObserver(() => revealSelectedOption(root));
+      const observer = new ResizeObserver(() => revealSelectedOption(root, directionIsRtl));
 
       // Observe the scrollport AND EVERY option, not just the selected one.
       // When a PRECEDING SIBLING grows it pushes the selected option along the

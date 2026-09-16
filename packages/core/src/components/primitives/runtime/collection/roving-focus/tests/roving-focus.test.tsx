@@ -2,6 +2,8 @@ import React, { StrictMode, useEffect } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import {
   resolveNavigationIntent,
   resolveNavigationTarget,
@@ -152,11 +154,14 @@ describe('roving-focus kernel: navigation', () => {
     expect(tabStops()[0]).toHaveTextContent('a');
   });
 
-  it('mirrors the horizontal axis under dir="rtl"', () => {
+  it('mirrors the horizontal axis under an RTL locale', () => {
+    // Direction arrives from the i18n authority, so the seam is the locale,
+    // not a `dir` attribute: the kernel measures nothing and a bare `dir`
+    // wrapper would leave this case asserting LTR behaviour twice.
     const { unmount } = render(
-      <div dir="ltr">
+      <I18nProvider locale="en" fallbackLocale="en">
         <Collection ids={ids} orientation="horizontal" />
-      </div>
+      </I18nProvider>
     );
 
     fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowRight' });
@@ -164,9 +169,9 @@ describe('roving-focus kernel: navigation', () => {
     unmount();
 
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <Collection ids={ids} orientation="horizontal" />
-      </div>
+      </I18nProvider>
     );
 
     fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowRight' });
@@ -176,11 +181,13 @@ describe('roving-focus kernel: navigation', () => {
     expect(screen.getByTestId('a')).toHaveFocus();
   });
 
-  it('lets an explicit rtl flag override the DOM probe', () => {
+  it('lets an explicit rtl flag override the authority', () => {
+    // A family that owns a direction axis of its own (Rate) passes the boolean
+    // and never consults the locale.
     render(
-      <div dir="ltr">
+      <I18nProvider locale="en" fallbackLocale="en">
         <Collection ids={ids} orientation="horizontal" rtl />
-      </div>
+      </I18nProvider>
     );
 
     fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowRight' });
@@ -252,32 +259,34 @@ describe('roving-focus kernel: controlled active', () => {
 });
 
 describe('roving-focus kernel: reading direction resolves live', () => {
-  it('re-resolves on every interaction, so a live dir flip on the SAME mounted tree mirrors both ways', () => {
+  it('follows a live locale flip on the SAME mounted tree, mirroring both ways', () => {
     // This is exactly the case a cached-direction implementation cannot
-    // handle: capture direction once on the FIRST navigation and nothing
-    // ever invalidates it, so a live locale flip leaves the horizontal
-    // arrows mirrored the wrong way with no error and no re-render to fix
-    // it. Nothing here unmounts -- `rerender` updates the SAME `<div dir>`
-    // element, which is the failure a two-separate-mounts test cannot see.
-    const tree = (dir: 'ltr' | 'rtl') => (
-      <div dir={dir}>
+    // handle: capture direction once on the FIRST navigation and nothing ever
+    // invalidates it, so a live locale flip leaves the horizontal arrows
+    // mirrored the wrong way with no error to show for it. Nothing here
+    // unmounts -- `rerender` switches the locale on the SAME tree, which is
+    // the failure a two-separate-mounts test cannot see. Reading the authority
+    // makes freshness a property of the source: the provider re-renders every
+    // consumer, so the kernel does not have to re-measure anything.
+    const tree = (locale: 'en' | 'ar') => (
+      <I18nProvider locale={locale} fallbackLocale="en">
         <Collection ids={ids} orientation="horizontal" />
-      </div>
+      </I18nProvider>
     );
 
-    const { rerender } = render(tree('ltr'));
+    const { rerender } = render(tree('en'));
 
     // Navigate once while LTR -- the exact trigger a first-navigation cache
     // would key its capture on.
     fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowRight' });
     expect(screen.getByTestId('b')).toHaveFocus();
 
-    rerender(tree('rtl'));
+    rerender(tree('ar'));
     fireEvent.keyDown(screen.getByTestId('b'), { key: 'ArrowRight' });
     // RTL mirrors ArrowRight to "previous".
     expect(screen.getByTestId('a')).toHaveFocus();
 
-    rerender(tree('ltr'));
+    rerender(tree('en'));
     fireEvent.keyDown(screen.getByTestId('a'), { key: 'ArrowRight' });
     expect(screen.getByTestId('b')).toHaveFocus();
   });

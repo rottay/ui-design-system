@@ -66,7 +66,7 @@ import React from 'react';
 import type { PaginationProps } from '../../contracts';
 import { PAGINATION_DEFAULTS } from '../../contracts';
 import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { revealInlineWithinScroller } from '../../../../foundation/scroll-reveal';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
@@ -280,6 +280,9 @@ function SizeSelect({
  */
 export default function ModernPagination(props: PaginationProps): React.ReactElement {
   const translation = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
 
   const {
     current,
@@ -349,8 +352,8 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
     const currentButton = row?.querySelector<HTMLElement>(
       '[data-part="pagination-page-button"][data-current="true"]'
     );
-    if (row && currentButton) revealInlineWithinScroller(row, currentButton);
-  }, [current]);
+    if (row && currentButton) revealInlineWithinScroller(row, currentButton, directionIsRtl);
+  }, [current, directionIsRtl]);
 
   // A boundary page disables the edge button that was just activated, and a
   // disabled element cannot hold focus — rescue it instead of dropping to body.

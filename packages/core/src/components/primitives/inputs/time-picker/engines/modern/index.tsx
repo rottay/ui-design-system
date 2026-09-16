@@ -19,7 +19,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import { isTypeaheadKey, resolveListboxTarget, resolveTypeaheadTarget } from '../../../../runtime/collection/listbox';
-import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import { resolveNavigationIntent } from '../../../../runtime/collection/roving-focus';
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import type { TimePickerProps, TimeRangePickerProps, TimePickerPlacement } from '../../contracts';
@@ -128,7 +129,7 @@ const columnTypeahead = new WeakMap<HTMLElement, TypeaheadState>();
  * edges and type-ahead; the horizontal intent hops to the sibling column in the
  * reading direction. Focus moves only; selection commits on activation.
  */
-function handleColumnKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+function handleColumnKeyDown(event: React.KeyboardEvent<HTMLDivElement>, isRtl: boolean): void {
   const column = event.currentTarget;
   const target = event.target as HTMLElement | null;
   const current = target?.closest<HTMLButtonElement>('[data-part="time-option"]');
@@ -144,7 +145,7 @@ function handleColumnKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
     return;
   }
 
-  const intent = resolveNavigationIntent(event.key, { orientation: 'horizontal', rtl: resolveReadingDirectionIsRtl(column) });
+  const intent = resolveNavigationIntent(event.key, { orientation: 'horizontal', rtl: isRtl });
   if (intent === 'next' || intent === 'previous') {
     const panel = column.closest('[data-part="panel"]');
     const columns = Array.from(panel?.querySelectorAll<HTMLElement>('[data-part="time-column"]') ?? []);
@@ -248,6 +249,14 @@ const TimePanel: React.FC<TimePanelProps> = ({
   renderExtraFooter,
 }) => {
   const tOr = useTimePickerTranslation();
+  // The reading direction comes from the shared i18n authority. `handleColumnKeyDown`
+  // is a module-level handler, not a component, so it cannot ask for itself: the
+  // component that attaches it passes the value in.
+  const directionIsRtl = useReadingDirectionIsRtl();
+  const columnKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => handleColumnKeyDown(event, directionIsRtl),
+    [directionIsRtl]
+  );
   const hoursRef = useRef<HTMLDivElement>(null);
   const minutesRef = useRef<HTMLDivElement>(null);
   const secondsRef = useRef<HTMLDivElement>(null);
@@ -330,7 +339,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
               data-part="time-column"
               role="listbox"
               aria-label={col.label}
-              onKeyDown={handleColumnKeyDown}
+              onKeyDown={columnKeyDown}
             >
               {col.options.map((opt) => (
                 <TimeOptionButton
@@ -362,7 +371,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
               data-column="meridiem"
               role="listbox"
               aria-label={meridiemLabel}
-              onKeyDown={handleColumnKeyDown}
+              onKeyDown={columnKeyDown}
             >
               {(['am', 'pm'] as const).map((mer) => (
                 <TimeOptionButton

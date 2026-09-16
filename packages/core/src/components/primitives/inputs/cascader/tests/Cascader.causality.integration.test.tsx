@@ -130,13 +130,15 @@ describe('cascader direction, language and accessibility', () => {
     await waitFor(() => expect(document.activeElement).toHaveTextContent('Portugal'));
     ltr.unmount();
 
+    // Direction arrives through the i18n authority these families now read.
+    // The manual `dir` stamp on the portalled dropdown existed only to feed the
+    // DOM probe across the portal boundary; the locale crosses it by context.
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernCascader options={OPTIONS} />
-      </div>,
+      </I18nProvider>,
     );
     const portugal = await openFirstColumn();
-    portugal.closest('[data-part="dropdown"]')?.setAttribute('dir', 'rtl');
     portugal.focus();
     fireEvent.keyDown(portugal, { key: 'ArrowRight' });
     expect(screen.queryByRole('option', { name: /Lisbon/ })).toBeNull();

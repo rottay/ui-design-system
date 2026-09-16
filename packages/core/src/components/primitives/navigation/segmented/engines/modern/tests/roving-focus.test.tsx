@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import ModernSegmented from '../index';
 
 const radio = (name: string) => screen.getByRole('radio', { name });
@@ -15,9 +17,9 @@ describe('Modern Segmented roving focus', () => {
   it('walks the vertical axis, which stays direction-neutral in RTL', () => {
     const onChange = vi.fn();
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernSegmented options={['A', 'B', 'C']} defaultValue="A" onChange={onChange} />
-      </div>
+      </I18nProvider>
     );
 
     // The horizontal pair mirrors under RTL; the vertical pair never does.
@@ -43,9 +45,9 @@ describe('Modern Segmented roving focus', () => {
   it('keeps Home and End direction-neutral under RTL', () => {
     const onChange = vi.fn();
     render(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en">
         <ModernSegmented options={['A', 'B', 'C']} defaultValue="B" onChange={onChange} />
-      </div>
+      </I18nProvider>
     );
 
     fireEvent.keyDown(radio('B'), { key: 'Home' });
@@ -81,10 +83,10 @@ describe('Modern Segmented roving focus', () => {
  *
  * The KEYBOARD half lived in the shared roving-focus kernel, which captured
  * reading direction into a ref on the first navigation and never recomputed it.
- * Navigate once in LTR, flip an ancestor to `dir="rtl"` on the SAME mounted
- * tree, and the horizontal arrows kept the stale mapping — nothing remounts, so
- * nothing re-captured. Its pure resolver was always correct; only the caching
- * was not. The law now resolves direction at the start of every interaction.
+ * Navigate once in LTR, flip the locale on the SAME mounted tree, and the
+ * horizontal arrows kept the stale mapping — nothing remounts, so nothing
+ * re-captured. The kernel now reads the i18n authority, so freshness is a
+ * property of the source: the provider re-renders every consumer.
  *
  * The REVEAL half is asserted in `reveal.test.tsx`. Together they matter more
  * than separately: with only the reveal fixed, the option scrolled into view at
@@ -98,26 +100,26 @@ describe('Modern Segmented roving focus', () => {
  * becomes a test defending the bug.
  */
 describe('Modern Segmented keyboard direction after a live locale flip', () => {
-  const tree = (dir: 'ltr' | 'rtl', onChange: (value: string | number) => void) => (
-    <div dir={dir}>
+  const tree = (locale: 'en' | 'ar', onChange: (value: string | number) => void) => (
+    <I18nProvider locale={locale} fallbackLocale="en">
       <ModernSegmented
         ariaLabel="Stage"
         options={['A', 'B', 'C']}
         defaultValue="B"
         onChange={onChange}
       />
-    </div>
+    </I18nProvider>
   );
 
   it('mirrors the horizontal arrows after an ancestor flips to RTL', () => {
     const onChange = vi.fn();
-    const { rerender } = render(tree('ltr', onChange));
+    const { rerender } = render(tree('en', onChange));
 
     // This first navigation is what the old law CAPTURED direction on.
     fireEvent.keyDown(radio('B'), { key: 'ArrowRight' });
     expect(onChange).toHaveBeenLastCalledWith('C');
 
-    rerender(tree('rtl', onChange));
+    rerender(tree('ar', onChange));
 
     // Under RTL the horizontal pair mirrors, so ArrowRight is PREVIOUS. With a
     // cached LTR direction this advanced and wrapped to 'A' instead.
@@ -129,12 +131,12 @@ describe('Modern Segmented keyboard direction after a live locale flip', () => {
     // A one-way fix would pass the test above and still strand anyone switching
     // back, so the return trip is asserted rather than assumed symmetric.
     const onChange = vi.fn();
-    const { rerender } = render(tree('rtl', onChange));
+    const { rerender } = render(tree('ar', onChange));
 
     fireEvent.keyDown(radio('B'), { key: 'ArrowRight' });
     expect(onChange).toHaveBeenLastCalledWith('A');
 
-    rerender(tree('ltr', onChange));
+    rerender(tree('en', onChange));
 
     fireEvent.keyDown(radio('A'), { key: 'ArrowRight' });
     expect(onChange).toHaveBeenLastCalledWith('B');
@@ -145,7 +147,7 @@ describe('Modern Segmented keyboard direction after a live locale flip', () => {
     // never flipping always resolved correctly, which is why every pre-existing
     // RTL test passed and none of them reached the defect.
     const onChange = vi.fn();
-    render(tree('rtl', onChange));
+    render(tree('ar', onChange));
 
     fireEvent.keyDown(radio('B'), { key: 'ArrowRight' });
     expect(onChange).toHaveBeenLastCalledWith('A');

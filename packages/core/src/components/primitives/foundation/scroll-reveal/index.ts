@@ -110,22 +110,6 @@ export function computeRevealDelta(geometry: RevealAxisGeometry): number {
   return 0;
 }
 
-/**
- * Resolve writing direction from SEMANTIC MARKUP before computed CSS.
- *
- * `dir="rtl"` on an ancestor is the authoritative declaration of direction, and
- * reading it first matches the Tabs family, which resolves direction the same
- * way for the same reason. It is also the only formulation that works in
- * jsdom, where the `dir` attribute does not cascade into `getComputedStyle`.
- * Computed style remains the fallback for the CSS-only `direction: rtl` case.
- */
-function elementDirection(element: HTMLElement): 'ltr' | 'rtl' {
-  const owner = element.closest?.('[dir]') as HTMLElement | null;
-  if (owner?.dir === 'rtl') return 'rtl';
-  if (owner?.dir === 'ltr') return 'ltr';
-  return getComputedStyle(element).direction === 'rtl' ? 'rtl' : 'ltr';
-}
-
 /** `parseFloat` that answers 0 for the empty strings a detached style returns. */
 function pixels(value: string): number {
   const parsed = Number.parseFloat(value);
@@ -149,17 +133,25 @@ function pixels(value: string): number {
  * box while scrolling happens inside the padding box. A classic scrollbar
  * gutter is NOT subtracted: a horizontal scrollbar sits on the block edge, so
  * it cannot occlude either inline edge of the reveal.
+ *
+ * DIRECTION ARRIVES AS A PARAMETER. This helper used to resolve it by probing
+ * the scroller's `[dir]` chain with a computed-style fallback, which made a
+ * geometry function that measures the DOM twice: once for the boxes it needs,
+ * and once for a fact the i18n authority already holds. The caller is a
+ * component and reads `useReadingDirectionIsRtl()`; what stays here is
+ * arithmetic, which is also what makes it testable without a layout.
  */
 export function revealInlineWithinScroller(
   scroller: HTMLElement,
-  item: HTMLElement
+  item: HTMLElement,
+  isRtl: boolean
 ): number {
   const view = scroller.getBoundingClientRect();
   const rect = item.getBoundingClientRect();
   const styles = getComputedStyle(scroller);
 
   const inline = computeRevealDelta({
-    logicalStart: elementDirection(scroller) === 'rtl' ? 'right' : 'left',
+    logicalStart: isRtl ? 'right' : 'left',
     viewStart: view.left + pixels(styles.borderLeftWidth),
     viewEnd: view.right - pixels(styles.borderRightWidth),
     itemStart: rect.left,

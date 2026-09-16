@@ -21,14 +21,15 @@
  * `vertical` the kernel owns Up/Down and leaves Left/Right to the submenu
  * disclosure, and under `horizontal` the axes swap.
  *
- * READING-DIRECTION LAW. Direction is resolved at the START OF EVERY
- * INTERACTION, never cached. The previous law captured once per instance on
- * first navigation, following the ContextMenu precedent of capturing at open
- * time; that is wrong for a collection that outlives a locale change. Flip an
- * ancestor's `dir` on a live tree and a cached direction leaves the horizontal
- * arrows mirrored the wrong way with nothing to invalidate it. A family
- * carrying its own direction axis (Rate's `direction` prop) passes an explicit
- * boolean and never reaches the probe.
+ * READING-DIRECTION LAW. Direction comes from the i18n authority
+ * (`useReadingDirectionIsRtl`), and this kernel measures nothing. Two earlier
+ * laws lived here: one captured direction once per instance, which a locale
+ * change left stale with nothing to invalidate it, and one resolved a DOM probe
+ * per interaction, which was fresh but could not answer during SSR and paid a
+ * `closest()` plus a computed-style read on every keydown. The locale answers
+ * both at once -- identically on server and client, and a switch re-renders
+ * every consumer. A family carrying its own direction axis (Rate's `direction`
+ * prop) still passes an explicit boolean and never consults the authority.
  *
  * SCOPE. This owner navigates a collection whose steps ARE its elements. A
  * family whose step is a VALUE rather than an element (Rate: `allowHalf`
@@ -44,6 +45,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
+
 // ============================================================================
 // Vocabulary
 // ============================================================================
@@ -57,22 +60,6 @@ export type NavigationIntent = 'next' | 'previous' | 'first' | 'last';
 // ============================================================================
 // Pure resolvers (the shared decision model)
 // ============================================================================
-
-/**
- * Resolves the reading direction of an element's context: the nearest explicit
- * `[dir]` answers first, the computed `direction` answers when no ancestor
- * declares one.
- */
-export function resolveReadingDirectionIsRtl(element: HTMLElement): boolean {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-
-  return (
-    element.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
-    window.getComputedStyle(element).direction === 'rtl'
-  );
-}
 
 /**
  * Maps a keyboard key to a logical direction for the given axis, or `null`
@@ -191,9 +178,9 @@ export interface RovingFocusOptions {
   wrap?: boolean;
 
   /**
-   * Reading direction. `'auto'` probes the DOM context on every interaction, so
-   * a live locale flip is honoured; an explicit boolean belongs to families
-   * that own a direction axis.
+   * Reading direction. `'auto'` takes it from the i18n authority, so a live
+   * locale flip is honoured by the render it causes; an explicit boolean
+   * belongs to families that own a direction axis of their own.
    */
   rtl?: boolean | 'auto';
 
@@ -249,12 +236,13 @@ export interface RovingFocus {
   getItemProps: (id: string) => RovingFocusItemProps;
 
   /**
-   * The collection's reading direction, resolved fresh on each call. A family
-   * composing CROSS-axis semantics on top of the collection (Menu's submenu
-   * disclosure) must ask here, so one resolver answers for the whole instance
-   * instead of the family opening a second direction model.
+   * The collection's reading direction. A family composing CROSS-axis semantics
+   * on top of the collection (Menu's submenu disclosure) must ask here, so one
+   * resolver answers for the whole instance instead of the family opening a
+   * second direction model. It takes no element: the answer is the locale's,
+   * not the element's.
    */
-  resolveIsRtl: (element: HTMLElement) => boolean;
+  resolveIsRtl: () => boolean;
 }
 
 /**
@@ -342,25 +330,27 @@ export function useRovingFocus(options: RovingFocusOptions): RovingFocus {
   });
 
   /**
-   * READING-DIRECTION LAW, corrected: resolve at the START OF EVERY INTERACTION.
+   * READING-DIRECTION LAW: the direction comes from the i18n authority, and
+   * this kernel measures nothing.
    *
-   * The previous law captured direction once per instance into a ref and never
-   * recomputed it. That is wrong under locale switching, and the failure is
-   * silent: navigate once in LTR, flip an ancestor to `dir="rtl"` on the SAME
-   * mounted tree, and the horizontal arrows keep the stale mapping. Nothing
-   * remounts, so nothing re-captures. Consumers that also reveal the active item
-   * make it worse — the option scrolls into view at the correct mirrored
-   * position while the arrow that reaches it still points the wrong way.
+   * Two earlier laws lived here. The first captured direction once per instance
+   * into a ref and never recomputed it, which is silently wrong under a locale
+   * switch: navigate once in LTR, flip the locale on the SAME mounted tree, and
+   * the horizontal arrows keep the stale mapping with nothing to invalidate it.
+   * The second resolved a DOM probe at the start of every interaction, which
+   * fixed the staleness by paying a `closest()` plus a computed-style read per
+   * keydown -- and still could not answer during SSR, where there is no layout
+   * to probe.
    *
-   * The resolver itself was always correct; only the caching was not. Resolving
-   * per interaction costs one `closest()` plus one computed-style read per
-   * keydown, which is not measurable against the layout work a keypress already
-   * triggers, and correctness under locale switching is not optional.
+   * Reading the authority costs neither: it is the locale's own answer, it is
+   * identical on server and client, and a locale switch re-renders every
+   * consumer, so freshness is a property of the source rather than of how often
+   * this kernel re-measures.
    */
+  const authorityIsRtl = useReadingDirectionIsRtl();
   const resolveIsRtl = useCallback(
-    (element: HTMLElement): boolean =>
-      rtl !== 'auto' ? rtl : resolveReadingDirectionIsRtl(element),
-    [rtl]
+    (): boolean => (rtl !== 'auto' ? rtl : authorityIsRtl),
+    [authorityIsRtl, rtl]
   );
 
   const setActive = useCallback(
@@ -405,7 +395,7 @@ export function useRovingFocus(options: RovingFocusOptions): RovingFocus {
 
       const intent = resolveNavigationIntent(event.key, {
         orientation,
-        rtl: resolveIsRtl(event.currentTarget),
+        rtl: resolveIsRtl(),
       });
       if (intent === null) return;
 

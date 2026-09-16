@@ -34,8 +34,11 @@ import { revealInlineWithinScroller } from '../../../../foundation/scroll-reveal
  * this is the guard whose absence made the old `scrollIntoView` yank the page
  * on lists that never scrolled. It is the reason this binding exists rather
  * than the engine calling the shared unit directly.
+ *
+ * `isRtl` arrives from the caller, which is a component and reads the i18n
+ * authority; nothing here measures direction.
  */
-export function revealTabWithinList(list: HTMLElement, tab: HTMLElement): number {
+export function revealTabWithinList(list: HTMLElement, tab: HTMLElement, isRtl: boolean): number {
   if (list.scrollWidth - list.clientWidth <= 1) return 0;
-  return revealInlineWithinScroller(list, tab);
+  return revealInlineWithinScroller(list, tab, isRtl);
 }

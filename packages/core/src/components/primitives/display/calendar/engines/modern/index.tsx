@@ -47,7 +47,7 @@
  * @package @rottay/design-system
  */
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import {
@@ -57,7 +57,6 @@ import {
   resolveWeekStartsOn,
   weekdayOrder,
 } from '../../../../foundation/calendar';
-import { resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
 import type { CalendarProps, CalendarMode } from '../../contracts';
 
 // Navigation glyphs always come from the semantic icon corpus. Year movement
@@ -134,6 +133,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   // catalog when an I18nProvider is mounted, else the English fallback tables
   // above (missing key echoes the full key, endsWith guard detects it).
   const i18n = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const calendarLabel = (key: string, fallback: string): string => {
     const translated = i18n?.t(key);
     return translated && !translated.endsWith(key) ? translated : fallback;
@@ -329,7 +331,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
 
   const handleDayGridKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      const rtl = resolveReadingDirectionIsRtl(e.currentTarget as HTMLElement);
+      const rtl = directionIsRtl;
       const target = resolveEnabledCalendarKeyDate(anchorDate, e, isDateDisabled, { rtl, weekStartsOn: weekStart });
       if (target === null) {
         if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.key)) {
@@ -349,7 +351,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
 
   const handleYearGridKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      const rtl = resolveReadingDirectionIsRtl(e.currentTarget as HTMLElement);
+      const rtl = directionIsRtl;
       const key = rtl && e.key === 'ArrowRight'
         ? 'ArrowLeft'
         : rtl && e.key === 'ArrowLeft'

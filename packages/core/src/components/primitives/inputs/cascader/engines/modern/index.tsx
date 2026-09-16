@@ -22,7 +22,7 @@ import React, { useState, useRef, useEffect, useCallback, useId, useMemo } from 
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import { resolveListboxTarget, resolveTypeaheadTarget, isTypeaheadKey } from '../../../../runtime/collection/listbox';
-import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import { resolveNavigationIntent } from '../../../../runtime/collection/roving-focus';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../../contracts';
 import {
@@ -31,7 +31,7 @@ import {
 } from '../../../../runtime/overlay/field-overlay';
 import { CASCADER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
@@ -224,6 +224,9 @@ const PANEL_SCOPE = 'ds-cascader ds-cascader--modern ds-cascader-panel';
 export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
   (props, ref) => {
     const { tOr } = useCascaderTranslation();
+    // The reading direction comes from the shared i18n authority; this family
+    // measures nothing of its own.
+    const directionIsRtl = useReadingDirectionIsRtl();
     const {
       options,
       value: controlledValue,
@@ -526,7 +529,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       if (columnIndex < 0) return;
       const intent = resolveNavigationIntent(e.key, {
         orientation: 'horizontal',
-        rtl: resolveReadingDirectionIsRtl(optionEl),
+        rtl: directionIsRtl,
       });
 
       if (intent === 'next') {

@@ -3,6 +3,7 @@ export type { UseLocaleResult } from "@/infrastructure/runtime/i18n/composition/
 export {
   useDirection,
   useOptionalDirection,
+  useReadingDirectionIsRtl,
 } from "@/infrastructure/runtime/i18n/composition/direction";
 export {
   useOptionalTranslation,

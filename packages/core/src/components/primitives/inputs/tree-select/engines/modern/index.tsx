@@ -36,7 +36,7 @@ import type {
 } from '../../contracts';
 import { TREESELECT_DEFAULTS } from '../../contracts';
 import { FieldOverlayPanel, useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
@@ -44,7 +44,7 @@ import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 import { partAttributes, useFieldAction, useInteractionState } from '@/foundation/behavior';
 import { isTypeaheadKey, resolveListboxTarget, resolveTypeaheadTarget } from '../../../../runtime/collection/listbox';
-import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import { resolveNavigationIntent } from '../../../../runtime/collection/roving-focus';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 
 /**
@@ -502,6 +502,9 @@ function TreeSelectClearButton({ label, onClear }: { label: string; onClear: (ev
 export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
   (props, ref) => {
     const { t } = useTreeSelectCopy();
+    // The reading direction comes from the shared i18n authority; this family
+    // measures nothing of its own.
+    const directionIsRtl = useReadingDirectionIsRtl();
 
     const {
       treeData: rawTreeData,
@@ -853,7 +856,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         return;
       }
 
-      const intent = resolveNavigationIntent(e.key, { orientation: 'horizontal', rtl: resolveReadingDirectionIsRtl(row) });
+      const intent = resolveNavigationIntent(e.key, { orientation: 'horizontal', rtl: directionIsRtl });
       const key = row.getAttribute('data-key');
       const hasChildren = row.getAttribute('data-has-children') === 'true';
       const expanded = row.getAttribute('data-expanded') === 'true';

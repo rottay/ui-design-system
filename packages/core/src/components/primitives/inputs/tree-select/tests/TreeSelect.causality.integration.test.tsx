@@ -125,9 +125,15 @@ describe('tree-select direction, indent, language and accessibility', () => {
     await waitFor(() => expect(row).toHaveAttribute('aria-expanded', 'false'));
     ltr.unmount();
 
-    render(<ModernTreeSelect treeData={TREE} aria-label="Team" />);
+    // Direction arrives through the i18n authority these families now read.
+    // The manual `dir` stamp on the portalled panel existed only to feed the
+    // DOM probe across the portal boundary; the locale crosses it by context.
+    render(
+      <I18nProvider locale="ar" fallbackLocale="en">
+        <ModernTreeSelect treeData={TREE} aria-label="Team" />
+      </I18nProvider>,
+    );
     const rtlRow = await openTree();
-    rtlRow.closest('[data-part="dropdown"]')?.setAttribute('dir', 'rtl');
     fireEvent.keyDown(rtlRow, { key: 'ArrowRight' });
     expect(rtlRow).toHaveAttribute('aria-expanded', 'false');
     fireEvent.keyDown(rtlRow, { key: 'ArrowLeft' });

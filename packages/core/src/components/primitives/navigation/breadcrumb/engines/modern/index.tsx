@@ -7,14 +7,13 @@
 
 import React from 'react';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import type { BreadcrumbProps, BreadcrumbItem } from '../../contracts';
 import { BREADCRUMB_OVERFLOW_DEFAULTS } from '../../contracts';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 // Cross-family composition goes through the primitives facade tier — never a
 // sibling-direct import (Button.Icon's ModernTooltip precedent).
 import { Dropdown, type DropdownMenuItem } from '../../../../facade';
-import { resolveReadingDirectionIsRtl } from '@/components/primitives/runtime/collection/roving-focus';
 
 /**
  * Shape shared by a collapsed `BreadcrumbItem` (hidden behind the overflow
@@ -184,6 +183,9 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // family's other chrome copy below lives in `common` -- so it needs its
   // own namespace lookup, with the same floor idiom.
   const componentsTranslation = useOptionalTranslation('components');
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
   const { items, separator, maxItems, overflow, className = '', style } = props;
   const rootRef = React.useRef<HTMLElement | null>(null);
 
@@ -274,7 +276,7 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
       if (!parkedAtCurrentRef.current) return;
       if (root.scrollWidth <= root.clientWidth) return;
       const maxScroll = root.scrollWidth - root.clientWidth;
-      root.scrollLeft = resolveReadingDirectionIsRtl(root) ? -maxScroll : maxScroll;
+      root.scrollLeft = directionIsRtl ? -maxScroll : maxScroll;
     };
 
     // `scrollLeft` runs negative under RTL, so distance-from-the-end is read

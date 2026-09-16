@@ -23,7 +23,8 @@ import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../c
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { isTypeaheadKey, resolveListboxTarget, resolveTypeaheadTarget } from '../../../../runtime/collection/listbox';
-import { resolveNavigationIntent, resolveReadingDirectionIsRtl } from '../../../../runtime/collection/roving-focus';
+import { resolveNavigationIntent } from '../../../../runtime/collection/roving-focus';
+import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import {
@@ -194,6 +195,10 @@ const MenuItem: React.FC<{
   onClick: (key: string) => void;
   depth?: number;
 }> = ({ item, selectedKeys, selectable, onClick, depth = 0 }) => {
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
+
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const dismissChain = React.useContext(DropdownDismissChainContext);
   const interaction = useInteractionState({ disabled: item.type === 'divider' || item.type === 'group' ? true : item.disabled });
@@ -259,7 +264,7 @@ const MenuItem: React.FC<{
           if (!hasChildren) return;
           const intent = resolveNavigationIntent(event.key, {
             orientation: 'horizontal',
-            rtl: resolveReadingDirectionIsRtl(event.currentTarget),
+            rtl: directionIsRtl,
           });
           if (intent === 'next' || intent === 'previous') {
             event.preventDefault();
@@ -314,6 +319,10 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     overlayStyle,
     getPopupContainer,
   } = props;
+
+  // The reading direction comes from the shared i18n authority; this family
+  // measures nothing of its own.
+  const directionIsRtl = useReadingDirectionIsRtl();
 
   const [internalOpen, setInternalOpen] = useState(false);
   const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
@@ -414,7 +423,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     // geometry is measured in physical viewport coordinates, so under RTL the
     // alignment mirrors (Popover's toPhysicalPlacement precedent) while the
     // stamped coordinates and the clamp below stay physical.
-    const mirrorInline = resolveReadingDirectionIsRtl(containerRef.current);
+    const mirrorInline = directionIsRtl;
     const alignPhysicalEnd = mirrorInline ? isLeft : isRight;
     const alignPhysicalStart = mirrorInline ? isRight : isLeft;
 

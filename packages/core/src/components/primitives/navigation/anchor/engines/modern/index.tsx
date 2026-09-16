@@ -52,9 +52,8 @@
 import React, { useState, useEffect, createContext, useContext, useCallback, useRef, Children, isValidElement } from 'react';
 import type { AnchorProps, AnchorLinkProps } from '../../contracts';
 import { ANCHOR_DEFAULTS } from '../../contracts';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { revealInlineWithinScroller } from '../../../../foundation/scroll-reveal';
-import { resolveReadingDirectionIsRtl } from '@/components/primitives/runtime/collection/roving-focus';
 
 // ============================================================================
 // Context
@@ -286,6 +285,9 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     // falls back until then). Bare compositions never crash on a missing
     // provider (the useOptionalTranslation contract).
     const i18n = useOptionalTranslation('components');
+    // The reading direction comes from the shared i18n authority; this family
+    // measures nothing of its own.
+    const directionIsRtl = useReadingDirectionIsRtl();
     const navigationLabel = (() => {
       const translated = i18n?.t('anchor.navigation');
       return translated && !translated.endsWith('navigation') ? translated : 'Anchor navigation';
@@ -376,8 +378,8 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
       const root = rootRef.current;
       if (!root || !item) return;
       if (root.dataset.direction !== 'horizontal') return;
-      revealInlineWithinScroller(root, item);
-    }, []);
+      revealInlineWithinScroller(root, item, directionIsRtl);
+    }, [directionIsRtl]);
 
     useEffect(() => {
       const root = rootRef.current;
@@ -404,7 +406,7 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
       const vertical = direction !== 'horizontal';
       // `dir` on an ancestor is the authoritative declaration of direction and
       // is read first; computed style stays the CSS-only fallback.
-      const rtl = resolveReadingDirectionIsRtl(event.currentTarget);
+      const rtl = directionIsRtl;
 
       const links = Array.from(
         event.currentTarget.querySelectorAll<HTMLElement>("[data-part='item']")
