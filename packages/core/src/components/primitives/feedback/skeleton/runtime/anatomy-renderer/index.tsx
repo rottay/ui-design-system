@@ -32,6 +32,21 @@ export type SkeletonPartRole = 'frame' | 'pass' | 'block' | 'line' | 'round' | '
  * missing here fails the family-cut gate until the name is given a role.
  */
 export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = Object.freeze({
+  // ---- tree, list and descriptions anatomy (WO-FAM-06 tree/list/descriptions cut) ----
+  // A node row and a descriptions body read their parts; the selection control
+  // is a block; a drag affordance and a layout spacer mean nothing with no data.
+  node: 'pass',
+  rows: 'pass',
+  checkbox: 'block',
+  'drop-indicator': 'omit',
+  'switcher-spacer': 'omit',
+  // A list item's meta is the row the loading state stands in for: its wrappers
+  // pass through and its two texts are the lines the bones draw.
+  meta: 'pass',
+  'meta-content': 'pass',
+  'meta-avatar': 'round',
+  'meta-title': 'line',
+  'meta-description': 'line',
   // ---- badge, tag and avatar anatomy (WO-FAM-06 badge/tag/avatar cut) ----
   // A dismiss control is a pill; the avatar silhouette is the mask, measured
   // with its own corner so a rounded square stays square; what fills the
@@ -268,8 +283,17 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   anchor: 'omit',
   backdrop: 'omit',
   handle: 'omit',
+  // ---- splitter anatomy (WO-FAM-07 layout cut) ----
+  // A resize boundary is an affordance, not content: with no panels to move it
+  // means nothing, exactly like the `handle` above.
+  gutter: 'omit',
   arrow: 'omit',
   divider: 'omit',
+  // ---- divider anatomy (WO-FAM-07 layout cut) ----
+  // The two rule segments around a label are hairlines: a skeleton draws no
+  // bone for a mark that carries no content.
+  'line-before': 'omit',
+  'line-after': 'omit',
   submenu: 'omit',
   'selection-indicator': 'omit',
   'submenu-indicator': 'omit',
@@ -427,6 +451,9 @@ export interface AnatomySkeletonProps {
   children?: ReactNode;
   /** Overrides the tenant `skeletonStyle`; `false` holds a static surface. */
   animation?: SkeletonAnimation;
+  /** Stamps `aria-busy` while loading. `false` when the host already announces
+   * its own loading state, so the surface keeps a single announcement. @default true */
+  busy?: boolean;
   /** @default 'block' */
   mode?: AnatomySkeletonMode;
   /** `table-rows` only: how many placeholder rows to draw. @default 4 */
@@ -438,7 +465,10 @@ export interface AnatomySkeletonProps {
 }
 
 export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
-  ({ loading = true, children, animation, mode = 'block', rowCount = 4, cells, className, style }, ref) => {
+  (
+    { loading = true, busy = true, children, animation, mode = 'block', rowCount = 4, cells, className, style },
+    ref,
+  ) => {
     const tokens = useOptionalTokens();
     const sourceRef = useRef<HTMLDivElement>(null);
     const [bones, setBones] = useState<AnatomyBone[] | null>(null);
@@ -553,7 +583,7 @@ export const AnatomySkeleton = forwardRef<HTMLDivElement, AnatomySkeletonProps>(
         data-loading={loading ? 'true' : 'false'}
         data-measured={bones ? 'true' : 'false'}
         data-animation={animationStyle}
-        aria-busy={loading || undefined}
+        aria-busy={(busy && loading) || undefined}
         className={['ds-skeleton-anatomy', className].filter(Boolean).join(' ')}
         style={style}
       >
