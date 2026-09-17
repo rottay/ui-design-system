@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 
 import { packageRoot as findPackageRoot } from '../../repo-root/index.mjs';
-import { countArc09PaintInFile } from './index.mjs';
+import { auditCertifiedInlineStyleProducers, countArc09PaintInFile } from './index.mjs';
 
 const CORE = findPackageRoot(new URL('.', import.meta.url).pathname);
 const BEHAVIOR = 'src/foundation/behavior';
@@ -172,4 +172,57 @@ test('CONTROL: the re-keyed craft owner certifies the spread at zero', () => {
 test('PLANT: a certified producer whose module moves without a registry re-key reads as opaque paint', () => {
   const count = countCraftConsumer(`${TYPOGRAPHY}/runtime/relocated-craft`);
   assert.equal(count, 1, `expected the unkeyed owner to leave the spread opaque, got ${count}`);
+});
+
+// ---------------------------------------------------------------------------
+// The certified registry must stay bound to the tree it certifies
+// ---------------------------------------------------------------------------
+
+test('every certified producer key resolves on disk and exports its symbol', () => {
+  // A stale key is silent by construction: the producer stops being certified,
+  // every consumer that spreads it falls opaque, and a paint counter moves
+  // without one line of product source moving. 171e7dbfe relocated the
+  // typography craft resolver and left exactly that hole, so the registry is
+  // proven against the tree here rather than trusted.
+  const rows = auditCertifiedInlineStyleProducers();
+  assert.ok(rows.length >= 30, `only ${rows.length} certified pairs read back -- an empty audit is never a pass`);
+  const stale = rows.filter((row) => row.stale);
+  assert.deepEqual(
+    stale.map((row) => `${row.stale}: ${row.packagePath} -> ${row.symbol}`),
+    [],
+  );
+});
+
+test('the audit is not vacuous: a root that holds none of the modules is all stale', () => {
+  const sandbox = mkdtempSync(join(tmpdir(), 'paint-inline-registry-'));
+  try {
+    const rows = auditCertifiedInlineStyleProducers(join(sandbox, 'packages/core/src'));
+    assert.ok(rows.length > 0);
+    assert.ok(rows.every((row) => row.stale === 'module'), 'an unresolvable key must be reported, never passed');
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+});
+
+test('a key that names a module which no longer exports the symbol is reported by NAME', () => {
+  // The 171e7dbfe shape, replayed: the craft resolver lives in `legacy-craft`
+  // and the owner it moved away from must not answer for it any more.
+  const rows = auditCertifiedInlineStyleProducers();
+  const craft = rows.find((row) => row.symbol === 'resolveTypographyCraftStyle');
+  assert.equal(craft.packagePath, 'components/primitives/display/typography/runtime/legacy-craft/index');
+  assert.equal(craft.stale, null);
+  const sandbox = mkdtempSync(join(tmpdir(), 'paint-inline-relocate-'));
+  try {
+    const owner = 'src/components/primitives/display/typography/runtime/legacy-craft';
+    const core = join(sandbox, 'packages/core');
+    cpSync(join(CORE, owner), join(core, owner), { recursive: true });
+    const file = join(core, owner, 'index.ts');
+    const source = readFileSync(file, 'utf8');
+    writeFileSync(file, source.replaceAll('resolveTypographyCraftStyle', 'resolveTypographyCraftStyleMoved'));
+    const stale = auditCertifiedInlineStyleProducers(join(core, 'src'))
+      .filter((row) => row.stale === 'symbol');
+    assert.deepEqual(stale.map((row) => row.symbol), ['resolveTypographyCraftStyle']);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
 });

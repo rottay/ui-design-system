@@ -8,6 +8,8 @@ import {
   resolve as resolvePath,
   sep,
 } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import ts from "typescript";
 
 // Single source of truth for the inline-paint counter: the engine-token-audit
@@ -589,6 +591,9 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     ]),
   ],
 ]);
+
+/** This package's `src`, so the registry can be audited without a caller supplying a root. */
+const DEFAULT_SRC_ROOT = fileURLToPath(new URL("../../../../src/", import.meta.url));
 
 const certifiedProducerCache = new Map();
 const parsedModuleCache = new Map();
@@ -3385,4 +3390,45 @@ export function countArc09PaintInFile(text, fileName = "source.tsx") {
     countExplicitObjectPaintInFile(text) +
     countScopedStylePaintInFile(text, fileName)
   );
+}
+
+/**
+ * The registry read back as data: one row per certified `(module, symbol)`
+ * pair, with the module it resolves to on disk and whether that module really
+ * exports the symbol.
+ *
+ * A key that no longer resolves -- a module relocated, renamed or merged -- is
+ * not an error at count time: the producer simply stops being certified and
+ * every consumer that spreads it falls opaque, which moves a paint counter
+ * without moving a single line of product source. So the registry has to be
+ * proven against the tree instead of trusted, and `stale` is what a drill
+ * asserts is empty.
+ */
+export function auditCertifiedInlineStyleProducers(srcRoot = DEFAULT_SRC_ROOT) {
+  /** A file that does not exist, used only to give the resolver a directory to start from. */
+  const probe = join(srcRoot, "__certified-producer-probe.tsx");
+  const rows = [];
+  for (const [packagePath, symbols] of CERTIFIED_INLINE_STYLE_PRODUCERS) {
+    const resolved = resolveSamePackageModule(probe, `@/${packagePath}`);
+    for (const symbol of symbols.keys()) {
+      const exported = resolved
+        ? Boolean(exportedSymbol(resolved.file, symbol))
+        : false;
+      rows.push({
+        packagePath,
+        symbol,
+        file: resolved?.file ?? null,
+        resolvedPackagePath: resolved?.packagePath ?? null,
+        exported,
+        stale: !resolved
+          ? "module"
+          : !exported
+            ? "symbol"
+            : resolved.packagePath !== packagePath
+              ? "path"
+              : null,
+      });
+    }
+  }
+  return rows;
 }
