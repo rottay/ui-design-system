@@ -37515,11 +37515,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `dir=rtl`; this file mirrors the centering signs (mark-label, handle
  * `--tw-translate-x`) and the single-mode fill gradient under `:dir(rtl)`.
  * Vertical offsets are logical too and carry the same `:dir(rtl)` mirrors
- * (rail, track, dot), so the rail/track/handle/dot centre on one inline line
- * in both directions. The ONE physical vertical anchor left is the value
- * tooltip: its `placement` vocabulary is physical by contract ('left' |
- * 'right'), so a logical anchor would move the bubble to the wrong side of
- * the rail under `dir=rtl`.
+ * (rail, track, dot, value tooltip), so the rail/track/handle/dot/tooltip
+ * centre on one inline line in both directions. The value tooltip's
+ * `placement` vocabulary went logical with it ('inline-start' | 'inline-end',
+ * WO-INV-01): the anchor is `inset-inline-start` and the transforms below
+ * mirror under `:dir(rtl)`, so the readout keeps the side the caller asked
+ * for instead of the physical edge a name used to promise.
  *
  * VALUE TOOLTIP + STEP DOTS + MARK STATE (Phase B second pass): the engine's
  * `tooltip` contract renders `data-part='tooltip'` readouts anchored at each
@@ -37967,8 +37968,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /* ---- Value tooltip (contract `tooltip`). Anchored at the thumb point by the
-        engine (physical left/bottom in vertical, logical insetInlineStart in
-        horizontal); the transforms below place the bubble relative to that
+        engine (logical insetInlineStart on both axes, plus bottom in
+        vertical); the transforms below place the bubble relative to that
         anchor. Surface/ink ride the global material overlay channels (same
         grammar as the Tooltip family recipe), the thumb gap is the
         `--_ds-slider-tooltip-gap` proto. aria-hidden in the engine --
@@ -38010,15 +38011,26 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='bottom']:dir(rtl) {
   transform: translate(50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)));
 }
-/* Vertical placements: the anchor is the thumb center (physical left: 50% +
-   bottom). The placement vocabulary is physical by contract, so the anchor and
-   these transforms stay physical together and NO `:dir(rtl)` mirror applies --
-   a mirror here would send the bubble across the rail under dir=rtl. */
-.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='right'] {
+/* Vertical placements: the anchor is the thumb center (logical
+   inset-inline-start: 50% + bottom) and the placement vocabulary is logical
+   too, so the X shift is signed for the reading direction exactly like the
+   mark-label and handle mirrors below it. LTR: inline-end is the physical
+   right. */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-end'] {
   transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)), 50%);
 }
-.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='left'] {
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-start'] {
   transform: translate(calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-slider-tooltip-gap, 6px)), 50%);
+}
+/* RTL mirror: `inset-inline-start: 50%` puts the bubble's OTHER edge on the
+   rail line, and the requested side is now the other physical side, so both
+   flip together -- one sign change keeps the bubble centred on the rail and on
+   the side that was asked for. */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-end']:dir(rtl) {
+  transform: translate(calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-slider-tooltip-gap, 6px)), 50%);
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-start']:dir(rtl) {
+  transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)), 50%);
 }
 
 /* Visibility: focus/press on the driving input (single: adjacent sibling;
@@ -53500,18 +53512,24 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   transform: rotate(45deg);
 }
 
+/*
+ * The two hidden facets of the rotated square are a PHYSICAL fact of the side
+ * the arrow points at, and the side comes from `data-placement^='top'|'bottom'`,
+ * which no reading direction moves. A logical border here flipped which facets
+ * were hidden under RTL and turned the tip sideways.
+ */
 .ds-dropdown-surface[data-part='surface'][data-placement^='bottom'] > [data-part='arrow'] {
   inset-block-start: calc(var(--ds-dropdown-arrow-size) / -2 - var(--ds-dropdown-border-width, var(--ds-edge-standard-width)));
   inset-inline-start: calc(50% - var(--ds-dropdown-arrow-size) / 2);
-  border-inline-end: 0;
-  border-block-end: 0;
+  border-right: 0;
+  border-bottom: 0;
 }
 
 .ds-dropdown-surface[data-part='surface'][data-placement^='top'] > [data-part='arrow'] {
   inset-block-end: calc(var(--ds-dropdown-arrow-size) / -2 - var(--ds-dropdown-border-width, var(--ds-edge-standard-width)));
   inset-inline-start: calc(50% - var(--ds-dropdown-arrow-size) / 2);
-  border-inline-start: 0;
-  border-block-start: 0;
+  border-left: 0;
+  border-top: 0;
 }
 
 /* A measured anchor offset points the arrow at the trigger, one radius clear of the corners. */
@@ -56472,7 +56490,9 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
     inset-block-start var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-block-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-inline-start var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
-    inset-inline-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
+    inset-inline-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    left var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    right var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='arrow'][data-part='arrow']::before {
@@ -56484,32 +56504,38 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   pointer-events: none;
 }
 
+/*
+ * The arrow's EDGE is selected by `data-placement`, which the engine stamps in
+ * the PHYSICAL spelling, so the declarations answering that selector are
+ * physical too -- a logical inset or border mirrors under RTL while the
+ * selector does not. Same rule as the Tooltip skin.
+ */
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='top'] > [data-part='arrow'] {
   inset-block-end: calc(var(--ds-popover-arrow-size) / -2);
   inset-inline-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  border-block-start: 0;
-  border-inline-start: 0;
+  border-top: 0;
+  border-left: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='bottom'] > [data-part='arrow'] {
   inset-block-start: calc(var(--ds-popover-arrow-size) / -2);
   inset-inline-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  border-block-end: 0;
-  border-inline-end: 0;
+  border-bottom: 0;
+  border-right: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='left'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  inset-inline-end: calc(var(--ds-popover-arrow-size) / -2);
-  border-block-end: 0;
-  border-inline-start: 0;
+  right: calc(var(--ds-popover-arrow-size) / -2);
+  border-bottom: 0;
+  border-left: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='right'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  inset-inline-start: calc(var(--ds-popover-arrow-size) / -2);
-  border-block-start: 0;
-  border-inline-end: 0;
+  left: calc(var(--ds-popover-arrow-size) / -2);
+  border-top: 0;
+  border-right: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-centered='false']:is([data-placement^='top'], [data-placement^='bottom'])[data-placement$='-start'] > [data-part='arrow'] {
@@ -69500,39 +69526,50 @@ html[data-ds-motion='reduced']
     inset-block-start var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-block-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-inline-start var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
-    inset-inline-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
+    inset-inline-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    left var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    right var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-has-arrow='true'][data-placement*='-'] {
   min-inline-size: var(--ds-tooltip-arrow-safe-min-inline-size);
 }
 
+/*
+ * The arrow's EDGE is selected by `data-placement`, which the engines stamp in
+ * the PHYSICAL spelling (the logical side already resolved against the one
+ * direction that placed the bubble). The declarations that answer that selector
+ * are therefore physical too: a logical inset or border mirrors under RTL while
+ * `[data-placement^='left']` does not, which pointed the tip away from the
+ * anchor. The block-axis sides keep their logical insets, which no reading
+ * direction moves.
+ */
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='top'] > [data-part='arrow'] {
   inset-block-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
   inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  border-block-start: 0;
-  border-inline-start: 0;
+  border-top: 0;
+  border-left: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='bottom'] > [data-part='arrow'] {
   inset-block-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
   inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  border-block-end: 0;
-  border-inline-end: 0;
+  border-bottom: 0;
+  border-right: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='left'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  inset-inline-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
-  border-block-end: 0;
-  border-inline-start: 0;
+  right: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
+  border-bottom: 0;
+  border-left: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='right'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  inset-inline-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
-  border-block-start: 0;
-  border-inline-end: 0;
+  left: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
+  border-top: 0;
+  border-right: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble']:is([data-placement^='top'], [data-placement^='bottom'])[data-placement$='-start'] > [data-part='arrow'] {
