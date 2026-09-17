@@ -1,10 +1,49 @@
 # Shared DnD kernel — contract debrief (WO-FAM-08 / F-69)
 
-Design packet, **revision 3**. No product code was written. Every number below is
+Design packet, **revision 4**. No product code was written. Every number below is
 a measurement over the tree, and each claim carries its `file:line`.
 
 Reviewers: Codex, Kimi, Fable (shared-core review, `roadmap/README.md` execution
 policy). Record ACCEPT or HOLD with evidence.
+
+> **Revision 4 (2026-09-17).** Round 3 was reviewed by Codex (**HOLD** —
+> `evidence/dnd-kernel-debrief/codex-HOLD-round3.txt`; B3 and B4 resolved at
+> contract level, B1/B2/B5 partial). Codex compiled the whole contract in memory
+> and found **zero diagnostics** — the round-3 type fixes hold — and then showed
+> that a contract which type-checks can still specify the wrong behavior. It did
+> so by *executing* the extracted handlers. This revision resolves the eleven
+> remaining items. The one that reaches furthest: **the held hover target was
+> being promoted into the drop destination**, and no owner does that. Every
+> sortable owner commits the identity bound on the element *receiving the drop*
+> — saved-views' `handleDrop(e, view.id)`, column-menu's `handleColumnDrop(event, key)`,
+> kanban's `handleDrop(e, column.id, index)`, tree's receiving row plus its
+> stored zone — while the hover stamp is a **pure indicator** that three of the
+> four never read at commit time. So `resolveTarget` gains a `phase`
+> (`'hover' | 'drop'`), the commit sequence splits into a pointer branch that
+> resolves the receiving element and a keyboard branch that commits the
+> candidate, and `session.target` is stated to be the indicator (§2.2.1,
+> §2.2.3). Codex's regression sequence now reproduces every owner exactly
+> (Appendix B, leg 17). Also in this round: `resolveTarget` becomes **required**
+> when the bound target cannot supply the destination, with Codex's own decoy as
+> refusal leg R-7 (§2.2.6); tree's **session-level target gating** gets its own
+> `eligible` and the target bag's handlers become optional so an empty bag is
+> expressible (§2.2.4(c)); kanban's adapter **composes FLIP and focus
+> registration** instead of replacing one with the other (§2.2.4(d)); saved-views
+> keeps its **index-validity guard** and C15 tests callback count (§6.3);
+> **immediate mode gets its own finalization branch** so an arrow commits without
+> opening a session (§2.2.3); every announce event carries an **`origin`**, which
+> is how kanban keeps announcing keyboard moves and not pointer drops (§2.6);
+> the delegated adapter's lifecycle is rewritten around a `move()` that **returns
+> whether the candidate advanced**, leaving one message, one commit and a closed
+> session on every arm, with the native `disabled` dropped from the move controls
+> because a disabled button fires no `onClick` (§2.4.6); the F-69 admission gains
+> a **drop-zone arm**, an **attachment** requirement and **zero independent
+> implementations** as its closure condition, with Codex's decoy as a drill
+> (§6.6); N3 is re-pointed at the real cleanup boundaries and N11 gains a
+> live-session case (§6.4); and the `dropEffect` **cursor claim is withdrawn** in
+> favour of a negotiated-operation measurement with a negative control that can
+> actually fail (§6.3). Claims corrected in this round are marked
+> **CORRECTED (R4)**.
 
 > **Revision 3 (2026-09-17).** Round 2 was reviewed by Kimi (ACCEPT of the
 > direction) and by Codex (**HOLD** —
@@ -45,6 +84,7 @@ policy). Record ACCEPT or HOLD with evidence.
 | Round-1 base | `75ce56bfdef64388d7c32b3c36bfef116c3367b4`, branch `main` |
 | Revision-2 base | `785771a30e584bba784f258bf9a6471bf9fed45e`, branch `main` |
 | Revision-3 base | `35122963005dca61b24503155d52687608b0097b`, branch `main` |
+| Revision-4 base | `30ec496c1e4420395b614033ddf404dfd0d321a4`, branch `main` |
 | Checkout | `/Users/daniel/Developer/Rottay/r4-recon-opus` |
 | Phase | DESIGN. Implementation is a separate dispatch AFTER this debrief resolves. |
 
@@ -58,11 +98,35 @@ its `defs/jsx/tok` counts are unchanged).
 **Revision 3 re-measured a wider set.** The eleven above plus the seven this
 round reasons about directly — `button/engines/modern`, `tree/runtime/tree-behavior`,
 `Tree.modern-engine-advanced.test.tsx`, `tests/support/family-causality`,
-`scripts/check/family-cut/index.mjs` and the two `structure` gate files — are
+`scripts/check/family-cut/index.mjs` and the two `structure` gate files — were
 **18 of 18 byte-identical across `785771a30`, HEAD `351229630` and this
 worktree**. Every measurement in revisions 2 and 3 therefore stands on the same
 bytes, and none is taken against another writer's uncommitted edit.
 Reproduction: Appendix B, leg 0.
+
+**Revision 4 re-measured the same set plus `flip-layout`, `file-manager/engines/modern`
+and `upload/engines/modern`, and two of the nineteen have moved. Both matter, and
+neither is hidden here.** Reproduction: Appendix B, leg 15.
+
+- **`scripts/check/architecture/audits/structure/index.test.mjs` moved in HEAD**,
+  through `2c4ba44af` — the lot that re-anchored the suite's stale taxonomy
+  fixtures. It took the suite from **32 pass / 3 fail to 37 pass / 0 fail** and
+  the `rankedChildren.length` pin from `94` to **`98`**. Codex flagged this in
+  round 3 ("its old test-count receipt is not the current checkout's result") and
+  it is correct: §3.1, §6.5 and R15 carried the stale figures and are re-stated
+  against the measured HEAD below. Revision 3's own §3.1 predicted exactly this
+  case and said the lot must move the pin "from the value the file then carries,
+  not from `94`, if another writer lands first" — so the prediction is kept and
+  the numbers are refreshed, not the rule.
+- **`saved-views/engines/modern/index.tsx` is MODIFIED in this worktree** by
+  another in-flight writer: it wraps the pill in a new `ViewPill` component that
+  owns a `useInteractionState` instance (`+21/-3` against HEAD, uncommitted).
+  Every saved-views measurement in this packet is taken with
+  `git show HEAD:<file>`, never from disk, so no claim here reads that writer's
+  edit. It is nonetheless a **live watch item for lots 2 and 6**: if it lands,
+  saved-views acquires a fourth press-cancel boundary of exactly the
+  `BoardCard` / `StatefulRow` / `Button` class (§2.3.1), and its pill becomes a
+  component that can own the drag-end route. R22 carries it.
 
 **Circularity resolution.** The FAM-08 registry note of 2026-09-17 04:18 routed the
 DnD kernel to WO-FAM-13 ("pertenece a WO-FAM-13"); the closure inventory of
@@ -76,8 +140,13 @@ overstated.
 
 **Tree state.** The worktree carries modified and untracked paths belonging to
 other in-flight writers (overlay positioning, table-toolbar direction, export
-runtime). None of them is in this packet's write set, none was touched, and none
-of them is one of the eleven files above.
+runtime, column-settings, filter-panel and the tenant-theme ingress chain). None
+of them is in this packet's write set and none was touched. **CORRECTED (R4):**
+revision 3 added "and none of them is one of the eleven files above", which is no
+longer true — `saved-views/engines/modern/index.tsx` is one of the eleven and it
+is now dirty. The claim that stands is the narrower and stronger one: every
+measurement in this packet is taken at a named commit, so a dirty file cannot
+enter a number here.
 
 ---
 
@@ -391,35 +460,77 @@ interface SortableSourceProps {
   readonly onKeyDown?: React.KeyboardEventHandler<Element>;
 }
 
+/**
+ * CORRECTED (R4). Both handlers are OPTIONAL, because an ineligible target must
+ * be able to return an EMPTY bag: tree attaches no `onDragOver`/`onDrop` at all
+ * when `propDraggable === false` (`:384-400`). Revision 3 required both, so the
+ * only expressible answer was a bag that still prevents the default — Codex
+ * reproduced the **TS2739** that fell out of trying to return `{}` (§2.2.4(c)).
+ */
 interface SortableTargetProps {
-  readonly onDragOver: React.DragEventHandler<Element>;
-  readonly onDrop: React.DragEventHandler<Element>;
+  readonly onDragOver?: React.DragEventHandler<Element>;
+  readonly onDrop?: React.DragEventHandler<Element>;
 }
 
-interface UseDragSessionOptions<
+/**
+ * CORRECTED (R4) — the resolver runs in TWO PHASES and is told which.
+ *
+ * `'hover'` decides what the INDICATOR shows on `dragover`. `'drop'` decides
+ * what gets COMMITTED, and it receives the identity bound on the element the
+ * drop landed on — never the held indicator. The two are different questions
+ * and every owner answers them differently for a self-target: saved-views and
+ * column-menu HOLD the previous stamp on hover (`:200-202`, `:410-412`) and
+ * REFUSE the commit on drop (`:210`, `moveDraftColumn`'s `sourceKey === targetKey`
+ * return). Revision 3 had one phase and committed `session.target`, which
+ * reorders on a sequence where every real owner does nothing (§2.2.1).
+ */
+type TargetResolver<TPayload extends DragPayload, TTarget, TDestination> = (
+  context: {
+    readonly phase: 'hover' | 'drop';
+    readonly event: React.DragEvent;
+    readonly payload: TPayload;
+    /** The identity bound at THIS element's `getTargetProps(target)` call site. */
+    readonly target: TTarget;
+    /** The destination the session is holding right now — the INDICATOR. */
+    readonly current: TDestination | null;
+  }
+) => TDestination | null;
+
+/**
+ * CORRECTED (R4) — the resolver is REQUIRED when the bound target cannot supply
+ * the destination. `[TTarget] extends [TDestination]` is the exact predicate: it
+ * holds only when every destination field is already present on the bound
+ * identity. Revision 3 left `resolveTarget` unconditionally optional while its
+ * own comment said omission "is only typable when `TDestination` defaults to
+ * `TTarget`" — Codex wrote the configuration that made the comment false
+ * (refusal leg R-7, §2.2.6).
+ */
+type ResolverRequirement<TPayload extends DragPayload, TTarget, TDestination> =
+  [TTarget] extends [TDestination]
+    ? { readonly resolveTarget?: TargetResolver<TPayload, TTarget, TDestination> }
+    : { readonly resolveTarget: TargetResolver<TPayload, TTarget, TDestination> };
+
+type UseDragSessionOptions<
+  TPayload extends DragPayload,
+  TTarget,
+  TDestination = TTarget,
+> = UseDragSessionBaseOptions<TPayload, TTarget, TDestination> &
+  ResolverRequirement<TPayload, TTarget, TDestination>;
+
+interface UseDragSessionBaseOptions<
   TPayload extends DragPayload,
   TTarget,
   TDestination = TTarget,
 > {
-  /** Off switch. A disabled session stamps nothing, starts nothing, commits nothing. */
-  readonly disabled?: boolean;
-
   /**
-   * Refines the target identity the consumer bound at the call site of
-   * `getTargetProps(target)` into the DESTINATION the commit receives. It runs
-   * on `dragover`, AFTER the kernel called `preventDefault()` and set
-   * `dropEffect`. Returning `null` clears the destination; returning `current`
-   * LEAVES THE PREVIOUS ONE INTACT, which is what saved-views and column-menu
-   * do today (§2.2.3). Omitting it means the bound identity IS the destination,
-   * which is only typable when `TDestination` defaults to `TTarget`.
+   * Off switch: no source is draggable, no session opens, no commit runs.
+   * It does NOT detach the target handlers — saved-views attaches `onDragOver`
+   * and `onDrop` unconditionally and only gates `draggable` on `onViewReorder`
+   * (`:326-329`), so a disabled session still cancels `dragover` and stays
+   * inert because nothing can open. Detaching a target is `getTargetProps`'s
+   * own `eligible`, which is tree's question, not this one.
    */
-  readonly resolveTarget?: (context: {
-    readonly event: React.DragEvent;
-    readonly payload: TPayload;
-    readonly target: TTarget;
-    /** The destination the session is holding right now. */
-    readonly current: TDestination | null;
-  }) => TDestination | null;
+  readonly disabled?: boolean;
 
   /**
    * THE SINGLE COMMIT POINT, for the pointer path and the keyboard path alike.
@@ -439,6 +550,11 @@ interface UseDragSessionOptions<
    * boundary. Where the source component owns its own `useInteractionState`
    * instance -- kanban's `BoardCard`, column-menu's `StatefulRow` -- the
    * boundary belongs there and this option stays unset (§2.3.1).
+   * When supplied the kernel calls it from BOTH `onDragEnd` and the
+   * `onPointerCancel` it then adds to the source bag: an HTML5 drag swallows
+   * the `pointerup`, so drag end is the route that matters. None of the four
+   * owners supplies it -- all three boundaries are component-owned -- so its
+   * only fixture is the kernel's own scene, named in N3d (§6.4).
    */
   readonly pressCancel?: (event: React.PointerEvent) => void;
 
@@ -470,11 +586,18 @@ interface UseDragSessionResult<
   /**
    * Spread on a drop TARGET. `target` IS the bound identity: the consumer binds
    * it at the call site, exactly where its closure binds it today. Source and
-   * target may be the same element.
+   * target may be the same element. The SAME bound value reaches both handlers,
+   * which is what lets the `drop` resolve its own receiving element (§2.2.1).
+   *
+   * CORRECTED (R4) -- `eligible` is PER TARGET and defaults to `true`, symmetric
+   * with `getSourceProps`. `false` returns an EMPTY bag, which is tree's
+   * `propDraggable === false` row: no `onDragOver`, no `onDrop`, and therefore
+   * no `preventDefault` (`:384-400`). Session `disabled` does not do this, because
+   * saved-views keeps its target handlers attached while its source is off.
    */
   getTargetProps(
     target: TTarget,
-    options?: { readonly stopPropagation?: boolean }
+    options?: { readonly stopPropagation?: boolean; readonly eligible?: boolean }
   ): SortableTargetProps;
 
   /** Focus restoration for keyboard commits (§2.4.4). Optional to call. */
@@ -488,16 +611,30 @@ interface UseDragSessionResult<
    */
   start(payload: TPayload, options?: { readonly target?: TDestination }): void;
 
-  /** Advances the candidate. Requires an open session and a keyboard resolver. */
-  move(intent: MoveIntent): void;
+  /**
+   * Advances the candidate. Requires an open session and a keyboard resolver.
+   *
+   * CORRECTED (R4) -- it RETURNS whether the candidate advanced. Revision 3's
+   * `void` return left a delegated family no way to know a move was refused, so
+   * its own adapter called `commit()` on a blocked edge and produced a second
+   * `blocked` outcome on an unclosed session (§2.4.6). Codex executed that
+   * sequence.
+   */
+  move(intent: MoveIntent): boolean;
 
   /**
    * Commits. An explicit destination OVERRIDES the candidate, which is how a
    * destination picker commits to an arbitrary node and position that four
-   * relative intents cannot express (§2.4.6, tree).
+   * relative intents cannot express (§2.4.6, tree). Returns whether `onDrop`
+   * ran. A commit with no destination CLOSES the session either way (§2.2.3).
    */
-  commit(destination?: TDestination): void;
+  commit(destination?: TDestination): boolean;
 
+  /**
+   * Closes the session. Emits `cancelled` only when a candidate exists: a
+   * cancel that abandons nothing announces nothing, which is what keeps a
+   * delegated family's blocked edge at exactly one message (§2.4.6).
+   */
   cancel(): void;
 }
 ```
@@ -536,6 +673,88 @@ writes three. `resolveTarget` therefore *refines* the bound identity into a
 destination with something only the event knows (Tree's cursor zone), *refuses*
 it (`null`), or *holds the previous one* (`current`).
 
+**CORRECTED (R4) — the resolver is REQUIRED when the bound target cannot supply
+the destination.** Revision 3 left `resolveTarget` optional in every
+instantiation while its own comment said omission "is only typable when
+`TDestination` defaults to `TTarget`". Codex wrote the configuration that made
+the comment false — a `{key: number}` bound target with a
+`{key: number; position: 'inside'}` destination and no resolver, which compiled,
+and whose `onDrop` then read a `position` the HTML5 path has no producer for.
+`ResolverRequirement` closes it with `[TTarget] extends [TDestination]`, and the
+decoy is refusal leg **R-7** (§2.2.6), verified to produce `TS2345: Property
+'resolveTarget' is missing` when its directive is removed (Appendix B, leg 16).
+
+#### 2.2.1(a) The held target is the INDICATOR, not the destination
+
+**CORRECTED (R4), and this is the largest behavioral correction of the round.**
+
+Revision 3's commit rule was `destination = explicit ?? session.target`. Codex
+executed it against the extracted handlers and showed it reorders where every
+real owner does nothing:
+
+```text
+Initial order: [a,b,c].  Sequence: drag a -> hover b -> hover a -> DROP ON a
+
+  saved-views today       [a,b,c]   0 callbacks   (stamp still b)
+  column-menu today       [a,b,c]                 (stamp still b)
+  R3 `session.target`     [b,a,c]   1 callback    <-- the regression
+  R4 (this revision)      [a,b,c]   0 callbacks
+```
+
+I reproduced all four rows independently (Appendix B, leg 17). The cause is a
+misreading I made of what the hover stamp is for. **Every sortable owner binds
+its drop identity on the receiving element and never consults the stamp at
+commit time:**
+
+| Owner | The drop handler's signature | What it commits | Does it read the hover stamp? |
+|---|---|---|---|
+| saved-views | `handleDrop(e, targetViewId)` (`:207`) from `onDrop={(e) => handleDrop(e, view.id)}` (`:330`) | the **receiving pill's** id, refusing `dragViewId === targetViewId` (`:210`) | **no** — `dropTargetId` is never read in `handleDrop` |
+| column-menu | `handleColumnDrop(event, key)` (`:417`) | the **receiving row's** key, into `moveDraftColumn`, which returns on `sourceKey === targetKey` (`:380`) | **no** — `dragOverColumnKey` is only cleared |
+| kanban | `handleDrop(e, columnId, position)` (`:245`) from `onDrop={(e) => handleDrop(e, column.id, index)}` (`:587`) | the **receiving card's** `{columnId, position}` | **no** — `dropTarget` is only cleared |
+| tree | `handleDrop(key, _e)` (`:823`) | the **receiving row's** `key` combined with the **stored zone** `dropTarget.position` (`:834`) | **partly** — the zone comes from the stamp, the node does not, and `!dropTarget` is the refusal |
+
+Three of four never read it; tree reads only its `position`. So `session.target`
+is a **render input** — it drives `data-drop-target`, `data-dropping`,
+`data-drag-target`, `data-drop-position` — and on the pointer path it is not the
+commit destination at all.
+
+The contract therefore resolves the destination **twice, in two phases, from two
+different inputs**:
+
+| Phase | Fires on | `target` the resolver receives | `current` | Produces |
+|---|---|---|---|---|
+| `'hover'` | `dragover` | the bound identity of the hovered element | the held indicator | the new indicator (`null` clears, `current` holds) |
+| `'drop'` | `drop` | the bound identity of the **receiving** element | the held indicator | the **commit destination** (`null` refuses) |
+
+Which makes the four rules one line each, and the self-target disagreement stops
+being a kernel policy question:
+
+```ts
+// saved-views, column-menu -- hold the stamp, refuse the commit
+({ phase, payload, target, current }) =>
+  target.key === payload.key ? (phase === 'hover' ? current : null) : target
+
+// tree -- clear the stamp; commit the receiving row with the STORED zone
+({ phase, event, payload, target, current }) => {
+  if (payload.key === target.key) return null;
+  if (phase === 'drop') return current ? { key: target.key, position: current.position } : null;
+  return { key: target.key, position: resolveEdgeZone(rectOf(event), event.clientY, …) };
+}
+
+// kanban -- no resolver at all: the bound target IS the destination, in both
+// phases, and the self-drop it commits today is preserved by construction
+```
+
+Tree's `phase === 'drop'` branch is not decoration: `handleDrop` uses the
+receiving `key` and the zone the LAST `dragover` stored, and it never recomputes
+the zone from the drop event's `clientY` (`_e` is unused, `:824`). Reading
+`current.position` is that, exactly.
+
+**The keyboard path is the other branch and keeps the old rule**, because there
+is no receiving element: `commit(destination?)` uses `explicit ?? session.target`.
+That is the one place `session.target` IS the destination, and it is why it
+exists on the session at all (§2.4.6).
+
 #### 2.2.2 Stamp ownership — the kernel stamps nothing
 
 **CORRECTED (R2).** Round 1's invariant 5 said "the kernel stamps `data-*` and
@@ -572,14 +791,30 @@ pinned selectors keep matching because the attributes never move.
 
 Each one is a thing a consumer gets wrong today, and each is a named case or mutation in §6.3-§6.4.
 
-- **PREVENT-DEFAULT LAW.** `dragover` calls `preventDefault()` unconditionally,
-  before any consumer code runs. Without it the browser never fires `drop`. All
-  four owners do this by hand (tree does it in the JSX wrapper, `:386`, not in
-  its handler) and none of them has a test that would catch its removal.
+- **PREVENT-DEFAULT LAW.** An **attached** `dragover` handler calls
+  `preventDefault()` unconditionally, before any consumer code runs. Without it
+  the browser never fires `drop`. All four owners do this by hand (tree does it
+  in the JSX wrapper, `:386`, not in its handler) and none of them has a test
+  that would catch its removal. **CORRECTED (R4) — "attached" is the whole
+  reconciliation with tree's global gating.** The only way not to prevent is to
+  attach no handler, which is `getTargetProps(target, { eligible: false })` and
+  is exactly tree's `propDraggable === false` row (§2.2.4(c)).
 - **DROPEFFECT LAW.** `dragover` sets `dataTransfer.dropEffect = 'move'`. Three
   of the four do; **tree does not** (`:802-822` — measured, and Codex flagged it).
-  Setting it in tree's adoption is a one-line, user-visible cursor change, so it
-  is a declared addition in tree's lot note, not a silent transport side effect.
+  **CORRECTED (R4) — the "user-visible cursor change" claim is withdrawn.**
+  Revisions 2 and 3 said adding the write makes tree's cursor visibly different.
+  It does not, and Codex is right about why: tree already sets
+  `effectAllowed = 'move'` on `dragstart` (`:794`), and the HTML drag-and-drop
+  processing model initializes a cancelled `dragover`'s `dropEffect` from
+  `effectAllowed` — for a `move`-only source it is already `move`. Writing it
+  again changes nothing for tree's own drags. What the write DOES change is the
+  one case where `move` is not in the source's `effectAllowed`: a foreign
+  `copy`-only drag, whose negotiated operation becomes `none` and whose `drop`
+  is then not dispatched. That is a real declared consequence and it is
+  *consistent* with §2.2.5's decision to reject foreign drags — a surface that
+  will refuse the drop should not advertise one. Tree's lot note declares that,
+  not a cursor. The browser leg measures the negotiated operation on both arms
+  and the `copy` arm is the one that can fail (§6.3, claim 2).
   **CORRECTED (R3) — it also breaks tree's existing fixture, and that is handled
   before the lot, not inside it.** `Tree.modern-engine-advanced.test.tsx:206-210`
   builds its `dragOver` with `createEvent.dragOver(childItem)` and supplies **no
@@ -629,13 +864,53 @@ Each one is a thing a consumer gets wrong today, and each is a named case or mut
   a second, outer kernel target in the same event finds `sessionRef.current`
   already `null` and is a no-op, so `stopPropagation` is a visual/latency choice
   and not the correctness mechanism. Three named mutations, §6.4 N9/N10/N16.
-- **DROP-TIME VALIDATION.** A drop commits only when `session !== null` AND
-  `session.target !== null`. This reproduces all four owners' guards
-  (tree: `!dropTarget` → return, `:826`; saved-views: `dragViewId && dragViewId !== targetViewId`, `:210`;
-  kanban: `if (dragData)`, `:246`; column-menu via the `-1` index guard in
-  `moveItem`, `:177-186`). A **self-target** is NOT refused by the kernel: the
-  three owners disagree (kanban commits a self-drop, saved-views and tree refuse
-  it), so the rule stays in each family's `resolveTarget`.
+- **IMMEDIATE FINALIZATION. NEW (R4).** The sequence above governs **session
+  commits** — the pointer `drop`, the `'grab'` commit key, a delegated
+  `commit()`. It cannot govern `'immediate'` mode, because §2.4.1 requires that
+  mode to open no session at all, so step 1 would return on every arrow and
+  produce **zero commits**. Codex caught the contradiction; revision 3 said the
+  seven steps applied "for the pointer path and the keyboard path alike" and
+  meant it literally. `'immediate'` has its own straight-line branch, and it is
+  kanban's `applyMove` (`:269-310`) stated as a rule:
+
+  1. resolve `resolveKeyboardTarget({ payload, intent, candidate: null })`;
+  2. `{ kind: 'blocked' }` → emit
+     `onAnnounce({ kind: 'blocked', origin: 'keyboard', reason: 'edge' })` and
+     return. No commit, no focus change — kanban `:286-290`, verbatim;
+  3. `{ kind: 'target', target }` → call `onDrop(payload, target)`;
+  4. set the pending focus key (the origin is the keyboard by construction);
+  5. emit `onAnnounce({ kind: 'dropped', origin: 'keyboard', … })`.
+
+  No session is opened at any point, so `sessionRef.current` stays `null`
+  throughout and **R10 ("no grabbed state is ever stamped") holds by
+  construction**, which is what it claimed all along. Exactly-once needs no
+  reservation here because the branch has no re-entry point: an `onDrop` that
+  synchronously calls `commit()` finds no session and returns at step 1 of the
+  session sequence. Order is kanban's: move callback, pending focus,
+  announcement. §6.3 C9 and C19.
+- **DROP-TIME VALIDATION. CORRECTED (R4).** Revision 3 wrote: "a drop commits
+  only when `session !== null` AND `session.target !== null`", and claimed that
+  reproduces all four owners' guards. **It reproduces one.** Measured:
+
+  | Owner | The guard in its drop handler | Does `session.target` gate it? |
+  |---|---|---|
+  | saved-views | `dragViewId && dragViewId !== targetViewId && onViewReorder` (`:210`) then `fromIndex !== -1 && toIndex !== -1` (`:214`) | **no** |
+  | kanban | `if (dragData)` (`:249`) | **no** |
+  | column-menu | `if (sourceKey)` (`:422`), then `moveItem`'s index guards | **no** |
+  | tree | `if (dragKey === null \|\| !dropTarget) return` (`:826`) | **yes** |
+
+  Three of the four never read the hover stamp at drop time (§2.2.1(a)), so
+  gating on it would have added a refusal none of them has. The law is:
+
+  > A drop commits when `session !== null` **and the `'drop'`-phase destination
+  > is non-null**. The held indicator gates nothing by itself; tree's dependence
+  > on it is expressed inside tree's own resolver, where it belongs.
+
+  A **self-target** is still not refused by the kernel — kanban commits a
+  self-drop (`handleDrop` guards only `if (dragData)`, `:249`), saved-views,
+  column-menu and tree refuse it —
+  so the rule stays in each family's `resolveTarget`, now at `phase: 'drop'`.
+  §6.3 C2 and C16.
 - **CLEANUP LAW.** `dragend` clears the session unconditionally — commit or no
   commit, prevented or not — and is never routed through a chain that could skip
   it (§2.3).
@@ -648,15 +923,18 @@ Each one is a thing a consumer gets wrong today, and each is a named case or mut
   reject a non-file drag during `dragover` by reading `types`/`kind` (§2.7).
   Round 1's "reading `dataTransfer` during `dragover` is forbidden" was too broad
   and is **CORRECTED (R2)**.
-- **TARGET-HOLD.** A `dragover` that resolves to `null` CLEARS the destination;
-  a `dragover` that returns `current` HOLDS it. The three owners that have a
+- **TARGET-HOLD.** A `dragover` that resolves to `null` CLEARS the indicator;
+  a `dragover` that returns `current` HOLDS it. This is a **stamp** rule and
+  nothing else — the commit destination is resolved separately, at `phase:
+  'drop'` (§2.2.1(a)). The three owners that have a
   self-target rule disagree on which they do, so the kernel owns neither: tree
   clears (`setDropTarget(null)` then `return`, `:804-807`), while saved-views
   (`if (viewId !== dragViewId)`, `:200-202`) and column-menu
   (`if (draggedColumnKey && draggedColumnKey !== key)`, `:410-412`) leave the
   previous target stamped. That is why `resolveTarget` receives `current`, and
   it is the whole of §2.2.4(a)/(b)'s one-line resolver. §6.3 C16 pins the
-  a → b → a sequence in both spellings.
+  a → b → a sequence in both spellings **and carries it through the drop**,
+  which is the leg revision 3 stopped short of and Codex executed.
 - **PAYLOAD RECOVERY.** The kernel takes its payload from the session, never
   from `dataTransfer`. Three owners do the same; **column-menu does not** — it
   reads `getData('text/plain')` first and falls back to local state
@@ -679,11 +957,19 @@ controlled `string[]` callback.
 ```tsx
 const drag = useDragSession<{ key: string }, { key: string }>({
   disabled: !onViewReorder,
-  // HOLDS the previous target when the source is re-hovered -- `:200-202`.
-  resolveTarget: ({ payload, target, current }) =>
-    target.key === payload.key ? current : target,
-  onDrop: (payload, target) =>
-    onViewReorder?.(reorderByKey(views.map((v) => v.id), payload.key, target.key)),
+  // HOLDS the previous indicator when the source is re-hovered (`:200-202`);
+  // REFUSES the commit when the drop lands on the source (`:210`). CORRECTED (R4).
+  resolveTarget: ({ phase, payload, target, current }) =>
+    target.key === payload.key ? (phase === 'hover' ? current : null) : target,
+  onDrop: (payload, target) => {
+    // CORRECTED (R4) -- the family's index-validity guard (`:214`) is PRESERVED.
+    // Revision 3's adapter called the callback unconditionally, so a key no
+    // longer in `views` produced one callback with an unchanged array where the
+    // family produces NONE. Codex reproduced the difference.
+    const order = views.map((v) => v.id);
+    if (order.indexOf(payload.key) === -1 || order.indexOf(target.key) === -1) return;
+    onViewReorder?.(reorderByKey(order, payload.key, target.key));
+  },
 });
 
 // per pill -- source and target on the SAME element, stamps stay the family's
@@ -695,6 +981,12 @@ const drag = useDragSession<{ key: string }, { key: string }>({
   {...drag.getTargetProps({ key: view.id })}
 />
 ```
+
+`disabled: !onViewReorder` switches the SOURCE off and leaves the target
+handlers attached, which is what the family does: `draggable={!!onViewReorder}`
+(`:327`) beside unconditional `onDragOver` / `onDrop` / `onDragEnd`
+(`:329-331`). No `eligible` is passed to `getTargetProps` here — that option is
+tree's (§2.2.4(c)).
 
 Order today: `preventDefault` → guard `dragViewId !== targetViewId` → splice pair →
 `onViewReorder(newOrder)` → clear (`:207-224`). Order after: identical, with the
@@ -710,9 +1002,10 @@ returns `draggable: !disabled`.
 
 ```tsx
 const drag = useDragSession<{ key: string }, { key: string }>({
-  // Same leave-intact rule as saved-views -- `:410-412`.
-  resolveTarget: ({ payload, target, current }) =>
-    target.key === payload.key ? current : target,
+  // Same two-phase rule as saved-views: hold on hover (`:410-412`), refuse on
+  // drop -- `moveDraftColumn` returns when `sourceKey === targetKey` (`:378`).
+  resolveTarget: ({ phase, payload, target, current }) =>
+    target.key === payload.key ? (phase === 'hover' ? current : null) : target,
   // THE DRAFT: the commit point writes local state, NOT the public callback.
   onDrop: (payload, target) =>
     setDraftOrder((previous) =>
@@ -749,8 +1042,15 @@ const drag = useDragSession<
   { key: TreeEngineKey; position: TreeDropZone }       // TDestination -- resolved by cursor
 >({
   disabled: !propDraggable,
-  resolveTarget: ({ event, payload, target }) => {
+  resolveTarget: ({ phase, event, payload, target, current }) => {
     if (payload.key === target.key) return null;              // today's self guard, :804 CLEARS
+    if (phase === 'drop') {
+      // CORRECTED (R4). `handleDrop` combines the RECEIVING row (`key`) with the
+      // STORED zone (`dropTarget.position`, `:834`) and never recomputes the
+      // zone from the drop event -- its event argument is unused (`:825`).
+      // `!dropTarget` is its refusal (`:826`), which is `current === null` here.
+      return current ? { key: target.key, position: current.position } : null;
+    }
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     return { key: target.key, position: resolveEdgeZone(rect, event.clientY, { zones: 'before-inside-after' }) };
   },
@@ -771,7 +1071,7 @@ const isDraggable = propDraggable && !disabled;            // :263, unchanged
   data-draggable={isDraggable || undefined}
   data-dragging={drag.session?.payload.key === nodeKey || undefined}
   {...drag.getSourceProps({ key: nodeKey }, { eligible: !disabled })}
-  {...drag.getTargetProps({ key: nodeKey })}
+  {...drag.getTargetProps({ key: nodeKey }, { eligible: propDraggable })}
 />
 ```
 
@@ -791,23 +1091,39 @@ Three corrections live in this adapter, each one a Codex finding:
    function for the three string families.
 2. **The bound row is not the resolved destination**, which is the TS2345 fix
    (§2.2.1). The row binds `{ key }`; the cursor resolves `{ key, position }`.
-3. **Per-source eligibility.** Tree computes `isDraggable = propDraggable && !disabled`
-   per row (`:263`) and today attaches `onDragStart` only when it holds
-   (`:383`), while `onDragOver`/`onDrop`/`onDragEnd` are gated on `propDraggable`
-   ALONE (`:384-400`) — a disabled row is still a drop TARGET. Revision 2's
-   `disabled: !propDraggable` could not express that, and its
-   `data-draggable` stamp does not disable native dragging, which Codex
-   correctly called out. `getSourceProps(payload, { eligible })` reproduces the
-   three states exactly:
+3. **Eligibility is per source AND per target. CORRECTED (R4).** Tree computes
+   `isDraggable = propDraggable && !disabled` per row (`:263`) and today attaches
+   `onDragStart` only when it holds (`:383`), while `onDragOver`/`onDrop`/
+   `onDragEnd` are gated on `propDraggable` ALONE (`:384-400`). Revision 2's
+   `disabled: !propDraggable` could not express the per-row half; revision 3 fixed
+   that with `getSourceProps(payload, { eligible })` and then asserted, in C17,
+   that "the target bag is identical in all three" states — which Codex showed is
+   **contradicted by the source**: when `propDraggable === false` tree attaches
+   *no target handlers either*. Revision 3 had no way to say that (returning `{}`
+   from a `SortableTargetProps` requiring both handlers is **TS2739**, which Codex
+   reproduced), so the fix is two changes, not one:
 
-   | State | Tree today | `getSourceProps` returns |
-   |---|---|---|
-   | `propDraggable === false` | `draggable={false}`, all four handlers `undefined` | session `disabled` → `{ draggable: false }` and nothing else |
-   | `propDraggable && disabled` | `draggable={false}`, `onDragStart` `undefined`, `onDragEnd` attached | `{ draggable: false, onDragEnd }` — no `onDragStart`, no `onKeyDown` |
-   | `propDraggable && !disabled` | `draggable={true}`, `onDragStart` and `onDragEnd` attached | the full bag |
+   - `SortableTargetProps`'s handlers become **optional**, so an empty bag is
+     expressible and spreading it yields `onDragOver={undefined}` — React's
+     no-handler, and byte-for-byte tree's `undefined` (§2.2);
+   - `getTargetProps(target, { eligible })` carries the session-level gate.
+     It is **not** folded into `disabled`, because the two families disagree:
+     saved-views' `!onViewReorder` switches the source off and keeps the target
+     handlers attached (`:326-330`), while tree's `propDraggable === false`
+     detaches everything. One option cannot be both.
 
-   The target bag is unaffected by `eligible`, so a disabled row keeps receiving
-   drops exactly as it does today. §6.3 C17 pins all three rows.
+   The four measured states, and what the kernel returns for each:
+
+   | State | Tree today | source bag | target bag |
+   |---|---|---|---|
+   | `propDraggable === false` | `draggable={false}`; **all four** handlers `undefined` | `disabled: true` → `{ draggable: false }` | `{ eligible: false }` → **`{}`** |
+   | `propDraggable && disabled` | `draggable={false}`; no `onDragStart`; `onDragOver`/`onDrop`/`onDragEnd` attached | `{ eligible: false }` → `{ draggable: false, onDragEnd }` | the full bag |
+   | `propDraggable && !disabled` | `draggable={true}`; all attached | the full bag | the full bag |
+   | saved-views, `!onViewReorder` | `draggable={false}`; target handlers attached | `disabled: true` → `{ draggable: false }` | the full bag (no `eligible` passed) |
+
+   The fourth row is why `disabled` must not touch the target bag, and it is the
+   only row that is not tree's. §6.3 C17 pins all four; §6.4 N17a/N17b plant one
+   mutation per axis.
 
 `onDragStarted` exists for exactly this: tree emits a public `onDragStart({node})`
 from inside its handler (`:797`), and §2.3 forbids composing a second handler onto
@@ -829,7 +1145,14 @@ const drag = useDragSession<{ key: string }, KanbanTarget>({
   },
   keyboard: { mode: 'immediate', orientation: 'vertical', crossAxis: 'horizontal',
               resolveKeyboardTarget },
-  onAnnounce: announceKanbanMove,                 // the family builds every string
+  // CORRECTED (R4). Pointer commits announce NOTHING today; keyboard moves do
+  // (`:245-258` vs `:295-306`, executed). Revision 3 wired `announceKanbanMove`
+  // bare, which would have ADDED a pointer announcement inside a lot whose whole
+  // claim is that behavior did not change. `origin` is what preserves the split.
+  onAnnounce: (event) => {
+    if (event.origin === 'pointer') return;
+    setAnnouncement(announceKanbanMove(event));
+  },
 });
 
 // column body: the outer target
@@ -837,11 +1160,28 @@ const drag = useDragSession<{ key: string }, KanbanTarget>({
      {...drag.getTargetProps({ columnId: column.id, position: column.items.length })} />
 //   card: the inner target AND the source; stopPropagation reproduces :584
 <BoardCard
-  ref={drag.registerItem(itemKey(item))}
+  // CORRECTED (R4) -- BOTH registrations, including their null/unmount calls.
+  // The current ref callback registers each card with FLIP **and** the focus
+  // map (`:571-575`); `measure()` traverses FLIP's map (`flip-layout:83-89`),
+  // so revision 3's `ref={drag.registerItem(...)}` left it EMPTY and killed the
+  // animation while R8's call-order assertion stayed green. Codex caught it.
+  ref={(element: HTMLElement | null) => {
+    register(itemKey(item))(element);             // FLIP -- what measure() reads
+    drag.registerItem(itemKey(item))(element);    // focus restoration (§2.4.4)
+  }}
   data-drop-before={drag.session?.target?.columnId === column.id && drag.session.target.position === index}
   {...drag.getSourceProps({ key: itemKey(item) })}
   {...drag.getTargetProps({ columnId: column.id, position: index }, { stopPropagation: true })} />
 ```
+
+The kernel's `registerItem` **replaces `cardRefs`, not `register`**: it takes
+over the focus map the family keeps at `:573-574` and leaves `useFlipLayout`'s
+registration untouched. They are two maps with two readers — `measure()` reads
+FLIP's, the pending-focus effect reads the kernel's — and collapsing them was the
+error. The assertion that would have seen it is named in §6.3 **C20**: R8's
+"`measure()` is called before `onItemMove`" is true of a `measure()` that
+snapshots nothing, so the lot asserts the snapshot is **non-empty** — a surviving
+card must carry a running animation after a reordering drop.
 
 `measure()` before `onItemMove` is **inside the family's own `onDrop`**, so R8's
 ordering is preserved by construction rather than by a kernel promise; the kernel
@@ -913,9 +1253,10 @@ How it is carried, so no lot claims byte-identical behavior it does not have:
 
 #### 2.2.6 The contract's negative legs
 
-Six shapes the contract must **refuse**, each compiled with `@ts-expect-error`
-so that a contract which stopped refusing one reddens the check rather than
-passing silently (Appendix B, leg 10):
+**Eight** shapes the contract must **refuse** (six in revision 3, two added in
+revision 4), each compiled with `@ts-expect-error` so that a contract which
+stopped refusing one reddens the check rather than passing silently
+(Appendix B, leg 16):
 
 | # | Refused shape | Why |
 |---|---|---|
@@ -925,6 +1266,25 @@ passing silently (Appendix B, leg 10):
 | R-4 | `keyboard: { mode: 'grab', orientation }` | `resolveKeyboardTarget` is required in `'grab'` mode |
 | R-5 | `keyboard: { mode: 'delegated', crossAxis }` | §2.4.5's refusal is now at the type level, not a dev-time throw |
 | R-6 | `event.crossedContainer` on a `'moved'` announce event | the kernel does not know what a container is (§2.6) |
+| R-7 | **NEW (R4).** `useDragSession<{key:number},{key:number},{key:number;position:'inside'}>` with **no** `resolveTarget` | Codex's round-3 decoy, verbatim: a destination the bound target cannot supply has no producer, so the resolver is required (§2.2.1) |
+| R-8 | **NEW (R4).** `event.origin === 'touch'` on any announce event | the announcement origin is a CLOSED domain of the two paths the kernel actually has (§2.6) |
+
+**Each directive is load-bearing, proved by removing all eight.** Compiling the
+same file with every `@ts-expect-error` stripped produces **exactly eight
+errors, one per leg** — TS2353, TS2322, TS2345, TS2322, TS2353, TS2339, TS2345,
+TS2367 — at the eight declared positions and nowhere else (Appendix B, leg 16).
+A contract that stopped refusing one of the eight reddens the green run on an
+unused directive; a leg that never refused anything reddens the bare run by
+being absent from it. Both directions are checked.
+
+**The intersection does not loosen the options bag.** `UseDragSessionOptions`
+became `Base & ResolverRequirement`, and an intersection is the one place a
+reader should suspect that excess-property checking quietly stopped applying —
+which would make the contract *weaker* than revision 3's while looking stronger.
+Probed directly: an unknown property on the options literal (`rtl: true`, the
+option §2.4 deliberately does not have) is still **refused**, and so is a
+resolver whose `phase` parameter names a value outside the two (Appendix B,
+leg 16, the excess leg).
 
 ### 2.3 Press-cancel and handler composition
 
@@ -1136,8 +1496,8 @@ This is the distinction round 1 left implicit and Codex blocked on. It is what
 makes "one commit point" auditable.
 
 - A **candidate move** changes `session.target` and never calls `onDrop`. It
-  emits `onAnnounce({ kind: 'moved' })` **when the session's origin is the
-  keyboard**; a pointer `dragover` moves the candidate silently, because no
+  emits `onAnnounce({ kind: 'moved', origin: 'keyboard' })` **when the session's
+  origin is the keyboard**; a pointer `dragover` moves the candidate silently, because no
   owner announces during a drag today (§2.6). **CORRECTED (R3)** — revision 2
   made the emission unconditional, which Codex read, correctly, as one
   announcement per `dragover`.
@@ -1154,6 +1514,11 @@ makes "one commit point" auditable.
 `'immediate'` is kanban's shipped behavior stated as a rule: an arrow resolves a
 target and commits it in the same tick, no session is opened, and R10 ("no
 grabbed state is ever stamped") is true by construction rather than by assertion.
+**CORRECTED (R4):** because it opens no session, it cannot run the session
+commit sequence of §2.2.3 — whose first step returns on a null session — so it
+has its own **IMMEDIATE FINALIZATION** branch there. Revision 3 declared the
+sequence universal and therefore specified **zero commits** for every kanban
+arrow; Codex derived the contradiction from the two sections.
 Escape restoration in `'grab'` mode is auditable for the same reason: the data was
 never touched, so cancelling is `session = null` plus `onCancel`, not an undo.
 
@@ -1258,22 +1623,73 @@ const drag = useDragSession<{ key: string }, { key: string }>({
       return { kind: 'target', target: { key: order[to] } };
     },
   },
-  onAnnounce: (event) => setAnnouncement(columnMenuMessage(event)),   // the family's strings
+  // The family owns the text, so it also owns which kinds HAVE text: this
+  // builder returns a string for `dropped` and `blocked` and null for the
+  // `grabbed`/`moved` steps of a one-shot control press.
+  onAnnounce: (event) => {
+    const message = columnMenuMessage(event);
+    if (message) setAnnouncement(message);
+  },
 });
 
+// CORRECTED (R4) -- ONE user action, ONE terminal state, ONE message.
 const moveBy = (key: string, intent: MoveIntent) => {
-  drag.start({ key });        // opens the keyboard session on THIS column
-  drag.move(intent);          // resolves the candidate
-  drag.commit();              // one commit, one announcement
+  drag.start({ key });                       // opens the keyboard session
+  if (drag.move(intent)) drag.commit();      // advanced  -> moved, then dropped
+  else drag.cancel();                        // refused   -> edge already announced
 };
 
+// NOT `disabled`: see below.
 <IconButton aria-label={`${tOr('columnMenu.moveUp', 'Move up')} ${column.title}`}
-            disabled={isAtEdge(column.key, 'prev-item')}
             onClick={() => moveBy(column.key, 'prev-item')} />
 <IconButton aria-label={`${tOr('columnMenu.moveDown', 'Move down')} ${column.title}`}
-            disabled={isAtEdge(column.key, 'next-item')}
             onClick={() => moveBy(column.key, 'next-item')} />
 ```
+
+**Two defects of revision 3's version, both executed by Codex, both fixed
+above.**
+
+*The lifecycle.* Revision 3 wrote `start → move → commit` unconditionally.
+Executed against the specified lifecycle that gives, at an edge: `grabbed`,
+`blocked('edge')` from the refused `move()`, then `blocked('no-destination')`
+from the `commit()` that followed anyway — **two refusals for one key press, on
+a session that was never closed**. The next `start()` would then be made on top
+of a live session. The fix is two rules and one line of adapter: `move()`
+returns whether the candidate advanced (§2.2), `cancel()` announces only when
+there is a candidate (§2.6), and the adapter branches. Re-executed, all three
+arms now end with `session === null` and one message each:
+
+| Action | Events | Terminal session | Committed |
+|---|---|---|---|
+| `b` next-item | `grabbed`, `moved`, `dropped` | `null` | `{key:'c'}` |
+| `a` prev-item (edge) | `grabbed`, `blocked(edge)` | `null` | — |
+| `d` next-item (edge) | `grabbed`, `blocked(edge)` | `null` | — |
+
+Revision 3's two edge rows were `grabbed`, `blocked(edge)`,
+`blocked(no-destination)`, **session open**. Appendix B, leg 19.
+
+*The disabled buttons.* Revision 3 kept the family's `disabled={isAtEdge(…)}`
+and then claimed "at the edges the user now hears something". Codex is right
+that those cannot both be true: a natively disabled `<button>` fires no
+`onClick`, so the edge branch was unreachable — and a disabled control is also
+out of the tab order, so a keyboard user cannot even arrive at the edge to learn
+about it. **The controls stay enabled and the resolver decides**, which is not
+an invention: it is the pattern kanban already ships on its coarse-pointer move
+rail, where the buttons are plain enabled `ModernButton`s and `applyMove` emits
+the edge message itself (`:602-614`, `:286-290`).
+
+That makes the §0.5 divergence disappear as a side effect rather than needing
+its own repair: today `disabled` is computed from `index` within the **rendered
+section** (`:897`, `:906`) while `handleMove` spans the **complete normalized
+order**, so in a grouped menu the last row of a group is disabled from moving
+down although the order below it continues. With the resolver as the only edge
+authority there is one decision, and it is the right one.
+
+**This is a declared, user-visible change and it gets a pin**, in lot 7's note:
+the first and last rows' move buttons stop being `disabled`; activating one
+announces the edge message and moves nothing. The alternative — keep `disabled`
+and drop the `blocked` claim — is recorded as an open decision below, because it
+is the reviewer's to take.
 
 **The data outcome is identical to `handleMove`, proved by execution, not by
 inspection.** `handleMove` does a POSITIONAL move (`moveItem(order, i, i ± 1)`)
@@ -1291,19 +1707,18 @@ edges (Appendix B, leg 11):
 | `d` down (edge) | `[a,b,c,d]` — `to >= length` guard | `[a,b,c,d]` — `{ kind: 'blocked' }` | SAME |
 
 What the lot **adds**, declared: at the edges the user now hears something. Today
-both edge cases are silent no-ops; through the kernel they emit
-`{ kind: 'blocked', reason: 'edge' }` and the family renders a message. That is
-the entire point of the operability lot.
+both edge cases are unreachable silent no-ops — the control is disabled, so
+there is no activation at all; through the kernel the control is enabled, the
+resolver emits `{ kind: 'blocked', reason: 'edge' }` and the family renders a
+message. That is the entire point of the operability lot.
 
 **The lot also repairs the disabled-ends divergence** that §0.5 recorded as a
-measured bound: today `disabled` is computed from the index within the **rendered
-section** while `handleMove` spans the **complete normalized order**, so in a
-grouped menu the last row of a group is disabled from moving down although the
-order below it continues. Once the resolver owns the edge decision, the control
-and the announcement would disagree — a button that says it cannot move next to
-a resolver that says it can. `isAtEdge` above therefore asks the same resolver
-(`resolveKeyboardTarget(...).kind === 'blocked'`), which makes them one decision.
-Declared addition, one named test, in lot 7.
+measured bound, and **CORRECTED (R4)** it does so by removing the second
+authority rather than by synchronizing two: revision 3 kept `disabled` and fed it
+from the resolver via an `isAtEdge` helper, which is one decision rendered twice
+and, as shown above, silences the very announcement the lot exists to add. With
+the control enabled, the resolver is the only edge authority there is. Declared
+addition, one named test, in lot 7.
 
 **What tree needs that column-menu does not.** Tree's destination picker must
 name an **arbitrary** node and a before/inside/after position, which four
@@ -1354,16 +1769,44 @@ The kernel owns the **when** and the **politeness**; the consumer owns the
 
 ```ts
 type SortableAnnounceEvent<TPayload extends DragPayload, TDestination> =
-  | { readonly kind: 'grabbed';   readonly payload: TPayload }
-  | { readonly kind: 'moved';     readonly payload: TPayload; readonly target: TDestination }
-  | { readonly kind: 'dropped';   readonly payload: TPayload; readonly target: TDestination }
-  | { readonly kind: 'cancelled'; readonly payload: TPayload }
-  | { readonly kind: 'blocked';   readonly payload: TPayload;
+  | { readonly kind: 'grabbed';   readonly origin: Origin; readonly payload: TPayload }
+  | { readonly kind: 'moved';     readonly origin: Origin; readonly payload: TPayload; readonly target: TDestination }
+  | { readonly kind: 'dropped';   readonly origin: Origin; readonly payload: TPayload; readonly target: TDestination }
+  | { readonly kind: 'cancelled'; readonly origin: Origin; readonly payload: TPayload }
+  | { readonly kind: 'blocked';   readonly origin: Origin; readonly payload: TPayload;
       readonly reason: 'edge' | 'no-destination' };
+
+// where `Origin` is the session's own `'pointer' | 'keyboard'` (§2.2).
 ```
 
 Generic over the family's own payload and destination — round 1 typed `target` as
 `unknown`, which forced every consumer to cast before it could build a string.
+
+> **CORRECTED (R4) — every event carries its `origin`, and that is what keeps
+> kanban's announcements where they are.** Codex executed kanban's handlers and
+> measured the asymmetry the contract was about to erase:
+>
+> ```text
+> Pointer drop:  measure -> onItemMove                                  NO announcement
+> Keyboard move: measure -> onItemMove -> pending focus -> announcement
+> ```
+>
+> Revision 3 emitted `dropped` on pointer commits and `cancelled` on aborted
+> pointer drags, and wired kanban's `announceKanbanMove` to `onAnnounce`
+> directly. That is a **new pointer announcement in a lot that claims no
+> behavior change**, and lots 5 and 5b declare no such thing. The alternative of
+> emitting nothing on the pointer path was rejected: the kernel would then be
+> deciding a product question, and a family that *wants* a pointer announcement
+> could never have one.
+>
+> `origin` is already a field of `DragSession` (§2.2), so the kernel is emitting
+> a fact it holds rather than learning a new one. The consumer decides, in one
+> line, which is the design everywhere else in this contract: **the kernel owns
+> the when, the family owns the text — and a family that returns no text has
+> made no announcement.** Kanban's adapter guards on `origin === 'pointer'`
+> (§2.2.4(d)) and its lot 5 note carries the assertion that a pointer drop
+> leaves the live region unchanged. Refusal leg R-8 keeps the origin domain
+> closed at two.
 
 > **CORRECTED (R3) — `crossedContainer` is deleted.** Revision 2 put it on the
 > `'moved'` event, and Codex is right that nothing could supply it: the kernel
@@ -1380,12 +1823,20 @@ undefined, which is how `'immediate'` ended up owing a candidate event it has no
 phase for, and how the pointer path ended up implying an announcement per
 `dragover`.
 
-| Path | `grabbed` | `moved` | `dropped` | `cancelled` | `blocked` |
-|---|---|---|---|---|---|
-| pointer | — | **—** | on the commit | on `dragend` without a commit | — |
-| `'immediate'` | — | — | on each committed arrow | — | on a blocked arrow (`'edge'`) |
-| `'grab'` | on the grab key | on each candidate arrow | on the commit key | on Escape / `cancel()` | `'edge'` |
-| `'delegated'` | on `start()` | on each `move()` | on `commit()` | on `cancel()` | `'edge'`, or `'no-destination'` from a bare `commit()` with no candidate |
+| Path | `origin` | `grabbed` | `moved` | `dropped` | `cancelled` | `blocked` |
+|---|---|---|---|---|---|---|
+| pointer | `'pointer'` | — | **—** | on the commit | on `dragend` without a commit | — |
+| `'immediate'` | `'keyboard'` | — | — | on each committed arrow | — | on a blocked arrow (`'edge'`) |
+| `'grab'` | `'keyboard'` | on the grab key | on each candidate arrow | on the commit key | on Escape / `cancel()` **with a candidate** | `'edge'` |
+| `'delegated'` | `'keyboard'` | on `start()` | on each `move()` that advances | on `commit()` | on `cancel()` **with a candidate** | `'edge'` from a refused `move()`, or `'no-destination'` from a `commit()` with no candidate |
+
+**CORRECTED (R4) — `cancel()` announces only when there is something to
+abandon.** A `cancel()` on a session with `target === null` closes it and emits
+nothing. Without that rule a delegated family's blocked edge produces two
+messages for one key press (§2.4.6), and "cancelled" for a move that never
+staged anything is noise rather than feedback. The rule is stateless — it reads
+`session.target !== null` — and it leaves `'grab'`'s real case intact: Escape
+after arrows has a candidate and announces.
 
 Two rules make that table, and both are measured rather than chosen:
 
@@ -1538,27 +1989,40 @@ directions:
   `sibling-owner-dependency`. Neither edge exists and neither is being bought.
 
 The gate's own suite changes in three places: the mirrored `SCOPED_OWNER_RANKS`
-literal (`index.test.mjs:127-133`), the `rankedChildren.length` pin (`:252`,
-`94` → `95`), and a new causal test modelled on the existing
-`'the collection kernels are a ladder'` case (`:545-570`) that plants
-`sortable → roving-focus` (admitted) and `roving-focus → sortable` (inverted).
-**No baseline is widened.**
+literal (`index.test.mjs:136`), the `rankedChildren.length` pin (`:274`), and a
+new causal test modelled on the existing listbox-ladder case (`:600-653`) that
+plants `sortable → roving-focus` (admitted) and `roving-focus → sortable`
+(inverted). **No baseline is widened.**
 
-**Pre-existing reds this lot inherits and must not be credited with.**
-Re-measured for revision 3 at HEAD `351229630`, with both gate files
-byte-identical across `785771a30`, HEAD and this worktree,
-`node --test scripts/check/architecture/audits/structure/index.test.mjs` still
-reports **32 pass / 3 fail** and `rankedChildren.length` is still pinned at `94`
-(`index.test.mjs:258`), so revision 2's figures stand unchanged. The three: `default macro roots match the governed graphics and UI
-taxonomy` (the mirrored literal is missing the `components/primitives/feedback`
-notifier ranks another writer added), `every scoped owner and ranked child
-resolves to a real directory` (the owner-count pin says 25, the table has 26), and
-`the theme contract chain is a directed ladder, and the reversed edge still
-inverts` (the themes literal in the test disagrees with the source's current
-order). The kernel lot must leave those three exactly as it found them — repairing
-someone else's mirrored literal inside this lot would make its own A/B unreadable
-— and its own two edits must move `rankedChildren.length` from the value the file
-then carries, not from `94`, if another writer lands first.
+**CORRECTED (R4) — the three pre-existing reds are gone, and the pins moved.**
+Revisions 2 and 3 recorded this suite as **32 pass / 3 fail** with
+`rankedChildren.length` pinned at `94`, and instructed the kernel lot to inherit
+the reds untouched. That is no longer this checkout's result. Codex noticed the
+file had changed under the review ("its old test-count receipt is not the current
+checkout's result") and it is right. Re-measured at revision-4 base
+`30ec496c1`:
+
+```
+node --test packages/core/scripts/check/architecture/audits/structure/index.test.mjs
+  -> 37 tests, 37 pass, 0 fail
+grep -n "rankedChildren.length" .../index.test.mjs     ->  :274  assert.equal(..., 98)
+```
+
+The change landed in `2c4ba44af`, the lot that re-anchored the suite's stale
+taxonomy fixtures — it repaired all three reds (the mirrored macro-root literal,
+the owner-count pin and the themes ladder order) and added two cases. So:
+
+- there are **no inherited reds** for the kernel lot to be careful about, and the
+  paragraph that told it to preserve them is withdrawn;
+- the kernel lot's A/B is now the cleanest possible one: **37/37 → 38/38**, one
+  new passing case, nothing else moving;
+- the `rankedChildren.length` edit is **`98` → `99`**, not `94` → `95`.
+
+Revision 3 anticipated exactly this and wrote that the lot must move the pin
+"from the value the file then carries, not from `94`, if another writer lands
+first". The rule is kept; only the numbers are refreshed. The general hazard —
+that a design packet's gate receipts decay while it is under review — is recorded
+in R15 and in `revision-notes.md`.
 
 ### 3.2 Adoption lots, in recommended order
 
@@ -1833,15 +2297,18 @@ rewritten and C13-C17 are new in revision 3**.
 | # | Case | Asserts |
 |---|---|---|
 | C1 | `dragover` cancels the event | `event.defaultPrevented === true` after dispatch, in the unit suite (this is the honest unit-level form of the PREVENT-DEFAULT LAW; see the browser leg below) |
-| C2 | drop with `session.target === null` | `onDrop` not called |
+| C2 | **REWRITTEN (R4).** drop whose `'drop'`-phase destination is `null` | `onDrop` not called — and the companion case: a drop whose **indicator** is `null` while the receiving element's bound target resolves DOES commit, because three of the four owners never read the stamp at drop time (§2.2.3, DROP-TIME VALIDATION). Revision 3 gated the commit on `session.target`, which would have added a refusal no owner has |
 | C3 | **leaving every target** — **REWRITTEN (R3)** | after `dragover` on a target, dragging away from every kernel target fires nothing, so the destination is **held** and its stamp stays (the measured behavior of all four owners, none of which has an `onDragLeave` — §2.2.2); a `dragend` there fires `onCancel` exactly once and clears it |
 | C4 | **the source is disabled mid-session** | `disabled` flipping true during a drag clears the session, fires `onCancel`, routes `pressCancel`, and a subsequent `drop` commits nothing |
 | C5 | **the target unmounts mid-session** | a `drop` that never arrives leaves no session after `dragend`; no stamp and no callback survive the unmount |
-| C13 | **re-entrant commit** — **NEW (R3)** | an `onDrop` that synchronously drives a second commit (the kernel's own `commit()`, or a nested `drop` dispatched from inside it) finds the session already reserved: `onDrop` is called **exactly once** (§2.2.3 step 3) |
+| C13 | **re-entrant commit** — **NEW (R3)** | an `onDrop` that synchronously drives a second commit (the kernel's own `commit()`, or a nested `drop` dispatched from inside it) finds the session already reserved: `onDrop` is called **exactly once** (§2.2.3, the reservation at step 4) |
 | C14 | **the SOURCE unmounts mid-session** — **NEW (R3)** | the session OUTLIVES the source, because the browser fires `dragend` on a detached node and React's handler never runs. This reproduces all four owners at base (`dragKey`/`dragData`/`draggedColumnKey`/`dragViewId` all stay set), so the kernel must NOT invent a window listener: the test asserts the session is still open, that `cancel()` closes it, and that the next `dragstart` reserves a fresh one over the stale payload |
-| C15 | **commit against a removed destination** — **NEW (R3)** | `session.target` is a VALUE, not a live node: `commit({ key: 'gone' })` passes it through to `onDrop` unvalidated, and the family's own guard decides — tree's `findNode` returns `undefined` and fires nothing (`:825-833`), saved-views' and column-menu's `indexOf` return `-1` and the order is unchanged. The kernel performs no liveness check and the test says so, so a later reader does not mistake a non-null field for a validity proof |
-| C16 | **the leave-intact / clear split** — **NEW (R3)** | dragging `a → b → a`: with `resolveTarget` returning `current` the destination stays `b` (saved-views, column-menu), and with it returning `null` the destination clears (tree). Both spellings in one test, because §2.2.3's TARGET-HOLD law is the only thing that keeps saved-views' stamp from changing on adoption |
-| C17 | **per-source eligibility** — **NEW (R3)** | the three rows of §2.2.4(c): a session-disabled source returns `{ draggable: false }` alone; an ineligible source returns `draggable: false` with `onDragEnd` but NO `onDragStart`, and a `dragStart` fired on it opens no session; an eligible source returns the full bag. The target bag is identical in all three |
+| C15 | **commit against a removed destination** — **NEW (R3), AMENDED (R4)** | `session.target` is a VALUE, not a live node: `commit({ key: 'gone' })` passes it through to `onDrop` unvalidated, and the family's own guard decides. The kernel performs no liveness check and the test says so, so a later reader does not mistake a non-null field for a validity proof. **The assertion is CALLBACK COUNT, not array contents**: with `b` removed from `[a,b,c]`, saved-views' `fromIndex !== -1 && toIndex !== -1` guard (`:214`) produces **zero** `onViewReorder` calls, while revision 3's adapter — which dropped the guard — produced **one** call with an unchanged array. An "unchanged order" assertion is green on both. Codex reproduced the difference; so did I (Appendix B, leg 17) |
+| C16 | **the leave-intact / clear split, CARRIED THROUGH THE DROP** — **NEW (R3), REWRITTEN (R4)** | two legs, and the second is the one revision 3 omitted. **Leg 1 (the stamp):** dragging `a → b → a`, a `'hover'` resolver returning `current` holds the indicator at `b` (saved-views, column-menu) and one returning `null` clears it (tree). **Leg 2 (the commit):** the SAME sequence continued with a `drop on a` calls `onDrop` **zero** times and leaves `[a,b,c]`, because the `'drop'` phase resolves the RECEIVING element and refuses the self-target — which is what all four owners do, executed. A contract committing `session.target` here reorders to `[b,a,c]` with one callback, and leg 1 alone stays green on it. The ordinary `a → hover b → drop on b` leg is asserted beside it (`[b,a,c]`, one callback) so the fix cannot be a blanket refusal |
+| C18 | **payload authority on a LIVE session** — **NEW (R4)** | a session open on `a`, and a `drop` whose `dataTransfer.getData('text/plain')` returns `'b'` — a different, existing key. The kernel commits **`a`**: the payload is the session's, never the transfer's (PAYLOAD LAW). This is the case N11 needs, because the foreign-drag case it used before is refused by the null-session guard before any recovery could run — Codex's mutant read zero transfers and the assertion stayed green |
+| C19 | **immediate mode commits without a session** — **NEW (R4)** | in `'immediate'` mode an arrow calls `onDrop` **exactly once** while `session` is `null` before, during and after; a blocked arrow calls it zero times and emits one `blocked('edge')`. The ordering is `onDrop` → pending focus → `dropped` announcement (kanban `:295-306`). This is the case that fails against revision 3's contract, which routed every commit through a sequence that returns on a null session |
+| C20 | **the FLIP snapshot is not empty** — **NEW (R4)** | after a pointer drop that reorders, the measured snapshot contains the registered cards — asserted through the observable consequence, that a surviving card carries a running animation. R8's "`measure()` before `onItemMove`" ordering assertion is **green on a `measure()` that snapshots nothing**, which is exactly what replacing the FLIP registration with the kernel's would produce (§2.2.4(d)) |
+| C17 | **eligibility on both axes** — **NEW (R3), REWRITTEN (R4)** | the **four** rows of §2.2.4(c). Source axis: a session-disabled source returns `{ draggable: false }` alone; an ineligible source returns `draggable: false` with `onDragEnd` but NO `onDragStart`, and a `dragStart` fired on it opens no session; an eligible source returns the full bag. Target axis: `{ eligible: false }` returns an **empty bag**, so a `dragover` on it is NOT cancelled and no `drop` handler exists — tree's `propDraggable === false` row. Revision 3 asserted "the target bag is identical in all three", which the source contradicts, and whose only expressible form was a **TS2739** |
 | C6 | **an unrelated external drag** | `dragover` + `drop` with no session (a foreign drag) commits nothing and clears nothing that was not its own — the case all four owners survive today only by their own separate guards (§2.2.3) |
 | C7 | **nested targets commit once** | a `drop` on kanban's card target inside its column-body target calls `onDrop` exactly once, BOTH with and without `stopPropagation` (the ref guard, not the flag, is the mechanism) |
 | C8 | **a caller-prevented event** | an event arriving already `defaultPrevented` still cleans up on `dragend` and still obeys the target guard on `drop` (§2.3.2) |
@@ -1885,8 +2352,29 @@ unit suite can make:
    `drop` event fires; with it removed (the runner injects the mutation into the
    page, exactly as FAB-17 injects `position: static`), **no `drop` event fires
    at all**. This is the consequence, not the `defaultPrevented` proxy of C1.
-2. `dataTransfer.dropEffect = 'move'` actually changes the drag cursor
-   negotiation, which is what makes tree's addition user-visible (§2.2.3).
+2. **REWRITTEN (R4) — the negotiated operation, with a control that can fail.**
+   Revision 3 required this leg to show that writing `dropEffect = 'move'`
+   changes the cursor. Codex is right that it does not follow: tree already sets
+   `effectAllowed = 'move'` on `dragstart` (`:794`), and the HTML processing
+   model initializes a cancelled `dragover`'s `dropEffect` from `effectAllowed`,
+   so for a move-only source the negotiated operation is already `move` before
+   the kernel writes anything. An unmeasured cursor delta is not evidence, and
+   requiring one would have produced a leg that passes by accident.
+   The leg measures the **negotiated operation** on two arms:
+
+   | Arm | Source `effectAllowed` | Without the kernel's write | With it |
+   |---|---|---|---|
+   | own drag | `'move'` | operation `move`, `drop` fires | operation `move`, `drop` fires — **unchanged, and that is the claim** |
+   | foreign, copy-only | `'copy'` | operation `copy`, `drop` fires | `move` is not in the allowed set: operation `none`, **`drop` does not fire** |
+
+   The first arm is the *safety* proof — the write is inert for every drag the
+   four families start, which is what makes tree's adoption a non-event — and it
+   is explicitly **not** a sufficient instrument, because it is green with the
+   write removed. The second arm is the negative control: it is the only
+   observable consequence of the DROPEFFECT LAW, it flips when the write is
+   deleted, and it is consistent with §2.2.5's decision to reject foreign drags,
+   since a surface that will refuse the drop should not advertise one. Tree's lot
+   note declares **that**, not a cursor. §7 R21.
 3. `effectAllowed` + `setData('text/plain', …)` round-trips through a real drag
    data store, and `getData()` is **empty during `dragover`** while `types`
    stays enumerable — the protected-mode claim §2.2.3 makes.
@@ -1912,7 +2400,10 @@ that reddens **nothing** is an instrument failure and blocks the lot.
 |---|---|---|
 | N1 | Delete `preventDefault()` in the `dragover` handler | `the dragover handler cancels the event` (unit, C1) **and** `a drag over an uncancelled target never drops` (browser leg) |
 | N2 | Delete the `dragend` cleanup | `an aborted drag leaves no session and no stamp` |
-| N3 | Remove the press-cancel route from `getSourceProps` | `a drag that starts and ends on the source leaves no pressed state` (the `PatternKanbanBoard.press-cancel` template) |
+| N3a | **RE-POINTED (R4).** Delete the `cancelPress(event)` call from **`BoardCard`'s `onDragEnd` wrapper** (`kanban-board/engines/modern:116`, inside the `:114-117` wrapper) | `a drag that starts and ends on the card leaves no pressed state` (`PatternKanbanBoard.press-cancel.test.tsx`). Revision 3 mutated an *option* the revised kanban adapter does not pass, so Codex executed the source-extracted `BoardCard` with a no-op consumer drag-end and the press still cleared: the designated assertion stayed green and the mutation caught nothing. The cleanup boundary is the component (§2.3.1), so the mutation belongs there |
+| N3b | **NEW (R4).** Delete lot 6a's drag-end press-cancel from **`StatefulRow`** | column-menu's ported `pressed is false after a drag that starts and ends on the row` (lot 6a). Note R18: it must be the behavioral assertion, because `StatefulRow` spreads `{...rest}` then `{...interaction.handlers}` (`:1123-1125`) and a "the prop was passed" test is green on a prop that is overwritten |
+| N3c | **NEW (R4).** Delete lot 6b's `onDragEnd` → press-cancel route from **`Button`** | the Button press-cancel case (lot 6b). `Button` routes `onPointerCancel` to press-cancel today (`:492`) and nothing else |
+| N3d | **NEW (R4).** Make the kernel ignore `options.pressCancel` | the kernel suite's `a source with pressCancel is routed on dragEnd and pointerCancel`. **The fixture is named**, because Codex is right that none of the four owners supplies the option: it is the kernel's own scene (§6.3 browser write set), which declares a source with no component-local boundary — the case the option exists for. If the reviewer prefers, deleting `pressCancel` from the API is the honest alternative and is recorded as an open decision |
 | N4 | Change `edgeRatio` from `0.25` to `0.5` in `resolveEdgeZone` | `the before/inside boundary sits at a quarter of the row` |
 | N5 | Replace `resolveMoveIntent`'s delegation with a physical key map | `ArrowLeft moves next under rtl on a horizontal axis` |
 | N6 | Make `resolveTarget` returning `null` still commit a drop | `a drop on a non-target is a no-op` |
@@ -1920,27 +2411,45 @@ that reddens **nothing** is an instrument failure and blocks the lot.
 | N8 | Make `reorderByKey` mutate its input | `reorderByKey returns a new array and leaves the input intact` |
 | N9 | Read the session from state instead of the ref in the commit guard | `a drop on nested targets commits exactly once` (C7) |
 | N10 | **REWRITTEN (R3).** Move the terminal reservation to AFTER `onDrop` returns | `a re-entrant commit during onDrop commits exactly once` (C13). Revision 2's N10 demanded a failure when the ref cleared *before* `onDrop`, which is now the specified behavior — so its designated assertion would have stayed green and the mutation would have caught nothing. Codex verified that counterexample; this is the mutation that actually bites |
-| N11 | Recover the payload from `dataTransfer.getData` instead of the session | `a foreign drag whose text/plain MATCHES an existing key commits nothing` (C6). **Re-pointed (R3):** the old case used a non-matching key, which passes either way — executed proof in §2.2.5 |
+| N11 | Recover the payload from `dataTransfer.getData` instead of the session | **AMENDED (R4): two designated assertions, and the second is the one that bites.** (i) `a foreign drag whose text/plain MATCHES an existing key commits nothing` (C6) — kept, because it is the declared behavior change of §2.2.5. (ii) `a live session commits its OWN payload when the transfer names a different key` (**C18**) — added, because Codex showed the mutant dies on the mandatory null-session guard *before* recovery runs: with no session there is nothing to recover, so its mutant read zero transfers and C6 stayed green. C18 gives it a live session to be wrong on |
 | N16 | **NEW (R3).** Re-read `sessionRef.current` inside the `onDrop` call instead of passing the reserved locals | `onDrop receives the payload and destination the session held at commit time` — after step 3 the ref is `null`, so the mutant throws or passes `undefined` |
-| N17 | **NEW (R3).** Make `getSourceProps` ignore `options.eligible` | `an ineligible source is not draggable and opens no session` (C17) — this is the mutation that reproduces revision 2's own defect, where a `data-draggable` stamp was mistaken for a native-drag switch |
+| N17a | **NEW (R3), renamed (R4).** Make `getSourceProps` ignore `options.eligible` | `an ineligible source is not draggable and opens no session` (C17) — this is the mutation that reproduces revision 2's own defect, where a `data-draggable` stamp was mistaken for a native-drag switch |
+| N17b | **NEW (R4).** Make `getTargetProps` ignore `options.eligible` | `a target with eligible:false attaches no handlers and does not cancel dragover` (C17) — the tree row that revision 3 asserted was identical in every state |
+| N18 | **NEW (R4).** Commit `session.target` instead of the `'drop'`-phase destination | `a re-hovered source is not committed as the destination` (C16 leg 2). This is revision 3's own contract text as a mutation: it reorders `[a,b,c]` to `[b,a,c]` with one callback where every owner does nothing |
+| N19 | **NEW (R4).** Emit `dropped` / `cancelled` on the pointer path with `origin: 'keyboard'` | `a pointer drop leaves the live region unchanged` (kanban, lot 5). A kernel that mislabels the origin reintroduces the undeclared pointer announcement the adapter's guard exists to prevent |
+| N20 | **NEW (R4).** Make `move()` return `true` unconditionally | `a blocked delegated move closes the session and announces once` (§2.4.6). The mutant restores revision 3's sequence: a second `blocked('no-destination')` on a session that stays open |
 | N12 | Skip cleanup when the event is already `defaultPrevented` | `a caller-prevented dragend still clears the session` (C8) |
 | N13 | Let `resolveMoveIntent` map `Home`/`End` onto a move | `Home and End are not move keys` (§2.4.3) |
 | N14 | Accept `crossAxis === orientation` | `an ambiguous axis pair is refused` (§2.4.5) |
 | N15a | Add an `aria-label` string to the kernel | `the kernel contains no literal outside SORTABLE_PROTOCOL_VOCABULARY` (invariant 6c) |
 | N15b | **NEW (R3).** Import `useOptionalTranslation` beside `useReadingDirectionIsRtl` | `the kernel imports no i18n binding but the direction authority` (invariant 6a). One negative per assertion, which is what revision 2 promised and did not deliver |
 
-N3, N5 and N11 are the ones no existing test in the repository would catch today
-outside kanban; they are why the planted-negative list is part of acceptance
-rather than a nicety. **N10, N16 and N17 are new in revision 3** and each one
-corresponds to a defect that was present in revision 2's own contract text — the
-list is not a formality, it caught its author.
+N3b, N3c, N5 and N11(ii) are the ones no existing test in the repository would
+catch today; they are why the planted-negative list is part of acceptance rather
+than a nicety. **N10, N16 and N17a were new in revision 3, and N3a-d, N17b and
+N18-N20 are new in revision 4** — each one corresponds to a defect that was
+present in the *previous* revision's own contract text. N18 is the sharpest of
+them: it is revision 3's specified commit rule, planted as the mutation that must
+fail. The list is not a formality; two rounds running, it has caught its author.
+
+**Two of revision 3's mutations did not bite, and both are replaced above rather
+than defended.** N3 targeted an option no adapter passes; N11's single case was
+refused by a guard that runs before the mutated code. Codex executed both
+mutants. The general lesson is recorded in `revision-notes.md`: a planted
+negative must be aimed at the boundary that actually owns the behavior, and a
+mutation placed behind an earlier guard proves only that the guard works.
 
 ### 6.5 Gates
 
 - `structure:check` — the new owner under `primitives/runtime/collection/` plus
-  the rank admission of §3.1, which is what this gate adjudicates. The gate's own
-  test file must go from its current 32/35 to 33/36 (the new causal case), with
-  the three pre-existing failures untouched and un-baselined.
+  the rank admission of §3.1, which is what this gate adjudicates. **CORRECTED
+  (R4):** the gate's own test file goes from its measured **37/37** at
+  `30ec496c1` to **38/38** (the new causal case). Revision 3 wrote "32/35 to
+  33/36, with the three pre-existing failures untouched"; `2c4ba44af` repaired
+  those three during the review round. Nothing is baselined either way. Note,
+  registered by another writer and not repaired here: `structure:check` never
+  runs this suite — its only runner is the `test:scripts` glob — so the lot must
+  run it explicitly rather than assume the gate covers it.
 - `tsc` and `typecheck:tests`.
 - `family-cut` for each adopted family.
 - `contract-changeset` at lot 11 — **with immutable SHAs**. **CORRECTED (R2).**
@@ -1975,9 +2484,9 @@ four already existing:
 
 | Role | File | Change |
 |---|---|---|
-| measurement | `packages/core/scripts/check/family-cut/index.mjs` → `measureFamily` | two new counts on the returned object |
-| blocking judgment | same file → `judgeFamily` (the `blocking.a11yAssertions === 0` branch at `:1350` is the template) | one blocking finding |
-| ratchet | `packages/core/scripts/check/family-cut/baseline/index.json` | one decrease-only pin per family |
+| measurement | `packages/core/scripts/check/family-cut/index.mjs` → `measureFamily` (`:1095`) | three new counts on the returned object |
+| blocking judgment | same file → `judgeFamily` (`:1268`; the `blocking.a11yAssertions === 0` branch at `:1350` is the template) | one blocking finding, plus the closure arm below |
+| ratchet | `packages/core/scripts/check/family-cut/baseline/index.json` | **two** decrease-only pins per family (`dndTransportOwners`, `dndDropZoneOwners`) |
 | drill | `packages/core/scripts/check/family-cut/index.test.mjs` | the planted cases below |
 
 No gate registration is needed: `family-cut` and `family-cut-drill` are already
@@ -1994,13 +2503,42 @@ in the manifest with `drillFor` / `drillId` and the baseline as their ratchet
    whose value is written in a `dragstart`-shaped handler and read in a
    `drop`-shaped one. A renamed quartet, an inline JSX arrow and a brand-new file
    all count; a pattern matching `handle*Drag*` would miss all three.
-2. `dndKernelWired` — **blocking**, and it is an *invocation* check, not an
-   import check: the family must contain a **call expression** to
-   `useDragSession` or `useFileDropZone` whose result is bound and whose bound
-   name is then **read** at least once (a spread of `getSourceProps` /
-   `getTargetProps` / `dropZoneProps`, or a `session` read). An unused import
-   fails. The finding fires only when `dndTransportOwners > 0` **and**
-   `dndKernelWired` is false — a family with no drag at all is not accused.
+2. `dndDropZoneOwners` — **NEW (R4)**, a second ratchet on the same footing.
+   Revision 3's single predicate required state written in a **drag-start**
+   shaped handler, and Codex is right that this measures **zero** for both
+   actual file-drop implementations, so nothing would ever have required their
+   `useFileDropZone` adoption. Measured at HEAD, neither has a drag source at
+   all — no `draggable`, no `onDragStart` anywhere in either file:
+
+   | Owner | Its shape |
+   |---|---|
+   | `file-manager/engines/modern` | `const [isDragOver, setIsDragOver] = useState(false)` (`:212`); written in an inline `onDragOver` (`:407`) and in `handleDragLeave` (`:408`); read as `data-drag-over` (`:406`); `e.dataTransfer.files` consumed in `handleDrop` (`:248-249`) |
+   | `upload/engines/modern` | `const [isDragOver, setIsDragOver] = useState(false)` (`:873`); written in an inline `onDragOver` (`:962`) and `onDragLeave` (`:963-972`); read as `data-state` (`:984`); `e.dataTransfer.files` consumed in `handleDrop` (`:928`) |
+
+   So the drop-zone shape is its own thing and is detected as such: the HTML5
+   **drop** vocabulary (`onDragOver` + `onDrop`, usually `onDragLeave`, and a
+   `dataTransfer.files` read) **without** `draggable` or a drag-start handler,
+   together with its own hover state — a `useState` written in a
+   `dragover`-shaped handler and cleared in a `drop`- or `dragleave`-shaped one.
+3. `dndKernelWired` — **blocking**, and **CORRECTED (R4) it is an *attachment*
+   check, not an invocation-and-read check.** Revision 3 required a call
+   expression whose bound name is read at least once. Codex wrote the decoy that
+   satisfies it while the family's real transport stays wired to the DOM:
+
+   ```ts
+   const unusedTransport = useDragSession(options);
+   void unusedTransport.session;
+   // The existing independent transport remains attached.
+   ```
+
+   The predicate is therefore raised to evidence that the kernel's props **reach
+   an element**: the bound name's `getSourceProps(...)` / `getTargetProps(...)`
+   result appears in a **JSX spread attribute**, or `dropZoneProps` does; or it
+   is **delegated** — passed as a JSX attribute value, or as a property of an
+   object literal that is itself spread onto an element. Those three shapes are
+   named exhaustively and drilled (D10, D11), rather than left to a general
+   dataflow analysis the gate cannot honestly perform. A bare `session` read no
+   longer counts as wiring, because a `session` read is rendering, not transport.
 
 **Transitive adapters are defined, not left to judgement.** Three shapes are
 named and excluded, each with its measured instance:
@@ -2033,10 +2571,31 @@ on revert):
 | D6 | an adapter-only module (tree-view's reshape) | **NOT** accused |
 | D7 | a family with no DnD vocabulary at all | **NOT** accused |
 | D8 | a frozen `engines/classic` copy of D1 | **NOT** accused, and **reported** on the EXCLUDED line |
+| D9 | **NEW (R4).** Codex's decoy verbatim: the kernel called, the result bound and read (`void x.session`), **and the legacy transport retained** | `dndKernelWired === false` (no attachment), **and** `dndTransportOwners` unchanged at 1, so the adopted family's ratchet pin of `0` fails. Both arms fire; the drill asserts both, because either one alone would let the decoy through under some pin |
+| D10 | **NEW (R4).** the kernel called and `getTargetProps(...)` assigned to a local that is never spread | **not** wired |
+| D11 | **NEW (R4).** `getSourceProps(...)` passed to a child through a JSX attribute rather than spread locally | **wired** — the delegation shape, which must not be a false accusation |
+| D12 | **NEW (R4).** a drop zone: `onDragOver` + `onDrop` + `onDragLeave` + its own `isDragOver` state + a `dataTransfer.files` read, with **no** `draggable` and **no** drag-start | ACCUSED as a **drop-zone** owner (the arm revision 3 measured as zero) |
+| D13 | **NEW (R4).** upload's `onDrop?.(e)` public prop re-emission, alone | **NOT** accused — a consumer callback is not a transport, on either arm |
 
-D6, D7 and D8 are the half that matters most: a gate that accuses everything is
-as useless as one that accuses nothing, and revision 2's proposed name-pattern
-would have failed D6.
+D6, D7, D8, D11 and D13 are the half that matters most: a gate that accuses
+everything is as useless as one that accuses nothing, and revision 2's proposed
+name-pattern would have failed D6.
+
+**The closure condition, stated separately from the blocking finding.
+CORRECTED (R4).** Revision 3 had one arm and let "the kernel is wired" stand in
+for "the duplication is gone". They are different claims and D9 is the proof:
+
+- **Blocking (per lot, per family):** `dndKernelWired === false` while
+  `dndTransportOwners > 0` **or** `dndDropZoneOwners > 0` → a blocking finding.
+  This is what stops a family from being declared adopted without adopting.
+- **Closure (the F-69 criterion):** the DnD consolidation criterion may be closed
+  only when `dndTransportOwners === 0` **and** `dndDropZoneOwners === 0` across
+  every family in the census — **zero independent implementations**, not "a
+  kernel is present somewhere". Both ratchets are decrease-only per family, so an
+  adoption lot must actually drive its own to zero and no later lot can put one
+  back. Under the decoy, `dndKernelWired` is `true` and `dndTransportOwners` is
+  still `1`, so the criterion stays open and the pin the adoption lot lowered
+  fails — which is the behavior Codex asked for.
 
 Scope, stated so the closure claim stays honest: this instrument establishes **DnD
 consolidation only**. F-69's geometry and export obligations remain separately
@@ -2083,7 +2642,9 @@ Until all five exist, the owner stays exported and lot 11 does not run. Invarian
 | R12 | **upload / file-manager** | The `dragleave` containment rule. Getting `relatedTarget === null` wrong (it means "left the window", an exit) makes the drop tint latch forever after the user drags out of the browser. | One kernel unit test per branch: inside → not an exit; outside → exit; `null` → exit. |
 | R13 | **all four sortable** | `dist/` staleness. Several gates read `dist` (`gates-de-registry-leen-dist`), and the hooks manifest drives the dead-writers census. A kernel added without republishing the hooks manifest leaves censuses measuring the old surface. | The DT's serialized regeneration after the kernel lot, before any adoption is measured. |
 | R14 | **all** | Foreign modified/untracked paths in this worktree (§1). An adoption lot measured against a dirty tree attributes another writer's reds to itself. | Every leg-1 A/B runs against a clean pre-lot tree, not the worktree. §1 records that the eleven files this packet measures are HEAD-identical. |
-| R15 | **the kernel lot itself** | `structure:check`'s own suite is red at HEAD with three pre-existing failures (§3.1). A lot that "fixes" them while adding its rank entry cannot show what its own change did. | Run the suite on the pre-lot tree and on the candidate and show both; the delta must be exactly one new passing case. |
+| R15 | **the kernel lot itself** | **REWRITTEN (R4).** The hazard is no longer inherited reds — `2c4ba44af` repaired all three during the review round and the suite is **37/37** at `30ec496c1` (§3.1). The hazard is that a design packet's gate receipts **decay while it is under review**: revisions 2 and 3 both carried `32/35` and `rankedChildren = 94`, and a lot executed from those figures would have written the wrong pin and mis-read its own A/B. | Re-measure the suite and the pin **at the lot's own pre-lot commit**, never from this document's numbers; run it on the pre-lot tree and on the candidate and show both; the delta must be exactly one new passing case. The lot must also run the suite explicitly: `structure:check` does not. |
+| R21 | **tree** | **NEW (R4).** Two consequences of tree's adoption that revision 3 either overclaimed or did not name. (i) The `dropEffect` write is **inert for tree's own drags** — `effectAllowed` is already `'move'` (`:794`), so the negotiated operation was already `move`; the "user-visible cursor change" claim is withdrawn. What it does change is a foreign **copy-only** drag, whose operation becomes `none` and whose `drop` stops firing. (ii) A **refused** drop now closes the session at the `drop` event instead of at the following `dragend` (§2.2.3, step 3), because three of the four owners clear on a refused drop and tree does not. In a browser `dragend` always follows, so the window is one event long; under `fireEvent` it is observable. | (i) is the browser leg's two-arm negotiated-operation measurement (§6.3 claim 2), with the copy arm as the control that can fail; both are recorded in tree's lot-3 note as declared changes, neither as a cursor claim. (ii) is one assertion in lot 3: after a refused `drop` with no `dragend`, the session is closed and a following `dragend` is a no-op. |
+| R22 | **saved-views** | **NEW (R4).** Another writer's uncommitted edit wraps the pill in a `ViewPill` component owning its own `useInteractionState` instance (§1). If it lands before lot 2, saved-views acquires a **fourth press-cancel boundary** of exactly the `BoardCard` / `StatefulRow` / `Button` class — an HTML5 drag swallowing the `pointerup` on an element that now tracks `pressed`. The packet's saved-views measurements are all taken at `HEAD`, so none of them is wrong; the *lot plan* is what would be incomplete. | Before lot 2 is written, re-read `saved-views/engines/modern/index.tsx` at the then-current HEAD. If `ViewPill` has landed, lot 2's PRE-pin records the pill's pre-repair `pressed` value the way the column-menu pin does (R2), and the boundary repair joins lots 6a/6b as **lot 6c**. Do not fold it into a transport lot. |
 | R16 | **tree** | **NEW (R3).** The `dropEffect` addition throws in tree's own suite: `Tree.modern-engine-advanced.test.tsx:206-210` fires `dragOver` with no `dataTransfer`, so `event.dataTransfer.dropEffect = 'move'` is a TypeError, not a cursor change. Revision 2's "existing tests unchanged" would have hidden a red behind a declared addition. | A PRE-lot fixture correction adding a `dataTransfer` stub to `dragOverAt`, landed and proved green against the UNCHANGED implementation first (it is inert there), then lot 3 lands the write. Both runs go in the lot report. |
 | R17 | **column-menu, kanban, saved-views** | **NEW (R3).** The foreign-drag differences of §2.2.5. The dangerous one is column-menu's: a foreign `text/plain` that happens to equal a column key reorders the draft today (`[a,b,c]` + `"a"` on `"c"` → `[b,c,a]`, executed) and will not after adoption. A lot that claims byte-identical behavior while carrying it is a false claim. | The lot-2 PRE-pin asserts the pre-adoption `[b,c,a]` for a MATCHING key; the adoption lot flips that single assertion in the commit that declares the change. kanban's and saved-views' stamp changes get one assertion each. §6.4 N11. |
 | R18 | **column-menu** | **NEW (R3).** `StatefulRow` spreads `{...rest}` and THEN `{...interaction.handlers}` (`:1124-1125`), so any handler a caller passes for a pointer event the kernel also owns is silently **overwritten** rather than composed. A lot-6a repair written as "pass `onPointerUp` through" would look correct, change nothing, and pass review. | Lot 6a's assertion must be behavioral — `pressed` is false after a drag that starts and ends on the row — never "the prop was passed". The lot-2 PRE-pin's recorded pre-repair value is what makes the delta visible. |
@@ -2093,7 +2654,29 @@ Until all five exist, the owner stays exported and lot 11 does not run. Invarian
 
 ## Appendix A — dispositions
 
-### A.0 Round-2 dispositions (Codex HOLD, `codex-HOLD-round2.txt`)
+### A.0 Round-3 dispositions (Codex HOLD, `codex-HOLD-round3.txt`)
+
+Codex's round-3 verdict resolved **B3** and kept **B4** resolved at contract
+level; neither is reopened. Eleven items remained across B1, B2 and B5. Every one
+is answered in the contract text; none is deferred and none is argued with.
+
+| # | Round-3 finding | Round-4 resolution | Where |
+|---|---|---|---|
+| B1.1 | **the held hover target is promoted into the drop destination** — the a→b→a→drop-on-a sequence reorders under the contract and does nothing in all four owners | Accepted and **executed independently** (`[a,b,c]`, 0 callbacks, matching every owner). `resolveTarget` gains `phase: 'hover' \| 'drop'`; the commit sequence's step 2 splits into a pointer branch that resolves the **receiving element** and a keyboard branch that commits the candidate; `session.target` is re-stated as the **indicator**. Kanban's bound `{columnId, position}` and tree's receiving-row-plus-stored-zone are written out. DROP-TIME VALIDATION is rewritten — revision 3 claimed its stamp gate reproduced four owners' guards; it reproduced **one** | **§2.2.1(a)**, §2.2.3, §2.2.4(a)-(d), §6.3 C2/C16, §6.4 N18 |
+| B1.2 | a distinct `TDestination` does not require its resolver | `ResolverRequirement` with `[TTarget] extends [TDestination]`; Codex's decoy is refusal leg **R-7**, and removing its directive yields `TS2345: Property 'resolveTarget' is missing` | §2.2, §2.2.1, §2.2.6 |
+| B1.3 | tree's global target gating is contradicted by the API and C17 (returning `{}` is TS2739) | Two changes, not one: `SortableTargetProps`' handlers become **optional**, and `getTargetProps` gains its own `eligible`. `disabled` is explicitly NOT overloaded, because saved-views keeps its target handlers attached while its source is off — the fourth row of the state table. PREVENT-DEFAULT is restated as applying to an *attached* handler | §2.2, **§2.2.4(c)**, §6.3 C17, §6.4 N17b |
+| B1.4 | kanban's adapter replaces FLIP registration with focus registration | The ref callback **composes both**, including null/unmount calls, with the distinction stated (`measure()` reads FLIP's map; the pending-focus effect reads the kernel's). C20 asserts a **non-empty snapshot**, because R8's ordering assertion is green on a `measure()` that snapshots nothing | §2.2.4(d), §6.3 C20 |
+| B1.5 | removed-target handling changes saved-views' callback behavior | The family's `fromIndex !== -1 && toIndex !== -1` guard (`:213`) is **preserved in the adapter**, and C15 asserts **callback count** (0, not 1-with-an-unchanged-array) | §2.2.4(a), §6.3 C15 |
+| B2.1 | the universal commit sequence excludes immediate mode → zero commits | A named **IMMEDIATE FINALIZATION** branch: resolve → blocked/return → `onDrop` → pending focus → `dropped`, opening no session, with the exactly-once property coming from the branch having no re-entry point. The session commit sequence (now nine steps, since the destination resolution splits by path) is re-scoped to **session commits only** | §2.2.3, §2.4.1, §6.3 C19 |
+| B2.2 | kanban acquires undeclared pointer announcements; the event carries no origin | Every announce event carries **`origin`**; kanban's adapter guards `origin === 'pointer'` and its lot pins that a pointer drop leaves the region unchanged. Refusal leg R-8 closes the domain; N19 plants a mislabelled origin | §2.2.4(d), **§2.6**, §6.4 N19 |
+| B2.3 | the delegated adapter leaves blocked sessions open, double-reports blocked, and its disabled buttons cannot fire | `move()` returns whether the candidate advanced; `cancel()` announces only with a candidate; the adapter branches. All three arms re-executed: one message each, `session === null` each. The `disabled` prop is **removed** from the move controls — kanban's shipped enabled move rail is the precedent — which also dissolves the §0.5 section-vs-order divergence | **§2.4.6**, §2.2, §2.6, §6.4 N20 |
+| B5.1 | the F-69 predicate misses both actual file-drop implementations | A second ratchet, `dndDropZoneOwners`, detected by the measured drop-zone shape (drop vocabulary + own hover state + a `dataTransfer.files` read, **no** `draggable`, **no** drag-start), with both owners' shapes tabulated from source. Drill D12/D13 | **§6.6** |
+| B5.2 | invocation plus a session read does not establish adoption | The predicate is raised to **attachment** (a JSX spread of the bag, or one of two named delegation shapes); a bare `session` read no longer counts. **Zero independent implementations** becomes the explicit closure condition, separate from the blocking finding. Codex's decoy is drill **D9**, asserted on both arms | **§6.6** |
+| B5.3 | N3 and N11 do not establish their designated failures | N3 is re-pointed at the **actual cleanup boundaries** — `BoardCard`'s `onDragEnd` wrapper (N3a), and lots 6a/6b's new routes in `StatefulRow` and `Button` (N3b/N3c) — with the kernel option's own fixture named (N3d). N11 gains a **live-session** case where the transfer key differs from the session key (C18), which is the only place a `getData` recovery can be wrong | §6.4, §6.3 C18 |
+| B5.4 | the `dropEffect` browser claim overclaims a cursor change | Withdrawn. Replaced by a **two-arm negotiated-operation** measurement whose `move` arm proves inertness (and is explicitly not a sufficient instrument) and whose foreign **copy-only** arm is the control that actually flips when the write is deleted | §2.2.3, §6.3 claim 2, R21 |
+| — | (Codex's observation) the structure gate's test file changed during the review | Accepted: the suite is **37/37** and `rankedChildren` is **98** at `30ec496c1`; §3.1, §6.5 and R15 are re-stated, the three "inherited reds" instructions are withdrawn, and the decay hazard itself is now R15 | §1, §3.1, §6.5, R15 |
+
+### A.0.1 Round-2 dispositions (Codex HOLD, `codex-HOLD-round2.txt`)
 
 One row per blocking finding. `RESOLVED` means the answer is in the contract text
 at the section named. Full detail, one row per sub-finding, is in
@@ -2105,14 +2688,14 @@ at the section named. Full detail, one row per sub-finding, is in
 | B1.2 tree's per-row source eligibility is lost | blocking | `getSourceProps(payload, { eligible })`, with the three measured states tabulated and pinned (C17, N17) | §2.2.4(c), §6.3 |
 | B1.3 the column-menu foreign-drag reconciliation is FALSE | blocking | Accepted and **executed independently** (`[b,c,a]`). Declared as a deliberate rejection, with a PRE-pin on a **matching** key — and the same method found **two more** owners with the same class of change | **§2.2.5**, R17 |
 | B1.4 saved-views' dragover leaves the previous target intact | blocking | **Reproduced**, not declared: `resolveTarget` receives `current`, so the leave-intact spelling is one line and tree's clearing spelling is another. TARGET-HOLD law + C16 | §2.2.3, §2.2.4(a)(b), §6.3 |
-| B1.5 exactly-once vs N10 disagree | blocking | Terminal reservation specified as a seven-step sequence with the announcement order, the rendered-state clear and the no-catch rule; N10 rewritten to a mutation that actually fails, plus N16 | §2.2.3, §6.4 |
+| B1.5 exactly-once vs N10 disagree | blocking | Terminal reservation specified as a single ordered sequence with the announcement order, the rendered-state clear and the no-catch rule; N10 rewritten to a mutation that actually fails, plus N16 | §2.2.3, §6.4 |
 | B2.1 no delegated session entrypoint | blocking | `start(payload, { target })` on the result, plus `commit(destination)` for an absolute destination; **one complete delegated adapter** written out and type-checked | §2.2, **§2.4.6** |
 | B2.2 the delegated config does not type-check (TS2739) | blocking | Mode-specific discriminated union; `{ mode: 'delegated' }` compiles alone. Reproduced against revision 2 first | §2.4, §2.2.6 |
 | B2.3 repeated candidate movement has no defined input | blocking | `resolveKeyboardTarget({ payload, intent, candidate })`; the delegated adapter advances from the candidate and says why | §2.4, §2.4.6 |
 | B2.4 the direction source is missing | blocking | The kernel calls `useReadingDirectionIsRtl()` itself — the identical import `roving-focus` makes from the same folder — and invariant 6 is restated as an **import allowlist** rather than a blanket ban. Equality with kanban's `direction === 'rtl'` proved from the hook's own source | §2.4, invariant 6 |
 | B2.5 announcement metadata exceeds the supplied information | blocking | `crossedContainer` **deleted** (the consumer owns `TDestination` and already computes it); a per-path event table defines what `'immediate'` fires, and `moved` becomes keyboard-only | §2.6, refusal R-6 |
 | B3 the press route does not reach the real instances | blocking | Inverted: press-cancel is a **per-source cleanup boundary**, which kanban's `BoardCard` already implements — so kanban needs no option and no plumbing. `StatefulRow` and `Button` get one repair each, in lots 6a and 6b, reconciled with the unchanged lot-2 PRE-pin | **§2.3.1**, §3.2, R18 |
-| B4 structure-gate admission | resolved in round 2 | Re-measured at HEAD: still 32/35, `rankedChildren` still `94` | §3.1 |
+| B4 structure-gate admission | resolved in round 2 | Re-measured at HEAD `351229630`: 32/35, `rankedChildren` `94`. **Superseded by R4** — `2c4ba44af` repaired the three reds during the round-3 review; the current figures are 37/37 and `98` (§1, §3.1) | §3.1 |
 | B5.1 the named browser harness cannot drive the hook | blocking | `family-causality` withdrawn (it injects markup and never hydrates). A live-mount scene + runner modelled on the repository's **two existing precedents**, with its own write set, its own `--self-check` and four claims a unit suite cannot make | §6.3 |
 | B5.2 leaving/removal coverage weaker than claimed | blocking | C3 rewritten to the measured no-`dragleave` truth; C13-C17 added, including source-removal-mid-session and commit-against-a-removed-destination, with the explicit statement that a non-null field is not a liveness check | §6.3 |
 | B5.3 tree's dropEffect conflicts with an unchanged fixture | blocking | A declared **PRE-lot** fixture correction, proved inert at the base | §2.2.3, R16, lot 3 |
@@ -2139,6 +2722,43 @@ open and who owns it.
 | A5 | **`useFileDropZone` in this WO** | Codex: keep it here as a **separately named capability**; remove `accept`/`multiple` if the hook does not enforce them; define raw-event callback ordering, disabled behavior, file identification, containment and cleanup; preserve each consumer's picker and keyboard fallback; "no accessibility surface" is too strong for an adapter attached to Upload's accessible drop control. | **RESOLVED** — §2.7: options trimmed, Upload's exact order reproduced, identification and cleanup left with the consumers, and the dropzone's `role="button"` / `tabIndex` / `aria-label` / Enter-Space path named as untouchable. |
 | A6 | **The transport/operability split** | Codex: confirm the split. Transport lots preserve existing behavior; additions and defect repairs are declared separately. Correct ColumnMenu's premise and keep its move buttons. SavedViews' grab behavior must not steal Space/Enter from selection, rename or menu. **A press-latch repair cannot simultaneously be represented as byte-identical behavior.** | **RESOLVED** — §3.3 (with its invariant references corrected), §0.5 (the corrected column-menu premise), §2.4.2 (both families move to `'delegated'`; `'grab'` ships with no adopter), lots 6a/6b (the two press-cancel repairs, declared, never inside a transport lot) and lot 5b (kanban's announcement repair, moved out of its transport lot in R3). |
 | A7 | **Mechanization of F-69** | Kimi: recommended as a rider. Codex: **required** before the DnD consolidation criterion may be closed. Extend existing machinery; verify actual imports/adoption; detect independent transport state/handler implementations rather than forbidding a name pattern; drill renamed and inline handlers and new files; exclude frozen engines explicitly. This establishes DnD consolidation only — F-69's geometry and export obligations remain separately accountable. | **RESOLVED as a requirement** — §6.6 and lot 9 of §3.2. |
+
+### Open decisions REVISION 4 takes, and the reviewer may reverse
+
+1. **Column-menu's move controls stop being `disabled` at the ends** (§2.4.6).
+   Taken because a disabled button fires no `onClick`, so the edge announcement
+   the operability lot exists to add would be unreachable, and because a disabled
+   control is out of the tab order — the keyboard user cannot arrive at the edge
+   to learn about it. Kanban's shipped coarse-pointer move rail is the precedent.
+   The alternative is to keep `disabled` and drop the edge-announcement claim
+   entirely; that is coherent, it just makes lot 7 smaller than its name. It
+   would also leave the §0.5 section-vs-complete-order divergence unrepaired,
+   since `disabled` would still be computed from the rendered section.
+2. **`cancel()` announces only when a candidate exists** (§2.6). Taken so a
+   delegated family's blocked edge is one message rather than two. The
+   alternative — always announce `cancelled` — is simpler to state and noisier to
+   hear, and it would put a "cancelled" in the user's ear for a key press that
+   staged nothing.
+3. **A `drop` event always closes the session, commit or refusal** (§2.2.3, step
+   3). Taken because three of the four owners clear their own state on a refused
+   drop and the fourth (tree) differs only for the one event between `drop` and
+   the `dragend` that always follows it. The alternative is to reproduce tree's
+   leave-it-to-`dragend` spelling for every family, which makes the kernel carry
+   a divergence that is invisible in a browser and only observable under
+   `fireEvent`. Declared in R21 either way.
+4. **`pressCancel` stays in the API with the kernel's own scene as its only
+   fixture** (§6.4 N3d). Taken because the option exists for a source that owns
+   no component-local cleanup boundary, and the design should not lose that case
+   just because none of these four owners is it. The honest alternative, which I
+   would not argue against, is to **delete the option** — all three real
+   boundaries turned out to be component-owned (§2.3.1) — and re-add it when a
+   source needs it.
+5. **The announcement `origin` is on the event rather than the kernel deciding
+   per path** (§2.6). Taken because emitting nothing on the pointer path would
+   put a product decision in the kernel and would leave a family that *wants* a
+   pointer announcement with no way to have one. The alternative is a
+   per-path emission switch in the options, which is a second authority on the
+   same question (invariant 7).
 
 ### Open decisions REVISION 3 takes, and the reviewer may reverse
 
@@ -2188,12 +2808,22 @@ open and who owns it.
 ### Standing process items
 
 - **Fable's independent review is still pending** under the three-reviewer rule.
-  Kimi's round-2 ACCEPT and Codex's round-2 HOLD do not substitute for it.
-- **Codex re-reviews revision 3.** Its round-2 HOLD resolved B4 and left
-  B1/B2/B3/B5 blocking; Appendix A.0 maps each to where it is now answered.
+  Kimi's round-2 ACCEPT and Codex's round-2 and round-3 HOLDs do not substitute
+  for it.
+- **Codex re-reviews revision 4.** Its round-3 HOLD resolved B3 and kept B4
+  resolved, leaving eleven items across B1/B2/B5; Appendix A.0 maps each to where
+  it is now answered. B3 and B4 are not reopened here.
+- **Two of this packet's own instruments failed their round-3 audit** (N3 and
+  N11 caught nothing; the browser's `dropEffect` claim could not fail). They are
+  replaced, not defended. The rule that produced them is written down in
+  `revision-notes.md`: aim a planted negative at the boundary that owns the
+  behavior, and never state an acceptance claim whose green is guaranteed by the
+  platform rather than by the code.
 - **The type-check of §2 is reproducible but not yet a repository artifact.**
-  It runs from `/tmp` scratch files (Appendix B, legs 9-10) because no product
-  code exists to compile against yet. When lot 0 lands, the same declarations
+  It runs from `/tmp` scratch files (Appendix B, legs 9-10 and 16) because no
+  product code exists to compile against yet. Revision 4 adds the **second
+  direction**: the same files compiled with every `@ts-expect-error` stripped,
+  which is what proves the eight refusal legs refuse something. When lot 0 lands, the same declarations
   compile in place under `tsc` and `typecheck:tests`, and the scratch check is
   superseded rather than maintained.
 - The FAM-08/FAM-13 circularity (D15, §1) is executed under the newer handoff law
@@ -2317,6 +2947,8 @@ sed -n '1,120p'    packages/core/src/components/primitives/overlay/dropdown/test
 sed -n '188,212p' packages/core/src/components/primitives/display/tree/tests/Tree.modern-engine-advanced.test.tsx
 #   dragOverAt() builds createEvent.dragOver(childItem) with NO dataTransfer;
 #   the same file DOES pass one to dragStart at :219.
+#   NOTE (R4): the same block fires `drop` with no dataTransfer either, which the
+#   PAYLOAD LAW already survives -- the kernel never reads the transfer on drop.
 
 # leg 14 -- base stability for revision 3 (§1)
 git rev-parse HEAD                     # 35122963005dca61b24503155d52687608b0097b
@@ -2325,4 +2957,99 @@ for f in <the 18 files of §1>; do
 done                                   # 18 of 18 identical across all three
 node --test packages/core/scripts/check/architecture/audits/structure/index.test.mjs
 #   -> 35 tests, 32 pass, 3 fail (unchanged from revision 2; rankedChildren pin still 94)
+
+# ---------------------------------------------------------------------------
+# REVISION 4
+# ---------------------------------------------------------------------------
+
+# leg 15 -- base movement for revision 4 (§1)
+git rev-parse HEAD                     # 30ec496c1e4420395b614033ddf404dfd0d321a4
+for f in <the 19 files: the 18 of leg 14 plus graphics/motion/.../flip-layout>; do
+  git show 351229630:$f | shasum; git show HEAD:$f | shasum; shasum < $f
+done
+#   17 of 19 identical across r3 base, HEAD and disk.
+#   MOVED IN HEAD: scripts/check/architecture/audits/structure/index.test.mjs (2c4ba44af)
+#   DIRTY ON DISK: saved-views/engines/modern/index.tsx  (+21/-3, another writer's
+#                  ViewPill/useInteractionState -- R22; every saved-views number
+#                  in this packet is read with `git show HEAD:`)
+#   NOTE: two paths quoted in revisions 2-3 do not exist at those spellings and
+#   were re-resolved for this leg -- tree-view lives at
+#   components/patterns/visualization/tree-view/engines/modern/index.tsx and
+#   compose-handlers at foundation/behavior/runtime/compose-handlers/index.ts.
+#   Both are byte-identical across all three reads.
+node --test packages/core/scripts/check/architecture/audits/structure/index.test.mjs
+#   -> 37 tests, 37 pass, 0 fail          (was 32/35 in revisions 2 and 3)
+grep -n "rankedChildren.length" .../structure/index.test.mjs   # :274 -> 98 (was 94)
+grep -n "collection" .../structure/index.test.mjs              # :136 mirrored literal
+sed -n '600,653p' .../structure/index.test.mjs                 # the ladder case template
+
+# leg 16 -- TYPE-CHECKING revision 4, both directions (§2.2, §2.2.4, §2.2.6, §2.4.6)
+#   /tmp/dnd-r4/contract.ts    the declared API of §2.2, verbatim
+#   /tmp/dnd-r4/adapters.tsx   the four adapters + the delegated adapter
+#   /tmp/dnd-r4/refusals.tsx   EIGHT negative legs, each @ts-expect-error
+node -e "console.log(require('typescript/package.json').version)"   # 5.9.3
+packages/core/node_modules/.bin/tsc -p /tmp/dnd-r4/tsconfig.json    # strict, exit 0
+#   Zero diagnostics.
+#   Then the OTHER direction -- every directive stripped:
+packages/core/node_modules/.bin/tsc -p /tmp/dnd-r4/tsconfig-bare.json
+#   EXACTLY 8 errors, one per leg, at the 8 declared positions:
+#     R-1 TS2353 'position' does not exist in type '{ key: string; }'
+#     R-2 TS2322 'TreeEngineKey' is not assignable to 'string'
+#     R-3 TS2345 Property 'position' is missing
+#     R-4 TS2322 Property 'resolveKeyboardTarget' is missing
+#     R-5 TS2353 'crossAxis' does not exist in SortableDelegatedKeyboard
+#     R-6 TS2339 Property 'crossedContainer' does not exist
+#     R-7 TS2345 Property 'resolveTarget' is missing       <- Codex's decoy
+#     R-8 TS2367 '"pointer" | "keyboard"' and '"touch"' have no overlap
+#   Plus the excess leg (/tmp/dnd-r4/excess.tsx): the intersected options bag
+#   still refuses an unknown property (`rtl: true`) and a resolver whose `phase`
+#   parameter is outside the two -- both @ts-expect-error legs are satisfied, so
+#   the ResolverRequirement intersection did not disable excess-property
+#   checking. Exit 0.
+
+# leg 17 -- EXECUTING the R4 behavioral claims (§2.2.1(a), §6.3 C15/C16)
+node /tmp/dnd-r4/probe.mjs
+#   (1) drag a -> hover b -> hover a -> DROP ON a, on [a,b,c]:
+#         saved-views source  ["a","b","c"]  0 callbacks
+#         column-menu source  ["a","b","c"]
+#         R4 kernel           ["a","b","c"]  0 callbacks
+#         R3 session.target   ["b","a","c"]  1 callback   <- Codex's regression
+#   (2) the ordinary drag a -> hover b -> DROP ON b: ["b","a","c"] from all three
+#   (3) kanban hover {done,3} then DROP ON {done,0}:
+#         source [["x","todo","done",0]]   R4 kernel [["x","todo","done",0]]
+#         (R3 would have committed position 3, the held indicator)
+#   (4) tree hover c1/after then DROP ON c1: both give {dropNode:c1, position:after};
+#       and with a self-hover between, both REFUSE
+#   (5) C15, destination `b` removed from [a,b,c]:
+#         source 0 callbacks | R3 adapter 1 callback | R4 adapter 0 callbacks
+
+# leg 18 -- the four owners' drop signatures, re-read at 30ec496c1 (§2.2.1(a))
+sed -n '207,224p' .../saved-views/engines/modern/index.tsx    # handleDrop(e, targetViewId)
+sed -n '326,331p' .../saved-views/engines/modern/index.tsx    # onDrop={(e) => handleDrop(e, view.id)}
+sed -n '375,393p' .../column-menu/index.tsx                   # moveDraftColumn: sourceKey === targetKey returns
+sed -n '414,425p' .../column-menu/index.tsx                   # handleColumnDrop(event, key)
+sed -n '243,257p' .../kanban-board/engines/modern/index.tsx   # handleDrop(e, columnId, position); NO announcement
+sed -n '585,588p'  .../kanban-board/engines/modern/index.tsx  # onDrop={(e) => handleDrop(e, column.id, index)}
+sed -n '569,576p'  .../kanban-board/engines/modern/index.tsx  # ref: register(...) AND cardRefs -- BOTH
+sed -n '823,838p' .../tree/engines/modern/index.tsx           # handleDrop(key,_e): receiving key + STORED zone
+sed -n '383,401p' .../tree/engines/modern/index.tsx           # onDragOver/onDrop/onDragEnd gated on propDraggable
+sed -n '84,90p'   .../graphics/motion/react/runtime/flip-layout/index.ts   # measure() traverses nodesRef
+sed -n '269,306p' .../kanban-board/engines/modern/index.tsx   # applyMove: blocked->announce; else move,focus,announce
+sed -n '893,910p' .../column-menu/index.tsx                   # disabled={index === 0} / {index === listLength - 1}
+sed -n '598,614p' .../kanban-board/engines/modern/index.tsx   # the ENABLED coarse-pointer move rail
+
+# leg 19 -- EXECUTING the delegated lifecycle (§2.4.6)
+node /tmp/dnd-r4/probe.mjs        # final block
+#   b next-item -> ["grabbed","moved","dropped"]   session null  committed {"key":"c"}
+#   a prev-item -> ["grabbed","blocked(edge)"]     session null  committed null
+#   d next-item -> ["grabbed","blocked(edge)"]     session null  committed null
+#   R3 gave the two edges: grabbed, blocked(edge), blocked(no-destination), session OPEN
+
+# leg 20 -- the two file-drop owners have no drag source (§6.6, B5.1)
+grep -n "onDragStart\|draggable" .../file-manager/engines/modern/index.tsx   # no output
+grep -n "onDragStart\|draggable" .../upload/engines/modern/index.tsx         # no output
+grep -n "isDragOver\|dataTransfer" .../file-manager/engines/modern/index.tsx # 212,248,249,406,407
+grep -n "isDragOver\|dataTransfer" .../upload/engines/modern/index.tsx       # 873,924,928,962,972,984
+sed -n '1095,1100p' packages/core/scripts/check/family-cut/index.mjs         # measureFamily
+sed -n '1268,1272p' packages/core/scripts/check/family-cut/index.mjs         # judgeFamily
 ```
