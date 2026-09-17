@@ -39,7 +39,10 @@
  * so their tab stops stay the consumer's; the cluster adds direction-aware
  * ArrowLeft/ArrowRight plus Home/End movement across the focusable controls
  * it contains, which is what keeps a wide filter+action rail traversable
- * without a tab stop per control. The search field is a separate `search`
+ * without a tab stop per control. The key-to-direction mapping is the
+ * roving-focus kernel's; only the item walk is delegated, because the controls
+ * are opaque consumer slots this family never renders.
+ * The search field is a separate `search`
  * landmark and is deliberately outside the arrow model, so typing in it is
  * never intercepted.
  */
@@ -50,14 +53,16 @@ import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructu
 import { ActionAddIcon } from '@/graphics/icons/semantic/generated/roles/action-add';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { ActionSearchIcon } from '@/graphics/icons/semantic/generated/roles/action-search';
+import {
+  resolveNavigationIntent,
+  resolveNavigationTarget,
+} from '../../../../../primitives/runtime/collection/roving-focus';
 import { Box, Button, Flex, Input } from '../../../../../primitives';
 import type { TableToolbarProps } from '../../contracts';
 
 /** Controls participating in the cluster's arrow-key model. */
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-const ARROW_KEYS = new Set(['ArrowRight', 'ArrowLeft', 'Home', 'End']);
 
 /** Border-relief vertical separator between toolbar sections */
 function ToolbarDivider(): ReactElement {
@@ -102,25 +107,24 @@ export function TableToolbar({
   const hasControls = Boolean(filters || actions || primaryAction);
 
   const handleControlsKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void => {
-    if (!ARROW_KEYS.has(event.key)) return;
+    const intent = resolveNavigationIntent(event.key, {
+      orientation: 'horizontal',
+      rtl: directionIsRtl,
+    });
+    if (intent === null) return;
+
     const container = event.currentTarget;
     const items = Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
     if (items.length === 0) return;
     const currentIndex = items.indexOf(document.activeElement as HTMLElement);
     if (currentIndex === -1) return;
 
-    const isRtl = directionIsRtl;
-    const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
-    const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
-    let nextIndex: number | undefined;
-
-    if (event.key === forwardKey) nextIndex = (currentIndex + 1) % items.length;
-    else if (event.key === backwardKey)
-      nextIndex = (currentIndex - 1 + items.length) % items.length;
-    else if (event.key === 'Home') nextIndex = 0;
-    else if (event.key === 'End') nextIndex = items.length - 1;
-
-    if (nextIndex === undefined || nextIndex === currentIndex) return;
+    const nextIndex = resolveNavigationTarget(intent, {
+      index: currentIndex,
+      length: items.length,
+      wrap: true,
+    });
+    if (nextIndex === currentIndex) return;
     event.preventDefault();
     items[nextIndex]?.focus();
   };

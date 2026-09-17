@@ -161,6 +161,19 @@ function PinRightIcon() {
   );
 }
 
+/** Draft order rebuilt against the live columns: keys the caller no longer
+ *  declares drop out, and columns added since the draft opened append last. */
+function normalizeDraftOrder(
+  previous: readonly string[],
+  knownColumnKeys: readonly string[]
+): string[] {
+  const knownColumnKeySet = new Set(knownColumnKeys);
+  return [
+    ...previous.filter((columnKey) => knownColumnKeySet.has(columnKey)),
+    ...knownColumnKeys.filter((columnKey) => !previous.includes(columnKey)),
+  ];
+}
+
 function moveItem<T>(items: T[], from: number, to: number): T[] {
   if (
     from === to ||
@@ -351,14 +364,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
   const handleMove = useCallback(
     (key: string, direction: -1 | 1) => {
       setDraftOrder((previous) => {
-        const knownColumnKeys = columns.map((column) => column.key);
-        const knownColumnKeySet = new Set(knownColumnKeys);
-        const completeOrder = [
-          ...previous.filter((columnKey) => knownColumnKeySet.has(columnKey)),
-          ...knownColumnKeys.filter(
-            (columnKey) => !previous.includes(columnKey)
-          ),
-        ];
+        const completeOrder = normalizeDraftOrder(
+          previous,
+          columns.map((column) => column.key)
+        );
         const index = completeOrder.indexOf(key);
         return moveItem(completeOrder, index, index + direction);
       });
@@ -371,14 +380,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
       if (sourceKey === targetKey) return;
 
       setDraftOrder((previous) => {
-        const knownColumnKeys = columns.map((column) => column.key);
-        const knownColumnKeySet = new Set(knownColumnKeys);
-        const completeOrder = [
-          ...previous.filter((columnKey) => knownColumnKeySet.has(columnKey)),
-          ...knownColumnKeys.filter(
-            (columnKey) => !previous.includes(columnKey)
-          ),
-        ];
+        const completeOrder = normalizeDraftOrder(
+          previous,
+          columns.map((column) => column.key)
+        );
         const sourceIndex = completeOrder.indexOf(sourceKey);
         const targetIndex = completeOrder.indexOf(targetKey);
 

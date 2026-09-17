@@ -35,7 +35,9 @@
  * KEYBOARD (APG toolbar, `action-dock` freeform precedent): the chip group is
  * a `role='toolbar'`; direction-aware ArrowLeft/ArrowRight plus Home/End move
  * across the chips' dismiss controls and the disclosure toggle, so a rail
- * carrying twenty filters is traversable without twenty tab stops.
+ * carrying twenty filters is traversable without twenty tab stops. The
+ * key-to-direction mapping is the roving-focus kernel's; only the item walk is
+ * delegated, because the Tag primitive owns each dismiss control.
  *
  * Returns null when no filters are active, so consumers can mount it
  * unconditionally without dealing with empty-state logic; the rail's
@@ -57,6 +59,10 @@ import { useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent, ReactElement } from "react";
 
 import { useOptionalTranslation, useReadingDirectionIsRtl } from "@/infrastructure/runtime/i18n";
+import {
+  resolveNavigationIntent,
+  resolveNavigationTarget,
+} from "../../../../../primitives/runtime/collection/roving-focus";
 import { Box } from "../../../../../primitives/layout/box";
 import { Button } from "../../../../../primitives/inputs/button";
 import { Flex } from "../../../../../primitives/layout/flex";
@@ -70,8 +76,6 @@ import type { ActiveFiltersBarProps } from "../../contracts";
 /** Controls participating in the chip group's arrow-key model. */
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])';
-
-const ARROW_KEYS = new Set(["ArrowRight", "ArrowLeft", "Home", "End"]);
 
 export function ActiveFiltersBar({
   activeFilters,
@@ -99,7 +103,12 @@ export function ActiveFiltersBar({
   const [expanded, setExpanded] = useState(false);
 
   const handleChipsKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void => {
-    if (!ARROW_KEYS.has(event.key)) return;
+    const intent = resolveNavigationIntent(event.key, {
+      orientation: "horizontal",
+      rtl: directionIsRtl,
+    });
+    if (intent === null) return;
+
     const container = event.currentTarget;
     const items = Array.from(
       container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
@@ -108,17 +117,12 @@ export function ActiveFiltersBar({
     const currentIndex = items.indexOf(document.activeElement as HTMLElement);
     if (currentIndex === -1) return;
 
-    const forwardKey = directionIsRtl ? "ArrowLeft" : "ArrowRight";
-    const backwardKey = directionIsRtl ? "ArrowRight" : "ArrowLeft";
-    let nextIndex: number | undefined;
-
-    if (event.key === forwardKey) nextIndex = (currentIndex + 1) % items.length;
-    else if (event.key === backwardKey)
-      nextIndex = (currentIndex - 1 + items.length) % items.length;
-    else if (event.key === "Home") nextIndex = 0;
-    else if (event.key === "End") nextIndex = items.length - 1;
-
-    if (nextIndex === undefined || nextIndex === currentIndex) return;
+    const nextIndex = resolveNavigationTarget(intent, {
+      index: currentIndex,
+      length: items.length,
+      wrap: true,
+    });
+    if (nextIndex === currentIndex) return;
     event.preventDefault();
     items[nextIndex]?.focus();
   };
