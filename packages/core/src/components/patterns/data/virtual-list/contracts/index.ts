@@ -74,7 +74,11 @@ export interface PatternVirtualListProps<T> {
 
   /**
    * Height of the scroll viewport. A concrete bound (number of pixels or a CSS
-   * length) is required for the list to scroll. @default '100%'
+   * length) is required for the list to scroll. Stating it stamps the
+   * `--ds-virtual-list-block-size` channel on this instance; omitting it leaves
+   * the bound to the skin, which rests the channel at `100%` — the same value
+   * the pattern used to default to, now movable by a theme instead of forced by
+   * a prop default on every render.
    */
   height?: number | string;
 

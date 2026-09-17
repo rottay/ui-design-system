@@ -10,7 +10,67 @@
  * renderCard subtree is consumer-owned, so the content slots (action-*,
  * footer-*, icon-*, meter-*, number-*, value-color-hover) have no honest host
  * in this file and stay unwired pending a CONSUMER_APPLIED contract.
+ *
+ * GEOMETRY (WO-FAM-08 B7): the grid's own track model, gap, bleed and box
+ * sizing moved here out of the engine's `style` prop. The two numbers a caller
+ * can state travel as family channels whose RESTING values are declared below,
+ * so the reads have a producer instead of resolving to a fallback nobody can
+ * move:
+ *
+ *   --ds-grid-view-columns  the `grid-template-columns` track model
+ *   --ds-grid-view-gap      the gap between cards
+ *
+ * Both resting values are byte-equivalent to what the pattern's prop defaults
+ * used to compute, including the `--ds-collection-card-gap` premium socket the
+ * engine used to tier through.
+ *
+ * STATE: the shell's interaction state is decided once by the kernel and
+ * arrives as `data-state`; the platform pseudo-class is PAIRED with it as the
+ * fallback of one decision, never as a second authority (F-37).
  */
+
+.ds-pattern-grid-view[data-part='root'] {
+  --ds-grid-view-columns: repeat(
+    auto-fill,
+    minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr)
+  );
+  --ds-grid-view-gap: var(
+    --ds-collection-card-gap,
+    var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))
+  );
+}
+
+/* The card grid itself. The empty branch is NOT a grid -- it is one centered
+   message on the same root box -- so the track model is scoped to the
+   populated and loading branches, exactly as the engine scoped it. */
+.ds-pattern-grid-view[data-part='root'][data-empty='false'] {
+  display: grid;
+  grid-template-columns: var(
+    --ds-grid-view-columns,
+    repeat(auto-fill, minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr))
+  );
+  gap: var(--ds-grid-view-gap, var(--ds-spacing-4, 16px));
+  /* One pixel of bleed on each side so a card's own ring is not clipped, and a
+     bottom bleed the listing layer can tune. */
+  padding-block: 1px var(--ds-listing-grid-bottom-bleed, 8px);
+  padding-inline: 1px;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* The stagger cell wraps a card only when the motion policy actually animates.
+   It is a grid item like any other, and a grid item whose content can overflow
+   needs an explicit floor or the track blows out. */
+.ds-pattern-grid-view [data-part='cell'] {
+  min-inline-size: 0;
+}
+
+/* The card body the loading state stands behind: with no data there is nothing
+   inside the caller's slot to draw, so the slot itself is the bone, and it
+   needs a footprint for the renderer to measure. */
+.ds-pattern-grid-view [data-part='card-content'] {
+  min-block-size: 7.5rem;
+}
 
 .ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'] {
   /* Positioning host for the ::before/::after motif layers and the checkbox
@@ -74,16 +134,17 @@
    preference because a lit slot is a brand-literal transform (motion). Unset
    it computes `none`, the value the shell paints today. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']:hover {
+  .ds-pattern-grid-view
+    [data-part='card-shell'][data-part='card-shell']:is([data-state~='hovered'], :hover) {
     transform: var(--ds-collection-card-hover-transform, none);
   }
 }
 
 .ds-pattern-grid-view .ds-grid-view__checkbox-control.ds-grid-view__checkbox-control.ds-grid-view__checkbox-control {
   padding: 2px;
-  background: var(--ds-color-bg-primary, #fff);
+  background: var(--ds-color-bg-primary);
   border-radius: var(--ds-radius-sm, 6px);
-  box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0, 0, 0, 0.12));
+  box-shadow: var(--ds-elevation-1);
 }
 
 .ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
@@ -91,7 +152,7 @@
   text-align: center;
   border-radius: var(--ds-radius-lg, 12px);
   border: 1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)));
-  background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary, #fff)));
+  background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary)));
 }
 
 .ds-pattern-grid-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {

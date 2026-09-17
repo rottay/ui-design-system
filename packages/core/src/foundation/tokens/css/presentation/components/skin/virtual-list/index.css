@@ -1,22 +1,52 @@
 /**
- * VirtualList skin (p610 visual wave).
+ * VirtualList skin (p610 visual wave; family cut WO-FAM-08 B7).
  *
  * REGISTRATION: wired — imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` (coordinator closed the gap this file's
- * header used to flag). The engine keeps its functional geometry inline
- * (height, measured offsets, the scrollport's overflowY/position), exactly
- * like the data-table scroll region; this skin owns only the pattern's
- * CHROME: the focus ring of the keyboard-focusable scroll region
- * (scrollable-region law), its overscroll containment, its scrollbar ink and
- * the empty-state frame.
+ * `facade/entrypoints/styles.css`.
  *
- * SCOPE: the engine stamps `data-part='root'` on the scrollport; consumers
- * may add their own class. No engine scope class exists (the presentation
- * component is engine-free), so rules key on the part pair alone and paint
- * no border colors (the P-48 floor never applies).
+ * OWNERSHIP (B7): this file owns ALL of the pattern's paint and geometry. The
+ * TSX no longer stamps a single CSS property; the three numbers the
+ * virtualization runtime MEASURES travel as `--ds-virtual-list-*` custom
+ * properties and are consumed here, with their resting values declared on the
+ * root so every read has a producer instead of resolving to a fallback nobody
+ * can move:
+ *
+ *   --ds-virtual-list-block-size              the scrollport's viewport bound
+ *                                             (stamped only when the caller
+ *                                             states `height`)
+ *   --ds-virtual-list-spacer-block-size       the whole dataset's block size
+ *   --ds-virtual-list-item-inset-block-start  one row's measured offset
+ *
+ * SCOPE: the pattern stamps `data-part` on the scrollport, the spacer, each
+ * row and the end sentinel; consumers may add their own class. No engine scope
+ * class exists (the presentation component is engine-free), so rules key on
+ * the part pair alone and paint no border colors (the P-48 floor never
+ * applies). The three structural rules walk the DOM's child chain
+ * (root > spacer > item|sentinel) because `item` and `sentinel` are parts other
+ * families stamp too: a bare descendant selector would reach whatever a
+ * caller's `renderItem` renders, which is outside this family's anatomy.
+ *
+ * STATE: the scrollport's interaction state is decided once by the kernel and
+ * arrives as `data-state`; the platform pseudo-class is PAIRED with it as the
+ * fallback of one decision, never as a second authority (F-37).
  */
 
+.ds-pattern-virtual-list[data-part='root'],
+.ds-pattern-virtual-list[data-part='empty'] {
+  /* The resting geometry of the whole family, declared once and inherited by
+     the spacer and the rows. A stamped instance value outranks these exactly
+     as an inline declaration outranks the theme root. */
+  --ds-virtual-list-block-size: 100%;
+  --ds-virtual-list-spacer-block-size: auto;
+  --ds-virtual-list-item-inset-block-start: 0;
+}
+
 .ds-pattern-virtual-list[data-part='root'] {
+  block-size: var(--ds-virtual-list-block-size, 100%);
+  /* The windowed region is the scrollport: it scrolls on the block axis and is
+     the positioning host every measured row anchors to. */
+  overflow-y: auto;
+  position: relative;
   overscroll-behavior-block: contain;
   scrollbar-color: var(--ds-color-border-secondary) transparent;
   /* The gutter is reserved up-front: rows appearing on scroll (or on
@@ -24,18 +54,48 @@
   scrollbar-gutter: stable;
 }
 
-/* The empty branch renders `data-part='empty'` on the same root box (inline
-   height travels with it): the caller's empty composition stays centered in
-   the viewport the populated list would have occupied. */
+/* The full-height spacer: it holds the scrollbar honest for rows that were
+   never rendered, and it is the containing block of the windowed rows. The
+   chain is the DOM's own child chain: the family paints its OWN anatomy only,
+   never a `data-part` a caller's `renderItem` happens to stamp. */
+.ds-pattern-virtual-list[data-part='root'] > [data-part='spacer'] {
+  position: relative;
+  inline-size: 100%;
+  block-size: var(--ds-virtual-list-spacer-block-size, auto);
+}
+
+/* One windowed row, parked at its own measured offset. The inline edges are
+   logical, so the window mirrors under `dir="rtl"` with zero overrides. */
+.ds-pattern-virtual-list[data-part='root'] > [data-part='spacer'] > [data-part='item'] {
+  position: absolute;
+  inset-block-start: var(--ds-virtual-list-item-inset-block-start, 0);
+  inset-inline: 0;
+}
+
+/* The end-of-list sentinel: a hairline the observer can see and the reader
+   cannot. It is `aria-hidden` in the TSX and paints nothing. */
+.ds-pattern-virtual-list[data-part='root'] > [data-part='spacer'] > [data-part='sentinel'] {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: 1px;
+}
+
+/* The empty branch renders `data-part='empty'` on the same root box (the
+   viewport bound travels with it): the caller's empty composition stays
+   centered in the viewport the populated list would have occupied. */
 .ds-pattern-virtual-list[data-part='empty'] {
+  block-size: var(--ds-virtual-list-block-size, 100%);
   display: grid;
   place-items: center;
   min-block-size: 8rem;
 }
 
-/* The region is tabbable (engine, scrollable-region law): keyboard focus
-   must read on the region itself before its items take over. */
-.ds-pattern-virtual-list[data-part='root']:focus-visible {
+/* The region is tabbable (scrollable-region law): keyboard focus must read on
+   the region itself before its items take over. The kernel decides when the
+   region carries a focus ring; `:focus-visible` is that decision's platform
+   fallback, not a second opinion. */
+.ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
@@ -43,7 +103,7 @@
 }
 
 @media (forced-colors: active) {
-  .ds-pattern-virtual-list[data-part='root']:focus-visible {
+  .ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
   }
 }

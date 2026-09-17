@@ -18,9 +18,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { ImageIcon } from '../../../../../../graphics/icons';
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box } from '../../../../../primitives/layout/box';
 import { Flex } from '../../../../../primitives/layout/flex';
-import { Skeleton } from '../../../../../primitives/feedback/skeleton';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { Stack } from '../../../../../primitives/layout/stack';
 import { Text } from '../../../../../primitives/display/typography/compound/text';
 import { Checkbox } from '../../../../../primitives/inputs/checkbox';
@@ -37,9 +38,7 @@ import { useGalleryKeyboardNav, GalleryCollectionShortcuts } from '../../runtime
 
 const DEFAULT_COLUMNS = 'auto' as const;
 const DEFAULT_MIN_COLUMN_WIDTH = 200;
-const DEFAULT_GAP = 16;
-const DEFAULT_ASPECT_RATIO = '1';
-const SKELETON_COUNT = 8;
+const LOADING_CARD_COUNT = 8;
 
 function readRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
@@ -81,17 +80,9 @@ function normalizeGap(gap: number | string): string {
  * Rendered in place of the image when the URL is null, undefined, or empty.
  * @internal
  */
-function ImagePlaceholder({ aspectRatio }: { aspectRatio: string }) {
+function ImagePlaceholder() {
   return (
-    <Flex
-      data-part="image-placeholder"
-      align="center"
-      justify="center"
-      style={{
-        /* Runtime instance geometry: the aspectRatio prop owns this value. */
-        aspectRatio,
-      }}
-    >
+    <Flex data-part="image-placeholder" align="center" justify="center">
       <ImageIcon data-part="image-placeholder-icon" />
     </Flex>
   );
@@ -110,12 +101,10 @@ function DefaultGalleryCard<T>({
   item,
   imageField,
   captionField,
-  aspectRatio,
 }: {
   item: T;
   imageField: keyof T & string;
   captionField?: keyof T & string;
-  aspectRatio: string;
 }) {
   const imageUrl = readRecordValue(item, imageField);
   const caption = captionField
@@ -126,13 +115,7 @@ function DefaultGalleryCard<T>({
   return (
     <>
       {hasImage ? (
-        <Box
-          data-part="image-frame"
-          style={{
-            /* Runtime instance geometry: the aspectRatio prop owns this value. */
-            aspectRatio,
-          }}
-        >
+        <Box data-part="image-frame">
           <img
             data-part="image"
             src={imageUrl as string}
@@ -141,7 +124,7 @@ function DefaultGalleryCard<T>({
           />
         </Box>
       ) : (
-        <ImagePlaceholder aspectRatio={aspectRatio} />
+        <ImagePlaceholder />
       )}
       {caption != null && String(caption).length > 0 && (
         <Box data-part="caption">
@@ -185,7 +168,6 @@ function GalleryCardWrapper<T>({
   renderCard,
   imageField,
   captionField,
-  aspectRatio,
 }: {
   item: T;
   index: number;
@@ -205,7 +187,6 @@ function GalleryCardWrapper<T>({
   renderCard?: (item: T, index: number) => React.ReactNode;
   imageField: keyof T & string;
   captionField?: keyof T & string;
-  aspectRatio: string;
 }) {
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
@@ -227,16 +208,29 @@ function GalleryCardWrapper<T>({
     translation?.tOr('galleryView.selectItem', 'Select item {item}', { item: itemKey })
     ?? `Select item ${itemKey}`;
 
+  /* The card is the part the skin's hover, focus and checkbox-reveal arms
+     paint, so its state is decided here, once, and the skin reads the kernel's
+     answer rather than asking the platform the same question a second time. */
+  const interaction = useInteractionState();
+  const handleFocus = useCallback(
+    (event: React.FocusEvent) => {
+      interaction.handlers.onFocus(event);
+      if (focusable) onFocusItem();
+    },
+    [focusable, interaction.handlers, onFocusItem],
+  );
+
   return (
     <Box
-      data-part="card"
+      {...partAttributes('card', interaction.state)}
       data-selected={selected ? 'true' : 'false'}
       data-selectable={selectable ? 'true' : 'false'}
       data-clickable={onItemClick ? 'true' : 'false'}
       role={onItemClick ? 'button' : undefined}
       ref={focusable ? itemRef : undefined}
       tabIndex={focusable ? tabIndex : undefined}
-      onFocus={focusable ? onFocusItem : undefined}
+      {...interaction.handlers}
+      onFocus={handleFocus}
       onClick={handleClick}
       className="ds-gallery-card"
     >
@@ -248,7 +242,6 @@ function GalleryCardWrapper<T>({
           item={item}
           imageField={imageField}
           captionField={captionField}
-          aspectRatio={aspectRatio}
         />
       )}
 
@@ -271,67 +264,6 @@ function GalleryCardWrapper<T>({
           />
         </Box>
       )}
-    </Box>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Loading skeleton grid
-// ---------------------------------------------------------------------------
-
-/**
- * Skeleton grid that mimics the gallery layout during loading.
- * Each skeleton card shows a rectangular placeholder with a text line below.
- * @internal
- */
-function GallerySkeletonGrid({
-  columns,
-  minColumnWidth,
-  gap,
-  aspectRatio,
-  className,
-  style,
-}: {
-  columns: number | 'auto';
-  minColumnWidth: number;
-  gap: string;
-  aspectRatio: string;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  const gridStyle: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
-    gap,
-    ...style,
-  };
-
-  return (
-    <Box
-      className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
-      data-part="root"
-      data-loading="true"
-      data-empty="false"
-      style={gridStyle}
-    >
-      {Array.from({ length: SKELETON_COUNT }, (_, i) => (
-        <Box
-          key={i}
-          data-part="skeleton-card"
-        >
-          <Skeleton
-            className="ds-gallery-view__skeleton-image"
-            variant="rectangular"
-            style={{
-              /* Runtime instance geometry: mirrors the loaded card's ratio. */
-              aspectRatio,
-            }}
-          />
-          <Box data-part="skeleton-caption">
-            <Skeleton className="ds-gallery-view__skeleton-caption" variant="text" />
-          </Box>
-        </Box>
-      ))}
     </Box>
   );
 }
@@ -385,10 +317,10 @@ export function PatternGalleryView<T extends object>(
     captionField,
     renderCard,
     rowKey,
-    columns = DEFAULT_COLUMNS,
-    minColumnWidth = DEFAULT_MIN_COLUMN_WIDTH,
-    aspectRatio = DEFAULT_ASPECT_RATIO,
-    gap = DEFAULT_GAP,
+    columns,
+    minColumnWidth,
+    aspectRatio,
+    gap,
     selectable = false,
     selectedKeys: controlledSelectedKeys,
     onSelectionChange,
@@ -493,16 +425,27 @@ export function PatternGalleryView<T extends object>(
   // Grid styles
   // -------------------------------------------------------------------------
 
-  const normalizedGap = useMemo(() => normalizeGap(gap), [gap]);
-
+  /* The caller's column model and media ratio ride the family's own channels;
+     the skin applies them. Stamped ONLY when the caller states the number: an
+     unconditional stamp of the old prop defaults would shadow the skin's
+     resting declarations on every render and take the gallery's rhythm and its
+     media ratio away from the theme. */
   const gridStyle: React.CSSProperties = useMemo(
-    () => ({
-      display: 'grid',
-      gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
-      gap: normalizedGap,
-      ...style,
-    }),
-    [columns, minColumnWidth, normalizedGap, style],
+    () =>
+      ({
+        ...(columns === undefined && minColumnWidth === undefined
+          ? {}
+          : {
+              '--ds-gallery-view-columns': buildGridTemplateColumns(
+                columns ?? DEFAULT_COLUMNS,
+                minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH,
+              ),
+            }),
+        ...(gap === undefined ? {} : { '--ds-gallery-view-gap': normalizeGap(gap) }),
+        ...(aspectRatio === undefined ? {} : { '--ds-gallery-view-aspect-ratio': aspectRatio }),
+        ...style,
+      }) as React.CSSProperties,
+    [columns, minColumnWidth, gap, aspectRatio, style],
   );
 
   // -------------------------------------------------------------------------
@@ -510,17 +453,30 @@ export function PatternGalleryView<T extends object>(
   // -------------------------------------------------------------------------
 
   if (loading) {
+    /* The loading state is this gallery's OWN anatomy, read by the shared
+       renderer: eight cards, each with the media frame and the caption line the
+       loaded card stamps. The renderer wraps the family root rather than
+       sitting inside it, so the gallery the bones are measured against is the
+       real gallery -- same track model, same gap, same media ratio. */
     return (
-      <>
-        <GallerySkeletonGrid
-          columns={columns}
-          minColumnWidth={minColumnWidth}
-          gap={normalizedGap}
-          aspectRatio={aspectRatio}
-          className={className}
-          style={style}
-        />
-      </>
+      <AnatomySkeleton>
+        <Box
+          className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
+          data-part="root"
+          data-loading="true"
+          data-empty="false"
+          style={gridStyle}
+        >
+          {Array.from({ length: LOADING_CARD_COUNT }, (_, index) => (
+            <Box key={index} data-part="card" className="ds-gallery-card">
+              <Box data-part="image-frame" />
+              <Box data-part="caption">
+                <Box data-part="caption-text">{'\u00a0'}</Box>
+              </Box>
+            </Box>
+          ))}
+        </Box>
+      </AnatomySkeleton>
     );
   }
 
@@ -577,7 +533,6 @@ export function PatternGalleryView<T extends object>(
             renderCard={renderCard}
             imageField={imageField}
             captionField={captionField}
-            aspectRatio={aspectRatio}
           />
         );
       })}

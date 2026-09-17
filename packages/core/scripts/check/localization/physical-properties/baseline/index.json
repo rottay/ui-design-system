@@ -65,10 +65,6 @@
     }
   },
   "inert": {
-    "patterns/data/virtual-list/presentation/list/index.tsx": {
-      "sites": 4,
-      "reason": "Two absolutely-positioned rows pinned on BOTH inline edges (`left: 0` with `right: 0`), for the virtual item and the end sentinel. Both edges fixed means the direction moves nothing; `inset-inline: 0` is the idiom and a zero-pixel change."
-    },
     "primitives/feedback/toast/compound/undo-toast/index.tsx": {
       "sites": 2,
       "reason": "The countdown bar track is pinned on BOTH inline edges (`left: 0` with `right: 0`) inside the toast surface, so it spans the full width and the reading direction moves neither edge. Clearing it to `inset-inline: 0` is a zero-pixel change."

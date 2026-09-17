@@ -32,10 +32,36 @@ describe('PatternGridView responsive + style pass-through', () => {
       'modern',
     );
 
-    const columns = (await root(container)).style.gridTemplateColumns;
+    // The track model rides the family channel the skin consumes; the TSX
+    // paints nothing itself.
+    const grid = await root(container);
+    const columns = grid.style.getPropertyValue('--ds-grid-view-columns');
     // Without the min(..., 100%) floor the track resolves to a bare 320px
     // minimum and overflows any container narrower than that.
     expect(columns).toContain('min(var(--ds-listing-grid-min-compact-width, 320px), 100%)');
+    expect(grid.style.gridTemplateColumns).toBe('');
+  });
+
+  it('leaves both layout channels unstamped when the caller states no number', async () => {
+    const { container } = renderWithEngine(
+      <PatternGridView data={data} renderCard={renderCard} rowKey="id" />,
+      'modern',
+    );
+
+    // Negative control for the case above: an unconditional stamp would shadow
+    // the skin's resting declaration on every render.
+    const grid = await root(container);
+    expect(grid.style.getPropertyValue('--ds-grid-view-columns')).toBe('');
+    expect(grid.style.getPropertyValue('--ds-grid-view-gap')).toBe('');
+  });
+
+  it('stamps the gap channel when the caller states one', async () => {
+    const { container } = renderWithEngine(
+      <PatternGridView data={data} renderCard={renderCard} rowKey="id" gap={24} />,
+      'modern',
+    );
+
+    expect((await root(container)).style.getPropertyValue('--ds-grid-view-gap')).toBe('24px');
   });
 
   it('keeps the caller style on the empty state, not only on the populated grid', async () => {

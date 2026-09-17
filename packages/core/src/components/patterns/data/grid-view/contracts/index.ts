@@ -63,14 +63,20 @@ export interface GridViewProps<T> {
    * Number of columns (1-6) or `'auto'` for responsive auto-fill.
    * When set to `'auto'`, the grid uses CSS `auto-fill` with `minColumnWidth`
    * to determine column count responsively.
-   * @default 'auto'
+   *
+   * Stating this (or `minColumnWidth`) stamps the `--ds-grid-view-columns`
+   * channel on this instance; omitting both leaves the track model to the skin,
+   * which rests the channel at the `'auto'` + 280px model the pattern used to
+   * default to -- now movable by a theme instead of forced by a prop default on
+   * every render.
    */
   columns?: number | 'auto';
 
   /**
    * Minimum column width in pixels when `columns='auto'`.
-   * Used in the CSS `minmax()` function for responsive column sizing.
-   * @default 280
+   * Used in the CSS `minmax()` function for responsive column sizing. Shares
+   * the `--ds-grid-view-columns` channel with `columns`; see there for the
+   * resting value.
    */
   minColumnWidth?: number;
 
@@ -79,8 +85,12 @@ export interface GridViewProps<T> {
    * (e.g. a DS spacing variable). Where a bundle declares the
    * `--ds-collection-card-gap` premium channel (BitHire: 10px, an authorized
    * deliberate delta), the channel tiers over the resolved gap; everywhere
-   * else the fallback below governs unchanged.
-   * @default 'var(--ds-collection-card-gap, var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px)))'
+   * else the resting declaration governs unchanged.
+   *
+   * Stating it stamps the `--ds-grid-view-gap` channel on this instance;
+   * omitting it leaves the gap to the skin, which rests the channel at
+   * `var(--ds-collection-card-gap, var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px)))`
+   * -- the exact resolution the old prop default computed.
    */
   gap?: number | string;
 

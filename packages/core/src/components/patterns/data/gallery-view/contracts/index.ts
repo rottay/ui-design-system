@@ -74,14 +74,20 @@ export interface GalleryViewProps<T> {
    * Number of grid columns or `'auto'` for responsive auto-fit.
    * When set to a number, the grid uses exactly that many columns.
    * When `'auto'`, columns are determined by `minColumnWidth`.
-   * @default 'auto'
+   *
+   * Stating this (or `minColumnWidth`) stamps the `--ds-gallery-view-columns`
+   * channel on this instance; omitting both leaves the track model to the skin,
+   * which rests the channel at the `'auto'` + 200px model the pattern used to
+   * default to -- now movable by a theme instead of forced by a prop default on
+   * every render.
    */
   columns?: number | 'auto';
 
   /**
    * Minimum column width in pixels when `columns` is `'auto'`.
-   * The grid uses CSS `auto-fill` with `minmax(minColumnWidth, 1fr)`.
-   * @default 200
+   * The grid uses CSS `auto-fill` with `minmax(minColumnWidth, 1fr)`. Shares
+   * the `--ds-gallery-view-columns` channel with `columns`; see there for the
+   * resting value.
    */
   minColumnWidth?: number;
 
@@ -89,13 +95,21 @@ export interface GalleryViewProps<T> {
    * CSS aspect-ratio value for card images.
    * Controls the height of the image container relative to its width.
    * Common values: `'1'` (square), `'4/3'`, `'16/9'`, `'3/2'`.
-   * @default '1'
+   *
+   * Stating it stamps the `--ds-gallery-view-aspect-ratio` channel on this
+   * instance; omitting it leaves the ratio to the skin, which rests the channel
+   * at `1` -- the square the pattern used to default to.
    */
   aspectRatio?: string;
 
   /**
    * Gap between grid items. Accepts a number (pixels) or CSS string value.
-   * @default 16
+   *
+   * Stating it stamps the `--ds-gallery-view-gap` channel on this instance;
+   * omitting it leaves the gap to the skin, which rests the channel at
+   * `var(--ds-spacing-4, 16px)` -- the 16px the old prop default forced at
+   * density 1, now following a denser or more spacious tenant instead of
+   * ignoring it.
    */
   gap?: number | string;
 

@@ -45,8 +45,52 @@ describe('PatternVirtualList', () => {
     );
     const spacer = container.querySelector('[data-part="spacer"]') as HTMLElement;
     expect(spacer).not.toBeNull();
-    // 100 rows x 40px estimate.
-    expect(spacer.style.height).toBe('4000px');
+    // 100 rows x 40px estimate. The measured total rides the family channel the
+    // skin consumes (`block-size`), so the TSX paints nothing itself.
+    expect(spacer.style.getPropertyValue('--ds-virtual-list-spacer-block-size')).toBe('4000px');
+    expect(spacer.style.height).toBe('');
+  });
+
+  it('stamps the viewport bound only when the caller states a height', () => {
+    const rows = makeRows(10);
+    const stated = render(
+      <PatternVirtualList<Row>
+        items={rows}
+        estimateSize={40}
+        height={480}
+        renderItem={(row) => <span>{row.label}</span>}
+      />,
+    );
+    const statedRoot = stated.container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(statedRoot.style.getPropertyValue('--ds-virtual-list-block-size')).toBe('480px');
+
+    // Negative control: a list that states nothing leaves the bound to the
+    // skin's resting declaration rather than forcing it on every render.
+    const omitted = render(
+      <PatternVirtualList<Row>
+        items={rows}
+        estimateSize={40}
+        renderItem={(row) => <span>{row.label}</span>}
+      />,
+    );
+    const omittedRoot = omitted.container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(omittedRoot.style.getPropertyValue('--ds-virtual-list-block-size')).toBe('');
+  });
+
+  it('parks each windowed row on its own measured offset channel', () => {
+    const { container } = render(
+      <PatternVirtualList<Row>
+        items={makeRows(100)}
+        estimateSize={40}
+        renderItem={(row) => <span>{row.label}</span>}
+      />,
+    );
+    const rows = container.querySelectorAll('[data-part="item"]');
+    const second = rows[1] as HTMLElement;
+    expect(second.style.getPropertyValue('--ds-virtual-list-item-inset-block-start')).toBe('40px');
+    // Nothing else travels inline: the anchoring itself is the skin's.
+    expect(second.style.position).toBe('');
+    expect(second.style.top).toBe('');
   });
 
   it('exposes list semantics with position metadata', () => {

@@ -10,16 +10,35 @@
  * such as card selection and responsive grid layout while keeping the card
  * rendering API reusable across domains. Engine-free -- uses CSS Grid
  * directly with DS CSS variables for theming.
+ *
+ * PAINT (WO-FAM-08 B7): the grid's own geometry lives in the grid-view skin.
+ * The only things this file puts on the `style` prop are runtime-computed
+ * `--ds-*` custom properties: the caller's column model rides
+ * `--ds-grid-view-columns` and `--ds-grid-view-gap`, and both are stamped ONLY
+ * when the caller states a number -- a grid that states none leaves the two
+ * channels to the skin's resting declarations, so a theme can move the rhythm
+ * instead of a prop default forcing it on every render.
+ *
+ * LOADING (WO-FAM-14): the loading state is DERIVED from this grid's own
+ * `data-part` anatomy by the shared `AnatomySkeleton` renderer, which wraps
+ * the family root itself -- the grid it stands in for is the grid it measures,
+ * so the two cannot drift. It used to be a hand-built grid of six foreign
+ * `Card` primitives, whose anatomy is the Card's and not the grid's.
+ *
+ * STATE (F-37): a selectable card shell's interaction state is decided ONCE by
+ * the kernel and stamped through `partAttributes`, so the skin's hover arm
+ * pairs `[data-state~='hovered']` with the platform pseudo-class instead of
+ * being a second authority on the same question.
  */
 
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box } from '../../../../../primitives/layout/box';
 import { Checkbox } from '../../../../../primitives/inputs/checkbox';
 import { Flex } from '../../../../../primitives/layout/flex';
 import { Pagination } from '../../../../../primitives/navigation/pagination';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
-import { Card } from '../../../../../primitives/display/card';
 import { Stack } from '../../../../../primitives/layout/stack';
 import { Text } from '../../../../../primitives/display/typography/compound/text';
 import type { GridViewProps } from '../../contracts';
@@ -33,8 +52,7 @@ import { useOptionalTranslation } from '../../../../../../infrastructure/runtime
 
 const DEFAULT_COLUMNS = 'auto' as const;
 const DEFAULT_MIN_COLUMN_WIDTH = 280;
-const DEFAULT_GAP = 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))';
-const SKELETON_COUNT = 6;
+const LOADING_CARD_COUNT = 6;
 const MAX_FIXED_COLUMNS = 6;
 
 // ---------------------------------------------------------------------------
@@ -98,9 +116,14 @@ function SelectableCard<T>({
     translation?.tOr('gridView.selectItem', 'Select item {item}', { item: itemKey })
     ?? `Select item ${itemKey}`;
 
+  /* The shell is the part the skin's hover arm paints, so its state is decided
+     here, once, and the skin reads the kernel's answer. */
+  const interaction = useInteractionState();
+
   return (
     <Box
-      data-part="card-shell"
+      {...partAttributes('card-shell', interaction.state)}
+      {...interaction.handlers}
       data-selected={selected ? 'true' : 'false'}
       data-ds-stagger-item={staggered ? '' : undefined}
       style={
@@ -127,47 +150,6 @@ function SelectableCard<T>({
   );
 }
 
-/**
- * Loading skeleton grid that mimics the card layout.
- * @internal
- */
-function GridSkeleton({
-  columns,
-  minColumnWidth,
-  gap,
-  className,
-  style,
-}: {
-  columns: number | 'auto';
-  minColumnWidth: number;
-  gap: string;
-  className?: string;
-  style?: React.CSSProperties;
-}): React.ReactElement {
-  const gridStyle: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
-    gap,
-    ...style,
-  };
-
-  return (
-    <Box
-      className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
-      data-part="root"
-      data-loading="true"
-      data-empty="false"
-      style={gridStyle}
-    >
-      {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
-        <AnatomySkeleton className="ds-grid-view__skeleton" key={index}>
-          <Card title={'\u00a0'} description={'\u00a0'} />
-        </AnatomySkeleton>
-      ))}
-    </Box>
-  );
-}
-
 // ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
@@ -179,9 +161,9 @@ export function PatternGridView<T>(
     data,
     renderCard,
     rowKey,
-    columns = DEFAULT_COLUMNS,
-    minColumnWidth = DEFAULT_MIN_COLUMN_WIDTH,
-    gap = DEFAULT_GAP,
+    columns,
+    minColumnWidth,
+    gap,
     selectable = false,
     selectedKeys: controlledSelectedKeys,
     onSelectionChange,
@@ -242,31 +224,41 @@ export function PatternGridView<T>(
   // Grid styles
   // -------------------------------------------------------------------------
 
-  const normalizedGap = useMemo(() => normalizeGap(gap), [gap]);
-
-  // Premium channel socket (visual worklist schemaVersion 3, row B -- authorized
-  // deliberate delta): --ds-collection-card-gap tiers over the resolved gap.
-  // Bundles that do not declare it keep the fallback, which is exactly today's
-  // resolution; BitHire declares 10px and paints it.
-  const gridGap = `var(--ds-collection-card-gap, ${normalizedGap})`;
+  /* The caller's column model rides the family's own channels; the skin
+     applies them. Stamped ONLY when the caller states a number: an
+     unconditional stamp of the old prop defaults would shadow the skin's
+     resting declarations on every render and take the grid's rhythm away from
+     the theme. The premium socket the gap used to tier through
+     (`--ds-collection-card-gap`) moved with it into that resting declaration,
+     so a bundle that declares the socket still paints it. */
+  const gridChannels: React.CSSProperties = useMemo(
+    () =>
+      ({
+        ...(columns === undefined && minColumnWidth === undefined
+          ? {}
+          : {
+              '--ds-grid-view-columns': buildGridTemplateColumns(
+                columns ?? DEFAULT_COLUMNS,
+                minColumnWidth ?? DEFAULT_MIN_COLUMN_WIDTH,
+              ),
+            }),
+        ...(gap === undefined ? {} : { '--ds-grid-view-gap': normalizeGap(gap) }),
+        ...style,
+      }) as React.CSSProperties,
+    [columns, minColumnWidth, gap, style],
+  );
 
   const gridStyle: React.CSSProperties = useMemo(
     () =>
       ({
-        display: 'grid',
-        gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
-        gap: gridGap,
-        padding: '1px 1px var(--ds-listing-grid-bottom-bleed, 8px)',
-        overflow: 'visible',
-        boxSizing: 'border-box',
-        ...style,
+        ...gridChannels,
         // Publish the policy-resolved stagger bounds so the .ds-collection-stagger
         // preset's per-item clamp reflects the tenant durationScale. Absent when the
         // batch renders final-state.
         '--ds-stagger-step': stagger.animated ? stagger.stepCss : undefined,
         '--ds-stagger-max': stagger.animated ? stagger.maxCss : undefined,
       }) as React.CSSProperties,
-    [columns, minColumnWidth, gridGap, style, stagger.animated, stagger.stepCss, stagger.maxCss],
+    [gridChannels, stagger.animated, stagger.stepCss, stagger.maxCss],
   );
 
   // -------------------------------------------------------------------------
@@ -274,14 +266,28 @@ export function PatternGridView<T>(
   // -------------------------------------------------------------------------
 
   if (loading) {
+    /* The loading state is this grid's OWN anatomy, read by the shared
+       renderer: six card shells, each standing behind the caller's card slot,
+       stamped with the parts the loaded grid stamps. The renderer wraps the
+       family root rather than sitting inside it, so the grid the bones are
+       measured against is the real grid -- same track model, same gap, same
+       channels. */
     return (
-      <GridSkeleton
-        columns={columns}
-        minColumnWidth={minColumnWidth}
-        gap={gridGap}
-        className={className}
-        style={style}
-      />
+      <AnatomySkeleton>
+        <Box
+          className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
+          data-part="root"
+          data-loading="true"
+          data-empty="false"
+          style={gridChannels}
+        >
+          {Array.from({ length: LOADING_CARD_COUNT }).map((_, index) => (
+            <Box data-part="card-shell" key={index}>
+              <Box data-part="card-content" />
+            </Box>
+          ))}
+        </Box>
+      </AnatomySkeleton>
     );
   }
 

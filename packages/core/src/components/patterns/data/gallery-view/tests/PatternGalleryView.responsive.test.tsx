@@ -37,10 +37,46 @@ describe('PatternGalleryView responsive + style pass-through', () => {
       'modern',
     );
 
-    const columns = (await root(container)).style.gridTemplateColumns;
+    // The track model rides the family channel the skin consumes; the TSX
+    // paints nothing itself.
+    const grid = await root(container);
+    const columns = grid.style.getPropertyValue('--ds-gallery-view-columns');
     // Without the min(..., 100%) floor the track resolves to a bare 320px
     // minimum and overflows any container narrower than that.
     expect(columns).toContain('min(320px, 100%)');
+    expect(grid.style.gridTemplateColumns).toBe('');
+  });
+
+  it('leaves every layout channel unstamped when the caller states no number', async () => {
+    const { container } = renderWithEngine(
+      <PatternGalleryView<Photo> data={data} imageField="image" rowKey="id" />,
+      'modern',
+    );
+
+    // Negative control for the case above and for the ratio case below: an
+    // unconditional stamp would shadow the skin's resting declarations on every
+    // render and take all three channels away from the theme.
+    const grid = await root(container);
+    expect(grid.style.getPropertyValue('--ds-gallery-view-columns')).toBe('');
+    expect(grid.style.getPropertyValue('--ds-gallery-view-gap')).toBe('');
+    expect(grid.style.getPropertyValue('--ds-gallery-view-aspect-ratio')).toBe('');
+  });
+
+  it('stamps the gap and media-ratio channels when the caller states them', async () => {
+    const { container } = renderWithEngine(
+      <PatternGalleryView<Photo>
+        data={data}
+        imageField="image"
+        rowKey="id"
+        gap={24}
+        aspectRatio="16/9"
+      />,
+      'modern',
+    );
+
+    const grid = await root(container);
+    expect(grid.style.getPropertyValue('--ds-gallery-view-gap')).toBe('24px');
+    expect(grid.style.getPropertyValue('--ds-gallery-view-aspect-ratio')).toBe('16/9');
   });
 
   it('keeps the caller style once data arrives, not only while loading and empty', async () => {
