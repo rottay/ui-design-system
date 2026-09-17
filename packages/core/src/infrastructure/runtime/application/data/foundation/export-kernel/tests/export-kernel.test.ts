@@ -129,11 +129,11 @@ describe('downloadBlob', () => {
     blobParts = [];
     blobTypes = [];
 
-    vi.spyOn(globalThis, 'Blob').mockImplementation(((parts: unknown[], options?: BlobPropertyBag) => {
+    vi.spyOn(globalThis, 'Blob').mockImplementation((function (this: Blob, parts?: BlobPart[], options?: BlobPropertyBag) {
       blobParts.push(parts?.[0]);
       blobTypes.push(options?.type ?? '');
       return { size: 0, type: options?.type ?? '' } as Blob;
-    }) as unknown as typeof Blob);
+    }) as (this: Blob, blobParts?: BlobPart[], options?: BlobPropertyBag) => Blob);
 
     URL.createObjectURL = vi.fn(() => {
       const url = `blob:mock-${createdUrls.length}`;
