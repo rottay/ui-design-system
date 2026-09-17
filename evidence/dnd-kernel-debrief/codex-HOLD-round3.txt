@@ -1,0 +1,236 @@
+Codex shared-core review, ROUND 3 — DnD kernel debrief revision 3 (WO-FAM-08 / F-69), 2026-09-17. Verdict: HOLD (acceptance-instrument sharpness: decoy-invocation gaming of the F-69 admission, N3/N11 mutations that do not bite, the dropEffect cursor overclaim; B1-B3 substantially resolved per the review body).
+
+VERDICT: HOLD
+
+Revision 3 resolves the original compilation errors and the press-instance ownership problem. It still specifies observable regressions and acceptance checks that can pass without proving their claims.
+
+Reviewed [index.md](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md), the round-2 HOLD and the resolution map. Document SHA-256 remained:
+
+`be96315f96086c04a9442424ecf8bd4626045ec96853159b9f39fbd8626c49f4`
+
+HEAD advanced from `1ae879b5e448be1dbcf94bddb1826bfa9f9fe3a8` to `2c4ba44af2f3d5ce5326269de11122c70ea85cd3`. Seventeen of the eighteen tracked source files remain byte-identical to revision-3 base `35122963005dca61b24503155d52687608b0097b`. The structure gate’s test file changed independently during review; its old test-count receipt is not the current checkout’s result.
+
+| Finding | Disposition |
+|---|---|
+| B1 — adapters, identity, eligibility, termination | **PARTIAL; HOLD** |
+| B2 — usable keyboard lifecycle and announcements | **PARTIAL; HOLD** |
+| B3 — per-instance press cleanup and repair ownership | **RESOLVED at contract level** |
+| B4 — structural admission | **Remains resolved at contract level** |
+| B5 — executable acceptance | **PARTIAL; HOLD** |
+
+**Type-check result**
+
+I independently compiled the document’s declarations and all five adapters in memory using TypeScript **5.9.3**, `strict: true`, `noEmit: true`. Family symbols were explicitly declared; omitted JSX structure received closing tags/fragments and the omitted BoardCard children. Result: **zero diagnostics**.
+
+The writer’s retained scratch declarations, adapters and six refusal legs also compile when loaded into an in-memory compiler host. Removing the six `@ts-expect-error` directives produces six actual errors: TS2353, TS2322, TS2345, TS2322, TS2353 and TS2339.
+
+That confirms the original fixes. Additional negative probes expose an invalid configuration the types still accept.
+
+**B1 — Several corrections are sound, but the adapters remain behaviorally inconsistent.**
+
+Verified corrections:
+
+- `DragKey` widens the constraint while string-family payloads retain `string`.
+- Separate `TTarget` and `TDestination` make Tree’s adapter expressible.
+- Per-source `eligible` fixes Tree’s source-start eligibility.
+- Foreign-drag changes are now declared for **three owners**. I reproduced ColumnMenu’s matching-key result `[b,c,a]`; a non-matching key leaves the order unchanged. SavedViews and Kanban’s unguarded foreign-hover highlighting is also present in source.
+- `current` correctly expresses the **hover-stamp** hold/clear distinction.
+- Reserving the session before `onDrop`, passing reserved locals, and the rewritten N10 are coherent for an existing session. A direct model produced one callback under re-entry and cleared both session representations before a throwing callback.
+
+The following remain blocking.
+
+1. **The held hover target is incorrectly promoted into the drop destination.**
+
+   [The terminal sequence](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:608) commits `explicit ?? session.target`. The SavedViews and ColumnMenu adapters retain target `b` when source `a` is re-hovered.
+
+   Their current drop handlers instead inspect the row receiving the drop. SavedViews refuses `dragViewId === targetViewId`; ColumnMenu’s `moveDraftColumn` returns when source and destination match. See [SavedViews](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/data/saved-views/engines/modern/index.tsx:207) and [ColumnMenu](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/structures/workspace/column-menu/index.tsx:378).
+
+   Executing the actual extracted handlers, then comparing with the specified R3 commit rule:
+
+   ```text
+   Initial order: [a,b,c]
+   Sequence: drag a → hover b → hover a → drop on a
+
+   Current SavedViews: target stamp remains b; zero reorder callbacks
+   Current ColumnMenu: target stamp remains b; order remains [a,b,c]
+   R3 held-target commit: onDrop(a,b); order becomes [b,a,c]
+   ```
+
+   C16 tests only the highlight and misses the regression. The contract needs a drop-time destination/refusal rule that receives the bound drop target independently of the held indicator. Extend the sequence through `drop`, not merely `dragover`.
+
+   The broader claim that the new guard reproduces all four owners is also false: Kanban commits the drop handler’s bound column/position, and Tree combines the receiving row’s key with the stored zone.
+
+2. **A distinct destination type does not require its resolver.**
+
+   [`resolveTarget` remains unconditionally optional](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:416), despite the comment saying omission is typable only when the bound target supplies the destination.
+
+   This compiles without errors:
+
+   ```ts
+   useDragSession<
+     { key: number },
+     { key: number },
+     { key: number; position: 'inside' }
+   >({
+     onDrop: (_payload, destination) =>
+       destination.position.toUpperCase(),
+   });
+   ```
+
+   The HTML5 path can bind `{key: 2}` but has no producer for `position`. Adding an expected-error directive to this configuration produces **TS2578: unused directive**. A generic implementation returning `TTarget` as `TDestination` produces TS2322.
+
+   Require a resolver when the bound target cannot supply the destination, and add this refusal leg.
+
+3. **Tree’s global target gating is still contradicted by the API and C17.**
+
+   [Tree source](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:383) distinguishes:
+
+   - `propDraggable === false`: no drag-start, drag-over, drop or drag-end handlers.
+   - A disabled row with `propDraggable === true`: no drag-start, but target handlers and drag-end remain.
+
+   The prose now recognizes that distinction. However, C17 requires the target bag to be identical in **all three** states, the adapter always spreads it, and `SortableTargetProps` requires both handlers. Returning `{}` for the globally disabled case produces **TS2739**.
+
+   Define target-handler suppression for session disablement separately from per-source ineligibility. Reconcile it with the unconditional `preventDefault` law and the return type.
+
+4. **The Kanban adapter replaces FLIP registration with focus registration.**
+
+   [The mandatory adapter](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:839) uses only:
+
+   ```tsx
+   ref={drag.registerItem(itemKey(item))}
+   ```
+
+   The [current ref callback](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:571) registers each card with both FLIP and focus tracking. Removing the FLIP registration leaves `measure()` traversing an empty map; calling it before `onItemMove` does not preserve animation.
+
+   Compose both registrations, including their null/unmount calls. R8’s call-order assertion alone would remain green on this broken adapter.
+
+5. **Removed-target handling preserves the array but changes SavedViews’ callback behavior.**
+
+   [C15](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1842) relies on invalid keys producing an unchanged order. The current SavedViews implementation additionally suppresses `onViewReorder` when either index is missing. Its new adapter calls the callback unconditionally whenever supplied.
+
+   Reproduced with destination `b` removed from `[a,b,c]`:
+
+   ```text
+   Current source: zero callbacks
+   Proposed adapter: onViewReorder([a,c])
+   ```
+
+   Preserve the family’s validity guard and test callback count as well as array contents.
+
+**B2 — The API is now expressible, but its lifecycle still has contradictions.**
+
+The requested structural corrections are present: typed `start(payload)` and `commit(destination)`, a compiling delegated union member, explicit `candidate`, the actual roving-focus direction-hook precedent, and removal of `crossedContainer`. The direction hook’s implementation confirms the stated equality with Kanban’s existing direction calculation.
+
+Three problems remain:
+
+1. **The universal commit sequence excludes immediate mode.**
+
+   [§2.2.3](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:602) says the seven-step sequence applies to pointer and keyboard paths alike. Step 1 returns when `sessionRef.current` is null.
+
+   [§2.4.1](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1147) requires immediate mode to open no session at all. Applying the stipulated sequence therefore produces **zero commits** for an immediate arrow.
+
+   Specify the immediate finalization branch and how it shares reservation, callback, focus and announcement ordering without exposing a grabbed session.
+
+2. **Kanban acquires undeclared pointer announcements.**
+
+   The [announcement table](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1383) emits `dropped` for pointer commits and `cancelled` for aborted pointer drags. The mandatory Kanban adapter connects `announceKanbanMove`.
+
+   Executing [current Kanban handlers](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:245) confirms:
+
+   ```text
+   Pointer drop: measure → onItemMove; no announcement
+   Keyboard move: measure → onItemMove → pending focus → announcement
+   ```
+
+   Lot 5 declares only the foreign-highlight change; lot 5b repairs repeated announcements. Neither declares new pointer announcements. Moreover, the announcement event carries no origin, so the adapter cannot directly distinguish pointer `dropped` from keyboard `dropped`.
+
+   Preserve the distinction through an explicit contract mechanism, or declare and pin the addition.
+
+3. **The complete delegated adapter leaves blocked sessions open and emits a second blocked outcome.**
+
+   [Its unconditional sequence](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1264) is `start → move → commit`.
+
+   Executing its resolver with the specified lifecycle gives:
+
+   ```text
+   b down: grabbed → moved → dropped; session closes
+   a up:   grabbed → blocked(edge) → blocked(no-destination); session stays open
+   d down: grabbed → blocked(edge) → blocked(no-destination); session stays open
+   ```
+
+   The five “SAME” comparisons establish array equality only. They do not establish the promised terminal state or announcement outcome.
+
+   Also, the shown native disabled buttons cannot invoke their `onClick` at an edge, contradicting the claim that those edge activations now produce audible feedback. Specify the actual reachable edge behavior and terminal handling, then test the complete sequence.
+
+**B3 — The ownership correction is accepted.**
+
+The inversion is supported by source:
+
+- [BoardCard](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:90) already owns its interaction instance and chains its drag-end prop into local cancellation.
+- [StatefulRow](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/structures/workspace/column-menu/index.tsx:1117) owns a separate instance and overwrites overlapping pointer props through spread order.
+- [Button](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/inputs/button/engines/modern/index.tsx:487) has its own chain and needs consumer-preserving drag-end plumbing.
+
+Lots **6a/6b** now assign both repairs and preserve the transport lot’s pre-repair pin. This resolves the ownership and sequencing design. N3 still needs correction below.
+
+**B5 — The acceptance design improves, but still permits false greens.**
+
+Accepted at contract level:
+
+- The unsuitable server-markup harness is replaced by a named live React scene/runner with an owned write set and self-check.
+- C3 now describes the actual absence of sortable drag-leave handlers.
+- Source removal and removed-destination cases are explicitly named, with liveness limitations acknowledged.
+- Tree’s `dataTransfer` fixture correction is an explicit, base-inert PRE-lot.
+- Kanban’s distinguishability repair has its own **lot 5b**.
+- F-69 now names measurement, judgment, baseline and drill files.
+- N10/N16 address reservation order and reserved callback arguments.
+
+Remaining failures:
+
+1. **The F-69 predicate misses both actual file-drop implementations.**
+
+   [The proposed owner measurement](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1989) requires state written in a drag-start-shaped handler and read in a drop-shaped handler.
+
+   FileManager and Upload have **no drag source or drag-start handler**. Their independent file-drop implementations therefore measure zero, and `dndTransportOwners > 0 && !dndKernelWired` never requires their `useFileDropZone` adoption.
+
+   Add a drop-zone detection/admission arm and drill it using these actual shapes.
+
+2. **Invocation plus a session read still does not establish adoption.**
+
+   The stated wiring rule accepts:
+
+   ```ts
+   const unusedTransport = useDragSession(options);
+   void unusedTransport.session;
+   // Existing independent transport remains attached to the DOM.
+   ```
+
+   With one independent owner and an unchanged baseline pin of one:
+
+   ```text
+   dndTransportOwners = 1
+   dndKernelWired = true
+   blocking finding = false
+   ratchet = green
+   ```
+
+   Require evidence of actual handler attachment/delegation, and make zero independent implementations an explicit consolidation closure condition. Add a drill retaining the legacy transport beside this decoy invocation.
+
+3. **N3 and N11 do not establish their designated failures.**
+
+   [N3](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1915) still removes a press-cancel route from `getSourceProps`, while the revised Kanban adapter passes no such option. Executing the source-extracted BoardCard with a no-op consumer drag-end still clears its local press. Its designated “no pressed state” assertion remains green.
+
+   If N3 tests the optional kernel callback, name a fixture that actually supplies it. The component-boundary repairs need mutations at their actual cleanup boundaries.
+
+   [N11](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1923) changes payload recovery to `getData`, but the mandatory null-session guard still rejects a foreign drag before recovery runs. My mutant produced zero transfer reads and zero callbacks: the matching-key C6 assertion remains green.
+
+   Keep the matching-key foreign pin, and add a live-session case where the transfer key differs from the session key to test payload authority.
+
+4. **The browser acceptance overclaims a cursor change.**
+
+   [Browser claim 2](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1888) requires the explicit `dropEffect = 'move'` write to change negotiation and make Tree visibly different. Tree already sets `effectAllowed = 'move'`. The HTML processing model initializes drag-over `dropEffect` to `move` for that allowed effect. A visible before/after change does not follow from adding the assignment. [HTML Standard](https://html.spec.whatwg.org/multipage/dnd.html#dndevents)
+
+   Test the negotiated operation and a meaningful negative control. Do not require an unmeasured cursor delta. The PRE-lot fixture correction remains valid independently.
+
+This was an independent read-only review. I changed no files. Verification comprised source inspection, source-byte comparison, in-memory TypeScript checks, execution of extracted source functions, and explicitly identified models of the proposed lifecycle. No candidate implementation or live browser adoption was certified.
+
+The historical constitution checker again failed on obsolete-path drift. That is separate from this verdict. **HOLD is based on the contract contradictions and false-green acceptance cases above.**
