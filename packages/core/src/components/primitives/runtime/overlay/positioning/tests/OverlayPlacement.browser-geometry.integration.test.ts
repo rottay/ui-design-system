@@ -28,6 +28,13 @@
  *   - The vertical slider readout mirrors about the rail line instead of
  *     keeping a physical side, and the horizontal readout stays centred on
  *     the thumb in both directions.
+ *   - A PORTALLED bubble resolves its LOGICAL paint against the `dir` it was
+ *     stamped with, not against the tree it landed in: with the app locale
+ *     `en` and the anchor inside a `dir="rtl"` wrapper, the bubble is a child
+ *     of the LTR portal root, and an aligned placement still lays its shortcut
+ *     keys at the inline end and its arrow on the anchor, both physically
+ *     mirrored. Restoring `direction: inherit` on the bubble makes it compute
+ *     `ltr` from the portal root and turns both readings around.
  *   - ONE DIRECTION PER REQUEST, in the two trees where the app locale and the
  *     anchor's own context DISAGREE: an anchor inside a bare `dir` wrapper that
  *     contradicts the locale, and a nested locale provider that flips the
@@ -57,7 +64,11 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { findChromium } from '@checks/modern-rescue/cascade/probe/browser-analysis/index.mjs';
 
-import type { NonUniformScene, PlacementProbeResult } from './fixtures/logical-placement-scene';
+import type {
+  NonUniformScene,
+  PlacementProbeResult,
+  StampedDirectionScene,
+} from './fixtures/logical-placement-scene';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PACKAGE_ROOT = resolve(HERE, '../../../../../../..');
@@ -369,6 +380,44 @@ describe('logical overlay placement -- real Chromium geometry (NOT the DOM runne
       expect(Math.abs(run.popconfirmDir.plain!.bubble!.left - run.popconfirmDir.portal!.bubble!.left))
         .toBeLessThanOrEqual(TOLERANCE_PX);
     }
+  });
+
+  // The stamped `dir` is the ONLY direction a portalled bubble can resolve its
+  // logical paint against: it is not in its anchor's tree any more, and the
+  // portal root it landed in speaks the app locale. Measured in the `ltr`
+  // navigation, which is where the two disagree (locale `en`, anchor `rtl`).
+  it('resolves a portalled bubble\'s logical paint against the dir it stamps', () => {
+    const scene: StampedDirectionScene | null = ltr.stampedDirection;
+    expect(scene).not.toBeNull();
+    const measured = scene!;
+
+    // The tree really is non-uniform, and the bubble really did leave it.
+    expect(ltr.dir).toBe('ltr');
+    expect(measured.strategy).toBe('js');
+    expect(measured.anchorDirection).toBe('rtl');
+    expect(measured.portalRootDirection).toBe('ltr');
+
+    // The engine stamps the anchor's direction, and paint follows the stamp.
+    // A skin declaration that outranks the UA `[dir]` rule breaks this line.
+    expect(measured.stampedDir).toBe('rtl');
+    expect(measured.bubbleDirection).toBe('rtl');
+
+    // The shortcut row lays its keys at the bubble's INLINE END, which under
+    // the stamped direction is the physical LEFT: they end before the copy
+    // begins. Inheriting `ltr` from the portal root puts them on the right.
+    expect(measured.content).not.toBeNull();
+    expect(measured.keys).not.toBeNull();
+    expect(measured.keys!.right).toBeLessThanOrEqual(measured.content!.left + TOLERANCE_PX);
+
+    // The aligned placement's arrow rules are inline-axis rules (the `-end`
+    // edge offset and the tracked clamp are `inset-inline-*`), so they resolve
+    // against the same stamp: the tip stays on the anchor's centre. Resolved
+    // against `ltr` it mirrors to the far side of the bubble instead.
+    expect(measured.arrowTracked).toBe('true');
+    expect(measured.arrow).not.toBeNull();
+    expect(measured.bubble).not.toBeNull();
+    expect(Math.abs(centre(measured.arrow!) - centre(measured.anchor)))
+      .toBeLessThanOrEqual(ARROW_TOLERANCE_PX);
   });
 
   it('keeps the horizontal slider readout centred on the thumb in both directions', () => {

@@ -16,6 +16,8 @@
   max-inline-size: 100%;
 }
 
+/* The stamped `dir` is the bubble's reading direction: a portalled bubble has no
+   ancestor to inherit one from, so nothing here may outrank the UA `[dir]` rule. */
 .ds-tooltip-bubble.ds-tooltip-bubble[data-part='bubble'] {
   --ds-tooltip-surface-current: var(--ds-tooltip-bordered-background, var(--ds-material-overlay-background));
   --ds-tooltip-ink-current: var(--ds-tooltip-bordered-foreground, var(--ds-color-text-primary));
@@ -53,7 +55,6 @@
   overflow-wrap: anywhere;
   word-break: normal;
   white-space: normal;
-  direction: inherit;
   unicode-bidi: plaintext;
   opacity: 0;
   pointer-events: none;

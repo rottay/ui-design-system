@@ -56,6 +56,32 @@ export interface NonUniformScene {
   arrow: Edges | null;
 }
 
+/**
+ * A PORTALLED bubble in a non-uniform tree: its anchor declares one direction
+ * and the portal root it lands in has the other. Nothing in its own ancestry
+ * carries the anchor's direction, so the `dir` the engine stamps on it is the
+ * only authority its logical paint can resolve against.
+ */
+export interface StampedDirectionScene {
+  /** The anchor's own resolved direction -- what the engine stamps. */
+  anchorDirection: string;
+  /** The direction of the element the portal actually rendered into. */
+  portalRootDirection: string;
+  /** The attribute the engine wrote on the bubble. */
+  stampedDir: string | null;
+  /** The direction paint resolved for the bubble; must follow the stamp. */
+  bubbleDirection: string;
+  strategy: string | null;
+  placementAttribute: string | null;
+  arrowTracked: string | null;
+  anchor: Edges;
+  bubble: Edges | null;
+  content: Edges | null;
+  /** The shortcut chips, which the skin lays at the bubble's inline end. */
+  keys: Edges | null;
+  arrow: Edges | null;
+}
+
 export interface PlacementProbeResult {
   dir: string;
   anchor: Edges;
@@ -78,6 +104,8 @@ export interface PlacementProbeResult {
   nestedLocale: { plain: NonUniformScene | null; portal: NonUniformScene | null };
   /** Popconfirm, same bare `dir` wrapper: the panel carries no arrow and stamps no placement. */
   popconfirmDir: { plain: NonUniformScene | null; portal: NonUniformScene | null };
+  /** A portalled, aligned tooltip whose only direction authority is its own stamp. */
+  stampedDirection: StampedDirectionScene | null;
 }
 
 const RTL = typeof window !== 'undefined' && window.location.hash === '#rtl';
@@ -178,6 +206,21 @@ function Scene(): React.ReactElement {
             <NonUniformPopconfirm anchorId="popconfirm-portal-anchor" />
           </div>
         </OverlayPortalBoundary>
+        {/* Scene 4: a PORTALLED bubble with an ALIGNED placement and a
+            shortcut row, under a `dir` wrapper the document does not share.
+            The portal root is a child of <body>, so the bubble inherits the
+            app locale's direction from the tree it landed in; only the `dir`
+            the engine stamps carries the anchor's. Both the shortcut row's
+            inline end and the aligned arrow rule resolve against it. */}
+        <OverlayPortalBoundary>
+          <div id="stamped-portal" dir="rtl" style={{ padding: 120 }}>
+            <ModernTooltip content="Copy rows" shortcut="mod+c" placement="top-end" visible>
+              <button type="button" id="stamped-portal-anchor" style={{ width: 80, height: 24 }}>
+                anchor
+              </button>
+            </ModernTooltip>
+          </div>
+        </OverlayPortalBoundary>
       </div>
     </I18nProvider>
   );
@@ -233,6 +276,37 @@ function nonUniformScene(anchorId: string): NonUniformScene | null {
           collisionAdjusted: bubble.getAttribute('data-collision-adjusted'),
         }
       : null,
+    arrow: arrow ? edges(arrow) : null,
+  };
+}
+
+/**
+ * The stamped-direction scene, read through the same `aria-describedby` link:
+ * the bubble is a child of the portal root, not of the wrapper that declared
+ * the direction it must paint in.
+ */
+function stampedDirectionScene(anchorId: string): StampedDirectionScene | null {
+  const trigger = document.getElementById(anchorId);
+  const anchor = trigger?.parentElement ?? null;
+  if (!trigger || !anchor) return null;
+  const bubbleId = trigger.getAttribute('aria-describedby');
+  const bubble = bubbleId ? document.getElementById(bubbleId) : null;
+  const portalRoot = bubble?.parentElement ?? null;
+  const content = bubble?.querySelector('[data-part="content"]') ?? null;
+  const keys = bubble?.querySelector('[data-part="shortcut-chips"]') ?? null;
+  const arrow = bubble?.querySelector('[data-part="arrow"]') ?? null;
+  return {
+    anchorDirection: window.getComputedStyle(anchor).direction,
+    portalRootDirection: portalRoot ? window.getComputedStyle(portalRoot).direction : '',
+    stampedDir: bubble?.getAttribute('dir') ?? null,
+    bubbleDirection: bubble ? window.getComputedStyle(bubble).direction : '',
+    strategy: bubble?.getAttribute('data-ds-position-strategy') ?? null,
+    placementAttribute: bubble?.getAttribute('data-placement') ?? null,
+    arrowTracked: bubble?.getAttribute('data-arrow-tracked') ?? null,
+    anchor: edges(anchor),
+    bubble: bubble ? edges(bubble) : null,
+    content: content ? edges(content) : null,
+    keys: keys ? edges(keys) : null,
     arrow: arrow ? edges(arrow) : null,
   };
 }
@@ -301,6 +375,7 @@ function probe(): void {
       plain: popconfirmScene('popconfirm-plain-anchor'),
       portal: popconfirmScene('popconfirm-portal-anchor'),
     },
+    stampedDirection: stampedDirectionScene('stamped-portal-anchor'),
   };
   document.documentElement.setAttribute('data-probe-result', JSON.stringify(result));
 }

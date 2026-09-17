@@ -19,14 +19,26 @@ import {
   seriousFindings,
 } from '@tests/support/family-causality';
 
-function bubbleMarkup(props: Partial<TooltipProps> = {}): string {
+/**
+ * The engine stamps `dir` on the bubble from the anchor's context, and that
+ * stamp is the bubble's only direction authority once it is portalled out of
+ * the anchor's tree. A snapshot therefore has to be rendered in the direction
+ * it will be measured in: a scene that inherited its direction from the probe
+ * host would be measuring the host, not the contract.
+ */
+function bubbleMarkup(props: Partial<TooltipProps> = {}, direction: 'ltr' | 'rtl' = 'ltr'): string {
+  const host = document.createElement('div');
+  host.setAttribute('dir', direction);
+  document.body.append(host);
   const view = render(
     <ModernTooltip visible content="Copied to clipboard" shortcut="mod+c" {...props}>
       <button type="button">Copy</button>
     </ModernTooltip>,
+    { container: host },
   );
   const html = document.querySelector("[data-part='bubble']")!.outerHTML;
   view.unmount();
+  host.remove();
   return html;
 }
 
@@ -83,18 +95,27 @@ describe('tooltip recipe, tone, direction, loading and accessibility', () => {
   }, 60_000);
 
   it('lays the shortcut keys at the inline end in both directions', async () => {
+    // Two scenes, each stamped by the engine in its own direction, measured in
+    // a host of that same direction: the bubble's `dir` is what resolves the
+    // inline axis, so the RTL arm must carry the stamp instead of inheriting it.
+    const scenes = `<div id="ltr">${markup}</div><div id="rtl">${bubbleMarkup({}, 'rtl')}</div>`;
     const readings = await measureArms({
       vertical: 'rottay',
-      markup,
+      markup: scenes,
       arms: { base: {} },
       targets: [
-        { id: 'ltrContent', selector: "[data-part='content']", property: '@rect.left', dir: 'ltr' },
-        { id: 'ltrKeys', selector: "[data-part='shortcut-chips']", property: '@rect.left', dir: 'ltr' },
-        { id: 'rtlContent', selector: "[data-part='content']", property: '@rect.left', dir: 'rtl' },
-        { id: 'rtlKeys', selector: "[data-part='shortcut-chips']", property: '@rect.left', dir: 'rtl' },
+        { id: 'ltrDirection', selector: `#ltr ${BUBBLE}`, property: 'direction', dir: 'ltr' },
+        { id: 'ltrContent', selector: "#ltr [data-part='content']", property: '@rect.left', dir: 'ltr' },
+        { id: 'ltrKeys', selector: "#ltr [data-part='shortcut-chips']", property: '@rect.left', dir: 'ltr' },
+        { id: 'rtlDirection', selector: `#rtl ${BUBBLE}`, property: 'direction', dir: 'rtl' },
+        { id: 'rtlContent', selector: "#rtl [data-part='content']", property: '@rect.left', dir: 'rtl' },
+        { id: 'rtlKeys', selector: "#rtl [data-part='shortcut-chips']", property: '@rect.left', dir: 'rtl' },
       ],
     });
     const r = readings.base!;
+    // The scenes are only different if the stamp reached paint.
+    expect(r.ltrDirection).toBe('ltr');
+    expect(r.rtlDirection).toBe('rtl');
     expect(Number(r.ltrKeys)).toBeGreaterThan(Number(r.ltrContent));
     expect(Number(r.rtlKeys)).toBeLessThan(Number(r.rtlContent));
   }, 60_000);
