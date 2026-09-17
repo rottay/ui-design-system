@@ -9,9 +9,10 @@
 
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { partAttributes, serializeState } from '../../../kernel/anatomy';
+import { composeHandlers } from '../../compose-handlers';
 import { useInteractionState } from '..';
 
 function Probe({ disabled = false }: { disabled?: boolean }) {
@@ -158,5 +159,81 @@ describe('a disabled part reports nothing', () => {
 
     const state = trigger().getAttribute('data-state') ?? '';
     expect(state).toBe('disabled');
+  });
+});
+
+/**
+ * The kernel's handlers are a prop bag, not a chain. Three family cuts in a row
+ * lost a caller's `onPointerDown` to a naive spread, so the behaviour is pinned
+ * here: changing it is then a declared decision, not a silent one.
+ */
+describe('the handlers do not chain to a caller', () => {
+  function SpreadLast({ onPointerDown }: { onPointerDown: () => void }) {
+    const { state, handlers } = useInteractionState();
+    return (
+      <button
+        type="button"
+        onPointerDown={onPointerDown}
+        {...partAttributes('trigger', state)}
+        {...handlers}
+      >
+        probe
+      </button>
+    );
+  }
+
+  function SpreadFirst({ onPointerDown }: { onPointerDown: () => void }) {
+    const { state, handlers } = useInteractionState();
+    return (
+      <button
+        type="button"
+        {...handlers}
+        {...partAttributes('trigger', state)}
+        onPointerDown={onPointerDown}
+      >
+        probe
+      </button>
+    );
+  }
+
+  function Composed({ onPointerDown }: { onPointerDown: () => void }) {
+    const { state, handlers } = useInteractionState();
+    return (
+      <button
+        type="button"
+        {...partAttributes('trigger', state)}
+        {...handlers}
+        onPointerDown={composeHandlers(onPointerDown, handlers.onPointerDown)}
+      >
+        probe
+      </button>
+    );
+  }
+
+  it('replaces a caller handler it is spread after', () => {
+    const caller = vi.fn();
+    render(<SpreadLast onPointerDown={caller} />);
+    fireEvent.pointerDown(trigger());
+
+    expect(caller, 'the spread started chaining; update the contract').not.toHaveBeenCalled();
+    expect(trigger().getAttribute('data-state')).toContain('pressed');
+  });
+
+  it('loses its own handler to a caller handler spread after it', () => {
+    const caller = vi.fn();
+    render(<SpreadFirst onPointerDown={caller} />);
+    fireEvent.pointerDown(trigger());
+
+    expect(caller).toHaveBeenCalledTimes(1);
+    expect(trigger()).not.toHaveAttribute('data-state');
+  });
+
+  it('keeps both sides when the colliding prop is composed explicitly', () => {
+    const caller = vi.fn();
+    render(<Composed onPointerDown={caller} />);
+    fireEvent.pointerDown(trigger());
+
+    expect(caller).toHaveBeenCalledTimes(1);
+    expect(trigger().getAttribute('data-state')).toContain('pressed');
   });
 });

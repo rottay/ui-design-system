@@ -27,9 +27,10 @@ export interface UseInteractionStateOptions {
 export interface UseInteractionStateResult {
   state: InteractionState;
   /**
-   * Handlers to spread onto the interactive element. They call through to any
-   * handler the caller also passes, because a part owns its state and a product
-   * owns its behaviour.
+   * Handlers to spread onto the interactive element. They do NOT chain: a
+   * spread REPLACES a colliding handler the caller passed. Spread them before
+   * the caller's own props, or compose explicitly (see `composeHandlers` in
+   * `../compose-handlers`).
    */
   handlers: {
     onPointerEnter: (event: React.PointerEvent) => void;
@@ -92,12 +93,6 @@ export function useInteractionState(
     if (disabled) return;
     setFocused(true);
     // Input modality decides the ring, not `element.matches(':focus-visible')`.
-    // Several DOM implementations answer that selector without implementing it:
-    // they return `false` rather than throwing, so a "does it throw" support
-    // probe reports support and every keyboard focus silently loses its ring.
-    // Skins that want the platform's own answer still have `:focus-visible` in
-    // CSS; this attribute is the behaviour layer's answer, and it is honest
-    // about how it knows.
     setFocusVisible(!pointerDownRef.current);
   }, [disabled]);
 
