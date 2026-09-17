@@ -82,6 +82,32 @@ export interface StampedDirectionScene {
   arrow: Edges | null;
 }
 
+/**
+ * An IN-TREE surface (the `anchor-css` branch) whose tree declares one
+ * direction and paints another: a locale ISLAND publishes `dir` on its own
+ * scope element, and a container inside it sets `direction` in CSS without
+ * declaring `dir`. The engine reads the island's `dir`, so the stamp and the
+ * ancestry the surface is rendered into disagree, and every placement the
+ * engine computed is expressed in the stamp.
+ */
+export interface InTreeStampedScene {
+  /** The `dir` the nearest declaring ancestor carries -- what the engine reads. */
+  declaredDir: string | null;
+  /** The direction the anchor's own box resolves to, set in CSS below the island. */
+  anchorDirection: string;
+  /** The attribute the engine wrote on the surface. */
+  stampedDir: string | null;
+  /** The direction paint resolved for the surface; must follow the stamp. */
+  surfaceDirection: string;
+  strategy: string | null;
+  placementAttribute: string | null;
+  anchor: Edges;
+  surface: Edges | null;
+  body: Edges | null;
+  /** The copy inside the body, which `text-align: start` lays at the inline start. */
+  ink: Edges | null;
+}
+
 export interface PlacementProbeResult {
   dir: string;
   anchor: Edges;
@@ -106,6 +132,8 @@ export interface PlacementProbeResult {
   popconfirmDir: { plain: NonUniformScene | null; portal: NonUniformScene | null };
   /** A portalled, aligned tooltip whose only direction authority is its own stamp. */
   stampedDirection: StampedDirectionScene | null;
+  /** An in-tree popover whose stamp contradicts the ancestry it renders into. */
+  inTreeStamped: InTreeStampedScene | null;
 }
 
 const RTL = typeof window !== 'undefined' && window.location.hash === '#rtl';
@@ -221,6 +249,29 @@ function Scene(): React.ReactElement {
             </ModernTooltip>
           </div>
         </OverlayPortalBoundary>
+        {/* Scene 5: an IN-TREE surface (the `anchor-css` branch) under a tree
+            that DECLARES one direction and PAINTS another: a nested locale
+            island publishes `dir="rtl"` on its own scope element, and a
+            container inside it sets `direction: ltr` in CSS without declaring
+            `dir`. The engine reads the island and stamps `rtl`, and the branch
+            renders the surface under a trigger that declares nothing, so the
+            stamp is the only authority its logical paint may follow: the
+            placement, the arrow offset and `text-align: start` are all
+            expressed in it. Inheriting the container's `ltr` instead lays the
+            copy on the opposite physical side from everything else. */}
+        <I18nProvider locale="ar" fallbackLocale="en" directionScope="element">
+          <div id="in-tree-stamped" style={{ padding: 120, direction: 'ltr' }}>
+            <ModernPopover
+              content={<div style={{ width: 240 }}><span data-probe-ink="true">Copy rows</span></div>}
+              open
+              placement="top"
+            >
+              <button type="button" id="in-tree-stamped-anchor" style={{ width: 80, height: 24 }}>
+                anchor
+              </button>
+            </ModernPopover>
+          </div>
+        </I18nProvider>
       </div>
     </I18nProvider>
   );
@@ -311,6 +362,31 @@ function stampedDirectionScene(anchorId: string): StampedDirectionScene | null {
   };
 }
 
+/**
+ * The in-tree scene: the surface is a child of the trigger, so its ancestry is
+ * the CSS container, while the `dir` it carries came from the island above it.
+ */
+function inTreeStampedScene(anchorId: string): InTreeStampedScene | null {
+  const trigger = document.getElementById(anchorId);
+  const root = trigger?.closest<HTMLElement>('[data-part="trigger"]') ?? null;
+  if (!trigger || !root) return null;
+  const surface = root.querySelector('[data-part="surface"]');
+  const body = surface?.querySelector('[data-part="body"]') ?? null;
+  const ink = surface?.querySelector('[data-probe-ink]') ?? null;
+  return {
+    declaredDir: root.closest<HTMLElement>('[dir]')?.getAttribute('dir') ?? null,
+    anchorDirection: window.getComputedStyle(root).direction,
+    stampedDir: surface?.getAttribute('dir') ?? null,
+    surfaceDirection: surface ? window.getComputedStyle(surface).direction : '',
+    strategy: surface?.getAttribute('data-ds-position-strategy') ?? null,
+    placementAttribute: surface?.getAttribute('data-placement') ?? null,
+    anchor: edges(root),
+    surface: surface ? edges(surface) : null,
+    body: body ? edges(body) : null,
+    ink: ink ? edges(ink) : null,
+  };
+}
+
 function probe(): void {
   const anchor = document.getElementById('popover-anchor');
   const surface = document.querySelector('.ds-popover--modern [data-part="surface"]');
@@ -376,6 +452,7 @@ function probe(): void {
       portal: popconfirmScene('popconfirm-portal-anchor'),
     },
     stampedDirection: stampedDirectionScene('stamped-portal-anchor'),
+    inTreeStamped: inTreeStampedScene('in-tree-stamped-anchor'),
   };
   document.documentElement.setAttribute('data-probe-result', JSON.stringify(result));
 }

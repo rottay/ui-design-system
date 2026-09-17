@@ -35,6 +35,14 @@
  *     keys at the inline end and its arrow on the anchor, both physically
  *     mirrored. Restoring `direction: inherit` on the bubble makes it compute
  *     `ltr` from the portal root and turns both readings around.
+ *   - An IN-TREE surface (the `anchor-css` branch) does the same in the tree
+ *     that DECLARES one direction and PAINTS another: a nested locale island
+ *     publishes `dir="rtl"`, a container inside it sets `direction: ltr` in CSS
+ *     without declaring `dir`, and the surface is rendered under a trigger that
+ *     declares nothing. The engine stamps the island's direction and expresses
+ *     every placement in it, so the paint must follow the stamp; restoring
+ *     `direction: inherit` on the surface makes it take the container's `ltr`
+ *     and lays the copy on the opposite physical side.
  *   - ONE DIRECTION PER REQUEST, in the two trees where the app locale and the
  *     anchor's own context DISAGREE: an anchor inside a bare `dir` wrapper that
  *     contradicts the locale, and a nested locale provider that flips the
@@ -65,6 +73,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { findChromium } from '@checks/modern-rescue/cascade/probe/browser-analysis/index.mjs';
 
 import type {
+  InTreeStampedScene,
   NonUniformScene,
   PlacementProbeResult,
   StampedDirectionScene,
@@ -418,6 +427,37 @@ describe('logical overlay placement -- real Chromium geometry (NOT the DOM runne
     expect(measured.bubble).not.toBeNull();
     expect(Math.abs(centre(measured.arrow!) - centre(measured.anchor)))
       .toBeLessThanOrEqual(ARROW_TOLERANCE_PX);
+  });
+
+  // The same law on the OTHER branch: an `anchor-css` surface stays in its
+  // anchor's tree, so it has an ancestry to inherit from -- and that ancestry
+  // is not the authority the engine used. Measured in the `ltr` navigation,
+  // where the island declares `rtl` and the container below it paints `ltr`.
+  it('resolves an in-tree surface\'s logical paint against the dir it stamps', () => {
+    const scene: InTreeStampedScene | null = ltr.inTreeStamped;
+    expect(scene).not.toBeNull();
+    const measured = scene!;
+
+    // The branch is the in-tree one, and the tree really does disagree with
+    // itself: the nearest declared `dir` is not what the anchor's box paints.
+    expect(ltr.dir).toBe('ltr');
+    expect(measured.strategy).toBe('anchor-css');
+    expect(measured.declaredDir).toBe('rtl');
+    expect(measured.anchorDirection).toBe('ltr');
+
+    // The engine stamps the direction it resolved, and paint follows the stamp.
+    // A skin declaration that outranks the UA `[dir]` rule breaks this line.
+    expect(measured.stampedDir).toBe('rtl');
+    expect(measured.surfaceDirection).toBe('rtl');
+
+    // `text-align: start` under the stamp is the physical RIGHT: the copy
+    // begins at the body's end edge. Inheriting the container's `ltr` puts it
+    // at the opposite edge, while the placement channels still read `rtl`.
+    expect(measured.body).not.toBeNull();
+    expect(measured.ink).not.toBeNull();
+    expect(Math.abs(measured.ink!.right - measured.body!.right))
+      .toBeLessThanOrEqual(TOLERANCE_PX);
+    expect(measured.ink!.left).toBeGreaterThan(centre(measured.body!));
   });
 
   it('keeps the horizontal slider readout centred on the thumb in both directions', () => {

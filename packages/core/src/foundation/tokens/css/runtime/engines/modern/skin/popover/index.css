@@ -42,6 +42,9 @@
   display: contents;
 }
 
+/* The stamped `dir` is the surface's reading direction: the in-tree branch
+   renders it under a trigger that declares none, so nothing here may outrank
+   the UA `[dir]` rule. */
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
   --ds-popover-surface-current: var(--ds-popover-bordered-background, var(--ds-material-overlay-background));
   --ds-popover-ink-current: var(--ds-popover-bordered-foreground, var(--ds-color-text-primary));
@@ -80,7 +83,6 @@
   text-wrap: pretty;
   overflow-wrap: anywhere;
   word-break: normal;
-  direction: inherit;
   unicode-bidi: plaintext;
   transform-origin: center bottom;
   animation: ds-popover-enter var(--ds-popover-enter-duration, var(--ds-motion-reveal)) var(--ds-popover-enter-easing, var(--ds-motion-ease-enter)) both;

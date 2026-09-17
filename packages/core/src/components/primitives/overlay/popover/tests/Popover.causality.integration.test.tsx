@@ -20,16 +20,32 @@ import {
   seriousFindings,
 } from '@tests/support/family-causality';
 
-/** The surface in its portal scope wrapper, as the browser receives it. */
-function popoverMarkup(props: Partial<PopoverProps> = {}): string {
+/**
+ * The surface in its portal scope wrapper, as the browser receives it.
+ *
+ * The engine stamps `dir` on the surface from the anchor's context, and that
+ * stamp is the surface's only direction authority: the in-tree branch renders
+ * it under a trigger that declares none. A snapshot therefore has to be
+ * rendered in the direction it will be measured in, instead of being rewritten
+ * afterwards or inheriting one from the probe host.
+ */
+function popoverMarkup(
+  props: Partial<PopoverProps> = {},
+  direction: 'ltr' | 'rtl' = 'ltr',
+): string {
+  const host = document.createElement('div');
+  host.setAttribute('dir', direction);
+  document.body.append(host);
   const view = render(
     <Popover open title="Owner" content="Assigned to the platform team." {...props}>
       <button type="button">Details</button>
     </Popover>,
+    { container: host },
   );
   const surface = document.querySelector("[data-part='surface']")!;
   const html = (surface.closest("[data-portal-scope='true']") ?? surface.parentElement!).outerHTML;
   view.unmount();
+  host.remove();
   return html;
 }
 
@@ -94,7 +110,10 @@ describe('popover recipe, direction, loading and accessibility', () => {
   }, 60_000);
 
   it('starts its copy at the inline start in both directions', async () => {
-    const rtl = popoverMarkup().replace('dir="ltr"', 'dir="rtl"');
+    // Two scenes, each stamped by the engine in its own direction: the `dir`
+    // the surface carries is what resolves its inline axis, so the RTL arm
+    // must be rendered with that stamp rather than inherit one.
+    const rtl = popoverMarkup({}, 'rtl');
     const result = await measureArms({
       vertical: 'rottay',
       markup: `<div id="ltr">${markup}</div><div id="rtl">${rtl}</div>`,
@@ -102,12 +121,14 @@ describe('popover recipe, direction, loading and accessibility', () => {
       targets: [
         { id: 'ltrAlign', selector: `#ltr ${SURFACE}`, property: 'text-align' },
         { id: 'ltrDirection', selector: `#ltr ${SURFACE}`, property: 'direction' },
+        { id: 'rtlAlign', selector: `#rtl ${SURFACE}`, property: 'text-align' },
         { id: 'rtlDirection', selector: `#rtl ${SURFACE}`, property: 'direction' },
       ],
     });
     const r = result.base!;
     expect(r.ltrAlign).toBe('start');
     expect(r.ltrDirection).toBe('ltr');
+    expect(r.rtlAlign).toBe('start');
     expect(r.rtlDirection).toBe('rtl');
   }, 60_000);
 
