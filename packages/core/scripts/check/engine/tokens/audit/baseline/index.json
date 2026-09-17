@@ -1516,7 +1516,7 @@
   "fleet.inlinePaint.primitives/display/avatar/compound/fallback/index.tsx": 0,
   "fleet.inlinePaint.primitives/display/avatar/compound/group/index.tsx": 0,
   "fleet.inlinePaint.primitives/display/avatar/compound/index.ts": 0,
-  "fleet.inlinePaint.primitives/display/avatar/engines/modern/index.tsx": 1,
+  "fleet.inlinePaint.primitives/display/avatar/engines/modern/index.tsx": 0,
   "fleet.inlinePaint.primitives/display/avatar/engines/rustic/index.tsx": 1,
   "fleet.inlinePaint.primitives/display/avatar/index.tsx": 0,
   "fleet.inlinePaint.primitives/display/badge/compound/index.ts": 0,

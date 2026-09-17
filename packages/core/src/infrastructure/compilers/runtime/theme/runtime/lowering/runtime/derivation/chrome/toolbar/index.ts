@@ -75,7 +75,7 @@ export function deriveToolbarChannels(): Record<string, string> {
   vars["--ds-toolbar-controls-border"] = "transparent";
   vars["--ds-toolbar-controls-padding"] = "0";
   vars["--ds-toolbar-controls-shadow"] = "none";
-  vars["--ds-toolbar-count-radius"] = "var(--ds-radius-full, 999px)";
+  vars["--ds-toolbar-count-radius"] = "var(--ds-radius-full, 9999px)";
   vars["--ds-toolbar-divider-opacity"] = "0.6";
   vars["--ds-toolbar-entry-animation"] = "none";
   vars["--ds-toolbar-focus-border"] = "var(--ds-material-panel-border-hover, var(--ds-color-primary))";

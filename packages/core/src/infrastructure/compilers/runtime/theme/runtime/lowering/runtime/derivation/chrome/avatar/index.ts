@@ -68,7 +68,7 @@ export function deriveAvatarChannels(): Record<string, string> {
 
   vars["--ds-avatar-hover-transform"] = "scale(var(--ds-avatar-hover-scale))";
   vars["--ds-avatar-press-transform"] = "scale(var(--ds-avatar-active-scale))";
-  vars["--ds-avatar-initials-tracking"] = "var(--ds-letter-spacing-wide, 0.01em)";
+  vars["--ds-avatar-initials-tracking"] = "var(--ds-letter-spacing-wide, 0.025em)";
 
   return vars;
 }

@@ -510,7 +510,7 @@
   .ds-list-toolbar__filter-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
-    var(--ds-radius-full, 999px)
+    var(--ds-radius-full, 9999px)
   );
   /* Per-pill active count reads quiet (soft): the trigger's own active border
      and tint already carry the state; the global count badge in the search
@@ -1131,7 +1131,7 @@
   .ds-list-toolbar__count-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
-    var(--ds-radius-full, 999px)
+    var(--ds-radius-full, 9999px)
   );
   background: var(
     --ds-filter-pill-count-active-bg,
