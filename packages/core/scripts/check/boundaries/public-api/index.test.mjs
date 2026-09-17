@@ -477,16 +477,20 @@ test('C2/EXACTO — el techo de `./runtime/visual-authority` es el grafo MEDIDO,
    * export, los dos nombres repeating-*-gradient y el docblock de doctrina
    * single-source que cierra el drift admission/emision (revision focal: Codex
    * ACCEPT + Fable ACCEPT, evidence/der-06-texture-review/). Los modulos siguen
-   * en 9: no entra ningun import nuevo. */
+   * en 9: no entra ningun import nuevo.
+   *
+   * 73544 -> 73535 (2026-09-16, lote DER-08 sobre f61a9da9f BrandTheme->FlatTheme):
+   * -9 en dos hojas ya alcanzadas (tenant-selectors -7, runtime -2). Los modulos
+   * siguen en 9. */
   const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../../..');
   const [report] = runPublicEntrypointGate({ root, silent: true })
     .filter((entry) => entry.subpath === './runtime/visual-authority');
   assert.deepEqual(
     { reachableModules: report.reachableModules, sourceBytes: report.sourceBytes },
-    { reachableModules: 9, sourceBytes: 73544 },
+    { reachableModules: 9, sourceBytes: 73535 },
   );
   const baseline = JSON.parse(fs.readFileSync(path.join(root, CEILINGS_BASELINE_RELATIVE), 'utf8'));
-  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 73544), 'el ancla es el valor medido, sin holgura');
+  assert.deepEqual(baseline.ceilings['./runtime/visual-authority'], ceiling(9, 73535), 'el ancla es el valor medido, sin holgura');
 });
 
 /* ── los defectos que encontro independent code audit, drilleados ─────────── */

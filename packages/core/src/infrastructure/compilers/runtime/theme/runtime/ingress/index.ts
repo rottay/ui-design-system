@@ -43,6 +43,8 @@ export {
   governedTenantTheme,
   previewThemeAdmission,
   previewThemeIntent,
+  projectThemeDraft,
+  readThemeDraft,
 } from "./presentation/preview";
 export type {
   DraftPreviewThemeIntentInput,

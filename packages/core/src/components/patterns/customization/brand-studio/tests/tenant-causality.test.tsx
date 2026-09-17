@@ -14,6 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import type { FlatTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
+import type { Theme } from '../../../../../foundation/contracts/composition/tenants/themes/iso';
 import type {
   TenantThemeConfigIdentity,
   TenantThemeDocument,
@@ -21,7 +22,7 @@ import type {
 import {
   PatternBrandStudio,
   buildSurfaceVariables,
-  normalizeFlatTheme,
+  normalizeThemeDraft,
 } from '../index';
 import { flatThemeToTenantAppearanceAdvanced } from '../runtime/file-export';
 import {
@@ -65,9 +66,11 @@ function ControlledStudio({
   onTheme,
 }: {
   initial: FlatTheme;
-  onTheme: (theme: FlatTheme) => void;
+  onTheme: (theme: Theme) => void;
 }): React.ReactElement {
-  const [theme, setTheme] = useState<FlatTheme>(initial);
+  // WO-DER-08: the studio's transport is the governed Theme, so a controlled
+  // host stores what `onChange` emits, not the flat view it seeded with.
+  const [theme, setTheme] = useState<Theme | FlatTheme>(initial);
   return (
     <PatternBrandStudio
       vertical="bithire"
@@ -89,7 +92,7 @@ function styleText(): string {
 
 describe('PatternBrandStudio tenant causality (static FlatTheme path)', () => {
   it('mutates the rendered tree from a chrome control and restores the exact default document when cleared', async () => {
-    const seen: FlatTheme[] = [];
+    const seen: Theme[] = [];
     render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
         <ControlledStudio initial={DEFAULT_THEME} onTheme={(next) => seen.push(next)} />
@@ -109,14 +112,16 @@ describe('PatternBrandStudio tenant causality (static FlatTheme path)', () => {
     // Exact restore: clearing the same control is its inverse on every path.
     fireEvent.change(screen.getByLabelText('Input bg'), { target: { value: '' } });
 
-    const restored = seen[seen.length - 1];
-    expect(restored).toEqual(normalizeFlatTheme(DEFAULT_THEME));
+    const restored = seen[seen.length - 1]!;
+    // Governed-to-governed: the emitted transport deep-equals the draft the
+    // studio was opened with, read through the SAME door.
+    expect(restored).toEqual(normalizeThemeDraft(DEFAULT_THEME));
     expect(restored.chrome).toBeUndefined();
     expect(styleText()).toBe(before);
   });
 
   it('does not leak a cleared chrome value into the DB-bound appearance projection', async () => {
-    const seen: FlatTheme[] = [];
+    const seen: Theme[] = [];
     render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
         <ControlledStudio initial={DEFAULT_THEME} onTheme={(next) => seen.push(next)} />
@@ -137,7 +142,7 @@ describe('PatternBrandStudio tenant causality (static FlatTheme path)', () => {
   });
 
   it('keeps a contract-required leaf present when its control is cleared', async () => {
-    const seen: FlatTheme[] = [];
+    const seen: Theme[] = [];
     render(
       <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
         <ControlledStudio initial={DEFAULT_THEME} onTheme={(next) => seen.push(next)} />

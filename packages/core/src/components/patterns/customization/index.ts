@@ -4,12 +4,17 @@ export { TokenInspector } from './token-inspector';
 export { BrandingPreviewSandbox } from './branding-preview-sandbox';
 export {
   PatternBrandStudio,
+  serializeThemeDraft,
+  deserializeThemeDraft,
+  // SUPERSEDED (WO-DER-08): the flat pair stays published for one window so a
+  // consumer moves on its own schedule. End trigger in the file-export owner.
   serializeFlatTheme,
   deserializeFlatTheme,
   flatThemeToTenantAppearance,
   flatThemeToTenantAppearanceAdvanced,
 } from './brand-studio';
 export type {
+  BrandStudioDraft,
   PatternBrandStudioProps,
   BrandStudioSurfaceConfig,
   BrandStudioSurfaceKey,

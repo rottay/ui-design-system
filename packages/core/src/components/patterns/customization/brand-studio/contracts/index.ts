@@ -1,11 +1,12 @@
 /**
  * @fileoverview PatternBrandStudio public types.
  *
- * PatternBrandStudio edits a bounded FlatTheme and renders a live, dual-ground
- * preview. It is domain-agnostic: the component knows nothing about tenants,
- * candidates, events, or any product vocabulary. Real component galleries are
- * supplied by the consumer through the {@link BrandStudioGalleriesSlot} render
- * slot so the design system never depends on a product surface.
+ * PatternBrandStudio edits a bounded governed `Theme` and renders a live,
+ * dual-ground preview. It is domain-agnostic: the component knows nothing about
+ * tenants, candidates, events, or any product vocabulary. Real component
+ * galleries are supplied by the consumer through the
+ * {@link BrandStudioGalleriesSlot} render slot so the design system never
+ * depends on a product surface.
  *
  * @module Patterns/Customization/BrandStudio/Contracts
  * @package @rottay/design-system
@@ -13,6 +14,10 @@
 
 import type { ReactNode } from 'react';
 import type { FlatTheme } from '../../../../../foundation/contracts/composition/tenants/themes';
+import type {
+  DeepPartial,
+  Theme,
+} from '../../../../../foundation/contracts/composition/tenants/themes/iso';
 import type { FirstPartyVerticalId } from '../../../../../foundation/contracts/kernel/verticals';
 import type {
   TenantThemeArtifact,
@@ -124,13 +129,28 @@ export interface BrandStudioTenantThemePreviewConfig {
   label?: string;
 }
 
+/**
+ * What a studio draft travels as (WO-DER-08).
+ *
+ * The governed `Theme` is the transport. The flat arm is a REGISTERED
+ * MIGRATION, not a second authority: a flat draft is lifted once by the
+ * ingress door's `readThemeDraft` and compiles the intent it always did, so an
+ * existing caller keeps working while the spelling moves. Both arms accept a
+ * partial draft; `id`/`name` are defaulted when absent.
+ */
+export type BrandStudioDraft =
+  | Theme
+  | DeepPartial<Theme>
+  | FlatTheme
+  | Partial<FlatTheme>;
+
 export interface PatternBrandStudioProps {
   /**
-   * The FlatTheme being edited. Accepts a partial theme; `id`/`name` are
-   * defaulted when absent. The component is controlled: it never mutates the
-   * value in place and emits the next theme through {@link onChange}.
+   * The draft being edited, as the governed {@link BrandStudioDraft}. The
+   * component is controlled: it never mutates the value in place and emits the
+   * next draft through {@link onChange}.
    */
-  value: FlatTheme | Partial<FlatTheme>;
+  value: BrandStudioDraft;
   /**
    * The first-party vertical the edited draft is a tenant of.
    *
@@ -140,8 +160,20 @@ export interface PatternBrandStudioProps {
    * dark grounds are always a delta against the same baseline.
    */
   vertical: FirstPartyVerticalId;
-  /** Called with the next full FlatTheme after any edit. */
-  onChange?: (next: FlatTheme) => void;
+  /**
+   * Called with the next full governed `Theme` after any edit.
+   *
+   * The payload is the transport, not the lowering's read view: a family the
+   * edit did not touch keeps the disposition it arrived with rather than being
+   * republished as authored, while a family the edit DOES write becomes
+   * authored -- an editor's first edit to a withheld family is authorship.
+   *
+   * A consumer that must name the payload's type reaches it through
+   * `ComponentProps<typeof PatternBrandStudio>` or through {@link
+   * BrandStudioDraft}, both published at the package root; the bare `Theme` is
+   * published as a type from the server entry.
+   */
+  onChange?: (next: Theme) => void;
   /** Render slot for the live preview galleries. */
   galleries?: BrandStudioGalleriesSlot;
   /** Overrides for the light preview ground. */
@@ -156,8 +188,8 @@ export interface PatternBrandStudioProps {
    * Optional live preview of a DB-tenant theme document. When present, the
    * studio renders a second preview section driven by the tenant-theme compiler
    * (validation issues, APCA autocorrections, font-pack warnings) below the
-   * FlatTheme preview grid. Independent of {@link value}; the FlatTheme editor
-   * is unchanged when this is absent.
+   * draft preview grid. Independent of {@link value}; the draft editor is
+   * unchanged when this is absent.
    */
   tenantThemePreview?: BrandStudioTenantThemePreviewConfig;
 }

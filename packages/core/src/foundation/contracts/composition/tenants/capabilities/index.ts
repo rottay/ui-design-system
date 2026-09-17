@@ -2,17 +2,20 @@
  * @fileoverview Tenant capability registry — the typed manifest of every
  * white-label axis, partitioned into access tiers.
  *
- * One architecture, four access surfaces: internal vertical authoring
- * (FlatTheme, full depth), tenant STANDARD (few high-impact dials), tenant
- * PRO (bounded advanced surface), and app customization (public hooks and
- * `--rt-*`, governed elsewhere by the hooks manifest). Every capability here
- * compiles through the SAME two emitters into the same channel canon — the
- * registry declares access, it never adds a second theme system.
+ * One architecture, four access surfaces: internal vertical authoring (the
+ * governed `Theme`, full depth, read flat as FlatTheme), tenant STANDARD (few
+ * high-impact dials), tenant PRO (bounded advanced surface), and app
+ * customization (public hooks and `--rt-*`, governed elsewhere by the hooks
+ * manifest). Every capability here compiles through the SAME two emitters into
+ * the same channel canon — the registry declares access, it never adds a
+ * second theme system.
  *
  * Laws:
  * - an ACTIVE tenant-scoped capability must be expressible by BOTH paths
  *   (its `documentPath` accepted by the TenantThemeDocument schema and its
- *   `brandThemePath` by the FlatTheme contract); the reachability test in
+ *   `brandThemePath` by the FlatTheme contract, which is the lowering's READ
+ *   view and not an authoring surface -- what a draft authors is the governed
+ *   `Theme`); the reachability test in
  *   `infrastructure/compilers/composition/tenant-theme/tests` compiles a
  *   document exercising every one of them;
  * - a FRONTIER capability is a declared contract boundary that the schema
@@ -68,7 +71,11 @@ export interface TenantCapabilityDeclaration {
   readonly defaultBehavior: string;
   /** Path inside the resolved TenantThemeDocument (DB authoring surface). */
   readonly documentPath: string;
-  /** Path inside FlatTheme (static vertical authoring surface). */
+  /**
+   * Path inside FlatTheme, the lowering's read view of the governed `Theme`.
+   * The authoring draft is that governed `Theme`; this field keeps its
+   * serialized name until its own rename lot (WO-DER-08 open obligation).
+   */
   readonly brandThemePath: string;
   /** Representative derived channels, never an exhaustive list. */
   readonly derivedChannels: readonly string[];

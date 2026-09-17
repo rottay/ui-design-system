@@ -1,8 +1,15 @@
 /**
- * @fileoverview PatternBrandStudio — bounded FlatTheme editor with a live,
+ * @fileoverview PatternBrandStudio — bounded theme editor with a live,
  * dual-ground preview and inline WCAG contrast validation.
  *
- * The editor exposes only the bounded FlatTheme fields (palette, typography,
+ * WHAT A DRAFT TRAVELS AS (WO-DER-08). `value`/`onChange` carry the governed
+ * `Theme`. The flat projection is the editor's own READ VIEW — what the field
+ * controls and the panel math read leaf by leaf — and never the transport: the
+ * component normalizes once through the ingress door's `readThemeDraft`,
+ * projects once through `projectThemeDraft`, and lifts the mutated view back
+ * through the same reader before emitting.
+ *
+ * The editor exposes only the bounded theme fields (palette, typography,
  * surfaces, motion, chrome). The preview resolves the in-flight theme as a
  * PATCH over the vertical it is a draft for — the same door a tenant document
  * takes — and injects the channels that draft actually MOVES off the untouched
@@ -45,7 +52,8 @@ import {
   ThemeAdmissionError,
   compileThemeIntent,
   draftPreviewThemeIntent,
-  governedTenantTheme,
+  projectThemeDraft,
+  readThemeDraft,
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import {
@@ -68,9 +76,11 @@ import { cloneFlatTheme } from './runtime/file-export';
 import { useTenantThemePreview } from './runtime/tenant-theme-preview';
 import { TenantThemePreviewReport } from './runtime/tenant-theme-preview/report';
 import type { ThemeCompilation } from '@/foundation/contracts/composition/tenants/themes/compiled';
+import type { Theme } from '@/foundation/contracts/composition/tenants/themes/iso';
 import type { FirstPartyVerticalId } from '@/foundation/contracts/kernel/verticals';
 import type {
   BrandStudioContrastReport,
+  BrandStudioDraft,
   BrandStudioSurfaceConfig,
   BrandStudioSurfaceKey,
   BrandStudioTenantThemePreviewConfig,
@@ -80,6 +90,8 @@ import type {
 export * from './contracts';
 export {
   cloneFlatTheme,
+  serializeThemeDraft,
+  deserializeThemeDraft,
   serializeFlatTheme,
   deserializeFlatTheme,
   flatThemeToTenantAppearance,
@@ -356,7 +368,10 @@ export interface SurfaceVariables {
  * and `modes` overlays, resolved per-panel by `resolveModeVariables` above,
  * not by an input flag the compiler reads.
  */
-export function buildSurfaceVariables(theme: FlatTheme, surface: BrandStudioSurfaceConfig): SurfaceVariables {
+export function buildSurfaceVariables(
+  theme: Theme | FlatTheme,
+  surface: BrandStudioSurfaceConfig,
+): SurfaceVariables {
   // The draft is a PATCH over the vertical it is authored for, never a baseline
   // of its own: it used to be lifted wrap-only and compiled as if it were the
   // whole theme, which is a compile no publish path can produce.
@@ -370,11 +385,11 @@ export function buildSurfaceVariables(theme: FlatTheme, surface: BrandStudioSurf
   const intent = draftPreviewThemeIntent({
     vertical: surface.vertical,
     slug: surface.tenantSlug,
-    // WO-DER-08: the door takes the governed Theme. The editor's own panel math
-    // still reads the flat projection -- that is a VIEW, not an authoring
-    // transport -- so the lift happens here, at the one boundary that crosses
-    // into the compiler.
-    draft: governedTenantTheme(theme),
+    // WO-DER-08: the door takes the governed Theme, and the component already
+    // holds one, so this is a passthrough rather than a second lift. A caller
+    // still holding the flat read view lifts here, once, through the SAME
+    // reader the door itself discriminates with.
+    draft: readThemeDraft(theme),
   });
   const { compiled } = compileThemeIntent(intent);
   const { compiled: untouched } = compileThemeIntent(
@@ -449,7 +464,7 @@ function projectSurfaceVariables(
  * with it so the studio can say why. Nothing is compiled around the door.
  */
 export function tryBuildSurfaceVariables(
-  theme: FlatTheme,
+  theme: Theme | FlatTheme,
   surface: BrandStudioSurfaceConfig
 ): SurfaceVariables & { refusal?: string } {
   try {
@@ -474,11 +489,12 @@ export function tryBuildSurfaceVariables(
 }
 
 /**
- * Compile a FlatTheme against one preview ground and validate the derived
- * colors. This is the exact evaluation the component runs on every edit.
+ * Compile a draft against one preview ground and validate the derived colors.
+ * This is the exact evaluation the component runs on every edit; it takes the
+ * governed draft or the flat read view, because grading is a VIEW operation.
  */
 export function evaluateFlatThemeContrast(
-  theme: FlatTheme,
+  theme: Theme | FlatTheme,
   surface: BrandStudioSurfaceConfig
 ): BrandStudioContrastReport {
   const { vars, declaredKeys } = tryBuildSurfaceVariables(theme, surface);
@@ -488,7 +504,8 @@ export function evaluateFlatThemeContrast(
 }
 
 /**
- * Overlay deliberately extreme values on a theme for the hostile-input check.
+ * Overlay deliberately extreme values on the flat READ VIEW for the
+ * hostile-input check. It authors nothing: the result is graded and discarded.
  * The color values guarantee failing color pairs on both grounds; the radius/
  * motion values are extreme for the visual preview only and are never contrast
  * scored (the validator has no font or radius notion).
@@ -536,13 +553,18 @@ export function applyHostileFlatTheme(theme: FlatTheme): FlatTheme {
   return draft;
 }
 
-/** Ensure required id/name so a partial value satisfies the FlatTheme contract. */
-export function normalizeFlatTheme(value: FlatTheme | Partial<FlatTheme>): FlatTheme {
-  return {
-    ...value,
-    id: value.id ?? 'brand-studio-draft',
-    name: value.name ?? 'Brand Studio Draft',
-  } as FlatTheme;
+/**
+ * The draft the component edits: identity defaulted, then read ONCE through the
+ * ingress door's discriminant. A governed draft passes through; the superseded
+ * flat arm is lifted here and nowhere else in this component.
+ */
+export function normalizeThemeDraft(value: BrandStudioDraft): Theme {
+  const named = {
+    ...(value as object),
+    id: (value as Partial<FlatTheme>).id ?? 'brand-studio-draft',
+    name: (value as Partial<FlatTheme>).name ?? 'Brand Studio Draft',
+  } as Theme | FlatTheme;
+  return readThemeDraft(named);
 }
 
 // ---------------------------------------------------------------------------
@@ -850,7 +872,7 @@ function PreviewPanel({
   galleries,
   report,
 }: {
-  theme: FlatTheme;
+  theme: Theme;
   surface: BrandStudioSurfaceConfig;
   scopeSalt: string;
   galleries: PatternBrandStudioProps['galleries'];
@@ -1637,16 +1659,23 @@ export function PatternBrandStudio({
   const t = useBrandStudioCopy();
   const resolvedTitle = title ?? t('brandStudio.title', 'Brand Studio');
   const scopeSalt = useId().replace(/:/g, '');
-  const theme = useMemo(() => normalizeFlatTheme(value), [value]);
+  // ONE normalization and ONE projection. Everything below the projection is
+  // the read view; everything that leaves the component is the transport.
+  const draft = useMemo(() => normalizeThemeDraft(value), [value]);
+  const theme = useMemo(() => projectThemeDraft(draft), [draft]);
 
   const emit = useCallback(
-    (mutate: (draft: FlatTheme) => void) => {
-      const draft = cloneFlatTheme(theme);
-      mutate(draft);
-      pruneClearedFields(draft);
-      onChange?.(draft);
+    (mutate: (next: FlatTheme) => void) => {
+      const view = cloneFlatTheme(theme);
+      mutate(view);
+      pruneClearedFields(view);
+      // Lifted back through the door's own reader, carrying the dispositions
+      // the projection could not: an edit states what it moved, never why a
+      // family the edit never touched is withheld. A family this edit DOES
+      // write is authorship and outranks the carry.
+      onChange?.(readThemeDraft(view, draft));
     },
-    [theme, onChange]
+    [theme, draft, onChange]
   );
 
   const surfaces = useMemo<BrandStudioSurfaceConfig[]>(
@@ -1658,8 +1687,8 @@ export function PatternBrandStudio({
   );
 
   const reports = useMemo(
-    () => surfaces.map((surface) => evaluateFlatThemeContrast(theme, surface)),
-    [theme, surfaces]
+    () => surfaces.map((surface) => evaluateFlatThemeContrast(draft, surface)),
+    [draft, surfaces]
   );
 
   const [hostileReports, setHostileReports] = useState<BrandStudioContrastReport[] | null>(null);
@@ -1705,7 +1734,7 @@ export function PatternBrandStudio({
             size="sm"
             weight="semibold"
           >
-            {t('brandStudio.editorHeading', 'Bounded FlatTheme fields')}
+            {t('brandStudio.editorHeading', 'Bounded theme fields')}
           </Text>
           <FlatThemeEditor theme={theme} emit={emit} />
         </Stack>
@@ -1725,7 +1754,7 @@ export function PatternBrandStudio({
             return (
               <PreviewPanel
                 key={surface.key}
-                theme={theme}
+                theme={draft}
                 surface={surface}
                 scopeSalt={scopeSalt}
                 galleries={galleries}

@@ -1439,7 +1439,7 @@
       "titleDark": "Dark ground contrast",
       "titleLight": "Light ground contrast"
     },
-    "editorHeading": "Bounded BrandTheme fields",
+    "editorHeading": "Bounded theme fields",
     "field": {
       "accent": "Accent",
       "activeTabColor": "Active tab color",

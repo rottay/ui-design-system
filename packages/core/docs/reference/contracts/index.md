@@ -48,14 +48,26 @@ foundation/contracts/
 
 ## Key Types
 
-### FlatTheme (code-owned premium visual source)
+### Theme (code-owned premium visual source)
 
 The single source of truth for premium visual identity. Merge precedence:
-DS base -> vertical baseline -> FlatTheme -> generated artifacts.
+DS base -> vertical baseline -> Theme -> generated artifacts. Optional families
+(`motion`, `charts`, `recipes`, `expressive`, `responsive`) travel as
+`Governed<T>` slots, so a withheld capability carries a reason instead of
+vanishing.
+
+### FlatTheme (the lowering's read view)
+
+`FlatTheme` is the flat projection the lowering's channel writers consume. It
+is NOT an authoring surface and NOT a transport (WO-DER-08): an editor draft
+travels as the governed `Theme` and is read once at the ingress door by
+`readThemeDraft`. Two registered exceptions remain -- test/fixture material
+still authored flat, and the superseded `serializeFlatTheme` /
+`deserializeFlatTheme` window.
 
 Published customer writes use the bounded `TenantThemeDocument` schema stored
 in the canonical tenancy DB. They are validated and server-compiled into the
-exact SSR/hydration artifact; `FlatTheme` is not an unrestricted DB write
+exact SSR/hydration artifact; neither shape is an unrestricted DB write
 contract.
 
 Categories: palette, typography, surfaces, motion, charts, chrome, engineBridge.
@@ -95,6 +107,18 @@ All contracts are re-exported from the package root:
 ```typescript
 import type { FlatTheme, TenantConfig, DesignTokens, EngineName } from '@rottay/design-system';
 ```
+
+The governed `Theme` is not on that list: the package root re-exports the theme
+contracts barrel, which owns `FlatTheme`, while `Theme` is published as a type
+from the server entry.
+
+```typescript
+import type { Theme } from '@rottay/design-system/server';
+```
+
+A client host that only needs to name the brand-studio draft does not need
+either import: the draft type travels with the component, as the root-published
+`BrandStudioDraft` or as `ComponentProps<typeof PatternBrandStudio>['value']`.
 
 Primitive component props (ButtonProps, AvatarProps, etc.) live next to their
 component implementations, not in this directory.

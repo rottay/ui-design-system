@@ -1439,7 +1439,7 @@
       "titleDark": "Contraste sobre fondo oscuro",
       "titleLight": "Contraste sobre fondo claro"
     },
-    "editorHeading": "Campos delimitados de BrandTheme",
+    "editorHeading": "Campos delimitados del tema",
     "field": {
       "accent": "Acento",
       "activeTabColor": "Color de pestaña activa",

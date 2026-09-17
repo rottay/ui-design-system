@@ -1262,7 +1262,7 @@
       "titleDark": "Contraste sur fond sombre",
       "titleLight": "Contraste sur fond clair"
     },
-    "editorHeading": "Champs délimités de BrandTheme",
+    "editorHeading": "Champs délimités du thème",
     "field": {
       "accent": "Accent",
       "activeTabColor": "Couleur de l'onglet actif",

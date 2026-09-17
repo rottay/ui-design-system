@@ -280,7 +280,14 @@ different values. Published customer tenants
 are stored-document-owned, and a hostname chooses tenant identity, never a checked-in CSS
 file or a component branch.
 
-`Theme` is the single theme contract. Both transports resolve to the same complete theme
+`Theme` is the single theme contract, and it is what a DRAFT travels as too: the brand
+studio's `value`/`onChange` and its file export carry the governed `Theme`, read once at the
+ingress door by `readThemeDraft` (WO-DER-08). `FlatTheme` is the lowering's READ VIEW of that
+theme — the projection the channel writers consume — never an authoring surface and never a
+transport. Test/fixture material still authored flat, and the superseded
+`serializeFlatTheme`/`deserializeFlatTheme` window, are the two registered exceptions.
+
+Both transports resolve to the same complete theme
 and enter **one lowering** under
 `src/infrastructure/compilers/runtime/theme/runtime/lowering/`, which owns the whole
 `resolveTheme -> compileTheme -> EngineAdapter.project` chain and delegates emission to

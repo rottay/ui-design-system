@@ -19,7 +19,11 @@ import { movedThemePatch } from "../../foundation/authorship";
 import { draftProvenanceLedger } from "../../foundation/provenance";
 import { liftAuthoredTheme, readGovernedTheme } from "../../../lowering/foundation/intake";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-import type { Theme } from "@/foundation/contracts/composition/tenants/themes/iso";
+import {
+  isGovernedActive,
+  type Governed,
+  type Theme,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
 
 /** What an unsaved document preview needs to name a compile. */
 export interface PreviewThemeIntentInput {
@@ -143,6 +147,10 @@ export function previewThemeAdmission(
  * through the intake's own `liftAuthoredTheme` and therefore compiles the same
  * intent it always did.
  *
+ * THIS IS THE ONE DISCRIMINANT. The compile door below and the studio's file
+ * import both route through it, so there is no second, export-local reader that
+ * could disagree with this one about what a serialized draft IS.
+ *
  * THE DISCRIMINATOR IS THE GOVERNED WRAPPER, and the first one written here was
  * wrong in a way worth recording: it tested for an `appearance` block, which a
  * lifted Theme does not carry at all, so every governed draft took the flat arm
@@ -176,17 +184,22 @@ function familyShape(slot: unknown): FamilyShape {
   return keys.every((key) => WRAPPER_KEYS.has(key)) ? "wrapped" : "flat";
 }
 
-function governedDraft(draft: Theme | FlatTheme): Theme {
+export function readThemeDraft(
+  draft: Theme | FlatTheme,
+  projectedFrom?: Theme
+): Theme {
   const shapes = GOVERNED_FAMILIES.map((family) => ({
     family,
     shape: familyShape((draft as unknown as Record<string, unknown>)[family]),
   }));
   const wrapped = shapes.filter(({ shape }) => shape === "wrapped");
-  if (wrapped.length === 0) return liftAuthoredTheme(draft as FlatTheme);
+  if (wrapped.length === 0) {
+    return carryDispositions(liftAuthoredTheme(draft as FlatTheme), projectedFrom);
+  }
   const unwrapped = shapes.filter(({ shape }) => shape === "flat");
   if (unwrapped.length > 0) {
     throw new Error(
-      `draftPreviewThemeIntent: draft mixes governed families (${wrapped
+      `readThemeDraft: draft mixes governed families (${wrapped
         .map(({ family }) => family)
         .join(", ")}) with unwrapped ones (${unwrapped
         .map(({ family }) => family)
@@ -194,6 +207,64 @@ function governedDraft(draft: Theme | FlatTheme): Theme {
     );
   }
   return draft as Theme;
+}
+
+/**
+ * Restore the dispositions {@link projectThemeDraft} could not carry.
+ *
+ * The projection states WHETHER a family is active, never WHY it is not: an
+ * inactive family leaves the flat view (and `charts` leaves it as `{}`), so a
+ * naive re-lift republishes every withheld family as `not-authored` and loses
+ * the reason the theme actually gave. An editor that round-trips a draft it did
+ * not author must not rewrite that reason, so a family the view never carried
+ * keeps the slot it came in with.
+ *
+ * A family the VIEW carries is authorship and outranks the carry: the first
+ * edit to a family the incoming draft had not authored is exactly the case an
+ * editor exists to serve, so the guard is on the LIFTED slot, not only on the
+ * source one. Guarding on the source alone made every governed section of the
+ * studio inert for a draft that had not already activated it.
+ */
+function carryDispositions(lifted: Theme, projectedFrom?: Theme): Theme {
+  if (!projectedFrom) return lifted;
+  const out = lifted as unknown as Record<string, unknown>;
+  const source = projectedFrom as unknown as Record<string, unknown>;
+  for (const family of GOVERNED_FAMILIES) {
+    const slot = source[family];
+    if (familyShape(slot) !== "wrapped") continue;
+    if (isGovernedActive(slot as Governed<unknown>)) continue;
+    if (liftedFromAuthorship(out[family])) continue;
+    out[family] = { ...(slot as Governed<unknown>) };
+  }
+  return lifted;
+}
+
+/**
+ * True when the re-lifted slot came from something the view actually carried.
+ *
+ * `charts` unwraps to `{}` even when it is withheld, so an empty container is
+ * the projection's own filler and never authorship; every other family is
+ * simply absent from the view when withheld and lifts to `not-authored`.
+ */
+function liftedFromAuthorship(slot: unknown): boolean {
+  if (familyShape(slot) !== "wrapped") return false;
+  const governed = slot as Governed<unknown>;
+  if (!isGovernedActive(governed)) return false;
+  const value = governed.value;
+  if (value === undefined) return false;
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    return Object.keys(value).length > 0;
+  }
+  return true;
+}
+
+/**
+ * The flat view of a governed draft, for a caller that reads leaves rather than
+ * transporting them. It is the intake's own projection, so a component never
+ * has to name the lowering's lift to describe the draft it is editing.
+ */
+export function projectThemeDraft(draft: Theme): FlatTheme {
+  return readGovernedTheme(draft);
 }
 
 export function draftPreviewThemeIntent(
@@ -204,7 +275,7 @@ export function draftPreviewThemeIntent(
   // ONE projection, at the door. Everything below reads the same flat view the
   // flat draft used to arrive as, so this move changes the transport's TYPE and
   // nothing about what the door decides.
-  const draft = readGovernedTheme(governedDraft(input.draft));
+  const draft = readGovernedTheme(readThemeDraft(input.draft));
   return {
     vertical: input.vertical,
     slug: input.slug,

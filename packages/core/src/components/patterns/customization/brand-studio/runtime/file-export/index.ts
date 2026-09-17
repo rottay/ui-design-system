@@ -1,10 +1,10 @@
 /**
- * @fileoverview FlatTheme serialization and bounded projection.
+ * @fileoverview Theme-draft serialization and bounded projection.
  *
  * Two export paths:
- *   - FlatTheme -> FlatTheme JSON: a lossless, identity round-trip target
- *     ({@link serializeFlatTheme} / {@link deserializeFlatTheme}).
- *   - FlatTheme -> TenantAppearanceAdvanced: a bounded projection
+ *   - draft -> draft JSON: a lossless, identity round-trip target
+ *     ({@link serializeThemeDraft} / {@link deserializeThemeDraft}).
+ *   - draft -> TenantAppearanceAdvanced: a bounded projection
  *     ({@link flatThemeToTenantAppearanceAdvanced}). Chrome maps directly.
  *     Palette, typography, and motion have no Advanced home, so they funnel
  *     through bounded `tokenOverrides` keyed on the exact `--ds-*` names the
@@ -27,20 +27,61 @@ import type {
   TenantAppearanceAdvanced,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
 import { TENANT_THEME_EFFECT_INTENSITY_BOUNDS } from '../../../../../../foundation/contracts/composition/tenants/themes/tenant-theme';
+import type { Theme } from '../../../../../../foundation/contracts/composition/tenants/themes/iso';
 import { themeDefaultMode } from '@/infrastructure/compilers/kernel/foundation/modes';
+import {
+  projectThemeDraft,
+  readThemeDraft,
+} from '@/infrastructure/compilers/runtime/theme';
 
 /*
- * The studio draft transport. `FlatTheme` is the DRAFT here, not only the read
- * view the lowering consumes: the studio authors and serializes this shape.
- * WO-DER-08 owns splitting the two roles.
+ * The studio draft transport is the governed `Theme` (WO-DER-08). `FlatTheme`
+ * is the lowering's READ VIEW: the projection these functions read leaf by leaf
+ * and never the shape a draft travels or is stored as.
+ *
+ * File import routes through the SAME `readThemeDraft` the compile door
+ * discriminates with. A second, export-local discriminant is exactly the defect
+ * that door already recorded once -- it tested for a key a governed draft does
+ * not carry, so every governed draft silently took the flat arm.
  */
+
+/** Serialize a studio draft to its canonical JSON string. */
+export function serializeThemeDraft(draft: Theme): string {
+  return JSON.stringify(draft);
+}
+
+/**
+ * Parse a draft JSON string back into the governed `Theme`.
+ *
+ * It accepts a file written by {@link serializeThemeDraft} and one written by
+ * the superseded {@link serializeFlatTheme}, because the reader it delegates to
+ * is the door's own: a flat file is lifted, a governed one passes through, and
+ * `disposition: undefined` lost across JSON is not mistaken for a flat draft.
+ */
+export function deserializeThemeDraft(json: string): Theme {
+  return readThemeDraft(JSON.parse(json) as Theme | FlatTheme);
+}
+
+/** The flat read view of a draft that may have arrived on either arm. */
+function draftView(draft: Theme | FlatTheme): FlatTheme {
+  return projectThemeDraft(readThemeDraft(draft));
+}
 
 /** Deep clone through JSON. FlatTheme is a plain data contract. */
 export function cloneFlatTheme(theme: FlatTheme): FlatTheme {
   return JSON.parse(JSON.stringify(theme)) as FlatTheme;
 }
 
-/** Serialize a FlatTheme to its canonical JSON string. */
+/**
+ * SUPERSEDED (WO-DER-08), kept as a registered window so no consumer breaks at
+ * the moment the spelling moves. Use {@link serializeThemeDraft}.
+ *
+ * END TRIGGER: remove this pair when `contracts/runtime/suppliers/index.json`
+ * shows no consumer snapshot still naming `serializeFlatTheme` /
+ * `deserializeFlatTheme` on entrypoint `.`. The pin that fails when the pair
+ * is removed without that regeneration lives in
+ * `../../tests/draft-transport.test.tsx`.
+ */
 export function serializeFlatTheme(theme: FlatTheme): string {
   return JSON.stringify(theme);
 }
@@ -237,12 +278,19 @@ function buildBoundedTokenOverrides(theme: FlatTheme): TokenOverrides {
 }
 
 /**
- * Project a FlatTheme into a bounded TenantAppearanceAdvanced. Chrome families
- * map directly (minus card/accent); palette, typography, and motion funnel into
+ * Project a draft into a bounded TenantAppearanceAdvanced. Chrome families map
+ * directly (minus card/accent); palette, typography, and motion funnel into
  * bounded `--ds-*` token overrides. This projection is intentionally lossy — the
- * lossless path is {@link serializeFlatTheme}.
+ * lossless path is {@link serializeThemeDraft}.
  */
-export function flatThemeToTenantAppearanceAdvanced(theme: FlatTheme): TenantAppearanceAdvanced {
+export function flatThemeToTenantAppearanceAdvanced(
+  draft: Theme | FlatTheme,
+): TenantAppearanceAdvanced {
+  return advancedFromView(draftView(draft));
+}
+
+/** The projection itself, over an already-projected read view. */
+function advancedFromView(theme: FlatTheme): TenantAppearanceAdvanced {
   const advanced: TenantAppearanceAdvanced = {};
 
   if (theme.chrome) {
@@ -280,7 +328,10 @@ function palettePerMode(
  * the remaining bounded channels stay in Advanced. The older Advanced-only
  * exporter remains available for backwards-compatible documents.
  */
-export function flatThemeToTenantAppearance(theme: FlatTheme): TenantAppearance {
+export function flatThemeToTenantAppearance(
+  draft: Theme | FlatTheme,
+): TenantAppearance {
+  const theme = draftView(draft);
   // `TenantAppearanceGeneral.palette.background` is documented as the
   // "Clear-scheme page canvas" -- the base/plain fields are specifically the
   // LIGHT-mode values, and `.dark` is specifically the DARK-mode values. Each
@@ -371,6 +422,6 @@ export function flatThemeToTenantAppearance(theme: FlatTheme): TenantAppearance 
 
   return {
     ...(Object.keys(general).length > 0 ? { general } : {}),
-    advanced: flatThemeToTenantAppearanceAdvanced(theme),
+    advanced: advancedFromView(theme),
   };
 }

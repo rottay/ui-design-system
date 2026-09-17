@@ -145,7 +145,7 @@ const commerce: PatternEntry[] = [
 // ---------------------------------------------------------------------------
 
 const customization: PatternEntry[] = [
-  { slug: 'pattern-brand-studio', name: 'PatternBrandStudio', group: 'customization', description: 'Bounded FlatTheme editor with a dual-ground live preview and inline WCAG contrast validation', engines: allEngines },
+  { slug: 'pattern-brand-studio', name: 'PatternBrandStudio', group: 'customization', description: 'Bounded governed-theme editor with a dual-ground live preview and inline WCAG contrast validation', engines: allEngines },
   { slug: 'branding-preview-sandbox', name: 'BrandingPreviewSandbox', group: 'customization', description: 'Live preview sandbox for brand theme changes', engines: allEngines },
   { slug: 'tenant-preview', name: 'TenantPreview', group: 'customization', description: 'Tenant branding preview card', engines: allEngines },
   { slug: 'token-inspector', name: 'TokenInspector', group: 'customization', description: 'Developer tool for inspecting active design tokens', engines: allEngines },

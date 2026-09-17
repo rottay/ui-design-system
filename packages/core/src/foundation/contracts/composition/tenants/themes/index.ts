@@ -238,9 +238,15 @@ export type BrandCapabilityCatalog = Readonly<
 >;
 
 /**
- * The flat projection of the governed `Theme`. It carries TWO roles today: the
- * read view the lowering consumes, and the draft transport the studio, preview
- * and fixtures author and serialize. WO-DER-08 owns splitting them.
+ * The flat projection of the governed `Theme`: the READ VIEW the lowering's
+ * channel writers consume, and nothing else. It is not an authoring surface and
+ * not a transport (WO-DER-08).
+ *
+ * Two named exceptions remain, both registered rather than incidental:
+ * test/fixture material still authors this shape and is lifted at the ingress
+ * door by `readThemeDraft`, and the superseded `serializeFlatTheme` /
+ * `deserializeFlatTheme` window keeps a published spelling alive until its
+ * named end trigger fires.
  */
 export interface FlatTheme {
   /** Unique identifier for this brand theme */
