@@ -17,15 +17,18 @@ import {
 } from '../../../runtime/overlay/positioning';
 
 /**
- * Side where the hover card appears relative to the trigger. The inline axis
- * is LOGICAL: `inline-start` is the reader's near side, `inline-end` the far
- * one, so the card mirrors under `dir=rtl` without the caller computing
- * anything.
+ * Side where the hover card appears relative to the trigger. The inline axis is
+ * spelled logically: `inline-start` is the reader's near side, `inline-end` the
+ * far one, and `left`/`right` are deprecated aliases of them -- see
+ * {@link OVERLAY_PLACEMENT_ALIASES}.
  *
- * `left` and `right` are kept as deprecated aliases of `inline-start` and
- * `inline-end` -- see {@link OVERLAY_PLACEMENT_ALIASES} -- so no caller and no
- * frozen engine breaks. Their LTR geometry is unchanged; under RTL they now
- * mirror instead of pinning to the physical edge they name.
+ * ENGINE REACH. The spelling resolves logically only on the MODERN path, which
+ * reaches the positioning runtime through `useFieldOverlay`: there the card
+ * mirrors under `dir=rtl` without the caller computing anything. The frozen
+ * Rustic engine calls `useOverlayPosition` directly and takes its physical
+ * default, so every inline side -- alias or logical spelling -- lands on the
+ * edge it names in both reading directions. That is the established behaviour,
+ * and the frozen engine gains no logical capability it never had.
  */
 export type HoverCardSide =
   | 'top'
@@ -94,8 +97,9 @@ export function resolveOverlayPlacement(
   const placement = (
     align === 'center' ? side : `${side}-${align}`
   ) as OverlayPlacementInput;
-  // One normalization point for both engines: a deprecated physical side
-  // becomes its logical equivalent here, so nothing downstream carries two
-  // vocabularies.
+  // One SPELLING point for both engines: a deprecated physical side becomes its
+  // logical name here, so nothing downstream carries two alphabets. It decides
+  // no geometry -- each engine's door does, and the frozen one asks for the
+  // physical edge.
   return normalizeOverlayPlacement(placement);
 }

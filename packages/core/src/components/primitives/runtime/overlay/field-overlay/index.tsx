@@ -110,8 +110,10 @@ export interface UseFieldOverlayOptions {
   render?: FieldOverlayRenderMode;
   /**
    * Preferred side/alignment for an `anchored` surface. The side vocabulary is
-   * LOGICAL (`inline-start`/`inline-end`); the deprecated physical spellings
-   * are accepted and normalized by the positioning owner.
+   * LOGICAL (`inline-start`/`inline-end`) and resolves logically -- this door
+   * is where that is declared, see the `useOverlayPosition` call below. The
+   * deprecated physical spellings are accepted and rewritten to the logical
+   * name by the positioning owner, so they mirror here too.
    * @default 'bottom-start'
    */
   placement?: OverlayPlacementInput;
@@ -396,10 +398,13 @@ export function useFieldOverlay(options: UseFieldOverlayOptions): FieldOverlayHa
 
   const measuring = measure ?? open;
 
+  // Every Modern engine reaches the positioning runtime through this hook and
+  // nothing else does, so the logical resolution is declared once, here.
   const { strategy, style: positionStyle, anchorAttrs } = useOverlayPosition({
     anchor: anchored ? anchor : null,
     overlay: anchored && measuring ? panel : null,
     placement,
+    inlineSides: 'logical',
     ...(offset === undefined ? {} : { offset }),
     ...(flip === undefined ? {} : { flip }),
     ...(boundary === undefined ? {} : { boundary }),

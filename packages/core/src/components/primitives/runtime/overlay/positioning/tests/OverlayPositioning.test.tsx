@@ -10,6 +10,7 @@ import {
   normalizeOverlayPlacement,
   OVERLAY_PLACEMENT_ALIASES,
   useOverlayPosition,
+  type OverlayInlineSideResolution,
   type OverlayPlacement,
   type OverlayPlacementInput,
   type OverlayPositionResult,
@@ -56,6 +57,8 @@ interface HarnessProps {
   /** `'ar'` drives the direction authority to RTL; omitted means LTR. */
   locale?: 'en' | 'ar';
   placement?: OverlayPlacementInput;
+  /** Omitted means the frozen adopters' path: the runtime's physical default. */
+  inlineSides?: OverlayInlineSideResolution;
   offset?: number;
   flip?: boolean;
   boundary?: 'viewport' | HTMLElement;
@@ -66,6 +69,7 @@ interface HarnessProps {
 
 function Harness({
   placement = 'top',
+  inlineSides,
   offset,
   flip,
   boundary,
@@ -75,7 +79,15 @@ function Harness({
 }: HarnessProps): React.ReactElement {
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const [overlay, setOverlay] = useState<HTMLElement | null>(null);
-  const result = useOverlayPosition({ anchor, overlay, placement, offset, flip, boundary });
+  const result = useOverlayPosition({
+    anchor,
+    overlay,
+    placement,
+    offset,
+    flip,
+    boundary,
+    ...(inlineSides === undefined ? {} : { inlineSides }),
+  });
   onResult(result, { anchor, overlay });
   return (
     <div>
@@ -165,19 +177,24 @@ describe('useOverlayPosition - js branch (native in this DOM environment)', () =
     expect(captured.result?.style.top).toBe(8);
   });
 
-  it('mirrors a logical side against the direction authority (measured branch)', () => {
+  it('mirrors a logical side against the direction authority when the caller declares one', () => {
     // A centred anchor (40x20 at x 300..340) so neither side overflows and the
     // flip chain stays out of the measurement. Overlay 100 wide, offset 8.
     // LTR: inline-start is the physical left -> 300 - 8 - 100 = 192.
     // RTL: inline-start is the physical right -> 340 + 8 = 348.
     const centred = { top: 100, left: 300, right: 340, bottom: 120, width: 40, height: 20 };
 
-    const ltr = renderHarness({ placement: 'inline-start', anchorRect: centred });
+    const ltr = renderHarness({
+      placement: 'inline-start',
+      inlineSides: 'logical',
+      anchorRect: centred,
+    });
     expect(ltr.captured.result?.style.left).toBe(192);
     cleanup();
 
     const rtl = renderHarness({
       placement: 'inline-start',
+      inlineSides: 'logical',
       anchorRect: centred,
       locale: 'ar',
     });
@@ -186,29 +203,96 @@ describe('useOverlayPosition - js branch (native in this DOM environment)', () =
 
     // The other side mirrors the other way, so the pair discriminates
     // direction rather than just naming an edge.
-    const inlineEndLtr = renderHarness({ placement: 'inline-end', anchorRect: centred });
+    const inlineEndLtr = renderHarness({
+      placement: 'inline-end',
+      inlineSides: 'logical',
+      anchorRect: centred,
+    });
     expect(inlineEndLtr.captured.result?.style.left).toBe(348);
     cleanup();
 
     const inlineEndRtl = renderHarness({
       placement: 'inline-end',
+      inlineSides: 'logical',
       anchorRect: centred,
       locale: 'ar',
     });
     expect(inlineEndRtl.captured.result?.style.left).toBe(192);
   });
 
-  it('routes the deprecated physical alias through the same logical mirror', () => {
-    // `left` is no longer a physical promise: it is an alias for inline-start,
-    // so under RTL it mirrors exactly like the logical spelling.
+  it('keeps an undeclared request on the physical edge in BOTH directions (frozen default)', () => {
+    // The frozen Classic/Rustic adopters call this hook with no `inlineSides`.
+    // Under RTL the mirroring branch would put `inline-start` at 348; the
+    // default must stay at 192, which is where every one of them has always
+    // painted. Both spellings are checked, because an alias and its logical
+    // name are the same request by the time the runtime sees them.
     const centred = { top: 100, left: 300, right: 340, bottom: 120, width: 40, height: 20 };
 
-    const ltr = renderHarness({ placement: 'left', anchorRect: centred });
-    expect(ltr.captured.result?.style.left).toBe(192);
+    for (const placement of ['inline-start', 'left'] as const) {
+      const ltr = renderHarness({ placement, anchorRect: centred });
+      expect(ltr.captured.result?.style.left).toBe(192);
+      cleanup();
+
+      const rtl = renderHarness({ placement, anchorRect: centred, locale: 'ar' });
+      expect(rtl.captured.result?.style.left).toBe(192);
+      cleanup();
+    }
+
+    for (const placement of ['inline-end', 'right'] as const) {
+      const ltr = renderHarness({ placement, anchorRect: centred });
+      expect(ltr.captured.result?.style.left).toBe(348);
+      cleanup();
+
+      const rtl = renderHarness({ placement, anchorRect: centred, locale: 'ar' });
+      expect(rtl.captured.result?.style.left).toBe(348);
+      cleanup();
+    }
+  });
+
+  it('resolves an alias and its logical name identically under one resolution', () => {
+    // The alias map is a SPELLING change. Whatever the resolution, `left` and
+    // `inline-start` have to land on the same pixel, or the deprecation is
+    // quietly a second geometry.
+    const centred = { top: 100, left: 300, right: 340, bottom: 120, width: 40, height: 20 };
+    const resolutions: readonly OverlayInlineSideResolution[] = ['physical', 'logical'];
+
+    for (const inlineSides of resolutions) {
+      for (const locale of ['en', 'ar'] as const) {
+        for (const [alias, logical] of Object.entries(OVERLAY_PLACEMENT_ALIASES)) {
+          const viaAlias = renderHarness({
+            placement: alias as OverlayPlacementInput,
+            inlineSides,
+            locale,
+            anchorRect: centred,
+          });
+          const aliasLeft = viaAlias.captured.result?.style.left;
+          cleanup();
+
+          const viaLogical = renderHarness({
+            placement: logical,
+            inlineSides,
+            locale,
+            anchorRect: centred,
+          });
+          expect(aliasLeft).toBe(viaLogical.captured.result?.style.left);
+          cleanup();
+        }
+      }
+    }
+  });
+
+  it('flips a physically resolved side on overflow exactly as it always did', () => {
+    // Collision handling is downstream of the resolution: once the side is an
+    // edge, the arithmetic is the physical arithmetic. An `inline-start` with no
+    // room on the left flips right in BOTH directions under the default.
+    const crowded = { top: 100, left: 20, right: 60, bottom: 120, width: 40, height: 20 };
+
+    const ltr = renderHarness({ placement: 'inline-start', anchorRect: crowded });
+    expect(ltr.captured.result?.style.left).toBe(68);
     cleanup();
 
-    const rtl = renderHarness({ placement: 'left', anchorRect: centred, locale: 'ar' });
-    expect(rtl.captured.result?.style.left).toBe(348);
+    const rtl = renderHarness({ placement: 'inline-start', anchorRect: crowded, locale: 'ar' });
+    expect(rtl.captured.result?.style.left).toBe(68);
   });
 
   it('supports side-aligned placements (bottom-start tracks the anchor left edge)', () => {
@@ -294,7 +378,8 @@ describe('useOverlayPosition - anchor-css branch (forced capabilities)', () => {
       positionTryFallbacks: 'flip-block, flip-inline, flip-block flip-inline',
       inset: 'auto',
       margin: 0,
-      marginBlockEnd: 8,
+      // No resolution declared: the physical family, margin included.
+      marginBottom: 8,
     });
     expect(captured.result?.style.top).toBeUndefined();
     expect(captured.result?.style.left).toBeUndefined();
@@ -302,11 +387,14 @@ describe('useOverlayPosition - anchor-css branch (forced capabilities)', () => {
 
   it('maps aligned and inline placements onto position-area spans', () => {
     forceAnchorBranch();
-    const bottomStart = renderHarness({ placement: 'bottom-start' });
+    const bottomStart = renderHarness({ placement: 'bottom-start', inlineSides: 'logical' });
     expect(bottomStart.captured.result?.style.positionArea).toBe('bottom span-right');
     expect(bottomStart.captured.result?.style.marginBlockStart).toBe(8);
 
-    const inlineStartEnd = renderHarness({ placement: 'inline-start-end' });
+    const inlineStartEnd = renderHarness({
+      placement: 'inline-start-end',
+      inlineSides: 'logical',
+    });
     expect(inlineStartEnd.captured.result?.style.positionArea).toBe(
       'self-inline-start span-self-block-start',
     );
@@ -316,13 +404,15 @@ describe('useOverlayPosition - anchor-css branch (forced capabilities)', () => {
     expect(inlineStartEnd.captured.result?.style.marginInlineEnd).toBe(8);
   });
 
-  it('lowers every placement to one position-area keyword family', () => {
+  it('lowers every placement to one position-area keyword family, per resolution', () => {
     forceAnchorBranch();
-    // A `position-area` value may not mix keyword families. The block-axis
-    // placements stay physical (`top span-right`); the inline-axis placements
-    // are wholly `self-*` logical, so the overlay's own writing mode resolves
-    // BOTH the area and the offset margin.
-    const cases: ReadonlyArray<[OverlayPlacement, string]> = [
+    // A `position-area` value may not mix keyword families, and the offset
+    // margin has to be spelled in the same family as the area it sits beside.
+    // Under `'logical'` the inline placements are wholly `self-*`, so the
+    // overlay's own writing mode resolves BOTH; under the physical default they
+    // are wholly physical, so nothing consults a writing mode at all. The
+    // block-axis placements are physical in both (`top span-right`).
+    const logicalCases: ReadonlyArray<[OverlayPlacement, string]> = [
       ['top', 'top'],
       ['top-start', 'top span-right'],
       ['top-end', 'top span-left'],
@@ -336,11 +426,55 @@ describe('useOverlayPosition - anchor-css branch (forced capabilities)', () => {
       ['inline-end-start', 'self-inline-end span-self-block-end'],
       ['inline-end-end', 'self-inline-end span-self-block-start'],
     ];
-    for (const [placement, area] of cases) {
+    for (const [placement, area] of logicalCases) {
+      const rendered = renderHarness({ placement, inlineSides: 'logical' });
+      expect(rendered.captured.result?.style.positionArea).toBe(area);
+      cleanup();
+    }
+
+    // The physical table, value for value, is what this runtime emitted before
+    // the logical vocabulary existed. It is the frozen engines' geometry.
+    const physicalCases: ReadonlyArray<[OverlayPlacement, string]> = [
+      ['top', 'top'],
+      ['top-start', 'top span-right'],
+      ['top-end', 'top span-left'],
+      ['bottom', 'bottom'],
+      ['bottom-start', 'bottom span-right'],
+      ['bottom-end', 'bottom span-left'],
+      ['inline-start', 'left'],
+      ['inline-start-start', 'left span-bottom'],
+      ['inline-start-end', 'left span-top'],
+      ['inline-end', 'right'],
+      ['inline-end-start', 'right span-bottom'],
+      ['inline-end-end', 'right span-top'],
+    ];
+    for (const [placement, area] of physicalCases) {
       const rendered = renderHarness({ placement });
       expect(rendered.captured.result?.style.positionArea).toBe(area);
       cleanup();
     }
+  });
+
+  it('keeps the offset margin in the same keyword family as the area', () => {
+    forceAnchorBranch();
+    // A logical margin beside a physical `left` area is the defect this pair
+    // exists to exclude: the area would pin the overlay left while the margin
+    // resolved in the overlay's writing mode and put the gap on the far side
+    // under RTL.
+    const physical = renderHarness({ placement: 'inline-start' });
+    expect(physical.captured.result?.style).toMatchObject({
+      positionArea: 'left',
+      marginRight: 8,
+    });
+    expect(physical.captured.result?.style.marginInlineEnd).toBeUndefined();
+    cleanup();
+
+    const logical = renderHarness({ placement: 'inline-start', inlineSides: 'logical' });
+    expect(logical.captured.result?.style).toMatchObject({
+      positionArea: 'self-inline-start',
+      marginInlineEnd: 8,
+    });
+    expect(logical.captured.result?.style.marginRight).toBeUndefined();
   });
 
   it('accepts the deprecated physical placements through the documented alias map', () => {
@@ -357,23 +491,47 @@ describe('useOverlayPosition - anchor-css branch (forced capabilities)', () => {
     // Idempotent: a logical placement passes through unchanged.
     expect(normalizeOverlayPlacement('inline-end-start')).toBe('inline-end-start');
 
-    for (const [legacy, logical] of Object.entries(OVERLAY_PLACEMENT_ALIASES)) {
-      expect(normalizeOverlayPlacement(legacy as OverlayPlacementInput)).toBe(logical);
-      const viaAlias = renderHarness({ placement: legacy as OverlayPlacementInput });
-      const aliasArea = viaAlias.captured.result?.style.positionArea;
-      const aliasMargins = {
-        marginInlineStart: viaAlias.captured.result?.style.marginInlineStart,
-        marginInlineEnd: viaAlias.captured.result?.style.marginInlineEnd,
-      };
-      cleanup();
-      const viaLogical = renderHarness({ placement: logical });
-      expect(aliasArea).toBe(viaLogical.captured.result?.style.positionArea);
-      expect(aliasMargins).toEqual({
-        marginInlineStart: viaLogical.captured.result?.style.marginInlineStart,
-        marginInlineEnd: viaLogical.captured.result?.style.marginInlineEnd,
-      });
-      cleanup();
+    const resolutions: readonly OverlayInlineSideResolution[] = ['physical', 'logical'];
+    for (const inlineSides of resolutions) {
+      for (const [legacy, logical] of Object.entries(OVERLAY_PLACEMENT_ALIASES)) {
+        expect(normalizeOverlayPlacement(legacy as OverlayPlacementInput)).toBe(logical);
+        const viaAlias = renderHarness({
+          placement: legacy as OverlayPlacementInput,
+          inlineSides,
+        });
+        const aliasArea = viaAlias.captured.result?.style.positionArea;
+        const aliasMargins = {
+          marginLeft: viaAlias.captured.result?.style.marginLeft,
+          marginRight: viaAlias.captured.result?.style.marginRight,
+          marginInlineStart: viaAlias.captured.result?.style.marginInlineStart,
+          marginInlineEnd: viaAlias.captured.result?.style.marginInlineEnd,
+        };
+        cleanup();
+        const viaLogical = renderHarness({ placement: logical, inlineSides });
+        expect(aliasArea).toBe(viaLogical.captured.result?.style.positionArea);
+        expect(aliasMargins).toEqual({
+          marginLeft: viaLogical.captured.result?.style.marginLeft,
+          marginRight: viaLogical.captured.result?.style.marginRight,
+          marginInlineStart: viaLogical.captured.result?.style.marginInlineStart,
+          marginInlineEnd: viaLogical.captured.result?.style.marginInlineEnd,
+        });
+        cleanup();
+      }
     }
+  });
+
+  it('never consults the reading direction under the physical default', () => {
+    forceAnchorBranch();
+    // The anchor-css branch cannot be measured in this DOM, so the evidence is
+    // the emitted value: a physical `position-area` plus a physical margin
+    // names its edge outright, and an `ar` locale changes not one byte of it.
+    const ltr = renderHarness({ placement: 'inline-start-end' });
+    const rtl = renderHarness({ placement: 'inline-start-end', locale: 'ar' });
+
+    expect(ltr.captured.result?.style.positionArea).toBe('left span-top');
+    expect(rtl.captured.result?.style.positionArea).toBe('left span-top');
+    expect(ltr.captured.result?.style.marginRight).toBe(8);
+    expect(rtl.captured.result?.style.marginRight).toBe(8);
   });
 
   it('omits the try-fallback chain when flip is disabled', () => {

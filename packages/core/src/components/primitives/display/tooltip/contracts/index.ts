@@ -64,14 +64,26 @@ import type { EngineAwareProps } from "../../../../../foundation/contracts/runti
  *
  * `left`/`right` and their aligned forms are kept as deprecated aliases of the
  * logical sides -- the same migration table the overlay positioning runtime
- * publishes as `OVERLAY_PLACEMENT_ALIASES` -- so no caller breaks. Their LTR
- * geometry is unchanged; under RTL they now MIRROR instead of pinning to the
- * physical edge they name.
+ * publishes as `OVERLAY_PLACEMENT_ALIASES` -- so no caller breaks.
  *
- * ENGINE REACH: the logical spellings are honoured by the Modern engine. The
- * frozen Classic/Rustic engines read a physical `PLACEMENT_MAP` and fall back
- * to `top` for a spelling it does not contain, so pass a physical alias when
- * targeting them until they are unfrozen.
+ * ENGINE REACH, and it is a LIMITATION rather than a capability. Only the
+ * Modern engine implements this vocabulary. It rewrites an alias to its logical
+ * side, so a Modern tooltip asking for `left` mirrors under `dir=rtl`.
+ *
+ * The frozen Classic and Rustic engines implement the PHYSICAL vocabulary and
+ * nothing else. They read the raw prop through a physical placement map:
+ *
+ * - `left`/`right` and their aligned forms land on the edge they name, in both
+ *   reading directions -- unchanged, established behaviour.
+ * - `inline-start`/`inline-end` and their aligned forms are NOT in that map.
+ *   The engine falls back to `top`, deterministically and for every one of the
+ *   six spellings. That fallback is a refusal, not support: it never guesses an
+ *   inline edge and it never mirrors. It is pinned by
+ *   `tests/Tooltip.frozen-placement-reach.test.tsx` so it cannot quietly become
+ *   a half-implementation.
+ *
+ * So: target the frozen engines with a physical spelling. The logical spellings
+ * are Modern-only until those engines are unfrozen.
  */
 export type TooltipPlacement =
   | "top"
@@ -371,8 +383,13 @@ export interface TooltipPlacementOffsets {
  *
  * Maps the physical tooltip placement spellings to the offsets the frozen
  * Rustic engine applies around its trigger. The Modern engine positions its
- * bubble through the shared overlay kernel and does not read this map, so the
- * logical inline sides have no row here.
+ * bubble through the shared overlay kernel and does not read this map.
+ *
+ * The logical inline sides have no row here ON PURPOSE. This engine is frozen,
+ * it has no direction authority and no mirroring machinery, and a row inventing
+ * one would be new behaviour in a frozen engine. Its caller resolves a missing
+ * key to the `top` row, which is a documented refusal -- see
+ * {@link TooltipPlacement}. Do not add logical rows to make a gate green.
  *
  * Placement naming convention:
  * - `{side}` - centered along the given side.

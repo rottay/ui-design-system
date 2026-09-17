@@ -62,10 +62,14 @@ export type PopconfirmPlacement =
  * engine's `-start`/`-end` edge alignment). Internal to the engines --
  * the public `PopconfirmPlacement` prop vocabulary is unchanged.
  *
- * The engine side of the map is LOGICAL (`left` -> `inline-start`,
- * `right` -> `inline-end`), the same migration the Popover table carries: the
- * public prop keeps its antd-shaped physical names, and this table is where
- * the name stops being a physical promise.
+ * The engine side of the map is spelled logically (`left` -> `inline-start`,
+ * `right` -> `inline-end`), the same migration the Popover table carries, and
+ * with the same boundary: the spelling resolves logically on the Modern path,
+ * which reaches the positioning runtime through `useFieldOverlay`, and
+ * physically in the frozen Rustic engine, which calls `useOverlayPosition`
+ * directly and takes its physical default. A Rustic popconfirm declared `left`
+ * therefore opens on the physical left edge in both reading directions, exactly
+ * as it always has.
  */
 export const POPCONFIRM_TO_OVERLAY_PLACEMENT: Record<PopconfirmPlacement, OverlayPlacement> = {
   top: 'top',

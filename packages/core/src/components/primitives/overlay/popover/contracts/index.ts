@@ -80,12 +80,21 @@ export type PopoverPlacement =
  * engine's `-start`/`-end` edge alignment). Internal to the engines --
  * the public `PopoverPlacement` prop vocabulary is unchanged.
  *
- * The engine side of the map is LOGICAL: `left` asks for the inline-start
- * side, `right` for inline-end, so a popover declared `left` opens on the
- * reader's near side in both directions instead of pinning to the physical
- * left edge. The public prop keeps its antd-shaped physical NAMES -- renaming
- * them would break every caller -- and this table is where the name stops
- * being a physical promise.
+ * The engine side of the map is spelled logically (`left` -> `inline-start`,
+ * `right` -> `inline-end`); the public prop keeps its antd-shaped physical
+ * NAMES, because renaming them would break every caller. What that spelling
+ * RESOLVES to is the adopting engine's door, not this table:
+ *
+ * - Modern reaches the positioning runtime through `useFieldOverlay`, which
+ *   declares `inlineSides: 'logical'`, so a Modern popover declared `left`
+ *   opens on the reader's near side and mirrors under `dir=rtl`.
+ * - The frozen Rustic engine calls `useOverlayPosition` directly and takes its
+ *   physical default, so a Rustic popover declared `left` opens on the physical
+ *   left edge in both reading directions -- the behaviour it has always had.
+ *
+ * Do not "fix" that asymmetry by making this table physical: Modern's geometry
+ * resolver speaks the logical vocabulary and would then compare two different
+ * alphabets when it stamps `data-collision-adjusted`.
  */
 export const POPOVER_TO_OVERLAY_PLACEMENT: Record<PopoverPlacement, OverlayPlacement> = {
   top: 'top',
