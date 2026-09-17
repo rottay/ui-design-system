@@ -425,6 +425,14 @@
   transition: transform var(--ds-tabs-indicator-motion-duration, var(--ds-motion-normal)) var(--ds-tabs-motion-easing);
 }
 
+/* The measured offset is a PHYSICAL left distance, so the RTL mirror moves the
+   anchor to the physical left edge and replays the same transform from there. */
+.ds-tabs--modern[data-part='root'] [data-part='indicator']:dir(rtl) {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  transform: translateX(var(--ds-tabs-indicator-offset)) scaleX(var(--ds-tabs-indicator-scale));
+}
+
 /* ---- overflow controls share one tokenized control anatomy ------------ */
 
 .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']) {

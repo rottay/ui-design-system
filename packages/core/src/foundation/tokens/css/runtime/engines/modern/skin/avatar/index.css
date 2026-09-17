@@ -223,6 +223,11 @@
 .rottay-avatar.rottay-avatar--modern:dir(rtl) {
   --ds-avatar-status-offset-x: -25%;
 }
+/* The flipped channel is replayed at the paint site so the mirror is legible
+   on the rule that moves the dot, not only on the root that feeds it. */
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot']:dir(rtl) {
+  transform: translate(var(--ds-avatar-status-offset-x, -25%), 25%);
+}
 .rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='online'] {
   background-color: var(--ds-avatar-status-online);
 }

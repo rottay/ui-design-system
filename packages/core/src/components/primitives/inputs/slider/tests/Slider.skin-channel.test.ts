@@ -61,7 +61,12 @@ describe('Slider modern skin state postures (K2-V sweep)', () => {
   });
 
   it('mirrors RTL centering for handles and mark labels', () => {
-    expect(skin).toContain("[data-part='handle']:dir(rtl) {\n  --tw-translate-x: 50%;");
+    expect(skin).toContain(
+      "[data-orientation='horizontal'] [data-part='handle']:dir(rtl) {\n  translate: 50% -50%;"
+    );
+    expect(skin).toContain(
+      "[data-orientation='vertical'] [data-part='handle']:dir(rtl) {\n  translate: 50% 50%;"
+    );
     expect(skin).toContain("[data-part='mark-label'][data-axis='x']:dir(rtl) {\n  transform: translateX(50%);");
   });
 });

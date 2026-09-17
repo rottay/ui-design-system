@@ -230,11 +230,11 @@
   "pinnedDebt": {
     "foundation/animations/keyframes/index.css": {
       "sites": 10,
-      "reason": "10 measured sites, all `transform: translateX(<signed>)` inside a keyframe step and none with a `:dir(rtl)` twin: `ds-foundation-fade-in-left/-right` (-1rem / 1rem), `ds-foundation-slide-in-left/-right` and `ds-foundation-slide-out-left/-right` (-100% / 100%), `ds-foundation-shake` (-0.5rem / 0.5rem across its two step lists) and `ds-foundation-progress-indeterminate` (-100% -> 100%). A keyframe name IS the public handle -- `ds-foundation-progress-indeterminate` is animated by runtime/engines/modern/skin/progress/index.css, and the left/right pairs are a named vocabulary a consumer picks by side -- so the fix is an animation-name contract decision (one direction-resolved pair, or a mirrored twin per keyframe), which belongs to the L3 mirror lot. Shake is a special case: its two step lists are equal and opposite, so it is symmetric in effect but not in spelling, and it stays pinned rather than being claimed as inert by a rule that cannot see across steps."
+      "reason": "10 measured sites, all `transform: translateX(<signed>)` inside a keyframe step. ADJUDICATED by the INV-01 L3 mirror lot, and none of the 10 is a live RTL defect. 8 are DEAD: `ds-foundation-fade-in-left/-right`, `ds-foundation-slide-in-left/-right`, `ds-foundation-slide-out-left/-right` and `ds-foundation-shake` have no `animation`/`animation-name` consumer anywhere in the workspace, so there is nothing to mirror and dead code is not mirrored. The other 2, `ds-foundation-progress-indeterminate`, have exactly one live consumer -- runtime/engines/modern/skin/progress/index.css -- and it ALREADY mirrors, with `animation-direction: reverse` under `.rottay-progress-shell--modern[data-type='line']:dir(rtl)`. A keyframe STEP cannot carry a `:dir(rtl)` qualifier, so the gate cannot see either resolution. The 8 dead rows drain with a removal lot; the 2 live rows drain when the gate learns to read `animation-direction: reverse` at the animation-name site."
     },
     "foundation/animations/transitions/index.css": {
       "sites": 4,
-      "reason": "4 measured sites: the view-transition panel keyframes `ds-vt-panel-exit-toward-start`, `ds-vt-panel-exit-toward-end`, `ds-vt-panel-enter-from-end` and `ds-vt-panel-enter-from-start`, each a `translateX(var(--ds-motion-panel-offset))` or its `calc(-1 * ...)` negation with no `:dir(rtl)` twin. The names are already LOGICAL (toward-start / from-end) while the paint is physical, so under RTL a panel choreographed to leave toward the reading start leaves toward the right instead -- the defect the naming denies. Consumed through the choreography contract asserted by src/foundation/tokens/tests/view-transition-choreography-contract.test.ts. The fix is a mirrored twin per keyframe (L3 lot), not a rename."
+      "reason": "4 measured sites: the view-transition panel keyframes `ds-vt-panel-exit-toward-start`, `-exit-toward-end`, `-enter-from-end` and `-enter-from-start`. FIXED BEHAVIOURALLY by the INV-01 L3 mirror lot without a count change: each step now travels on `calc(var(--ds-vt-panel-start-sign|end-sign) * var(--ds-motion-panel-offset))`, and `:root:dir(rtl)` swaps the two signs, so a panel choreographed to leave toward the reading start now leaves toward the physical right under RTL. LTR paint is unchanged (the signs resolve to the former -1 / 1). The rows stay pinned because a keyframe STEP cannot carry a `:dir(rtl)` qualifier -- the mirror idiom this gate recognises is structurally unavailable inside `@keyframes` (0 of the 83 mirrored sites are keyframe steps) -- and a `var()` x component is always read as an unresolved signed x. Keyframe NAMES are the public handle asserted by src/foundation/tokens/tests/view-transition-choreography-contract.test.ts and were not renamed."
     },
     "foundation/responsive/channels/index.css": {
       "sites": 24,
@@ -242,11 +242,11 @@
     },
     "presentation/components/arc/index.css": {
       "sites": 1,
-      "reason": "1 measured site: `.ds-arc::after` composes `rotate(calc(var(--_ds-arc-value) * 3.6deg - 90deg)) translate(calc(var(--_ds-arc-size) / 2 - 50%))`, a positive x push along an already-rotated axis that places the arc's end cap. The sibling rule already carries a `:dir(rtl)` twin, so the file is half mirrored; this component of the pair is not, and the gate reads an unresolved signed x rather than assuming a rotation cancels it. It owes the same mirrored twin its sibling has (L3 lot), and the arc is engine-agnostic pattern CSS, outside this lot's write set."
+      "reason": "1 measured site: `.ds-arc::after` composes `rotate(...) translate(calc(var(--_ds-arc-size) / 2 - 50%))`, the push that places the gauge's end cap along an already-rotated axis. ADJUDICATED by the INV-01 L3 mirror lot: an arc gauge is clock geometry, not text geometry -- it sweeps from 12 o'clock in both reading directions -- so an unconditional `:dir(rtl)` twin would mirror every gauge that did not ask for it. The mirror is an explicit consumer opt-in and already exists, `.ds-arc[data-arc-mirror='true']:dir(rtl)::after`, which flips the sweep and the cap together; its core (`.ds-arc[data-arc-mirror='true']::after`) is deliberately narrower than the base, so the gate does not pair them. The row stays pinned as an opt-in contract, not as a defect."
     },
     "presentation/components/patterns/index.css": {
-      "sites": 4,
-      "reason": "4 measured sites: `ds-meter-sweep` translates -100% -> 100% across its two steps (a sweep with no `:dir(rtl)` twin), `:where(.ds-metric-card__progress-bar)::after` starts at `translateX(-100%)` for the same sweep, and `:where(.ds-metric-card__halo)` pins `right: -54px` to hang a decorative halo off one physical corner. The two sweeps owe a mirror (L3 lot); the halo owes `inset-inline-end`, which is a one-line change but lands in the engine-agnostic pattern sheet rather than in a skin, outside this lot's write set."
+      "sites": 2,
+      "reason": "2 measured site(s) after the INV-01 L3 mirror lot: the two steps of `@keyframes ds-meter-sweep` (`translateX(-100%)` -> `translateX(100%)`). A keyframe STEP cannot carry a `:dir(rtl)` qualifier, so the mirror idiom this gate recognises is structurally unavailable inside `@keyframes`; the sweep is mirrored at its only consumer instead -- `:where(.ds-metric-card__progress-bar):dir(rtl)::after` flips the rest offset and replays the pair with `animation-direction: reverse` -- and that consumer rule is now counted as mirrored. The halo migrated from `right: -54px` to `inset-inline-end: -54px`. These 2 rows stay pinned until either the keyframe is retired or the gate learns to read `animation-direction: reverse` at the animation-name site."
     },
     "presentation/components/skin/ascii-diagram/index.css": {
       "sites": 1,
@@ -316,25 +316,21 @@
       "sites": 1,
       "reason": "1 measured site: `[data-engine='modern'] select` writes `padding: 8px 32px 8px 12px`, a four-value box shorthand whose inline edges differ (32px right against 12px left) because the 32px reserves room for the chevron painted by the background-image on the same rule. Under RTL the chevron moves to the reading end while the padding does not, so the glyph overlaps the text. The fix is two declarations -- a symmetric `padding-block`/`padding-inline` base plus `padding-inline-end: 32px` -- paired with a logical `background-position`, and the background half is a paint change to a data-URI-bearing rule that this correction lot did not adjudicate."
     },
-    "runtime/engines/modern/skin/avatar/index.css": {
-      "sites": 1,
-      "reason": "1 measured site(s): 1 x transform (signed x). First: `.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot'] | transform: translate(var(--ds-avatar-status-offset-x, 25%), 25%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
-    },
     "runtime/engines/modern/skin/cascader/index.css": {
       "sites": 1,
-      "reason": "1 measured site(s): 1 x transform (signed x). First: `@keyframes ds-cascader-panel-in / from | transform: translateX(var(--ds-cascader-column-enter-x, calc(var(--ds-spacing-2) * -1)))`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+      "reason": "1 measured site(s): 1 x transform (signed x) -- `@keyframes ds-cascader-panel-in / from`. ADJUDICATED by the INV-01 L3 mirror lot: the step already reads a direction channel, `translateX(var(--ds-cascader-column-enter-x, ...))`, and the only animation-name site sets that channel per direction with a `:dir(rtl)` twin, so the column already drifts in from the reading start in both directions. A keyframe STEP cannot carry a `:dir(rtl)` qualifier, so the gate cannot see the pairing and reads the `var()` as an unresolved signed x. The row stays pinned as a measurement limit, not as a defect."
     },
     "runtime/engines/modern/skin/drawer/index.css": {
       "sites": 5,
-      "reason": "5 measured site(s): 1 x left, 4 x transform (signed x). First: `@keyframes ds-drawer-enter-left / from | transform: translateX(-100%)`; `@keyframes ds-drawer-exit-left / to | transform: translateX(-100%)`; `@keyframes ds-drawer-enter-right / from | transform: translateX(100%)`; `@keyframes ds-drawer-exit-right / to | transform: translateX(100%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+      "reason": "5 measured site(s): 1 x left, 4 x transform (signed x). ADJUDICATED by the INV-01 L3 mirror lot: `data-placement` is the PHYSICAL contract already declared in `physicalStamp` for this file -- a drawer asked for `left` docks at `left: 0` in every reading direction -- and `ds-drawer-enter-left` / `-exit-left` / `-enter-right` / `-exit-right` are the motion arm of that same vocabulary. A `:dir(rtl)` mirror would slide the surface in from the edge it is NOT docked to, so mirroring them is a regression, not a fix; they drain the day the placement vocabulary turns logical (D9/D10), together with the stamped selectors. The 5th site, `left: 0` on the top/bottom placements, is the same contract spelled on the block-placed surface."
     },
     "runtime/engines/modern/skin/dropdown/index.css": {
-      "sites": 4,
-      "reason": "4 measured site(s) after the INV-01 L2 migration: 2 x transform (signed x) on the item/submenu indicator sweep, and 2 x border-left/border-right on the block-placed arrow. The in-tree centring edge migrated to `inset-inline-start` with a `:dir(rtl)` translate mirror, and the portaled `left` is a named measured-space exception. The two sweeps owe a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); the two arrow shapers owe `border-inline-start|end`."
+      "sites": 2,
+      "reason": "2 measured site(s) after the INV-01 L3 mirror lot: `border-left: 0` / `border-right: 0` on the block-placed arrow. The item/submenu sheen sweep now carries `:dir(rtl)` twins on both the rest and the hover rule, so it is counted as mirrored rather than as debt; the portaled `left` stays a named measured-space exception and the `[data-placement$='Left|Right']` pair stays a physical stamp. The two arrow shapers owe `border-inline-start|end`, which is the arrow-anatomy lot, not this one."
     },
     "runtime/engines/modern/skin/list-toolbar/index.css": {
       "sites": 2,
-      "reason": "2 measured site(s): 2 x transform (signed x). First: `@keyframes ds-list-toolbar-sheen / 0% | transform: translateX(-120%)`; `@keyframes ds-list-toolbar-sheen / 100% | transform: translateX(120%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+      "reason": "2 measured site(s): the two steps of `@keyframes ds-list-toolbar-sheen` (`translateX(-120%)` -> `translateX(120%)`). ADJUDICATED by the INV-01 L3 mirror lot: the keyframe has NO in-repo consumer -- no `animation`/`animation-name` anywhere in the workspace names it -- so there is nothing to mirror and dead code is not mirrored. The row drains when the keyframe is retired, which belongs to a removal lot."
     },
     "runtime/engines/modern/skin/popover/index.css": {
       "sites": 2,
@@ -342,15 +338,7 @@
     },
     "runtime/engines/modern/skin/sheet/index.css": {
       "sites": 4,
-      "reason": "4 measured site(s): 4 x transform (signed x). First: `@keyframes ds-sheet-enter-left / from | transform: translateX(-100%)`; `@keyframes ds-sheet-exit-left / to | transform: translateX(-100%)`; `@keyframes ds-sheet-enter-right / from | transform: translateX(100%)`; `@keyframes ds-sheet-exit-right / to | transform: translateX(100%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
-    },
-    "runtime/engines/modern/skin/slider/index.css": {
-      "sites": 2,
-      "reason": "2 measured site(s): 2 x translate (signed x). First: `.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='handle'] | translate: var(--tw-translate-x) var(--tw-translate-y)`; `.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='handle'] | translate: var(--tw-translate-x) var(--tw-translate-y)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
-    },
-    "runtime/engines/modern/skin/tabs/index.css": {
-      "sites": 1,
-      "reason": "1 measured site(s): 1 x transform (signed x). First: `.ds-tabs--modern[data-part='root'] [data-part='indicator'] | transform: translateX(var(--ds-tabs-indicator-offset)) scaleX(var(--ds-tabs-indicator-scale))`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+      "reason": "4 measured site(s): 4 x transform (signed x). ADJUDICATED by the INV-01 L3 mirror lot: `data-placement` is the PHYSICAL contract already declared in `physicalStamp` for this file -- a sheet asked for `left` docks at `left: 0` in every reading direction -- and `ds-sheet-enter-left` / `-exit-left` / `-enter-right` / `-exit-right` are the motion arm of that same vocabulary. A `:dir(rtl)` mirror would slide the surface in from the edge it is NOT docked to, so mirroring them is a regression, not a fix; they drain with the placement vocabulary (D9/D10)."
     },
     "runtime/engines/modern/skin/tooltip/index.css": {
       "sites": 2,

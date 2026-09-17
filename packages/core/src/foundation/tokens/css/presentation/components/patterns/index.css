@@ -1380,7 +1380,7 @@
 
 :where(.ds-metric-card__halo) {
   position: absolute;
-  right: -54px;
+  inset-inline-end: -54px;
   bottom: -48px;
   z-index: 0;
   width: 132px;
@@ -1532,6 +1532,13 @@
   transform: translateX(-100%);
   animation: ds-meter-sweep var(--ds-motion-attention)
     var(--ds-motion-ease-enter) var(--ds-motion-feedback) 1;
+}
+
+/* The sweep travels with the reading direction: the rest offset mirrors and
+   the keyframe pair is replayed in reverse. */
+:where(.ds-metric-card__progress-bar):dir(rtl)::after {
+  transform: translateX(100%);
+  animation-direction: reverse;
 }
 
 :where(.ds-metric-card__status-row) {

@@ -5,6 +5,10 @@
  * axe accepts, keyboard reach that follows the reading direction, and labels
  * that survive a right-to-left locale.
  */
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import axe from 'axe-core';
@@ -222,5 +226,33 @@ describe('direction and locale', () => {
     expect(tab.querySelector('[data-part="tab-label"]')).toHaveTextContent(label);
     expect(tab.closest('[data-part="root"]')).toHaveAttribute('data-direction', 'rtl');
     expect(screen.getByRole('status')).toHaveTextContent('قيد التحميل');
+  });
+});
+
+/**
+ * DOM-SIMULATED, deliberately: the runners implement neither `:dir()` nor the
+ * computed matrix a matched rule would produce, so the indicator's RTL mirror
+ * is read off the skin text the cascade would apply.
+ */
+const TABS_SKIN = readFileSync(
+  resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    '../../../../../foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css',
+  ),
+  'utf8',
+);
+
+describe('the indicator mirror re-anchors the measured PHYSICAL offset', () => {
+  it('declares a :dir(rtl) twin after the base that moves the anchor to the physical left', () => {
+    const base = TABS_SKIN.indexOf(".ds-tabs--modern[data-part='root'] [data-part='indicator'] {");
+    const twin = TABS_SKIN.indexOf(
+      ".ds-tabs--modern[data-part='root'] [data-part='indicator']:dir(rtl) {",
+    );
+    expect(base).toBeGreaterThanOrEqual(0);
+    expect(twin).toBeGreaterThan(base);
+    const body = TABS_SKIN.slice(twin, TABS_SKIN.indexOf('}', twin));
+    expect(body).toContain('inset-inline-start: auto;');
+    expect(body).toContain('inset-inline-end: 0;');
+    expect(body).toContain('transform: translateX(var(--ds-tabs-indicator-offset))');
   });
 });

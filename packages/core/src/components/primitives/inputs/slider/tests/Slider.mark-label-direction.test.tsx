@@ -256,6 +256,25 @@ function declarationOf(body: string, property: string): string | null {
   return match ? match[1]!.trim() : null;
 }
 
+/** Split on the top-level whitespace, so `var(--a, b)` stays one term. */
+function splitTerms(text: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const character of text) {
+    if (character === '(') depth += 1;
+    if (character === ')') depth -= 1;
+    if (depth === 0 && /\s/.test(character)) {
+      if (current) parts.push(current);
+      current = '';
+      continue;
+    }
+    current += character;
+  }
+  if (current) parts.push(current);
+  return parts;
+}
+
 /** Split on the commas that are not inside a function. */
 function splitArguments(text: string): string[] {
   const parts: string[] = [];
@@ -348,8 +367,10 @@ function resolveLength(expression: string, basis: number): number {
 
 /** The inline-axis component of the rule's translate, as a CSS length. */
 function inlineTranslateExpression(body: string): string {
-  const channel = declarationOf(body, '--tw-translate-x');
-  if (channel) return channel;
+  // The `translate` PROPERTY lists x then y, so its first top-level term is the
+  // inline-axis component the handle centres on.
+  const composed = declarationOf(body, 'translate');
+  if (composed) return splitTerms(composed)[0] ?? '0px';
   const transform = declarationOf(body, 'transform');
   if (!transform) return '0px';
   const single = transform.match(/^translateX\((.*)\)$/);
@@ -443,7 +464,7 @@ const CENTRED_PARTS: Array<{ part: string; geometry: PartGeometry }> = [
     part: 'handle',
     geometry: {
       base: `${VERTICAL_SCOPE} [data-part='handle']`,
-      rtl: ".ds-slider.ds-slider--modern [data-part='handle']:dir(rtl)",
+      rtl: `${VERTICAL_SCOPE} [data-part='handle']:dir(rtl)`,
     },
   },
   {

@@ -231,6 +231,12 @@
   pointer-events: none;
 }
 
+/* The sweep travels with the reading direction, so its rest and hover offsets
+   mirror under RTL. */
+.ds-dropdown-surface[data-part='surface'] [data-part='item']:dir(rtl)::after {
+  transform: translateX(40%);
+}
+
 /* Hover and focus are a quiet well, never a lift, so a keyboard sweep does not jitter the list. */
 .ds-dropdown-surface[data-part='surface'] [data-part='item'][data-part='item']:is([data-state~='hovered'], :hover, [data-state~='focus-visible'], :focus-visible):not([data-state~='disabled']) {
   color: var(--ds-dropdown-item-color-hover, var(--ds-color-text-primary));
@@ -253,6 +259,10 @@
 .ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='hovered'], :hover):not([data-state~='disabled'])::after {
   opacity: calc(var(--ds-dropdown-sheen-opacity) * var(--ds-effect-intensity));
   transform: translateX(40%);
+}
+
+.ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='hovered'], :hover):not([data-state~='disabled']):dir(rtl)::after {
+  transform: translateX(-40%);
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-part='item'][data-part='item'][data-selected='true'] {

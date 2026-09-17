@@ -46,7 +46,7 @@
  * RTL (K2-V sweep): the engine's horizontal offsets are logical
  * (`insetInlineStart`), matching Chromium's flipped native scale under
  * `dir=rtl`; this file mirrors the centering signs (mark-label, handle
- * `--tw-translate-x`) and the single-mode fill gradient under `:dir(rtl)`.
+ * `translate`) and the single-mode fill gradient under `:dir(rtl)`.
  * Vertical offsets are logical too and carry the same `:dir(rtl)` mirrors
  * (rail, track, dot, value tooltip), so the rail/track/handle/dot/tooltip
  * centre on one inline line in both directions. The value tooltip's
@@ -144,7 +144,7 @@
 /* Handle geometry (drained: `absolute w-4 h-4 rounded-full border-2 shadow
    pointer-events-none`). Centering rides the `translate` PROPERTY, which
    composes with the press `transform: scale()` instead of being overridden
-   by it; the --tw-translate-* vars are the pinned mirror channel. */
+   by it; each orientation carries its own `:dir(rtl)` translate mirror. */
 .ds-slider.ds-slider--modern [data-part='handle'] {
   position: absolute;
   inline-size: var(--ds-slider-thumb-size, 16px);
@@ -162,16 +162,18 @@
   border: 2px solid var(--ds-color-bg-primary);
 }
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='handle'] {
-  --tw-translate-x: -50%;
-  --tw-translate-y: -50%;
-  translate: var(--tw-translate-x) var(--tw-translate-y);
+  translate: -50% -50%;
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='handle']:dir(rtl) {
+  translate: 50% -50%;
 }
 /* Vertical anchors at `bottom`, so the centering shift is +50% (the drained
    class carried -50% -- a full thumb-height of mis-centering). */
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='handle'] {
-  --tw-translate-x: -50%;
-  --tw-translate-y: 50%;
-  translate: var(--tw-translate-x) var(--tw-translate-y);
+  translate: -50% 50%;
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='handle']:dir(rtl) {
+  translate: 50% 50%;
 }
 
 /* Disabled posture (K2-V sweep, sighted defect): the range mode's custom
@@ -182,12 +184,6 @@
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='track'],
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='handle'] {
   opacity: var(--ds-disabled-opacity, 0.5);
-}
-
-/* RTL centering: the engine's horizontal handle offsets are logical, so the
-   Tailwind v4 `translate` property must mirror its sign under dir=rtl. */
-.ds-slider.ds-slider--modern [data-part='handle']:dir(rtl) {
-  --tw-translate-x: 50%;
 }
 
 .ds-slider.ds-slider--modern [data-part='mark-label'] {

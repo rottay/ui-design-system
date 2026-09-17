@@ -12,6 +12,10 @@
  * Geometry is proven in a real browser by the causality suite; this file pins
  * the stamped placement and the keyboard model.
  */
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -79,5 +83,42 @@ describe('Dropdown modern engine — submenu keys are logical forward/backward',
 
     fireEvent.keyDown(item, { key: 'ArrowRight' });
     expect(item).toHaveAttribute('aria-expanded', 'false');
+  });
+});
+
+/**
+ * DOM-SIMULATED, deliberately: neither happy-dom nor jsdom implements
+ * `:dir()` or resolves a matched rule into a computed matrix, so the mirror is
+ * read off the skin text the cascade would apply, not off a rendered box.
+ */
+const SKIN = readFileSync(
+  resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    '../../../../../foundation/tokens/css/runtime/engines/modern/skin/dropdown/index.css',
+  ),
+  'utf8',
+);
+
+describe('Dropdown modern skin — the item sheen sweeps with the reading direction', () => {
+  it('mirrors the rest offset on a :dir(rtl) twin declared after the base', () => {
+    const base = SKIN.indexOf(
+      ".ds-dropdown-surface[data-part='surface'] [data-part='item']::after {",
+    );
+    const twin = SKIN.indexOf(
+      ".ds-dropdown-surface[data-part='surface'] [data-part='item']:dir(rtl)::after {\n  transform: translateX(40%);",
+    );
+    expect(base).toBeGreaterThanOrEqual(0);
+    expect(twin).toBeGreaterThan(base);
+  });
+
+  it('mirrors the hover offset on a :dir(rtl) twin declared after the base', () => {
+    const base = SKIN.indexOf(
+      ".ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='hovered'], :hover):not([data-state~='disabled'])::after {",
+    );
+    const twin = SKIN.indexOf(
+      ".ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='hovered'], :hover):not([data-state~='disabled']):dir(rtl)::after {\n  transform: translateX(-40%);",
+    );
+    expect(base).toBeGreaterThanOrEqual(0);
+    expect(twin).toBeGreaterThan(base);
   });
 });

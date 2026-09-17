@@ -152,6 +152,11 @@
   /* Horizontal travel for the direction-aware panel slide (view transitions).
      Kept small: the slide is a cue, not a carousel. */
   --ds-motion-panel-offset: 12px;
+  /* The physical sign each logical panel edge travels on. `translateX` has no
+     logical spelling inside a keyframe, so the reading direction enters the
+     keyframe through these two inherited signs instead. */
+  --ds-vt-panel-start-sign: -1;
+  --ds-vt-panel-end-sign: 1;
 
   /* Pre-composed per-component transitions, re-expressed on the canon primitives.
      These are the ONLY thing modern components reference for multi-property
@@ -334,6 +339,13 @@
 
   /* Stagger increments for lists */
   --delay-stagger-increment: 0.05s; /* 50ms between items */
+}
+
+/* RTL: the reading start is the physical right, so the panel slide's two
+   direction signs swap and every ds-vt-panel keyframe travels with the text. */
+:root:dir(rtl) {
+  --ds-vt-panel-start-sign: 1;
+  --ds-vt-panel-end-sign: -1;
 }
 
 /* ========================================================================
@@ -555,7 +567,7 @@
   }
   to {
     opacity: 0;
-    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+    transform: translateX(calc(var(--ds-vt-panel-start-sign) * var(--ds-motion-panel-offset)));
   }
 }
 
@@ -566,14 +578,14 @@
   }
   to {
     opacity: 0;
-    transform: translateX(var(--ds-motion-panel-offset));
+    transform: translateX(calc(var(--ds-vt-panel-end-sign) * var(--ds-motion-panel-offset)));
   }
 }
 
 @keyframes ds-vt-panel-enter-from-end {
   from {
     opacity: 0;
-    transform: translateX(var(--ds-motion-panel-offset));
+    transform: translateX(calc(var(--ds-vt-panel-end-sign) * var(--ds-motion-panel-offset)));
   }
   to {
     opacity: 1;
@@ -584,7 +596,7 @@
 @keyframes ds-vt-panel-enter-from-start {
   from {
     opacity: 0;
-    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+    transform: translateX(calc(var(--ds-vt-panel-start-sign) * var(--ds-motion-panel-offset)));
   }
   to {
     opacity: 1;
