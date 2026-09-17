@@ -5110,6 +5110,16 @@
      "at": "2026-09-16 16:06",
      "by": "claude-fable-dt",
      "note": "Relevo DT Claude Fable 5.1 (workers Opus) desde HEAD 03519b71e. Reconciliacion de aterrizajes posteriores a la ultima nota: B7 vocabularios 51593e697+b8b8fc6ef (chrome/toolbar 42 canales + chrome/filter-chip; rwp list-toolbar 65->20 con residuo nombrado kernelAuthorableWithoutRest y ladder radios/densidad diferida al owner); suites de causalidad de las 4 familias chrome ef921a859 (palette/radiusScale en filter-panel, palette en column-settings y focusStyle en saved-views/toolbar declarados pero NO probados: deuda registrada, no cerrada); list-toolbar compacto d52369283; family-cut 55e61c96a+ac4dc91dd (maskAlphaStops, variantContract compuesto, fila list-toolbar medida); P-79 Stack/Grid c94ec13f0 con artefactos 03519b71e. Auditoria Codex 03519b71e: cobertura causal parcial (H3), residuo B7 21 nombres, list-toolbar 20 reads; axe con deuda pinneada no es cero. Lote actual B4 data-table: medido en HEAD rwp 94, skeleton hand-made 55 findings, inline paint 19, stateGoverned rojo, 13 parts sin regla, 44 pseudo sin par; fuera de roster. Despachado en tres sublotes con write sets disjuntos: B4-1 deriver chrome/data-table, B4-2 skin+TSX (AnatomySkeleton, partAttributes, inline paint), B4-3 causalidad+fila roster. Brief durable: ui-design-system/audit/quota-handoff-2026-09-16/reports/dt-brief-wave8-2026-09-16.md."
+    },
+    {
+     "at": "2026-09-16 19:30",
+     "by": "claude-fable-dt",
+     "note": "Ola 8 (workers Opus, revision adversaria por lote): B4-1 deriver chrome/data-table (76 canales, rank derived, contrato generado; CHANGES->rename a --ds-data-table-* por la ley de un namespace; queda 'vivo pero no leido' hasta el rename de skins), B4-2 skin+TSX (AnatomySkeleton adoptado, 19 inline paint a custom properties, partAttributes en partes con estado, 44 pseudo pareados, 13 parts huerfanos cerrados; CHANGES: re-pin EmbeddedCssRecovery y decorative-accents pendientes, doble opacidad disabled en wrappers, getPinnedOffsetStyle inline invisible al gate), B4-3 suite de causalidad (11 tests, 6 decisiones con control negativo, 3 consumes declarados inertes registrados: spacing.rhythm, surfaces.controlHeight, roleWeights) + fila roster pinneada a la medicion transitoria rwp=92 (ACCEPT). Auditoria DT propia del arbol compuesto: family-cut OK 64/64, contrato derivers 426/426, tsc limpio. RULINGS DT para la ola 9 (B4-4): R1 namespace --ds-data-table-* para lo producido por la familia; reads de canales producidos por el primitivo Table (--ds-table-*, ~38) se mantienen como consumo cross-family legitimo; 7 canales de geometria runtime en data-table-interactions ratificados como element-scoped. R2 quitar opacity de los wrappers pagination-nav-button/bulk-bar-action (el Button compuesto posee su disabled). R3 shimmer retirado con re-pins en la misma integracion. R5 pinned offsets a custom properties runtime. Punto ciego del ratchet registrado: readWithoutProducer solo escanea skins bajo /engines/modern/ (3 de 4 skins de data-table no escaneados; instrumento, no se toca en este lote)."
+    },
+    {
+     "at": "2026-09-16 21:10",
+     "by": "claude-fable-dt",
+     "note": "B4 data-table INTEGRADO en main: 1f171b2db (deriver chrome/data-table 76 canales --ds-data-table-*, skins renombrados, AnatomySkeleton, inline paint 0 incl. pinned insets, partAttributes/pseudo pareados 44->0, disabled sin doble opacidad, EmbeddedCssRecovery y decorative-accents re-pinneados, ratchet global rwp 641->563, hooks republicado) + 3c376d53e (suite de causalidad 11 tests, 6 decisiones probadas con control negativo, 3 consumes inertes pinneados; fila roster rwp=16 medido). Verificado en arbol quieto por el DT: family-cut 64/64, tsc 0, typecheck:tests 0, 45 archivos/877 tests focales verdes. Revision independiente de las ediciones del DT: ACCEPT tras corregir produced/producers/debtNote del baseline rwp. Residuo nombrado: 16 reads sin producer (3 --ds-density-*, 6 --ds-table-* de decision de pintura/ladder, 7 --ds-typography-* foraneos); punto ciego del ratchet (solo skins /engines/modern/); brazo axe-per-family OWED a WO-GAT-04. B4 NO cierra FAM-08: siguen toolbars residuo B7, widget-board, kanban, calendar-view, file-manager, virtual-list, gallery/grid y las causalidades declaradas no probadas (palette/radius en filter-panel, palette en column-settings, focusStyle en saved-views/toolbar)."
     }
    ]
   },
@@ -5244,6 +5254,16 @@
      "at": "2026-09-16 16:06",
      "by": "claude-fable-dt",
      "note": "Relevo DT Claude Fable 5.1. Estado: gate physical-properties OK con deuda pinneada (slider 6 sitios: 1 defecto RTL del mark label vertical + 5 offsets centrados; dropdown 2; affix 1; overlay positioning 2; engine-styles 1 muerto hacia WO-RET-04) y 6 excepciones nombradas por sitio. Gate verde con deuda no cumple cierre. Despachado: fix del slider (insetInlineStart en los 6 sitios, pin bajado, test RTL medido). Dropdown/affix/offsetMargins: adjudicacion documentada pendiente del DT/owner (memo de opciones pedido al worker; ningun archivo se exime completo)."
+    },
+    {
+     "at": "2026-09-16 19:30",
+     "by": "claude-fable-dt",
+     "note": "Ola 8: slider 6->3 sitios (mark-label y handles verticales a insetInlineStart; tooltip/dot/track revertidos por transforms verticales sin espejo en el skin; test Slider.mark-label-direction 3 casos; ACCEPT tras correccion). ADJUDICACIONES DT (ola 9): affix projectGeometry left: measured.left = excepcion nombrada clase measured-rect (precedente export-button/filter-dropdown/chart-tooltip); overlay positioning offsetMargins x2 = excepciones nombradas bajo NUEVA clase 'physical placement vocabulary' documentada en _comment (la migracion del vocabulario OverlayPlacement a inline-start/end es una WO aparte, no un lote); tooltip vertical del slider en la misma clase si su placement es fisico por contrato; dropdown callerSurfaceStyle left x2: opcion A (dropear el forward fisico) si el conteo de consumidores de overlayStyle.left es cero en core/showroom/apps, opcion B (mapear a inset logico por direccion resuelta) si no; slider: espejos :dir(rtl) en rail/track/dot/tooltip y anclas logicas, pin a 0."
+    },
+    {
+     "at": "2026-09-16 21:10",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 52dff0d6c: slider 5/6 anclas verticales logicas + espejos :dir(rtl) rail/track/dot, tooltip vertical pinneado como DEBT (no excepcion) owed al lote de vocabulario de placement de esta WO (step 1: placement start/end only); dropdown dropea el forward fisico de overlayStyle.left (0 consumidores medidos); affix = excepcion nombrada measured-space; overlay positioning offsetMargins x2 = DEBT owed al mismo lote. Gate OK: debt 4 sitios/3 archivos (engine-styles 1 hacia WO-RET-04, slider 1, positioning 2), inert 9, excepciones 7/7; drill 44/44. Revision independiente de la adjudicacion del DT: ACCEPT. Lo que falta para cerrar: lote de vocabulario de placement logico (OverlayPlacement inline-start/end + position-area logico + tooltip del slider), retiro de engine-styles (WO-RET-04), y la aceptacion completa de la ficha (grep closest('[dir]') = 0, caso Playwright dir=rtl por grupo de familias) por comprobar."
     }
    ]
   },
@@ -5658,6 +5678,16 @@
      "at": "2026-09-16 13:08",
      "by": "opus-worker-L",
      "note": "2026-09-16 opus worker L (quota handoff item 5; registration only, no scope or threshold change): three registrations touch this WO's gates. (1) roadmap/derivation.md, WO-DER-06 POST-CLOSE RESIDUALS table: N4 control-height (bithire button) and tag-radius sit on this WO's shape-axis numerator, N5 hover border and N6 evnto toggle hoverFill on its states axis, and N2 menu ink and R3 mode-palette seeding in the axe-debt identity pins this WO owns (the 08e828982 progress entry). This WO's Files cannot hold their source fix; the receiving WO is open question Q-DER06-RES there, not chosen. (2) roadmap/evidence-graph.md, WO-EVI-01 POST-CLOSE RECONCILIATION: this WO is one candidate (option b) for re-homing programme indicators 2 and 5 under open question Q-IND-2-5, not assigned. (3) The theme-graph source-freshness and real-skin mutant obligation was discharged by implementation (237f39520, 4132f3f51). The structural graph still does not prove causal paint; that proof remains this WO's existing computed-style acceptance."
+    },
+    {
+     "at": "2026-09-16 19:31",
+     "by": "claude-fable-dt",
+     "note": "Q-IND-2-5 resuelta por el DT: opcion (b). Esta WO ahora es owner del measure de los indicadores de programa 2 (Root reach per vertical) y 5 (Modern skins consuming typographic roles): debe publicar packages/core/artifacts/quality/indicators/root-reach/index.json y .../typographic-roles/index.json desde theme-graph by-family.json / by-control.json; hasta entonces STATUS los muestra NOT MEASURED. Registry metrics y evidence-graph.md amendados en el mismo cambio."
+    },
+    {
+     "at": "2026-09-16 19:34",
+     "by": "claude-fable-dt",
+     "note": "CORRECCION de la entrada anterior: Q-IND-2-5 NO queda resuelta. La opcion (b) fue intentada y revertida verbatim porque PROGRAM_INDICATORS en scripts/maintain/roadmap/status/index.mjs vincula ambas metricas a WO-EVI-01 y el checker rechaza otro owner; (b) requiere cambio de maquinaria (tabla + test) en el mismo lote. Esta WO NO es owner de los indicadores 2 y 5 hoy. Decision del owner pendiente entre (a), (b)+maquinaria, (c); registrado en evidence-graph.md."
     }
    ]
   },
@@ -6245,6 +6275,16 @@
      "at": "2026-09-16 16:06",
      "by": "claude-fable-dt",
      "note": "Relevo DT Claude Fable 5.1. Aterrizajes posteriores a la ultima nota: aaaad38be discriminante de transporte gobernado JSON-estable (vocabulario de claves {value, disposition} en las 5 familias; mixed/foreign rechazado; ACCEPT Fable); 480ce5807 rename staticThemePath con ventana supersedida registrada y pin ejecutable 4/4; Codex 03519b71e reconfirma 7/7 nucleo/ingress. NO cerrada: faltan inventario del draft del studio (brand-studio value/onChange, export/round-trip), liftAuthoredTheme callers, docs tenancy/architecture y migraciones; el retype semantico del lowering queda expresamente fuera. Inventario read-only despachado a worker Opus; implementacion solo si el write set es disjunto de data-table/slider y no requiere decision del owner."
+    },
+    {
+     "at": "2026-09-16 19:30",
+     "by": "claude-fable-dt",
+     "note": "Ola 8: inventario (liftAuthoredTheme tiene 3 callers de produccion dentro de la propia puerta preview, no cero; tenant-preview ya migrado; el transporte del studio era el residuo) + implementacion: PatternBrandStudio value/onChange en Theme gobernado (BrandStudioDraft con brazo FlatTheme supersedido), readThemeDraft/projectThemeDraft exportados desde la puerta, serializeThemeDraft/deserializeThemeDraft publicados con ventana supersedida para serializeFlatTheme/deserializeFlatTheme (misma forma que 480ce5807), suite draft-transport 10 tests, docs tenant-authority/contracts/consumer-contract/architecture. Revision: defecto real hallado y corregido (carryDispositions descartaba la primera edicion a una familia retenida; guard liftedFromAuthorship + 2 tests). RATIFICADO por el DT: readThemeDraft(draft, projectedFrom?) con carry de disposiciones (desviacion del brief registrada). ABIERTO, no eximido: brandThemePath (32 ocurrencias/3 archivos) sigue siendo campo serializado; su rename con ventana supersedida es sub-lote propio de esta WO (cambio de datos + regeneracion de manifests/probes); staticBrandThemePath en manifests = regeneracion del DT. Pendientes DT en integracion: contract:generate (+2 nombres publicados; hazard cross-repo: apps deben tomar el snapshot), re-ancla a la baja de ./runtime/visual-authority (73544->73535), showroom theme-builder (ola 9)."
+    },
+    {
+     "at": "2026-09-16 21:10",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 464fc308a: transporte del draft del studio en Theme gobernado (BrandStudioDraft con ventana supersedida flat), readThemeDraft/projectThemeDraft exportados, serializeThemeDraft/deserializeThemeDraft publicados (+7 nombres en suppliers, 0 removidos), guard liftedFromAuthorship (defecto real hallado en revision), docs y showroom; visual-authority re-anclado a la baja 73535 (f61a9da9f). Revision: ACCEPT en pase 2. ABIERTO para cerrar la WO: (1) brandThemePath 32 ocurrencias/3 archivos — sub-lote propio de rename con ventana supersedida + regeneracion de manifests/probes (no eximido); (2) createTenantFlatTheme y preview-css siguen autorando flat (6 sitios) — fuera de este lote, adjudicar si es scope de DER-08 o del retype (b) diferido; (3) hazard cross-repo: apps deben tomar el snapshot regenerado de contracts/runtime/suppliers/index.json; (4) showroom typecheck no demostrable desde este worktree (symlink de node_modules al checkout principal)."
     }
    ]
   }
