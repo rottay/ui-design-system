@@ -12,11 +12,12 @@
  * assuming a path. Adoption is measured at the host.
  *
  * Adopting the kernel is NOT the same as rendering through `FieldOverlayPanel`.
- * The 24 hosts sit behind four measured doors -- 12 family-authored panels
+ * The 24 hosts sit behind five measured doors -- 12 family-authored panels
  * through `FieldOverlayPanel`, 6 through the kernel's own `Portal`, 4 in-tree
  * fixed-positioned by unchanged design (drawer, popconfirm, context-menu,
- * hover-card) and 2 declared `render: 'inline'` -- and this suite pins the
- * door of every family, so no family can change posture silently.
+ * hover-card), 1 declared `render: 'inline'` and 1 that owns no panel at all
+ * and takes the band from the layer manager -- and this suite pins the door of
+ * every family, so no family can change posture silently.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -65,23 +66,21 @@ const FAMILIES = Object.keys(PANEL_HOSTS);
  * route from the kernel. This is a CLOSED, reasoned list, not an open escape
  * hatch, and the suite pins it against what the sources actually declare.
  *
- * Both remaining entries are inline BY DESIGN, not by debt, and neither is a
- * panel pinned to a trigger. `skinBlockers` stays in the shape so a future
- * debt entry must name the tests that pin its in-tree contract as law and can
+ * The remaining entry is inline BY DESIGN, not by debt, and it is not a panel
+ * pinned to a trigger. `skinBlockers` stays in the shape so a future debt
+ * entry must name the tests that pin its in-tree contract as law and can
  * leave this list only together with its skin and those tests; it is empty
  * here because no entry is debt. The last debt entry (`inputs/tree-select`)
- * was drained in WO-CAN-05, so this list is now two rows and the other 22
- * families declare no inline render at all. Where each of those 22 does cross
- * (or deliberately does not cross) a portal boundary is a separate, measured
- * question, answered by {@link OVERLAY_DOORS}.
+ * was drained in WO-CAN-05. `feedback/message` left this list when it stopped
+ * taking the panel door at all: an in-tree stack that pins to nothing takes
+ * the band from the layer manager and declares no render mode -- its posture
+ * is pinned as `stack-only` in {@link OVERLAY_DOORS} instead. Where each of
+ * the other families does cross (or deliberately does not cross) a portal
+ * boundary is a separate, measured question, answered by the same roster.
  */
 const INLINE_RENDERERS: Record<string, { reason: string; skinBlockers: readonly string[] }> = {
   'inputs/upload': {
     reason: 'the preview scrim is a full-viewport child of the field, by design',
-    skinBlockers: [],
-  },
-  'feedback/message': {
-    reason: 'the stack is skin-placed in-tree and owns its own --ds-z-message tier',
     skinBlockers: [],
   },
 };
@@ -99,9 +98,18 @@ const INLINE_RENDERERS: Record<string, { reason: string; skinBlockers: readonly 
  *   the trigger's own subtree and is fixed-positioned, either by its own shell
  *   (drawer) or by the kernel's measured `positionStyle`. Unchanged design,
  *   not F-21 debt: none of these four is a clipped dropdown.
- * - `inline` -- the two {@link INLINE_RENDERERS}.
+ * - `inline` -- the {@link INLINE_RENDERERS}.
+ * - `stack-only` -- the family owns no panel the kernel could place, portal or
+ *   dismiss: it is a skin-placed in-tree region that takes the band and stack
+ *   membership from `runtime/overlay/layer-stack` directly. Every negative law
+ *   below still governs it; only the door differs.
  */
-type OverlayDoor = 'field-overlay-panel' | 'kernel-portal' | 'in-tree-fixed' | 'inline';
+type OverlayDoor =
+  | 'field-overlay-panel'
+  | 'kernel-portal'
+  | 'in-tree-fixed'
+  | 'inline'
+  | 'stack-only';
 
 const OVERLAY_DOORS: Record<string, OverlayDoor> = {
   'inputs/select': 'field-overlay-panel',
@@ -126,7 +134,7 @@ const OVERLAY_DOORS: Record<string, OverlayDoor> = {
   'overlay/tour': 'kernel-portal',
   'display/tooltip': 'kernel-portal',
   'feedback/notification': 'field-overlay-panel',
-  'feedback/message': 'inline',
+  'feedback/message': 'stack-only',
   'feedback/toast': 'field-overlay-panel',
 };
 
@@ -135,13 +143,20 @@ const DOOR_CENSUS: Record<OverlayDoor, number> = {
   'field-overlay-panel': 12,
   'kernel-portal': 6,
   'in-tree-fixed': 4,
-  inline: 2,
+  inline: 1,
+  'stack-only': 1,
 };
 
 /** `<Portal` must not be satisfied by `<PortalScope`, which is not a door. */
 const RENDERS_PANEL = /<FieldOverlayPanel[\s/>]/;
 const RENDERS_PORTAL = /<Portal[\s/>]/;
 const RENDERS_INLINE = /render:\s*'inline'/;
+/**
+ * The panel door itself. It is what separates `in-tree-fixed` from
+ * `stack-only`: both render no panel and no portal, but only one of them asks
+ * the kernel to place a panel.
+ */
+const TAKES_PANEL_DOOR = /useFieldOverlay\(\{/;
 
 /** Fixed-positioned either by its own shell or by the kernel's measurement. */
 const FIXED_POSITION = /position:\s*'fixed'|overlay\.positionStyle/;
@@ -149,30 +164,57 @@ const FIXED_POSITION = /position:\s*'fixed'|overlay\.positionStyle/;
 /** In-tree families whose fixed shell geometry is skin-owned, never inline. */
 const SKIN_POSITIONED = new Set(['feedback/drawer']);
 
+interface DoorTraits {
+  panel: boolean;
+  portal: boolean;
+  inline: boolean;
+  panelDoor: boolean;
+}
+
 /** The traits a source must show -- and must NOT show -- for each door. */
-const DOOR_TRAITS: Record<OverlayDoor, { panel: boolean; portal: boolean; inline: boolean }> = {
-  'field-overlay-panel': { panel: true, portal: false, inline: false },
-  'kernel-portal': { panel: false, portal: true, inline: false },
-  'in-tree-fixed': { panel: false, portal: false, inline: false },
-  inline: { panel: false, portal: false, inline: true },
+const DOOR_TRAITS: Record<OverlayDoor, DoorTraits> = {
+  'field-overlay-panel': { panel: true, portal: false, inline: false, panelDoor: true },
+  'kernel-portal': { panel: false, portal: true, inline: false, panelDoor: true },
+  'in-tree-fixed': { panel: false, portal: false, inline: false, panelDoor: true },
+  inline: { panel: false, portal: false, inline: true, panelDoor: true },
+  'stack-only': { panel: false, portal: false, inline: false, panelDoor: false },
+};
+
+/**
+ * The kernel owner each door reaches, and the call that proves it. Every
+ * family resolves its band and stack membership inside `runtime/overlay/`;
+ * the door decides which rung of that ladder it stands on.
+ */
+const KERNEL_CONTRACT: Record<OverlayDoor, { module: RegExp; call: RegExp }> = {
+  'field-overlay-panel': { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
+  'kernel-portal': { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
+  'in-tree-fixed': { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
+  inline: { module: /runtime\/overlay\/field-overlay/, call: TAKES_PANEL_DOOR },
+  'stack-only': { module: /runtime\/overlay\/layer-stack/, call: /useOverlayLayer\(\{/ },
 };
 
 /** The door a source actually shows, or `ambiguous` for an impossible mix. */
 function measureDoor(source: string): OverlayDoor | 'ambiguous' {
-  const traits = {
-    panel: RENDERS_PANEL.test(source),
-    portal: RENDERS_PORTAL.test(source),
-    inline: RENDERS_INLINE.test(source),
-  };
+  const traits = measureTraits(source);
   const doors = Object.keys(DOOR_TRAITS) as OverlayDoor[];
   return (
     doors.find(
       (door) =>
         DOOR_TRAITS[door].panel === traits.panel &&
         DOOR_TRAITS[door].portal === traits.portal &&
-        DOOR_TRAITS[door].inline === traits.inline,
+        DOOR_TRAITS[door].inline === traits.inline &&
+        DOOR_TRAITS[door].panelDoor === traits.panelDoor,
     ) ?? 'ambiguous'
   );
+}
+
+function measureTraits(source: string): DoorTraits {
+  return {
+    panel: RENDERS_PANEL.test(source),
+    portal: RENDERS_PORTAL.test(source),
+    inline: RENDERS_INLINE.test(source),
+    panelDoor: TAKES_PANEL_DOOR.test(source),
+  };
 }
 
 const stripComments = (source: string): string =>
@@ -194,8 +236,9 @@ describe('useFieldOverlay adoption', () => {
 
   it.each(FAMILIES)('%s resolves its overlay through the kernel', (family) => {
     const source = host(family);
-    expect(source).toMatch(/runtime\/overlay\/field-overlay/);
-    expect(source).toMatch(/useFieldOverlay\(\{/);
+    const contract = KERNEL_CONTRACT[OVERLAY_DOORS[family]];
+    expect(source, `${family} must import its kernel owner`).toMatch(contract.module);
+    expect(source, `${family} must call its kernel door`).toMatch(contract.call);
   });
 
   it.each(FAMILIES)('%s keeps no private document dismiss listener', (family) => {
@@ -236,9 +279,9 @@ describe('useFieldOverlay adoption', () => {
 
   it('declares no inline render outside the closed list', () => {
     // This measures the ABSENCE of `render: 'inline'`, not the portal door;
-    // the door of each of these 22 families is pinned separately below.
+    // the door of each of these 23 families is pinned separately below.
     const rest = FAMILIES.filter((family) => !(family in INLINE_RENDERERS));
-    expect(rest.length).toBe(22);
+    expect(rest.length).toBe(23);
     for (const family of rest) {
       expect(host(family), family).not.toMatch(RENDERS_INLINE);
     }
@@ -252,13 +295,7 @@ describe('useFieldOverlay adoption', () => {
   });
 
   it.each(FAMILIES)('%s leaves through the door it declares', (family) => {
-    const source = host(family);
-    const measured = {
-      panel: RENDERS_PANEL.test(source),
-      portal: RENDERS_PORTAL.test(source),
-      inline: RENDERS_INLINE.test(source),
-    };
-    expect(measured, `${family} changed its overlay posture`).toEqual(
+    expect(measureTraits(host(family)), `${family} changed its overlay posture`).toEqual(
       DOOR_TRAITS[OVERLAY_DOORS[family]],
     );
   });
@@ -313,5 +350,13 @@ describe('useFieldOverlay adoption', () => {
     expect('<Portal container={host}>').toMatch(RENDERS_PORTAL);
     expect('<FieldOverlayPanel overlay={o}>').toMatch(RENDERS_PANEL);
     expect('<FieldOverlayPanelProps>').not.toMatch(RENDERS_PANEL);
+    // The two panel-less doors differ by ONE trait, so the discriminator has
+    // to separate them in both directions or the roster measures nothing.
+    const panelDoorSource = "useFieldOverlay({ kind: 'popover', open });";
+    const layerDoorSource = "useOverlayLayer({ kind: 'toast', active: open });";
+    expect(measureDoor(panelDoorSource)).toBe('in-tree-fixed');
+    expect(measureDoor(layerDoorSource)).toBe('stack-only');
+    expect(layerDoorSource).not.toMatch(TAKES_PANEL_DOOR);
+    expect(layerDoorSource).toMatch(KERNEL_CONTRACT['stack-only'].call);
   });
 });

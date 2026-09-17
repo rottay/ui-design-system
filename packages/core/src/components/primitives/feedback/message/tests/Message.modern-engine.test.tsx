@@ -34,6 +34,22 @@ describe('Message modern engine live region + lifecycle', () => {
     expect(stack).toHaveAttribute('data-placement', 'top');
   });
 
+  it('stack joins the overlay stack and carries the notification band', () => {
+    renderWithEngine(
+      <MessageProvider>
+        <span>child</span>
+      </MessageProvider>,
+      'modern',
+    );
+
+    const stack = screen.getByRole('log');
+    expect(stack).toHaveAttribute('data-overlay-kind', 'toast');
+    expect(stack.getAttribute('data-overlay-layer')).toBeTruthy();
+    expect(stack.style.getPropertyValue('--ds-notifier-layer')).toBe(
+      'var(--ds-z-index-notification)',
+    );
+  });
+
   it('item keeps role=alert with a polite announcement posture', () => {
     renderWithEngine(
       <ModernMessageItem id="m1" type="success" content="Saved" duration={0} />,
