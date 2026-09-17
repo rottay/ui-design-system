@@ -321,3 +321,184 @@ section named above. The standing requirement was met in both directions: the
 declarations, five adapters and eight refusal legs compile clean at TS 5.9.3
 `strict`, and stripping the eight directives yields exactly eight errors, one per
 leg (Appendix B, leg 16).
+
+---
+
+# DnD kernel debrief — revision 5 notes (Codex round-4 HOLD → resolution map)
+
+- Reviewed document: `evidence/dnd-kernel-debrief/index.md` at sha256
+  `3dd9dccff80bcdbafbb2a3000da5b7eb0eabc9e9836eaa243ab8845c24020d0b`
+  (Codex's recorded digest; the document did not move during the review),
+  review-start HEAD `b81e304c9`, review-end HEAD `bdbee769a`.
+- Revision base: `cc5f10739a91c0114eef4df3445f557160d1732c`, branch `main`.
+  HEAD advanced twice after Codex's review ended and **once more during the
+  writing of this revision**, to `fb2f44b4d` (another writer's theme-ingress
+  lot). The thirteen files this revision reads are byte-identical at
+  `cc5f10739`, at `fb2f44b4d` and on disk, and the structure suite is 37/37 at
+  both tips (Appendix B, leg 21). Four rounds running, the base has moved under
+  the review.
+- Write set of this round: `evidence/dnd-kernel-debrief/` only. No product code,
+  no gate code, no `git add`/`commit`/`mv`.
+- Round-4 verdict: **HOLD**, with **B3** and **B4** still resolved at contract
+  level and **thirteen** corrections independently verified as working. Neither
+  the resolutions nor the verified table is reopened. Five items across B1
+  (three), B2 (one) and B5 (one).
+- **This is the last Codex round.** The seat is retired by owner order of
+  2026-09-17; `codex-HOLD-round4-FINAL.txt` is its final artifact and **Kimi
+  reviews revision 5 directly** — compile and execute. There is no round-6 Codex
+  artifact to defer anything to, which is why nothing below is carried on the
+  grounds that a later reviewer will settle it.
+
+**The shape of this round's defect class, stated once because four of the five
+items are instances of it.** Revision 4 diagnosed correctly and then wrote the
+diagnosis *beside* the text that carried the defect instead of replacing it:
+
+| Corrected in prose | Still specified the defect |
+|---|---|
+| §2.2.1(a) stated the two-phase commit rule and the phase table | §2.2.3's authoritative sequence still read `explicit ?? session.target` |
+| Appendix A recorded "the commit sequence now nine steps" | no nine-step sequence was ever written |
+| §2.2.4(d) said the FLIP and focus registrations compose | the same adapter called an undeclared `fromColumnOf` |
+| §2.4.6 claimed the delegated adapter compiles | it compiled against a **scratch** `IconButton`, not the family's |
+| §6.6's D9 row required `dndKernelWired === false` | the closure paragraph three screens down said `true` |
+
+A reviewer who reads the *narrative* sees a resolved packet; a reviewer who
+compiles the *artifact* does not. Codex compiled and executed. The rule this
+round is the evidence for is in §5 below.
+
+## 1. B1 — the terminal sequence, C16, and the kanban snapshot
+
+| # | Round-4 finding | Resolution | Where | Verified by |
+|---|---|---|---|---|
+| 1 | **The authoritative terminal sequence still specifies the round-3 regression.** It reads `destination = explicit ?? session.target`, never invokes the drop-phase resolver, and Appendix A's claimed nine-step replacement is absent. Its refusal branch also contradicts two other passages: `commit()`'s API says a missing destination closes the session, step 2 returns without closing it, and R21 requires a refused pointer drop to close immediately. Executed: `start({key:'a'}); commit()` emits `blocked(no-destination)` and leaves the session open. | **The sequence is replaced, not annotated** — which is what the finding asked for, and the reason no reconciling paragraph sits beside it. `P1-P3` is the pointer branch and it resolves the identity bound on the **receiving** element through `phase: 'drop'`, passing `session.target` in as `current`. `K1-K3` is the keyboard branch: `explicit ?? session.target`, resolver **not invoked**, because there is no receiving element. `T1-T5` is the shared tail (reserve → clear mirror → `onDrop` → pending focus → `dropped`). Both `P3` and `K3` **clear the ref, clear the rendered mirror and emit `blocked('no-destination')` explicitly**, so `commit()`'s doc, the sequence and R21(ii) now state one rule. `origin` is read from the session rather than the entrypoint, so the tail needs no per-path variant. `commit()`'s JSDoc is rewritten to say which branch it is. | **§2.2.3**, §2.2 (`commit`), §2.2.1(a), §7 R21, §6.4 N21 | Executed, Appendix B leg 23: the replaced sequence reproduces all four owners on the self-return case, including kanban's commit. The refused-drop leg shows the source leaving tree's `dragKey` set and the kernel closing (leg 23 leg 4). `start(); commit()` now ends `session === null` with one message. N21 plants revision 4's own refusal branch. |
+| 2 | **C16 is not family-specific.** Kanban's self-drop COMMITS — executed, `onItemMove("a","todo","todo",0)` — so "zero callbacks in all four owners" is false, and C16 contradicts the very adapter it certifies. Separately, tree's source does **not** reject a receiving key equal to the source at drop time; that guard belongs to `dragover`. The R4 adapter applies it before the phase split and therefore **changes tree**: with a retained zone, source commits `{dragNode:a, dropNode:a, dropPosition:1}` and the adapter commits nothing. | Both accepted. C16 becomes a **four-leg matrix** with a per-family row: saved-views 0 (`:229`), column-menu 0 (`moveDraftColumn` `:378`), tree 0 *when a self-hover cleared the zone* (`:826`), kanban **exactly one** (`:249`, no guard, no resolver). Leg 3 is tree's no-self-hover drop and asserts **one callback**. Leg 4 is the ordinary drop, kept as the anti-blanket-refusal control. Tree's resolver is **re-ordered**: the `'drop'` phase runs first and carries no key comparison at all, which is `handleDrop`'s actual guard set; the self check moves inside the hover branch, which is where `:804-807` puts it. **Preservation over declaration** was chosen deliberately — a transport lot whose claim is "no behavior change" is the wrong place to add a refusal — and the alternative is written up as open decision 1, routed to lot 8 if the reviewer takes it. DROP-TIME VALIDATION's self-target sentence becomes a **three-way** table (commits / refuses at drop / refuses at hover). | §2.2.1(a), **§2.2.4(c)** correction 4, §2.2.3, **§6.3 C16**, §7 R21(iii), §6.4 N22 | Executed, Appendix B leg 23: leg 1 gives 0/0/1/0 callbacks across saved-views/column-menu/kanban/tree, with kanban's tuple identical on both sides; leg 2 gives 1 callback from both the tree source and the R5 adapter and **0** from the R4 adapter. Source re-read: tree `:824-826` (the guard is `dragKey === null \|\| !dropTarget`), `:804` (the key comparison), kanban `:249`. |
+| 3 | **Kanban's source-column snapshot has no producer.** The source records `fromColumn` at drag start and passes the saved value at drop; the adapter retains only `{key}` and calls an undeclared `fromColumnOf(payload.key)` at commit. A current-column lookup diverges: with the parent moving `x` from `todo` to `doing` mid-drag, source gives `("x","todo","done",0)` and the adapter gives `("x","doing","done",0)`. The four-argument contract includes **when** its arguments were captured. | `TPayload` becomes `{ key: string; fromColumn: string }` — the **start column rides in the payload**, and `getSourceProps({ key: itemKey(item), fromColumn: column.id })` binds it at the same JSX site the family's `handleDragStart(e, item, columnId)` closure binds it. The kernel copies `payload` into the session **inside `onDragStart`**, so the capture instant is `setDragData({itemId, fromColumn: columnId})`'s (`:222-228`) and the session then holds a value a re-render cannot change. `fromColumnOf` is deleted from the document and the harness. The licence is already in the contract: `DragPayload` is a *constraint* and the kernel "never inspects it beyond `key`". The `'immediate'` keyboard path lands on the same value from the other side — no session, so the payload is the current render's, which is `applyMove`'s `columns[columnIndex].id` (`:271`, `:296`). | **§2.2.4(d)**, §6.3 C21, §2.2.6 R-9, §2.6 (`crossedContainer` note), §6.4 N23 | Executed, Appendix B leg 24: source `("x","todo","done",0)`, R4 `("x","doing","done",0)`, R5 `("x","todo","done",0)`. **And the control that explains why this needed a case:** the same drag without the mid-drag reparent gives `("x","todo","done",0)` from all three, so the quiet drag is green on the defect. Type side: stripping R-9's directive yields `TS2339: Property 'fromColumn' does not exist on type '{ key: string; }'` (leg 22). |
+
+## 2. B2 — the delegated adapter against the real component
+
+| # | Round-4 finding | Resolution | Where | Verified by |
+|---|---|---|---|---|
+| 4 | **The "complete" delegated adapter does not compile against its actual component.** The document supplies `aria-label` to both move controls. ColumnMenu's local `IconButton` requires `label: string`, consumes it and writes `aria-label={label}` internally; it forwards no incoming `aria-label`. In-memory compilation gave **two TS2741s**. The retained scratch adapter already used `label`, which is why its green compilation established nothing about the document. | The document uses the **real contract**: `label` plus the required icon `children` (`<NavigationUpIcon size={14} decorative />`), in the family's own three-part label spelling — `${tOr("columnMenu.moveUp","Move")} ${column.title} ${tOr("columnMenu.upSuffix","up")}` (`:894-896`) — so the accessible name a screen-reader user hears is **unchanged by the lot** and only `disabled`/`onClick` differ from `:893-911`. The harness's scratch declaration is replaced by the source contract verbatim, including required `children`, so the file that compiles is the text the document shows. A named consequence is added: passing `aria-label` would not merely fail to type-check, it would render both controls **nameless** — and §6.2's drill now asserts the accessible name by role, not a prop. | **§2.4.6**, §6.2 | Both directions, Appendix B leg 22. (A) Codex's finding reproduced: the R4 text with children restored gives `TS2741` at `(23,6)` and `(27,6)`, exit 2; `aria-label` → `label` gives zero diagnostics. (B) The R5 text, in the full harness with the real contract: **zero diagnostics**. The scratch/real difference is recorded in the leg so the false green cannot recur silently. |
+
+## 3. B5 — the F-69 instrument's false green
+
+| # | Round-4 finding | Resolution | Where | Verified by |
+|---|---|---|---|---|
+| 5 | **Attachment plus a zero count still permits a false green.** (a) The attachment predicate counts a JSX spread without checking whether later props overwrite its handlers; Codex's counterexample compiles, the kernel's handlers run **0** times and the independent upload handler runs once, and the specified predicates report `wired=true`, both counts `0`, blocking `false`, closure `true` — the kernel bypassed and the consolidation proof passing. (b) The drop-zone count requires independent hover state, excluding stateless independent file-drop handling. (c) D11: passing a bag to a child is not evidence the child consumes it. (d) The closure paragraph says the original decoy is wired, contradicting D9's explicit `false`. | Four changes, each aimed at one clause. **(a)** Attachment becomes **effective and positional**, stated as the rule the JSX transform itself applies: for each element carrying a kernel spread, nothing after it may name `draggable`, `onDragStart`, `onDragEnd`, `onDragOver`, `onDragLeave`, `onDrop`, `onPointerCancel` or `onKeyDown` — not a later **attribute** (D15, Codex's), not a later **spread with enumerable keys** (D18), not an **overriding key in a merge literal** that produced the spread local (D16). Writing the rule surfaced that third shape, which the finding did not name and which the repository **does** ship: `ViewPill` (`saved-views:73-83`) and `StatefulRow` (`column-menu:1124-1125`) are both `{...rest}` followed by `{...interaction.handlers}`, so a predicate that only watched later *attributes* would have missed the one live form. A later spread whose keys are not enumerable is `SPREAD-UNVERIFIED`: printed, not effective, blocking arm fires (D19, fail-closed by open decision 4). An attribute or spread *before* the kernel spread is overwritten **by** the kernel and is explicitly not a defect (D17 is that control). This is an AST walk in the file's existing idiom — `family-cut/index.mjs` already imports `typescript` and parses with `ts.createSourceFile(..., ScriptKind.TSX)` (`:68`, `:442`). **(b)** The hover-state conjunct is **removed**: it was a sufficient signal, never a necessary one, and both real owners still count. **(c)** D11 credits the **pair** — the child must be in the family's census and spread the bag under the same positional rule — and unresolvable delegation is printed `DELEGATED-UNVERIFIED` rather than counted in either direction (D14), so a family whose only wiring is unverified cannot close the criterion. **(d)** The closure paragraph is rewritten to agree with D9 and carries a four-row decoy table. One addition the finding did not ask for but the arm needs: the blocking condition is gated on a new **`dndKernelDeclared`**, because the ungated form is red on every un-adopted family the day it lands, which would force the gate to be disabled. | **§6.6**, §6.4 N24, open decisions 3 and 4 | Executed and measured per file, Appendix B leg 25 — one file per shape, because the gate's granularity is the file. All five decoy files **compile** (exit 0). Executed kernel-handler calls and surviving kernel keys: d15 **0** calls / **no** keys survive (Codex's reported result exactly); d16 **2** / `onDragOver`+`onDragLeave`; d18 **1** / `onDragLeave`; d19 **2** / `onDragOver`+`onDragLeave`; d17 (control) **3** / all three. **All five are GREEN under R4's predicates; only the control is GREEN under R5's.** d16 and d19 are RED on the blocking arm alone, which proves the arm is not redundant with the ratchets; d15 and d18 are RED on both. The spread of surviving-key counts (0, 1, 2) is also why the walk is **per key** rather than per element: "did any kernel handler run?" is green on three of the four decoys. |
+
+## 4. The base moved again, and one file mattered
+
+Codex noted HEAD advancing from `b81e304c9` to `bdbee769a` during its review and
+that "SavedViews gained `ViewPill`, with its drag handlers unchanged". Re-measured
+at `cc5f10739`: **12 of the 13 files this revision reads are byte-identical at
+the revision-4 base, at Codex's review HEAD, at this HEAD and on disk.** The one
+that moved is `saved-views/engines/modern/index.tsx`, through `8fb516981`.
+
+Three consequences, none of them a behavioral claim:
+
+1. **Every saved-views citation is re-anchored.** `ViewPill` shifted the handler
+   region by exactly **+19** lines and the JSX region by exactly **+18**,
+   measured rather than assumed. Fifteen citation sites were re-read and
+   corrected (`:200-202 → :219-221`, `:207 → :226`, `:210 → :229`,
+   `:213`/`:214 → :233`, `:324 → :342`, `:325 → :343`, `:327 → :345`,
+   `:330 → :348`, `:207-224 → :226-243`). The handlers are byte-identical, so
+   nothing this packet says about saved-views' behavior changes — only its
+   address. Revision 4's "DIRTY ON DISK" note is discharged: the file is
+   committed and clean.
+2. **R22 stops being conditional.** It said "if `ViewPill` lands, the boundary
+   repair joins lots 6a/6b as lot 6c". It landed. Lot 6c is now a **required**
+   row in §3.2, and lot 1's PRE-pin acquires one assertion (the pill's
+   pre-repair `pressed`) that revision 4 recorded as "no pin needed".
+3. **R18 becomes a family of two, and that is why §6.6's rule is positional.**
+   `ViewPill` spreads `{...rest}` and *then* `{...interaction.handlers}`, the
+   same order as `StatefulRow` (`:1124-1125`). `useInteractionState` exposes six
+   pointer/focus handlers and **no** drag handler (`:36-41`), so the drag props
+   survive both spreads today — the shape is live in the repository, the DnD
+   defect is not. An attachment predicate that ignored attribute order would be
+   wrong about this shape the moment anyone adds a drag handler to it.
+
+The structure gate's suite was re-run rather than quoted: **37/37**,
+`rankedChildren` pin still `98`. Three consecutive rounds of receipt decay is why
+§3.1 states a rule ("re-measure at the lot's own pre-lot commit") instead of a
+number, and this re-measurement is that rule being obeyed.
+
+## 5. The rule this round is the evidence for
+
+**A correction is not resolved until the authoritative text says it.** Every
+other rule this file has recorded was about *finding* a defect — execute the
+handler, aim the mutation at the owning boundary, don't accept a green the
+platform guarantees. This one is about *landing* a fix, and it cost a whole round
+on its own:
+
+> When a packet corrects a rule, the correction must **replace** the text that
+> carries the rule. A new section that states the right rule, a table that
+> illustrates it, and a dispositions row that claims the replacement happened are
+> three descriptions of a fix, not the fix. If two passages can both be read as
+> normative and they disagree, the packet specifies the defect — and a reviewer
+> is entitled to act on either one.
+
+The four checks that would have caught all five items, in order of cost:
+
+1. **Grep your own document for the text you claim to have replaced.** Searching
+   for `explicit ?? session.target` would have found the surviving sequence in
+   one second. Revision 4 changed it in §2.2.1(a) and left it in §2.2.3.
+2. **Compile the document's text, not a harness approximation of it.** The
+   `IconButton` harness declaration was *close enough to read the same* and had a
+   different required-prop set. If a declaration in the harness is not copied
+   from the source file, it is a second authority on that component's contract.
+3. **Grep the harness for `declare` names that the document does not produce.**
+   `declare function fromColumnOf(key: string): string` is the whole defect in
+   one line: a stand-in for a producer that does not exist, which makes the
+   adapter compile and the behavior wrong.
+4. **Apply a predicate to its own counterexample before claiming it holds.** The
+   F-69 attachment rule was stated, then asserted to resist evasion, and never
+   run against an evasion. Codex wrote three lines of JSX and it failed.
+
+A fifth, earned twice in one leg while writing the F-69 walk: **when a predicate
+and the executed behavior disagree, the executed behavior is right and the
+predicate is the defect.** Both corrections are recorded in Appendix B leg 25
+rather than quietly fixed:
+
+- the first walk measured per *function slice*, which put a shape's `const` out
+  of scope and reported an **enumerable** later spread as unverifiable. The fix
+  is to measure at the gate's real granularity — one file per owner;
+- the second had a **dangling `else`** inside the later-spread loop, so
+  `unverified` was never assigned and D19's opaque `{...rest}` read as
+  *effective*. Nothing in the predicate's own output looked wrong; the disagreement
+  with the runtime column is the only thing that exposed it.
+
+Neither was a contract defect, and that is the point: an instrument written to
+catch a false green produced two of its own inside one afternoon, and only the
+execution leg caught them. A drill row (**D18**) now pins the first and the
+`unverified` printout pins the second.
+
+A sixth, specific to this packet's subject: **an assertion that is green on the
+quiet case is not an assertion.** Both of this round's behavioral defects —
+kanban's `fromColumn` and tree's self-drop — are invisible unless the test
+disturbs something (a parent re-render mid-drag; a drop with no intervening
+`dragover`). C21 and C16 leg 3 are written to disturb it, and both are pinned on
+**callback count** rather than on resulting data, because the defective and
+correct readings produce the same array.
+
+## 6. Carried, not resolved
+
+Unchanged from revision 4 — tree's Move affordance (A3, lot 8), the
+source-removal session leak (C14), `crossAxis === orientation` as a dev-time
+refusal, registering the browser leg in `gates:ci`, Fable's independent review,
+and the closure-inventory D15 / `useAriaAnnounce` / FAM-13-depth /
+constitution-drift items. The two reviewer decisions carried out of revision 4
+(whether `pressCancel` survives; whether column-menu's move controls lose
+`disabled`) are still open and still the reviewer's. Added this round:
+
+| Item | Owner | Why it cannot close here |
+|---|---|---|
+| Whether tree gains a drop-time self-refusal | reviewer | Revision 5 **preserves** the commit, because adding a refusal inside a transport lot contradicts that lot's own claim. But committing `{dragNode:a, dropNode:a, dropPosition:1}` is very likely a latent consumer bug, so the refusal is probably right *product* behavior in the wrong *lot*. Open decision 1 routes it to lot 8 with its own pin if the reviewer takes it. |
+| The browser receipt for the negotiated-operation arm | lot 0 | Unchanged from revision 4: the two-arm measurement is specified and the harness's write set is named, but no Playwright run is recorded in this packet. The copy-only arm is the control that can fail and it has not been run. |
+| Whether the F-69 blocking arm's `dndKernelDeclared` gate is the right shape | reviewer | Taken here (open decision 3) so the arm is green at HEAD and therefore shippable. The alternative — an explicit per-family adoption roster in the gate config — is a second place to keep the truth, which is the failure mode invariant 7 exists to prevent. |
+
+**Nothing in the round-5 brief was unresolvable.** All five blocking groups are
+answered in the contract text at the sections named above, every round-4 executed
+repro was re-executed and lands on the corrected side, and the standing compile
+requirement is met in both directions: the declarations, five adapters (including
+the delegated one against the **real** `IconButton`) and **nine** refusal legs
+compile clean at TS 5.9.3 `strict`, and stripping the nine directives yields
+exactly nine errors, one per leg (Appendix B, leg 22).
