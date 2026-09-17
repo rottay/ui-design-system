@@ -9,5 +9,5 @@ export const CommunicationReplyIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyp
   name: "communication.reply",
   componentName: "CommunicationReplyIcon",
   defaultRole: "control",
-  autoMirror: false,
+  autoMirror: true,
 });

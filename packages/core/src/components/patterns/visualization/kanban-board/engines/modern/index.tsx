@@ -361,8 +361,10 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     };
   }, [loading, columns.length]);
 
-  /* Touch move rail descriptors: the intent stays logical, only the inline
-     glyph mirrors so the arrow points where the card will actually go. */
+  /* Touch move rail descriptors: the intent stays logical and the glyph is
+     logical too. navigation.back/forward declare autoMirror, so the icon skin
+     flips them under :dir(rtl); swapping the two here as well would mirror
+     twice and point the arrow back the wrong way. */
   const moveControls: ReadonlyArray<{
     intent: KanbanMoveIntent;
     label: string;
@@ -381,20 +383,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     {
       intent: 'prev-column',
       label: tOr('kanbanBoard.move_prev_column', 'Move to previous column'),
-      icon: direction === 'rtl' ? (
-        <NavigationForwardIcon decorative size={14} />
-      ) : (
-        <NavigationBackIcon decorative size={14} />
-      ),
+      icon: <NavigationBackIcon decorative size={14} />,
     },
     {
       intent: 'next-column',
       label: tOr('kanbanBoard.move_next_column', 'Move to next column'),
-      icon: direction === 'rtl' ? (
-        <NavigationBackIcon decorative size={14} />
-      ) : (
-        <NavigationForwardIcon decorative size={14} />
-      ),
+      icon: <NavigationForwardIcon decorative size={14} />,
     },
   ];
 

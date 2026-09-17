@@ -6,6 +6,16 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { DSIconComponent, DSIconProps } from '../../../../foundation/contracts';
+import { ReplyIcon } from '../../../../presentation/catalog/action';
+import { Undo2Icon, WorkflowIcon } from '../../../../presentation/catalog/compatibility';
+import {
+  ArrowLeftIcon,
+  ArrowUpIcon,
+  ChevronRightIcon,
+  ExternalLinkIcon,
+  HomeIcon,
+} from '../../../../presentation/catalog/navigation';
+import { LogOutIcon } from '../../../../presentation/catalog/user';
 import { createPhosphorCompatibilityIcon } from '..';
 
 type WeightProbeProps = SVGProps<SVGSVGElement> & {
@@ -106,6 +116,66 @@ describe('createPhosphorCompatibilityIcon', () => {
       expect(screen.getByTestId('weight')).toHaveAttribute('data-resolved-weight', expectedWeight);
       unmount();
     }
+  });
+
+  it('declares RTL mirroring for directional legacy exports only', () => {
+    render(
+      <>
+        <ArrowLeftIcon data-testid="arrow-left" />
+        <ChevronRightIcon data-testid="chevron-right" />
+        <ArrowUpIcon data-testid="arrow-up" />
+        <HomeIcon data-testid="home" />
+      </>,
+    );
+
+    expect(screen.getByTestId('arrow-left')).toHaveAttribute('data-icon-mirrored', 'auto');
+    expect(screen.getByTestId('chevron-right')).toHaveAttribute('data-icon-mirrored', 'auto');
+    expect(screen.getByTestId('arrow-up')).not.toHaveAttribute('data-icon-mirrored');
+    expect(screen.getByTestId('home')).not.toHaveAttribute('data-icon-mirrored');
+  });
+
+  it('derives the mirroring decision from the supplier glyph, not the export name', () => {
+    render(
+      <>
+        <ReplyIcon data-testid="reply" />
+        <Undo2Icon data-testid="undo2" />
+        <LogOutIcon data-testid="log-out" />
+      </>,
+    );
+
+    // None of these export names spells a side; their suppliers
+    // (ArrowBendUpLeft, ArrowUUpLeft, SignOut) all do.
+    expect(screen.getByTestId('reply')).toHaveAttribute('data-icon-mirrored', 'auto');
+    expect(screen.getByTestId('undo2')).toHaveAttribute('data-icon-mirrored', 'auto');
+    expect(screen.getByTestId('log-out')).toHaveAttribute('data-icon-mirrored', 'auto');
+  });
+
+  it('holds a frozen-prefix export to its unflagged semantic twin', () => {
+    render(
+      <>
+        <ExternalLinkIcon data-testid="external-link" />
+        <WorkflowIcon data-testid="workflow" />
+      </>,
+    );
+
+    // ArrowSquareOut and FlowArrow owe a mirror, but their corpus rows sit in
+    // the fingerprinted v4 prefix and stay unflagged; the two facades must not
+    // disagree on the same glyph.
+    expect(screen.getByTestId('external-link')).not.toHaveAttribute('data-icon-mirrored');
+    expect(screen.getByTestId('workflow')).not.toHaveAttribute('data-icon-mirrored');
+  });
+
+  it('keeps the legacy element in the class the mirroring rule selects on', () => {
+    render(<ArrowLeftIcon data-testid="classed" />);
+    const element = screen.getByTestId('classed');
+
+    expect(element.getAttribute('class')?.split(/\s+/)).toContain('rottay-icon');
+    expect(element).toHaveAttribute('data-icon-mirrored', 'auto');
+  });
+
+  it('lets a call site override the declared mirroring channel', () => {
+    render(<ArrowLeftIcon data-testid="override" data-icon-mirrored="false" />);
+    expect(screen.getByTestId('override')).toHaveAttribute('data-icon-mirrored', 'false');
   });
 
   it('applies the resolved weight to a real SSR glyph without adding a public weight prop', () => {

@@ -12,6 +12,10 @@ import React, { forwardRef } from "react";
 import type { ComponentType, RefAttributes, SVGProps } from "react";
 
 import { ICON_SIZE_MAP } from "../../../foundation";
+import {
+  FROZEN_CORPUS_PREFIX_EXPORTS,
+  mirrorsInRtl,
+} from "../../../foundation/directionality";
 import type {
   DSIconComponent,
   DSIconProps,
@@ -72,13 +76,40 @@ function resolveSize(size: IconSize | string | undefined): string | number {
 }
 
 /**
+ * Every pinned Phosphor SSR glyph carries its own supplier name in
+ * `displayName` (`ArrowUUpLeftIcon`). Falls back to the DS export name only
+ * for a non-Phosphor probe component.
+ */
+function resolveSupplierName(
+  SourceComponent: PhosphorSsrGlyph,
+  fallback: string
+): string {
+  const supplied = (SourceComponent as { displayName?: string }).displayName;
+  return typeof supplied === "string" && supplied.length > 0
+    ? supplied
+    : fallback;
+}
+
+/**
  * Wraps one SSR glyph without leaking Phosphor's weight, mirrored, or alt
  * props through the named-icon compatibility API.
  */
 export function createPhosphorCompatibilityIcon(
   SourceComponent: PhosphorSsrGlyph,
-  displayName: string
+  displayName: string,
+  supplierName: string = resolveSupplierName(SourceComponent, displayName)
 ): DSIconComponent {
+  /**
+   * Legacy exports keep Phosphor's `mirrored` prop stripped; RTL mirroring is
+   * declared here and painted by the icon skin, so no call site changes. The
+   * decision reads the SUPPLIER glyph, never the published export name: the
+   * catalog renames freely (`Undo2Icon` supplies `ArrowUUpLeft`), so keying on
+   * the export would leave the drawn arrow unmirrored.
+   */
+  const mirrorMarker =
+    mirrorsInRtl(supplierName) && !FROZEN_CORPUS_PREFIX_EXPORTS.has(displayName)
+      ? "auto"
+      : undefined;
   const DSIcon = forwardRef<SVGSVGElement, DSIconProps>((props, ref) => {
     const {
       size = "md",
@@ -110,6 +141,7 @@ export function createPhosphorCompatibilityIcon(
         weight: resolvePhosphorWeight(strokeWidth),
         className: `rottay-icon ${className}`.trim(),
         style,
+        "data-icon-mirrored": mirrorMarker,
         ...rest,
         "aria-hidden": hasAccessibleName ? undefined : ariaHidden ?? true,
         "aria-label": ariaLabel ?? title,

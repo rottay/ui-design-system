@@ -120,4 +120,38 @@ describe('KanbanBoard (modern) coarse-pointer move rail', () => {
 
     expect(onItemMove).toHaveBeenCalledWith('task-1', 'todo', 'doing', 0);
   });
+
+  /**
+   * navigation.back/forward carry `autoMirror`, so the icon skin already flips
+   * them under :dir(rtl). The engine must therefore keep the logical glyph on
+   * each control: swapping them here too would mirror twice and point the
+   * arrow at the wrong column.
+   */
+  it('mirrors the column-move glyphs exactly once under RTL', () => {
+    mockMatchMedia(390);
+    renderBoard(vi.fn(), undefined, 'rtl');
+
+    const rail = within(railFor('A'));
+    const previous = rail.getByLabelText('Move to previous column').querySelector('svg');
+    const next = rail.getByLabelText('Move to next column').querySelector('svg');
+
+    expect(previous).toHaveAttribute('data-icon-name', 'navigation.back');
+    expect(next).toHaveAttribute('data-icon-name', 'navigation.forward');
+    expect(previous).toHaveAttribute('data-icon-mirrored', 'auto');
+    expect(next).toHaveAttribute('data-icon-mirrored', 'auto');
+  });
+
+  it('keeps the same logical glyphs under LTR', () => {
+    mockMatchMedia(390);
+    renderBoard();
+
+    const rail = within(railFor('A'));
+    expect(
+      rail.getByLabelText('Move to previous column').querySelector('svg'),
+    ).toHaveAttribute('data-icon-name', 'navigation.back');
+    expect(rail.getByLabelText('Move to next column').querySelector('svg')).toHaveAttribute(
+      'data-icon-name',
+      'navigation.forward',
+    );
+  });
 });

@@ -9,5 +9,5 @@ export const DataPipelineIcon = /* @__PURE__ */ createSemanticIcon(SsrGlyph, {
   name: "data.pipeline",
   componentName: "DataPipelineIcon",
   defaultRole: "feature",
-  autoMirror: false,
+  autoMirror: true,
 });

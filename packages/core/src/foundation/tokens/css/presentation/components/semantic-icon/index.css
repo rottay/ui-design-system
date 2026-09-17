@@ -45,6 +45,12 @@
   transform: scaleX(-1);
 }
 
+/* The compatibility catalog carries only .rottay-icon; it declares the same channel. */
+.rottay-icon[data-icon-mirrored='auto']:dir(rtl) {
+  transform: scaleX(-1);
+  transform-origin: center;
+}
+
 .rottay-semantic-icon[data-icon-state='busy'],
 .rottay-semantic-icon[data-icon-name='status.loading'] {
   animation: ds-icon-semantic-busy var(--ds-icon-busy-duration) linear infinite;

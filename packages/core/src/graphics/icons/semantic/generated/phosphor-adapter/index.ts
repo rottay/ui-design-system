@@ -7,7 +7,7 @@ export const GENERATED_PHOSPHOR_PROVENANCE = Object.freeze({
   packageName: "@phosphor-icons/react",
   packageVersion: "2.1.10",
   rendering: "local-ssr",
-  manifestFingerprint: "ef5bd474b9ac7e275689478cf3a7f257f9c7e305dd6032cdf1e871011e94addf",
+  manifestFingerprint: "0976196602059d750f489680c5909edcc962a46b3a6bb375ae34d89871b027fb",
 } as const);
 
 export interface GeneratedPhosphorAdapterEntry {
