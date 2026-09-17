@@ -5215,6 +5215,11 @@
      "at": "2026-09-17 15:29",
      "by": "kimi-dt",
      "note": "INTEGRADO W12 (c43433737, sweep tipografico: 15 sitios/9 nombres --ds-typography-* -> --ds-type-* con equivalencia de reposo medida contra artefactos; residuo nombrado: 5 sitios con razon, decision-comparison x8 a su familia, y DEFECTO REAL de productor: typography.families.display de bithire nunca alcanza el deriver — W14 despachado a la lane de derivacion). Debrief DnD: ronda 2 Codex HOLD (adapters que no tipean en memoria, reconciliacion foreign-drag de column-menu refutada por ejecucion, entrada de sesion delegated ausente, press-route hipotetica); ronda 3 (W9c) despachada con instruccion de que los snippets TS tipeen. Regla del programa confirmada: el ciclo de debrief esta funcionando (EVI-05 tomo 3 rondas)."
+    },
+    {
+     "at": "2026-09-17 15:47",
+     "by": "kimi-dt",
+     "note": "F-81 OLA B INTEGRADA 051232cba + fix del DT 2008fbdea (mock Blob del kernel; Codex ACCEPT — mi escritura con revision independiente como manda la regla). Glifo de ciclo de vida extraido a patterns/foundation/active-filter-state-glyph (marker de anatomia queda del llamador; leccion del censo aplicada). CountPill x2 NO extraido: construido, medido, revertido — el censo de partes lee por archivo y un owner compartido haria la regla del skin invisible (instrumento, documentado). AUTO-REPORTE DT: integre el kernel W5 sin correr typecheck:tests; el rojo se detecto en la entrega de W13 y se reparo con revision Codex. La cadena de integracion del DT ahora incluye typecheck:tests SIEMPRE. Despachados W15 (residuo de censo de partes de las 8 familias del inventario) y W16 (re-ancla de fixtures stale del structure gate con provenance por commit)."
     }
    ]
   },
