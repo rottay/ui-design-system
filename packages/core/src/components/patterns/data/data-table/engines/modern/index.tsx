@@ -146,6 +146,13 @@ function chainHandler<E>(
  * The interaction triad for one part, decided by the anatomy kernel. A repeated
  * part cannot call the hook in a loop, so each stateful part below is its own
  * element; the caller's handlers keep running, the kernel's run after them.
+ *
+ * Parts keep the hook result as ONE value and spread `part.handlers`: the arc09
+ * inline-paint scan cannot resolve an object-binding pattern initialised by a
+ * file-local call, so destructuring `{ state, handlers }` makes a paint-free
+ * handler bag read as opaque (nine false sites against a zero-locked counter).
+ * A property access resolves into the returned literal and still fails closed
+ * if that bag ever stops being paint-free.
  */
 function useStatefulPart<E extends Element>(
   props: React.DOMAttributes<E>,
@@ -190,18 +197,26 @@ type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   DataAttributes;
 
 function BodyRow({ children, ...rest }: RowProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLTableRowElement>(rest);
+  const part = useStatefulPart<HTMLTableRowElement>(rest);
   return (
-    <tr {...rest} {...handlers} {...partAttributes("body-row", state)}>
+    <tr
+      {...rest}
+      {...part.handlers}
+      {...partAttributes("body-row", part.state)}
+    >
       {children}
     </tr>
   );
 }
 
 function ColumnHeaderCell({ children, ...rest }: CellProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLTableCellElement>(rest);
+  const part = useStatefulPart<HTMLTableCellElement>(rest);
   return (
-    <th {...rest} {...handlers} {...partAttributes("header-cell", state)}>
+    <th
+      {...rest}
+      {...part.handlers}
+      {...partAttributes("header-cell", part.state)}
+    >
       {children}
     </th>
   );
@@ -209,9 +224,13 @@ function ColumnHeaderCell({ children, ...rest }: CellProps): React.ReactElement 
 
 /** A cell that opens an editor under the pointer, so its own hover is painted. */
 function EditableDataCell({ children, ...rest }: CellProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLTableCellElement>(rest);
+  const part = useStatefulPart<HTMLTableCellElement>(rest);
   return (
-    <td {...rest} {...handlers} {...partAttributes("data-cell", state)}>
+    <td
+      {...rest}
+      {...part.handlers}
+      {...partAttributes("data-cell", part.state)}
+    >
       {children}
     </td>
   );
@@ -226,39 +245,51 @@ function DataCell({ children, ...rest }: CellProps): React.ReactElement {
 }
 
 function ResizeHandle({ children, ...rest }: SlotProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  const part = useStatefulPart<HTMLSpanElement>(rest);
   return (
-    <span {...rest} {...handlers} {...partAttributes("resize-handle", state)}>
+    <span
+      {...rest}
+      {...part.handlers}
+      {...partAttributes("resize-handle", part.state)}
+    >
       {children}
     </span>
   );
 }
 
 function DragGrip({ children, ...rest }: SlotProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  const part = useStatefulPart<HTMLSpanElement>(rest);
   return (
-    <span {...rest} {...handlers} {...partAttributes("drag-grip", state)}>
+    <span
+      {...rest}
+      {...part.handlers}
+      {...partAttributes("drag-grip", part.state)}
+    >
       {children}
     </span>
   );
 }
 
 function ExpandButtonSlot({ children, ...rest }: SlotProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  const part = useStatefulPart<HTMLSpanElement>(rest);
   return (
-    <span {...rest} {...handlers} {...partAttributes("expand-button", state)}>
+    <span
+      {...rest}
+      {...part.handlers}
+      {...partAttributes("expand-button", part.state)}
+    >
       {children}
     </span>
   );
 }
 
 function PageButtonSlot({ children, ...rest }: SlotProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  const part = useStatefulPart<HTMLSpanElement>(rest);
   return (
     <span
       {...rest}
-      {...handlers}
-      {...partAttributes("pagination-page-button", state)}
+      {...part.handlers}
+      {...partAttributes("pagination-page-button", part.state)}
     >
       {children}
     </span>
@@ -266,11 +297,15 @@ function PageButtonSlot({ children, ...rest }: SlotProps): React.ReactElement {
 }
 
 function PinToggle({ children, ...rest }: IconButtonProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLButtonElement>(rest, {
+  const part = useStatefulPart<HTMLButtonElement>(rest, {
     disabled: rest.disabled,
   });
   return (
-    <button {...rest} {...handlers} {...partAttributes("pin-toggle", state)}>
+    <button
+      {...rest}
+      {...part.handlers}
+      {...partAttributes("pin-toggle", part.state)}
+    >
       {children}
     </button>
   );
@@ -280,14 +315,14 @@ function HideColumnButton({
   children,
   ...rest
 }: IconButtonProps): React.ReactElement {
-  const { state, handlers } = useStatefulPart<HTMLButtonElement>(rest, {
+  const part = useStatefulPart<HTMLButtonElement>(rest, {
     disabled: rest.disabled,
   });
   return (
     <button
       {...rest}
-      {...handlers}
-      {...partAttributes("hide-column-button", state)}
+      {...part.handlers}
+      {...partAttributes("hide-column-button", part.state)}
     >
       {children}
     </button>

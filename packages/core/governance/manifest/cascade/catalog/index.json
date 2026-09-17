@@ -1398,7 +1398,7 @@
       "rootId": "motion.intensity",
       "group": "movimiento-perfil",
       "channel": "--ds-motion-intensity",
-      "channelStatus": "solo-artefacto",
+      "channelStatus": "existe",
       "assignments": {
         "total": 3,
         "rottay": 1,
@@ -1417,11 +1417,11 @@
         }
       },
       "derivation": "Escalar que modula desplazamiento y escala de cada entrada: transform: translateY(calc(var(--ds-motion-offset-in) * var(--ds-motion-intensity, 1))) scale(calc(1 - 0.01 * var(--ds-motion-intensity, 1))) (packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:16-17).",
-      "evidence": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:16",
+      "evidence": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:110",
       "governedBy": "motion.dial",
       "governanceScope": "total",
       "exposure": "tenant-dial",
-      "exposureNote": "CABEZA SOLO-ARTEFACTO con fallback 1 en el lector. Perilla completa: motion.dial declara --ds-motion-intensity y --ds-motion-duration-scale.",
+      "exposureNote": "CABEZA DECLARADA EN LA BASE DS (--ds-motion-intensity: 1, animations/transitions/index.css:110); los lectores conservan su fallback 1. Perilla completa: motion.dial declara --ds-motion-intensity y --ds-motion-duration-scale.",
       "derivationDebt": true,
       "collapsesLegacy": {
         "total": 36,
@@ -3652,6 +3652,7 @@
   "corrections": {
     "statement": "Correcciones a mi propio informe previo (/private/tmp/mr-COLAPSABILIDAD.md), verificadas contra fuente al escribir este catalogo. Se declaran porque la regla es que un dato que no se sostiene se corrige y se dice.",
     "items": [
+      "MOTION.INTENSITY, channelStatus solo-artefacto -> existe: la base DS declara --ds-motion-intensity: 1 en packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:110, asi que la cabeza ya nace en fuente y no solo al compilar un tenant. evidence pasa del lector (skin/alert) al productor.",
       "DETECCION DE CANALES: una verificacion intermedia mia filtro las declaraciones con grep -v \"var(\", lo que descarta toda declaracion cuyo VALOR es un var. Eso reporto como inexistentes dos canales que SI existen: --ds-radius-button (packages/core/src/foundation/tokens/css/foundation/base/borders/index.css:27, \"--ds-radius-button: var(--ds-radius-md);\") y --ds-shadow-button-rest (packages/core/src/foundation/tokens/css/foundation/base/shadows/index.css:89). El metodo correcto se ancla en los dos puntos de la declaracion y es el usado en todo este catalogo. Ningun dato del informe entregado dependia de aquella verificacion fallida.",
       "SUPERVIVIENTES DE CLASE D: el informe estimo \"unos 22 sobreviven\" y proyecto un residuo de ~284 a ojo sobre la tabla de cubetas. Aplicada una regla mecanica y citada (anatomia singular + receta propia), los supervivientes medidos son 13 y el residuo proyectado 275. Este catalogo usa la cifra mecanica; la estimacion previa queda superada.",
       "CUBETAS DE CLASE D: el reparto por cubeta publicado en el informe difiere en unas pocas unidades del de aqui porque el orden de evaluacion de las reglas cambia a que cubeta cae un literal ambiguo. Los totales estables (C 262, D 156, residuo 418) no cambian; la subclasificacion se declara explicitamente como heuristica.",

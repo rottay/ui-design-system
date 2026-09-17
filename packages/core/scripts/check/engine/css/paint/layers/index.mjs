@@ -1016,7 +1016,6 @@ function ownLayerClaim(headerText) {
  * `facade/entrypoints/**` and header-only edits under `runtime/engines/**`).
  */
 const WRONG_LAYER_HEADER_DEBT = [
-  "presentation/components/skin/active-filters-bar/index.css",
   "presentation/components/skin/activity-surface/index.css",
   "presentation/components/skin/audit/index.css",
   "presentation/components/skin/auth-surface/index.css",
@@ -1036,7 +1035,6 @@ const WRONG_LAYER_HEADER_DEBT = [
   "presentation/components/skin/edit-header/index.css",
   "presentation/components/skin/editor-surface/index.css",
   "presentation/components/skin/empty-state-surface/index.css",
-  "presentation/components/skin/field-filters-panel/index.css",
   "presentation/components/skin/file-browser/index.css",
   "presentation/components/skin/form-header/index.css",
   "presentation/components/skin/form-sections/index.css",
@@ -1056,7 +1054,6 @@ const WRONG_LAYER_HEADER_DEBT = [
   "presentation/components/skin/record-workbench/index.css",
   "presentation/components/skin/record/index.css",
   "presentation/components/skin/report/index.css",
-  "presentation/components/skin/saved-views-menu/index.css",
   "presentation/components/skin/scheduler-surface/index.css",
   "presentation/components/skin/scope-switcher/index.css",
   "presentation/components/skin/search-command-bar/index.css",
@@ -1121,7 +1118,6 @@ const UNLAYERED_HEADER_DEBT = [
   "presentation/components/skin/radio-group/index.css",
   "presentation/components/skin/statistic-compounds/index.css",
   "presentation/components/skin/stats-header/index.css",
-  "presentation/components/skin/status-filter-pills/index.css",
   "presentation/components/skin/toast-compounds/index.css",
   "presentation/components/skin/token-inspector/index.css",
   "presentation/components/skin/voice-input-button/index.css",
@@ -1355,7 +1351,9 @@ export function auditHeaderLayerClaims({
  * are not paint the DS ships.
  */
 export const INLINE_STYLE_ESCAPE_CEILINGS = new Map([
-  ["structures", 158],
+  // 158 -> 157: the gate refuses a ceiling above its own measurement, so
+  // the ratchet is lowered to the measured census instead of left slack.
+  ["structures", 157],
   // 24 -> 23 (WO-CAN-04): the `oauth-transition` surface left the package with
   // its inline escape. Decrease-only, and the gate refuses a ceiling that sits
   // above the measurement, so this is lowered rather than left slack.
