@@ -4214,28 +4214,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 }
 
-@keyframes ds-foundation-fade-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes ds-foundation-fade-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 /* ========================================================================
    SCALE ANIMATIONS
    Grow and shrink effects
@@ -4332,24 +4310,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 }
 
-@keyframes ds-foundation-slide-in-left {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes ds-foundation-slide-in-right {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
 @keyframes ds-foundation-slide-out-up {
   from {
     transform: translateY(0);
@@ -4365,24 +4325,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
   to {
     transform: translateY(100%);
-  }
-}
-
-@keyframes ds-foundation-slide-out-left {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes ds-foundation-slide-out-right {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
   }
 }
 
@@ -4483,18 +4425,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    SHAKE ANIMATIONS
    Error indication and attention grabbers
    ======================================================================== */
-
-@keyframes ds-foundation-shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-0.5rem);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(0.5rem);
-  }
-}
 
 @keyframes ds-foundation-shake-vertical {
   0%, 100% {
@@ -9794,6 +9724,21 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-color-picker-check-height: 0.35rem;
   --ds-color-picker-check-transform: translate(-50%, -65%) rotate(-45deg);
   --ds-color-picker-touch-target-min: var(--ds-touch-target-min);
+}
+
+/**
+ * The checkmark is centred by a PAIR: the skin anchors it with
+ * `inset-inline-start: 50%` and this channel pulls it back half its own width.
+ * The anchor mirrors with the reading direction and the pull-back has to travel
+ * with it -- under RTL the anchored edge is the right one, so the retreat is
+ * positive. Declared on the part itself (the `::after` inherits it), so a
+ * portalled panel is judged by its own resolved directionality.
+ * The rotation is untouched: a transform list applies the translate in the
+ * element's unrotated box, so mirroring only the x offset moves the glyph
+ * without redrawing it -- the two border strokes stay the same tick.
+ */
+[data-part='preset-swatch']:dir(rtl) {
+  --ds-color-picker-check-transform: translate(50%, -65%) rotate(-45deg);
 }
 
 }
@@ -16634,9 +16579,22 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --_ds-widget-board-z-resizing: calc(var(--_ds-widget-board-z-controls) + 1);
   --_ds-widget-board-z-handle: calc(var(--_ds-widget-board-z-controls) + 2);
   --_ds-widget-board-z-dragging: calc(var(--_ds-widget-board-z-handle) + 1);
+  /* Resting values of the runtime placement channels. The solver stamps them
+     per cell when it has placed one; declared here they have a producer, and
+     an unplaced board resolves them to the same `auto` the cell had before. */
+  --ds-widget-board-cell-column: auto;
+  --ds-widget-board-cell-row: auto;
+  --ds-widget-board-cell-height: auto;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar {
+/* The resize edge's state host draws no box: the handle inside it stays
+   absolutely positioned against the card, so the rendered geometry is the
+   one this family had before the host existed. */
+.ds-pattern-widget-board .ds-widget-board__resize-edge {
+  display: contents;
+}
+
+.ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16679,7 +16637,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar:active {
+.ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="pressed"], :active) {
   background-position: 100% 50%;
   border-color: color-mix(
     in srgb,
@@ -16688,7 +16646,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   );
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-heading {
+.ds-pattern-widget-board .ds-widget-board__toolbar-heading[data-part="toolbar-heading"] {
   display: flex;
   flex: 1 1 280px;
   align-items: center;
@@ -16696,7 +16654,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-icon {
+.ds-pattern-widget-board .ds-widget-board__toolbar-icon[data-part="toolbar-icon"] {
   display: inline-grid;
   flex: 0 0 auto;
   width: 38px;
@@ -16715,18 +16673,18 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__toolbar:active
-  .ds-widget-board__toolbar-icon {
+  .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="pressed"], :active)
+  .ds-widget-board__toolbar-icon[data-part="toolbar-icon"] {
   transform: translateY(-1px) scale(1.025);
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-copy {
+.ds-pattern-widget-board .ds-widget-board__toolbar-copy[data-part="toolbar-copy"] {
   display: grid;
   gap: 2px;
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-context {
+.ds-pattern-widget-board .ds-widget-board__toolbar-context[data-part="toolbar-context"] {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
   font-size: var(--ds-text-eyebrow-size, var(--ds-font-size-xs));
@@ -16742,7 +16700,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   );
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-title {
+.ds-pattern-widget-board .ds-widget-board__toolbar-title[data-part="toolbar-title"] {
   margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
@@ -16752,7 +16710,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   line-height: 1.2;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-actions {
+.ds-pattern-widget-board .ds-widget-board__toolbar-actions[data-part="toolbar-actions"] {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -16760,7 +16718,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog {
+  .ds-widget-board__catalog[data-part="catalog"] {
   display: grid;
   gap: var(--ds-spacing-4, 16px);
   width: 100%;
@@ -16775,7 +16733,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    380px width). */
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-header {
+  .ds-widget-board__catalog-header[data-part="catalog-header"] {
   display: grid;
   gap: 3px;
   max-width: 680px;
@@ -16798,14 +16756,14 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-grid {
+  .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 272px), 1fr));
   gap: var(--ds-spacing-3, 12px);
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-item {
+  .ds-widget-board__catalog-item[data-part="catalog-item"] {
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3, 12px);
@@ -16826,7 +16784,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-item:active {
+  .ds-widget-board__catalog-item[data-part="catalog-item"]:is([data-state~="pressed"], :active) {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 28%,
@@ -16928,7 +16886,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-preview {
+  .ds-widget-board__catalog-preview[data-part="catalog-preview"] {
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -16962,7 +16920,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   color: var(--ds-color-text-muted);
 }
 
-.ds-pattern-widget-board .ds-widget-board__grid {
+.ds-pattern-widget-board .ds-widget-board__grid[data-part="grid"] {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-auto-rows: 8px;
@@ -16983,7 +16941,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__grid[data-narrow="true"] {
+.ds-pattern-widget-board .ds-widget-board__grid[data-part="grid"][data-narrow="true"] {
   grid-template-columns: minmax(0, 1fr);
   /* The narrow (no-solver) stack owns its rows: tracks size to each cell's
      content. The 8px quantum is only meaningful when the runtime stamps row
@@ -16994,12 +16952,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__grid[data-narrow="true"]
-  > .ds-widget-board__cell {
+  .ds-widget-board__grid[data-part="grid"][data-narrow="true"]
+  > .ds-widget-board__cell[data-part="card-shell"] {
   grid-column: 1 / -1;
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"] {
   position: relative;
   container-type: inline-size;
   container-name: ds-widget-cell;
@@ -17058,26 +17016,26 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 /* Entry stagger cadence derives from the fast motion rung (fast × 0.3 ≈ 36ms
    per step, matching the legacy 35ms cadence) so a tenant's motion scale
    slows the whole sequence proportionally — no raw millisecond literals. */
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(2) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(2) {
   animation-delay: calc(var(--ds-motion-fast) * 0.3);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(3) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(3) {
   animation-delay: calc(var(--ds-motion-fast) * 0.6);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(4) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(4) {
   animation-delay: calc(var(--ds-motion-fast) * 0.9);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(5) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(5) {
   animation-delay: calc(var(--ds-motion-fast) * 1.2);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(6) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(6) {
   animation-delay: calc(var(--ds-motion-fast) * 1.5);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(n + 7) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(n + 7) {
   animation-delay: calc(var(--ds-motion-fast) * 1.8);
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell:active {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active) {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 28%,
@@ -17089,7 +17047,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-widget-board-hover-lift: -2px;
 }
 
-.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell {
+.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell[data-part="card-shell"] {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 24%,
@@ -17100,7 +17058,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     0 10px 24px -22px color-mix(in srgb, var(--ds-color-text-primary) 34%, transparent);
 }
 
-.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell:active {
+.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active) {
   --ds-widget-board-hover-lift: 0px;
 }
 
@@ -17111,7 +17069,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    The block sits before the resizing/dragging state rules so those states
    still win their specificity ties while a gesture is running. */
 @media (hover: hover) {
-  .ds-pattern-widget-board .ds-widget-board__toolbar:hover {
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="hovered"], :hover) {
     background-position: 100% 50%;
     border-color: color-mix(
       in srgb,
@@ -17121,13 +17079,13 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__toolbar:hover
-    .ds-widget-board__toolbar-icon {
+    .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="hovered"], :hover)
+    .ds-widget-board__toolbar-icon[data-part="toolbar-icon"] {
     transform: translateY(-1px) scale(1.025);
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item:hover {
+    .ds-widget-board__catalog-item[data-part="catalog-item"]:is([data-state~="hovered"], :hover) {
     border-color: color-mix(
       in srgb,
       var(--ds-color-primary) 28%,
@@ -17138,7 +17096,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     transform: translateY(-1px);
   }
 
-  .ds-pattern-widget-board .ds-widget-board__cell:hover {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover) {
     border-color: color-mix(
       in srgb,
       var(--ds-color-primary) 28%,
@@ -17151,29 +17109,29 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 
   .ds-pattern-widget-board[data-editing="true"]
-    .ds-widget-board__cell:hover {
+    .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover) {
     --ds-widget-board-hover-lift: 0px;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__cell:hover
-    > .ds-widget-board__item-header {
+    .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover)
+    > .ds-widget-board__item-header[data-part="item-header"] {
     background-position: 100% 50%;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__cell:hover
-    .ds-widget-board__item-icon {
+    .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover)
+    .ds-widget-board__item-icon[data-part="item-icon"] {
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle:hover {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="hovered"], :hover) {
     color: var(--ds-color-text-secondary);
     outline: none;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     opacity: 1;
     background: color-mix(
@@ -17184,50 +17142,50 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge^="inline"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     transform: translateY(-50%) scaleY(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:is(
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
       [data-edge="block-start"],
       [data-edge="block-end"]
-    ):hover
+    ):is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     transform: translateX(-50%) scaleX(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge*="-inline-"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     background: transparent;
     transform: scale(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     opacity: 1;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge^="inline"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     transform: translateY(-50%) translateX(0) scale(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:is(
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
       [data-edge="block-start"],
       [data-edge="block-end"]
-    ):hover
+    ):is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     transform: translateX(-50%) translateY(0) scale(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge*="-inline-"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     transform: translate(0, 0) scale(1);
   }
@@ -17236,12 +17194,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 /* Forced colors: frames read as ButtonText, the drop target and the focus
    ring read as Highlight; decorative shadows and mixed paints drop out. */
 @media (forced-colors: active) {
-  .ds-pattern-widget-board .ds-widget-board__toolbar,
-  .ds-pattern-widget-board .ds-widget-board__cell,
-  .ds-pattern-widget-board .ds-widget-board__empty,
-  .ds-pattern-widget-board .ds-widget-board__error,
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"],
+  .ds-pattern-widget-board .ds-widget-board__empty[data-part="empty-state"],
+  .ds-pattern-widget-board .ds-widget-board__error[data-part="error-state"],
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item,
+    .ds-widget-board__catalog-item[data-part="catalog-item"],
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog-empty {
     border-color: ButtonText;
@@ -17250,10 +17208,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   /* Secondary frames (icon wells, chips, readouts, the resize indicator and
      the edit-header separator) keep a system-colored edge so the chrome
      structure survives the forced palette. */
-  .ds-pattern-widget-board .ds-widget-board__toolbar-icon,
-  .ds-pattern-widget-board .ds-widget-board__item-icon,
-  .ds-pattern-widget-board .ds-widget-board__cell-controls,
-  .ds-pattern-widget-board .ds-widget-board__item-header,
+  .ds-pattern-widget-board .ds-widget-board__toolbar-icon[data-part="toolbar-icon"],
+  .ds-pattern-widget-board .ds-widget-board__item-icon[data-part="item-icon"],
+  .ds-pattern-widget-board .ds-widget-board__cell-controls[data-part="cell-controls"],
+  .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"],
   .ds-pattern-widget-board .ds-widget-board__size-readout,
   .ds-pattern-widget-board .ds-widget-board__resize-indicator,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
@@ -17263,12 +17221,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog-size,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-preview {
+    .ds-widget-board__catalog-preview[data-part="catalog-preview"] {
     border-color: ButtonText;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__cell[data-dragging="true"],
-  .ds-pattern-widget-board .ds-widget-board__cell[data-drop-target="true"] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-dragging="true"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-drop-target="true"] {
     border-color: Highlight;
     outline-color: Highlight;
   }
@@ -17281,27 +17239,14 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     background: ButtonText;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle:focus-visible {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-
-  /* Skeleton: the frame survives (cell + header hairline above); the
-     placeholder blocks read as disabled system paint and the pulse stops. */
-  .ds-pattern-widget-board .ds-widget-board__skeleton-header {
-    border-color: ButtonText;
-  }
-
-  .ds-pattern-widget-board .ds-widget-board__skeleton-icon,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-title,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-line {
-    background: GrayText;
-    animation: none;
-  }
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell[data-resizing="true"] {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-resizing="true"] {
   z-index: var(--_ds-widget-board-z-resizing, 6);
   box-shadow: inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent),
@@ -17311,7 +17256,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   will-change: height;
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell[data-dragging="true"] {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-dragging="true"] {
   z-index: var(--_ds-widget-board-z-dragging, 8);
   opacity: 0.94;
   box-shadow: inset 0 1px 0
@@ -17332,7 +17277,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    a dashed, offset outline is the system's "drop here" grammar (solid rings
    stay reserved for focus), so the state survives achromatic vision and
    forced colors alike. */
-.ds-pattern-widget-board .ds-widget-board__cell[data-drop-target="true"] {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-drop-target="true"] {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 62%,
@@ -17343,7 +17288,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   outline-offset: 2px;
 }
 
-.ds-pattern-widget-board .ds-widget-board__content {
+.ds-pattern-widget-board .ds-widget-board__content[data-part="card-content"] {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
@@ -17352,14 +17297,14 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-height="fixed"]
-  .ds-widget-board__content {
+  .ds-widget-board__cell[data-part="card-shell"][data-height="fixed"]
+  .ds-widget-board__content[data-part="card-content"] {
   flex: 1 1 auto;
   overflow: auto;
   overscroll-behavior: contain;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-header {
+.ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"] {
   position: relative;
   z-index: var(--_ds-widget-board-z-header, 1);
   display: flex;
@@ -17394,8 +17339,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell:active
-  > .ds-widget-board__item-header {
+  .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active)
+  > .ds-widget-board__item-header[data-part="item-header"] {
   background-position: 100% 50%;
 }
 
@@ -17403,12 +17348,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    design (a light-sweep across the band), so it mirrors about the vertical
    axis under RTL — 112deg ↔ 68deg — through one private channel. LTR keeps
    the exact fallback; an authored `--ds-card-header-bg` is unaffected. */
-[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__toolbar,
-[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__item-header {
+[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"],
+[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"] {
   --_ds-widget-board-band-angle: 68deg;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-heading {
+.ds-pattern-widget-board .ds-widget-board__item-heading[data-part="item-heading"] {
   display: flex;
   flex: 1 1 auto;
   align-items: flex-start;
@@ -17416,7 +17361,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-icon {
+.ds-pattern-widget-board .ds-widget-board__item-icon[data-part="item-icon"] {
   display: grid;
   flex: 0 0 auto;
   width: 38px;
@@ -17435,18 +17380,18 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell:active
-  .ds-widget-board__item-icon {
+  .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active)
+  .ds-widget-board__item-icon[data-part="item-icon"] {
   transform: translateY(-1px) scale(1.025);
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-copy {
+.ds-pattern-widget-board .ds-widget-board__item-copy[data-part="item-copy"] {
   display: grid;
   gap: 3px;
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-eyebrow {
+.ds-pattern-widget-board .ds-widget-board__item-eyebrow[data-part="item-eyebrow"] {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
   font-size: var(--ds-text-eyebrow-size, var(--ds-font-size-xs));
@@ -17460,7 +17405,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   );
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-title {
+.ds-pattern-widget-board .ds-widget-board__item-title[data-part="item-title"] {
   min-width: 0;
   margin: 0;
   color: var(--ds-color-text-primary);
@@ -17472,7 +17417,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   text-wrap: balance;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-supporting {
+.ds-pattern-widget-board .ds-widget-board__item-supporting[data-part="item-supporting"] {
   overflow: hidden;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 12px);
@@ -17480,7 +17425,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   text-overflow: ellipsis;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-accessory {
+.ds-pattern-widget-board .ds-widget-board__item-accessory[data-part="item-accessory"] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -17488,30 +17433,30 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-size="sm"]
-  .ds-widget-board__item-header {
+  .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+  .ds-widget-board__item-header[data-part="item-header"] {
   min-height: 62px;
   padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-size="sm"]
-  .ds-widget-board__item-icon {
+  .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+  .ds-widget-board__item-icon[data-part="item-icon"] {
   width: 32px;
   height: 32px;
   border-radius: var(--ds-radius-md, 9px);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-size="sm"]
-  .ds-widget-board__item-title {
+  .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+  .ds-widget-board__item-title[data-part="item-title"] {
   font-size: var(--ds-font-size-sm, 14px);
 }
 
 /* The whole edit header is the grab target, so the drag affordance is not
    bound to the width of the move control. The Button and Button.Icon inside it
    keep their own primitive chrome. */
-.ds-pattern-widget-board .ds-widget-board__cell-controls {
+.ds-pattern-widget-board .ds-widget-board__cell-controls[data-part="cell-controls"] {
   position: relative;
   z-index: var(--_ds-widget-board-z-controls, 5);
   display: flex;
@@ -17533,7 +17478,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   user-select: none;
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell-controls:active {
+.ds-pattern-widget-board .ds-widget-board__cell-controls[data-part="cell-controls"]:is([data-state~="pressed"], :active) {
   cursor: grabbing;
 }
 
@@ -17557,22 +17502,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   white-space: nowrap;
 }
 
-/* RETIRE CANDIDATE (wave law 11 — kept, not deleted): no engine stamps
-   `ds-widget-board__drag` today; the grab cursor lives on the cell-controls
-   bar and the move Button. independent code audit adjudicates removal. */
-.ds-pattern-widget-board .ds-widget-board__drag {
-  cursor: grab;
-}
-
-.ds-pattern-widget-board .ds-widget-board__drag:active {
-  cursor: grabbing;
-}
-
 /* The entire physical border is the resize target. The visual rail only
    appears on hover/focus/drag, so edit mode stays precise without decorating
    a permanent coloured side. Inline-end and block-end remain keyboard
    sliders; their opposite edges provide the same pointer affordance. */
-.ds-pattern-widget-board .ds-widget-board__resize-handle {
+.ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"] {
   position: absolute;
   z-index: var(--_ds-widget-board-z-handle, 7);
   display: block;
@@ -17589,80 +17523,82 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-start"],
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"],
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"] {
   inset-block: 9px;
   width: 14px;
   cursor: ew-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"] {
   inset-inline-start: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"] {
   inset-inline-end: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start"],
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start"],
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"] {
   inset-inline: 9px;
   height: 14px;
   cursor: ns-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start"] {
   inset-block-start: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"] {
   inset-block-end: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"] {
   width: 20px;
   height: 20px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-start"] {
   inset-block-start: 0;
   inset-inline-start: 0;
   cursor: nwse-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-end"] {
   inset-block-start: 0;
   inset-inline-end: 0;
   cursor: nesw-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"] {
   inset-block-end: 0;
   inset-inline-start: 0;
   cursor: nesw-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"] {
   inset-block-end: 0;
   inset-inline-end: 0;
   cursor: nwse-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   ) {
@@ -17670,7 +17606,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   outline: none;
 }
 
-.ds-pattern-widget-board .ds-widget-board__resize-handle:focus-visible {
+.ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
   border-radius: 999px;
   box-shadow: var(
     --ds-shadow-focus-ring,
@@ -17694,7 +17630,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge^="inline"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]
   .ds-widget-board__resize-rail {
   inset-block-start: 50%;
   inset-inline: 6px;
@@ -17704,7 +17640,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
   )
@@ -17717,8 +17653,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -17732,8 +17670,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge^="inline"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -17742,16 +17682,22 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
-  ):where(:focus-visible, :active, [data-active="true"])
+  ):where(
+    [data-state~="focus-visible"],
+    :focus-visible,
+    [data-state~="pressed"],
+    :active,
+    [data-active="true"]
+  )
   .ds-widget-board__resize-rail {
   transform: translateX(-50%) scaleX(1);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]
   .ds-widget-board__resize-rail {
   inset: 6px;
   width: 8px;
@@ -17767,31 +17713,44 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-start"]
   .ds-widget-board__resize-rail {
-  border-width: 2px 0 0 2px;
+  border-block-start-width: 2px;
+  border-block-end-width: 0;
+  border-inline-start-width: 2px;
+  border-inline-end-width: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-end"]
   .ds-widget-board__resize-rail {
-  border-width: 2px 2px 0 0;
+  border-block-start-width: 2px;
+  border-block-end-width: 0;
+  border-inline-start-width: 0;
+  border-inline-end-width: 2px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"]
   .ds-widget-board__resize-rail {
-  border-width: 0 0 2px 2px;
+  border-block-start-width: 0;
+  border-block-end-width: 2px;
+  border-inline-start-width: 2px;
+  border-inline-end-width: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"]
   .ds-widget-board__resize-rail {
-  border-width: 0 2px 2px 0;
+  border-block-start-width: 0;
+  border-block-end-width: 2px;
+  border-inline-start-width: 0;
+  border-inline-end-width: 2px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:where(
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -17826,7 +17785,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 50%;
   inset-inline-start: 20px;
@@ -17834,7 +17793,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 50%;
   inset-inline-end: 20px;
@@ -17842,7 +17801,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
   )
@@ -17852,19 +17811,19 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 20px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"]
   .ds-widget-board__resize-indicator {
   inset-block-end: 20px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-start"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 20px;
   inset-inline-start: 20px;
@@ -17872,7 +17831,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-end"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 20px;
   inset-inline-end: 20px;
@@ -17880,7 +17839,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"]
   .ds-widget-board__resize-indicator {
   inset-block-end: 20px;
   inset-inline-start: 20px;
@@ -17888,7 +17847,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"]
   .ds-widget-board__resize-indicator {
   inset-block-end: 20px;
   inset-inline-end: 20px;
@@ -17896,8 +17855,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -17906,8 +17867,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge^="inline"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -17916,16 +17879,23 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
-  ):where(:focus-visible, :active, [data-active="true"])
+  ):where(
+    [data-state~="focus-visible"],
+    :focus-visible,
+    [data-state~="pressed"],
+    :active,
+    [data-active="true"]
+  )
   .ds-widget-board__resize-indicator {
   transform: translateX(-50%) translateY(0) scale(1);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:where(
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -17957,22 +17927,22 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    separator keeps keyboard operation, so height stays fully operable. */
 @media (pointer: coarse) {
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="inline-start"],
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"],
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="inline-end"] {
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"] {
     inset-block-start: 56px;
     width: 44px;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="block-end"] {
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"] {
     height: 32px;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="block-end-inline-start"],
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"],
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="block-end-inline-end"] {
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"] {
     width: 36px;
     height: 36px;
   }
@@ -17986,7 +17956,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 /* The empty board consumes the shared empty-state premium contract so a blank
    workspace reads like the rest of the system's empty surfaces. */
-.ds-pattern-widget-board .ds-widget-board__empty {
+.ds-pattern-widget-board .ds-widget-board__empty[data-part="empty-state"] {
   display: grid;
   min-height: 220px;
   padding: var(--ds-spacing-6, 24px);
@@ -18004,7 +17974,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 /* Board-level error: the same quiet framed region as the empty state, keyed
    to the error role (tinted frame, never error paint alone — the consumer's
    composed content carries the copy, icon and recovery action). */
-.ds-pattern-widget-board .ds-widget-board__error {
+.ds-pattern-widget-board .ds-widget-board__error[data-part="error-state"] {
   display: grid;
   min-height: 220px;
   padding: var(--ds-spacing-6, 24px);
@@ -18022,100 +17992,6 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      therefore keyed to the panel color the gradient itself resolves toward. */
   background: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-panel-bg));
   color: var(--ds-color-text-secondary);
-}
-
-/* Loading skeleton: quiet placeholder cells on the SAME 12-track grid, so
-   the first paint already owns the final composition's footprint and the
-   swap to real content is paint-only (FLIP then covers the settle). Cells
-   reuse the card frame class, keeping border/radius/background identical to
-   real widgets; the row span reserves a representative widget height (18
-   tracks ≈ 18 × row quantum + seams, measured by the same formula the
-   runtime solves with). Non-interactive by construction. */
-.ds-pattern-widget-board .ds-widget-board__grid[data-skeleton="true"] {
-  pointer-events: none;
-}
-
-.ds-pattern-widget-board
-  .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-  .ds-widget-board__cell {
-  grid-row: span 18;
-}
-
-/* Full-width tiers mirror the declared size vocabulary; the mid/single-tier
-   container queries above already re-span these same `[data-size]` cells,
-   and the narrow stack places them full-width by its own rule. */
-@container ds-widget-board (min-width: 840px) {
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="sm"] {
-    grid-column: span 3;
-  }
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="md"] {
-    grid-column: span 4;
-  }
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="lg"] {
-    grid-column: span 6;
-  }
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="wide"] {
-    grid-column: 1 / -1;
-  }
-}
-
-/* Skeleton anatomy mirrors the widget's: an icon+title header row over a
-   line stack, with the same padding and hairline, so the placeholder reads
-   as the card it stands for. The pulse rides the canonical attention rung
-   and goes quiet under reduced motion (block below). */
-.ds-pattern-widget-board .ds-widget-board__skeleton-header {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-3, 12px);
-  min-height: 70px;
-  padding: var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px);
-  border-bottom: 1px solid
-    var(--ds-surface-card-border, var(--ds-color-border-primary));
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-body {
-  display: grid;
-  gap: var(--ds-spacing-3, 12px);
-  padding: var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px);
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-icon,
-.ds-pattern-widget-board .ds-widget-board__skeleton-title,
-.ds-pattern-widget-board .ds-widget-board__skeleton-line {
-  background: var(--ds-surface-panel-bg, var(--ds-color-bg-secondary));
-  animation: ds-foundation-pulse
-    var(--ds-motion-attention, 1.5s)
-    var(--ds-motion-ease-in-out, ease-in-out) infinite;
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-icon {
-  inline-size: 38px;
-  block-size: 38px;
-  border-radius: var(--ds-radius-lg, 11px);
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-title {
-  inline-size: 42%;
-  block-size: 14px;
-  border-radius: 999px;
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-line {
-  block-size: 12px;
-  border-radius: 999px;
-}
-
-.ds-pattern-widget-board
-  .ds-widget-board__skeleton-line[data-width="short"] {
-  inline-size: 58%;
 }
 
 @keyframes ds-widget-board-cell-enter {
@@ -18136,103 +18012,118 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
    full-width card and produced the dead vertical space this pattern exists to
    prevent. */
 @container ds-widget-board (max-width: 839px) {
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="sm"],
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="md"] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="sm"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="md"] {
     grid-column: span 6;
   }
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="lg"],
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="wide"] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="lg"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="wide"] {
     grid-column: 1 / -1;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"] {
     display: none;
   }
 }
 
 @container ds-widget-board (max-width: 639px) {
-  .ds-pattern-widget-board .ds-widget-board__toolbar {
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"] {
     align-items: stretch;
     flex-direction: column;
   }
-  .ds-pattern-widget-board .ds-widget-board__toolbar-actions > * {
+  .ds-pattern-widget-board .ds-widget-board__toolbar-actions[data-part="toolbar-actions"] > * {
     flex: 1 1 auto;
   }
-  .ds-pattern-widget-board .ds-widget-board__toolbar-heading {
+  .ds-pattern-widget-board .ds-widget-board__toolbar-heading[data-part="toolbar-heading"] {
     flex: 0 1 auto;
     width: 100%;
   }
-  .ds-pattern-widget-board .ds-widget-board__grid {
+  .ds-pattern-widget-board .ds-widget-board__grid[data-part="grid"] {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--ds-spacing-3, 12px);
   }
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size] {
     grid-column: 1 / -1;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__item-header {
+  .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"] {
     align-items: stretch;
     flex-direction: column;
     min-height: 0;
     padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
   }
 
-  .ds-pattern-widget-board .ds-widget-board__item-heading {
+  .ds-pattern-widget-board .ds-widget-board__item-heading[data-part="item-heading"] {
     width: 100%;
   }
 
   /* In the stacked header the accessory drops under the copy column, so it
      aligns with the title text: icon box + heading gap. The compact widget
      carries a smaller icon box and needs its own offset. */
-  .ds-pattern-widget-board .ds-widget-board__item-accessory {
+  .ds-pattern-widget-board .ds-widget-board__item-accessory[data-part="item-accessory"] {
     align-self: flex-start;
     justify-content: flex-start;
     padding-inline-start: calc(38px + var(--ds-spacing-3, 12px));
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__cell[data-size="sm"]
-    .ds-widget-board__item-accessory {
+    .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+    .ds-widget-board__item-accessory[data-part="item-accessory"] {
     padding-inline-start: calc(32px + var(--ds-spacing-3, 12px));
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"] {
     display: none;
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog {
+    .ds-widget-board__catalog[data-part="catalog"] {
     gap: var(--ds-spacing-3, 12px);
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-grid {
+    .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
     grid-template-columns: minmax(0, 1fr);
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item {
+    .ds-widget-board__catalog-item[data-part="catalog-item"] {
     min-height: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-widget-board .ds-widget-board__cell,
-  .ds-pattern-widget-board .ds-widget-board__toolbar,
-  .ds-pattern-widget-board .ds-widget-board__toolbar-icon,
-  .ds-pattern-widget-board .ds-widget-board__item-header,
-  .ds-pattern-widget-board .ds-widget-board__item-icon,
-  .ds-pattern-widget-board .ds-widget-board__resize-handle,
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"],
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"],
+  .ds-pattern-widget-board .ds-widget-board__toolbar-icon[data-part="toolbar-icon"],
+  .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"],
+  .ds-pattern-widget-board .ds-widget-board__item-icon[data-part="item-icon"],
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"],
   .ds-pattern-widget-board .ds-widget-board__resize-rail,
   .ds-pattern-widget-board .ds-widget-board__resize-indicator,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-icon,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-title,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-line,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item {
+    .ds-widget-board__catalog-item[data-part="catalog-item"] {
     animation: none;
     transition: none;
   }
+}
+
+/* PLACEMENT: both grid lines, and the height a resize committed, are computed
+   by the shared solver and travel as runtime `--ds-widget-board-cell-*`
+   channels. `data-placed` is the solver's own flag and this arm is the last
+   rule in the file, so a placed cell is never contested by the container-query
+   span rules above -- which is exactly what the retired inline stamp
+   guaranteed. A cell the solver did not place (narrow, or before the first
+   measure) keeps the spans its declared size earns. */
+.ds-pattern-widget-board
+  .ds-widget-board__cell[data-part="card-shell"][data-placed="true"] {
+  grid-column: var(--ds-widget-board-cell-column);
+  grid-row: var(--ds-widget-board-cell-row);
+}
+
+.ds-pattern-widget-board
+  .ds-widget-board__cell[data-part="card-shell"][data-placed="true"][data-height="fixed"] {
+  height: var(--ds-widget-board-cell-height);
 }
 
 }
@@ -28600,6 +28491,17 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-structure.ds-field-filters-panel [data-part='presets-region'] {
   margin-block-end: 12px;
+}
+
+/* The two wrapping lanes the panel stamps: the header's eyebrow+subtitle
+   cluster and the quick-slice row. Both are flex items whose content is
+   free-form copy, so both must be allowed to shrink below their intrinsic
+   width -- exactly what `header-copy` and `filter-card-copy` already state for
+   the same reason. Without it a long subtitle or a long preset label pushes
+   its lane past the panel instead of wrapping inside it. */
+.ds-structure.ds-field-filters-panel [data-part='title-group'],
+.ds-structure.ds-field-filters-panel [data-part='presets-row'] {
+  min-inline-size: 0;
 }
 
 /* header pill + quick-slices pill ----------------------------------------- */
@@ -94401,20 +94303,6 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
-@keyframes ds-list-toolbar-sheen {
-  0% {
-    opacity: 0;
-    transform: translateX(-120%);
-  }
-  45% {
-    opacity: var(--ds-toolbar-sheen-opacity, 0.22);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(120%);
-  }
-}
-
 @keyframes ds-list-toolbar-filter-enter {
   from {
     opacity: 0;
@@ -95216,25 +95104,24 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       the tint for pure hairline cards, an editorial one can warm it. The
       accent origin is directional and mirrors under RTL. */
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__toolbar {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__toolbar[data-part="toolbar"] {
   min-height: calc(72px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell[data-part="card-shell"] {
   min-height: calc(132px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__item-header,
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__skeleton-header {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__item-header[data-part="item-header"] {
   min-height: calc(70px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__empty,
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__error {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__empty[data-part="empty-state"],
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__error[data-part="error-state"] {
   min-height: calc(220px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell[data-part="card-shell"] {
   --_ds-widget-board-tint-origin: 100% 0%;
   background: radial-gradient(
       circle at var(--_ds-widget-board-tint-origin),
@@ -95258,7 +95145,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 [dir='rtl']
   .ds-pattern-widget-board.ds-engine-modern
-  .ds-widget-board__cell {
+  .ds-widget-board__cell[data-part="card-shell"] {
   --_ds-widget-board-tint-origin: 0% 0%;
 }
 
@@ -95562,6 +95449,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * a box. The objects keep the Tag primitive's chrome untouched and gain only
  * the hit-target floor a dismissible object owes.
  *
+ * CHANNELS (WO-FAM-08): every `--ds-active-filters-bar-*` name below has a
+ * producer -- `derivation/chrome/active-filters-bar` emits the ground, the
+ * rule, the chips measure, the eyebrow's height and ink, both padding pairs
+ * and the entrance duration at exactly the resting values written here as
+ * fallbacks, so a tenant can move them. The two `--ds-control-size-*` rungs
+ * the chip target reads are a kernel scale with no owner today and are this
+ * cut's named residue, not channels for this deriver to grow into.
+ *
  * REGION VOCABULARY: ground, rule, seam and rhythm read `--ds-toolbar-*` and
  * `--ds-list-shell-section-gap` UNDER the family's own channels, so a tenant
  * can still address the rail alone; when it does not, the rail follows the
@@ -95807,7 +95702,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     padding-inline-end: 0;
     border-inline-end: 0;
   }
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"] {
+  /* The disclosure toggle shares the chips lane, so on a coarse pointer it
+     takes the same target the objects beside it take -- a 32px control in a
+     row of 40px objects is a mis-sized tap area, not a quieter one. The
+     Button primitive still owns its chrome. */
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"],
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
     min-block-size: calc(
       var(--ds-control-size-md, 2.5rem) * var(--ds-density-effective-scale, 1)
     );
@@ -95998,8 +95899,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   outline: none;
 }
 
+/* One decision, with its platform fallback: the panel's ring is the kernel's
+   answer, and `:focus-visible` is what the kernel falls through to (F-37). */
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="panel"]:focus-visible {
+  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: var(
     --ds-column-menu-panel-focus-outline,
     2px solid var(--ds-color-border-focus)
@@ -96102,12 +96005,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     inset 0 1px 0
       color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)
   );
-  transition: background-color var(--ds-motion-fast, 120ms)
+  /* One duration, one channel: the row's state changes are feedback, and the
+     family channel rests on the dial-bent feedback role. */
+  transition: background-color
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
       var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms)
+    border-color
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
       var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    box-shadow
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-motion-ease-out, ease-out),
+    opacity
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
@@ -96154,9 +96065,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * draft / drag target) keep their stronger grammar. */
 @media (hover: hover) {
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="row"]:hover:not([data-visible="true"]):not([data-drag-target="true"]),
+    [data-part="row"]:is([data-state~="hovered"], :hover):not([data-visible="true"]):not([data-drag-target="true"]),
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="action-row"]:hover:not([data-visible="true"]) {
+    [data-part="action-row"]:is([data-state~="hovered"], :hover):not([data-visible="true"]) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 68%, transparent);
     background: color-mix(
       in srgb,
@@ -96292,6 +96203,25 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   [data-part="footer-hint"][data-size] {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs);
+}
+
+/* The three composed Buttons the family stamps but never painted. Each gets
+   the one rule the family honestly owns about it -- the primitive keeps its
+   own chrome, type, states and ring.
+
+   `reset` and `apply` are the header's and the footer's exits: neither may be
+   squeezed by a long title or a long hint sharing its lane. `width-badge`
+   shows a live pixel measure that changes while a column is dragged, so its
+   digits are tabular and its box does not shrink under the caption beside it. */
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="reset"],
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="apply"],
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="width-badge"] {
+  flex: 0 0 auto;
+}
+
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  [data-part="width-badge"] {
+  font-variant-numeric: tabular-nums;
 }
 
 /* NARROW POSTURE — container, never viewport.
@@ -96578,13 +96508,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open]:hover:not([data-open='true']) {
+  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open]:is([data-state~='hovered'], :hover):not([data-open='true']) {
     border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
     background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
   }
 }
 
-.ds-structure.ds-saved-views-menu[data-part='trigger']:focus-visible {
+.ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
@@ -96652,7 +96582,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
   /* The clamp the render measures against the viewport, placed here and never
      inline. Physical on purpose: the measurement is a viewport rect, so a
-     logical property would flip it under RTL. */
+     logical property would flip it under RTL.
+
+     RESTING DECLARATIONS (WO-FAM-08 B9): the three channels are declared here
+     at the values the reads below used to fall through to, so each read
+     resolves to a value a theme can move instead of to a `var()` fallback
+     nobody writes. The render's measured instance stamps them on the element
+     itself and outranks these exactly as an inline declaration outranks a
+     rule. */
+  --ds-saved-views-menu-panel-top: 0;
+  --ds-saved-views-menu-panel-left: 0;
+  --ds-saved-views-menu-panel-width: 26.25rem;
   top: var(--ds-saved-views-menu-panel-top, 0);
   left: var(--ds-saved-views-menu-panel-left, 0);
   width: var(--ds-saved-views-menu-panel-width, 26.25rem);
@@ -96765,7 +96705,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   outline: none;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:focus-visible {
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
 }
 
@@ -96925,28 +96865,28 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-weight: 700;
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:hover {
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-surface-card) 70%, var(--ds-color-bg-primary) 30%);
     color: var(--ds-color-text-primary);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral']:hover {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
   }
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:hover {
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary']:hover {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
   }
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button']:focus-visible {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:active {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, var(--ds-surface-card));
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:active {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
 }
 
@@ -96959,14 +96899,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:hover:not([data-active='true']) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
     background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
     box-shadow: var(
       --ds-material-raised-shadow-hover,
       0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
     );
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:hover:not([data-active='true']) {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
   }
 }
@@ -96979,15 +96919,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:hover {
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
     color: var(--ds-color-danger);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete']:hover {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-danger) 34%, transparent);
   }
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='delete']:focus-visible {
+.ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-danger) 50%, transparent));
 }
@@ -97200,10 +97140,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background: transparent;
   }
 
-  .ds-structure.ds-saved-views-menu[data-part='trigger']:focus-visible,
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:focus-visible,
-  .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:focus-visible,
-  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:focus-visible {
+  .ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
     box-shadow: none;
@@ -97991,6 +97931,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * geometry, motion (token-derived), and state paint live here — zero inline
  * styles. The pressed state is announced by the engine (`aria-pressed`) and
  * reads through border + ink + label weight + count contrast, never hue alone.
+ *
+ * STATE IS DECIDED ONCE (F-37, WO-FAM-08): the pill is a stateful part — the
+ * pattern runs it through `useInteractionState` and stamps
+ * `partAttributes('pill', …)` — so every hover, press and focus arm below
+ * pairs the kernel token with the platform pseudo-class it stands for
+ * (`:is([data-state~='hovered'], :hover)`), which leaves the selector's
+ * specificity exactly where the ladder above put it. At rest the kernel
+ * serializes nothing, so the pseudo-class is the fallback of one decision,
+ * never a second authority.
+ *
+ * CHANNELS: every `--ds-filter-pill-*` name this file reads already has a
+ * producer, so the family owns no deriver of its own; its vocabulary is the
+ * shared filter-pill one, not a private namespace.
  */
 
 /* ---- root: wraps when the composition narrows. ---- */
@@ -98086,7 +98039,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true']) {
+    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='hovered'], :hover):not([data-selected='true']) {
     background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
     border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   }
@@ -98094,12 +98047,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* Touch/active equivalent of the hover wash (4th-tanda law). */
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:active:not([data-selected='true']) {
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='pressed'], :active):not([data-selected='true']) {
   background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:focus-visible {
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
 }
 
@@ -98213,7 +98166,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:focus-visible {
+    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
@@ -98269,6 +98222,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * declares the toolbar family gets a branded band; one that declares none of
  * it falls through to its own surface and border tokens.
  *
+ * ANATOMY (WO-FAM-08): every region rule names the `data-part` the family
+ * stamps beside the private class it already carried, so the anatomy contract
+ * has both sides and a consumer can key on either. The search field's part is
+ * an ANCESTOR in the glyph rules -- the composed Input's node is still painted
+ * by nobody (see the relay note below); the part is a route, not a surface.
+ *
  * MATERIAL INVARIANT — DELIBERATELY FLAT. This family reads no elevation
  * channel and must not grow one. The toolbar is a row ON the surface it
  * belongs to, separated by exactly one hairline. `--ds-toolbar-shadow` is a
@@ -98302,23 +98261,32 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* ---- row sections: one seam channel instead of three fixed paddings ---- */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
   flex-shrink: 0;
   min-inline-size: 0;
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer[data-part='spacer'] {
   flex: 1;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
   flex-shrink: 0;
   min-inline-size: 0;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
   padding-inline-start: var(--_ds-table-toolbar-section-gap);
+}
+
+/* ---- the reset affordance is the filters lane's EXIT, not one of its
+        filters: a crowded cluster wraps around it and never squeezes it.
+        The composed ghost Button keeps its own chrome. ---- */
+.ds-structure.ds-table-toolbar[data-part='root']
+  .ds-table-toolbar__filters[data-part='filters']
+  [data-part='clear-filters'] {
+  flex-shrink: 0;
 }
 
 /* ---- divider: soft vertical hairline with a paper highlight ---- */
@@ -98367,7 +98335,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * type step is a deliberate departure: toolbar controls speak the supporting
  * step rather than the Input's 14px default.
  * ------------------------------------------------------------------------ */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
   flex: 0 1 auto;
   inline-size: 100%;
   max-inline-size: var(--_ds-table-toolbar-search-max);
@@ -98383,7 +98351,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    position. Its tint follows the field's focus through the primitive's own
    focus-within, which reaches the affix as a descendant. */
 .ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field
+  .ds-table-toolbar__search-field[data-part='search-field']
+  [data-part='search-input']
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
@@ -98391,7 +98360,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field:focus-within
+  .ds-table-toolbar__search-field[data-part='search-field']:focus-within
+  [data-part='search-input']
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   color: var(--ds-toolbar-color, var(--ds-color-text-secondary));
 }
@@ -98399,15 +98369,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- posture: tablet. The search field is the toolbar's primary
         affordance, so it claims its own row before anything is compressed. ---- */
 @container ds-table-toolbar (max-width: 64rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row[data-part='row'] {
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
     flex: 1 1 100%;
     max-inline-size: 100%;
   }
@@ -98420,22 +98390,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         with the row it divided, and the primary action becomes a full-width
         commit control instead of a compact end-edge button. ---- */
 @container ds-table-toolbar (max-width: 40rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
     flex: 1 1 100%;
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
     justify-content: flex-start;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
     flex: 1 1 100%;
     padding-inline-start: 0;
   }
   .ds-structure.ds-table-toolbar[data-part='root']
-    .ds-table-toolbar__actions
+    .ds-table-toolbar__actions[data-part='actions']
     [data-part='primary-action'] {
     flex: 1 1 auto;
   }
@@ -98459,7 +98429,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     box-shadow: none;
   }
   .ds-structure.ds-table-toolbar
-    .ds-table-toolbar__search-field
+    .ds-table-toolbar__search-field[data-part='search-field']
+    [data-part='search-input']
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     color: CanvasText;
   }
@@ -98468,7 +98439,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Reduced motion: the only animated channel is the icon color cross-fade. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-table-toolbar
-    .ds-table-toolbar__search-field
+    .ds-table-toolbar__search-field[data-part='search-field']
+    [data-part='search-input']
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     transition: none;
   }
@@ -98559,24 +98531,54 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 @layer rottay-components {
 /**
- * VirtualList skin (p610 visual wave).
+ * VirtualList skin (p610 visual wave; family cut WO-FAM-08 B7).
  *
  * REGISTRATION: wired — imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` (coordinator closed the gap this file's
- * header used to flag). The engine keeps its functional geometry inline
- * (height, measured offsets, the scrollport's overflowY/position), exactly
- * like the data-table scroll region; this skin owns only the pattern's
- * CHROME: the focus ring of the keyboard-focusable scroll region
- * (scrollable-region law), its overscroll containment, its scrollbar ink and
- * the empty-state frame.
+ * `facade/entrypoints/styles.css`.
  *
- * SCOPE: the engine stamps `data-part='root'` on the scrollport; consumers
- * may add their own class. No engine scope class exists (the presentation
- * component is engine-free), so rules key on the part pair alone and paint
- * no border colors (the P-48 floor never applies).
+ * OWNERSHIP (B7): this file owns ALL of the pattern's paint and geometry. The
+ * TSX no longer stamps a single CSS property; the three numbers the
+ * virtualization runtime MEASURES travel as `--ds-virtual-list-*` custom
+ * properties and are consumed here, with their resting values declared on the
+ * root so every read has a producer instead of resolving to a fallback nobody
+ * can move:
+ *
+ *   --ds-virtual-list-block-size              the scrollport's viewport bound
+ *                                             (stamped only when the caller
+ *                                             states `height`)
+ *   --ds-virtual-list-spacer-block-size       the whole dataset's block size
+ *   --ds-virtual-list-item-inset-block-start  one row's measured offset
+ *
+ * SCOPE: the pattern stamps `data-part` on the scrollport, the spacer, each
+ * row and the end sentinel; consumers may add their own class. No engine scope
+ * class exists (the presentation component is engine-free), so rules key on
+ * the part pair alone and paint no border colors (the P-48 floor never
+ * applies). The three structural rules walk the DOM's child chain
+ * (root > spacer > item|sentinel) because `item` and `sentinel` are parts other
+ * families stamp too: a bare descendant selector would reach whatever a
+ * caller's `renderItem` renders, which is outside this family's anatomy.
+ *
+ * STATE: the scrollport's interaction state is decided once by the kernel and
+ * arrives as `data-state`; the platform pseudo-class is PAIRED with it as the
+ * fallback of one decision, never as a second authority (F-37).
  */
 
+.ds-pattern-virtual-list[data-part='root'],
+.ds-pattern-virtual-list[data-part='empty'] {
+  /* The resting geometry of the whole family, declared once and inherited by
+     the spacer and the rows. A stamped instance value outranks these exactly
+     as an inline declaration outranks the theme root. */
+  --ds-virtual-list-block-size: 100%;
+  --ds-virtual-list-spacer-block-size: auto;
+  --ds-virtual-list-item-inset-block-start: 0;
+}
+
 .ds-pattern-virtual-list[data-part='root'] {
+  block-size: var(--ds-virtual-list-block-size, 100%);
+  /* The windowed region is the scrollport: it scrolls on the block axis and is
+     the positioning host every measured row anchors to. */
+  overflow-y: auto;
+  position: relative;
   overscroll-behavior-block: contain;
   scrollbar-color: var(--ds-color-border-secondary) transparent;
   /* The gutter is reserved up-front: rows appearing on scroll (or on
@@ -98584,18 +98586,48 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   scrollbar-gutter: stable;
 }
 
-/* The empty branch renders `data-part='empty'` on the same root box (inline
-   height travels with it): the caller's empty composition stays centered in
-   the viewport the populated list would have occupied. */
+/* The full-height spacer: it holds the scrollbar honest for rows that were
+   never rendered, and it is the containing block of the windowed rows. The
+   chain is the DOM's own child chain: the family paints its OWN anatomy only,
+   never a `data-part` a caller's `renderItem` happens to stamp. */
+.ds-pattern-virtual-list[data-part='root'] > [data-part='spacer'] {
+  position: relative;
+  inline-size: 100%;
+  block-size: var(--ds-virtual-list-spacer-block-size, auto);
+}
+
+/* One windowed row, parked at its own measured offset. The inline edges are
+   logical, so the window mirrors under `dir="rtl"` with zero overrides. */
+.ds-pattern-virtual-list[data-part='root'] > [data-part='spacer'] > [data-part='item'] {
+  position: absolute;
+  inset-block-start: var(--ds-virtual-list-item-inset-block-start, 0);
+  inset-inline: 0;
+}
+
+/* The end-of-list sentinel: a hairline the observer can see and the reader
+   cannot. It is `aria-hidden` in the TSX and paints nothing. */
+.ds-pattern-virtual-list[data-part='root'] > [data-part='spacer'] > [data-part='sentinel'] {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: 1px;
+}
+
+/* The empty branch renders `data-part='empty'` on the same root box (the
+   viewport bound travels with it): the caller's empty composition stays
+   centered in the viewport the populated list would have occupied. */
 .ds-pattern-virtual-list[data-part='empty'] {
+  block-size: var(--ds-virtual-list-block-size, 100%);
   display: grid;
   place-items: center;
   min-block-size: 8rem;
 }
 
-/* The region is tabbable (engine, scrollable-region law): keyboard focus
-   must read on the region itself before its items take over. */
-.ds-pattern-virtual-list[data-part='root']:focus-visible {
+/* The region is tabbable (scrollable-region law): keyboard focus must read on
+   the region itself before its items take over. The kernel decides when the
+   region carries a focus ring; `:focus-visible` is that decision's platform
+   fallback, not a second opinion. */
+.ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
@@ -98603,7 +98635,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 @media (forced-colors: active) {
-  .ds-pattern-virtual-list[data-part='root']:focus-visible {
+  .ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
   }
 }
@@ -98645,6 +98677,23 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * RESPONSIVE: the root is the named container `ds-file-manager`; the grid
  * column cuts are container queries (the composition defines the cut, not
  * viewport breakpoints — spec section 13).
+ *
+ * CHANNELS (WO-FAM-08): every `--ds-file-manager-*` name below has a producer
+ * -- `derivation/chrome/file-manager` emits the drop-zone floor, the folder
+ * link's resting and hover ink and the coarse-pointer target at exactly the
+ * resting values written here as fallbacks, so a tenant can move them. The two
+ * `--ds-link-underline-*` names the folder-link reset reads are the LINK
+ * family's vocabulary and nothing writes them; they are this cut's named
+ * residue, not channels for this deriver to grow into.
+ *
+ * STATE IS DECIDED ONCE (F-37): the list row and the grid card are stateful
+ * parts -- the engine runs each through `useInteractionState` and stamps
+ * `partAttributes(...)` -- and the folder link is a composed Button, which
+ * already decides its own state through the same kernel. Every hover, press
+ * and focus arm below therefore pairs the kernel token with the platform
+ * pseudo-class it stands for (`:is([data-state~='hovered'], :hover)`); at rest
+ * the kernel serializes nothing, so the pseudo-class is the fallback of one
+ * decision, never a second authority.
  */
 
 /* ---- root: named container (the composition defines the cut) ---- */
@@ -98666,6 +98715,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   align-items: center;
   justify-content: center;
   padding-block: var(--ds-spacing-12, 3rem);
+}
+/* The composed Spinner is the loading root's only child and carries no class
+   of this family, so the child combinator scopes the one thing the PATTERN
+   owns about it: where it sits. Ring, size and cadence stay the primitive's
+   (composition law above) -- the slot is placed, never restyled. */
+.ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='true']
+  > [data-part='spinner'] {
+  align-self: center;
 }
 
 /* ---- body ---- */
@@ -98751,7 +98808,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Underline reveals only where hovering is a real input mode. */
 @media (hover: hover) {
   .ds-pattern-file-manager.ds-engine-modern
-    .ds-file-manager__folder-link[data-part='folder-link']:hover {
+    .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='hovered'], :hover) {
     color: var(--ds-file-manager-link-hover-color, var(--ds-color-link-hover, var(--ds-color-primary-hover)));
     text-decoration-line: underline;
   }
@@ -98761,9 +98818,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   outline-style: none;
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus-visible {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-shadow-focus-ring);
+  /* The focus SIGNATURE is a decision, so the ring reads it first (the
+     materials idiom every cut family uses). --ds-focus-ring always resolves,
+     so this CHANGES the painted ring: the W8 double ring replaces the former
+     3px primary-at-24% halo. The static token stays only as the floor. */
+  box-shadow: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
 }
 
 /* The pattern intentionally flattens Button's visual padding above; restore
@@ -98898,7 +98959,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
 }
 @media (hover: hover) {
-  .ds-pattern-file-manager.ds-engine-modern [data-part='row']:not([data-selected='true']):hover {
+  .ds-pattern-file-manager.ds-engine-modern [data-part='row']:not([data-selected='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
   }
 }
@@ -98945,9 +99006,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']:focus-visible {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-shadow-focus-ring);
+  /* The focus SIGNATURE is a decision, so the ring reads it first (the
+     materials idiom every cut family uses). --ds-focus-ring always resolves,
+     so this CHANGES the painted ring: the W8 double ring replaces the former
+     3px primary-at-24% halo. The static token stays only as the floor. */
+  box-shadow: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
 }
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false'] {
   background: var(--ds-surface-card);
@@ -98958,14 +99023,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Hover reveals only where hovering is a real input mode (hover law);
    the press feedback is a real :active, available on every pointer. */
 @media (hover: hover) {
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:hover {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false']:hover {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 35%, var(--ds-color-border));
   }
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:active {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-inset);
 }
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true'] {
@@ -99044,8 +99109,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background: Highlight;
     color: HighlightText;
   }
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']:focus-visible,
-  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus-visible {
+  .ds-pattern-file-manager.ds-engine-modern
+    .ds-file-manager__grid-card[data-part='grid-card']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-pattern-file-manager.ds-engine-modern
+    .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
@@ -102222,16 +102289,67 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * instance values owned by props (grid template, gap, aspectRatio) — never
  * paint.
  *
- * P-79 NOTE: the Text primitive stamps its own `data-part="root"` and drops
- * the caller's part, so the caption-text rules key on the pattern's BEM class
- * (repeated for the same specificity the dead attribute chain had). The
- * caption colour rule now actually matches.
+ * P-79 NOTE: the Text primitive FORWARDS the caller's `data-part` (it falls
+ * back to `root` only when none is given), so the caption line carries
+ * `data-part='caption-text'` on the loaded card exactly as the loading bone
+ * does. The caption-text rule keys on that attribute, repeated to match the
+ * specificity of the typography skin's `[data-color]` rule. The pattern's BEM
+ * class stays on the node as the test handle only.
  *
  * RTL: the checkbox overlay anchors with logical insets — it mirrors to the
  * inline-start corner under `dir="rtl"` with zero overrides.
+ *
+ * GEOMETRY (WO-FAM-08 B7): the gallery's track model, gap and media ratio moved
+ * here out of the engine's `style` prop. The three numbers a caller can state
+ * travel as family channels whose RESTING values are declared below, so the
+ * reads have a producer instead of resolving to a fallback nobody can move:
+ *
+ *   --ds-gallery-view-columns       the `grid-template-columns` track model
+ *   --ds-gallery-view-gap           the gap between cards
+ *   --ds-gallery-view-aspect-ratio  the media frame's ratio
+ *
+ * All three resting values are byte-equivalent to what the pattern's prop
+ * defaults used to compute.
+ *
+ * LOADING: the family draws no skeleton of its own. The shared anatomy renderer
+ * builds the loading state from this gallery's own parts, so the `skeleton-card`
+ * and `skeleton-caption` rules that used to live here are gone with the
+ * hand-made compound they painted.
+ *
+ * STATE: a card's interaction state is decided once by the kernel and arrives
+ * as `data-state`; every platform pseudo-class below is PAIRED with it as the
+ * fallback of one decision, never as a second authority (F-37).
  */
 
+.ds-pattern-gallery-view[data-part='root'] {
+  --ds-gallery-view-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  /* The card rhythm rides the density-scaled spacing ramp: `--ds-spacing-4` is
+     `calc(1rem * density)`, which is the 16px the prop default forced at
+     density 1 -- and now follows a denser tenant instead of ignoring it. */
+  --ds-gallery-view-gap: var(--ds-spacing-4, 16px);
+  --ds-gallery-view-aspect-ratio: 1;
+}
+
+/* The card grid itself. The empty branch is NOT a grid -- it is one centered
+   message on the same root box -- so the track model is scoped to the populated
+   and loading branches, exactly as the engine scoped it. */
+.ds-pattern-gallery-view[data-part='root'][data-empty='false'] {
+  display: grid;
+  grid-template-columns: var(
+    --ds-gallery-view-columns,
+    repeat(auto-fill, minmax(min(200px, 100%), 1fr))
+  );
+  gap: var(--ds-gallery-view-gap, var(--ds-spacing-4, 16px));
+}
+
 /* ---- media frame: the image and its placeholder share one geometry. ---- */
+
+.ds-pattern-gallery-view [data-part='image-frame'],
+.ds-pattern-gallery-view [data-part='image-placeholder'] {
+  /* The media ratio is one decision for the frame and for the placeholder that
+     stands in for it, so a missing image never changes the card's footprint. */
+  aspect-ratio: var(--ds-gallery-view-aspect-ratio, 1);
+}
 
 .ds-pattern-gallery-view [data-part='image-frame'] {
   inline-size: 100%;
@@ -102261,14 +102379,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- caption: quiet strip below the media, single-line with ellipsis. ---- */
 
 .ds-pattern-gallery-view .ds-gallery-card [data-part='caption'] {
+  /* The strip owns the caption's rhythm ONCE. The line inside it must not
+     repeat the padding: it would indent and inflate every loaded caption
+     inside an already-padded strip. */
   padding-block: var(--ds-spacing-2);
   padding-inline: 10px;
   background: var(--ds-color-bg-primary);
 }
 
+/* The caption line, keyed on the part the Text primitive forwards, so the
+   loaded line and the loading bone are the same node contract. The attribute
+   is repeated to the specificity the typography skin's `[data-color]` rule
+   carries; anything lower would lose the colour decision. */
 .ds-pattern-gallery-view
   .ds-gallery-card
-  .ds-gallery-view__caption-text.ds-gallery-view__caption-text.ds-gallery-view__caption-text {
+  [data-part='caption-text'][data-part='caption-text'][data-part='caption-text'] {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -102305,16 +102430,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 @media (hover: hover) {
-  .ds-pattern-gallery-view .ds-gallery-card:hover {
+  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='hovered'], :hover) {
     box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
     transform: translateY(-2px);
   }
 
-  .ds-pattern-gallery-view .ds-gallery-card:hover [data-part='image'] {
+  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='hovered'], :hover) [data-part='image'] {
     transform: scale(1.04);
   }
 
-  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']:hover {
+  .ds-pattern-gallery-view
+    .ds-gallery-card[data-part='card'][data-selected='true']:is([data-state~='hovered'], :hover) {
     box-shadow:
       0 0 0 var(--ds-border-width-thin) var(--ds-color-primary),
       0 4px 12px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
@@ -102324,7 +102450,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- selection overlay: revealed on hover / when checked; always visible
         on coarse pointers, where no hover exists to reveal it. ---- */
 
-.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {
+.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox[data-part='checkbox'] {
   position: absolute;
   inset-block-start: var(--ds-spacing-2);
   inset-inline-start: var(--ds-spacing-2);
@@ -102341,7 +102467,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 @media (hover: hover) {
-  .ds-pattern-gallery-view .ds-gallery-card:hover .ds-gallery-checkbox {
+  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='hovered'], :hover) .ds-gallery-checkbox {
     opacity: 1;
   }
 }
@@ -102357,34 +102483,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 }
 
-.ds-pattern-gallery-view .ds-gallery-card:focus-visible {
+.ds-pattern-gallery-view .ds-gallery-card:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
-}
-
-/* ---- skeleton: same footprint as the loaded card (image ratio + caption). ---- */
-
-.ds-pattern-gallery-view [data-part='skeleton-card'][data-part='skeleton-card'][data-part='skeleton-card'] {
-  overflow: hidden;
-  border-radius: var(--ds-radius-md);
-  border: var(--ds-border-width-thin) solid var(--ds-color-border);
-  background: var(--ds-color-bg-primary);
-}
-
-.ds-pattern-gallery-view .ds-gallery-view__skeleton-image {
-  display: block;
-  inline-size: 100%;
-}
-
-.ds-pattern-gallery-view [data-part='skeleton-caption'] {
-  padding-block: var(--ds-spacing-2);
-  padding-inline: 10px;
-}
-
-.ds-pattern-gallery-view .ds-gallery-view__skeleton-caption {
-  display: block;
-  inline-size: 70%;
-  block-size: var(--ds-font-size-sm);
 }
 
 /* ---- empty state ---- */
@@ -102410,11 +102511,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     transition: none;
   }
 
-  .ds-pattern-gallery-view .ds-gallery-card:hover {
+  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='hovered'], :hover) {
     transform: none;
   }
 
-  .ds-pattern-gallery-view .ds-gallery-card:hover [data-part='image'] {
+  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='hovered'], :hover) [data-part='image'] {
     transform: none;
   }
 }
@@ -102434,7 +102535,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     border-color: ButtonText;
   }
 
-  .ds-pattern-gallery-view .ds-gallery-card:focus-visible {
+  .ds-pattern-gallery-view .ds-gallery-card:is([data-state~='focus-visible'], :focus-visible) {
     outline: var(--ds-focus-ring-width) solid Highlight;
     outline-offset: var(--ds-focus-ring-offset);
   }
@@ -102461,7 +102562,67 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * renderCard subtree is consumer-owned, so the content slots (action-*,
  * footer-*, icon-*, meter-*, number-*, value-color-hover) have no honest host
  * in this file and stay unwired pending a CONSUMER_APPLIED contract.
+ *
+ * GEOMETRY (WO-FAM-08 B7): the grid's own track model, gap, bleed and box
+ * sizing moved here out of the engine's `style` prop. The two numbers a caller
+ * can state travel as family channels whose RESTING values are declared below,
+ * so the reads have a producer instead of resolving to a fallback nobody can
+ * move:
+ *
+ *   --ds-grid-view-columns  the `grid-template-columns` track model
+ *   --ds-grid-view-gap      the gap between cards
+ *
+ * Both resting values are byte-equivalent to what the pattern's prop defaults
+ * used to compute, including the `--ds-collection-card-gap` premium socket the
+ * engine used to tier through.
+ *
+ * STATE: the shell's interaction state is decided once by the kernel and
+ * arrives as `data-state`; the platform pseudo-class is PAIRED with it as the
+ * fallback of one decision, never as a second authority (F-37).
  */
+
+.ds-pattern-grid-view[data-part='root'] {
+  --ds-grid-view-columns: repeat(
+    auto-fill,
+    minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr)
+  );
+  --ds-grid-view-gap: var(
+    --ds-collection-card-gap,
+    var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))
+  );
+}
+
+/* The card grid itself. The empty branch is NOT a grid -- it is one centered
+   message on the same root box -- so the track model is scoped to the
+   populated and loading branches, exactly as the engine scoped it. */
+.ds-pattern-grid-view[data-part='root'][data-empty='false'] {
+  display: grid;
+  grid-template-columns: var(
+    --ds-grid-view-columns,
+    repeat(auto-fill, minmax(min(var(--ds-listing-grid-min-compact-width, 280px), 100%), 1fr))
+  );
+  gap: var(--ds-grid-view-gap, var(--ds-spacing-4, 16px));
+  /* One pixel of bleed on each side so a card's own ring is not clipped, and a
+     bottom bleed the listing layer can tune. */
+  padding-block: 1px var(--ds-listing-grid-bottom-bleed, 8px);
+  padding-inline: 1px;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* The stagger cell wraps a card only when the motion policy actually animates.
+   It is a grid item like any other, and a grid item whose content can overflow
+   needs an explicit floor or the track blows out. */
+.ds-pattern-grid-view [data-part='cell'] {
+  min-inline-size: 0;
+}
+
+/* The card body the loading state stands behind: with no data there is nothing
+   inside the caller's slot to draw, so the slot itself is the bone, and it
+   needs a footprint for the renderer to measure. */
+.ds-pattern-grid-view [data-part='card-content'] {
+  min-block-size: 7.5rem;
+}
 
 .ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'] {
   /* Positioning host for the ::before/::after motif layers and the checkbox
@@ -102525,16 +102686,17 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    preference because a lit slot is a brand-literal transform (motion). Unset
    it computes `none`, the value the shell paints today. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']:hover {
+  .ds-pattern-grid-view
+    [data-part='card-shell'][data-part='card-shell']:is([data-state~='hovered'], :hover) {
     transform: var(--ds-collection-card-hover-transform, none);
   }
 }
 
 .ds-pattern-grid-view .ds-grid-view__checkbox-control.ds-grid-view__checkbox-control.ds-grid-view__checkbox-control {
   padding: 2px;
-  background: var(--ds-color-bg-primary, #fff);
+  background: var(--ds-color-bg-primary);
   border-radius: var(--ds-radius-sm, 6px);
-  box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0, 0, 0, 0.12));
+  box-shadow: var(--ds-elevation-1);
 }
 
 .ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
@@ -102542,7 +102704,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-align: center;
   border-radius: var(--ds-radius-lg, 12px);
   border: 1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)));
-  background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary, #fff)));
+  background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary)));
 }
 
 .ds-pattern-grid-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
@@ -106654,7 +106816,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
         flex evenly and never overflow the page (min-inline-size: 0). ---- */
 .ds-surface.ds-kanban [data-part='kanban-skeleton-board'] {
   display: flex;
-  gap: var(--ds-kanban-column-gap, var(--ds-spacing-4, 16px));
+  gap: var(--ds-kanban-board-column-gap, var(--ds-spacing-4, 16px));
 }
 
 .ds-surface.ds-kanban [data-part='kanban-skeleton-column'] {
@@ -113328,8 +113490,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * hue alone.
  *
  * EVENT ACCENT HATCH: `CalendarEvent.color` is consumer-supplied config data;
- * it rides the quoted `--ds-calendar-event-accent` custom property the engine
- * stamps per chip, and the single rule below owns the fill (one paint owner).
+ * it rides the quoted `--ds-calendar-view-event-accent` custom property, and
+ * the single rule below owns the fill (one paint owner). The engine stamps it
+ * CONDITIONALLY -- an event that states no colour spreads no `style` at all --
+ * so the derived resting accent stays reachable from the theme instead of being
+ * shadowed inline on every render.
  * In forced colors the accent data deliberately DISAPPEARS (documented
  * decision): events read by their title text inside a system-ink frame —
  * there is no forced-color-adjust opt-out, the chip is not a color picker.
@@ -113358,6 +113523,22 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * TOKEN OWNERSHIP: selected-ring width reuses the canonical focus-ring width;
  * the narrow event-dot diameter is private to this family because it is not a
  * tenant-level density rung.
+ *
+ * CHANNELS (WO-FAM-08): every `--ds-calendar-view-*` name below has a producer
+ * -- `derivation/chrome/calendar-view` emits the cell floors, the event accent
+ * and the coarse-pointer target at exactly the resting values written here as
+ * fallbacks, so a tenant can move them. The accent used to be read and stamped
+ * as `--ds-calendar-event-accent`, a name inside the `calendar` PRIMITIVE's
+ * prefix that nothing wrote; it is now the family's own channel, fallback
+ * byte-identical.
+ *
+ * STATE IS DECIDED ONCE (F-37): the day cell and the event chip are stateful
+ * parts -- the engine runs each through `useInteractionState` and stamps
+ * `partAttributes(...)` -- so every hover, press and focus arm below pairs the
+ * kernel token with the platform pseudo-class it stands for
+ * (`:is([data-state~='hovered'], :hover)`). At rest the kernel serializes
+ * nothing, so the pseudo-class is the fallback of one decision, never a second
+ * authority.
  */
 
 /* ---- loading frame (Spinner owns ring + cadence) ---- */
@@ -113365,6 +113546,16 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   display: flex;
   justify-content: center;
   padding-block: var(--ds-spacing-12, 3rem);
+}
+/* The composed Spinner is the loading frame's only child and carries no class
+   of this family, so the child combinator scopes the one thing the PATTERN
+   owns about it: where it sits. Its ring, size and cadence stay the
+   primitive's (composition law above) -- the slot is clipped to the frame,
+   never restyled. */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='loading']
+  > [data-part='spinner'] {
+  align-self: center;
 }
 
 /* ---- toolbar (geometry drained from utilities) ---- */
@@ -113452,13 +113643,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    [data-part='day-cell'][data-empty='false']:hover {
+    [data-part='day-cell'][data-empty='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  [data-part='day-cell'][data-empty='false']:active {
+  [data-part='day-cell'][data-empty='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-inset);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
@@ -113470,7 +113661,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- gridcell keyboard ring: inset (the grid hairlines own the borders) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  [data-part='day-cell'][data-empty='false']:focus-visible {
+  [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
 }
@@ -113516,7 +113707,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   white-space: nowrap;
   cursor: pointer;
   border-radius: var(--ds-radius-sm);
-  background: var(--ds-calendar-event-accent, var(--ds-color-primary));
+  background: var(--ds-calendar-view-event-accent, var(--ds-color-primary));
   color: var(--ds-color-text-on-primary);
   font-size: var(--ds-font-size-xs, 0.75rem);
   transition: filter var(--ds-motion-fast) var(--ds-motion-ease-out);
@@ -113525,20 +113716,20 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event']:hover {
+    [data-part='event']:is([data-state~='hovered'], :hover) {
     filter: brightness(1.06);
   }
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:active {
+  [data-part='event']:is([data-state~='pressed'], :active) {
   filter: brightness(0.94);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:focus-visible {
+  [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -113645,7 +113836,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    [data-part='day-cell'][data-empty='false']:focus-visible {
+    [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
 
@@ -113666,7 +113857,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event']:focus-visible {
+    [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
 
@@ -118882,6 +119073,15 @@ html[lang]:lang(ar) {
 :is(html[data-tenant='rottay'], :where([data-ds-root][data-vertical='rottay'])) {
   color-scheme: dark;
   color: var(--ds-color-text-primary);
+  --ds-active-filters-bar-background: var(--ds-toolbar-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)));
+  --ds-active-filters-bar-border: 1px solid var(--ds-toolbar-border-bottom, color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent));
+  --ds-active-filters-bar-chips-basis: 560px;
+  --ds-active-filters-bar-count-block-size: 24px;
+  --ds-active-filters-bar-count-color: var(--ds-color-text-muted);
+  --ds-active-filters-bar-embedded-padding-block: 6px 10px;
+  --ds-active-filters-bar-motion-duration: var(--ds-motion-reveal, var(--ds-motion-normal));
+  --ds-active-filters-bar-padding-block: 10px 12px;
+  --ds-active-filters-bar-padding-inline: 16px;
   --ds-alert-actions-bg: color-mix(in srgb, var(--ds-color-bg-elevated) 60%, transparent);
   --ds-alert-close-bg: color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   --ds-alert-close-color: var(--ds-color-text-secondary);
@@ -119191,6 +119391,10 @@ html[lang]:lang(ar) {
   --ds-button-warning-shadow-hover: var(--ds-material-control-shadow-hover);
   --ds-button-xl-radius: var(--ds-radius-md, 8px);
   --ds-button-xs-radius: var(--ds-radius-md, 8px);
+  --ds-calendar-view-cell-min-height: 5rem;
+  --ds-calendar-view-cell-min-height-compact: 3.5rem;
+  --ds-calendar-view-event-accent: var(--ds-color-primary);
+  --ds-calendar-view-touch-target: 2.75rem;
   --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
   --ds-card-error-title-color: var(--ds-color-error-900);
   --ds-card-footer-actions-inset: var(--ds-spacing-1);
@@ -119304,6 +119508,47 @@ html[lang]:lang(ar) {
   --ds-color-picker-swatch-shadow: var(--ds-elevation-1);
   --ds-color-picker-swatch-shadow-hover: var(--ds-elevation-2);
   --ds-color-picker-text-ink: var(--ds-color-text-primary);
+  --ds-column-menu-body-background: color-mix(in srgb, var(--ds-color-bg-primary) 5%, transparent);
+  --ds-column-menu-body-max-block-size: 430px;
+  --ds-column-menu-body-padding: 14px;
+  --ds-column-menu-count-background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent);
+  --ds-column-menu-count-block-size: 22px;
+  --ds-column-menu-count-border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent);
+  --ds-column-menu-count-color: var(--ds-color-text-secondary);
+  --ds-column-menu-count-min-inline-size: 26px;
+  --ds-column-menu-count-padding-inline: 8px;
+  --ds-column-menu-count-radius: var(--ds-radius-full, 9999px);
+  --ds-column-menu-description-color: var(--ds-color-text-muted);
+  --ds-column-menu-footer-background: color-mix(in srgb, var(--ds-color-bg-primary) 24%, transparent);
+  --ds-column-menu-footer-padding: 12px;
+  --ds-column-menu-header-background: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  --ds-column-menu-header-padding: 18px 20px 16px;
+  --ds-column-menu-panel-backdrop: none;
+  --ds-column-menu-panel-background: var(--ds-gradient-surface, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)));
+  --ds-column-menu-panel-border: 1px solid var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent));
+  --ds-column-menu-panel-focus-outline: 2px solid var(--ds-color-border-focus);
+  --ds-column-menu-panel-focus-outline-offset: -2px;
+  --ds-column-menu-panel-inline-size: 432px;
+  --ds-column-menu-panel-radius: var(--ds-radius-xl, 20px);
+  --ds-column-menu-panel-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-4, 0 24px 64px color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)));
+  --ds-column-menu-row-active-background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
+  --ds-column-menu-row-active-shadow: var(--ds-material-raised-shadow-selected, 0 8px 20px color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
+  --ds-column-menu-row-background: color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%);
+  --ds-column-menu-row-border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
+  --ds-column-menu-row-drag-background: color-mix(in srgb, var(--ds-color-primary) 13%, var(--ds-surface-card));
+  --ds-column-menu-row-motion-duration: var(--ds-motion-feedback, var(--ds-motion-fast, 120ms));
+  --ds-column-menu-row-padding: 13px 15px;
+  --ds-column-menu-row-radius: var(--ds-radius-lg, 14px);
+  --ds-column-menu-row-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent);
+  --ds-column-menu-row-title-color: var(--ds-color-text-primary);
+  --ds-column-menu-section-border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
+  --ds-column-menu-section-gap: 8px;
+  --ds-column-menu-section-padding-block-start: 14px;
+  --ds-column-menu-title-color: var(--ds-color-text-primary);
+  --ds-column-menu-trigger-open-z: var(--ds-z-index-popover);
+  --ds-column-menu-trigger-z: var(--ds-z-index-relative-above, 1);
+  --ds-column-menu-viewport-gutter: 24px;
+  --ds-column-menu-viewport-reservation: 152px;
   --ds-column-settings-empty-padding-block: 8px;
   --ds-column-settings-empty-padding-inline: 12px;
   --ds-column-settings-footer-padding-block: 8px;
@@ -119607,6 +119852,10 @@ html[lang]:lang(ar) {
   --ds-edge-hairline-width: 1px;
   --ds-edge-standard-width: 1px;
   --ds-effect-intensity: 0.2;
+  --ds-file-manager-content-min-height: 12.5rem;
+  --ds-file-manager-link-color: var(--ds-color-link, var(--ds-color-primary));
+  --ds-file-manager-link-hover-color: var(--ds-color-link-hover, var(--ds-color-primary-hover));
+  --ds-file-manager-touch-target: 2.75rem;
   --ds-filter-chip-bg: var(--ds-surface-card);
   --ds-filter-chip-border: var(--ds-toolbar-control-border, var(--ds-color-border));
   --ds-filter-panel-content-max-height: 125rem;
@@ -120978,6 +121227,9 @@ html[lang]:lang(ar) {
   --ds-type-tier-xl-line-height: 1.15;
   --ds-type-tier-xs-letter-spacing: 0;
   --ds-type-tier-xs-line-height: 1.4;
+  --ds-widget-board-catalog-no-results-min-height: 96px;
+  --ds-widget-board-catalog-search-margin-block-end: var(--ds-spacing-3);
+  --ds-widget-board-catalog-search-max-width: 680px;
   --ds-z-index-base: 0;
   --ds-z-index-drawer: 1400;
   --ds-z-index-dropdown: 1000;
