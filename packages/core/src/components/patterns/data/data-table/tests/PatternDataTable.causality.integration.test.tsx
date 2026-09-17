@@ -11,6 +11,9 @@ import { prerenderToNodeStream } from 'react-dom/static';
 import { describe, expect, it } from 'vitest';
 
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
+import { apcaContrast } from '@/foundation/kernel/accessibility/branding-contrast';
+import { ratioFromLuminance, relativeLuminanceOf } from '@/foundation/kernel/color/contrast';
+import type { Rgb255 } from '@/foundation/kernel/color/contrast';
 import { firstPartyEngineVisual } from '@/infrastructure/compilers/runtime/theme';
 import type { TenantConfig } from '@/foundation/contracts';
 import type { ColumnDef } from '@/foundation/contracts/runtime/components/patterns/core';
@@ -167,6 +170,28 @@ const RANGE = "#grid [data-part='pagination-range']";
 const HEAD_CONTENT = "#grid [data-part='header-content']";
 const CUSTOM_CARD = "#cards [data-part='mobile-card-custom'][data-selected='true']";
 
+/**
+ * A computed color in either shape Chromium serializes: `rgb()` for a literal,
+ * and `color(srgb <0..1> <0..1> <0..1>)` for the result of a `color-mix()` --
+ * which is what a derived ink resolves to, so a reader that only knows `rgb()`
+ * would measure the contrast of a colour it failed to parse.
+ */
+function parseComputedColor(value: string): Rgb255 {
+  const srgb = /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/.exec(value.trim());
+  if (srgb) {
+    return { r: Number(srgb[1]) * 255, g: Number(srgb[2]) * 255, b: Number(srgb[3]) * 255 };
+  }
+  const rgb = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/.exec(value.trim());
+  if (!rgb) throw new Error(`unparsed computed color: "${value}"`);
+  return { r: Number(rgb[1]), g: Number(rgb[2]), b: Number(rgb[3]) };
+}
+
+function toHex({ r, g, b }: Rgb255): string {
+  const byte = (channel: number): string =>
+    Math.round(Math.min(255, Math.max(0, channel))).toString(16).padStart(2, '0');
+  return `#${byte(r)}${byte(g)}${byte(b)}`;
+}
+
 describeCausality({
   family: 'data-table',
   markup,
@@ -189,14 +214,26 @@ describeCausality({
     { id: 'pageBarPad', selector: PAGE_BAR, property: 'padding-top' },
     { id: 'bulkBarPad', selector: BULK_BAR, property: 'padding-top' },
     { id: 'sortControlSize', selector: SORT_ICON, property: 'width' },
+    { id: 'mobileBulkGround', selector: "#cards [data-part='mobile-bulk-actions']", property: 'background-color' },
+    { id: 'mobileBulkInk', selector: "#cards [data-part='mobile-bulk-count']", property: 'color' },
   ],
   decisions: {
     // `consumes: palette.*` -- the sort ink, the selected row and bulk-bar
     // grounds, the sortable header's focus shadow and the selected mobile
-    // card's ring all resolve from the seeded ramp.
+    // card's ring all resolve from the seeded ramp. The phone bulk bar carries
+    // both halves of one pair: the seed tints its ground, and its quiet ink is
+    // derived from that same ground, so the ink follows the seed with it.
     'palette.seeds': {
       value: { primary: '#2F6B9A' },
-      moves: ['sortInk', 'rowSelectedBg', 'bulkBg', 'headFocusRing', 'cardSelectedInk'],
+      moves: [
+        'sortInk',
+        'rowSelectedBg',
+        'bulkBg',
+        'headFocusRing',
+        'cardSelectedInk',
+        'mobileBulkGround',
+        'mobileBulkInk',
+      ],
       holds: 'bulkCorner',
       in: VERTICALS,
     },
@@ -271,13 +308,24 @@ describeCausality({
  * family-causality harness defines it: a repaired node, a new node and a
  * same-count swap all go red and must be re-adjudicated.
  *
- * `aria-conditional-attr` fails in EVERY gated scope, so the select-all
- * checkbox's `aria-checked="mixed"` on a native input is a systemic defect of
- * the header selection cell, not a mode-specific one. The contrast failures
- * belong to the phone chrome -- the bulk count and the range on the light
- * scopes, the toolbar slot and the custom card slot on bithire dark -- where
- * the family states no ground of its own beneath caller content. Registered,
- * never excluded.
+ * Both surviving rules are owned OUTSIDE this family, which is why they are
+ * still here after the family's own two contrast pairs were drained.
+ *
+ * `aria-conditional-attr` fails in every gated scope on one node: the shared
+ * Checkbox primitive puts `aria-checked` on its native `input[type=checkbox]`,
+ * and `mixed` can never agree with a serialized checkbox's real state, because
+ * `indeterminate` is a DOM property with no content attribute. Stripping the
+ * attribute from the probed markup leaves every scope clean, so the remedy is
+ * the primitive's single `aria-checked` expression, not this family's markup.
+ *
+ * `color-contrast` survives only on bithire dark, and only on the two slots the
+ * family deliberately leaves unpainted beneath caller content: the toolbar slot
+ * and the custom mobile card. Their ink is the page's, and their ground is the
+ * page's -- `#f3f4f6` on `#ffffff` at 1.1:1, because bithire states
+ * `palette.seeds.background: '#FFFFFF'` and that seed lowers mode-lessly while
+ * the ink ramp mirrors into dark. Recompiling the same scope with a dark
+ * background seed takes the three nodes to zero, so the ground is the defect
+ * and painting one here would only hide it for one family.
  *
  * Scope limit, stated rather than implied: the four Buttons React defers into
  * `[hidden]` completion containers (see `serverMarkup`) sit outside every
@@ -295,17 +343,9 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   },
   'bithire light': {
     'aria-conditional-attr': ['#checkbox-modern-_R_2pe_'],
-    'color-contrast': [
-      'span[data-part="mobile-bulk-count"]',
-      'span[data-part="mobile-pagination-range"]',
-    ],
   },
   'evnto light': {
     'aria-conditional-attr': ['#checkbox-modern-_R_2pe_'],
-    'color-contrast': [
-      'span[data-part="mobile-bulk-count"]',
-      'span[data-part="mobile-pagination-range"]',
-    ],
   },
   'rottay dark': {
     'aria-conditional-attr': ['#checkbox-modern-_R_2pe_'],
@@ -483,6 +523,64 @@ describe('data-table causality surface', () => {
     // above moves it), so the prop reaches the cells and not the chrome gap.
     expect(r.compactGap).toBe(r.comfortableGap);
   }, 120_000);
+
+  /**
+   * The two phone chrome figures are graded against the ground their own bar
+   * paints, not against the page. Both metrics are load-bearing and neither is
+   * a fallback: WCAG is what the axe arm below reads and it binds on the light
+   * grounds, while APCA binds on the dark one, so the weight the deriver states
+   * has to clear the harder of the two in every vertical. Measured in each
+   * vertical's declared mode -- the mount projects that mode's root attributes,
+   * and every scope whose metric binds is a declared mode.
+   */
+  it('keeps both phone chrome figures above the WCAG and APCA floors on their own grounds', async () => {
+    const PAIRS = [
+      {
+        id: 'bulk',
+        ink: "#cards [data-part='mobile-bulk-count']",
+        ground: "#cards [data-part='mobile-bulk-actions']",
+      },
+      {
+        id: 'range',
+        ink: "#cards [data-part='mobile-pagination-range']",
+        ground: "#cards [data-part='mobile-pagination']",
+      },
+    ] as const;
+    for (const vertical of VERTICALS) {
+      const readings = await measureArms({
+        vertical,
+        markup,
+        arms: { base: {} },
+        targets: [
+          ...PAIRS.flatMap((pair) => [
+            { id: `${pair.id}Ink`, selector: pair.ink, property: 'color' },
+            { id: `${pair.id}Ground`, selector: pair.ground, property: 'background-color' },
+          ]),
+          // Negative control: the figure is quieter than the page's reading ink,
+          // so the floor was cleared by derivation and not by dropping the tier.
+          { id: 'pageInk', selector: "#cards [data-part='mobile-root']", property: 'color' },
+        ],
+      });
+      const r = readings.base!;
+      for (const pair of PAIRS) {
+        const ink = parseComputedColor(r[`${pair.id}Ink`]!);
+        const ground = parseComputedColor(r[`${pair.id}Ground`]!);
+        const label = `${vertical}/${pair.id}`;
+        const ratio = ratioFromLuminance(relativeLuminanceOf(ink), relativeLuminanceOf(ground));
+        expect(ratio, `${label}: WCAG AA on its own ground`).toBeGreaterThanOrEqual(4.5);
+        expect(
+          Math.abs(apcaContrast(toHex(ink), toHex(ground))),
+          `${label}: APCA Lc on its own ground`,
+        ).toBeGreaterThanOrEqual(60);
+        // Quieter than the page ink: the demotion the phone posture wants survives.
+        const pageInk = parseComputedColor(r.pageInk!);
+        expect(
+          ratio,
+          `${label}: still a quiet tier, not the page ink`,
+        ).toBeLessThan(ratioFromLuminance(relativeLuminanceOf(pageInk), relativeLuminanceOf(ground)));
+      }
+    }
+  }, 180_000);
 
   it('carries no serious axe finding beyond the pinned debt', async () => {
     const measured: Record<string, Readonly<Record<string, readonly string[]>>> = {};

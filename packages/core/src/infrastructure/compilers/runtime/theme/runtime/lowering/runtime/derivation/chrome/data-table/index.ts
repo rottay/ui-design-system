@@ -73,6 +73,10 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-leading-cell-padding-spacious",
     "--ds-data-table-min-inline-size",
     "--ds-data-table-minimal-shadow",
+    "--ds-data-table-mobile-bulk-bar-bg",
+    "--ds-data-table-mobile-bulk-bar-ink",
+    "--ds-data-table-mobile-pagination-bg",
+    "--ds-data-table-mobile-pagination-ink",
     "--ds-data-table-open-cell-padding-block",
     "--ds-data-table-pagination-padding",
     "--ds-data-table-pinned-cell-bg",
@@ -160,6 +164,18 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-leading-cell-padding-spacious"] = "1rem 1rem 1rem 0.25rem";
   vars["--ds-data-table-min-inline-size"] = "42rem";
   vars["--ds-data-table-minimal-shadow"] = "none";
+  // Each phone chrome bar states its ground AND the quiet ink that sits on it,
+  // so the ink flips with the mode instead of borrowing a page role graded for
+  // the page ground. 72% of the reading ink is the floor's own answer: the
+  // smallest whole-percent weight clearing WCAG 4.5 (binding in light) and APCA
+  // Lc 60 (binding in dark) in every gated scope. It is not a tenant knob.
+  vars["--ds-data-table-mobile-bulk-bar-bg"] =
+    "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))";
+  vars["--ds-data-table-mobile-bulk-bar-ink"] =
+    "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg))";
+  vars["--ds-data-table-mobile-pagination-bg"] = "var(--ds-surface-inset, var(--ds-surface-panel))";
+  vars["--ds-data-table-mobile-pagination-ink"] =
+    "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-pagination-bg))";
   vars["--ds-data-table-open-cell-padding-block"] = "0.875rem";
   vars["--ds-data-table-pagination-padding"] =
     "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1))";

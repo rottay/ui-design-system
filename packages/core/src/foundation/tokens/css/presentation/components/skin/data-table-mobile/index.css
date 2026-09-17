@@ -348,11 +348,15 @@
   [data-part="mobile-bulk-actions"] {
   padding: var(--ds-table-mobile-bulk-padding, 0.625rem 0.75rem);
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
-  background: color-mix(
-    in srgb,
-    var(--ds-color-primary) 7%,
-    var(--ds-surface-card)
+  background: var(
+    --ds-data-table-mobile-bulk-bar-bg,
+    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
   );
+  /* The bar owns the ground, so it owns the quiet ink measured against it; the
+     count inherits this instead of a page role blind to a tinted well. The
+     fallback is the page's reading ink: an unproduced channel must fail to the
+     legible extreme, never to no ink and never to a second copy of the weight. */
+  color: var(--ds-data-table-mobile-bulk-bar-ink, var(--ds-color-text-primary));
   box-shadow: var(--ds-elevation-1);
 }
 
@@ -364,7 +368,13 @@
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-pagination"] {
   padding: var(--ds-table-mobile-pagination-padding, 0.625rem 0.75rem);
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
-  background: var(--ds-surface-inset, var(--ds-surface-panel));
+  background: var(
+    --ds-data-table-mobile-pagination-bg,
+    var(--ds-surface-inset, var(--ds-surface-panel))
+  );
+  /* Same pair as the bulk bar: the inset ground carries its own quiet ink, and
+     the range inherits it. The page number states `default` and keeps the lead. */
+  color: var(--ds-data-table-mobile-pagination-ink, var(--ds-color-text-primary));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile

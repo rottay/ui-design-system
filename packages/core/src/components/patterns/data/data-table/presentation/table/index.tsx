@@ -98,7 +98,7 @@ function MobileBulkActions<T extends object>({
       wrap="wrap"
       className="ds-pattern-data-table ds-data-table--mobile"
     >
-      <Text color="subtle" data-part="mobile-bulk-count">
+      <Text color="inherit" data-part="mobile-bulk-count">
         {messages?.selectedCount?.(selectedKeys.length) ??
           `${selectedKeys.length} selected`}
       </Text>
@@ -151,7 +151,7 @@ function MobilePagination<T extends object>({
       justify="between"
       gap={12}
     >
-      <Text color="subtle" data-part="mobile-pagination-range">
+      <Text color="inherit" data-part="mobile-pagination-range">
         {messages?.paginationRange?.(start, end, pagination.total) ??
           `${start} – ${end} of ${pagination.total.toLocaleString()}`}
       </Text>
