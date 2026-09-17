@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { createEvent, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { StableEngineName } from '@tests/support/engine';
@@ -104,5 +104,49 @@ describe('PatternTreeView advanced engine coverage', () => {
 
     // Disabled children should remain visible after filtering but not become interactive.
     expect(screen.getByText('Child Two (1)')).toBeInTheDocument();
+  });
+
+  it('reshapes the primitive drop info into {dragKey, dropKey, position} through the modern engine', () => {
+    const onDrop = vi.fn();
+
+    render(<ModernTreeView {...createProps({ onDrop, expandedKeys: ['parent'] })} />);
+
+    const source = screen.getByText('Parent (0)').closest('[role="treeitem"]') as HTMLElement;
+    const target = screen.getByText('Standalone (0)').closest('[role="treeitem"]') as HTMLElement;
+    Object.defineProperty(target, 'getBoundingClientRect', {
+      value: () => ({
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        bottom: 100,
+        right: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }),
+      configurable: true,
+    });
+
+    const zones: Array<[number, 'before' | 'inside' | 'after']> = [
+      [10, 'before'],
+      [50, 'inside'],
+      [90, 'after'],
+    ];
+
+    zones.forEach(([clientY, position], index) => {
+      fireEvent.dragStart(source, { dataTransfer: { effectAllowed: '', setData: vi.fn() } });
+      const dragOver = createEvent.dragOver(target);
+      Object.defineProperty(dragOver, 'clientY', { value: clientY });
+      Object.defineProperty(dragOver, 'dataTransfer', { value: { dropEffect: '' } });
+      fireEvent(target, dragOver);
+      fireEvent.drop(target);
+
+      expect(onDrop).toHaveBeenNthCalledWith(index + 1, {
+        dragKey: 'parent',
+        dropKey: 'standalone',
+        position,
+      });
+    });
   });
 });

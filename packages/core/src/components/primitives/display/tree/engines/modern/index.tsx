@@ -55,6 +55,8 @@ import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
+import { resolveEdgeZone, useDragSession } from '../../../../runtime/collection/sortable';
+import type { SortableDropZone, UseDragSessionResult } from '../../../../runtime/collection/sortable';
 import {
   type TreeEngineKey,
   normalizeTreeKey,
@@ -114,6 +116,18 @@ function renderedSiblings(
 }
 
 // ---------------------------------------------------------------------------
+// Drag transport
+// ---------------------------------------------------------------------------
+
+// The row binds its own key; the cursor resolves the key AND the zone, so the
+// destination is a wider shape than the bound target.
+type TreeDragPayload = { key: TreeEngineKey };
+type TreeDragDestination = { key: TreeEngineKey; position: SortableDropZone };
+type TreeDragSession = UseDragSessionResult<TreeDragPayload, TreeDragPayload, TreeDragDestination>;
+
+const DROP_POSITION: Record<SortableDropZone, number> = { before: -1, inside: 0, after: 1 };
+
+// ---------------------------------------------------------------------------
 // Drop indicator line
 // ---------------------------------------------------------------------------
 
@@ -164,10 +178,6 @@ interface TreeNodeInternalProps extends TreeDataNode {
   draggable?: boolean;
   /** Custom expand/collapse affordance from the contract (default: governed caret). */
   switcherIcon?: TreeProps['switcherIcon'];
-  /** Key of the node currently being dragged (null when no drag is active). */
-  dragKey: TreeEngineKey | null;
-  /** True while this node is the one being dragged (drag affordance paint). */
-  isDragging: boolean;
   expandedKeys: TreeEngineKey[];
   selectedKeys: TreeEngineKey[];
   checkedKeys: TreeEngineKey[];
@@ -177,14 +187,7 @@ interface TreeNodeInternalProps extends TreeDataNode {
   filteredKeys: Set<TreeEngineKey> | null;
   searchValue?: string;
   findNode: (key: TreeEngineKey) => TreeDataNode | undefined;
-  onDragStartInternal: (key: TreeEngineKey, e: React.DragEvent) => void;
-  onDragOverInternal: (key: TreeEngineKey, e: React.DragEvent, level: number) => void;
-  onDropInternal: (key: TreeEngineKey, e: React.DragEvent) => void;
-  onDragEndInternal: () => void;
-  dropTarget: {
-    key: TreeEngineKey;
-    position: 'before' | 'inside' | 'after';
-  } | null;
+  drag: TreeDragSession;
   nodeRef: (key: TreeEngineKey, el: HTMLDivElement | null) => void;
   isLast: boolean;
   parentIsLast: boolean[];
@@ -221,8 +224,6 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   blockNode,
   draggable: propDraggable,
   switcherIcon,
-  dragKey,
-  isDragging,
   expandedKeys,
   selectedKeys,
   checkedKeys,
@@ -232,11 +233,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   filteredKeys,
   searchValue,
   findNode,
-  onDragStartInternal,
-  onDragOverInternal,
-  onDropInternal,
-  onDragEndInternal,
-  dropTarget,
+  drag,
   nodeRef,
   isLast,
   parentIsLast,
@@ -261,6 +258,14 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   const paddingInlineStart = level === 0 ? 0 : `calc(${level} * ${indentStep})`;
 
   const isDraggable = propDraggable && !disabled;
+  // The row is both the drag source and the drop target, so it carries both
+  // kernel bags -- their keys are disjoint and neither overrides the other.
+  const dragProps = {
+    ...drag.getSourceProps({ key: nodeKey }, { eligible: !disabled }),
+    ...drag.getTargetProps({ key: nodeKey }, { eligible: !!propDraggable }),
+  };
+  const dropTarget = drag.session?.target ?? null;
+  const isDragging = drag.session?.payload.key === nodeKey;
   const isDropTarget = dropTarget?.key === nodeKey;
   const dropPosition = isDropTarget ? dropTarget!.position : null;
 
@@ -379,25 +384,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         data-drop-position={isDropTarget ? dropPosition : undefined}
         data-draggable={isDraggable || undefined}
         data-dragging={isDragging || undefined}
-        draggable={isDraggable}
-        onDragStart={isDraggable ? (e) => onDragStartInternal(nodeKey, e) : undefined}
-        onDragOver={
-          propDraggable
-            ? (e) => {
-                e.preventDefault();
-                onDragOverInternal(nodeKey, e, level);
-              }
-            : undefined
-        }
-        onDrop={
-          propDraggable
-            ? (e) => {
-                e.preventDefault();
-                onDropInternal(nodeKey, e);
-              }
-            : undefined
-        }
-        onDragEnd={propDraggable ? onDragEndInternal : undefined}
+        {...dragProps}
       >
         {/* Expand/collapse affordance or the governed loading Spinner */}
         {isLoading ? (
@@ -497,8 +484,6 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 blockNode={blockNode}
                 draggable={propDraggable}
                 switcherIcon={switcherIcon}
-                dragKey={dragKey}
-                isDragging={dragKey === childKey}
                 expandedKeys={expandedKeys}
                 selectedKeys={selectedKeys}
                 checkedKeys={checkedKeys}
@@ -508,11 +493,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 filteredKeys={filteredKeys}
                 searchValue={searchValue}
                 findNode={findNode}
-                onDragStartInternal={onDragStartInternal}
-                onDragOverInternal={onDragOverInternal}
-                onDropInternal={onDropInternal}
-                onDragEndInternal={onDragEndInternal}
-                dropTarget={dropTarget}
+                drag={drag}
                 nodeRef={nodeRef}
                 isLast={childIsLast}
                 parentIsLast={[...parentIsLast, isLast]}
@@ -617,11 +598,6 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   );
   const [focusedKey, setFocusedKey] = useState<TreeEngineKey | null>(null);
   const [loadingKeys, setLoadingKeys] = useState<TreeEngineKey[]>([]);
-  const [dragKey, setDragKey] = useState<TreeEngineKey | null>(null);
-  const [dropTarget, setDropTarget] = useState<{
-    key: TreeEngineKey;
-    position: 'before' | 'inside' | 'after';
-  } | null>(null);
 
   // Resolve controlled vs uncontrolled -- when the consumer provides controlled
   // keys we normalize them on every render (cheap string coercion). When
@@ -782,68 +758,41 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   );
 
   // -----------------------------------------------------------------------
-  // Drag and drop -- uses HTML5 Drag and Drop API. Drop position is inferred
+  // Drag and drop -- the shared sortable session. Drop position is inferred
   // from cursor Y within the target node: top 25% = before, middle = inside
   // (reparent), bottom 25% = after. This 3-zone model matches macOS Finder
-  // and Windows Explorer tree drag semantics.
+  // and Windows Explorer tree drag semantics. Arrows stay the WAI-ARIA
+  // TreeView contract below, so the session binds no key of its own.
   // -----------------------------------------------------------------------
 
-  const handleDragStart = useCallback(
-    (key: TreeEngineKey, e: React.DragEvent) => {
-      setDragKey(key);
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', String(key));
-      const node = findNode(key);
+  const drag = useDragSession<TreeDragPayload, TreeDragPayload, TreeDragDestination>({
+    disabled: !draggable,
+    resolveTarget: ({ phase, event, payload, target, current }) => {
+      // The commit combines the RECEIVING row with the zone the hover stored;
+      // no zone is the refusal, and the drop phase carries no self guard.
+      if (phase === 'drop') {
+        return current ? { key: target.key, position: current.position } : null;
+      }
+      if (payload.key === target.key) return null;
+      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      return {
+        key: target.key,
+        position: resolveEdgeZone(rect, event.clientY, { zones: 'before-inside-after' }),
+      };
+    },
+    onDrop: (payload, target) => {
+      const dragNode = findNode(payload.key);
+      const dropNode = findNode(target.key);
+      if (dragNode && dropNode) {
+        onDrop?.({ dragNode, dropNode, dropPosition: DROP_POSITION[target.position] });
+      }
+    },
+    onDragStarted: (payload) => {
+      const node = findNode(payload.key);
       if (node) onDragStart?.({ node });
     },
-    [findNode, onDragStart]
-  );
-
-  const handleDragOver = useCallback(
-    (key: TreeEngineKey, e: React.DragEvent, level: number) => {
-      if (dragKey === null || dragKey === key) {
-        setDropTarget(null);
-        return;
-      }
-      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const h = rect.height;
-      let position: 'before' | 'inside' | 'after';
-      if (y < h * 0.25) {
-        position = 'before';
-      } else if (y > h * 0.75) {
-        position = 'after';
-      } else {
-        position = 'inside';
-      }
-      setDropTarget({ key, position });
-    },
-    [dragKey]
-  );
-
-  const handleDrop = useCallback(
-    (key: TreeEngineKey, _e: React.DragEvent) => {
-      if (dragKey === null || !dropTarget) return;
-      const dragNode = findNode(dragKey);
-      const dropNode = findNode(key);
-      if (dragNode && dropNode) {
-        const positionMap = { before: -1, inside: 0, after: 1 };
-        onDrop?.({
-          dragNode,
-          dropNode,
-          dropPosition: positionMap[dropTarget.position],
-        });
-      }
-      setDragKey(null);
-      setDropTarget(null);
-    },
-    [dragKey, dropTarget, findNode, onDrop]
-  );
-
-  const handleDragEnd = useCallback(() => {
-    setDragKey(null);
-    setDropTarget(null);
-  }, []);
+    keyboard: { mode: 'delegated' },
+  });
 
   // -----------------------------------------------------------------------
   // Keyboard navigation -- follows WAI-ARIA TreeView pattern:
@@ -1068,8 +1017,6 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
             blockNode={blockNode}
             draggable={draggable}
             switcherIcon={switcherIcon}
-            dragKey={dragKey}
-            isDragging={dragKey === nodeKey}
             expandedKeys={actualExpandedKeys}
             selectedKeys={actualSelectedKeys}
             checkedKeys={actualCheckedKeys}
@@ -1079,11 +1026,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
             filteredKeys={filteredKeys}
             searchValue={searchValue}
             findNode={findNode}
-            onDragStartInternal={handleDragStart}
-            onDragOverInternal={handleDragOver}
-            onDropInternal={handleDrop}
-            onDragEndInternal={handleDragEnd}
-            dropTarget={dropTarget}
+            drag={drag}
             nodeRef={registerNodeRef}
             isLast={nodeIsLast}
             parentIsLast={[]}

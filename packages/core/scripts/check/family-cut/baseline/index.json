@@ -1067,9 +1067,9 @@
       "unpairedStatePseudoSelectors": 3,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "dndTransportOwners": 1,
+      "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-08 (F-69, 2026-09-17): the DnD admission arm is new, so its two counters seed at what the gate measures today -- INSTRUMENT COVERAGE, newly visible debt for a corpus never scanned before, with no ceiling raised for source that changed. dndTransportOwners=1 / dndDropZoneOwners=0. Both are decrease-only and the F-69 consolidation criterion closes only when every row reaches 0."
+      "cutNote": "WO-FAM-08 (F-69, 2026-09-17): the DnD admission arm is new, so its two counters seed at what the gate measures today -- INSTRUMENT COVERAGE, newly visible debt for a corpus never scanned before, with no ceiling raised for source that changed. dndTransportOwners=1 / dndDropZoneOwners=0. Both are decrease-only and the F-69 consolidation criterion closes only when every row reaches 0. 2026-09-17: the transport moves to the shared sortable kernel (WO-FAM-08 lot 3) — dndTransportOwners 1 -> 0 measured by the F-69 arm; the frozen engines stay named exceptions."
     },
     "descriptions": {
       "cut": "WO-FAM-06",

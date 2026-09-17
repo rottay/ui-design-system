@@ -22,6 +22,46 @@ const TREE_DATA = [
   },
 ];
 
+function rowOf(label: string): HTMLElement {
+  const row = screen.getByText(label).closest('[role="treeitem"]');
+  if (!row) {
+    throw new Error(`Expected a tree row for ${label}`);
+  }
+  return row as HTMLElement;
+}
+
+function pinRowRect(row: Element): void {
+  Object.defineProperty(row, 'getBoundingClientRect', {
+    value: () => ({
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 100,
+      bottom: 100,
+      right: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    }),
+    configurable: true,
+  });
+}
+
+function startDrag(row: Element): void {
+  fireEvent.dragStart(row, { dataTransfer: { effectAllowed: '', setData: vi.fn() } });
+}
+
+// The event a real browser dispatches always carries a `dataTransfer`; an
+// attached `dragover` handler negotiates the drop effect on it.
+function dragOverRowAt(row: Element, clientY: number): { dropEffect: string } {
+  const transfer = { dropEffect: '' };
+  const event = createEvent.dragOver(row);
+  Object.defineProperty(event, 'clientY', { value: clientY });
+  Object.defineProperty(event, 'dataTransfer', { value: transfer });
+  fireEvent(row, event);
+  return transfer;
+}
+
 describe('Tree modern engine advanced coverage', () => {
   it('covers defaultExpandAll, controlled checked keys, icon rendering, selection, and disabled guards', () => {
     const handleExpand = vi.fn();
@@ -206,6 +246,7 @@ describe('Tree modern engine advanced coverage', () => {
     const dragOverAt = (clientY: number) => {
       const event = createEvent.dragOver(childItem);
       Object.defineProperty(event, 'clientY', { value: clientY });
+      Object.defineProperty(event, 'dataTransfer', { value: { dropEffect: '' } });
       fireEvent(childItem, event);
     };
 
@@ -272,5 +313,131 @@ describe('Tree modern engine advanced coverage', () => {
     // contract, and it is what a tenant would retarget.
     expect(highlight).toHaveClass('rottay-tree-search-highlight');
     expect(highlight.getAttribute('data-part')).toBe('tree-node-highlight');
+  });
+
+  it('splits the drop row into before/inside/after at the exact quarter boundaries', () => {
+    const handleDrop = vi.fn();
+
+    render(
+      <ModernTree
+        treeData={[
+          { key: 'alpha', title: 'Alpha' },
+          { key: 'bravo', title: 'Bravo' },
+        ]}
+        draggable
+        onDrop={handleDrop}
+      />
+    );
+
+    const alpha = rowOf('Alpha');
+    const bravo = rowOf('Bravo');
+    pinRowRect(bravo);
+
+    // A 100px row: the comparisons are strict, so equality at either quarter
+    // resolves inside and only 24 / 76 fall out of it.
+    const boundaries: Array<[number, number]> = [
+      [24, -1],
+      [25, 0],
+      [74, 0],
+      [75, 0],
+      [76, 1],
+    ];
+
+    boundaries.forEach(([clientY, dropPosition], index) => {
+      startDrag(alpha);
+      dragOverRowAt(bravo, clientY);
+      fireEvent.drop(bravo);
+
+      expect(handleDrop).toHaveBeenNthCalledWith(
+        index + 1,
+        expect.objectContaining({
+          dropNode: expect.objectContaining({ key: 'bravo' }),
+          dropPosition,
+        })
+      );
+    });
+
+    expect(handleDrop).toHaveBeenCalledTimes(boundaries.length);
+  });
+
+  it('commits the receiving row with the zone stored by an earlier hover', () => {
+    const handleDrop = vi.fn();
+
+    render(
+      <ModernTree
+        treeData={[
+          { key: 'alpha', title: 'Alpha' },
+          { key: 'bravo', title: 'Bravo' },
+        ]}
+        draggable
+        onDrop={handleDrop}
+      />
+    );
+
+    const alpha = rowOf('Alpha');
+    const bravo = rowOf('Bravo');
+    pinRowRect(bravo);
+
+    startDrag(alpha);
+    dragOverRowAt(bravo, 90);
+    fireEvent.drop(alpha);
+
+    expect(handleDrop).toHaveBeenCalledTimes(1);
+    expect(handleDrop).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dragNode: expect.objectContaining({ key: 'alpha' }),
+        dropNode: expect.objectContaining({ key: 'alpha' }),
+        dropPosition: 1,
+      })
+    );
+  });
+
+  it('closes the session at a drop that carries no zone, leaving dragend a no-op', () => {
+    const handleDrop = vi.fn();
+
+    render(
+      <ModernTree
+        treeData={[
+          { key: 'alpha', title: 'Alpha' },
+          { key: 'bravo', title: 'Bravo' },
+        ]}
+        draggable
+        onDrop={handleDrop}
+      />
+    );
+
+    const alpha = rowOf('Alpha');
+    const bravo = rowOf('Bravo');
+
+    startDrag(alpha);
+    fireEvent.drop(bravo);
+
+    expect(handleDrop).not.toHaveBeenCalled();
+    expect(alpha).not.toHaveAttribute('data-dragging');
+
+    fireEvent.dragEnd(alpha);
+    expect(alpha).not.toHaveAttribute('data-dragging');
+    expect(handleDrop).not.toHaveBeenCalled();
+  });
+
+  it('negotiates the move operation on every dragover it cancels', () => {
+    render(
+      <ModernTree
+        treeData={[
+          { key: 'alpha', title: 'Alpha' },
+          { key: 'bravo', title: 'Bravo' },
+        ]}
+        draggable
+        onDrop={vi.fn()}
+      />
+    );
+
+    const alpha = rowOf('Alpha');
+    const bravo = rowOf('Bravo');
+    pinRowRect(bravo);
+
+    startDrag(alpha);
+
+    expect(dragOverRowAt(bravo, 50).dropEffect).toBe('move');
   });
 });
