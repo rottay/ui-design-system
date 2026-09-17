@@ -5200,6 +5200,11 @@
      "at": "2026-09-17 14:21",
      "by": "kimi-dt",
      "note": "Despachado W9 (Opus, fase de DISEÑO, sin codigo de producto): debrief del kernel DnD compartido (F-69) en evidence/dnd-kernel-debrief/ — censo verificado de los 8 reimplementadores, contrato propuesto (superficie = interseccion real, no union), invariants (adopcion sin cambio de comportamiento, Modern-only, announcements obligatorios), aceptacion ejecutable y registro de riesgos por consumidor. Resuelve la circularidad FAM-08/FAM-13 por la autoridad mas nueva (handoff 2026-09-17): el kernel base es scope de FAM-08; FAM-13 adopta despues. Tras la entrega corre la revision shared-core (Codex + Kimi; Fable si hay cupo) ANTES de cualquier implementacion. Esto NO cierra la pregunta D15 ante el owner: la recomendacion vieja de D15 (kernel a FAM-13) queda superseded por el handoff; registrado para ratificacion."
+    },
+    {
+     "at": "2026-09-17 14:44",
+     "by": "kimi-dt",
+     "note": "F-81 OLA A INTEGRADA 8c96f4197 (writer W6 claude-opus-5; auditoria Kimi: equivalencia tecla por tecla contra los resolvers verificada leyendo el kernel; suites de las 3 familias 57/57 en mi corrida). table-toolbar y active-filters-bar consumen resolveNavigationIntent/resolveNavigationTarget del kernel roving-focus (retira una violacion real: ambos flipeaban forwardKey/backwardKey a mano); column-menu dedup normalizeDraftOrder. Dos items del inventario NO sobrevivieron el contacto con el arbol (honestos, documentados): pin tri-state x2 no existe como duplicacion (los tri-state reales viven en data-table y column-settings); el mapping ActiveFilter de list-toolbar no es duplicacion (shapes distintos) y structures/workspace/list-toolbar no existe — mi brief tenia la ruta vieja, corregida. Wave B pendiente: CountPill x2 (tras liberacion de saved-views-menu por W5), glifo lifecycle (active-filters-bar + patterns/data/list-toolbar; defecto enrutado: size={11} literal), useDelegatedArrowTraversal propuesto (no creado). Debrief DnD integrado (evidence/dnd-kernel-debrief, W9): revision Codex en vuelo; Kimi ACCEPT con rider (lote de instrumento F-69 recomendado, no bloqueante); Fable pendiente (no fabricado)."
     }
    ]
   },
@@ -6296,6 +6301,11 @@
      "at": "2026-09-16 13:07",
      "by": "opus-worker-L",
      "note": "2026-09-16 opus worker L (quota handoff item 5, registration only, no status change): the accounting dependency of milestone B on this WO is registered as open question Q-B-DER07 in roadmap/derivation.md under WO-DER-07. The four texts disagree: the code gates B on WO-DER-07 done (scripts/maintain/roadmap/status/index.mjs:2763-2767, and README.md:537-539 says the code is the authority); README.md:527 says the D-30 pick does not gate B; this WO's acceptance still requires the recorded pick; and kit-2026-09.md:241-253 §5c does not mention B. Exact options: (1) keep the code, so B waits on the pick, and correct README:527; (2) drop WO-DER-07 from B's gates, together with its test; (3) split the technical preparation from the branding pick, which needs a new registry entry approved by the owner 1:1; (4) the owner amends this WO's acceptance to move the pick out. None lowers WO-EVI-02's fleet threshold. No option is chosen."
+    },
+    {
+     "at": "2026-09-17 14:44",
+     "by": "kimi-dt",
+     "note": "Q-B-DER07 RESUELTA en maquinaria (c4d5405b0, writer W10 claude-opus-5, auditoria Kimi 114/114 + 3/3): opcion (2) por orden del handoff 2026-09-17 — B gates DER-05/EVI-02/FAM-01/FAM-02/FAM-06; WO-DER-07 sigue gating C via la poblacion audit-2026-09-05 (test pineado); la obligacion del pick D-30 con digest queda abierta en esta WO, sin inventar eleccion. Resolucion registrada en roadmap/derivation.md. El pick sigue siendo decision del owner (branding stage)."
     }
    ]
   },
