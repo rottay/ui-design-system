@@ -48,11 +48,12 @@
  * `dir=rtl`; this file mirrors the centering signs (mark-label, handle
  * `--tw-translate-x`) and the single-mode fill gradient under `:dir(rtl)`.
  * Vertical offsets are logical too and carry the same `:dir(rtl)` mirrors
- * (rail, track, dot), so the rail/track/handle/dot centre on one inline line
- * in both directions. The ONE physical vertical anchor left is the value
- * tooltip: its `placement` vocabulary is physical by contract ('left' |
- * 'right'), so a logical anchor would move the bubble to the wrong side of
- * the rail under `dir=rtl`.
+ * (rail, track, dot, value tooltip), so the rail/track/handle/dot/tooltip
+ * centre on one inline line in both directions. The value tooltip's
+ * `placement` vocabulary went logical with it ('inline-start' | 'inline-end',
+ * WO-INV-01): the anchor is `inset-inline-start` and the transforms below
+ * mirror under `:dir(rtl)`, so the readout keeps the side the caller asked
+ * for instead of the physical edge a name used to promise.
  *
  * VALUE TOOLTIP + STEP DOTS + MARK STATE (Phase B second pass): the engine's
  * `tooltip` contract renders `data-part='tooltip'` readouts anchored at each
@@ -500,8 +501,8 @@
 }
 
 /* ---- Value tooltip (contract `tooltip`). Anchored at the thumb point by the
-        engine (physical left/bottom in vertical, logical insetInlineStart in
-        horizontal); the transforms below place the bubble relative to that
+        engine (logical insetInlineStart on both axes, plus bottom in
+        vertical); the transforms below place the bubble relative to that
         anchor. Surface/ink ride the global material overlay channels (same
         grammar as the Tooltip family recipe), the thumb gap is the
         `--_ds-slider-tooltip-gap` proto. aria-hidden in the engine --
@@ -543,15 +544,26 @@
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='bottom']:dir(rtl) {
   transform: translate(50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)));
 }
-/* Vertical placements: the anchor is the thumb center (physical left: 50% +
-   bottom). The placement vocabulary is physical by contract, so the anchor and
-   these transforms stay physical together and NO `:dir(rtl)` mirror applies --
-   a mirror here would send the bubble across the rail under dir=rtl. */
-.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='right'] {
+/* Vertical placements: the anchor is the thumb center (logical
+   inset-inline-start: 50% + bottom) and the placement vocabulary is logical
+   too, so the X shift is signed for the reading direction exactly like the
+   mark-label and handle mirrors below it. LTR: inline-end is the physical
+   right. */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-end'] {
   transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)), 50%);
 }
-.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='left'] {
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-start'] {
   transform: translate(calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-slider-tooltip-gap, 6px)), 50%);
+}
+/* RTL mirror: `inset-inline-start: 50%` puts the bubble's OTHER edge on the
+   rail line, and the requested side is now the other physical side, so both
+   flip together -- one sign change keeps the bubble centred on the rail and on
+   the side that was asked for. */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-end']:dir(rtl) {
+  transform: translate(calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-slider-tooltip-gap, 6px)), 50%);
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='inline-start']:dir(rtl) {
+  transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)), 50%);
 }
 
 /* Visibility: focus/press on the driving input (single: adjacent sibling;

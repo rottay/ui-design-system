@@ -270,7 +270,9 @@
     inset-block-start var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-block-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-inline-start var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
-    inset-inline-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
+    inset-inline-end var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    left var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    right var(--ds-popover-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'] > [data-part='arrow'][data-part='arrow']::before {
@@ -282,32 +284,38 @@
   pointer-events: none;
 }
 
+/*
+ * The arrow's EDGE is selected by `data-placement`, which the engine stamps in
+ * the PHYSICAL spelling, so the declarations answering that selector are
+ * physical too -- a logical inset or border mirrors under RTL while the
+ * selector does not. Same rule as the Tooltip skin.
+ */
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='top'] > [data-part='arrow'] {
   inset-block-end: calc(var(--ds-popover-arrow-size) / -2);
   inset-inline-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  border-block-start: 0;
-  border-inline-start: 0;
+  border-top: 0;
+  border-left: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='bottom'] > [data-part='arrow'] {
   inset-block-start: calc(var(--ds-popover-arrow-size) / -2);
   inset-inline-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  border-block-end: 0;
-  border-inline-end: 0;
+  border-bottom: 0;
+  border-right: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='left'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  inset-inline-end: calc(var(--ds-popover-arrow-size) / -2);
-  border-block-end: 0;
-  border-inline-start: 0;
+  right: calc(var(--ds-popover-arrow-size) / -2);
+  border-bottom: 0;
+  border-left: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='right'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-popover-arrow-size) / 2);
-  inset-inline-start: calc(var(--ds-popover-arrow-size) / -2);
-  border-block-start: 0;
-  border-inline-end: 0;
+  left: calc(var(--ds-popover-arrow-size) / -2);
+  border-top: 0;
+  border-right: 0;
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-arrow-centered='false']:is([data-placement^='top'], [data-placement^='bottom'])[data-placement$='-start'] > [data-part='arrow'] {

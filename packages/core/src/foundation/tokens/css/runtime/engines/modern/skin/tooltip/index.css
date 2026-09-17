@@ -288,39 +288,50 @@
     inset-block-start var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-block-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
     inset-inline-start var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
-    inset-inline-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
+    inset-inline-end var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    left var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move),
+    right var(--ds-tooltip-arrow-duration, var(--ds-motion-feedback)) var(--ds-motion-ease-move);
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-has-arrow='true'][data-placement*='-'] {
   min-inline-size: var(--ds-tooltip-arrow-safe-min-inline-size);
 }
 
+/*
+ * The arrow's EDGE is selected by `data-placement`, which the engines stamp in
+ * the PHYSICAL spelling (the logical side already resolved against the one
+ * direction that placed the bubble). The declarations that answer that selector
+ * are therefore physical too: a logical inset or border mirrors under RTL while
+ * `[data-placement^='left']` does not, which pointed the tip away from the
+ * anchor. The block-axis sides keep their logical insets, which no reading
+ * direction moves.
+ */
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='top'] > [data-part='arrow'] {
   inset-block-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
   inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  border-block-start: 0;
-  border-inline-start: 0;
+  border-top: 0;
+  border-left: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='bottom'] > [data-part='arrow'] {
   inset-block-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
   inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  border-block-end: 0;
-  border-inline-end: 0;
+  border-bottom: 0;
+  border-right: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='left'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  inset-inline-end: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
-  border-block-end: 0;
-  border-inline-start: 0;
+  right: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
+  border-bottom: 0;
+  border-left: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble'][data-placement^='right'] > [data-part='arrow'] {
   inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size, calc(var(--ds-tooltip-arrow-size) / 2)));
-  inset-inline-start: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
-  border-block-start: 0;
-  border-inline-end: 0;
+  left: var(--ds-tooltip-arrow-overlap, calc(0px - var(--ds-tooltip-arrow-tip-length)));
+  border-top: 0;
+  border-right: 0;
 }
 
 .ds-tooltip-bubble[data-part='bubble']:is([data-placement^='top'], [data-placement^='bottom'])[data-placement$='-start'] > [data-part='arrow'] {

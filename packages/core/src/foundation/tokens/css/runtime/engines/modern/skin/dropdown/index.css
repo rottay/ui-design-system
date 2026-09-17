@@ -414,18 +414,24 @@
   transform: rotate(45deg);
 }
 
+/*
+ * The two hidden facets of the rotated square are a PHYSICAL fact of the side
+ * the arrow points at, and the side comes from `data-placement^='top'|'bottom'`,
+ * which no reading direction moves. A logical border here flipped which facets
+ * were hidden under RTL and turned the tip sideways.
+ */
 .ds-dropdown-surface[data-part='surface'][data-placement^='bottom'] > [data-part='arrow'] {
   inset-block-start: calc(var(--ds-dropdown-arrow-size) / -2 - var(--ds-dropdown-border-width, var(--ds-edge-standard-width)));
   inset-inline-start: calc(50% - var(--ds-dropdown-arrow-size) / 2);
-  border-inline-end: 0;
-  border-block-end: 0;
+  border-right: 0;
+  border-bottom: 0;
 }
 
 .ds-dropdown-surface[data-part='surface'][data-placement^='top'] > [data-part='arrow'] {
   inset-block-end: calc(var(--ds-dropdown-arrow-size) / -2 - var(--ds-dropdown-border-width, var(--ds-edge-standard-width)));
   inset-inline-start: calc(50% - var(--ds-dropdown-arrow-size) / 2);
-  border-inline-start: 0;
-  border-block-start: 0;
+  border-left: 0;
+  border-top: 0;
 }
 
 /* A measured anchor offset points the arrow at the trigger, one radius clear of the corners. */

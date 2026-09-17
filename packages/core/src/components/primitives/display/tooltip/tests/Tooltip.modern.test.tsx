@@ -2,6 +2,8 @@ import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { I18nProvider } from "@/infrastructure/runtime/i18n";
+
 import ModernTooltip from "../engines/modern";
 
 afterEach(() => {
@@ -336,6 +338,86 @@ describe("ModernTooltip", () => {
       tooltip.style.getPropertyValue("--ds-tooltip-bordered-radius")
     ).toBe("7px");
   });
+
+  // The inline sides are LOGICAL (WO-INV-01): one request mirrors under
+  // `dir=rtl`, and a mirror is NOT a collision. happy-dom never lays out, so
+  // the un-collided geometry is supplied explicitly -- anchor and bubble side
+  // by side, no overflow on any edge -- and the assertions read the
+  // vocabulary the engine derives from it, never a simulated rect.
+  const pinInlineStartGeometry = (
+    anchor: HTMLElement,
+    bubble: HTMLElement,
+    direction: "ltr" | "rtl"
+  ): void => {
+    const rect = (left: number, right: number): DOMRect =>
+      ({
+        top: 100,
+        bottom: 140,
+        left,
+        right,
+        width: right - left,
+        height: 40,
+        x: left,
+        y: 100,
+        toJSON: () => ({}),
+      } as DOMRect);
+    // The reader's near side: physical left under ltr, physical right under rtl.
+    const anchorRect = direction === "rtl" ? rect(480, 560) : rect(240, 320);
+    const bubbleRect = direction === "rtl" ? rect(568, 622) : rect(178, 232);
+    vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue(anchorRect);
+    vi.spyOn(bubble, "getBoundingClientRect").mockReturnValue(bubbleRect);
+  };
+
+  // Both spellings: the canonical logical side and its deprecated alias.
+  it.each(["inline-start", "left"] as const)(
+    "mirrors placement=%s under an ar locale and reports no collision",
+    async (placement) => {
+      render(
+        <I18nProvider locale="ar" fallbackLocale="en">
+          <ModernTooltip content="سياق القرار" placement={placement} visible>
+            <button>افتح</button>
+          </ModernTooltip>
+        </I18nProvider>
+      );
+
+      const tooltip = screen.getByRole("tooltip");
+      const anchor = screen.getByRole("button").parentElement as HTMLElement;
+      pinInlineStartGeometry(anchor, tooltip, "rtl");
+      fireEvent(window, new Event("resize"));
+
+      // The skin selects on the physical side, so the attribute is lowered to
+      // the edge the logical request RESOLVED to -- mirrored under rtl.
+      await waitFor(() => {
+        expect(tooltip).toHaveAttribute("data-placement", "right");
+        expect(tooltip).toHaveAttribute("data-preferred-placement", "right");
+        expect(tooltip).not.toHaveAttribute("data-collision-adjusted");
+      });
+    }
+  );
+
+  it.each(["inline-start", "left"] as const)(
+    "keeps placement=%s on the physical left under an en locale",
+    async (placement) => {
+      render(
+        <I18nProvider locale="en" fallbackLocale="en">
+          <ModernTooltip content="Decision context" placement={placement} visible>
+            <button>Open</button>
+          </ModernTooltip>
+        </I18nProvider>
+      );
+
+      const tooltip = screen.getByRole("tooltip");
+      const anchor = screen.getByRole("button").parentElement as HTMLElement;
+      pinInlineStartGeometry(anchor, tooltip, "ltr");
+      fireEvent(window, new Event("resize"));
+
+      await waitFor(() => {
+        expect(tooltip).toHaveAttribute("data-placement", "left");
+        expect(tooltip).toHaveAttribute("data-preferred-placement", "left");
+        expect(tooltip).not.toHaveAttribute("data-collision-adjusted");
+      });
+    }
+  );
 
   it("keeps the arrow on the resolved logical edge after an RTL collision flip", async () => {
     vi.spyOn(window, "getComputedStyle").mockReturnValue({

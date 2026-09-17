@@ -10,10 +10,32 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
-import type { OverlayPlacement } from '../../../runtime/overlay/positioning';
+import {
+  normalizeOverlayPlacement,
+  type OverlayPlacement,
+  type OverlayPlacementInput,
+} from '../../../runtime/overlay/positioning';
 
-/** Side where the hover card appears relative to the trigger */
-export type HoverCardSide = 'top' | 'bottom' | 'left' | 'right';
+/**
+ * Side where the hover card appears relative to the trigger. The inline axis
+ * is LOGICAL: `inline-start` is the reader's near side, `inline-end` the far
+ * one, so the card mirrors under `dir=rtl` without the caller computing
+ * anything.
+ *
+ * `left` and `right` are kept as deprecated aliases of `inline-start` and
+ * `inline-end` -- see {@link OVERLAY_PLACEMENT_ALIASES} -- so no caller and no
+ * frozen engine breaks. Their LTR geometry is unchanged; under RTL they now
+ * mirror instead of pinning to the physical edge they name.
+ */
+export type HoverCardSide =
+  | 'top'
+  | 'bottom'
+  | 'inline-start'
+  | 'inline-end'
+  /** @deprecated Use `inline-start`. */
+  | 'left'
+  /** @deprecated Use `inline-end`. */
+  | 'right';
 
 /** Alignment of the hover card relative to the trigger */
 export type HoverCardAlign = 'start' | 'center' | 'end';
@@ -69,5 +91,11 @@ export function resolveOverlayPlacement(
   side: HoverCardSide,
   align: HoverCardAlign
 ): OverlayPlacement {
-  return align === 'center' ? side : (`${side}-${align}` as OverlayPlacement);
+  const placement = (
+    align === 'center' ? side : `${side}-${align}`
+  ) as OverlayPlacementInput;
+  // One normalization point for both engines: a deprecated physical side
+  // becomes its logical equivalent here, so nothing downstream carries two
+  // vocabularies.
+  return normalizeOverlayPlacement(placement);
 }

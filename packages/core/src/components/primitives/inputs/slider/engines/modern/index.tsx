@@ -24,8 +24,12 @@
  *   with `data-active` fill-coverage state (never color-only: position + weight)
  * - Value tooltip (`tooltip` contract): opt-in via the prop, hover/focus/press
  *   driven or forced with `open`, per-orientation placement coercion
- *   (horizontal -> top/bottom, vertical -> left/right; incompatible requests
- *   fall back to the orientation default)
+ *   (horizontal -> top/bottom, vertical -> inline-start/inline-end;
+ *   incompatible requests fall back to the orientation default). The inline
+ *   sides are LOGICAL: the anchor is `insetInlineStart` and the skin mirrors
+ *   its transforms under `:dir(rtl)`, so the readout keeps the side the caller
+ *   asked for in both reading directions. `left`/`right` are accepted as
+ *   deprecated aliases.
  *
  * **Limitations:**
  * - No `reverse` direction (contract gap, documented -- not invented)
@@ -280,12 +284,18 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
     /**
      * Placement coercion per orientation (documented in the module docblock):
-     * horizontal tooltips place top/bottom, vertical left/right; incompatible
-     * requests fall back to the orientation's default.
+     * horizontal tooltips place top/bottom, vertical inline-start/inline-end;
+     * incompatible requests fall back to the orientation's default. The
+     * deprecated physical spellings normalize here, so `data-placement` only
+     * ever carries the logical vocabulary the skin keys on.
      */
-    const tooltipPlacement: 'top' | 'bottom' | 'left' | 'right' = (() => {
+    const tooltipPlacement: 'top' | 'bottom' | 'inline-start' | 'inline-end' = (() => {
       const requested = tooltip?.placement;
-      if (vertical) return requested === 'left' || requested === 'right' ? requested : 'right';
+      if (vertical) {
+        if (requested === 'inline-start' || requested === 'left') return 'inline-start';
+        if (requested === 'inline-end' || requested === 'right') return 'inline-end';
+        return 'inline-end';
+      }
       return requested === 'top' || requested === 'bottom' ? requested : 'top';
     })();
 
@@ -343,12 +353,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           data-placement={tooltipPlacement}
           data-open={tooltip?.open === true ? 'true' : undefined}
           aria-hidden="true"
-          /* The vertical anchor stays PHYSICAL on purpose: `placement` is a
-             physical vocabulary ('left'|'right', antd contract) and the skin
-             lowers it to physical placement transforms, so a logical anchor
-             would put the bubble on the wrong side of the rail under RTL. */
+          /* Logical anchor, logical placement: the bubble centres on the rail
+             with `insetInlineStart` and the skin mirrors its inline-axis
+             transforms under `:dir(rtl)`, so the readout stays centred on the
+             rail and on the side the caller asked for in both directions. */
           style={vertical
-            ? { left: '50%', bottom: `${percent}%` }
+            ? { insetInlineStart: '50%', bottom: `${percent}%` }
             : { top: '50%', insetInlineStart: `${percent}%` }}
         >
           {tooltip?.formatter ? tooltip.formatter(val) : val}

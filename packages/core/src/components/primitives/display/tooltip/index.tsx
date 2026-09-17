@@ -2,7 +2,8 @@
 
 /**
  * @fileoverview Tooltip - Contextual overlay triggered by hover, click, or focus.
- * 12 placement positions, controlled/uncontrolled visibility, and color variants.
+ * 12 placement positions (the inline sides are logical and mirror under
+ * dir=rtl), controlled/uncontrolled visibility, and color variants.
  * Compound sub-components: Trigger and Content for advanced composition.
  *
  * @example

@@ -56,7 +56,10 @@ import {
 } from '../../contracts';
 import {
   OverlayPortalBoundary,
+  parseOverlayPlacement,
+  toPhysicalPlacementAttribute,
   type OverlayPlacement,
+  type OverlayPlacementSide,
 } from '../../../../runtime/overlay/positioning';
 import {
   useFieldOverlay,
@@ -184,7 +187,14 @@ function resolveArrowOffset(
   return `${anchorRect.top + anchorRect.height / 2 - surfaceRect.top}px`;
 }
 
-/** The positioning runtime uses physical alignment; component placement is logical. */
+/**
+ * ALIGNMENT ONLY. The SIDE vocabulary is logical end to end now -- the
+ * positioning owner resolves `inline-start`/`inline-end` itself -- but the
+ * runtime's `-start`/`-end` alignment is still physical, so a logical
+ * alignment on the inline axis (the top/bottom sides) is mirrored here against
+ * the resolved reading direction. The inline-axis sides align on the BLOCK
+ * axis, which the reading direction never moves, so they pass through.
+ */
 function toPhysicalPlacement(
   placement: OverlayPlacement,
   direction: 'ltr' | 'rtl'
@@ -207,11 +217,24 @@ function toLogicalPlacement(
   return toPhysicalPlacement(placement, direction);
 }
 
+/**
+ * The side the surface ACTUALLY landed on, read back from geometry and
+ * returned in the LOGICAL vocabulary: rects are viewport coordinates, so the
+ * measured physical side is mapped back through the reading direction. A flip
+ * therefore reports `inline-end` rather than a physical edge, and the arrow,
+ * transform-origin and travel stay expressed in the one vocabulary.
+ */
 function resolvePlacementFromGeometry(
   preferred: OverlayPlacement,
   anchor: HTMLElement,
-  surface: HTMLElement
+  surface: HTMLElement,
+  direction: 'ltr' | 'rtl'
 ): OverlayPlacement {
+  const inlineStartSide = direction === 'rtl' ? 'right' : 'left';
+  const toLogicalSide = (physical: 'top' | 'bottom' | 'left' | 'right'): OverlayPlacementSide => {
+    if (physical === 'top' || physical === 'bottom') return physical;
+    return physical === inlineStartSide ? 'inline-start' : 'inline-end';
+  };
   const anchorRect = anchor.getBoundingClientRect();
   const surfaceRect = surface.getBoundingClientRect();
   let side: 'top' | 'bottom' | 'left' | 'right' | undefined;
@@ -242,17 +265,19 @@ function resolvePlacementFromGeometry(
           : 'right';
   }
 
-  const hasAlignment = preferred.includes('-');
-  if (!hasAlignment) return side;
+  const logicalSide = toLogicalSide(side);
+  // Never `preferred.includes('-')`: a logical side carries the separator.
+  const hasAlignment = parseOverlayPlacement(preferred)[1] !== 'center';
+  if (!hasAlignment) return logicalSide;
   if (side === 'top' || side === 'bottom') {
     const startDelta = Math.abs(surfaceRect.left - anchorRect.left);
     const endDelta = Math.abs(surfaceRect.right - anchorRect.right);
-    return `${side}-${startDelta <= endDelta ? 'start' : 'end'}`;
+    return `${logicalSide}-${startDelta <= endDelta ? 'start' : 'end'}` as OverlayPlacement;
   }
 
   const startDelta = Math.abs(surfaceRect.top - anchorRect.top);
   const endDelta = Math.abs(surfaceRect.bottom - anchorRect.bottom);
-  return `${side}-${startDelta <= endDelta ? 'start' : 'end'}`;
+  return `${logicalSide}-${startDelta <= endDelta ? 'start' : 'end'}` as OverlayPlacement;
 }
 
 function describeTrigger(
@@ -523,6 +548,9 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       panel: surfaceEl,
       measure: positioningActive,
       placement: physicalPlacement,
+      // ONE direction for this instance: the anchor context read above, which
+      // is also what the anchor-css branch resolves `self-*` against.
+      direction,
       offset,
       flip: true,
       modal: true,
@@ -550,7 +578,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         const resolvedPhysical = resolvePlacementFromGeometry(
           physicalPlacement,
           anchorEl,
-          surfaceEl
+          surfaceEl,
+          direction
         );
         const resolvedLogical = toLogicalPlacement(resolvedPhysical, direction);
         setResolvedPlacement(resolvedLogical);
@@ -775,8 +804,11 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         lang={language}
         data-part="surface"
         data-open={isOpen ? 'true' : 'false'}
-        data-placement={resolvedPlacement}
-        data-preferred-placement={resolvedPlacementProp}
+        data-placement={toPhysicalPlacementAttribute(resolvedPlacement, direction)}
+        data-preferred-placement={toPhysicalPlacementAttribute(
+          preferredOverlayPlacement,
+          direction
+        )}
         data-collision-adjusted={
           resolvedPlacement !== preferredOverlayPlacement ? 'true' : undefined
         }

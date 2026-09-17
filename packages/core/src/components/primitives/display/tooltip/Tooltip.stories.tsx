@@ -69,6 +69,12 @@ Supports multiple placement positions, trigger types, and color variants.
         "bottom",
         "bottom-start",
         "bottom-end",
+        "inline-start",
+        "inline-start-start",
+        "inline-start-end",
+        "inline-end",
+        "inline-end-start",
+        "inline-end-end",
         "left",
         "left-start",
         "left-end",
@@ -76,7 +82,10 @@ Supports multiple placement positions, trigger types, and color variants.
         "right-start",
         "right-end",
       ],
-      description: "Position of the tooltip relative to the trigger element",
+      description:
+        "Position of the tooltip relative to the trigger element. The inline "
+        + "sides are logical and mirror under dir=rtl; left/right and their "
+        + "aligned forms are deprecated aliases of them.",
     },
     trigger: {
       control: "select",

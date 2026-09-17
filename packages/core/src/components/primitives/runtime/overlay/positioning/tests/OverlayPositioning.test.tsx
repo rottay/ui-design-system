@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { render, cleanup } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import {
   OverlayPortalBoundary,
   overlayCapabilities,
+  normalizeOverlayPlacement,
+  OVERLAY_PLACEMENT_ALIASES,
   useOverlayPosition,
   type OverlayPlacement,
+  type OverlayPlacementInput,
   type OverlayPositionResult,
 } from '..';
 
@@ -48,7 +53,9 @@ function stubRect(rect: Partial<DOMRect>): () => DOMRect {
 }
 
 interface HarnessProps {
-  placement?: OverlayPlacement;
+  /** `'ar'` drives the direction authority to RTL; omitted means LTR. */
+  locale?: 'en' | 'ar';
+  placement?: OverlayPlacementInput;
   offset?: number;
   flip?: boolean;
   boundary?: 'viewport' | HTMLElement;
@@ -104,15 +111,19 @@ function renderHarness(props: Omit<HarnessProps, 'onResult'> = {}) {
     anchor: HTMLElement | null;
     overlay: HTMLElement | null;
   } = { result: null, anchor: null, overlay: null };
-  const view = render(
+  const { locale, ...harnessProps } = props;
+  const tree = (
     <Harness
-      {...props}
+      {...harnessProps}
       onResult={(result, elements) => {
         captured.result = result;
         captured.anchor = elements.anchor;
         captured.overlay = elements.overlay;
       }}
-    />,
+    />
+  );
+  const view = render(
+    locale === undefined ? tree : <I18nProvider locale={locale}>{tree}</I18nProvider>,
   );
   return { captured, view };
 }
@@ -152,6 +163,52 @@ describe('useOverlayPosition - js branch (native in this DOM environment)', () =
 
     // No flip: -34 clamps to the boundary margin.
     expect(captured.result?.style.top).toBe(8);
+  });
+
+  it('mirrors a logical side against the direction authority (measured branch)', () => {
+    // A centred anchor (40x20 at x 300..340) so neither side overflows and the
+    // flip chain stays out of the measurement. Overlay 100 wide, offset 8.
+    // LTR: inline-start is the physical left -> 300 - 8 - 100 = 192.
+    // RTL: inline-start is the physical right -> 340 + 8 = 348.
+    const centred = { top: 100, left: 300, right: 340, bottom: 120, width: 40, height: 20 };
+
+    const ltr = renderHarness({ placement: 'inline-start', anchorRect: centred });
+    expect(ltr.captured.result?.style.left).toBe(192);
+    cleanup();
+
+    const rtl = renderHarness({
+      placement: 'inline-start',
+      anchorRect: centred,
+      locale: 'ar',
+    });
+    expect(rtl.captured.result?.style.left).toBe(348);
+    cleanup();
+
+    // The other side mirrors the other way, so the pair discriminates
+    // direction rather than just naming an edge.
+    const inlineEndLtr = renderHarness({ placement: 'inline-end', anchorRect: centred });
+    expect(inlineEndLtr.captured.result?.style.left).toBe(348);
+    cleanup();
+
+    const inlineEndRtl = renderHarness({
+      placement: 'inline-end',
+      anchorRect: centred,
+      locale: 'ar',
+    });
+    expect(inlineEndRtl.captured.result?.style.left).toBe(192);
+  });
+
+  it('routes the deprecated physical alias through the same logical mirror', () => {
+    // `left` is no longer a physical promise: it is an alias for inline-start,
+    // so under RTL it mirrors exactly like the logical spelling.
+    const centred = { top: 100, left: 300, right: 340, bottom: 120, width: 40, height: 20 };
+
+    const ltr = renderHarness({ placement: 'left', anchorRect: centred });
+    expect(ltr.captured.result?.style.left).toBe(192);
+    cleanup();
+
+    const rtl = renderHarness({ placement: 'left', anchorRect: centred, locale: 'ar' });
+    expect(rtl.captured.result?.style.left).toBe(348);
   });
 
   it('supports side-aligned placements (bottom-start tracks the anchor left edge)', () => {
@@ -237,24 +294,86 @@ describe('useOverlayPosition - anchor-css branch (forced capabilities)', () => {
       positionTryFallbacks: 'flip-block, flip-inline, flip-block flip-inline',
       inset: 'auto',
       margin: 0,
-      marginBottom: 8,
+      marginBlockEnd: 8,
     });
     expect(captured.result?.style.top).toBeUndefined();
     expect(captured.result?.style.left).toBeUndefined();
   });
 
-  it('maps aligned and horizontal placements onto position-area spans', () => {
+  it('maps aligned and inline placements onto position-area spans', () => {
     forceAnchorBranch();
     const bottomStart = renderHarness({ placement: 'bottom-start' });
     expect(bottomStart.captured.result?.style.positionArea).toBe('bottom span-right');
-    expect(bottomStart.captured.result?.style.marginTop).toBe(8);
+    expect(bottomStart.captured.result?.style.marginBlockStart).toBe(8);
 
-    const leftEnd = renderHarness({ placement: 'left-end' });
-    expect(leftEnd.captured.result?.style.positionArea).toBe('left span-top');
-    expect(leftEnd.captured.result?.style.positionTryFallbacks).toBe(
+    const inlineStartEnd = renderHarness({ placement: 'inline-start-end' });
+    expect(inlineStartEnd.captured.result?.style.positionArea).toBe(
+      'self-inline-start span-self-block-start',
+    );
+    expect(inlineStartEnd.captured.result?.style.positionTryFallbacks).toBe(
       'flip-inline, flip-block, flip-inline flip-block',
     );
-    expect(leftEnd.captured.result?.style.marginRight).toBe(8);
+    expect(inlineStartEnd.captured.result?.style.marginInlineEnd).toBe(8);
+  });
+
+  it('lowers every placement to one position-area keyword family', () => {
+    forceAnchorBranch();
+    // A `position-area` value may not mix keyword families. The block-axis
+    // placements stay physical (`top span-right`); the inline-axis placements
+    // are wholly `self-*` logical, so the overlay's own writing mode resolves
+    // BOTH the area and the offset margin.
+    const cases: ReadonlyArray<[OverlayPlacement, string]> = [
+      ['top', 'top'],
+      ['top-start', 'top span-right'],
+      ['top-end', 'top span-left'],
+      ['bottom', 'bottom'],
+      ['bottom-start', 'bottom span-right'],
+      ['bottom-end', 'bottom span-left'],
+      ['inline-start', 'self-inline-start'],
+      ['inline-start-start', 'self-inline-start span-self-block-end'],
+      ['inline-start-end', 'self-inline-start span-self-block-start'],
+      ['inline-end', 'self-inline-end'],
+      ['inline-end-start', 'self-inline-end span-self-block-end'],
+      ['inline-end-end', 'self-inline-end span-self-block-start'],
+    ];
+    for (const [placement, area] of cases) {
+      const rendered = renderHarness({ placement });
+      expect(rendered.captured.result?.style.positionArea).toBe(area);
+      cleanup();
+    }
+  });
+
+  it('accepts the deprecated physical placements through the documented alias map', () => {
+    forceAnchorBranch();
+    expect(Object.keys(OVERLAY_PLACEMENT_ALIASES)).toHaveLength(6);
+    expect(OVERLAY_PLACEMENT_ALIASES).toEqual({
+      left: 'inline-start',
+      'left-start': 'inline-start-start',
+      'left-end': 'inline-start-end',
+      right: 'inline-end',
+      'right-start': 'inline-end-start',
+      'right-end': 'inline-end-end',
+    });
+    // Idempotent: a logical placement passes through unchanged.
+    expect(normalizeOverlayPlacement('inline-end-start')).toBe('inline-end-start');
+
+    for (const [legacy, logical] of Object.entries(OVERLAY_PLACEMENT_ALIASES)) {
+      expect(normalizeOverlayPlacement(legacy as OverlayPlacementInput)).toBe(logical);
+      const viaAlias = renderHarness({ placement: legacy as OverlayPlacementInput });
+      const aliasArea = viaAlias.captured.result?.style.positionArea;
+      const aliasMargins = {
+        marginInlineStart: viaAlias.captured.result?.style.marginInlineStart,
+        marginInlineEnd: viaAlias.captured.result?.style.marginInlineEnd,
+      };
+      cleanup();
+      const viaLogical = renderHarness({ placement: logical });
+      expect(aliasArea).toBe(viaLogical.captured.result?.style.positionArea);
+      expect(aliasMargins).toEqual({
+        marginInlineStart: viaLogical.captured.result?.style.marginInlineStart,
+        marginInlineEnd: viaLogical.captured.result?.style.marginInlineEnd,
+      });
+      cleanup();
+    }
   });
 
   it('omits the try-fallback chain when flip is disabled', () => {

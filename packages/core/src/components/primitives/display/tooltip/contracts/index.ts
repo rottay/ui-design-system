@@ -9,7 +9,8 @@
  *
  * **Exported Types:**
  * - `TooltipProps` - Main component properties
- * - `TooltipPlacement` - Position options (12 positions)
+ * - `TooltipPlacement` - Position options (12 logical, plus 6 deprecated
+ *   physical aliases of the inline sides)
  * - `TooltipTrigger` - Trigger event types
  * - `TooltipState` - Internal visibility state
  * - `TooltipTriggerProps` - Trigger compound component props
@@ -49,9 +50,28 @@ import type { EngineAwareProps } from "../../../../../foundation/contracts/runti
 // ============================================================================
 
 /**
- * Tooltip placement options combining edge and logical alignment. `start` and
- * `end` follow writing direction on the inline axis, so a `top-start` tooltip
- * aligns to the right edge in RTL.
+ * Tooltip placement: a SIDE, optionally qualified by an edge ALIGNMENT.
+ *
+ * The side's inline axis is LOGICAL (WO-INV-01): `inline-start` is the
+ * reader's near side and `inline-end` the far one, so one request means the
+ * same thing in both reading directions and the bubble mirrors under
+ * `dir=rtl` without the caller computing anything. The block sides keep
+ * `top`/`bottom`, which no reading direction moves.
+ *
+ * The alignment (`-start`/`-end`) was already logical: it follows writing
+ * direction on the inline axis, so a `top-start` tooltip aligns to the right
+ * edge in RTL.
+ *
+ * `left`/`right` and their aligned forms are kept as deprecated aliases of the
+ * logical sides -- the same migration table the overlay positioning runtime
+ * publishes as `OVERLAY_PLACEMENT_ALIASES` -- so no caller breaks. Their LTR
+ * geometry is unchanged; under RTL they now MIRROR instead of pinning to the
+ * physical edge they name.
+ *
+ * ENGINE REACH: the logical spellings are honoured by the Modern engine. The
+ * frozen Classic/Rustic engines read a physical `PLACEMENT_MAP` and fall back
+ * to `top` for a spelling it does not contain, so pass a physical alias when
+ * targeting them until they are unfrozen.
  */
 export type TooltipPlacement =
   | "top"
@@ -60,11 +80,23 @@ export type TooltipPlacement =
   | "bottom"
   | "bottom-start"
   | "bottom-end"
+  | "inline-start"
+  | "inline-start-start"
+  | "inline-start-end"
+  | "inline-end"
+  | "inline-end-start"
+  | "inline-end-end"
+  /** @deprecated Use `inline-start`. */
   | "left"
+  /** @deprecated Use `inline-start-start`. */
   | "left-start"
+  /** @deprecated Use `inline-start-end`. */
   | "left-end"
+  /** @deprecated Use `inline-end`. */
   | "right"
+  /** @deprecated Use `inline-end-start`. */
   | "right-start"
+  /** @deprecated Use `inline-end-end`. */
   | "right-end";
 
 /**
@@ -337,9 +369,10 @@ export interface TooltipPlacementOffsets {
 /**
  * Placement to position offsets.
  *
- * Maps each of the 12 tooltip placement options to the offsets the frozen
+ * Maps the physical tooltip placement spellings to the offsets the frozen
  * Rustic engine applies around its trigger. The Modern engine positions its
- * bubble through the shared overlay kernel and does not read this map.
+ * bubble through the shared overlay kernel and does not read this map, so the
+ * logical inline sides have no row here.
  *
  * Placement naming convention:
  * - `{side}` - centered along the given side.

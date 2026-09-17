@@ -61,6 +61,11 @@ export type PopconfirmPlacement =
  * `{side}Left`/`{side}Top` and `{side}Right`/`{side}Bottom` become the
  * engine's `-start`/`-end` edge alignment). Internal to the engines --
  * the public `PopconfirmPlacement` prop vocabulary is unchanged.
+ *
+ * The engine side of the map is LOGICAL (`left` -> `inline-start`,
+ * `right` -> `inline-end`), the same migration the Popover table carries: the
+ * public prop keeps its antd-shaped physical names, and this table is where
+ * the name stops being a physical promise.
  */
 export const POPCONFIRM_TO_OVERLAY_PLACEMENT: Record<PopconfirmPlacement, OverlayPlacement> = {
   top: 'top',
@@ -69,12 +74,12 @@ export const POPCONFIRM_TO_OVERLAY_PLACEMENT: Record<PopconfirmPlacement, Overla
   bottom: 'bottom',
   bottomLeft: 'bottom-start',
   bottomRight: 'bottom-end',
-  left: 'left',
-  leftTop: 'left-start',
-  leftBottom: 'left-end',
-  right: 'right',
-  rightTop: 'right-start',
-  rightBottom: 'right-end',
+  left: 'inline-start',
+  leftTop: 'inline-start-start',
+  leftBottom: 'inline-start-end',
+  right: 'inline-end',
+  rightTop: 'inline-end-start',
+  rightBottom: 'inline-end-end',
 };
 
 /**

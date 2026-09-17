@@ -41,6 +41,7 @@ import React, { useState, useRef, useCallback, useEffect, useId, isValidElement,
 import type { HoverCardProps } from '../../contracts';
 import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { toPhysicalPlacementAttribute } from '../../../../runtime/overlay/positioning';
 import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { usePresence } from '@/graphics/motion/react/runtime';
 
@@ -179,11 +180,12 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
   // overlay. The surface only mounts while open, so element presence drives
   // the positioning lifecycle.
   //
-  // `start`/`end` in the shared runtime are PHYSICAL. Along the inline axis
-  // (side: top/bottom) a logical `align` mirrors under RTL, so the physical
-  // placement is resolved from the trigger's reading direction (Popover's
-  // toPhysicalPlacement precedent). Left/right sides align on the BLOCK
-  // axis, which does not mirror in RTL.
+  // The SIDE vocabulary is logical (`inline-start`/`inline-end`), resolved by
+  // the positioning owner. The ALIGNMENT is still physical in the shared
+  // runtime: along the inline axis (side: top/bottom) a logical `align`
+  // mirrors under RTL, so it is resolved here from the reading direction
+  // (Popover's toPhysicalPlacement precedent). Inline-axis sides align on the
+  // BLOCK axis, which does not mirror in RTL.
   const placement = resolveOverlayPlacement(side, align);
   const logicalPlacement = React.useMemo<ReturnType<typeof resolveOverlayPlacement>>(() => {
     if (
@@ -206,6 +208,10 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     panel: surfaceEl,
     measure: true,
     placement: logicalPlacement,
+    // ONE direction for this instance. The card has no anchor-context reader,
+    // so the locale IS its authority -- and the surface stamps the same `dir`
+    // below, which is what the anchor-css branch resolves `self-*` against.
+    direction: directionIsRtl ? 'rtl' : 'ltr',
     // The card claims no Escape slot (its own trigger-scoped handler owns
     // that, keeping focus return to the trigger) and takes no scroll lock.
     modal: false,
@@ -262,9 +268,13 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
           {...layerProps}
           ref={setSurfaceRef}
           id={surfaceId}
+          dir={directionIsRtl ? 'rtl' : 'ltr'}
           data-part="surface"
           data-open={dataState === 'open' ? 'true' : 'false'}
-          data-placement={logicalPlacement}
+          data-placement={toPhysicalPlacementAttribute(
+            logicalPlacement,
+            directionIsRtl ? 'rtl' : 'ltr',
+          )}
           data-ds-position-strategy={strategy}
           className={overlayClassName || undefined}
           style={surfaceStyle}

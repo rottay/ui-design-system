@@ -32,6 +32,7 @@ import React, {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -41,6 +42,29 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { ModernButton as Button } from '../../../../facade';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { readLocaleContext } from '../../../../runtime/overlay/portal-scope';
+import type { OverlayPlacement } from '../../../../runtime/overlay/positioning';
+
+/**
+ * ALIGNMENT ONLY. The SIDE vocabulary is logical and the positioning owner
+ * resolves it; the runtime's `-start`/`-end` alignment on the block-axis
+ * sides is physical, so it is mirrored here against the resolved reading
+ * direction. The inline-axis sides align on the block axis, which the
+ * reading direction never moves, so they pass through.
+ */
+function toPhysicalPlacement(
+  placement: OverlayPlacement,
+  direction: 'ltr' | 'rtl',
+): OverlayPlacement {
+  if (direction !== 'rtl') return placement;
+  if (placement.startsWith('top-') || placement.startsWith('bottom-')) {
+    if (placement.endsWith('-start'))
+      return placement.replace('-start', '-end') as OverlayPlacement;
+    if (placement.endsWith('-end'))
+      return placement.replace('-end', '-start') as OverlayPlacement;
+  }
+  return placement;
+}
 
 /**
  * Popconfirm implementation that stamps the panel anatomy; card and button
@@ -104,6 +128,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
 
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
     const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+    const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr');
     // The panel renders only after mount: `overlayCapabilities` resolves
     // false/false server-side (no CSS/HTMLElement), so a capable client's
     // first hydration pass would otherwise disagree with the server output
@@ -113,6 +138,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
     useEffect(() => {
       setMounted(true);
     }, []);
+
+    // ONE direction for this instance: the anchor's own reading direction,
+    // which is also what the anchor-css branch resolves `self-*` against.
+    useLayoutEffect(() => {
+      if (!anchorEl || typeof window === 'undefined') return;
+      setDirection(readLocaleContext(anchorEl).direction);
+    }, [anchorEl, isOpen]);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (!isControlled) {
@@ -187,7 +219,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       open: isOpen,
       anchor: anchorEl,
       panel: surfaceEl,
-      placement: POPCONFIRM_TO_OVERLAY_PLACEMENT[placement ?? 'top'],
+      placement: toPhysicalPlacement(
+        POPCONFIRM_TO_OVERLAY_PLACEMENT[placement ?? 'top'],
+        direction,
+      ),
+      // ONE direction for this instance: the anchor context read above, which
+      // is also what the anchor-css branch resolves `self-*` against.
+      direction,
       flip: true,
       modal: true,
       lockScroll: false,
@@ -266,6 +304,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             ref={setSurfaceEl}
             {...layerProps}
             id={surfaceId}
+            dir={direction}
             data-part="surface"
             data-open="true"
             data-ok-type={okType}

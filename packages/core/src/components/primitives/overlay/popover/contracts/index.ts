@@ -79,6 +79,13 @@ export type PopoverPlacement =
  * `{side}Left`/`{side}Top` and `{side}Right`/`{side}Bottom` become the
  * engine's `-start`/`-end` edge alignment). Internal to the engines --
  * the public `PopoverPlacement` prop vocabulary is unchanged.
+ *
+ * The engine side of the map is LOGICAL: `left` asks for the inline-start
+ * side, `right` for inline-end, so a popover declared `left` opens on the
+ * reader's near side in both directions instead of pinning to the physical
+ * left edge. The public prop keeps its antd-shaped physical NAMES -- renaming
+ * them would break every caller -- and this table is where the name stops
+ * being a physical promise.
  */
 export const POPOVER_TO_OVERLAY_PLACEMENT: Record<PopoverPlacement, OverlayPlacement> = {
   top: 'top',
@@ -87,12 +94,12 @@ export const POPOVER_TO_OVERLAY_PLACEMENT: Record<PopoverPlacement, OverlayPlace
   bottom: 'bottom',
   bottomLeft: 'bottom-start',
   bottomRight: 'bottom-end',
-  left: 'left',
-  leftTop: 'left-start',
-  leftBottom: 'left-end',
-  right: 'right',
-  rightTop: 'right-start',
-  rightBottom: 'right-end',
+  left: 'inline-start',
+  leftTop: 'inline-start-start',
+  leftBottom: 'inline-start-end',
+  right: 'inline-end',
+  rightTop: 'inline-end-start',
+  rightBottom: 'inline-end-end',
 };
 
 /**

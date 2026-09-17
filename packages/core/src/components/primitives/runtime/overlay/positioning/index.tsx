@@ -32,6 +32,31 @@
  *
  * An element `boundary` is only expressible in the measured branch, so
  * passing one also forces `js`.
+ *
+ * PLACEMENT IS LOGICAL (WO-INV-01). The inline sides of `OverlayPlacement` are
+ * `inline-start`/`inline-end`, never `left`/`right`: one request means the same
+ * thing in both reading directions, and the paint mirrors by construction
+ * rather than by a caller's arithmetic. The block sides keep `top`/`bottom`,
+ * which no reading direction moves. Each branch honours it in its own
+ * currency: `anchor-css` lowers to the `self-*` `position-area` family plus
+ * logical offset margins, which CSS resolves against the overlay's own writing
+ * mode; `js` resolves the side to a physical edge ONCE, because viewport
+ * coordinates are physical by construction. Those are two different readings
+ * of "the direction" -- the anchor subtree's declared `dir` versus the app
+ * locale -- and a tree where they disagree would paint the SAME request on
+ * opposite physical sides in the two branches, so the request carries the
+ * direction it is resolved in (`OverlayPositionRequest.direction`, defaulting
+ * to the locale) and every consumer of the resulting placement reads that one
+ * value. The retired physical spellings survive as documented,
+ * deprecated input aliases (see `OVERLAY_PLACEMENT_ALIASES`), so no caller and
+ * no frozen engine breaks -- they simply resolve to the logical side.
+ *
+ * WHAT IS NOT LOGICAL HERE, and why: the `-start`/`-end` ALIGNMENT is the
+ * cross axis of the side, and on the block-axis sides that cross axis is the
+ * inline one. The adopting engines (Popover, HoverCard, Tooltip) mirror that
+ * alignment themselves against the direction they resolve, and their skins key
+ * on the physical spelling, so the alignment vocabulary stays physical and is
+ * stated as such at every boundary rather than being half-migrated.
  */
 
 import React, {
@@ -46,13 +71,32 @@ import React, {
   type ReactNode,
 } from 'react';
 
+import type { TextDirection } from '@/foundation/i18n/kernel/contracts';
+import { useOptionalDirection } from '@/infrastructure/runtime/i18n';
+
 // ---------------------------------------------------------------------------
 // Public contract
 // ---------------------------------------------------------------------------
 
 /**
+ * The side an overlay takes relative to its anchor. The block axis keeps
+ * `top`/`bottom` -- the reading direction never moves them -- while the inline
+ * axis is LOGICAL (`inline-start`/`inline-end`), so one placement request
+ * means the same thing in both reading directions and the paint mirrors by
+ * construction instead of by a caller's arithmetic.
+ */
+export type OverlayPlacementSide = 'top' | 'bottom' | 'inline-start' | 'inline-end';
+
+/**
  * Side-align placement vocabulary (the Tooltip set): a side qualified by an
- * optional edge alignment; the bare side centers on the anchor.
+ * optional edge alignment; the bare side centers on the anchor. The trailing
+ * segment is the ALIGNMENT (`-start`/`-end`), so `inline-start-end` reads
+ * "on the inline-start side, aligned to the anchor's end edge".
+ *
+ * The alignment axis is deliberately NOT part of this migration: it is the
+ * cross axis of the side, the adopting engines (Popover, HoverCard, Tooltip)
+ * mirror it themselves against the resolved reading direction, and their skins
+ * key on the physical spelling. Only the SIDE is logical here.
  */
 export type OverlayPlacement =
   | 'top'
@@ -61,12 +105,89 @@ export type OverlayPlacement =
   | 'bottom'
   | 'bottom-start'
   | 'bottom-end'
+  | 'inline-start'
+  | 'inline-start-start'
+  | 'inline-start-end'
+  | 'inline-end'
+  | 'inline-end-start'
+  | 'inline-end-end';
+
+/**
+ * The retired PHYSICAL spellings of the inline sides. Accepted on input and
+ * mapped through {@link OVERLAY_PLACEMENT_ALIASES}; never produced.
+ *
+ * @deprecated Pass the logical spelling: `left` -> `inline-start`,
+ * `right` -> `inline-end` (and the aligned forms alongside them). The physical
+ * names are kept so callers that predate the logical vocabulary -- including
+ * the frozen Classic/Rustic engines, which may not be edited -- keep
+ * compiling and keep their LTR geometry unchanged. They resolve to the
+ * logical side, so under `dir=rtl` they now mirror rather than staying on the
+ * physical edge they name.
+ */
+export type LegacyPhysicalOverlayPlacement =
   | 'left'
   | 'left-start'
   | 'left-end'
   | 'right'
   | 'right-start'
   | 'right-end';
+
+/** What a caller may pass: the logical vocabulary, or a deprecated physical alias. */
+export type OverlayPlacementInput = OverlayPlacement | LegacyPhysicalOverlayPlacement;
+
+/**
+ * The documented migration map. One entry per retired physical spelling; the
+ * logical names map to themselves and are absent here on purpose, so the table
+ * is exactly the deprecation surface and a test can assert its size.
+ */
+export const OVERLAY_PLACEMENT_ALIASES: Readonly<
+  Record<LegacyPhysicalOverlayPlacement, OverlayPlacement>
+> = Object.freeze({
+  left: 'inline-start',
+  'left-start': 'inline-start-start',
+  'left-end': 'inline-start-end',
+  right: 'inline-end',
+  'right-start': 'inline-end-start',
+  'right-end': 'inline-end-end',
+});
+
+/**
+ * Normalizes a placement request to the logical vocabulary. Anything already
+ * logical is returned unchanged, so the call is idempotent and safe to apply
+ * at every boundary an adopter owns.
+ */
+export function normalizeOverlayPlacement(placement: OverlayPlacementInput): OverlayPlacement {
+  return (
+    (OVERLAY_PLACEMENT_ALIASES as Record<string, OverlayPlacement | undefined>)[placement]
+    ?? (placement as OverlayPlacement)
+  );
+}
+
+/**
+ * The PHYSICAL spelling of a resolved placement, for the ONE channel that is
+ * still physical: the `data-placement` attribute the Modern skins key on
+ * (`[data-placement^='left']` lowers to a physical arrow edge and
+ * transform-origin). The skin files are owned elsewhere, so the engines lower
+ * here rather than stamping a logical name no selector matches.
+ *
+ * This is a presentation channel, not a positioning input: the geometry is
+ * already decided by the logical placement when this runs, so the value is the
+ * physical side that placement RESOLVED to in the given direction, which is
+ * exactly what a physical skin selector needs.
+ */
+export function toPhysicalPlacementAttribute(
+  placement: OverlayPlacement,
+  direction: TextDirection,
+): OverlayPlacementInput {
+  const isRtl = direction === 'rtl';
+  if (placement.startsWith('inline-start')) {
+    return placement.replace('inline-start', isRtl ? 'right' : 'left') as OverlayPlacementInput;
+  }
+  if (placement.startsWith('inline-end')) {
+    return placement.replace('inline-end', isRtl ? 'left' : 'right') as OverlayPlacementInput;
+  }
+  return placement;
+}
 
 export type OverlayPositionStrategy = 'anchor-css' | 'js';
 
@@ -75,7 +196,12 @@ export interface OverlayPositionRequest {
   anchor: HTMLElement | null;
   /** The positioned overlay element; null while closed/unmounted. */
   overlay: HTMLElement | null;
-  placement: OverlayPlacement;
+  /**
+   * Logical placement. The deprecated physical spellings (`left`, `right` and
+   * their aligned forms) are still accepted and normalized -- see
+   * {@link OVERLAY_PLACEMENT_ALIASES}.
+   */
+  placement: OverlayPlacementInput;
   /** Gap in px between the anchor edge and the overlay. @default 8 */
   offset?: number;
   /** Flip to the opposite side when the preferred side overflows. @default true */
@@ -86,6 +212,25 @@ export interface OverlayPositionRequest {
    * @default 'viewport'
    */
   boundary?: 'viewport' | HTMLElement;
+  /**
+   * The reading direction THIS request is resolved in -- the one authority for
+   * every consumer of the resulting placement.
+   *
+   * It exists because the two branches read direction from different places by
+   * construction: `anchor-css` lowers to the `self-*` `position-area` family,
+   * which CSS resolves against the OVERLAY ELEMENT's own writing mode (the
+   * anchor subtree's declared `dir`), while `js` has to resolve the logical
+   * side into viewport coordinates itself. Left to their defaults those two
+   * answers can differ for one tree and one request -- an anchor inside a bare
+   * `dir="rtl"` under an LTR app locale is the whole family of cases -- and the
+   * same request then paints on opposite physical sides in the two branches.
+   * An adopter that already resolves the anchor's direction (the portalled
+   * panels: Tooltip, Popover, HoverCard) passes it here, so placement, paint
+   * and every stamped attribute are computed against ONE direction.
+   *
+   * @default the active locale's direction (`useOptionalDirection()`)
+   */
+  direction?: TextDirection;
 }
 
 export interface OverlayPositionResult {
@@ -174,12 +319,66 @@ const DEFAULT_OFFSET = 8;
 /** Minimum clearance kept between the overlay and the boundary edge (js branch). */
 const BOUNDARY_MARGIN = 8;
 
-type PlacementSide = 'top' | 'bottom' | 'left' | 'right';
-type PlacementAlign = 'center' | 'start' | 'end';
+/**
+ * Edge alignment along the side's CROSS axis; `center` is the bare side.
+ * Physical on the inline axis by the adopting engines' contract -- see
+ * {@link OverlayPlacement}.
+ */
+export type OverlayPlacementAlign = 'center' | 'start' | 'end';
+type PlacementAlign = OverlayPlacementAlign;
+/** The physical side the measured branch works in, once direction is resolved. */
+type PhysicalSide = 'top' | 'bottom' | 'left' | 'right';
 
-function parsePlacement(placement: OverlayPlacement): [PlacementSide, PlacementAlign] {
-  const [side, align] = placement.split('-') as [PlacementSide, PlacementAlign | undefined];
-  return [side, align ?? 'center'];
+/**
+ * Side + alignment per placement, as a TABLE rather than a split on `-`: the
+ * logical sides contain the separator themselves (`inline-start-end` is the
+ * `inline-start` side aligned to `end`), so a positional split would read
+ * `inline` as the side and `start` as the alignment. The table is the only
+ * parser, and it is exhaustive by its own type.
+ */
+const PLACEMENT_PARTS: Readonly<
+  Record<OverlayPlacement, readonly [OverlayPlacementSide, PlacementAlign]>
+> = Object.freeze({
+  top: ['top', 'center'],
+  'top-start': ['top', 'start'],
+  'top-end': ['top', 'end'],
+  bottom: ['bottom', 'center'],
+  'bottom-start': ['bottom', 'start'],
+  'bottom-end': ['bottom', 'end'],
+  'inline-start': ['inline-start', 'center'],
+  'inline-start-start': ['inline-start', 'start'],
+  'inline-start-end': ['inline-start', 'end'],
+  'inline-end': ['inline-end', 'center'],
+  'inline-end-start': ['inline-end', 'start'],
+  'inline-end-end': ['inline-end', 'end'],
+});
+
+function parsePlacement(placement: OverlayPlacement): readonly [OverlayPlacementSide, PlacementAlign] {
+  return PLACEMENT_PARTS[placement];
+}
+
+/**
+ * Public reader for the same table. Adopters must not split on `-`: a logical
+ * side contains the separator, so `inline-start` would read as the side
+ * `inline` aligned to `start`.
+ */
+export function parseOverlayPlacement(
+  placement: OverlayPlacementInput,
+): readonly [OverlayPlacementSide, OverlayPlacementAlign] {
+  return PLACEMENT_PARTS[normalizeOverlayPlacement(placement)];
+}
+
+/**
+ * The physical side a logical side resolves to. Only the MEASURED branch needs
+ * this: it computes viewport coordinates, which are physical by construction.
+ * The anchor-css branch never calls it -- CSS resolves the logical keywords
+ * itself, against the overlay's own writing mode.
+ */
+function toPhysicalSide(side: OverlayPlacementSide, direction: TextDirection): PhysicalSide {
+  if (side === 'top' || side === 'bottom') return side;
+  const inlineStartIsLeft = direction !== 'rtl';
+  if (side === 'inline-start') return inlineStartIsLeft ? 'left' : 'right';
+  return inlineStartIsLeft ? 'right' : 'left';
 }
 
 /**
@@ -190,6 +389,24 @@ function parsePlacement(placement: OverlayPlacement): [PlacementSide, PlacementA
  * region would overflow on every wide overlay). `-start`/`-end` span from
  * the anchor's near edge outward so the default alignment lines the edges
  * up.
+ *
+ * WHY `self-*` FOR THE INLINE SIDES. `position-area` has three keyword
+ * families and a value may not mix them. The plain logical keywords
+ * (`inline-start`) resolve against the CONTAINING BLOCK's writing mode, which
+ * for a top-layer popover is the initial containing block -- the ROOT
+ * element's direction, not the anchor's. The `self-*` keywords resolve against
+ * the overlay element's OWN writing mode, which it inherits from the anchor's
+ * subtree (the top layer changes painting, not inheritance), and that is also
+ * the mode `offsetMargins` below is resolved in. Measured in Chromium 1228:
+ * with `dir="rtl"` on a wrapper rather than on `<html>`, `inline-start` left
+ * the overlay on the physical left of its anchor while `self-inline-start`
+ * mirrored it to the right and kept the gap anchor-facing. So the pair that
+ * agrees in every nesting is `self-*` plus logical margins.
+ *
+ * The block-axis sides stay in the PHYSICAL family (`top`, `span-right`): the
+ * reading direction never moves `top`/`bottom`, and the alignment axis of
+ * those placements is owned by the adopting engines, which mirror it
+ * themselves. One family per value, as the grammar requires.
  */
 const POSITION_AREA: Record<OverlayPlacement, string> = {
   top: 'top',
@@ -198,36 +415,39 @@ const POSITION_AREA: Record<OverlayPlacement, string> = {
   bottom: 'bottom',
   'bottom-start': 'bottom span-right',
   'bottom-end': 'bottom span-left',
-  left: 'left',
-  'left-start': 'left span-bottom',
-  'left-end': 'left span-top',
-  right: 'right',
-  'right-start': 'right span-bottom',
-  'right-end': 'right span-top',
+  'inline-start': 'self-inline-start',
+  'inline-start-start': 'self-inline-start span-self-block-end',
+  'inline-start-end': 'self-inline-start span-self-block-start',
+  'inline-end': 'self-inline-end',
+  'inline-end-start': 'self-inline-end span-self-block-end',
+  'inline-end-end': 'self-inline-end span-self-block-start',
 };
 
 /** Fallbacks flip the placement axis first, then alignment, then both. */
-const FLIP_CHAIN: Record<PlacementSide, string> = {
+const FLIP_CHAIN: Record<OverlayPlacementSide, string> = {
   top: 'flip-block, flip-inline, flip-block flip-inline',
   bottom: 'flip-block, flip-inline, flip-block flip-inline',
-  left: 'flip-inline, flip-block, flip-inline flip-block',
-  right: 'flip-inline, flip-block, flip-inline flip-block',
+  'inline-start': 'flip-inline, flip-block, flip-inline flip-block',
+  'inline-end': 'flip-inline, flip-block, flip-inline flip-block',
 };
 
 /**
  * The anchor-facing margin carries the offset gap; try fallbacks mirror
- * margins in the flipped axis, so the gap survives a flip.
+ * margins in the flipped axis, so the gap survives a flip. Every spelling is
+ * LOGICAL, resolved in the overlay's own writing mode -- the same mode the
+ * `self-*` `position-area` keywords above resolve in, so the gap stays on the
+ * anchor-facing edge under `dir=rtl` instead of jumping to the far side.
  */
-function offsetMargins(side: PlacementSide, offset: number): CSSProperties {
+function offsetMargins(side: OverlayPlacementSide, offset: number): CSSProperties {
   switch (side) {
     case 'top':
-      return { marginBottom: offset };
+      return { marginBlockEnd: offset };
     case 'bottom':
-      return { marginTop: offset };
-    case 'left':
-      return { marginRight: offset };
-    case 'right':
-      return { marginLeft: offset };
+      return { marginBlockStart: offset };
+    case 'inline-start':
+      return { marginInlineEnd: offset };
+    case 'inline-end':
+      return { marginInlineStart: offset };
   }
 }
 
@@ -292,11 +512,16 @@ function computeMeasuredPosition(
   overlayWidth: number,
   overlayHeight: number,
   placement: OverlayPlacement,
+  direction: TextDirection,
   offset: number,
   flip: boolean,
   bounds: BoundaryRect,
 ): MeasuredPosition {
-  const [side, align] = parsePlacement(placement);
+  const [logicalSide, align] = parsePlacement(placement);
+  // Viewport coordinates are physical by construction, so the logical side is
+  // resolved against the reading direction ONCE, here, and the collision
+  // arithmetic below stays the physical arithmetic it always was.
+  const side = toPhysicalSide(logicalSide, direction);
   let top: number;
   let left: number;
 
@@ -402,11 +627,20 @@ export function useOverlayPosition(request: OverlayPositionRequest): OverlayPosi
   const {
     anchor,
     overlay,
-    placement,
+    placement: requestedPlacement,
     offset = DEFAULT_OFFSET,
     flip = true,
     boundary = 'viewport',
+    direction: requestedDirection,
   } = request;
+
+  const placement = normalizeOverlayPlacement(requestedPlacement);
+  // ONE direction per request. The app locale is the default answer; an
+  // adopter that resolves the anchor's own direction -- which is what the
+  // anchor-css branch's `self-*` keywords resolve against -- overrides it, so
+  // both branches place against the same authority instead of two.
+  const localeDirection = useOptionalDirection();
+  const direction = requestedDirection ?? localeDirection;
 
   const portalDepth = useOverlayPortalDepth();
   const boundaryElement = boundary === 'viewport' ? null : boundary;
@@ -473,6 +707,7 @@ export function useOverlayPosition(request: OverlayPositionRequest): OverlayPosi
         overlayRect.width,
         overlayRect.height,
         placement,
+        direction,
         offset,
         flip,
         resolveBoundaryRect(boundary),
@@ -502,7 +737,7 @@ export function useOverlayPosition(request: OverlayPositionRequest): OverlayPosi
       visualViewport?.removeEventListener('resize', update);
       visualViewport?.removeEventListener('scroll', update);
     };
-  }, [strategy, anchor, overlay, placement, offset, flip, boundary]);
+  }, [strategy, anchor, overlay, placement, direction, offset, flip, boundary]);
 
   const style = useMemo<CSSProperties>(() => {
     if (strategy === 'anchor-css') {

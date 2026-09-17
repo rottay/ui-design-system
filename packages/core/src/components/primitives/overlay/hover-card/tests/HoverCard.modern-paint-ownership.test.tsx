@@ -7,8 +7,10 @@
  * unlayered skin `hover-card.css` on family-local `--ds-hover-card-*`
  * channels, and made `align: start/end` logical along the inline axis: the
  * shared runtime's `-start`/`-end` are physical, so under `dir="rtl"` a
- * `top|bottom-*` placement mirrors (left/right sides align on the block axis
- * and do not mirror).
+ * `top|bottom-*` placement mirrors (the inline-axis sides align on the block
+ * axis and do not mirror). WO-INV-01 then made the SIDE logical, so an
+ * inline side is `inline-start`/`inline-end` and CSS -- not this engine --
+ * mirrors it; `left`/`right` survive as deprecated aliases.
  */
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
@@ -95,12 +97,34 @@ describe('HoverCard modern engine — align mirrors along the inline axis', () =
     expect(lastPlacement()).toBe('top-start');
   });
 
-  it('does NOT mirror block-axis alignment (side=left stays left-start)', () => {
+  it('does NOT mirror block-axis alignment (an inline side keeps -start in both directions)', () => {
     render(
       <I18nProvider locale="ar" fallbackLocale="en">
-        <ModernHoverCard open side="left" align="start" content={<div>Card</div>} trigger={<span>Hover</span>} />
+        <ModernHoverCard open side="inline-start" align="start" content={<div>Card</div>} trigger={<span>Hover</span>} />
       </I18nProvider>,
     );
-    expect(lastPlacement()).toBe('left-start');
+    expect(lastPlacement()).toBe('inline-start-start');
+    cleanup();
+
+    // The counter-factual: the alignment suffix is identical under LTR, which
+    // is what "does not mirror" means. The SIDE is what the direction moves,
+    // and CSS moves it -- not this engine.
+    render(
+      <ModernHoverCard open side="inline-start" align="start" content={<div>Card</div>} trigger={<span>Hover</span>} />,
+    );
+    expect(lastPlacement()).toBe('inline-start-start');
+  });
+
+  it('accepts the deprecated physical side as an alias of the logical one', () => {
+    render(
+      <ModernHoverCard open side="left" align="start" content={<div>Card</div>} trigger={<span>Hover</span>} />,
+    );
+    expect(lastPlacement()).toBe('inline-start-start');
+    cleanup();
+
+    render(
+      <ModernHoverCard open side="right" align="end" content={<div>Card</div>} trigger={<span>Hover</span>} />,
+    );
+    expect(lastPlacement()).toBe('inline-end-end');
   });
 });

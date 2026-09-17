@@ -79,7 +79,23 @@ export interface SliderProps {
   /** Custom tooltip */
   tooltip?: {
     open?: boolean;
-    placement?: 'top' | 'bottom' | 'left' | 'right';
+    /**
+     * Which side of the rail the readout takes. The inline axis is LOGICAL
+     * (`inline-start`/`inline-end`), so a vertical slider puts its readout on
+     * the reader's near or far side and mirrors under `dir=rtl` by itself.
+     *
+     * `left`/`right` are kept as deprecated aliases of `inline-start`/
+     * `inline-end` so no caller breaks; their LTR geometry is unchanged.
+     */
+    placement?:
+      | 'top'
+      | 'bottom'
+      | 'inline-start'
+      | 'inline-end'
+      /** @deprecated Use `inline-start`. */
+      | 'left'
+      /** @deprecated Use `inline-end`. */
+      | 'right';
     formatter?: ((value?: number) => ReactNode) | null;
   };
   /** Allow keyboard interaction */

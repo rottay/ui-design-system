@@ -456,7 +456,8 @@ const CENTRED_PARTS: Array<{ part: string; geometry: PartGeometry }> = [
 ];
 
 const TOOLTIP_GEOMETRY: PartGeometry = {
-  base: `${VERTICAL_SCOPE} [data-part='tooltip'][data-placement='right']`,
+  base: `${VERTICAL_SCOPE} [data-part='tooltip'][data-placement='inline-end']`,
+  rtl: `${VERTICAL_SCOPE} [data-part='tooltip'][data-placement='inline-end']:dir(rtl)`,
 };
 
 const MARK_LABEL_GEOMETRY: PartGeometry = {
@@ -512,7 +513,7 @@ describe('Slider modern vertical geometry -- one inline centre line in both dire
     },
   );
 
-  it('places the value tooltip identically in both directions (physical placement contract)', async () => {
+  it('mirrors the value tooltip about the rail line (logical placement contract)', async () => {
     const ltr = renderVerticalGeometry('en');
     await waitFor(() => expect(document.documentElement.dir).toBe('ltr'));
     const ltrCentres = PROBE_SIZES.map((size) =>
@@ -525,14 +526,27 @@ describe('Slider modern vertical geometry -- one inline centre line in both dire
       inlineCentre(firstPart(rtl.container, 'tooltip'), TOOLTIP_GEOMETRY, 'rtl', size));
     rtl.unmount();
 
-    // `placement` is 'left' | 'right' -- a physical vocabulary -- so the bubble
-    // keeps the physical side it was asked for. Moving it under RTL would be
-    // the defect, not the fix.
+    // WO-INV-01: `placement` is 'inline-start' | 'inline-end' -- a LOGICAL
+    // vocabulary -- so the bubble changes physical side with the reading
+    // direction while keeping the same distance from the rail line, exactly
+    // like the mark label below. Staying on the same physical side would now
+    // be the defect.
+    PROBE_SIZES.forEach((size, index) => {
+      const mirrored = ROOT_INLINE_SIZE - ltrCentres[index]!;
+      expect(
+        Math.abs(mirrored - rtlCentres[index]!),
+        `tooltip centre at inline size ${size}px: ${rtlCentres[index]} vs mirrored ${mirrored}`,
+      ).toBeLessThanOrEqual(TOLERANCE_PX);
+    });
+
+    // The counter-factual that keeps the mirror honest: the two directions are
+    // NOT the same number (a symmetric no-op would satisfy the mirror
+    // assertion at the exact rail line only).
     PROBE_SIZES.forEach((size, index) => {
       expect(
         Math.abs(ltrCentres[index]! - rtlCentres[index]!),
-        `tooltip centre at inline size ${size}px: ${ltrCentres[index]} (ltr) vs ${rtlCentres[index]} (rtl)`,
-      ).toBeLessThanOrEqual(TOLERANCE_PX);
+        `tooltip centre at inline size ${size}px must differ between directions`,
+      ).toBeGreaterThan(TOLERANCE_PX);
     });
   });
 

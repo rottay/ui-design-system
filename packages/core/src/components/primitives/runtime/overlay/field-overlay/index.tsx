@@ -47,12 +47,14 @@ import React, {
   type ReactNode,
 } from 'react';
 
+import type { TextDirection } from '@/foundation/i18n/kernel/contracts';
+
 import { Portal } from '../portal';
 import { PortalScope, usePortalScope, type PortalScopeSnapshot } from '../portal-scope';
 import {
   OverlayPortalBoundary,
   useOverlayPosition,
-  type OverlayPlacement,
+  type OverlayPlacementInput,
   type OverlayPositionStrategy,
 } from '../positioning';
 import {
@@ -106,14 +108,27 @@ export interface UseFieldOverlayOptions {
   surface?: FieldOverlaySurface;
   /** @default 'auto' */
   render?: FieldOverlayRenderMode;
-  /** Preferred side/alignment for an `anchored` surface. @default 'bottom-start' */
-  placement?: OverlayPlacement;
+  /**
+   * Preferred side/alignment for an `anchored` surface. The side vocabulary is
+   * LOGICAL (`inline-start`/`inline-end`); the deprecated physical spellings
+   * are accepted and normalized by the positioning owner.
+   * @default 'bottom-start'
+   */
+  placement?: OverlayPlacementInput;
   /** Gap in px between anchor edge and panel. @default 8 */
   offset?: number;
   /** Flip to the opposite side on overflow. @default true */
   flip?: boolean;
   /** Overflow boundary for the measured branch. @default 'viewport' */
   boundary?: 'viewport' | HTMLElement;
+  /**
+   * Reading direction this placement is resolved in. A family that already
+   * resolves its ANCHOR's direction -- which is the direction the anchor-css
+   * branch's `self-*` keywords resolve against -- passes it so both branches
+   * place against one authority instead of two.
+   * @default the active locale's direction
+   */
+  direction?: TextDirection;
   /**
    * Tie the panel's inline size to the anchor's measured width. In-tree
    * panels get this for free from `inset-inline: 0`; a portaled panel has no
@@ -321,6 +336,7 @@ export function useFieldOverlay(options: UseFieldOverlayOptions): FieldOverlayHa
     offset,
     flip,
     boundary,
+    direction,
     modal,
     lockScroll,
     restoreFocus,
@@ -387,6 +403,7 @@ export function useFieldOverlay(options: UseFieldOverlayOptions): FieldOverlayHa
     ...(offset === undefined ? {} : { offset }),
     ...(flip === undefined ? {} : { flip }),
     ...(boundary === undefined ? {} : { boundary }),
+    ...(direction === undefined ? {} : { direction }),
   });
 
   const scope = usePortalScope(anchor);

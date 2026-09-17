@@ -70,7 +70,14 @@ import {
   readDsPortalVariables,
   type DsPortalVariableStyle,
 } from "../../../../runtime/overlay/foundation/portal-theme";
-import { OverlayPortalBoundary } from "../../../../runtime/overlay/positioning";
+import {
+  OverlayPortalBoundary,
+  normalizeOverlayPlacement,
+  parseOverlayPlacement,
+  toPhysicalPlacementAttribute,
+  type OverlayPlacement,
+  type OverlayPlacementSide,
+} from "../../../../runtime/overlay/positioning";
 import {
   useFieldOverlay,
   type FieldOverlayDismissReason,
@@ -127,20 +134,24 @@ const TOOLTIP_EXIT_FALLBACK = {
   detachedFallbackMs: DEFAULT_EXIT_FALLBACK_MS,
 } as const;
 
+/**
+ * ALIGNMENT ONLY. The SIDE vocabulary is logical end to end -- the positioning
+ * owner resolves `inline-start`/`inline-end` itself -- but the shared runtime's
+ * `-start`/`-end` alignment is physical, while the Tooltip contract's is
+ * logical. On the block-axis sides that alignment runs along the inline axis,
+ * so it is mirrored here against the resolved reading direction. The
+ * inline-axis sides align on the block axis, which no reading direction moves.
+ */
 function toPhysicalPlacement(
-  placement: NonNullable<TooltipProps["placement"]>,
+  placement: OverlayPlacement,
   direction: "ltr" | "rtl" | undefined
-): NonNullable<TooltipProps["placement"]> {
+): OverlayPlacement {
   if (direction !== "rtl") return placement;
   if (placement.startsWith("top-") || placement.startsWith("bottom-")) {
     if (placement.endsWith("-start"))
-      return placement.replace("-start", "-end") as NonNullable<
-        TooltipProps["placement"]
-      >;
+      return placement.replace("-start", "-end") as OverlayPlacement;
     if (placement.endsWith("-end"))
-      return placement.replace("-end", "-start") as NonNullable<
-        TooltipProps["placement"]
-      >;
+      return placement.replace("-end", "-start") as OverlayPlacement;
   }
   return placement;
 }
@@ -202,15 +213,30 @@ function describeTrigger(
   });
 }
 
+/**
+ * The side the bubble ACTUALLY landed on, read back from geometry and returned
+ * in the LOGICAL vocabulary: rects are viewport coordinates, so the measured
+ * physical side is mapped back through the reading direction. A flip therefore
+ * reports `inline-end` rather than a physical edge, and the preferred placement
+ * it is compared against speaks the same vocabulary.
+ */
 function resolvePlacementFromGeometry(
-  preferred: TooltipProps["placement"],
+  preferred: OverlayPlacement,
   anchor: HTMLElement,
   bubble: HTMLElement,
   direction: "ltr" | "rtl" = "ltr"
-): NonNullable<TooltipProps["placement"]> {
+): OverlayPlacement {
   const anchorRect = anchor.getBoundingClientRect();
   const bubbleRect = bubble.getBoundingClientRect();
-  const preferredHasAlignment = preferred?.includes("-") ?? false;
+  // Never `preferred.includes('-')`: a logical side carries the separator.
+  const preferredHasAlignment = parseOverlayPlacement(preferred)[1] !== "center";
+  const inlineStartSide = direction === "rtl" ? "right" : "left";
+  const toLogicalSide = (
+    physical: "top" | "bottom" | "left" | "right"
+  ): OverlayPlacementSide => {
+    if (physical === "top" || physical === "bottom") return physical;
+    return physical === inlineStartSide ? "inline-start" : "inline-end";
+  };
 
   let side: "top" | "bottom" | "left" | "right" | undefined;
   if (bubbleRect.bottom <= anchorRect.top + 1) side = "top";
@@ -225,8 +251,7 @@ function resolvePlacementFromGeometry(
     const deltaY =
       bubbleRect.top + bubbleRect.height / 2 -
       (anchorRect.top + anchorRect.height / 2);
-    if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1)
-      return preferred ?? TOOLTIP_DEFAULTS.placement;
+    if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return preferred;
     side =
       Math.abs(deltaY) >= Math.abs(deltaX)
         ? deltaY < 0
@@ -236,7 +261,8 @@ function resolvePlacementFromGeometry(
         ? "left"
         : "right";
   }
-  if (!preferredHasAlignment) return side;
+  const logicalSide = toLogicalSide(side);
+  if (!preferredHasAlignment) return logicalSide;
 
   // Anchor-position fallbacks may flip alignment as well as side. Derive the
   // resolved logical edge so the arrow stays attached after a collision.
@@ -252,12 +278,14 @@ function resolvePlacementFromGeometry(
         : physicalAlignment === "left"
         ? "start"
         : "end";
-    return `${side}-${logicalAlignment}`;
+    return `${logicalSide}-${logicalAlignment}` as OverlayPlacement;
   }
 
   const topDelta = Math.abs(bubbleRect.top - anchorRect.top);
   const bottomDelta = Math.abs(bubbleRect.bottom - anchorRect.bottom);
-  return `${side}-${topDelta <= bottomDelta ? "start" : "end"}`;
+  return `${logicalSide}-${
+    topDelta <= bottomDelta ? "start" : "end"
+  }` as OverlayPlacement;
 }
 
 function readPortalScope(anchor: HTMLElement): TooltipPortalScope {
@@ -300,7 +328,7 @@ function readLocaleContext(anchor: HTMLElement): {
 }
 
 function resolveArrowOffset(
-  placement: NonNullable<TooltipProps["placement"]>,
+  placement: OverlayPlacement,
   anchor: HTMLElement,
   bubble: HTMLElement,
   direction: "ltr" | "rtl"
@@ -392,14 +420,23 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     content !== null && content !== undefined && content !== false;
   const requestedVisibleRef = useRef(Boolean(isVisible));
   const [present, setPresent] = useState(Boolean(isVisible));
-  const [resolvedPlacement, setResolvedPlacement] = useState(placement);
+  // One normalization point: a deprecated physical spelling becomes its
+  // logical equivalent here, so nothing downstream carries two vocabularies.
+  const requestedPlacement = normalizeOverlayPlacement(placement);
+  const [resolvedPlacement, setResolvedPlacement] =
+    useState<OverlayPlacement>(requestedPlacement);
   const [arrowOffset, setArrowOffset] = useState<string>();
-  const [direction, setDirection] = useState<"ltr" | "rtl" | undefined>();
+  // ONE direction for this instance: the anchor context read below, which is
+  // also what the anchor-css branch resolves `self-*` against.
+  const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
   const [language, setLanguage] = useState<string | undefined>();
   const [portalScope, setPortalScope] = useState<TooltipPortalScope>({});
   const [portalVariables, setPortalVariables] =
     useState<DsPortalVariableStyle>({});
-  const positioningPlacement = toPhysicalPlacement(placement, direction);
+  const positioningPlacement = toPhysicalPlacement(
+    requestedPlacement,
+    direction
+  );
 
   useEffect(() => {
     setMounted(true);
@@ -643,6 +680,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     panel: bubbleEl,
     measure: true,
     placement: positioningPlacement,
+    direction,
     offset,
     flip: true,
     modal: true,
@@ -684,19 +722,14 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
 
     const update = (): void => {
       const nextPlacement = resolvePlacementFromGeometry(
-        placement,
+        requestedPlacement,
         anchorEl,
         bubbleEl,
         direction
       );
       setResolvedPlacement(nextPlacement);
       setArrowOffset(
-        resolveArrowOffset(
-          nextPlacement,
-          anchorEl,
-          bubbleEl,
-          direction ?? "ltr"
-        )
+        resolveArrowOffset(nextPlacement, anchorEl, bubbleEl, direction)
       );
     };
     const frame = window.requestAnimationFrame(update);
@@ -720,7 +753,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   }, [
     anchorEl,
     bubbleEl,
-    placement,
+    requestedPlacement,
     overlay.positionStyle.left,
     overlay.positionStyle.top,
     present,
@@ -837,6 +870,17 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
     interactive
   );
 
+  // The skin keys on the PHYSICAL side (`[data-placement^='left']`), so the
+  // resolved logical placement is lowered here and nowhere else.
+  const placementAttribute = toPhysicalPlacementAttribute(
+    resolvedPlacement,
+    direction
+  );
+  const preferredPlacementAttribute = toPhysicalPlacementAttribute(
+    requestedPlacement,
+    direction
+  );
+
   const bubbleNode = (
     <div
       ref={setBubbleEl}
@@ -856,10 +900,10 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
       data-variant={recipe}
       data-custom-max-width={maxWidth === undefined ? undefined : "true"}
       data-density={density ?? portalScope["data-density"]}
-      data-placement={resolvedPlacement}
-      data-preferred-placement={placement}
+      data-placement={placementAttribute}
+      data-preferred-placement={preferredPlacementAttribute}
       data-collision-adjusted={
-        resolvedPlacement !== placement ? "true" : undefined
+        resolvedPlacement !== requestedPlacement ? "true" : undefined
       }
       data-radius={radius}
       data-interactive={interactive}
