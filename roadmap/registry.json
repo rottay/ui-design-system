@@ -5180,6 +5180,11 @@
      "at": "2026-09-17 13:17",
      "by": "claude-fable-dt",
      "note": "ADOPCION post-auditoria Codex (docs-engineering/archive/audits/2026-09-17-ds-814927519-davila.md): HEAD 814927519 confirmado, main, porcelain e index limpios, sin procesos. DT en esta sesion: Fable 5.1 (claude-fable-5-1), cuenta daniel.avila@rottay.com; implementadores Opus por Agent. Contraejemplos reproducidos: R17-01 (grouped 6 filas expuestas, aria-rowcount 4, 2 group-header sin indice), R17-02 (physical-css test 58: 5 de 9 sitios), R17-07 (cascade 2346/2079, 2359/2114, denominador 5439/5210). Despachados en paralelo con scopes disjuntos: R17-01 (data-table), R17-02 (gate physical-css), R17-03 (frontera fisica para motores congelados en el resolver compartido, sin editar frozen), y lector de atribucion por conjuntos del cascade ratchet (R17-07)."
+    },
+    {
+     "at": "2026-09-17 13:57",
+     "by": "kimi-dt",
+     "note": "SUCESION DT 2026-09-17: Kimi asume DT/auditoria/integracion local por orden del owner (handoff Codex 2026-09-17 + enmienda paralela 2026-09-17 en roadmap/README.md, commit ef34493c5). Asiento writer: claude-admin (admin@rottay.com) con Opus real, verificado por ejecutable y recibo de modelo al cierre de cada lote. Lote R17-01 en curso PRESERVADO: implementacion sin commitear en data-table/engines/modern/index.tsx (walk de filas expuestas: headers de grupo y detalle indexados, aria-rowcount honesto -1 con paginacion remota estructural) auditada por Kimi; suite focal aria-grid-coordinates 4/4 verde sobre el candidato. Despachado W1 (Opus): completar regresiones grouped/collapsed/expanded/paginated/virtualized; write set limitado al engine modern + su test aria. Reservas activas: data-table family (W1)."
     }
    ]
   },
@@ -5414,6 +5419,11 @@
      "at": "2026-09-17 13:17",
      "by": "claude-fable-dt",
      "note": "ADOPCION post-auditoria Codex (docs-engineering/archive/audits/2026-09-17-ds-814927519-davila.md): HEAD 814927519 confirmado, main, porcelain e index limpios, sin procesos. DT en esta sesion: Fable 5.1 (claude-fable-5-1), cuenta daniel.avila@rottay.com; implementadores Opus por Agent. Contraejemplos reproducidos: R17-01 (grouped 6 filas expuestas, aria-rowcount 4, 2 group-header sin indice), R17-02 (physical-css test 58: 5 de 9 sitios), R17-07 (cascade 2346/2079, 2359/2114, denominador 5439/5210). Despachados en paralelo con scopes disjuntos: R17-01 (data-table), R17-02 (gate physical-css), R17-03 (frontera fisica para motores congelados en el resolver compartido, sin editar frozen), y lector de atribucion por conjuntos del cascade ratchet (R17-07)."
+    },
+    {
+     "at": "2026-09-17 13:57",
+     "by": "kimi-dt",
+     "note": "SUCESION DT 2026-09-17 (ver WO-FAM-08 para el detalle del asiento). Despachados W2 (R17-02: atribuir sitios shorthand drenados 9->5 y corregir la expectativa stale del drill en scripts/check/localization/physical-css, drills plantados intactos, sin ensanchar baselines) y W3 (R17-03: frontera fisica/logica — normalizacion solo en la ruta Modern, consumidores frozen Classic/Rustic recuperan comportamiento fisico exacto LTR/RTL, fallback Tooltip logico documentado fail-closed, changeset corregido; si la frontera limpia exige tocar un motor congelado, W3 frena y eleva opcion breaking al owner). Write sets disjuntos: physical-css scripts (W2) vs primitives/runtime/overlay/positioning + contracts overlay + changeset inv-01 (W3)."
     }
    ]
   },
@@ -5868,6 +5878,11 @@
      "at": "2026-09-17 13:17",
      "by": "claude-fable-dt",
      "note": "ADOPCION post-auditoria Codex (docs-engineering/archive/audits/2026-09-17-ds-814927519-davila.md): HEAD 814927519 confirmado, main, porcelain e index limpios, sin procesos. DT en esta sesion: Fable 5.1 (claude-fable-5-1), cuenta daniel.avila@rottay.com; implementadores Opus por Agent. Contraejemplos reproducidos: R17-01 (grouped 6 filas expuestas, aria-rowcount 4, 2 group-header sin indice), R17-02 (physical-css test 58: 5 de 9 sitios), R17-07 (cascade 2346/2079, 2359/2114, denominador 5439/5210). Despachados en paralelo con scopes disjuntos: R17-01 (data-table), R17-02 (gate physical-css), R17-03 (frontera fisica para motores congelados en el resolver compartido, sin editar frozen), y lector de atribucion por conjuntos del cascade ratchet (R17-07)."
+    },
+    {
+     "at": "2026-09-17 13:57",
+     "by": "kimi-dt",
+     "note": "SUCESION DT 2026-09-17 (ver WO-FAM-08). Despachado W4 (R17-07, SOLO LECTURA + un informe en evidence/r17-07-cascade-attribution/index.md): atribucion por conjuntos nombrados del cascade-ratchet (2346/2079, 2359/2114, denominador 5439/5210) — clases (a) deuda preexistente mal baselineada, (b) nombres nuevos del delta b29cf1e20..814927519, (c) movimientos de denominador; cruzado con dt-gate-attribution-2026-09-16 (baseline falsa al escribirse: 2427 medido vs 2079 escrito en 8bcc3852b). Sin escritura de baseline ni fuente. decisions-lit (R17-06): republicacion solo sobre la puerta actual, pendiente de la atribucion W4 para no fijar una puerta que el repair path vaya a mover."
     }
    ]
   },
