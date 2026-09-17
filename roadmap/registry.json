@@ -5429,6 +5429,11 @@
      "at": "2026-09-17 13:57",
      "by": "kimi-dt",
      "note": "SUCESION DT 2026-09-17 (ver WO-FAM-08 para el detalle del asiento). Despachados W2 (R17-02: atribuir sitios shorthand drenados 9->5 y corregir la expectativa stale del drill en scripts/check/localization/physical-css, drills plantados intactos, sin ensanchar baselines) y W3 (R17-03: frontera fisica/logica — normalizacion solo en la ruta Modern, consumidores frozen Classic/Rustic recuperan comportamiento fisico exacto LTR/RTL, fallback Tooltip logico documentado fail-closed, changeset corregido; si la frontera limpia exige tocar un motor congelado, W3 frena y eleva opcion breaking al owner). Write sets disjuntos: physical-css scripts (W2) vs primitives/runtime/overlay/positioning + contracts overlay + changeset inv-01 (W3)."
+    },
+    {
+     "at": "2026-09-17 14:08",
+     "by": "kimi-dt",
+     "note": "R17-02 INTEGRADO 94e16eeee (writer W2, recibo claude-opus-5 verificado; auditoria e integracion Kimi). Atribucion con instrumento constante sobre arboles archivados: los 4 sitios shorthand drenados son las rotaciones border-width del resize-rail de widget-board, migradas a longhands logicos en el corte B8 (39e13cd80) con baseline del instrumento ya re-pineado y razonado; el artefacto stale era el piso >=9 del test, no el ledger. El drill ahora compara identidades [band, path, locator] (deepEqual), exige PHYSICAL_CONTRACT en cada stamp y la declaracion exacta en la razon de cada pin; drenaje silencioso y llegada nueva quedan rojos. Drill plantado red->green reproducido por el DT: suite 92/92, gate OK. R17-02 CERRADO. En vuelo: W3 (R17-03 frontera placement)."
     }
    ]
   },
