@@ -120,5 +120,43 @@ A client host that only needs to name the brand-studio draft does not need
 either import: the draft type travels with the component, as the root-published
 `BrandStudioDraft` or as `ComponentProps<typeof PatternBrandStudio>['value']`.
 
+### PatternBrandStudio.onChange: the declared break and its bridge (WO-DER-08)
+
+`value` and `onChange` are the two directions of one contract and are not
+classified together. `value` widened to `BrandStudioDraft` — additive. `onChange`
+narrowed from `(next: FlatTheme) => void` to `(next: Theme) => void` — BREAKING:
+a handler typed on the flat view stops compiling (TS2322). The release
+declaration is `.changeset/der-08-studio-callback-governed-theme.md` (major).
+
+The bridge is the door's own projection; no consumer writes a second lift.
+
+```tsx
+// BEFORE (2.19.x)
+const legacy = (next: FlatTheme) => save(next);
+<PatternBrandStudio vertical="bithire" value={draft} onChange={legacy} />;
+
+// AFTER — the handler keeps its flat type; the wrapper projects once
+import { PatternBrandStudio, projectThemeDraft } from '@rottay/design-system';
+
+<PatternBrandStudio
+  vertical="bithire"
+  value={draft}
+  onChange={(next) => legacy(projectThemeDraft(next))}
+/>;
+```
+
+A handler that moves to the transport names the payload as `BrandStudioDraft`
+or `ComponentProps<typeof PatternBrandStudio>['onChange']`. A stored flat draft
+still opens as `value` (the superseded arm) or lifts once with `readThemeDraft`;
+a file written by `serializeFlatTheme` is read by `deserializeThemeDraft`,
+through that same single discriminant. Re-emitting `FlatTheme` from the studio,
+or writing a second local discriminant to silence the type error, is refused:
+the flat shape is the lowering's read view, not an authoring surface.
+
+The migrated consumer is executed, not only documented, in
+`tests/integration/consumer/brand-studio-callback-migration.test.tsx`,
+which also pins with `@ts-expect-error` that the old signature is rejected at
+compile time (`typecheck:tests`).
+
 Primitive component props (ButtonProps, AvatarProps, etc.) live next to their
 component implementations, not in this directory.

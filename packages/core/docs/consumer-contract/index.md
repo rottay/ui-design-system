@@ -349,6 +349,56 @@ Cliente: `DesignSystemProvider` con la declaración TIPADA `visualAuthority={{ a
 
 Nombres que las apps usan hoy y que quedan **prohibidos** en código nuevo: `compileTenantTheme`, `compileTheme`, `resolveTheme`, `liftAuthoredTheme`, `THEME_ENGINE_ADAPTERS`, `FlatTheme`, `TenantAppearance*`, `tokenOverrides`, `getTenantBranding()` con campos visuales fuera de `companyName/logo/logoMark/favicon/locale`. `mountTenantTheme` está publicado (WO-CON-02). El borrador del estudio viaja como `Theme` gobernado (WO-DER-08): el entrypoint `.` publica `serializeThemeDraft` / `deserializeThemeDraft`, y `serializeFlatTheme` / `deserializeFlatTheme` quedan como ventana SUPERSEDED con disparador de cierre nombrado — se retiran cuando `contracts/runtime/suppliers/index.json` deje de nombrarlas en el entrypoint `.`; el pin ejecutable vive en `src/components/patterns/customization/brand-studio/tests/draft-transport.test.tsx`. Hasta que cada app ejecute su paquete de migración (WO-CON-04), mantiene sus tres archivos actuales (`runtime-tenant-theme/{ssr,contracts,artifact-resolution}`) sin ampliarlos; el codemod de WO-CON-02 los reemplaza por la llamada única.
 
+### 2.1 `PatternBrandStudio.onChange`: ruptura declarada y su puente (WO-DER-08)
+
+`value` y `onChange` son las dos direcciones del mismo contrato y NO se
+clasifican juntas. `value` se ensanchó a `BrandStudioDraft`
+(`Theme | DeepPartial<Theme> | FlatTheme | Partial<FlatTheme>`): aditivo, todo
+borrador que ya se pasaba sigue admitido. `onChange` se estrechó de
+`(next: FlatTheme) => void` a `(next: Theme) => void`: **ruptura**. Un manejador
+tipado sobre la vista plana deja de compilar (TS2322); la declaración de
+release es `.changeset/der-08-studio-callback-governed-theme.md` (major), no el
+changeset aditivo del ingreso.
+
+El puente es la proyección de la propia puerta — ninguna app escribe un segundo
+lift:
+
+```tsx
+// ANTES (2.19.x)
+const legacy = (next: FlatTheme) => save(next);
+<PatternBrandStudio vertical="bithire" value={draft} onChange={legacy} />;
+
+// DESPUÉS: el manejador conserva su tipo plano; el envoltorio proyecta una vez
+import { PatternBrandStudio, projectThemeDraft } from "@rottay/design-system";
+
+<PatternBrandStudio
+  vertical="bithire"
+  value={draft}
+  onChange={(next) => legacy(projectThemeDraft(next))}
+/>;
+```
+
+Reglas de la migración:
+
+- El manejador que sí se mueve al transporte nombra el payload como
+  `BrandStudioDraft` o `ComponentProps<typeof PatternBrandStudio>['onChange']`,
+  ambos publicados en el entrypoint `.`. El tipo `Theme` desnudo se publica en
+  `@rottay/design-system/server`, no en la raíz: un host cliente no necesita
+  importarlo.
+- Un borrador plano guardado sigue abriendo: se pasa como `value` (brazo
+  supersedido) o se eleva una vez con `readThemeDraft`.
+- Un archivo escrito por `serializeFlatTheme` lo lee `deserializeThemeDraft`,
+  que enruta por ese mismo discriminante único.
+- Prohibido: volver a emitir `FlatTheme` desde el estudio o escribir un segundo
+  discriminante local para evitar el error de tipos. La vista plana es la
+  lectura del lowering, no una superficie de autoría.
+
+El consumidor migrado está ejecutado, no sólo documentado:
+`tests/integration/consumer/brand-studio-callback-migration.test.tsx`
+monta un host escrito a la vieja usanza detrás del puente y, en el mismo
+archivo, fija con `@ts-expect-error` que la firma antigua es rechazada en
+compilación (`typecheck:tests`).
+
 ## 3. Documento de tenant v2 (lo que escribe app-platform)
 
 ```ts
