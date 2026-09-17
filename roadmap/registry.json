@@ -5170,6 +5170,11 @@
      "at": "2026-09-17 08:05",
      "by": "claude-fable-dt",
      "note": "INTEGRADO 0d29e9fe8 (B9: column-menu, saved-views-menu, field-filters-panel; revision ACCEPT). Roster 77/77. Todas las familias nombradas por la ficha estan rosteradas; queda el cierre transversal (inventario 2026-09-17). Defecto ruteado desde B6: --ds-calendar-view-event-accent viola la ley de nombres de theme (sustantivo de vertical 'event'): rename a --ds-calendar-view-entry-accent en el siguiente lote (8 sitios + 2 notas). En vuelo: endurecimiento de spreads; aria-rowindex/colindex + wrappers de widget-board + chainHandler de data-table. Regeneracion ligera (hooks B6-B9, cascada, css) ahora; build/theme-graph/dist tras los lotes de motor."
+    },
+    {
+     "at": "2026-09-17 08:56",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADOS c7381099e (calendar-view: canal entry-accent, la ley de nombres de tema rechazaba el sustantivo de producto event), 26d6c2501 (hardening F-37: 10 sitios Modern componen handlers del caller con el kernel via composeHandlers caller-first, notifier cierra contrato, stepper chain local por techo de modulos 31/31; revision independiente ACCEPT), 3d2b84a05 (data-table aria-rowindex/colindex con header contado, probe de densidad F-22 en Chromium, widget-board y data-table componen handlers kernel-first en los origenes de arrastre), 581f45dd2 (artefactos: build verde, theme-graph 89 derivers/8251 canales, freshness 12/12). Hallazgo: ds-table-density-* NO esta muerta (app-bithire runtime, app-evnto CSS) -> D21. Residuo: QuickJumperInput (necesita apretar baseline 1->0 en lote DT), duplicados locales de composeHandlers por techo (stepper, data-table). Decisiones D15-D21 en reports/dt-owner-decisions-2026-09-17.md. FRENO por orden del owner en este checkpoint; siguiente lote autorizado: export-kernel (detenido antes de escribir)."
     }
    ]
   },
