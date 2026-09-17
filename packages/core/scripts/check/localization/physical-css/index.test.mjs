@@ -26,19 +26,27 @@ import postcss from 'postcss';
 import {
   CSS_ROOT,
   FROZEN,
+  PHYSICAL_CONTRACT,
+  PHYSICAL_CONTRACT_KEY,
   PHYSICAL_PROPERTIES,
   PHYSICAL_SHORTHANDS,
   SCAN_ROOTS,
+  channelsRead,
   classify,
   compareSpecificity,
   countSites,
+  coversSequence,
+  cssCorpus,
   fileSites,
   inlineTranslations,
   judge,
+  keyframeConsumers,
+  keyframeOf,
   namedExceptions,
   physicalCssSites,
   readBaseline,
   run,
+  selectorSequence,
   shorthandInlinePairs,
   specificity,
 } from './index.mjs';
@@ -48,8 +56,8 @@ const ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 
 /** A skin no band declares, so a planted site is unambiguously the drill's. */
 const CLEAN_FILE = 'runtime/engines/modern/skin/divider/index.css';
-/** The drawer's four keyframe slides: pinned debt owed to the L3 mirror lot. */
-const PINNED_DEBT = 'runtime/engines/modern/skin/drawer/index.css';
+/** Four dead toast slides: pinned debt owed to a removal lot, no consumer to mirror at. */
+const PINNED_DEBT = 'presentation/components/skin/toast-animation-keyframes/index.css';
 /** The tooltip's centred export toast: symmetric, so pinned inert. */
 const PINNED_INERT = 'presentation/components/skin/export-button/index.css';
 /** A measured viewport coordinate; the exception names exactly this site. */
@@ -582,7 +590,11 @@ test('every band row carries a reason long enough to be one', () => {
     const selectors = row.selectors.map((pin) => pin.selector);
     assert.equal(new Set(selectors).size, selectors.length, `${path} declares a selector twice`);
     for (const pin of row.selectors) {
-      assert.ok(/\[data-(placement|fixed|align|side)/.test(pin.selector), `${path} stamp must be keyed on a physical data-* contract`);
+      // A stamp is keyed on a physical `data-*` contract, or -- for the motion
+      // arm of that same contract -- on a `@keyframes <name> / <step>` locator,
+      // whose honesty the gate checks at the animation-name site instead.
+      const keyed = PHYSICAL_CONTRACT_KEY.test(pin.selector) || keyframeOf(pin.selector) !== null;
+      assert.ok(keyed, `${path} stamp must be keyed on a physical data-* contract or a keyframe step`);
       assert.ok(pin.reason.length > 120, `a one-line reason is not a reason: stamp ${path} ${pin.selector}`);
       assert.ok(Number.isInteger(pin.sites) && pin.sites > 0, `${path} stamp must pin a real count`);
     }
@@ -933,4 +945,369 @@ test('the responsive channel vocabulary is pinned as DEBT, never excused', () =>
   assert.equal(baseline.inert[path], undefined);
   assert.ok(baseline.pinnedDebt[path].sites >= 24);
   assert.match(baseline.pinnedDebt[path].reason, /D9/);
+});
+
+// ---------------------------------------------------------------------------
+// A keyframe step is mirrored at its CONSUMERS, or not at all
+// ---------------------------------------------------------------------------
+
+/** A keyframe plus the rules that animate with it, planted as one fixture. */
+const keyframeFixture = (consumers) => [
+  '@keyframes ds-planted-slide {',
+  '  from { transform: translateX(-100%); }',
+  '  to { transform: none; }',
+  '}',
+  consumers,
+].join('\n');
+
+const plantedBands = (body) => fileSites(CLEAN_FILE, body)
+  .filter((site) => site.kind === 'transform')
+  .map((site) => site.band);
+
+test('a keyframe step is MIRRORED when its only consumer reverses it under RTL', () => {
+  const body = keyframeFixture([
+    '.ds-planted-drill { animation: ds-planted-slide 200ms ease both; }',
+    '.ds-planted-drill:dir(rtl) { animation-direction: reverse; }',
+  ].join('\n'));
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['mirrored']);
+});
+
+test('ONE unmirrored consumer out of two keeps the step as debt', () => {
+  // The consumer that reverses does not speak for the one that does not: the
+  // second rule paints the step unflipped under RTL, so the step still owes.
+  const body = keyframeFixture([
+    '.ds-planted-drill { animation: ds-planted-slide 200ms ease both; }',
+    '.ds-planted-drill:dir(rtl) { animation-direction: reverse; }',
+    '.ds-planted-other { animation-name: ds-planted-slide; }',
+  ].join('\n'));
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['physical']);
+});
+
+test('a consumer that reverses WITHOUT an RTL qualifier is not a mirror', () => {
+  // `animation-direction: reverse` in every direction plays the slide backwards
+  // in LTR too: it is a different animation, not a mirrored one.
+  const body = keyframeFixture([
+    '.ds-planted-drill { animation: ds-planted-slide 200ms ease both; }',
+    '.ds-planted-drill { animation-direction: reverse; }',
+  ].join('\n'));
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['physical']);
+});
+
+test('a keyframe NO rule animates with stays debt: dead code is not mirrored', () => {
+  const body = keyframeFixture('.ds-planted-drill:dir(rtl) { animation-direction: reverse; }');
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['physical']);
+  // And the tree really does hold such a keyframe, pinned rather than excused.
+  assert.ok(readBaseline().pinnedDebt[PINNED_DEBT].sites >= 4);
+});
+
+test("a step whose x reads a channel is mirrored by the consumer's :dir(rtl) channel twin", () => {
+  // The cascader idiom: the step cannot carry a qualifier, so the consumer
+  // re-declares the channel the step reads and the column drifts in from the
+  // reading start in both directions.
+  const body = [
+    '@keyframes ds-planted-channel {',
+    '  from { transform: translateX(var(--ds-planted-enter-x, -8px)); }',
+    '  to { transform: none; }',
+    '}',
+    '.ds-planted-drill { --ds-planted-enter-x: -8px; animation: ds-planted-channel 200ms ease; }',
+    '.ds-planted-drill:dir(rtl) { --ds-planted-enter-x: 8px; }',
+  ].join('\n');
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['mirrored']);
+  // The control: a twin that re-declares some OTHER channel mirrors nothing.
+  const other = body.replace('.ds-planted-drill:dir(rtl) { --ds-planted-enter-x: 8px; }', '.ds-planted-drill:dir(rtl) { --ds-planted-unrelated: 8px; }');
+  assert.deepEqual(plantedBands(other), ['physical']);
+});
+
+test('the consumer is resolved ACROSS files, not within one', () => {
+  // `foundation/animations/keyframes` is animated from a Modern skin: a
+  // per-file reading would have called the live progress sweep dead.
+  const sites = physicalCssSites();
+  const steps = sites.filter((site) => site.path === 'foundation/animations/keyframes/index.css'
+    && site.selector.startsWith('@keyframes ds-foundation-progress-indeterminate'));
+  assert.equal(steps.length, 2);
+  for (const step of steps) {
+    assert.equal(step.band, 'mirrored');
+    assert.deepEqual(step.consumers.map((consumer) => consumer.path), ['runtime/engines/modern/skin/progress/index.css']);
+  }
+});
+
+test('channelsRead reads the channel, never the fallback that stands in for it', () => {
+  assert.deepEqual([...channelsRead('translateX(var(--ds-a, var(--ds-b)))')], ['--ds-a']);
+  assert.deepEqual([...channelsRead('calc(var(--ds-a) * -1)')], ['--ds-a']);
+  assert.deepEqual([...channelsRead('translateX(-100%)')], []);
+});
+
+test('a twin only mirrors a consumer it spells IN FULL', () => {
+  // The live progress shape: the twin narrows the consumer further, so it
+  // matches a subset of the same elements and still counts as its mirror.
+  const consumer = selectorSequence(".ds-a.ds-a--modern [data-part='x'][data-part='x']");
+  assert.ok(coversSequence(selectorSequence(".ds-a.ds-a--modern[data-type='line'] [data-part='x'][data-part='x']"), consumer));
+  // A twin that drops one of the repeated attributes does not spell it in full.
+  assert.equal(coversSequence(selectorSequence(".ds-a.ds-a--modern [data-part='x']"), consumer), false);
+  assert.equal(coversSequence(selectorSequence('.ds-other'), consumer), false);
+  assert.equal(coversSequence(consumer, selectorSequence('')), false, 'an empty consumer is covered by nothing');
+});
+
+test('the compound SEQUENCE is compared, combinators included -- not a flat multiset', () => {
+  // A multiset reads `.inner .outer` and `.outer .inner` as the same selector.
+  // They match different elements, so neither can be the other's mirror.
+  const consumer = selectorSequence('.outer .inner');
+  assert.equal(coversSequence(selectorSequence('.inner .outer'), consumer), false, 'order must decide');
+  assert.ok(coversSequence(selectorSequence('.outer.narrow .inner'), consumer), 'narrowing in place still covers');
+  // The combinator is part of the structure: a child is not a descendant.
+  assert.equal(coversSequence(selectorSequence('.outer > .inner'), consumer), false);
+  assert.equal(coversSequence(selectorSequence('.outer .inner'), selectorSequence('.outer > .inner')), false);
+  // A shorter or longer chain matches other elements entirely.
+  assert.equal(coversSequence(selectorSequence('.outer .mid .inner'), consumer), false);
+  assert.equal(coversSequence(selectorSequence('.inner'), consumer), false);
+  // The live shapes the corpus depends on keep their parenthesised commas and
+  // their sibling combinator: `:is(a, b)` is one compound, not two.
+  const cascader = ".ds-cascader:is([data-part='root'], [data-part='dropdown']) [data-part='menu-column'] + [data-part='menu-column']";
+  assert.equal(selectorSequence(cascader).length, 3);
+  assert.deepEqual(selectorSequence(cascader).map((compound) => compound.combinator), ['', ' ', '+']);
+  assert.ok(coversSequence(selectorSequence(cascader.replace(' + ', ':dir(rtl) + ')), selectorSequence(cascader)));
+});
+
+test('a planted `.inner:dir(rtl) .outer` twin does not mirror `.outer .inner`', () => {
+  const body = [
+    '@keyframes ds-planted-order {',
+    '  from { transform: translateX(-100%); }',
+    '  to { transform: none; }',
+    '}',
+    '.outer .inner { animation: ds-planted-order 1s; }',
+    '.inner:dir(rtl) .outer { animation-direction: reverse; }',
+  ].join('\n');
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['physical']);
+  // The same twin written in the consumer's own order IS the mirror.
+  assert.deepEqual(plantedBands(body.replace('.inner:dir(rtl) .outer', '.outer .inner:dir(rtl)')), ['mirrored']);
+});
+
+test('a twin that LOSES the cascade is dead paint, not a keyframe mirror', () => {
+  // isMirroredBy's rule, applied to the consumer arm: `:where()` contributes
+  // nothing, so the twin ties at zero classes and is declared ABOVE the base.
+  const body = [
+    '.ds-a.ds-b.ds-c:dir(rtl) { animation-direction: reverse; }',
+    '@keyframes ds-planted-cascade {',
+    '  from { transform: translateX(-100%); }',
+    '  to { transform: none; }',
+    '}',
+    '.ds-a.ds-b.ds-c { animation: ds-planted-cascade 1s; }',
+  ].join('\n');
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['mirrored'], 'the twin out-specifies the base by :dir(rtl)');
+  // Wrapped in `:where()` the twin carries NO specificity at all, so an
+  // equally weightless consumer declared after it wins and the step still owes.
+  const weightless = body
+    .replace('.ds-a.ds-b.ds-c:dir(rtl) {', ':where(.ds-a.ds-b.ds-c):dir(rtl) {')
+    .replace('.ds-a.ds-b.ds-c { animation', ':where(.ds-a.ds-b.ds-c):where(:dir(ltr), :dir(rtl)) { animation');
+  assert.deepEqual(parseErrors(CLEAN_FILE, weightless), []);
+  assert.deepEqual(plantedBands(weightless), ['physical']);
+});
+
+test('an at-rule-scoped twin does not mirror an UNCONDITIONAL consumer', () => {
+  const consume = '.ds-planted-drill { animation: ds-planted-scope 1s; }';
+  const body = [
+    '@keyframes ds-planted-scope {',
+    '  from { transform: translateX(-100%); }',
+    '  to { transform: none; }',
+    '}',
+    consume,
+    '@media (min-width: 900px) {',
+    '  .ds-planted-drill:dir(rtl) { animation-direction: reverse; }',
+    '}',
+  ].join('\n');
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  assert.deepEqual(plantedBands(body), ['physical'], 'the twin only holds above 900px');
+  // The consumer scoped to the same query is mirrored by it.
+  const scoped = body.replace(consume, `@media (min-width: 900px) {\n  ${consume}\n}`);
+  assert.deepEqual(parseErrors(CLEAN_FILE, scoped), []);
+  assert.deepEqual(plantedBands(scoped), ['mirrored']);
+});
+
+test('animation LAYERS are mirrored one by one, with the list repeated', () => {
+  // `animation-direction: reverse, normal` reverses layer 1 only. The step the
+  // second layer names is painted forwards under RTL, so it still owes.
+  const body = (steps) => [
+    '@keyframes ds-planted-slide {',
+    '  from { transform: translateX(-100%); }',
+    '  to { transform: none; }',
+    '}',
+    '@keyframes ds-planted-other {',
+    '  from { transform: translateX(-30%); }',
+    '  to { transform: none; }',
+    '}',
+    '.ds-planted-drill { animation: ds-planted-other 1s, ds-planted-slide 1s; }',
+    `.ds-planted-drill:dir(rtl) { animation-direction: ${steps}; }`,
+  ].join('\n');
+  const banded = (steps) => fileSites(CLEAN_FILE, body(steps))
+    .filter((site) => site.kind === 'transform')
+    .map((site) => [site.selector, site.band]);
+  assert.deepEqual(parseErrors(CLEAN_FILE, body('reverse, normal')), []);
+  assert.deepEqual(banded('reverse, normal'), [
+    ['@keyframes ds-planted-slide / from', 'physical'],
+    ['@keyframes ds-planted-other / from', 'mirrored'],
+  ]);
+  // The other order reverses the second layer instead.
+  assert.deepEqual(banded('normal, reverse'), [
+    ['@keyframes ds-planted-slide / from', 'mirrored'],
+    ['@keyframes ds-planted-other / from', 'physical'],
+  ]);
+  // A one-value list repeats over both layers, which is how CSS reads it.
+  assert.deepEqual(banded('reverse'), [
+    ['@keyframes ds-planted-slide / from', 'mirrored'],
+    ['@keyframes ds-planted-other / from', 'mirrored'],
+  ]);
+});
+
+test('a channel twin that re-declares the SAME value mirrors nothing', () => {
+  const body = (twin) => [
+    '@keyframes ds-planted-channel {',
+    '  from { transform: translateX(var(--ds-planted-enter-x, -8px)); }',
+    '  to { transform: none; }',
+    '}',
+    '.ds-planted-drill { --ds-planted-enter-x: -8px; animation: ds-planted-channel 1s; }',
+    `.ds-planted-drill:dir(rtl) { --ds-planted-enter-x: ${twin}; }`,
+  ].join('\n');
+  assert.deepEqual(parseErrors(CLEAN_FILE, body('-8px')), []);
+  assert.deepEqual(plantedBands(body('-8px')), ['physical'], 'an identical re-declaration is the same paint');
+  assert.deepEqual(plantedBands(body('8px')), ['mirrored']);
+});
+
+test('a keyframe name is matched whole: `ds-x` is not consumed by `ds-x-rtl`', () => {
+  const body = [
+    '@keyframes ds-planted-sweep {',
+    '  from { transform: translateX(-100%); }',
+    '  to { transform: none; }',
+    '}',
+    '@keyframes ds-planted-sweep-rtl {',
+    '  from { transform: translateX(100%); }',
+    '  to { transform: none; }',
+    '}',
+    '.ds-planted-drill { animation-name: ds-planted-sweep-rtl; }',
+    '.ds-planted-drill:dir(rtl) { animation-direction: reverse; }',
+  ].join('\n');
+  assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
+  const sites = fileSites(CLEAN_FILE, body).filter((site) => site.kind === 'transform');
+  assert.deepEqual(sites.map((site) => [site.selector, site.band, site.consumers.length]), [
+    // Nobody animates with `ds-planted-sweep`: the substring is not a consumer.
+    ['@keyframes ds-planted-sweep / from', 'physical', 0],
+    // `ds-planted-sweep-rtl` is judged on its own consumer, which mirrors it.
+    ['@keyframes ds-planted-sweep-rtl / from', 'mirrored', 1],
+  ]);
+});
+
+test('the physical CONTRACT key is the vocabulary; the STAMP key is an inline-axis value', () => {
+  // The motion arm stamps an inline x, so only a value that names an inline
+  // edge can carry it -- bare, by prefix, or in the dropdown's camel spelling.
+  for (const selector of [
+    ".ds-drawer[data-placement='left']",
+    ".ds-x[data-placement^='right']",
+    ".ds-dropdown-surface[data-part='surface'][data-placement$='Left']",
+    '.ds-table [data-fixed="right"]',
+    ".ds-x[data-align='left']",
+  ]) assert.ok(PHYSICAL_CONTRACT.test(selector), selector);
+  for (const selector of [
+    '.ds-x[data-placement]',
+    ".ds-x[data-placement='top']",
+    ".ds-x[data-placement='bottom']",
+    ".ds-x[data-fixed='true']",
+    ".ds-x[data-align='center']",
+    ".ds-x[data-side='leftover']",
+    ".ds-x[data-part='left']",
+  ]) assert.equal(PHYSICAL_CONTRACT.test(selector), false, selector);
+  // The block-placed row keeps its own selector-shaped stamp: the vocabulary
+  // key still holds it, which is what the band's honesty test reads.
+  const blockPlaced = ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='top'], "
+    + ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='bottom']";
+  assert.ok(PHYSICAL_CONTRACT_KEY.test(blockPlaced));
+  assert.equal(PHYSICAL_CONTRACT.test(blockPlaced), false);
+  const stamps = readBaseline().physicalStamp['runtime/engines/modern/skin/drawer/index.css'].selectors;
+  assert.ok(stamps.some((pin) => pin.selector === blockPlaced), 'the block-placed stamp must still be declared');
+});
+
+test('a motion arm whose consumer is keyed on a BLOCK-axis value is refused', () => {
+  // Presence-only or block-axis keys decide a different edge, so they cannot
+  // carry the inline-x a keyframe step writes.
+  withPlantedTree(
+    (sandbox) => rewrite(
+      sandbox,
+      'runtime/engines/modern/skin/drawer/index.css',
+      (text) => text.replace(
+        "[data-open='true'][data-placement='left'] {",
+        "[data-open='true'][data-placement='top'] {",
+      ),
+    ),
+    (findings) => {
+      const reported = mentions(findings, '@keyframes ds-drawer-enter-left / from');
+      assert.ok(reported.length >= 1, JSON.stringify(findings, null, 1));
+      assert.ok(reported[0].includes('not keyed on a physical data-* contract'), reported[0]);
+    },
+  );
+});
+
+test('a keyframe stamp whose consumers are not placement-keyed is REFUSED', () => {
+  // The stamp is only as honest as the rule that animates with it: strip the
+  // placement key off the drawer's enter rule and the stamped step turns back
+  // into a step that owes a mirror.
+  withPlantedTree(
+    (sandbox) => rewrite(
+      sandbox,
+      'runtime/engines/modern/skin/drawer/index.css',
+      (text) => text.replace(
+        ".ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'][data-placement='left'] {",
+        ".ds-drawer.ds-drawer--modern[data-part='surface'][data-motion='animated'][data-open='true'] {",
+      ),
+    ),
+    (findings) => {
+      const reported = mentions(findings, '@keyframes ds-drawer-enter-left / from');
+      assert.ok(reported.length >= 1, JSON.stringify(findings, null, 1));
+      assert.ok(reported[0].includes('not keyed on a physical data-* contract'), reported[0]);
+    },
+  );
+});
+
+test('a keyframe stamp for a keyframe nobody animates with is REFUSED', () => {
+  withPlantedTree(
+    (sandbox) => rewrite(
+      sandbox,
+      'runtime/engines/modern/skin/sheet/index.css',
+      (text) => text.replace('animation: ds-sheet-enter-left ', 'animation: ds-sheet-enter-bottom '),
+    ),
+    (findings) => {
+      const reported = mentions(findings, '@keyframes ds-sheet-enter-left / from');
+      assert.ok(reported.length >= 1, JSON.stringify(findings, null, 1));
+      assert.ok(reported[0].includes('no rule animates with'), reported[0]);
+    },
+  );
+});
+
+test('the drawer and sheet motion arms are stamped, not pinned as debt', () => {
+  const baseline = readBaseline();
+  const bands = classify(physicalCssSites(), baseline);
+  for (const path of ['runtime/engines/modern/skin/drawer/index.css', 'runtime/engines/modern/skin/sheet/index.css']) {
+    assert.equal(baseline.pinnedDebt[path], undefined, `${path} must not pin debt any more`);
+    const steps = bands.stamp.filter((site) => site.path === path && keyframeOf(site.selector) !== null);
+    assert.equal(steps.length, 4, `${path} must stamp its four enter/exit x steps`);
+    for (const step of steps) {
+      assert.ok(step.consumers.length > 0, `${step.selector} must name its consumers`);
+      for (const consumer of step.consumers) {
+        assert.ok(PHYSICAL_CONTRACT.test(consumer.selector), `${step.selector} is animated from an unkeyed rule`);
+      }
+    }
+  }
+});
+
+test('keyframeConsumers reports each consumer and whether it mirrors', () => {
+  const corpus = cssCorpus([['p.css', keyframeFixture(
+    '.ds-a { animation: ds-planted-slide 1s; }\n.ds-a:dir(rtl) { animation-direction: reverse; }\n.ds-b { animation-name: ds-planted-slide; }',
+  )]]);
+  const rows = keyframeConsumers('ds-planted-slide', new Set(), corpus);
+  assert.deepEqual(rows.map((row) => [row.selector, row.mirrored]), [['.ds-a', true], ['.ds-b', false]]);
+  assert.deepEqual(keyframeConsumers('ds-absent', new Set(), corpus), []);
 });

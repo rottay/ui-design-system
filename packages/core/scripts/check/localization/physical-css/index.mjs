@@ -48,7 +48,14 @@
  *       so the migration is the vocabulary's, not the stylesheet's. Declared
  *       per SELECTOR so the band drains selector by selector as each contract
  *       turns logical, and counted, so a new physical stamp cannot hide behind
- *       an already-declared one.
+ *       an already-declared one. A keyframe STEP has no selector of its own,
+ *       so the MOTION ARM of such a contract is declared by its locator
+ *       (`@keyframes <name> / <step>`) and the gate binds it to the rules that
+ *       animate with it: every `animation-name` consumer must itself be keyed
+ *       on that contract AT AN INLINE-AXIS VALUE -- the step writes an inline
+ *       x, so a presence-only or block-axis key decides a different edge --
+ *       or the stamp is refused and the step owes a mirror. The drain semantics are unchanged -- when the contract turns
+ *       logical the consumer stops being keyed and the row must be removed.
  *
  *   INERT. Both inline edges pinned to the same value (`left: 0` with
  *       `right: 0`), a centred `left: 50%` paired with a translate, or a
@@ -61,6 +68,29 @@
  *       an asymmetric `translateX` with no `:dir(rtl)` mirror. Count per file,
  *       decrease-only: growth fails, a site in an unpinned file fails as a new
  *       owner, and a fix fails with an instruction to lower the pin.
+ *
+ * A KEYFRAME STEP IS MIRRORED AT ITS CONSUMERS. A step cannot carry a
+ * `:dir(rtl)` qualifier, so the mirror idiom below is structurally unavailable
+ * inside `@keyframes`; it lives at the `animation-name` site instead, either as
+ * an RTL-qualified `animation-direction: reverse` (the pair is replayed
+ * backwards) or as an RTL-qualified re-declaration of the channel the step's x
+ * reads. The consumers are resolved across the WHOLE scanned corpus, because a
+ * keyframe and the rule that animates with it routinely live in different files,
+ * and a step counts as mirrored only when EVERY consumer is: one unmirrored
+ * consumer paints the step unflipped under RTL. A keyframe no rule animates
+ * with is dead code, not a mirror, and stays debt with that reason.
+ *
+ * THAT TWIN HAS TO WIN TOO. The consumer mirror is resolved the way the
+ * transform mirror below is, not as a name match: the twin must cover the
+ * consumer's compound SEQUENCE (combinators included, so `.inner:dir(rtl)
+ * .outer` never mirrors `.outer .inner`), must hold wherever the consumer
+ * paints (a twin inside `@media (min-width: 900px)` does not mirror an
+ * unconditional rule), and must beat the consumer in the cascade -- out-specify
+ * it, or tie and be declared after it. `animation` is a comma LIST, so the
+ * reversal is read per layer: `animation-direction: reverse, normal` mirrors
+ * the first layer's keyframe and leaves the second owing. And a channel twin
+ * only mirrors when it declares a DIFFERENT value: re-declaring the same x is
+ * the same paint in both directions.
  *
  * MIRRORED TRANSFORMS ARE NOT SITES. A signed `translateX` whose rule has an
  * RTL-qualified twin (`:dir(rtl)` / `[dir='rtl']`) that re-declares the
@@ -167,6 +197,30 @@ const CENTRING = /^[+-]?50%$/;
 /** A component that actually moves the box: a number, or an expression that resolves to one. `none` and the CSS-wide keywords do not. */
 const LENGTH = /^([+-]?(\d+\.?\d*|\.\d+)|calc\(|var\(|min\(|max\(|clamp\(|matrix\(\))/i;
 const SAFE_AREA = /env\(\s*safe-area-inset-(left|right)\b/i;
+/** The `@keyframes <name>` head of a step's nesting chain, so a step knows which keyframe it belongs to. */
+const KEYFRAME_HEAD = /^@(?:-webkit-)?keyframes\s+(\S+)/;
+const ANIMATION_PROPERTIES = new Set(['animation', 'animation-name', '-webkit-animation', '-webkit-animation-name']);
+const ANIMATION_DIRECTION = new Set(['animation-direction', '-webkit-animation-direction']);
+/** `reverse` and `alternate-reverse` replay the pair backwards; `normal` and `alternate` do not. */
+const REVERSED = /(^|[\s,])(reverse|alternate-reverse)([\s,]|$)/i;
+/**
+ * The physical `data-*` contract VOCABULARY -- the attribute names the
+ * physical-stamp class exists for. A selector-shaped stamp is keyed by name:
+ * `[data-placement='bottom']` is still that contract deciding the paint, even
+ * when the value it carries is a block-axis one.
+ */
+export const PHYSICAL_CONTRACT_KEY = /\[\s*data-(placement|fixed|align|side)\b/;
+/**
+ * The same contract narrowed to a VALUED inline-axis key: the attribute is
+ * compared against a value that names an inline edge, bare (`[data-align='left']`),
+ * by prefix (`[data-placement^='right']`) or in the camel spelling the dropdown
+ * uses (`[data-placement$='Left']`). The motion arm of a physical contract is
+ * read with this one, because a keyframe step writes an inline-x and only a
+ * consumer keyed on the inline AXIS can be said to own that x. A presence-only
+ * key (`[data-placement]`) or a block-axis value (`[data-placement='top']`)
+ * decides a different edge, so it cannot carry an inline-x stamp.
+ */
+export const PHYSICAL_CONTRACT = /\[\s*data-(placement|fixed|align|side)\s*[~|^$*]?=\s*['"]?[\w-]*(left|right)\b/i;
 
 const toPosix = (value) => value.split(sep).join('/');
 const squash = (text) => text.replace(/\s+/g, ' ').trim();
@@ -374,6 +428,273 @@ const isRtlQualified = (selector) => {
   return RTL_QUALIFIER.test(selector);
 };
 
+/** The `@keyframes <name>` a nesting chain sits under, or null when it sits under none. */
+export function keyframeOf(selector) {
+  for (const segment of selector.split(' / ')) {
+    const head = KEYFRAME_HEAD.exec(segment.trim());
+    if (head) return head[1].replace(/^['"]|['"]$/g, '');
+  }
+  return null;
+}
+
+const TOKEN = /::?[-\w]+|\[[^\]]*\]|\.[-\w]+|#[-\w]+|[a-z][-\w]*/gi;
+
+/**
+ * The compound SEQUENCE a chain spells: one entry per compound selector, each
+ * carrying the combinator that joins it to the one before it and the multiset
+ * of simple selectors it spells. At-rule segments are dropped (they are read
+ * as scope, not as structure) and the RTL qualifier with them, so a twin can
+ * be matched to the rule it mirrors even when it narrows that rule further
+ * (`...[data-type='line']:dir(rtl) X` mirrors `... X`).
+ *
+ * The order is the point. A flat multiset reads `.inner .outer` and
+ * `.outer .inner` as the same selector, so a twin written for one would have
+ * mirrored the other; the sequence keeps the structure the browser matches.
+ */
+export function selectorSequence(selector) {
+  const text = stripRtl(selector.split(' / ').filter((segment) => !segment.trim().startsWith('@')).join(' '));
+  const compounds = [];
+  let combinator = '';
+  let pendingSpace = false;
+  let pendingCombinator = null;
+  let current = '';
+  let depth = 0;
+  for (const character of text) {
+    if (character === '(' || character === '[') depth += 1;
+    else if (character === ')' || character === ']') depth -= 1;
+    if (depth === 0 && /\s/.test(character)) {
+      if (current) pendingSpace = true;
+      continue;
+    }
+    if (depth === 0 && (character === '>' || character === '+' || character === '~')) {
+      if (current) pendingCombinator = character;
+      pendingSpace = false;
+      continue;
+    }
+    if (current && (pendingSpace || pendingCombinator)) {
+      compounds.push({ combinator, text: current });
+      combinator = pendingCombinator ?? ' ';
+      current = '';
+      pendingSpace = false;
+      pendingCombinator = null;
+    }
+    current += character;
+  }
+  if (current) compounds.push({ combinator, text: current });
+  return compounds.map((compound) => {
+    const tally = new Map();
+    for (const token of compound.text.match(TOKEN) ?? []) tally.set(token, (tally.get(token) ?? 0) + 1);
+    return { combinator: compound.combinator, tokens: tally };
+  });
+}
+
+/**
+ * True when `twin` matches the same elements as `consumer` or a subset of
+ * them: the same compounds in the same order, joined by the same combinators,
+ * each compound spelling everything the consumer's spells and possibly more.
+ */
+export function coversSequence(twin, consumer) {
+  if (consumer.length === 0 || twin.length !== consumer.length) return false;
+  for (let position = 0; position < consumer.length; position += 1) {
+    if (twin[position].combinator !== consumer[position].combinator) return false;
+    for (const [token, count] of consumer[position].tokens) {
+      if ((twin[position].tokens.get(token) ?? 0) < count) return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * The at-rule conditions a chain sits under, by identity. A twin only mirrors
+ * a consumer it is in force for: its conditions must all hold wherever the
+ * consumer paints, so an unconditional twin mirrors anything it covers while a
+ * twin inside `@media (min-width: 900px)` mirrors nothing wider than itself.
+ */
+export function selectorConditions(selector) {
+  return selector
+    .split(' / ')
+    .map((segment) => squash(segment))
+    .filter((segment) => segment.startsWith('@'));
+}
+
+/**
+ * The custom properties a value READS, fallbacks excluded: `var(--a, var(--b))`
+ * reads `--a`, and `--b` is only the spelling of what happens when `--a` is
+ * missing. A direction twin that re-declares `--a` has mirrored the value.
+ */
+export function channelsRead(value) {
+  const names = new Set();
+  const visit = (text) => {
+    for (const call of functionCalls(text)) {
+      const args = splitArguments(call.args);
+      if (call.name === 'var') {
+        if (args[0]?.startsWith('--')) names.add(args[0]);
+        continue;
+      }
+      for (const argument of args) visit(argument);
+    }
+  };
+  visit(value);
+  return names;
+}
+
+/**
+ * The corpus-wide facts a single file cannot hold: which keyframes exist, which
+ * rules animate with them, and which RTL-qualified rules re-declare a direction.
+ *
+ * A keyframe STEP cannot carry a `:dir(rtl)` qualifier, so the mirror idiom the
+ * rest of this gate reads is structurally unavailable inside `@keyframes`. The
+ * mirror lives at the animation-name site instead: the consumer either replays
+ * the pair backwards under RTL (`animation-direction: reverse`) or re-declares
+ * the channel the step's x reads. Resolving that needs the whole scanned
+ * corpus, because the keyframe and its consumer routinely live in different
+ * files (`foundation/animations/keyframes` is animated from a Modern skin).
+ */
+export function cssCorpus(files) {
+  const parsed = [];
+  const keyframes = new Set();
+  for (const [path, text] of files) {
+    const root = postcss.parse(text, { from: path });
+    parsed.push([path, root]);
+    root.walkAtRules(/^(-webkit-)?keyframes$/i, (rule) => {
+      keyframes.add(rule.params.trim().replace(/^['"]|['"]$/g, ''));
+    });
+  }
+
+  /**
+   * An `animation` shorthand mixes the name with times, curves and keywords, so
+   * the name is not found by position: a term counts as a name only when a
+   * declared keyframe is spelled by it.
+   */
+  const consumers = new Map();
+  const rtl = new Map();
+  /** What each rule DECLARES a channel to be, so a twin can be asked whether it changed it. */
+  const declared = new Map();
+  /** One document order over the whole corpus: file order, then declaration order. */
+  let order = 0;
+  for (const [path, root] of parsed) {
+    root.walkDecls((declaration) => {
+      const index = order;
+      order += 1;
+      const property = declaration.prop.toLowerCase();
+      const selector = selectorOf(declaration);
+      const conditions = selectorConditions(selector);
+      if (property.startsWith('--')) {
+        const key = `${path} | ${selector}`;
+        if (!declared.has(key)) declared.set(key, new Map());
+        declared.get(key).set(declaration.prop.trim(), squash(declaration.value));
+      }
+      if (ANIMATION_PROPERTIES.has(property)) {
+        /**
+         * `animation` is a comma list of LAYERS, and the mirror is declared per
+         * layer: the position a keyframe sits at is what an
+         * `animation-direction` list is read against.
+         */
+        const layers = splitArguments(squash(declaration.value)).map((layer) => new Set(splitTerms(layer)));
+        for (const name of keyframes) {
+          const positions = layers.flatMap((terms, position) => (terms.has(name) ? [position] : []));
+          if (positions.length === 0) continue;
+          if (!consumers.has(name)) consumers.set(name, []);
+          const rows = consumers.get(name);
+          let row = rows.find((candidate) => candidate.path === path && candidate.selector === selector);
+          if (!row) {
+            row = {
+              path,
+              selector,
+              sequence: selectorSequence(selector),
+              conditions,
+              specificity: specificity(selector),
+              index,
+              layers: new Set(),
+            };
+            rows.push(row);
+          }
+          for (const position of positions) row.layers.add(position);
+        }
+      }
+      for (const part of splitArguments(selector)) {
+        if (!isRtlQualified(part)) continue;
+        const core = stripRtl(part);
+        if (!core) continue;
+        const key = `${path} | ${part}`;
+        if (!rtl.has(key)) {
+          rtl.set(key, {
+            path,
+            sequence: selectorSequence(core),
+            conditions,
+            specificity: specificity(part),
+            index,
+            directions: [],
+            channels: new Map(),
+          });
+        }
+        const twin = rtl.get(key);
+        if (index > twin.index) twin.index = index;
+        if (ANIMATION_DIRECTION.has(property)) twin.directions = splitArguments(squash(declaration.value));
+        if (property.startsWith('--')) twin.channels.set(declaration.prop.trim(), squash(declaration.value));
+      }
+    });
+  }
+  return { keyframes, consumers, rtlTwins: [...rtl.values()], declared };
+}
+
+/**
+ * True when the twin is the rule the browser ends up painting for the elements
+ * the consumer matches: it must out-specify the consumer, or tie and be
+ * declared after it. The same rule the transform mirror is read with; a twin
+ * that loses the cascade is dead paint, not a mirror.
+ */
+const winsOver = (twin, consumer) => {
+  const relation = compareSpecificity(twin.specificity, consumer.specificity);
+  return relation > 0 || (relation === 0 && twin.index > consumer.index);
+};
+
+/** True when every condition the twin sits under also holds for the consumer. */
+const scopesOver = (twin, consumer) =>
+  twin.conditions.every((condition) => consumer.conditions.includes(condition));
+
+/**
+ * True when the twin's `animation-direction` list replays EVERY layer that
+ * names the keyframe backwards. The list repeats over the layers the way CSS
+ * repeats it, so `animation-direction: reverse, normal` reverses the first
+ * layer and leaves the second playing forwards.
+ */
+const reversesLayers = (twin, consumer) => twin.directions.length > 0
+  && [...consumer.layers].every((position) => REVERSED.test(twin.directions[position % twin.directions.length]));
+
+/**
+ * True when the twin re-declares a channel the step's x reads WITH A DIFFERENT
+ * VALUE. An identical re-declaration paints the same x in both directions, so
+ * it mirrors nothing and the step still owes.
+ */
+const rewritesChannel = (twin, consumer, channels, corpus) => {
+  const base = corpus.declared.get(`${consumer.path} | ${consumer.selector}`);
+  for (const channel of channels) {
+    if (!twin.channels.has(channel)) continue;
+    if (twin.channels.get(channel) !== base?.get(channel)) return true;
+  }
+  return false;
+};
+
+/**
+ * The consumers of one keyframe, each judged as mirrored or not for the x value
+ * the step writes. A consumer is mirrored when an RTL-qualified twin that
+ * covers its compound sequence, holds wherever it paints and wins the cascade
+ * against it either replays the layer backwards or re-declares the channel the
+ * x reads with a different value.
+ */
+export function keyframeConsumers(name, channels, corpus) {
+  const rows = corpus.consumers.get(name) ?? [];
+  return rows.map((row) => ({
+    path: row.path,
+    selector: row.selector,
+    mirrored: corpus.rtlTwins.some((twin) => coversSequence(twin.sequence, row.sequence)
+      && scopesOver(twin, row)
+      && winsOver(twin, row)
+      && (reversesLayers(twin, row) || rewritesChannel(twin, row, channels, corpus))),
+  }));
+}
+
 /**
  * The physical sites one stylesheet writes. Exported so a drill can measure a
  * single fixture without mirroring a tree.
@@ -383,8 +704,12 @@ const isRtlQualified = (selector) => {
  * `mirrored` for a translate whose RTL twin already flips it, `physical`
  * otherwise. Only `safeArea` is decided here from the value itself, because
  * the UA -- not the author -- makes that number physical.
+ *
+ * `corpus` carries the cross-file facts a keyframe step needs (see
+ * `cssCorpus`); it defaults to this file alone, so a single-fixture drill can
+ * plant a keyframe and its consumer together and be read exactly as the tree is.
  */
-export function fileSites(path, text) {
+export function fileSites(path, text, corpus = cssCorpus([[path, text]])) {
   const root = postcss.parse(text, { from: path });
   const sites = [];
   /** Document order, so the cascade's last-one-wins tie can be judged. */
@@ -436,6 +761,7 @@ export function fileSites(path, text) {
 
     let kind = null;
     let band = 'physical';
+    let consumers = null;
 
     if (PHYSICAL_SHORTHANDS[property]) {
       if (!isAsymmetricShorthand(property, value)) return;
@@ -460,8 +786,19 @@ export function fileSites(path, text) {
       const components = inlineTranslations(property, value);
       if (components.length === 0) return;
       kind = 'transform';
+      const keyframe = keyframeOf(selector);
+      if (keyframe !== null) consumers = keyframeConsumers(keyframe, channelsRead(value), corpus);
       if (isRtlQualified(selector) || isMirroredBy(selector, order.get(declaration))) band = 'mirrored';
       else if (components.every((component) => CENTRING.test(component))) band = 'inert';
+      else if (consumers !== null) {
+        /**
+         * A step is a real mirror only when EVERY consumer of its keyframe is
+         * one. One unmirrored `animation-name` site paints the step unflipped
+         * under RTL, and a keyframe nobody animates with is dead code, which is
+         * not mirrored either -- both stay debt, with their reason intact.
+         */
+        if (consumers.length > 0 && consumers.every((consumer) => consumer.mirrored)) band = 'mirrored';
+      }
     }
 
     if (kind === null) return;
@@ -473,6 +810,7 @@ export function fileSites(path, text) {
       kind,
       band,
       locator: `${selector} | ${property}: ${value}`,
+      ...(consumers === null ? {} : { consumers }),
     });
   });
 
@@ -482,14 +820,18 @@ export function fileSites(path, text) {
 /** Every physical CSS site under the scan roots. `root` exists so a drill can measure a sandbox copy. */
 export function physicalCssSites(root = ROOT) {
   const cssRoot = join(root, CSS_ROOT);
-  const sites = [];
+  const files = [];
   for (const scanRoot of SCAN_ROOTS) {
     for (const file of walk(join(cssRoot, scanRoot))) {
       const path = toPosix(relative(cssRoot, file));
       if (FROZEN.test(`/${path}`)) continue;
-      sites.push(...fileSites(path, readFileSync(file, 'utf8')));
+      files.push([path, readFileSync(file, 'utf8')]);
     }
   }
+  /** Built once over the whole scan, because a keyframe and its consumer rarely share a file. */
+  const corpus = cssCorpus(files);
+  const sites = [];
+  for (const [path, text] of files) sites.push(...fileSites(path, text, corpus));
   return sites.sort((a, b) => a.path.localeCompare(b.path) || a.line - b.line);
 }
 
@@ -563,7 +905,33 @@ export function judge(sites, baseline = readBaseline()) {
 
   for (const [path, row] of Object.entries(physicalStamp).sort()) {
     for (const pin of row.selectors) {
-      const matches = bands.stamp.filter((site) => site.path === path && site.selector === pin.selector).length;
+      const stamped = bands.stamp.filter((site) => site.path === path && site.selector === pin.selector);
+      const matches = stamped.length;
+      /**
+       * A keyframe step carries no selector of its own, so its stamp is only as
+       * honest as the rules that animate with it: the motion arm of a physical
+       * placement contract is a stamp exactly when every `animation-name` site
+       * is itself keyed on that contract. A consumer that is not -- or a
+       * keyframe with no consumer at all -- is debt wearing a stamp.
+       */
+      if (keyframeOf(pin.selector) !== null) {
+        for (const site of stamped) {
+          const consumers = site.consumers ?? [];
+          if (consumers.length === 0) {
+            findings.push(
+              `${path}: physical stamp \`${pin.selector}\` names a keyframe no rule animates with -- a dead keyframe is debt, not a physical contract.`,
+            );
+            continue;
+          }
+          for (const consumer of consumers) {
+            if (PHYSICAL_CONTRACT.test(consumer.selector)) continue;
+            findings.push(
+              `${path}: physical stamp \`${pin.selector}\` is animated from \`${consumer.path} | ${consumer.selector}\`, `
+                + 'which is not keyed on a physical data-* contract -- the step owes a mirror, not a stamp.',
+            );
+          }
+        }
+      }
       if (matches === 0) {
         findings.push(
           `${path}: physical stamp \`${pin.selector}\` matches no site -- the contract turned logical, so remove the row.`,
