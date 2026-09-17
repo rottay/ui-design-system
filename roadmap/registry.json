@@ -5948,6 +5948,11 @@
      "at": "2026-09-17 15:19",
      "by": "kimi-dt",
      "note": "ATRIBUCION registrada (no de esta ola): la suite propia del structure gate esta roja 32/35 en HEAD — fixtures stale de taxonomia (notifier merge, shape del theme-contract de DER-06/08) con el test file sin tocar desde 29e23b97a (2026-09-13). Pre-existente a la ola R17, clase 'constitution drift' ya registrada por la auditoria. Se rutea a un lote de re-ancla de fixtures con provenance (la shape nueva SI es la revisada: DER-06/08 y el merge notifier). No bloquea el kernel DnD: la admision de rango sortable se escribe contra la tabla viva, y el lote del kernel re-ancla esos fixtures en su ventana."
+    },
+    {
+     "at": "2026-09-17 16:26",
+     "by": "kimi-dt",
+     "note": "Recibo de lane cruzada (DER-02 ya done; el script rechaza progress ahi): el defecto typography.families.display se cerro en 63aec5c5e (W14+W14b, Codex CHANGES->ACCEPT) — la proyeccion v1 lo descartaba; el repair ademas cerro un hueco pre-existente de validacion de fuentes en el ingress v1 (base/heading/display sin validar; un pack no registrado compilaba). isSafeFontFamily reubicado verbatim al schema owner del kernel; catalogo fila 6 keypath +display; digests CC-01. Paint declarada: bithire gana grotesk-display. Enrutado, NO ensanchado: tokenOverrides['--ds-font-family-*'] lleva el mismo bypass — lote propio pendiente de despacho. W16 (fixtures structure) en 2c4ba44af."
     }
    ]
   },
