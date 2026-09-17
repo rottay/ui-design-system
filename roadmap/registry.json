@@ -5225,6 +5225,11 @@
      "at": "2026-09-17 16:25",
      "by": "kimi-dt",
      "note": "W16 INTEGRADO 2c4ba44af: fixtures del structure gate re-anclados con provenance por commit (la taxonomia nueva es la revisada; el rojo era stale, no drift). Registrado por el writer: structure:check NUNCA corre esa suite — su unico runner es el glob test:scripts; nota de observabilidad para la lane EVI. Despachado W17: drenaje del AXE_DEBT de data-table (R17-04 rendered a11y: checkbox aria-conditional-attr en todos los scopes + pares de contraste mobile bithire/evnto; la clase de fix es derivacion mode-aware, nunca exclusion; paint change declarada)."
+    },
+    {
+     "at": "2026-09-17 16:38",
+     "by": "kimi-dt",
+     "note": "W15 INTEGRADO 8fb516981 (residuo de censo de partes, 8 familias): verdicts por familia (stamped/adjudicado/artefacto-de-instrumento con razon escrita), nota P-79 stale corregida (Text SI forwards data-part — sonda DOM), paridad Chromium medida 161.367 celdas 0 diff con control positivo. Mis suites: 356/356. Dos rutas registradas: (1) family-cut necesita el escape anchoredParts del lado states (lote de instrumento, EVI); (2) --ds-toolbar-title-max-width: el deriver lo emite y el fallback del skin queda muerto (revisar). Re-pins de filas family-cut (todas a la baja) en la ventana serializada del DT cuando W17 libere data-table."
     }
    ]
   },
