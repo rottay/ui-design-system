@@ -9,14 +9,14 @@
       "Switch"
     ],
     "sourceRoot": "packages/core/src/components/primitives",
-    "sourceOwner": "packages/core/src/components/primitives/inputs/switch",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/toggle/compound/switch",
     "publicComponents": [
       "Switch"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "4447f57aa6709480a8bd5e0225e91f6b52485c0fcc9e7e6c3dca5840a4039ddf"
+    "inventoryRowDigest": "72d801f4927fb25296f581192d4479f14c99db9a0437300eb791211fda3e3ab6"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {

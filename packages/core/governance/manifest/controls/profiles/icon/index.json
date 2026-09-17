@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "e9c0a5cc48dcf3d1d3b65e0f235f26ef8b7fa686623a34bf301c3a7bbd6a24a6"
+    "registryDigest": "bd0669d204209666fd6431fd9fb214369330e16c35d0d056f19bcffa927ef75e"
   },
   "title": "Icon posture profile",
   "valueType": "enum",
@@ -23,7 +23,7 @@
     "defaultBehavior": "baseline role/state weight tables. A posture only selects among the governed PROFILE_ROLE_WEIGHT tables in the icon policy — never a supplier, glyph or local SVG; state weights stay supreme (feedback over decoration). Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design."
   },
   "ingress": {
-    "staticBrandThemePath": "expressive.profiles.icon",
+    "staticThemePath": "expressive.profiles.icon",
     "dbTenantThemePath": "visualFoundation.advanced.profiles.icon"
   },
   "declaredOutputs": {

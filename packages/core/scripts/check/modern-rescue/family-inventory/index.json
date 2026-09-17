@@ -3658,7 +3658,7 @@
         "Switch"
       ],
       "sourceRoot": "packages/core/src/components/primitives",
-      "sourceOwner": "packages/core/src/components/primitives/inputs/switch",
+      "sourceOwner": "packages/core/src/components/primitives/inputs/toggle/compound/switch",
       "resolvedBy": "folder-slug",
       "layerProfile": "primitive-interactive-control-data-overlay",
       "layerProfileSignal": "primitive category inputs",
@@ -4713,7 +4713,7 @@
         "Steps"
       ],
       "sourceRoot": "packages/core/src/components/primitives",
-      "sourceOwner": "packages/core/src/components/primitives/navigation/steps",
+      "sourceOwner": "packages/core/src/components/primitives/navigation/stepper/compound/steps",
       "resolvedBy": "folder-slug",
       "layerProfile": "primitive-interactive-control-data-overlay",
       "layerProfileSignal": "primitive category navigation",

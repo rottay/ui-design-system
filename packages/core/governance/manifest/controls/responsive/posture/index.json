@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "e9c0a5cc48dcf3d1d3b65e0f235f26ef8b7fa686623a34bf301c3a7bbd6a24a6"
+    "registryDigest": "bd0669d204209666fd6431fd9fb214369330e16c35d0d056f19bcffa927ef75e"
   },
   "title": "Responsive posture profile",
   "valueType": "profile-id",
@@ -22,7 +22,7 @@
     "defaultBehavior": "the balanced ladder, whose container thresholds (compact ≤639px, standard ≤839px) and `preferred` span resolution ARE the constants the adaptive runtime and pure solver used before this axis opened — so an absent selection is byte-for-byte the pre-capability layout, and \"unset it\" is a true rollback rather than an approximate one"
   },
   "ingress": {
-    "staticBrandThemePath": "responsive.posture",
+    "staticThemePath": "responsive.posture",
     "dbTenantThemePath": "visualFoundation.advanced.responsivePosture"
   },
   "declaredOutputs": {

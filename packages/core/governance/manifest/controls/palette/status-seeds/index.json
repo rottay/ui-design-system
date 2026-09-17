@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "e9c0a5cc48dcf3d1d3b65e0f235f26ef8b7fa686623a34bf301c3a7bbd6a24a6"
+    "registryDigest": "bd0669d204209666fd6431fd9fb214369330e16c35d0d056f19bcffa927ef75e"
   },
   "title": "Status tone seeds (success/warning/error/info) in General",
   "valueType": "color-set",
@@ -18,7 +18,7 @@
     "defaultBehavior": "vertical baseline status tones. The DB General path authors them at `palette.status.{…}` and confluences into BrandPalette BEFORE the single lowering, so both transports reach `deriveTenantColorRamps` through the same door — no parallel emitter. Absent => the vertical baseline, unchanged."
   },
   "ingress": {
-    "staticBrandThemePath": "palette.{successColor,warningColor,errorColor,infoColor}",
+    "staticThemePath": "palette.{successColor,warningColor,errorColor,infoColor}",
     "dbTenantThemePath": "appearance.general.palette.status.{success,warning,error,info}"
   },
   "declaredOutputs": {

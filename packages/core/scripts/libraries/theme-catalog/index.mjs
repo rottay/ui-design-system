@@ -163,8 +163,6 @@ export function readThemeCatalogRecords(sourcePath = CATALOG_SOURCE) {
     title: row.title,
     domain: domainOf(row),
     ingress: {
-      // Readers still accept the superseded `staticBrandThemePath` until the window trigger in
-      // probe/runtime/ingress/tests/superseded-ingress-key fails (WO-DER-08).
       staticThemePath: row.keypath?.brandTheme ?? null,
       dbTenantThemePath: row.keypath?.document ?? null,
     },

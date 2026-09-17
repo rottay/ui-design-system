@@ -202,14 +202,10 @@ export const INGRESS_ARMS = Object.freeze({
     id: 'static-brand-theme',
     door: 'static',
     manifestIngressKey: 'staticThemePath',
-    // Also consulted until the window trigger in tests/superseded-ingress-key fails,
-    // so a not-yet-regenerated manifest resolves its door instead of "declares no path".
-    supersededIngressKey: 'staticBrandThemePath',
     // The same door, one step upstream: the key the capability registry row carries,
     // which the manifest generator reads to produce `manifestIngressKey`. One arm owns
-    // both spellings of its door, so a rename is declared in one place.
+    // both ends of its door, so a rename is declared in one place.
     registryKey: 'themePath',
-    supersededRegistryKey: 'brandThemePath',
     position: 'tenant-scoped-stylesheet-block',
     positionMeaning:
       'Appended to the measured bundle behind the same unlayered tenant selector the compiled ' +
@@ -275,33 +271,27 @@ export const INGRESS_ARMS = Object.freeze({
 });
 
 /**
- * Read a door's declared path through the arm's own key names, current first.
+ * Read a door's declared path through the arm's own key name.
  *
- * ONE registry of superseded spellings. Every reader of a door — the committed
- * manifest's `ingress` block and the capability registry row it is generated
- * from — asks this function instead of remembering a key name or adding its own
- * `??`, so a rename is declared once, on the arm, and closed once, by the
- * window trigger in `tests/superseded-ingress-key/`.
+ * ONE lookup. Every reader of a door — the committed manifest's `ingress` block
+ * and the capability registry row it is generated from — asks this function
+ * instead of remembering a key name or adding its own `??`, so a rename is
+ * declared once, on the arm.
  *
- * Returns `{ path, key, superseded }`; `path` is `undefined` when the source
- * carries neither spelling, which every caller treats as "declares no path".
+ * Returns `{ path, key }`; `path` is `undefined` when the source carries no
+ * value under that key, which every caller treats as "declares no path".
  */
 export function readIngressKey(source, spec, { registry = false } = {}) {
   const current = registry ? spec?.registryKey : spec?.manifestIngressKey;
-  const superseded = registry ? spec?.supersededRegistryKey : spec?.supersededIngressKey;
   const container = source ?? {};
   const currentValue = current ? container[current] : undefined;
   if (typeof currentValue === 'string' && currentValue.length > 0) {
-    return { path: currentValue, key: current, superseded: false };
+    return { path: currentValue, key: current };
   }
-  const supersededValue = superseded ? container[superseded] : undefined;
-  if (typeof supersededValue === 'string' && supersededValue.length > 0) {
-    return { path: supersededValue, key: superseded, superseded: true };
-  }
-  return { path: undefined, key: current, superseded: false };
+  return { path: undefined, key: current };
 }
 
-/** The declared door of a committed control manifest, superseded key included. */
+/** The declared door of a committed control manifest. */
 export function manifestIngressPath(controlManifest, spec) {
   return readIngressKey(controlManifest?.ingress, spec).path;
 }

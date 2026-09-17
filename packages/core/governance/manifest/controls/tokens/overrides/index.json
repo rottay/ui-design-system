@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "e9c0a5cc48dcf3d1d3b65e0f235f26ef8b7fa686623a34bf301c3a7bbd6a24a6"
+    "registryDigest": "bd0669d204209666fd6431fd9fb214369330e16c35d0d056f19bcffa927ef75e"
   },
   "title": "Bounded raw channel overrides",
   "valueType": "token-map",
@@ -18,7 +18,7 @@
     "defaultBehavior": "none; closed allowlist, max 200 entries, fails closed"
   },
   "ingress": {
-    "staticBrandThemePath": "tokenOverrides",
+    "staticThemePath": "tokenOverrides",
     "dbTenantThemePath": "visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}"
   },
   "declaredOutputs": {

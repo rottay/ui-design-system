@@ -9,14 +9,14 @@
       "Steps"
     ],
     "sourceRoot": "packages/core/src/components/primitives",
-    "sourceOwner": "packages/core/src/components/primitives/navigation/steps",
+    "sourceOwner": "packages/core/src/components/primitives/navigation/stepper/compound/steps",
     "publicComponents": [
       "Steps"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "4d0a23cdd0563d4df13ed27ade956c757916b747935baf9559ed7de329ffd7e6"
+    "inventoryRowDigest": "060d628c51a79da762fe0b78a719728ebbbcaf580d85bbd68b7038d3765d9451"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {

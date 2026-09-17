@@ -72,10 +72,8 @@ const CONTROL_MANIFEST = readManifest(
   resolve(CORE_ROOT, 'governance/manifest/controls/spacing/rhythm/index.json'),
 );
 
-// Every manifest read goes through the arm's own lookup, superseded key included.
-const declaredIngressPath = (manifest, spec) =>
-  manifest?.ingress?.[spec.manifestIngressKey] ??
-  (spec.supersededIngressKey ? manifest?.ingress?.[spec.supersededIngressKey] : undefined);
+// Every manifest read goes through the arm's own key name.
+const declaredIngressPath = (manifest, spec) => manifest?.ingress?.[spec.manifestIngressKey];
 const staticDoorPath = (manifest) =>
   declaredIngressPath(manifest, INGRESS_ARMS['static-brand-theme']);
 
@@ -4526,24 +4524,4 @@ test('PACKET-K drill 6 [needs dist]: an APCA-paired chrome entry DIVERGES betwee
     Object.hasOwn(STOP_EXCLUSION_CLASSES, 'GOVERNED_CONTRAST_FLOOR'),
     'the class this refusal maps to already exists -- no new class is needed',
   );
-});
-
-// Superseded key, open until the window trigger in superseded-ingress-key/ fails;
-// that sibling is the executed copy, since this file does not load under node --test.
-test("the superseded staticBrandThemePath still resolves the static arm", () => {
-  const domain = { kind: "closed-enum", enumValues: ["compact"] };
-  const calibration = { normalizedStops: [{ id: "compact" }] };
-  const superseded = { domain, calibration, ingress: { staticBrandThemePath: "surfaces.density" } };
-  const current = { domain, calibration, ingress: { staticThemePath: "surfaces.density" } };
-  const fromOld = buildIngressInput({
-    armId: "static-brand-theme",
-    controlManifest: superseded,
-    stopId: "compact",
-  });
-  const fromNew = buildIngressInput({
-    armId: "static-brand-theme",
-    controlManifest: current,
-    stopId: "compact",
-  });
-  assert.deepEqual(fromOld, fromNew);
 });

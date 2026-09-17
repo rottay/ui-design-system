@@ -221,12 +221,7 @@ export function readTree(coreRoot = CORE_ROOT) {
   const controlRecords = readThemeCatalogRecords();
   const controlIds = new Set(controlRecords.map((record) => record.controlId));
   const authorable = controlRecords.filter(
-    // Superseded `staticBrandThemePath` is still read until the window trigger in
-    // probe/runtime/ingress/tests/superseded-ingress-key fails (WO-DER-08).
-    (record) =>
-      record.ingress.staticThemePath ||
-      record.ingress.staticBrandThemePath ||
-      record.ingress.dbTenantThemePath,
+    (record) => record.ingress.staticThemePath || record.ingress.dbTenantThemePath,
   );
   const authorableControls = authorable.length;
   const controlsWithDbDoor = authorable.filter(
