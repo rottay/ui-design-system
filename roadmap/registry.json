@@ -5125,6 +5125,51 @@
      "at": "2026-09-16 21:44",
      "by": "claude-fable-dt",
      "note": "Lote 10 integrado 12866efbd: arc09.inlinePaint del motor modern de data-table 9->0 en su zero-lock (forma del hook useStatefulPart; el instrumento no resuelve binding patterns de llamadas locales; probes adversarios confirman que la nueva forma sigue fallando cerrado; sugerencia de maquinaria registrada: certificar useStatefulPart como nonStylePropBag en scripts/libraries/paint/inline). Atribucion de gates generados (reports/dt-gate-attribution-2026-09-16.md): cascade-ratchet +10 nombres de geometria runtime --ds-data-table-* con fallback literal, residuo nombrado sin inventar raices, sobre ~248 preexistentes de cuts anteriores (baseline decrease-only ya falsa desde 8bcc3852b: 2427 medidos vs 2079 escritos); csspaint apretado (4 filas stale + techo structures 157), queda --radius-field (ownership, preexistente); root-catalog OK; engine-audit sigue enmascarado por 3 contadores sin baseline (legacy-craft typography) con regresiones preexistentes detras (scale.fallbackParity 0->4, gradient/glass consumers, unreferencedSelectors 0->14). Build oficial pnpm build verde (12fb61380)."
+    },
+    {
+     "at": "2026-09-17 03:00",
+     "by": "claude-fable-dt",
+     "note": "Cobertura rwp completa (dc6c5a5b8): data-table 16->46 reads sin producer al medir sus 3 skins de presentation (deuda ya existente ahora visible; no pagada). Fallbacks de paridad del toolbar deriver corregidos (0a725ecc8). Abierto: 3 consumes declarados inertes en chrome/data-table (spacing.rhythm, surfaces.controlHeight, roleWeights); 10 canales de geometria runtime como residuo cascade-wiring; familias restantes de la WO."
+    },
+    {
+     "at": "2026-09-17 03:32",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO d3f721bc0: causalidad completa de las 4 familias chrome (H3 cerrada): palette en filter-panel (hover real del reset) y column-settings (pin-side), focusStyle real en saved-views y list-toolbar, radiusScale de filter-panel pinneado como alcanzado-al-peldano/pintura-solo-portal (inventario ejecutable). 18->23 tests Chromium, roster 64/64 sin mover. Residuo: la tinta neutra en reposo de filter-panel no se mueve con ningun arm de palette (pregunta de derivacion al owner: si las semillas del tenant deben tenir el chrome del panel); prueba de pintura del badge de radio requiere escena hidratada. Siguiente sublote: B5 kanban-board (F-69 DnD kernel) con el precedente de data-table."
+    },
+    {
+     "at": "2026-09-17 04:18",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 32b2da644 (B5 kanban-board): deriver chrome/kanban-board (5 canales, 6 consumes causales), AnatomySkeleton, inline paint 0, estado unico, 19 hallazgos -> 0, roster 65/65; revision independiente hallo canales tapados por defaults de props (column-gap/min-width) -> corregido (prop estampa solo si el caller la declara; rottay descansa el gap en 15px por su rampa de densidad, antes forzado a 16) + press-cancel en dragend. Ratchet global rwp 563->558. Residuo nombrado: kernel DnD cross-container (F-69) no existe — useSortableList es single-list con cero consumidores y 7 owners reimplementan HTML5 DnD; pertenece a WO-FAM-13; kanban fuera de LAYOUT_SENSITIVE_FAMILIES (decision de registro); fidelidad del skeleton limitada por las cadenas root>board. Pendiente DT tras el lote L2: regeneracion serializada (ds:derive, css, hooks, dist). Familias restantes de la WO: widget-board (coordinar con FAM-12/FAM-13), calendar-view, file-manager, virtual-list, gallery/grid, table-toolbar, status-filter-pills/active-filters-bar, mobile cards."
+    },
+    {
+     "at": "2026-09-17 06:44",
+     "by": "claude-fable-dt",
+     "note": "B6 (calendar-view, file-manager, table-toolbar, status-filter-pills, active-filters-bar) entregado y corregido tras revision independiente: test de gobernanza non-chart-regression re-pinneado a los nombres de familia y ensenado a ver el stamp condicional y los wrappers locales de partes (esto es un ensanchamiento acotado y drilleado de classifyTag: registrado para el owner), kanban ya estaba rojo ahi desde B5 y queda verde; ratchet rwp 558->550 con produced/producers medidos; focus ring de file-manager alineado al brazo de materiales (cambio visual declarado en cutNote); changeset patch por rename del hook publico --ds-calendar-event-accent -> --ds-calendar-view-event-accent. B7 (virtual-list, grid-view, gallery-view) en revision; B8 widget-board en curso (sin geometria por canal ni DnD: FAM-12/FAM-13). Commits de B6/B7 pendientes de particion de filas del roster compartido."
+    },
+    {
+     "at": "2026-09-17 07:07",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 3ed62c175 (B6: calendar-view, file-manager, table-toolbar, status-filter-pills, active-filters-bar) y be69bb75e (B7: virtual-list, grid-view, gallery-view; correccion: regresion de padding del caption de gallery y selectores de virtual-list fuera de la anatomia, ambas pinneadas en Chromium). Roster 73/73. Rostered de la WO hasta ahora: data-table, list-toolbar, column-settings, saved-views, filter-panel, kanban-board, + B6 + B7. En curso: B8 widget-board. Pendiente de medir para B9: column-menu, saved-views-menu, field-filters-panel, mobile cards. Regeneracion serializada (hooks B6+B7+B8, build, cascada, css, theme-graph, dist) tras B8."
+    },
+    {
+     "at": "2026-09-17 07:33",
+     "by": "claude-fable-dt",
+     "note": "350e5f16b (kernel interaction-state, contrato FAM-00): JSDoc corregido (los handlers NO encadenan; un spread reemplaza al handler del caller que colisione), helper interno composeHandlers (sin adoptar), 3 tests que pinnean el no-encadenamiento; los 5 entrypoints pinneados que alcanzan el kernel ganan 347 bytes. Inventario del backlog: 17 sitios latentes 'kernel gana' (breadcrumb 4, widget-board 3, column-menu 2, pagination 2, status-filter-pills, kanban-board, modal, notifier/item, menu/item, stepper/step, tour) + 1 'caller gana' (typography:814); data-table lleva un chainHandler local duplicado. Despachado: endurecimiento de esos sitios con composicion explicita (sin importar el helper en subpaths pinneados exactos; column-menu y widget-board excluidos por estar en lotes vivos). B8 en revision; B9 en curso."
+    },
+    {
+     "at": "2026-09-17 07:40",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 39e13cd80 (B8 widget-board): 28 hallazgos -> 0 sin tocar geometria (FAM-12) ni DnD (FAM-13); deriver chrome/widget-board (3 canales de catalogo), skeleton por anatomia (cell -> card-shell), placements como canales runtime estampados solo con placement y leidos por la ultima regla del skin gated en data-placed, kernel de interaccion en toolbar/card-shell/catalog-item/cell-controls y 8 bordes de resize (host display: contents), 43 pseudos pareados, 31 parts reconciliados, esquinas de resize logicas (physical-css 92->88). Ratchet rwp 550->547; contrato de breakpoints sin la entrada del bloque skeleton retirado. Revision independiente CHANGES (ratchet, linea stale) aplicadas por el DT en la integracion. Residuo: 4 wrappers con spread del kernel tras rest (latente; lote de endurecimiento en curso excluye widget-board por estar vivo), host de resize razonado no medido en navegador, --ds-workspace-card-icon-* sin owner (misma clase que --ds-collection-card-*). Roster 74/74. En curso: B9 (column-menu, saved-views-menu, field-filters-panel) y endurecimiento de spreads."
+    },
+    {
+     "at": "2026-09-17 08:00",
+     "by": "claude-fable-dt",
+     "note": "INVENTARIO DE CIERRE medido (reports/fam-08-closure-inventory-2026-09-17.md): tras B4-B9 quedan kernels y clausulas transversales, no familias. Step 4: 0/5 pares pattern/structure componen (F-81 no satisfacible por composicion: modelos y callbacks distintos; duplicaciones reales: normalizador de orden x2 en column-menu, pin tri-state x2, traversal de flechas table-toolbar = active-filters-bar, CountPill x2, glifo de lifecycle x2, tOr en 59 archivos; useRovingFocus existe con 0 consumidores de la WO); DnD: useSortableList single-list con 0 consumidores, 8 reimplementadores, fichas FAM-08/FAM-13 circulares (D15); export: new Blob x3 en components (criterio 1), downloadFile x3 identico, clipboard x5, ExportButton sin consumidores (D16); data-table density MET, aria-rowindex NO. Clausulas: rwp 94 abiertos en 9 familias (15 en vocabularios sin owner: D17), censo de partes con residuo en 8 familias, 3 consumes inertes en data-table (spelling weight) + radiusScale de filter-panel, axe no medible por el gate (arm OWED a GAT-04: D20), rottay-* 0, adapt y skeleton MET. F-22 partido entre FAM-08 y FAM-09 (D19). Lotes autorizados por el DT: aria-rowindex/colindex + clase muerta; wrappers latentes de widget-board y chainHandler local de data-table; kernel de export; extracciones honestas de F-81 tras B9; consumes inertes route-or-retire; residuo de censo de partes."
+    },
+    {
+     "at": "2026-09-17 08:05",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 0d29e9fe8 (B9: column-menu, saved-views-menu, field-filters-panel; revision ACCEPT). Roster 77/77. Todas las familias nombradas por la ficha estan rosteradas; queda el cierre transversal (inventario 2026-09-17). Defecto ruteado desde B6: --ds-calendar-view-event-accent viola la ley de nombres de theme (sustantivo de vertical 'event'): rename a --ds-calendar-view-entry-accent en el siguiente lote (8 sitios + 2 notas). En vuelo: endurecimiento de spreads; aria-rowindex/colindex + wrappers de widget-board + chainHandler de data-table. Regeneracion ligera (hooks B6-B9, cascada, css) ahora; build/theme-graph/dist tras los lotes de motor."
     }
    ]
   },
@@ -5284,6 +5329,76 @@
      "at": "2026-09-17 02:17",
      "by": "claude-fable-dt",
      "note": "INTEGRADO f1833a48f: placement logico end to end en Modern (inline-start/end + alias fisicos deprecados; position-area y offsetMargins logicos; UNA direccion por request en useOverlayPosition resuelta desde el contexto del anchor por Tooltip/Popover/HoverCard/Popconfirm y estampada como dir; skins tooltip/popover/dropdown con flecha correcta bajo RTL — defecto preexistente; suite Chromium 9 tests uniforme y no uniforme, ambas ramas, borde de flecha; pins slider/positioning drenados: debt 1/1 (engine-styles hacia WO-RET-04), inert 9/4, excepciones 7/7). Revision independiente: 2 rondas CHANGES (autoridad de direccion dividida entre ramas; Popconfirm sin direccion; regresion typecheck:tests) corregidas por el writer y verificadas por el DT. Ratificado por el DT: espejo de alineacion de Popconfirm por paridad con Popover. Residuo nombrado: direction: inherit en .ds-tooltip-bubble afecta el canal de alineacion de un bubble portalado en arbol no uniforme (fuera de alcance: lote propio con el snapshot de Tooltip.causality). Pendiente para cerrar la WO: aceptacion de ficha (grep closest('[dir]') en src/components = 0? caso Playwright dir=rtl por grupo de familias; API logica de Box/Stack/Flex; iconos data-icon-mirrored) por medir; docs-engineering primitives/display por actualizar."
+    },
+    {
+     "at": "2026-09-17 02:31",
+     "by": "claude-fable-dt",
+     "note": "Tras f1833a48f el gate public-entrypoints vuelve a bloquear prebuild: ./primitives/message 282132 > 269450 (+12682). Ruling DT (Codex A2, owner: sin nuevas ampliaciones por conveniencia): atribucion byte a byte y REDUCCION (deep-import/split del runtime de positioning sin cambiar nombres publicos), no re-anclaje; si tras la reduccion honesta persiste exceso por crecimiento legitimo del runtime logico, se eleva a ratificacion junto con el +654 de 212439653. Worker Opus despachado."
+    },
+    {
+     "at": "2026-09-17 02:50",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO d92acf1aa: reduccion honesta del presupuesto de ./primitives/message (282132 -> 268324 con dos deep-imports que sueltan 7 modulos nunca usados, 13808 bytes; sin re-anclaje, sin nombres publicos movidos; gate 76/76 PASS, drill 34/34). Build oficial verde de nuevo. Residuo: margen 1126 bytes; la cura estructural (message deja de alcanzar el cluster de overlay anclado, ~49 KB) requiere partir field-overlay en kernel + entrada de viewport (archivo nuevo => 3 contadores engine-audit a baseline cero revisada): lote propio. bcf8125db: artefactos (extraccion de cascada, theme-graph) regenerados; ingress 113/128 misma deuda."
+    },
+    {
+     "at": "2026-09-17 03:29",
+     "by": "claude-fable-dt",
+     "note": "INVENTARIO DE ACEPTACION medido (read-only, HEAD 169ec6381): clausula 1 NO (2 probes de deuda en active-filters-bar + punto ciego del gate: document.documentElement.dir en adaptive-overlay); clausula 2 NO (ningun gate mide CSS: Modern tiene 77 declaraciones fisicas/translateX, 28 sin migrar o sin espejo, 26 stamps data-placement deliberados mientras el contrato sea fisico, 10 env(safe-area)); clausula 3 casi (Box textAlign sin acotar; props fisicas de Box ya @deprecated con gemelos logicos, uso interno 0); clausula 4 parcial (autoMirror 10/283, 7 filas direccionales sin flag, catalogo legacy de glifos nunca estampa data-icon-mirrored, 7 call sites vivos); clausula 5 NO (9 vocabularios publicos de placement siguen fisicos canonicos: Drawer, Sheet, Popover, Popconfirm, Dropdown, Tour, pickers, Notification, Toast, TooltipArrow side, BadgePosition mixto); clausula 6 NO (1 suite Chromium real cubre 3 de 37 grupos; 24 grupos sin ningun test RTL; no existe Playwright). Lotes autorizados por el DT: L1 probes+gate, L2 gate CSS + 7 declaraciones, L3 translateX (list-toolbar despues del lote FAM-08), L5 parcial (corpus autoMirror + stamping legacy no-breaking), L7 Box textAlign. Decisiones del owner D9-D12 en reports/dt-owner-decisions-2026-09-17.md (Drawer/Sheet, tablas antd, alcance RTL por grupo, pin de engine-styles hacia WO-RET-04)."
+    },
+    {
+     "at": "2026-09-17 03:32",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 363784b93: bubble portalado del tooltip obedece el dir estampado (direction: inherit retirado del skin; suite de causalidad renderiza por el motor; caso Chromium no uniforme con alineacion y clamp de flecha; falsificado). Despachado L1 (2 probes de active-filters-bar, document.dir de adaptive-overlay, cobertura del gate direction-authority) + L7 (Box textAlign acotado con alias deprecados)."
+    },
+    {
+     "at": "2026-09-17 03:59",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO a7602bbf0 (L1+L7): probes DOM de direccion en src = 0 (active-filters-bar migrado, adaptive-overlay sin document.dir), gate direction-authority ampliado (formas document.dir y .dir === 'rtl', scope src completo, 23 drills; bandas debt 0/0, excepciones 9/3 = los tres lectores de contexto de anchor para portales), Box textAlign logico con alias deprecados y changeset. Revision independiente ACCEPT. Clausula 1 de la ficha: CUMPLIDA (grep closest('[dir]') en src/components = 0; una sola autoridad). Clausula 3: cumplida salvo re-export de los tipos BoxTextAlign desde box/index.ts (una linea, changeset). En vuelo: L2 gate CSS + 7 declaraciones; lote popover direction: inherit (misma clase que 363784b93)."
+    },
+    {
+     "at": "2026-09-17 04:06",
+     "by": "claude-fable-dt",
+     "note": "L2 entregado (en revision): nuevo gate physical-css (postcss, scope Modern engine skins + presentation skins, clases pinnedDebt/inert/physicalStamp por selector/namedExceptions safe-area y measured-space, translates espejados con :dir(rtl) no cuentan; 46 drills; cableado al manifest de gates como blocking pre-build). Bandas sembradas: debt 76 sitios/27 archivos (17 translateX asimetricos modern sin espejo = L3; 51 en skins de presentation sin lote), inert 16, physicalStamp 23 (drena con D9/D10), excepciones 12. 5 declaraciones migradas (framework-bridge, divider, color-picker, dropdown, tour), 2 adjudicadas measured-space (spotlight del tour, portal del dropdown). RULING DT: el tick del color-picker es geometria de glifo: vuelve a border-left bajo nueva clase de excepcion glyph-geometry (un check no se espeja en RTL). Residuo nuevo: centrado del color-picker roto en RTL (translate detras de var(), invisible al gate) — lote color-picker."
+    },
+    {
+     "at": "2026-09-17 04:10",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 067650706: ultimo direction: inherit del corpus Modern retirado (popover in-tree), suite de causalidad renderiza por el motor, caso Chromium discriminante (isla rtl + direction: ltr por CSS sin dir). Lote siguiente registrado: readLocaleContext (portal-scope y las copias en tooltip/popover) prefiere el [dir] ancestro sobre la direccion computada del anchor: RULING DT pendiente de ejecutar = la direccion computada del anchor (lo que pinta) es la autoridad, el [dir] es fallback; una sola implementacion compartida (retirar las dos copias). Despachado L5 parcial (iconos: autoMirror del corpus + gate + stamping no-breaking del catalogo legacy)."
+    },
+    {
+     "at": "2026-09-17 04:25",
+     "by": "claude-fable-dt",
+     "note": "L5 entregado (en revision): autoMirror 10->12 (communication.reply, data.pipeline), 4 filas con review, gate de corpus (glifo direccional nuevo debe estar flagueado o adjudicado), catalogo legacy estampa data-icon-mirrored=auto en 12 exports por regla de nombre + selector .rottay-icon en el skin, prueba Chromium real (matrix(-1,0,0,1,0,0) bajo rtl), changeset patch con 3 filas. Hallazgo: prefijo v4 del corpus (filas 0-125) fingerprinteado -> open-external, workflow, send no pueden cambiar sin re-anclar: decision del owner D13. Ruling DT: Toggle* espeja (convencion RTL del switch). Residuo: ExternalLinkIcon (ArrowSquareOut) no se estampa porque la regla es por nombre."
+    },
+    {
+     "at": "2026-09-17 04:36",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO e8a086e24 (L2): gate physical-css sobre todo el owner CSS que Modern pinta (facade/foundation/presentation/runtime; frozen excluidos), 4 bandas: debt 124 sitios/33 archivos (43 en foundation/presentation nunca medidos: vocabulario data-ds-responsive fisico = decision de contrato D9-class, keyframes/transitions sin espejo, widget-board border-width junto a vocabulario de borde ya logico), inert 16, physicalStamp 27/19 selectores (drena con D9/D10), excepciones 13 en 3 clases (safe-area, measured-space, glyph-geometry); shorthands asimetricos descompuestos; twin :dir(rtl) cuenta solo si gana la cascada; 71 drills; 2 gates blocking pre-build; 5 skins migrados. Clausula 2 de la ficha ahora MEDIDA (no cumplida: 124 de deuda). Despachado L3 (translateX asimetricos + keyframes/transitions de foundation con espejos :dir(rtl)). L5 en correccion (stamping por glifo del proveedor; doble espejo vivo en kanban)."
+    },
+    {
+     "at": "2026-09-17 04:51",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 81ea4764b (L5): iconos direccionales espejan en ambas fachadas (corpus 12/282 autoMirror + review; gate de corpus; catalogo legacy estampa por glifo del proveedor: 15 exports + gate sobre 328 + allowlist razonada; Chromium 6/6); doble espejo del kanban eliminado; changeset patch con 3 filas y nota de migracion. Deuda nombrada D13: ExternalLinkIcon/WorkflowIcon y filas 54/82/99 del prefijo v4 fingerprinteado. Clausula 4 de la ficha: mecanismo completo y gateado; cierre depende de D13. Despachado: lote del lector de direccion compartido (direccion computada del anchor como autoridad, [dir] como fallback; una sola implementacion en portal-scope, retiro de las copias en tooltip y popover)."
+    },
+    {
+     "at": "2026-09-17 05:02",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 4dfc77f05 (L3): twins :dir(rtl) en dropdown sheen, indicador de tabs (defecto real: offsetLeft fisico anclaba a la derecha fisica en RTL), avatar status-dot, handles del slider (vars tailwind retiradas), halo/sweep de metric-card, pasos de view-transition por canales de signo; physical-css debt 124->116, espejados 69->83. Residuo con razon en baseline: keyframes de drawer/sheet = brazo de movimiento del contrato fisico de placement (drenan con D9/D10); 8 keyframes de foundation muertos (lote de retiro); espejos via animation-direction: reverse invisibles al gate (lote de instrumento: tratar un paso de keyframe como espejado cuando todos sus consumidores tienen reverse bajo rtl). En vuelo: lector de direccion compartido. Regeneracion serializada en curso (hooks, build, cascada, css, theme-graph)."
+    },
+    {
+     "at": "2026-09-17 05:59",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO d03a82275: un solo lector de direccion para overlays portalados (portal-scope): la direccion computada del anchor es la autoridad, [dir] es fallback solo cuando el runtime no mapea dir a estilo computado (sonda de capacidad en shadow root, inmune a resets de autor; medido en Chromium que revert !important falla porque dir es hint presentacional) o con valor vacio (nodo detached); tooltip y popover retiran sus copias (gate direction-authority 9/3 -> 4/1 con drill); suite Chromium 14/14 con el arbol discriminante y capability bajo reset de pagina; readLocaleContext certificado como productor zero-paint; message 269380 bajo su techo sin re-anclaje. Residuo: cache de capacidad por modulo (iframes/popouts). Dos rondas de revision independiente. Despachado: retiro de keyframes muertos (8 foundation + toast-animation 4 + list-toolbar sheen 2)."
+    },
+    {
+     "at": "2026-09-17 06:13",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO e3d7fb780: 9 pasos de keyframes sin consumidor retirados (7 foundation + sheen de list-toolbar) con censo en package/showroom/docs/apps; los 4 del toast se conservan (consumidor JS en toast/runtime/animation) y su razon en el gate nombra ese consumidor; physical-css debt 102->92. Despachado: defectos RTL vivos residuales — slide del toast (runtime JS elige keyframe fisico por position) y centrado del check del color-picker (translate detras de var())."
+    },
+    {
+     "at": "2026-09-17 06:32",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 5c8a1570c: centrado del check del color-picker bajo RTL (twin :dir(rtl) del canal de transform; Chromium 12px -> 0); el defecto de slide del toast no es reproducible en Modern (contenedor con placement logico del notifier y animacion solo en Y; la ruta fisica solo la alcanzan los motores congelados y esta fisicamente colocada): razon del gate corregida. Nueva decision del owner D14 (ToastPosition fisico vs logico entre las dos rutas del contenedor). Bandas physical-css: debt 92. En vuelo: correccion B6; B7 (virtual-list, grid-view, gallery-view)."
     }
    ]
   },
@@ -5713,6 +5828,26 @@
      "at": "2026-09-16 21:44",
      "by": "claude-fable-dt",
      "note": "Reds preexistentes reconfirmados en HEAD 12866efbd y atribuidos (reports/dt-gate-attribution-2026-09-16.md): ingress 15 IDs (wave2), single-door 4 (aridad resolveTheme), theme-parity (2 buckets nuevos collapse/type, adopcion manual revisada + obligacion INV-07), constitution (switch/steps/sidebar sourceOwner, notifier sin fila, manifest stale), engine-audit (3 contadores sin baseline enmascaran regresiones), state-material-arm (4 canales filter-pill, residuo B7), adaptive-contracts (census 74->71; regenerar desde checkout llamado ui-design-system), decisions-lit (republicar), cascade-ratchet (~248 nombres de drift de cuts, baseline falsa desde 8bcc3852b). Ninguno causado por la ola 8-10 salvo los +10 de geometria runtime de data-table, registrados en FAM-08."
+    },
+    {
+     "at": "2026-09-17 02:50",
+     "by": "claude-fable-dt",
+     "note": "Lote de instrumentos entregado y en revision independiente (owner unico): (A) zero-locks acumula errores de roster y compara valores en la misma corrida (fail-closed conservado, drill nuevo), 3 contadores legacy-craft a baseline 0 MEDIDO; engine-audit pasa de 3 errores de diagnostico a 4 regresiones reales atribuidas (menu .rottay-menu muerto eabf62987 FAM-05; paridad de fallbacks radius-full 999->9999 51593e697 FAM-08 B7 y letter-spacing avatar 6627914f0 FAM-06; slack avatar baseline 1 vs 0; typography rustic 1 vs 0 tras 171e7dbfe). (B) family-cut readWithoutProducer ahora mide TODOS los skins Modern-scope de la familia (antes solo /engines/modern/): 18 filas re-pinneadas por la salida del gate (data-table 16->46, avatar 0->8, list 0->5, button 0->1, input 0->1), registrado como cobertura de instrumento (deuda ya existente que ahora se ve, NO deuda pagada); drill de skin presentation. (C) adaptive-contracts con ancla logica (IDs independientes del nombre de carpeta, drill de rename), artefacto regenerado: 74->71 campos (AdaptiveConfig.desktop/phone/tablet), check OK. Writer de correccion de las 4 regresiones en vuelo (FAM-05/06/08 en source)."
+    },
+    {
+     "at": "2026-09-17 03:00",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO dc6c5a5b8 (lote de instrumentos A/B/C, revision independiente ACCEPT tras prosa de cutNotes) y 0a725ecc8 (regresiones reales del engine-audit reparadas en fuente: menu .rottay-menu muerto drenado; paridad de fallbacks radius-full/letter-spacing; baseline avatar 1->0 apretado). Queda 1 hallazgo: rustic typography inlinePaint=1 por defecto de clave del registro de productores certificados (scripts/libraries/paint/inline keyed en runtime/index; simbolo movido a runtime/legacy-craft por 171e7dbfe): lote de instrumento despachado (re-key + drill). Residuos nombrados: claims/exactness drill 24 oscuro hasta engine-audit verde; 5 reglas .rottay-menu--modern muertas en presentation/components/skin/navigation-static pinneadas por EmbeddedCssRecovery (fuera del scan themeCss); cascade-ratchet sigue rojo por ~248 nombres de drift de cuts anteriores (baseline falsa desde 8bcc3852b) + 10 de geometria runtime de data-table."
+    },
+    {
+     "at": "2026-09-17 03:20",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO: re-key del registro de productores certificados (engine-audit OK, 3303 contadores; claims/exactness 61/61). Revision independiente ACCEPT. Backlog de instrumento: drill de liveness sobre cada clave de CERTIFIED_INLINE_STYLE_PRODUCERS (una clave stale debe fallar, no dejar de certificar en silencio); extension del scanner para callables locales (useStatefulPart en data-table sigue con la forma member-access documentada). Paquete de decisiones al owner: reports/dt-owner-decisions-2026-09-17.md (D1 ratificacion +654, D2 notifier, D3 retiro switch/steps, D4 Q-IND-2-5, D5 Q-B-DER07, D6 Q-DER06-RES, D7 recibos cross-repo, D8 deuda rwp visible)."
+    },
+    {
+     "at": "2026-09-17 05:38",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO e5d3f4411 (registro de productores certificados con drill de liveness: 39 pares vivos) y 5f51ee3ba (physical-css: espejos por animation-direction reverse / twin de canal reconocidos solo si el twin GANA la cascada, scope de at-rule subset, secuencia de compounds con combinadores, capas alineadas; brazo de movimiento drawer/sheet como physicalStamp con contrato valuado de eje inline; bandas debt 116->102, stamp 27->36, mirrored 83->88; 92 drills; revision independiente CHANGES aplicada). Tambien 7608b1b9a/5b98622a4: radio y modal sueltan el barrel i18n (-8 modulos/-16386 bytes cada uno) y sus techos bajan por la puerta de decremento (D1 backlog ejecutado). En vuelo: correccion del lector de direccion (certificar readLocaleContext, -1058 bytes en portal-scope para message, sonda con revert !important, try/finally); B6 cinco cuts chrome."
     }
    ]
   },
