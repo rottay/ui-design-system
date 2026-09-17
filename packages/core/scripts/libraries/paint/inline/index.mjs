@@ -466,7 +466,10 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
   [
     // Typography craft emits layout and type declarations only. Contrast paint
     // is selected by the engine skins through the stable `data-contrast` stamp.
-    "components/primitives/display/typography/runtime/index",
+    // The producer lives in the `legacy-craft` owner, which is where the frozen
+    // engines import it from; a certified key must name the module that
+    // actually exports the symbol.
+    "components/primitives/display/typography/runtime/legacy-craft/index",
     new Map([
       [
         "resolveTypographyCraftStyle",
@@ -477,6 +480,11 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
           transparentArgs: [],
         },
       ],
+    ]),
+  ],
+  [
+    "components/primitives/display/typography/runtime/index",
+    new Map([
       [
         // The type-role binding declares exactly three channels — lineHeight,
         // fontWeight and fontVariantNumeric — and every one of them resolves

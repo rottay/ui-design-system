@@ -114,3 +114,62 @@ test('PLANT: a local `useMemo` shadowing the React import inside the hook is cou
   });
   assert.ok(count > 0, `expected a shadowing useMemo to leave the spread uncertified, got ${count}`);
 });
+
+/**
+ * Relocation drill: a certified producer is keyed by the module that exports
+ * it, so moving that module without re-keying the registry must make its
+ * spread read as opaque paint again.
+ */
+const TYPOGRAPHY = 'src/components/primitives/display/typography';
+const CRAFT_OWNER = `${TYPOGRAPHY}/runtime/legacy-craft`;
+
+const CRAFT_CONSUMER = `import type { CSSProperties } from 'react';
+
+import { resolveTypographyCraftStyle } from 'SPECIFIER';
+
+export function CraftFixture(): React.ReactElement {
+  const style: CSSProperties = {
+    ...resolveTypographyCraftStyle({ textStyle: 'body' }),
+  };
+  return <span style={style} />;
+}
+`;
+
+/** Copies the craft producer into a sandbox core, optionally under a new owner, and counts a consumer that spreads it. */
+function countCraftConsumer(relocatedOwner) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'paint-inline-relocation-'));
+  try {
+    const core = join(sandbox, 'packages/core');
+    cpSync(join(CORE, `${TYPOGRAPHY}/contracts`), join(core, `${TYPOGRAPHY}/contracts`), { recursive: true });
+    cpSync(join(CORE, `${TYPOGRAPHY}/runtime/index.ts`), join(core, `${TYPOGRAPHY}/runtime/index.ts`), { recursive: true });
+    const owner = relocatedOwner ?? CRAFT_OWNER;
+    cpSync(join(CORE, CRAFT_OWNER), join(core, owner), { recursive: true });
+    const consumer = join(core, `${TYPOGRAPHY}/engines/fixture/index.tsx`);
+    mkdirSync(dirname(consumer), { recursive: true });
+    const source = CRAFT_CONSUMER.replace('SPECIFIER', `@/${owner.slice('src/'.length)}`);
+    writeFileSync(consumer, source);
+    return countArc09PaintInFile(source, consumer);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+test('the craft producer really lives in the owner the registry names', () => {
+  const source = readFileSync(join(CORE, `${CRAFT_OWNER}/index.ts`), 'utf8');
+  assert.match(source, /export function resolveTypographyCraftStyle\b/u);
+  assert.equal(countArc09PaintInFile(source, join(CORE, `${CRAFT_OWNER}/index.ts`)), 0);
+  assert.doesNotMatch(
+    readFileSync(join(CORE, `${TYPOGRAPHY}/runtime/index.ts`), 'utf8'),
+    /resolveTypographyCraftStyle/u,
+    'the pre-relocation owner must not re-export the symbol, so only the new key can certify it',
+  );
+});
+
+test('CONTROL: the re-keyed craft owner certifies the spread at zero', () => {
+  assert.equal(countCraftConsumer(null), 0);
+});
+
+test('PLANT: a certified producer whose module moves without a registry re-key reads as opaque paint', () => {
+  const count = countCraftConsumer(`${TYPOGRAPHY}/runtime/relocated-craft`);
+  assert.equal(count, 1, `expected the unkeyed owner to leave the spread opaque, got ${count}`);
+});
