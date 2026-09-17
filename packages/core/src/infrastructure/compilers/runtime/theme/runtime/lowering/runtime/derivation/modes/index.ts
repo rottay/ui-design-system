@@ -39,6 +39,10 @@ import type {
   TenantFacts,
   ThemeLayerFamily,
 } from "../../../foundation/contract";
+import {
+  DARK_DEFAULT_GROUND,
+  LIGHT_DEFAULT_GROUND,
+} from "../../../foundation/ground";
 import { PRIMARY_SEED_FIELD } from "../../../foundation/seeds";
 import { keepTenantBaseSidebarLeaves } from "../../../foundation/sidebar";
 
@@ -220,6 +224,67 @@ function withThemePath(
   return copy as unknown as FlatTheme;
 }
 
+/**
+ * The palette leaves that DESCRIBE a canvas rather than a brand.
+ *
+ * Everything else in a palette -- the brand seeds, the status tones -- is
+ * identity and crosses modes under `MODE_AGNOSTIC_DECISIONS`.
+ */
+const CANVAS_INK_LEAVES: readonly (keyof BrandPalette)[] = Object.freeze([
+  "textPrimaryColor",
+  "textSecondaryColor",
+  "textMutedColor",
+  "textDisabledColor",
+  "borderPrimaryColor",
+  "borderSecondaryColor",
+]);
+
+/**
+ * This block's own canvas, for the block whose overlay states none.
+ *
+ * A ground, an ink and a border DESCRIBE a mode, so the theme body's are
+ * statements about the theme's DEFAULT mode. Leaving them alone does not leave
+ * the other mode unstated: the block is a DELTA over the base block, so the
+ * body's literals keep cascading and the overlay paints a canvas it never
+ * chose. Nor can the theme author its way out -- the document door refuses
+ * per-mode seeds by name, because the kit opens per-mode adjustment only as
+ * `SanctionedOverrides`, which carry chrome and nothing else.
+ *
+ * What makes that cascade visible rather than merely wrong is that the canvas
+ * leaves do NOT all cascade: a ground stated in the body is compiled and
+ * mode-less, while an ink nobody states comes from the foundation, which
+ * declares one per mode. A body-only ground therefore meets the other mode's
+ * ink -- `#FFFFFF` under `#f3f4f6`, 1.10:1, the pair no ink can sit on. So the
+ * ground is re-derived for the surface the block compiles FOR, from the canvas
+ * pair `foundation/ground` already declares as the fallback of a surface that
+ * states none. That is also the authority the ramp and chart derivations read
+ * for the same question, which a body-only ground made them answer against the
+ * other mode's canvas. It is a closed pair selected by the mode, never a
+ * free-form value and never authored.
+ *
+ * The canvas moves as a SET or not at all. A theme that states its inks too
+ * owns the whole canvas, and re-grounding that theme alone would stand its own
+ * inks on a canvas it never chose -- which the APCA floor then refuses, by
+ * name, for both of the deliberately quiet roles. Those themes keep the
+ * cascade until the per-mode channel exists to state the other canvas in.
+ */
+function withModeCanvas(
+  modeTheme: FlatTheme,
+  mode: FlatThemeMode,
+  overlay: FlatThemeModeOverlay
+): FlatTheme {
+  if (overlay.palette?.backgroundColor !== undefined) return modeTheme;
+  if (modeTheme.palette?.backgroundColor === undefined) return modeTheme;
+  for (const leaf of CANVAS_INK_LEAVES) {
+    if (modeTheme.palette[leaf] !== undefined) return modeTheme;
+  }
+  return withThemePath(
+    modeTheme,
+    ["palette", "backgroundColor"],
+    mode === "dark" ? DARK_DEFAULT_GROUND : LIGHT_DEFAULT_GROUND
+  );
+}
+
 /** One block the pipeline still has to lower, with the theme it lowers. */
 export interface ModeBlockRequest {
   readonly mode: FlatThemeMode;
@@ -274,7 +339,11 @@ export function deriveModeThemes(
     // Rank, highest last: the vertical's per-mode override over the merged
     // body, then every tenant decision the tenant did not narrow for this mode.
     const authoredLeaves = tenantFacts?.authoredLeaves;
-    let modeTheme = applyModeOverlay(theme, overlay);
+    let modeTheme = withModeCanvas(
+      applyModeOverlay(theme, overlay),
+      mode,
+      overlay
+    );
     const crossed = new Set<string>();
     if (authoredLeaves !== undefined) {
       for (const [segments, value] of tenantDecisionsCrossingInto(

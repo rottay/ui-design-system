@@ -30,6 +30,12 @@ import {
   verticalDefaultMode,
 } from "@/infrastructure/compilers/kernel/foundation/modes";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
+import { FOUNDATION_COLOR_DEFAULTS } from "@/foundation/tokens/ts/foundation/base/declared-defaults";
+import {
+  DARK_DEFAULT_GROUND,
+  LIGHT_DEFAULT_GROUND,
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/ground";
 import { deriveModeThemes } from "..";
 import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 
@@ -154,17 +160,11 @@ describe("WO-DER-05 · the tenant, and only the tenant, narrows its own decision
 
   it("leaves a mode-DESCRIBING statement where the tenant wrote it", () => {
     // A ground is not brand identity: carrying a light canvas into the dark
-    // block would put the dark ink on a light surface. The vertical's own
-    // per-mode ground is what used to stand under the tenant's sanctioned
-    // overrides and keep that from happening.
-    //
-    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15):
-    // `modes.dark.palette.backgroundColor` on the bithire preset; pinned to the
-    // measured state until the lane lands. The preset authors no per-mode
-    // ground, so nothing restates the canvas in the dark block and the tenant's
-    // base ground now cascades into it -- the light-canvas-in-dark-mode shape
-    // this test was written to forbid. Pinned as measured, with the rule it
-    // asserts stated, rather than re-titled as if the behaviour were intended.
+    // block would put the dark ink on a light surface. Nothing in the chain
+    // authors the other mode's canvas -- the bithire preset states none, and
+    // per-mode seeds are refused at the document door -- so the statement is
+    // kept in its own block by the mode's own canvas restating it, not by a
+    // second authored ground.
     const grounded = compile("bithire", {
       primary: TENANT_PRIMARY,
       background: "#FBFBFD",
@@ -173,9 +173,128 @@ describe("WO-DER-05 · the tenant, and only the tenant, narrows its own decision
     expect(
       FIRST_PARTY_BASELINES.bithire.modes?.dark?.palette?.backgroundColor
     ).toBeUndefined();
-    expect(effective(grounded, "dark")["--ds-color-bg-primary"]).toBe(
+    expect(effective(grounded, "dark")["--ds-color-bg-primary"]).not.toBe(
       "#FBFBFD"
     );
+  });
+});
+
+/**
+ * R3 of the WO-DER-06 post-close residuals: "bithire's dark block cascades the
+ * light ground".
+ *
+ * A mode block is a DELTA, so a ground stated once in the theme body is not
+ * confined to the mode it describes -- it keeps cascading, and the block paints
+ * a canvas nobody chose. The other mode cannot be authored out of that: the
+ * document door refuses per-mode seeds by name (kit row 5 opens them only as
+ * per-mode `SanctionedOverrides`, which carry chrome and nothing else), so the
+ * overlay is structurally silent on every first-party vertical. The canvas is
+ * therefore DERIVED for the surface the block compiles for.
+ */
+describe("R3 · the other mode's canvas is derived, not cascaded", () => {
+  const groundChannels = [
+    "--ds-color-bg-primary",
+    "--ds-color-bg",
+    "--ds-color-background",
+  ] as const;
+
+  it("a light seed ground does not paint the dark block", () => {
+    const grounded = compile("bithire", {
+      primary: TENANT_PRIMARY,
+      background: "#FBFBFD",
+    });
+    for (const channel of groundChannels) {
+      expect(grounded.variables[channel], `base ${channel}`).toBe("#FBFBFD");
+      expect(effective(grounded, "dark")[channel], `dark ${channel}`).toBe(
+        DARK_DEFAULT_GROUND
+      );
+    }
+  });
+
+  it("the dark canvas clears the floor the shipped light one could not", () => {
+    // The defect measured as paint, on the ground bithire's own preset seeds:
+    // the foundation's dark ink over it is 1.10:1, under every floor there is.
+    const ink = FOUNDATION_COLOR_DEFAULTS.dark["--ds-color-text-primary"]!;
+    const seeded = FIRST_PARTY_BASELINES.bithire.palette?.backgroundColor;
+    expect(seeded).toBe("#FFFFFF");
+    expect(contrastRatio(ink, seeded!)).toBeLessThan(1.5);
+    expect(contrastRatio(ink, DARK_DEFAULT_GROUND)).toBeGreaterThan(7);
+  });
+
+  it("a tenant that authors the mode's own ground keeps it", () => {
+    // The derivation fills a silence; it never outranks a statement about the
+    // block's own mode.
+    const narrowed = compile("bithire", {
+      primary: TENANT_PRIMARY,
+      background: "#FFFFFF",
+      backgroundMode: "auto",
+      dark: { background: "#101014" },
+    });
+    expect(effective(narrowed, "dark")["--ds-color-bg-primary"]).toBe(
+      "#101014"
+    );
+  });
+
+  it("holds in the other direction: a dark-default theme's light block", () => {
+    const requests = deriveModeThemes({
+      theme: {
+        id: "r3-dark-default",
+        name: "R3 dark default",
+        appearance: { defaultMode: "dark" },
+        palette: { primaryColor: TENANT_PRIMARY, backgroundColor: "#050307" },
+        modes: { light: {} },
+      } as unknown as FlatTheme,
+      tenantFacts: undefined,
+      tenantPatch: undefined,
+    });
+    expect(requests.map((request) => request.mode)).toEqual(["light"]);
+    expect(requests[0]?.theme.palette?.backgroundColor).toBe(
+      LIGHT_DEFAULT_GROUND
+    );
+  });
+
+  it("RESIDUE: a theme that states its inks too keeps the cascade", () => {
+    // The canvas moves as a set. A theme that authors inks for its own ground
+    // owns the whole canvas, and re-grounding it alone stands those inks on a
+    // canvas they were not chosen for -- measured, the APCA floor then REFUSES
+    // the compile by name on the two deliberately quiet roles (`text-muted` at
+    // Lc -51.6, `text-disabled` at Lc -12.0 over the dark canvas), because the
+    // foundation's own per-mode values for them are sub-floor by design.
+    // Re-authoring them needs the per-mode channel the kit has not opened, so
+    // this shape is pinned as measured rather than half-fixed.
+    const authoredInks = compile("bithire", {
+      primary: TENANT_PRIMARY,
+      background: "#FBF6EC",
+      foreground: { primary: "#2E261C", secondary: "#5C4F3D" },
+    });
+    expect(authoredInks.variables["--ds-color-bg-primary"]).toBe("#FBF6EC");
+    expect(effective(authoredInks, "dark")["--ds-color-bg-primary"]).toBe(
+      "#FBF6EC"
+    );
+    expect(effective(authoredInks, "dark")["--ds-color-text-primary"]).toBe(
+      "#2E261C"
+    );
+  });
+
+  it("states no canvas for a theme that seeded none", () => {
+    // rottay and evnto seed no ground at all, so the foundation's own per-mode
+    // declaration is what paints and the derivation must stay out of it. This
+    // is also the byte-stability leg: adding a canvas here would rewrite both
+    // verticals' artifacts.
+    for (const vertical of ["rottay", "evnto"] as const) {
+      const baseline = FIRST_PARTY_BASELINES[vertical] as unknown as FlatTheme;
+      expect(baseline.palette?.backgroundColor, vertical).toBeUndefined();
+      const requests = deriveModeThemes({
+        theme: baseline,
+        tenantFacts: undefined,
+        tenantPatch: undefined,
+      });
+      expect(requests.length, vertical).toBe(1);
+      expect(
+        requests[0]?.theme.palette?.backgroundColor,
+        `${vertical} ${requests[0]?.mode}`
+      ).toBeUndefined();
+    }
   });
 });
 
