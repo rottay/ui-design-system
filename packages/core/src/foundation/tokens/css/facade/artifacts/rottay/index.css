@@ -838,6 +838,11 @@
   --ds-input-number-warning-shadow-focus: var(--ds-input-warning-shadow-focus);
   --ds-input-selection-bg: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
   --ds-input-shadow-rest: var(--ds-material-control-shadow);
+  --ds-kanban-board-column-accent: transparent;
+  --ds-kanban-board-column-gap: var(--ds-spacing-4);
+  --ds-kanban-board-column-max-height: none;
+  --ds-kanban-board-column-min-width: 280px;
+  --ds-kanban-board-touch-target: 2.75rem;
   --ds-list-meta-description-ink: color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%, var(--ds-color-text-primary) 30%);
   --ds-material-canvas-background: var(--ds-surface-canvas);
   --ds-material-canvas-foreground: var(--ds-color-text-primary);

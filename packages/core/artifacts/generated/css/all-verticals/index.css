@@ -3643,6 +3643,11 @@ html.dark {
   /* Horizontal travel for the direction-aware panel slide (view transitions).
      Kept small: the slide is a cue, not a carousel. */
   --ds-motion-panel-offset: 12px;
+  /* The physical sign each logical panel edge travels on. `translateX` has no
+     logical spelling inside a keyframe, so the reading direction enters the
+     keyframe through these two inherited signs instead. */
+  --ds-vt-panel-start-sign: -1;
+  --ds-vt-panel-end-sign: 1;
 
   /* Pre-composed per-component transitions, re-expressed on the canon primitives.
      These are the ONLY thing modern components reference for multi-property
@@ -3825,6 +3830,13 @@ html.dark {
 
   /* Stagger increments for lists */
   --delay-stagger-increment: 0.05s; /* 50ms between items */
+}
+
+/* RTL: the reading start is the physical right, so the panel slide's two
+   direction signs swap and every ds-vt-panel keyframe travels with the text. */
+:root:dir(rtl) {
+  --ds-vt-panel-start-sign: 1;
+  --ds-vt-panel-end-sign: -1;
 }
 
 /* ========================================================================
@@ -4046,7 +4058,7 @@ html.dark {
   }
   to {
     opacity: 0;
-    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+    transform: translateX(calc(var(--ds-vt-panel-start-sign) * var(--ds-motion-panel-offset)));
   }
 }
 
@@ -4057,14 +4069,14 @@ html.dark {
   }
   to {
     opacity: 0;
-    transform: translateX(var(--ds-motion-panel-offset));
+    transform: translateX(calc(var(--ds-vt-panel-end-sign) * var(--ds-motion-panel-offset)));
   }
 }
 
 @keyframes ds-vt-panel-enter-from-end {
   from {
     opacity: 0;
-    transform: translateX(var(--ds-motion-panel-offset));
+    transform: translateX(calc(var(--ds-vt-panel-end-sign) * var(--ds-motion-panel-offset)));
   }
   to {
     opacity: 1;
@@ -4075,7 +4087,7 @@ html.dark {
 @keyframes ds-vt-panel-enter-from-start {
   from {
     opacity: 0;
-    transform: translateX(calc(-1 * var(--ds-motion-panel-offset)));
+    transform: translateX(calc(var(--ds-vt-panel-start-sign) * var(--ds-motion-panel-offset)));
   }
   to {
     opacity: 1;
@@ -10209,6 +10221,12 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   transform: scaleX(-1);
 }
 
+/* The compatibility catalog carries only .rottay-icon; it declares the same channel. */
+.rottay-icon[data-icon-mirrored='auto']:dir(rtl) {
+  transform: scaleX(-1);
+  transform-origin: center;
+}
+
 .rottay-semantic-icon[data-icon-state='busy'],
 .rottay-semantic-icon[data-icon-name='status.loading'] {
   animation: ds-icon-semantic-busy var(--ds-icon-busy-duration) linear infinite;
@@ -12304,7 +12322,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 :where(.ds-metric-card__halo) {
   position: absolute;
-  right: -54px;
+  inset-inline-end: -54px;
   bottom: -48px;
   z-index: 0;
   width: 132px;
@@ -12456,6 +12474,13 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   transform: translateX(-100%);
   animation: ds-meter-sweep var(--ds-motion-attention)
     var(--ds-motion-ease-enter) var(--ds-motion-feedback) 1;
+}
+
+/* The sweep travels with the reading direction: the rest offset mirrors and
+   the keyframe pair is replayed in reverse. */
+:where(.ds-metric-card__progress-bar):dir(rtl)::after {
+  transform: translateX(100%);
+  animation-direction: reverse;
 }
 
 :where(.ds-metric-card__status-row) {
@@ -21872,7 +21897,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 /* Ensure buttons have gap when in flex/inline containers */
 [data-engine='modern'] .btn + .btn {
-  margin-left: 8px;
+  margin-inline-start: 8px;
 }
 
 /* Generic flex gap for button parents */
@@ -37409,7 +37434,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * RTL (K2-V sweep): the engine's horizontal offsets are logical
  * (`insetInlineStart`), matching Chromium's flipped native scale under
  * `dir=rtl`; this file mirrors the centering signs (mark-label, handle
- * `--tw-translate-x`) and the single-mode fill gradient under `:dir(rtl)`.
+ * `translate`) and the single-mode fill gradient under `:dir(rtl)`.
  * Vertical offsets are logical too and carry the same `:dir(rtl)` mirrors
  * (rail, track, dot, value tooltip), so the rail/track/handle/dot/tooltip
  * centre on one inline line in both directions. The value tooltip's
@@ -37507,7 +37532,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* Handle geometry (drained: `absolute w-4 h-4 rounded-full border-2 shadow
    pointer-events-none`). Centering rides the `translate` PROPERTY, which
    composes with the press `transform: scale()` instead of being overridden
-   by it; the --tw-translate-* vars are the pinned mirror channel. */
+   by it; each orientation carries its own `:dir(rtl)` translate mirror. */
 .ds-slider.ds-slider--modern [data-part='handle'] {
   position: absolute;
   inline-size: var(--ds-slider-thumb-size, 16px);
@@ -37525,16 +37550,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 2px solid var(--ds-color-bg-primary);
 }
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='handle'] {
-  --tw-translate-x: -50%;
-  --tw-translate-y: -50%;
-  translate: var(--tw-translate-x) var(--tw-translate-y);
+  translate: -50% -50%;
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='handle']:dir(rtl) {
+  translate: 50% -50%;
 }
 /* Vertical anchors at `bottom`, so the centering shift is +50% (the drained
    class carried -50% -- a full thumb-height of mis-centering). */
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='handle'] {
-  --tw-translate-x: -50%;
-  --tw-translate-y: 50%;
-  translate: var(--tw-translate-x) var(--tw-translate-y);
+  translate: -50% 50%;
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='handle']:dir(rtl) {
+  translate: 50% 50%;
 }
 
 /* Disabled posture (K2-V sweep, sighted defect): the range mode's custom
@@ -37545,12 +37572,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='track'],
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='handle'] {
   opacity: var(--ds-disabled-opacity, 0.5);
-}
-
-/* RTL centering: the engine's horizontal handle offsets are logical, so the
-   Tailwind v4 `translate` property must mirror its sign under dir=rtl. */
-.ds-slider.ds-slider--modern [data-part='handle']:dir(rtl) {
-  --tw-translate-x: 50%;
 }
 
 .ds-slider.ds-slider--modern [data-part='mark-label'] {
@@ -53100,11 +53121,16 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   animation-name: ds-dropdown-exit-top;
 }
 
-/* In-tree placement: one block end and one logical inline edge; centring stays physical. */
+/* In-tree placement: one block end and one logical inline edge, centred on the trigger. */
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true']) {
   inset-block-start: calc(100% + var(--ds-dropdown-gap, var(--ds-spacing-2)));
-  left: 50%;
+  inset-inline-start: 50%;
   translate: -50% 0;
+}
+
+/* The centring translate mirrors with the inline edge it pulls back from. */
+.ds-dropdown-surface[data-part='surface']:not([data-portaled='true']):dir(rtl) {
+  translate: 50% 0;
 }
 
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement^='top'] {
@@ -53220,6 +53246,12 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   pointer-events: none;
 }
 
+/* The sweep travels with the reading direction, so its rest and hover offsets
+   mirror under RTL. */
+.ds-dropdown-surface[data-part='surface'] [data-part='item']:dir(rtl)::after {
+  transform: translateX(40%);
+}
+
 /* Hover and focus are a quiet well, never a lift, so a keyboard sweep does not jitter the list. */
 .ds-dropdown-surface[data-part='surface'] [data-part='item'][data-part='item']:is([data-state~='hovered'], :hover, [data-state~='focus-visible'], :focus-visible):not([data-state~='disabled']) {
   color: var(--ds-dropdown-item-color-hover, var(--ds-color-text-primary));
@@ -53242,6 +53274,10 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
 .ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='hovered'], :hover):not([data-state~='disabled'])::after {
   opacity: calc(var(--ds-dropdown-sheen-opacity) * var(--ds-effect-intensity));
   transform: translateX(40%);
+}
+
+.ds-dropdown-surface[data-part='surface'] [data-part='item']:is([data-state~='hovered'], :hover):not([data-state~='disabled']):dir(rtl)::after {
+  transform: translateX(-40%);
 }
 
 .ds-dropdown-surface[data-part='surface'] [data-part='item'][data-part='item'][data-selected='true'] {
@@ -56158,6 +56194,9 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   display: contents;
 }
 
+/* The stamped `dir` is the surface's reading direction: the in-tree branch
+   renders it under a trigger that declares none, so nothing here may outrank
+   the UA `[dir]` rule. */
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
   --ds-popover-surface-current: var(--ds-popover-bordered-background, var(--ds-material-overlay-background));
   --ds-popover-ink-current: var(--ds-popover-bordered-foreground, var(--ds-color-text-primary));
@@ -56196,7 +56235,6 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   text-wrap: pretty;
   overflow-wrap: anywhere;
   word-break: normal;
-  direction: inherit;
   unicode-bidi: plaintext;
   transform-origin: center bottom;
   animation: ds-popover-enter var(--ds-popover-enter-duration, var(--ds-motion-reveal)) var(--ds-popover-enter-easing, var(--ds-motion-ease-enter)) both;
@@ -58902,6 +58940,14 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
   transition: transform var(--ds-tabs-indicator-motion-duration, var(--ds-motion-normal)) var(--ds-tabs-motion-easing);
 }
 
+/* The measured offset is a PHYSICAL left distance, so the RTL mirror moves the
+   anchor to the physical left edge and replays the same transform from there. */
+.ds-tabs--modern[data-part='root'] [data-part='indicator']:dir(rtl) {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  transform: translateX(var(--ds-tabs-indicator-offset)) scaleX(var(--ds-tabs-indicator-scale));
+}
+
 /* ---- overflow controls share one tokenized control anatomy ------------ */
 
 .ds-tabs--modern[data-part='root'] :is([data-part='overflow-previous'], [data-part='overflow-next'], [data-part='overflow-more']) {
@@ -59285,8 +59331,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='false'] {
   position: fixed;
   top: 50%;
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translate(-50%, -50%);
+}
+
+/* The centring translate mirrors with the inline edge it pulls back from. */
+.ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='false']:dir(rtl) {
+  transform: translate(50%, -50%);
 }
 
 /* The colored frame repeats its part to clear the tenant border-color floor. */
@@ -62304,6 +62355,11 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .rottay-avatar.rottay-avatar--modern:dir(rtl) {
   --ds-avatar-status-offset-x: -25%;
 }
+/* The flipped channel is replayed at the paint site so the mirror is legible
+   on the rule that moves the dot, not only on the root that feeds it. */
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot']:dir(rtl) {
+  transform: translate(var(--ds-avatar-status-offset-x, -25%), 25%);
+}
 .rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='online'] {
   background-color: var(--ds-avatar-status-online);
 }
@@ -64884,7 +64940,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   min-inline-size: var(--ds-divider-segment-min);
   min-block-size: 0;
   border-top: var(--ds-divider-line);
-  border-left: none;
+  border-inline-start: none;
   transition:
     border-color var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
     opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);
@@ -113701,13 +113757,19 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * (4th-tanda law).
  *
  * STATE ACCENT AS DATA: `column.color` is consumer config riding the quoted
- * `--ds-kanban-column-accent` channel — applied as a HORIZONTAL strip on the
+ * `--ds-kanban-board-column-accent` channel — applied as a HORIZONTAL strip on the
  * header's block-start edge (side rails / vertical accents are forbidden).
  *
  * KEYBOARD MOVE: cards are tab stops (`role="listitem"` in `role="list"`),
- * so they carry a `:focus-visible` ring; the engine announces every keyboard
- * move through the visually-hidden `move-announcer` live region (the
- * VISUALLY-HIDDEN PATTERN below is shared with the loading status wrapper).
+ * so they carry a focus ring; the engine announces every keyboard move through
+ * the visually-hidden `move-announcer` live region (the VISUALLY-HIDDEN
+ * PATTERN below is shared with the `spinner` status slot).
+ *
+ * STATE IS DECIDED ONCE (F-37): the card is a stateful part -- the engine runs
+ * it through `useInteractionState` and stamps `partAttributes('card', state)`
+ * -- so every hover, press and focus arm below pairs the kernel token with the
+ * platform pseudo-class it stands for (`:is([data-state~='hovered'], :hover)`).
+ * The pseudo-class is the fallback of one decision, never a second authority.
  *
  * DROP GEOMETRY: the drop target never reads by tone alone — beyond the
  * column ring, the exact insertion point is a SHAPE: a primary insertion
@@ -113723,13 +113785,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * compositing keeps the two edges independent; keyboard focus scrolls the
  * focused card out of the fade zone on its own).
  *
- * LOADING SKELETON: the loading state is a ghost board with the real
- * footprint (skeleton columns, header bars and card bars pulsing on the
- * canonical `ds-foundation-pulse` keyframes through the
- * `--ds-motion-attention` channel; staggered heights keep the rhythm
- * honest). The composed Spinner stays mounted visually-hidden as the
- * polite status announcer (public test pin). Reduced motion and forced
- * colors quiet the pulse; forced colors re-key the bars to GrayText.
+ * LOADING SKELETON: this file draws none. The loading state is derived from
+ * the family's own `data-part` anatomy by the shared `AnatomySkeleton`
+ * renderer, which owns the bones, the motion vocabulary, reduced motion and
+ * forced colors in `presentation/components/skin/skeleton-anatomy`. The
+ * composed Spinner stays mounted OUTSIDE the renderer, visually-hidden, as the
+ * polite status announcer (public test pin) -- the renderer makes its own
+ * source inert, and an inert announcer announces nothing.
  *
  * MOTION: card chrome transitions ride `--ds-motion-*` channels; drag moves
  * animate through the engine's FLIP hook (coordinated, never teleport); the
@@ -113745,10 +113807,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   min-inline-size: 0;
 }
 
-/* ---- VISUALLY-HIDDEN PATTERN: the loading status (Spinner pin) and the
-        keyboard-move announcer stay in the accessibility tree, clipped out
-        of view ---- */
-.ds-pattern-kanban-board.ds-engine-modern [data-part='loading-status'],
+/* ---- VISUALLY-HIDDEN PATTERN: the loading status slot (the composed Spinner
+        rides inside it, clipped rather than restyled -- the primitive owns its
+        own chrome) and the keyboard-move announcer stay in the accessibility
+        tree, clipped out of view ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='spinner'],
 .ds-pattern-kanban-board.ds-engine-modern [data-part='move-announcer'] {
   position: absolute;
   inline-size: 1px;
@@ -113758,46 +113821,10 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   white-space: nowrap;
 }
 
-/* ---- loading skeleton: ghost board with the real footprint (the root
-        keeps its historical 300px presence) ---- */
+/* ---- loading: the root keeps its historical 300px presence while the shared
+        anatomy renderer measures the board it stands in for ---- */
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root'][data-loading='true'] {
   min-block-size: 300px;
-}
-.ds-pattern-kanban-board.ds-engine-modern[data-part='root'][data-loading='true']
-  > [data-part='board'][data-skeleton='true'] {
-  display: flex;
-  gap: var(--ds-kanban-column-gap, 16px);
-  overflow: hidden;
-}
-.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-column'] {
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: var(--ds-spacing-2);
-  min-inline-size: var(--ds-kanban-column-min-width, 280px);
-}
-.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'],
-.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
-  border-radius: var(--ds-radius-lg);
-  background: var(--ds-surface-panel);
-  animation: ds-foundation-pulse
-    var(--ds-motion-attention, 960ms)
-    var(--ds-motion-ease-in-out, ease-in-out) infinite;
-}
-.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'] {
-  block-size: 2.5rem;
-  border-radius: var(--ds-radius-xl);
-  background: var(--ds-surface-inset);
-}
-.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
-  block-size: 4.5rem;
-}
-/* Staggered bar heights keep the footprint rhythm honest (not a barcode). */
-.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']:nth-child(3n + 1) {
-  block-size: 3.5rem;
-}
-.ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']:nth-child(3n) {
-  block-size: 5.5rem;
 }
 
 /* ---- toolbar slot (was mb-4) ---- */
@@ -113808,7 +113835,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- board: horizontal scroll strip; the consumer's gap rides the channel ---- */
 .ds-pattern-kanban-board.ds-engine-modern [data-part='board'] {
   display: flex;
-  gap: var(--ds-kanban-column-gap, 16px);
+  gap: var(--ds-kanban-board-column-gap, 16px);
   padding-block-end: var(--ds-spacing-2);
   overflow-x: auto;
 }
@@ -113816,32 +113843,32 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- scroll affordance: clipped edges fade (physical gradients, so each
         direction carries a :dir(rtl) mirror) ---- */
 .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'] {
-  mask-image: linear-gradient(to right, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+  mask-image: linear-gradient(to right, transparent, black var(--_ds-kanban-board-edge-fade, 2rem));
 }
 .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true'] {
-  mask-image: linear-gradient(to left, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+  mask-image: linear-gradient(to left, transparent, black var(--_ds-kanban-board-edge-fade, 2rem));
 }
 .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true'] {
   mask-image: linear-gradient(
     to right,
     transparent,
-    black var(--_ds-kanban-edge-fade, 2rem),
-    black calc(100% - var(--_ds-kanban-edge-fade, 2rem)),
+    black var(--_ds-kanban-board-edge-fade, 2rem),
+    black calc(100% - var(--_ds-kanban-board-edge-fade, 2rem)),
     transparent
   );
 }
 :dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'] {
-  mask-image: linear-gradient(to left, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+  mask-image: linear-gradient(to left, transparent, black var(--_ds-kanban-board-edge-fade, 2rem));
 }
 :dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true'] {
-  mask-image: linear-gradient(to right, transparent, black var(--_ds-kanban-edge-fade, 2rem));
+  mask-image: linear-gradient(to right, transparent, black var(--_ds-kanban-board-edge-fade, 2rem));
 }
 :dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true'] {
   mask-image: linear-gradient(
     to left,
     transparent,
-    black var(--_ds-kanban-edge-fade, 2rem),
-    black calc(100% - var(--_ds-kanban-edge-fade, 2rem)),
+    black var(--_ds-kanban-board-edge-fade, 2rem),
+    black calc(100% - var(--_ds-kanban-board-edge-fade, 2rem)),
     transparent
   );
 }
@@ -113851,7 +113878,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
-  min-inline-size: var(--ds-kanban-column-min-width, 280px);
+  min-inline-size: var(--ds-kanban-board-column-min-width, 280px);
 }
 .ds-pattern-kanban-board.ds-engine-modern [data-part='column'][data-collapsed='true'] {
   flex: 0 0 auto;
@@ -113867,7 +113894,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   margin-block-end: var(--ds-spacing-2);
   padding-block: var(--ds-spacing-3);
   padding-inline: var(--ds-spacing-4);
-  border-block-start: 3px solid var(--ds-kanban-column-accent, transparent);
+  border-block-start: 3px solid var(--ds-kanban-board-column-accent, transparent);
   border-radius: var(--ds-radius-xl);
   background: var(--ds-surface-inset);
 }
@@ -113929,7 +113956,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true'] {
   box-shadow:
     0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
-    inset 0 calc(-1 * var(--_ds-kanban-insert-bar, 3px)) 0 0 var(--ds-color-primary);
+    inset 0 calc(-1 * var(--_ds-kanban-board-insert-bar, 3px)) 0 0 var(--ds-color-primary);
 }
 
 /* ---- empty column slot (was flex items-center justify-center p-6) ---- */
@@ -113957,7 +113984,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-2);
-  max-block-size: var(--ds-kanban-column-max-height, none);
+  max-block-size: var(--ds-kanban-board-column-max-height, none);
   overflow-y: auto;
 }
 
@@ -113992,12 +114019,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   > [data-part='column']
   > [data-part='column-body']
   > [data-part='card-list']
-  > [data-part='card']:focus-visible {
+  > [data-part='card']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 @media (hover: hover) {
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='card']:hover {
+  .ds-pattern-kanban-board.ds-engine-modern
+    [data-part='card']:is([data-state~='hovered'], :hover) {
     box-shadow: var(--ds-elevation-2);
   }
 }
@@ -114015,16 +114043,27 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   > [data-part='column']
   > [data-part='column-body']
   > [data-part='card-list']
-  > [data-part='card'][data-drop-before='true']:hover {
+  > [data-part='card'][data-drop-before='true']:is([data-state~='hovered'], :hover) {
   box-shadow:
     var(--ds-elevation-1),
-    0 calc(-1 * var(--_ds-kanban-insert-bar, 3px)) 0 0 var(--ds-color-primary);
+    0 calc(-1 * var(--_ds-kanban-board-insert-bar, 3px)) 0 0 var(--ds-color-primary);
 }
-.ds-pattern-kanban-board.ds-engine-modern [data-part='card']:active {
+.ds-pattern-kanban-board.ds-engine-modern
+  [data-part='card']:is([data-state~='pressed'], :active) {
   cursor: grabbing;
 }
 .ds-pattern-kanban-board.ds-engine-modern [data-part='card-content'] {
   padding: var(--ds-spacing-3);
+}
+
+/* ---- coarse-pointer move rail: the four controls trail the card content on
+        the reading-end side (these four declarations used to travel inline on
+        the TSX, which is paint in the wrong layer) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card-move'] {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-spacing-1);
+  margin-block-start: var(--ds-spacing-1);
 }
 
 /* ---- add item: the composed dashed Button stretches to the column ---- */
@@ -114045,19 +114084,12 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   }
 }
 
-/* ---- coarse pointers: the add-item button reaches the 44px floor ---- */
+/* ---- coarse pointers: the add-item button and the move rail -- the only two
+        controls that exist there -- reach the 44px floor ---- */
 @media (hover: none), (pointer: coarse) {
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'] {
-    min-block-size: var(--ds-kanban-touch-target, 2.75rem);
-  }
-}
-
-/* ---- reduced motion: the skeleton pulse goes quiet (the footprint still
-        reads as a board at rest) ---- */
-@media (prefers-reduced-motion: reduce) {
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'],
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
-    animation: none;
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'],
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='card-move-button'] {
+    min-block-size: var(--ds-kanban-board-touch-target, 2.75rem);
   }
 }
 
@@ -114067,9 +114099,9 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    is shape, never colour alone); the dragged ghost keeps its opacity
    (opacity survives forced colours); the header accent strip degrades to a
    neutral ButtonText hairline -- column identity reads through the title
-   text; the skeleton bars re-key to GrayText with the pulse stopped.
-   Composed primitives (Button, Badge, Empty, Spinner) own their own
-   forced-colors contracts. */
+   text. The loading state's forced-colors contract belongs to the shared
+   anatomy renderer, not here. Composed primitives (Button, Badge, Empty,
+   Spinner) own their own forced-colors contracts. */
 @media (forced-colors: active) {
   .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
     > [data-part='board']
@@ -114120,7 +114152,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     > [data-part='column']
     > [data-part='column-body']
     > [data-part='card-list']
-    > [data-part='card'][data-drop-before='true']:hover {
+    > [data-part='card'][data-drop-before='true']:is([data-state~='hovered'], :hover) {
     box-shadow: 0 -3px 0 0 Highlight;
   }
   .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
@@ -114128,13 +114160,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     > [data-part='column']
     > [data-part='column-body']
     > [data-part='card-list']
-    > [data-part='card']:focus-visible {
+    > [data-part='card']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
-  }
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'],
-  .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card'] {
-    animation: none;
-    background: GrayText;
   }
 }
 
@@ -119727,6 +119754,11 @@ html[lang]:lang(ar) {
   --ds-input-number-warning-shadow-focus: var(--ds-input-warning-shadow-focus);
   --ds-input-selection-bg: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
   --ds-input-shadow-rest: var(--ds-material-control-shadow);
+  --ds-kanban-board-column-accent: transparent;
+  --ds-kanban-board-column-gap: var(--ds-spacing-4);
+  --ds-kanban-board-column-max-height: none;
+  --ds-kanban-board-column-min-width: 280px;
+  --ds-kanban-board-touch-target: 2.75rem;
   --ds-list-meta-description-ink: color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%, var(--ds-color-text-primary) 30%);
   --ds-material-canvas-background: var(--ds-surface-canvas);
   --ds-material-canvas-foreground: var(--ds-color-text-primary);
@@ -121972,6 +122004,11 @@ html[lang]:lang(ar) {
   --ds-input-selection-bg: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
   --ds-input-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--ds-color-border-focus, var(--ds-color-primary)) 20%, transparent);
   --ds-input-shadow-rest: var(--ds-material-control-shadow);
+  --ds-kanban-board-column-accent: transparent;
+  --ds-kanban-board-column-gap: var(--ds-spacing-4);
+  --ds-kanban-board-column-max-height: none;
+  --ds-kanban-board-column-min-width: 280px;
+  --ds-kanban-board-touch-target: 2.75rem;
   --ds-letter-spacing-heading: 0.01em;
   --ds-line-height-display: 1.12;
   --ds-list-meta-description-ink: color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%, var(--ds-color-text-primary) 30%);
@@ -124206,6 +124243,11 @@ html[lang]:lang(ar) {
   --ds-input-number-warning-shadow-focus: var(--ds-input-warning-shadow-focus);
   --ds-input-selection-bg: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
   --ds-input-shadow-rest: var(--ds-material-control-shadow);
+  --ds-kanban-board-column-accent: transparent;
+  --ds-kanban-board-column-gap: var(--ds-spacing-4);
+  --ds-kanban-board-column-max-height: none;
+  --ds-kanban-board-column-min-width: 280px;
+  --ds-kanban-board-touch-target: 2.75rem;
   --ds-list-meta-description-ink: color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%, var(--ds-color-text-primary) 30%);
   --ds-material-canvas-background: var(--ds-surface-canvas);
   --ds-material-canvas-foreground: var(--ds-color-text-primary);
