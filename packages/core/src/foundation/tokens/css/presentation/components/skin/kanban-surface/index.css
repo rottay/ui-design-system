@@ -56,7 +56,7 @@
         flex evenly and never overflow the page (min-inline-size: 0). ---- */
 .ds-surface.ds-kanban [data-part='kanban-skeleton-board'] {
   display: flex;
-  gap: var(--ds-kanban-column-gap, var(--ds-spacing-4, 16px));
+  gap: var(--ds-kanban-board-column-gap, var(--ds-spacing-4, 16px));
 }
 
 .ds-surface.ds-kanban [data-part='kanban-skeleton-column'] {
