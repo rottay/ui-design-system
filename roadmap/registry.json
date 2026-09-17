@@ -5245,6 +5245,11 @@
      "at": "2026-09-17 19:15",
      "by": "kimi-dt",
      "note": "KERNEL DnD INTEGRADO f1d74ef81 (lot 0: contrato adoptado, 83/83 kernel + 38/38 structure + 134/134 family-cut en mis corridas; brazo F-69 sembrado en la misma commit por la ley de contadores; 8 desviaciones nombradas y verificadas). Despachado W23 = adoption lot 1 (saved-views, la superficie menor; invariante 1: comportamiento byte-identico salvo la excepcion declarada foreign-drag). Censo F-69 en el baseline: saved-views 1 transport owner, dndDropZoneOwners file-manager/upload por medir en su lote. Ventana serializada corrida y commiteada (83a4a0810)."
+    },
+    {
+     "at": "2026-09-17 19:35",
+     "by": "kimi-dt",
+     "note": "Adopcion DnD: lot 1 (saved-views) entregado por W23 con evidencia fuerte (name-sets pre/post sin flips, pin foreign-drag con plant-check rojo en HEAD) PERO con una violacion de la ley de congelados: adopto el kernel en classic/rustic (mi brief dijo 'engine' sin excluir; el debrief adoptado dice Modern-only). W23b despachado: revertir ambos engines a HEAD byte-identico, pins acotados a modern. Mis 3 rulings sobre las divergencias reportadas: T1 clear-before-callback inobservable bajo batching (declarado); disabled-sin-handlers browser-equivalente (excepcion declarada #7); identity re-render DOM-silencioso (aceptado). El baseline pressed de ViewPill queda asignado al lote 6c. En vuelo: W24 (tree), W25 (drop zones), W23b."
     }
    ]
   },
