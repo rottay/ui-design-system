@@ -5120,6 +5120,11 @@
      "at": "2026-09-16 21:10",
      "by": "claude-fable-dt",
      "note": "B4 data-table INTEGRADO en main: 1f171b2db (deriver chrome/data-table 76 canales --ds-data-table-*, skins renombrados, AnatomySkeleton, inline paint 0 incl. pinned insets, partAttributes/pseudo pareados 44->0, disabled sin doble opacidad, EmbeddedCssRecovery y decorative-accents re-pinneados, ratchet global rwp 641->563, hooks republicado) + 3c376d53e (suite de causalidad 11 tests, 6 decisiones probadas con control negativo, 3 consumes inertes pinneados; fila roster rwp=16 medido). Verificado en arbol quieto por el DT: family-cut 64/64, tsc 0, typecheck:tests 0, 45 archivos/877 tests focales verdes. Revision independiente de las ediciones del DT: ACCEPT tras corregir produced/producers/debtNote del baseline rwp. Residuo nombrado: 16 reads sin producer (3 --ds-density-*, 6 --ds-table-* de decision de pintura/ladder, 7 --ds-typography-* foraneos); punto ciego del ratchet (solo skins /engines/modern/); brazo axe-per-family OWED a WO-GAT-04. B4 NO cierra FAM-08: siguen toolbars residuo B7, widget-board, kanban, calendar-view, file-manager, virtual-list, gallery/grid y las causalidades declaradas no probadas (palette/radius en filter-panel, palette en column-settings, focusStyle en saved-views/toolbar)."
+    },
+    {
+     "at": "2026-09-16 21:44",
+     "by": "claude-fable-dt",
+     "note": "Lote 10 integrado 12866efbd: arc09.inlinePaint del motor modern de data-table 9->0 en su zero-lock (forma del hook useStatefulPart; el instrumento no resuelve binding patterns de llamadas locales; probes adversarios confirman que la nueva forma sigue fallando cerrado; sugerencia de maquinaria registrada: certificar useStatefulPart como nonStylePropBag en scripts/libraries/paint/inline). Atribucion de gates generados (reports/dt-gate-attribution-2026-09-16.md): cascade-ratchet +10 nombres de geometria runtime --ds-data-table-* con fallback literal, residuo nombrado sin inventar raices, sobre ~248 preexistentes de cuts anteriores (baseline decrease-only ya falsa desde 8bcc3852b: 2427 medidos vs 2079 escritos); csspaint apretado (4 filas stale + techo structures 157), queda --radius-field (ownership, preexistente); root-catalog OK; engine-audit sigue enmascarado por 3 contadores sin baseline (legacy-craft typography) con regresiones preexistentes detras (scale.fallbackParity 0->4, gradient/glass consumers, unreferencedSelectors 0->14). Build oficial pnpm build verde (12fb61380)."
     }
    ]
   },
@@ -5688,6 +5693,11 @@
      "at": "2026-09-16 19:34",
      "by": "claude-fable-dt",
      "note": "CORRECCION de la entrada anterior: Q-IND-2-5 NO queda resuelta. La opcion (b) fue intentada y revertida verbatim porque PROGRAM_INDICATORS en scripts/maintain/roadmap/status/index.mjs vincula ambas metricas a WO-EVI-01 y el checker rechaza otro owner; (b) requiere cambio de maquinaria (tabla + test) en el mismo lote. Esta WO NO es owner de los indicadores 2 y 5 hoy. Decision del owner pendiente entre (a), (b)+maquinaria, (c); registrado en evidence-graph.md."
+    },
+    {
+     "at": "2026-09-16 21:44",
+     "by": "claude-fable-dt",
+     "note": "Reds preexistentes reconfirmados en HEAD 12866efbd y atribuidos (reports/dt-gate-attribution-2026-09-16.md): ingress 15 IDs (wave2), single-door 4 (aridad resolveTheme), theme-parity (2 buckets nuevos collapse/type, adopcion manual revisada + obligacion INV-07), constitution (switch/steps/sidebar sourceOwner, notifier sin fila, manifest stale), engine-audit (3 contadores sin baseline enmascaran regresiones), state-material-arm (4 canales filter-pill, residuo B7), adaptive-contracts (census 74->71; regenerar desde checkout llamado ui-design-system), decisions-lit (republicar), cascade-ratchet (~248 nombres de drift de cuts, baseline falsa desde 8bcc3852b). Ninguno causado por la ola 8-10 salvo los +10 de geometria runtime de data-table, registrados en FAM-08."
     }
    ]
   },
