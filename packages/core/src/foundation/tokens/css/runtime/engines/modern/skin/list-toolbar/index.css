@@ -1328,20 +1328,6 @@
   }
 }
 
-@keyframes ds-list-toolbar-sheen {
-  0% {
-    opacity: 0;
-    transform: translateX(-120%);
-  }
-  45% {
-    opacity: var(--ds-toolbar-sheen-opacity, 0.22);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(120%);
-  }
-}
-
 @keyframes ds-list-toolbar-filter-enter {
   from {
     opacity: 0;

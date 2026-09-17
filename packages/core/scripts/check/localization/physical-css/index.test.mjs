@@ -1000,7 +1000,9 @@ test('a keyframe NO rule animates with stays debt: dead code is not mirrored', (
   const body = keyframeFixture('.ds-planted-drill:dir(rtl) { animation-direction: reverse; }');
   assert.deepEqual(parseErrors(CLEAN_FILE, body), []);
   assert.deepEqual(plantedBands(body), ['physical']);
-  // And the tree really does hold such a keyframe, pinned rather than excused.
+  // And the tree really does hold steps no CSS rule animates with, pinned rather
+  // than excused. The pin is the toast file, whose consumer is the JS runtime --
+  // read its reason before treating an unanimated step as removable dead code.
   assert.ok(readBaseline().pinnedDebt[PINNED_DEBT].sites >= 4);
 });
 

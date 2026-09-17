@@ -50,28 +50,6 @@
   }
 }
 
-@keyframes ds-foundation-fade-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes ds-foundation-fade-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 /* ========================================================================
    SCALE ANIMATIONS
    Grow and shrink effects
@@ -168,24 +146,6 @@
   }
 }
 
-@keyframes ds-foundation-slide-in-left {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes ds-foundation-slide-in-right {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
 @keyframes ds-foundation-slide-out-up {
   from {
     transform: translateY(0);
@@ -201,24 +161,6 @@
   }
   to {
     transform: translateY(100%);
-  }
-}
-
-@keyframes ds-foundation-slide-out-left {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes ds-foundation-slide-out-right {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
   }
 }
 
@@ -319,18 +261,6 @@
    SHAKE ANIMATIONS
    Error indication and attention grabbers
    ======================================================================== */
-
-@keyframes ds-foundation-shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-0.5rem);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(0.5rem);
-  }
-}
 
 @keyframes ds-foundation-shake-vertical {
   0%, 100% {

@@ -348,11 +348,16 @@ var(--transition-button)
 
 Reusable @keyframes for common animations:
 
-- Fade (in, out, up, down, left, right)
+- Fade (in, out, up, down)
 - Scale (in, out, up, down, zoom)
-- Slide (all directions)
-- Rotate, bounce, shake, pulse
+- Slide (up, down)
+- Rotate, bounce, shake-vertical, pulse
 - Shimmer, loading, ripple, glow
+
+The horizontal variants (`fade-in-left/-right`, `slide-in-left/-right`,
+`slide-out-left/-right`, `shake`) were removed as dead code: nothing in the
+workspace animated with them, and a signed `translateX` step cannot carry the
+`:dir(rtl)` mirror an RTL-safe horizontal move owes.
 
 ### Responsive Tokens
 
