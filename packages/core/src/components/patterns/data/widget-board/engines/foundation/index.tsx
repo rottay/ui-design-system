@@ -13,6 +13,7 @@ import React, {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import {
+  AnatomySkeleton,
   Box,
   Button,
   Input,
@@ -22,6 +23,7 @@ import {
   Text,
   type ResizeHandleIntent,
 } from "../../../../../primitives";
+import { partAttributes, useInteractionState } from "@/foundation/behavior";
 import { ActionAddIcon } from "@/graphics/icons/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/semantic/generated/roles/action-close";
 import { ActionRefreshIcon } from "@/graphics/icons/semantic/generated/roles/action-refresh";
@@ -146,6 +148,118 @@ function normalize(items: WidgetBoardItem[]): WidgetBoardItem[] {
     visibleOrder.has(item.id)
       ? { ...item, order: visibleOrder.get(item.id) as number }
       : item
+  );
+}
+
+/*
+ * F-37: state is decided ONCE. Every part below whose skin arm used to read a
+ * bare `:hover`, `:active` or `:focus-visible` now runs the shared interaction
+ * kernel and stamps `partAttributes(part, state)`; the skin pairs each platform
+ * pseudo-class with the kernel token it stands for, so the pseudo-class is the
+ * fallback of one decision instead of a second authority on the same question.
+ * At rest the kernel serializes nothing, so `[data-state]` never matches a
+ * resting part and the resting paint is byte-identical to before.
+ */
+
+/** The edit-mode toolbar: a stateful part, its hover/press arms paired. */
+function BoardToolbar({
+  children,
+  ...rest
+}: React.HTMLAttributes<HTMLElement>): React.ReactElement {
+  const interaction = useInteractionState();
+  return (
+    <header
+      {...rest}
+      {...interaction.handlers}
+      {...partAttributes("toolbar", interaction.state)}
+    >
+      {children}
+    </header>
+  );
+}
+
+/** One widget card. `ref` forwards to the board's own cell register. */
+const BoardCardShell = React.forwardRef<
+  HTMLElement,
+  React.HTMLAttributes<HTMLElement>
+>(function BoardCardShell({ children, ...rest }, ref) {
+  const interaction = useInteractionState();
+  return (
+    <article
+      {...rest}
+      {...interaction.handlers}
+      {...partAttributes("card-shell", interaction.state)}
+      ref={ref}
+    >
+      {children}
+    </article>
+  );
+});
+
+/** One add-widget catalog card. */
+function BoardCatalogItem({
+  children,
+  ...rest
+}: React.HTMLAttributes<HTMLElement>): React.ReactElement {
+  const interaction = useInteractionState();
+  return (
+    <article
+      {...rest}
+      {...interaction.handlers}
+      {...partAttributes("catalog-item", interaction.state)}
+    >
+      {children}
+    </article>
+  );
+}
+
+/**
+ * The edit header bar of a card; it is also the drag surface, so it is the one
+ * stateful part that also carries a caller handler. The kernel's own handlers
+ * do NOT chain to a caller's, so the press that starts a drag is composed here
+ * explicitly: the part owns its state, the product owns its behaviour.
+ */
+function BoardCellControls({
+  children,
+  onPointerDown,
+  ...rest
+}: React.HTMLAttributes<HTMLDivElement>): React.ReactElement {
+  const interaction = useInteractionState();
+  return (
+    <div
+      {...rest}
+      {...interaction.handlers}
+      onPointerDown={(event) => {
+        interaction.handlers.onPointerDown(event);
+        onPointerDown?.(event);
+      }}
+      {...partAttributes("cell-controls", interaction.state)}
+    >
+      {children}
+    </div>
+  );
+}
+
+/*
+ * The resize edge's state host. `ResizeHandle` stamps the anatomy it is given
+ * verbatim but exposes no interaction handlers (its contract carries semantics
+ * and keyboard operation only), so the family owns the kernel around it and
+ * hands the serialized state back through `anatomy` -- which keeps the skin's
+ * selectors on the handle itself. The host draws no box: the skin gives it
+ * `display: contents`, so the absolutely positioned handle still resolves
+ * against the card and the rendered geometry is unchanged.
+ */
+function BoardResizeEdge({
+  children,
+}: {
+  children: (state: string | undefined) => React.ReactNode;
+}): React.ReactElement {
+  const interaction = useInteractionState();
+  const anatomy = partAttributes("resize-handle", interaction.state);
+  return (
+    <span className="ds-widget-board__resize-edge" {...interaction.handlers}>
+      {children(anatomy["data-state"])}
+    </span>
   );
 }
 
@@ -853,16 +967,17 @@ export function WidgetBoardEngine({
     .join(" ");
 
   /*
-   * Skeleton with the final composition's footprint. Until the first load
-   * produces a visible widget the board used to render the EMPTY state, so
-   * every initial load flashed "no widgets" and then jumped. Instead, the
-   * loading board renders quiet placeholder cells on the SAME 12-track grid:
-   * when the items are already known their declared sizes are mirrored (the
-   * footprint the solver will reserve, so late widgets never jump), and only
-   * a fully unknown board falls back to a representative 3-up composition.
-   * Decorative only: the root's aria-busy already announces the state.
+   * The loading footprint. Until the first load produces a visible widget the
+   * board used to render the EMPTY state, so every initial load flashed "no
+   * widgets" and then jumped. Instead, the loading board renders its OWN
+   * anatomy on the SAME 12-track grid and the shared `AnatomySkeleton` reads
+   * it: when the items are already known their declared sizes are mirrored
+   * (the footprint the solver will reserve, so late widgets never jump), and
+   * only a fully unknown board falls back to a representative 3-up
+   * composition. The root's aria-busy already announces the state, so the
+   * renderer does not announce a second time.
    */
-  const skeletonSizes = useMemo<readonly WidgetBoardSize[]>(() => {
+  const placeholderSizes = useMemo<readonly WidgetBoardSize[]>(() => {
     if (!loading || visible.length > 0) return [];
     if (items.length > 0) {
       return items
@@ -896,7 +1011,7 @@ export function WidgetBoardEngine({
       style={style}
     >
       {editable ? (
-        <header className="ds-widget-board__toolbar" data-part="toolbar">
+        <BoardToolbar className="ds-widget-board__toolbar">
           <div
             className="ds-widget-board__toolbar-heading"
             data-part="toolbar-heading"
@@ -980,7 +1095,7 @@ export function WidgetBoardEngine({
               {editing ? labels.done : labels.customize}
             </Button>
           </div>
-        </header>
+        </BoardToolbar>
       ) : null}
 
       {editing ? (
@@ -1071,10 +1186,9 @@ export function WidgetBoardEngine({
                   const catalogDescription =
                     item.catalog?.description ?? item.header?.supporting;
                   return (
-                    <article
+                    <BoardCatalogItem
                       key={item.id}
                       className="ds-widget-board__catalog-item"
-                      data-part="catalog-item"
                     >
                       <div className="ds-widget-board__catalog-item-main">
                         {catalogIcon ? (
@@ -1129,7 +1243,7 @@ export function WidgetBoardEngine({
                           {labels.addWidget}
                         </Button>
                       </footer>
-                    </article>
+                    </BoardCatalogItem>
                   );
                 })}
               </div>
@@ -1162,25 +1276,31 @@ export function WidgetBoardEngine({
                 : item.height;
             const adaptiveStyle = adaptiveCellStyles[item.id];
             // Both grid lines come from the shared runtime's solver for the
-            // REAL tier capacity, stamped inline on every tier so the skin's
-            // container-query column rules never contest them. Visual order
-            // equals DOM/focus order by construction.
+            // REAL tier capacity. They travel as runtime-computed `--ds-*`
+            // channels, and `data-placed` is the flag the skin's own arm reads
+            // so the container-query column rules never contest them. Visual
+            // order equals DOM/focus order by construction.
+            const placed = !narrow && Boolean(adaptiveStyle);
             const cellStyle: CSSProperties | undefined =
-              narrow || !adaptiveStyle
-                ? undefined
-                : {
-                    gridColumn: adaptiveStyle.gridColumn,
-                    gridRow: adaptiveStyle.gridRow,
-                    height: effectiveHeight
-                      ? `${Math.round(effectiveHeight)}px`
-                      : undefined,
-                  };
+              placed && adaptiveStyle
+                ? ({
+                    "--ds-widget-board-cell-column": adaptiveStyle.gridColumn,
+                    "--ds-widget-board-cell-row": adaptiveStyle.gridRow,
+                    ...(effectiveHeight
+                      ? {
+                          "--ds-widget-board-cell-height": `${Math.round(
+                            effectiveHeight
+                          )}px`,
+                        }
+                      : {}),
+                  } as CSSProperties)
+                : undefined;
             return (
-              <article
+              <BoardCardShell
                 key={item.id}
                 ref={(node) => setCellRef(item.id, node)}
                 className="ds-widget-board__cell"
-                data-part="cell"
+                data-placed={placed ? "true" : "false"}
                 data-widget-id={item.id}
                 data-size={effectiveSize}
                 data-height={effectiveHeight ? "fixed" : "auto"}
@@ -1205,7 +1325,7 @@ export function WidgetBoardEngine({
                    * gesture starts on the bar it bubbles into, and the destructive
                    * control shields itself so pressing it never begins a drag.
                    */
-                  <div
+                  <BoardCellControls
                     className="ds-widget-board__cell-controls"
                     onPointerDown={
                       isWidgetMovable(item)
@@ -1262,7 +1382,7 @@ export function WidgetBoardEngine({
                         onClick={() => setVisible(item.id, false)}
                       />
                     ) : null}
-                  </div>
+                  </BoardCellControls>
                 ) : null}
                 {editing && !narrow ? (
                   <>
@@ -1310,8 +1430,9 @@ export function WidgetBoardEngine({
                          * pointer-only hit areas, which is only honest because
                          * both dimensions already have a keyboard equivalent.
                          */
+                        <BoardResizeEdge key={edge}>
+                          {(edgeState) => (
                         <ResizeHandle
-                          key={edge}
                           className="ds-widget-board__resize-handle"
                           operable={keyboardEdge}
                           orientation={widthEdge ? "vertical" : "horizontal"}
@@ -1342,6 +1463,7 @@ export function WidgetBoardEngine({
                           keyShortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home End"
                           anatomy={{
                             "data-part": "resize-handle",
+                            "data-state": edgeState,
                             "data-edge": edge,
                             "data-active": active ? "true" : "false",
                           }}
@@ -1400,6 +1522,8 @@ export function WidgetBoardEngine({
                             </span>
                           </span>
                         </ResizeHandle>
+                          )}
+                        </BoardResizeEdge>
                       );
                     })}
                   </>
@@ -1459,62 +1583,66 @@ export function WidgetBoardEngine({
                     ) : null}
                   </header>
                 ) : null}
-                <Stack className="ds-widget-board__content">
+                <Stack
+                  className="ds-widget-board__content"
+                  data-part="card-content"
+                >
                   {item.content}
                 </Stack>
-              </article>
+              </BoardCardShell>
             );
           })}
         </div>
       ) : loading ? (
-        <div
-          className="ds-widget-board__grid"
-          data-part="grid"
-          data-narrow={narrow ? "true" : "false"}
-          data-skeleton="true"
-          aria-hidden
-        >
-          {skeletonSizes.map((size, index) => (
-            <div
-              key={`${size}-${index}`}
-              className="ds-widget-board__cell ds-widget-board__cell--skeleton"
-              data-part="skeleton-cell"
-              data-size={size}
-            >
-              <div
-                className="ds-widget-board__skeleton-header"
-                data-part="skeleton-header"
+        <AnatomySkeleton busy={false}>
+          <div
+            className="ds-widget-board__grid"
+            data-part="grid"
+            data-narrow={narrow ? "true" : "false"}
+          >
+            {placeholderSizes.map((size, index) => (
+              <article
+                key={`${size}-${index}`}
+                className="ds-widget-board__cell"
+                data-part="card-shell"
+                data-size={size}
+                data-height="auto"
+                data-placed="false"
+                data-has-header="true"
               >
-                <span
-                  className="ds-widget-board__skeleton-icon"
-                  data-part="skeleton-icon"
+                <header
+                  className="ds-widget-board__item-header"
+                  data-part="item-header"
+                >
+                  <div
+                    className="ds-widget-board__item-heading"
+                    data-part="item-heading"
+                  >
+                    <span
+                      className="ds-widget-board__item-icon"
+                      data-part="item-icon"
+                    />
+                    <div
+                      className="ds-widget-board__item-copy"
+                      data-part="item-copy"
+                    >
+                      <h3
+                        className="ds-widget-board__item-title"
+                        data-part="item-title"
+                      >
+                        {"\u00a0"}
+                      </h3>
+                    </div>
+                  </div>
+                </header>
+                <Stack
+                  className="ds-widget-board__content"
+                  data-part="card-content"
                 />
-                <span
-                  className="ds-widget-board__skeleton-title"
-                  data-part="skeleton-title"
-                />
-              </div>
-              <div
-                className="ds-widget-board__skeleton-body"
-                data-part="skeleton-body"
-              >
-                <span
-                  className="ds-widget-board__skeleton-line"
-                  data-part="skeleton-line"
-                />
-                <span
-                  className="ds-widget-board__skeleton-line"
-                  data-part="skeleton-line"
-                />
-                <span
-                  className="ds-widget-board__skeleton-line"
-                  data-part="skeleton-line"
-                  data-width="short"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        </AnatomySkeleton>
       ) : (
         <div className="ds-widget-board__empty" data-part="empty-state">
           {emptyState}

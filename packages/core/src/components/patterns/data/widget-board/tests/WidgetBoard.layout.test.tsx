@@ -93,7 +93,7 @@ describe("WidgetBoard product layout", () => {
     expect(headers[0]).toHaveTextContent("Nine sources verified");
     expect(getByTestId("widget-icon")).toBeInTheDocument();
     expect(getByTestId("widget-accessory")).toBeInTheDocument();
-    expect(container.querySelectorAll('[data-part="cell"]')).toHaveLength(2);
+    expect(container.querySelectorAll('[data-part="card-shell"]')).toHaveLength(2);
   });
 
   it("keeps stored widget sizes honest instead of silently stretching the last cell", () => {
@@ -109,13 +109,13 @@ describe("WidgetBoard product layout", () => {
     );
 
     const cells = Array.from(
-      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+      container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
     );
     // C2b deliberate re-pin: the retired inline packer wrapped the sm to a
     // new row, stranding columns 11-12 forever (defect d). The shared solver
     // bends the trailing widget INSIDE its declared min/max range
     // (shrink-to-min policy, reason-coded) so the row completes.
-    expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
+    expect(cells.map((cell) => cell.style.getPropertyValue("--ds-widget-board-cell-column"))).toEqual([
       "1 / span 6",
       "7 / span 4",
       "11 / span 2",
@@ -136,9 +136,9 @@ describe("WidgetBoard product layout", () => {
     );
 
     const cells = Array.from(
-      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+      container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
     );
-    expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
+    expect(cells.map((cell) => cell.style.getPropertyValue("--ds-widget-board-cell-column"))).toEqual([
       "1 / span 3",
       "4 / span 3",
       "7 / span 3",
@@ -159,19 +159,19 @@ describe("WidgetBoard product layout", () => {
     );
 
     const cells = Array.from(
-      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+      container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
     );
     // C2b deliberate re-pin (reviewed, not silent): the legacy packer
     // floated `queue` ABOVE `pipeline` visually (visual ≠ DOM/focus order —
     // defect c). The solver keeps strict reading order: `pipeline` (wide,
     // min 6) shrinks within its range to complete row 1 beside `priority`,
     // and `queue` grows alone on row 2 — zero dead space, zero reorder.
-    expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
+    expect(cells.map((cell) => cell.style.getPropertyValue("--ds-widget-board-cell-column"))).toEqual([
       "1 / span 6",
       "7 / span 6",
       "1 / span 8",
     ]);
-    expect(cells.map((cell) => cell.style.gridRow)).toEqual([
+    expect(cells.map((cell) => cell.style.getPropertyValue("--ds-widget-board-cell-row"))).toEqual([
       "1 / span 1",
       "1 / span 1",
       "2 / span 1",
@@ -191,9 +191,12 @@ describe("WidgetBoard product layout", () => {
       "data-narrow",
       "true"
     );
+    const narrowCell = container.querySelector<HTMLElement>(
+      '[data-part="card-shell"]'
+    );
+    expect(narrowCell).toHaveAttribute("data-placed", "false");
     expect(
-      container.querySelector<HTMLElement>('[data-part="cell"]')?.style
-        .gridColumn
+      narrowCell?.style.getPropertyValue("--ds-widget-board-cell-column")
     ).toBe("");
   });
 
@@ -290,7 +293,7 @@ describe("WidgetBoard product layout", () => {
       />
     );
     const grid = container.querySelector<HTMLElement>('[data-part="grid"]');
-    const cell = container.querySelector<HTMLElement>('[data-part="cell"]');
+    const cell = container.querySelector<HTMLElement>('[data-part="card-shell"]');
     const corner = container.querySelector<HTMLElement>(
       '[data-edge="block-end-inline-end"]'
     );
@@ -372,7 +375,7 @@ describe("WidgetBoard product layout", () => {
     const move = await findByRole("button", { name: `${labels.move}: one` });
     const grid = container.querySelector<HTMLElement>('[data-part="grid"]');
     const initialCells = Array.from(
-      container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+      container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
     );
     expect(grid).not.toBeNull();
     expect(initialCells).toHaveLength(2);
@@ -428,7 +431,7 @@ describe("WidgetBoard product layout", () => {
 
     await waitFor(() => {
       const cells = Array.from(
-        container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+        container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
       );
       expect(cells.map((cell) => cell.dataset.widgetId)).toEqual([
         "two",

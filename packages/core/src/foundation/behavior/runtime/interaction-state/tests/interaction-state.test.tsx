@@ -173,7 +173,7 @@ describe('the handlers do not chain to a caller', () => {
     return (
       <button
         type="button"
-        onPointerDown={onPointerDown}
+        {...{ onPointerDown }}
         {...partAttributes('trigger', state)}
         {...handlers}
       >

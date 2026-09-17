@@ -73,11 +73,9 @@ const ROOT_FONT_PX = 16;
  * a pin records the line a reader will find rather than its normalisation.
  */
 const DECLARED_OFF_LADDER = [
-  // Component-container thresholds: the bottom tab bar switches to its wide
-  // arrangement, and the widget board to its multi-column arrangement, against
-  // their OWN container width. Neither is a viewport step.
+  // Component-container threshold: the bottom tab bar switches to its wide
+  // arrangement against its OWN container width. Not a viewport step.
   "presentation/components/skin/bottom-tab-bar/index.css: min-width: 600px",
-  "presentation/components/skin/widget-board/index.css: min-width: 840px",
   // Legacy inclusive viewport bound on the command-home console, duplicated in
   // the paint sheet. 640px matches this query AND the `sm` step at the same
   // viewport; owned by whoever unifies patterns/ with patterns-paint/.

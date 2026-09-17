@@ -79,7 +79,7 @@ function visibleOrder(next: WidgetBoardItem[]): string[] {
 
 function domOrder(container: HTMLElement): string[] {
   return Array.from(
-    container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+    container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
   ).map((cell) => cell.dataset.widgetId ?? "");
 }
 
@@ -109,11 +109,11 @@ function measure(container: HTMLElement, widths: number[]): void {
     left += width + 20;
   }
   for (const cell of Array.from(
-    container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+    container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
   )) {
     cell.getBoundingClientRect = () => {
       const order = Array.from(
-        container.querySelectorAll<HTMLElement>('[data-part="cell"]')
+        container.querySelectorAll<HTMLElement>('[data-part="card-shell"]')
       );
       const index = order.indexOf(cell);
       return rect(lefts[index] ?? 0, widths[index] ?? 300);

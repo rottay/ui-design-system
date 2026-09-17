@@ -54,6 +54,7 @@ import { kanbanBoardChromeDeriver } from "./chrome/kanban-board";
 import { calendarViewChromeDeriver } from "./chrome/calendar-view";
 import { fileManagerChromeDeriver } from "./chrome/file-manager";
 import { activeFiltersBarChromeDeriver } from "./chrome/active-filters-bar";
+import { widgetBoardChromeDeriver } from "./chrome/widget-board";
 import { savedViewsChromeDeriver } from "./chrome/saved-views";
 import { columnSettingsChromeDeriver } from "./chrome/column-settings";
 import { filterPanelChromeDeriver } from "./chrome/filter-panel";
@@ -170,6 +171,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   calendarViewChromeDeriver,
   fileManagerChromeDeriver,
   activeFiltersBarChromeDeriver,
+  widgetBoardChromeDeriver,
   savedViewsChromeDeriver,
   columnSettingsChromeDeriver,
   filterPanelChromeDeriver,

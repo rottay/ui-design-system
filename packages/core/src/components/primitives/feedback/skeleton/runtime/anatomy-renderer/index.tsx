@@ -92,6 +92,9 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'inline-edit-actions': 'pass',
   'item-copy': 'pass',
   'item-header': 'pass',
+  // A widget card's heading row holds the card's icon and its copy block: the
+  // parts inside it are drawn, the wrapper itself is not (WO-FAM-08 B8).
+  'item-heading': 'pass',
   left: 'pass',
   'list-scroll': 'pass',
   'list-table': 'pass',
@@ -115,6 +118,9 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'pagination-bar': 'pass',
   'pin-side': 'pass',
   'presets-region': 'pass',
+  // The quick-slice lane inside that region: the pill and the chips it holds
+  // are drawn, the wrapping lane itself is not (WO-FAM-08 B9).
+  'presets-row': 'pass',
   rail: 'pass',
   'range-group': 'pass',
   'record-cards': 'pass',
@@ -176,7 +182,6 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'header-description': 'line',
   'header-label': 'line',
   'item-eyebrow': 'line',
-  'item-heading': 'line',
   'item-name': 'line',
   'item-supporting': 'line',
   'item-title': 'line',
@@ -302,6 +307,9 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   // Nothing to stand in for with no data: spacers, drag and resize affordances,
   // empty and error states, announcers, an overlay with nothing under it.
   'catalog-no-results': 'omit',
+  // A board card's edit bar is drag and remove chrome: with no data there is
+  // nothing to move or remove, exactly like the drag affordances beside it.
+  'cell-controls': 'omit',
   'checkbox-overlay': 'omit',
   'drag-grip': 'omit',
   'drag-handle': 'omit',

@@ -82,25 +82,24 @@
       the tint for pure hairline cards, an editorial one can warm it. The
       accent origin is directional and mirrors under RTL. */
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__toolbar {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__toolbar[data-part="toolbar"] {
   min-height: calc(72px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell[data-part="card-shell"] {
   min-height: calc(132px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__item-header,
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__skeleton-header {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__item-header[data-part="item-header"] {
   min-height: calc(70px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__empty,
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__error {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__empty[data-part="empty-state"],
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__error[data-part="error-state"] {
   min-height: calc(220px * var(--ds-density-effective-scale, 1));
 }
 
-.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell {
+.ds-pattern-widget-board.ds-engine-modern .ds-widget-board__cell[data-part="card-shell"] {
   --_ds-widget-board-tint-origin: 100% 0%;
   background: radial-gradient(
       circle at var(--_ds-widget-board-tint-origin),
@@ -124,6 +123,6 @@
 
 [dir='rtl']
   .ds-pattern-widget-board.ds-engine-modern
-  .ds-widget-board__cell {
+  .ds-widget-board__cell[data-part="card-shell"] {
   --_ds-widget-board-tint-origin: 0% 0%;
 }

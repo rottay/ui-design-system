@@ -13,9 +13,22 @@
   --_ds-widget-board-z-resizing: calc(var(--_ds-widget-board-z-controls) + 1);
   --_ds-widget-board-z-handle: calc(var(--_ds-widget-board-z-controls) + 2);
   --_ds-widget-board-z-dragging: calc(var(--_ds-widget-board-z-handle) + 1);
+  /* Resting values of the runtime placement channels. The solver stamps them
+     per cell when it has placed one; declared here they have a producer, and
+     an unplaced board resolves them to the same `auto` the cell had before. */
+  --ds-widget-board-cell-column: auto;
+  --ds-widget-board-cell-row: auto;
+  --ds-widget-board-cell-height: auto;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar {
+/* The resize edge's state host draws no box: the handle inside it stays
+   absolutely positioned against the card, so the rendered geometry is the
+   one this family had before the host existed. */
+.ds-pattern-widget-board .ds-widget-board__resize-edge {
+  display: contents;
+}
+
+.ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,7 +71,7 @@
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar:active {
+.ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="pressed"], :active) {
   background-position: 100% 50%;
   border-color: color-mix(
     in srgb,
@@ -67,7 +80,7 @@
   );
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-heading {
+.ds-pattern-widget-board .ds-widget-board__toolbar-heading[data-part="toolbar-heading"] {
   display: flex;
   flex: 1 1 280px;
   align-items: center;
@@ -75,7 +88,7 @@
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-icon {
+.ds-pattern-widget-board .ds-widget-board__toolbar-icon[data-part="toolbar-icon"] {
   display: inline-grid;
   flex: 0 0 auto;
   width: 38px;
@@ -94,18 +107,18 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__toolbar:active
-  .ds-widget-board__toolbar-icon {
+  .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="pressed"], :active)
+  .ds-widget-board__toolbar-icon[data-part="toolbar-icon"] {
   transform: translateY(-1px) scale(1.025);
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-copy {
+.ds-pattern-widget-board .ds-widget-board__toolbar-copy[data-part="toolbar-copy"] {
   display: grid;
   gap: 2px;
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-context {
+.ds-pattern-widget-board .ds-widget-board__toolbar-context[data-part="toolbar-context"] {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
   font-size: var(--ds-text-eyebrow-size, var(--ds-font-size-xs));
@@ -121,7 +134,7 @@
   );
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-title {
+.ds-pattern-widget-board .ds-widget-board__toolbar-title[data-part="toolbar-title"] {
   margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
@@ -131,7 +144,7 @@
   line-height: 1.2;
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar-actions {
+.ds-pattern-widget-board .ds-widget-board__toolbar-actions[data-part="toolbar-actions"] {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -139,7 +152,7 @@
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog {
+  .ds-widget-board__catalog[data-part="catalog"] {
   display: grid;
   gap: var(--ds-spacing-4, 16px);
   width: 100%;
@@ -154,7 +167,7 @@
    380px width). */
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-header {
+  .ds-widget-board__catalog-header[data-part="catalog-header"] {
   display: grid;
   gap: 3px;
   max-width: 680px;
@@ -177,14 +190,14 @@
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-grid {
+  .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 272px), 1fr));
   gap: var(--ds-spacing-3, 12px);
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-item {
+  .ds-widget-board__catalog-item[data-part="catalog-item"] {
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3, 12px);
@@ -205,7 +218,7 @@
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-item:active {
+  .ds-widget-board__catalog-item[data-part="catalog-item"]:is([data-state~="pressed"], :active) {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 28%,
@@ -307,7 +320,7 @@
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-preview {
+  .ds-widget-board__catalog-preview[data-part="catalog-preview"] {
   display: flex;
   flex: 1 1 auto;
   align-items: center;
@@ -341,7 +354,7 @@
   color: var(--ds-color-text-muted);
 }
 
-.ds-pattern-widget-board .ds-widget-board__grid {
+.ds-pattern-widget-board .ds-widget-board__grid[data-part="grid"] {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-auto-rows: 8px;
@@ -362,7 +375,7 @@
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__grid[data-narrow="true"] {
+.ds-pattern-widget-board .ds-widget-board__grid[data-part="grid"][data-narrow="true"] {
   grid-template-columns: minmax(0, 1fr);
   /* The narrow (no-solver) stack owns its rows: tracks size to each cell's
      content. The 8px quantum is only meaningful when the runtime stamps row
@@ -373,12 +386,12 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__grid[data-narrow="true"]
-  > .ds-widget-board__cell {
+  .ds-widget-board__grid[data-part="grid"][data-narrow="true"]
+  > .ds-widget-board__cell[data-part="card-shell"] {
   grid-column: 1 / -1;
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"] {
   position: relative;
   container-type: inline-size;
   container-name: ds-widget-cell;
@@ -437,26 +450,26 @@
 /* Entry stagger cadence derives from the fast motion rung (fast × 0.3 ≈ 36ms
    per step, matching the legacy 35ms cadence) so a tenant's motion scale
    slows the whole sequence proportionally — no raw millisecond literals. */
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(2) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(2) {
   animation-delay: calc(var(--ds-motion-fast) * 0.3);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(3) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(3) {
   animation-delay: calc(var(--ds-motion-fast) * 0.6);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(4) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(4) {
   animation-delay: calc(var(--ds-motion-fast) * 0.9);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(5) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(5) {
   animation-delay: calc(var(--ds-motion-fast) * 1.2);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(6) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(6) {
   animation-delay: calc(var(--ds-motion-fast) * 1.5);
 }
-.ds-pattern-widget-board .ds-widget-board__cell:nth-child(n + 7) {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:nth-child(n + 7) {
   animation-delay: calc(var(--ds-motion-fast) * 1.8);
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell:active {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active) {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 28%,
@@ -468,7 +481,7 @@
   --ds-widget-board-hover-lift: -2px;
 }
 
-.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell {
+.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell[data-part="card-shell"] {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 24%,
@@ -479,7 +492,7 @@
     0 10px 24px -22px color-mix(in srgb, var(--ds-color-text-primary) 34%, transparent);
 }
 
-.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell:active {
+.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active) {
   --ds-widget-board-hover-lift: 0px;
 }
 
@@ -490,7 +503,7 @@
    The block sits before the resizing/dragging state rules so those states
    still win their specificity ties while a gesture is running. */
 @media (hover: hover) {
-  .ds-pattern-widget-board .ds-widget-board__toolbar:hover {
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="hovered"], :hover) {
     background-position: 100% 50%;
     border-color: color-mix(
       in srgb,
@@ -500,13 +513,13 @@
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__toolbar:hover
-    .ds-widget-board__toolbar-icon {
+    .ds-widget-board__toolbar[data-part="toolbar"]:is([data-state~="hovered"], :hover)
+    .ds-widget-board__toolbar-icon[data-part="toolbar-icon"] {
     transform: translateY(-1px) scale(1.025);
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item:hover {
+    .ds-widget-board__catalog-item[data-part="catalog-item"]:is([data-state~="hovered"], :hover) {
     border-color: color-mix(
       in srgb,
       var(--ds-color-primary) 28%,
@@ -517,7 +530,7 @@
     transform: translateY(-1px);
   }
 
-  .ds-pattern-widget-board .ds-widget-board__cell:hover {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover) {
     border-color: color-mix(
       in srgb,
       var(--ds-color-primary) 28%,
@@ -530,29 +543,29 @@
   }
 
   .ds-pattern-widget-board[data-editing="true"]
-    .ds-widget-board__cell:hover {
+    .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover) {
     --ds-widget-board-hover-lift: 0px;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__cell:hover
-    > .ds-widget-board__item-header {
+    .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover)
+    > .ds-widget-board__item-header[data-part="item-header"] {
     background-position: 100% 50%;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__cell:hover
-    .ds-widget-board__item-icon {
+    .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="hovered"], :hover)
+    .ds-widget-board__item-icon[data-part="item-icon"] {
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle:hover {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="hovered"], :hover) {
     color: var(--ds-color-text-secondary);
     outline: none;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     opacity: 1;
     background: color-mix(
@@ -563,50 +576,50 @@
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge^="inline"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     transform: translateY(-50%) scaleY(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:is(
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
       [data-edge="block-start"],
       [data-edge="block-end"]
-    ):hover
+    ):is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     transform: translateX(-50%) scaleX(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge*="-inline-"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-rail {
     background: transparent;
     transform: scale(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     opacity: 1;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge^="inline"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     transform: translateY(-50%) translateX(0) scale(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle:is(
+    .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
       [data-edge="block-start"],
       [data-edge="block-end"]
-    ):hover
+    ):is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     transform: translateX(-50%) translateY(0) scale(1);
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge*="-inline-"]:hover
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:is([data-state~="hovered"], :hover)
     .ds-widget-board__resize-indicator {
     transform: translate(0, 0) scale(1);
   }
@@ -615,12 +628,12 @@
 /* Forced colors: frames read as ButtonText, the drop target and the focus
    ring read as Highlight; decorative shadows and mixed paints drop out. */
 @media (forced-colors: active) {
-  .ds-pattern-widget-board .ds-widget-board__toolbar,
-  .ds-pattern-widget-board .ds-widget-board__cell,
-  .ds-pattern-widget-board .ds-widget-board__empty,
-  .ds-pattern-widget-board .ds-widget-board__error,
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"],
+  .ds-pattern-widget-board .ds-widget-board__empty[data-part="empty-state"],
+  .ds-pattern-widget-board .ds-widget-board__error[data-part="error-state"],
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item,
+    .ds-widget-board__catalog-item[data-part="catalog-item"],
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog-empty {
     border-color: ButtonText;
@@ -629,10 +642,10 @@
   /* Secondary frames (icon wells, chips, readouts, the resize indicator and
      the edit-header separator) keep a system-colored edge so the chrome
      structure survives the forced palette. */
-  .ds-pattern-widget-board .ds-widget-board__toolbar-icon,
-  .ds-pattern-widget-board .ds-widget-board__item-icon,
-  .ds-pattern-widget-board .ds-widget-board__cell-controls,
-  .ds-pattern-widget-board .ds-widget-board__item-header,
+  .ds-pattern-widget-board .ds-widget-board__toolbar-icon[data-part="toolbar-icon"],
+  .ds-pattern-widget-board .ds-widget-board__item-icon[data-part="item-icon"],
+  .ds-pattern-widget-board .ds-widget-board__cell-controls[data-part="cell-controls"],
+  .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"],
   .ds-pattern-widget-board .ds-widget-board__size-readout,
   .ds-pattern-widget-board .ds-widget-board__resize-indicator,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
@@ -642,12 +655,12 @@
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog-size,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-preview {
+    .ds-widget-board__catalog-preview[data-part="catalog-preview"] {
     border-color: ButtonText;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__cell[data-dragging="true"],
-  .ds-pattern-widget-board .ds-widget-board__cell[data-drop-target="true"] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-dragging="true"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-drop-target="true"] {
     border-color: Highlight;
     outline-color: Highlight;
   }
@@ -660,27 +673,14 @@
     background: ButtonText;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle:focus-visible {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }
-
-  /* Skeleton: the frame survives (cell + header hairline above); the
-     placeholder blocks read as disabled system paint and the pulse stops. */
-  .ds-pattern-widget-board .ds-widget-board__skeleton-header {
-    border-color: ButtonText;
-  }
-
-  .ds-pattern-widget-board .ds-widget-board__skeleton-icon,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-title,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-line {
-    background: GrayText;
-    animation: none;
-  }
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell[data-resizing="true"] {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-resizing="true"] {
   z-index: var(--_ds-widget-board-z-resizing, 6);
   box-shadow: inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent),
@@ -690,7 +690,7 @@
   will-change: height;
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell[data-dragging="true"] {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-dragging="true"] {
   z-index: var(--_ds-widget-board-z-dragging, 8);
   opacity: 0.94;
   box-shadow: inset 0 1px 0
@@ -711,7 +711,7 @@
    a dashed, offset outline is the system's "drop here" grammar (solid rings
    stay reserved for focus), so the state survives achromatic vision and
    forced colors alike. */
-.ds-pattern-widget-board .ds-widget-board__cell[data-drop-target="true"] {
+.ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-drop-target="true"] {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 62%,
@@ -722,7 +722,7 @@
   outline-offset: 2px;
 }
 
-.ds-pattern-widget-board .ds-widget-board__content {
+.ds-pattern-widget-board .ds-widget-board__content[data-part="card-content"] {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
@@ -731,14 +731,14 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-height="fixed"]
-  .ds-widget-board__content {
+  .ds-widget-board__cell[data-part="card-shell"][data-height="fixed"]
+  .ds-widget-board__content[data-part="card-content"] {
   flex: 1 1 auto;
   overflow: auto;
   overscroll-behavior: contain;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-header {
+.ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"] {
   position: relative;
   z-index: var(--_ds-widget-board-z-header, 1);
   display: flex;
@@ -773,8 +773,8 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell:active
-  > .ds-widget-board__item-header {
+  .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active)
+  > .ds-widget-board__item-header[data-part="item-header"] {
   background-position: 100% 50%;
 }
 
@@ -782,12 +782,12 @@
    design (a light-sweep across the band), so it mirrors about the vertical
    axis under RTL — 112deg ↔ 68deg — through one private channel. LTR keeps
    the exact fallback; an authored `--ds-card-header-bg` is unaffected. */
-[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__toolbar,
-[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__item-header {
+[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"],
+[dir='rtl'] .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"] {
   --_ds-widget-board-band-angle: 68deg;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-heading {
+.ds-pattern-widget-board .ds-widget-board__item-heading[data-part="item-heading"] {
   display: flex;
   flex: 1 1 auto;
   align-items: flex-start;
@@ -795,7 +795,7 @@
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-icon {
+.ds-pattern-widget-board .ds-widget-board__item-icon[data-part="item-icon"] {
   display: grid;
   flex: 0 0 auto;
   width: 38px;
@@ -814,18 +814,18 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell:active
-  .ds-widget-board__item-icon {
+  .ds-widget-board__cell[data-part="card-shell"]:is([data-state~="pressed"], :active)
+  .ds-widget-board__item-icon[data-part="item-icon"] {
   transform: translateY(-1px) scale(1.025);
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-copy {
+.ds-pattern-widget-board .ds-widget-board__item-copy[data-part="item-copy"] {
   display: grid;
   gap: 3px;
   min-width: 0;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-eyebrow {
+.ds-pattern-widget-board .ds-widget-board__item-eyebrow[data-part="item-eyebrow"] {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
   font-size: var(--ds-text-eyebrow-size, var(--ds-font-size-xs));
@@ -839,7 +839,7 @@
   );
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-title {
+.ds-pattern-widget-board .ds-widget-board__item-title[data-part="item-title"] {
   min-width: 0;
   margin: 0;
   color: var(--ds-color-text-primary);
@@ -851,7 +851,7 @@
   text-wrap: balance;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-supporting {
+.ds-pattern-widget-board .ds-widget-board__item-supporting[data-part="item-supporting"] {
   overflow: hidden;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 12px);
@@ -859,7 +859,7 @@
   text-overflow: ellipsis;
 }
 
-.ds-pattern-widget-board .ds-widget-board__item-accessory {
+.ds-pattern-widget-board .ds-widget-board__item-accessory[data-part="item-accessory"] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -867,30 +867,30 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-size="sm"]
-  .ds-widget-board__item-header {
+  .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+  .ds-widget-board__item-header[data-part="item-header"] {
   min-height: 62px;
   padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-size="sm"]
-  .ds-widget-board__item-icon {
+  .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+  .ds-widget-board__item-icon[data-part="item-icon"] {
   width: 32px;
   height: 32px;
   border-radius: var(--ds-radius-md, 9px);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell[data-size="sm"]
-  .ds-widget-board__item-title {
+  .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+  .ds-widget-board__item-title[data-part="item-title"] {
   font-size: var(--ds-font-size-sm, 14px);
 }
 
 /* The whole edit header is the grab target, so the drag affordance is not
    bound to the width of the move control. The Button and Button.Icon inside it
    keep their own primitive chrome. */
-.ds-pattern-widget-board .ds-widget-board__cell-controls {
+.ds-pattern-widget-board .ds-widget-board__cell-controls[data-part="cell-controls"] {
   position: relative;
   z-index: var(--_ds-widget-board-z-controls, 5);
   display: flex;
@@ -912,7 +912,7 @@
   user-select: none;
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell-controls:active {
+.ds-pattern-widget-board .ds-widget-board__cell-controls[data-part="cell-controls"]:is([data-state~="pressed"], :active) {
   cursor: grabbing;
 }
 
@@ -936,22 +936,11 @@
   white-space: nowrap;
 }
 
-/* RETIRE CANDIDATE (wave law 11 — kept, not deleted): no engine stamps
-   `ds-widget-board__drag` today; the grab cursor lives on the cell-controls
-   bar and the move Button. independent code audit adjudicates removal. */
-.ds-pattern-widget-board .ds-widget-board__drag {
-  cursor: grab;
-}
-
-.ds-pattern-widget-board .ds-widget-board__drag:active {
-  cursor: grabbing;
-}
-
 /* The entire physical border is the resize target. The visual rail only
    appears on hover/focus/drag, so edit mode stays precise without decorating
    a permanent coloured side. Inline-end and block-end remain keyboard
    sliders; their opposite edges provide the same pointer affordance. */
-.ds-pattern-widget-board .ds-widget-board__resize-handle {
+.ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"] {
   position: absolute;
   z-index: var(--_ds-widget-board-z-handle, 7);
   display: block;
@@ -968,80 +957,82 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-start"],
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"],
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"] {
   inset-block: 9px;
   width: 14px;
   cursor: ew-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"] {
   inset-inline-start: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"] {
   inset-inline-end: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start"],
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start"],
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"] {
   inset-inline: 9px;
   height: 14px;
   cursor: ns-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start"] {
   inset-block-start: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"] {
   inset-block-end: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"] {
   width: 20px;
   height: 20px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-start"] {
   inset-block-start: 0;
   inset-inline-start: 0;
   cursor: nwse-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-end"] {
   inset-block-start: 0;
   inset-inline-end: 0;
   cursor: nesw-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-start"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"] {
   inset-block-end: 0;
   inset-inline-start: 0;
   cursor: nesw-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-end"] {
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"] {
   inset-block-end: 0;
   inset-inline-end: 0;
   cursor: nwse-resize;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   ) {
@@ -1049,7 +1040,7 @@
   outline: none;
 }
 
-.ds-pattern-widget-board .ds-widget-board__resize-handle:focus-visible {
+.ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"]:is([data-state~="focus-visible"], :focus-visible) {
   border-radius: 999px;
   box-shadow: var(
     --ds-shadow-focus-ring,
@@ -1073,7 +1064,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge^="inline"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]
   .ds-widget-board__resize-rail {
   inset-block-start: 50%;
   inset-inline: 6px;
@@ -1083,7 +1074,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
   )
@@ -1096,8 +1087,10 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -1111,8 +1104,10 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge^="inline"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -1121,16 +1116,22 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
-  ):where(:focus-visible, :active, [data-active="true"])
+  ):where(
+    [data-state~="focus-visible"],
+    :focus-visible,
+    [data-state~="pressed"],
+    :active,
+    [data-active="true"]
+  )
   .ds-widget-board__resize-rail {
   transform: translateX(-50%) scaleX(1);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]
   .ds-widget-board__resize-rail {
   inset: 6px;
   width: 8px;
@@ -1146,31 +1147,44 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-start"]
   .ds-widget-board__resize-rail {
-  border-width: 2px 0 0 2px;
+  border-block-start-width: 2px;
+  border-block-end-width: 0;
+  border-inline-start-width: 2px;
+  border-inline-end-width: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-end"]
   .ds-widget-board__resize-rail {
-  border-width: 2px 2px 0 0;
+  border-block-start-width: 2px;
+  border-block-end-width: 0;
+  border-inline-start-width: 0;
+  border-inline-end-width: 2px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"]
   .ds-widget-board__resize-rail {
-  border-width: 0 0 2px 2px;
+  border-block-start-width: 0;
+  border-block-end-width: 2px;
+  border-inline-start-width: 2px;
+  border-inline-end-width: 0;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"]
   .ds-widget-board__resize-rail {
-  border-width: 0 2px 2px 0;
+  border-block-start-width: 0;
+  border-block-end-width: 2px;
+  border-inline-start-width: 0;
+  border-inline-end-width: 2px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:where(
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -1205,7 +1219,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 50%;
   inset-inline-start: 20px;
@@ -1213,7 +1227,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 50%;
   inset-inline-end: 20px;
@@ -1221,7 +1235,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
   )
@@ -1231,19 +1245,19 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 20px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"]
   .ds-widget-board__resize-indicator {
   inset-block-end: 20px;
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-start"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 20px;
   inset-inline-start: 20px;
@@ -1251,7 +1265,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-start-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-start-inline-end"]
   .ds-widget-board__resize-indicator {
   inset-block-start: 20px;
   inset-inline-end: 20px;
@@ -1259,7 +1273,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-start"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"]
   .ds-widget-board__resize-indicator {
   inset-block-end: 20px;
   inset-inline-start: 20px;
@@ -1267,7 +1281,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge="block-end-inline-end"]
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"]
   .ds-widget-board__resize-indicator {
   inset-block-end: 20px;
   inset-inline-end: 20px;
@@ -1275,8 +1289,10 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -1285,8 +1301,10 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge^="inline"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge^="inline"]:where(
+    [data-state~="focus-visible"],
     :focus-visible,
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -1295,16 +1313,23 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle:is(
+  .ds-widget-board__resize-handle[data-part="resize-handle"]:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
-  ):where(:focus-visible, :active, [data-active="true"])
+  ):where(
+    [data-state~="focus-visible"],
+    :focus-visible,
+    [data-state~="pressed"],
+    :active,
+    [data-active="true"]
+  )
   .ds-widget-board__resize-indicator {
   transform: translateX(-50%) translateY(0) scale(1);
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__resize-handle[data-edge*="-inline-"]:where(
+  .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge*="-inline-"]:where(
+    [data-state~="pressed"],
     :active,
     [data-active="true"]
   )
@@ -1336,22 +1361,22 @@
    separator keeps keyboard operation, so height stays fully operable. */
 @media (pointer: coarse) {
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="inline-start"],
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-start"],
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="inline-end"] {
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="inline-end"] {
     inset-block-start: 56px;
     width: 44px;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="block-end"] {
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end"] {
     height: 32px;
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="block-end-inline-start"],
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-start"],
   .ds-pattern-widget-board
-    .ds-widget-board__resize-handle[data-edge="block-end-inline-end"] {
+    .ds-widget-board__resize-handle[data-part="resize-handle"][data-edge="block-end-inline-end"] {
     width: 36px;
     height: 36px;
   }
@@ -1365,7 +1390,7 @@
 
 /* The empty board consumes the shared empty-state premium contract so a blank
    workspace reads like the rest of the system's empty surfaces. */
-.ds-pattern-widget-board .ds-widget-board__empty {
+.ds-pattern-widget-board .ds-widget-board__empty[data-part="empty-state"] {
   display: grid;
   min-height: 220px;
   padding: var(--ds-spacing-6, 24px);
@@ -1383,7 +1408,7 @@
 /* Board-level error: the same quiet framed region as the empty state, keyed
    to the error role (tinted frame, never error paint alone — the consumer's
    composed content carries the copy, icon and recovery action). */
-.ds-pattern-widget-board .ds-widget-board__error {
+.ds-pattern-widget-board .ds-widget-board__error[data-part="error-state"] {
   display: grid;
   min-height: 220px;
   padding: var(--ds-spacing-6, 24px);
@@ -1401,100 +1426,6 @@
      therefore keyed to the panel color the gradient itself resolves toward. */
   background: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-surface-panel-bg));
   color: var(--ds-color-text-secondary);
-}
-
-/* Loading skeleton: quiet placeholder cells on the SAME 12-track grid, so
-   the first paint already owns the final composition's footprint and the
-   swap to real content is paint-only (FLIP then covers the settle). Cells
-   reuse the card frame class, keeping border/radius/background identical to
-   real widgets; the row span reserves a representative widget height (18
-   tracks ≈ 18 × row quantum + seams, measured by the same formula the
-   runtime solves with). Non-interactive by construction. */
-.ds-pattern-widget-board .ds-widget-board__grid[data-skeleton="true"] {
-  pointer-events: none;
-}
-
-.ds-pattern-widget-board
-  .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-  .ds-widget-board__cell {
-  grid-row: span 18;
-}
-
-/* Full-width tiers mirror the declared size vocabulary; the mid/single-tier
-   container queries above already re-span these same `[data-size]` cells,
-   and the narrow stack places them full-width by its own rule. */
-@container ds-widget-board (min-width: 840px) {
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="sm"] {
-    grid-column: span 3;
-  }
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="md"] {
-    grid-column: span 4;
-  }
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="lg"] {
-    grid-column: span 6;
-  }
-  .ds-pattern-widget-board
-    .ds-widget-board__grid[data-skeleton="true"]:not([data-narrow="true"])
-    .ds-widget-board__cell[data-size="wide"] {
-    grid-column: 1 / -1;
-  }
-}
-
-/* Skeleton anatomy mirrors the widget's: an icon+title header row over a
-   line stack, with the same padding and hairline, so the placeholder reads
-   as the card it stands for. The pulse rides the canonical attention rung
-   and goes quiet under reduced motion (block below). */
-.ds-pattern-widget-board .ds-widget-board__skeleton-header {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-3, 12px);
-  min-height: 70px;
-  padding: var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px);
-  border-bottom: 1px solid
-    var(--ds-surface-card-border, var(--ds-color-border-primary));
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-body {
-  display: grid;
-  gap: var(--ds-spacing-3, 12px);
-  padding: var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px);
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-icon,
-.ds-pattern-widget-board .ds-widget-board__skeleton-title,
-.ds-pattern-widget-board .ds-widget-board__skeleton-line {
-  background: var(--ds-surface-panel-bg, var(--ds-color-bg-secondary));
-  animation: ds-foundation-pulse
-    var(--ds-motion-attention, 1.5s)
-    var(--ds-motion-ease-in-out, ease-in-out) infinite;
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-icon {
-  inline-size: 38px;
-  block-size: 38px;
-  border-radius: var(--ds-radius-lg, 11px);
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-title {
-  inline-size: 42%;
-  block-size: 14px;
-  border-radius: 999px;
-}
-
-.ds-pattern-widget-board .ds-widget-board__skeleton-line {
-  block-size: 12px;
-  border-radius: 999px;
-}
-
-.ds-pattern-widget-board
-  .ds-widget-board__skeleton-line[data-width="short"] {
-  inline-size: 58%;
 }
 
 @keyframes ds-widget-board-cell-enter {
@@ -1515,101 +1446,116 @@
    full-width card and produced the dead vertical space this pattern exists to
    prevent. */
 @container ds-widget-board (max-width: 839px) {
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="sm"],
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="md"] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="sm"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="md"] {
     grid-column: span 6;
   }
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="lg"],
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size="wide"] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="lg"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size="wide"] {
     grid-column: 1 / -1;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"] {
     display: none;
   }
 }
 
 @container ds-widget-board (max-width: 639px) {
-  .ds-pattern-widget-board .ds-widget-board__toolbar {
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"] {
     align-items: stretch;
     flex-direction: column;
   }
-  .ds-pattern-widget-board .ds-widget-board__toolbar-actions > * {
+  .ds-pattern-widget-board .ds-widget-board__toolbar-actions[data-part="toolbar-actions"] > * {
     flex: 1 1 auto;
   }
-  .ds-pattern-widget-board .ds-widget-board__toolbar-heading {
+  .ds-pattern-widget-board .ds-widget-board__toolbar-heading[data-part="toolbar-heading"] {
     flex: 0 1 auto;
     width: 100%;
   }
-  .ds-pattern-widget-board .ds-widget-board__grid {
+  .ds-pattern-widget-board .ds-widget-board__grid[data-part="grid"] {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--ds-spacing-3, 12px);
   }
-  .ds-pattern-widget-board .ds-widget-board__cell[data-size] {
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"][data-size] {
     grid-column: 1 / -1;
   }
 
-  .ds-pattern-widget-board .ds-widget-board__item-header {
+  .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"] {
     align-items: stretch;
     flex-direction: column;
     min-height: 0;
     padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
   }
 
-  .ds-pattern-widget-board .ds-widget-board__item-heading {
+  .ds-pattern-widget-board .ds-widget-board__item-heading[data-part="item-heading"] {
     width: 100%;
   }
 
   /* In the stacked header the accessory drops under the copy column, so it
      aligns with the title text: icon box + heading gap. The compact widget
      carries a smaller icon box and needs its own offset. */
-  .ds-pattern-widget-board .ds-widget-board__item-accessory {
+  .ds-pattern-widget-board .ds-widget-board__item-accessory[data-part="item-accessory"] {
     align-self: flex-start;
     justify-content: flex-start;
     padding-inline-start: calc(38px + var(--ds-spacing-3, 12px));
   }
 
   .ds-pattern-widget-board
-    .ds-widget-board__cell[data-size="sm"]
-    .ds-widget-board__item-accessory {
+    .ds-widget-board__cell[data-part="card-shell"][data-size="sm"]
+    .ds-widget-board__item-accessory[data-part="item-accessory"] {
     padding-inline-start: calc(32px + var(--ds-spacing-3, 12px));
   }
 
-  .ds-pattern-widget-board .ds-widget-board__resize-handle {
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"] {
     display: none;
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog {
+    .ds-widget-board__catalog[data-part="catalog"] {
     gap: var(--ds-spacing-3, 12px);
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-grid {
+    .ds-widget-board__catalog-grid[data-part="catalog-grid"] {
     grid-template-columns: minmax(0, 1fr);
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item {
+    .ds-widget-board__catalog-item[data-part="catalog-item"] {
     min-height: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-widget-board .ds-widget-board__cell,
-  .ds-pattern-widget-board .ds-widget-board__toolbar,
-  .ds-pattern-widget-board .ds-widget-board__toolbar-icon,
-  .ds-pattern-widget-board .ds-widget-board__item-header,
-  .ds-pattern-widget-board .ds-widget-board__item-icon,
-  .ds-pattern-widget-board .ds-widget-board__resize-handle,
+  .ds-pattern-widget-board .ds-widget-board__cell[data-part="card-shell"],
+  .ds-pattern-widget-board .ds-widget-board__toolbar[data-part="toolbar"],
+  .ds-pattern-widget-board .ds-widget-board__toolbar-icon[data-part="toolbar-icon"],
+  .ds-pattern-widget-board .ds-widget-board__item-header[data-part="item-header"],
+  .ds-pattern-widget-board .ds-widget-board__item-icon[data-part="item-icon"],
+  .ds-pattern-widget-board .ds-widget-board__resize-handle[data-part="resize-handle"],
   .ds-pattern-widget-board .ds-widget-board__resize-rail,
   .ds-pattern-widget-board .ds-widget-board__resize-indicator,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-icon,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-title,
-  .ds-pattern-widget-board .ds-widget-board__skeleton-line,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-    .ds-widget-board__catalog-item {
+    .ds-widget-board__catalog-item[data-part="catalog-item"] {
     animation: none;
     transition: none;
   }
+}
+
+/* PLACEMENT: both grid lines, and the height a resize committed, are computed
+   by the shared solver and travel as runtime `--ds-widget-board-cell-*`
+   channels. `data-placed` is the solver's own flag and this arm is the last
+   rule in the file, so a placed cell is never contested by the container-query
+   span rules above -- which is exactly what the retired inline stamp
+   guaranteed. A cell the solver did not place (narrow, or before the first
+   measure) keeps the spans its declared size earns. */
+.ds-pattern-widget-board
+  .ds-widget-board__cell[data-part="card-shell"][data-placed="true"] {
+  grid-column: var(--ds-widget-board-cell-column);
+  grid-row: var(--ds-widget-board-cell-row);
+}
+
+.ds-pattern-widget-board
+  .ds-widget-board__cell[data-part="card-shell"][data-placed="true"][data-height="fixed"] {
+  height: var(--ds-widget-board-cell-height);
 }

@@ -46,7 +46,7 @@ function item(
 
 function cellGrid(container: HTMLElement, id: string) {
   const cell = container.querySelector<HTMLElement>(`[data-widget-id="${id}"]`)!;
-  return { column: cell.style.gridColumn, row: cell.style.gridRow };
+  return { column: cell.style.getPropertyValue("--ds-widget-board-cell-column"), row: cell.style.getPropertyValue("--ds-widget-board-cell-row") };
 }
 
 describe('WidgetBoardEngine — shared adaptive solver (default engine)', () => {
