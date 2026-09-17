@@ -20,7 +20,7 @@ import type { MessageConfig, MessageInstance, MessageItemProps, MessageProviderP
 import { MESSAGE_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n/composition/translation';
 import { NotifierItem, NotifierStack } from '../../../notifier';
 
 interface InternalMessage extends MessageItemProps {

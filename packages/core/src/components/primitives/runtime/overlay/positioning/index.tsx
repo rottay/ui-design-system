@@ -72,7 +72,7 @@ import React, {
 } from 'react';
 
 import type { TextDirection } from '@/foundation/i18n/kernel/contracts';
-import { useOptionalDirection } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection } from '@/infrastructure/runtime/i18n/composition/direction';
 
 // ---------------------------------------------------------------------------
 // Public contract
