@@ -34,10 +34,10 @@
  * are banned by the source-gated contract.
  *
  * SOURCE-GATED CONTRACT RULES (FilterPanel.real-engines.test.tsx reads this
- * file): the `[data-part='reset-button']:hover` rule and a
- * `[data-part='input']…:focus` selector must exist. The hover rides inside the
- * `@media (hover: hover)` guard (house hover law) with an unguarded `:active`
- * twin; the input slot's `:focus-within` variant is in the geometry rule
+ * file): the reset button's hover/press tone must live here as the composed
+ * Button's ghost channels — never as imperative handlers and never as a second
+ * `:hover`/`:active` decision — and a `[data-part='input']…:focus` selector
+ * must exist. The input slot's `:focus-within` variant is in the geometry rule
  * below: the composed Input/InputNumber owns its chrome and focus ring, so
  * the slot deliberately paints nothing on focus — the selector documents the
  * pass-through.
@@ -106,19 +106,18 @@
   transform: rotate(90deg);
 }
 
-/* ---- reset (clear-all) ghost Button: the source-gated pointer treatment.
-        Hover law: the hover variant lives inside the (hover: hover) guard
-        below; this unguarded :active twin gives touch the same feedback. ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:active {
-  color: var(--ds-color-error);
-  background: var(--ds-surface-highlight);
-}
-
-@media (hover: hover) {
-  .ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:hover {
-    color: var(--ds-color-error);
-    background: var(--ds-surface-highlight);
-  }
+/* ---- reset (clear-all) ghost Button: the pattern owns the TONE, the
+        primitive owns the DECISION. The composed ghost Button already decides
+        hover and press once (kernel `data-state` with the platform pseudo-class
+        as its fallback) and paints them from these channels -- its hover arm
+        sits inside the same (hover: hover) guard, its press arm outside it --
+        so the panel states the two washes here instead of taking a second
+        decision of its own. ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'] {
+  --ds-button-ghost-color-hover: var(--ds-color-error);
+  --ds-button-ghost-bg-hover: var(--ds-surface-highlight);
+  --ds-button-ghost-color-active: var(--ds-color-error);
+  --ds-button-ghost-bg-active: var(--ds-surface-highlight);
 }
 
 /* ---- fields container: the two layouts (geometry drained from the engine) ---- */

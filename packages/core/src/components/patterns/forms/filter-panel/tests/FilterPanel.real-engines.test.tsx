@@ -144,11 +144,41 @@ describe.each(['modern', 'rustic'] as const)(
       ).toEqual([]);
     });
 
-    it('carries the reset-button hover rule the imperative handler pair used to own', () => {
+    it('carries the reset-button hover tone the imperative handler pair used to own', () => {
+      /* Modern: the composed ghost Button decides hover and press once and
+         reads its tone from these channels, so the wash is authored as the
+         channels rather than as a second `:hover` decision here. Rustic is
+         frozen and still carries the literal pseudo-class rule. */
+      const RESET_TONE: Record<'modern' | 'rustic', RegExp[]> =
+        {
+          modern: [
+            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-color-hover/,
+            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-bg-hover/,
+            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-color-active/,
+            /\[data-part='reset-button'\][^{]*\{[^}]*--ds-button-ghost-bg-active/,
+          ],
+          rustic: [/\[data-part='reset-button'\][^{]*:hover/],
+        };
+      for (const pattern of RESET_TONE[engine]) {
+        expect(
+          pattern.test(SKINS[engine]),
+          `the reset-button hover/press tone (replacing onMouseEnter/onMouseLeave) is missing: ${pattern}`,
+        ).toBe(true);
+      }
+    });
+
+    it('takes no second hover or press decision on the reset button', () => {
+      /* The tone moved to the primitive's channels precisely so the panel stops
+         deciding a state the composed Button already decides (F-37). Rustic is
+         frozen: its own rule is the decision there. */
+      const second = engine === 'modern'
+        ? rules.filter(({ selector }) =>
+            /\[data-part='reset-button'\]/.test(selector) && /:hover|:active/.test(selector))
+        : [];
       expect(
-        /\[data-part='reset-button'\][^{]*:hover/.test(SKINS[engine]),
-        'the reset-button :hover rule (replacing onMouseEnter/onMouseLeave) is missing',
-      ).toBe(true);
+        second.map((rule) => rule.selector),
+        'the reset button must not carry a state pseudo-class of its own in the modern skin',
+      ).toEqual([]);
     });
   },
 );

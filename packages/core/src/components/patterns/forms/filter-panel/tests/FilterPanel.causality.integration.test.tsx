@@ -197,6 +197,13 @@ async function inkUnderHover(decisions: Readonly<Record<string, unknown>>) {
       page.evaluate((sel: string) => getComputedStyle(document.querySelector(sel)!).color, selector);
     const rest = await inkOf(RESET);
     await page.hover(RESET);
+    /* The composed ghost Button paints hover from the kernel state, which React
+       stamps on pointer enter -- and this probe injects prerendered markup with
+       no React behind it. So the real pointer stays (it is what a user does) and
+       the stamp React would have written is applied alongside it. */
+    await page.evaluate((sel: string) => {
+      document.querySelector(sel)!.setAttribute('data-state', 'hovered');
+    }, RESET);
     // The reset ink crosses on the family's motion channel; read the landing value.
     await page.waitForTimeout(600);
     return { rest, hovered: await inkOf(RESET), control: await inkOf(RESET_LABEL) };

@@ -178,13 +178,13 @@
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__pill[data-part='pill'][data-active='false']:hover {
+    .ds-saved-views__pill[data-part='pill'][data-active='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
 /* Touch/active equivalent of the hover wash (4th-tanda law). */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part='pill'][data-active='false']:active {
+  .ds-saved-views__pill[data-part='pill'][data-active='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 
@@ -236,7 +236,7 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill [data-part='pill-select']:focus-visible {
+  .ds-saved-views__pill [data-part='pill-select']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm));
@@ -328,7 +328,7 @@
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__pill:hover .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+    .ds-saved-views__pill:is([data-state~='hovered'], :hover) .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
     opacity: 1;
   }
 }
@@ -340,32 +340,32 @@
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-open='true'],
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger']:focus-visible {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger']:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:hover {
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:hover {
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:is([data-state~='hovered'], :hover) {
     background: var(--ds-color-alpha-white-20);
   }
 }
 /* Touch/active equivalents of the hover washes. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:active {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:active {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:is([data-state~='pressed'], :active) {
   background: var(--ds-color-alpha-white-20);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger']:focus-visible {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -381,9 +381,9 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .ds-input-shell,
+  .ds-saved-views__input[data-part='field'] [data-part='rename-input'],
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .ds-input-shell {
+  .ds-saved-views__create-input[data-part='field'] [data-part='create-input'] {
   box-sizing: border-box;
   inline-size: 100%;
   block-size: var(--ds-saved-views-input-height, 26px);
@@ -401,16 +401,16 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .ds-input-shell.ds-input-shell--modern,
+  .ds-saved-views__input[data-part='field'] [data-part='rename-input'].ds-input-shell--modern,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .ds-input-shell.ds-input-shell--modern {
+  .ds-saved-views__create-input[data-part='field'] [data-part='create-input'].ds-input-shell--modern {
   border: 1px solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .ds-input-shell:focus,
+  .ds-saved-views__input[data-part='field'] [data-part='rename-input']:focus,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .ds-input-shell:focus {
+  .ds-saved-views__create-input[data-part='field'] [data-part='create-input']:focus {
   border-color: var(--ds-focus-ring-color);
   box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
 }
@@ -462,18 +462,18 @@
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-button[data-part='create-button']:hover {
+    .ds-saved-views__create-button[data-part='create-button']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
 /* Touch/active equivalent of the hover wash. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button']:active {
+  .ds-saved-views__create-button[data-part='create-button']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button']:focus-visible {
+  .ds-saved-views__create-button[data-part='create-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -513,9 +513,9 @@
   .ds-pattern-saved-views.ds-engine-modern
     .ds-saved-views__create-button[data-part='create-button'],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__input[data-part='field'] .ds-input-shell,
+    .ds-saved-views__input[data-part='field'] [data-part='rename-input'],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-input[data-part='field'] .ds-input-shell {
+    .ds-saved-views__create-input[data-part='field'] [data-part='create-input'] {
     transition: none;
   }
 }

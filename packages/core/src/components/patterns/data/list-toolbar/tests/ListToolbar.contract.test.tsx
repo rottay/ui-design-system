@@ -284,29 +284,40 @@ describe('PatternListToolbar contract', () => {
     });
   });
 
-  it('never keys modern skin paint on primitive-swallowed data-parts (P-79)', () => {
-    // Text and Icon primitives stamp their own data-part="root" and drop the
-    // caller's data-part, so a skin rule keyed on those attributes is dead in
-    // production. The skin must key those parts on the pattern's BEM class.
-    const skin = readFileSync(MODERN_SKIN_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-    const swallowedParts = [
+  it('keys modern skin paint on parts that reach the DOM (P-79, re-measured)', async () => {
+    /* The 2026-07 reading -- Text and Icon swallow the caller's `data-part`, so
+       those rules must be class-keyed -- no longer holds: both primitives
+       forward it. This asserts the live DOM rather than the skin text, because a
+       string check cannot see a part that stopped being stamped (and the old one
+       searched for a double-quoted attribute this skin never authored). */
+    mockMatchMedia(1280);
+    renderWithEngine(<PatternListToolbar engine="modern" {...baseProps()} />, 'modern');
+    const root = await findToolbarRoot();
+
+    const compoundedParts = [
       'title',
       'search-icon',
-      'settings-empty',
-      'mobile-overflow-label',
       'filter-chips-count',
       'filter-chips-icon',
       'filter-chip-label',
       'filter-chip-value',
+      'icon-button',
+      'filter-trigger',
+      'primary-action',
+      'count-badge',
     ];
-    for (const part of swallowedParts) {
-      expect(skin).not.toContain(`[data-part="${part}"]`);
+    const skin = readFileSync(MODERN_SKIN_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const part of compoundedParts) {
+      const node = await waitFor(() => {
+        const found = root.querySelector(`[data-part='${part}']`);
+        expect(found, `${part} never reached the DOM`).not.toBeNull();
+        return found as HTMLElement;
+      });
+      // The class the skin compounds with the part sits on the SAME node.
+      expect(node.classList.contains(`ds-list-toolbar__${part}`), part).toBe(true);
+      // ...and the skin reads the anatomy, not only the class.
+      expect(skin, part).toContain(`.ds-list-toolbar__${part}[data-part='${part}']`);
     }
-    // The replacement class-keyed selectors exist at the same specificity.
-    expect(skin).toContain(
-      '.ds-list-toolbar__title.ds-list-toolbar__title.ds-list-toolbar__title',
-    );
-    expect(skin).toContain('.ds-list-toolbar__search-icon.ds-list-toolbar__search-icon');
   });
 
   it('follows the viewport fallback while the modern container is unmeasurable', async () => {

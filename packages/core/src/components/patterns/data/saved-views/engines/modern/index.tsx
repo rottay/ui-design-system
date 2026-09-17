@@ -62,6 +62,25 @@ import { ActionReorderIcon } from '@/graphics/icons/semantic/generated/roles/act
 import { NavigationMoreIcon } from '@/graphics/icons/semantic/generated/roles/navigation-more';
 import { StatusFeaturedIcon } from '@/graphics/icons/semantic/generated/roles/status-featured';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+
+/**
+ * The pill shell is a STATEFUL PART: its hover wash and press wash are painted,
+ * so one place decides them and the skin reads the result back. It is a
+ * component rather than a bare element because a row inside `views.map` cannot
+ * hold a hook.
+ */
+function ViewPill({
+  children,
+  ...rest
+}: React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>) {
+  const interaction = useInteractionState();
+  return (
+    <div {...rest} {...interaction.handlers} {...partAttributes('pill', interaction.state)}>
+      {children}
+    </div>
+  );
+}
 
 /**
  * Modern engine saved views bar: a scrollable horizontal strip of pills
@@ -316,9 +335,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         const hasMenu = menuItems.length > 0;
 
         return (
-          <div
+          <ViewPill
             key={view.id}
-            data-part="pill"
             className="ds-saved-views__pill"
             data-active={isActive}
             data-dragging={isDragging}
@@ -428,7 +446,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 />
               </Dropdown>
             )}
-          </div>
+          </ViewPill>
         );
       })}
 

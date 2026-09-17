@@ -195,12 +195,10 @@
   --ds-button-ghost-border-hover: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   --ds-button-ghost-color-hover: var(--ds-color-text-primary);
   --ds-button-ghost-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card));
-}
-
-/* Keyboard focus: the ring recipe is the panel's one :focus-visible
-   decision, delivered through the button focus-ring channel (the inset
-   highlight survives so the ring keeps the family signature). */
-.ds-structure.ds-field-filters-panel [data-part='preset-chip']:focus-visible {
+  /* The ring recipe rides the same channel block: the Button applies
+     --ds-button-focus-ring only when IT decides focus is visible, so a second
+     :focus-visible here would gate a channel that is already inert until then
+     (the inset highlight survives so the ring keeps the family signature). */
   --ds-button-focus-ring:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent),
     0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));

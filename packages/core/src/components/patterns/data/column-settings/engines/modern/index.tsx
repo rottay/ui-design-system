@@ -42,6 +42,7 @@ import {
 import { NavigationUpIcon } from '@/graphics/icons/semantic/generated/roles/navigation-up';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 import type { ColumnSettingsProps, ColumnSettingItem } from '../../contracts';
 
@@ -117,9 +118,13 @@ function ColumnRow({
   const columnName =
     typeof column.header === 'string' ? column.header : column.key;
 
+  /* The row's hover and press are painted, so one place decides them and the
+     skin reads the result back; the platform pseudo-class stays the native
+     fallback of that one decision, never a second authority (F-37). */
+  const rowInteraction = useInteractionState();
+
   return (
     <div
-      data-part="row"
       data-visible={isVisible ? 'true' : 'false'}
       data-pinned={pinSide ?? undefined}
       role="listitem"
@@ -127,6 +132,8 @@ function ColumnRow({
          programmatically available -- the list exposed no position at all. */
       aria-posinset={index + 1}
       aria-setsize={count}
+      {...rowInteraction.handlers}
+      {...partAttributes('row', rowInteraction.state)}
     >
       {/* Visibility toggle (certified Checkbox primitive) — named after the
           column it governs so the row reads as one control to AT. */}

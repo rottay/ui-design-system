@@ -14,16 +14,12 @@
  * Primitive paint remains owned by Button/Input/Badge. Toolbar selectors below
  * only tune their composition through pattern classes and semantic data state.
  *
- * P-79 NOTE (Pass-2 falsification, 2026-07): Text primitives stamp their own
- * `data-part='root'` and DROP the caller's data-part — production-verified:
- * `[data-part='title']` matched 0 nodes on :7001 and the title computed to
- * font-weight 400 / letter-spacing normal / no ellipsis instead of this
- * skin's treatment. Icon components DO forward the caller's data-part. Every
- * Text-part rule below is therefore keyed on the pattern's repeated BEM class
- * — attribute and class weigh identically in the cascade, so specificity (and
- * paint precedence) is unchanged while the rules actually match. The two icon
- * rules were re-keyed class-side for uniformity. Box/Flex/Stack/Tag forward
- * caller data-part and keep their part-keyed rules.
+ * ANATOMY NOTE: every part this pattern stamps reaches the DOM on the SAME node
+ * that carries its BEM class — Text forwards the caller's `data-part` today
+ * (`primitives/display/typography/engines/modern`), which falsifies the 2026-07
+ * P-79 reading that it dropped it. The rules below therefore compound class AND
+ * part: the class keeps the match exact (`data-part` is a shared vocabulary an
+ * inner Popover title would also answer), the part is the anatomy contract.
  *
  * W10 NOTE (second visual pass, 2026-07): the independent code audit verdict flagged the
  * toolbar as 'too many nested boxes, inconsistent radii and heights'. The
@@ -207,7 +203,7 @@
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.ds-button.ds-button {
+  .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -238,7 +234,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.ds-button.ds-button:hover {
+    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -258,7 +254,7 @@
    aria-expanded onto the IconButton, and the trigger reads as 'pressed' for
    as long as its panel lives. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.ds-button[data-variant][aria-expanded='true'] {
+  .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button[data-variant][aria-expanded='true'] {
   background: var(
     --ds-filter-pill-hover-bg,
     var(
@@ -275,13 +271,13 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   :is(
-    .ds-list-toolbar__icon-button,
-    .ds-list-toolbar__filter-trigger,
-    .ds-list-toolbar__filter-dropdown-item,
-    .ds-list-toolbar__density-option,
-    .ds-list-toolbar__mobile-overflow-item,
-    .ds-list-toolbar__clear-all,
-    .ds-list-toolbar__primary-action,
+    .ds-list-toolbar__icon-button[data-part='icon-button'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+    .ds-list-toolbar__density-option[data-part='density-option'],
+    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+    .ds-list-toolbar__clear-all[data-part='clear-all'],
+    .ds-list-toolbar__primary-action[data-part='primary-action'],
     .ds-list-toolbar__primary-action-mobile
   ).ds-button[data-variant]:focus-visible {
   outline: none;
@@ -296,13 +292,13 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   :is(
-    .ds-list-toolbar__icon-button,
-    .ds-list-toolbar__filter-trigger,
-    .ds-list-toolbar__filter-dropdown-item,
-    .ds-list-toolbar__density-option,
-    .ds-list-toolbar__mobile-overflow-item,
-    .ds-list-toolbar__clear-all,
-    .ds-list-toolbar__primary-action,
+    .ds-list-toolbar__icon-button[data-part='icon-button'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+    .ds-list-toolbar__density-option[data-part='density-option'],
+    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+    .ds-list-toolbar__clear-all[data-part='clear-all'],
+    .ds-list-toolbar__primary-action[data-part='primary-action'],
     .ds-list-toolbar__primary-action-mobile
   ).ds-button[data-variant]:active:not(:disabled) {
   transform: scale(var(--ds-toolbar-control-pressed-scale, 0.975));
@@ -391,7 +387,7 @@
   padding-block: var(--ds-spacing-2, 0.5rem);
 }
 
-.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
+.ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty {
   padding: var(--ds-spacing-4, 1rem) var(--ds-spacing-3, 0.75rem);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-supporting-font-size, 0.8125rem);
@@ -401,7 +397,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant] {
   flex: 0 0 auto;
   white-space: nowrap;
   border-radius: var(
@@ -437,7 +433,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-active='true'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -455,19 +451,19 @@
    dash; an invalid value needs repair, so its frame tightens to a dotted rule
    and the ink shifts to the semantic error role. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='draft'] {
   border-style: dashed;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='invalid'] {
   border-style: dotted;
   border-color: var(--ds-color-error);
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-open='true'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-open='true'] {
   border-color: var(
     --ds-filter-pill-active-border,
     var(--ds-material-control-border-hover, var(--ds-color-primary))
@@ -480,7 +476,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -499,7 +495,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant]:focus-visible {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:focus-visible {
   box-shadow: var(
     --ds-filter-pill-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
@@ -507,7 +503,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-badge {
+  .ds-list-toolbar__filter-badge[data-part='filter-badge'] {
   border-radius: var(
     --ds-toolbar-count-radius,
     var(--ds-radius-full, 9999px)
@@ -528,7 +524,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant] {
+  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -543,7 +539,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant][data-selected='true'] {
+  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant][data-selected='true'] {
   background: var(
     --ds-filter-pill-active-bg,
     color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
@@ -560,7 +556,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant]:hover:not(
     [data-selected='true']
   ) {
     background: var(
@@ -574,12 +570,12 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
+  .ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.ds-button[data-variant] {
+  .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border-radius: var(
@@ -593,7 +589,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.ds-button[data-variant][data-active='true'] {
+  .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -604,7 +600,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -634,7 +630,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label {
+  .ds-list-toolbar__mobile-overflow-label[data-part='mobile-overflow-label'].ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   display: block;
   margin-block-end: var(--ds-spacing-2, 0.5rem);
@@ -647,7 +643,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-item.ds-button[data-variant] {
+  .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -658,7 +654,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-overflow-item.ds-button[data-variant]:hover {
+    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -735,7 +731,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__title.ds-list-toolbar__title.ds-list-toolbar__title {
+  .ds-list-toolbar__title[data-part='title'].ds-list-toolbar__title.ds-list-toolbar__title {
   color: var(--ds-toolbar-color, var(--ds-color-text-primary));
   /* Typography law: family and tracking fall back to the tenant's governed
      section-title role, so an editorial profile (serif heading, wider
@@ -808,7 +804,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action.ds-button[data-variant],
+  .ds-list-toolbar__primary-action[data-part='primary-action'].ds-button[data-variant],
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__primary-action-mobile.ds-button[data-variant] {
   flex: 0 0 auto;
@@ -847,7 +843,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-rail
-  .ds-list-toolbar__filter-trigger {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'] {
   scroll-snap-align: start;
 }
 
@@ -893,7 +889,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-icon.ds-list-toolbar__search-icon {
+  .ds-list-toolbar__search-icon[data-part='search-icon'].ds-list-toolbar__search-icon {
   color: var(--ds-search-icon-color, var(--ds-color-text-muted));
 }
 
@@ -962,15 +958,15 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-icon.ds-list-toolbar__filter-chips-icon {
+  .ds-list-toolbar__filter-chips-icon[data-part='filter-chips-icon'].ds-list-toolbar__filter-chips-icon {
   flex: 0 0 auto;
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count,
+  .ds-list-toolbar__filter-chips-count[data-part='filter-chips-count'].ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count,
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label {
+  .ds-list-toolbar__filter-chip-label[data-part='filter-chip-label'].ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   font-family: var(--ds-type-caption-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-caption-font-size, 0.6875rem);
@@ -978,7 +974,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count {
+  .ds-list-toolbar__filter-chips-count[data-part='filter-chips-count'].ds-list-toolbar__filter-chips-count {
   font-weight: var(--ds-type-label-font-weight, 600);
   white-space: nowrap;
   /* C1: the "N active" summary speaks the same eyebrow voice as the
@@ -1024,7 +1020,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   color: var(--ds-toolbar-color, var(--ds-color-text-primary));
   font-family: var(--ds-type-label-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-label-font-size, 0.75rem);
@@ -1069,7 +1065,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
-  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
   /* C1: draft must read at two meters — hollow dashed frame + REGULAR weight
      + quieted ink, so the provisional chip is visibly ghosted next to the
      solid applied chip even before the status glyph registers. */
@@ -1079,14 +1075,14 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
-  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
   text-underline-offset: 0.18em;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__clear-all.ds-button[data-variant] {
+  .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
   border: 1px solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
@@ -1111,7 +1107,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.ds-button[data-variant]:hover {
+    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -1128,7 +1124,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__count-badge {
+  .ds-list-toolbar__count-badge[data-part='count-badge'] {
   border-radius: var(
     --ds-toolbar-count-radius,
     var(--ds-radius-full, 9999px)
@@ -1253,7 +1249,7 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__title.ds-list-toolbar__title {
+    .ds-list-toolbar__title[data-part='title'].ds-list-toolbar__title {
     max-inline-size: none;
   }
 
@@ -1285,13 +1281,13 @@
 @media (pointer: coarse) {
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
-      .ds-list-toolbar__icon-button,
-      .ds-list-toolbar__filter-trigger,
-      .ds-list-toolbar__filter-dropdown-item,
-      .ds-list-toolbar__density-option,
-      .ds-list-toolbar__mobile-overflow-item,
-      .ds-list-toolbar__clear-all,
-      .ds-list-toolbar__primary-action,
+      .ds-list-toolbar__icon-button[data-part='icon-button'],
+      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+      .ds-list-toolbar__density-option[data-part='density-option'],
+      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+      .ds-list-toolbar__clear-all[data-part='clear-all'],
+      .ds-list-toolbar__primary-action[data-part='primary-action'],
       .ds-list-toolbar__primary-action-mobile
     ).ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
@@ -1365,13 +1361,13 @@
     > [data-part='option'],
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
-      .ds-list-toolbar__icon-button,
-      .ds-list-toolbar__filter-trigger,
-      .ds-list-toolbar__filter-dropdown-item,
-      .ds-list-toolbar__density-option,
-      .ds-list-toolbar__mobile-overflow-item,
-      .ds-list-toolbar__clear-all,
-      .ds-list-toolbar__primary-action,
+      .ds-list-toolbar__icon-button[data-part='icon-button'],
+      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+      .ds-list-toolbar__density-option[data-part='density-option'],
+      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+      .ds-list-toolbar__clear-all[data-part='clear-all'],
+      .ds-list-toolbar__primary-action[data-part='primary-action'],
       .ds-list-toolbar__primary-action-mobile
     ).ds-button[data-variant] {
     animation: none;
@@ -1392,24 +1388,24 @@
      the dropdown selection rely on primary-tinted fills, so remap them to the
      system highlight pair and let every control keep a visible border. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.ds-button[data-variant],
+    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.ds-button[data-variant] {
+    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
     forced-color-adjust: auto;
     border-color: ButtonText;
     box-shadow: none;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-active='true'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-active='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant][data-selected='true'],
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant][data-selected='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.ds-button[data-variant][data-active='true'] {
+    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
@@ -1425,7 +1421,7 @@
      rule (wide enough to render both lines) plus the wavy value underline,
      which forced colors preserves by remapping it to CanvasText. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='draft'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='draft'] {
     border-style: dashed;
@@ -1434,7 +1430,7 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='invalid'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
     border-color: ButtonText;
@@ -1449,7 +1445,7 @@
 
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
-    .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+    .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
     color: CanvasText;
     text-decoration-color: CanvasText;
   }
@@ -1465,10 +1461,10 @@
    below the canonical --ds-touch-target-min channel; fine pointers keep the
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
-  .ds-list-toolbar__icon-button,
-  .ds-list-toolbar__filter-trigger,
-  .ds-list-toolbar__density-option,
-  .ds-list-toolbar__filter-dropdown-item {
+  .ds-list-toolbar__icon-button[data-part='icon-button'],
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+  .ds-list-toolbar__density-option[data-part='density-option'],
+  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

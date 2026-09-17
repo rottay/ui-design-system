@@ -87,14 +87,14 @@
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:hover {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-column-settings-row-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
     );
   }
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:active {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:is([data-state~='pressed'], :active) {
   background: var(
     --ds-column-settings-row-bg-hover,
     color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
@@ -123,21 +123,21 @@
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:hover:not(:disabled) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     color: var(--ds-color-text-primary);
     opacity: 1;
   }
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:active:not(:disabled) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   color: var(--ds-color-text-primary);
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:focus-visible {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:disabled {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='disabled'], :disabled) {
   cursor: default;
   opacity: 0.3;
 }
@@ -249,7 +249,7 @@
     color: GrayText;
   }
 
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:focus-visible {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
