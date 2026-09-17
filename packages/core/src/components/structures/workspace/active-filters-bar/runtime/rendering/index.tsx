@@ -69,8 +69,7 @@ import { Flex } from "../../../../../primitives/layout/flex";
 import { Tag } from "../../../../../primitives/display/tag";
 import { ActionAddIcon } from "@/graphics/icons/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/semantic/generated/roles/action-close";
-import { StatusDraftIcon } from "@/graphics/icons/semantic/generated/roles/status-draft";
-import { StatusErrorIcon } from "@/graphics/icons/semantic/generated/roles/status-error";
+import { renderActiveFilterStateGlyph } from "../../../../../patterns/foundation/active-filter-state-glyph";
 import type { ActiveFiltersBarProps } from "../../contracts";
 
 /** Controls participating in the chip group's arrow-key model. */
@@ -204,13 +203,7 @@ export function ActiveFiltersBar({
                    icon slot, so the family stamps the part its skin paints:
                    the lifecycle ink belongs to the rail, the chip chrome to
                    the Tag. */
-                icon={
-                  state === "draft" ? (
-                    <StatusDraftIcon decorative size="xs" data-part="icon" />
-                  ) : state === "invalid" ? (
-                    <StatusErrorIcon decorative size="xs" data-part="icon" />
-                  ) : undefined
-                }
+                icon={renderActiveFilterStateGlyph(state, { "data-part": "icon" })}
               >
                 <Box as="span" data-part="chip-label">
                   {filter.label}

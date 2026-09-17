@@ -279,5 +279,18 @@ describe("ActiveFiltersBar anatomy", () => {
       ) as SVGElement;
       expect(glyph.getAttribute("width")).toContain("var(--ds-icon-");
     }
+
+    // The lifecycle glyph carries the rail's anatomy marker on the SVG itself,
+    // so the skin's ink reaches it without a wrapper.
+    const lifecycle = Array.from(
+      container.querySelectorAll<SVGElement>('[data-part="icon"][data-icon-name]')
+    );
+    expect(lifecycle.map((glyph) => glyph.getAttribute("data-icon-name"))).toEqual([
+      "status.draft",
+      "status.error",
+    ]);
+    for (const glyph of lifecycle) {
+      expect(glyph.getAttribute("width")).toContain("var(--ds-icon-");
+    }
   });
 });

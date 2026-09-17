@@ -54,8 +54,7 @@ import {
   MoreHorizontalIcon as MoreHorizontal,
   CheckIcon as Check,
 } from '../../../../../../graphics/icons';
-import { StatusDraftIcon } from '@/graphics/icons/semantic/generated/roles/status-draft';
-import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
+import { renderActiveFilterStateGlyph } from '../../../../foundation/active-filter-state-glyph';
 
 import type {
   ListToolbarProps,
@@ -1179,13 +1178,7 @@ export default function ModernListToolbar({
               closable
               onClose={() => onFilterChange?.(chip.key, '')}
               size='sm'
-              icon={
-                chip.state === 'draft' ? (
-                  <StatusDraftIcon decorative size={11} />
-                ) : chip.state === 'invalid' ? (
-                  <StatusErrorIcon decorative size={11} />
-                ) : undefined
-              }
+              icon={renderActiveFilterStateGlyph(chip.state)}
             >
               <Text
                 data-part='filter-chip-label'
