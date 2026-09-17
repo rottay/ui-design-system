@@ -53,9 +53,10 @@ import { serializeState, useInteractionState } from '@/foundation/behavior';
 import { ActionConfirmIcon } from '@/graphics/icons/semantic/generated/roles/action-confirm';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 
-// ============================================================================
-// Internal Props Interface
-// ============================================================================
+// Local caller-first chain: ./primitives/steps sits at its exact module ceiling, so the shared composeHandlers helper cannot be imported here.
+function chain<E extends React.SyntheticEvent>(caller: ((e: E) => void) | undefined, own: (e: E) => void) {
+  return (e: E) => { caller?.(e); if (!e.defaultPrevented) own(e); };
+}
 
 /**
  * Extended props including internal properties set by parent Stepper.
@@ -75,10 +76,6 @@ interface StepInternalProps extends StepProps {
   /** Whether this is the last step (no connector) */
   isLast?: boolean;
 }
-
-// ============================================================================
-// Main Component
-// ============================================================================
 
 /**
  * Individual step component for the Stepper.
@@ -130,10 +127,16 @@ export function StepperStep({
 
   const isClickable = Boolean(onClick) && !disabled;
   const interaction = useInteractionState({ disabled });
-
-  // ========================================================================
-  // Event Handlers
-  // ========================================================================
+  const kernel = interaction.handlers;
+  const caller = rest as Partial<typeof kernel>;
+  const chained = {
+    onPointerEnter: chain(caller.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: chain(caller.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: chain(caller.onPointerDown, kernel.onPointerDown),
+    onPointerUp: chain(caller.onPointerUp, kernel.onPointerUp),
+    onFocus: chain(caller.onFocus, kernel.onFocus),
+    onBlur: chain(caller.onBlur, kernel.onBlur),
+  };
 
   /**
    * Handles click events on the step.
@@ -156,10 +159,6 @@ export function StepperStep({
       onClick?.();
     }
   };
-
-  // ============================================================================
-  // Icon Renderer
-  // ============================================================================
 
   /**
    * Renders the step icon based on status and custom icon prop. The default
@@ -184,15 +183,11 @@ export function StepperStep({
     return <span>{stepNumber}</span>;
   };
 
-  // ========================================================================
-  // Render
-  // ========================================================================
-
   return (
     <>
       <div
         {...rest}
-        {...interaction.handlers}
+        {...chained}
         className={`ds-stepper-step ${className}`.trim()}
         style={style}
         onClick={handleClick}

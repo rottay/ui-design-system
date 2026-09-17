@@ -66,6 +66,7 @@ import React from 'react';
 import type { PaginationProps } from '../../contracts';
 import { PAGINATION_DEFAULTS } from '../../contracts';
 import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { revealInlineWithinScroller } from '../../../../foundation/scroll-reveal';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
@@ -182,6 +183,15 @@ const NavButton = React.forwardRef<
   NativeButtonProps & { direction: 'prev' | 'next'; disabled: boolean }
 >(function NavButton({ direction, disabled, children, ...rest }, ref) {
   const interaction = useInteractionState({ disabled });
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <button
       {...rest}
@@ -189,7 +199,7 @@ const NavButton = React.forwardRef<
       type="button"
       disabled={disabled}
       {...partAttributes('pagination-nav-button', interaction.state)}
-      {...interaction.handlers}
+      {...chained}
       data-direction={direction}
     >
       {children}
@@ -256,12 +266,21 @@ function SizeSelect({
   ...rest
 }: React.SelectHTMLAttributes<HTMLSelectElement> & { disabled: boolean }): React.ReactElement {
   const interaction = useInteractionState({ disabled });
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <select
       {...rest}
       disabled={disabled}
       {...partAttributes('pagination-size-select', interaction.state)}
-      {...interaction.handlers}
+      {...chained}
     >
       {children}
     </select>

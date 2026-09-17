@@ -16,6 +16,7 @@ import type { ComponentProps, ComponentType, ReactNode } from 'react';
 type StatusFilterPillIcon = ComponentType<any>;
 
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { Box } from '../../../primitives/layout/box';
 import { Flex } from '../../../primitives/layout/flex';
 import { Text } from '../../../primitives/display/typography/compound/text';
@@ -60,12 +61,21 @@ function Pill({
   ...rest
 }: ComponentProps<typeof Box> & { children?: ReactNode }) {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <Box
       as="button"
       type="button"
       {...rest}
-      {...interaction.handlers}
+      {...chained}
       {...partAttributes('pill', interaction.state)}
     >
       {children}

@@ -19,6 +19,7 @@ import {
   type ResolvedOverlayAdaptation,
 } from '../../../../../../foundation/contracts/kernel/adaptation/composition/families/overlay';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { usePortalScope } from '../../../../runtime/overlay/portal-scope';
@@ -41,8 +42,17 @@ function ModalButton({
   ...rest
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { part: 'close-button' | 'action' }) {
   const interaction = useInteractionState({ disabled });
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
-    <button type="button" disabled={disabled} {...rest} {...partAttributes(part, interaction.state)} {...interaction.handlers}>
+    <button type="button" disabled={disabled} {...rest} {...partAttributes(part, interaction.state)} {...chained}>
       {children}
     </button>
   );

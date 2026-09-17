@@ -41,6 +41,7 @@
 
 import React from 'react';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import type { MenuItemProps } from '../../contracts';
 
 // ============================================================================
@@ -87,6 +88,16 @@ export function MenuItem({
   ...rest
 }: MenuItemProps): React.ReactElement {
   const interaction = useInteractionState({ disabled });
+  const kernel = interaction.handlers;
+  const caller = rest as Partial<typeof kernel>;
+  const chained = {
+    onPointerEnter: composeHandlers(caller.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(caller.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(caller.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(caller.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(caller.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(caller.onBlur, kernel.onBlur),
+  };
 
   // ========================================================================
   // Event Handlers
@@ -128,7 +139,7 @@ export function MenuItem({
       className={`ds-menu-item ${className}`.trim()}
       style={style}
       {...partAttributes(dataPart ?? 'item', interaction.state)}
-      {...interaction.handlers}
+      {...chained}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="menuitem"

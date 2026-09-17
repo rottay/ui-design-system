@@ -51,14 +51,16 @@ function NotifierControl({
   part,
   onClick,
   children,
-  ...rest
-}: Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
+  'aria-label': ariaLabel,
+}: {
   part: 'action' | 'close-button';
+  children?: React.ReactNode;
+  'aria-label'?: string;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const interaction = useInteractionState();
   return (
-    <button type="button" {...rest} {...partAttributes(part, interaction.state)} {...interaction.handlers} onClick={onClick}>
+    <button type="button" aria-label={ariaLabel} {...partAttributes(part, interaction.state)} {...interaction.handlers} onClick={onClick}>
       {children}
     </button>
   );

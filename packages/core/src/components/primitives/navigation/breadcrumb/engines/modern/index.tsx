@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import type { BreadcrumbProps, BreadcrumbItem } from '../../contracts';
 import { BREADCRUMB_OVERFLOW_DEFAULTS } from '../../contracts';
@@ -71,6 +72,15 @@ type CrumbElementProps = React.HTMLAttributes<HTMLElement> & {
  */
 function Crumb({ href, onClick, isCurrent, hasMenu, icon, label, ...rest }: CrumbElementProps): React.ReactElement {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   const labelTitle = typeof label === 'string' ? label : undefined;
   const content = (
     <>
@@ -86,7 +96,7 @@ function Crumb({ href, onClick, isCurrent, hasMenu, icon, label, ...rest }: Crum
         href={href}
         onClick={onClick}
         {...partAttributes('crumb', interaction.state)}
-        {...interaction.handlers}
+        {...chained}
         data-current="false"
         data-clickable="true"
       >
@@ -101,7 +111,7 @@ function Crumb({ href, onClick, isCurrent, hasMenu, icon, label, ...rest }: Crum
         type="button"
         onClick={onClick}
         {...partAttributes('crumb', interaction.state)}
-        {...interaction.handlers}
+        {...chained}
         data-current="false"
         data-clickable="true"
       >
@@ -116,7 +126,7 @@ function Crumb({ href, onClick, isCurrent, hasMenu, icon, label, ...rest }: Crum
         {...rest}
         type="button"
         {...partAttributes('crumb', interaction.state)}
-        {...interaction.handlers}
+        {...chained}
         data-current={isCurrent ? 'true' : 'false'}
         aria-current={isCurrent ? 'page' : undefined}
       >
@@ -139,12 +149,21 @@ function Crumb({ href, onClick, isCurrent, hasMenu, icon, label, ...rest }: Crum
 
 function OverflowTrigger({ label, ...rest }: { label: string } & React.ButtonHTMLAttributes<HTMLButtonElement>): React.ReactElement {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <button
       {...rest}
       type="button"
       {...partAttributes('overflow-trigger', interaction.state)}
-      {...interaction.handlers}
+      {...chained}
       aria-label={label}
     >
       <span aria-hidden="true">…</span>

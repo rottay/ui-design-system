@@ -75,6 +75,7 @@ import { useMediaQuery } from '@/infrastructure/runtime/responsive';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useFlipLayout } from '@/graphics/motion/react/runtime';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 
@@ -91,6 +92,15 @@ const BoardCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
   children: React.ReactNode;
 }>(function BoardCard({ children, onDragEnd, onPointerCancel, ...rest }, ref) {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   // An HTML5 drag swallows the pointerup that would end the press, so a drag
   // starting and ending on this card would latch `pressed` (and its grabbing
   // cursor) until a later leave or blur. The kernel's press-cancel IS its
@@ -99,7 +109,7 @@ const BoardCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
   return (
     <div
       {...rest}
-      {...interaction.handlers}
+      {...chained}
       {...partAttributes('card', interaction.state)}
       onDragEnd={(event) => {
         onDragEnd?.(event);

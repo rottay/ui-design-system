@@ -61,6 +61,7 @@ import { useTourSpotlightRect } from '../../runtime/spotlight-rect';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { resolveNavigationIntent } from '../../../../runtime/collection/roving-focus';
 
 /** A tour button whose hover, press and focus ring the interaction kernel decides. */
@@ -70,8 +71,17 @@ function TourButton({
   ...rest
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { part: 'close-button' | 'action' }) {
   const interaction = useInteractionState({ disabled: rest.disabled });
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
-    <button type="button" {...rest} {...partAttributes(part, interaction.state)} {...interaction.handlers}>
+    <button type="button" {...rest} {...partAttributes(part, interaction.state)} {...chained}>
       {children}
     </button>
   );

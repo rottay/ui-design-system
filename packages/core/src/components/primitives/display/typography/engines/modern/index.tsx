@@ -49,6 +49,7 @@ import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } fro
 import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP, WEIGHT_MAP } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
   HEADING_TYPE_ROLE,
@@ -783,6 +784,16 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
     // The press and focus cues the skin paints are reachable as a stamped
     // state, not only as a device pseudo-class.
     const interaction = useInteractionState({ disabled });
+    const kernel = interaction.handlers;
+    const caller = props as Partial<typeof kernel>;
+    const chained = {
+      onPointerEnter: composeHandlers(caller.onPointerEnter, kernel.onPointerEnter),
+      onPointerLeave: composeHandlers(caller.onPointerLeave, kernel.onPointerLeave),
+      onPointerDown: composeHandlers(caller.onPointerDown, kernel.onPointerDown),
+      onPointerUp: composeHandlers(caller.onPointerUp, kernel.onPointerUp),
+      onFocus: composeHandlers(caller.onFocus, kernel.onFocus),
+      onBlur: composeHandlers(caller.onBlur, kernel.onBlur),
+    };
     const linkSizeStyle: React.CSSProperties =
       !sizeIsResponsive && textStyle === undefined
       ? resolveTypeRoleStyle({
@@ -817,13 +828,13 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
           target={target}
           rel={computedRel}
           onClick={disabled ? undefined : onClick}
-          {...interaction.handlers}
           className={classes}
           lang={lang}
           dir={dir}
           translate={translate}
           title={title}
           {...props}
+          {...chained}
           {...responsive.attrs}
           {...partAttributes(dataPart ?? 'root', interaction.state)}
           data-color={color}
