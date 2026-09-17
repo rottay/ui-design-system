@@ -5235,6 +5235,11 @@
      "at": "2026-09-17 16:52",
      "by": "kimi-dt",
      "note": "W17 INTEGRADO 51454e03b: contraste mobile drenado por derivacion mode-aware (tinta color-mix contra su propio ground; 72% = piso por WCAG y APCA en modos opuestos, drilleado 0.40/0.65/1.00); AXE_DEBT pierde los pares light por identidad. Rutas: W18 (checkbox aria-checked, primitivo modern; rustic conserva el defecto por ley de freeze — registrado) y W19 (ground de bithire dark no re-stateado en el bloque de modo — defecto de lowering/preset). NOTA DE GOBIERNO: por orden del owner 2026-09-17, Codex queda fuera del ciclo; las revisiones shared-core restantes corren Kimi (DT) + Opus, con Fable pendiente si hay cupo. La ronda 4 de Codex (ya producida) queda como ultimo artefacto suyo en evidence/dnd-kernel-debrief."
+    },
+    {
+     "at": "2026-09-17 17:34",
+     "by": "kimi-dt",
+     "note": "W18 INTEGRADO cc5f10739 (checkbox aria-checked fuera del engine modern; rustic conserva el defecto por freeze — asimetria explicita; 4 entradas aria-conditional-attr salen del AXE_DEBT). W19 INTEGRADO 4f7d46751 (withModeCanvas: ground no declarado se re-deriva del par cerrado de la foundation por modo; bithire dark sana; rottay/evnto byte-iguales; A/B amplio 2958 tests). DEBRIEF DnD ADOPTADO (revision 5): el ciclo cerro — 4 rondas Codex (HOLD,HOLD,HOLD,HOLD parcial) + revision 5 con mi verificacion independiente (compile estricto 0 diagnosticos + 9 rechazos al pelar directivas, probes ejecutados: matriz self-return por familia, fromColumn capture, overwrite drill rojo). Kimi ACCEPT r5; Codex retirado por orden del owner; Fable pendiente. Siguiente: lote 0 del kernel (sortable/ + admision de rango en structure gate + instrumento F-69). BLOQUEO DE VENTANA: pnpm build rojo — ./primitives/message 274369 > 269450 (+6045 desde d92acf1aa; sospechoso: la frontera R17-03 en positioning, alcanzada por message). W21 despachado: atribuir y reducir SIN re-anclar (ratificacion owner si persiste). La regeneracion serializada espera a W21."
     }
    ]
   },
