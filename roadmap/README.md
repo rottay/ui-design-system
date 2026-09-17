@@ -16,6 +16,10 @@
   - [`architecture.md`](./architecture.md) — behavior, ownership, package and access architecture;
   - [`skin-adoption.md`](./skin-adoption.md) — Stage-1 extraction and retroactive conformance evidence.
 
+- **Dispatch first:** [DS-only parallel execution — owner amendment 2026-09-17](#ds-only-parallel-execution--owner-amendment-2026-09-17)
+  classifies the remaining WOs, shared-file conflicts, serial boundaries and verification windows.
+  It is scheduling policy inside this roadmap, not a second backlog or a change to acceptance.
+
   > The commercial-surfaces program (the showroom Monochrome Signature relaunch of `showroom.rottay.com`
   > + the shared `@rottay/design-system/commercial` kit, WO-SHW-01..05) lives in `roadmap/commercial/` —
   > isolated by owner decision 2026-07-07, own machinery `pnpm roadmap:commercial`.
@@ -245,19 +249,22 @@ full certification for every lot; it does not waive a WO's substantive acceptanc
 criteria or final certification. State and dependencies remain in the existing
 registry; denominator definitions and authorities are unchanged.
 
-- **Writer and auditor (account seats, owner 2026-09-14):** the writer seat is
-  `claude-admin` (profile `~/.claude-admin`, account admin@rottay.com) running the
-  real Opus model; Kimi runs as `kimi-admin` and is DT, coordinator and the
-  independent code auditor and integrator of every Opus lot. The default/Daniel profile
-  (`claude-daniel`) is not used for programme work, and no other account may be
-  consumed without owner authorization. Nobody approves their own implementation:
-  if Kimi exceptionally writes product code under an explicit write-set, that code
+- **Writer and auditor (succession-aware):** real Opus is the primary writer;
+  exactly one owner-authorized DT is the coordinator, independent code auditor
+  and local integrator. Kimi is the requested successor; preserve the outgoing
+  coordinator's in-flight packets until the explicit checkpoint handoff, never
+  start a competing DT. The fixed admin-account assignment of 2026-09-14 is
+  historical, superseded by later owner account changes; use the latest explicit
+  authorization and record the effective profile/account, not an old prompt's
+  label. Available quota is not permission to switch billing accounts silently.
+  Nobody approves their own implementation: if the DT exceptionally writes
+  product code under an explicit write-set, that code
   requires another independent auditor before integration. The ordinary
   implement/audit/integrate cycle does not wait for Fable or Codex, and no ACCEPT
   may be fabricated in their name; the shared-core review rule below is unchanged
   and still binds where it applies. Verify the executable, profile, effective
   account and real model identifier before each dispatch, never a terminal label.
-  Kimi remains DT/integrator.
+  Record any succession once in the existing WO progress trail.
 - **Before shared-core design is adopted:** Codex, Fable and Kimi review the SAME
   debrief: WO, base, proposed contract, owners/write set, invariants, alternatives
   and executable acceptance. Core means catalog/permissions, precedence, derivation
@@ -289,14 +296,241 @@ registry; denominator definitions and authorities are unchanged.
   shared contracts. Shared compiler/catalog/registries have one owner. Serialize
   integration/commits and heavy builds/suites/browser runs on this host; wait for
   completion events instead of continuously polling.
+- **DS-only focus and mandatory safe parallelism (owner 2026-09-17):** read
+  `roadmap/README.md` section **DS-only parallel execution — owner amendment 2026-09-17**
+  before dispatch, and include its applicable WO row and conflicts in the bounded brief.
+  There is NO fixed agent-count ceiling: dispatch every useful independent packet
+  that has satisfied dependencies/phase permissions, a stable consumed contract,
+  an exclusive write set, an independent reviewer and a scheduled validation slot.
+  If any condition is unknown, do not guess or dispatch overlapping writers.
+  Route that dependency to its owner and dispatch another ready packet instead.
+  Work on the owner's active execution checkout on main (currently
+  `/Users/daniel/Developer/Rottay/r4-recon-opus`); historical prompts naming
+  `/Users/daniel/Developer/Rottay/ui-design-system` are not a checkout-switch order.
+  Do not create coordination branches/worktrees or restart completed work.
+  No new unrelated programme work; preserve any already-running foreign work.
 - **Evidence and landing:** record debrief version/hash, each review and the tested
   candidate; link them from the existing WO progress/done evidence via the roadmap
-  script. No shadow backlog or new status. Kimi lands audited functional commits
+  script. No shadow backlog or new status. The sole DT lands audited functional commits
   locally on main; never push, never restore directories, never sweep foreign
   staging. No emojis or AI attribution; keep applicable product documentation
   current. The three-way agreement
   is NOT yet obtained merely because this policy is documented.
 <!-- execution-policy:end -->
+
+## DS-only parallel execution — owner amendment 2026-09-17
+
+### Authority and dispatch decision
+
+Owner direction: focus available execution capacity on completing the Design System;
+parallelize as much as is safe, with no arbitrary limit of two, three, five or any
+other number of agents. Quality and substantive acceptance do not decrease.
+This section supersedes conservative *scheduling* defaults, not dependency edges,
+phase locks, public-contract approvals, account authorization or WO closure criteria.
+It does not authorize terminating other processes, editing other repos, publishing
+or pushing. Already-running work is preserved and reconciled at handoff.
+
+Use `registry.json` through `next`/`show`/`claim` to determine current eligibility.
+The following tables are conflict/scheduling rules, NOT another status register.
+They cover the 47 open WOs observed when this amendment was drafted; a completed
+row is not an instruction to reopen it. New scope must enter the existing machinery.
+The registry DAG is necessary but insufficient: disjoint files can still conflict
+through a changing contract, generated output or shared test/build environment.
+
+**Dispatch only if all six answers are yes:**
+
+1. Is the WO claimable under actual dependencies, phase controls and authority?
+2. Is this packet useful now, with no unresolved assumption about its consumed contract?
+3. Does one named writer exclusively own its exact files, including tests and skin?
+4. Are shared registrations, exports, generated files and read-dependency conflicts assigned?
+5. Is a reviewer independent of the implementation assigned, with capacity to review it?
+6. Is there an agreed validation/integration window on a stable candidate?
+
+Otherwise record the specific wait in the existing WO progress and choose another
+ready packet. Preparation may inspect a future WO read-only, but is not a claim,
+implementation permission, speculative contract or proof of completion. A real
+block affects its dependency closure, not all unrelated work.
+
+The DT reads the current handoff once, preserves active file reservations, dispatches
+bounded packets and waits for completion events. It does not run minute-by-minute
+status loops or restart repository-wide audits after every delivery. No worker
+commits, stages, claims completion, changes shared contracts unilaterally or borrows
+another worker's draft. Exactly one DT owns integration on main.
+
+### Capacity, priority and first dispatch
+
+- **No fixed concurrency cap.** Add writers while there are non-conflicting ready
+  packets and real review/validation capacity. More available quota removes a
+  billing bottleneck; it does not add RAM, test isolation or reviewer throughput.
+  If integration, reviews or host memory become the bottleneck, drain that queue
+  before opening more drafts. Do not create idle scouts merely to fill seats.
+- **Prioritize unblockers:** first preserve/finish the active R17 correction packets
+  under WO-FAM-08 / WO-INV-01 / WO-EVI-02, then the shared contracts that unlock
+  several family packets, then complete families rather than isolated token edits.
+  The R17 evidence is in
+  [`2026-09-17 checkpoint audit`](../../docs-engineering/archive/audits/2026-09-17-ds-814927519-davila.md).
+  Reproduce only unresolved findings; never duplicate a repair already landed.
+- **Do not wait for all of FAM-08 to start FAM-09/10/11.** These are same-wave
+  peers. After checking their consumed contracts against the active correction,
+  dispatch their disjoint work alongside the FAM-08 closer and evidence owners.
+  One root fix may block its consumers without blocking unrelated family behavior.
+- **Illustrative initial allocation, not a quota:** independent FAM-08 residue
+  packets; chart contract/families; form/record families; shell/workspace families;
+  verification instruments. Add INV-02, INV-03, INV-08, EMI-03 or CON-06 packets
+  whenever the reservations below permit. Split further only across complete,
+  genuinely independent families, never deriver vs skin vs tests for one family.
+- **Do not defer every shared capability until the end:** reserve the DnD/export,
+  chart paint, header, i18n, motion and verification owners early. Their short
+  reviewed contracts let later family adoption proceed without divergent APIs.
+
+### Remaining programme WOs: parallel work and serial boundaries
+
+All starts require the six-answer check. “Serial” concerns the named boundary,
+not a blanket instruction to idle all other agents. Logical paths in lane specs
+must be resolved to actual files before dispatch; an entire `components/**` glob
+is not an exclusive file reservation for one small packet.
+
+| WO | Work that can run concurrently | Boundary / completion rule |
+| --- | --- | --- |
+| WO-FAM-08 | Complete disjoint data families and named residues; export-kernel work separate from table ARIA work when their files and contracts do not overlap. | One DnD owner, one export owner. Family kernel contracts land before dependent adoption. Own tests stay with the family writer. Keep the WO open until the real family/finding acceptance passes. |
+| WO-FAM-09 | Chart cohorts after the shared series-paint/geometry contract is reviewed and stable; alongside FAM-08/10/11. | One owner for chart theme/series resolver, shared geometry utilities and registration. No 18 competing paint implementations; do not split one chart's behavior from its skin/tests. |
+| WO-FAM-10 | Form/record, header and lifecycle cohorts on exact disjoint files after common contracts settle. | One header/SurfaceRegion contract owner. FAM-11 reads the settled contract; shared surface builders cannot be co-edited. |
+| WO-FAM-11 | Independent shell, search/command and workspace cohorts after common contracts settle. | One keyboard/provider owner; reserve shared headers against FAM-10 and collection/render-dispatch files against FAM-08. |
+| WO-INV-01 | Direction/physical-property instrument repairs and disjoint family adoption. | One shared direction/overlay boundary owner; never change frozen-engine behavior indirectly. Family writers apply local RTL changes while they own those files. |
+| WO-INV-02 | Catalog/formatter/font work separate from family cuts with the agreed message/locale API. | One catalog/calendar/IME contract owner. Send adoption requirements to the active family writer, not a second repository-wide edit sweep. |
+| WO-INV-03 | Global accessibility floor and independent test authoring outside reserved family files. | Coordinate root CSS with EVI/root owners; gate manifest and axe harness have one owner. Component repairs go through their family writer. Actual browser runs use the host validation slot. |
+| WO-INV-08 | Reviewed motion kernel and its isolated tests alongside family work. | Adoption in grid, grid-view, kanban or overlays waits for that family's reservation release; a disjoint kernel directory does NOT make its whole WO disjoint. Align FAM-12's API before integration. |
+| WO-FAM-12 | Card/auto-fit work on released families, with a stable motion/adaptation contract. | FAM-08 also touches grid/gallery/widget-board. Hand off each shared directory explicitly; no simultaneous writes. Required registry deps still apply. |
+| WO-FAM-13 | After FAM-08, FAM-12 and INV-08 are done (and all other declared deps). Independent of unrelated completed-family cleanup. | Sole widget-board/DnD adoption window. Never overlap RET-01 on drag-and-drop; shared DnD is owed by FAM-08, not deferred to this dependent WO. |
+| WO-INV-06 | After FAM-10/11 and its responsive dependency are done; independent of unrelated chart work. | Own SurfaceRegion/posture/app-shell adoption window, with CON-06 reservation on shared consumer fixtures. SSR first-paint proof, not client-only simulation. |
+| WO-DER-08 | Bounded Studio/draft transport residue independent of settled family skins. | One ingress/Theme/public-callback owner; coordinate compile and migration fixtures with CON-06, EMI-03 and EVI-02. Do not reimplement already landed migration. |
+| WO-EMI-03 | Non-CSS emission over a stable ThemeCompilation; independent family skins may progress. | Core review before changing compilation/contracts; never create a second compiler. Resolve overlap with DER-08 and root fixes first; serialize shared artifacts. |
+| WO-CON-06 | Migration documentation and exclusive consumer-fixture cases over the stable published seam. | Singleton ownership with DER-08 / INV-06 / EVI-02 for migration code and shared fixtures. DS fixture work is not permission to write consuming apps or release. |
+| WO-DER-07 | Technical candidate/probe preparation using governed decisions; may accompany evidence work. | Final branding pick stays deferred. Resolve Q-B-DER07 through reviewed milestone machinery, not an invented pick or silently altered acceptance. Reserve probe-ground with RET-05/EVI. |
+| WO-EVI-02 | Separate instruments on disjoint files; read-only evaluation of landed families. | One owner for populations, floors, runner/gate manifest and shared fixtures. Root source repair is assigned to its source owner. Fleet certification waits for actual eligible population/evidence, never substitutes a pilot. |
+| WO-EVI-03 | Harness/door-parity conversion outside active family test files. | Family-local test migration travels with its cut. Coordinate liveness harness with EVI-02; identity-dependent golden regeneration waits for the approved identity. Never bless current output blindly. |
+| WO-RET-01 | In wave 5, independent retirement cohorts after all declared family prerequisites and a fresh consumer census. | Shared exports/package metadata/changeset have one integrator; no removal of active app consumers before authorized migration. Never overlap FAM-13 on DnD. |
+| WO-RET-02 | In wave 5, scoped dead CSS/bundle retirement after consumer evidence. | No active skin/root rewrite on the same inputs. Serialize CSS-build, package and showroom/Tailwind changes with RET-05 and artifact generation. Frozen engine content stays frozen. |
+| WO-RET-03 | In wave 5, evidence quarantine separate from settled runtime source work. | Transfer every live consumer/gate to its authorized authority before moving it. Serialize gate-manifest/docs/script ownership with EVI and RET-04; preserve measured graphs/history. |
+| WO-RET-04 | After RET-01 and its declared deps: disjoint internal monolith splits on released directories. | Global moves/import rewrites are a serial window across BOTH source and its importers, including tests/docs/generated path keys. No moves under active family writers; APIs preserved, no compatibility duplicates. |
+| WO-RET-05 | In wave 5, probe-ground/Storybook adoption over the settled mount and family contracts. | One showroom owner; coordinate RET-02 tooling, RET-04 paths, DER-07 references and EVI browser harness. Pause shared showroom edits during captures. |
+
+Retirement rows do not become early execution merely because `next` lists them:
+the existing wave-5 consumer-census/start-order law still applies. Read-only
+inventory/preparation can run earlier without deleting or moving anything.
+
+### Remaining legacy WOs: avoid duplicate implementation
+
+These rows retain their registry dependencies, phase permissions and source
+authorities. The replacement may already be done: verify its actual evidence,
+then close the old obligation through the script when claimable. Do not redo the
+old recipe, automatically close a partial replacement, or count support as final
+source completion. If the phase is locked, keep the closure receipt ready in the
+existing progress trail and surface the precise phase-control decision early;
+this scheduling amendment does not open a phase or alter its fingerprint.
+
+| Remaining WO(s) | Scheduling / closure route |
+| --- | --- |
+| WO-ARC-12, WO-ARC-13, WO-ARC-14, WO-ARC-17 | Reconcile the recorded FAM-00 / EVI-01 / EMI-02 / CAT-02 replacement evidence and required old-WO ordering; no duplicate anatomy/compiler programme. |
+| WO-ENG-25, WO-CRA-19 | Reconcile DER-04 + INV-05 and CAN-05 respectively; do not rebuild motion or overlay kernels. |
+| WO-ARC-15 | INV-03 plus actual family adoption; do not treat a global floor as every family's accessibility proof. |
+| WO-ARC-20, WO-ARC-18 | FAM-11 plus the recorded responsive contract; avoid a second workspace rewrite. |
+| WO-TOK-11, WO-ARC-19 | DER-03/EVI-02 contrast and six-axis divergence evidence respectively; no palette-only shortcut. |
+| WO-CRA-18 | FAM-09 chart convergence; no second chart programme. |
+| WO-CRA-15, WO-CRA-17, WO-ARC-16, WO-CRA-21 | RET-01's capability, legacy-icon, extensions and marks dispositions; paused scope is not permission to add new effects. |
+| WO-ENG-24 | CAN-06's frozen-engine decision; do not reopen Classic/Rustic development to consume quota. |
+| WO-GAT-12 | EVI-01 + RET-03's measured graph/quarantine evidence; no historical receipt as runtime authority. |
+| WO-SKIN-08 | All replacing cuts and EVI-02 must substantively satisfy its recorded closure; no second broad skin sweep. |
+| WO-ARC-21 | Conserved: DB-to-first-paint proof in consuming apps, after actual phase permission and stable DS contract. DS-side preparation can proceed; app-side implementation requires an explicit authorized cross-repo packet. DS-only focus neither cancels this obligation nor silently grants those writes. |
+| WO-CRA-20 | Conserved: icon weight pruning after RET-01; one generator owner, consumer proof, serialized generated corpus. |
+| WO-CRA-22 | Conserved: supplier-pure root imports after RET-02; coordinate entrypoints/importers with RET-01/04 and CRA-20. |
+| WO-GAT-10 | Conserved: license/provenance for retained effects after RET-01; disjoint checker work can accompany icon cleanup, but shared manifest changes are integrated once. |
+| WO-GAT-11 | INV-01 + INV-03 + EVI-02's actual robustness matrix; one shared browser window, no duplicate fleet harness. |
+| WO-GAT-09 | Final claim-integrity barrier, including its own certifier residuals; cannot close while another executable authority remains open or required review is overdue. |
+
+### Conflict reservations and serial integration
+
+Keep reservations in the owning WO's existing `progress` trail and the DT's
+bounded dispatch, not a second registry or task graph. Release a reservation on
+an explicit delivery/integration event, not elapsed time or silence. Independent
+WOs that share any of the following require a named singleton owner:
+
+| Shared resource | Competing work to coordinate |
+| --- | --- |
+| Theme, catalog, roots, ingress, compilation/emission and public contract | DER-08, EMI-03, CON-06, EVI-02 and any root repair. Review contract first; then disjoint consumers. |
+| DnD / export / widget-board / grid-gallery | FAM-08, FAM-12, FAM-13, INV-08, RET-01. API owner first, consumer-directory handoff second. |
+| Headers / SurfaceRegion / shell / keyboard provider | FAM-10, FAM-11, INV-06 and any INV-02 adoption in those files. |
+| Family TSX, deriver, skin and its tests | A single complete-family writer; INV-01/02/03 and EVI-03 request changes through that owner, or await release. |
+| Gate/roster/fan-out registries, shared fixtures and `.github/workflows/ci.yml` | EVI-02/03, INV-03, CON-06, RET-03/05 and family registrations. Writers provide exact registration deltas; the assigned owner integrates them once. |
+| Build inputs, generators, dist, CSS artifacts, graph, supplier snapshots, package exports/lockfiles | One integration/generation owner; no concurrent regeneration or installation. |
+| Showroom source/dev server, browser matrix, screenshot/golden paths | One stable capture window; DER-07, INV-03/06, EVI-02/03, FAM-13 and RET-02/04/05 reserve it. |
+| Filesystem moves and reverse importers | RET-04 reserves the whole affected source/importer closure, not just the destination folder. |
+| Git index, roadmap registry/STATUS and commits | The sole DT. Writers never use `git add`, `git mv` or whole-tree formatting. |
+
+**Land coherent functional packets, not hundreds of loose edits.** Review the
+exact candidate, verify HEAD/index/pathspec and new/untracked files, then use the
+serialized test/commit window. A pass that depended on another writer's
+uncommitted dependency does not certify the candidate commit. If the relevant
+source/test dependency closure cannot be held equal to the reviewed candidate,
+wait for its owners' checkpoint; never reset, hide or sweep their drafts.
+
+One heavy build, full suite or browser/visual run uses this host at a time, with
+bounded test workers and no automatic retries. Disjoint source authoring and
+read-only review may continue outside its input closure. Lightweight focal tests
+may run only in DT-granted non-conflicting slots; writers do not compete for
+ports, caches, global fixtures or mutable artifacts. Whole-wave certification
+uses a pinned integrated checkpoint after relevant writers have yielded.
+
+### Verification that protects the product without repeating work
+
+| Delivery | Required proof |
+| --- | --- |
+| Ordinary family packet | Independent diff review; changed behavior + direct-consumer tests; production/test types as applicable; family anatomy/RWP/paint/causality gates; RTL/i18n/a11y/adaptation cases appropriate to the change; actual sighted evidence for visual changes. |
+| Shared contract / root / instrument | Same-debrief core review under the existing policy; producer/consumer and transport parity; rejection/negative cases. Instruments need realistic planted failures. Reuse the approved contract, not a new architecture meeting per consuming file. |
+| Artifact / migration / package boundary | Reproducible official generation, freshness and public-consumer evidence against the real candidate; server/preview/publish/mount identity where affected. Never hand-edit generated output. |
+| Meaningful family/shared-core milestone | One combined full suite on the pinned checkpoint, applicable browser/visual matrix, integrated gate inventory and named red attribution; reuse it for covered lots whose relevant inputs are unchanged. |
+| Final certification | All WO/finding acceptance, indicators at target, fleet evidence and required robustness/consumer proofs. Registry completion, a package build or a nonzero-debt ratchet alone is insufficient. |
+
+Reuse evidence only with the same source/input closure, contract, harness and
+population revision. When one changes, rerun the affected checks and dependent
+consumers, not blindly the whole repository. Report measured PASS, FAIL,
+historically attributed red and NOT RUN separately. Pre-existing debt is not
+silently forgiven; new failures cannot be hidden in a baseline or skip list.
+
+Product invariants remain: bounded meaningful customization; one canonical
+compiler/owner; full inherited quality for Standard and Pro with different
+editing permissions; same-vertical tenant difference beyond palette with all
+six required axes, absolute minima and negative controls; responsive first paint,
+interaction, accessibility and RTL/i18n; no new hardcoded paint or duplicate path.
+Use provisional admitted identities to prove capability, without spending the
+critical path on deferred final branding. Preserve the distinct later approval
+for identity-dependent goldens. Shared/frozen engine boundaries remain protected.
+
+### Minimal packet and event-driven handoff
+
+Every dispatch carries this compact record in the existing WO progress/brief:
+
+```text
+WO / packet / acceptance or finding covered:
+Base HEAD + verified checkout/main + writer account/model + independent reviewer:
+Exact write set (including tests/skin) / shared-registration owner:
+Consumed contract revision + source owners that must not change during validation:
+Dependencies and phase permission checked / explicit file reservations:
+Focal tests, negative cases, applicable gates, visual proof / validation slot:
+Deliverable: candidate hashes/diff, evidence, unresolved items, completion event:
+```
+
+On delivery: audit once, return concrete corrections to that writer if needed,
+land the reviewed functional lot locally, record its evidence, release files and
+dispatch the next safe ready packet. Do not globally stop because one packet
+completed. Only a genuine missing authority/contract, failing acceptance or
+unavailable capacity blocks its affected work; the DT continues independent work.
+
+Report actual completed families, removed blocking defects, current indicators,
+critical-path dependency and next packages at material landings. Re-estimate time
+from observed accepted throughput, not agent count, lines changed or the raw WO
+percentage. No periodic empty progress messages. This plan guarantees a process
+for verification, not an assertion that unseen output is already excellent.
 
 ### DS-improvements authority, milestones and wave locks
 
