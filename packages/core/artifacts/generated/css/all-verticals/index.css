@@ -30858,18 +30858,18 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.875rem 1rem))
   );
   --ds-modern-table-leading-cell-padding: var(
-    --ds-table-leading-cell-padding-comfortable,
+    --ds-data-table-leading-cell-padding-comfortable,
     0.75rem 1rem 0.75rem 0.1875rem
   );
   --ds-modern-table-selection-cell-padding: var(
-    --ds-table-selection-cell-padding-comfortable,
+    --ds-data-table-selection-cell-padding-comfortable,
     0 0 0 0.4375rem
   );
   --ds-modern-table-action-cell-padding: var(
-    --ds-table-action-cell-padding-comfortable,
+    --ds-data-table-action-cell-padding-comfortable,
     0 0.625rem
   );
-  --ds-modern-table-control-size: var(--ds-table-control-size, 2rem);
+  --ds-modern-table-control-size: var(--ds-data-table-control-size, 2rem);
   --ds-modern-table-control-radius: var(
     --ds-table-control-radius,
     var(--ds-radius-md, 0.5rem)
@@ -30895,6 +30895,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
      here as the designed default: an owner override on root or part wins. */
   --_ds-data-table-actions-rest-opacity: 0.4;
 
+  /* The shared loading renderer states its placeholder cells on the host's
+     own rhythm, so the pending rows keep the table's density. */
+  --ds-skeleton-cell-padding: var(--ds-modern-table-cell-padding);
+
   width: 100%;
   min-width: 0;
   color: var(--ds-table-cell-color, var(--ds-color-text-primary));
@@ -30912,21 +30916,21 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.5rem 0.75rem))
   );
   --ds-modern-table-leading-cell-padding: var(
-    --ds-table-leading-cell-padding-compact,
+    --ds-data-table-leading-cell-padding-compact,
     0.375rem 0.75rem 0.375rem 0.125rem
   );
   --ds-modern-table-selection-cell-padding: var(
-    --ds-table-selection-cell-padding-compact,
+    --ds-data-table-selection-cell-padding-compact,
     0 0 0 0.375rem
   );
   --ds-modern-table-action-cell-padding: var(
-    --ds-table-action-cell-padding-compact,
+    --ds-data-table-action-cell-padding-compact,
     0 0.5rem
   );
-  --ds-modern-table-control-size: var(--ds-table-control-size-compact, 1.75rem);
-  /* Compact is a coordinated posture, not ±2px: chrome bars, skeleton bars
-     and the type step below all move together on the family's shared density
-     factor channel. */
+  --ds-modern-table-control-size: var(--ds-data-table-control-size-compact, 1.75rem);
+  /* Compact is a coordinated posture, not ±2px: chrome bars and the type
+     step below all move together on the family's shared density factor
+     channel. */
   --ds-table-pagination-min-height: 2.75rem;
   --ds-table-bulk-bar-min-height: 3rem;
 }
@@ -30937,18 +30941,18 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-density-cell-padding, var(--ds-table-cell-padding, 16px 16px))
   );
   --ds-modern-table-leading-cell-padding: var(
-    --ds-table-leading-cell-padding-spacious,
+    --ds-data-table-leading-cell-padding-spacious,
     1rem 1rem 1rem 0.25rem
   );
   --ds-modern-table-selection-cell-padding: var(
-    --ds-table-selection-cell-padding-spacious,
+    --ds-data-table-selection-cell-padding-spacious,
     0 0 0 0.5rem
   );
   --ds-modern-table-action-cell-padding: var(
-    --ds-table-action-cell-padding-spacious,
+    --ds-data-table-action-cell-padding-spacious,
     0 0.75rem
   );
-  --ds-modern-table-control-size: var(--ds-table-control-size-spacious, 2.25rem);
+  --ds-modern-table-control-size: var(--ds-data-table-control-size-spacious, 2.25rem);
   --ds-table-pagination-min-height: 3.75rem;
   --ds-table-bulk-bar-min-height: 4rem;
 }
@@ -30978,12 +30982,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   line-height: var(--ds-table-cell-line-height, 1.55);
 }
 
-/* The header label joins the SAME ladder (height + type + chrome + skeleton
-   move together): compact tightens the header toward the ledger's caption
+/* The header label joins the SAME ladder (height + type + chrome move
+   together): compact tightens the header toward the ledger's caption
    register — floored so an already-small authored header size never
    collapses into illegibility — and spacious opens it toward the editorial
-   register. The header control size and the skeleton header bars already
-   scale on these same channels. */
+   register. The header control size already scales on these same channels. */
 .ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
   [data-part="header-cell"] {
   font-size: max(
@@ -31001,25 +31004,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-table-header-font-size, 13px) *
       var(--ds-density-factor-spacious, 1.15)
   );
-}
-
-/* The loading skeleton keeps the posture's exact footprint: bar heights move
-   with the same factor the rows resolve, per density. */
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
-  [data-part="skeleton-cell"] {
-  height: calc(14px * var(--ds-density-factor-compact, 0.85));
-}
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
-  [data-part="skeleton-header-col"] {
-  height: calc(10px * var(--ds-density-factor-compact, 0.85));
-}
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
-  [data-part="skeleton-cell"] {
-  height: calc(14px * var(--ds-density-factor-spacious, 1.15));
-}
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
-  [data-part="skeleton-header-col"] {
-  height: calc(10px * var(--ds-density-factor-spacious, 1.15));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="inline-edit-actions"] {
@@ -31041,7 +31025,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="inline-edit-action"]:disabled {
+  [data-part="inline-edit-action"]:is([data-state~="disabled"], :disabled) {
   cursor: wait;
 }
 
@@ -31057,7 +31041,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern [data-part="toolbar"] {
   display: grid;
-  gap: var(--ds-table-toolbar-gap, var(--ds-spacing-2, 0.5rem));
+  gap: var(--ds-data-table-toolbar-gap, var(--ds-spacing-2, 0.5rem));
   min-width: 0;
   margin-bottom: 0;
 }
@@ -31110,42 +31094,15 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   overflow-y: auto;
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton"] {
-  width: 100%;
-}
-
-/* The skeleton tracks the SAME density-aware cell padding the real header and
-   body rows paint (`--ds-modern-table-cell-padding` resolves per data-density
-   on the root), so the loading posture keeps the table's exact footprint and
-   nothing jumps when rows swap in. */
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header"] {
-  display: flex;
-  gap: var(--ds-spacing-4, 16px);
-  padding: var(--ds-modern-table-cell-padding);
-}
-
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
-  flex: 1;
-  height: 10px;
-  opacity: 0.5;
-}
-
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-header-col"][data-leading="true"],
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-cell"][data-leading="true"] {
-  flex-grow: 1.5;
-}
-
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-row"] {
-  display: flex;
-  gap: var(--ds-spacing-4, 16px);
-  padding: var(--ds-modern-table-cell-padding);
-}
-
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
-  flex: 1;
-  height: 14px;
+/* The loading announcement carries no visual weight of its own: the
+   placeholder rows are what the surface shows. */
+.ds-pattern-data-table.ds-engine-modern [data-part="loading-status"] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="empty-state"],
@@ -31179,21 +31136,21 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="state-title"] {
-  max-inline-size: var(--ds-table-state-copy-max-inline-size, 32rem);
+  max-inline-size: var(--ds-data-table-state-copy-max-inline-size, 32rem);
   text-align: center;
   text-wrap: balance;
   font-family: var(--ds-typography-section-title-family, inherit);
-  font-size: var(--ds-table-empty-title-font-size, var(--ds-font-size-sm));
+  font-size: var(--ds-data-table-empty-title-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-typography-section-title-weight, 600);
   letter-spacing: var(--ds-typography-section-title-tracking, -0.01em);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="state-description"] {
-  max-inline-size: var(--ds-table-state-copy-max-inline-size, 32rem);
+  max-inline-size: var(--ds-data-table-state-copy-max-inline-size, 32rem);
   text-align: center;
   text-wrap: pretty;
   font-size: var(
-    --ds-table-empty-description-font-size,
+    --ds-data-table-empty-description-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   line-height: 1.5;
@@ -31201,7 +31158,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern [data-part="table"] {
   width: 100%;
-  min-width: var(--ds-table-min-inline-size, 42rem);
+  min-width: var(--ds-data-table-min-inline-size, 42rem);
   border-collapse: collapse;
   color: inherit;
   font-variant-numeric: tabular-nums;
@@ -31234,7 +31191,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   padding: var(--ds-modern-table-cell-padding);
   font-size: var(--ds-table-header-font-size, 13px);
   font-family: var(
-    --ds-table-header-font-family,
+    --ds-data-table-header-font-family,
     var(--ds-typography-label-family, inherit)
   );
   font-weight: var(--ds-table-header-font-weight, 500);
@@ -31332,25 +31289,28 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   z-index: 2;
 }
 
+/* The stacking offset of a pinned cell is runtime geometry: the engine measures
+   the preceding pinned columns and sets it as an element-scoped custom
+   property, so the sticky inset itself stays declared here. */
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-pin-side="left"],
 .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"][data-pin-side="left"] {
-  inset-inline-start: 0;
+  inset-inline-start: var(--ds-data-table-pinned-inset-start, 0px);
 }
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-pin-side="right"],
 .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"][data-pin-side="right"] {
-  inset-inline-end: 0;
+  inset-inline-end: var(--ds-data-table-pinned-inset-end, 0px);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="header-content"] {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-table-header-content-gap, 0.375rem);
+  gap: var(--ds-data-table-header-content-gap, 0.375rem);
   width: 100%;
   min-width: 0;
 }
@@ -31378,12 +31338,12 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   margin-inline-end: var(--ds-table-drag-grip-offset, 0.125rem);
   padding: 0;
   font-size: var(
-    --ds-table-drag-handle-font-size,
+    --ds-data-table-drag-handle-font-size,
     calc(var(--ds-font-size-xs) * 0.9167)
   );
   line-height: 1;
   cursor: grab;
-  opacity: var(--ds-table-drag-grip-opacity, 0.58);
+  opacity: var(--ds-data-table-drag-grip-opacity, 0.58);
   transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
     border-color var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -31423,20 +31383,20 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   color: inherit;
   line-height: 1;
   cursor: pointer;
-  opacity: var(--ds-table-drag-grip-opacity, 0.58);
+  opacity: var(--ds-data-table-drag-grip-opacity, 0.58);
   transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
     var(--ds-motion-ease-move, ease-out);
 }
 
 @media (hover: hover) {
-  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:hover,
-  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]:hover {
+  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:is([data-state~="hovered"], :hover),
+  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]:is([data-state~="hovered"], :hover) {
     opacity: 1;
   }
 }
-.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:focus-visible,
+.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:is([data-state~="focus-visible"], :focus-visible),
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="hide-column-button"]:focus-visible {
+  [data-part="hide-column-button"]:is([data-state~="focus-visible"], :focus-visible) {
   opacity: 1;
 }
 
@@ -31454,7 +31414,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   flex-shrink: 0;
   gap: 1px;
   margin-inline-start: 0.125rem;
-  color: var(--ds-table-sort-color, var(--ds-color-text-muted));
+  color: var(--ds-data-table-sort-color, var(--ds-color-text-muted));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="drop-indicator"] {
@@ -31473,14 +31433,14 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--ds-table-resize-hit-size, 1rem);
+  width: var(--ds-data-table-resize-hit-size, 1rem);
   cursor: col-resize;
   touch-action: none;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"] {
-  width: var(--ds-table-resize-bar-width, 0.125rem);
-  height: var(--ds-table-resize-bar-height, 58%);
+  width: var(--ds-data-table-resize-bar-width, 0.125rem);
+  height: var(--ds-data-table-resize-bar-height, 58%);
   transition: width var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
     height var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -31503,7 +31463,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   border-inline-start: 1px solid
     var(--ds-table-action-border, var(--ds-table-row-border, transparent));
   background: var(--ds-table-action-bg, var(--ds-surface-card));
-  box-shadow: var(--ds-table-action-shadow, none);
+  box-shadow: var(--ds-data-table-action-shadow, none);
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -31539,7 +31499,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   justify-content: center;
   width: var(--ds-modern-table-control-size);
   height: var(--ds-modern-table-control-size);
-  font-size: var(--ds-table-caption-font-size, var(--ds-font-size-xs));
+  font-size: var(--ds-data-table-caption-font-size, var(--ds-font-size-xs));
   cursor: pointer;
   transition: background var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
@@ -31585,13 +31545,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-input"] {
   box-sizing: border-box;
   width: 100%;
-  padding: var(--ds-table-editor-input-padding, 0.25rem 0.5rem);
+  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
   font-family: inherit;
   font-size: var(
-    --ds-table-editor-input-font-size,
+    --ds-data-table-editor-input-font-size,
     var(--ds-font-size-sm, 0.875rem)
   );
-  line-height: var(--ds-table-editor-input-line-height, 1.5);
+  line-height: var(--ds-data-table-editor-input-line-height, 1.5);
 }
 
 .ds-pattern-data-table.ds-engine-modern select[data-part="editor-input"] {
@@ -31601,8 +31561,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-checkbox"] {
   flex-shrink: 0;
-  inline-size: var(--ds-table-editor-checkbox-size, 1rem);
-  block-size: var(--ds-table-editor-checkbox-size, 1rem);
+  inline-size: var(--ds-data-table-editor-checkbox-size, 1rem);
+  block-size: var(--ds-data-table-editor-checkbox-size, 1rem);
   cursor: pointer;
 }
 
@@ -31611,7 +31571,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
      the cell never grew for, so half of it lands outside the table. */
   display: block;
   margin-block-start: var(--ds-spacing-1, 0.25rem);
-  font-size: var(--ds-table-editor-error-font-size, var(--ds-font-size-xs));
+  font-size: var(--ds-data-table-editor-error-font-size, var(--ds-font-size-xs));
   overflow-wrap: anywhere;
 }
 
@@ -31622,7 +31582,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
   width: 100%;
-  padding: var(--ds-table-expanded-padding, 0.875rem 1rem 1rem);
+  padding: var(--ds-data-table-expanded-padding, 0.875rem 1rem 1rem);
   /* Disclosure continuity: the detail arrives from the row that spawned it,
      on the semantic reveal dial (quieted wholesale by the RM block). */
   animation: ds-data-table-expanded-enter
@@ -31633,7 +31593,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
   font-family: var(--ds-typography-section-title-family, inherit);
   font-size: var(
-    --ds-table-group-header-font-size,
+    --ds-data-table-group-header-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   font-weight: var(--ds-typography-section-title-weight, 600);
@@ -31652,7 +31612,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   width: 18px;
   height: 18px;
   font-size: var(
-    --ds-table-group-disclosure-font-size,
+    --ds-data-table-group-disclosure-font-size,
     calc(var(--ds-font-size-xs) * 0.8333)
   );
   transition: transform var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -31667,7 +31627,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   height: 20px;
   padding: 0 6px;
   font-size: var(
-    --ds-table-group-count-font-size,
+    --ds-data-table-group-count-font-size,
     calc(var(--ds-font-size-xs) * 0.9167)
   );
   font-weight: 500;
@@ -31680,7 +31640,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   align-items: center;
   gap: 6px;
   margin-inline-start: 4px;
-  font-size: var(--ds-table-caption-font-size, var(--ds-font-size-xs));
+  font-size: var(--ds-data-table-caption-font-size, var(--ds-font-size-xs));
   font-weight: 400;
 }
 
@@ -31695,9 +31655,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   align-items: center;
   justify-content: space-between;
   min-height: var(--ds-table-pagination-min-height, 3.25rem);
-  padding: var(--ds-table-pagination-padding, 0.625rem 1rem);
+  padding: var(--ds-data-table-pagination-padding, 0.625rem 1rem);
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   /* Flush with the card's bottom corners whenever it is the last chrome
@@ -31724,7 +31684,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   height: 32px;
   padding: 0 10px;
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   font-weight: 500;
@@ -31737,9 +31697,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="pagination-nav-button"]:disabled {
+  [data-part="pagination-nav-button"]:is([data-state~="disabled"], :disabled) {
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="pagination-ellipsis"],
@@ -31750,7 +31709,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   width: 32px;
   height: 32px;
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
 }
@@ -31782,7 +31741,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   justify-content: space-between;
   gap: 12px;
   min-height: var(--ds-table-bulk-bar-min-height, 3.5rem);
-  padding: var(--ds-table-bulk-bar-padding, 0.625rem 1rem);
+  padding: var(--ds-data-table-bulk-bar-padding, 0.625rem 1rem);
   /* Last chrome region: keep the card's bottom radius unbroken. */
   border-end-start-radius: var(--ds-table-radius, var(--ds-radius-lg));
   border-end-end-radius: var(--ds-table-radius, var(--ds-radius-lg));
@@ -31794,7 +31753,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   font-weight: 500;
@@ -31813,9 +31772,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-motion-ease-move, ease);
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"]:disabled {
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"]:is([data-state~="disabled"], :disabled) {
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 /* ---- card surface ---- */
@@ -31836,59 +31794,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="card"][data-part="card"] {
   border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
-}
-
-/* ---- loading skeleton parts ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header"] {
-  background: var(
-    --ds-table-header-bg,
-    var(--ds-surface-inset, var(--ds-surface-panel))
-  );
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-header"][data-part="skeleton-header"] {
-  /* The skeleton reproduces the header's terminal emphasis rule too, so the
-     loading handoff keeps the exact footprint at any tenant edge width. */
-  border-bottom: var(--ds-table-header-rule-width, 1px) solid
-    var(--ds-table-border, var(--ds-color-border-subtle));
-}
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(
-    --ds-table-skeleton-fill,
-    linear-gradient(
-      105deg,
-      var(--ds-color-border-subtle) 24%,
-      color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent) 44%,
-      var(--ds-color-border-subtle) 64%
-    )
-  );
-  background-size: 220% 100%;
-  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
-    var(--ds-motion-ease-standard, ease-in-out) infinite;
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-row"][data-divider="true"] {
-  border-bottom: 1px solid
-    var(--ds-modern-table-divider);
-}
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(
-    --ds-table-skeleton-fill,
-    linear-gradient(
-      105deg,
-      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 24%,
-      color-mix(in srgb, var(--ds-color-bg-elevated) 74%, transparent) 44%,
-      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 64%
-    )
-  );
-  background-size: 220% 100%;
-  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
-    var(--ds-motion-ease-standard, ease-in-out) infinite;
-  animation-delay: calc(
-    var(--ds-modern-table-skeleton-index, 0) * var(--ds-motion-fast)
-  );
 }
 
 /* ---- empty/error state (container tint + default icon-tile/title/description) ---- */
@@ -32040,7 +31945,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
   border-radius: var(--ds-modern-table-control-radius);
   background: var(
-    --ds-table-drag-grip-bg,
+    --ds-data-table-drag-grip-bg,
     color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)
   );
   color: var(--ds-color-text-secondary);
@@ -32049,19 +31954,19 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part="drag-grip"][data-part="drag-grip"] {
   border: 1px solid
     var(
-      --ds-table-drag-grip-border,
+      --ds-data-table-drag-grip-border,
       color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)
     );
 }
 @media (hover: hover) {
-  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover {
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="hovered"], :hover) {
     border-color: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
     background: var(--ds-table-reorder-bg, var(--ds-surface-inset));
     opacity: 1;
     transform: translateY(-1px);
   }
 }
-.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible {
+.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="focus-visible"], :focus-visible) {
   border-color: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
   background: var(--ds-table-reorder-bg, var(--ds-surface-inset));
   opacity: 1;
@@ -32116,13 +32021,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-selected="true"] > td {
   box-shadow: var(
-    --ds-table-row-selected-shadow,
+    --ds-data-table-row-selected-shadow,
     inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
   );
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible {
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: none;
   background-color: var(
     --ds-table-row-bg-selected,
@@ -32130,7 +32035,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   );
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible > td {
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible) > td {
   box-shadow: var(
     --ds-table-row-focus-shadow,
     inset 0 0 0 2px
@@ -32141,7 +32046,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover {
+  ):is([data-state~="hovered"], :hover) {
     background-color: var(
       --ds-table-row-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
@@ -32150,7 +32055,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover > td {
+  ):is([data-state~="hovered"], :hover) > td {
     box-shadow: var(
       --ds-table-row-hover-shadow,
       inset 0 0 0 1px
@@ -32172,7 +32077,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   color: var(--ds-color-text-secondary);
 }
 @media (hover: hover) {
-  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover {
+  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:is([data-state~="hovered"], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
     transform: scale(1.03);
   }
@@ -32310,7 +32215,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   border: 0;
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="pagination-nav-button"]:disabled {
+  [data-part="pagination-nav-button"]:is([data-state~="disabled"], :disabled) {
   color: var(--ds-color-text-muted);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="pagination-ellipsis"] {
@@ -32323,7 +32228,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="pagination-page-button"]:hover {
+    [data-part="pagination-page-button"]:is([data-state~="hovered"], :hover) {
     box-shadow: var(--ds-table-page-button-hover-shadow, none);
   }
 }
@@ -32393,7 +32298,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   }
 
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"]:hover
+    [data-part="body-row"]:is([data-state~="hovered"], :hover)
     [data-part="actions-content"],
   .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"]:focus-within
@@ -32429,11 +32334,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   .ds-data-table__column-tooltip--resize.ds-data-table__column-tooltip--resize {
   position: absolute;
   inset-block: 0;
-  inset-inline-end: calc(var(--ds-table-resize-hit-size, 1rem) / -2);
+  inset-inline-end: calc(var(--ds-data-table-resize-hit-size, 1rem) / -2);
   z-index: 4;
   display: block;
-  width: var(--ds-table-resize-hit-size, 1rem);
-  min-width: var(--ds-table-resize-hit-size, 1rem);
+  width: var(--ds-data-table-resize-hit-size, 1rem);
+  min-width: var(--ds-data-table-resize-hit-size, 1rem);
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -32459,16 +32364,16 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"] {
   display: inline-grid;
   place-items: center;
-  width: var(--ds-table-sort-control-size, 1.375rem);
-  height: var(--ds-table-sort-control-size, 1.375rem);
-  margin-inline-start: var(--ds-table-sort-control-offset, 0.125rem);
+  width: var(--ds-data-table-sort-control-size, 1.375rem);
+  height: var(--ds-data-table-sort-control-size, 1.375rem);
+  margin-inline-start: var(--ds-data-table-sort-control-offset, 0.125rem);
   border-radius: var(
-    --ds-table-sort-control-radius,
+    --ds-data-table-sort-control-radius,
     var(--ds-radius-sm, 0.375rem)
   );
-  background: var(--ds-table-sort-bg, transparent);
-  color: var(--ds-table-sort-color, var(--ds-color-text-muted));
-  opacity: var(--ds-table-sort-opacity, 0.68);
+  background: var(--ds-data-table-sort-bg, transparent);
+  color: var(--ds-data-table-sort-color, var(--ds-color-text-muted));
+  opacity: var(--ds-data-table-sort-opacity, 0.68);
   transform: rotate(0deg);
   transition:
     color var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -32485,52 +32390,52 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="sort-icon"][data-part="sort-icon"] {
-  border: 1px solid var(--ds-table-sort-border, transparent);
+  border: 1px solid var(--ds-data-table-sort-border, transparent);
 }
 
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="header-cell"][data-sortable="true"]:hover
+    [data-part="header-cell"][data-sortable="true"]:is([data-state~="hovered"], :hover)
     [data-part="sort-icon"] {
     border-color: var(
-      --ds-table-sort-border-hover,
+      --ds-data-table-sort-border-hover,
       color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
     );
     background: var(
-      --ds-table-sort-bg-hover,
+      --ds-data-table-sort-bg-hover,
       color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
     );
-    color: var(--ds-table-sort-color-hover, var(--ds-color-text-secondary));
+    color: var(--ds-data-table-sort-color-hover, var(--ds-color-text-secondary));
     opacity: 1;
   }
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)
   [data-part="sort-icon"] {
   border-color: var(
-    --ds-table-sort-border-hover,
+    --ds-data-table-sort-border-hover,
     color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
   background: var(
-    --ds-table-sort-bg-hover,
+    --ds-data-table-sort-bg-hover,
     color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
   );
-  color: var(--ds-table-sort-color-hover, var(--ds-color-text-secondary));
+  color: var(--ds-data-table-sort-color-hover, var(--ds-color-text-secondary));
   opacity: 1;
 }
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="sort-icon"][data-active="true"] {
   border-color: var(
-    --ds-table-sort-border-active,
+    --ds-data-table-sort-border-active,
     color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
   );
   background: var(
-    --ds-table-sort-bg-active,
+    --ds-data-table-sort-bg-active,
     color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
   );
-  color: var(--ds-table-sort-color-active, var(--ds-color-primary));
+  color: var(--ds-data-table-sort-color-active, var(--ds-color-primary));
   opacity: 1;
 }
 
@@ -32546,17 +32451,17 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   box-shadow: inset 0 -2px 0 0
     color-mix(
       in srgb,
-      var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+      var(--ds-data-table-sort-color-active, var(--ds-color-primary)) 42%,
       transparent
     );
 }
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="drop-indicator"][data-part="drop-indicator"] {
-  inset: var(--ds-table-drop-indicator-inset, 0.1875rem);
+  inset: var(--ds-data-table-drop-indicator-inset, 0.1875rem);
   border: 1px solid
     var(
-      --ds-table-drop-indicator-border,
+      --ds-data-table-drop-indicator-border,
       color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
     );
   border-radius: var(
@@ -32564,11 +32469,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-modern-table-control-radius)
   );
   background: var(
-    --ds-table-drop-indicator-bg,
+    --ds-data-table-drop-indicator-bg,
     color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
   );
   box-shadow: var(
-    --ds-table-drop-indicator-shadow,
+    --ds-data-table-drop-indicator-shadow,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
   );
 }
@@ -32578,7 +32483,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-pinned="true"] {
   background: var(
-    --ds-table-header-pinned-bg,
+    --ds-data-table-header-pinned-bg,
     var(--ds-table-header-bg, var(--ds-surface-inset))
   );
 }
@@ -32586,7 +32491,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"]
   [data-part="data-cell"][data-pinned="true"] {
-  background: var(--ds-table-pinned-cell-bg, var(--ds-table-row-bg, var(--ds-surface-card)));
+  background: var(--ds-data-table-pinned-cell-bg, var(--ds-table-row-bg, var(--ds-surface-card)));
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -32609,7 +32514,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part="body-row"][data-striped="true"]
   :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
   background: var(
-    --ds-table-pinned-cell-bg-striped,
+    --ds-data-table-pinned-cell-bg-striped,
     var(--ds-table-row-bg-striped, var(--ds-surface-inset))
   );
 }
@@ -32618,7 +32523,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part="body-row"][data-selected="true"]
   :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
   background: var(
-    --ds-table-pinned-cell-bg-selected,
+    --ds-data-table-pinned-cell-bg-selected,
     var(
       --ds-table-row-bg-selected,
       color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
@@ -32628,10 +32533,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):is([data-state~="hovered"], :hover)
     :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
     background: var(
-      --ds-table-pinned-cell-bg-hover,
+      --ds-data-table-pinned-cell-bg-hover,
       var(
         --ds-table-row-bg-hover,
         color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card))
@@ -32641,10 +32546,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
   :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
   background: var(
-    --ds-table-pinned-cell-bg-focus,
+    --ds-data-table-pinned-cell-bg-focus,
     var(
       --ds-table-row-bg-selected,
       color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
@@ -32653,10 +32558,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible {
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: none;
   box-shadow: var(
-    --ds-table-header-focus-shadow,
+    --ds-data-table-header-focus-shadow,
     inset 0 0 0 2px
       color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
   );
@@ -32691,7 +32596,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 /* The always-sticky actions column carries data-pinned/data-pin-side as well,
-   but it already owns its directional border + --ds-table-action-shadow
+   but it already owns its directional border + --ds-data-table-action-shadow
    channel, so the edge grammar below skips it. */
 .ds-pattern-data-table.ds-engine-modern
   :is([data-part="header-cell"], [data-part="data-cell"])[data-pinned="true"][data-pin-side="left"]:not([data-cell-kind="actions"]) {
@@ -32709,7 +32614,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part="body-row"][data-selected="true"]
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
   box-shadow: var(
-      --ds-table-row-selected-shadow,
+      --ds-data-table-row-selected-shadow,
       inset 0 0 0 1px
         color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
     ),
@@ -32719,7 +32624,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part="body-row"][data-selected="true"]
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
   box-shadow: var(
-      --ds-table-row-selected-shadow,
+      --ds-data-table-row-selected-shadow,
       inset 0 0 0 1px
         color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
     ),
@@ -32727,7 +32632,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):is([data-state~="hovered"], :hover)
     > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
     box-shadow: var(
         --ds-table-row-hover-shadow,
@@ -32737,7 +32642,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
       var(--_ds-data-table-pin-edge-start);
   }
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):is([data-state~="hovered"], :hover)
     > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
     box-shadow: var(
         --ds-table-row-hover-shadow,
@@ -32748,7 +32653,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   }
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
   box-shadow: var(
       --ds-table-row-focus-shadow,
@@ -32758,7 +32663,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--_ds-data-table-pin-edge-start);
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
   box-shadow: var(
       --ds-table-row-focus-shadow,
@@ -32771,18 +32676,18 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 /* A pinned SORTABLE header cell keeps its keyboard ring without losing the
    edge keyline. */
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible[data-pinned="true"][data-pin-side="left"] {
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)[data-pinned="true"][data-pin-side="left"] {
   box-shadow: var(
-      --ds-table-header-focus-shadow,
+      --ds-data-table-header-focus-shadow,
       inset 0 0 0 2px
         color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
     ),
     var(--_ds-data-table-pin-edge-start);
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible[data-pinned="true"][data-pin-side="right"] {
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)[data-pinned="true"][data-pin-side="right"] {
   box-shadow: var(
-      --ds-table-header-focus-shadow,
+      --ds-data-table-header-focus-shadow,
       inset 0 0 0 2px
         color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
     ),
@@ -32795,7 +32700,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   box-shadow: inset 0 -2px 0 0
       color-mix(
         in srgb,
-        var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+        var(--ds-data-table-sort-color-active, var(--ds-color-primary)) 42%,
         transparent
       ),
     var(--_ds-data-table-pin-edge-start);
@@ -32805,7 +32710,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   box-shadow: inset 0 -2px 0 0
       color-mix(
         in srgb,
-        var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+        var(--ds-data-table-sort-color-active, var(--ds-color-primary)) 42%,
         transparent
       ),
     var(--_ds-data-table-pin-edge-end);
@@ -32829,13 +32734,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="minimal"]
   [data-part="card"] {
-  box-shadow: var(--ds-table-minimal-shadow, none);
+  box-shadow: var(--ds-data-table-minimal-shadow, none);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="ruled"]
   [data-part="body-row"][data-last="false"] {
   border-bottom: 1px solid
-    var(--ds-table-rule-strong, var(--ds-color-border-secondary));
+    var(--ds-data-table-rule-strong, var(--ds-color-border-secondary));
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
@@ -32874,21 +32779,21 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="header-row"] {
-  background: var(--ds-table-editorial-header-bg, transparent);
+  background: var(--ds-data-table-editorial-header-bg, transparent);
   box-shadow: none;
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="header-cell"] {
-  padding-block: var(--ds-table-editorial-header-padding-block, 1rem);
+  padding-block: var(--ds-data-table-editorial-header-padding-block, 1rem);
   font-family: var(--ds-typography-label-family, inherit);
   letter-spacing: var(--ds-typography-label-tracking, 0.08em);
-  text-transform: var(--ds-table-editorial-header-transform, uppercase);
+  text-transform: var(--ds-data-table-editorial-header-transform, uppercase);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="data-cell"] {
-  padding-block: var(--ds-table-editorial-cell-padding-block, 1.125rem);
+  padding-block: var(--ds-data-table-editorial-cell-padding-block, 1.125rem);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
@@ -32911,9 +32816,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover
+  ):is([data-state~="hovered"], :hover)
     > td:not([data-pinned="true"]) {
-    box-shadow: var(--ds-table-editorial-row-shadow, var(--ds-elevation-1));
+    box-shadow: var(--ds-data-table-editorial-row-shadow, var(--ds-elevation-1));
   }
 }
 
@@ -32963,7 +32868,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover {
+  ):is([data-state~="hovered"], :hover) {
     background-color: var(
       --ds-table-row-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)
@@ -32991,7 +32896,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 [data-anatomy-table="open"]
   .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"] {
-  padding-block: var(--ds-table-open-cell-padding-block, 0.875rem);
+  padding-block: var(--ds-data-table-open-cell-padding-block, 0.875rem);
 }
 
 @keyframes ds-data-table-arrive {
@@ -33034,14 +32939,14 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]::after {
     content: "";
     position: absolute;
-    inset: calc(var(--ds-table-touch-hit-expansion, 0.5625rem) * -1);
+    inset: calc(var(--ds-data-table-touch-hit-expansion, 0.5625rem) * -1);
   }
 
   .ds-pattern-data-table.ds-engine-modern
     .ds-data-table__column-tooltip--resize.ds-data-table__column-tooltip--resize {
-    inset-inline-end: calc(var(--ds-table-touch-target, 2.75rem) / -2);
-    width: var(--ds-table-touch-target, 2.75rem);
-    min-width: var(--ds-table-touch-target, 2.75rem);
+    inset-inline-end: calc(var(--ds-data-table-touch-target, 2.75rem) / -2);
+    width: var(--ds-data-table-touch-target, 2.75rem);
+    min-width: var(--ds-data-table-touch-target, 2.75rem);
   }
 }
 
@@ -33062,7 +32967,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 @container ds-table (max-width: 640px) {
   .ds-pattern-data-table.ds-engine-modern [data-part="table"] {
-    min-width: var(--ds-table-collapsed-min-inline-size, 34rem);
+    min-width: var(--ds-data-table-collapsed-min-inline-size, 34rem);
   }
 
   .ds-pattern-data-table.ds-engine-modern
@@ -33132,9 +33037,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     transition: none;
   }
 
-  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover,
-  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible,
-  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover,
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="hovered"], :hover),
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="focus-visible"], :focus-visible),
+  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:is([data-state~="hovered"], :hover),
   .ds-pattern-data-table.ds-engine-modern
     [data-part="expand-button"]:focus-within {
     transform: none;
@@ -33471,7 +33376,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   background: var(--ds-table-action-bg, var(--ds-surface-card));
   border-inline-start: 1px solid
     var(--ds-table-action-border, var(--ds-table-row-border, transparent));
-  box-shadow: var(--ds-table-action-shadow, none);
+  box-shadow: var(--ds-data-table-action-shadow, none);
 }
 
 }
@@ -33646,7 +33551,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 @media (hover: hover) {
   .ds-pattern-data-table.ds-data-table--mobile
-    .ds-data-table__mobile-card:hover {
+    .ds-data-table__mobile-card:is([data-state~="hovered"], :hover) {
     transform: translateY(var(--ds-table-mobile-card-hover-lift, -1px));
     box-shadow: var(
       --ds-collection-card-shadow-hover,
@@ -33665,7 +33570,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
-  .ds-data-table__mobile-card:focus-visible {
+  .ds-data-table__mobile-card:is(
+    [data-state~="focus-visible"],
+    :focus-visible
+  ) {
   outline: none;
   box-shadow: var(
     --ds-table-mobile-card-focus-ring,
@@ -33719,8 +33627,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-data-table--mobile[data-recipe="minimal"]
   .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
-  --ds-card-shadow: var(--ds-table-minimal-shadow, none);
-  box-shadow: var(--ds-table-minimal-shadow, none);
+  --ds-card-shadow: var(--ds-data-table-minimal-shadow, none);
+  box-shadow: var(--ds-data-table-minimal-shadow, none);
 }
 
 .ds-pattern-data-table.ds-data-table--mobile[data-recipe="ruled"]
@@ -33914,12 +33822,9 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   color: var(--ds-color-error);
 }
 
-/* ---- mobile loading skeleton: two anonymous card anatomies replace the old
-        bare "Loading…" line. They mirror the loaded list's exact footprint —
-        identity bar, summary field rows, trailing action bar — and scale with
-        the same per-density channels the real cards resolve, so the handoff
-        to content does not jump at any density. The bars ride the shared
-        --ds-table-skeleton-fill channel and the family's scan keyframes. ---- */
+/* ---- mobile loading state: the shared anatomy renderer draws one bone per
+        stamped part of the two card anatomies the panel holds, so the loading
+        posture is the card's own footprint and cannot drift from it. ---- */
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"][data-state="loading"] {
   display: grid;
   gap: var(--ds-spacing-3, 0.75rem);
@@ -33927,71 +33832,82 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   text-align: start;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-card"] {
-  display: grid;
-  gap: var(--ds-spacing-2, 0.5rem);
-  padding: var(--ds-density-card-padding, 1rem);
-  border-radius: var(
-    --ds-collection-card-radius,
-    var(--ds-premium-card-radius, var(--ds-radius-lg))
-  );
-  background: var(
-    --ds-collection-card-bg,
-    var(--ds-card-bg, var(--ds-surface-card))
-  );
-}
-.ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-skeleton-card"][data-part="mobile-skeleton-card"] {
-  border: 1px solid
-    var(
-      --ds-collection-card-border,
-      var(--ds-card-border, var(--ds-color-border-subtle))
-    );
+/* ---- record projections ----------------------------------------------------
+   The mobile branch renders records in two shapes: the card stack and the
+   compact list. The list shape had no paint of its own, so its rows, open
+   affordance and meta line are painted here on the channels the cards already
+   use. The swipe affordance and the row-actions menu are painted with them:
+   they are the same records' trailing controls. */
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-cards"],
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list"] {
+  min-inline-size: 0;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"],
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-field"],
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
-  height: calc(12px * var(--ds-density-local-factor, 1));
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(
-    --ds-table-skeleton-fill,
-    linear-gradient(
-      105deg,
-      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 24%,
-      color-mix(in srgb, var(--ds-color-bg-elevated) 74%, transparent) 44%,
-      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 64%
-    )
-  );
-  background-size: 220% 100%;
-  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
-    var(--ds-motion-ease-standard, ease-in-out) infinite;
-}
-
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"] {
-  width: 52%;
-  height: calc(16px * var(--ds-density-local-factor, 1));
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list-item"] {
+  min-inline-size: 0;
+  /* The list row keeps the card summary's rhythm: same two channels, so a
+     tenant retunes one padding and both record shapes follow. */
+  padding-block: var(--ds-table-mobile-summary-padding-block, 0.375rem);
+  padding-inline: var(--ds-table-mobile-summary-padding-inline, 0.125rem);
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-skeleton-field"][data-short="true"] {
-  width: 64%;
-}
-
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
-  width: 44%;
-  height: calc(24px * var(--ds-density-local-factor, 1));
-  margin-block-start: 2px;
+  [data-part="record-list-item"]
+  + [data-part="record-list-item"] {
+  border-block-start: 1px solid
+    var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
-  [data-part="mobile-skeleton-card"][data-skeleton-index="1"]
-  :is(
-    [data-part="mobile-skeleton-title"],
-    [data-part="mobile-skeleton-field"],
-    [data-part="mobile-skeleton-actions"]
-  ) {
-  animation-delay: var(--ds-motion-fast);
+  [data-part="record-list-item"][data-selected="true"] {
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list-open"] {
+  min-inline-size: 0;
+  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-meta"] {
+  min-inline-size: 0;
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="record-meta-value"] {
+  min-inline-size: 0;
+  font-size: var(--ds-typography-supporting-size, 0.8125rem);
+  overflow-wrap: anywhere;
+}
+
+/* ---- row actions: the menu the `menu` posture places, and the swipe record
+        the `swipe` posture wraps around each record ---- */
+.ds-pattern-data-table.ds-data-table--mobile [data-part="row-actions-menu"] {
+  min-inline-size: 9rem;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="row-actions-trigger"],
+.ds-pattern-data-table.ds-data-table--mobile
+  [data-part="swipe-actions-toggle"] {
+  flex-shrink: 0;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="swipe-record"] {
+  position: relative;
+  min-inline-size: 0;
+  /* The gesture owns the inline axis; the page keeps the block axis. */
+  touch-action: pan-y;
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="swipe-actions-bar"] {
+  min-inline-size: 0;
+  padding-block-start: var(--ds-table-mobile-actions-padding-block, 0.625rem);
+}
+
+.ds-pattern-data-table.ds-data-table--mobile [data-part="swipe-actions"] {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 0;
 }
 
 @container ds-mobile-table (max-width: 28rem) {
@@ -34007,16 +33923,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   }
 
   .ds-pattern-data-table.ds-data-table--mobile
-    .ds-data-table__mobile-card:hover,
+    .ds-data-table__mobile-card:is([data-state~="hovered"], :hover),
   .ds-pattern-data-table.ds-data-table--mobile
     .ds-data-table__mobile-card:focus-within {
     transform: none;
-  }
-
-  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"],
-  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-field"],
-  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
-    animation: none;
   }
 }
 
@@ -34051,21 +33961,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
-
-  /* Skeleton gradients are forced away; the bars keep a system-color fill so
-     the loading anatomy still reads (the stats-grid/table.css idiom). */
-  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-title"],
-  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-field"],
-  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-actions"] {
-    background: GrayText;
-    animation: none;
-  }
-
-  .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-skeleton-card"] {
-    forced-color-adjust: none;
-    border-color: CanvasText;
-    background: Canvas;
-  }
 }
 
 }
@@ -34078,14 +33973,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
  * They deliberately keep their original specificity and source order. The
  * zero-weight `:where(.ds-pattern-data-table)` root contains their formerly
  * mount-local reach without changing selector weight. Frame bodies remain
- * exact. The former generic `ds-shimmer` name is the sole keyframe rename:
- * `ds-data-table-shimmer` prevents a live same-name/different-body collision
- * with ShimmerText's global producer.
+ * exact. The extracted shimmer keyframe was retired with the hand-made
+ * skeleton it painted; loading is drawn by the shared anatomy renderer.
  */
 
 @media (hover: hover) {
   .ds-engine-modern:where(.ds-pattern-data-table)
-    .ds-resize-handle:hover
+    .ds-resize-handle:is([data-state~="hovered"], :hover)
     .ds-resize-handle__bar {
     width: var(--ds-table-resize-bar-width-active, 0.1875rem);
     height: var(--ds-table-resize-bar-height-active, 74%);
@@ -34096,7 +33990,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  .ds-resize-handle:focus-visible
+  .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)
   .ds-resize-handle__bar {
   width: var(--ds-table-resize-bar-width-active, 0.1875rem);
   height: var(--ds-table-resize-bar-height-active, 74%);
@@ -34106,14 +34000,15 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  .ds-resize-handle:focus-visible {
+  .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 @media (hover: hover) {
-  .ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    th[data-col-key]:is([data-state~="hovered"], :hover) {
     background-color: var(
       --ds-table-header-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
@@ -34122,14 +34017,17 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  th[data-col-key][data-sortable="true"]:focus-visible {
+  th[data-col-key][data-sortable="true"]:is(
+    [data-state~="focus-visible"],
+    :focus-visible
+  ) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  tr[data-row-index]:focus-visible {
+  tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible) {
   outline: none;
   background-color: var(
     --ds-table-row-bg-selected,
@@ -34140,7 +34038,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
    under border-collapse (same td rule the modern skin and the primitive
    table.css selection keyline follow). */
 .ds-engine-modern:where(.ds-pattern-data-table)
-  tr[data-row-index]:focus-visible
+  tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible)
   > td {
   box-shadow: inset 0 0 0 1px
     color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
@@ -34157,7 +34055,8 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 @media (hover: hover) {
-  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    td[data-editable="true"]:is([data-state~="hovered"], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
     box-shadow: inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
@@ -34207,25 +34106,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   pointer-events: none;
 }
 
-@keyframes ds-data-table-shimmer {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-@keyframes ds-data-table-skeleton-scan {
-  from {
-    background-position: 100% 50%;
-  }
-  to {
-    background-position: -100% 50%;
-  }
-}
-
 @keyframes ds-spin {
   to {
     transform: rotate(360deg);
@@ -34245,12 +34125,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 @media (prefers-reduced-motion: reduce) {
   .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"],
-  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"],
-  .ds-engine-modern:where(.ds-pattern-data-table) .ds-skeleton-row,
-  .ds-engine-modern:where(.ds-pattern-data-table)
-    [data-part="skeleton-header-col"],
-  .ds-engine-modern:where(.ds-pattern-data-table)
-    [data-part="skeleton-cell"] {
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"] {
     animation: none;
     transition: none;
   }
@@ -34258,23 +34133,77 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 @media (forced-colors: active) {
   .ds-engine-modern:where(.ds-pattern-data-table)
-    .ds-resize-handle:hover
+    .ds-resize-handle:is([data-state~="hovered"], :hover)
     .ds-resize-handle__bar,
   .ds-engine-modern:where(.ds-pattern-data-table)
-    .ds-resize-handle:focus-visible
+    .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)
     .ds-resize-handle__bar {
     background: Highlight;
     box-shadow: none;
   }
 
   .ds-engine-modern:where(.ds-pattern-data-table)
-    th[data-col-key][data-sortable="true"]:focus-visible,
+    th[data-col-key][data-sortable="true"]:is(
+      [data-state~="focus-visible"],
+      :focus-visible
+    ),
   .ds-engine-modern:where(.ds-pattern-data-table)
-    tr[data-row-index]:focus-visible {
+    tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: -2px;
     box-shadow: none;
   }
+}
+
+/* ---------------------------------------------------------------------------
+ * RUNTIME GEOMETRY. The caller's column model, bounded height and virtual
+ * window are measured at runtime, so only their VALUES travel inline, as the
+ * `--ds-data-table-*` properties declared below. The rules that consume them
+ * live here, with the rest of the recovered per-instance geometry, so the
+ * engine skin's channel set stays exactly what the family deriver produces.
+ * The two pinned insets are consumed by the engine skin's sticky rules, which
+ * is why their resting value is declared here rather than beside them.
+ * ------------------------------------------------------------------------ */
+
+.ds-engine-modern:where(.ds-pattern-data-table)[data-part="root"] {
+  --ds-data-table-col-inline-size: auto;
+  --ds-data-table-col-min-inline-size: auto;
+  --ds-data-table-col-max-inline-size: none;
+  --ds-data-table-actions-col-inline-size: auto;
+  --ds-data-table-scroll-max-block-size: none;
+  --ds-data-table-row-block-size: auto;
+  --ds-data-table-virtual-spacer-block-size: 0;
+  --ds-data-table-pinned-inset-start: 0px;
+  --ds-data-table-pinned-inset-end: 0px;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="header-cell"],
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="data-cell"] {
+  inline-size: var(--ds-data-table-col-inline-size, auto);
+  min-inline-size: var(--ds-data-table-col-min-inline-size, auto);
+  max-inline-size: var(--ds-data-table-col-max-inline-size, none);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  [data-part="header-cell"][data-cell-kind="actions"],
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="actions-cell"] {
+  inline-size: var(--ds-data-table-actions-col-inline-size, auto);
+  min-inline-size: var(--ds-data-table-actions-col-inline-size, auto);
+  max-inline-size: none;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  [data-part="scroll"][data-bounded="true"] {
+  max-block-size: var(--ds-data-table-scroll-max-block-size, none);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  [data-part="body-row"][data-virtualized="true"] {
+  block-size: var(--ds-data-table-row-block-size, auto);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="virtual-spacer"] {
+  block-size: var(--ds-data-table-virtual-spacer-block-size, 0);
 }
 
 }
@@ -37609,7 +37538,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (`insetInlineStart`), matching Chromium's flipped native scale under
  * `dir=rtl`; this file mirrors the centering signs (mark-label, handle
  * `--tw-translate-x`) and the single-mode fill gradient under `:dir(rtl)`.
- * Vertical-mode offsets stay physical.
+ * Vertical offsets are logical too and carry the same `:dir(rtl)` mirrors
+ * (rail, track, dot), so the rail/track/handle/dot centre on one inline line
+ * in both directions. The ONE physical vertical anchor left is the value
+ * tooltip: its `placement` vocabulary is physical by contract ('left' |
+ * 'right'), so a logical anchor would move the bubble to the wrong side of
+ * the rail under `dir=rtl`.
  *
  * VALUE TOOLTIP + STEP DOTS + MARK STATE (Phase B second pass): the engine's
  * `tooltip` contract renders `data-part='tooltip'` readouts anchored at each
@@ -37672,6 +37606,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   inline-size: var(--ds-slider-track-size, 4px);
   transform: translateX(-50%);
 }
+/* The logical inset anchors the rail's inline-START edge, which is the
+   physical RIGHT edge under dir=rtl, so the centering shift flips sign. */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='rail']:dir(rtl) {
+  transform: translateX(50%);
+}
 
 .ds-slider.ds-slider--modern [data-part='track'] {
   background: var(--ds-color-primary);
@@ -37681,6 +37620,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='track'] {
   inline-size: var(--ds-slider-track-size, 4px);
   transform: translateX(-50%);
+}
+/* Same mirror as the rail: without it the track and the rail centred on two
+   different lines under dir=rtl (a full track width apart). */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='track']:dir(rtl) {
+  transform: translateX(50%);
 }
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='track'] {
   block-size: var(--ds-slider-track-size, 4px);
@@ -38028,6 +37972,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-slider.ds-slider--modern[data-part='root'][data-orientation='vertical'] [data-part='dot'] {
   transform: translate(-50%, 50%);
 }
+.ds-slider.ds-slider--modern[data-part='root'][data-orientation='vertical'] [data-part='dot']:dir(rtl) {
+  transform: translate(50%, 50%);
+}
 .ds-slider.ds-slider--modern[data-part='root'] [data-part='dot'][data-active='true'] {
   border-color: var(--ds-color-primary);
   background: var(--ds-color-primary);
@@ -38087,8 +38034,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='bottom']:dir(rtl) {
   transform: translate(50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)));
 }
-/* Vertical placements: the anchor is the thumb center (left: 50% + bottom).
-   Placements are physical (antd contract), so no direction mirror applies. */
+/* Vertical placements: the anchor is the thumb center (physical left: 50% +
+   bottom). The placement vocabulary is physical by contract, so the anchor and
+   these transforms stay physical together and NO `:dir(rtl)` mirror applies --
+   a mirror here would send the bubble across the rail under dir=rtl. */
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='right'] {
   transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)), 50%);
 }
@@ -119526,6 +119475,82 @@ html[lang]:lang(ar) {
   --ds-container-transition-timing: var(--ds-container-motion-easing, var(--ds-motion-ease-out));
   --ds-container-xl: var(--ds-breakpoint-xl);
   --ds-control-height-scale: 1;
+  --ds-data-table-action-cell-padding-comfortable: 0 0.625rem;
+  --ds-data-table-action-cell-padding-compact: 0 0.5rem;
+  --ds-data-table-action-cell-padding-spacious: 0 0.75rem;
+  --ds-data-table-action-shadow: none;
+  --ds-data-table-bulk-bar-padding: 0.625rem 1rem;
+  --ds-data-table-caption-font-size: var(--ds-font-size-xs);
+  --ds-data-table-collapsed-min-inline-size: 34rem;
+  --ds-data-table-control-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-control-size: 2rem;
+  --ds-data-table-control-size-compact: 1.75rem;
+  --ds-data-table-control-size-spacious: 2.25rem;
+  --ds-data-table-drag-grip-bg: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+  --ds-data-table-drag-grip-border: color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent);
+  --ds-data-table-drag-grip-opacity: 0.58;
+  --ds-data-table-drag-handle-font-size: calc(var(--ds-font-size-xs) * 0.9167);
+  --ds-data-table-drop-indicator-bg: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  --ds-data-table-drop-indicator-border: color-mix(in srgb, var(--ds-color-primary) 52%, transparent);
+  --ds-data-table-drop-indicator-inset: 0.1875rem;
+  --ds-data-table-drop-indicator-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  --ds-data-table-editor-checkbox-size: 1rem;
+  --ds-data-table-editor-error-font-size: var(--ds-font-size-xs);
+  --ds-data-table-editor-input-font-size: var(--ds-font-size-sm, 0.875rem);
+  --ds-data-table-editor-input-line-height: 1.5;
+  --ds-data-table-editor-input-padding: 0.25rem 0.5rem;
+  --ds-data-table-editorial-cell-padding-block: 1.125rem;
+  --ds-data-table-editorial-header-bg: transparent;
+  --ds-data-table-editorial-header-padding-block: 1rem;
+  --ds-data-table-editorial-header-transform: uppercase;
+  --ds-data-table-editorial-row-shadow: var(--ds-elevation-1);
+  --ds-data-table-empty-description-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-empty-title-font-size: var(--ds-font-size-sm);
+  --ds-data-table-expanded-padding: 0.875rem 1rem 1rem;
+  --ds-data-table-group-count-font-size: calc(var(--ds-font-size-xs) * 0.9167);
+  --ds-data-table-group-disclosure-font-size: calc(var(--ds-font-size-xs) * 0.8333);
+  --ds-data-table-group-header-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-header-content-gap: 0.375rem;
+  --ds-data-table-header-focus-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
+  --ds-data-table-header-font-family: var(--ds-typography-label-family, inherit);
+  --ds-data-table-header-pinned-bg: var(--ds-table-header-bg, var(--ds-surface-inset));
+  --ds-data-table-leading-cell-padding-comfortable: 0.75rem 1rem 0.75rem 0.1875rem;
+  --ds-data-table-leading-cell-padding-compact: 0.375rem 0.75rem 0.375rem 0.125rem;
+  --ds-data-table-leading-cell-padding-spacious: 1rem 1rem 1rem 0.25rem;
+  --ds-data-table-min-inline-size: 42rem;
+  --ds-data-table-minimal-shadow: none;
+  --ds-data-table-open-cell-padding-block: 0.875rem;
+  --ds-data-table-pagination-padding: 0.625rem 1rem;
+  --ds-data-table-pinned-cell-bg: var(--ds-table-row-bg, var(--ds-surface-card));
+  --ds-data-table-pinned-cell-bg-focus: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-hover: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-selected: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-striped: var(--ds-table-row-bg-striped, var(--ds-surface-inset));
+  --ds-data-table-resize-bar-height: 58%;
+  --ds-data-table-resize-bar-width: 0.125rem;
+  --ds-data-table-resize-hit-size: 1rem;
+  --ds-data-table-row-selected-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-data-table-rule-strong: var(--ds-color-border-secondary);
+  --ds-data-table-selection-cell-padding-comfortable: 0 0 0 0.4375rem;
+  --ds-data-table-selection-cell-padding-compact: 0 0 0 0.375rem;
+  --ds-data-table-selection-cell-padding-spacious: 0 0 0 0.5rem;
+  --ds-data-table-sort-bg: transparent;
+  --ds-data-table-sort-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  --ds-data-table-sort-bg-hover: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  --ds-data-table-sort-border: transparent;
+  --ds-data-table-sort-border-active: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-data-table-sort-border-hover: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  --ds-data-table-sort-color: var(--ds-color-text-muted);
+  --ds-data-table-sort-color-active: var(--ds-color-primary);
+  --ds-data-table-sort-color-hover: var(--ds-color-text-secondary);
+  --ds-data-table-sort-control-offset: 0.125rem;
+  --ds-data-table-sort-control-radius: var(--ds-radius-sm, 0.375rem);
+  --ds-data-table-sort-control-size: 1.375rem;
+  --ds-data-table-sort-opacity: 0.68;
+  --ds-data-table-state-copy-max-inline-size: 32rem;
+  --ds-data-table-toolbar-gap: var(--ds-spacing-2, 0.5rem);
+  --ds-data-table-touch-hit-expansion: 0.5625rem;
+  --ds-data-table-touch-target: 2.75rem;
   --ds-date-picker-active-ring: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-primary);
   --ds-date-picker-band-bg: var(--ds-wash-band);
   --ds-date-picker-band-preview-bg: var(--ds-wash-band-preview);
@@ -121687,6 +121712,82 @@ html[lang]:lang(ar) {
   --ds-container-transition-timing: var(--ds-container-motion-easing, var(--ds-motion-ease-out));
   --ds-container-xl: var(--ds-breakpoint-xl);
   --ds-control-height-scale: 0.9;
+  --ds-data-table-action-cell-padding-comfortable: 0 0.625rem;
+  --ds-data-table-action-cell-padding-compact: 0 0.5rem;
+  --ds-data-table-action-cell-padding-spacious: 0 0.75rem;
+  --ds-data-table-action-shadow: none;
+  --ds-data-table-bulk-bar-padding: 0.625rem 1rem;
+  --ds-data-table-caption-font-size: var(--ds-font-size-xs);
+  --ds-data-table-collapsed-min-inline-size: 34rem;
+  --ds-data-table-control-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-control-size: 2rem;
+  --ds-data-table-control-size-compact: 1.75rem;
+  --ds-data-table-control-size-spacious: 2.25rem;
+  --ds-data-table-drag-grip-bg: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+  --ds-data-table-drag-grip-border: color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent);
+  --ds-data-table-drag-grip-opacity: 0.58;
+  --ds-data-table-drag-handle-font-size: calc(var(--ds-font-size-xs) * 0.9167);
+  --ds-data-table-drop-indicator-bg: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  --ds-data-table-drop-indicator-border: color-mix(in srgb, var(--ds-color-primary) 52%, transparent);
+  --ds-data-table-drop-indicator-inset: 0.1875rem;
+  --ds-data-table-drop-indicator-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  --ds-data-table-editor-checkbox-size: 1rem;
+  --ds-data-table-editor-error-font-size: var(--ds-font-size-xs);
+  --ds-data-table-editor-input-font-size: var(--ds-font-size-sm, 0.875rem);
+  --ds-data-table-editor-input-line-height: 1.5;
+  --ds-data-table-editor-input-padding: 0.25rem 0.5rem;
+  --ds-data-table-editorial-cell-padding-block: 1.125rem;
+  --ds-data-table-editorial-header-bg: transparent;
+  --ds-data-table-editorial-header-padding-block: 1rem;
+  --ds-data-table-editorial-header-transform: uppercase;
+  --ds-data-table-editorial-row-shadow: var(--ds-elevation-1);
+  --ds-data-table-empty-description-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-empty-title-font-size: var(--ds-font-size-sm);
+  --ds-data-table-expanded-padding: 0.875rem 1rem 1rem;
+  --ds-data-table-group-count-font-size: calc(var(--ds-font-size-xs) * 0.9167);
+  --ds-data-table-group-disclosure-font-size: calc(var(--ds-font-size-xs) * 0.8333);
+  --ds-data-table-group-header-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-header-content-gap: 0.375rem;
+  --ds-data-table-header-focus-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
+  --ds-data-table-header-font-family: var(--ds-typography-label-family, inherit);
+  --ds-data-table-header-pinned-bg: var(--ds-table-header-bg, var(--ds-surface-inset));
+  --ds-data-table-leading-cell-padding-comfortable: 0.75rem 1rem 0.75rem 0.1875rem;
+  --ds-data-table-leading-cell-padding-compact: 0.375rem 0.75rem 0.375rem 0.125rem;
+  --ds-data-table-leading-cell-padding-spacious: 1rem 1rem 1rem 0.25rem;
+  --ds-data-table-min-inline-size: 42rem;
+  --ds-data-table-minimal-shadow: none;
+  --ds-data-table-open-cell-padding-block: 0.875rem;
+  --ds-data-table-pagination-padding: 0.625rem 1rem;
+  --ds-data-table-pinned-cell-bg: var(--ds-table-row-bg, var(--ds-surface-card));
+  --ds-data-table-pinned-cell-bg-focus: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-hover: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-selected: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-striped: var(--ds-table-row-bg-striped, var(--ds-surface-inset));
+  --ds-data-table-resize-bar-height: 58%;
+  --ds-data-table-resize-bar-width: 0.125rem;
+  --ds-data-table-resize-hit-size: 1rem;
+  --ds-data-table-row-selected-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-data-table-rule-strong: var(--ds-color-border-secondary);
+  --ds-data-table-selection-cell-padding-comfortable: 0 0 0 0.4375rem;
+  --ds-data-table-selection-cell-padding-compact: 0 0 0 0.375rem;
+  --ds-data-table-selection-cell-padding-spacious: 0 0 0 0.5rem;
+  --ds-data-table-sort-bg: transparent;
+  --ds-data-table-sort-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  --ds-data-table-sort-bg-hover: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  --ds-data-table-sort-border: transparent;
+  --ds-data-table-sort-border-active: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-data-table-sort-border-hover: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  --ds-data-table-sort-color: var(--ds-color-text-muted);
+  --ds-data-table-sort-color-active: var(--ds-color-primary);
+  --ds-data-table-sort-color-hover: var(--ds-color-text-secondary);
+  --ds-data-table-sort-control-offset: 0.125rem;
+  --ds-data-table-sort-control-radius: var(--ds-radius-sm, 0.375rem);
+  --ds-data-table-sort-control-size: 1.375rem;
+  --ds-data-table-sort-opacity: 0.68;
+  --ds-data-table-state-copy-max-inline-size: 32rem;
+  --ds-data-table-toolbar-gap: var(--ds-spacing-2, 0.5rem);
+  --ds-data-table-touch-hit-expansion: 0.5625rem;
+  --ds-data-table-touch-target: 2.75rem;
   --ds-date-picker-active-ring: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-primary);
   --ds-date-picker-band-bg: var(--ds-wash-band);
   --ds-date-picker-band-preview-bg: var(--ds-wash-band-preview);
@@ -123853,6 +123954,82 @@ html[lang]:lang(ar) {
   --ds-container-transition-timing: var(--ds-container-motion-easing, var(--ds-motion-ease-out));
   --ds-container-xl: var(--ds-breakpoint-xl);
   --ds-control-height-scale: 1;
+  --ds-data-table-action-cell-padding-comfortable: 0 0.625rem;
+  --ds-data-table-action-cell-padding-compact: 0 0.5rem;
+  --ds-data-table-action-cell-padding-spacious: 0 0.75rem;
+  --ds-data-table-action-shadow: none;
+  --ds-data-table-bulk-bar-padding: 0.625rem 1rem;
+  --ds-data-table-caption-font-size: var(--ds-font-size-xs);
+  --ds-data-table-collapsed-min-inline-size: 34rem;
+  --ds-data-table-control-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-control-size: 2rem;
+  --ds-data-table-control-size-compact: 1.75rem;
+  --ds-data-table-control-size-spacious: 2.25rem;
+  --ds-data-table-drag-grip-bg: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+  --ds-data-table-drag-grip-border: color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent);
+  --ds-data-table-drag-grip-opacity: 0.58;
+  --ds-data-table-drag-handle-font-size: calc(var(--ds-font-size-xs) * 0.9167);
+  --ds-data-table-drop-indicator-bg: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  --ds-data-table-drop-indicator-border: color-mix(in srgb, var(--ds-color-primary) 52%, transparent);
+  --ds-data-table-drop-indicator-inset: 0.1875rem;
+  --ds-data-table-drop-indicator-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  --ds-data-table-editor-checkbox-size: 1rem;
+  --ds-data-table-editor-error-font-size: var(--ds-font-size-xs);
+  --ds-data-table-editor-input-font-size: var(--ds-font-size-sm, 0.875rem);
+  --ds-data-table-editor-input-line-height: 1.5;
+  --ds-data-table-editor-input-padding: 0.25rem 0.5rem;
+  --ds-data-table-editorial-cell-padding-block: 1.125rem;
+  --ds-data-table-editorial-header-bg: transparent;
+  --ds-data-table-editorial-header-padding-block: 1rem;
+  --ds-data-table-editorial-header-transform: uppercase;
+  --ds-data-table-editorial-row-shadow: var(--ds-elevation-1);
+  --ds-data-table-empty-description-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-empty-title-font-size: var(--ds-font-size-sm);
+  --ds-data-table-expanded-padding: 0.875rem 1rem 1rem;
+  --ds-data-table-group-count-font-size: calc(var(--ds-font-size-xs) * 0.9167);
+  --ds-data-table-group-disclosure-font-size: calc(var(--ds-font-size-xs) * 0.8333);
+  --ds-data-table-group-header-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-header-content-gap: 0.375rem;
+  --ds-data-table-header-focus-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
+  --ds-data-table-header-font-family: var(--ds-typography-label-family, inherit);
+  --ds-data-table-header-pinned-bg: var(--ds-table-header-bg, var(--ds-surface-inset));
+  --ds-data-table-leading-cell-padding-comfortable: 0.75rem 1rem 0.75rem 0.1875rem;
+  --ds-data-table-leading-cell-padding-compact: 0.375rem 0.75rem 0.375rem 0.125rem;
+  --ds-data-table-leading-cell-padding-spacious: 1rem 1rem 1rem 0.25rem;
+  --ds-data-table-min-inline-size: 42rem;
+  --ds-data-table-minimal-shadow: none;
+  --ds-data-table-open-cell-padding-block: 0.875rem;
+  --ds-data-table-pagination-padding: 0.625rem 1rem;
+  --ds-data-table-pinned-cell-bg: var(--ds-table-row-bg, var(--ds-surface-card));
+  --ds-data-table-pinned-cell-bg-focus: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-hover: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-selected: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
+  --ds-data-table-pinned-cell-bg-striped: var(--ds-table-row-bg-striped, var(--ds-surface-inset));
+  --ds-data-table-resize-bar-height: 58%;
+  --ds-data-table-resize-bar-width: 0.125rem;
+  --ds-data-table-resize-hit-size: 1rem;
+  --ds-data-table-row-selected-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-data-table-rule-strong: var(--ds-color-border-secondary);
+  --ds-data-table-selection-cell-padding-comfortable: 0 0 0 0.4375rem;
+  --ds-data-table-selection-cell-padding-compact: 0 0 0 0.375rem;
+  --ds-data-table-selection-cell-padding-spacious: 0 0 0 0.5rem;
+  --ds-data-table-sort-bg: transparent;
+  --ds-data-table-sort-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  --ds-data-table-sort-bg-hover: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  --ds-data-table-sort-border: transparent;
+  --ds-data-table-sort-border-active: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-data-table-sort-border-hover: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  --ds-data-table-sort-color: var(--ds-color-text-muted);
+  --ds-data-table-sort-color-active: var(--ds-color-primary);
+  --ds-data-table-sort-color-hover: var(--ds-color-text-secondary);
+  --ds-data-table-sort-control-offset: 0.125rem;
+  --ds-data-table-sort-control-radius: var(--ds-radius-sm, 0.375rem);
+  --ds-data-table-sort-control-size: 1.375rem;
+  --ds-data-table-sort-opacity: 0.68;
+  --ds-data-table-state-copy-max-inline-size: 32rem;
+  --ds-data-table-toolbar-gap: var(--ds-spacing-2, 0.5rem);
+  --ds-data-table-touch-hit-expansion: 0.5625rem;
+  --ds-data-table-touch-target: 2.75rem;
   --ds-date-picker-active-ring: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-primary);
   --ds-date-picker-band-bg: var(--ds-wash-band);
   --ds-date-picker-band-preview-bg: var(--ds-wash-band-preview);

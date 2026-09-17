@@ -956,8 +956,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1687,
-      "channelsThroughAliases": 3301,
+      "channels": 1763,
+      "channelsThroughAliases": 3360,
       "decision": "palette.contrast-posture",
       "derivers": [
         "alert",
@@ -973,6 +973,7 @@
         "color-picker",
         "column-settings",
         "confirm-dialog",
+        "data-table",
         "date-picker",
         "descriptions",
         "divider",
@@ -1274,8 +1275,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1687,
-      "channelsThroughAliases": 3301,
+      "channels": 1763,
+      "channelsThroughAliases": 3360,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "alert",
@@ -1291,6 +1292,7 @@
         "color-picker",
         "column-settings",
         "confirm-dialog",
+        "data-table",
         "date-picker",
         "descriptions",
         "divider",
@@ -1584,8 +1586,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1783,
-      "channelsThroughAliases": 3498,
+      "channels": 1859,
+      "channelsThroughAliases": 3557,
       "decision": "palette.seeds",
       "derivers": [
         "alert",
@@ -1602,6 +1604,7 @@
         "color-picker",
         "column-settings",
         "confirm-dialog",
+        "data-table",
         "date-picker",
         "descriptions",
         "divider",
@@ -1898,8 +1901,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1773,
-      "channelsThroughAliases": 3478,
+      "channels": 1849,
+      "channelsThroughAliases": 3537,
       "decision": "palette.status-seeds",
       "derivers": [
         "alert",
@@ -1915,6 +1918,7 @@
         "color-picker",
         "column-settings",
         "confirm-dialog",
+        "data-table",
         "date-picker",
         "descriptions",
         "divider",
@@ -2719,10 +2723,11 @@
       "tier": "standard"
     },
     {
-      "channels": 73,
-      "channelsThroughAliases": 139,
+      "channels": 149,
+      "channelsThroughAliases": 237,
       "decision": "shape.control-height",
       "derivers": [
+        "data-table",
         "segmented",
         "shape",
         "sidebar-surface",
@@ -2744,8 +2749,14 @@
         "card",
         "cascader",
         "chart-foundation",
+        "collection-shell",
+        "collection-workspace-render-dispatch",
         "column-menu",
         "confirm-dialog",
+        "dashboard-metrics-interactions",
+        "data-table",
+        "data-table-actions",
+        "data-table-mobile",
         "date-picker",
         "drawer",
         "dropdown",
@@ -2756,6 +2767,10 @@
         "input-compounds",
         "input-number",
         "list-toolbar",
+        "metrics-cards",
+        "metrics-chart",
+        "metrics-minimal",
+        "metrics-rows",
         "modal",
         "notifier",
         "otp-input",
@@ -2769,6 +2784,7 @@
         "splitter",
         "stats-grid",
         "status-filter-pills",
+        "surface-section-card",
         "table",
         "tag-input",
         "time-picker",
@@ -2836,8 +2852,8 @@
       "tier": "pro"
     },
     {
-      "channels": 750,
-      "channelsThroughAliases": 1332,
+      "channels": 826,
+      "channelsThroughAliases": 1419,
       "decision": "shape.radius-scale",
       "derivers": [
         "avatar",
@@ -2848,6 +2864,7 @@
         "card",
         "collapse",
         "column-settings",
+        "data-table",
         "descriptions",
         "filter-panel",
         "menu",
@@ -2928,7 +2945,9 @@
         "context-menu",
         "dashboard",
         "dashboard-header",
+        "dashboard-metrics-interactions",
         "data-table",
+        "data-table-actions",
         "data-table-interactions",
         "data-table-mobile",
         "data-terminal-card",
@@ -3141,7 +3160,7 @@
     },
     {
       "channels": 82,
-      "channelsThroughAliases": 824,
+      "channelsThroughAliases": 823,
       "decision": "states.emphasis",
       "derivers": [
         "segmented",
@@ -3362,7 +3381,7 @@
     },
     {
       "channels": 256,
-      "channelsThroughAliases": 978,
+      "channelsThroughAliases": 977,
       "decision": "states.focus-style",
       "derivers": [
         "avatar",
@@ -3718,8 +3737,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1249,
-      "channelsThroughAliases": 1442,
+      "channels": 1325,
+      "channelsThroughAliases": 1523,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "alert",
@@ -3733,6 +3752,7 @@
         "cascader",
         "color-picker",
         "confirm-dialog",
+        "data-table",
         "date-picker",
         "drawer",
         "dropdown",
@@ -3792,6 +3812,7 @@
         "confirm-dialog",
         "dashboard-metrics-interactions",
         "data-table",
+        "data-table-actions",
         "data-table-mobile",
         "date-picker",
         "detail-panel",
