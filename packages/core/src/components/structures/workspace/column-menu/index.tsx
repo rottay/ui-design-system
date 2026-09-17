@@ -24,6 +24,9 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { ComponentProps, ReactNode } from "react";
+
+import { partAttributes, useInteractionState } from "@/foundation/behavior";
 
 // Corpus gap: no pin/unpin role exists. `action.attach` is the nearest name and
 // means something else, so the compatibility catalog stays until a role lands.
@@ -553,6 +556,12 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
       : ""
   }`;
 
+  /* The panel is programmatically focused on open (tabIndex=-1), so its ring
+     is a state the kernel decides once and the skin reads back; the platform
+     pseudo-class stays the fallback of that one decision, never a second
+     authority (F-37). */
+  const panelInteraction = useInteractionState();
+
   return (
     <Popover
       trigger="click"
@@ -574,7 +583,13 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           "min(var(--ds-column-menu-panel-inline-size, 432px), calc(var(--ds-viewport-inline-size) - 24px))",
       }}
       content={
-        <Box data-part="panel" data-open={isOpen} ref={panelRef} tabIndex={-1}>
+        <Box
+          data-open={isOpen}
+          ref={panelRef}
+          tabIndex={-1}
+          {...panelInteraction.handlers}
+          {...partAttributes("panel", panelInteraction.state)}
+        >
           <Box data-part="header">
             <Flex align="start" justify="between" gap={12}>
               <Box data-part="header-copy">
@@ -626,9 +641,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     draggedColumnKey !== column.key;
 
                   return (
-                    <Box
+                    <StatefulRow
                       key={column.key}
-                      data-part="row"
                       data-drag-target={isDragTarget}
                       data-visible={isVisible}
                       data-dragging={isDragging}
@@ -673,6 +687,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           <Checkbox
                             checked={isVisible}
                             size="sm"
+                            aria-label={column.title}
                             onChange={() => handleToggleColumn(column.key)}
                           />
                           <Box data-part="row-copy">
@@ -890,7 +905,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           </IconButton>
                         </Flex>
                       </Flex>
-                    </Box>
+                    </StatefulRow>
                   );
                 };
 
@@ -988,9 +1003,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                       );
 
                       return (
-                        <Box
+                        <StatefulActionRow
                           key={action.key}
-                          data-part="action-row"
                           data-visible={isVisible}
                         >
                           <Flex
@@ -1007,6 +1021,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               <Checkbox
                                 checked={isVisible}
                                 size="sm"
+                                aria-label={action.title}
                                 disabled={action.locked}
                                 onChange={() =>
                                   handleToggleAction(action.key, action.locked)
@@ -1043,7 +1058,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               </Box>
                             </Flex>
                           </Flex>
-                        </Box>
+                        </StatefulActionRow>
                       );
                     })}
                   </Flex>
@@ -1083,6 +1098,47 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
         aria-label={triggerLabel}
       />
     </Popover>
+  );
+}
+
+/**
+ * A column row (or an action row) is a STATEFUL PART: one place decides when it
+ * is hovered, pressed or focused -- the shared interaction kernel -- and the
+ * skin pairs its platform pseudo-class with the kernel token it stands for. At
+ * rest the kernel serializes nothing, so `[data-state]` never matches a resting
+ * row and the pseudo-class remains the fallback of one decision rather than a
+ * second authority (F-37).
+ */
+function StatefulRow({
+  children,
+  ...rest
+}: ComponentProps<typeof Box> & { children?: ReactNode }) {
+  const interaction = useInteractionState();
+  return (
+    <Box
+      {...rest}
+      {...interaction.handlers}
+      {...partAttributes("row", interaction.state)}
+    >
+      {children}
+    </Box>
+  );
+}
+
+/** The action row, same contract, its own part name stated literally. */
+function StatefulActionRow({
+  children,
+  ...rest
+}: ComponentProps<typeof Box> & { children?: ReactNode }) {
+  const interaction = useInteractionState();
+  return (
+    <Box
+      {...rest}
+      {...interaction.handlers}
+      {...partAttributes("action-row", interaction.state)}
+    >
+      {children}
+    </Box>
   );
 }
 

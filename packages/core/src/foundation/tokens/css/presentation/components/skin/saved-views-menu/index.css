@@ -65,13 +65,13 @@
 }
 
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open]:hover:not([data-open='true']) {
+  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open]:is([data-state~='hovered'], :hover):not([data-open='true']) {
     border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
     background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
   }
 }
 
-.ds-structure.ds-saved-views-menu[data-part='trigger']:focus-visible {
+.ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
@@ -139,7 +139,17 @@
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
   /* The clamp the render measures against the viewport, placed here and never
      inline. Physical on purpose: the measurement is a viewport rect, so a
-     logical property would flip it under RTL. */
+     logical property would flip it under RTL.
+
+     RESTING DECLARATIONS (WO-FAM-08 B9): the three channels are declared here
+     at the values the reads below used to fall through to, so each read
+     resolves to a value a theme can move instead of to a `var()` fallback
+     nobody writes. The render's measured instance stamps them on the element
+     itself and outranks these exactly as an inline declaration outranks a
+     rule. */
+  --ds-saved-views-menu-panel-top: 0;
+  --ds-saved-views-menu-panel-left: 0;
+  --ds-saved-views-menu-panel-width: 26.25rem;
   top: var(--ds-saved-views-menu-panel-top, 0);
   left: var(--ds-saved-views-menu-panel-left, 0);
   width: var(--ds-saved-views-menu-panel-width, 26.25rem);
@@ -252,7 +262,7 @@
   outline: none;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:focus-visible {
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
 }
 
@@ -412,28 +422,28 @@
   font-weight: 700;
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:hover {
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-surface-card) 70%, var(--ds-color-bg-primary) 30%);
     color: var(--ds-color-text-primary);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral']:hover {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
   }
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:hover {
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary']:hover {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
   }
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button']:focus-visible {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:active {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, var(--ds-surface-card));
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:active {
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
 }
 
@@ -446,14 +456,14 @@
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:hover:not([data-active='true']) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
     background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
     box-shadow: var(
       --ds-material-raised-shadow-hover,
       0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
     );
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:hover:not([data-active='true']) {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
   }
 }
@@ -466,15 +476,15 @@
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:hover {
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
     color: var(--ds-color-danger);
   }
-  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete']:hover {
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-danger) 34%, transparent);
   }
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='delete']:focus-visible {
+.ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-danger) 50%, transparent));
 }
@@ -687,10 +697,10 @@
     background: transparent;
   }
 
-  .ds-structure.ds-saved-views-menu[data-part='trigger']:focus-visible,
-  .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:focus-visible,
-  .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:focus-visible,
-  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:focus-visible {
+  .ds-structure.ds-saved-views-menu[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
     box-shadow: none;

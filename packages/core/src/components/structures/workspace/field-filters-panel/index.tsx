@@ -179,6 +179,7 @@ export function FieldFiltersPanel({
               >
                 <Select
                   className="ds-field-filters-panel__control"
+                  aria-label={filter.label}
                   value={value || 'all'}
                   onChange={(next) => onChange(filter.key, String(next === 'all' ? '' : next))}
                   searchable={Boolean((filter.options?.length ?? 0) > 6)}
@@ -203,6 +204,7 @@ export function FieldFiltersPanel({
               >
                 <Select
                   className="ds-field-filters-panel__control"
+                  aria-label={filter.label}
                   value={value || 'all'}
                   onChange={(next) => onChange(filter.key, String(next === 'all' ? '' : next))}
                   clearable
@@ -225,6 +227,7 @@ export function FieldFiltersPanel({
             >
               <Input
                 className="ds-field-filters-panel__control"
+                aria-label={filter.label}
                 value={value}
                 onChange={(next) => onChange(filter.key, next)}
                 placeholder={filter.placeholder}

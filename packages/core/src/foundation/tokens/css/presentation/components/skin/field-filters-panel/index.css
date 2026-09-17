@@ -118,6 +118,17 @@
   margin-block-end: 12px;
 }
 
+/* The two wrapping lanes the panel stamps: the header's eyebrow+subtitle
+   cluster and the quick-slice row. Both are flex items whose content is
+   free-form copy, so both must be allowed to shrink below their intrinsic
+   width -- exactly what `header-copy` and `filter-card-copy` already state for
+   the same reason. Without it a long subtitle or a long preset label pushes
+   its lane past the panel instead of wrapping inside it. */
+.ds-structure.ds-field-filters-panel [data-part='title-group'],
+.ds-structure.ds-field-filters-panel [data-part='presets-row'] {
+  min-inline-size: 0;
+}
+
 /* header pill + quick-slices pill ----------------------------------------- */
 
 .ds-structure.ds-field-filters-panel [data-part='title-pill'] {

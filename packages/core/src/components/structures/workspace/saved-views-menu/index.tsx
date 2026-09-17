@@ -24,7 +24,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 // Compatibility-catalog residue, all three blocked on a missing governed role:
 // `Sparkles` marks the two empty states, `Bookmark` the custom-view glyph.
@@ -44,6 +44,7 @@ import { ActionSaveIcon } from '@/graphics/icons/semantic/generated/roles/action
 import { ActionShareIcon } from '@/graphics/icons/semantic/generated/roles/action-share';
 import { StatusFeaturedIcon } from '@/graphics/icons/semantic/generated/roles/status-featured';
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
@@ -476,15 +477,21 @@ export function SavedViewsMenu({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, closeMenu]);
 
+  /* The trigger is a STATEFUL PART: the shared kernel is the one place that
+     decides when it is hovered, pressed or focus-visible, and the skin pairs
+     each platform pseudo-class with the kernel token it stands for (F-37). */
+  const triggerInteraction = useInteractionState();
+
   return (
     <Box data-part="anchor" data-open={isOpen} className="ds-structure ds-saved-views-menu">
       <Box
         as="button"
         type="button"
-        data-part="trigger"
         data-open={isOpen}
         className="ds-structure ds-saved-views-menu"
         ref={setTriggerRef}
+        {...triggerInteraction.handlers}
+        {...partAttributes('trigger', triggerInteraction.state)}
         onClick={() => setIsOpen((prev) => !prev)}
         title={activeView ? `${labels.views}: ${activeView.label}` : labels.views}
         aria-label={activeView ? `${labels.views}: ${activeView.label}` : labels.views}
@@ -586,37 +593,22 @@ export function SavedViewsMenu({
 
                   <Flex data-part="active-card-actions" align="center" gap={8} wrap="wrap">
                     {onViewSave && (
-                      <Box
-                        as="button"
-                        type="button"
-                        data-part="action-button"
-                        data-tone="neutral"
-                        onClick={handleDuplicateActiveView}
-                      >
+                      <ActionButton tone="neutral" onClick={handleDuplicateActiveView}>
                         <ActionCopyIcon decorative />
                         {labels.duplicate}
-                      </Box>
+                      </ActionButton>
                     )}
 
                     {activeView && (
-                      <Box
-                        as="button"
-                        type="button"
-                        data-part="action-button"
-                        data-tone="neutral"
-                        onClick={handleShareActiveView}
-                      >
+                      <ActionButton tone="neutral" onClick={handleShareActiveView}>
                         <ActionShareIcon decorative />
                         {shareState === 'copied' ? labels.copied : labels.share}
-                      </Box>
+                      </ActionButton>
                     )}
 
                     {onSaveCurrentView && (
-                      <Box
-                        as="button"
-                        type="button"
-                        data-part="action-button"
-                        data-tone="primary"
+                      <ActionButton
+                        tone="primary"
                         onClick={() => {
                           onSaveCurrentView();
                           closeMenu();
@@ -624,7 +616,7 @@ export function SavedViewsMenu({
                       >
                         <ActionSaveIcon decorative />
                         {labels.saveCurrent}
-                      </Box>
+                      </ActionButton>
                     )}
                   </Flex>
                 </Box>
@@ -766,16 +758,23 @@ interface ViewItemProps {
 
 function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps) {
   const kindLabel = getViewKindLabel(view, labels);
+  /* Three stateful parts, one authority each: the row's own wash, the select
+     surface's ring, and the delete affordance's hover and ring. */
+  const itemInteraction = useInteractionState();
+  const selectInteraction = useInteractionState();
+  const deleteInteraction = useInteractionState();
 
   return (
     <Box
-      data-part="view-item"
       data-active={isActive}
+      {...itemInteraction.handlers}
+      {...partAttributes('view-item', itemInteraction.state)}
     >
       <Flex align="stretch" justify="between" gap={6}>
         <button
           type="button"
-          data-part="view-item-select"
+          {...selectInteraction.handlers}
+          {...partAttributes('view-item-select', selectInteraction.state)}
           onClick={() => onSelect(view.key)}
         >
           <Flex align="start" justify="between" gap={12}>
@@ -815,7 +814,8 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
         {onDelete && (
           <button
             type="button"
-            data-part="delete"
+            {...deleteInteraction.handlers}
+            {...partAttributes('delete', deleteInteraction.state)}
             onClick={onDelete}
             aria-label={`${labels.deletePrefix} ${view.label}`}
           >
@@ -823,6 +823,37 @@ function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps)
           </button>
         )}
       </Flex>
+    </Box>
+  );
+}
+
+/**
+ * An active-card action is a STATEFUL PART: the shared interaction kernel is the
+ * one place that decides when it is hovered, pressed or focus-visible, and the
+ * skin pairs each platform pseudo-class with the kernel token it stands for. At
+ * rest the kernel serializes nothing, so `[data-state]` never matches a resting
+ * button and the pseudo-class remains the fallback of one decision (F-37).
+ */
+function ActionButton({
+  tone,
+  onClick,
+  children,
+}: {
+  tone: 'neutral' | 'primary';
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  const interaction = useInteractionState();
+  return (
+    <Box
+      as="button"
+      type="button"
+      data-tone={tone}
+      {...interaction.handlers}
+      {...partAttributes('action-button', interaction.state)}
+      onClick={onClick}
+    >
+      {children}
     </Box>
   );
 }

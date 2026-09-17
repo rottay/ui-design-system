@@ -109,8 +109,10 @@
   outline: none;
 }
 
+/* One decision, with its platform fallback: the panel's ring is the kernel's
+   answer, and `:focus-visible` is what the kernel falls through to (F-37). */
 .ds-structure.ds-column-menu-panel[data-part="surface"]
-  [data-part="panel"]:focus-visible {
+  [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: var(
     --ds-column-menu-panel-focus-outline,
     2px solid var(--ds-color-border-focus)
@@ -213,12 +215,20 @@
     inset 0 1px 0
       color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)
   );
-  transition: background-color var(--ds-motion-fast, 120ms)
+  /* One duration, one channel: the row's state changes are feedback, and the
+     family channel rests on the dial-bent feedback role. */
+  transition: background-color
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
       var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms)
+    border-color
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
       var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    box-shadow
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-motion-ease-out, ease-out),
+    opacity
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-column-menu-panel[data-part="surface"]
@@ -265,9 +275,9 @@
  * draft / drag target) keep their stronger grammar. */
 @media (hover: hover) {
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="row"]:hover:not([data-visible="true"]):not([data-drag-target="true"]),
+    [data-part="row"]:is([data-state~="hovered"], :hover):not([data-visible="true"]):not([data-drag-target="true"]),
   .ds-structure.ds-column-menu-panel[data-part="surface"]
-    [data-part="action-row"]:hover:not([data-visible="true"]) {
+    [data-part="action-row"]:is([data-state~="hovered"], :hover):not([data-visible="true"]) {
     border-color: color-mix(in srgb, var(--ds-color-border-secondary) 68%, transparent);
     background: color-mix(
       in srgb,
@@ -403,6 +413,25 @@
   [data-part="footer-hint"][data-size] {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs);
+}
+
+/* The three composed Buttons the family stamps but never painted. Each gets
+   the one rule the family honestly owns about it -- the primitive keeps its
+   own chrome, type, states and ring.
+
+   `reset` and `apply` are the header's and the footer's exits: neither may be
+   squeezed by a long title or a long hint sharing its lane. `width-badge`
+   shows a live pixel measure that changes while a column is dragged, so its
+   digits are tabular and its box does not shrink under the caption beside it. */
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="reset"],
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="apply"],
+.ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="width-badge"] {
+  flex: 0 0 auto;
+}
+
+.ds-structure.ds-column-menu-panel[data-part="surface"]
+  [data-part="width-badge"] {
+  font-variant-numeric: tabular-nums;
 }
 
 /* NARROW POSTURE — container, never viewport.
