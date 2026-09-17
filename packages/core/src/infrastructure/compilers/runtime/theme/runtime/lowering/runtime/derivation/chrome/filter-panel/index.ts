@@ -10,7 +10,15 @@
 
 import type { FamilyDeriver } from "../../../../foundation/contract";
 
-/** A vertical's own filter-panel chrome outranks every relation stated here. */
+/**
+ * A vertical's own filter-panel chrome outranks every relation stated here.
+ *
+ * `palette.*` and `surfaces.radiusScale` are read by the family's SKIN, not by
+ * these channels: the seeded ink paints the reset affordance under the pointer,
+ * and the radius rung paints the option-icon badge the engine hands to the
+ * composed Select, which renders inside that primitive's portal. Both are
+ * measured in `FilterPanel.causality.integration.test.tsx`.
+ */
 export const filterPanelChromeDeriver: FamilyDeriver = {
   family: "filter-panel",
   rank: "derived",
