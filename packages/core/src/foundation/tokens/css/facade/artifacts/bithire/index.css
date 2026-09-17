@@ -126,7 +126,7 @@
   --ds-avatar-focus-ring: 0 0 0 var(--ds-avatar-focus-ring-offset) var(--ds-surface-card-bg, var(--ds-color-bg-elevated)), 0 0 0 calc(var(--ds-avatar-focus-ring-offset) + var(--ds-avatar-focus-ring-width)) var(--ds-avatar-focus-ring-color, var(--ds-color-primary-500, var(--ds-color-primary)));
   --ds-avatar-group-surplus-radius: var(--ds-radius-full);
   --ds-avatar-hover-transform: scale(var(--ds-avatar-hover-scale));
-  --ds-avatar-initials-tracking: var(--ds-letter-spacing-wide, 0.01em);
+  --ds-avatar-initials-tracking: var(--ds-letter-spacing-wide, 0.025em);
   --ds-avatar-press-transform: scale(var(--ds-avatar-active-scale));
   --ds-avatar-primary-ink: var(--ds-color-primary-foreground, var(--ds-color-text-inverse));
   --ds-avatar-primary-solid-bg: var(--ds-color-primary);
@@ -2020,7 +2020,7 @@
   --ds-toolbar-controls-border: transparent;
   --ds-toolbar-controls-padding: 0;
   --ds-toolbar-controls-shadow: none;
-  --ds-toolbar-count-radius: var(--ds-radius-full, 999px);
+  --ds-toolbar-count-radius: var(--ds-radius-full, 9999px);
   --ds-toolbar-divider-opacity: 0.6;
   --ds-toolbar-entry-animation: none;
   --ds-toolbar-focus-border: var(--ds-material-panel-border-hover, var(--ds-color-primary));

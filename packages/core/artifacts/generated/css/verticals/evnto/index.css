@@ -21330,133 +21330,13 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    so tenant white-labelling is unchanged. The Modal primitive never consumed
    this block — its skins key on `.rottay-modal-*`/`.ds-modal*` instead. */
 
-/* =============================================================================
-   MENU - .menu (Sidebar Navigation)
-   ============================================================================= */
-
-[data-engine='modern'] .rottay-menu {
-  list-style: none;
-  padding: var(--ds-sidebar-shell-padding-inline, 14px);
-  margin: 0;
-}
-
-[data-engine='modern'] .rottay-menu li {
-  list-style: none;
-  margin-bottom: 2px;
-}
-
-[data-engine='modern'] .rottay-menu li > a,
-[data-engine='modern'] .rottay-menu li > button {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-sidebar-item-gap, 10px);
-  min-height: var(--ds-sidebar-item-height, 60px);
-  padding: var(--ds-sidebar-item-padding, 0 18px);
-  border-radius: var(--ds-radius-lg, 12px);
-  color: var(--ds-text-secondary);
-  background-color: transparent;
-  transition:
-    background-color var(--ds-motion-normal, 200ms)
-      var(--ds-motion-ease-out, ease),
-    color var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease);
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  width: 100%;
-  text-align: start;
-  font-size: var(--ds-sidebar-item-font-size, 15.75px);
-  font-weight: 500;
-  line-height: 1.28;
-}
-
-[data-engine='modern'] .rottay-menu li > a:hover,
-[data-engine='modern'] .rottay-menu li > button:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--ds-color-neutral-100) 92%,
-    transparent
-  );
-  color: var(--ds-text-primary);
-}
-
-[data-engine='modern'] .rottay-menu li > a.active,
-[data-engine='modern'] .rottay-menu li > button.active {
-  background-color: color-mix(
-    in srgb,
-    var(--ds-color-primary-50) 78%,
-    transparent
-  );
-  color: var(--ds-color-primary-800);
-  font-weight: 600;
-}
-
-/* Menu Icons */
-[data-engine='modern'] .rottay-menu li > a > span:first-child,
-[data-engine='modern'] .rottay-menu li > button > span:first-child {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: var(--ds-sidebar-icon-column-size, 22px);
-  font-size: var(--ds-sidebar-icon-size, 17.5px);
-}
-
-/* Submenu (details/summary) */
-[data-engine='modern'] .rottay-menu details {
-  margin-bottom: 2px;
-}
-
-[data-engine='modern'] .rottay-menu details > summary {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-sidebar-item-gap, 10px);
-  min-height: var(--ds-sidebar-item-height, 60px);
-  padding: var(--ds-sidebar-item-padding, 0 18px);
-  border-radius: var(--ds-radius-lg, 12px);
-  color: var(--ds-text-secondary);
-  background-color: transparent;
-  transition:
-    background-color var(--ds-motion-normal, 200ms)
-      var(--ds-motion-ease-out, ease),
-    color var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease);
-  cursor: pointer;
-  font-size: var(--ds-sidebar-item-font-size, 15.75px);
-  font-weight: 500;
-  line-height: 1.28;
-  list-style: none;
-}
-
-[data-engine='modern'] .rottay-menu details > summary::-webkit-details-marker {
-  display: none;
-}
-
-[data-engine='modern'] .rottay-menu details > summary:hover {
-  background-color: color-mix(
-    in srgb,
-    var(--ds-color-neutral-100) 92%,
-    transparent
-  );
-  color: var(--ds-text-primary);
-}
-
-[data-engine='modern'] .rottay-menu details[open] > summary {
-  color: var(--ds-text-primary);
-  font-weight: 600;
-}
-
-[data-engine='modern'] .rottay-menu details > ul {
-  padding-left: var(--ds-sidebar-child-padding-inline, 8px);
-  margin-top: 1px;
-  margin-bottom: 3px;
-}
-
-/* Disabled state */
-[data-engine='modern'] .rottay-menu li > a.disabled,
-[data-engine='modern'] .rottay-menu li > button.disabled,
-[data-engine='modern'] .rottay-menu details > summary.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
+/* MENU — bridge removed (WO-FAM-05 menu cut): the modern Menu engine stamps
+   `ds-menu ds-menu--modern`, never `.rottay-menu`, so the fourteen rules this
+   header used to introduce (root, item, icon, details/summary submenu,
+   disabled, plus the reduced-motion override that closed this file) selected
+   nothing. The family paints from `runtime/engines/modern/skin/menu/index.css`
+   and `presentation/components/skin/menu-compounds/index.css` off the
+   `--ds-menu-*` channels emitted by `derivation/chrome/menu`. */
 
 /* Table cells and rows should not clip dropdown */
 [data-engine='modern'] table,
@@ -21570,14 +21450,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 [data-engine='modern'] .rottay-qrcode[data-status="scanned"] {
   opacity: var(--ds-qrcode-status-scanned-opacity);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  [data-engine='modern'] .rottay-menu li > a,
-  [data-engine='modern'] .rottay-menu li > button,
-  [data-engine='modern'] .rottay-menu details > summary {
-    transition: none;
-  }
 }
 
 /**
@@ -93677,7 +93549,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-list-toolbar__filter-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
-    var(--ds-radius-full, 999px)
+    var(--ds-radius-full, 9999px)
   );
   /* Per-pill active count reads quiet (soft): the trigger's own active border
      and tint already carry the state; the global count badge in the search
@@ -94298,7 +94170,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-list-toolbar__count-badge {
   border-radius: var(
     --ds-toolbar-count-radius,
-    var(--ds-radius-full, 999px)
+    var(--ds-radius-full, 9999px)
   );
   background: var(
     --ds-filter-pill-count-active-bg,
@@ -119118,7 +118990,7 @@ html[lang]:lang(ar) {
   --ds-avatar-focus-ring: 0 0 0 var(--ds-avatar-focus-ring-offset) var(--ds-surface-card-bg, var(--ds-color-bg-elevated)), 0 0 0 calc(var(--ds-avatar-focus-ring-offset) + var(--ds-avatar-focus-ring-width)) var(--ds-avatar-focus-ring-color, var(--ds-color-primary-500, var(--ds-color-primary)));
   --ds-avatar-group-surplus-radius: var(--ds-radius-full);
   --ds-avatar-hover-transform: scale(var(--ds-avatar-hover-scale));
-  --ds-avatar-initials-tracking: var(--ds-letter-spacing-wide, 0.01em);
+  --ds-avatar-initials-tracking: var(--ds-letter-spacing-wide, 0.025em);
   --ds-avatar-press-transform: scale(var(--ds-avatar-active-scale));
   --ds-avatar-primary-ink: var(--ds-color-primary-foreground, var(--ds-color-text-inverse));
   --ds-avatar-primary-solid-bg: var(--ds-color-primary);
@@ -120854,7 +120726,7 @@ html[lang]:lang(ar) {
   --ds-toolbar-controls-border: transparent;
   --ds-toolbar-controls-padding: 0;
   --ds-toolbar-controls-shadow: none;
-  --ds-toolbar-count-radius: var(--ds-radius-full, 999px);
+  --ds-toolbar-count-radius: var(--ds-radius-full, 9999px);
   --ds-toolbar-divider-opacity: 0.6;
   --ds-toolbar-entry-animation: none;
   --ds-toolbar-focus-border: var(--ds-material-panel-border-hover, var(--ds-color-primary));
