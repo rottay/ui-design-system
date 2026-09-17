@@ -638,16 +638,56 @@ export function extractTintRampEmissions(sourceText) {
 }
 
 /**
+ * The source with every line and block comment blanked and every byte offset,
+ * length and newline position preserved, so a line number stays exact.
+ */
+export function maskSourceComments(sourceText) {
+  const blank = (slice) => slice.replace(/[^\n]/g, ' ');
+  let out = '';
+  let index = 0;
+  while (index < sourceText.length) {
+    const char = sourceText[index];
+    const next = sourceText[index + 1];
+    const escaped = sourceText[index - 1] === '\\';
+    if (char === '/' && next === '/' && !escaped) {
+      const end = sourceText.indexOf('\n', index);
+      const stop = end === -1 ? sourceText.length : end;
+      out += blank(sourceText.slice(index, stop));
+      index = stop;
+    } else if (char === '/' && next === '*' && !escaped) {
+      const end = sourceText.indexOf('*/', index + 2);
+      const stop = end === -1 ? sourceText.length : end + 2;
+      out += blank(sourceText.slice(index, stop));
+      index = stop;
+    } else if (char === '"' || char === "'" || char === '`') {
+      let cursor = index + 1;
+      while (cursor < sourceText.length && sourceText[cursor] !== char) {
+        cursor += sourceText[cursor] === '\\' ? 2 : 1;
+      }
+      const stop = Math.min(cursor + 1, sourceText.length);
+      out += sourceText.slice(index, stop);
+      index = stop;
+    } else {
+      out += char;
+      index += 1;
+    }
+  }
+  return out;
+}
+
+/**
  * Every `vars["--ds-x"] = ...` / `vars['--ds-x'] = ...` direct literal
  * assignment in the file, with line numbers. Multiple sites per name are
  * kept (never deduped) so the caller can fail on repetition (defect 5).
+ * A name quoted inside a comment is prose about an emission, not one.
  */
 export function extractDirectVarsAssignments(sourceText) {
   const offsets = buildLineIndex(sourceText);
+  const scanned = maskSourceComments(sourceText);
   const sites = new Map();
   const re = /vars\[\s*(['"])(--ds-[a-z0-9-]+)\1\s*\]\s*=/g;
   let match;
-  while ((match = re.exec(sourceText)) !== null) {
+  while ((match = re.exec(scanned)) !== null) {
     const name = match[2];
     const list = sites.get(name) ?? [];
     list.push({ line: lineForOffset(offsets, match.index) });
@@ -1339,7 +1379,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card|active-filters-bar|aspect-ratio|avatar|badge|box|calendar-view|collapse|column-menu|column-settings|container|data-table|descriptions|divider|file-manager|filter-chip|filter-panel|flex|grid|kanban-board|list|saved-views|space|splitter|stack|table|tag|toolbar|tree|widget-board)-/, (m) => `chrome.${m[1]}`],
 ]);
 
 export function classifySemanticOwner(name) {

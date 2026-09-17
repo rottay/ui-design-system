@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, sep } from 'node:path';
 
@@ -15,6 +15,7 @@ import {
   DEFAULT_TENANT_THEME_CONTRACT,
   // EMITTED
   extractTintRampEmissions,
+  maskSourceComments,
   extractDirectVarsAssignments,
   extractInterpolatedAssignments,
   findUnresolvedInterpolatedAssignments,
@@ -200,6 +201,38 @@ test('extractDirectVarsAssignments finds both quote styles with line numbers', (
   const sites = extractDirectVarsAssignments(FIXTURE_BRAND_THEME_SOURCE);
   assert.ok(sites.has('--ds-color-primary'));
   assert.ok(sites.has('--ds-surface-panel'));
+});
+
+test('a --ds-* name quoted in a comment is never a producer, and the surviving line numbers stay exact', () => {
+  const src = [
+    '// the census reads `vars["--ds-commented"] = ...` out of this source',
+    '/* and var(--ds-blocked, var(--ds-also-blocked)) is prose, not paint',
+    '   vars["--ds-multiline"] = "x"; */',
+    'vars["--ds-real"] = "1"; // vars["--ds-trailing"] = "2"',
+    'const href = "https://example.test/a//b"; vars["--ds-after-url"] = "3";',
+  ].join('\n');
+  const sites = extractDirectVarsAssignments(src);
+  assert.deepEqual([...sites.keys()], ['--ds-real', '--ds-after-url']);
+  assert.deepEqual(sites.get('--ds-real'), [{ line: 4 }]);
+  assert.deepEqual(sites.get('--ds-after-url'), [{ line: 5 }]);
+
+  const masked = maskSourceComments(src);
+  assert.equal(masked.length, src.length);
+  assert.deepEqual(
+    masked.split('\n').map((line) => line.length),
+    src.split('\n').map((line) => line.length),
+  );
+  assert.ok(!masked.includes('--ds-commented'));
+  assert.ok(!masked.includes('--ds-blocked'));
+  assert.ok(masked.includes('--ds-real'));
+
+  const box = readFileSync(
+    join(DEFAULT_BRAND_THEME_COMPILER_ROOT, 'chrome/box/index.ts'),
+    'utf8',
+  );
+  assert.match(box, /vars\["--ds-x"\] = \.\.\./);
+  assert.ok(!extractDirectVarsAssignments(box).has('--ds-x'));
+  assert.ok(extractDirectVarsAssignments(box).has('--ds-box-corner-xs'));
 });
 
 test('extractInterpolatedAssignments finds vars[`...`] template assignments with raw text', () => {
@@ -637,6 +670,26 @@ test('classifySemanticOwner covers every declared rule and role-suffixes the tin
   assert.equal(classifySemanticOwner('--ds-text-eyebrow-line-height'), 'typography.eyebrow');
   assert.equal(classifySemanticOwner('--ds-text-body'), null);
   assert.ok(SEMANTIC_OWNER_RULES.length > 10);
+});
+
+test('the family alternation names every chrome deriver on disk, and the longer name always wins', () => {
+  const derivers = readdirSync(join(DEFAULT_BRAND_THEME_COMPILER_ROOT, 'chrome'), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+  const unowned = derivers.filter((family) => classifySemanticOwner(`--ds-${family}-probe`) !== `chrome.${family}`);
+  assert.deepEqual(unowned, [], `chrome derivers whose namespace resolves elsewhere: ${unowned.join(', ')}`);
+  assert.ok(derivers.length > 60);
+
+  assert.equal(classifySemanticOwner('--ds-data-table-sort-bg'), 'chrome.data-table');
+  assert.equal(classifySemanticOwner('--ds-table-touch-target-min'), 'chrome.table');
+  assert.equal(classifySemanticOwner('--ds-tag-input-placeholder-opacity'), 'chrome.tag-input');
+  assert.equal(classifySemanticOwner('--ds-tag-shadow'), 'chrome.tag');
+  assert.equal(classifySemanticOwner('--ds-tree-select-level'), 'chrome.tree-select');
+  assert.equal(classifySemanticOwner('--ds-tree-node-radius'), 'chrome.tree');
+  assert.equal(classifySemanticOwner('--ds-column-settings-hairline'), 'chrome.column-settings');
+  assert.equal(classifySemanticOwner('--ds-column-menu-row-radius'), 'chrome.column-menu');
+  assert.equal(classifySemanticOwner('--ds-color-picker-panel-bg'), 'chrome.color-picker');
 });
 
 test('LIVE: every real declared/emitted channel name resolves to a non-null semantic owner today', () => {
