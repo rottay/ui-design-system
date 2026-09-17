@@ -131,21 +131,40 @@ type DataAttributes = {
   [key in `data-${string}`]?: string | number | boolean | undefined;
 };
 
-/** Runs the part's own kernel handler after the caller's. */
-function chainHandler<E>(
+/**
+ * `composeHandlers` (`foundation/behavior/runtime/compose-handlers`) inlined
+ * for one file, with the KERNEL as the first of the pair. It mirrors the shared
+ * helper -- one handler, then the other, and `defaultPrevented` stops the chain
+ * -- and is re-declared rather than imported because this engine is an
+ * exactly-pinned public-API entrypoint and the import would spend bytes on a
+ * measured ceiling. Any change to the shared helper's semantics belongs here
+ * too.
+ *
+ * The order is the part of this that is NOT free to change. Two stateful parts
+ * below carry a caller press that calls `preventDefault()` on the gesture it
+ * starts (`handleResizeStart`, `handleReorderStart`). With the caller first,
+ * that flag would swallow the kernel's own pointerdown: the part would keep its
+ * pointer-modality flag clear and the focus that follows the press would be
+ * read as a KEYBOARD focus, so the resize handle and the drag grip would paint
+ * their `[data-state~="focus-visible"]` ring on every mouse drag. The kernel
+ * decides state first; the caller's behaviour runs after it.
+ */
+function chainHandler<E extends { defaultPrevented?: boolean }>(
   own: ((event: E) => void) | undefined,
   kernel: (event: E) => void
 ): (event: E) => void {
   return (event: E) => {
-    own?.(event);
     kernel(event);
+    if (event?.defaultPrevented) return;
+    own?.(event);
   };
 }
 
 /**
  * The interaction triad for one part, decided by the anatomy kernel. A repeated
  * part cannot call the hook in a loop, so each stateful part below is its own
- * element; the caller's handlers keep running, the kernel's run after them.
+ * element; the kernel decides state first and the caller's handlers keep
+ * running after it (see `chainHandler` for why that order is fixed).
  *
  * Parts keep the hook result as ONE value and spread `part.handlers`: the arc09
  * inline-paint scan cannot resolve an object-binding pattern initialised by a
@@ -1405,6 +1424,35 @@ export default function ModernDataTable<T extends object>(
     (actions ? 1 : 0);
 
   // ---------------------------------------------------------------------------
+  // ARIA grid coordinates
+  //
+  // `aria-rowcount` / `aria-colcount` declare a grid whose rendered rows are a
+  // WINDOW on the data (pagination slices it, virtualization slices it again),
+  // and a count without an index tells a reader the size of a set it cannot
+  // place a row in. Both indices are 1-based and count the header rows, per the
+  // ARIA grid pattern, so the single `<thead>` row is row 1 and the first data
+  // row is row 2 -- which is why the row count below is the dataset total PLUS
+  // that header row.
+  //
+  // The column order is the rendered order: selection, expansion, the visible
+  // data columns, actions. `leadingColumnCount` is how many control columns sit
+  // before the first data column.
+  const leadingColumnCount = (selectable ? 1 : 0) + (expandedRow ? 1 : 0);
+  const selectionColIndex = 1;
+  const expansionColIndex = selectable ? 2 : 1;
+  const actionsColIndex = totalColSpan;
+  const headerRowCount = 1;
+  // `data` is the page the caller handed us, never the whole set, so a row's
+  // dataset position is the page offset plus its index inside the page.
+  const datasetRowOffset = pagination
+    ? (pagination.current - 1) * pagination.pageSize
+    : 0;
+  const datasetRowCount = pagination ? pagination.total : data.length;
+  /** The 1-based grid row of the body row at `index` within the current page. */
+  const ariaRowIndex = (index: number): number =>
+    datasetRowOffset + index + headerRowCount + 1;
+
+  // ---------------------------------------------------------------------------
   // Render
   // ---------------------------------------------------------------------------
 
@@ -1529,7 +1577,8 @@ export default function ModernDataTable<T extends object>(
               aria-colcount={totalColSpan}
               // aria-rowcount is the dataset total, not the page length: under pagination
               // `data` is only the current page, so a reader would announce "row 1 of 20".
-              aria-rowcount={pagination ? pagination.total : data.length}
+              // The header row counts, so every aria-rowindex below falls inside it.
+              aria-rowcount={datasetRowCount + headerRowCount}
               data-part="table"
               data-resizable={resizable ? "true" : "false"}
               data-has-pinned={hasPinnedColumns ? "true" : "false"}
@@ -1539,10 +1588,14 @@ export default function ModernDataTable<T extends object>(
                 data-part="table-head"
                 data-sticky={stickyHeader ? "true" : "false"}
               >
-                <tr ref={headerRowRef} data-part="header-row">
+                <tr ref={headerRowRef} data-part="header-row" aria-rowindex={1}>
                   {/* Select-all checkbox */}
                   {selectable && (
-                    <th data-cell-kind="selection" data-part="header-cell">
+                    <th
+                      aria-colindex={selectionColIndex}
+                      data-cell-kind="selection"
+                      data-part="header-cell"
+                    >
                       <ModernCheckbox
                         size="sm"
                         aria-label={messages?.selectAll ?? "Select all rows"}
@@ -1553,7 +1606,11 @@ export default function ModernDataTable<T extends object>(
                     </th>
                   )}
                   {expandedRow && (
-                    <th data-cell-kind="expansion" data-part="header-cell" />
+                    <th
+                      aria-colindex={expansionColIndex}
+                      data-cell-kind="expansion"
+                      data-part="header-cell"
+                    />
                   )}
                   {visibleColumns.map((col, columnIndex) => {
                     const pinSide = getPinSide(col.key, col.pin);
@@ -1604,6 +1661,7 @@ export default function ModernDataTable<T extends object>(
                       <ColumnHeaderCell
                         key={col.key}
                         role="columnheader"
+                        aria-colindex={leadingColumnCount + columnIndex + 1}
                         aria-sort={
                           col.sortable
                             ? sorting?.key === col.key
@@ -1869,6 +1927,7 @@ export default function ModernDataTable<T extends object>(
                   {/* Actions column header */}
                   {actions && (
                     <th
+                      aria-colindex={actionsColIndex}
                       data-cell-kind="actions"
                       data-part="header-cell"
                       data-pin-side="right"
@@ -1946,6 +2005,7 @@ export default function ModernDataTable<T extends object>(
                           const groupedRowNodes = (
                             <>
                               <BodyRow
+                                aria-rowindex={ariaRowIndex(index)}
                                 data-row-index={index}
                                 data-row-key={key}
                                 data-clickable={onRowClick ? "true" : "false"}
@@ -1986,6 +2046,7 @@ export default function ModernDataTable<T extends object>(
                               >
                                 {selectable && (
                                   <td
+                                    aria-colindex={selectionColIndex}
                                     data-part="selection-cell"
                                     onClick={(e) => e.stopPropagation()}
                                   >
@@ -2001,7 +2062,10 @@ export default function ModernDataTable<T extends object>(
                                   </td>
                                 )}
                                 {expandedRow && (
-                                  <td data-part="expand-cell">
+                                  <td
+                                    aria-colindex={expansionColIndex}
+                                    data-part="expand-cell"
+                                  >
                                     <ExpandButtonSlot
                                       data-expanded={
                                         isRowExpanded ? "true" : "false"
@@ -2105,6 +2169,9 @@ export default function ModernDataTable<T extends object>(
                                   return (
                                     <GroupedCell
                                       key={col.key}
+                                      aria-colindex={
+                                        leadingColumnCount + columnIndex + 1
+                                      }
                                       data-align={col.align}
                                       data-col-priority={
                                         col.priority || undefined
@@ -2236,6 +2303,7 @@ export default function ModernDataTable<T extends object>(
                                 })}
                                 {actions && (
                                   <td
+                                    aria-colindex={actionsColIndex}
                                     data-part="actions-cell"
                                     style={
                                       {
@@ -2287,7 +2355,11 @@ export default function ModernDataTable<T extends object>(
 
                       return (
                         <React.Fragment key={`group-${section.groupValue}`}>
-                          {/* Group header row */}
+                          {/* Group header row. It carries no aria-rowindex:
+                              the index names a position in the DATASET the
+                              counts describe, and a group header, an expanded
+                              detail row, a virtual spacer and a loading
+                              placeholder all have none. */}
                           <tr
                             role="row"
                             aria-expanded={!isCollapsed}
@@ -2389,6 +2461,7 @@ export default function ModernDataTable<T extends object>(
                       const flatRowNodes = (
                         <>
                           <BodyRow
+                            aria-rowindex={ariaRowIndex(index)}
                             data-row-index={index}
                             data-row-key={key}
                             data-clickable={onRowClick ? "true" : "false"}
@@ -2434,6 +2507,7 @@ export default function ModernDataTable<T extends object>(
                             {/* Selection checkbox */}
                             {selectable && (
                               <td
+                                aria-colindex={selectionColIndex}
                                 data-part="selection-cell"
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -2450,7 +2524,10 @@ export default function ModernDataTable<T extends object>(
                             )}
                             {/* Expand toggle */}
                             {expandedRow && (
-                              <td data-part="expand-cell">
+                              <td
+                                aria-colindex={expansionColIndex}
+                                data-part="expand-cell"
+                              >
                                 <ExpandButtonSlot
                                   data-expanded={isExpanded ? "true" : "false"}
                                 >
@@ -2549,6 +2626,9 @@ export default function ModernDataTable<T extends object>(
                               return (
                                 <FlatCell
                                   key={col.key}
+                                  aria-colindex={
+                                    leadingColumnCount + columnIndex + 1
+                                  }
                                   data-align={col.align}
                                   data-col-priority={col.priority || undefined}
                                   data-editable={
@@ -2679,6 +2759,7 @@ export default function ModernDataTable<T extends object>(
                             {/* Actions cell */}
                             {actions && (
                               <td
+                                aria-colindex={actionsColIndex}
                                 data-part="actions-cell"
                                 style={
                                   {

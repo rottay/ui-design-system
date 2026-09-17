@@ -24,6 +24,7 @@ import {
   type ResizeHandleIntent,
 } from "../../../../../primitives";
 import { partAttributes, useInteractionState } from "@/foundation/behavior";
+import { composeHandlers } from "@/foundation/behavior/runtime/compose-handlers";
 import { ActionAddIcon } from "@/graphics/icons/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/semantic/generated/roles/action-close";
 import { ActionRefreshIcon } from "@/graphics/icons/semantic/generated/roles/action-refresh";
@@ -159,6 +160,17 @@ function normalize(items: WidgetBoardItem[]): WidgetBoardItem[] {
  * fallback of one decision instead of a second authority on the same question.
  * At rest the kernel serializes nothing, so `[data-state]` never matches a
  * resting part and the resting paint is byte-identical to before.
+ *
+ * COMPOSITION (B8 residue, closed): `useInteractionState().handlers` do NOT
+ * chain. Spread after `{...rest}` the bag REPLACES every colliding caller
+ * handler -- which is exactly how a naive spread killed pointer drag in eight
+ * places during B8, and it stayed latent here for the other five handlers. Each
+ * part below composes all six explicitly with `composeHandlers`, as one local
+ * object literal (`chained`) rather than an opaque call result, so the arc09
+ * inline-paint scan still resolves the spread and the fleet counter stays 0.
+ * The caller runs first and can opt out of the kernel's reaction by preventing
+ * the event's default; the single press that must NOT work that way is
+ * documented on `BoardCellControls`.
  */
 
 /** The edit-mode toolbar: a stateful part, its hover/press arms paired. */
@@ -167,10 +179,19 @@ function BoardToolbar({
   ...rest
 }: React.HTMLAttributes<HTMLElement>): React.ReactElement {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <header
       {...rest}
-      {...interaction.handlers}
+      {...chained}
       {...partAttributes("toolbar", interaction.state)}
     >
       {children}
@@ -184,10 +205,19 @@ const BoardCardShell = React.forwardRef<
   React.HTMLAttributes<HTMLElement>
 >(function BoardCardShell({ children, ...rest }, ref) {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <article
       {...rest}
-      {...interaction.handlers}
+      {...chained}
       {...partAttributes("card-shell", interaction.state)}
       ref={ref}
     >
@@ -202,10 +232,19 @@ function BoardCatalogItem({
   ...rest
 }: React.HTMLAttributes<HTMLElement>): React.ReactElement {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers(rest.onPointerDown, kernel.onPointerDown),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <article
       {...rest}
-      {...interaction.handlers}
+      {...chained}
       {...partAttributes("catalog-item", interaction.state)}
     >
       {children}
@@ -218,6 +257,14 @@ function BoardCatalogItem({
  * stateful part that also carries a caller handler. The kernel's own handlers
  * do NOT chain to a caller's, so the press that starts a drag is composed here
  * explicitly: the part owns its state, the product owns its behaviour.
+ *
+ * The PRESS is the one composition on this board that runs the kernel FIRST.
+ * `beginMove` calls `preventDefault()` on the pointerdown that grabs a widget,
+ * so with the caller first `composeHandlers` would stop the chain there and the
+ * kernel would never see the press: the skin's
+ * `[data-part="cell-controls"]:is([data-state~="pressed"], :active)` arm would
+ * go dark for the whole drag, and the focus that follows the press would be
+ * read as a keyboard focus. The other five keep the caller-first order.
  */
 function BoardCellControls({
   children,
@@ -225,14 +272,22 @@ function BoardCellControls({
   ...rest
 }: React.HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const interaction = useInteractionState();
+  const kernel = interaction.handlers;
+  const chained = {
+    onPointerEnter: composeHandlers(rest.onPointerEnter, kernel.onPointerEnter),
+    onPointerLeave: composeHandlers(rest.onPointerLeave, kernel.onPointerLeave),
+    onPointerDown: composeHandlers<ReactPointerEvent<HTMLDivElement>>(
+      kernel.onPointerDown,
+      onPointerDown
+    ),
+    onPointerUp: composeHandlers(rest.onPointerUp, kernel.onPointerUp),
+    onFocus: composeHandlers(rest.onFocus, kernel.onFocus),
+    onBlur: composeHandlers(rest.onBlur, kernel.onBlur),
+  };
   return (
     <div
       {...rest}
-      {...interaction.handlers}
-      onPointerDown={(event) => {
-        interaction.handlers.onPointerDown(event);
-        onPointerDown?.(event);
-      }}
+      {...chained}
       {...partAttributes("cell-controls", interaction.state)}
     >
       {children}

@@ -81,6 +81,7 @@ function tenant(locale: 'en' | 'es'): TenantConfig {
 async function serverMarkup(
   viewport: DocumentViewportHint,
   locale: 'en' | 'es' = 'en',
+  density?: DataTablePatternProps<Row>['density'],
 ): Promise<string> {
   const { prelude } = await prerenderToNodeStream(
     <DesignSystemProvider
@@ -108,6 +109,7 @@ async function serverMarkup(
           pagination={{ current: 13, pageSize: 1000, total: 1234567, onChange: noop }}
           messages={{ tableLabel: 'Roles' }}
           mobileCard={viewport === 'phone' ? (row) => <span>{row.name}</span> : undefined}
+          density={density}
         />
       </Suspense>
     </DesignSystemProvider>,
@@ -134,6 +136,14 @@ const cards = await serverMarkup('phone');
 const spanishGrid = await serverMarkup('desktop', 'es');
 
 const markup = `<div id="grid">${grid}</div><div id="cards" style="inline-size:24rem">${cards}</div>`;
+
+/**
+ * The same table twice, once per density posture. It is a SEPARATE markup
+ * string: adding a third table to `markup` would shift every axe `:nth-child`
+ * path the debt map pins.
+ */
+const compactGrid = await serverMarkup('desktop', 'en', 'compact');
+const densityPair = `<div id="comfortable">${grid}</div><div id="compact">${compactGrid}</div>`;
 
 const ROOT = "#grid [data-part='root']";
 const CELL = "#grid [data-part='data-cell']";
@@ -378,6 +388,52 @@ describe('data-table causality surface', () => {
     // Grouped figures only read as a column when the family pins tabular figures.
     expect(readings.base!.rangeNumeric).toBe('tabular-nums');
     expect(readings.base!.cellNumeric).toBe('tabular-nums');
+  }, 120_000);
+
+  /**
+   * F-22, density half: the posture must reach the family's own geometry, not
+   * only the attribute the root stamps. The unit suite pins `data-density`;
+   * this reads the channel that attribute resolves BACK OFF A CELL in a real
+   * browser, where the cascade law that makes the projection work (a custom
+   * property is resolved on the element that declares it, so the boundary
+   * redeclares the ramp) is actually in force.
+   */
+  it('changes the density scale a cell computes when the posture is compact', async () => {
+    const CELL_IN = (host: string) => `#${host} [data-part='data-cell']`;
+    const readings = await measureArms({
+      vertical: 'rottay',
+      markup: densityPair,
+      arms: { base: {} },
+      targets: [
+        { id: 'comfortableScale', selector: CELL_IN('comfortable'), property: '--ds-density-effective-scale' },
+        { id: 'compactScale', selector: CELL_IN('compact'), property: '--ds-density-effective-scale' },
+        { id: 'comfortableRhythm', selector: CELL_IN('comfortable'), property: 'padding-top' },
+        { id: 'compactRhythm', selector: CELL_IN('compact'), property: 'padding-top' },
+        { id: 'comfortableGap', selector: "#comfortable [data-part='toolbar']", property: 'row-gap' },
+        { id: 'compactGap', selector: "#compact [data-part='toolbar']", property: 'row-gap' },
+        { id: 'comfortableRow', selector: "#comfortable [data-part='body-row']", property: '@rect.height' },
+        { id: 'compactRow', selector: "#compact [data-part='body-row']", property: '@rect.height' },
+      ],
+    });
+    const r = readings.base!;
+    // `--ds-density-effective-scale` is not a registered property, so a cell
+    // computes it as the substituted token stream: the posture is visible in
+    // the factor the boundary substituted into it.
+    const factor = (value: string): string =>
+      value.replace(/\s+/g, ' ').replace(/^clamp\( 0\.5, calc\( .* \* (\S+) \), 3 \)$/, '$1');
+    expect(factor(r.comfortableScale)).toBe('1');
+    // 0.85 is DENSITY_MODE_FACTORS.compact, projected by the base density CSS.
+    expect(factor(r.compactScale)).toBe('0.85');
+    expect(r.compactScale).not.toBe(r.comfortableScale);
+    // The channel is not decoration: the cell's own geometry follows it.
+    expect(Number.parseFloat(r.compactRhythm)).toBeLessThan(
+      Number.parseFloat(r.comfortableRhythm),
+    );
+    expect(Number(r.compactRow)).toBeLessThan(Number(r.comfortableRow));
+    // PINNED, measured: the toolbar rhythm does NOT follow the instance
+    // posture. It follows the tenant-level `density.mode` decision (the arm
+    // above moves it), so the prop reaches the cells and not the chrome gap.
+    expect(r.compactGap).toBe(r.comfortableGap);
   }, 120_000);
 
   it('carries no serious axe finding beyond the pinned debt', async () => {

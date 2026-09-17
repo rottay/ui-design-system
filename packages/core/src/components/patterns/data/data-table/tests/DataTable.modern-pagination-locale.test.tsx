@@ -66,7 +66,10 @@ describe('PatternDataTable modern — pagination range follows the active catalo
 });
 
 describe('PatternDataTable modern — aria-rowcount reflects the true dataset size', () => {
-  it('reports pagination.total, not the rendered page length', () => {
+  // The count includes the single header row, because aria-rowindex on a body
+  // row counts it too; a dataset-only count would put the last row's index
+  // outside the grid it declares.
+  it('reports pagination.total plus the header row, not the rendered page length', () => {
     // `data` is a single-row page slice; a paginated table only ever
     // receives the current page, never the full dataset.
     const { container } = render(
@@ -81,10 +84,10 @@ describe('PatternDataTable modern — aria-rowcount reflects the true dataset si
     );
 
     const table = container.querySelector('table[role="grid"]');
-    expect(table?.getAttribute('aria-rowcount')).toBe('200');
+    expect(table?.getAttribute('aria-rowcount')).toBe('201');
   });
 
-  it('falls back to data.length when pagination is not used', () => {
+  it('falls back to data.length plus the header row when pagination is not used', () => {
     const rows: Row[] = [
       { id: 1, name: 'Ada' },
       { id: 2, name: 'Bo' },
@@ -97,6 +100,6 @@ describe('PatternDataTable modern — aria-rowcount reflects the true dataset si
     );
 
     const table = container.querySelector('table[role="grid"]');
-    expect(table?.getAttribute('aria-rowcount')).toBe('3');
+    expect(table?.getAttribute('aria-rowcount')).toBe('4');
   });
 });

@@ -180,6 +180,11 @@ export function DataTableMobileCards<T extends object>({
       </Flex>
     ) : null;
 
+  /* No aria-rowindex/aria-colindex here, and no aria-rowcount to be consistent
+     with: the phone posture is a list or a plain stack of cards, never a grid
+     role, and those attributes are only defined on rows and cells inside a
+     table/grid/treegrid. Giving this list a grid role to carry them would make
+     a reader announce columns the posture does not render. */
   return (
     <Stack
       spacing={isListPresentation ? "xs" : "md"}
