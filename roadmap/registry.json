@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-16",
+ "updated": "2026-09-17",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -5269,6 +5269,21 @@
      "at": "2026-09-16 21:10",
      "by": "claude-fable-dt",
      "note": "INTEGRADO 52dff0d6c: slider 5/6 anclas verticales logicas + espejos :dir(rtl) rail/track/dot, tooltip vertical pinneado como DEBT (no excepcion) owed al lote de vocabulario de placement de esta WO (step 1: placement start/end only); dropdown dropea el forward fisico de overlayStyle.left (0 consumidores medidos); affix = excepcion nombrada measured-space; overlay positioning offsetMargins x2 = DEBT owed al mismo lote. Gate OK: debt 4 sitios/3 archivos (engine-styles 1 hacia WO-RET-04, slider 1, positioning 2), inert 9, excepciones 7/7; drill 44/44. Revision independiente de la adjudicacion del DT: ACCEPT. Lo que falta para cerrar: lote de vocabulario de placement logico (OverlayPlacement inline-start/end + position-area logico + tooltip del slider), retiro de engine-styles (WO-RET-04), y la aceptacion completa de la ficha (grep closest('[dir]') = 0, caso Playwright dir=rtl por grupo de familias) por comprobar."
+    },
+    {
+     "at": "2026-09-16 23:52",
+     "by": "claude-fable-dt",
+     "note": "Ola 11 despachada (Opus): vocabulario logico de placement (OverlayPlacement inline-start/end, position-area logico, offsetMargins logico, tooltip vertical del slider con :dir(rtl) por construccion), alias documentado para los nombres fisicos (Classic/Rustic congelados deben seguir compilando), test de navegador real LTR/RTL (los tests del slider de 52dff0d6c son DOM simulado, no Chromium: Codex). Pendiente de RATIFICACION del owner (Codex A2): el re-anclaje 212439653 (+654 x3, causa 8a9711cb4 de esta WO) es una ampliacion con causa, no una optimizacion; se preserva y se eleva como excepcion acotada; no se usa como permiso general."
+    },
+    {
+     "at": "2026-09-17 01:34",
+     "by": "claude-fable-dt",
+     "note": "Ola 11 entrega: vocabulario logico de placement en positioning/field-overlay + popover/hover-card/popconfirm/tooltip contracts y engines modern, slider tooltip, test de navegador real OverlayPlacement.browser-geometry (Chromium), pins slider/positioning drenados (debt 1/1). Revision 2 BLOCKING (reproducido en Chromium): las dos ramas de useOverlayPosition usaban autoridades de direccion distintas (anchor-css = writing mode del overlay; js = contexto de locale) y pintaban lados opuestos con direccion no uniforme; data-collision-adjusted falso. Correccion en curso con una sola direccion por request. RULINGS DT: (1) los cuatro skins modern tooltip/popover/hover-card/dropdown entran al write set para migrar el canal de placement y corregir el defecto PREEXISTENTE de la flecha del tooltip bajo RTL; (2) el vocabulario de alineacion -start/-end queda fuera de alcance (ficha: placement start/end only); (3) motores Classic/Rustic congelados: un placement logico en ellos cae al fallback documentado, no se editan. Docs-engineering del monorepo (primitives/display README) pendiente del DT tras integrar."
+    },
+    {
+     "at": "2026-09-17 02:17",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO f1833a48f: placement logico end to end en Modern (inline-start/end + alias fisicos deprecados; position-area y offsetMargins logicos; UNA direccion por request en useOverlayPosition resuelta desde el contexto del anchor por Tooltip/Popover/HoverCard/Popconfirm y estampada como dir; skins tooltip/popover/dropdown con flecha correcta bajo RTL — defecto preexistente; suite Chromium 9 tests uniforme y no uniforme, ambas ramas, borde de flecha; pins slider/positioning drenados: debt 1/1 (engine-styles hacia WO-RET-04), inert 9/4, excepciones 7/7). Revision independiente: 2 rondas CHANGES (autoridad de direccion dividida entre ramas; Popconfirm sin direccion; regresion typecheck:tests) corregidas por el writer y verificadas por el DT. Ratificado por el DT: espejo de alineacion de Popconfirm por paridad con Popover. Residuo nombrado: direction: inherit en .ds-tooltip-bubble afecta el canal de alineacion de un bubble portalado en arbol no uniforme (fuera de alcance: lote propio con el snapshot de Tooltip.causality). Pendiente para cerrar la WO: aceptacion de ficha (grep closest('[dir]') en src/components = 0? caso Playwright dir=rtl por grupo de familias; API logica de Box/Stack/Flex; iconos data-icon-mirrored) por medir; docs-engineering primitives/display por actualizar."
     }
    ]
   },
@@ -6295,6 +6310,21 @@
      "at": "2026-09-16 21:10",
      "by": "claude-fable-dt",
      "note": "INTEGRADO 464fc308a: transporte del draft del studio en Theme gobernado (BrandStudioDraft con ventana supersedida flat), readThemeDraft/projectThemeDraft exportados, serializeThemeDraft/deserializeThemeDraft publicados (+7 nombres en suppliers, 0 removidos), guard liftedFromAuthorship (defecto real hallado en revision), docs y showroom; visual-authority re-anclado a la baja 73535 (f61a9da9f). Revision: ACCEPT en pase 2. ABIERTO para cerrar la WO: (1) brandThemePath 32 ocurrencias/3 archivos — sub-lote propio de rename con ventana supersedida + regeneracion de manifests/probes (no eximido); (2) createTenantFlatTheme y preview-css siguen autorando flat (6 sitios) — fuera de este lote, adjudicar si es scope de DER-08 o del retype (b) diferido; (3) hazard cross-repo: apps deben tomar el snapshot regenerado de contracts/runtime/suppliers/index.json; (4) showroom typecheck no demostrable desde este worktree (symlink de node_modules al checkout principal)."
+    },
+    {
+     "at": "2026-09-16 23:52",
+     "by": "claude-fable-dt",
+     "note": "Codex b29cf1e20 A1: la migracion del callback PatternBrandStudioProps.onChange (FlatTheme->Theme, 464fc308a) no esta declarada (changeset der-08 dice aditivo; TS2322 reproducido con consumidor viejo) y los 7 exports nuevos no estan en contract-diff. Despachado lote Opus (ola 11): clasificacion honesta segun contract-changeset, contract-diff completo, guia de migracion, test de consumidor migrado + rechazo de la firma vieja, y sublote brandThemePath con ventana supersedida (precedente 480ce5807); regeneraciones de manifests/probes las serializa el DT. Showroom typecheck global NO se afirma probado (resolucion de dist de otro checkout)."
+    },
+    {
+     "at": "2026-09-17 01:34",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO e75874eb7: changeset MAJOR der-08-studio-callback-governed-theme (9 filas contract-diff: onChange FlatTheme->Theme breaking, inputs ampliados, 5 exports nuevos; el minor previo ya no afirma compatibilidad total), guia de migracion en consumer-contract y reference/contracts, test ejecutable de consumidor migrado por nombre de paquete (3/3) + rechazo de la firma vieja con @ts-expect-error; contract-changeset CI form b29cf1e20..HEAD OK. Revision independiente ACCEPT tras corregir 2 rutas de docs. HALLAZGO: brandThemePath no es solo campo serializado: se publica como tipo literal en TenantCapabilityDeclaration (entrypoint .), y su productor lo lee literalmente scripts/generate/tokens/manifest/generation/index.mjs:285; el mecanismo de ventana supersedida vive en scripts/. RULING DT: el rename brandThemePath->themePath es un sublote propio con autoridad sobre esos scripts, fila contract-diff major, ventana supersedida reutilizando INGRESS_ARMS manifestIngressKey/supersededIngressKey, regeneracion de 21 manifests + probes serializada por el DT. Despachado."
+    },
+    {
+     "at": "2026-09-17 02:05",
+     "by": "claude-fable-dt",
+     "note": "INTEGRADO 8bbefa48e: brandThemePath -> themePath en el registro de capacidades (22 filas, paths byte-identicos medidos), TenantCapabilityDeclaration (tipo literal publicado, fila contract-diff major), admission facade, productor de manifests via readIngressKey con UNA ventana supersedida (INGRESS_ARMS registryKey/supersededRegistryKey) y disparador ejecutable de cierre; revision independiente ACCEPT. DT serializo  (22 manifests: ingress.staticBrandThemePath -> staticThemePath, registryDigest); el disparador de cierre se encendio por diseno. Despachado lote de instrumento (owner unico, revision independiente): cierre de la ventana (ambos brazos, fallback de normalization, warning del productor, tests) + reparacion de los 4 bindings stale preexistentes del generador (sidebar-surface layout-sidebar css, switch/steps sourceOwner, notifier sin fila de inventario). Pendiente DT tras integrar: contract:generate (tipo literal publicado), dist build, re-medicion del instrumento ingress (114/129 esperado), recibo cross-repo del snapshot supplier."
     }
    ]
   }
