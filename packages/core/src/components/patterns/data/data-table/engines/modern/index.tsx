@@ -1431,8 +1431,15 @@ export default function ModernDataTable<T extends object>(
   // and a count without an index tells a reader the size of a set it cannot
   // place a row in. Both indices are 1-based and count the header rows, per the
   // ARIA grid pattern, so the single `<thead>` row is row 1 and the first data
-  // row is row 2 -- which is why the row count below is the dataset total PLUS
-  // that header row.
+  // row is row 2.
+  //
+  // The counted sequence is the EXPOSED table, in document order: the header
+  // row, then each group header row, body row and expanded detail row. Group
+  // headers are interactive rows, so they take an index like any other; only
+  // the virtual spacers stay out, because they paint scroll height, own no cell
+  // and are aria-hidden. Collapsed group members are not exposed and are not
+  // counted; virtualized and loading dataset rows are counted even while they
+  // are out of the DOM, which is what `aria-rowcount` exists for.
   //
   // The column order is the rendered order: selection, expansion, the visible
   // data columns, actions. `leadingColumnCount` is how many control columns sit
@@ -1447,10 +1454,82 @@ export default function ModernDataTable<T extends object>(
   const datasetRowOffset = pagination
     ? (pagination.current - 1) * pagination.pageSize
     : 0;
-  const datasetRowCount = pagination ? pagination.total : data.length;
-  /** The 1-based grid row of the body row at `index` within the current page. */
+  /**
+   * The 1-based grid row of the body row at `index` within the current page,
+   * used only when a row key is missing from the coordinate walk below (a
+   * caller-supplied duplicate key), so a row never loses its index entirely.
+   */
   const ariaRowIndex = (index: number): number =>
     datasetRowOffset + index + headerRowCount + 1;
+
+  // One walk of the exposed row sequence assigns every coordinate: the body
+  // and group-header indices the rows stamp, and the total they must fall
+  // inside. The walk mirrors the render order below exactly (sections in order,
+  // group header first, each rendered row followed by its detail row).
+  const ariaRows = useMemo(() => {
+    const bodyRowIndices = new Map<string, number>();
+    const groupRowIndices = new Map<string, number>();
+    let cursor = headerRowCount + datasetRowOffset;
+    let structuralRowCount = 0;
+    const visitRow = (row: T, index: number) => {
+      const key = getRowKey(row, index);
+      cursor += 1;
+      bodyRowIndices.set(key, cursor);
+      if (expandedRow && expandedKeys.has(key)) {
+        cursor += 1;
+        structuralRowCount += 1;
+      }
+    };
+    if (isGrouped) {
+      let globalIndex = 0;
+      for (const section of sections) {
+        cursor += 1;
+        groupRowIndices.set(section.groupValue, cursor);
+        structuralRowCount += 1;
+        if (!collapsedGroups.has(section.groupValue)) {
+          section.items.forEach((row, localIndex) =>
+            visitRow(row, globalIndex + localIndex)
+          );
+        }
+        globalIndex += section.items.length;
+      }
+    } else {
+      data.forEach(visitRow);
+    }
+    return {
+      bodyRowIndices,
+      groupRowIndices,
+      structuralRowCount,
+      /** Header row + every exposed row of this dataset. */
+      exposedRowCount: cursor - datasetRowOffset,
+    };
+  }, [
+    collapsedGroups,
+    data,
+    datasetRowOffset,
+    expandedKeys,
+    expandedRow,
+    getRowKey,
+    isGrouped,
+    sections,
+  ]);
+
+  // Remote pagination hands us one page, so structural rows on the other pages
+  // are unknowable. With none in play the exposed total is exactly the dataset
+  // plus the header row; otherwise the count is honestly unknown
+  // (`aria-rowcount="-1"`, ARIA 1.2) instead of a total that no index matches.
+  const ariaRowCount =
+    pagination && pagination.total > data.length
+      ? ariaRows.structuralRowCount > 0
+        ? -1
+        : pagination.total + headerRowCount
+      : ariaRows.exposedRowCount;
+
+  /** An expanded detail row is the exposed row right after its body row. */
+  const detailRowIndex = (key: string): number | undefined => {
+    const bodyIndex = ariaRows.bodyRowIndices.get(key);
+    return bodyIndex === undefined ? undefined : bodyIndex + 1;
+  };
 
   // ---------------------------------------------------------------------------
   // Render
@@ -1575,10 +1654,11 @@ export default function ModernDataTable<T extends object>(
               role="grid"
               aria-label={messages?.tableLabel ?? "Data table"}
               aria-colcount={totalColSpan}
-              // aria-rowcount is the dataset total, not the page length: under pagination
-              // `data` is only the current page, so a reader would announce "row 1 of 20".
-              // The header row counts, so every aria-rowindex below falls inside it.
-              aria-rowcount={datasetRowCount + headerRowCount}
+              // The count is the exposed row sequence, never the page length:
+              // under pagination `data` is only the current page, so a reader
+              // would otherwise announce "row 1 of 20". Every aria-rowindex
+              // below falls inside it, or the count declares itself unknown.
+              aria-rowcount={ariaRowCount}
               data-part="table"
               data-resizable={resizable ? "true" : "false"}
               data-has-pinned={hasPinnedColumns ? "true" : "false"}
@@ -2005,7 +2085,7 @@ export default function ModernDataTable<T extends object>(
                           const groupedRowNodes = (
                             <>
                               <BodyRow
-                                aria-rowindex={ariaRowIndex(index)}
+                                aria-rowindex={ariaRows.bodyRowIndices.get(key) ?? ariaRowIndex(index)}
                                 data-row-index={index}
                                 data-row-key={key}
                                 data-clickable={onRowClick ? "true" : "false"}
@@ -2322,7 +2402,7 @@ export default function ModernDataTable<T extends object>(
                                 )}
                               </BodyRow>
                               {expandedRow && isRowExpanded && (
-                                <tr>
+                                <tr aria-rowindex={detailRowIndex(key)}>
                                   <td
                                     colSpan={totalColSpan}
                                     data-part="expanded-row"
@@ -2355,13 +2435,13 @@ export default function ModernDataTable<T extends object>(
 
                       return (
                         <React.Fragment key={`group-${section.groupValue}`}>
-                          {/* Group header row. It carries no aria-rowindex:
-                              the index names a position in the DATASET the
-                              counts describe, and a group header, an expanded
-                              detail row, a virtual spacer and a loading
-                              placeholder all have none. */}
+                          {/* Group header row: an interactive, exposed row, so
+                              it takes its place in the counted sequence. */}
                           <tr
                             role="row"
+                            aria-rowindex={ariaRows.groupRowIndices.get(
+                              section.groupValue
+                            )}
                             aria-expanded={!isCollapsed}
                             tabIndex={0}
                             data-part="group-header-row"
@@ -2461,7 +2541,7 @@ export default function ModernDataTable<T extends object>(
                       const flatRowNodes = (
                         <>
                           <BodyRow
-                            aria-rowindex={ariaRowIndex(index)}
+                            aria-rowindex={ariaRows.bodyRowIndices.get(key) ?? ariaRowIndex(index)}
                             data-row-index={index}
                             data-row-key={key}
                             data-clickable={onRowClick ? "true" : "false"}
@@ -2779,7 +2859,7 @@ export default function ModernDataTable<T extends object>(
                           </BodyRow>
                           {/* Expanded row content */}
                           {expandedRow && isExpanded && (
-                            <tr>
+                            <tr aria-rowindex={detailRowIndex(key)}>
                               <td
                                 colSpan={totalColSpan}
                                 data-part="expanded-row"
