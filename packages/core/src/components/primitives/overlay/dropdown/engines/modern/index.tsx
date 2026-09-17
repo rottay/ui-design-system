@@ -55,6 +55,13 @@ type PopupPosition = { top: number; left: number };
  * and the layer belong to the engine, and so do the coordinates the placement
  * computes -- the measured `top`/`left` of a portaled surface, or the one block
  * end and one inline edge an in-tree placement claims.
+ *
+ * The caller's physical `left` never reaches an in-tree surface. Placement
+ * semantics are logical, and the skin pins `left: auto` next to the
+ * `inset-inline-*` edge it claims; an inline `left` would beat that `auto` and
+ * over-constrain the surface against the opposite logical edge under
+ * `dir="rtl"`. The caller's own `insetInlineStart`/`insetInlineEnd` is the
+ * supported hatch, and it survives on the end the placement does not compute.
  */
 function callerSurfaceStyle(
   style: React.CSSProperties | undefined,
@@ -67,7 +74,7 @@ function callerSurfaceStyle(
     zIndex: _zIndex,
     top,
     bottom,
-    left,
+    left: _left,
     insetInlineStart,
     insetInlineEnd,
     translate,
@@ -76,9 +83,9 @@ function callerSurfaceStyle(
   if (portaled) return { ...rest, bottom, insetInlineStart, insetInlineEnd, translate };
   const blockEdge = placement.startsWith('top') ? { top } : { bottom };
   const inlineEdge = placement.endsWith('Right')
-    ? { insetInlineStart, left, translate }
+    ? { insetInlineStart, translate }
     : placement.endsWith('Left')
-      ? { insetInlineEnd, left, translate }
+      ? { insetInlineEnd, translate }
       : { insetInlineStart, insetInlineEnd };
   return { ...rest, ...blockEdge, ...inlineEdge };
 }

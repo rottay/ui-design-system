@@ -148,14 +148,14 @@ test('the sandbox mirror measures exactly what the real tree measures', () => {
 test('the corpus is not vacuous and the clean file really is clean', () => {
   // The floor is the NAMED EXCEPTIONS, not the debt: debt is supposed to reach
   // zero, and a floor tied to it would have to be lowered on every correction
-  // until it asserted nothing. The six measured-coordinate readers are
+  // until it asserted nothing. The seven measured-coordinate readers are
   // permanent by adjudication, one declared site each.
   const sites = physicalSites();
   const exceptions = namedExceptions();
   const exceptionSites = sites.filter((site) => exceptions[site.path]?.sites.some((row) => row.locator === site.locator));
   assert.ok(sites.length >= 6, `only ${sites.length} sites found -- an empty scan is never a pass`);
-  assert.equal(exceptionSites.length, 6, 'the six measured-coordinate readers carry one declared site each');
-  assert.equal(Object.keys(exceptions).length, 6);
+  assert.equal(exceptionSites.length, 7, 'the seven measured-coordinate readers carry one declared site each');
+  assert.equal(Object.keys(exceptions).length, 7);
   assert.equal(physicalCounts()[CLEAN_FILE], undefined, `${CLEAN_FILE} must hold no physical site`);
 });
 

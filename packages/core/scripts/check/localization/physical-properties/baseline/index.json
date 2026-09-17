@@ -1,11 +1,27 @@
 {
-  "_comment": "Three-band ledger for physical-properties/index.mjs, the paint half of the one-direction law. `pinnedDebt` and `inert` pin a COUNT PER FILE, not a line list: an edit above a site would move every number without changing anything the law cares about. `pinnedDebt` is a physical edge that should be logical -- growth fails, a fix fails with an instruction to lower the pin. `inert` is a symmetric pair or a centred offset, where flipping the direction moves nothing: it is COUNTED rather than excluded by rule, because proving symmetry pair-by-pair is fragile and a pinned band is what stops tomorrow's unpaired `left: 0` arriving unnoticed; clearing one is a zero-pixel change. `namedExceptions` are declared PER SITE, as a locator (`scope property: value`, whitespace-collapsed) with its own reason: each exempts exactly the one site it names, so a second physical site in the same file is judged as unbanded and a substituted site stops matching its locator -- the exception is never permission for the whole file. Frozen engines (223 of the 245 measured sites) are excluded by path in the gate source, because the freeze gate already governs them with written, content-pinned exceptions. Population measured 2026-09-16; the Class D corrections lot then cleared the two LIVE debt rows -- the countdown affix gap to marginInlineEnd/marginInlineStart on --ds-spacing-1 and the progress label to textAlign:'end'. The same day the detector moved from a spelling regex to the TypeScript syntax tree, which found eight sites the regex could not see (keys inside spreads, branches of a conditional style and CSSProperties-returning functions); each is banded below and says so in its reason. None was granted a named exception: the two measured/physical-placement candidates (affix, overlay positioning) are pinned as debt until adjudicated.",
+  "_comment": "Three-band ledger for physical-properties/index.mjs, the paint half of the one-direction law. `pinnedDebt` and `inert` pin a COUNT PER FILE, not a line list: an edit above a site would move every number without changing anything the law cares about. `pinnedDebt` is a physical edge that should be logical -- growth fails, a fix fails with an instruction to lower the pin. `inert` is a symmetric pair or a centred offset, where flipping the direction moves nothing: it is COUNTED rather than excluded by rule, because proving symmetry pair-by-pair is fragile and a pinned band is what stops tomorrow's unpaired `left: 0` arriving unnoticed; clearing one is a zero-pixel change. `namedExceptions` are declared PER SITE, as a locator (`scope property: value`, whitespace-collapsed) with its own reason: each exempts exactly the one site it names, so a second physical site in the same file is judged as unbanded and a substituted site stops matching its locator -- the exception is never permission for the whole file. Frozen engines (223 of the 245 measured sites) are excluded by path in the gate source, because the freeze gate already governs them with written, content-pinned exceptions. Population measured 2026-09-16; the Class D corrections lot then cleared the two LIVE debt rows -- the countdown affix gap to marginInlineEnd/marginInlineStart on --ds-spacing-1 and the progress label to textAlign:'end'. The same day the detector moved from a spelling regex to the TypeScript syntax tree, which found eight sites the regex could not see (keys inside spreads, branches of a conditional style and CSSProperties-returning functions); each is banded below and says so in its reason. There are TWO exception classes. The first is MEASURED SPACE: a value that arrives from `getBoundingClientRect()` or a pointer event is already a physical viewport coordinate, so a logical inset would mirror an already-mirrored number. The second, opened by the INV-01 adjudication, is PHYSICAL PLACEMENT VOCABULARY: a site whose paired placement API or CSS keywords are physical by contract (`placement: 'left' | 'right'`, `position-area: left | span-right`), where a logical spelling would move the paint OFF the side the caller asked for under RTL; migrating such a site means migrating its vocabulary first, which is a separate work order. The INV-01 lot then cleared four of the five debt rows: the slider migrated FIVE of its six vertical anchors to `insetInlineStart` -- the step dot, the range track, both handles and the vertical mark label -- and gained the `:dir(rtl)` rail/track/dot skin mirrors they needed, keeping the value tooltip pinned as debt owed to the placement-vocabulary lot of WO-INV-01; the mark label is the site the retired slider pin called the DEFECT (`left: '100%'` in `renderMarks`, which under RTL put the label on the far side of the root, away from the rail) and it is the one that was fixed, pinned by `primitives/inputs/slider/tests/Slider.mark-label-direction.test.tsx`; the dropdown DROPPED the caller's physical `left` forward (measured consumers of `overlayStyle.left` on an in-tree placement: 0 across core, showroom, bithire, evnto and platform); affix was granted a named exception in the measured-space class (precedent export-button/filter-dropdown/chart-tooltip), and overlay positioning `offsetMargins` stays pinned as debt owed to the same placement-vocabulary lot of WO-INV-01 (DT ruling 2026-09-16: a physical placement vocabulary is this work order's scope, so it cannot be exempted).",
   "namedExceptions": {
     "patterns/customization/token-inspector/index.tsx": {
       "sites": [
         {
           "locator": "panelStyle left: state.position.x",
           "reason": "The inspector panel anchors to the POINTER (`left: state.position.x`). Pointer space is physical: the number is a viewport coordinate, and `insetInlineStart` would reinterpret it from the other edge under RTL and put the panel across the screen from the cursor. The file already carries this reason at the call site."
+        }
+      ]
+    },
+    "patterns/visualization/charts/presentation/tooltip/index.tsx": {
+      "sites": [
+        {
+          "locator": "ChartTooltip left: adjusted.left",
+          "reason": "`left: adjusted.left` is the chart tooltip's own auto-flip result -- a viewport coordinate the component computed and clamped against the chart rect. Same class as the other measured-rect readers; it happens to live under charts, where the surrounding coordinate space is physical anyway."
+        }
+      ]
+    },
+    "primitives/navigation/affix/engines/modern/index.tsx": {
+      "sites": [
+        {
+          "locator": "projectGeometry left: measured.left",
+          "reason": "MEASURED-SPACE class, parallel to the export-button entry. `projectGeometry` re-projects `placeholderRect.left`, a `getBoundingClientRect()` edge that `measure()` writes back as a fixed-position coordinate. The rect is already in physical coordinates, so a logical inset would mirror an already-mirrored measured edge and place the affixed element off its placeholder under RTL."
         }
       ]
     },
@@ -25,14 +41,6 @@
         }
       ]
     },
-    "surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/index.tsx": {
-      "sites": [
-        {
-          "locator": "style left: position?.left",
-          "reason": "`left: position?.left` is the same measured-rect clamp as export-button: the value comes from a viewport measurement, so it is physical by construction."
-        }
-      ]
-    },
     "structures/workspace/export-button/runtime/file-export/index.ts": {
       "sites": [
         {
@@ -41,11 +49,11 @@
         }
       ]
     },
-    "patterns/visualization/charts/presentation/tooltip/index.tsx": {
+    "surfaces/presentation/pages/workspace/collection-workspace/filter-dropdown/index.tsx": {
       "sites": [
         {
-          "locator": "ChartTooltip left: adjusted.left",
-          "reason": "`left: adjusted.left` is the chart tooltip's own auto-flip result -- a viewport coordinate the component computed and clamped against the chart rect. Same class as the other measured-rect readers; it happens to live under charts, where the surrounding coordinate space is physical anyway."
+          "locator": "style left: position?.left",
+          "reason": "`left: position?.left` is the same measured-rect clamp as export-button: the value comes from a viewport measurement, so it is physical by construction."
         }
       ]
     }
@@ -56,20 +64,12 @@
       "reason": "`menuItemStyle`'s `textAlign: 'left'`. DEAD EXPORT: measured 0 consumers across all of src, alongside popupPanelStyle (0), menuListStyle (0) and pillBadgeStyle (0); only panelCardStyle (10) and pillBadgeSmStyle (5) are live. It retires under WO-RET-04 with the other three rather than being made logical, and this pin drops to zero when that retirement lands."
     },
     "primitives/inputs/slider/engines/modern/index.tsx": {
-      "sites": 6,
-      "reason": "One DEFECT and five centred offsets in one file, pinned together because a file sits in exactly one band. The defect is the vertical mark label's `left: '100%'` (renderMarks): its gap is `margin-inline-start` in the skin, which under RTL lands on the far side, so the label touches the rail; it wants `insetInlineStart: '100%'` with the skin's y-axis transform. The other five are `left: '50%'` on the VERTICAL branch of the rail, track, handle, tooltip and step dot, each centred by a skin translate -- symmetric, a zero-pixel change to `insetInlineStart`. The rail/track/handle three were pinned as inert before the syntax scan; the tooltip, dot and mark-label sites sit in conditional branches the spelling regex could not reach."
-    },
-    "primitives/overlay/dropdown/engines/modern/index.tsx": {
-      "sites": 2,
-      "reason": "`callerSurfaceStyle` forwards the CALLER's physical `left` for the in-tree `*Right` / `*Left` placements, next to `insetInlineStart` / `insetInlineEnd`. The placement semantics are logical (the portal branch says so and mirrors under RTL), so forwarding a physical caller edge on those branches lets a consumer's LTR coordinate survive into RTL. Newly visible to the syntax scan (shorthand keys inside a conditional); pinned as debt, the band that grants no permission, pending the dropdown owner's ruling on whether the caller edge should be dropped or mapped."
-    },
-    "primitives/navigation/affix/engines/modern/index.tsx": {
       "sites": 1,
-      "reason": "`projectGeometry`'s `left: measured.left` re-projects `placeholderRect.left`, a `getBoundingClientRect()` edge that `measure()` writes back as a fixed-position coordinate -- by its shape the measured-rect class of export-button and filter-dropdown, where a logical inset would mirror a measured edge. Newly visible to the syntax scan (a spread inside a CSSProperties-typed projection). Pinned as debt, the band that grants no permission, until the owner adjudicates it as a named exception; debt here does NOT mean the logical spelling is right."
+      "reason": "`renderTooltip`'s vertical anchor (`left: '50%'`) pairs with the `tooltip.placement` vocabulary, which is PHYSICAL by the antd contract (the engine coerces a vertical request to left/right and the modern skin lowers it to physical placement transforms on `[data-placement]`); a logical anchor alone would flip the anchored edge under `dir=rtl` while the placement transform did not. The other FIVE vertical anchors of this file (step dot, range track, both handles, and the vertical mark label that was the registered DEFECT) DID migrate to `insetInlineStart` with the `:dir(rtl)` rail/track/dot skin mirrors, pinned by `tests/Slider.mark-label-direction.test.tsx`. Pinned as DEBT, the band that grants no permission, NOT as a named exception: WO-INV-01 step 1 scopes `placement` to start/end only, so migrating the physical placement vocabulary (OverlayPlacement sides, their `position-area` lowering, and the antd-shaped tooltip placements) is this work order's own later lot, and a permanent exception here would absorb work the work order claims. A partial migration (logical anchor, physical placement) is wrong and is not done."
     },
     "primitives/runtime/overlay/positioning/index.tsx": {
       "sites": 2,
-      "reason": "`offsetMargins` puts the anchor-facing gap on `marginRight` for `placement: left` and `marginLeft` for `placement: right`. The placement vocabulary and its `position-area` keywords (`left`, `span-right`) are PHYSICAL, so while that API stays physical a logical margin would move the gap off the anchor side under RTL. Newly visible to the syntax scan (a CSSProperties-returning function). Pinned as debt, the band that grants no permission, pending the owner's ruling: a named exception while placement is physical, or a migration together with a logical placement vocabulary."
+      "reason": "`offsetMargins` puts the anchor-facing gap on `marginRight` for `placement: 'left'` and `marginLeft` for `placement: 'right'`. The OverlayPlacement vocabulary and the `position-area` keywords it lowers to (`left`, `span-right`) are PHYSICAL, so a logical margin alone would move the gap off the anchor side under RTL. Pinned as DEBT, the band that grants no permission, NOT as a named exception: WO-INV-01 step 1 scopes `placement` to start/end only, so migrating the physical placement vocabulary (OverlayPlacement sides, their `position-area` lowering, and the antd-shaped tooltip placements) is this work order's own later lot, and a permanent exception here would absorb work the work order claims. A partial migration (logical anchor, physical placement) is wrong and is not done."
     }
   },
   "inert": {

@@ -12,6 +12,8 @@ import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
+
 import { Dropdown as ModernDropdown } from '../engines/modern';
 
 const SURFACE = '.ds-dropdown-surface';
@@ -230,5 +232,60 @@ describe('FAB-17 / Dropdown modern: submenu is a PROTECTED CONTROL', () => {
 
     expect(surfaceEl().style.background).toBe('rgb(1, 2, 3)');
     expect(document.querySelector(SUBMENU)).not.toBeNull();
+  });
+});
+
+/**
+ * R-D ruling (INV-01): the caller's PHYSICAL `left` is dropped on the in-tree
+ * placements, not mapped. The skin pins `left: auto` beside the logical inset
+ * each `*Left`/`*Right` placement claims, and an inline `left` beats that
+ * `auto`: under `dir="rtl"` the surface was then constrained from the physical
+ * left AND the physical right (the mirrored `inset-inline-*`) at once, which
+ * stretches it across the trigger instead of aligning it.
+ *
+ * Measured consumers of `overlayStyle.left` on an in-tree placement at the
+ * time of the ruling: 0 in packages/core/src, 0 in packages/showroom/src, 0 in
+ * app-bithire, app-evnto and app-platform -- so the forward is dropped rather
+ * than mapped, and the logical hatch stays the supported one.
+ */
+describe('FAB-17 / Dropdown modern: the caller physical `left` never reaches an in-tree surface', () => {
+  const IN_TREE_PLACEMENTS = ['bottomLeft', 'bottomRight', 'topLeft', 'topRight', 'bottom', 'top'] as const;
+
+  function renderInTree(placement: (typeof IN_TREE_PLACEMENTS)[number], locale: 'en' | 'ar') {
+    return render(
+      <I18nProvider locale={locale} fallbackLocale="en">
+        <ModernDropdown open placement={placement} overlayStyle={COORDINATE_HATCH} menu={MENU}>
+          <button type="button">trigger</button>
+        </ModernDropdown>
+      </I18nProvider>,
+    );
+  }
+
+  it.each(IN_TREE_PLACEMENTS)('%s: no physical `left` survives under dir=rtl', async (placement) => {
+    renderInTree(placement, 'ar');
+    await waitFor(() => expect(document.documentElement.dir).toBe('rtl'));
+    const style = surfaceEl().style;
+
+    // Over-constraint is the defect: a physical left plus the mirrored logical
+    // end would pin both physical edges of the surface at once.
+    expect(style.getPropertyValue('left')).toBe('');
+    expect(style.getPropertyValue('right')).toBe('');
+  });
+
+  it.each(IN_TREE_PLACEMENTS)('%s: no physical `left` survives under dir=ltr (control)', (placement) => {
+    renderInTree(placement, 'en');
+    const style = surfaceEl().style;
+
+    expect(style.getPropertyValue('left')).toBe('');
+    expect(style.getPropertyValue('right')).toBe('');
+  });
+
+  it('the logical hatch the placement does not claim still reaches the surface (rtl)', async () => {
+    renderInTree('bottomLeft', 'ar');
+    await waitFor(() => expect(document.documentElement.dir).toBe('rtl'));
+    const style = surfaceEl().style;
+
+    expect(style.getPropertyValue('inset-inline-end')).toBe('922px');
+    expect(style.getPropertyValue('inset-inline-start')).toBe('');
   });
 });

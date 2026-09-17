@@ -343,6 +343,10 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           data-placement={tooltipPlacement}
           data-open={tooltip?.open === true ? 'true' : undefined}
           aria-hidden="true"
+          /* The vertical anchor stays PHYSICAL on purpose: `placement` is a
+             physical vocabulary ('left'|'right', antd contract) and the skin
+             lowers it to physical placement transforms, so a logical anchor
+             would put the bubble on the wrong side of the rail under RTL. */
           style={vertical
             ? { left: '50%', bottom: `${percent}%` }
             : { top: '50%', insetInlineStart: `${percent}%` }}
@@ -378,7 +382,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             data-active={isValueInFill(dotValue) || undefined}
             aria-hidden="true"
             style={vertical
-              ? { left: '50%', bottom: `${percent}%` }
+              ? { insetInlineStart: '50%', bottom: `${percent}%` }
               : { top: '50%', insetInlineStart: `${percent}%` }}
           />,
         );
@@ -411,7 +415,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             data-axis={vertical ? 'y' : 'x'}
             data-active={isValueInFill(markValue) || undefined}
             style={vertical ? {
-              left: '100%',
+              insetInlineStart: '100%',
               bottom: `${percent}%`,
               ...markStyle,
             } : {
@@ -497,7 +501,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             data-part="track"
             style={{
               ...(vertical ? {
-                left: '50%',
+                insetInlineStart: '50%',
                 bottom: `${startPercent}%`,
                 height: `${endPercent - startPercent}%`,
               } : {
@@ -549,7 +553,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           <div
             data-part="handle"
             style={{
-              ...(vertical ? { left: '50%', bottom: `${startPercent}%` } : { top: '50%', insetInlineStart: `${startPercent}%` }),
+              ...(vertical ? { insetInlineStart: '50%', bottom: `${startPercent}%` } : { top: '50%', insetInlineStart: `${startPercent}%` }),
               ...(Array.isArray(handleStyle) ? handleStyle[0] : handleStyle),
             }}
           />
@@ -577,7 +581,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           <div
             data-part="handle"
             style={{
-              ...(vertical ? { left: '50%', bottom: `${endPercent}%` } : { top: '50%', insetInlineStart: `${endPercent}%` }),
+              ...(vertical ? { insetInlineStart: '50%', bottom: `${endPercent}%` } : { top: '50%', insetInlineStart: `${endPercent}%` }),
               ...(Array.isArray(handleStyle) ? handleStyle[1] : handleStyle),
             }}
           />
