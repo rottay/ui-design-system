@@ -1,0 +1,111 @@
+Codex shared-core review — DnD kernel debrief (WO-FAM-08 / F-69), 2026-09-17. Reviewer: codex-cli 0.153.4, read-only exec. Debrief sha256 d79e5947a7c8d89c52c5cbe31c367b629e7de50124b37613c8da8e69bf369452 at base 75ce56bfd.
+
+VERDICT: HOLD
+
+The extraction premise is supported. The proposed contract is not ready for adoption: it misclassifies existing operability, leaves essential integration behavior unspecified, and omits a required structural admission change.
+
+Reviewed [the debrief](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md) at SHA-256 `d79e5947a7c8d89c52c5cbe31c367b629e7de50124b37613c8da8e69bf369452`, against its cited base `75ce56bfd` and review-start HEAD `550a8ac9e`. During review, HEAD advanced to `d4b8079e5`; that commit changes only roadmap status/registry files.
+
+**Measured claims**
+
+I reproduced all eight `defs / jsx / tok` triples at both the cited base and the reviewed checkout:
+
+| Owner | Reproduced counts | Assessment |
+|---|---:|---|
+| kanban-board | 4 / 7 / 20 | Independent HTML5 item-move implementation |
+| saved-views | 4 / 4 / 8 | Independent HTML5 reorder implementation |
+| column-menu | 4 / 4 / 9 | Independent HTML5 draft-reorder implementation |
+| primitive tree | 4 / 4 / 49 | Independent HTML5 reorder/reparent implementation |
+| tree-view | 1 / 1 / 10 | Adapter over ModernTree |
+| file-manager | 2 / 3 / 5 | External-file drop zone |
+| upload | 1 / 3 / 6 | External-file drop zone |
+| widget-board | 0 / 0 / 1 | Pointer Events implementation; HTML dragging disabled |
+
+Seven files are byte-identical to the base. ColumnMenu changed through `8c96f4197`, extracting `normalizeDraftOrder`; its measured counts remain unchanged.
+
+- **Four-owner quartet: confirmed as an event-role intersection, not identical behavior.** See [Kanban’s handlers](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:222), [SavedViews’ handlers](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/data/saved-views/engines/modern/index.tsx:187), [ColumnMenu’s handlers](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/structures/workspace/column-menu/index.tsx:396), and [Tree’s handlers](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:791). Tree’s `preventDefault()` lives in JSX wrappers; it does not set `dropEffect` during dragover. ColumnMenu reads the drop event’s `text/plain` before falling back to local state. Those differences matter to invariant 1.
+- **Corrected owner classification: confirmed.** [TreeView](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:227) reshapes the callback; [FileManager](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:245) and [Upload](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/inputs/upload/engines/modern/index.tsx:921) read files; [WidgetBoard](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/data/widget-board/engines/foundation/index.tsx:748) owns pointer capture, window listeners and cancellation. The eight contain **two transport mechanisms**, not three: HTML5 DnD and Pointer Events. Item versus file handling distinguishes semantics, not transports.
+- **Frozen DataTable implementations: confirmed.** Both [Classic](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/data/data-table/engines/classic/index.tsx:398) and [Rustic](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/data/data-table/engines/rustic/index.tsx:493) attach the quartet. Their exclusion is appropriate.
+- **`useSortableList` zero consumers: confirmed within the searched source.** Repository TypeScript references resolve to its declaration/examples, facade and own tests. Searches of the local BitHire, Evnto and Platform source trees found no references. This establishes zero **known** production consumers; it cannot establish that no published-package consumer exists elsewhere.
+- **Root export: confirmed.** [Root barrel](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/index.ts:256) → [runtime facade](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/infrastructure/runtime/facade/index.ts:2) → [hook and four type exports](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/infrastructure/runtime/facade/react-hooks/index.ts:351). The root package export points at `dist/index.js`/`dist/index.d.ts`. Removal is a public API change.
+- **Existing hook defects: confirmed.** Its [implementation](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/infrastructure/runtime/application/interaction/drag-and-drop/index.ts:319) hardcodes list semantics, English labels and visual styles, including `#1677ff`. These support replacing its internal role, but do not independently authorize removing its public API.
+- **Operability census: materially incorrect.** ColumnMenu already renders [Move up/Move down buttons](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/structures/workspace/column-menu/index.tsx:893), wired to draft reordering through `handleMove`. They provide keyboard activation and a touch alternative. “No drag-specific keyboard protocol” is supportable; “no keyboard/touch reordering” is not. The file also contains an `onKeyDown` handler for width editing. The proposed mandatory new grab protocol therefore rests partly on a false premise.
+- **`useAriaAnnounce`: confirmed within core.** No production core consumers were found. Its [implementation](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/infrastructure/runtime/application/accessibility/index.ts:512) clears, defers through rAF, then clears after seven seconds. Kanban instead sets local announcement state directly.
+- **No authored auto-scroll/custom drag image is a scope observation, not measured demand.** It supports deferral. It does not prove “0/8 demand” or that Pointer-based WidgetBoard ships a browser drag ghost.
+
+**Blocking findings**
+
+1. **The contract cannot yet demonstrate the four required integrations.**
+
+   In [§2.2](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:224), `getTargetProps()` receives no target identity or target-specific resolver. The sole `resolveTarget(event, payload)` must somehow recover a view key, column key, Tree key, or Kanban `{columnId, position}`. Current implementations bind those values through closures. The proposal supplies neither that binding nor a declared DOM registration mechanism.
+
+   Likewise, a generic `TTarget` supplies no equality/projection rule for target stamps. Existing anatomy differs: `data-drag-target`, `data-drop-target`, `data-drop-before`, `data-dropping`, and Tree’s absent-versus-false attributes.
+
+   Require concrete typed adapter examples for all four owners, including ColumnMenu’s separate handle/row and Kanban’s nested card/column targets. Specify target identity, stamp ownership, propagation, drop-time validation, callback order and exactly-once termination. Matching handler names does not settle these contracts.
+
+2. **The promised keyboard and pointer abstractions are absent from the API.**
+
+   `UseDragSessionOptions` has no keyboard mode, announcement callback, keyboard target resolver, focus registration, preview/rollback operation or imperative move entrypoint. `SortableAnnouncements` is declared separately without being connected to anything.
+
+   The claimed event-generic core explicitly takes `React.DragEvent`, always returns HTML5 source props, and mandates `dataTransfer`. That is an HTML5 adapter, not the generic session core described in §2.8.
+
+   The keyboard contract must distinguish candidate movement from committed movement. Otherwise “one commit point,” immediate Kanban moves, and grab-mode Escape restoration cannot be audited. Also define invalid axis combinations and the treatment of `Home`/`End`, which `resolveNavigationIntent` returns but `MoveIntent` cannot represent.
+
+3. **Press cancellation and handler composition conflict with the stated invariants.**
+
+   `useInteractionState` holds state **per hook instance**. The proposed source-prop factory receives no reference to the existing instance. Creating another instance cannot clear the pressed state owned by ColumnMenu’s row or its Button.
+
+   Moreover, [composeHandlers](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/foundation/behavior/runtime/compose-handlers/index.ts:21) deliberately skips its second handler when the first prevents default. I executed that helper directly: after the first handler called `preventDefault()`, the second ran **zero times**.
+
+   This matters particularly for Upload: its current order is `preventDefault` → disabled guard → clear hover → public `onDrop(event)` → process files. Internal processing continues despite the already-prevented event. Blindly applying the proposed composition law changes that behavior.
+
+   Define explicit access to the owning press state and distinguish vetoable actions from mandatory cleanup. Preserve Upload’s raw-event callback and ordering. An unconditional cleanup promise cannot rely on a chain that intentionally skips handlers.
+
+4. **Placement is reasonable, but the declared write set cannot satisfy the current gate.**
+
+   The foundation dependency concern is valid: its inspected production imports are React/local, while roving-focus imports the i18n runtime. Existing primitive and structure consumers support the proposed tier.
+
+   However, the [structure gate’s collection dependency ranks](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/scripts/check/architecture/audits/structure/index.mjs:173) name `combobox`, `roving-focus`, `typeahead` and `listbox`—not `sortable`. Under the current dependency rules, the proposed `sortable → roving-focus` edge falls through to `sibling-owner-dependency`.
+
+   Add the narrow structural admission and its tests to the singleton write set. Do not widen the baseline. “Beside an admitted kernel” does not itself admit a new dependent owner.
+
+5. **The executable acceptance promises exceed what the named instruments measure.**
+
+   - N1 is listed under a unit suite, but `fireEvent.drop()` dispatches the requested event independently of browser drag negotiation. Assert dragover cancellation in a unit test; use an actual browser drag to prove the browser-level claim. The [HTML specification](https://html.spec.whatwg.org/multipage/dnd.html#drag-and-drop-processing-model) distinguishes that processing model from manually dispatching events.
+   - Require each mutation to fail **at least its designated test**, not “exactly one.” Additional legitimate failures are not instrument defects.
+   - R5 proposes adding `0.1h/0.5h/0.9h` cases that [already exist](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/display/tree/tests/Tree.modern-engine-advanced.test.tsx:206). Add actual quarter-boundary cases, including equality at 25% and 75%.
+   - Add cancellation after leaving all targets, disable/removal during a session, unrelated external drags, nested-target single commitment, and caller-prevented-event cases.
+   - Use immutable base/candidate SHAs for the changeset receipt. `--base=main` can compare main with itself after integration; the repository’s [gate manifest explicitly warns about that](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/scripts/check/automation/gates/manifest/index.mjs:54).
+   - Public hook retirement needs the authorized API decision, appropriate release declaration, consumer documentation and complete export/type removal accounting. Zero local callers plus a passing changeset check is insufficient authorization.
+
+**Other corrections**
+
+The rejection of third-party libraries on dependency policy is coherent. The claimed measured DOM incompatibility is not: dnd-kit explicitly supports augmenting existing elements without additional wrapper nodes. Retain the policy argument; remove the unsupported inevitability claim. [Official project documentation](https://github.com/clauderic/dnd-kit#readme)
+
+“Reading `dataTransfer` during dragover is forbidden” is too broad. Payload contents are unavailable in protected mode; formats and kinds remain enumerable. That distinction matters to rejecting non-file drags in a file-drop adapter. [HTML drag data store](https://html.spec.whatwg.org/multipage/dnd.html#the-drag-data-store)
+
+The duplicate `normalizeDraftOrder` observation is stale after `8c96f4197`. Also fix §3.3’s incorrect invariant references and replace invariant 6’s impossible “no quoted English word” grep: legitimate protocol literals include `'move'`, `'before'` and `'blocked'`.
+
+**Appendix A answers**
+
+1. **Q1 — Placement:** Accept `components/primitives/runtime/collection/sortable/` in principle, with explicit admission as a downstream consumer of roving-focus and a tested reverse-edge prohibition. Include that gate change in the write set. Keep public exposure separate; this placement does not imply a new root export.
+
+2. **Q2 — FAM-13:** Prefer **B for this bounded contract**. Permit FAM-13 to consume applicable resolvers; do not claim this HTML5 interface already accommodates its pointer lifecycle. WidgetBoard has activation thresholds, pointer identity, preview state, origin restoration and live ownership checks that an event type parameter does not solve. Reconcile this narrower commitment explicitly with the handoff. If full session adoption remains mandatory, return a concrete event-neutral lifecycle contract for joint review before adopting A.
+
+3. **Q3 — Tree keyboard movement:** Prefer an explicit, keyboard- and touch-operable **Move affordance** that selects a destination and before/inside/after position. Preserve bare arrows, Space and Enter for existing Tree navigation/selection. Specify invalid self/descendant targets, cancellation, announcements and focus restoration. A modifier shortcut may supplement this; it should not be the sole discoverability mechanism. This blocks the operability lot, not a properly isolated transport extraction.
+
+4. **Q4 — Live region:** Confirm consumer-owned regions and kernel-emitted events. Make those events generic over the actual payload/target and connect them to the API. Preserve Kanban’s timing during transport adoption. Test repeated identical outcomes, especially consecutive blocked moves. `useAriaAnnounce` retirement or repair is a separate decision; its orphan status does not justify changing Kanban here.
+
+5. **Q5 — File drop:** Keep it in this WO as a separately named capability. Remove `accept`/`multiple` from its options if it does not enforce them. Define raw-event callback ordering, disabled behavior, file identification, containment and cleanup. Preserve each consumer’s picker and keyboard fallback. “No accessibility surface” is too strong for an adapter attached to Upload’s accessible drop control.
+
+6. **Q6 — Transport/operability split:** Confirm the split. Transport lots preserve existing behavior; additions and defect repairs are declared separately. Correct ColumnMenu’s premise and preserve its existing move buttons. SavedViews’ grab behavior must not steal Space/Enter from its selection, rename or menu controls. A press-latch repair cannot simultaneously be represented as byte-identical behavior.
+
+7. **Q7 — Mechanization:** Require a bounded instrument before closing the DnD consolidation criterion. Extend existing machinery. Verify actual imports/adoption and detect independent transport state/handler implementations; do not merely forbid names matching `handle*Drag*`. Adapter callbacks legitimately remain. Drill renamed/inline handlers and newly added files, with explicit frozen-engine exclusions. This establishes DnD consolidation only; F-69’s geometry/export obligations remain separately accountable.
+
+**Authorship and verification limits**
+
+This is an independent, read-only Codex review; I authored neither the debrief nor the inspected implementation during this session. Registry provenance identifies W9/Opus as the debrief writer. Git uses the shared owner identity, so Git authorship alone cannot establish all earlier model authorship conflicts.
+
+The registry records Kimi’s acceptance and Fable as pending. Neither substitutes for this review, and Fable’s missing review remains pending under the three-reviewer rule. Any reviewer who authored affected implementation must disclose that contribution.
+
+The required historical Modern Rescue check failed with constitution drift, including obsolete compiler/skin paths. I did not treat that as a DnD regression or modify its expectations. No candidate implementation exists to certify; no full suite or browser adoption tests were run. The HOLD is based on the source-confirmed contradictions and contract gaps above.
