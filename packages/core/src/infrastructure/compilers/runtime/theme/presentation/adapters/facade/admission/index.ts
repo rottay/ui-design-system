@@ -15,20 +15,20 @@ import {
  *
  * Exported because the tier admission asks the SAME question of the catalog's
  * `keypath.brandTheme` spelling that this owner asks of the capability
- * registry's `brandThemePath`. Two expanders would be two answers to "which
+ * registry's `themePath`. Two expanders would be two answers to "which
  * authored paths does this control claim".
  */
-export function authoringPrefixes(brandThemePath: string): readonly string[] {
-  const brace = brandThemePath.match(/^(.*)\{([^}]*)\}(.*)$/);
+export function authoringPrefixes(themePath: string): readonly string[] {
+  const brace = themePath.match(/^(.*)\{([^}]*)\}(.*)$/);
   const spellings = brace
     ? brace[2].split(",").map((member) => `${brace[1]}${member.trim()}${brace[3]}`)
-    : [brandThemePath];
+    : [themePath];
   return spellings.map((path) => (path.endsWith(".*") ? path.slice(0, -2) : path));
 }
 
 const CONTROL_PREFIXES: readonly (readonly [ControlId, readonly string[]])[] =
   TENANT_CAPABILITY_REGISTRY.map(
-    (control) => [control.id, authoringPrefixes(control.brandThemePath)] as const
+    (control) => [control.id, authoringPrefixes(control.themePath)] as const
   );
 
 /**

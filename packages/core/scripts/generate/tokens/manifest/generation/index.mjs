@@ -12,6 +12,10 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { parseRegistry } from '../../customization/surface/index.mjs';
+import {
+  INGRESS_ARMS,
+  registryIngressPath,
+} from '../../../../check/tokens/cascade/probe/runtime/ingress/index.mjs';
 import { loadProgramContracts } from '../../../../check/evidence/framework/contracts/index.mjs';
 import {
   APPLICABLE_FAMILY_FIELDS,
@@ -280,9 +284,12 @@ function buildControl(entry, existing = {}) {
       defaultBehavior: entry.defaultBehavior,
     },
     ingress: {
-      // Readers still accept the superseded `staticBrandThemePath` until the window trigger in
+      // Both spellings of this door — the manifest key and the registry key it is read
+      // from — are declared by INGRESS_ARMS['static-brand-theme']. Readers still accept the
+      // superseded `staticBrandThemePath`, and this producer still accepts a registry row
+      // carrying the superseded `brandThemePath`, until the window trigger in
       // probe/runtime/ingress/tests/superseded-ingress-key fails (WO-DER-08).
-      staticThemePath: entry.brandThemePath,
+      staticThemePath: registryIngressPath(entry).path,
       dbTenantThemePath: entry.documentPath,
     },
     declaredOutputs: {
@@ -599,6 +606,16 @@ export function writeCustomizationManifest() {
   const beforeDigest = sourceInputsDigest();
   const inventory = readJson(INVENTORY_PATH);
   const controls = activePublicControls();
+  const superseded = controls.filter((entry) => registryIngressPath(entry).superseded);
+  if (superseded.length > 0) {
+    console.warn(
+      `customization-manifest WINDOW — ${superseded.length} capability rows still declare the ` +
+        `superseded registry key ${INGRESS_ARMS['static-brand-theme'].supersededRegistryKey}: ` +
+        `${superseded.map((entry) => entry.id).join(', ')}. They are read through the registered ` +
+        'window (WO-DER-08); rename them to ' +
+        `${INGRESS_ARMS['static-brand-theme'].registryKey} to close it.`,
+    );
+  }
   mkdirSync(CONTROLS_ROOT, { recursive: true });
   mkdirSync(RECIPES_ROOT, { recursive: true });
   mkdirSync(FAMILIES_ROOT, { recursive: true });

@@ -205,6 +205,11 @@ export const INGRESS_ARMS = Object.freeze({
     // Also consulted until the window trigger in tests/superseded-ingress-key fails,
     // so a not-yet-regenerated manifest resolves its door instead of "declares no path".
     supersededIngressKey: 'staticBrandThemePath',
+    // The same door, one step upstream: the key the capability registry row carries,
+    // which the manifest generator reads to produce `manifestIngressKey`. One arm owns
+    // both spellings of its door, so a rename is declared in one place.
+    registryKey: 'themePath',
+    supersededRegistryKey: 'brandThemePath',
     position: 'tenant-scoped-stylesheet-block',
     positionMeaning:
       'Appended to the measured bundle behind the same unlayered tenant selector the compiled ' +
@@ -268,6 +273,46 @@ export const INGRESS_ARMS = Object.freeze({
     compilerExport: 'compileTenantThemeConfig',
   }),
 });
+
+/**
+ * Read a door's declared path through the arm's own key names, current first.
+ *
+ * ONE registry of superseded spellings. Every reader of a door — the committed
+ * manifest's `ingress` block and the capability registry row it is generated
+ * from — asks this function instead of remembering a key name or adding its own
+ * `??`, so a rename is declared once, on the arm, and closed once, by the
+ * window trigger in `tests/superseded-ingress-key/`.
+ *
+ * Returns `{ path, key, superseded }`; `path` is `undefined` when the source
+ * carries neither spelling, which every caller treats as "declares no path".
+ */
+export function readIngressKey(source, spec, { registry = false } = {}) {
+  const current = registry ? spec?.registryKey : spec?.manifestIngressKey;
+  const superseded = registry ? spec?.supersededRegistryKey : spec?.supersededIngressKey;
+  const container = source ?? {};
+  const currentValue = current ? container[current] : undefined;
+  if (typeof currentValue === 'string' && currentValue.length > 0) {
+    return { path: currentValue, key: current, superseded: false };
+  }
+  const supersededValue = superseded ? container[superseded] : undefined;
+  if (typeof supersededValue === 'string' && supersededValue.length > 0) {
+    return { path: supersededValue, key: superseded, superseded: true };
+  }
+  return { path: undefined, key: current, superseded: false };
+}
+
+/** The declared door of a committed control manifest, superseded key included. */
+export function manifestIngressPath(controlManifest, spec) {
+  return readIngressKey(controlManifest?.ingress, spec).path;
+}
+
+/**
+ * The declared door of a CAPABILITY REGISTRY row — the manifest generator's own
+ * read, one step upstream of the manifest.
+ */
+export function registryIngressPath(entry, spec = INGRESS_ARMS['static-brand-theme']) {
+  return readIngressKey(entry, spec, { registry: true });
+}
 
 /**
  * DB compiler exports that are retired and must never be bound again.
@@ -621,9 +666,7 @@ export function assertArmsMatchManifest({ controlManifest, arms }) {
       failures.push({ armId: arm.armId, reason: 'not a declared ingress arm' });
       continue;
     }
-    const path =
-      declared[spec.manifestIngressKey] ??
-      (spec.supersededIngressKey ? declared[spec.supersededIngressKey] : undefined);
+    const path = readIngressKey(declared, spec).path;
     if (typeof path !== 'string' || path.length === 0) {
       failures.push({
         armId: arm.armId,
@@ -843,11 +886,7 @@ function readKeypath(document, path) {
 export function buildIngressInput({ armId, controlManifest, stopId, base = {} }) {
   const spec = INGRESS_ARMS[armId];
   if (!spec) throw new Error(`resolution-probe: unknown ingress arm: ${armId}`);
-  const path =
-    controlManifest?.ingress?.[spec.manifestIngressKey] ??
-    (spec.supersededIngressKey
-      ? controlManifest?.ingress?.[spec.supersededIngressKey]
-      : undefined);
+  const path = manifestIngressPath(controlManifest, spec);
   if (typeof path !== 'string' || path.length === 0) {
     throw new Error(
       `resolution-probe: the control manifest declares no ${spec.manifestIngressKey}, so this ` +

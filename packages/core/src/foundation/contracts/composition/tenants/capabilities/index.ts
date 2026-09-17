@@ -13,7 +13,7 @@
  * Laws:
  * - an ACTIVE tenant-scoped capability must be expressible by BOTH paths
  *   (its `documentPath` accepted by the TenantThemeDocument schema and its
- *   `brandThemePath` by the FlatTheme contract, which is the lowering's READ
+ *   `themePath` by the FlatTheme contract, which is the lowering's READ
  *   view and not an authoring surface -- what a draft authors is the governed
  *   `Theme`); the reachability test in
  *   `infrastructure/compilers/composition/tenant-theme/tests` compiles a
@@ -73,10 +73,10 @@ export interface TenantCapabilityDeclaration {
   readonly documentPath: string;
   /**
    * Path inside FlatTheme, the lowering's read view of the governed `Theme`.
-   * The authoring draft is that governed `Theme`; this field keeps its
-   * serialized name until its own rename lot (WO-DER-08 open obligation).
+   * The authoring draft is that governed `Theme`; the field is named for the
+   * theme it addresses, not for the flat transport it is read through.
    */
-  readonly brandThemePath: string;
+  readonly themePath: string;
   /** Representative derived channels, never an exhaustive list. */
   readonly derivedChannels: readonly string[];
   /**
@@ -139,7 +139,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'color-set',
       defaultBehavior: 'vertical baseline palette',
       documentPath: 'appearance.general.palette.{primary,secondary,accent,background}',
-      brandThemePath: 'palette.{primaryColor,secondaryColor,accentColor,backgroundColor}',
+      themePath: 'palette.{primaryColor,secondaryColor,accentColor,backgroundColor}',
       derivedChannels: [
         '--ds-color-primary',
         '--ds-color-primary-500',
@@ -166,7 +166,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       defaultBehavior:
         'the tenant palette remains authoritative; optional mode data stays an internal compatibility surface',
       documentPath: 'appearance.general.palette.{backgroundMode,dark.*}',
-      brandThemePath: 'modes.dark.palette.*',
+      themePath: 'modes.dark.palette.*',
       derivedChannels: ['--ds-color-primary-500'],
       compat:
         'compatibility-only; not rendered in Standard or Pro tenant editors unless product explicitly enables a mode feature',
@@ -190,7 +190,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // F4B-11 fix (F4B-7 class, false-green variant -- the census's most
       // dangerous shape): this read `typography.{fontFamilyBase,
       // fontFamilyHeading}`, literally `typography.families`'s own
-      // brandThemePath copy-pasted one entry down. Both are real,
+      // themePath copy-pasted one entry down. Both are real,
       // string-typed FlatTheme fields, so a causal run writing an enum
       // value there (e.g. "sober") would NOT throw -- it would silently set
       // `fontFamilyBase` to the literal string "sober", which reads back as
@@ -202,7 +202,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // "technical"`, the same four enum values this control declares).
       // Caught by the F4B census preflight before any causal run wrote the
       // false-green value.
-      brandThemePath: 'typography.typePairing',
+      themePath: 'typography.typePairing',
       derivedChannels: ['--ds-font-family-base', '--ds-font-family-heading'],
       compat: 'additive, unset-to-rollback',
     },
@@ -230,7 +230,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // to the full 4-channel real surface the control governs, matching
       // the F4B-12 DT ruling for navigation.sidebar-tone (declare the real
       // table, not a subset).
-      brandThemePath: 'typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}',
+      themePath: 'typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}',
       derivedChannels: [
         '--ds-font-family-base',
         '--ds-font-family-heading',
@@ -265,7 +265,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // construction, exactly like `surfaces.density` below: the seed at
       // brand-theme:713 emits `--ds-type-scale: 1` whatever happens, so the arm
       // stayed non-empty and only H-2's stop-discrimination guard caught it.
-      brandThemePath: 'typography.scale',
+      themePath: 'typography.scale',
       derivedChannels: ['--ds-type-scale'],
       compat: 'additive, unset-to-rollback',
     },
@@ -291,7 +291,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // `calc(base * scale)` reproduces the authored value — it CANCELS this control
       // rather than carrying it. Measured at every stop on all three verticals:
       // artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/.
-      brandThemePath: 'surfaces.radiusScale',
+      themePath: 'surfaces.radiusScale',
       derivedChannels: ['--ds-radius-scale', '--ds-radius-md'],
       compat: 'additive, unset-to-rollback',
     },
@@ -325,7 +325,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // failed LOUD (the empty-lowering guard, not a silent pass). No stop had
       // been authored yet; the F4B-9 preflight census caught the prose door by
       // reading the walker and registry source directly.
-      brandThemePath: 'surfaces.buttonStyle',
+      themePath: 'surfaces.buttonStyle',
       derivedChannels: ['--ds-radius-button'],
       compat: 'additive, unset-to-rollback',
     },
@@ -356,7 +356,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // seed, so the arm stayed non-empty and the empty-lowering guard never fired
       // while no stop was carried. Same anti-door shape as `surfaces.borderRadius`
       // above, different mechanism.
-      brandThemePath: 'surfaces.density',
+      themePath: 'surfaces.density',
       derivedChannels: ['--ds-density-mode-factor', '--ds-density-scale'],
       compat:
         'additive; the three density vocabularies (contracts/tokens/schema) are recorded debt — unification is a breaking alignment owned by a future wave',
@@ -380,7 +380,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       defaultBehavior:
         'normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1',
       documentPath: 'appearance.general.rhythm',
-      brandThemePath: 'surfaces.rhythm',
+      themePath: 'surfaces.rhythm',
       derivedChannels: ['--ds-rhythm-scale', '--ds-rhythm-effective-scale'],
       dependsOn: [],
       compat:
@@ -419,7 +419,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // `BrandMotion` (themes/index.ts:694-699). `ambient` intentionally
       // emits no CSS custom property (behaviour, not a channel) and stays
       // out of derivedChannels by design, not omission.
-      brandThemePath: 'motion.{intensity,durationScale,ambient}',
+      themePath: 'motion.{intensity,durationScale,ambient}',
       derivedChannels: ['--ds-motion-intensity', '--ds-motion-duration-scale'],
       // DT ruling (F4B-13): `domain.bounds` is one {min,max} pair per
       // control, and this control governs TWO numeric channels with
@@ -465,7 +465,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // it to the same posture lowering as every other Standard field. Caught
       // by the F4B-10 preflight census reading the source directly, not by a
       // guard firing: no stop had been authored yet.
-      brandThemePath: 'surfaces.elevation',
+      themePath: 'surfaces.elevation',
       derivedChannels: ['--ds-elevation-1', '--ds-elevation-2', '--ds-elevation-3'],
       compat: 'additive, unset-to-rollback',
     },
@@ -485,7 +485,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       bounds: { min: 0, max: 1 },
       defaultBehavior: '1 for the DS default; verticals author their own floor',
       documentPath: 'appearance.general.surfaces.effectIntensity',
-      brandThemePath: 'surfaces.effectIntensity',
+      themePath: 'surfaces.effectIntensity',
       derivedChannels: ['--ds-effect-intensity'],
       compat: 'additive; 0 removes decoration, never hierarchy',
     },
@@ -523,7 +523,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // resolution-probe/runtime/ingress/tests/index.test.mjs that PARSES
       // the compiler source text (never imports it) for `SIDEBAR_TONE_FIELD`
       // and asserts equality against this exact string.
-      brandThemePath: 'chrome.sidebar.tone',
+      themePath: 'chrome.sidebar.tone',
       // DT ruling (F4B-12, widen adjudication): the control's authority IS
       // the closed six-channel table `SIDEBAR_TONE_LEAF_FIELDS`
       // (chrome-variables/index.ts:184-191) -- declaring 2 of 6 under-declares
@@ -559,7 +559,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       defaultBehavior:
         'baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel',
       documentPath: 'appearance.general.experienceProfile',
-      brandThemePath: 'expressive.experienceProfile',
+      themePath: 'expressive.experienceProfile',
       derivedChannels: [
         '--ds-letter-spacing-heading',
         '--ds-edge-standard-width',
@@ -585,7 +585,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'chrome-map',
       defaultBehavior: 'family derivations over semantic channels decide',
       documentPath: 'visualFoundation.advanced.chrome.*',
-      brandThemePath: 'chrome.*',
+      themePath: 'chrome.*',
       derivedChannels: ['--ds-button-primary-bg', '--ds-table-header-bg', '--ds-modal-bg'],
       compat:
         'additive; chromeToVariables is the single shared emitter for both paths',
@@ -611,7 +611,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'enum',
       defaultBehavior: 'default anatomy; fails closed unless the vertical envelope opts in',
       documentPath: 'visualFoundation.advanced.chrome.{cardComponent,table,sidebar,layout}.anatomy',
-      brandThemePath: 'chrome.{cardComponent,table,sidebar,layout}.anatomy',
+      themePath: 'chrome.{cardComponent,table,sidebar,layout}.anatomy',
       derivedChannels: [],
       derivedRootAttributes: [
         'data-anatomy-card',
@@ -653,7 +653,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
        */
       documentPath:
         'visualFoundation.advanced.tokenOverrides.{--ds-color-error,--ds-color-bg-overlay}',
-      brandThemePath: 'tokenOverrides',
+      themePath: 'tokenOverrides',
       // Impact radius includes every channel this control changes; calibration
       // stays limited to the two channels that its fixture writes directly.
       derivedChannels: ['--ds-color-error', '--ds-surface-card', '--ds-color-bg-overlay'],
@@ -667,7 +667,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       tier: 'pro',
       status: 'active',
       // F4B-15 fix (false-INERT by PATH, same class as F4B-7/F4B-12/F4B-13):
-      // `brandThemePath: 'recipeProfile'` named a field that does not exist
+      // `themePath: 'recipeProfile'` named a field that does not exist
       // on FlatTheme -- every 'recipeProfile' in the theme contracts is an
       // OUTPUT shape (TenantAppearance.recipeProfile in themes/index.ts,
       // ThemeCompilationRuntime.recipeProfile in themes/compiled/index.ts),
@@ -691,7 +691,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'profile-id',
       defaultBehavior: 'no profile: family recipe defaults apply',
       documentPath: 'visualFoundation.recipeProfile',
-      brandThemePath: 'recipes.profile',
+      themePath: 'recipes.profile',
       derivedChannels: [],
       compat:
         'closed registry of typed per-family axes (recipe-profiles); caller props always win',
@@ -731,7 +731,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       // brace-set, all last segments distinct (Fase B's brace law only bites
       // on a SHARED last segment; none here), matching the DB path's own
       // already-correct 6-member set one level down.
-      brandThemePath:
+      themePath:
         'expressive.profiles.{type,geometry,edge,material,elevation,motif}',
       // F4B-16 fix: `--ds-type-label-text-transform` was never measured --
       // it does not move (direct compile sweep, all 3 verticals, all 4
@@ -788,7 +788,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       defaultBehavior:
         'vertical baseline status tones. The DB General path authors them at `palette.status.{…}` and confluences into BrandPalette BEFORE the single lowering, so both transports reach `deriveTenantColorRamps` through the same door — no parallel emitter. Absent => the vertical baseline, unchanged.',
       documentPath: 'appearance.general.palette.status.{success,warning,error,info}',
-      brandThemePath: 'palette.{successColor,warningColor,errorColor,infoColor}',
+      themePath: 'palette.{successColor,warningColor,errorColor,infoColor}',
       // Under-declared the real surface: three channels of ONE tone, for a
       // control whose value type is `color-set` and whose documentPath names
       // FOUR. The radius is not a sample here — it is mechanically closed and
@@ -935,7 +935,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       defaultBehavior:
         'baseline role/state weight tables. A posture only selects among the governed PROFILE_ROLE_WEIGHT tables in the icon policy — never a supplier, glyph or local SVG; state weights stay supreme (feedback over decoration). Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design.',
       documentPath: 'visualFoundation.advanced.profiles.icon',
-      brandThemePath: 'expressive.profiles.icon',
+      themePath: 'expressive.profiles.icon',
       derivedChannels: [],
       dependsOn: ['profiles.expressive'],
       compat:
@@ -959,7 +959,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       defaultBehavior:
         'the balanced ladder, whose container thresholds (compact ≤639px, standard ≤839px) and `preferred` span resolution ARE the constants the adaptive runtime and pure solver used before this axis opened — so an absent selection is byte-for-byte the pre-capability layout, and "unset it" is a true rollback rather than an approximate one',
       documentPath: 'visualFoundation.advanced.responsivePosture',
-      brandThemePath: 'responsive.posture',
+      themePath: 'responsive.posture',
       derivedChannels: [],
       compat:
         'additive, unset-to-rollback; the ladder travels as DATA (document → schema → artifact normalizedAppearance) and selects a published threshold pair plus a span bias — never authored thresholds, never a viewport read, never a CSS channel. It reaches geometry ONLY through solver door 2 (`AdaptiveLayoutEnv.spanBias`) and through container-posture bucketing, both bounded by each item\'s own min/max contract and by the tier capacity, so no selection can overflow, reorder DOM/focus, or open an avoidable hole — drilled by the property sweep under all three profiles. WidgetBoard\'s collapse TIER is deliberately NOT tenant-driven: widget-board.css mirrors 639/839 as container queries that repoint the grid tracks, so the tier is CSS-co-authored and a JS-only move would manufacture implicit columns. A live swap invalidates measurements and saved layouts for free, because the environment epoch already folds artifactRevision.',

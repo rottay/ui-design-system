@@ -109,7 +109,7 @@ describe("activation is read off the tenant's own authored paths", () => {
     const unreachable = TENANT_CAPABILITY_REGISTRY.filter(
       (control) =>
         controlsActivatedBy(
-          new Set([control.brandThemePath.replace(/\{([^,}]+)[^}]*\}/g, "$1").replace(/\.\*$/, ".x")])
+          new Set([control.themePath.replace(/\{([^,}]+)[^}]*\}/g, "$1").replace(/\.\*$/, ".x")])
         ).length === 0
     ).map((control) => control.id);
     expect(unreachable).toEqual([]);

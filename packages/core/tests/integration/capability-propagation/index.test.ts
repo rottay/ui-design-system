@@ -3,7 +3,7 @@
  *
  * THE QUESTION, which no existing suite asks: when a tenant moves a dial, does
  * the move actually travel? Every capability in the registry is declared with a
- * documentPath, a brandThemePath, representative derived channels, and a
+ * documentPath, a themePath, representative derived channels, and a
  * productive `evidence.consumer`. Those declarations are inventory. This file
  * asks whether the inventory is CAUSAL, by mutating the input and watching the
  * output move:

@@ -1082,7 +1082,7 @@ test('regression fence: the radius-scale static door is a literal path, never a 
     path,
     'surfaces.radiusScale',
     'shape.radius-scale must lower through the bounded multiplier BrandSurfaces documents as ' +
-      'the canonical radius dial. Change the authority (capabilities/index.ts brandThemePath) ' +
+      'the canonical radius dial. Change the authority (capabilities/index.ts themePath) ' +
       'and regenerate; do not edit the generated manifest.',
   );
   assert.doesNotMatch(
@@ -1165,7 +1165,7 @@ test('regression fence: the density.mode static door is a literal path, and it i
     path,
     'surfaces.density',
     'density.mode lowers through the enum BrandSurfaces documents. Change the authority ' +
-      '(capabilities/index.ts brandThemePath) and regenerate; do not edit the generated manifest.',
+      '(capabilities/index.ts themePath) and regenerate; do not edit the generated manifest.',
   );
   assert.doesNotMatch(
     path,
