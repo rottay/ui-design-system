@@ -125,6 +125,14 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
   // place, so it must stay complete rather than track the entries someone
   // happened to touch.
   assert.deepEqual(SCOPED_OWNER_RANKS, {
+    // One Notifier owns the transient announcement surface; message,
+    // notification and toast are its role entry points and compose it.
+    'components/primitives/feedback': {
+      notifier: 0,
+      message: 1,
+      notification: 1,
+      toast: 1,
+    },
     'components/primitives/runtime/collection': {
       combobox: 0,
       'roving-focus': 0,
@@ -140,12 +148,20 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
     'foundation/contracts/composition/tenants/themes': {
       iso: 0,
       provenance: 1,
-      'tenant-theme': 2,
-      intent: 3,
-      resolved: 4,
-      compiled: 5,
-      emission: 6,
-      'engine-adapter': 7,
+      compiled: 2,
+      emission: 3,
+      'engine-adapter': 4,
+      intent: 5,
+      resolved: 6,
+      'tenant-theme': 7,
+    },
+    // The breakpoint scale is the floor, `values` is the shape read against it,
+    // and channels/visibility are its two equal-rank CSS projections.
+    'foundation/contracts/kernel/responsive': {
+      breakpoints: 0,
+      values: 1,
+      channels: 2,
+      visibility: 2,
     },
     foundation: { contracts: 0, presets: 1 },
     'foundation/i18n/runtime': { catalog: 0, resolution: 1 },
@@ -254,8 +270,8 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
 
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
-  assert.equal(owners.length, 25);
-  assert.equal(rankedChildren.length, 94);
+  assert.equal(owners.length, 26);
+  assert.equal(rankedChildren.length, 98);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
@@ -509,6 +525,46 @@ test('infrastructure runtime may consume compilers but compilers cannot consume 
       'sibling-owner-dependency:infrastructure/runtime/tenant/index.ts->infrastructure/runtime/foundation/diagnostics/index.ts',
     ));
     assert(!ids.has('mixed-layer-and-capability-peers:infrastructure/runtime'));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the announcement roles compose one Notifier without becoming peers of each other', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'components/primitives/feedback';
+    write(
+      resolve(sourceRoot, `${owner}/notifier/index.ts`),
+      "import { toast } from '../toast';\nexport const notifier = toast;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/message/index.ts`),
+      "import { notifier } from '../notifier';\nexport const message = notifier;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/notification/index.ts`),
+      "import { notifier } from '../notifier';\nexport const notification = notifier;\n",
+    );
+    // Two controls leave this one file: the notifier is rank 0 below it, and
+    // message is a rank-1 role beside it.
+    write(
+      resolve(sourceRoot, `${owner}/toast/index.ts`),
+      "import { notifier } from '../notifier';\nimport { message } from '../message';\nexport const toast = [notifier, message];\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    for (const role of ['message', 'notification', 'toast']) {
+      const edge = `${owner}/${role}/index.ts->${owner}/notifier/index.ts`;
+      assert(!ids.has(`sibling-owner-dependency:${edge}`), `a role must compose the notifier: ${edge}`);
+      assert(!ids.has(`local-layer-inversion:${edge}`), `a role must compose the notifier: ${edge}`);
+    }
+    assert(ids.has(`local-layer-inversion:${owner}/notifier/index.ts->${owner}/toast/index.ts`));
+    // Equal rank is not permission: the three roles stay peers of each other.
+    assert(ids.has(`sibling-owner-dependency:${owner}/toast/index.ts->${owner}/message/index.ts`));
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });
   }
@@ -1271,22 +1327,65 @@ test('outer layer taxonomy wins across nested component families', () => {
   }
 });
 
+test('the responsive contract hangs off one breakpoint scale, and its two projections stay peers', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'foundation/contracts/kernel/responsive';
+    // The inversion control: the scale everything is read against may not read
+    // the shape that reads it.
+    write(
+      resolve(sourceRoot, `${owner}/breakpoints/index.ts`),
+      "import type { ResponsiveValue } from '../values';\nexport const BREAKPOINTS = ['sm'];\nexport type Echo = ResponsiveValue;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/values/index.ts`),
+      "import { BREAKPOINTS } from '../breakpoints';\nexport type ResponsiveValue = typeof BREAKPOINTS;\nexport const values = BREAKPOINTS;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/visibility/index.ts`),
+      "import { BREAKPOINTS } from '../breakpoints';\nexport const band = BREAKPOINTS;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/channels/index.ts`),
+      "import { values } from '../values';\nimport { band } from '../visibility';\nexport const channels = [values, band];\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    for (const edge of [
+      `${owner}/values/index.ts->${owner}/breakpoints/index.ts`,
+      `${owner}/visibility/index.ts->${owner}/breakpoints/index.ts`,
+      `${owner}/channels/index.ts->${owner}/values/index.ts`,
+    ]) {
+      assert(!ids.has(`sibling-owner-dependency:${edge}`), `downward edge must be legal: ${edge}`);
+      assert(!ids.has(`local-layer-inversion:${edge}`), `downward edge must be legal: ${edge}`);
+    }
+    assert(ids.has(`local-layer-inversion:${owner}/breakpoints/index.ts->${owner}/values/index.ts`));
+    // Equal rank is not permission: one projection may not read the other.
+    assert(ids.has(`sibling-owner-dependency:${owner}/channels/index.ts->${owner}/visibility/index.ts`));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
 test('the theme contract chain is a directed ladder, and the reversed edge still inverts', () => {
   const { packageRoot, sourceRoot } = fixture();
   try {
     const owner = 'foundation/contracts/composition/tenants/themes';
 
-    // The rank entry is a DIRECTED law, not an exemption: iso is the floor and
-    // every later owner may read downward, but nothing may read back up.
+    // The rank entry is a DIRECTED law, not an exemption: iso is the floor, the
+    // transport is LAST because it stores the stages, and nothing reads back up.
     assert.deepEqual(SCOPED_OWNER_RANKS[owner], {
       iso: 0,
       provenance: 1,
-      'tenant-theme': 2,
-      intent: 3,
-      resolved: 4,
-      compiled: 5,
-      emission: 6,
-      'engine-adapter': 7,
+      compiled: 2,
+      emission: 3,
+      'engine-adapter': 4,
+      intent: 5,
+      resolved: 6,
+      'tenant-theme': 7,
     });
 
     write(resolve(sourceRoot, `${owner}/iso/index.ts`), 'export const theme = true;\n');
@@ -1298,7 +1397,7 @@ test('the theme contract chain is a directed ladder, and the reversed edge still
     );
     write(
       resolve(sourceRoot, `${owner}/tenant-theme/index.ts`),
-      "import type { Ledger } from '../provenance';\nexport type Document = { readonly ledger?: Ledger };\n",
+      "import type { Ledger } from '../provenance';\nimport { compiled } from '../compiled';\nexport type Document = { readonly ledger?: Ledger };\nexport const persisted = compiled;\n",
     );
     write(
       resolve(sourceRoot, `${owner}/intent/index.ts`),
@@ -1310,7 +1409,7 @@ test('the theme contract chain is a directed ladder, and the reversed edge still
     );
     write(
       resolve(sourceRoot, `${owner}/compiled/index.ts`),
-      "import { resolved } from '../resolved';\nexport const compiled = resolved;\n",
+      "import { theme } from '../iso';\nexport const compiled = theme;\n",
     );
     write(
       resolve(sourceRoot, `${owner}/engine-adapter/index.ts`),
@@ -1325,6 +1424,10 @@ test('the theme contract chain is a directed ladder, and the reversed edge still
       `${owner}/resolved/index.ts->${owner}/intent/index.ts`,
       `${owner}/resolved/index.ts->${owner}/iso/index.ts`,
       `${owner}/engine-adapter/index.ts->${owner}/compiled/index.ts`,
+      `${owner}/compiled/index.ts->${owner}/iso/index.ts`,
+      // The transport persisting the lowered product is the edge the terminal
+      // position exists to admit; below the product it would be an inversion.
+      `${owner}/tenant-theme/index.ts->${owner}/compiled/index.ts`,
       // A carrier reading the ledger it transports is downward, and a type-only
       // edge is still an edge: these three are exactly what rank 1 admits.
       `${owner}/tenant-theme/index.ts->${owner}/provenance/index.ts`,
