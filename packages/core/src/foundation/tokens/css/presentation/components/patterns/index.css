@@ -477,6 +477,8 @@
   --ds-collection-card-status-border: var(--ds-premium-card-status-border);
   --ds-collection-card-status-color: var(--ds-premium-card-status-color);
   --ds-collection-card-action-color: var(--ds-premium-card-action-color);
+  /* Opt-in motif: the resting value is the absence of a grid line. */
+  --ds-collection-card-grid-line: transparent;
 
   /* The listing grid's gap is room between cards, so it takes rhythm; the
      min-card widths below are card SIZE and stay exact. A tenant artifact that

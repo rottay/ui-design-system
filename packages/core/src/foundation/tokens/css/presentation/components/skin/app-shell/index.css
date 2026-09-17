@@ -8,6 +8,13 @@
  */
 
 .rottay-app-shell {
+  /* Resting values for the channels the React root re-stamps per instance:
+     the physical inset bridges, and the default-geometry main transition. */
+  --ds-shell-safe-area-top: env(safe-area-inset-top, 0px);
+  --ds-shell-safe-area-right: env(safe-area-inset-right, 0px);
+  --ds-shell-safe-area-left: env(safe-area-inset-left, 0px);
+  --ds-shell-bottom-inset: env(safe-area-inset-bottom, 0px);
+  --ds-shell-resolved-main-transition: margin-inline-start 220ms cubic-bezier(0.16, 1, 0.3, 1);
   min-height: 100dvh;
   display: flex;
   background: var(--ds-shell-background, var(--ds-surface-canvas));

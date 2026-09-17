@@ -18,4 +18,9 @@
 :root {
   --ds-viewport-inline-size: 100dvw;
   --ds-viewport-block-size: 100dvh;
+
+  /* Device inset readings, named once. Every skin that consumed them repeated
+     the same `env()` expression as a fallback; this is that resting value. */
+  --ds-safe-area-top: env(safe-area-inset-top, 0px);
+  --ds-safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }

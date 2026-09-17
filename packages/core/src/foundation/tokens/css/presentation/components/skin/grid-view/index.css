@@ -52,7 +52,7 @@
   gap: var(--ds-grid-view-gap, var(--ds-spacing-4, 16px));
   /* One pixel of bleed on each side so a card's own ring is not clipped, and a
      bottom bleed the listing layer can tune. */
-  padding-block: 1px var(--ds-listing-grid-bottom-bleed, 8px);
+  padding-block: 1px var(--ds-listing-grid-bottom-bleed, var(--ds-spacing-2, 8px));
   padding-inline: 1px;
   overflow: visible;
   box-sizing: border-box;

@@ -36,6 +36,8 @@
   --ds-rate-active-color: var(--ds-color-warning-400);
   --ds-rate-inactive-color: var(--ds-color-neutral-300);
   --ds-rate-hover-color: var(--ds-color-warning-500);
+  /* Resting value of the per-star fill hatch the engines stamp inline. */
+  --ds-rate-star-fill: var(--ds-rate-inactive-color);
 
   /* ========================================================================
      SPACING
