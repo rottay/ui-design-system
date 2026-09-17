@@ -1,0 +1,123 @@
+Codex shared-core review, ROUND 2 — DnD kernel debrief revision 2 (WO-FAM-08 / F-69), 2026-09-17. Reviewer: codex-cli 0.153.4, read-only exec. Verdict: HOLD (B1/B2 partial, B3 press-route unresolved, B5 instrument contract incomplete; B4 resolved).
+
+VERDICT: HOLD
+
+Revision 2 makes substantial corrections, but it does **not** resolve all five blocking findings in the contract text. Several proposed integrations remain unimplementable as typed, and some acceptance requirements contradict the behavior they claim to preserve.
+
+Reviewed all three requested documents. The reviewed [debrief](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md) remained at SHA-256 `d09cd2521e65ebf30b0e1f714f453ec4b222fa38a01c1a9aa03fe7338d670fa0`. Source checks used revision base `785771a30e584bba784f258bf9a6471bf9fed45e`. HEAD advanced from `0032e7c7b958b3e79978a6c7a479a1dfbc423a79` to `77e338adb647fbc6ef62f99dbe57ff716bb51a2a` during review; I confirmed all eleven measured source files matched the revision base.
+
+| Round-1 finding | Revision-2 disposition |
+|---|---|
+| B1 — typed integrations, identity, stamps, termination, ordering | **PARTIAL; still blocking** |
+| B2 — keyboard inside a usable API | **PARTIAL; still blocking** |
+| B3 — owning press instance and composition | **PARTIAL; still blocking** |
+| B4 — structure-gate admission in write set | **RESOLVED at contract level** |
+| B5 — executable acceptance and retirement authority | **PARTIAL; still blocking** |
+
+**B1 — The four adapters still do not establish a working, behavior-preserving contract.**
+
+Call-site target binding and consumer-owned stamps are now explicit. Those corrections are sound. The remaining problems are concrete:
+
+- **Tree’s mandatory adapter fails type checking twice.** [§2.2.4(c)](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:581) supplies `{key: TreeEngineKey}` where `DragPayload.key` must be `string`. The actual [TreeEngineKey](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/display/tree/runtime/tree-behavior/index.ts:19) is `string | number`. Separately, `getTargetProps({key: nodeKey})` omits the required `position` in its declared `TTarget`. I reproduced **TS2344** and **TS2345** using the document’s interfaces and TypeScript 5.9.3, entirely in memory. These are contract failures under the document’s own statement that the adapters are mandatory, not illustrations. Preserve numeric identity; distinguish bound target identity from resolved destination, or provide a valid alternative.
+
+- **Tree’s source eligibility changes.** Today [Tree computes](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:263) `isDraggable = propDraggable && !disabled` per row and attaches `onDragStart` accordingly. The adapter only disables the whole session with `!propDraggable`; its source factory then returns `draggable: !disabled` for every row. Stamping `data-draggable={isDraggable || undefined}` does not disable native dragging. The contract needs per-source eligibility that preserves disabled rows.
+
+- **The ColumnMenu foreign-drag reconciliation is false.** [Lines 504–514](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:504) assume every foreign `text/plain` value produces `indexOf === -1`. A foreign drag can contain an existing column key. I executed the revision-base normalizer, reorder helper and drop callback with no local session, columns `[a,b,c]`, external text `"a"`, and destination `"c"`: the result was **`[b,c,a]`**. The [current handler](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/structures/workspace/column-menu/index.tsx:417) accepts that drop; the proposed session-only handler rejects it. Rejection may be desirable, but it must be an expressly declared behavior change with a pin covering a **matching** foreign key.
+
+- **Stamp ownership alone does not preserve stamp behavior.** SavedViews’ current [dragover handler](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/data/saved-views/engines/modern/index.tsx:196) leaves the previous target intact when the source is hovered again. The new self-target resolver returns `null`, which explicitly clears it. Thus dragging `a → b → a` changes the displayed target. This contradicts invariant 1’s unchanged-stamps promise unless declared separately.
+
+- **Exactly-once termination and N10 disagree.** [§2.2.3](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:479) requires synchronous ref consumption; §2.2.4(d) says the session clears after the callback; [N10](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1325) demands failure if the ref clears before `onDrop`. Saving the session locally, clearing the ref, then passing the saved payload/target preserves both arguments and prevents reentrant commitment. I verified that counterexample. N10’s designated assertion would remain green. Specify terminal reservation before external callbacks, rendered-state cleanup, callback exception handling and announcement order independently.
+
+**B2 — Keyboard declarations are connected, but the API still cannot drive its delegated consumers.**
+
+The HTML5 scope correction, explicit candidate-versus-commit distinction, Home/End exclusion and axis refusal rules are improvements. Home/End returning `null` preserves Kanban’s existing arrow-only move mapping.
+
+However:
+
+- **There is no delegated session entrypoint.** [The result API](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:395) exposes `move(intent)`, `commit()` and `cancel()`, but none accepts a payload or opens a keyboard session. Delegated mode installs no key handler. Starting from `session === null`, a ColumnMenu button cannot identify which column to move. Tree’s proposed destination picker also cannot supply an arbitrary node and before/inside/after destination through four relative intents. Calling a synthetic HTML5 handler would contradict the declared abstraction. This requires a concrete typed entrypoint and one complete delegated adapter.
+
+- **The documented delegated configuration does not type-check.** Tree is instructed to use `keyboard: {mode: 'delegated'}`, but [SortableKeyboardOptions](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:730) requires `orientation` and `resolveKeyboardTarget` for every mode. The in-memory check produced **TS2739**. Use mode-specific option types consistent with the promised behavior.
+
+- **Repeated candidate movement lacks a defined input.** `resolveKeyboardTarget(payload, intent)` receives no current candidate. During grab mode the committed data remains unchanged, so successive arrows need an explicitly defined way to advance from the previous candidate. Requiring an unstated closure over returned session state leaves this contract incomplete.
+
+- **The direction source is missing.** The pure resolver requires `rtl`, but neither session options nor keyboard options provides it. Invariant 6 prohibits importing the existing i18n direction authority. [resolveNavigationIntent](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/runtime/collection/roving-focus/index.ts:68) consumes a supplied boolean; importing that function does not supply the boolean. Allow the established direction hook or expose an explicit direction input.
+
+- **Generic announcement metadata exceeds the supplied information.** Every candidate move includes pointer dragover, while `moved` requires `crossedContainer`. The kernel neither understands `TTarget` nor receives a container projection or resolver-supplied crossing result. Define who supplies that fact and which events fire for immediate commits, which explicitly have no candidate phase.
+
+Shipping grab mode without an adopter is not itself the blocker. The shared candidate machinery first needs a usable, specified lifecycle.
+
+**B3 — The composition correction is verified; the press-instance route remains hypothetical.**
+
+I executed the actual `composeHandlers` module and reproduced:
+
+```text
+["A.first","B.first","C.first","C.second"]
+```
+
+Leg B is correct: an already-prevented event skips the second handler even when the first does not prevent anything. Banning that helper for mandatory drag cleanup is justified.
+
+[§2.7](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:934) also correctly preserves Upload’s raw-event callback before file processing, including processing after default prevention.
+
+The press route still does not reach the actual instances:
+
+- `cardInteraction.handlers.onPointerUp` in the Kanban adapter is not accessible at the board’s session call site. Every [BoardCard](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:90) owns its own local instance.
+- `cancelRowAndHandlePress` is an undeclared placeholder. Every [StatefulRow](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/structures/workspace/column-menu/index.tsx:1117) owns another local instance. Being declared in the same file does not expose that instance to the parent.
+- Button’s pointer props notify consumer callbacks after its internal handler; they do not export its internal cancellation function. A Button dragend repair can clear Button’s instance, but cannot clear its ancestor row’s separate instance.
+
+Specify a per-source cancellation binding or registration mechanism, or an explicit component-local cleanup boundary. Show the row/card plumbing.
+
+The lot split also remains contradictory: lot 2’s adapter already calls the supposed combined cancellation route, although its PRE-pin must preserve both pre-repair pressed values through transport adoption. Lot 6 is described as a Button-only repair, leaving the row repair unassigned. Assign both repairs and reconcile them with the unchanged PRE-pin.
+
+**B4 — The structural admission gap is resolved in the contract.**
+
+[§3.1](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1001) includes both gate files, the `sortable: 1` entry, mirrored-table/count updates and a reverse-edge test.
+
+The [actual gate](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/scripts/check/architecture/audits/structure/index.mjs:1224) supports the stated result:
+
+- `sortable:1 → roving-focus:0`: admitted.
+- Reverse edge: `local-layer-inversion`.
+- Equal-ranked `sortable ↔ listbox`: remains forbidden.
+
+No baseline widening is proposed. This resolves B4 as a design requirement, not as evidence that an implementation has passed. The recorded pre-existing failures still require attribution against the actual pre-lot SHA.
+
+**B5 — Several acceptance corrections are valid, but the instrument contract remains incomplete.**
+
+Correctly fixed in the document:
+
+- Mutations must fail **at least their designated test**.
+- R5 now tests actual quarter boundaries. Executing Tree’s existing handler produced `24→before`, `25→inside`, `74→inside`, `75→inside`, `76→after`.
+- Changeset receipts require immutable base/candidate SHAs.
+- [Lot 11](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1390) explicitly requires owner authorization, a major changeset, complete export/type accounting, migration documentation and a changeset receipt. This corrects the authorization requirement; it does not assert that authorization already exists.
+- F-69 consolidation now explicitly requires an instrument before closure.
+
+Still blocking:
+
+- **The named browser harness cannot exercise the proposed hook as it stands.** [family-causality](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/tests/support/family-causality/index.ts:158) injects server markup through `host.innerHTML`, reads computed styles and removes the host. It does not hydrate React or mount the kernel’s event handlers. Its declared page interface also exposes no drag input API. [§6.3](/Users/daniel/Developer/Rottay/r4-recon-opus/evidence/dnd-kernel-debrief/index.md:1296) must name the live mount/browser-input extension or an existing suitable harness, with an owned write set. Merely running in Chromium does not test native DnD negotiation.
+
+- **Leaving and removal coverage is weaker than claimed.** C3 requires dragleave behavior, but source props say it appears “when the family declares it”; no such option exists. C5 only removes a target and subsequently supplies `dragend`. It does not cover source removal while the session owner remains mounted, or commitment against a removed/invalidated target. Non-null session fields are not live validity checks.
+
+- **Tree’s declared dropEffect addition conflicts with unchanged tests.** Its existing [dragover test helper](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/src/components/primitives/display/tree/tests/Tree.modern-engine-advanced.test.tsx:206) supplies `clientY` but no `dataTransfer`. An unconditional `event.dataTransfer.dropEffect = 'move'` fails that fixture. Specify a PRE-lot fixture correction or another deliberate treatment; “existing tests unchanged” cannot silently absorb it.
+
+- **Kanban’s announcement repair has no consistent lot.** §0.7 assigns repeated-outcome repair to an operability lot. The lot table provides operability lots only for SavedViews/ColumnMenu and Tree, while §6.2 requires the improved outcome in Kanban’s transport lot 5. The measured current implementation fails that requirement. Assign a declared repair lot instead of demanding it inside unchanged transport adoption.
+
+- **The F-69 arm needs an executable admission rule.** `OWED_ARMS` currently [prints unmet obligations](/Users/daniel/Developer/Rottay/r4-recon-opus/packages/core/scripts/check/family-cut/index.mjs:1431); adding an entry there does not enforce adoption. The proposed positive test only requires an import, which may be unused. Require actual invocation/wiring, define transitive adapter treatment, and name the measurement, blocking check and drill files. Preserve the new requirement, but do not mistake its declaration for a sufficient instrument design.
+
+N10’s invalid mutation requirement and the false C6/N11 ColumnMenu baseline are additional B5 failures described under B1.
+
+**Census and other corrections**
+
+I reproduced all eight `defs/jsx/tok` triples: `4/7/20`, `4/4/8`, `4/4/9`, `4/4/49`, `1/1/10`, `2/3/5`, `1/3/6`, `0/0/1`.
+
+| Requested correction | Result |
+|---|---|
+| ColumnMenu already has keyboard/touch move buttons | **Fixed**, including the distinction from a drag-specific keyboard protocol. |
+| Two transports across the eight owners | **Fixed**. |
+| Stale `normalizeDraftOrder` duplication | **Fixed**; the surviving cross-owner splice duplication and asymmetry are correctly identified. |
+| Executable invariant 6 | **Partial**. The impossible English-word grep is removed, but the direction-import contradiction remains. The literal rule also needs explicit treatment of module specifiers, directives and required keyboard/mode literals; N15 supplies only one negative despite promising one for each assertion. |
+| §3.3 invariant references | **Fixed** to invariants 1 and 4. |
+| dnd-kit wrapper inevitability | **Withdrawn correctly**; official documentation supports ref forwarding without extra wrappers. [dnd-kit documentation](https://dndkit.com/legacy/api-documentation/draggable/drag-overlay/) |
+| Protected-mode `dataTransfer` wording | **Fixed**: formats/kinds remain enumerable while payload contents are unavailable. [HTML Standard](https://html.spec.whatwg.org/multipage/dnd.html#the-drag-data-store) |
+
+One smaller correction is incomplete: §0.5 correctly distinguishes scope from demand, but §5(a), line 1163, still says capability “measures 0/8 in authored demand.” Remove that remaining demand claim.
+
+This was an independent read-only review. I changed no files and authored neither revision 2 nor its implementation. Verification comprised source inspection, source-byte/census comparison, in-memory TypeScript checks and focused execution of existing functions. No candidate implementation, full adoption suite or live browser adoption was certified. The required historical Modern Rescue checker again reported obsolete-path constitution drift; that is recorded separately and is not the reason for this HOLD.
