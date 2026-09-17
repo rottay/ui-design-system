@@ -5195,6 +5195,11 @@
      "at": "2026-09-17 14:18",
      "by": "kimi-dt",
      "note": "R17-01 INTEGRADO 8638413ae (writer W1, recibo claude-opus-5; auditoria e integracion Kimi): el modelo de coordenadas ARIA cuenta e indexa la secuencia expuesta (group headers interactivos indexados, detail rows body+1, miembros colapsados no contados, spacers virtualizados aria-hidden, aria-rowcount=-1 honesto con paginacion remota estructural). Implementacion en vuelo preservada byte-identica (sha256 verificado); suite aria 4->11 casos con 7 sondas mutantes red->green; 28/28 focales corridos por el DT. El counterexample de la auditoria queda cubierto por regresion. Reserva data-table REASIGNADA a W7 (consumes inertes R17-04: spelling tipografico x2, route-or-retire de spacing.rhythm/surfaces.controlHeight/roleWeights, pins de inercia se invierten a causalidad o retiro con evidencia; catalogo singleton del DT)."
+    },
+    {
+     "at": "2026-09-17 14:21",
+     "by": "kimi-dt",
+     "note": "Despachado W9 (Opus, fase de DISEÑO, sin codigo de producto): debrief del kernel DnD compartido (F-69) en evidence/dnd-kernel-debrief/ — censo verificado de los 8 reimplementadores, contrato propuesto (superficie = interseccion real, no union), invariants (adopcion sin cambio de comportamiento, Modern-only, announcements obligatorios), aceptacion ejecutable y registro de riesgos por consumidor. Resuelve la circularidad FAM-08/FAM-13 por la autoridad mas nueva (handoff 2026-09-17): el kernel base es scope de FAM-08; FAM-13 adopta despues. Tras la entrega corre la revision shared-core (Codex + Kimi; Fable si hay cupo) ANTES de cualquier implementacion. Esto NO cierra la pregunta D15 ante el owner: la recomendacion vieja de D15 (kernel a FAM-13) queda superseded por el handoff; registrado para ratificacion."
     }
    ]
   },
