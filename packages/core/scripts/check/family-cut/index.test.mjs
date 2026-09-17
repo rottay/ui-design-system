@@ -25,11 +25,13 @@ import { collectChannelProducers } from '../../libraries/tokens/producers/index.
 import {
   BASELINE_PATH,
   OWED_ARMS,
+  analyzeDragAndDrop,
   analyzeSkin,
   analyzeSource,
   collectFindings,
   fanOutFor,
   judgeFamily,
+  measureDragAndDropArm,
   measureFamily,
   readBaseline,
   resolveFamily,
@@ -1470,4 +1472,452 @@ test('LIVE: list-toolbar holds the variant arm only through the composed Button'
   const measured = measureFamily(resolveFamily('list-toolbar', ROOT), { producers: PRODUCERS });
   assert.equal(measured.blocking.variantContract, true);
   assert.deepEqual(measured.detail.variantComposedFrom, ['button']);
+});
+
+// ---------------------------------------------------------------------------
+// F-69: the DnD admission drills
+// ---------------------------------------------------------------------------
+
+/**
+ * Each plant is ONE file, because the gate's granularity is the file: a
+ * harness that put every shape in one module would measure a slice whose
+ * `const`s are out of scope and misreport an enumerable spread as opaque.
+ */
+function plantDnd(source, name = 'index.tsx') {
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-dnd-'));
+  const file = join(sandbox, name);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, source);
+  try {
+    return analyzeDragAndDrop(file);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+/** The family-level arm over a set of planted files. */
+function plantDndFamily(files) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-dnd-family-'));
+  try {
+    const written = [];
+    for (const [relativePath, source] of Object.entries(files)) {
+      const file = join(sandbox, relativePath);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, source);
+      written.push(file);
+    }
+    const sources = written.filter((file) => !/[\\/]engines[\\/](?:classic|rustic)[\\/]/u.test(file));
+    const parsed = sources.map((file) => ({
+      file,
+      source: ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX),
+    }));
+    return measureDragAndDropArm(
+      { root: sandbox, componentDirs: [sandbox], sources },
+      parsed,
+    );
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+const RENAMED_QUARTET = `
+import { useState } from 'react';
+export function Board({ onMove }) {
+  const [held, setHeld] = useState(null);
+  const beginDragging = (event, id) => { event.dataTransfer.effectAllowed = 'move'; setHeld(id); };
+  const overSlot = (event) => { event.preventDefault(); };
+  const release = (event, id) => { if (held) onMove(held, id); };
+  const finishDrag = () => setHeld(null);
+  return (
+    <div
+      draggable
+      onDragStart={(event) => beginDragging(event, 'a')}
+      onDragOver={overSlot}
+      onDrop={(event) => release(event, 'b')}
+      onDragEnd={finishDrag}
+    />
+  );
+}
+`;
+
+const DROP_ZONE = `
+import { useState } from 'react';
+export function Zone({ onUpload }) {
+  const [isDragOver, setIsDragOver] = useState(false);
+  return (
+    <div
+      data-drag-over={isDragOver}
+      onDragOver={(event) => { event.preventDefault(); setIsDragOver(true); }}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={(event) => { event.preventDefault(); onUpload(Array.from(event.dataTransfer.files)); }}
+    />
+  );
+}
+`;
+
+const KERNEL_IMPORT = "import { useDragSession, useFileDropZone } from '@/components/primitives/runtime/collection/sortable';";
+
+test('D1: a renamed transport quartet is ACCUSED', () => {
+  const measured = plantDnd(RENAMED_QUARTET);
+
+  assert.equal(measured.transportOwner, true, 'the shape is the evidence, never the handler name');
+  assert.deepEqual(measured.sessionState, ['held']);
+});
+
+test('D2: the same quartet inlined in JSX, with no named handlers, is ACCUSED', () => {
+  const measured = plantDnd(`
+import { useState } from 'react';
+export function Board({ onMove }) {
+  const [held, setHeld] = useState(null);
+  return (
+    <div
+      draggable
+      onDragStart={(event) => { event.dataTransfer.setData('text/plain', 'a'); setHeld('a'); }}
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={() => { if (held) onMove(held); }}
+    />
+  );
+}
+`);
+
+  assert.equal(measured.transportOwner, true);
+});
+
+test('D3: a brand-new file carrying the vocabulary and its own state raises the count', () => {
+  const one = plantDndFamily({ 'index.tsx': RENAMED_QUARTET });
+  const two = plantDndFamily({ 'index.tsx': RENAMED_QUARTET, 'rail/index.tsx': RENAMED_QUARTET });
+
+  assert.equal(one.transportOwners.length, 1);
+  assert.equal(two.transportOwners.length, 2, 'a second copy in a new file is a second owner');
+});
+
+test('D4: an imported kernel that is never called is DECLARED and not wired', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Board() {
+  return <div />;
+}
+`);
+
+  assert.equal(measured.declaresKernel, true, 'bringing the kernel in is the accusation');
+  assert.equal(measured.attachments.length, 0);
+});
+
+test('D5: a kernel called and bound but never read is not wired', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Board() {
+  const drag = useDragSession({ onDrop: () => {} });
+  return <div />;
+}
+`);
+
+  assert.equal(measured.declaresKernel, true);
+  assert.equal(measured.attachments.some((element) => element.effective), false);
+});
+
+test('D6: an adapter-only module that reshapes a callback is NOT accused', () => {
+  const measured = plantDnd(`
+export interface TreeDropInfo { dragNode: unknown; dropNode: unknown; dropPosition: number; }
+export function TreeView({ onDrop, children }) {
+  const handleDrop = (info: TreeDropInfo) => onDrop?.({ from: info.dragNode, to: info.dropNode });
+  return <ModernTree onDrop={handleDrop}>{children}</ModernTree>;
+}
+`);
+
+  assert.equal(measured.transportOwner, false, 'a reshaped callback owns no session');
+  assert.equal(measured.dropZoneOwner, false);
+});
+
+test('D7: a family with no DnD vocabulary at all is NOT accused', () => {
+  const measured = plantDnd(`
+export function Badge({ label }) {
+  return <span data-part="badge">{label}</span>;
+}
+`);
+
+  assert.equal(measured.transportOwner, false);
+  assert.equal(measured.dropZoneOwner, false);
+  assert.equal(measured.declaresKernel, false);
+});
+
+test('D8: a frozen engine copy is NOT accused, and IS reported', () => {
+  const measured = plantDndFamily({
+    'index.tsx': 'export function Board() { return <div data-part="root" />; }\n',
+    'engines/classic/index.tsx': RENAMED_QUARTET,
+  });
+
+  assert.equal(measured.transportOwners.length, 0, 'the freeze is structural, not a hand-written list');
+  assert.deepEqual(
+    measured.frozen.map((row) => row.reason),
+    ['frozen engine, transport owner'],
+    'and the exclusion is reported rather than silent',
+  );
+});
+
+test('D9: the kernel called, read, and the legacy transport retained fails BOTH arms', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+import { useState } from 'react';
+export function Board({ onMove }) {
+  const unusedTransport = useDragSession({ onDrop: () => {} });
+  void unusedTransport.session;
+  const [held, setHeld] = useState(null);
+  return (
+    <div
+      draggable
+      onDragStart={(event) => { event.dataTransfer.effectAllowed = 'move'; setHeld('a'); }}
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={() => { if (held) onMove(held); }}
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.declared, true);
+  assert.equal(measured.wired, false, 'a bound and read result attaches nothing');
+  assert.equal(measured.transportOwners.length, 1, 'and the independent transport is still counted');
+});
+
+test('D10: a target bag assigned to a local that is never spread is not wired', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Board() {
+  const drag = useDragSession({ onDrop: () => {} });
+  const targetProps = drag.getTargetProps({ key: 'a' });
+  void targetProps;
+  return <div data-part="row" />;
+}
+`);
+
+  assert.equal(measured.attachments.some((element) => element.effective), false);
+});
+
+test('D11: a bag delegated to a child IN the census that spreads it IS wired', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+import { Row } from './row';
+export function Board() {
+  const drag = useDragSession({ onDrop: () => {} });
+  return <Row dragProps={drag.getSourceProps({ key: 'a' })} />;
+}
+`,
+    'row/index.tsx': `
+export function Row({ dragProps, children }) {
+  return <div data-part="row" {...dragProps}>{children}</div>;
+}
+`,
+  });
+
+  assert.equal(measured.wired, true, 'the credit is earned by the PAIR, never by the pass alone');
+  assert.deepEqual(measured.rows, []);
+});
+
+test('D12: a drop zone with no drag source is ACCUSED as a drop-zone owner', () => {
+  const measured = plantDnd(DROP_ZONE);
+
+  assert.equal(measured.dropZoneOwner, true);
+  assert.equal(measured.transportOwner, false, 'a drop zone is not a transport');
+});
+
+test('D12b: the same shape WITHOUT hover state is still accused', () => {
+  // The hover tint was a sufficient signal that the file owns the
+  // interaction, never a necessary one: a stateless drop handler is a drop
+  // zone too, and the conjunct made it invisible.
+  const measured = plantDnd(`
+export function Zone({ onUpload }) {
+  return (
+    <div
+      onDragOver={(event) => event.preventDefault()}
+      onDrop={(event) => { event.preventDefault(); onUpload(Array.from(event.dataTransfer.files)); }}
+    />
+  );
+}
+`);
+
+  assert.equal(measured.dropZoneOwner, true);
+});
+
+test('D13: a public onDrop prop the family re-emits is NOT accused on either arm', () => {
+  const measured = plantDnd(`
+export function Upload({ onDrop }) {
+  const handle = (event) => { onDrop?.(event); };
+  void handle;
+  return <div data-part="root" />;
+}
+`);
+
+  assert.equal(measured.transportOwner, false);
+  assert.equal(measured.dropZoneOwner, false);
+});
+
+test('D14: a bag delegated OUTSIDE the census is printed and NOT credited', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+import { ForeignRow } from '@external/rows';
+export function Board() {
+  const drag = useDragSession({ onDrop: () => {} });
+  return <ForeignRow dragProps={drag.getSourceProps({ key: 'a' })} />;
+}
+`,
+  });
+
+  assert.equal(measured.wired, false, 'the gate does not certify an adoption it cannot see');
+  assert.equal(measured.rows.length, 1);
+  assert.match(measured.rows[0], /^DELEGATED-UNVERIFIED .*<ForeignRow>$/u);
+});
+
+test('D15: a kernel spread followed by later ATTRIBUTES fails both arms', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Zone({ onUpload }) {
+  const zone = useFileDropZone({ onFiles: onUpload });
+  return (
+    <div
+      {...zone.dropZoneProps}
+      onDragOver={(event) => event.preventDefault()}
+      onDragLeave={() => {}}
+      onDrop={(event) => { event.preventDefault(); onUpload(Array.from(event.dataTransfer.files)); }}
+    />
+  );
+}
+`);
+
+  assert.equal(measured.declaresKernel, true);
+  assert.equal(measured.attachments.length, 1);
+  assert.deepEqual(measured.attachments[0].overwritten, ['onDragLeave', 'onDragOver', 'onDrop']);
+  assert.equal(measured.attachments[0].effective, false);
+  assert.equal(measured.dropZoneOwner, true, 'the independent implementation is still counted');
+});
+
+test('D16: a merge literal that overrides one key is not wired', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Zone({ onUpload }) {
+  const zone = useFileDropZone({ onFiles: onUpload });
+  const mine = (event) => { onUpload(event); };
+  const props = { ...zone.dropZoneProps, onDrop: mine };
+  return <div {...props} />;
+}
+`);
+
+  assert.equal(measured.attachments.length, 1);
+  assert.deepEqual(measured.attachments[0].overwritten, ['onDrop']);
+  assert.equal(measured.attachments[0].effective, false, 'the override is one level below JSX');
+});
+
+test('D17: the control -- an attribute BEFORE the spread and nothing after -- IS wired', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Zone({ onUpload }) {
+  const zone = useFileDropZone({ onFiles: onUpload });
+  return <div data-part="dropzone" {...zone.dropZoneProps} />;
+}
+`);
+
+  assert.equal(measured.attachments.length, 1);
+  assert.deepEqual(measured.attachments[0].overwritten, []);
+  assert.equal(measured.attachments[0].effective, true, 'a gate that reddens here blocks every adoption');
+});
+
+test('D18: a later ENUMERABLE spread -- the shape this repository already ships -- is not wired', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Zone({ onUpload }) {
+  const zone = useFileDropZone({ onFiles: onUpload });
+  const independent = {
+    onDragOver: (event) => event.preventDefault(),
+    onDrop: (event) => { onUpload(Array.from(event.dataTransfer.files)); },
+  };
+  return <div {...zone.dropZoneProps} {...independent} />;
+}
+`);
+
+  assert.deepEqual(measured.attachments[0].overwritten, ['onDragOver', 'onDrop']);
+  assert.equal(measured.attachments[0].effective, false);
+  assert.equal(measured.dropZoneOwner, true);
+});
+
+test('D19: a later OPAQUE spread is printed as SPREAD-UNVERIFIED and fails closed', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Zone({ onUpload, ...rest }: { onUpload: (files: File[]) => void } & Record<string, unknown>) {
+  const zone = useFileDropZone({ onFiles: onUpload });
+  return <div {...zone.dropZoneProps} {...rest} />;
+}
+`,
+  });
+
+  assert.equal(measured.wired, false);
+  assert.equal(measured.rows.length, 1);
+  assert.match(measured.rows[0], /^SPREAD-UNVERIFIED /u, 'the assertion is the printed row, not only the red');
+});
+
+test('D17b: an attribute the kernel overwrites is not a defect, even on a kernel-owned name', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Row() {
+  const drag = useDragSession({ onDrop: () => {} });
+  return <div draggable={false} onDrop={() => {}} {...drag.getSourceProps({ key: 'a' })} />;
+}
+`);
+
+  assert.equal(measured.attachments[0].effective, true, 'the kernel wins what precedes it');
+});
+
+test('the blocking arm fires only when the kernel was DECLARED and not attached', () => {
+  const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
+  const pinned = readBaseline().families[FAMILY];
+  const withArm = (dnd) => judgeFamily(
+    { ...measured, blocking: { ...measured.blocking, ...dnd }, detail: { ...measured.detail, dndUnverified: ['SPREAD-UNVERIFIED planted'] } },
+    pinned,
+  );
+
+  expectFinding(
+    withArm({ dndKernelDeclared: true, dndKernelWired: false }),
+    'BLOCKING the DnD kernel is declared and never effectively attached',
+    'a declared kernel that attaches nothing must block its lot',
+  );
+  expectNoFinding(
+    withArm({ dndKernelDeclared: true, dndKernelWired: true }),
+    'BLOCKING the DnD kernel',
+    'an adopted family is silent',
+  );
+  expectNoFinding(
+    withArm({ dndKernelDeclared: false, dndKernelWired: false }),
+    'BLOCKING the DnD kernel',
+    'an un-adopted family is silent, which is what makes the arm shippable',
+  );
+});
+
+test('both DnD ratchets are decrease-only, so a new independent implementation reddens', () => {
+  const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
+  const pinned = readBaseline().families[FAMILY];
+  const grown = (key) => judgeFamily(
+    { ...measured, ratchets: { ...measured.ratchets, [key]: measured.ratchets[key] + 1 } },
+    pinned,
+  );
+
+  expectFinding(grown('dndTransportOwners'), '`dndTransportOwners` GREW from 0 to 1', 'the transport ratchet holds');
+  expectFinding(grown('dndDropZoneOwners'), '`dndDropZoneOwners` GREW from 0 to 1', 'the drop-zone ratchet holds');
+});
+
+test('the live census is the four sortable owners and one drop zone, and nobody has adopted yet', () => {
+  const owners = ['tree', 'saved-views', 'kanban-board', 'column-menu'];
+  for (const family of owners) {
+    const measured = measureFamily(resolveFamily(family, ROOT, readBaseline().families[family]), { producers: PRODUCERS });
+    assert.equal(measured.ratchets.dndTransportOwners, 1, `${family} owns its transport today`);
+    assert.equal(measured.blocking.dndKernelDeclared, false, `${family} has not adopted the kernel yet`);
+  }
+  const fileManager = measureFamily(
+    resolveFamily('file-manager', ROOT, readBaseline().families['file-manager']),
+    { producers: PRODUCERS },
+  );
+  assert.equal(fileManager.ratchets.dndDropZoneOwners, 1);
+  assert.equal(fileManager.ratchets.dndTransportOwners, 0, 'a drop zone is not counted twice');
 });

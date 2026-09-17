@@ -169,12 +169,15 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     toast: 1,
   }),
   // The collection kernels are a ladder: listbox composes the combobox
-  // foundation, roving focus and type-ahead into one shared listbox law.
+  // foundation, roving focus and type-ahead into one shared listbox law, and
+  // sortable composes the same roving-focus key mapping into the drag session.
+  // Both sit at rank 1 and are therefore peers of each other, not a chain.
   'components/primitives/runtime/collection': Object.freeze({
     combobox: 0,
     'roving-focus': 0,
     typeahead: 0,
     listbox: 1,
+    sortable: 1,
   }),
   'foundation/contracts': Object.freeze({
     ambient: 0,

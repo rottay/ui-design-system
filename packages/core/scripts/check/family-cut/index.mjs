@@ -1092,12 +1092,481 @@ export function measureSkeletonArm(resolved, sources, skins, stampedParts) {
 // The measurement
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// F-69: the DnD admission arm
+// ---------------------------------------------------------------------------
+
+/**
+ * The props the DnD kernel owns. JSX resolves later attributes over earlier
+ * spreads, so ANY later mention of one of these names discards what the kernel
+ * put there -- which is why the attachment predicate below is positional and
+ * per key rather than "the bag was spread somewhere".
+ */
+const KERNEL_OWNED_PROPS = new Set([
+  'draggable',
+  'onDragStart',
+  'onDragEnd',
+  'onDragOver',
+  'onDragLeave',
+  'onDrop',
+  'onPointerCancel',
+  'onKeyDown',
+]);
+
+const KERNEL_HOOKS = new Set(['useDragSession', 'useFileDropZone']);
+const KERNEL_BAG_CALL = /(?:^|\.)(?:getSourceProps|getTargetProps)$/u;
+const KERNEL_BAG_VALUE = /(?:^|\.)dropZoneProps$/u;
+const DRAG_HANDLER_ATTRIBUTES = new Set([
+  'onDragStart',
+  'onDragOver',
+  'onDragEnd',
+  'onDragLeave',
+  'onDrop',
+]);
+
+const isFunctionNode = (node) => !!node && (
+  ts.isArrowFunction(node) || ts.isFunctionExpression(node) || ts.isFunctionDeclaration(node)
+);
+
+/**
+ * Every authored owner of the family, frozen engines INCLUDED. The frozen
+ * copies are never accused -- they are reported, so a frozen re-implementation
+ * stays a named exception instead of disappearing from the census.
+ */
+function familyFrozenModules(componentDirs) {
+  return componentDirs
+    .flatMap((dir) => walkFiles(dir, isFamilyModule))
+    .filter((file) => FROZEN_ENGINE_SEGMENT.test(toPosix(file)))
+    .sort();
+}
+
+/**
+ * The DnD shape of ONE authored file: whether it carries an independent HTML5
+ * transport, whether it carries an independent external-file drop zone,
+ * whether it brings the kernel in at all, and -- per JSX element -- whether
+ * what the kernel handed it actually reaches the DOM.
+ */
+export function analyzeDragAndDrop(file, source = ts.createSourceFile(
+  file,
+  readFileSync(file, 'utf8'),
+  ts.ScriptTarget.Latest,
+  true,
+  ts.ScriptKind.TSX,
+)) {
+  const functionsByName = new Map();
+  const objectsByName = new Map();
+  const typeMembersByName = new Map();
+  const statePairs = [];
+  const refNames = new Set();
+  const attributeNames = new Set();
+  const propBindings = new Map();
+  const handlerAttributes = [];
+  const elements = [];
+  let declaresKernel = false;
+  let readsTransfer = false;
+  let readsTransferFiles = false;
+
+  const lineOf = (node) => source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+  const text = (node) => node.getText(source);
+
+  const collect = (node) => {
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name)) {
+      const initializer = node.initializer ? unwrapTransparent(node.initializer) : undefined;
+      if (isFunctionNode(initializer)) functionsByName.set(node.name.text, initializer);
+      /* `useCallback(fn, deps)` and `React.memo(fn)` are the same function
+       * under a wrapper; a reader that stopped here would miss every handler
+       * the tree actually writes. */
+      if (initializer && ts.isCallExpression(initializer) && isFunctionNode(unwrapTransparent(initializer.arguments[0]))) {
+        functionsByName.set(node.name.text, unwrapTransparent(initializer.arguments[0]));
+      }
+      if (initializer && ts.isObjectLiteralExpression(initializer)) objectsByName.set(node.name.text, initializer);
+      if (node.type && ts.isTypeLiteralNode(node.type)) {
+        typeMembersByName.set(
+          node.name.text,
+          node.type.members.map((member) => (member.name ? text(member.name).replace(/^['"]|['"]$/gu, '') : '')),
+        );
+      }
+    }
+    if (ts.isFunctionDeclaration(node) && node.name) functionsByName.set(node.name.text, node);
+    if (ts.isVariableDeclaration(node) && ts.isArrayBindingPattern(node.name) && node.initializer) {
+      const callee = ts.isCallExpression(node.initializer) ? text(node.initializer.expression) : '';
+      if (/(?:^|\.)useState$/u.test(callee)) {
+        const [value, setter] = node.name.elements;
+        if (value && setter && ts.isBindingElement(value) && ts.isBindingElement(setter)) {
+          statePairs.push({ value: text(value.name), setter: text(setter.name) });
+        }
+      }
+    }
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer
+      && ts.isCallExpression(node.initializer) && /(?:^|\.)useRef$/u.test(text(node.initializer.expression))) {
+      refNames.add(node.name.text);
+    }
+    if (ts.isCallExpression(node)) {
+      const callee = text(node.expression).split('.').pop();
+      if (KERNEL_HOOKS.has(callee)) declaresKernel = true;
+    }
+    /* An import declares the kernel too: the arm accuses "you brought it in
+     * and did not attach it", and an unused import is the first way to do
+     * exactly that. */
+    if (ts.isImportDeclaration(node) && node.importClause?.namedBindings
+      && ts.isNamedImports(node.importClause.namedBindings)) {
+      for (const element of node.importClause.namedBindings.elements) {
+        if (KERNEL_HOOKS.has(element.name.text)) declaresKernel = true;
+      }
+    }
+    if (ts.isPropertyAccessExpression(node)) {
+      const name = node.name.text;
+      if (name === 'dataTransfer') readsTransfer = true;
+      if ((name === 'files' || name === 'items') && /dataTransfer$/u.test(text(node.expression))) {
+        readsTransferFiles = true;
+      }
+    }
+    if (ts.isPropertyAssignment(node) && node.name) {
+      const key = text(node.name).replace(/^['"]|['"]$/gu, '');
+      if (KERNEL_OWNED_PROPS.has(key)) attributeNames.add(key);
+    }
+    if (ts.isJsxAttribute(node)) {
+      const name = attributeName(node);
+      attributeNames.add(name);
+      if (node.initializer && ts.isJsxExpression(node.initializer) && node.initializer.expression) {
+        if (!propBindings.has(name)) propBindings.set(name, []);
+        propBindings.get(name).push(node.initializer.expression);
+        if (DRAG_HANDLER_ATTRIBUTES.has(name)) {
+          handlerAttributes.push({ name, expression: node.initializer.expression });
+        }
+      }
+    }
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      elements.push(node);
+    }
+    ts.forEachChild(node, collect);
+  };
+  ts.forEachChild(source, collect);
+
+  /**
+   * The function(s) an attribute actually runs. A handler reaches its body
+   * through a gate (`cond ? fn : undefined`), through a named local, through
+   * `useCallback`, and through ONE PROP HOP -- a row element calling the
+   * handler its own component received. All four shapes are live in this tree,
+   * and a reader that stopped at the first would measure zero owners.
+   */
+  const handlerBodies = (expression, depth = 0, seen = new Set()) => {
+    const found = [];
+    const current = unwrapTransparent(expression);
+    if (!current || depth > 3 || seen.has(current)) return found;
+    seen.add(current);
+    if (ts.isConditionalExpression(current)) {
+      return [...handlerBodies(current.whenTrue, depth, seen), ...handlerBodies(current.whenFalse, depth, seen)];
+    }
+    if (ts.isBinaryExpression(current)) {
+      return [...handlerBodies(current.left, depth, seen), ...handlerBodies(current.right, depth, seen)];
+    }
+    if (isFunctionNode(current)) {
+      found.push(current);
+      const nested = (node) => {
+        if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
+          found.push(...handlerBodies(node.expression, depth + 1, seen));
+        }
+        ts.forEachChild(node, nested);
+      };
+      ts.forEachChild(current, nested);
+      return found;
+    }
+    if (ts.isIdentifier(current)) {
+      const local = functionsByName.get(current.text);
+      if (local) {
+        found.push(local);
+        return found;
+      }
+      for (const bound of propBindings.get(current.text) ?? []) {
+        found.push(...handlerBodies(bound, depth + 1, seen));
+      }
+      return found;
+    }
+    if (ts.isCallExpression(current)) return handlerBodies(current.arguments[0], depth + 1, seen);
+    return found;
+  };
+
+  const namesCalledIn = (node) => {
+    const out = new Set();
+    const visit = (current) => {
+      if (ts.isCallExpression(current) && ts.isIdentifier(current.expression)) out.add(current.expression.text);
+      if (ts.isBinaryExpression(current) && current.operatorToken.kind === ts.SyntaxKind.EqualsToken
+        && ts.isPropertyAccessExpression(current.left) && current.left.name.text === 'current'
+        && ts.isIdentifier(current.left.expression)) {
+        out.add(current.left.expression.text);
+      }
+      ts.forEachChild(current, visit);
+    };
+    visit(node);
+    return out;
+  };
+
+  const namesReadIn = (node) => {
+    const out = new Set();
+    const visit = (current) => {
+      if (ts.isIdentifier(current)) out.add(current.text);
+      ts.forEachChild(current, visit);
+    };
+    visit(node);
+    return out;
+  };
+
+  const roleBodies = (role) => handlerAttributes
+    .filter((attribute) => attribute.name === role)
+    .flatMap((attribute) => handlerBodies(attribute.expression));
+
+  const startBodies = roleBodies('onDragStart');
+  const dropBodies = roleBodies('onDrop');
+  const writtenAtStart = new Set(startBodies.flatMap((body) => [...namesCalledIn(body)]));
+  const readAtDrop = new Set(dropBodies.flatMap((body) => [...namesReadIn(body)]));
+
+  /* The session bridge, detected BY SHAPE: a value written in a drag-start
+   * handler and read in a drop handler. A renamed quartet, an inline arrow and
+   * a brand-new file all satisfy it; a `handle*Drag*` name pattern misses all
+   * three. */
+  const sessionState = [
+    ...statePairs
+      .filter(({ value, setter }) => writtenAtStart.has(setter) && readAtDrop.has(value))
+      .map(({ value }) => value),
+    ...[...refNames].filter((name) => writtenAtStart.has(name) && readAtDrop.has(name)),
+  ];
+
+  const hasDragVocabulary = attributeNames.has('draggable')
+    || attributeNames.has('onDragStart')
+    || readsTransfer;
+  const transportOwner = hasDragVocabulary && sessionState.length > 0;
+  const dropZoneOwner = !transportOwner
+    && attributeNames.has('onDragOver')
+    && attributeNames.has('onDrop')
+    && readsTransferFiles
+    && !attributeNames.has('draggable')
+    && !attributeNames.has('onDragStart');
+
+  /** The keys a later spread carries, or `null` when they cannot be enumerated. */
+  const enumerableKeys = (expression) => {
+    const current = unwrapTransparent(expression);
+    if (!current) return null;
+    const literal = ts.isObjectLiteralExpression(current)
+      ? current
+      : (ts.isIdentifier(current) ? objectsByName.get(current.text) : undefined);
+    if (literal) {
+      const keys = [];
+      for (const property of literal.properties) {
+        if (ts.isSpreadAssignment(property)) {
+          const nested = enumerableKeys(property.expression);
+          if (nested === null) return null;
+          keys.push(...nested);
+          continue;
+        }
+        if (!property.name) return null;
+        keys.push(text(property.name).replace(/^['"]|['"]$/gu, ''));
+      }
+      return keys;
+    }
+    if (ts.isIdentifier(current) && typeMembersByName.has(current.text)) {
+      return typeMembersByName.get(current.text);
+    }
+    return null;
+  };
+
+  const isKernelBag = (expression) => {
+    const current = unwrapTransparent(expression);
+    if (!current) return false;
+    if (ts.isCallExpression(current)) return KERNEL_BAG_CALL.test(text(current.expression));
+    if (ts.isPropertyAccessExpression(current)) return KERNEL_BAG_VALUE.test(text(current));
+    return false;
+  };
+
+  /** A local assembled FROM a kernel bag, with the keys it overrides. */
+  const mergedKernelBag = (expression) => {
+    const current = unwrapTransparent(expression);
+    if (!current || !ts.isIdentifier(current)) return undefined;
+    const literal = objectsByName.get(current.text);
+    if (!literal) return undefined;
+    let seen = false;
+    const overridden = [];
+    for (const property of literal.properties) {
+      if (ts.isSpreadAssignment(property)) {
+        if (isKernelBag(property.expression)) { seen = true; continue; }
+        if (!seen) continue;
+        const keys = enumerableKeys(property.expression);
+        if (keys === null) return { kernel: true, overridden, unverified: true };
+        overridden.push(...keys.filter((key) => KERNEL_OWNED_PROPS.has(key)));
+        continue;
+      }
+      if (!seen || !property.name) continue;
+      const key = text(property.name).replace(/^['"]|['"]$/gu, '');
+      if (KERNEL_OWNED_PROPS.has(key)) overridden.push(key);
+    }
+    return seen ? { kernel: true, overridden, unverified: false } : undefined;
+  };
+
+  const attachments = [];
+  const delegations = [];
+  for (const element of elements) {
+    const properties = element.attributes.properties;
+    let index = -1;
+    let overwritten = [];
+    let unverified = false;
+    for (let position = 0; position < properties.length; position += 1) {
+      const property = properties[position];
+      if (!ts.isJsxSpreadAttribute(property)) continue;
+      if (isKernelBag(property.expression)) { index = position; break; }
+      const merged = mergedKernelBag(property.expression);
+      if (merged) {
+        index = position;
+        overwritten = [...merged.overridden];
+        unverified = merged.unverified;
+        break;
+      }
+    }
+    if (index === -1) {
+      for (const property of properties) {
+        if (!ts.isJsxAttribute(property)) continue;
+        if (!property.initializer || !ts.isJsxExpression(property.initializer)) continue;
+        if (!property.initializer.expression) continue;
+        if (!isKernelBag(property.initializer.expression)) continue;
+        delegations.push({
+          component: text(element.tagName),
+          prop: attributeName(property),
+          line: lineOf(element),
+        });
+      }
+      continue;
+    }
+    for (let position = index + 1; position < properties.length; position += 1) {
+      const property = properties[position];
+      if (ts.isJsxAttribute(property)) {
+        const name = attributeName(property);
+        if (KERNEL_OWNED_PROPS.has(name)) overwritten.push(name);
+        continue;
+      }
+      const keys = enumerableKeys(property.expression);
+      if (keys === null) { unverified = true; continue; }
+      overwritten.push(...keys.filter((key) => KERNEL_OWNED_PROPS.has(key)));
+    }
+    attachments.push({
+      element: text(element.tagName),
+      line: lineOf(element),
+      overwritten: [...new Set(overwritten)].sort(),
+      unverified,
+      effective: overwritten.length === 0 && !unverified,
+    });
+  }
+
+  /** The components this file declares, for resolving a delegated bag. */
+  const declaredComponents = new Set(
+    [...functionsByName.keys()].filter((name) => /^[A-Z]/u.test(name)),
+  );
+
+  return {
+    file,
+    transportOwner,
+    dropZoneOwner,
+    declaresKernel,
+    sessionState,
+    attachments,
+    delegations,
+    declaredComponents,
+    spreadsProp: (prop) => elements.some((element) => {
+      const properties = element.attributes.properties;
+      let index = -1;
+      for (let position = 0; position < properties.length; position += 1) {
+        const property = properties[position];
+        if (!ts.isJsxSpreadAttribute(property)) continue;
+        if (!new RegExp(`(?:^|\\.)${prop}$`, 'u').test(text(property.expression))) continue;
+        index = position;
+        break;
+      }
+      if (index === -1) return false;
+      for (let position = index + 1; position < properties.length; position += 1) {
+        const property = properties[position];
+        if (ts.isJsxAttribute(property) && KERNEL_OWNED_PROPS.has(attributeName(property))) return false;
+        if (ts.isJsxSpreadAttribute(property)) {
+          const keys = enumerableKeys(property.expression);
+          if (keys === null || keys.some((key) => KERNEL_OWNED_PROPS.has(key))) return false;
+        }
+      }
+      return true;
+    }),
+  };
+}
+
+/**
+ * The family-level arm. Two decrease-only counts -- independent transports and
+ * independent drop zones -- plus the blocking pair: a family that DECLARED the
+ * kernel and never effectively attached it. What the walk cannot resolve is
+ * printed and fails closed, because a gate that credits what it cannot see
+ * certifies an adoption nobody measured.
+ */
+export function measureDragAndDropArm(resolved, parsed) {
+  const { root, componentDirs } = resolved;
+  const rel = (file) => toPosix(relative(root, file));
+  const analyses = parsed.map(({ file, source }) => analyzeDragAndDrop(file, source));
+
+  const rows = [];
+  let wired = analyses.some((entry) => entry.attachments.some((element) => element.effective));
+
+  for (const entry of analyses) {
+    for (const delegation of entry.delegations) {
+      const owner = analyses.find((candidate) => candidate.declaredComponents.has(delegation.component));
+      if (owner && owner.spreadsProp(delegation.prop)) {
+        wired = true;
+        continue;
+      }
+      rows.push(`DELEGATED-UNVERIFIED ${rel(entry.file)}:${delegation.line} <${delegation.component}>`);
+    }
+    for (const element of entry.attachments) {
+      if (element.unverified) {
+        rows.push(`SPREAD-UNVERIFIED ${rel(entry.file)}:${element.line} <${element.element}>`);
+        continue;
+      }
+      if (!element.effective) {
+        rows.push(
+          `OVERWRITTEN ${rel(entry.file)}:${element.line} <${element.element}> ${element.overwritten.join(',')}`,
+        );
+      }
+    }
+  }
+
+  const frozen = familyFrozenModules(componentDirs)
+    .map((file) => ({ file, ...analyzeDragAndDrop(file) }))
+    .filter((entry) => entry.transportOwner || entry.dropZoneOwner)
+    .map((entry) => ({
+      file: rel(entry.file),
+      reason: entry.transportOwner ? 'frozen engine, transport owner' : 'frozen engine, drop zone owner',
+    }));
+
+  return {
+    transportOwners: analyses.filter((entry) => entry.transportOwner).map((entry) => rel(entry.file)),
+    dropZoneOwners: analyses.filter((entry) => entry.dropZoneOwner).map((entry) => rel(entry.file)),
+    declared: analyses.some((entry) => entry.declaresKernel),
+    wired,
+    rows,
+    frozen,
+  };
+}
+
 export function measureFamily(resolved, { producers } = {}) {
   const { family, root } = resolved;
   const producerSet = producers ?? collectChannelProducers().producers;
 
-  const sources = resolved.sources.map((file) => analyzeSource(file));
+  /* One parse per source: the anatomy reader and the DnD arm read the same
+   * tree rather than building it twice. */
+  const parsed = resolved.sources.map((file) => ({
+    file,
+    source: ts.createSourceFile(
+      file,
+      readFileSync(file, 'utf8'),
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TSX,
+    ),
+  }));
+  const sources = parsed.map(({ file, source }) => analyzeSource(file, source));
   const skins = resolved.skins.map((file) => analyzeSkin(file));
+  const dnd = measureDragAndDropArm(resolved, parsed);
   const recipeTokens = new Set();
   if (resolved.recipe) {
     for (const token of analyzeSource(resolved.recipe).classTokens) recipeTokens.add(token);
@@ -1207,6 +1676,8 @@ export function measureFamily(resolved, { producers } = {}) {
       stateGoverned: skinUsesStateAttribute ? usesPartAttributes : true,
       a11yProbes: resolved.a11yProbes.length,
       a11yAssertions: resolved.a11yAssertions ?? 0,
+      dndKernelDeclared: dnd.declared,
+      dndKernelWired: dnd.wired,
       adaptSlot,
       skeleton,
     },
@@ -1220,6 +1691,8 @@ export function measureFamily(resolved, { producers } = {}) {
       unpairedStatePseudoSelectors: unpairedStatePseudo.length,
       colorLiteralsInSkin: colorLiteralsInSkin.length,
       fanOutUnreached: fanOut.filter((row) => row.unreached).length,
+      dndTransportOwners: dnd.transportOwners.length,
+      dndDropZoneOwners: dnd.dropZoneOwners.length,
     },
     detail: {
       vocabularies,
@@ -1234,6 +1707,10 @@ export function measureFamily(resolved, { producers } = {}) {
       partsReadThroughComponent: [...anchoredParts].sort(),
       readWithoutProducer: readWithoutProducer.debt,
       fanOut,
+      dndTransportOwners: dnd.transportOwners,
+      dndDropZoneOwners: dnd.dropZoneOwners,
+      dndUnverified: dnd.rows,
+      dndFrozen: dnd.frozen,
       owners: resolved.componentDirs.map((dir) => toPosix(relative(root, dir))),
       ownerCandidates: resolved.ownerCandidates ?? [],
       pinnedOwner: resolved.pinnedOwner,
@@ -1263,6 +1740,8 @@ const RATCHET_LABEL = Object.freeze({
   unpairedStatePseudoSelectors: 'state pseudo-classes deciding state without their `data-state` twin',
   colorLiteralsInSkin: 'colour literals in the family skin',
   fanOutUnreached: 'catalog controls that declare this family and reach none of its channels',
+  dndTransportOwners: 'files carrying their own HTML5 drag transport instead of the shared kernel (F-69)',
+  dndDropZoneOwners: 'files carrying their own external-file drop zone instead of the shared kernel (F-69)',
 });
 
 export function judgeFamily(measured, pinned) {
@@ -1347,6 +1826,18 @@ export function judgeFamily(measured, pinned) {
       );
     }
   }
+  /* F-69: the arm means exactly one thing -- you brought the kernel in and did
+   * not attach it. The `declared` conjunct is what keeps it silent on a family
+   * that has not adopted yet; the two ratchets carry the "must reach zero"
+   * half, and reaching zero is the consolidation criterion. */
+  if (blocking.dndKernelDeclared && !blocking.dndKernelWired) {
+    findings.push(
+      `${family}: BLOCKING the DnD kernel is declared and never effectively attached -- `
+        + 'JSX resolves later attributes and later spreads over an earlier one, so a spread bag whose '
+        + 'kernel-owned props are overwritten (or followed by a spread this gate cannot enumerate) never '
+        + `reaches the DOM${detail.dndUnverified?.length ? `: ${JSON.stringify(detail.dndUnverified).slice(0, 400)}` : ''}`,
+    );
+  }
   if (blocking.a11yAssertions === 0) {
     findings.push(
       `${family}: BLOCKING the family owns no executable accessibility assertion; a cut without an a11y probe is not verified`,
@@ -1430,6 +1921,16 @@ function main() {
 
   for (const arm of OWED_ARMS) {
     console.log(`family-cut OWED ${arm.id} -> ${arm.owner}: ${arm.reason}`);
+  }
+  /* Printed before the verdict, because what the DnD walk cannot resolve is
+   * evidence whether or not the run goes red. */
+  for (const measured of measurements) {
+    for (const row of measured.detail.dndUnverified ?? []) {
+      console.log(`family-cut DND ${measured.family}: ${row}`);
+    }
+    for (const frozen of measured.detail.dndFrozen ?? []) {
+      console.log(`family-cut EXCLUDED -- ${measured.family}: ${frozen.file} (${frozen.reason})`);
+    }
   }
   if (findings.length > 0) {
     console.error('family-cut FAILED:');

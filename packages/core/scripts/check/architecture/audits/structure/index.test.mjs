@@ -138,6 +138,7 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       'roving-focus': 0,
       typeahead: 0,
       listbox: 1,
+      sortable: 1,
     },
     'foundation/contracts': {
       ambient: 0,
@@ -271,7 +272,7 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
   assert.equal(owners.length, 26);
-  assert.equal(rankedChildren.length, 98);
+  assert.equal(rankedChildren.length, 99);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
@@ -617,6 +618,41 @@ test('the listbox kernel composes the collection kernels, and a kernel below it 
       assert(!ids.has(`local-layer-inversion:${owner}/listbox/index.ts->${owner}/${kernel}/index.ts`));
     }
     assert(ids.has(`local-layer-inversion:${owner}/combobox/index.ts->${owner}/listbox/index.ts`));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the sortable kernel consumes roving focus, and the reverse edge is an inversion by name', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'components/primitives/runtime/collection';
+    write(
+      resolve(sourceRoot, `${owner}/sortable/index.ts`),
+      "import { resolveNavigationIntent } from '../roving-focus';\nexport const sortable = resolveNavigationIntent;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/roving-focus/index.ts`),
+      "import { sortable } from '../sortable';\nexport const resolveNavigationIntent = sortable;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/listbox/index.ts`),
+      "import { sortable } from '../sortable';\nexport const listbox = sortable;\n",
+    );
+
+    const result = auditCoreStructure({ packageRoot, sourceRoot });
+    assertEveryImportResolved(result);
+    const ids = new Set(result.findings.map(({ id }) => id));
+
+    const admitted = `${owner}/sortable/index.ts->${owner}/roving-focus/index.ts`;
+    assert(!ids.has(`sibling-owner-dependency:${admitted}`), `the kernel composes the key law: ${admitted}`);
+    assert(!ids.has(`local-layer-inversion:${admitted}`), `the kernel composes the key law: ${admitted}`);
+    // The reverse edge is refused under its OWN finding id: asserting only the
+    // absence of the sibling one would be green on a rank that admitted both
+    // directions.
+    assert(ids.has(`local-layer-inversion:${owner}/roving-focus/index.ts->${owner}/sortable/index.ts`));
+    // Equal rank is not permission: listbox and sortable stay peers.
+    assert(ids.has(`sibling-owner-dependency:${owner}/listbox/index.ts->${owner}/sortable/index.ts`));
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });
   }
