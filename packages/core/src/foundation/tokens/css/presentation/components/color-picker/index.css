@@ -25,3 +25,18 @@
   --ds-color-picker-check-transform: translate(-50%, -65%) rotate(-45deg);
   --ds-color-picker-touch-target-min: var(--ds-touch-target-min);
 }
+
+/**
+ * The checkmark is centred by a PAIR: the skin anchors it with
+ * `inset-inline-start: 50%` and this channel pulls it back half its own width.
+ * The anchor mirrors with the reading direction and the pull-back has to travel
+ * with it -- under RTL the anchored edge is the right one, so the retreat is
+ * positive. Declared on the part itself (the `::after` inherits it), so a
+ * portalled panel is judged by its own resolved directionality.
+ * The rotation is untouched: a transform list applies the translate in the
+ * element's unrotated box, so mirroring only the x offset moves the glyph
+ * without redrawing it -- the two border strokes stay the same tick.
+ */
+[data-part='preset-swatch']:dir(rtl) {
+  --ds-color-picker-check-transform: translate(50%, -65%) rotate(-45deg);
+}
