@@ -89,7 +89,7 @@ import {
   useRadioGroup,
   type RadioGroupContextValue,
 } from '../../runtime/group-context';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n/composition/translation';
 import { Radio } from '../..';
 
 export { useRadioGroup };
