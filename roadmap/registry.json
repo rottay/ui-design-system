@@ -5190,6 +5190,11 @@
      "at": "2026-09-17 14:02",
      "by": "kimi-dt",
      "note": "Despachado W5 (Opus, claude-admin): export-kernel, lote 1 de la cola autorizada (D16). Nuevo owner infrastructure/runtime/application/data/runtime/export-kernel (downloadBlob, escapeDelimited, serializeDelimited, writeClipboard) + adopcion interna en table-export, pdf-export, export-button/file-export y 4 sitios de clipboard (saved-views-menu, selection-preview-rail, code-block, record/field); charts FUERA (FAM-09); ExportButton publico sin cambio; equivalencia byte a byte exigida. Disjunto de W1 (data-table). Reserva registrada: saved-views-menu/index.tsx queda con W5 hasta su entrega — el lote F-81 (CountPill x2: saved-views-menu + column-menu; roving focus en table-toolbar/active-filters-bar) se despacha tras la liberacion. Integracion del kernel condicionada a revision de contrato (shared kernel) por el DT antes del commit."
+    },
+    {
+     "at": "2026-09-17 14:18",
+     "by": "kimi-dt",
+     "note": "R17-01 INTEGRADO 8638413ae (writer W1, recibo claude-opus-5; auditoria e integracion Kimi): el modelo de coordenadas ARIA cuenta e indexa la secuencia expuesta (group headers interactivos indexados, detail rows body+1, miembros colapsados no contados, spacers virtualizados aria-hidden, aria-rowcount=-1 honesto con paginacion remota estructural). Implementacion en vuelo preservada byte-identica (sha256 verificado); suite aria 4->11 casos con 7 sondas mutantes red->green; 28/28 focales corridos por el DT. El counterexample de la auditoria queda cubierto por regresion. Reserva data-table REASIGNADA a W7 (consumes inertes R17-04: spelling tipografico x2, route-or-retire de spacing.rhythm/surfaces.controlHeight/roleWeights, pins de inercia se invierten a causalidad o retiro con evidencia; catalogo singleton del DT)."
     }
    ]
   },
@@ -5893,6 +5898,11 @@
      "at": "2026-09-17 13:57",
      "by": "kimi-dt",
      "note": "SUCESION DT 2026-09-17 (ver WO-FAM-08). Despachado W4 (R17-07, SOLO LECTURA + un informe en evidence/r17-07-cascade-attribution/index.md): atribucion por conjuntos nombrados del cascade-ratchet (2346/2079, 2359/2114, denominador 5439/5210) — clases (a) deuda preexistente mal baselineada, (b) nombres nuevos del delta b29cf1e20..814927519, (c) movimientos de denominador; cruzado con dt-gate-attribution-2026-09-16 (baseline falsa al escribirse: 2427 medido vs 2079 escrito en 8bcc3852b). Sin escritura de baseline ni fuente. decisions-lit (R17-06): republicacion solo sobre la puerta actual, pendiente de la atribucion W4 para no fijar una puerta que el repair path vaya a mover."
+    },
+    {
+     "at": "2026-09-17 14:18",
+     "by": "kimi-dt",
+     "note": "R17-07 atribucion RECIBIDA e integrada como evidencia (evidence/r17-07-cascade-attribution/index.md, writer W4 claude-opus-5, verificacion del DT: defecto --ds-listing-grid-bottom-bleed sin productor confirmado por grep; ratchet en vivo reproduce 5439/2346/2359). Descomposicion del +267: +348 pin falso (8bcc3852b escribio 2079 donde su propio gate mide 2427 — enumeracion manual en lugar del censo; las 9 escrituras previas son honestas), -90 mejora real de los cuts, +9 delta auditado (4 renames + 8 producidos con fallback literal + 1 defecto real). Confirmada la cifra 2427 del DT saliente; corregida su clase '251 nombres' (era resta escalar; movimiento real +328/-425, neto -97). Despachado W8 (P0+P1 del repair path, SIN tocar baseline: re-anclaje a 5439/2346/2359 o pin de conjunto nombrado = decision del owner, pendiente). P5: 330 nombres frozen-only irrepairables por politica — poblacion frozen separada o excepcion escrita, tambien owner. Instrumento: propuesta de pinear conjuntos nombrados en vez de escalares (debrief core antes de adoptar)."
     }
    ]
   },
