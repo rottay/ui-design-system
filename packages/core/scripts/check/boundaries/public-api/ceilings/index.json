@@ -181,16 +181,16 @@
       "maxSourceBytes": 269450
     },
     "./primitives/modal": {
-      "maxReachableModules": 52,
-      "maxSourceBytes": 186535
+      "maxReachableModules": 44,
+      "maxSourceBytes": 170149
     },
     "./primitives/progress": {
       "maxReachableModules": 20,
       "maxSourceBytes": 110795
     },
     "./primitives/radio": {
-      "maxReachableModules": 47,
-      "maxSourceBytes": 158987
+      "maxReachableModules": 37,
+      "maxSourceBytes": 142601
     },
     "./primitives/responsive": {
       "maxReachableModules": 5,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "2026-09-16 (WO-DER-08 studio transport lot over f61a9da9f BrandTheme->FlatTheme): ./runtime/visual-authority measured graph 73544 -> 73535 bytes (-9: kernel/foundation/css/tenant-selectors -7, runtime -2), reachable modules unchanged at 9; the exact pin follows the graph down.",
+  "lastMove": "2026-09-17 (owner backlog D1, commit after 45e5f23a9): radio and modal import useOptionalTranslation from i18n/composition/translation instead of the root i18n barrel, shedding the Intl formatting kernel they never used — ./primitives/radio 45 -> 37 modules, 158987 -> 142601 bytes; ./primitives/modal 52 -> 44 modules, 186535 -> 170149 bytes; measured with the gate walker at HEAD; a decrease, no --widen.",
   "lastMoveKind": "decrece-solo — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 0 subido(s), 0 sin ancla valida"
 }

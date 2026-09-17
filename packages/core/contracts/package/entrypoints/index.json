@@ -668,8 +668,8 @@
       "output": "entrypoints/public/primitives/radio/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 47,
-        "maxSourceBytes": 158987
+        "maxReachableModules": 37,
+        "maxSourceBytes": 142601
       },
       "symbols": [
         {
@@ -1213,8 +1213,8 @@
       "output": "entrypoints/public/primitives/modal/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 52,
-        "maxSourceBytes": 186535
+        "maxReachableModules": 44,
+        "maxSourceBytes": 170149
       },
       "symbols": [
         {
