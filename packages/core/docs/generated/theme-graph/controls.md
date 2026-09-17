@@ -8,39 +8,39 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: dffcec40545c6ca4ff5c432cf90b07d435e7fce32c30da3e91ebb4d429a003ea
+digest: 2f9e3452476ac0d0c4cafd97febbbf9f3e1762c65cdfa2054fcaf2fa6f6bcdba
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
 | `chrome.anatomy` | pro | 1 | 6 | 13 | 3 |
-| `density.mode` | standard | 5 | 26 | 758 | 203 |
-| `experience.profile` | standard | 7 | 143 | 1597 | 238 |
+| `density.mode` | standard | 5 | 26 | 759 | 203 |
+| `experience.profile` | standard | 7 | 144 | 1602 | 238 |
 | `motion.character` | pro | 19 | 556 | 769 | 200 |
 | `motion.dial` | standard | 19 | 556 | 769 | 200 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 13 | 3 |
-| `palette.contrast-posture` | pro | 61 | 1826 | 3397 | 245 |
+| `palette.contrast-posture` | pro | 61 | 1833 | 3405 | 245 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 61 | 1826 | 3397 | 245 |
-| `palette.seeds` | standard | 65 | 1922 | 3594 | 245 |
-| `palette.status-seeds` | standard | 64 | 1912 | 3574 | 245 |
-| `profiles.expressive` | pro | 7 | 143 | 1597 | 238 |
+| `palette.neutral-temperature` | standard | 61 | 1833 | 3405 | 245 |
+| `palette.seeds` | standard | 65 | 1929 | 3602 | 245 |
+| `palette.status-seeds` | standard | 64 | 1919 | 3582 | 245 |
+| `profiles.expressive` | pro | 7 | 144 | 1602 | 238 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 26 | 26 | 1 |
 | `shape.button-style` | standard | 7 | 54 | 662 | 215 |
-| `shape.control-height` | standard | 8 | 149 | 237 | 54 |
+| `shape.control-height` | standard | 8 | 156 | 244 | 54 |
 | `shape.nesting` | pro | 5 | 33 | 97 | 42 |
-| `shape.radius-scale` | standard | 27 | 880 | 1469 | 218 |
+| `shape.radius-scale` | standard | 27 | 887 | 1476 | 218 |
 | `spacing.rhythm` | standard | 5 | 25 | 121 | 42 |
-| `states.emphasis` | standard | 7 | 82 | 823 | 204 |
-| `states.focus-style` | standard | 11 | 256 | 977 | 204 |
+| `states.emphasis` | standard | 7 | 82 | 825 | 204 |
+| `states.focus-style` | standard | 11 | 256 | 979 | 204 |
 | `surfaces.border-style` | standard | 5 | 38 | 173 | 78 |
 | `surfaces.effect-intensity` | standard | 4 | 24 | 59 | 25 |
-| `surfaces.elevation-posture` | standard | 38 | 1334 | 1532 | 105 |
-| `typography.families` | pro | 2 | 129 | 359 | 146 |
-| `typography.numeric` | pro | 4 | 242 | 472 | 146 |
-| `typography.pairing` | standard | 3 | 131 | 860 | 211 |
-| `typography.role-weights` | standard | 11 | 404 | 633 | 147 |
-| `typography.scale` | standard | 3 | 131 | 860 | 211 |
+| `surfaces.elevation-posture` | standard | 38 | 1341 | 1539 | 105 |
+| `typography.families` | pro | 2 | 130 | 363 | 146 |
+| `typography.numeric` | pro | 4 | 243 | 476 | 146 |
+| `typography.pairing` | standard | 3 | 132 | 864 | 211 |
+| `typography.role-weights` | standard | 11 | 405 | 637 | 147 |
+| `typography.scale` | standard | 3 | 132 | 864 | 211 |
 
 ## Decisions that reach no family
 

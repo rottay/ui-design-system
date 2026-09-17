@@ -10335,6 +10335,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-rate-active-color: var(--ds-color-warning-400);
   --ds-rate-inactive-color: var(--ds-color-neutral-300);
   --ds-rate-hover-color: var(--ds-color-warning-500);
+  /* Resting value of the per-star fill hatch the engines stamp inline. */
+  --ds-rate-star-fill: var(--ds-rate-inactive-color);
 
   /* ========================================================================
      SPACING
@@ -11340,6 +11342,8 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-collection-card-status-border: var(--ds-premium-card-status-border);
   --ds-collection-card-status-color: var(--ds-premium-card-status-color);
   --ds-collection-card-action-color: var(--ds-premium-card-action-color);
+  /* Opt-in motif: the resting value is the absence of a grid line. */
+  --ds-collection-card-grid-line: transparent;
 
   /* The listing grid's gap is room between cards, so it takes rhythm; the
      min-card widths below are card SIZE and stay exact. A tenant artifact that
@@ -28593,12 +28597,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   --ds-button-ghost-border-hover: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   --ds-button-ghost-color-hover: var(--ds-color-text-primary);
   --ds-button-ghost-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card));
-}
-
-/* Keyboard focus: the ring recipe is the panel's one :focus-visible
-   decision, delivered through the button focus-ring channel (the inset
-   highlight survives so the ring keeps the family signature). */
-.ds-structure.ds-field-filters-panel [data-part='preset-chip']:focus-visible {
+  /* The ring recipe rides the same channel block: the Button applies
+     --ds-button-focus-ring only when IT decides focus is visible, so a second
+     :focus-visible here would gate a channel that is already inert until then
+     (the inset highlight survives so the ring keeps the family signature). */
   --ds-button-focus-ring:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent),
     0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
@@ -28827,10 +28829,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
  * are banned by the source-gated contract.
  *
  * SOURCE-GATED CONTRACT RULES (FilterPanel.real-engines.test.tsx reads this
- * file): the `[data-part='reset-button']:hover` rule and a
- * `[data-part='input']…:focus` selector must exist. The hover rides inside the
- * `@media (hover: hover)` guard (house hover law) with an unguarded `:active`
- * twin; the input slot's `:focus-within` variant is in the geometry rule
+ * file): the reset button's hover/press tone must live here as the composed
+ * Button's ghost channels — never as imperative handlers and never as a second
+ * `:hover`/`:active` decision — and a `[data-part='input']…:focus` selector
+ * must exist. The input slot's `:focus-within` variant is in the geometry rule
  * below: the composed Input/InputNumber owns its chrome and focus ring, so
  * the slot deliberately paints nothing on focus — the selector documents the
  * pass-through.
@@ -28899,19 +28901,18 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   transform: rotate(90deg);
 }
 
-/* ---- reset (clear-all) ghost Button: the source-gated pointer treatment.
-        Hover law: the hover variant lives inside the (hover: hover) guard
-        below; this unguarded :active twin gives touch the same feedback. ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:active {
-  color: var(--ds-color-error);
-  background: var(--ds-surface-highlight);
-}
-
-@media (hover: hover) {
-  .ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:hover {
-    color: var(--ds-color-error);
-    background: var(--ds-surface-highlight);
-  }
+/* ---- reset (clear-all) ghost Button: the pattern owns the TONE, the
+        primitive owns the DECISION. The composed ghost Button already decides
+        hover and press once (kernel `data-state` with the platform pseudo-class
+        as its fallback) and paints them from these channels -- its hover arm
+        sits inside the same (hover: hover) guard, its press arm outside it --
+        so the panel states the two washes here instead of taking a second
+        decision of its own. ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'] {
+  --ds-button-ghost-color-hover: var(--ds-color-error);
+  --ds-button-ghost-bg-hover: var(--ds-surface-highlight);
+  --ds-button-ghost-color-active: var(--ds-color-error);
+  --ds-button-ghost-bg-active: var(--ds-surface-highlight);
 }
 
 /* ---- fields container: the two layouts (geometry drained from the engine) ---- */
@@ -30677,7 +30678,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   width: 100%;
   min-width: 0;
   color: var(--ds-table-cell-color, var(--ds-color-text-primary));
-  font-family: var(--ds-typography-body-family, inherit);
+  font-family: var(--ds-type-body-font-family, inherit);
   contain: layout style;
   container-name: ds-table;
   container-type: inline-size;
@@ -30914,10 +30915,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   max-inline-size: var(--ds-data-table-state-copy-max-inline-size, 32rem);
   text-align: center;
   text-wrap: balance;
-  font-family: var(--ds-typography-section-title-family, inherit);
+  font-family: var(--ds-type-section-title-font-family, inherit);
   font-size: var(--ds-data-table-empty-title-font-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-typography-section-title-weight, 600);
-  letter-spacing: var(--ds-typography-section-title-tracking, -0.01em);
+  font-weight: var(
+    --ds-data-table-empty-title-font-weight,
+    var(--ds-type-section-title-font-weight, 600)
+  );
+  letter-spacing: var(--ds-type-section-title-letter-spacing, -0.01em);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="state-description"] {
@@ -30967,7 +30971,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   font-size: var(--ds-table-header-font-size, 13px);
   font-family: var(
     --ds-data-table-header-font-family,
-    var(--ds-typography-label-family, inherit)
+    var(--ds-type-label-font-family, inherit)
   );
   font-weight: var(--ds-table-header-font-weight, 500);
   letter-spacing: var(
@@ -31366,12 +31370,15 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
-  font-family: var(--ds-typography-section-title-family, inherit);
+  font-family: var(--ds-type-section-title-font-family, inherit);
   font-size: var(
     --ds-data-table-group-header-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
-  font-weight: var(--ds-typography-section-title-weight, 600);
+  font-weight: var(
+    --ds-data-table-group-header-font-weight,
+    var(--ds-type-section-title-font-weight, 600)
+  );
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-content"] {
@@ -32561,7 +32568,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="header-cell"] {
   padding-block: var(--ds-data-table-editorial-header-padding-block, 1rem);
-  font-family: var(--ds-typography-label-family, inherit);
+  font-family: var(
+    --ds-data-table-header-font-family,
+    var(--ds-type-label-font-family, inherit)
+  );
   letter-spacing: var(--ds-typography-label-tracking, 0.08em);
   text-transform: var(--ds-data-table-editorial-header-transform, uppercase);
 }
@@ -32573,13 +32583,16 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="data-cell"]:first-of-type {
-  font-family: var(--ds-typography-section-title-family, inherit);
-  font-weight: var(--ds-typography-section-title-weight, 600);
+  font-family: var(--ds-type-section-title-font-family, inherit);
+  font-weight: var(
+    --ds-data-table-editorial-lead-font-weight,
+    var(--ds-type-section-title-font-weight, 600)
+  );
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="pagination-bar"] {
-  font-family: var(--ds-typography-supporting-family, inherit);
+  font-family: var(--ds-type-supporting-font-family, inherit);
 }
 
 @media (hover: hover) {
@@ -33440,16 +33453,16 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
         Text prop-swapped to color="subtle", not a rule) ---- */
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-title"] {
   color: var(--ds-color-text-primary);
-  font-family: var(--ds-typography-section-title-family, inherit);
-  font-weight: var(--ds-typography-section-title-weight, 600);
+  font-family: var(--ds-type-section-title-font-family, inherit);
+  font-weight: var(--ds-type-section-title-font-weight, 600);
 }
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-card-summary-label"] {
   flex-shrink: 0;
-  font-family: var(--ds-typography-label-family, inherit);
+  font-family: var(--ds-type-label-font-family, inherit);
   font-size: var(--ds-typography-label-size, 0.6875rem);
-  font-weight: var(--ds-typography-label-weight, 600);
-  letter-spacing: var(--ds-typography-label-tracking, 0.04em);
+  font-weight: var(--ds-type-label-font-weight, 600);
+  letter-spacing: var(--ds-type-label-letter-spacing, 0.04em);
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 .ds-pattern-data-table.ds-data-table--mobile
@@ -33498,19 +33511,23 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-bulk-count"] {
-  font-size: var(--ds-typography-supporting-size, 0.8125rem);
-  font-weight: var(--ds-typography-label-weight, 600);
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
+  font-weight: var(--ds-type-label-font-weight, 600);
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-bulk-actions"] {
   padding: var(--ds-table-mobile-bulk-padding, 0.625rem 0.75rem);
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
-  background: color-mix(
-    in srgb,
-    var(--ds-color-primary) 7%,
-    var(--ds-surface-card)
+  background: var(
+    --ds-data-table-mobile-bulk-bar-bg,
+    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
   );
+  /* The bar owns the ground, so it owns the quiet ink measured against it; the
+     count inherits this instead of a page role blind to a tinted well. The
+     fallback is the page's reading ink: an unproduced channel must fail to the
+     legible extreme, never to no ink and never to a second copy of the weight. */
+  color: var(--ds-data-table-mobile-bulk-bar-ink, var(--ds-color-text-primary));
   box-shadow: var(--ds-elevation-1);
 }
 
@@ -33522,7 +33539,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-pagination"] {
   padding: var(--ds-table-mobile-pagination-padding, 0.625rem 0.75rem);
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
-  background: var(--ds-surface-inset, var(--ds-surface-panel));
+  background: var(
+    --ds-data-table-mobile-pagination-bg,
+    var(--ds-surface-inset, var(--ds-surface-panel))
+  );
+  /* Same pair as the bulk bar: the inset ground carries its own quiet ink, and
+     the range inherits it. The page number states `default` and keeps the lead. */
+  color: var(--ds-data-table-mobile-pagination-ink, var(--ds-color-text-primary));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
@@ -33534,7 +33557,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part="mobile-pagination-range"],
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-pagination-page"] {
-  font-size: var(--ds-typography-supporting-size, 0.8125rem);
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
   font-variant-numeric: tabular-nums;
 }
 
@@ -33651,7 +33674,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="record-meta-value"] {
   min-inline-size: 0;
-  font-size: var(--ds-typography-supporting-size, 0.8125rem);
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
   overflow-wrap: anywhere;
 }
 
@@ -60929,6 +60952,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  */
 
 .rottay-app-shell {
+  /* Resting values for the channels the React root re-stamps per instance:
+     the physical inset bridges, and the default-geometry main transition. */
+  --ds-shell-safe-area-top: env(safe-area-inset-top, 0px);
+  --ds-shell-safe-area-right: env(safe-area-inset-right, 0px);
+  --ds-shell-safe-area-left: env(safe-area-inset-left, 0px);
+  --ds-shell-bottom-inset: env(safe-area-inset-bottom, 0px);
+  --ds-shell-resolved-main-transition: margin-inline-start 220ms cubic-bezier(0.16, 1, 0.3, 1);
   min-height: 100dvh;
   display: flex;
   background: var(--ds-shell-background, var(--ds-surface-canvas));
@@ -93012,16 +93042,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * Primitive paint remains owned by Button/Input/Badge. Toolbar selectors below
  * only tune their composition through pattern classes and semantic data state.
  *
- * P-79 NOTE (Pass-2 falsification, 2026-07): Text primitives stamp their own
- * `data-part='root'` and DROP the caller's data-part — production-verified:
- * `[data-part='title']` matched 0 nodes on :7001 and the title computed to
- * font-weight 400 / letter-spacing normal / no ellipsis instead of this
- * skin's treatment. Icon components DO forward the caller's data-part. Every
- * Text-part rule below is therefore keyed on the pattern's repeated BEM class
- * — attribute and class weigh identically in the cascade, so specificity (and
- * paint precedence) is unchanged while the rules actually match. The two icon
- * rules were re-keyed class-side for uniformity. Box/Flex/Stack/Tag forward
- * caller data-part and keep their part-keyed rules.
+ * ANATOMY NOTE: every part this pattern stamps reaches the DOM on the SAME node
+ * that carries its BEM class — Text forwards the caller's `data-part` today
+ * (`primitives/display/typography/engines/modern`), which falsifies the 2026-07
+ * P-79 reading that it dropped it. The rules below therefore compound class AND
+ * part: the class keeps the match exact (`data-part` is a shared vocabulary an
+ * inner Popover title would also answer), the part is the anatomy contract.
  *
  * W10 NOTE (second visual pass, 2026-07): the independent code audit verdict flagged the
  * toolbar as 'too many nested boxes, inconsistent radii and heights'. The
@@ -93205,7 +93231,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.ds-button.ds-button {
+  .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -93236,7 +93262,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.ds-button.ds-button:hover {
+    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -93256,7 +93282,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    aria-expanded onto the IconButton, and the trigger reads as 'pressed' for
    as long as its panel lives. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.ds-button[data-variant][aria-expanded='true'] {
+  .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button[data-variant][aria-expanded='true'] {
   background: var(
     --ds-filter-pill-hover-bg,
     var(
@@ -93273,13 +93299,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   :is(
-    .ds-list-toolbar__icon-button,
-    .ds-list-toolbar__filter-trigger,
-    .ds-list-toolbar__filter-dropdown-item,
-    .ds-list-toolbar__density-option,
-    .ds-list-toolbar__mobile-overflow-item,
-    .ds-list-toolbar__clear-all,
-    .ds-list-toolbar__primary-action,
+    .ds-list-toolbar__icon-button[data-part='icon-button'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+    .ds-list-toolbar__density-option[data-part='density-option'],
+    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+    .ds-list-toolbar__clear-all[data-part='clear-all'],
+    .ds-list-toolbar__primary-action[data-part='primary-action'],
     .ds-list-toolbar__primary-action-mobile
   ).ds-button[data-variant]:focus-visible {
   outline: none;
@@ -93294,13 +93320,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   :is(
-    .ds-list-toolbar__icon-button,
-    .ds-list-toolbar__filter-trigger,
-    .ds-list-toolbar__filter-dropdown-item,
-    .ds-list-toolbar__density-option,
-    .ds-list-toolbar__mobile-overflow-item,
-    .ds-list-toolbar__clear-all,
-    .ds-list-toolbar__primary-action,
+    .ds-list-toolbar__icon-button[data-part='icon-button'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+    .ds-list-toolbar__density-option[data-part='density-option'],
+    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+    .ds-list-toolbar__clear-all[data-part='clear-all'],
+    .ds-list-toolbar__primary-action[data-part='primary-action'],
     .ds-list-toolbar__primary-action-mobile
   ).ds-button[data-variant]:active:not(:disabled) {
   transform: scale(var(--ds-toolbar-control-pressed-scale, 0.975));
@@ -93389,7 +93415,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-block: var(--ds-spacing-2, 0.5rem);
 }
 
-.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
+.ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty {
   padding: var(--ds-spacing-4, 1rem) var(--ds-spacing-3, 0.75rem);
   font-family: var(--ds-type-supporting-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-supporting-font-size, 0.8125rem);
@@ -93399,7 +93425,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant] {
   flex: 0 0 auto;
   white-space: nowrap;
   border-radius: var(
@@ -93435,7 +93461,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-active='true'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -93453,19 +93479,19 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    dash; an invalid value needs repair, so its frame tightens to a dotted rule
    and the ink shifts to the semantic error role. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='draft'] {
   border-style: dashed;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='invalid'] {
   border-style: dotted;
   border-color: var(--ds-color-error);
   color: var(--ds-color-error);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-open='true'] {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-open='true'] {
   border-color: var(
     --ds-filter-pill-active-border,
     var(--ds-material-control-border-hover, var(--ds-color-primary))
@@ -93478,7 +93504,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -93497,7 +93523,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.ds-button[data-variant]:focus-visible {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:focus-visible {
   box-shadow: var(
     --ds-filter-pill-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
@@ -93505,7 +93531,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-badge {
+  .ds-list-toolbar__filter-badge[data-part='filter-badge'] {
   border-radius: var(
     --ds-toolbar-count-radius,
     var(--ds-radius-full, 9999px)
@@ -93526,7 +93552,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant] {
+  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -93541,7 +93567,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant][data-selected='true'] {
+  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant][data-selected='true'] {
   background: var(
     --ds-filter-pill-active-bg,
     color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
@@ -93558,7 +93584,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant]:hover:not(
     [data-selected='true']
   ) {
     background: var(
@@ -93572,12 +93598,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
+  .ds-list-toolbar__settings-empty[data-part='settings-empty'].ds-list-toolbar__settings-empty.ds-list-toolbar__settings-empty {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.ds-button[data-variant] {
+  .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border-radius: var(
@@ -93591,7 +93617,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.ds-button[data-variant][data-active='true'] {
+  .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -93602,7 +93628,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant]:hover:not(
     [data-active='true']
   ) {
     border-color: var(
@@ -93632,7 +93658,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label {
+  .ds-list-toolbar__mobile-overflow-label[data-part='mobile-overflow-label'].ds-list-toolbar__mobile-overflow-label.ds-list-toolbar__mobile-overflow-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   display: block;
   margin-block-end: var(--ds-spacing-2, 0.5rem);
@@ -93645,7 +93671,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-item.ds-button[data-variant] {
+  .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -93656,7 +93682,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-overflow-item.ds-button[data-variant]:hover {
+    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -93733,7 +93759,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__title.ds-list-toolbar__title.ds-list-toolbar__title {
+  .ds-list-toolbar__title[data-part='title'].ds-list-toolbar__title.ds-list-toolbar__title {
   color: var(--ds-toolbar-color, var(--ds-color-text-primary));
   /* Typography law: family and tracking fall back to the tenant's governed
      section-title role, so an editorial profile (serif heading, wider
@@ -93806,7 +93832,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action.ds-button[data-variant],
+  .ds-list-toolbar__primary-action[data-part='primary-action'].ds-button[data-variant],
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__primary-action-mobile.ds-button[data-variant] {
   flex: 0 0 auto;
@@ -93845,7 +93871,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-rail
-  .ds-list-toolbar__filter-trigger {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'] {
   scroll-snap-align: start;
 }
 
@@ -93891,7 +93917,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-icon.ds-list-toolbar__search-icon {
+  .ds-list-toolbar__search-icon[data-part='search-icon'].ds-list-toolbar__search-icon {
   color: var(--ds-search-icon-color, var(--ds-color-text-muted));
 }
 
@@ -93960,15 +93986,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-icon.ds-list-toolbar__filter-chips-icon {
+  .ds-list-toolbar__filter-chips-icon[data-part='filter-chips-icon'].ds-list-toolbar__filter-chips-icon {
   flex: 0 0 auto;
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count,
+  .ds-list-toolbar__filter-chips-count[data-part='filter-chips-count'].ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count,
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label {
+  .ds-list-toolbar__filter-chip-label[data-part='filter-chip-label'].ds-list-toolbar__filter-chip-label.ds-list-toolbar__filter-chip-label {
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   font-family: var(--ds-type-caption-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-caption-font-size, 0.6875rem);
@@ -93976,7 +94002,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-count.ds-list-toolbar__filter-chips-count {
+  .ds-list-toolbar__filter-chips-count[data-part='filter-chips-count'].ds-list-toolbar__filter-chips-count {
   font-weight: var(--ds-type-label-font-weight, 600);
   white-space: nowrap;
   /* C1: the "N active" summary speaks the same eyebrow voice as the
@@ -94022,7 +94048,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
   color: var(--ds-toolbar-color, var(--ds-color-text-primary));
   font-family: var(--ds-type-label-font-family, var(--ds-font-family-base));
   font-size: var(--ds-type-label-font-size, 0.75rem);
@@ -94067,7 +94093,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='draft']
-  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
   /* C1: draft must read at two meters — hollow dashed frame + REGULAR weight
      + quieted ink, so the provisional chip is visibly ghosted next to the
      solid applied chip even before the status glyph registers. */
@@ -94077,14 +94103,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
-  .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
   color: var(--ds-color-error);
   text-decoration: underline wavy var(--ds-color-error);
   text-underline-offset: 0.18em;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__clear-all.ds-button[data-variant] {
+  .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
   border: 1px solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
@@ -94109,7 +94135,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.ds-button[data-variant]:hover {
+    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant]:hover {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -94126,7 +94152,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__count-badge {
+  .ds-list-toolbar__count-badge[data-part='count-badge'] {
   border-radius: var(
     --ds-toolbar-count-radius,
     var(--ds-radius-full, 9999px)
@@ -94251,7 +94277,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__title.ds-list-toolbar__title {
+    .ds-list-toolbar__title[data-part='title'].ds-list-toolbar__title {
     max-inline-size: none;
   }
 
@@ -94283,13 +94309,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 @media (pointer: coarse) {
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
-      .ds-list-toolbar__icon-button,
-      .ds-list-toolbar__filter-trigger,
-      .ds-list-toolbar__filter-dropdown-item,
-      .ds-list-toolbar__density-option,
-      .ds-list-toolbar__mobile-overflow-item,
-      .ds-list-toolbar__clear-all,
-      .ds-list-toolbar__primary-action,
+      .ds-list-toolbar__icon-button[data-part='icon-button'],
+      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+      .ds-list-toolbar__density-option[data-part='density-option'],
+      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+      .ds-list-toolbar__clear-all[data-part='clear-all'],
+      .ds-list-toolbar__primary-action[data-part='primary-action'],
       .ds-list-toolbar__primary-action-mobile
     ).ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
@@ -94363,13 +94389,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     > [data-part='option'],
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
-      .ds-list-toolbar__icon-button,
-      .ds-list-toolbar__filter-trigger,
-      .ds-list-toolbar__filter-dropdown-item,
-      .ds-list-toolbar__density-option,
-      .ds-list-toolbar__mobile-overflow-item,
-      .ds-list-toolbar__clear-all,
-      .ds-list-toolbar__primary-action,
+      .ds-list-toolbar__icon-button[data-part='icon-button'],
+      .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+      .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'],
+      .ds-list-toolbar__density-option[data-part='density-option'],
+      .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'],
+      .ds-list-toolbar__clear-all[data-part='clear-all'],
+      .ds-list-toolbar__primary-action[data-part='primary-action'],
       .ds-list-toolbar__primary-action-mobile
     ).ds-button[data-variant] {
     animation: none;
@@ -94390,24 +94416,24 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      the dropdown selection rely on primary-tinted fills, so remap them to the
      system highlight pair and let every control keep a visible border. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.ds-button[data-variant],
+    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button[data-variant],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.ds-button[data-variant] {
+    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
     forced-color-adjust: auto;
     border-color: ButtonText;
     box-shadow: none;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-active='true'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-active='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.ds-button[data-variant][data-selected='true'],
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant][data-selected='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.ds-button[data-variant][data-active='true'] {
+    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
@@ -94423,7 +94449,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      rule (wide enough to render both lines) plus the wavy value underline,
      which forced colors preserves by remapping it to CanvasText. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='draft'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='draft'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='draft'] {
     border-style: dashed;
@@ -94432,7 +94458,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.ds-button[data-variant][data-filter-state='invalid'],
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant][data-filter-state='invalid'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'][data-filter-state='invalid'] {
     border-color: ButtonText;
@@ -94447,7 +94473,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-filter-state='invalid']
-    .ds-list-toolbar__filter-chip-value.ds-list-toolbar__filter-chip-value {
+    .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'].ds-list-toolbar__filter-chip-value {
     color: CanvasText;
     text-decoration-color: CanvasText;
   }
@@ -94463,10 +94489,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    below the canonical --ds-touch-target-min channel; fine pointers keep the
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
-  .ds-list-toolbar__icon-button,
-  .ds-list-toolbar__filter-trigger,
-  .ds-list-toolbar__density-option,
-  .ds-list-toolbar__filter-dropdown-item {
+  .ds-list-toolbar__icon-button[data-part='icon-button'],
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'],
+  .ds-list-toolbar__density-option[data-part='density-option'],
+  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -94653,13 +94679,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__pill[data-part='pill'][data-active='false']:hover {
+    .ds-saved-views__pill[data-part='pill'][data-active='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
 /* Touch/active equivalent of the hover wash (4th-tanda law). */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part='pill'][data-active='false']:active {
+  .ds-saved-views__pill[data-part='pill'][data-active='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 
@@ -94711,7 +94737,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill [data-part='pill-select']:focus-visible {
+  .ds-saved-views__pill [data-part='pill-select']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm));
@@ -94803,7 +94829,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__pill:hover .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+    .ds-saved-views__pill:is([data-state~='hovered'], :hover) .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
     opacity: 1;
   }
 }
@@ -94815,32 +94841,32 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-open='true'],
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger']:focus-visible {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger']:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:hover {
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:hover {
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:is([data-state~='hovered'], :hover) {
     background: var(--ds-color-alpha-white-20);
   }
 }
 /* Touch/active equivalents of the hover washes. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:active {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:active {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:is([data-state~='pressed'], :active) {
   background: var(--ds-color-alpha-white-20);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger']:focus-visible {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -94856,9 +94882,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .ds-input-shell,
+  .ds-saved-views__input[data-part='field'] [data-part='rename-input'],
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .ds-input-shell {
+  .ds-saved-views__create-input[data-part='field'] [data-part='create-input'] {
   box-sizing: border-box;
   inline-size: 100%;
   block-size: var(--ds-saved-views-input-height, 26px);
@@ -94876,16 +94902,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .ds-input-shell.ds-input-shell--modern,
+  .ds-saved-views__input[data-part='field'] [data-part='rename-input'].ds-input-shell--modern,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .ds-input-shell.ds-input-shell--modern {
+  .ds-saved-views__create-input[data-part='field'] [data-part='create-input'].ds-input-shell--modern {
   border: 1px solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] .ds-input-shell:focus,
+  .ds-saved-views__input[data-part='field'] [data-part='rename-input']:focus,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] .ds-input-shell:focus {
+  .ds-saved-views__create-input[data-part='field'] [data-part='create-input']:focus {
   border-color: var(--ds-focus-ring-color);
   box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
 }
@@ -94937,18 +94963,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 @media (hover: hover) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-button[data-part='create-button']:hover {
+    .ds-saved-views__create-button[data-part='create-button']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
 /* Touch/active equivalent of the hover wash. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button']:active {
+  .ds-saved-views__create-button[data-part='create-button']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button']:focus-visible {
+  .ds-saved-views__create-button[data-part='create-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -94988,9 +95014,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-pattern-saved-views.ds-engine-modern
     .ds-saved-views__create-button[data-part='create-button'],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__input[data-part='field'] .ds-input-shell,
+    .ds-saved-views__input[data-part='field'] [data-part='rename-input'],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-input[data-part='field'] .ds-input-shell {
+    .ds-saved-views__create-input[data-part='field'] [data-part='create-input'] {
     transition: none;
   }
 }
@@ -101556,14 +101582,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:hover {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-column-settings-row-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
     );
   }
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:active {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:is([data-state~='pressed'], :active) {
   background: var(
     --ds-column-settings-row-bg-hover,
     color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
@@ -101592,21 +101618,21 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:hover:not(:disabled) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     color: var(--ds-color-text-primary);
     opacity: 1;
   }
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:active:not(:disabled) {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   color: var(--ds-color-text-primary);
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:focus-visible {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   opacity: 1;
 }
-.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:disabled {
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='disabled'], :disabled) {
   cursor: default;
   opacity: 0.3;
 }
@@ -101718,7 +101744,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     color: GrayText;
   }
 
-  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:focus-visible {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
@@ -102627,7 +102653,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   gap: var(--ds-grid-view-gap, var(--ds-spacing-4, 16px));
   /* One pixel of bleed on each side so a card's own ring is not clipped, and a
      bottom bleed the listing layer can tune. */
-  padding-block: 1px var(--ds-listing-grid-bottom-bleed, 8px);
+  padding-block: 1px var(--ds-listing-grid-bottom-bleed, var(--ds-spacing-2, 8px));
   padding-inline: 1px;
   overflow: visible;
   box-sizing: border-box;
@@ -116477,6 +116503,11 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 :root {
   --ds-viewport-inline-size: 100dvw;
   --ds-viewport-block-size: 100dvh;
+
+  /* Device inset readings, named once. Every skin that consumed them repeated
+     the same `env()` expression as a fallback; this is that resting value. */
+  --ds-safe-area-top: env(safe-area-inset-top, 0px);
+  --ds-safe-area-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /**
@@ -119749,13 +119780,13 @@ html[lang]:lang(ar) {
   --ds-data-table-action-cell-padding-compact: 0 0.5rem;
   --ds-data-table-action-cell-padding-spacious: 0 0.75rem;
   --ds-data-table-action-shadow: none;
-  --ds-data-table-bulk-bar-padding: 0.625rem 1rem;
+  --ds-data-table-bulk-bar-padding: calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-caption-font-size: var(--ds-font-size-xs);
   --ds-data-table-collapsed-min-inline-size: 34rem;
   --ds-data-table-control-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
-  --ds-data-table-control-size: 2rem;
-  --ds-data-table-control-size-compact: 1.75rem;
-  --ds-data-table-control-size-spacious: 2.25rem;
+  --ds-data-table-control-size: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-data-table-control-size-compact: calc(1.75rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
+  --ds-data-table-control-size-spacious: calc(2.25rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-data-table-drag-grip-bg: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
   --ds-data-table-drag-grip-border: color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent);
   --ds-data-table-drag-grip-opacity: 0.58;
@@ -119773,24 +119804,31 @@ html[lang]:lang(ar) {
   --ds-data-table-editorial-header-bg: transparent;
   --ds-data-table-editorial-header-padding-block: 1rem;
   --ds-data-table-editorial-header-transform: uppercase;
+  --ds-data-table-editorial-lead-font-weight: var(--ds-type-section-title-font-weight, 600);
   --ds-data-table-editorial-row-shadow: var(--ds-elevation-1);
   --ds-data-table-empty-description-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
   --ds-data-table-empty-title-font-size: var(--ds-font-size-sm);
-  --ds-data-table-expanded-padding: 0.875rem 1rem 1rem;
+  --ds-data-table-empty-title-font-weight: var(--ds-type-section-title-font-weight, 600);
+  --ds-data-table-expanded-padding: calc(0.875rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-group-count-font-size: calc(var(--ds-font-size-xs) * 0.9167);
   --ds-data-table-group-disclosure-font-size: calc(var(--ds-font-size-xs) * 0.8333);
   --ds-data-table-group-header-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
-  --ds-data-table-header-content-gap: 0.375rem;
+  --ds-data-table-group-header-font-weight: var(--ds-type-section-title-font-weight, 600);
+  --ds-data-table-header-content-gap: calc(0.375rem * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-header-focus-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
-  --ds-data-table-header-font-family: var(--ds-typography-label-family, inherit);
+  --ds-data-table-header-font-family: var(--ds-type-label-font-family, inherit);
   --ds-data-table-header-pinned-bg: var(--ds-table-header-bg, var(--ds-surface-inset));
   --ds-data-table-leading-cell-padding-comfortable: 0.75rem 1rem 0.75rem 0.1875rem;
   --ds-data-table-leading-cell-padding-compact: 0.375rem 0.75rem 0.375rem 0.125rem;
   --ds-data-table-leading-cell-padding-spacious: 1rem 1rem 1rem 0.25rem;
   --ds-data-table-min-inline-size: 42rem;
   --ds-data-table-minimal-shadow: none;
+  --ds-data-table-mobile-bulk-bar-bg: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
+  --ds-data-table-mobile-bulk-bar-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-bulk-bar-bg));
+  --ds-data-table-mobile-pagination-bg: var(--ds-surface-inset, var(--ds-surface-panel));
+  --ds-data-table-mobile-pagination-ink: color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-data-table-mobile-pagination-bg));
   --ds-data-table-open-cell-padding-block: 0.875rem;
-  --ds-data-table-pagination-padding: 0.625rem 1rem;
+  --ds-data-table-pagination-padding: calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-pinned-cell-bg: var(--ds-table-row-bg, var(--ds-surface-card));
   --ds-data-table-pinned-cell-bg-focus: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)));
   --ds-data-table-pinned-cell-bg-hover: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card)));
@@ -119815,10 +119853,10 @@ html[lang]:lang(ar) {
   --ds-data-table-sort-color-hover: var(--ds-color-text-secondary);
   --ds-data-table-sort-control-offset: 0.125rem;
   --ds-data-table-sort-control-radius: var(--ds-radius-sm, 0.375rem);
-  --ds-data-table-sort-control-size: 1.375rem;
+  --ds-data-table-sort-control-size: calc(1.375rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-data-table-sort-opacity: 0.68;
   --ds-data-table-state-copy-max-inline-size: 32rem;
-  --ds-data-table-toolbar-gap: var(--ds-spacing-2, 0.5rem);
+  --ds-data-table-toolbar-gap: calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-touch-hit-expansion: 0.5625rem;
   --ds-data-table-touch-target: 2.75rem;
   --ds-date-picker-active-ring: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-primary);
@@ -120014,6 +120052,7 @@ html[lang]:lang(ar) {
   --ds-focus-ring-offset: 2px;
   --ds-focus-ring-width: 2px;
   --ds-font-family-base: var(--ds-font-pack-humanist-text), "Noto Sans Arabic", sans-serif;
+  --ds-font-family-display: var(--ds-font-pack-grotesk-display), "Noto Sans Arabic", sans-serif;
   --ds-font-family-heading: var(--ds-font-pack-grotesk-display), "Noto Sans Arabic", sans-serif;
   --ds-font-family-mono: var(--ds-font-pack-plex-mono, var(--ds-font-mono));
   --ds-font-weight-body: var(--ds-font-weight-normal);
@@ -121427,76 +121466,80 @@ html[lang]:lang(ar) {
 /* === Compiled from Theme.modes.dark — do not edit === */
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'], :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   color-scheme: dark;
-  --ds-chart-series-1: #638CF3;
+  --ds-chart-series-1: #6993FA;
   --ds-chart-series-10: #007AC2;
   --ds-chart-series-2: #8C56BE;
   --ds-chart-series-3: #DC6BAD;
   --ds-chart-series-4: #BE4B18;
-  --ds-chart-series-5: #C28400;
+  --ds-chart-series-5: #CA8A00;
   --ds-chart-series-6: #787A00;
-  --ds-chart-series-7: #3DA54B;
+  --ds-chart-series-7: #4BB157;
   --ds-chart-series-8: #008777;
-  --ds-chart-series-9: #009EB2;
-  --ds-color-error-100: #5C0508;
-  --ds-color-error-200: #83040D;
-  --ds-color-error-300: #A9151A;
-  --ds-color-error-400: #CB2F2D;
-  --ds-color-error-50: #340A08;
-  --ds-color-error-500: #E94E47;
-  --ds-color-error-600: #FF7267;
-  --ds-color-error-700: #FFA298;
-  --ds-color-error-800: #FFCBC5;
+  --ds-chart-series-9: #00ABC1;
+  --ds-color-background: #0A0A0A;
+  --ds-color-bg: #0A0A0A;
+  --ds-color-bg-input: #0c0c0c;
+  --ds-color-bg-primary: #0A0A0A;
+  --ds-color-error-100: #410002;
+  --ds-color-error-200: #690007;
+  --ds-color-error-300: #94000E;
+  --ds-color-error-400: #BC1D20;
+  --ds-color-error-50: #1D0001;
+  --ds-color-error-500: #DD423D;
+  --ds-color-error-600: #F8675D;
+  --ds-color-error-700: #FF998E;
+  --ds-color-error-800: #FFC7C0;
   --ds-color-error-900: #FFF2F0;
-  --ds-color-info-100: #013250;
-  --ds-color-info-200: #004871;
-  --ds-color-info-300: #066093;
-  --ds-color-info-400: #2279B2;
-  --ds-color-info-50: #071D2C;
-  --ds-color-info-500: #4092CD;
-  --ds-color-info-600: #62ACE4;
-  --ds-color-info-700: #87C6F8;
-  --ds-color-info-800: #B8DFFF;
+  --ds-color-info-100: #002137;
+  --ds-color-info-200: #00385A;
+  --ds-color-info-300: #00527F;
+  --ds-color-info-400: #0E6CA4;
+  --ds-color-info-50: #000B17;
+  --ds-color-info-500: #3588C2;
+  --ds-color-info-600: #5AA4DC;
+  --ds-color-info-700: #82C1F2;
+  --ds-color-info-800: #B2DDFF;
   --ds-color-info-900: #EDF7FF;
-  --ds-color-primary-100: #0E2570;
-  --ds-color-primary-200: #17359F;
-  --ds-color-primary-300: #244ACA;
-  --ds-color-primary-400: #3563EF;
-  --ds-color-primary-50: #09173D;
-  --ds-color-primary-500: #5281FF;
-  --ds-color-primary-600: #79A1FF;
-  --ds-color-primary-700: #A1BEFF;
-  --ds-color-primary-800: #C9DAFF;
+  --ds-color-primary-100: #040F5B;
+  --ds-color-primary-200: #0B218C;
+  --ds-color-primary-300: #1839B9;
+  --ds-color-primary-400: #2A55E0;
+  --ds-color-primary-50: #010429;
+  --ds-color-primary-500: #4373FF;
+  --ds-color-primary-600: #6D98FF;
+  --ds-color-primary-700: #99B8FF;
+  --ds-color-primary-800: #C5D7FF;
   --ds-color-primary-900: #F1F5FF;
-  --ds-color-secondary-100: #292F3B;
-  --ds-color-secondary-200: #3C4456;
-  --ds-color-secondary-300: #515B70;
-  --ds-color-secondary-400: #68728A;
-  --ds-color-secondary-50: #171B21;
-  --ds-color-secondary-500: #808BA4;
-  --ds-color-secondary-600: #9AA5BD;
-  --ds-color-secondary-700: #B5BFD4;
-  --ds-color-secondary-800: #D2DAEA;
+  --ds-color-secondary-100: #191E2A;
+  --ds-color-secondary-200: #2D3546;
+  --ds-color-secondary-300: #434D62;
+  --ds-color-secondary-400: #5C667E;
+  --ds-color-secondary-50: #070A10;
+  --ds-color-secondary-500: #76819A;
+  --ds-color-secondary-600: #929DB5;
+  --ds-color-secondary-700: #B0BACF;
+  --ds-color-secondary-800: #CFD7E7;
   --ds-color-secondary-900: #F1F5FF;
-  --ds-color-success-100: #043920;
-  --ds-color-success-200: #02522F;
-  --ds-color-success-300: #116C41;
-  --ds-color-success-400: #2A8656;
-  --ds-color-success-50: #082013;
-  --ds-color-success-500: #47A06E;
-  --ds-color-success-600: #68B989;
-  --ds-color-success-700: #8DD1A7;
-  --ds-color-success-800: #B5E8C7;
+  --ds-color-success-100: #002613;
+  --ds-color-success-200: #004023;
+  --ds-color-success-300: #005D35;
+  --ds-color-success-400: #18794B;
+  --ds-color-success-50: #000E05;
+  --ds-color-success-500: #3C9565;
+  --ds-color-success-600: #60B182;
+  --ds-color-success-700: #87CCA2;
+  --ds-color-success-800: #B2E5C4;
   --ds-color-success-900: #E0FEEA;
-  --ds-color-warning-100: #4E1F00;
-  --ds-color-warning-200: #6E2F00;
-  --ds-color-warning-300: #914000;
-  --ds-color-warning-400: #B3530B;
-  --ds-color-warning-50: #2D1203;
-  --ds-color-warning-500: #CF6C30;
-  --ds-color-warning-600: #E88953;
-  --ds-color-warning-700: #FCA87A;
-  --ds-color-warning-800: #FFCEB4;
+  --ds-color-warning-100: #351300;
+  --ds-color-warning-200: #572400;
+  --ds-color-warning-300: #7C3600;
+  --ds-color-warning-400: #A24800;
+  --ds-color-warning-50: #160500;
+  --ds-color-warning-500: #C46223;
+  --ds-color-warning-600: #DF814B;
+  --ds-color-warning-700: #F6A275;
+  --ds-color-warning-800: #FFCAAE;
   --ds-color-warning-900: #FFF2EC;
-  --ds-focus-ring-color: #3563EF;
+  --ds-focus-ring-color: #2A55E0;
   --ds-sidebar-item-color-active: var(--ds-color-neutral-100);
 }

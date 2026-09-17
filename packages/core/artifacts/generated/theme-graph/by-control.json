@@ -16,7 +16,7 @@
     },
     {
       "channels": 26,
-      "channelsThroughAliases": 758,
+      "channelsThroughAliases": 759,
       "decision": "density.mode",
       "derivers": [
         "density",
@@ -233,8 +233,8 @@
       "tier": "standard"
     },
     {
-      "channels": 143,
-      "channelsThroughAliases": 1597,
+      "channels": 144,
+      "channelsThroughAliases": 1602,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -960,8 +960,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1826,
-      "channelsThroughAliases": 3397,
+      "channels": 1833,
+      "channelsThroughAliases": 3405,
       "decision": "palette.contrast-posture",
       "derivers": [
         "active-filters-bar",
@@ -1284,8 +1284,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1826,
-      "channelsThroughAliases": 3397,
+      "channels": 1833,
+      "channelsThroughAliases": 3405,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "active-filters-bar",
@@ -1600,8 +1600,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1922,
-      "channelsThroughAliases": 3594,
+      "channels": 1929,
+      "channelsThroughAliases": 3602,
       "decision": "palette.seeds",
       "derivers": [
         "active-filters-bar",
@@ -1920,8 +1920,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1912,
-      "channelsThroughAliases": 3574,
+      "channels": 1919,
+      "channelsThroughAliases": 3582,
       "decision": "palette.status-seeds",
       "derivers": [
         "active-filters-bar",
@@ -2239,8 +2239,8 @@
       "tier": "standard"
     },
     {
-      "channels": 143,
-      "channelsThroughAliases": 1597,
+      "channels": 144,
+      "channelsThroughAliases": 1602,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2747,8 +2747,8 @@
       "tier": "standard"
     },
     {
-      "channels": 149,
-      "channelsThroughAliases": 237,
+      "channels": 156,
+      "channelsThroughAliases": 244,
       "decision": "shape.control-height",
       "derivers": [
         "data-table",
@@ -2876,8 +2876,8 @@
       "tier": "pro"
     },
     {
-      "channels": 880,
-      "channelsThroughAliases": 1469,
+      "channels": 887,
+      "channelsThroughAliases": 1476,
       "decision": "shape.radius-scale",
       "derivers": [
         "avatar",
@@ -3189,7 +3189,7 @@
     },
     {
       "channels": 82,
-      "channelsThroughAliases": 823,
+      "channelsThroughAliases": 825,
       "decision": "states.emphasis",
       "derivers": [
         "segmented",
@@ -3410,7 +3410,7 @@
     },
     {
       "channels": 256,
-      "channelsThroughAliases": 977,
+      "channelsThroughAliases": 979,
       "decision": "states.focus-style",
       "derivers": [
         "avatar",
@@ -3766,8 +3766,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1334,
-      "channelsThroughAliases": 1532,
+      "channels": 1341,
+      "channelsThroughAliases": 1539,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "alert",
@@ -3919,8 +3919,8 @@
       "tier": "standard"
     },
     {
-      "channels": 129,
-      "channelsThroughAliases": 359,
+      "channels": 130,
+      "channelsThroughAliases": 363,
       "decision": "typography.families",
       "derivers": [
         "tenant",
@@ -4077,8 +4077,8 @@
       "tier": "pro"
     },
     {
-      "channels": 242,
-      "channelsThroughAliases": 472,
+      "channels": 243,
+      "channelsThroughAliases": 476,
       "decision": "typography.numeric",
       "derivers": [
         "pagination",
@@ -4237,8 +4237,8 @@
       "tier": "pro"
     },
     {
-      "channels": 131,
-      "channelsThroughAliases": 860,
+      "channels": 132,
+      "channelsThroughAliases": 864,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -4461,8 +4461,8 @@
       "tier": "standard"
     },
     {
-      "channels": 404,
-      "channelsThroughAliases": 633,
+      "channels": 405,
+      "channelsThroughAliases": 637,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
@@ -4629,8 +4629,8 @@
       "tier": "standard"
     },
     {
-      "channels": 131,
-      "channelsThroughAliases": 860,
+      "channels": 132,
+      "channelsThroughAliases": 864,
       "decision": "typography.scale",
       "derivers": [
         "axes",

@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-15T22:42:28.776Z",
+  "producedAt": "2026-09-17T23:11:59.517Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 8-family sample: 16/22 move at least one sampled family",
   "denominators": {
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-15T22:40:46.571Z"
+      "builtAt": "2026-09-17T23:08:28.959Z"
     },
     "sources": {
       "door": {
@@ -30,13 +30,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 835,
-        "digest": "48b6fbd04c675e20d6af76029c52e1e0c19f7a26b15f69bd30d5d8d668b79557"
+        "fileCount": 874,
+        "digest": "f9a3ff7f547c053dfbe570e2f0d92c2d8bd3b97a62062cb5ecc72e604f8f0d83"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "0dd4fda4bcbc0014ac399f9d8d3c5ce3216d7eacda5229a0b74a4df42157a7a8"
+        "digest": "ee9dfac00b1fdf5bd9fbd8b5dad881c49f8af9cd733c8de0a617afcbdcb13e0f"
       }
     },
     "browser": {
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "2e8048800c63db8a7aa84f421b7d0b9a70d23025ac2368cec6c8e3e8915d9688",
+        "bundleSha": "5d81d39b8cde23923bf021bc6ca284b07dc7aa8779b5cee0c4bf80af0d5dbdd2",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -86,7 +86,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "b61ff38d5a2d1b632744d38c6adb8cc310da049fd6bc53f9fa5b5ab445635cb8",
+        "bundleSha": "882a5fac79f7442f2053e97b0b63377e941f8c18731398a3341c18e52b904686",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -108,7 +108,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "e474f460fdcab2a4c0ad5635b71e03b97bffa6f7096c2a42bcb7f6c1d9c22953",
+        "bundleSha": "852de5cd1a0948778dc1a65a818d490be84b677850475ad1bb20c0d5b00efd2a",
         "bundleMode": "fresh",
         "theme": "light"
       }
@@ -1414,13 +1414,11 @@
           "font-family"
         ],
         "token-readout/tokens": [
-          "--ds-font-family-base",
-          "--ds-font-family-display"
+          "--ds-font-family-base"
         ]
       },
       "movedChannels": [
-        "--ds-font-family-base",
-        "--ds-font-family-display"
+        "--ds-font-family-base"
       ]
     },
     {
@@ -1452,14 +1450,12 @@
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",
-          "--ds-font-family-display",
           "--ds-font-family-heading",
           "--ds-letter-spacing-heading"
         ]
       },
       "movedChannels": [
         "--ds-font-family-base",
-        "--ds-font-family-display",
         "--ds-font-family-heading",
         "--ds-letter-spacing-heading"
       ]
@@ -2021,7 +2017,6 @@
           "--ds-elevation-2",
           "--ds-elevation-3",
           "--ds-font-family-base",
-          "--ds-font-family-display",
           "--ds-font-family-heading",
           "--ds-input-md-border-radius",
           "--ds-letter-spacing-heading",
@@ -2067,7 +2062,6 @@
         "--ds-elevation-2",
         "--ds-elevation-3",
         "--ds-font-family-base",
-        "--ds-font-family-display",
         "--ds-font-family-heading",
         "--ds-input-md-border-radius",
         "--ds-letter-spacing-heading",
@@ -2110,7 +2104,6 @@
         ],
         "token-readout/tokens": [
           "--ds-font-family-base",
-          "--ds-font-family-display",
           "--ds-font-family-heading",
           "--ds-letter-spacing-heading",
           "--ds-select-group-text-transform",
@@ -2120,7 +2113,6 @@
       },
       "movedChannels": [
         "--ds-font-family-base",
-        "--ds-font-family-display",
         "--ds-font-family-heading",
         "--ds-letter-spacing-heading",
         "--ds-select-group-text-transform",
