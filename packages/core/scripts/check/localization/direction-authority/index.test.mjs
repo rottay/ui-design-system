@@ -3,14 +3,18 @@
  *
  * Every drill plants a REAL probe -- one of the exact spellings that defeated
  * WO-INV-01's own census -- and asserts the gate turns red. Nothing is planted
- * in the real tree: each drill mirrors `src/components` into a tmpdir sandbox,
- * edits the copy, and measures that.
+ * in the real tree: each drill mirrors `src` into a tmpdir sandbox, edits the
+ * copy, and measures that.
  *
- * The four spellings are the point. The roster that produced this WO was built
- * by `grep "closest('[dir]')"`, which saw one of them; the sweep's acceptance
+ * The spellings are the point. The roster that produced this WO was built by
+ * `grep "closest('[dir]')"`, which saw one of them; the sweep's acceptance
  * criterion was that same grep reading zero, so it went green with sixteen
  * probes alive. A drill that plants only the spelling the old census could see
- * would reproduce the blindness it exists to prevent.
+ * would reproduce the blindness it exists to prevent. L1b added the two shapes
+ * that defeated the gate in turn -- the DOCUMENT read that `adaptive-overlay`
+ * used for a physical drawer side, and the `.dir === 'rtl'` comparison -- plus
+ * the two drills that keep the WIDENED scope honest: a probe planted OUTSIDE
+ * `src/components` must be red, and a probe written as PROSE must not be.
  */
 import { strict as assert } from 'node:assert';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -34,24 +38,45 @@ import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/ind
 const ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
 
 /** A file with no probe of its own, so a planted one is unambiguously the drill's. */
-const CLEAN_FILE = 'primitives/layout/box/engines/modern/index.tsx';
+const CLEAN_FILE = 'components/primitives/layout/box/engines/modern/index.tsx';
+
+/**
+ * The same, OUTSIDE `src/components`: the widened scan root is a claim about
+ * the package, and a claim nothing measures is a preference.
+ */
+const CLEAN_FILE_OUTSIDE_COMPONENTS = 'infrastructure/runtime/responsive/index.ts';
 
 /**
  * Mirrors the scanned corpus into a sandbox, hands `edit` the sandbox root,
  * then runs `judge` over the sandbox measurement.
  */
-function withPlantedTree(edit, assertFindings) {
+function withPlantedTree(edit, assertFindings, baseline = readBaseline()) {
   const sandbox = mkdtempSync(join(tmpdir(), 'direction-authority-drill-'));
   try {
     const target = join(sandbox, SCAN_ROOT);
     mkdirSync(dirname(target), { recursive: true });
     cpSync(join(ROOT, SCAN_ROOT), target, { recursive: true });
     edit(sandbox);
-    assertFindings(judge(probeCounts(sandbox)), probeCounts(sandbox));
+    assertFindings(judge(probeCounts(sandbox), baseline), probeCounts(sandbox));
   } finally {
     rmSync(sandbox, { recursive: true, force: true });
   }
 }
+
+/**
+ * The ledger is EMPTY at HEAD, so the two ratchet drills below cannot borrow a
+ * real row. They pin a SYNTHETIC one over the same sandbox instead: `judge`
+ * takes its baseline as an argument, so the ratchet is exercised against the
+ * real measurement without the real ledger having to keep a row alive for the
+ * test's convenience.
+ */
+const PINNED_FIXTURE_PATH = 'components/primitives/display/tree/engines/modern/index.tsx';
+const syntheticBaseline = (probes) => ({
+  authority: readBaseline().authority,
+  pinnedDebt: {
+    [PINNED_FIXTURE_PATH]: { probes, group: 'A', reason: 'Synthetic ratchet fixture.' },
+  },
+});
 
 const plant = (sandbox, relativePath, line) => {
   const file = join(sandbox, SCAN_ROOT, relativePath);
@@ -84,17 +109,30 @@ test('the sandbox mirror measures exactly what the real tree measures', () => {
   });
 });
 
-test('the corpus is not vacuous and the clean file really is clean', () => {
+test('the corpus is not vacuous and the clean files really are clean', () => {
   // The floor is the NAMED EXCEPTIONS, not the debt: debt is supposed to reach
-  // zero, and a floor tied to it would have to be lowered on every migration
-  // until it eventually asserted nothing. The three anchor/portal readers are
-  // permanent by adjudication, so six probes is the honest "the scan really
-  // ran" signal. WO-INV-01's migrations took the debt from 21 to 2.
+  // zero -- it now IS zero -- and a floor tied to it would have to be lowered on
+  // every migration until it eventually asserted nothing. The three anchor/portal
+  // readers are permanent by adjudication, and each carries three lines the
+  // widened census sees (the `[dir]` selector, the computed-style read and the
+  // `.dir === 'rtl'` comparison), so nine probes is the honest "the scan really
+  // ran" signal. WO-INV-01's migrations took the debt from 21 to 0.
   const sites = probeSites();
   const exceptionSites = sites.filter((site) => NAMED_EXCEPTIONS[site.path]);
-  assert.ok(sites.length >= 6, `only ${sites.length} probe sites found -- an empty scan is never a pass`);
-  assert.equal(exceptionSites.length, 6, 'the three anchor/portal readers carry two probes each');
+  assert.ok(sites.length >= 9, `only ${sites.length} probe sites found -- an empty scan is never a pass`);
+  assert.equal(exceptionSites.length, 9, 'the three anchor/portal readers carry three probe lines each');
   assert.equal(probeCounts()[CLEAN_FILE], undefined, `${CLEAN_FILE} must hold no probe of its own`);
+  assert.equal(
+    probeCounts()[CLEAN_FILE_OUTSIDE_COMPONENTS],
+    undefined,
+    `${CLEAN_FILE_OUTSIDE_COMPONENTS} must hold no probe of its own`,
+  );
+  // The widened scope really is wider: the scan walks owners no `components/`
+  // prefix can reach.
+  assert.ok(
+    sites.length === exceptionSites.length,
+    'every remaining probe site belongs to a declared anchor/portal reader',
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -114,6 +152,16 @@ const SPELLINGS = [
    "const planted = getComputedStyle(element).direction === 'rtl';"],
   ['window.getComputedStyle(x).direction -- the same read with a receiver',
    "const planted = window.getComputedStyle(element).direction === 'rtl';"],
+  ["document.documentElement.dir -- adaptive-overlay's third authority, SSR-false",
+   "const planted = document.documentElement.dir === 'rtl';"],
+  ['document.dir -- the same read one property shorter',
+   "const planted = document.dir;"],
+  ['ownerDocument.documentElement.dir -- the same read through the node',
+   'const planted = element.ownerDocument.documentElement.dir;'],
+  ["node.dir === 'rtl' -- the comparison with no call of any kind",
+   "const planted = element.dir === 'rtl';"],
+  ["node?.dir === 'ltr' -- the optional form, and the other literal",
+   "const planted = owner?.dir === 'ltr';"],
 ];
 
 for (const [label, line] of SPELLINGS) {
@@ -135,19 +183,52 @@ for (const [label, line] of SPELLINGS) {
   });
 }
 
-test('a SECOND probe in an already-pinned file grows its count and fails', () => {
-  // The one row the baseline still pins: FAM-08 is stamping parts in this exact
-  // file, so WO-INV-01 fenced its two probes for the follow-up sweep.
-  const pinnedPath = 'structures/workspace/active-filters-bar/runtime/rendering/index.tsx';
-  const pin = readBaseline().pinnedDebt[pinnedPath].probes;
+test('a probe planted OUTSIDE src/components is red too', () => {
+  // The law is "one direction source in the package", so a scan that stopped at
+  // `src/components` could only ever prove it for part of the package. This is
+  // the drill that fails if the scan root narrows back.
   withPlantedTree(
-    (sandbox) => plant(sandbox, pinnedPath, "const planted = element.closest('[dir]');"),
+    (sandbox) => plant(
+      sandbox,
+      CLEAN_FILE_OUTSIDE_COMPONENTS,
+      "export const planted = document.documentElement.dir === 'rtl';",
+    ),
     (findings) => {
-      const reported = mentions(findings, pinnedPath);
+      const reported = mentions(findings, CLEAN_FILE_OUTSIDE_COMPONENTS);
       assert.equal(reported.length, 1, JSON.stringify(findings, null, 1));
-      assert.ok(reported[0].includes(`GREW from ${pin} to ${pin + 1}`), reported[0]);
+      assert.ok(reported[0].includes('does not pin'), reported[0]);
+    },
+  );
+});
+
+test('a probe written as PROSE is not counted as a read', () => {
+  // The widened scan reached the documents that forbid the probe by quoting it.
+  // Counting those would make the gate punish its own law being written down --
+  // and the escape is bounded: only a line that OPENS as a comment is skipped.
+  withPlantedTree(
+    (sandbox) => {
+      plant(sandbox, CLEAN_FILE, "// const planted = element.closest('[dir]');");
+      plant(sandbox, CLEAN_FILE, " * `document.documentElement.dir === 'rtl'` is the forbidden read.");
+      plant(sandbox, CLEAN_FILE, "/* const planted = getComputedStyle(element).direction; */");
+    },
+    (findings) => {
+      assert.deepEqual(mentions(findings, CLEAN_FILE), [], JSON.stringify(findings, null, 1));
+    },
+  );
+});
+
+test('a SECOND probe in an already-pinned file grows its count and fails', () => {
+  // The ledger is empty at HEAD, so the row is synthetic: the sandbox file holds
+  // no probe, the baseline claims it holds one, and the plant makes it two.
+  withPlantedTree(
+    (sandbox) => plant(sandbox, PINNED_FIXTURE_PATH, "const planted = element.closest('[dir]');"),
+    (findings) => {
+      const reported = mentions(findings, PINNED_FIXTURE_PATH);
+      assert.equal(reported.length, 1, JSON.stringify(findings, null, 1));
+      assert.ok(reported[0].includes('GREW from 0 to 1'), reported[0]);
       assert.ok(reported[0].includes(DIRECTION_AUTHORITY), 'the finding must name the authority to adopt');
     },
+    syntheticBaseline(0),
   );
 });
 
@@ -167,21 +248,29 @@ test('a NAMED EXCEPTION file is not counted as debt, in either direction', () =>
 
 test('a migration that removes a probe fails with an instruction to LOWER the pin', () => {
   // The ratchet direction: shrinking is red too, so the pin follows the tree
-  // down instead of quietly keeping room for the probe to come back.
-  const pinnedPath = 'structures/workspace/active-filters-bar/runtime/rendering/index.tsx';
+  // down instead of quietly keeping room for the probe to come back. Planted
+  // against a synthetic row that claims two probes for a file holding one.
   withPlantedTree(
-    (sandbox) => {
-      const file = join(sandbox, SCAN_ROOT, pinnedPath);
-      writeFileSync(
-        file,
-        readFileSync(file, 'utf8').replace(/getComputedStyle\(element\)\.direction/, "'ltr'"),
-      );
-    },
+    (sandbox) => plant(sandbox, PINNED_FIXTURE_PATH, "const planted = element.closest('[dir]');"),
     (findings) => {
-      const reported = mentions(findings, pinnedPath);
+      const reported = mentions(findings, PINNED_FIXTURE_PATH);
       assert.equal(reported.length, 1, JSON.stringify(findings, null, 1));
-      assert.ok(reported[0].includes('remove the pin') || reported[0].includes('lower the pin'), reported[0]);
+      assert.ok(reported[0].includes('FELL from 2 to 1'), reported[0]);
+      assert.ok(reported[0].includes('lower the pin to 1'), reported[0]);
     },
+    syntheticBaseline(2),
+  );
+});
+
+test('a pinned file that loses its last probe is told to REMOVE the pin', () => {
+  withPlantedTree(
+    () => {},
+    (findings) => {
+      const reported = mentions(findings, PINNED_FIXTURE_PATH);
+      assert.equal(reported.length, 1, JSON.stringify(findings, null, 1));
+      assert.ok(reported[0].includes('remove the pin'), reported[0]);
+    },
+    syntheticBaseline(1),
   );
 });
 
@@ -200,7 +289,13 @@ test('every named exception is declared WITH a reason, and holds a real probe', 
 });
 
 test('every pinned debt row carries the reason it is still debt', () => {
-  for (const [path, pin] of Object.entries(readBaseline().pinnedDebt)) {
+  // Vacuous at HEAD by construction: the ledger is EMPTY, which is the state
+  // the sweep was for. It is asserted rather than deleted because the next row
+  // to appear -- and a row will appear the first time a file re-derives
+  // direction from the DOM -- owes the same reason and census group.
+  const baseline = readBaseline();
+  assert.equal(typeof baseline.pinnedDebt, 'object', 'the ledger must stay declared');
+  for (const [path, pin] of Object.entries(baseline.pinnedDebt)) {
     assert.ok(pin.reason.length > 80, `a one-word reason is not a reason: ${path}`);
     assert.ok(/^[ACD]$/.test(pin.group), `${path} must name its census group`);
   }

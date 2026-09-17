@@ -2,21 +2,17 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { AdaptiveOverlay } from '..';
-/**
- * Rendered WITHOUT the DS provider, on purpose and per this suite's own title.
- * The provider owns the document direction and writes `dir` on <html> from its
- * locale, so mounting it here would overwrite the very floor under test: the
- * overlay's fallback to `document.documentElement.dir` when no i18n provider is
- * present. `renderWithEngine` mounts that provider, which is why the direction
- * this suite set was `ltr` again by the time the overlay read it; the engine is
- * passed as a prop instead, which is the seam the component already exposes.
- */
 
 /**
- * The i18n provider is optional and reports 'ltr' when absent, so a page that
- * declares its direction on the document used to get a physically wrong side
- * panel: the drawer's placement is a screen side, not a logical one.
+ * The Drawer contract's placement is a PHYSICAL screen side, so the trailing
+ * side panel has to be mirrored by hand for RTL reading order. The question
+ * "which way does this page read" has exactly one owner -- the active locale,
+ * through `useOptionalDirection` -- and this suite pins that the overlay asks
+ * it and nothing else. The document is not a second authority: it is written
+ * BY the provider, so reading it back would re-derive the provider's own fact
+ * from paint, unavailable during SSR and free to disagree across hydration.
  */
 
 async function preloadDrawer(): Promise<void> {
@@ -24,10 +20,8 @@ async function preloadDrawer(): Promise<void> {
 }
 
 /**
- * The overlay reads `document.documentElement.dir` in an EFFECT, so SSR and
- * hydration agree on `right` and the mirror lands on the commit after mount.
- * Reading the attribute on the first paint therefore measures the pre-effect
- * value, not the contract. `expected` is what the placement must SETTLE on.
+ * The drawer mounts through a lazy engine module, so the placement is asserted
+ * once the surface has settled rather than on the first paint.
  */
 async function expectDrawerPlacement(testId: string, expected: string): Promise<void> {
   const dialog = await screen.findByTestId(testId, {}, { timeout: 15000 });
@@ -41,24 +35,25 @@ afterEach(() => {
   document.documentElement.dir = '';
 });
 
-describe('AdaptiveOverlay drawer direction (no i18n provider)', () => {
+describe('AdaptiveOverlay drawer direction', () => {
   it(
-    'mirrors the drawer to the physical left when the document is RTL',
+    'mirrors the drawer to the physical left when the locale reads RTL',
     async () => {
       await preloadDrawer();
-      document.documentElement.dir = 'rtl';
 
       const { unmount } = render(
-        <AdaptiveOverlay
-          engine="modern"
-          mode="drawer"
-          open
-          onOpenChange={() => {}}
-          title="Filters"
-          data-testid="rtl-drawer"
-        >
-          <span>Body</span>
-        </AdaptiveOverlay>,
+        <I18nProvider locale="ar" fallbackLocale="en">
+          <AdaptiveOverlay
+            engine="modern"
+            mode="drawer"
+            open
+            onOpenChange={() => {}}
+            title="Filters"
+            data-testid="rtl-drawer"
+          >
+            <span>Body</span>
+          </AdaptiveOverlay>
+        </I18nProvider>,
       );
 
       await expectDrawerPlacement('rtl-drawer', 'left');
@@ -68,10 +63,39 @@ describe('AdaptiveOverlay drawer direction (no i18n provider)', () => {
   );
 
   it(
-    'keeps the drawer on the physical right when the document is LTR',
+    'keeps the drawer on the physical right when the locale reads LTR',
     async () => {
       await preloadDrawer();
-      document.documentElement.dir = 'ltr';
+
+      const { unmount } = render(
+        <I18nProvider locale="en" fallbackLocale="en">
+          <AdaptiveOverlay
+            engine="modern"
+            mode="drawer"
+            open
+            onOpenChange={() => {}}
+            title="Filters"
+            data-testid="ltr-drawer"
+          >
+            <span>Body</span>
+          </AdaptiveOverlay>
+        </I18nProvider>,
+      );
+
+      await expectDrawerPlacement('ltr-drawer', 'right');
+      unmount();
+    },
+    45000,
+  );
+
+  it(
+    'does not take a second direction from the document when no provider is present',
+    async () => {
+      await preloadDrawer();
+      // A bare `dir` on the document is NOT an authority: without a provider
+      // the authority answers 'ltr' and the panel stays on the trailing edge.
+      // Pinning this keeps a third direction source from growing back here.
+      document.documentElement.dir = 'rtl';
 
       const { unmount } = render(
         <AdaptiveOverlay
@@ -80,13 +104,13 @@ describe('AdaptiveOverlay drawer direction (no i18n provider)', () => {
           open
           onOpenChange={() => {}}
           title="Filters"
-          data-testid="ltr-drawer"
+          data-testid="no-provider-drawer"
         >
           <span>Body</span>
         </AdaptiveOverlay>,
       );
 
-      await expectDrawerPlacement('ltr-drawer', 'right');
+      await expectDrawerPlacement('no-provider-drawer', 'right');
       unmount();
     },
     45000,

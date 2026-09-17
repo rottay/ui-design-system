@@ -56,7 +56,7 @@
 import { useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent, ReactElement } from "react";
 
-import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
+import { useOptionalTranslation, useReadingDirectionIsRtl } from "@/infrastructure/runtime/i18n";
 import { Box } from "../../../../../primitives/layout/box";
 import { Button } from "../../../../../primitives/inputs/button";
 import { Flex } from "../../../../../primitives/layout/flex";
@@ -73,13 +73,6 @@ const FOCUSABLE_SELECTOR =
 
 const ARROW_KEYS = new Set(["ArrowRight", "ArrowLeft", "Home", "End"]);
 
-/** Resolve writing direction from semantic markup before computed CSS (Tabs precedent). */
-function elementDirection(element: HTMLElement): "ltr" | "rtl" {
-  const directionOwner = element.closest<HTMLElement>("[dir]");
-  if (directionOwner?.dir === "rtl") return "rtl";
-  return getComputedStyle(element).direction === "rtl" ? "rtl" : "ltr";
-}
-
 export function ActiveFiltersBar({
   activeFilters,
   onRemoveFilter,
@@ -90,6 +83,10 @@ export function ActiveFiltersBar({
   chipsLabel,
 }: ActiveFiltersBarProps): ReactElement | null {
   const i18n = useOptionalTranslation("components");
+  // Reading direction comes from the one authority (the active locale), not
+  // from measuring the DOM: the probe it replaces was unavailable during SSR
+  // and re-derived from paint a fact the provider already holds.
+  const directionIsRtl = useReadingDirectionIsRtl();
   // Optional channel with an English floor (parametric): a missing catalog
   // entry never echoes a raw key and fragments are never concatenated.
   const tOr = (
@@ -111,9 +108,8 @@ export function ActiveFiltersBar({
     const currentIndex = items.indexOf(document.activeElement as HTMLElement);
     if (currentIndex === -1) return;
 
-    const isRtl = elementDirection(container) === "rtl";
-    const forwardKey = isRtl ? "ArrowLeft" : "ArrowRight";
-    const backwardKey = isRtl ? "ArrowRight" : "ArrowLeft";
+    const forwardKey = directionIsRtl ? "ArrowLeft" : "ArrowRight";
+    const backwardKey = directionIsRtl ? "ArrowRight" : "ArrowLeft";
     let nextIndex: number | undefined;
 
     if (event.key === forwardKey) nextIndex = (currentIndex + 1) % items.length;

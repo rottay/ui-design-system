@@ -588,9 +588,14 @@ export interface BoxProps
   gridArea?: CSSProperties["gridArea"];
 
   /**
-   * Text alignment
+   * Text alignment, in the LOGICAL vocabulary: `start` and `end` follow the
+   * reading direction, `center` and `justify` are direction-free.
+   *
+   * `left` and `right` are accepted as deprecated aliases of `start` / `end`
+   * and normalized at render by {@link normalizeBoxTextAlign}, so a Modern Box
+   * cannot pin text to a physical edge that the reading direction moves.
    */
-  textAlign?: CSSProperties["textAlign"];
+  textAlign?: BoxTextAlignInput;
 
   /**
    * Color (text color)
@@ -611,6 +616,49 @@ export interface BoxProps
    * User select behavior
    */
   userSelect?: CSSProperties["userSelect"];
+}
+
+/**
+ * Logical text alignment. `start` / `end` resolve against the reading
+ * direction, so the same Box reads correctly in LTR and RTL; `center` and
+ * `justify` are direction-free.
+ */
+export type BoxTextAlign = "start" | "center" | "end" | "justify";
+
+/**
+ * @deprecated Physical inline edge. A public layout API is logical only
+ *   (WO-FAM-07 step 4, WO-INV-01 L7), because `left` / `right` do not follow
+ *   the reading direction: under RTL they pin the text to the wrong edge of
+ *   the box. Use `start` / `end`. Retained as an accepted input so existing
+ *   callers and the frozen Classic and Rustic engines build unchanged.
+ */
+export type LegacyPhysicalBoxTextAlign = "left" | "right";
+
+/** What the prop ACCEPTS: the logical vocabulary plus the deprecated aliases. */
+export type BoxTextAlignInput = BoxTextAlign | LegacyPhysicalBoxTextAlign;
+
+/**
+ * The documented migration map. One entry per deprecated physical spelling;
+ * the logical names map to themselves and are absent on purpose, so the table
+ * is exactly the deprecation surface and a test can assert its size.
+ */
+export const BOX_TEXT_ALIGN_ALIASES: Readonly<
+  Record<LegacyPhysicalBoxTextAlign, BoxTextAlign>
+> = Object.freeze({
+  left: "start",
+  right: "end",
+});
+
+/**
+ * Normalizes an alignment request to the logical vocabulary. Anything already
+ * logical is returned unchanged, so the call is idempotent and safe to apply
+ * at the engine boundary.
+ */
+export function normalizeBoxTextAlign(textAlign: BoxTextAlignInput): BoxTextAlign {
+  return (
+    (BOX_TEXT_ALIGN_ALIASES as Record<string, BoxTextAlign | undefined>)[textAlign]
+    ?? (textAlign as BoxTextAlign)
+  );
 }
 
 /**

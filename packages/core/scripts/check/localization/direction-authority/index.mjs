@@ -26,6 +26,25 @@
  * `[dir]` SELECTOR LITERAL (any call spelling) and on the computed-style read,
  * and its drill plants each spelling to prove it.
  *
+ * TWO MORE SHAPES, AND A WIDER SCOPE (WO-INV-01 L1b). The census above was
+ * still narrower than the law it serves. `adaptive-overlay` derived a physical
+ * drawer side from `document.documentElement.dir === 'rtl'` -- a third
+ * direction source, false during SSR, that no `[dir]`-selector or
+ * computed-style pattern can see; and the gate only ever walked
+ * `src/components`, while "the only direction source" is a claim about the
+ * whole package. So two shapes are added -- the DOCUMENT read
+ * (`document.dir`, `document.documentElement.dir`, and any
+ * `...documentElement.dir`) and the EQUALITY read (a DOM node's `.dir`
+ * compared against `'rtl'`/`'ltr'`) -- and the scan root moves to `src`.
+ *
+ * COMMENT LINES ARE NOT READS. Widening the scan reached five prose lines that
+ * DESCRIBE the probe in order to forbid it (the authority module's own
+ * fileoverview, the i18n contracts, the provider, the `ar` locale note). A gate
+ * that counted those would punish the documentation of its own law, so a line
+ * whose first non-space character opens a comment is skipped. Only lines that
+ * begin as code are measured; a planted probe is code, which is what every
+ * drill plants.
+ *
  * TWO CLASSES, MEASURED SEPARATELY.
  *
  *   NAMED EXCEPTIONS. A portal reads its ANCHOR's context to reproduce it
@@ -60,8 +79,12 @@ const BASELINE_PATH = join(HERE, 'baseline/index.json');
 /** The one module allowed to answer "what is the reading direction". */
 export const DIRECTION_AUTHORITY = 'src/infrastructure/runtime/i18n/composition/direction';
 
-/** The scanned corpus: authored component source, tests and stories excluded. */
-export const SCAN_ROOT = 'src/components';
+/**
+ * The scanned corpus: ALL authored package source, tests and stories excluded.
+ * The law is package-wide -- `src/components` was the population of the census
+ * that produced it, not the boundary of the claim.
+ */
+export const SCAN_ROOT = 'src';
 
 /**
  * A `[dir]` selector literal handed to `closest`, in ANY call spelling: bare,
@@ -75,15 +98,33 @@ const SELECTOR_PROBE = /closest[^(]*\(\s*['"`]\[dir\]/;
 const COMPUTED_PROBE = /getComputedStyle\s*\([^)]*\)\s*\.\s*direction/;
 
 /**
+ * A DOCUMENT direction read: `document.dir`, `document.documentElement.dir`,
+ * and the same read reached through any owner document. It asks what the page
+ * declares, which is what the provider WROTE there -- so it re-derives the
+ * authority's own fact, and answers false during SSR.
+ */
+const DOCUMENT_PROBE = /\b(?:document|documentElement)\s*\.\s*dir\b/;
+
+/**
+ * An EQUALITY direction read: a DOM node's `dir` property compared against a
+ * direction literal. The leading `.`/`?.` is required so a plain object literal
+ * (`{ dir: 'rtl' }`) or a prop comparison is not mistaken for a DOM read.
+ */
+const EQUALITY_PROBE = /[.?]\s*dir\s*(?:===|!==|==|!=)\s*['"`](?:rtl|ltr)['"`]/;
+
+/** A line that OPENS as a comment documents the probe; it does not perform it. */
+const COMMENT_LINE = /^\s*(?:\/\/|\/\*|\*)/;
+
+/**
  * Anchor/portal context readers. NOT the defect above: each reads the anchor's
  * declared ancestry so a portal rendered outside that subtree can reproduce it.
  */
 export const NAMED_EXCEPTIONS = Object.freeze({
-  'primitives/runtime/overlay/portal-scope/index.tsx':
+  'components/primitives/runtime/overlay/portal-scope/index.tsx':
     "readLocaleContext(anchor) snapshots the anchor's `dir` AND `lang` AND its data-{ds-root,vertical,tenant,theme,engine,density} scope, and a MutationObserver over the anchor's ancestor chain keeps that snapshot live. The question is what this anchor's ancestry declares, so a portal rendered outside the subtree can reproduce it; the locale cannot answer it, and swapping direction alone would make it the one field of the snapshot that stops following the anchor while every sibling field still does.",
-  'primitives/display/tooltip/engines/modern/index.tsx':
+  'components/primitives/display/tooltip/engines/modern/index.tsx':
     'The tooltip carries its own copy of the portal-scope reader for the same reason: the floating panel is rendered outside the anchor subtree and must inherit the anchor context, not the app locale. It is a duplicate of the shared reader, which is its own consolidation question, but the READ is legitimate.',
-  'primitives/overlay/popover/engines/modern/index.tsx':
+  'components/primitives/overlay/popover/engines/modern/index.tsx':
     'The popover carries its own copy of the portal-scope reader, identical in purpose to the tooltip one: the panel is portalled away from the anchor and reproduces the anchor ancestry, direction included, rather than the locale.',
 });
 
@@ -117,9 +158,12 @@ export function probeSites(root = ROOT) {
     readFileSync(file, 'utf8')
       .split('\n')
       .forEach((line, index) => {
+        if (COMMENT_LINE.test(line)) return;
         const kinds = [];
         if (SELECTOR_PROBE.test(line)) kinds.push('selector');
         if (COMPUTED_PROBE.test(line)) kinds.push('computed');
+        if (DOCUMENT_PROBE.test(line)) kinds.push('document');
+        if (EQUALITY_PROBE.test(line)) kinds.push('equality');
         if (kinds.length > 0) {
           sites.push({ path, line: index + 1, kinds, text: line.trim().slice(0, 100) });
         }
