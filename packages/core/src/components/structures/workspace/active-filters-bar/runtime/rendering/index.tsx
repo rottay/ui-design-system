@@ -196,11 +196,15 @@ export function ActiveFiltersBar({
                     field: filter.label,
                   }
                 )}
+                /* The glyph is the family's own node inside the primitive's
+                   icon slot, so the family stamps the part its skin paints:
+                   the lifecycle ink belongs to the rail, the chip chrome to
+                   the Tag. */
                 icon={
                   state === "draft" ? (
-                    <StatusDraftIcon decorative size="xs" />
+                    <StatusDraftIcon decorative size="xs" data-part="icon" />
                   ) : state === "invalid" ? (
-                    <StatusErrorIcon decorative size="xs" />
+                    <StatusErrorIcon decorative size="xs" data-part="icon" />
                   ) : undefined
                 }
               >

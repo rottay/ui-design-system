@@ -45,11 +45,77 @@
 import React, { useId, useMemo, useRef, useState } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
 
 const ROOT_CLASS_NAME = 'ds-pattern-calendar-view ds-engine-modern';
+
+/**
+ * The two interactive parts of the grid are STATEFUL PARTS: one place decides
+ * when they are hovered, pressed or focus-visible (the shared interaction
+ * kernel), and the skin pairs every platform pseudo-class with the kernel
+ * token it stands for. At rest the kernel serializes nothing, so `[data-state]`
+ * never matches a resting cell and the pseudo-class stays the fallback of one
+ * decision rather than a second authority (F-37).
+ *
+ * The caller's own `onFocus` / `onBlur` still run: the kernel owns the part's
+ * state, the pattern owns the roving tab stop.
+ */
+type StatefulDivProps = React.HTMLAttributes<HTMLDivElement> & {
+  [key: `data-${string}`]: string | number | boolean | undefined;
+};
+
+const DayCell = React.forwardRef<HTMLDivElement, StatefulDivProps>(function DayCell(
+  { children, onFocus, onBlur, ...rest },
+  ref,
+) {
+  const interaction = useInteractionState();
+  return (
+    <div
+      {...rest}
+      {...interaction.handlers}
+      onFocus={(event) => {
+        interaction.handlers.onFocus(event);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        interaction.handlers.onBlur(event);
+        onBlur?.(event);
+      }}
+      {...partAttributes('day-cell', interaction.state)}
+      ref={ref}
+    >
+      {children}
+    </div>
+  );
+});
+
+const EventChip = React.forwardRef<HTMLDivElement, StatefulDivProps>(function EventChip(
+  { children, onFocus, onBlur, ...rest },
+  ref,
+) {
+  const interaction = useInteractionState();
+  return (
+    <div
+      {...rest}
+      {...interaction.handlers}
+      onFocus={(event) => {
+        interaction.handlers.onFocus(event);
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        interaction.handlers.onBlur(event);
+        onBlur?.(event);
+      }}
+      {...partAttributes('event', interaction.state)}
+      ref={ref}
+    >
+      {children}
+    </div>
+  );
+});
 
 /**
  * Week start for the active locale, from the sanctioned Intl runtime:
@@ -462,8 +528,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                 const isToday = cell && cellKey === today;
                 const isSelected = cell && cellKey === currentKey;
                 return (
-                  <div
-                    data-part="day-cell"
+                  <DayCell
                     data-empty={cell === null}
                     data-today={Boolean(isToday)}
                     data-selected={Boolean(isSelected)}
@@ -520,8 +585,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                         {/* Show at most 3 event chips per cell to keep the grid compact;
                             overflow is shown as "+N more" below. */}
                         {dayEvents.slice(0, 3).map((ev) => (
-                          <div
-                            data-part="event"
+                          <EventChip
                             key={ev.id}
                             /* Button semantics only when the chip actually
                                activates something. Without `onEventClick` the
@@ -545,11 +609,19 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                               eventsInteractive ? (e) => handleChipKeyDown(e, ev) : undefined
                             }
                             /* Per-event color is consumer config data: it rides the
-                               accent hatch (quoted key) and the skin owns the fill. */
-                            style={{ '--ds-calendar-event-accent': ev.color } as React.CSSProperties}
+                               family's own accent channel (quoted key) and the skin
+                               owns the fill. An event that states NO colour stamps
+                               nothing, so the derived resting accent stays reachable
+                               from the theme instead of being shadowed on every
+                               render by an inline property. */
+                            {...(ev.color === undefined
+                              ? {}
+                              : {
+                                  style: { '--ds-calendar-view-event-accent': ev.color } as React.CSSProperties,
+                                })}
                           >
                             {renderEvent ? renderEvent(ev) : ev.title}
-                          </div>
+                          </EventChip>
                         ))}
                         {dayEvents.length > 3 && (
                           <div data-part="overflow-count">
@@ -558,7 +630,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                         )}
                       </>
                     )}
-                  </div>
+                  </DayCell>
                 );
               })}
             </div>

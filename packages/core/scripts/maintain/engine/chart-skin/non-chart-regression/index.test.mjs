@@ -218,7 +218,7 @@ test('visualization skin nonchart direct-paint floors retain their exact caller-
 // `text.match(/'--ds-…-accent': ev\.color\b/g)` and banned direct paint with
 // `assert.doesNotMatch(text, /background\s*:\s*ev\.color/)`. A regex reads bytes,
 // so a producer that has been COMMENTED OUT still counts: delete the live
-// `style={{ '--ds-calendar-event-accent': ev.color }}`, leave a commented corpse
+// `style={{ '--ds-calendar-view-event-accent': ev.color }}`, leave a commented corpse
 // behind, and the count stays at exactly one while the channel publishes
 // nothing. The migration this gate certifies would be silently undone. The ban
 // fails the same way in the opposite direction — a commented
@@ -230,8 +230,8 @@ test('visualization skin nonchart direct-paint floors retain their exact caller-
 // (`const s = {…}` then `style={s}`) is not the style EXPRESSION; and a computed
 // key (`{['--ds-…']: …}`) is not the canonical quoted-literal channel form this
 // gate certifies. None of them count, and each is pinned below.
-const CALENDAR_CHANNEL = '--ds-calendar-event-accent';
-const KANBAN_CHANNEL = '--ds-kanban-column-accent';
+const CALENDAR_CHANNEL = '--ds-calendar-view-event-accent';
+const KANBAN_CHANNEL = '--ds-kanban-board-column-accent';
 const CALENDAR_FILL_PROPS = ['background', 'backgroundColor'];
 const KANBAN_STRIP_PROPS = ['borderTop', 'borderBlockStart'];
 
@@ -239,8 +239,8 @@ const KANBAN_STRIP_PROPS = ['borderTop', 'borderBlockStart'];
 // channel test: they are quoted so the defect is written down as an executable
 // assertion. `\s` is admissible in these two — they scan TSX source, where JS
 // whitespace is the correct set; the CSS-only rule above governs CSS positions.
-const RETIRED_CALENDAR_PRODUCER_REGEX = /'--ds-calendar-event-accent': ev\.color\b/g;
-const RETIRED_KANBAN_PRODUCER_REGEX = /'--ds-kanban-column-accent': column\.color\b/g;
+const RETIRED_CALENDAR_PRODUCER_REGEX = /'--ds-calendar-view-event-accent': ev\.color\b/g;
+const RETIRED_KANBAN_PRODUCER_REGEX = /'--ds-kanban-board-column-accent': column\.color\b/g;
 const RETIRED_CALENDAR_PAINT_REGEX = /(?:background|backgroundColor)\s*:\s*ev\.color/;
 const RETIRED_KANBAN_PAINT_REGEX = /(?:borderTop|borderBlockStart)\s*:\s*column\.color/;
 
@@ -294,6 +294,26 @@ function collectStyleObjects(expression, objects) {
   return objects;
 }
 
+// The second live stamp form: a CONDITIONAL SPREAD. A family that must leave its
+// channel reachable from the theme when the datum states no value cannot write
+// `style={cond ? {…} : undefined}` — React still owns the attribute — so it
+// spreads the whole `style` prop or nothing:
+// `{...(ev.color === undefined ? {} : { style: {…} })}`. The object literal then
+// sits in a PROPERTY position inside a spread payload, not in a `style`
+// attribute, and a collector that only knows the attribute form counts zero
+// publishers for a family that publishes correctly. The transparent-wrapper set
+// is the same one on both sides; only the last hop differs.
+function styleObjectsInSpreadPayload(expression, objects) {
+  for (const payload of collectStyleObjects(expression, [])) {
+    for (const property of payload.properties) {
+      if (!ts.isPropertyAssignment(property)) continue;
+      if (propertyKey(property.name).text !== 'style') continue;
+      collectStyleObjects(property.initializer, objects);
+    }
+  }
+  return objects;
+}
+
 function styleObjectLiterals(sourceFile) {
   const objects = [];
   const visit = (node) => {
@@ -302,6 +322,7 @@ function styleObjectLiterals(sourceFile) {
         collectStyleObjects(node.initializer.expression, objects);
       }
     }
+    if (ts.isJsxSpreadAttribute(node)) styleObjectsInSpreadPayload(node.expression, objects);
     ts.forEachChild(node, visit);
   };
   visit(sourceFile);
@@ -397,6 +418,9 @@ function owningJsxElement(object) {
   }
 
   const expression = node.parent;
+  if (expression && ts.isPropertyAssignment(expression)) {
+    return owningJsxElementOfSpreadStamp(node, expression);
+  }
   if (!expression || !ts.isJsxExpression(expression) || expression.expression !== node) return null;
 
   const attribute = expression.parent;
@@ -404,6 +428,30 @@ function owningJsxElement(object) {
   if (!ts.isIdentifier(attribute.name) || attribute.name.text !== 'style') return null;
 
   const attributes = attribute.parent;
+  if (!attributes || !ts.isJsxAttributes(attributes)) return null;
+
+  const element = attributes.parent;
+  if (!element || (!ts.isJsxOpeningElement(element) && !ts.isJsxSelfClosingElement(element))) return null;
+  return element;
+}
+
+// The ascent mirror of `styleObjectsInSpreadPayload`. Every hop is checked by
+// identity of position exactly as the attribute chain is, so a `style` property
+// on an object that never reaches a JSX spread resolves to null.
+function owningJsxElementOfSpreadStamp(styleObject, property) {
+  if (property.initializer !== styleObject) return null;
+  if (propertyKey(property.name).text !== 'style') return null;
+
+  let payload = property.parent;
+  if (!payload || !ts.isObjectLiteralExpression(payload)) return null;
+  for (let parent = transparentParentOf(payload); parent; parent = transparentParentOf(payload)) {
+    payload = parent;
+  }
+
+  const spread = payload.parent;
+  if (!spread || !ts.isJsxSpreadAttribute(spread) || spread.expression !== payload) return null;
+
+  const attributes = spread.parent;
   if (!attributes || !ts.isJsxAttributes(attributes)) return null;
 
   const element = attributes.parent;
@@ -441,13 +489,132 @@ function countChannelProducers(text, path, channel, datum) {
 // any selector can be matched against; a `data-part` written in a comment or
 // inside a string is not an attribute. Two of them are not one, so the count is
 // reported rather than silently reduced to the first.
-function literalDataPart(element) {
-  const found = element.attributes.properties.filter(
+// ---------------------------------------------------------------------------
+// LOCAL PART WRAPPERS.
+//
+// A family whose part carries interaction state cannot spell that part as a
+// literal attribute on a `<div>`: the state has to come from `useInteractionState`,
+// and a hook needs a component. The families that took that step declare a tiny
+// local wrapper — `const EventChip = React.forwardRef(function EventChip({ children,
+// ...rest }, ref) { … return <div {...rest} {...partAttributes('event', state)}>
+// {children}</div>; })` — and render `<EventChip>` where `<div data-part="event">`
+// used to stand.
+//
+// That element is NOT opaque and its part is NOT unknown. The component is
+// declared in THIS file, it emits exactly one intrinsic element, and the part it
+// stamps is a string literal this walk can read. Treating it as a component whose
+// DOM is unseen would report a defect that is not there, and would make every
+// clause below fail on a family that publishes correctly.
+//
+// The admission is deliberately narrow, and each condition is what makes the
+// resolution sound rather than convenient:
+//
+//   * the declaration is top-level and capitalised — it is a component, not a
+//     helper that happens to build JSX;
+//   * it stamps `partAttributes` with a string-literal part EXACTLY ONCE, so the
+//     name resolves to one part and a wrapper that stamps two parts resolves to
+//     neither;
+//   * the stamped element's tag is intrinsic and carries no literal `data-part`
+//     of its own, so the emitted node is one DOM element with one part identity;
+//   * EVERY return in the declaration is that element, so the component cannot
+//     render `null`, a fragment, or a different tree on another branch — that is
+//     precisely the opacity `classifyTag` exists to refuse, and it is still
+//     refused here.
+//
+// Anything short of all four stays opaque. `DropChildren` — the mutant component
+// that returns `null` — fails the last condition and is refused, which is why the
+// opaque-hop mutants below remain red.
+const LOCAL_PART_WRAPPERS = new WeakMap();
+
+function unwrapParens(expression) {
+  let node = expression;
+  while (ts.isParenthesizedExpression(node)) node = node.expression;
+  return node;
+}
+
+function literalDataPartAttributes(element) {
+  return element.attributes.properties.filter(
     (attribute) =>
       ts.isJsxAttribute(attribute) &&
       ts.isIdentifier(attribute.name) &&
       attribute.name.text === 'data-part',
   );
+}
+
+function localPartWrappers(sourceFile) {
+  const cached = LOCAL_PART_WRAPPERS.get(sourceFile);
+  if (cached) return cached;
+
+  const wrappers = new Map();
+  const declarations = [];
+  for (const statement of sourceFile.statements) {
+    if (ts.isFunctionDeclaration(statement) && statement.name) {
+      declarations.push([statement.name.text, statement]);
+    } else if (ts.isVariableStatement(statement)) {
+      for (const declaration of statement.declarationList.declarations) {
+        if (ts.isIdentifier(declaration.name) && declaration.initializer) {
+          declarations.push([declaration.name.text, declaration.initializer]);
+        }
+      }
+    }
+  }
+
+  for (const [name, body] of declarations) {
+    if (!/^[A-Z]/.test(name)) continue;
+
+    const stamps = [];
+    const collectStamps = (node) => {
+      if (
+        ts.isJsxSpreadAttribute(node) &&
+        ts.isCallExpression(node.expression) &&
+        ts.isIdentifier(node.expression.expression) &&
+        node.expression.expression.text === 'partAttributes' &&
+        node.expression.arguments.length > 0 &&
+        ts.isStringLiteral(node.expression.arguments[0])
+      ) {
+        stamps.push({ part: node.expression.arguments[0].text, attributes: node.parent });
+      }
+      ts.forEachChild(node, collectStamps);
+    };
+    collectStamps(body);
+    if (stamps.length !== 1) continue;
+
+    const attributes = stamps[0].attributes;
+    if (!attributes || !ts.isJsxAttributes(attributes)) continue;
+    const opening = attributes.parent;
+    if (!opening || (!ts.isJsxOpeningElement(opening) && !ts.isJsxSelfClosingElement(opening))) continue;
+    const tag = opening.tagName;
+    if (!ts.isIdentifier(tag) || !/^[a-z]/.test(tag.text)) continue;
+    if (literalDataPartAttributes(opening).length !== 0) continue;
+
+    const stamped = ts.isJsxOpeningElement(opening) ? opening.parent : opening;
+    const roots = [];
+    const collectReturns = (node) => {
+      if (ts.isReturnStatement(node) && node.expression) roots.push(unwrapParens(node.expression));
+      ts.forEachChild(node, collectReturns);
+    };
+    collectReturns(body);
+    if (roots.length === 0 || roots.some((root) => root !== stamped)) continue;
+
+    wrappers.set(name, { part: stamps[0].part, tag: tag.text });
+  }
+
+  LOCAL_PART_WRAPPERS.set(sourceFile, wrappers);
+  return wrappers;
+}
+
+function localPartWrapperOf(element) {
+  const tag = element.tagName;
+  if (!ts.isIdentifier(tag)) return null;
+  return localPartWrappers(element.getSourceFile()).get(tag.text) ?? null;
+}
+
+function literalDataPart(element) {
+  const found = literalDataPartAttributes(element);
+  if (found.length === 0) {
+    const wrapper = localPartWrapperOf(element);
+    if (wrapper) return { count: 1, value: wrapper.part };
+  }
   if (found.length !== 1) return { count: found.length, value: null };
 
   const initializer = found[0].initializer;
@@ -718,6 +885,11 @@ const HTML_VOID_ELEMENTS = new Set([
 function classifyTag(opening) {
   const tag = opening.tagName;
   if (!ts.isIdentifier(tag) || !/^[a-z]/.test(tag.text)) {
+    // A local part wrapper is the one component this file CAN see through: it is
+    // declared here and provably emits one intrinsic element carrying one literal
+    // part. It is classified as that element, never as unknown DOM.
+    const wrapper = ts.isIdentifier(tag) ? localPartWrapperOf(opening) : null;
+    if (wrapper) return { kind: 'intrinsic', label: `<${wrapper.tag}>` };
     return { kind: 'opaque', label: `<${tag.getText()}: component, DOM unknown>` };
   }
   if (HTML_VOID_ELEMENTS.has(tag.text)) {
@@ -1047,6 +1219,21 @@ function producerSelectorPathViolations(text, path, channel, datum, selector) {
 // The uniqueness assertion is the drift alarm, and it is also why a `data-part`
 // mentioned in a comment or inside a `querySelector` string cannot be picked up
 // as the anchor — neither is a JSX element.
+// The loading branch of a family that adopted `AnatomySkeleton` stamps the
+// family's OWN anatomy a second time, so that the renderer can measure it and
+// paint one bone per part. That ghost copy is inert markup handed to the
+// renderer — it hosts no producer and is not the chain these mutants splice
+// into — so it is excluded by its enclosing `<AnatomySkeleton>` rather than by
+// any textual tell. The uniqueness alarm still guards everything outside it.
+function insideAnatomySkeleton(node) {
+  for (let current = node.parent; current; current = current.parent) {
+    if (!ts.isJsxElement(current)) continue;
+    const tag = current.openingElement.tagName;
+    if (ts.isIdentifier(tag) && tag.text === 'AnatomySkeleton') return true;
+  }
+  return false;
+}
+
 function uniqueElementWithPart(text, path, part) {
   const sourceFile = parseTsx(text, path);
   const found = [];
@@ -1055,7 +1242,7 @@ function uniqueElementWithPart(text, path, part) {
     let opening = null;
     if (ts.isJsxSelfClosingElement(node)) opening = node;
     else if (ts.isJsxElement(node)) opening = node.openingElement;
-    if (opening) {
+    if (opening && !insideAnatomySkeleton(node)) {
       const dataPart = literalDataPart(opening);
       if (dataPart.count === 1 && dataPart.value === part) found.push(node);
     }
@@ -1063,7 +1250,11 @@ function uniqueElementWithPart(text, path, part) {
   };
   visit(sourceFile);
 
-  assert.equal(found.length, 1, `exactly one JSX element must carry data-part="${part}"`);
+  assert.equal(
+    found.length,
+    1,
+    `exactly one JSX element outside the skeleton source must carry data-part="${part}"`,
+  );
   return { sourceFile, element: found[0] };
 }
 
@@ -1294,7 +1485,7 @@ function withLeakedSelectorAlternative(css, rule) {
   return widened;
 }
 
-const CALENDAR_PRODUCER_LITERAL = "{ '--ds-calendar-event-accent': ev.color } as React.CSSProperties";
+const CALENDAR_PRODUCER_LITERAL = "{ '--ds-calendar-view-event-accent': ev.color } as React.CSSProperties";
 
 test('visualization skin Calendar Modern crosses the event accent only through a scoped custom property', () => {
   const path = pathFor(FILES.calendarModern);
@@ -1347,7 +1538,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
   assert.equal(cssTrim(sinks[0].prop), 'background', 'the event accent must land as the chip fill');
   assert.equal(
     cssTrim(sinks[0].value),
-    'var(--ds-calendar-event-accent, var(--ds-color-primary))',
+    'var(--ds-calendar-view-event-accent, var(--ds-color-primary))',
     'the event accent sink lost its exact primary fallback',
   );
   assert.deepEqual(
@@ -2103,7 +2294,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
   );
 });
 
-const KANBAN_PRODUCER_LITERAL = "{ '--ds-kanban-column-accent': column.color } as React.CSSProperties";
+const KANBAN_PRODUCER_LITERAL = "{ '--ds-kanban-board-column-accent': column.color } as React.CSSProperties";
 
 test('visualization skin Kanban Modern crosses the column accent only through a scoped custom property', () => {
   const path = pathFor(FILES.kanbanModern);
@@ -2160,7 +2351,7 @@ test('visualization skin Kanban Modern crosses the column accent only through a 
   );
   assert.equal(
     cssTrim(sinks[0].value),
-    '3px solid var(--ds-kanban-column-accent, transparent)',
+    '3px solid var(--ds-kanban-board-column-accent, transparent)',
     'the column accent sink lost its exact transparent fallback',
   );
   assert.deepEqual(

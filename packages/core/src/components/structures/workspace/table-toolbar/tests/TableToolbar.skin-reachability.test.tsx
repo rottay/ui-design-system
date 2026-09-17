@@ -65,6 +65,10 @@ const withFilters = (
   <TableToolbar
     search=""
     onSearchChange={() => undefined}
+    /* Filtered, so the reset affordance renders: the lane's exit has a rule of
+       its own and the reachability sweep has to be able to reach it. */
+    isFiltered
+    onResetFilters={() => undefined}
     filters={<button type="button">Status</button>}
     actions={<button type="button">Extra</button>}
     primaryAction={{ label: "New", onClick: () => undefined }}
@@ -130,7 +134,9 @@ describe("TableToolbar skin reachability", () => {
     const field = winningDecl(
       rules,
       "max-inline-size",
-      (r) => r.selector.endsWith("__search-field") && r.conditions === ""
+      (r) =>
+        r.selector.endsWith("__search-field[data-part='search-field']") &&
+        r.conditions === ""
     );
     expect(field, "the search field had no measure at all").toBeDefined();
     expect(field!.decls["max-inline-size"]).toContain("search-max");
@@ -154,7 +160,9 @@ describe("TableToolbar skin reachability", () => {
     }
 
     const field = rules.find(
-      (r) => r.selector.endsWith("__search-field") && r.conditions === ""
+      (r) =>
+        r.selector.endsWith("__search-field[data-part='search-field']") &&
+        r.conditions === ""
     );
     expect(field).toBeDefined();
     // Each relay falls through to the EXACT root declaration, so a tenant with

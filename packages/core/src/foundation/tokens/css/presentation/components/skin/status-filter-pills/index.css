@@ -13,6 +13,19 @@
  * geometry, motion (token-derived), and state paint live here — zero inline
  * styles. The pressed state is announced by the engine (`aria-pressed`) and
  * reads through border + ink + label weight + count contrast, never hue alone.
+ *
+ * STATE IS DECIDED ONCE (F-37, WO-FAM-08): the pill is a stateful part — the
+ * pattern runs it through `useInteractionState` and stamps
+ * `partAttributes('pill', …)` — so every hover, press and focus arm below
+ * pairs the kernel token with the platform pseudo-class it stands for
+ * (`:is([data-state~='hovered'], :hover)`), which leaves the selector's
+ * specificity exactly where the ladder above put it. At rest the kernel
+ * serializes nothing, so the pseudo-class is the fallback of one decision,
+ * never a second authority.
+ *
+ * CHANNELS: every `--ds-filter-pill-*` name this file reads already has a
+ * producer, so the family owns no deriver of its own; its vocabulary is the
+ * shared filter-pill one, not a private namespace.
  */
 
 /* ---- root: wraps when the composition narrows. ---- */
@@ -108,7 +121,7 @@
 
 @media (hover: hover) {
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true']) {
+    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='hovered'], :hover):not([data-selected='true']) {
     background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
     border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   }
@@ -116,12 +129,12 @@
 
 /* Touch/active equivalent of the hover wash (4th-tanda law). */
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:active:not([data-selected='true']) {
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='pressed'], :active):not([data-selected='true']) {
   background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
 }
 
 .ds-pattern-status-filter-pills
-  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:focus-visible {
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
 }
 
@@ -235,7 +248,7 @@
   }
 
   .ds-pattern-status-filter-pills
-    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:focus-visible {
+    .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;

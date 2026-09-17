@@ -34,6 +34,7 @@
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { FileManagerProps, FileItem, FileSystemItem } from '../../contracts';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { formatDate as formatDateIntl, formatFileSize } from '@/foundation/i18n/runtime/formatting';
 import { LayoutGridIcon } from '@/graphics/icons/semantic/generated/roles/layout-grid';
 import { LayoutListIcon } from '@/graphics/icons/semantic/generated/roles/layout-list';
@@ -44,6 +45,71 @@ import ModernCheckbox from '../../../../../primitives/inputs/checkbox/engines/mo
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/empty/engines/modern';
 import ModernBreadcrumb from '../../../../../primitives/navigation/breadcrumb/engines/modern';
+
+/**
+ * The list row and the grid card are STATEFUL PARTS: one place decides when
+ * they are hovered, pressed or focus-visible (the shared interaction kernel),
+ * and the skin pairs every platform pseudo-class with the kernel token it
+ * stands for. At rest the kernel serializes nothing, so `[data-state]` never
+ * matches a resting row and the pseudo-class stays the fallback of one
+ * decision rather than a second authority (F-37). The folder link needs none
+ * of this: it is a composed Button, and the primitive already decides its own
+ * state through the same kernel.
+ *
+ * The caller's own `onFocus` / `onBlur` still run: the kernel owns the part's
+ * state, the pattern owns the roving tab stop.
+ */
+type StatefulProps<E extends HTMLElement> = React.HTMLAttributes<E> & {
+  [key: `data-${string}`]: string | number | boolean | undefined;
+};
+
+const FileRow = React.forwardRef<HTMLTableRowElement, StatefulProps<HTMLTableRowElement>>(
+  function FileRow({ children, onFocus, onBlur, ...rest }, ref) {
+    const interaction = useInteractionState();
+    return (
+      <tr
+        {...rest}
+        {...interaction.handlers}
+        onFocus={(event) => {
+          interaction.handlers.onFocus(event);
+          onFocus?.(event);
+        }}
+        onBlur={(event) => {
+          interaction.handlers.onBlur(event);
+          onBlur?.(event);
+        }}
+        {...partAttributes('row', interaction.state)}
+        ref={ref}
+      >
+        {children}
+      </tr>
+    );
+  },
+);
+
+const GridCard = React.forwardRef<HTMLDivElement, StatefulProps<HTMLDivElement>>(
+  function GridCard({ children, onFocus, onBlur, ...rest }, ref) {
+    const interaction = useInteractionState();
+    return (
+      <div
+        {...rest}
+        {...interaction.handlers}
+        onFocus={(event) => {
+          interaction.handlers.onFocus(event);
+          onFocus?.(event);
+        }}
+        onBlur={(event) => {
+          interaction.handlers.onBlur(event);
+          onBlur?.(event);
+        }}
+        {...partAttributes('grid-card', interaction.state)}
+        ref={ref}
+      >
+        {children}
+      </div>
+    );
+  },
+);
 
 /** Without a provider `tOr` returns the fallback verbatim, so `{name}`
     would otherwise reach accessible names as literal braces. */
@@ -372,9 +438,8 @@ export default function ModernFileManager(props: FileManagerProps) {
                       class dependency; the composed Checkbox carries the same
                       state to AT, so the fill is never the only cue. */}
                   {items.map(item => (
-                    <tr
+                    <FileRow
                       key={item.id}
-                      data-part="row"
                       data-selected={selectedItems.includes(item.id)}
                       data-file-kind={fileKindOf(item)}
                     >
@@ -470,7 +535,7 @@ export default function ModernFileManager(props: FileManagerProps) {
                           )}
                         </div>
                       </td>
-                    </tr>
+                    </FileRow>
                   ))}
                 </tbody>
               </table>
@@ -482,10 +547,9 @@ export default function ModernFileManager(props: FileManagerProps) {
                carries the same name the list table does. */
             <div data-part="grid" role="group" aria-label={tOr('fileManager.listLabel', 'Files and folders')}>
               {items.map((item, index) => (
-                <div
+                <GridCard
                   key={item.id}
                   ref={(node) => { gridCardRefs.current[index] = node; }}
-                  data-part="grid-card"
                   data-selected={selectedItems.includes(item.id)}
                   data-file-kind={fileKindOf(item)}
                   className="ds-file-manager__grid-card"
@@ -510,7 +574,7 @@ export default function ModernFileManager(props: FileManagerProps) {
                     )}
                     <span data-part="item-name" title={item.name}>{item.name}</span>
                   </div>
-                </div>
+                </GridCard>
               ))}
             </div>
           )}

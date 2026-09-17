@@ -37,8 +37,11 @@
  * hue alone.
  *
  * EVENT ACCENT HATCH: `CalendarEvent.color` is consumer-supplied config data;
- * it rides the quoted `--ds-calendar-event-accent` custom property the engine
- * stamps per chip, and the single rule below owns the fill (one paint owner).
+ * it rides the quoted `--ds-calendar-view-event-accent` custom property, and
+ * the single rule below owns the fill (one paint owner). The engine stamps it
+ * CONDITIONALLY -- an event that states no colour spreads no `style` at all --
+ * so the derived resting accent stays reachable from the theme instead of being
+ * shadowed inline on every render.
  * In forced colors the accent data deliberately DISAPPEARS (documented
  * decision): events read by their title text inside a system-ink frame —
  * there is no forced-color-adjust opt-out, the chip is not a color picker.
@@ -67,6 +70,22 @@
  * TOKEN OWNERSHIP: selected-ring width reuses the canonical focus-ring width;
  * the narrow event-dot diameter is private to this family because it is not a
  * tenant-level density rung.
+ *
+ * CHANNELS (WO-FAM-08): every `--ds-calendar-view-*` name below has a producer
+ * -- `derivation/chrome/calendar-view` emits the cell floors, the event accent
+ * and the coarse-pointer target at exactly the resting values written here as
+ * fallbacks, so a tenant can move them. The accent used to be read and stamped
+ * as `--ds-calendar-event-accent`, a name inside the `calendar` PRIMITIVE's
+ * prefix that nothing wrote; it is now the family's own channel, fallback
+ * byte-identical.
+ *
+ * STATE IS DECIDED ONCE (F-37): the day cell and the event chip are stateful
+ * parts -- the engine runs each through `useInteractionState` and stamps
+ * `partAttributes(...)` -- so every hover, press and focus arm below pairs the
+ * kernel token with the platform pseudo-class it stands for
+ * (`:is([data-state~='hovered'], :hover)`). At rest the kernel serializes
+ * nothing, so the pseudo-class is the fallback of one decision, never a second
+ * authority.
  */
 
 /* ---- loading frame (Spinner owns ring + cadence) ---- */
@@ -74,6 +93,16 @@
   display: flex;
   justify-content: center;
   padding-block: var(--ds-spacing-12, 3rem);
+}
+/* The composed Spinner is the loading frame's only child and carries no class
+   of this family, so the child combinator scopes the one thing the PATTERN
+   owns about it: where it sits. Its ring, size and cadence stay the
+   primitive's (composition law above) -- the slot is clipped to the frame,
+   never restyled. */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='loading']
+  > [data-part='spinner'] {
+  align-self: center;
 }
 
 /* ---- toolbar (geometry drained from utilities) ---- */
@@ -161,13 +190,13 @@
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    [data-part='day-cell'][data-empty='false']:hover {
+    [data-part='day-cell'][data-empty='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  [data-part='day-cell'][data-empty='false']:active {
+  [data-part='day-cell'][data-empty='false']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-inset);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
@@ -179,7 +208,7 @@
 /* ---- gridcell keyboard ring: inset (the grid hairlines own the borders) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  [data-part='day-cell'][data-empty='false']:focus-visible {
+  [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
 }
@@ -225,7 +254,7 @@
   white-space: nowrap;
   cursor: pointer;
   border-radius: var(--ds-radius-sm);
-  background: var(--ds-calendar-event-accent, var(--ds-color-primary));
+  background: var(--ds-calendar-view-event-accent, var(--ds-color-primary));
   color: var(--ds-color-text-on-primary);
   font-size: var(--ds-font-size-xs, 0.75rem);
   transition: filter var(--ds-motion-fast) var(--ds-motion-ease-out);
@@ -234,20 +263,20 @@
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event']:hover {
+    [data-part='event']:is([data-state~='hovered'], :hover) {
     filter: brightness(1.06);
   }
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:active {
+  [data-part='event']:is([data-state~='pressed'], :active) {
   filter: brightness(0.94);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell']
-  [data-part='event']:focus-visible {
+  [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -354,7 +383,7 @@
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    [data-part='day-cell'][data-empty='false']:focus-visible {
+    [data-part='day-cell'][data-empty='false']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
 
@@ -375,7 +404,7 @@
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
     [data-part='day-cell']
-    [data-part='event']:focus-visible {
+    [data-part='event']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
 

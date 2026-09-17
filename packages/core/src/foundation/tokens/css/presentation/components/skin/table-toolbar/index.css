@@ -45,6 +45,12 @@
  * declares the toolbar family gets a branded band; one that declares none of
  * it falls through to its own surface and border tokens.
  *
+ * ANATOMY (WO-FAM-08): every region rule names the `data-part` the family
+ * stamps beside the private class it already carried, so the anatomy contract
+ * has both sides and a consumer can key on either. The search field's part is
+ * an ANCESTOR in the glyph rules -- the composed Input's node is still painted
+ * by nobody (see the relay note below); the part is a route, not a surface.
+ *
  * MATERIAL INVARIANT — DELIBERATELY FLAT. This family reads no elevation
  * channel and must not grow one. The toolbar is a row ON the surface it
  * belongs to, separated by exactly one hairline. `--ds-toolbar-shadow` is a
@@ -78,23 +84,32 @@
 }
 
 /* ---- row sections: one seam channel instead of three fixed paddings ---- */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
   flex-shrink: 0;
   min-inline-size: 0;
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__spacer[data-part='spacer'] {
   flex: 1;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
   flex-shrink: 0;
   min-inline-size: 0;
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
   padding-inline-end: var(--_ds-table-toolbar-section-gap);
 }
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
   padding-inline-start: var(--_ds-table-toolbar-section-gap);
+}
+
+/* ---- the reset affordance is the filters lane's EXIT, not one of its
+        filters: a crowded cluster wraps around it and never squeezes it.
+        The composed ghost Button keeps its own chrome. ---- */
+.ds-structure.ds-table-toolbar[data-part='root']
+  .ds-table-toolbar__filters[data-part='filters']
+  [data-part='clear-filters'] {
+  flex-shrink: 0;
 }
 
 /* ---- divider: soft vertical hairline with a paper highlight ---- */
@@ -143,7 +158,7 @@
  * type step is a deliberate departure: toolbar controls speak the supporting
  * step rather than the Input's 14px default.
  * ------------------------------------------------------------------------ */
-.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field {
+.ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
   flex: 0 1 auto;
   inline-size: 100%;
   max-inline-size: var(--_ds-table-toolbar-search-max);
@@ -159,7 +174,8 @@
    position. Its tint follows the field's focus through the primitive's own
    focus-within, which reaches the affix as a descendant. */
 .ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field
+  .ds-table-toolbar__search-field[data-part='search-field']
+  [data-part='search-input']
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
@@ -167,7 +183,8 @@
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-table-toolbar
-  .ds-table-toolbar__search-field:focus-within
+  .ds-table-toolbar__search-field[data-part='search-field']:focus-within
+  [data-part='search-input']
   .ds-table-toolbar__search-icon[data-part='search-icon'] {
   color: var(--ds-toolbar-color, var(--ds-color-text-secondary));
 }
@@ -175,15 +192,15 @@
 /* ---- posture: tablet. The search field is the toolbar's primary
         affordance, so it claims its own row before anything is compressed. ---- */
 @container ds-table-toolbar (max-width: 64rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__row[data-part='row'] {
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__left[data-part='left'] {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__search-field[data-part='search-field'] {
     flex: 1 1 100%;
     max-inline-size: 100%;
   }
@@ -196,22 +213,22 @@
         with the row it divided, and the primary action becomes a full-width
         commit control instead of a compact end-edge button. ---- */
 @container ds-table-toolbar (max-width: 40rem) {
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__right[data-part='controls'] {
     flex: 1 1 100%;
     flex-wrap: wrap;
     row-gap: var(--_ds-table-toolbar-row-gap);
     justify-content: flex-start;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__filters[data-part='filters'] {
     flex: 1 1 100%;
     padding-inline-end: 0;
   }
-  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions {
+  .ds-structure.ds-table-toolbar[data-part='root'] .ds-table-toolbar__actions[data-part='actions'] {
     flex: 1 1 100%;
     padding-inline-start: 0;
   }
   .ds-structure.ds-table-toolbar[data-part='root']
-    .ds-table-toolbar__actions
+    .ds-table-toolbar__actions[data-part='actions']
     [data-part='primary-action'] {
     flex: 1 1 auto;
   }
@@ -235,7 +252,8 @@
     box-shadow: none;
   }
   .ds-structure.ds-table-toolbar
-    .ds-table-toolbar__search-field
+    .ds-table-toolbar__search-field[data-part='search-field']
+    [data-part='search-input']
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     color: CanvasText;
   }
@@ -244,7 +262,8 @@
 /* Reduced motion: the only animated channel is the icon color cross-fade. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-table-toolbar
-    .ds-table-toolbar__search-field
+    .ds-table-toolbar__search-field[data-part='search-field']
+    [data-part='search-input']
     .ds-table-toolbar__search-icon[data-part='search-icon'] {
     transition: none;
   }

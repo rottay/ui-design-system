@@ -53,6 +53,14 @@
  * a box. The objects keep the Tag primitive's chrome untouched and gain only
  * the hit-target floor a dismissible object owes.
  *
+ * CHANNELS (WO-FAM-08): every `--ds-active-filters-bar-*` name below has a
+ * producer -- `derivation/chrome/active-filters-bar` emits the ground, the
+ * rule, the chips measure, the eyebrow's height and ink, both padding pairs
+ * and the entrance duration at exactly the resting values written here as
+ * fallbacks, so a tenant can move them. The two `--ds-control-size-*` rungs
+ * the chip target reads are a kernel scale with no owner today and are this
+ * cut's named residue, not channels for this deriver to grow into.
+ *
  * REGION VOCABULARY: ground, rule, seam and rhythm read `--ds-toolbar-*` and
  * `--ds-list-shell-section-gap` UNDER the family's own channels, so a tenant
  * can still address the rail alone; when it does not, the rail follows the
@@ -298,7 +306,13 @@
     padding-inline-end: 0;
     border-inline-end: 0;
   }
-  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"] {
+  /* The disclosure toggle shares the chips lane, so on a coarse pointer it
+     takes the same target the objects beside it take -- a 32px control in a
+     row of 40px objects is a mis-sized tap area, not a quieter one. The
+     Button primitive still owns its chrome. */
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="chip"],
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="more-toggle"],
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="less-toggle"] {
     min-block-size: calc(
       var(--ds-control-size-md, 2.5rem) * var(--ds-density-effective-scale, 1)
     );

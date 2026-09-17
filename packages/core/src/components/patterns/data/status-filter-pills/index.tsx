@@ -12,9 +12,10 @@
  * their own state container.
  */
 
-import type { ComponentType } from 'react';
+import type { ComponentProps, ComponentType, ReactNode } from 'react';
 type StatusFilterPillIcon = ComponentType<any>;
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box } from '../../../primitives/layout/box';
 import { Flex } from '../../../primitives/layout/flex';
 import { Text } from '../../../primitives/display/typography/compound/text';
@@ -46,6 +47,32 @@ export interface StatusFilterPillsProps {
   size?: 'sm' | 'md';
 }
 
+/**
+ * The pill is a STATEFUL PART: one place decides when it is hovered, pressed
+ * or focus-visible (the shared interaction kernel), and the skin pairs every
+ * platform pseudo-class with the kernel token it stands for. At rest the
+ * kernel serializes nothing, so `[data-state]` never matches a resting pill
+ * and the pseudo-class stays the fallback of one decision rather than a
+ * second authority (F-37).
+ */
+function Pill({
+  children,
+  ...rest
+}: ComponentProps<typeof Box> & { children?: ReactNode }) {
+  const interaction = useInteractionState();
+  return (
+    <Box
+      as="button"
+      type="button"
+      {...rest}
+      {...interaction.handlers}
+      {...partAttributes('pill', interaction.state)}
+    >
+      {children}
+    </Box>
+  );
+}
+
 export function StatusFilterPills({
   options,
   value,
@@ -69,11 +96,8 @@ export function StatusFilterPills({
         const Icon = option.icon;
 
         return (
-          <Box
+          <Pill
             key={option.value}
-            as="button"
-            type="button"
-            data-part="pill"
             className="ds-status-filter-pills__pill"
             data-selected={isSelected}
             data-size={size}
@@ -113,7 +137,7 @@ export function StatusFilterPills({
                 </Text>
               </Box>
             )}
-          </Box>
+          </Pill>
         );
       })}
     </Flex>
