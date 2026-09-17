@@ -1495,11 +1495,11 @@ export function deriveCanonicalZScaleRoster(cssText) {
  */
 export const CHANNEL_DISPOSITIONS = Object.freeze([
   Object.freeze({
-    owner: 'WO-DER-06',
+    owner: 'WO-EVI-02',
     classification: LIVENESS.authorableUnprovenEffect,
-    registered: '2026-09-11',
+    registered: '2026-09-17',
     reason:
-      'the vertical-preset conversion decides reader-or-retire per channel; the 2026-09-10 amendment already routed ramps.accent there and the audit-100 disposition extended it to the full authorable set',
+      'the authorable set the preset conversion closed without deciding: the accent ramp (a palette.seeds role with no emitter), --ds-color-info-300, the glass and overlay surfaces, and the 16/24 steps of the four status tint ramps. WO-DER-06 went done on 2026-09-15 with all 24 rows still non-LIVE, and its own reader-or-retire lot disposed only what it could measure (the switch namespace, the two profiles, --ds-color-text-page, --ds-elevation-border-style); proving or refusing an effect is the causal-gates obligation, and a change of owner is not resolution. The pin clears per channel when the by-axis effect proof lands a terminal for it, or when the channel retires together with its producers and its authorable catalog entry in the same commit -- never by deleting a ramp step to reach green',
     channels: Object.freeze([
       '--ds-color-accent-50',
       '--ds-color-accent-100',
@@ -1528,11 +1528,11 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     ]),
   }),
   Object.freeze({
-    owner: 'WO-FAM-07',
+    owner: 'WO-EVI-02',
     classification: LIVENESS.unreadEmittedNoRoute,
-    registered: '2026-09-12',
+    registered: '2026-09-17',
     reason:
-      'CSS @media/@container preludes cannot read custom properties (WO-INV-07 evidence), so the only productive route was a family cut that paints or style-queries these values. WO-FAM-07 discharged it both ways: the Container measure ladder now reads --ds-breakpoint-{sm..2xl} (a rung resolves to the viewport step it frames, probed in Container.causality), and the zero floor --ds-breakpoint-xs was retired from emission and from the contract sheet rather than kept as a permanent dead writer. This row stays only until the five wired channels are re-measured as read',
+      'a CSS @media/@container prelude cannot read a custom property, so the productive route was always a paint or a style query: the Container measure ladder supplies it, reading --ds-breakpoint-{sm..2xl} through a deriver-to-deriver chain (--ds-container-<step>: var(--ds-breakpoint-<step>)) whose terminal is the container measure, probed in Container.causality. The liveness graph does not follow that shape, so the five rows measure unread while the route is real and Chromium-probed. WO-FAM-07 went done on 2026-09-16 having landed that adoption, which leaves only the instrument gap -- the same class as the status-tint pin this lane already owns. The pin clears when the graph counts a deriver-to-deriver chain as a productive route and the five rows re-measure read, or when a probe disproves the chain and the rows return to a layout cut as real debt',
     channels: Object.freeze([
       '--ds-breakpoint-2xl',
       '--ds-breakpoint-lg',
@@ -1540,6 +1540,14 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
       '--ds-breakpoint-sm',
       '--ds-breakpoint-xl',
     ]),
+  }),
+  Object.freeze({
+    owner: 'WO-EVI-02',
+    classification: LIVENESS.unreadEmittedNoRoute,
+    registered: '2026-09-17',
+    reason:
+      'the row is measured emitted and nothing emits it: derivation/responsive skips the zero floor (`if (step === PROJECTION_FLOOR) continue`) and --ds-breakpoint-xs is absent from every compiled vertical artifact, while this producer resolves vars[`--ds-breakpoint-${step}`] over the whole imported RESPONSIVE_BREAKPOINTS table and does not model the single-step guard. The retirement dropped its WO-FAM-07 pin, which left a false row unregistered and STOP NO-GO, so it is re-pinned here instead of carried silently -- a pin is not deleted to reach green. The pin retires with the row when the keyed resolver honors the emitter guard, or becomes real debt if a residual emission is ever measured',
+    channels: Object.freeze(['--ds-breakpoint-xs']),
   }),
   Object.freeze({
     owner: 'WO-FAM-12',
@@ -1580,10 +1588,11 @@ export const CHANNEL_DISPOSITIONS = Object.freeze([
     ]),
   }),
   Object.freeze({
-    owner: 'WO-DER-06',
+    owner: 'WO-EVI-02',
     classification: LIVENESS.readUnproven,
-    registered: '2026-09-11',
-    reason: 'the only evidence is a raw TS/TSX var() occurrence; the preset conversion decides reader-or-retire',
+    registered: '2026-09-17',
+    reason:
+      'the only evidence is a raw TS/TSX var() occurrence with no stylesheet terminal, so the step is read without being painted. WO-DER-06 went done on 2026-09-15 without deciding it and the preset conversion it named as the decider is finished, so the proof belongs to the causal gates. The pin clears when the TSX read is proven to reach a terminal or a stylesheet reader is wired, or when the step retires from the secondary ramp with its producers -- never by counting a TS occurrence as paint',
     channels: Object.freeze(['--ds-color-secondary-400']),
   }),
 ]);

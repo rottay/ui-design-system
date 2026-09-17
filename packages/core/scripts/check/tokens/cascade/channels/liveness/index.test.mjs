@@ -1700,7 +1700,7 @@ test('dispositionFailures is the ownership law plus the preconditions that make 
   ]);
 });
 
-test('META: the SHIPPED table is the registered set -- 45 channels, one owner each, no duplicates', () => {
+test('META: the SHIPPED table is the registered set -- 44 channels, one owner each, no duplicates', () => {
   const { index, duplicates } = buildDispositionIndex();
   assert.deepEqual(duplicates, []);
   assert.equal(
