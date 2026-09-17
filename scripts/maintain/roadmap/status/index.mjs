@@ -2762,7 +2762,7 @@ export const PROGRAM_MILESTONES = [
   {
     id: "B",
     title: "Real cascade in Modern",
-    gates: ["WO-DER-05", "WO-DER-07", "WO-EVI-02", "WO-FAM-01", "WO-FAM-02", "WO-FAM-06"],
+    gates: ["WO-DER-05", "WO-EVI-02", "WO-FAM-01", "WO-FAM-02", "WO-FAM-06"],
     enables: "Two tenants of the same vertical differ in shape, rhythm, states and mode, not only in colour and typography; the fleet by-axis threshold of WO-EVI-02 is reached.",
   },
   {

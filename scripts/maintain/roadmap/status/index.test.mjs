@@ -2071,6 +2071,24 @@ test("the pilot milestone carries the pilot instrument and the fleet threshold g
   assert.ok(!PROGRAM_MILESTONES.some((milestone) => milestone.id === "A2"));
 });
 
+test("milestone B gates the cascade, never the deferred branding pick, which still gates C", () => {
+  // The BitHire identity pick was deferred to the branding stage, so the work
+  // order that holds it cannot hold B; it must still gate the programme's end.
+  const b = PROGRAM_MILESTONES.find((milestone) => milestone.id === "B");
+  assert.deepEqual(b.gates, ["WO-DER-05", "WO-EVI-02", "WO-FAM-01", "WO-FAM-02", "WO-FAM-06"]);
+  assert.ok(!b.gates.includes("WO-DER-07"));
+
+  const registry = liveRegistry();
+  const der07 = registry.workOrders.find((workOrder) => workOrder.id === "WO-DER-07");
+  assert.ok(der07, "WO-DER-07 must remain registered");
+  assert.ok((der07.programs || []).includes("audit-2026-09-05"));
+  const milestoneC = summarizeProgramMilestones(registry).find((milestone) => milestone.id === "C");
+  assert.ok(
+    milestoneC.gates.includes("WO-DER-07"),
+    "the deferred pick must keep gating milestone C",
+  );
+});
+
 // Milestone reachability is asserted against controlled fixtures, never against
 // the live registry: a live assertion turns every legitimate reopen into a red
 // test and pressures the roadmap to stay green rather than stay true.
