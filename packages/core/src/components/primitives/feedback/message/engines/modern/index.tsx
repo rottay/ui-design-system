@@ -19,7 +19,7 @@ import React, { createContext, useCallback, useContext, useLayoutEffect, useRef,
 import type { MessageConfig, MessageInstance, MessageItemProps, MessageProviderProps, MessageType } from '../../contracts';
 import { MESSAGE_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
-import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n/composition/translation';
 import { NotifierItem, NotifierStack } from '../../../notifier';
 
@@ -50,11 +50,11 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
   const stackRef = useRef<HTMLDivElement>(null);
   const revisionRef = useRef(0);
 
-  const overlay = useFieldOverlay({
+  // The stack pins to nothing and never portals: it is skin-placed in tree, so
+  // it takes the band and stack membership from the layer manager directly.
+  const layer = useOverlayLayer({
     kind: 'toast',
-    open: messages.length > 0,
-    surface: 'viewport',
-    render: 'inline',
+    active: messages.length > 0,
     modal: false,
     lockScroll: false,
     restoreFocus: false,
@@ -164,10 +164,10 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
         ref={stackRef}
         role="message"
         placement={placement}
-        layer={overlay.zIndex}
+        layer={layer.zIndex}
         offset={placement === 'top' ? top : undefined}
-        data-overlay-layer={overlay.panelProps['data-overlay-layer']}
-        data-overlay-kind={overlay.panelProps['data-overlay-kind']}
+        data-overlay-layer={layer.layerProps['data-overlay-layer']}
+        data-overlay-kind={layer.layerProps['data-overlay-kind']}
         liveRole="log"
         aria-live="polite"
         onFocus={handleStackFocus}

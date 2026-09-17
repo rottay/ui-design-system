@@ -4,7 +4,8 @@
  * @fileoverview `useFieldOverlay` -- the SINGLE overlay contract every family
  * with a panel adopts (the 9 overlay-bearing inputs plus modal, drawer, sheet,
  * the dialogs, popover, popconfirm, dropdown, context-menu, hover-card,
- * tooltip, tour, toast, notification and message).
+ * tooltip, tour, toast and notification). A family that owns no panel to
+ * place, portal or dismiss takes the band from `layer-stack` directly.
  *
  * It composes the five runtime/overlay owners that were previously wired by
  * hand -- and inconsistently -- in every engine file:
@@ -28,11 +29,10 @@
  * - `viewport` -- the panel owns the viewport (modal, drawer, sheet, toast
  *   region). No anchor measurement; the layer style carries the z band.
  *
- * `render: 'inline'` is an explicit, declared mode for the two families whose
- * panel is in-tree BY DESIGN: Upload's preview scrim is a full-viewport child
- * of the field it belongs to, and Message's stack is skin-placed in-tree on
- * its own `--ds-z-message` tier. Both still join the shared stack, Escape
- * route and z band. It is not a second overlay mechanism.
+ * `render: 'inline'` is an explicit, declared mode for a family whose panel is
+ * in-tree BY DESIGN: Upload's preview scrim is a full-viewport child of the
+ * field it belongs to. It still joins the shared stack, Escape route and z
+ * band. It is not a second overlay mechanism.
  */
 
 import React, {
@@ -89,8 +89,7 @@ export type FieldOverlaySurface = 'anchored' | 'viewport';
 /**
  * `auto` follows the positioning branch (top layer renders inline, measured
  * renders through the portal). `inline` is the declared mode for a panel that
- * is in-tree by design (Upload's field-child scrim, Message's skin-placed
- * stack).
+ * is in-tree by design (Upload's field-child scrim).
  */
 export type FieldOverlayRenderMode = 'auto' | 'inline';
 
