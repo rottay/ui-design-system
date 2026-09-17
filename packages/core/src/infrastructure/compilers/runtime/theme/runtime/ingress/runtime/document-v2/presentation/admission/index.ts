@@ -150,7 +150,7 @@ function v1FontAuthorship(
       ? document.appearance?.typography
       : document.visualFoundation?.general?.typography;
   const families = Object.fromEntries(
-    (["fontFamilyBase", "fontFamilyHeading"] as const)
+    (["fontFamilyBase", "fontFamilyHeading", "fontFamilyDisplay"] as const)
       .filter((role) => typography?.[role] !== undefined)
       .map((role) => [role, typography?.[role]])
   );

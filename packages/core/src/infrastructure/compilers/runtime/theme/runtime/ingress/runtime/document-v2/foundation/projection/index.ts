@@ -157,12 +157,16 @@ function writeAnatomy(target: ProjectionTarget, value: unknown): boolean {
 }
 
 /**
- * The two typography roles v1's general transport can carry. `display` and
- * `mono` are registered but have no keypath, so they are reported unlit rather
- * than routed through the raw `--ds-font-family-*` allowlist D-03 retires.
+ * The typography roles v1's general transport can carry. `mono` is registered
+ * but has no keypath, so it is reported unlit rather than routed through the
+ * raw `--ds-font-family-*` allowlist D-03 retires.
  */
 const V1_TYPOGRAPHY_ROLE_FIELDS: Readonly<Record<string, string>> =
-  Object.freeze({ base: "fontFamilyBase", heading: "fontFamilyHeading" });
+  Object.freeze({
+    base: "fontFamilyBase",
+    heading: "fontFamilyHeading",
+    display: "fontFamilyDisplay",
+  });
 
 function writeFamilies(target: ProjectionTarget, value: unknown): boolean {
   assertClosedKeys("typography.families", value, TYPOGRAPHY_FAMILY_ROLES);
@@ -176,8 +180,8 @@ function writeFamilies(target: ProjectionTarget, value: unknown): boolean {
         `unsupported fontPackId ${JSON.stringify(packId)} for role "${role}"`
       );
     }
-    // `display` and `mono` are registered roles with no v1 keypath: unlit, not
-    // unknown. An unknown role never reaches here; the door refuses it.
+    // `mono` is a registered role with no v1 keypath: unlit, not unknown. An
+    // unknown role never reaches here; the door refuses it.
     const field = V1_TYPOGRAPHY_ROLE_FIELDS[role];
     if (!field) continue;
     // The DB document validator (`isSafeFontFamily`) admits exactly the bare

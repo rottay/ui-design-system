@@ -3259,6 +3259,11 @@ export interface TenantAppearanceGeneral {
     fontFamilyBase?: string;
     fontFamilyHeading?: string;
     /**
+     * No pairing expands into the display role, so this is the only way it
+     * reaches `--ds-font-family-display`; absent, the floor forwards to base.
+     */
+    fontFamilyDisplay?: string;
+    /**
      * Compiler-owned font pairing preset applied before the free-form
      * families; explicit fontFamilyBase/Heading always win.
      */

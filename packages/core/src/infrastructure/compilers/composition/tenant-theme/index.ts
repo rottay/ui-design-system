@@ -38,7 +38,6 @@ import type {
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   TENANT_THEME_ANATOMY_VARIANTS,
-  TENANT_THEME_FONT_PACK_IDS,
   TENANT_THEME_REFERENCE_TOKENS,
   TENANT_THEME_SCHEMA_VERSION,
   TENANT_THEME_V1_COVERAGE,
@@ -52,6 +51,7 @@ import {
   type OnToneRole,
 } from "../../kernel/foundation/css/color-math/readable-ink";
 import {
+  isSafeFontFamily,
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
@@ -198,35 +198,6 @@ function isTenantColor(value: string): boolean {
     isValidCssColor(value) &&
     !/^(?:var|inherit|currentColor|unset|initial|none)\b/i.test(value)
   );
-}
-
-const FONT_PACK_REFERENCE =
-  /var\(--ds-font-pack-([a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)\)/g;
-
-/**
- * Admit only code-owned font-pack variables inside an otherwise ordinary CSS
- * font-family list. Arbitrary `var()` references and fallback arguments stay
- * forbidden, so DB data can choose a loaded pack but cannot name private DS
- * tokens or turn font loading into a tenant-owned asset channel.
- */
-function isSafeFontFamily(value: string): boolean {
-  const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
-  if (
-    value.length === 0 ||
-    value.length > limits.maxFontFamilyLength ||
-    value !== value.trim()
-  )
-    return false;
-  const references = value.match(FONT_PACK_REFERENCE) ?? [];
-  const allVarFunctions = value.match(/var\s*\(/gi) ?? [];
-  if (references.length !== allVarFunctions.length) return false;
-  const allowedPacks = new Set<string>(TENANT_THEME_FONT_PACK_IDS);
-  for (const reference of references) {
-    const packId = /^var\(--ds-font-pack-(.+)\)$/.exec(reference)?.[1];
-    if (!packId || !allowedPacks.has(packId)) return false;
-  }
-  const withoutFontPacks = value.replace(FONT_PACK_REFERENCE, "FontPack");
-  return /^[\p{L}\p{N}\s'",._-]+$/u.test(withoutFontPacks);
 }
 
 function validateNode(

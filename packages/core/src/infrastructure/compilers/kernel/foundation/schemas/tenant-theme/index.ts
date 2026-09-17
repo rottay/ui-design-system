@@ -172,6 +172,7 @@ const general = object({
   typography: object({
     fontFamilyBase: string("font-family"),
     fontFamilyHeading: string("font-family"),
+    fontFamilyDisplay: string("font-family"),
     typePairing: enumeration("sober", "editorial", "geometric", "technical"),
     scale: number({
       min: TENANT_THEME_TYPE_SCALE_BOUNDS.min,
@@ -2065,6 +2066,39 @@ export const TENANT_THEME_CONFIG_SCHEMA = deepFreeze({
     maxGridSizePx: 256,
   }),
 });
+
+const FONT_PACK_REFERENCE =
+  /var\(--ds-font-pack-([a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?)\)/g;
+
+/**
+ * Admit only code-owned font-pack variables inside an otherwise ordinary CSS
+ * font-family list. Arbitrary `var()` references and fallback arguments stay
+ * forbidden, so DB data can choose a loaded pack but cannot name private DS
+ * tokens or turn font loading into a tenant-owned asset channel.
+ *
+ * Both doors that admit a tenant font read it: the write validator and the
+ * ingress migration. Held privately by the first, the second admitted what the
+ * first refused.
+ */
+export function isSafeFontFamily(value: string): boolean {
+  const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
+  if (
+    value.length === 0 ||
+    value.length > limits.maxFontFamilyLength ||
+    value !== value.trim()
+  )
+    return false;
+  const references = value.match(FONT_PACK_REFERENCE) ?? [];
+  const allVarFunctions = value.match(/var\s*\(/gi) ?? [];
+  if (references.length !== allVarFunctions.length) return false;
+  const allowedPacks = new Set<string>(TENANT_THEME_FONT_PACK_IDS);
+  for (const reference of references) {
+    const packId = /^var\(--ds-font-pack-(.+)\)$/.exec(reference)?.[1];
+    if (!packId || !allowedPacks.has(packId)) return false;
+  }
+  const withoutFontPacks = value.replace(FONT_PACK_REFERENCE, "FontPack");
+  return /^[\p{L}\p{N}\s'",._-]+$/u.test(withoutFontPacks);
+}
 
 export const TENANT_THEME_GENERAL_SCHEMA = general;
 export const TENANT_THEME_ADVANCED_SCHEMA = advanced;

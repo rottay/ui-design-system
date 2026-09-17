@@ -85,8 +85,8 @@ const NAMED_SPELLINGS: ReadonlyMap<ThemeDecisionId, readonly KeypathSpelling[]> 
  * transport is authored in. `null` where the row states a single keypath.
  *
  * `typography.families` registers four font roles and the document shape
- * carries two: a selection naming `mono` moves nothing, so it must own nothing
- * -- the pairing is what writes that leaf.
+ * carries three: a selection naming `mono` moves nothing, so it must own
+ * nothing -- the pairing is what writes that leaf.
  */
 const WRITABLE_MEMBERS: ReadonlyMap<
   ThemeDecisionId,

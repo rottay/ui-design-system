@@ -11,11 +11,21 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { expandExpressiveProfiles } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import { TYPE_PAIRING_IDS } from "@/foundation/tokens/ts/presentation/typography/pairings";
+import {
+  compileThemeIntent,
+  staticThemeIntent,
+} from "@/infrastructure/compilers/runtime/theme";
 import { NUMERIC_POSTURE, numericOverlay } from "../numeric";
+import { deriveTypePairingChannels } from "../pairing";
 import { deriveTypeRoleChannels } from "../roles";
 import { deriveTypeScaleChannels } from "../scale";
 import { deriveTypeWeightChannels, roleWeightOverlay } from "../weights";
+
+const EXPANSION = expandExpressiveProfiles({});
 
 const DEFAULT_THEME_CSS = readFileSync(
   resolve(
@@ -262,5 +272,41 @@ describe("typography.numeric (kit row 10)", () => {
     expect(numericOverlay(theme({ numeric: "potato" as never }))).toEqual({});
     expect(numericOverlay(theme({ numeric: "constructor" as never }))).toEqual({});
     expect(roles({ numeric: "potato" as never })).toEqual(roles({}));
+  });
+});
+
+describe("typography/pairing — the display family", () => {
+  /** The root font channels a vertical's own preset compiles to. */
+  const families = (vertical: FirstPartyVerticalId) =>
+    Object.fromEntries(
+      Object.entries(
+        compileThemeIntent(staticThemeIntent(vertical)).compiled.cssVariables
+      ).filter(([channel]) => channel.startsWith("--ds-font-family-"))
+    );
+
+  it("carries a vertical's authored display pack onto its own channel", () => {
+    expect(families("bithire")["--ds-font-family-display"]).toBe(
+      'var(--ds-font-pack-grotesk-display), "Noto Sans Arabic", sans-serif'
+    );
+  });
+
+  it("emits nothing for a vertical that authors no families", () => {
+    for (const vertical of ["evnto", "rottay"] as const) {
+      expect(families(vertical)).toEqual({});
+    }
+  });
+
+  it("is the only family no pairing expands into", () => {
+    for (const pairing of TYPE_PAIRING_IDS) {
+      expect(
+        deriveTypePairingChannels(theme({ typePairing: pairing }), EXPANSION)
+      ).not.toHaveProperty("--ds-font-family-display");
+    }
+    expect(
+      deriveTypePairingChannels(
+        theme({ typePairing: "technical", fontFamilyDisplay: "var(--ds-font-pack-editorial-display)" }),
+        EXPANSION
+      )["--ds-font-family-display"]
+    ).toBe('var(--ds-font-pack-editorial-display), "Noto Sans Arabic", sans-serif');
   });
 });

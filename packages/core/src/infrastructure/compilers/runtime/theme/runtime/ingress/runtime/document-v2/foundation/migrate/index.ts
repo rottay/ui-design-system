@@ -146,7 +146,11 @@ function migrateGeneralDecisions(
     if (typography.numeric) {
       decisions["typography.numeric"] = typography.numeric;
     }
-    for (const key of ["fontFamilyBase", "fontFamilyHeading"] as const) {
+    for (const key of [
+      "fontFamilyBase",
+      "fontFamilyHeading",
+      "fontFamilyDisplay",
+    ] as const) {
       if (typography[key] !== undefined) {
         refuse(
           `v1 general.typography.${key} has no v2 counterpart; row 6 closes the ` +

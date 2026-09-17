@@ -480,11 +480,22 @@ describe("TenantThemeConfig v1 server contract", () => {
     // the reference-token roster. Both schema digests therefore move, and the
     // superseded pins drop to `not.toBe` so the ratchet keeps every prior value
     // asserted. The widenings above are untouched: this is the only removal.
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-b71db4f9fb762ec6db296399cc1b061db98968f08fef1589d6ebb26fdd1a8b7f"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-b4668db82b7cc418e469974465d7931ccd3ef98ac48b8470a898c2dc63c10507"
+    );
+    // W14 (2026-09-17): `general.typography.fontFamilyDisplay` gained its
+    // authoring route, so row 6's document column reaches the one font role no
+    // pairing expands into. A WIDENING with the law of CC-01 above -- nothing
+    // withdrawn, no field changed type or format -- so the superseded pins stay
+    // asserted and the ratchet keeps its history.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-d6bfe52ac06d67a8515649aa4f3cb09f5bc9291454ab10d428ac33270355ae18"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-c4d24a1b7651f6d03a793d523eb0d386c8f66da511115340d4de476f954dd861"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

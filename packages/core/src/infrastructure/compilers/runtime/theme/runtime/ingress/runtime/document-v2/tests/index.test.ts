@@ -141,7 +141,7 @@ describe("accepted but not lit", () => {
   });
 
   it("accepts a typography role v1 cannot carry, records it, and reports it unlit", () => {
-    const document = v2({ "typography.families": { display: "editorial-display" } }, "pro");
+    const document = v2({ "typography.families": { mono: "plex-mono" } }, "pro");
     const admission = admitDocument({ vertical: "bithire", document });
     expect(admission.version).toBe(2);
     expect(admission.decisions).toEqual([
@@ -161,7 +161,7 @@ describe("accepted but not lit", () => {
 
   it("moves nothing in the compiled CSS when only unlit decisions are activated", () => {
     expect(
-      css("bithire", v2({ "typography.families": { display: "editorial-display" } }, "pro"))
+      css("bithire", v2({ "typography.families": { mono: "plex-mono" } }, "pro"))
     ).toEqual(css("bithire", v2({}, "pro")));
   });
 
@@ -578,6 +578,34 @@ describe("migrate v1 -> v2", () => {
     );
   });
 
+  it("REFUSES a free display stack the same way, through both migration doors", () => {
+    // The display role reaches `--ds-font-family-display` on the v1 transport,
+    // which is exactly why the migration must not carry it: row 6 closes the
+    // v2 domain to a pack id, and a stack has no pack id to become. The value
+    // is one the ingress font grammar ADMITS, so what this proves is the
+    // migration's own refusal rather than the validator's.
+    for (const document of [
+      {
+        schemaVersion: 1,
+        mode: "simple",
+        appearance: { typography: { fontFamilyDisplay: "Comic Sans MS" } },
+      },
+      {
+        schemaVersion: 1,
+        mode: "advanced",
+        visualFoundation: {
+          general: { typography: { fontFamilyDisplay: "Comic Sans MS" } },
+        },
+      },
+    ] as unknown as TenantThemeDocument[]) {
+      const refusal = /general\.typography\.fontFamilyDisplay has no v2 counterpart/;
+      expect(() => migrateDocumentV1ToV2(document)).toThrow(refusal);
+      expect(() =>
+        migrateAndAdmitDocument({ vertical: "bithire", document })
+      ).toThrow(refusal);
+    }
+  });
+
   for (const { id, appearance, value, invalid } of CARRIED) {
     it(`carries general ${id} onto its own row`, () => {
       expect(migrateDocumentV1ToV2(v1General(appearance)).decisions).toEqual({
@@ -817,7 +845,7 @@ describe("font packs are a registered domain", () => {
   it("keeps a registered role with no keypath accepted-but-unlit", () => {
     const admission = admitDocument({
       vertical: "bithire",
-      document: v2({ "typography.families": { display: "editorial-display" } }, "pro"),
+      document: v2({ "typography.families": { mono: "plex-mono" } }, "pro"),
     });
     expect(admission.unlit.map((row) => [row.id, row.reason])).toEqual([
       ["typography.families", "role-has-no-keypath-today"],
@@ -826,18 +854,49 @@ describe("font packs are a registered domain", () => {
 
   it("an unlit role is INERT: the projection's empty typography moves no byte", () => {
     // The projection nests `general.typography` before it knows whether any
-    // role has a keypath, so a display-only document reaches the v1 typography
+    // role has a keypath, so a mono-only document reaches the v1 typography
     // migration with an empty object. That migration resolves a pairing, so
     // "unlit" is only true if the empty object still compiles to nothing.
     for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
-      for (const role of ["display", "mono"] as const) {
-        expect(
-          css(
-            vertical,
-            v2({ "typography.families": { [role]: "plex-mono" } }, "pro")
-          )
-        ).toEqual(css(vertical, v2({}, "pro")));
-      }
+      expect(
+        css(vertical, v2({ "typography.families": { mono: "plex-mono" } }, "pro"))
+      ).toEqual(css(vertical, v2({}, "pro")));
+    }
+  });
+
+  it("carries the display role onto its own channel, which no pairing expands into", () => {
+    const admission = admitDocument({
+      vertical: "bithire",
+      document: v2({ "typography.families": { display: "editorial-display" } }, "pro"),
+    });
+    expect(admission.unlit).toEqual([]);
+    expect(admission.decisions).toEqual([
+      {
+        id: "typography.families",
+        tier: "pro",
+        lit: true,
+        keypaths: [v1KeypathOf("typography.families")],
+      },
+    ]);
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      expect(
+        css(vertical, v2({ "typography.families": { display: "editorial-display" } }, "pro"))
+      ).toContain(
+        '--ds-font-family-display: var(--ds-font-pack-editorial-display), "Noto Sans Arabic", sans-serif'
+      );
+    }
+  });
+
+  it("adds no display channel for a document that authors no display role", () => {
+    // bithire's own preset authors `display`, so its baseline carries the
+    // channel either way. What must hold everywhere is that a document which
+    // does not author the role moves it no further than an empty one does.
+    const displayOf = (text: string) =>
+      /--ds-font-family-display:[^;]*;/u.exec(text)?.[0];
+    for (const vertical of FIRST_PARTY_VERTICAL_SLUGS) {
+      expect(
+        displayOf(css(vertical, v2({ "typography.families": { base: "humanist-text" } }, "pro")))
+      ).toBe(displayOf(css(vertical, v2({}, "pro"))));
     }
   });
 

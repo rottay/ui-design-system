@@ -372,7 +372,8 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     title: "Registered font pack per role",
     domain: { kind: "registered", registry: "TENANT_THEME_FONT_PACK_IDS" },
     keypath: {
-      document: "appearance.general.typography.{fontFamilyBase,fontFamilyHeading}",
+      document:
+        "appearance.general.typography.{fontFamilyBase,fontFamilyHeading,fontFamilyDisplay}",
       brandTheme: "typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}",
     },
     consumes: [],

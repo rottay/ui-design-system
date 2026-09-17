@@ -38,6 +38,7 @@ import {
   type TenantThemeOverrideToken,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { typePairingToTypography } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import { isSafeFontFamily } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { isFirstPartyVerticalId } from "@/foundation/presets/verticals/roster";
 import {
@@ -339,6 +340,7 @@ function migrateTypography(
     [
       "fontFamilyBase",
       "fontFamilyHeading",
+      "fontFamilyDisplay",
       "typePairing",
       "scale",
       "roleWeights",
@@ -354,11 +356,37 @@ function migrateTypography(
       scale: typography.scale,
       roleWeights: typography.roleWeights,
       numeric: typography.numeric,
-      fontFamilyBase: typography.fontFamilyBase ?? paired.fontFamilyBase,
+      fontFamilyBase: authoredFamily(typography, "fontFamilyBase") ??
+        paired.fontFamilyBase,
       fontFamilyHeading:
-        typography.fontFamilyHeading ?? paired.fontFamilyHeading,
+        authoredFamily(typography, "fontFamilyHeading") ??
+        paired.fontFamilyHeading,
+      // No `?? paired.*`: no pairing carries a display family, so a fallback
+      // here would invent an authority the pairing table does not hold.
+      fontFamilyDisplay: authoredFamily(typography, "fontFamilyDisplay"),
     },
   };
+}
+
+/**
+ * One authored font role, closed against the same grammar the write validator
+ * closes it with: a row reaches both public producers without passing that
+ * validator, so a family admitted here is a family painted. Only the AUTHORED
+ * value is judged; the pairing's own expansion is code-owned.
+ */
+function authoredFamily(
+  typography: NonNullable<TenantAppearanceGeneral["typography"]>,
+  role: "fontFamilyBase" | "fontFamilyHeading" | "fontFamilyDisplay"
+): string | undefined {
+  const value = typography[role];
+  if (value === undefined) return undefined;
+  if (typeof value !== "string" || !isSafeFontFamily(value)) {
+    throw new ThemePatchMigrationError(
+      `unsupported general.typography.${role} ${JSON.stringify(value)}; ` +
+        "a font family lists plain families and registered pack variables only"
+    );
+  }
+  return value;
 }
 
 /** Closed domains of the two palette postures; the DB row is untrusted JSON. */

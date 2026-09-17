@@ -472,11 +472,26 @@ describe("digest identity across the canonicalization extraction", () => {
       "sha256-b71db4f9fb762ec6db296399cc1b061db98968f08fef1589d6ebb26fdd1a8b7f";
     const POST_NEUTRAL_FIELD_RETIREMENT_CONFIG_DIGEST =
       "sha256-b4668db82b7cc418e469974465d7931ccd3ef98ac48b8470a898c2dc63c10507";
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_NEUTRAL_FIELD_RETIREMENT_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_NEUTRAL_FIELD_RETIREMENT_CONFIG_DIGEST
+    );
+    // W14 (2026-09-17): `general.typography.fontFamilyDisplay` gained its
+    // authoring route, so the document transport reaches the one font role no
+    // pairing expands into. A WIDENING under the CC-01 law -- nothing
+    // withdrawn, no field changed type or format -- so the superseded pins drop
+    // to `not.toBe` and the two new values are re-derived from the tree.
+    const POST_DISPLAY_FAMILY_ROUTE_DOCUMENT_DIGEST =
+      "sha256-d6bfe52ac06d67a8515649aa4f3cb09f5bc9291454ab10d428ac33270355ae18";
+    const POST_DISPLAY_FAMILY_ROUTE_CONFIG_DIGEST =
+      "sha256-c4d24a1b7651f6d03a793d523eb0d386c8f66da511115340d4de476f954dd861";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_DISPLAY_FAMILY_ROUTE_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_DISPLAY_FAMILY_ROUTE_CONFIG_DIGEST
     );
   });
 

@@ -266,21 +266,21 @@ describe("member attribution holds for every braced row of the catalog", () => {
         measured.push(`${row.id}.${key}=${entries[0].effectiveLeaves.length}`);
       }
     }
-    // `mono` and `display` are Theme leaves the DOCUMENT column cannot write,
-    // so naming them selects nothing to own; `base` and `heading` are written
-    // by both columns and own their leaf.
+    // `mono` is the one Theme leaf the DOCUMENT column cannot write, so naming
+    // it selects nothing to own; the other three are written by both columns
+    // and own their leaf.
     expect(measured).toContain("typography.families.base=1");
     expect(measured).toContain("typography.families.heading=1");
+    expect(measured).toContain("typography.families.display=1");
     expect(measured).toContain("typography.families.mono=0");
-    expect(measured).toContain("typography.families.display=0");
     expect(measured).toContain("profiles.expressive.icon=0");
     expect(measured.length).toBeGreaterThan(20);
   });
 
   it("an unlit selection keeps its tier and owns nothing it cannot write", () => {
-    // The document column of row 6 carries `fontFamilyBase|Heading` only, so a
-    // `mono` selection is admitted, reported unlit, and owns no leaf -- while
-    // the pairing that actually writes `--ds-font-family-mono` keeps it.
+    // The document column of row 6 carries `fontFamilyBase|Heading|Display`,
+    // so a `mono` selection is admitted, reported unlit, and owns no leaf --
+    // while the pairing that actually writes `--ds-font-family-mono` keeps it.
     const document = {
       version: 2,
       plan: "pro",
@@ -310,14 +310,19 @@ describe("one authorship, one class, on both transports", () => {
   const PROFILE = "rottay/management-editorial@1";
   const STACK = "var(--ds-font-pack-grotesk-display)";
 
-  /** What owns `typography.fontFamilyBase`, and under which class. */
-  const baseOwnership = (
+  /** What owns a font leaf, and under which class. */
+  const ownershipOf = (
+    leaf: string,
     document: Parameters<typeof admitDocument>[0]["document"]
   ) => {
     const { ledger } = admitDocument({ vertical: "rottay", document });
-    const entry = ledgerOwnerOfLeaf(ledger, "typography.fontFamilyBase");
+    const entry = ledgerOwnerOfLeaf(ledger, leaf);
     return { ref: entry?.ref, provenance: entry?.provenance };
   };
+
+  const baseOwnership = (
+    document: Parameters<typeof admitDocument>[0]["document"]
+  ) => ownershipOf("typography.fontFamilyBase", document);
 
   it("a v1 row that writes a font owns it directly, exactly as v2 does", () => {
     // The migration refuses to CARRY a free stack (row 6 closes the domain to a
@@ -352,6 +357,110 @@ describe("one authorship, one class, on both transports", () => {
     } as never);
     expect(pure.ref).toEqual({ kind: "decision", id: "typography.pairing" });
     expect(pure.provenance).toBe("profile-derived");
+  });
+
+  it("names row 6 as the owner of the display leaf on both transports", () => {
+    // The row emits `--ds-font-family-display` through either transport, so
+    // the column the ledger reads its writable members from has to name the
+    // member that emits it. Reported unowned, the leaf read as a leaf nobody
+    // authored while a tenant was paying for it.
+    const DISPLAY_LEAF = "typography.fontFamilyDisplay";
+    const v1 = ownershipOf(DISPLAY_LEAF, {
+      schemaVersion: 1,
+      mode: "simple",
+      appearance: {
+        experienceProfile: PROFILE,
+        typography: { fontFamilyDisplay: STACK },
+      },
+    } as never);
+    const v2 = ownershipOf(DISPLAY_LEAF, {
+      version: 2,
+      plan: "pro",
+      decisions: {
+        "experience.profile": PROFILE,
+        "typography.families": { display: "grotesk-display" },
+      },
+    } as never);
+    expect(v1.ref).toEqual({ kind: "decision", id: "typography.families" });
+    expect(v1.provenance).toBe("direct-override");
+    expect(v1).toEqual(v2);
+    // And the selection reports the leaf as effective rather than as nothing.
+    const { ledger } = admitDocument({
+      vertical: "rottay",
+      document: {
+        version: 2,
+        plan: "pro",
+        decisions: { "typography.families": { display: "grotesk-display" } },
+      } as never,
+    });
+    expect(ledger.entries[0].effectiveLeaves).toEqual([DISPLAY_LEAF]);
+  });
+});
+
+describe("a v1 font family is closed at ingress, not only at the write door", () => {
+  /**
+   * A persisted row reaches the compiler through the public producers without
+   * passing `validateTenantThemeDocument` first, so an unregistered pack that
+   * the write door refuses was compiled into `--ds-font-family-*` anyway. The
+   * three roles are one grammar and one door, measured on both producers.
+   */
+  const REFUSED = {
+    "an unregistered pack": "var(--ds-font-pack-unregistered)",
+    "a private DS token": "var(--ds-private-font)",
+    "a declaration breakout": "Inter; color: red",
+  } as const;
+
+  const v1Document = (mode: "simple" | "advanced", typography: object) =>
+    (mode === "simple"
+      ? { schemaVersion: 1, mode, appearance: { typography } }
+      : {
+          schemaVersion: 1,
+          mode,
+          visualFoundation: { general: { typography } },
+        }) as never;
+
+  for (const role of [
+    "fontFamilyBase",
+    "fontFamilyHeading",
+    "fontFamilyDisplay",
+  ] as const) {
+    for (const [label, value] of Object.entries(REFUSED)) {
+      it(`refuses ${label} in ${role}, on both producers and both modes`, () => {
+        for (const [name, produce] of Object.entries(PRODUCERS)) {
+          for (const mode of ["simple", "advanced"] as const) {
+            expect(() =>
+              produce({
+                vertical: "bithire",
+                slug: SLUG,
+                document: v1Document(mode, { [role]: value }),
+              }),
+              `${name}/${mode}`
+            ).toThrow(
+              new RegExp(`unsupported general\\.typography\\.${role}`)
+            );
+          }
+        }
+      });
+    }
+  }
+
+  it("still admits the grammar the write door admits, on both producers", () => {
+    for (const [name, produce] of Object.entries(PRODUCERS)) {
+      for (const mode of ["simple", "advanced"] as const) {
+        expect(() =>
+          produce({
+            vertical: "bithire",
+            slug: SLUG,
+            document: v1Document(mode, {
+              fontFamilyBase: "Inter, sans-serif",
+              fontFamilyHeading: "'Fraunces', Georgia, serif",
+              fontFamilyDisplay: "var(--ds-font-pack-editorial-display)",
+            }),
+          }),
+          `${name}/${mode}`
+        ).not.toThrow();
+      }
+    }
   });
 });
 
