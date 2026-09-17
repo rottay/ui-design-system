@@ -308,15 +308,8 @@ describeCausality({
  * family-causality harness defines it: a repaired node, a new node and a
  * same-count swap all go red and must be re-adjudicated.
  *
- * Both surviving rules are owned OUTSIDE this family, which is why they are
- * still here after the family's own two contrast pairs were drained.
- *
- * `aria-conditional-attr` fails in every gated scope on one node: the shared
- * Checkbox primitive puts `aria-checked` on its native `input[type=checkbox]`,
- * and `mixed` can never agree with a serialized checkbox's real state, because
- * `indeterminate` is a DOM property with no content attribute. Stripping the
- * attribute from the probed markup leaves every scope clean, so the remedy is
- * the primitive's single `aria-checked` expression, not this family's markup.
+ * The surviving rule is owned OUTSIDE this family, which is why it is still
+ * here after the family's own two contrast pairs were drained.
  *
  * `color-contrast` survives only on bithire dark, and only on the two slots the
  * family deliberately leaves unpainted beneath caller content: the toolbar slot
@@ -334,21 +327,11 @@ describeCausality({
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
-    'aria-conditional-attr': ['#checkbox-modern-_R_2pe_'],
     'color-contrast': [
       '.rottay-box.rottay-box--modern[data-part="mobile-card-custom"]:nth-child(1) > span',
       '.rottay-box.rottay-box--modern[data-part="mobile-card-custom"]:nth-child(2) > span',
       'div[data-part="mobile-toolbar"] > span',
     ],
-  },
-  'bithire light': {
-    'aria-conditional-attr': ['#checkbox-modern-_R_2pe_'],
-  },
-  'evnto light': {
-    'aria-conditional-attr': ['#checkbox-modern-_R_2pe_'],
-  },
-  'rottay dark': {
-    'aria-conditional-attr': ['#checkbox-modern-_R_2pe_'],
   },
 };
 

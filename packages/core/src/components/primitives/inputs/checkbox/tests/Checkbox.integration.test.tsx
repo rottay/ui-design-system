@@ -44,7 +44,9 @@ describe('Checkbox integration', () => {
       );
 
       const checkbox = await screen.findByRole('checkbox', { name: /select all/i });
-      expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
+      // Both engines convey the third state through the `indeterminate` DOM
+      // property, the only carrier a native checkbox has for it.
+      expect((checkbox as HTMLInputElement).indeterminate).toBe(true);
     }
   );
 

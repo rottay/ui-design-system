@@ -32,7 +32,9 @@ describe('Modern Checkbox public anatomy', () => {
     const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
     expect(input.indeterminate).toBe(true);
-    expect(input).toHaveAttribute('aria-checked', 'mixed');
+    // A native checkbox exposes its tri-state through the `indeterminate` DOM
+    // property; `aria-checked` has no content attribute that could agree with it.
+    expect(input).not.toHaveAttribute('aria-checked');
     expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-indeterminate', 'true');
   });
 

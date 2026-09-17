@@ -198,7 +198,6 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           onBlur={handlers.onBlur}
           onKeyDown={(event) => pressKey(event, true)}
           onKeyUp={(event) => pressKey(event, false)}
-          aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-invalid={error || undefined}
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}
