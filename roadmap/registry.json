@@ -5175,6 +5175,11 @@
      "at": "2026-09-17 08:56",
      "by": "claude-fable-dt",
      "note": "INTEGRADOS c7381099e (calendar-view: canal entry-accent, la ley de nombres de tema rechazaba el sustantivo de producto event), 26d6c2501 (hardening F-37: 10 sitios Modern componen handlers del caller con el kernel via composeHandlers caller-first, notifier cierra contrato, stepper chain local por techo de modulos 31/31; revision independiente ACCEPT), 3d2b84a05 (data-table aria-rowindex/colindex con header contado, probe de densidad F-22 en Chromium, widget-board y data-table componen handlers kernel-first en los origenes de arrastre), 581f45dd2 (artefactos: build verde, theme-graph 89 derivers/8251 canales, freshness 12/12). Hallazgo: ds-table-density-* NO esta muerta (app-bithire runtime, app-evnto CSS) -> D21. Residuo: QuickJumperInput (necesita apretar baseline 1->0 en lote DT), duplicados locales de composeHandlers por techo (stepper, data-table). Decisiones D15-D21 en reports/dt-owner-decisions-2026-09-17.md. FRENO por orden del owner en este checkpoint; siguiente lote autorizado: export-kernel (detenido antes de escribir)."
+    },
+    {
+     "at": "2026-09-17 13:17",
+     "by": "claude-fable-dt",
+     "note": "ADOPCION post-auditoria Codex (docs-engineering/archive/audits/2026-09-17-ds-814927519-davila.md): HEAD 814927519 confirmado, main, porcelain e index limpios, sin procesos. DT en esta sesion: Fable 5.1 (claude-fable-5-1), cuenta daniel.avila@rottay.com; implementadores Opus por Agent. Contraejemplos reproducidos: R17-01 (grouped 6 filas expuestas, aria-rowcount 4, 2 group-header sin indice), R17-02 (physical-css test 58: 5 de 9 sitios), R17-07 (cascade 2346/2079, 2359/2114, denominador 5439/5210). Despachados en paralelo con scopes disjuntos: R17-01 (data-table), R17-02 (gate physical-css), R17-03 (frontera fisica para motores congelados en el resolver compartido, sin editar frozen), y lector de atribucion por conjuntos del cascade ratchet (R17-07)."
     }
    ]
   },
@@ -5404,6 +5409,11 @@
      "at": "2026-09-17 06:32",
      "by": "claude-fable-dt",
      "note": "INTEGRADO 5c8a1570c: centrado del check del color-picker bajo RTL (twin :dir(rtl) del canal de transform; Chromium 12px -> 0); el defecto de slide del toast no es reproducible en Modern (contenedor con placement logico del notifier y animacion solo en Y; la ruta fisica solo la alcanzan los motores congelados y esta fisicamente colocada): razon del gate corregida. Nueva decision del owner D14 (ToastPosition fisico vs logico entre las dos rutas del contenedor). Bandas physical-css: debt 92. En vuelo: correccion B6; B7 (virtual-list, grid-view, gallery-view)."
+    },
+    {
+     "at": "2026-09-17 13:17",
+     "by": "claude-fable-dt",
+     "note": "ADOPCION post-auditoria Codex (docs-engineering/archive/audits/2026-09-17-ds-814927519-davila.md): HEAD 814927519 confirmado, main, porcelain e index limpios, sin procesos. DT en esta sesion: Fable 5.1 (claude-fable-5-1), cuenta daniel.avila@rottay.com; implementadores Opus por Agent. Contraejemplos reproducidos: R17-01 (grouped 6 filas expuestas, aria-rowcount 4, 2 group-header sin indice), R17-02 (physical-css test 58: 5 de 9 sitios), R17-07 (cascade 2346/2079, 2359/2114, denominador 5439/5210). Despachados en paralelo con scopes disjuntos: R17-01 (data-table), R17-02 (gate physical-css), R17-03 (frontera fisica para motores congelados en el resolver compartido, sin editar frozen), y lector de atribucion por conjuntos del cascade ratchet (R17-07)."
     }
    ]
   },
@@ -5853,6 +5863,11 @@
      "at": "2026-09-17 05:38",
      "by": "claude-fable-dt",
      "note": "INTEGRADO e5d3f4411 (registro de productores certificados con drill de liveness: 39 pares vivos) y 5f51ee3ba (physical-css: espejos por animation-direction reverse / twin de canal reconocidos solo si el twin GANA la cascada, scope de at-rule subset, secuencia de compounds con combinadores, capas alineadas; brazo de movimiento drawer/sheet como physicalStamp con contrato valuado de eje inline; bandas debt 116->102, stamp 27->36, mirrored 83->88; 92 drills; revision independiente CHANGES aplicada). Tambien 7608b1b9a/5b98622a4: radio y modal sueltan el barrel i18n (-8 modulos/-16386 bytes cada uno) y sus techos bajan por la puerta de decremento (D1 backlog ejecutado). En vuelo: correccion del lector de direccion (certificar readLocaleContext, -1058 bytes en portal-scope para message, sonda con revert !important, try/finally); B6 cinco cuts chrome."
+    },
+    {
+     "at": "2026-09-17 13:17",
+     "by": "claude-fable-dt",
+     "note": "ADOPCION post-auditoria Codex (docs-engineering/archive/audits/2026-09-17-ds-814927519-davila.md): HEAD 814927519 confirmado, main, porcelain e index limpios, sin procesos. DT en esta sesion: Fable 5.1 (claude-fable-5-1), cuenta daniel.avila@rottay.com; implementadores Opus por Agent. Contraejemplos reproducidos: R17-01 (grouped 6 filas expuestas, aria-rowcount 4, 2 group-header sin indice), R17-02 (physical-css test 58: 5 de 9 sitios), R17-07 (cascade 2346/2079, 2359/2114, denominador 5439/5210). Despachados en paralelo con scopes disjuntos: R17-01 (data-table), R17-02 (gate physical-css), R17-03 (frontera fisica para motores congelados en el resolver compartido, sin editar frozen), y lector de atribucion por conjuntos del cascade ratchet (R17-07)."
     }
    ]
   },
