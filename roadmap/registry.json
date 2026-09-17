@@ -5220,6 +5220,11 @@
      "at": "2026-09-17 15:47",
      "by": "kimi-dt",
      "note": "F-81 OLA B INTEGRADA 051232cba + fix del DT 2008fbdea (mock Blob del kernel; Codex ACCEPT — mi escritura con revision independiente como manda la regla). Glifo de ciclo de vida extraido a patterns/foundation/active-filter-state-glyph (marker de anatomia queda del llamador; leccion del censo aplicada). CountPill x2 NO extraido: construido, medido, revertido — el censo de partes lee por archivo y un owner compartido haria la regla del skin invisible (instrumento, documentado). AUTO-REPORTE DT: integre el kernel W5 sin correr typecheck:tests; el rojo se detecto en la entrega de W13 y se reparo con revision Codex. La cadena de integracion del DT ahora incluye typecheck:tests SIEMPRE. Despachados W15 (residuo de censo de partes de las 8 familias del inventario) y W16 (re-ancla de fixtures stale del structure gate con provenance por commit)."
+    },
+    {
+     "at": "2026-09-17 16:25",
+     "by": "kimi-dt",
+     "note": "W16 INTEGRADO 2c4ba44af: fixtures del structure gate re-anclados con provenance por commit (la taxonomia nueva es la revisada; el rojo era stale, no drift). Registrado por el writer: structure:check NUNCA corre esa suite — su unico runner es el glob test:scripts; nota de observabilidad para la lane EVI. Despachado W17: drenaje del AXE_DEBT de data-table (R17-04 rendered a11y: checkbox aria-conditional-attr en todos los scopes + pares de contraste mobile bithire/evnto; la clase de fix es derivacion mode-aware, nunca exclusion; paint change declarada)."
     }
    ]
   },
