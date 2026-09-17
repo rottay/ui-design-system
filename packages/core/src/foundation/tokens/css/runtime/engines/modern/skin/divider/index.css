@@ -118,7 +118,7 @@
   min-inline-size: var(--ds-divider-segment-min);
   min-block-size: 0;
   border-top: var(--ds-divider-line);
-  border-left: none;
+  border-inline-start: none;
   transition:
     border-color var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
     opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);

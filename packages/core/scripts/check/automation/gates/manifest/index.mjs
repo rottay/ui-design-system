@@ -207,6 +207,16 @@ export const CI_GATES = Object.freeze([
   { id: 'physical-properties-drill', run: ['node', '--test', 'scripts/check/localization/physical-properties/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['physical-properties'], },
   { id: 'physical-properties', run: ['node', 'scripts/check/localization/physical-properties/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'physical-properties-drill', ratchet: 'scripts/check/localization/physical-properties/baseline/index.json', },
 
+  // --- the stylesheet half of the same law (WO-INV-01 L2) ---
+  // `physical-properties` reads style OBJECTS under src/components; the Modern
+  // engine paints from its skins, so a `margin-left` or an unmirrored
+  // `translateX` written in CSS was measured by nothing. Four classes, because
+  // a placement-keyed stamp and an `env(safe-area-inset-left)` padding are not
+  // the defect a physical margin is, and a translate mirrored by `:dir(rtl)`
+  // is not a defect at all.
+  { id: 'physical-css-drill', run: ['node', '--test', 'scripts/check/localization/physical-css/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['physical-css'], },
+  { id: 'physical-css', run: ['node', 'scripts/check/localization/physical-css/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'physical-css-drill', ratchet: 'scripts/check/localization/physical-css/baseline/index.json', },
+
   // --- source-owned artifact freshness: this manifest runs before Build ---
   // These gates execute the authored TypeScript roster and compile CSS from
   // source in memory. A dist/-backed check here is invalid on a clean clone and

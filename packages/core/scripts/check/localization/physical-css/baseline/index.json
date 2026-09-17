@@ -1,0 +1,394 @@
+{
+  "_comment": "Four-class ledger for physical-css/index.mjs, the stylesheet half of the paint law (WO-INV-01). The sibling gate physical-properties reads STYLE OBJECTS under src/components; this one reads the CSS the Modern engine actually paints from. SCOPE: every authored CSS owner below src/foundation/tokens/css -- facade, foundation, presentation and runtime -- because scoping the scan to the skins alone measured a margin-left in a skin and missed the same edge in the keyframe library and the responsive channel vocabulary the skins consume. Classic and Rustic are excluded BY PATH, not pinned, because the freeze gate already governs them. The scan is a postcss parse, not a regex: a declaration counts however it is nested, a transform is read by its function arguments, and a box or corner SHORTHAND is decomposed (padding/margin/inset/border-width/border-color/border-style/scroll-margin/scroll-padding at positions 2 and 4, border-radius as its two inline corner pairs, the elliptical `/` form out of scope) so an asymmetric `padding: 8px 32px 8px 12px` cannot hide behind a longhand-only vocabulary. pinnedDebt and inert pin a COUNT PER FILE, not a line list, so an edit above a site cannot move every number. pinnedDebt is a physical inline edge that should be logical, an asymmetric shorthand, or an asymmetric translateX with no :dir(rtl) mirror; growth fails, and a fix fails with an instruction to lower the pin. inert is a symmetric pair (left: 0 beside right: 0) or a centring +/-50% offset, where flipping the direction moves nothing: counted rather than excluded by rule, because a pinned band is what stops tomorrow's unpaired left: 0 arriving unnoticed. physicalStamp is declared PER SELECTOR, not per file: a declaration keyed on a physical data-* contract ([data-placement=left], [data-fixed=right], [data-align=left]) must follow the side the caller asked for by name, so the migration belongs to that vocabulary (D9/D10) and the band drains selector by selector as each contract turns logical. namedExceptions are declared PER SITE as a locator (selector | property: value, whitespace-collapsed) with a CLASS whose rationale is written once in exceptionClasses: safe-area (env(safe-area-inset-left|right) is a physical device inset with no logical spelling in CSS), measured-space (a getBoundingClientRect() coordinate published into a private channel and read back on an absolutely positioned or fixed box) and glyph-geometry (border edges used as the STROKES of a glyph, where mirroring draws the mark backwards). A mirrored translate -- a signed translateX whose rule has a :dir(rtl)/[dir=rtl] twin that re-declares the transform AND can win the cascade against it -- is NOT a site at all: a transform has no logical spelling, so the mirror IS the migration. Population measured 2026-09-17 on the INV-01 L2 lot and re-measured the same day after its independent review, which widened the scan to the whole CSS owner (+43 sites in 5 foundation and pattern files), taught the gate box and corner shorthands (+9 sites: 1 framework-bridge padding, 4 widget-board border-width, 4 drawer/sheet border-radius that land in their siblings' physicalStamp rows) and returned the color-picker checkmark to border-left under the new glyph-geometry class. The L2 lot migrated four declarations: framework-bridge margin-left -> margin-inline-start, divider border-left -> border-inline-start, and the dropdown and tour centring edges to inset-inline-start plus a :dir(rtl) translate mirror each. The remaining sites of that roster were adjudicated instead of migrated: two measured-space coordinates (--ds-tour-spotlight-left from spotlightRect.left, --ds-dropdown-position-left from the collision-resolved, host-relative popupPosition.left) and one glyph-geometry checkmark. The asymmetric unmirrored translateX sites are the L3 lot and stay pinned as debt with their reasons.",
+  "exceptionClasses": {
+    "safe-area": {
+      "reason": "SAFE AREA. `env(safe-area-inset-left|right)` is a physical viewport inset the user agent measures from the device: the notch, the rounded corner, the home indicator. It does not follow the reading direction, and there is no logical spelling of it -- CSS ships no `safe-area-inset-inline-start`. Feeding it into `padding-inline-start` would pad the RIGHT notch on the LEFT edge under RTL, so the migration would be the bug. A site in this class must consume the inset on the side whose name it carries, and nothing else."
+    },
+    "measured-space": {
+      "reason": "MEASURED SPACE. The value is a layout coordinate the component itself measured -- a `getBoundingClientRect()` edge published into a private channel and read back by the skin on an absolutely positioned or fixed box. The number is already in physical space and is already direction-correct, because the measurement ran against the laid-out, already-mirrored document: a viewport coordinate on a `position: fixed` box, or a host-relative coordinate (`triggerRect.left - hostRect.left + scrollLeft`) on a `position: absolute` box inside a portal host, resolve the same way. Reading either as `inset-inline-start` would mirror an already-mirrored edge and place the box on the far side under RTL, so the migration would be the bug. This is the CSS half of the class the sibling gate `physical-properties` already grants to `token-inspector`, `affix`, `export-button`, `context-menu`, `chart-tooltip` and `filter-dropdown`; it exempts the one site it names and nothing else in the file."
+    },
+    "glyph-geometry": {
+      "reason": "GLYPH GEOMETRY. The declaration does not lay out a box: it DRAWS one, by using border edges as the strokes of a glyph. A checkmark built from a left border and a bottom border rotated -45deg is a stroke pair whose shape is the meaning; a tick reads the same in Arabic and Hebrew as in English, because it is a mark, not a direction. Swapping `border-left` for `border-inline-start` would mirror the stroke under RTL and draw a backwards check, so the logical spelling is the defect and the physical one is the contract. The class covers any border-, outline- or shadow-edge trick whose output is an icon rather than a frame: the test is whether flipping the declaration flips a GLYPH (refuse) or an EDGE OF A BOX (migrate). It exempts the one site it names and nothing else in the file; the box the glyph sits in is governed normally."
+    }
+  },
+  "namedExceptions": {
+    "runtime/engines/modern/skin/drawer/index.css": {
+      "sites": [
+        {
+          "locator": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='left'] | padding-left: env(safe-area-inset-left, 0px)",
+          "class": "safe-area",
+          "reason": "The drawer surface is docked to the left screen edge, so it pads itself by the left-hand device inset the UA reports. The number IS the left notch: a logical padding fed by `safe-area-inset-left` would pad the opposite side of the screen under RTL."
+        },
+        {
+          "locator": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='right'] | padding-right: env(safe-area-inset-right, 0px)",
+          "class": "safe-area",
+          "reason": "The drawer surface is docked to the right screen edge, so it pads itself by the right-hand device inset the UA reports. The number IS the right notch: a logical padding fed by `safe-area-inset-right` would pad the opposite side of the screen under RTL."
+        },
+        {
+          "locator": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-presentation='fullscreen'][data-placement] | padding-right: env(safe-area-inset-right, 0px)",
+          "class": "safe-area",
+          "reason": "The drawer surface is stretched edge to edge in its fullscreen presentation, so it pads itself by the right-hand device inset the UA reports. The number IS the right notch: a logical padding fed by `safe-area-inset-right` would pad the opposite side of the screen under RTL."
+        },
+        {
+          "locator": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-presentation='fullscreen'][data-placement] | padding-left: env(safe-area-inset-left, 0px)",
+          "class": "safe-area",
+          "reason": "The drawer surface is stretched edge to edge in its fullscreen presentation, so it pads itself by the left-hand device inset the UA reports. The number IS the left notch: a logical padding fed by `safe-area-inset-left` would pad the opposite side of the screen under RTL."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/modal/index.css": {
+      "sites": [
+        {
+          "locator": ".ds-modal.ds-modal--modern[data-part='root'][data-presentation='fullscreen'] > [data-part='surface'][data-part='surface'] | padding-left: env(safe-area-inset-left, 0px)",
+          "class": "safe-area",
+          "reason": "The modal surface is stretched edge to edge in its fullscreen presentation, so it pads itself by the left-hand device inset the UA reports. The number IS the left notch: a logical padding fed by `safe-area-inset-left` would pad the opposite side of the screen under RTL."
+        },
+        {
+          "locator": ".ds-modal.ds-modal--modern[data-part='root'][data-presentation='fullscreen'] > [data-part='surface'][data-part='surface'] | padding-right: env(safe-area-inset-right, 0px)",
+          "class": "safe-area",
+          "reason": "The modal surface is stretched edge to edge in its fullscreen presentation, so it pads itself by the right-hand device inset the UA reports. The number IS the right notch: a logical padding fed by `safe-area-inset-right` would pad the opposite side of the screen under RTL."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/sheet/index.css": {
+      "sites": [
+        {
+          "locator": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'] | padding-left: env(safe-area-inset-left, 0px)",
+          "class": "safe-area",
+          "reason": "The sheet surface is docked to the left screen edge, so it pads itself by the left-hand device inset the UA reports. The number IS the left notch: a logical padding fed by `safe-area-inset-left` would pad the opposite side of the screen under RTL."
+        },
+        {
+          "locator": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] | padding-right: env(safe-area-inset-right, 0px)",
+          "class": "safe-area",
+          "reason": "The sheet surface is docked to the right screen edge, so it pads itself by the right-hand device inset the UA reports. The number IS the right notch: a logical padding fed by `safe-area-inset-right` would pad the opposite side of the screen under RTL."
+        },
+        {
+          "locator": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-presentation='fullscreen'][data-placement] | padding-right: env(safe-area-inset-right, 0px)",
+          "class": "safe-area",
+          "reason": "The sheet surface is stretched edge to edge in its fullscreen presentation, so it pads itself by the right-hand device inset the UA reports. The number IS the right notch: a logical padding fed by `safe-area-inset-right` would pad the opposite side of the screen under RTL."
+        },
+        {
+          "locator": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-presentation='fullscreen'][data-placement] | padding-left: env(safe-area-inset-left, 0px)",
+          "class": "safe-area",
+          "reason": "The sheet surface is stretched edge to edge in its fullscreen presentation, so it pads itself by the left-hand device inset the UA reports. The number IS the left notch: a logical padding fed by `safe-area-inset-left` would pad the opposite side of the screen under RTL."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/tour/index.css": {
+      "sites": [
+        {
+          "locator": ".ds-tour.ds-tour--modern[data-part='root'] > [data-part='spotlight'] | left: var(--ds-tour-spotlight-left)",
+          "class": "measured-space",
+          "reason": "`--ds-tour-spotlight-left` is written by `primitives/overlay/tour/engines/modern/index.tsx` as `${spotlightRect.left}px`, the target element's measured `getBoundingClientRect().left`, and the spotlight is `position: fixed`. The spotlight must cover the target where the target actually is, so the edge stays physical until the producer publishes a direction-resolved channel."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/dropdown/index.css": {
+      "sites": [
+        {
+          "locator": ".ds-dropdown-surface[data-part='surface'][data-portaled='true'] | left: var(--ds-dropdown-position-left)",
+          "class": "measured-space",
+          "reason": "`--ds-dropdown-position-left` is written by `primitives/overlay/dropdown/engines/modern/index.tsx` from the collision-resolved `popupPosition.left` of the portaled surface, a viewport coordinate computed from the trigger rect. The portal branch is `position: fixed` against the viewport, so the coordinate is physical by construction; the in-tree branch beside it is the one that migrated to `inset-inline-start`."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/color-picker/index.css": {
+      "sites": [
+        {
+          "locator": ".ds-color-picker-panel [data-part='preset-swatch'][data-selected='true']::after | border-left: var(--ds-color-picker-selected-ring-width, var(--ds-focus-ring-width)) solid var(--ds-color-picker-check-ink, var(--ds-color-white))",
+          "class": "glyph-geometry",
+          "reason": "The `::after` of a selected preset swatch is the CHECKMARK itself: a left border plus a bottom border, sized `--ds-color-picker-check-width` / `--ds-color-picker-check-height` and rotated by `--ds-color-picker-check-transform` (`translate(-50%, -65%) rotate(-45deg)`, declared in presentation/components/color-picker/index.css). The two borders are the two strokes of the tick, so the pair is direction-invariant glyph geometry; `border-inline-start` would swap the strokes under RTL and draw the tick backwards. RESIDUE, not fixed by this exception: the glyph's POSITION is still wrong under RTL, because `inset-inline-start: 50%` mirrors while the `translate(-50%, ...)` pull-back behind the var() does not, so the check lands half its width off-centre. That is a placement defect of the centring pair, tracked separately from the stroke geometry this class covers."
+        }
+      ]
+    }
+  },
+  "physicalStamp": {
+    "runtime/engines/modern/skin/drawer/index.css": {
+      "selectors": [
+        {
+          "selector": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='left']",
+          "sites": 2,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a drawer asked for `left` must dock against the left of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `left: 0` dock, and `border-radius: 0 R R 0` (R = the drawer radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        },
+        {
+          "selector": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='right']",
+          "sites": 2,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a drawer asked for `right` must dock against the right of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `right: 0` dock, and `border-radius: R 0 0 R` (R = the drawer radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        },
+        {
+          "selector": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-placement='left']",
+          "sites": 1,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a drawer asked for `left` must dock against the left of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `left: 0` dock, and `border-radius: 0 R R 0` (R = the drawer radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        },
+        {
+          "selector": ".ds-drawer.ds-drawer--modern[data-part='surface'][data-part='surface'][data-placement='right']",
+          "sites": 1,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a drawer asked for `right` must dock against the right of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `right: 0` dock, and `border-radius: R 0 0 R` (R = the drawer radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/dropdown/index.css": {
+      "selectors": [
+        {
+          "selector": ".ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement$='Left']",
+          "sites": 1,
+          "reason": "Keyed on `[data-placement$='Left']`, a PHYSICAL attribute the dropdown contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        },
+        {
+          "selector": ".ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement$='Right']",
+          "sites": 1,
+          "reason": "Keyed on `[data-placement$='Right']`, a PHYSICAL attribute the dropdown contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/popover/index.css": {
+      "selectors": [
+        {
+          "selector": ".ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='left'] > [data-part='arrow']",
+          "sites": 2,
+          "reason": "Keyed on `[data-placement^='left']`, a PHYSICAL attribute the popover contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        },
+        {
+          "selector": ".ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='right'] > [data-part='arrow']",
+          "sites": 2,
+          "reason": "Keyed on `[data-placement^='right']`, a PHYSICAL attribute the popover contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/sheet/index.css": {
+      "selectors": [
+        {
+          "selector": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left']",
+          "sites": 2,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a sheet asked for `left` must dock against the left of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `left: 0` dock, and `border-radius: 0 R R 0` (R = the sheet radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        },
+        {
+          "selector": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right']",
+          "sites": 2,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a sheet asked for `right` must dock against the right of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `right: 0` dock, and `border-radius: R 0 0 R` (R = the sheet radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        },
+        {
+          "selector": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-placement='left']",
+          "sites": 1,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a sheet asked for `left` must dock against the left of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `left: 0` dock, and `border-radius: 0 R R 0` (R = the sheet radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        },
+        {
+          "selector": ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-placement='right']",
+          "sites": 1,
+          "reason": "`data-placement` names a PHYSICAL screen edge: a sheet asked for `right` must dock against the right of the viewport in every reading direction, so the paint has to follow the attribute rather than the reading direction. 2 measured sites under this selector: the `right: 0` dock, and `border-radius: R 0 0 R` (R = the sheet radius channel), which rounds only the two corners that face into the page -- an asymmetric inline corner pair the gate sees now that it reads box and corner shorthands. Both are the same contract: the radius must round the same two corners the dock leaves exposed. The migration belongs to the placement vocabulary (D9/D10), and this row drains when that vocabulary turns logical, not before."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/table/index.css": {
+      "selectors": [
+        {
+          "selector": ".ds-table.ds-table--modern [data-align='right']",
+          "sites": 1,
+          "reason": "Keyed on `[data-align='right']`, a PHYSICAL attribute the table contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        },
+        {
+          "selector": ".ds-table.ds-table--modern [data-fixed='true'], .ds-table.ds-table--modern [data-fixed='left']",
+          "sites": 1,
+          "reason": "Keyed on `[data-fixed='left']`, a PHYSICAL attribute the table contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        },
+        {
+          "selector": ".ds-table.ds-table--modern [data-fixed='right']",
+          "sites": 1,
+          "reason": "Keyed on `[data-fixed='right']`, a PHYSICAL attribute the table contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/tooltip/index.css": {
+      "selectors": [
+        {
+          "selector": ".ds-tooltip-bubble[data-part='bubble'][data-placement^='left'] > [data-part='arrow']",
+          "sites": 2,
+          "reason": "Keyed on `[data-placement^='left']`, a PHYSICAL attribute the tooltip contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        },
+        {
+          "selector": ".ds-tooltip-bubble[data-part='bubble'][data-placement^='right'] > [data-part='arrow']",
+          "sites": 2,
+          "reason": "Keyed on `[data-placement^='right']`, a PHYSICAL attribute the tooltip contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        }
+      ]
+    },
+    "runtime/engines/modern/skin/typography/index.css": {
+      "selectors": [
+        {
+          "selector": ".rottay-typography.rottay-typography--modern[data-part='root'][data-align='left']",
+          "sites": 1,
+          "reason": "Keyed on `[data-align='left']`, a PHYSICAL attribute the typography contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        },
+        {
+          "selector": ".rottay-typography.rottay-typography--modern[data-part='root'][data-align='right']",
+          "sites": 1,
+          "reason": "Keyed on `[data-align='right']`, a PHYSICAL attribute the typography contract stamps: the caller names a screen edge, so the paint has to land on that edge and a logical spelling would move it off the side that was asked for. The migration belongs to the placement/fixed/align vocabulary, not to this stylesheet; the row drains the day that contract turns logical (D9/D10)."
+        }
+      ]
+    }
+  },
+  "pinnedDebt": {
+    "foundation/animations/keyframes/index.css": {
+      "sites": 10,
+      "reason": "10 measured sites, all `transform: translateX(<signed>)` inside a keyframe step and none with a `:dir(rtl)` twin: `ds-foundation-fade-in-left/-right` (-1rem / 1rem), `ds-foundation-slide-in-left/-right` and `ds-foundation-slide-out-left/-right` (-100% / 100%), `ds-foundation-shake` (-0.5rem / 0.5rem across its two step lists) and `ds-foundation-progress-indeterminate` (-100% -> 100%). A keyframe name IS the public handle -- `ds-foundation-progress-indeterminate` is animated by runtime/engines/modern/skin/progress/index.css, and the left/right pairs are a named vocabulary a consumer picks by side -- so the fix is an animation-name contract decision (one direction-resolved pair, or a mirrored twin per keyframe), which belongs to the L3 mirror lot. Shake is a special case: its two step lists are equal and opposite, so it is symmetric in effect but not in spelling, and it stays pinned rather than being claimed as inert by a rule that cannot see across steps."
+    },
+    "foundation/animations/transitions/index.css": {
+      "sites": 4,
+      "reason": "4 measured sites: the view-transition panel keyframes `ds-vt-panel-exit-toward-start`, `ds-vt-panel-exit-toward-end`, `ds-vt-panel-enter-from-end` and `ds-vt-panel-enter-from-start`, each a `translateX(var(--ds-motion-panel-offset))` or its `calc(-1 * ...)` negation with no `:dir(rtl)` twin. The names are already LOGICAL (toward-start / from-end) while the paint is physical, so under RTL a panel choreographed to leave toward the reading start leaves toward the right instead -- the defect the naming denies. Consumed through the choreography contract asserted by src/foundation/tokens/tests/view-transition-choreography-contract.test.ts. The fix is a mirrored twin per keyframe (L3 lot), not a rename."
+    },
+    "foundation/responsive/channels/index.css": {
+      "sites": 24,
+      "reason": "24 measured sites: 12 x margin-left/margin-right and 12 x padding-left/padding-right, one pair per breakpoint (xs plus the five min-width media blocks 640/768/1024/1280/1536). Each site is the paint half of a PUBLIC attribute contract: the selector is `[data-ds-responsive~=\"margin-left@xs\"]` and the value reads the matching `--_ds-rsp-margin-left-xs` channel, both of which are produced by `src/infrastructure/runtime/responsive/runtime/style-properties/index.ts` from responsive props that consumers spell by name. Migrating the paint alone would silently make `margin-left@xs` mean margin-inline-start, so the token name would lie; migrating the vocabulary renames a public contract every consuming app and several primitive contract tests spell. This is therefore a D9-class OWNER contract change, not a stylesheet edit, and it is pinned as debt rather than excepted: the sites are real RTL defects, they are simply not this gate's lot to fix."
+    },
+    "presentation/components/arc/index.css": {
+      "sites": 1,
+      "reason": "1 measured site: `.ds-arc::after` composes `rotate(calc(var(--_ds-arc-value) * 3.6deg - 90deg)) translate(calc(var(--_ds-arc-size) / 2 - 50%))`, a positive x push along an already-rotated axis that places the arc's end cap. The sibling rule already carries a `:dir(rtl)` twin, so the file is half mirrored; this component of the pair is not, and the gate reads an unresolved signed x rather than assuming a rotation cancels it. It owes the same mirrored twin its sibling has (L3 lot), and the arc is engine-agnostic pattern CSS, outside this lot's write set."
+    },
+    "presentation/components/patterns/index.css": {
+      "sites": 4,
+      "reason": "4 measured sites: `ds-meter-sweep` translates -100% -> 100% across its two steps (a sweep with no `:dir(rtl)` twin), `:where(.ds-metric-card__progress-bar)::after` starts at `translateX(-100%)` for the same sweep, and `:where(.ds-metric-card__halo)` pins `right: -54px` to hang a decorative halo off one physical corner. The two sweeps owe a mirror (L3 lot); the halo owes `inset-inline-end`, which is a one-line change but lands in the engine-agnostic pattern sheet rather than in a skin, outside this lot's write set."
+    },
+    "presentation/components/skin/ascii-diagram/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x right. First: `.rt-ascii-diagram[data-overflowing=\"true\"]::after | right: 0`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/avatar-compounds/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 2 x margin-left. First: `.rottay-avatar-group[data-part='root'] > [data-part='item'], .rottay-avatar-group[data-part='root'] > [data-part='surplus'] | margin-left: var(--ds-avatar-group-overlap, var(--ds-avatar-group-compact-spacing, -0.5rem))`; `.rottay-avatar-group[data-part='root'] > [data-part='item'][data-stack-lead='true'] | margin-left: 0`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/card-compounds/index.css": {
+      "sites": 8,
+      "reason": "8 measured site(s): 2 x border-bottom-left-radius, 2 x border-bottom-right-radius, 2 x border-top-left-radius, 2 x border-top-right-radius. First: `.ds-card-image[data-part='image'][data-part='image'][data-position='top'] | border-top-left-radius: var(--_ds-card-image-corner)`; `.ds-card-image[data-part='image'][data-part='image'][data-position='top'] | border-top-right-radius: var(--_ds-card-image-corner)`; `.ds-card-image[data-part='image'][data-part='image'][data-position='top'] | border-bottom-left-radius: 0`; `.ds-card-image[data-part='image'][data-part='image'][data-position='top'] | border-bottom-right-radius: 0`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/chart-foundation/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 1 x left, 1 x transform (signed x). First: `.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] > [data-part='interaction-tooltip'] | left: var(--ds-chart-tooltip-x, 0%)`; `.ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'] > [data-part='interaction-tooltip'] | transform: translate( var(--ds-chart-tooltip-shift-x, -50%), var(--ds-chart-tooltip-shift-y, calc(-100% - var(--ds-spacing-2))) )`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/dashboard-activity-interactions/index.css": {
+      "sites": 3,
+      "reason": "3 measured site(s): 3 x transform (signed x). First: `@keyframes ds-activity-timeline-item-slide-in / from | transform: translateX(-20px)`; `@keyframes ds-activity-compact-slide-in-right / from | transform: translateX(-20px)`; `@keyframes ds-activity-cards-card-slide-in / from | transform: translateX(-10px)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/dashboard-metrics-interactions/index.css": {
+      "sites": 8,
+      "reason": "8 measured site(s): 2 x left, 6 x transform (signed x). First: `@keyframes ds-metrics-minimal-slide-in / from | transform: translateX(-10px)`; `@keyframes ds-metrics-minimal-slide-in-rtl / from | transform: translateX(10px)`; `@keyframes ds-metrics-chart-slide-in / from | transform: translateX(-10px)`; `@keyframes ds-metrics-chart-slide-in-rtl / from | transform: translateX(10px)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/data-terminal-card-keyframes/index.css": {
+      "sites": 4,
+      "reason": "4 measured site(s): 4 x transform (signed x). First: `@keyframes dtc-slide / 0% | transform: translateX(-100%)`; `@keyframes dtc-slide / 100% | transform: translateX(400%)`; `@keyframes dtc-wave / 0% | transform: translateX(-100%)`; `@keyframes dtc-wave / 100% | transform: translateX(100%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/detail-header/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 1 x border-top-left-radius, 1 x border-top-right-radius. First: `.ds-structure.ds-detail-header [data-part='tab'] | border-top-left-radius: var(--ds-radius-md, 10px)`; `.ds-structure.ds-detail-header [data-part='tab'] | border-top-right-radius: var(--ds-radius-md, 10px)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/metrics-rows/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x left. First: `.ds-metrics-rows.ds-metrics-rows [data-part='shimmer'] | left: -100%`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/presence/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `.ds-presence-live-cursor[data-part='root'] | transform: translate( var(--ds-presence-cursor-x, 0), var(--ds-presence-cursor-y, 0) )`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/record-facts/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 2 x transform (signed x). First: `@keyframes ds-record-facts-shimmer / to | transform: translateX(100%)`; `@keyframes ds-record-facts-shimmer-rtl / to | transform: translateX(-100%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/saved-views-menu/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x left. First: `.ds-structure.ds-saved-views-menu-panel[data-part='panel'] | left: var(--ds-saved-views-menu-panel-left, 0)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/skeleton-anatomy/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x left. First: `.ds-skeleton-anatomy[data-part='root'] [data-part='bone'] | left: var(--ds-skeleton-bone-x, var(--ds-spacing-0))`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/stepper-compounds/index.css": {
+      "sites": 4,
+      "reason": "4 measured site(s): 4 x transform (signed x). First: `.ds-stepper-content[data-part='panel'][data-animation='slide'][data-presence='entering'][data-direction='forward'] | transform: translateX(var(--ds-stepper-panel-slide-distance))`; `.ds-stepper-content[data-part='panel'][data-animation='slide'][data-presence='entering'][data-direction='backward'] | transform: translateX(calc(-1 * var(--ds-stepper-panel-slide-distance)))`; `.ds-stepper-content[data-part='panel'][data-animation='slide'][data-presence='exiting'][data-direction='forward'] | transform: translateX(calc(-1 * var(--ds-stepper-panel-slide-distance)))`; `.ds-stepper-content[data-part='panel'][data-animation='slide'][data-presence='exiting'][data-direction='backward'] | transform: translateX(var(--ds-stepper-panel-slide-distance))`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/toast-animation-keyframes/index.css": {
+      "sites": 4,
+      "reason": "4 measured site(s): 4 x transform (signed x). First: `@keyframes toast-slide-in-right / from | transform: translateX(100%)`; `@keyframes toast-slide-out-right / to | transform: translateX(100%)`; `@keyframes toast-slide-in-left / from | transform: translateX(-100%)`; `@keyframes toast-slide-out-left / to | transform: translateX(-100%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "presentation/components/skin/widget-board/index.css": {
+      "sites": 11,
+      "reason": "11 measured sites: the 7 already pinned by the L2 seed, plus 4 that only became visible when the gate learned to read box shorthands -- `border-width: 2px 0 0 2px` and its three rotations on the resize rails of `[data-edge=\"block-start-inline-start\"]`, `block-start-inline-end`, `block-end-inline-start` and `block-end-inline-end`. These four are the sharpest case in the band: the ATTRIBUTE vocabulary is already logical (`inline-start` / `inline-end`), so nothing excuses the physical paint, and under RTL each rail draws its corner on the wrong side of the widget it resizes. They are not a physicalStamp -- a stamp is for a PHYSICAL contract the paint must follow -- and the fix is `border-inline-start-width` / `border-inline-end-width` in a file outside this lot's write set."
+    },
+    "runtime/engines/modern/framework-bridge/index.css": {
+      "sites": 1,
+      "reason": "1 measured site: `[data-engine='modern'] select` writes `padding: 8px 32px 8px 12px`, a four-value box shorthand whose inline edges differ (32px right against 12px left) because the 32px reserves room for the chevron painted by the background-image on the same rule. Under RTL the chevron moves to the reading end while the padding does not, so the glyph overlaps the text. The fix is two declarations -- a symmetric `padding-block`/`padding-inline` base plus `padding-inline-end: 32px` -- paired with a logical `background-position`, and the background half is a paint change to a data-URI-bearing rule that this correction lot did not adjudicate."
+    },
+    "runtime/engines/modern/skin/avatar/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot'] | transform: translate(var(--ds-avatar-status-offset-x, 25%), 25%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/cascader/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `@keyframes ds-cascader-panel-in / from | transform: translateX(var(--ds-cascader-column-enter-x, calc(var(--ds-spacing-2) * -1)))`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/drawer/index.css": {
+      "sites": 5,
+      "reason": "5 measured site(s): 1 x left, 4 x transform (signed x). First: `@keyframes ds-drawer-enter-left / from | transform: translateX(-100%)`; `@keyframes ds-drawer-exit-left / to | transform: translateX(-100%)`; `@keyframes ds-drawer-enter-right / from | transform: translateX(100%)`; `@keyframes ds-drawer-exit-right / to | transform: translateX(100%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/dropdown/index.css": {
+      "sites": 4,
+      "reason": "4 measured site(s) after the INV-01 L2 migration: 2 x transform (signed x) on the item/submenu indicator sweep, and 2 x border-left/border-right on the block-placed arrow. The in-tree centring edge migrated to `inset-inline-start` with a `:dir(rtl)` translate mirror, and the portaled `left` is a named measured-space exception. The two sweeps owe a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); the two arrow shapers owe `border-inline-start|end`."
+    },
+    "runtime/engines/modern/skin/list-toolbar/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 2 x transform (signed x). First: `@keyframes ds-list-toolbar-sheen / 0% | transform: translateX(-120%)`; `@keyframes ds-list-toolbar-sheen / 100% | transform: translateX(120%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/popover/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 1 x border-left, 1 x border-right. First: `.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='top'] > [data-part='arrow'] | border-left: 0`; `.ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement^='bottom'] > [data-part='arrow'] | border-right: 0`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/sheet/index.css": {
+      "sites": 4,
+      "reason": "4 measured site(s): 4 x transform (signed x). First: `@keyframes ds-sheet-enter-left / from | transform: translateX(-100%)`; `@keyframes ds-sheet-exit-left / to | transform: translateX(-100%)`; `@keyframes ds-sheet-enter-right / from | transform: translateX(100%)`; `@keyframes ds-sheet-exit-right / to | transform: translateX(100%)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/slider/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 2 x translate (signed x). First: `.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='handle'] | translate: var(--tw-translate-x) var(--tw-translate-y)`; `.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='handle'] | translate: var(--tw-translate-x) var(--tw-translate-y)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/tabs/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `.ds-tabs--modern[data-part='root'] [data-part='indicator'] | transform: translateX(var(--ds-tabs-indicator-offset)) scaleX(var(--ds-tabs-indicator-scale))`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/tooltip/index.css": {
+      "sites": 2,
+      "reason": "2 measured site(s): 1 x border-left, 1 x border-right. First: `.ds-tooltip-bubble[data-part='bubble'][data-placement^='top'] > [data-part='arrow'] | border-left: 0`; `.ds-tooltip-bubble[data-part='bubble'][data-placement^='bottom'] > [data-part='arrow'] | border-right: 0`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    },
+    "runtime/engines/modern/skin/tree/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x border-left-width. First: `.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'] | border-left-width: var(--ds-tree-line-width)`. An asymmetric translate owes a `:dir(rtl)` mirror (the L3 lot of WO-INV-01); a physical edge owes its logical spelling."
+    }
+  },
+  "inert": {
+    "presentation/components/skin/export-button/index.css": {
+      "sites": 5,
+      "reason": "5 measured site(s): 5 x transform (signed x). First: `.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] | transform: translateX(-50%)`; `@keyframes ds-export-toast-fade / 0% | transform: translateX(-50%) translateY(4px)`; `@keyframes ds-export-toast-fade / 10% | transform: translateX(-50%) translateY(0)`; `@keyframes ds-export-toast-fade / 80% | transform: translateX(-50%) translateY(0)`. Both inline edges carry the same value, or the offset is the centring +/-50% paired with a translate, so the reading direction moves nothing and clearing the row is a zero-pixel change."
+    },
+    "presentation/components/skin/progress-compounds/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `.rottay-progress-circle [data-part='label'] | transform: translate(-50%, -50%)`. Both inline edges carry the same value, or the offset is the centring +/-50% paired with a translate, so the reading direction moves nothing and clearing the row is a zero-pixel change."
+    },
+    "presentation/components/skin/toast-compounds/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `.rottay-toast-container[data-placement='top-center'][data-center-transform='true'], .rottay-toast-container[data-placement='bottom-center'][data-center-transform='true'] | transform: translateX(-50%)`. Both inline edges carry the same value, or the offset is the centring +/-50% paired with a translate, so the reading direction moves nothing and clearing the row is a zero-pixel change."
+    },
+    "presentation/components/skin/widget-board/index.css": {
+      "sites": 6,
+      "reason": "6 measured site(s): 6 x transform (signed x). First: `@media (hover: hover) / .ds-pattern-widget-board .ds-widget-board__resize-handle:is( [data-edge=\"block-start\"], [data-edge=\"block-end\"] ):hover .ds-widget-board__resize-rail | transform: translateX(-50%) scaleX(1)`; `@media (hover: hover) / .ds-pattern-widget-board .ds-widget-board__resize-handle:is( [data-edge=\"block-start\"], [data-edge=\"block-end\"] ):hover .ds-widget-board__resize-indicator | transform: translateX(-50%) translateY(0) scale(1)`; `.ds-pattern-widget-board .ds-widget-board__resize-handle:is( [data-edge=\"block-start\"], [data-edge=\"block-end\"] ) .ds-widget-board__resize-rail | transform: translateX(-50%) scaleX(0.62)`; `.ds-pattern-widget-board .ds-widget-board__resize-handle:is( [data-edge=\"block-start\"], [data-edge=\"block-end\"] ):where(:focus-visible, :active, [data-active=\"true\"]) .ds-widget-board__resize-rail | transform: translateX(-50%) scaleX(1)`. Both inline edges carry the same value, or the offset is the centring +/-50% paired with a translate, so the reading direction moves nothing and clearing the row is a zero-pixel change."
+    },
+    "runtime/engines/modern/skin/avatar/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `@media (hover: none), (pointer: coarse) / .rottay-avatar.rottay-avatar--modern[data-interactive='true']::before | transform: translate(-50%, -50%)`. Both inline edges carry the same value, or the offset is the centring +/-50% paired with a translate, so the reading direction moves nothing and clearing the row is a zero-pixel change."
+    },
+    "runtime/engines/modern/skin/date-picker/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `.ds-date-picker-panel[data-mode='date'] [data-part='cell'][data-today='true']::after | transform: translateX(-50%)`. Both inline edges carry the same value, or the offset is the centring +/-50% paired with a translate, so the reading direction moves nothing and clearing the row is a zero-pixel change."
+    },
+    "runtime/engines/modern/skin/qrcode/index.css": {
+      "sites": 1,
+      "reason": "1 measured site(s): 1 x transform (signed x). First: `.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='icon'] | transform: translate(-50%, -50%)`. Both inline edges carry the same value, or the offset is the centring +/-50% paired with a translate, so the reading direction moves nothing and clearing the row is a zero-pixel change."
+    }
+  }
+}

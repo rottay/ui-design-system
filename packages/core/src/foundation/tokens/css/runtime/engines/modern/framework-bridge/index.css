@@ -394,7 +394,7 @@
 
 /* Ensure buttons have gap when in flex/inline containers */
 [data-engine='modern'] .btn + .btn {
-  margin-left: 8px;
+  margin-inline-start: 8px;
 }
 
 /* Generic flex gap for button parents */

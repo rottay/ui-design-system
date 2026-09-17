@@ -56,8 +56,13 @@
 .ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='false'] {
   position: fixed;
   top: 50%;
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translate(-50%, -50%);
+}
+
+/* The centring translate mirrors with the inline edge it pulls back from. */
+.ds-tour.ds-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='false']:dir(rtl) {
+  transform: translate(50%, -50%);
 }
 
 /* The colored frame repeats its part to clear the tenant border-color floor. */

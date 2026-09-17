@@ -106,11 +106,16 @@
   animation-name: ds-dropdown-exit-top;
 }
 
-/* In-tree placement: one block end and one logical inline edge; centring stays physical. */
+/* In-tree placement: one block end and one logical inline edge, centred on the trigger. */
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true']) {
   inset-block-start: calc(100% + var(--ds-dropdown-gap, var(--ds-spacing-2)));
-  left: 50%;
+  inset-inline-start: 50%;
   translate: -50% 0;
+}
+
+/* The centring translate mirrors with the inline edge it pulls back from. */
+.ds-dropdown-surface[data-part='surface']:not([data-portaled='true']):dir(rtl) {
+  translate: 50% 0;
 }
 
 .ds-dropdown-surface[data-part='surface']:not([data-portaled='true'])[data-placement^='top'] {
