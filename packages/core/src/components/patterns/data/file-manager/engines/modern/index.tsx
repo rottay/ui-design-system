@@ -45,6 +45,7 @@ import ModernCheckbox from '../../../../../primitives/inputs/checkbox/engines/mo
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/empty/engines/modern';
 import ModernBreadcrumb from '../../../../../primitives/navigation/breadcrumb/engines/modern';
+import { useFileDropZone } from '../../../../../primitives/runtime/collection/sortable';
 
 /**
  * The list row and the grid card are STATEFUL PARTS: one place decides when
@@ -208,8 +209,14 @@ export default function ModernFileManager(props: FileManagerProps) {
 
   // Hidden file input is triggered by the Upload button click to open the native file picker.
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // Drag-over feedback state for the content-area drop zone.
-  const [isDragOver, setIsDragOver] = useState(false);
+  // Drag-over feedback for the content-area drop zone. Without an upload
+  // handler the zone is inert, so it neither lights up nor accepts a drop.
+  const fileDrop = useFileDropZone({
+    disabled: !onUpload,
+    onFiles: (droppedFiles) => {
+      if (droppedFiles.length > 0 && onUpload) onUpload(droppedFiles);
+    },
+  });
   // Row actions are named by their own text plus the row's name node, so the
   // announced name is item-specific without concatenating translated fragments.
   const rowIdBase = useId();
@@ -240,23 +247,6 @@ export default function ModernFileManager(props: FileManagerProps) {
       e.target.value = '';
     }
   }, [onUpload]);
-
-  // Drag-and-drop handler. preventDefault is required to allow the drop event to fire.
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    if (e.dataTransfer.files.length > 0 && onUpload) {
-      onUpload(Array.from(e.dataTransfer.files));
-    }
-  }, [onUpload]);
-
-  // dragleave bubbles from every descendant, so only a relatedTarget outside
-  // the zone is a real exit; otherwise the tint pulses off row by row.
-  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    const nextTarget = e.relatedTarget;
-    if (nextTarget instanceof Node && e.currentTarget.contains(nextTarget)) return;
-    setIsDragOver(false);
-  }, []);
 
   // The grid holds ONE roving tab stop; arrows walk the cards so a large
   // folder costs a single Tab press.
@@ -403,10 +393,8 @@ export default function ModernFileManager(props: FileManagerProps) {
         {/* Drop zone + content */}
         <div
           data-part="content"
-          data-drag-over={isDragOver ? 'true' : 'false'}
-          onDragOver={e => { e.preventDefault(); if (onUpload) setIsDragOver(true); }}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
+          data-drag-over={fileDrop.isDragOver ? 'true' : 'false'}
+          {...fileDrop.dropZoneProps}
         >
           {items.length === 0 ? (
             <div data-part="empty">

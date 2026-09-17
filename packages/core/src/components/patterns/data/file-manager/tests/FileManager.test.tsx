@@ -168,6 +168,45 @@ describe('PatternFileManager', () => {
     // Leaving toward a node outside the zone still clears the affordance.
     dragLeaveToward(content, document.body);
     expect(content).toHaveAttribute('data-drag-over', 'false');
+
+    // A null relatedTarget is the pointer leaving the window: also an exit.
+    fireEvent.dragOver(content);
+    expect(content).toHaveAttribute('data-drag-over', 'true');
+    fireEvent.dragLeave(content);
+    expect(content).toHaveAttribute('data-drag-over', 'false');
+  });
+
+  it('routes a modern drop to the upload handler and ignores an empty one', () => {
+    const onUpload = vi.fn();
+    renderWithEngine(<ModernFileManager {...createProps({ onUpload })} />, 'modern');
+
+    const content = screen.getByText('report.pdf').closest<HTMLElement>('[data-part="content"]');
+    if (!(content instanceof HTMLElement)) {
+      throw new Error('Expected modern drop zone');
+    }
+
+    const dropped = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+    fireEvent.dragOver(content);
+    fireEvent.drop(content, { dataTransfer: { files: [dropped] } });
+
+    expect(onUpload).toHaveBeenCalledTimes(1);
+    expect(onUpload).toHaveBeenCalledWith([dropped]);
+    expect(content).toHaveAttribute('data-drag-over', 'false');
+
+    fireEvent.drop(content, { dataTransfer: { files: [] } });
+    expect(onUpload).toHaveBeenCalledTimes(1);
+  });
+
+  it('leaves the modern drop zone inert without an upload handler', () => {
+    renderWithEngine(<ModernFileManager {...createProps()} />, 'modern');
+
+    const content = screen.getByText('report.pdf').closest<HTMLElement>('[data-part="content"]');
+    if (!(content instanceof HTMLElement)) {
+      throw new Error('Expected modern drop zone');
+    }
+
+    fireEvent.dragOver(content);
+    expect(content).toHaveAttribute('data-drag-over', 'false');
   });
 
   it('covers classic uploads, drag-drop, breadcrumbs, custom icons, selection toggles, and grid mode actions', () => {

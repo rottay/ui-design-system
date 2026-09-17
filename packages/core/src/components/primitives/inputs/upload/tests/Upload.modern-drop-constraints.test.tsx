@@ -48,6 +48,28 @@ describe('Upload modern dropzone constraints', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it('hands the caller the raw drop event, already prevented, before any processing', async () => {
+    const seen: string[] = [];
+    const { container } = renderWithEngine(
+      <Dragger
+        accept="image/*"
+        multiple
+        onDrop={(event) => {
+          const names = Array.from(event.dataTransfer.files).map((file) => file.name).join('+');
+          seen.push(`onDrop:${event.nativeEvent.defaultPrevented ? 'prevented' : 'live'}:${names}`);
+        }}
+        onChange={(info) => { seen.push(`processed:${info.file.name}`); }}
+      />,
+      'modern'
+    );
+    const zone = container.querySelector('[data-part="dropzone"]') as HTMLElement;
+
+    drop(zone, [makeFile('payload.exe', 'application/x-msdownload'), makeFile('shot.png', 'image/png')]);
+
+    await waitFor(() => expect(seen).toHaveLength(2));
+    expect(seen).toEqual(['onDrop:prevented:payload.exe+shot.png', 'processed:shot.png']);
+  });
+
   it('takes only the first dropped file when multiple is false', async () => {
     const onChange = vi.fn();
     const { container } = renderWithEngine(<Dragger multiple={false} onChange={onChange} />, 'modern');

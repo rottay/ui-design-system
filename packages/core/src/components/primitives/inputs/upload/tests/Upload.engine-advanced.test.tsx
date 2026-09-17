@@ -155,6 +155,8 @@ describe.each([
       expect(beforeUpload).toHaveBeenCalledTimes(1);
     });
     expect(handleDrop).toHaveBeenCalledTimes(1);
+    // The caller's public onDrop runs before the component processes anything.
+    expect(handleDrop.mock.invocationCallOrder[0]).toBeLessThan(beforeUpload.mock.invocationCallOrder[0]);
     expect(handleChange).not.toHaveBeenCalled();
 
     await act(async () => {

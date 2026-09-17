@@ -45,6 +45,7 @@
 import React, { useState, useRef, useCallback, useEffect, useId } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
+import { useFileDropZone } from '../../../../runtime/collection/sortable';
 import { UPLOAD_DEFAULTS } from '../../contracts';
 import { filterDroppedFiles, removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
 import { Progress } from '../../../../facade';
@@ -870,7 +871,6 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
     } = props;
 
     const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList);
-    const [isDragOver, setIsDragOver] = useState(false);
     const [thumbUrls, setThumbUrls] = useState<Record<string, string>>({});
     const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -918,15 +918,14 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       if (inputRef.current) inputRef.current.value = '';
     };
 
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      if (disabled) return;
-      setIsDragOver(false);
-      onDrop?.(e);
+    const fileDrop = useFileDropZone({
+      disabled,
+      // The kernel's bag is element-generic; the public prop names the div it is spread on.
+      onDropEvent: onDrop as ((event: React.DragEvent) => void) | undefined,
       // The declared accept/multiple constraints are enforced by the native
       // input on the picker path only; a drop bypasses it entirely.
-      processFiles(filterDroppedFiles(Array.from(e.dataTransfer.files), accept, multiple));
-    };
+      onFiles: (files) => processFiles(filterDroppedFiles(files, accept, multiple)),
+    });
 
     const handleRemove = async (file: UploadFile) => {
       if (onRemove) { const result = await onRemove(file); if (result === false) return; }
@@ -959,19 +958,6 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
     return (
       <div ref={ref} data-part="root" className={rootClassName} style={style}>
         <div
-          onDragOver={(e) => { e.preventDefault(); if (!disabled) setIsDragOver(true); }}
-          onDragLeave={(e) => {
-            /* dragleave bubbles from every child boundary (the hint text, the
-               icon): only clear the drag state when the pointer actually
-               exits the dropzone, or the frame flickers while crossing the
-               default content. relatedTarget is null when leaving the window
-               (still an exit). */
-            if (disabled) return;
-            const next = e.relatedTarget as Node | null;
-            if (next && e.currentTarget.contains(next)) return;
-            setIsDragOver(false);
-          }}
-          onDrop={handleDrop}
           onClick={() => { if (!disabled) inputRef.current?.click(); }}
           role="button"
           tabIndex={disabled ? -1 : 0}
@@ -980,8 +966,9 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           onKeyDown={(e) => {
             if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); inputRef.current?.click(); }
           }}
+          {...fileDrop.dropZoneProps}
           data-part="dropzone"
-          data-state={isDragOver ? 'dragging' : 'idle'}
+          data-state={fileDrop.isDragOver ? 'dragging' : 'idle'}
           data-disabled={disabled || undefined}
           /* Runtime prop-driven height rides the governed channel; the skin
              owns the block-size declaration. */
