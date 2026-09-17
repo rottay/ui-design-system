@@ -55,6 +55,8 @@
 
 import { useState, useCallback, useRef } from 'react';
 
+import { downloadBlob } from '../../foundation/export-kernel';
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -466,27 +468,6 @@ function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
-/**
- * Trigger a file download in the browser via a temporary anchor element.
- */
-function downloadFile(content: string, filename: string, mimeType: string): void {
-  if (!isBrowser()) return;
-
-  const blob = new Blob([content], { type: mimeType });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.style.display = 'none';
-  document.body.appendChild(anchor);
-  anchor.click();
-
-  // Cleanup
-  document.body.removeChild(anchor);
-  URL.revokeObjectURL(url);
-}
-
 // ============================================================================
 // Hook Implementation
 // ============================================================================
@@ -634,7 +615,7 @@ export function usePdfExport(options?: PdfExportOptions): UsePdfExportReturn {
         const html = generatePrintHtml(content);
         const filename = `${opts.filename ?? 'export'}.html`;
 
-        downloadFile(html, filename, 'text/html;charset=utf-8');
+        downloadBlob(html, filename, 'text/html;charset=utf-8');
       } finally {
         setIsExporting(false);
       }

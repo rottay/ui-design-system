@@ -52,6 +52,8 @@
 
 import { useState, useCallback, useRef } from 'react';
 
+import { downloadBlob, serializeDelimited } from '../../foundation/export-kernel';
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -164,49 +166,11 @@ function getExportColumns(columns: TableExportColumn[]): TableExportColumn[] {
 }
 
 /**
- * Escape a value for CSV output per RFC 4180.
- * - If the value contains a comma, double-quote, or newline, wrap it in quotes.
- * - Any double-quotes within the value are escaped by doubling them.
- */
-function escapeCsvValue(value: string): string {
-  if (
-    value.includes(',') ||
-    value.includes('"') ||
-    value.includes('\n') ||
-    value.includes('\r')
-  ) {
-    return `"${value.replace(/"/g, '""')}"`;
-  }
-  return value;
-}
-
-/**
  * Escape a value for tab-separated clipboard output.
  * Replaces tabs and newlines within values to prevent column/row breaks.
  */
 function escapeTabValue(value: string): string {
   return value.replace(/\t/g, ' ').replace(/\n/g, ' ').replace(/\r/g, '');
-}
-
-/**
- * Trigger a file download in the browser.
- */
-function downloadFile(content: string, filename: string, mimeType: string): void {
-  if (!isBrowser()) return;
-
-  const blob = new Blob([content], { type: mimeType });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.style.display = 'none';
-  document.body.appendChild(anchor);
-  anchor.click();
-
-  // Cleanup
-  document.body.removeChild(anchor);
-  URL.revokeObjectURL(url);
 }
 
 // ============================================================================
@@ -274,21 +238,12 @@ export function useTableExport<T>(
       const exportColumns = getExportColumns(cols);
       const rows = buildRows();
 
-      // Header row
-      const headerLine = exportColumns.map((c) => escapeCsvValue(c.header)).join(',');
-
-      // Data rows
-      const dataLines = rows.map((row) =>
-        row.map(escapeCsvValue).join(',')
+      const csvContent = serializeDelimited(
+        [exportColumns.map((c) => c.header), ...rows],
+        { rowSeparator: '\r\n', byteOrderMark: true },
       );
 
-      // The UTF-8 BOM (byte order mark) is prepended so that Excel on Windows
-      // correctly detects the file encoding. Without it, non-ASCII characters
-      // (accented names, currency symbols) display as garbled text.
-      const bom = '\uFEFF';
-      const csvContent = bom + [headerLine, ...dataLines].join('\r\n');
-
-      downloadFile(csvContent, `${filenameRef.current}.csv`, 'text/csv;charset=utf-8');
+      downloadBlob(csvContent, `${filenameRef.current}.csv`, 'text/csv;charset=utf-8');
     } finally {
       setIsExporting(false);
     }
@@ -316,7 +271,7 @@ export function useTableExport<T>(
 
       const jsonContent = JSON.stringify(exportData, null, 2);
 
-      downloadFile(
+      downloadBlob(
         jsonContent,
         `${filenameRef.current}.json`,
         'application/json;charset=utf-8'
@@ -337,15 +292,10 @@ export function useTableExport<T>(
       const exportColumns = getExportColumns(cols);
       const rows = buildRows();
 
-      // Header row
-      const headerLine = exportColumns.map((c) => escapeTabValue(c.header)).join('\t');
-
-      // Data rows
-      const dataLines = rows.map((row) =>
-        row.map(escapeTabValue).join('\t')
+      const tsvContent = serializeDelimited(
+        [exportColumns.map((c) => c.header), ...rows],
+        { delimiter: '\t', escapeValue: escapeTabValue },
       );
-
-      const tsvContent = [headerLine, ...dataLines].join('\n');
 
       await navigator.clipboard.writeText(tsvContent);
     } finally {

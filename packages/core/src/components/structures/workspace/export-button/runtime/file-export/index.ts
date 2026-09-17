@@ -17,6 +17,11 @@
  *   2. `key` as fallback (React nodes are not serializable to CSV headers)
  */
 
+import {
+  serializeDelimited,
+  writeClipboard,
+} from '@/infrastructure/runtime/application/data/foundation/export-kernel';
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -54,15 +59,14 @@ export function resolveHeader(column: ExportColumn): string {
 // Serialization helpers
 // ---------------------------------------------------------------------------
 
-/** Escape a value for safe inclusion inside a CSV cell. */
-function escapeCsvValue(value: unknown): string {
-  if (value == null) return '';
-  const str = String(value);
-  // Wrap in quotes if the value contains commas, quotes, or newlines.
-  if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
+/** Coerce a resolved cell value to its exported text. */
+function toCell(value: unknown): string {
+  return value == null ? '' : String(value);
+}
+
+/** Resolve every exported cell of one row, in column order. */
+function toRow(row: unknown, columns: ExportColumn[]): string[] {
+  return columns.map((col) => toCell(resolveValue(row as Record<string, unknown>, col)));
 }
 
 // ---------------------------------------------------------------------------
@@ -78,15 +82,9 @@ function escapeCsvValue(value: unknown): string {
  */
 export function generateCsv<T = unknown>(data: T[], columns: ExportColumn[]): string {
   const headers = columns.map(resolveHeader);
-  const headerRow = headers.map(escapeCsvValue).join(',');
+  const rows = data.map((row) => toRow(row, columns));
 
-  const rows = data.map((row) => {
-    return columns
-      .map((col) => escapeCsvValue(resolveValue(row as Record<string, unknown>, col)))
-      .join(',');
-  });
-
-  return [headerRow, ...rows].join('\n');
+  return serializeDelimited([headers, ...rows]);
 }
 
 /**
@@ -122,18 +120,11 @@ export function generateJson<T = unknown>(data: T[], columns: ExportColumn[]): s
  */
 export function generateClipboardText<T = unknown>(data: T[], columns: ExportColumn[]): string {
   const headers = columns.map(resolveHeader);
-  const headerRow = headers.join('\t');
+  const rows = data.map((row) => toRow(row, columns));
 
-  const rows = data.map((row) => {
-    return columns
-      .map((col) => {
-        const val = resolveValue(row as Record<string, unknown>, col);
-        return val == null ? '' : String(val);
-      })
-      .join('\t');
-  });
-
-  return [headerRow, ...rows].join('\n');
+  // Spreadsheet paste targets split on the tab itself, so cells are handed over
+  // unquoted here -- unlike the CSV document, which quotes per RFC 4180.
+  return serializeDelimited([headers, ...rows], { delimiter: '\t', escapeValue: (cell) => cell });
 }
 
 // ---------------------------------------------------------------------------
@@ -176,27 +167,5 @@ export function triggerDownload(content: string, filename: string, mimeType: str
  * @returns `true` when the copy succeeded.
  */
 export async function copyToClipboard(text: string): Promise<boolean> {
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch {
-    // Clipboard API failed -- fall through to legacy method.
-  }
-
-  // Legacy fallback
-  try {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    const ok = document.execCommand('copy');
-    document.body.removeChild(textarea);
-    return ok;
-  } catch {
-    return false;
-  }
+  return writeClipboard(text, { legacyFallback: true });
 }

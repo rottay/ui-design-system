@@ -50,6 +50,7 @@ import { Text } from '../../../primitives/display/typography/compound/text';
 import { Tooltip } from '../../../primitives/display/tooltip';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { writeClipboard } from '@/infrastructure/runtime/application/data/foundation/export-kernel';
 
 /** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
 function useRecordTranslation() {
@@ -141,7 +142,7 @@ export function RecordField({
   );
   const handleCopy = useCallback(() => {
     if (!copyValue) return;
-    void navigator.clipboard?.writeText(copyValue);
+    void writeClipboard(copyValue);
     setCopied(true);
     if (copyRevertTimer.current) clearTimeout(copyRevertTimer.current);
     copyRevertTimer.current = setTimeout(() => setCopied(false), 1400);

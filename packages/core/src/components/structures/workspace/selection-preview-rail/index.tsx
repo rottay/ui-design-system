@@ -49,6 +49,7 @@ import {
 
 import { Badge, Box, Button, Flex, Text } from '../../../primitives';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { writeClipboard } from '@/infrastructure/runtime/application/data/foundation/export-kernel';
 
 /** Minimal column definition consumed by the rail. */
 export interface SelectionPreviewRailColumn<T> {
@@ -249,11 +250,8 @@ export function SelectionPreviewRail<T extends object>({
   const customPreview = preview?.render?.(item);
 
   const handleCopyKey = async () => {
-    try {
-      await navigator.clipboard.writeText(itemKey);
-    } catch {
-      // Clipboard is best-effort only.
-    }
+    // Best-effort: the rail confirms nothing, so a refused write stays silent.
+    await writeClipboard(itemKey);
   };
 
   if (customPreview) {

@@ -49,6 +49,7 @@ import { Box, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { writeClipboard } from '@/infrastructure/runtime/application/data/foundation/export-kernel';
 
 /** Discriminator for saved view kinds. */
 export type SavedViewsMenuEntryKind = 'system' | 'persona' | 'custom';
@@ -376,21 +377,22 @@ export function SavedViewsMenu({
   const handleShareActiveView = useCallback(async () => {
     if (!activeView || typeof navigator === 'undefined' || !navigator.clipboard?.writeText) return;
 
-    try {
-      await navigator.clipboard.writeText(buildShareSnapshot(activeView, labels, shareBaseUrl));
-      setShareState('copied');
-
-      if (shareTimerRef.current) {
-        window.clearTimeout(shareTimerRef.current);
-      }
-
-      shareTimerRef.current = window.setTimeout(() => {
-        setShareState('idle');
-        shareTimerRef.current = null;
-      }, 1800);
-    } catch {
+    const copied = await writeClipboard(buildShareSnapshot(activeView, labels, shareBaseUrl));
+    if (!copied) {
       setShareState('idle');
+      return;
     }
+
+    setShareState('copied');
+
+    if (shareTimerRef.current) {
+      window.clearTimeout(shareTimerRef.current);
+    }
+
+    shareTimerRef.current = window.setTimeout(() => {
+      setShareState('idle');
+      shareTimerRef.current = null;
+    }, 1800);
   }, [activeView, labels, shareBaseUrl]);
 
   const updatePanelPosition = useCallback(() => {

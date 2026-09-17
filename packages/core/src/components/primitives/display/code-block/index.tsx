@@ -27,6 +27,7 @@
 import React from 'react';
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { writeClipboard } from '@/infrastructure/runtime/application/data/foundation/export-kernel';
 import { CheckIcon, CopyIcon } from '../../../../graphics/icons';
 import { VisuallyHidden } from '../../foundation';
 import { CODE_BLOCK_DEFAULTS } from './contracts';
@@ -155,18 +156,9 @@ export function CodeBlock({
   }, []);
 
   const handleCopy = React.useCallback(async () => {
-    const clipboard = typeof navigator !== 'undefined' ? navigator.clipboard : undefined;
-    // No clipboard (insecure context, blocked by permissions policy, older
-    // engine): the confirmation used to fire anyway, so the label flipped to
-    // "Copied" and the live region announced a copy that never happened.
-    if (!clipboard?.writeText) {
-      selectCode();
-      return;
-    }
-    try {
-      await clipboard.writeText(code);
-    } catch {
-      // Clipboard denial is non-fatal, but it is never a success either.
+    // A missing clipboard (insecure context, permissions policy, older engine)
+    // and a denied write are both non-fatal, but neither is ever a success.
+    if (!(await writeClipboard(code))) {
       selectCode();
       return;
     }
