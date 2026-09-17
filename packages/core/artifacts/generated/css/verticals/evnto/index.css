@@ -113513,7 +113513,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * hue alone.
  *
  * EVENT ACCENT HATCH: `CalendarEvent.color` is consumer-supplied config data;
- * it rides the quoted `--ds-calendar-view-event-accent` custom property, and
+ * it rides the quoted `--ds-calendar-view-entry-accent` custom property, and
  * the single rule below owns the fill (one paint owner). The engine stamps it
  * CONDITIONALLY -- an event that states no colour spreads no `style` at all --
  * so the derived resting accent stays reachable from the theme instead of being
@@ -113730,7 +113730,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   white-space: nowrap;
   cursor: pointer;
   border-radius: var(--ds-radius-sm);
-  background: var(--ds-calendar-view-event-accent, var(--ds-color-primary));
+  background: var(--ds-calendar-view-entry-accent, var(--ds-color-primary));
   color: var(--ds-color-text-on-primary);
   font-size: var(--ds-font-size-xs, 0.75rem);
   transition: filter var(--ds-motion-fast) var(--ds-motion-ease-out);
@@ -119416,7 +119416,7 @@ html[lang]:lang(ar) {
   --ds-button-xs-radius: var(--ds-radius-md, 8px);
   --ds-calendar-view-cell-min-height: 5rem;
   --ds-calendar-view-cell-min-height-compact: 3.5rem;
-  --ds-calendar-view-event-accent: var(--ds-color-primary);
+  --ds-calendar-view-entry-accent: var(--ds-color-primary);
   --ds-calendar-view-touch-target: 2.75rem;
   --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
   --ds-card-error-title-color: var(--ds-color-error-900);

@@ -337,7 +337,7 @@
   --ds-button-xs-radius: calc(2px / 0.8 * var(--ds-radius-scale, 1));
   --ds-calendar-view-cell-min-height: 5rem;
   --ds-calendar-view-cell-min-height-compact: 3.5rem;
-  --ds-calendar-view-event-accent: var(--ds-color-primary);
+  --ds-calendar-view-entry-accent: var(--ds-color-primary);
   --ds-calendar-view-touch-target: 2.75rem;
   --ds-card-bg: var(--ds-color-bg-elevated);
   --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
