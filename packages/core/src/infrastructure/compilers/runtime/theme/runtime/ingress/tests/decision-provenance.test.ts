@@ -20,6 +20,8 @@ import type { FlatTheme } from "@/foundation/contracts/composition/tenants/theme
 import { buttonStyleRadius } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
 import { TYPOGRAPHY_FAMILY_ROLES } from "@/contracts/theme/foundation/decisions";
 import { THEME_CONTROL_CATALOG } from "@/contracts/theme/runtime/catalog";
+import { TENANT_THEME_OVERRIDE_TOKENS } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import { validateTenantThemeDocument } from "@/infrastructure/compilers/composition/tenant-theme";
 import { FIRST_PARTY_VERTICAL_SLUGS } from "@/foundation/contracts/kernel/verticals";
 import {
   directOverrideEntries,
@@ -31,7 +33,12 @@ import {
   movedLeaves,
   tierIssues,
 } from "../../../facade/foundation/admission";
-import { baselineFor } from "@/infrastructure/compilers/runtime/theme";
+import {
+  baselineFor,
+  emitThemeCss,
+  tenantArtifactScope,
+} from "@/infrastructure/compilers/runtime/theme";
+import { OVERRIDE_TOKEN_PATCHES } from "../foundation/document-patch";
 import {
   documentProvenanceLedger,
   draftProvenanceLedger,
@@ -461,6 +468,171 @@ describe("a v1 font family is closed at ingress, not only at the write door", ()
         ).not.toThrow();
       }
     }
+  });
+});
+
+describe("the same font grammar answers the token-override spelling", () => {
+  /**
+   * v1 names one Theme leaf twice. The block above closes the
+   * `general.typography` role spelling; this one closes its sibling, where an
+   * unregistered pack authored as
+   * `advanced.tokenOverrides["--ds-font-family-display"]` compiled into the
+   * emitted channel through both producers while the document schema declares
+   * that very key `string("font-family")`. Both spellings answer to ONE
+   * grammar, so neither is the unguarded one.
+   */
+  const FAMILY_TOKENS = [
+    "--ds-font-family-base",
+    "--ds-font-family-heading",
+    "--ds-font-family-mono",
+    "--ds-font-family-display",
+  ] as const;
+
+  const REFUSED = {
+    "an unregistered pack": "var(--ds-font-pack-unregistered)",
+    "an arbitrary var()": "var(--ds-private-font)",
+    "a fallback argument": "var(--ds-font-pack-humanist-text, var(--ds-private-font))",
+    "a declaration breakout": "Inter; color: red",
+  } as const;
+
+  const ADMITTED = {
+    "a registered pack": "var(--ds-font-pack-editorial-display)",
+    "a plain family list": "'Fraunces', Georgia, serif",
+  } as const;
+
+  const overrideDocument = (token: string, value: string | number) =>
+    ({
+      schemaVersion: 1,
+      mode: "advanced",
+      visualFoundation: { advanced: { tokenOverrides: { [token]: value } } },
+    }) as never;
+
+  const writeDoorAdmits = (token: string, value: string | number) =>
+    validateTenantThemeDocument(overrideDocument(token, value)).success;
+
+  for (const token of FAMILY_TOKENS) {
+    for (const [label, value] of Object.entries(REFUSED)) {
+      it(`refuses ${label} in ${token}, on both producers`, () => {
+        // The write door is asserted first: this block must MATCH that door,
+        // not invent a stricter one of its own.
+        expect(writeDoorAdmits(token, value)).toBe(false);
+        for (const [name, produce] of Object.entries(PRODUCERS)) {
+          expect(
+            () =>
+              produce({
+                vertical: "bithire",
+                slug: SLUG,
+                document: overrideDocument(token, value),
+              }),
+            name
+          ).toThrow(new RegExp(`unsupported tokenOverride "${token}"`));
+        }
+      });
+    }
+
+    for (const [label, value] of Object.entries(ADMITTED)) {
+      it(`still admits ${label} in ${token}, on both producers`, () => {
+        expect(writeDoorAdmits(token, value)).toBe(true);
+        for (const [name, produce] of Object.entries(PRODUCERS)) {
+          expect(
+            () =>
+              produce({
+                vertical: "bithire",
+                slug: SLUG,
+                document: overrideDocument(token, value),
+              }),
+            name
+          ).not.toThrow();
+        }
+      });
+    }
+  }
+
+  it("refuses a non-string family, exactly as the write door's type rule does", () => {
+    for (const token of FAMILY_TOKENS) {
+      expect(writeDoorAdmits(token, 42)).toBe(false);
+      expect(() =>
+        documentThemeIntent({
+          vertical: "bithire",
+          slug: SLUG,
+          document: overrideDocument(token, 42),
+        })
+      ).toThrow(new RegExp(`unsupported tokenOverride "${token}"`));
+    }
+  });
+
+  it("carries an admitted pack all the way to the emitted channel", () => {
+    // The refusals above are only worth having if the door still CONDUCTS.
+    const compiled = (document: never) =>
+      emitThemeCss(
+        compileThemeIntent(
+          documentThemeIntent({ vertical: "bithire", slug: SLUG, document })
+        ).compiled,
+        tenantArtifactScope("bithire", SLUG)
+      );
+    const text = compiled(
+      overrideDocument(
+        "--ds-font-family-display",
+        "var(--ds-font-pack-grotesk-display)"
+      )
+    );
+    expect(/--ds-font-family-display:[^;]*;/u.exec(text)?.[0]).toBe(
+      '--ds-font-family-display: var(--ds-font-pack-grotesk-display), ' +
+        '"Noto Sans Arabic", sans-serif;'
+    );
+  });
+
+  it("has no token-override surface at all in simple mode", () => {
+    // Not a second guard: `appearance` is `TenantAppearanceGeneral`, which
+    // never declared the key, so the mode refuses it structurally by name.
+    for (const produce of Object.values(PRODUCERS)) {
+      expect(() =>
+        produce({
+          vertical: "bithire",
+          slug: SLUG,
+          document: {
+            schemaVersion: 1,
+            mode: "simple",
+            appearance: {
+              tokenOverrides: {
+                "--ds-font-family-display": "var(--ds-font-pack-unregistered)",
+              },
+            },
+          } as never,
+        })
+      ).toThrow(/unsupported general\.tokenOverrides/u);
+    }
+  });
+
+  it("keeps every keypath row the inverse override table publishes", () => {
+    // The table probes each token with a throwaway value, so a value guard can
+    // silently empty a row of it. The four font tokens must still resolve, and
+    // only the chart categories -- which have no keypath -- may be absent.
+    expect(FAMILY_TOKENS.every((token) => OVERRIDE_TOKEN_PATCHES.has(token))).toBe(
+      true
+    );
+    expect(
+      TENANT_THEME_OVERRIDE_TOKENS.filter(
+        (token) => !OVERRIDE_TOKEN_PATCHES.has(token)
+      )
+    ).toEqual([
+      "--ds-chart-category-1",
+      "--ds-chart-category-2",
+      "--ds-chart-category-3",
+      "--ds-chart-category-4",
+      "--ds-chart-category-5",
+      "--ds-chart-category-6",
+      "--ds-chart-category-7",
+      "--ds-chart-category-8",
+      "--ds-chart-category-9",
+      "--ds-chart-category-10",
+    ]);
+    expect([
+      ...movedLeaves(
+        OVERRIDE_TOKEN_PATCHES.get("--ds-font-family-display")!,
+        undefined
+      ),
+    ]).toEqual(["typography.fontFamilyDisplay"]);
   });
 });
 

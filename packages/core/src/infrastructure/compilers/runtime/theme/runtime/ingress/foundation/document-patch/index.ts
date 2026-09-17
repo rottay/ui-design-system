@@ -196,7 +196,11 @@ function migrateTokenOverride(
   };
   const typographyField = typographyFields[token];
   if (typographyField) {
-    return { typography: { [typographyField]: text } } as ThemeLayerPatch;
+    return {
+      typography: {
+        [typographyField]: safeFamily(value, `tokenOverride "${token}"`),
+      },
+    } as ThemeLayerPatch;
   }
 
   const letterSpacing =
@@ -295,12 +299,17 @@ export const OVERRIDE_TOKEN_PATCHES: ReadonlyMap<
 > = (() => {
   const index = new Map<TenantThemeOverrideToken, ThemeLayerPatch>();
   for (const token of TENANT_THEME_OVERRIDE_TOKENS) {
-    try {
-      // `1` rather than a colour: the VALUE is irrelevant to the keypath, and
-      // the two numeric tokens refuse a non-numeric one.
-      index.set(token, migrateTokenOverride(token, 1));
-    } catch {
-      continue;
+    // The VALUE is irrelevant to the keypath but not to the guards, and no one
+    // scalar satisfies both: the numeric tokens refuse a string and the font
+    // tokens refuse a non-string. A token absent from BOTH probes has no
+    // keypath at all, which is the only reason to be absent from this table.
+    for (const probe of [1, "Inter"] as const) {
+      try {
+        index.set(token, migrateTokenOverride(token, probe));
+        break;
+      } catch {
+        continue;
+      }
     }
   }
   return index;
@@ -369,24 +378,33 @@ function migrateTypography(
 }
 
 /**
- * One authored font role, closed against the same grammar the write validator
- * closes it with: a row reaches both public producers without passing that
- * validator, so a family admitted here is a family painted. Only the AUTHORED
- * value is judged; the pairing's own expansion is code-owned.
+ * One authored font family, closed against the same grammar the write
+ * validator closes it with: a row reaches both public producers without
+ * passing that validator, so a family admitted here is a family painted.
+ *
+ * v1 spells the same Theme leaf twice -- as a `general.typography` role and as
+ * a `--ds-font-family-*` token override, both declared `string("font-family")`
+ * by the document schema. One grammar answers both spellings, or the tenant
+ * simply authors through whichever one is unguarded.
  */
+function safeFamily(value: unknown, path: string): string {
+  if (typeof value !== "string" || !isSafeFontFamily(value)) {
+    throw new ThemePatchMigrationError(
+      `unsupported ${path} ${JSON.stringify(value)}; ` +
+        "a font family lists plain families and registered pack variables only"
+    );
+  }
+  return value;
+}
+
+/** Only the AUTHORED value is judged; the pairing's expansion is code-owned. */
 function authoredFamily(
   typography: NonNullable<TenantAppearanceGeneral["typography"]>,
   role: "fontFamilyBase" | "fontFamilyHeading" | "fontFamilyDisplay"
 ): string | undefined {
   const value = typography[role];
   if (value === undefined) return undefined;
-  if (typeof value !== "string" || !isSafeFontFamily(value)) {
-    throw new ThemePatchMigrationError(
-      `unsupported general.typography.${role} ${JSON.stringify(value)}; ` +
-        "a font family lists plain families and registered pack variables only"
-    );
-  }
-  return value;
+  return safeFamily(value, `general.typography.${role}`);
 }
 
 /** Closed domains of the two palette postures; the DB row is untrusted JSON. */
