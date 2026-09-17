@@ -24,7 +24,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
  * toolbar rhythm. Each is measured in
  * `PatternCalendarView.causality.integration.test.tsx`.
  *
- * `--ds-calendar-view-event-accent` can also be STAMPED per chip, but only
+ * `--ds-calendar-view-entry-accent` can also be STAMPED per chip, but only
  * when the consumer's event states a colour: a chip that states none leaves
  * the channel to the value here, so it is the tenant's, and a per-event stamp
  * outranks it exactly as an inline declaration outranks the theme root.
@@ -46,7 +46,7 @@ export const calendarViewChromeDeriver: FamilyDeriver = {
   produces: [
     "--ds-calendar-view-cell-min-height",
     "--ds-calendar-view-cell-min-height-compact",
-    "--ds-calendar-view-event-accent",
+    "--ds-calendar-view-entry-accent",
     "--ds-calendar-view-touch-target",
   ],
   derive: () => deriveCalendarViewChannels(),
@@ -61,7 +61,7 @@ export function deriveCalendarViewChannels(): Record<string, string> {
   vars["--ds-calendar-view-cell-min-height-compact"] = "3.5rem";
   // An event that states no colour reads as the family's own accent, which is
   // the seeded primary -- never a neutral chip nobody can tell from the cell.
-  vars["--ds-calendar-view-event-accent"] = "var(--ds-color-primary)";
+  vars["--ds-calendar-view-entry-accent"] = "var(--ds-color-primary)";
   vars["--ds-calendar-view-touch-target"] = "2.75rem";
   return vars;
 }

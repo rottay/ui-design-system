@@ -617,7 +617,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                             {...(ev.color === undefined
                               ? {}
                               : {
-                                  style: { '--ds-calendar-view-event-accent': ev.color } as React.CSSProperties,
+                                  style: { '--ds-calendar-view-entry-accent': ev.color } as React.CSSProperties,
                                 })}
                           >
                             {renderEvent ? renderEvent(ev) : ev.title}

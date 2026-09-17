@@ -241,7 +241,7 @@ describe('calendar-view causality surface', () => {
    */
   it('stamps the accent channel only for an event that states a colour', async () => {
     // Two of the three events state no colour; the third does.
-    expect(calendar.match(/--ds-calendar-view-event-accent/g)).toHaveLength(1);
+    expect(calendar.match(/--ds-calendar-view-entry-accent/g)).toHaveLength(1);
     const readings = await measureArms({
       vertical: 'rottay',
       markup,
@@ -256,7 +256,7 @@ describe('calendar-view causality surface', () => {
         {
           id: 'channel',
           selector: "#calendar [data-part='root']",
-          property: '--ds-calendar-view-event-accent',
+          property: '--ds-calendar-view-entry-accent',
         },
       ],
     });

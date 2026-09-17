@@ -218,7 +218,7 @@ test('visualization skin nonchart direct-paint floors retain their exact caller-
 // `text.match(/'--ds-…-accent': ev\.color\b/g)` and banned direct paint with
 // `assert.doesNotMatch(text, /background\s*:\s*ev\.color/)`. A regex reads bytes,
 // so a producer that has been COMMENTED OUT still counts: delete the live
-// `style={{ '--ds-calendar-view-event-accent': ev.color }}`, leave a commented corpse
+// `style={{ '--ds-calendar-view-entry-accent': ev.color }}`, leave a commented corpse
 // behind, and the count stays at exactly one while the channel publishes
 // nothing. The migration this gate certifies would be silently undone. The ban
 // fails the same way in the opposite direction — a commented
@@ -230,7 +230,7 @@ test('visualization skin nonchart direct-paint floors retain their exact caller-
 // (`const s = {…}` then `style={s}`) is not the style EXPRESSION; and a computed
 // key (`{['--ds-…']: …}`) is not the canonical quoted-literal channel form this
 // gate certifies. None of them count, and each is pinned below.
-const CALENDAR_CHANNEL = '--ds-calendar-view-event-accent';
+const CALENDAR_CHANNEL = '--ds-calendar-view-entry-accent';
 const KANBAN_CHANNEL = '--ds-kanban-board-column-accent';
 const CALENDAR_FILL_PROPS = ['background', 'backgroundColor'];
 const KANBAN_STRIP_PROPS = ['borderTop', 'borderBlockStart'];
@@ -239,7 +239,7 @@ const KANBAN_STRIP_PROPS = ['borderTop', 'borderBlockStart'];
 // channel test: they are quoted so the defect is written down as an executable
 // assertion. `\s` is admissible in these two — they scan TSX source, where JS
 // whitespace is the correct set; the CSS-only rule above governs CSS positions.
-const RETIRED_CALENDAR_PRODUCER_REGEX = /'--ds-calendar-view-event-accent': ev\.color\b/g;
+const RETIRED_CALENDAR_PRODUCER_REGEX = /'--ds-calendar-view-entry-accent': ev\.color\b/g;
 const RETIRED_KANBAN_PRODUCER_REGEX = /'--ds-kanban-board-column-accent': column\.color\b/g;
 const RETIRED_CALENDAR_PAINT_REGEX = /(?:background|backgroundColor)\s*:\s*ev\.color/;
 const RETIRED_KANBAN_PAINT_REGEX = /(?:borderTop|borderBlockStart)\s*:\s*column\.color/;
@@ -1485,7 +1485,7 @@ function withLeakedSelectorAlternative(css, rule) {
   return widened;
 }
 
-const CALENDAR_PRODUCER_LITERAL = "{ '--ds-calendar-view-event-accent': ev.color } as React.CSSProperties";
+const CALENDAR_PRODUCER_LITERAL = "{ '--ds-calendar-view-entry-accent': ev.color } as React.CSSProperties";
 
 test('visualization skin Calendar Modern crosses the event accent only through a scoped custom property', () => {
   const path = pathFor(FILES.calendarModern);
@@ -1538,7 +1538,7 @@ test('visualization skin Calendar Modern crosses the event accent only through a
   assert.equal(cssTrim(sinks[0].prop), 'background', 'the event accent must land as the chip fill');
   assert.equal(
     cssTrim(sinks[0].value),
-    'var(--ds-calendar-view-event-accent, var(--ds-color-primary))',
+    'var(--ds-calendar-view-entry-accent, var(--ds-color-primary))',
     'the event accent sink lost its exact primary fallback',
   );
   assert.deepEqual(
