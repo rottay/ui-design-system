@@ -55,7 +55,6 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'bulk-bar': 'pass',
   'bulk-bar-actions': 'pass',
   card: 'pass',
-  'card-content': 'pass',
   'card-list': 'pass',
   'card-move': 'pass',
   'card-shell': 'pass',
@@ -210,6 +209,9 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   apply: 'block',
   'apply-button': 'block',
   'bulk-bar-action': 'block',
+  // A board card's body is the caller's slot: with no data there is nothing
+  // inside it to draw, so the body itself is the bone the card stands behind.
+  'card-content': 'block',
   'card-move-button': 'block',
   'catalog-search': 'block',
   'clear-all': 'block',

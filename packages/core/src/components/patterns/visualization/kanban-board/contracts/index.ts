@@ -109,14 +109,20 @@ export interface KanbanBoardProps<T> extends PatternBaseProps {
 
   /**
    * Horizontal gap between columns. Accepts a number (pixels) or CSS string
-   * (e.g. `"1rem"`).
+   * (e.g. `"1rem"`). When stated it stamps `--ds-kanban-board-column-gap` on
+   * that board and outranks the theme; when omitted the modern engine leaves
+   * the channel to the theme, which rests it on the density-scaled spacing
+   * ramp (16px at density 1).
    * @default 16
    */
   columnGap?: number | string;
 
   /**
    * Minimum width of each column. Columns will not shrink below this value.
-   * Accepts a number (pixels) or CSS string.
+   * Accepts a number (pixels) or CSS string. When stated it stamps
+   * `--ds-kanban-board-column-min-width` on that board and outranks the theme;
+   * when omitted the modern engine leaves the channel to the theme, which
+   * rests it at 280px.
    * @default 280
    */
   columnMinWidth?: number | string;

@@ -50,6 +50,7 @@ import { avatarChromeDeriver } from "./chrome/avatar";
 import { tagChromeDeriver } from "./chrome/tag";
 import { badgeChromeDeriver } from "./chrome/badge";
 import { treeChromeDeriver } from "./chrome/tree";
+import { kanbanBoardChromeDeriver } from "./chrome/kanban-board";
 import { savedViewsChromeDeriver } from "./chrome/saved-views";
 import { columnSettingsChromeDeriver } from "./chrome/column-settings";
 import { filterPanelChromeDeriver } from "./chrome/filter-panel";
@@ -162,6 +163,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   tagChromeDeriver,
   badgeChromeDeriver,
   treeChromeDeriver,
+  kanbanBoardChromeDeriver,
   savedViewsChromeDeriver,
   columnSettingsChromeDeriver,
   filterPanelChromeDeriver,
