@@ -705,21 +705,65 @@ test('a SYMMETRIC shorthand is not a site: the band must not fill with neutral p
   );
 });
 
+/**
+ * Every shorthand site the tree measures, by band and locator: a floor on the
+ * COUNT reads a drained site and a newly arrived one as the same number.
+ */
+const LIVE_SHORTHANDS = [
+  [
+    'debt',
+    'runtime/engines/modern/framework-bridge/index.css',
+    "[data-engine='modern'] select | padding: 8px 32px 8px 12px",
+  ],
+  [
+    'stamp',
+    'runtime/engines/modern/skin/drawer/index.css',
+    ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='left'] | border-radius: 0 var(--ds-drawer-radius, var(--ds-radius-lg)) var(--ds-drawer-radius, var(--ds-radius-lg)) 0",
+  ],
+  [
+    'stamp',
+    'runtime/engines/modern/skin/drawer/index.css',
+    ".ds-drawer.ds-drawer--modern[data-part='surface'][data-placement='right'] | border-radius: var(--ds-drawer-radius, var(--ds-radius-lg)) 0 0 var(--ds-drawer-radius, var(--ds-radius-lg))",
+  ],
+  [
+    'stamp',
+    'runtime/engines/modern/skin/sheet/index.css',
+    ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'] | border-radius: 0 var(--ds-sheet-radius, var(--ds-radius-lg)) var(--ds-sheet-radius, var(--ds-radius-lg)) 0",
+  ],
+  [
+    'stamp',
+    'runtime/engines/modern/skin/sheet/index.css',
+    ".ds-sheet.ds-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] | border-radius: var(--ds-sheet-radius, var(--ds-radius-lg)) 0 0 var(--ds-sheet-radius, var(--ds-radius-lg))",
+  ],
+];
+
+const BAND_ORDER = ['debt', 'stamp', 'inert', 'excepted'];
+
 test('the live shorthand sites land in the bands the ledger declares', () => {
-  const bands = classify(physicalCssSites(), readBaseline());
-  const shorthands = [...bands.debt, ...bands.stamp, ...bands.inert, ...bands.excepted]
-    .filter((site) => site.kind === 'shorthand');
-  assert.ok(shorthands.length >= 9, `only ${shorthands.length} shorthand sites measured`);
+  const baseline = readBaseline();
+  const bands = classify(physicalCssSites(), baseline);
+  const measured = BAND_ORDER.flatMap((band) => bands[band]
+    .filter((site) => site.kind === 'shorthand')
+    .map((site) => [band, site.path, site.locator]));
+  const byIdentity = (rows) => [...rows].sort((a, b) => a.join(' | ').localeCompare(b.join(' | ')));
+  assert.deepEqual(byIdentity(measured), byIdentity(LIVE_SHORTHANDS));
   // The drawer's and the sheet's placement radii ride the same physical
   // contract as the `left: 0` beside them, so they belong to the stamp; the
   // rest is debt, and nothing may be excused as an exception by spelling.
-  const stamped = bands.stamp.filter((site) => site.kind === 'shorthand');
-  assert.equal(stamped.length, 4);
-  for (const site of stamped) {
+  for (const site of bands.stamp.filter((site) => site.kind === 'shorthand')) {
     assert.equal(site.property, 'border-radius');
-    assert.match(site.path, /skin\/(drawer|sheet)\/index\.css$/);
+    assert.match(site.selector, PHYSICAL_CONTRACT, `${site.selector} is stamped with no physical contract to follow`);
   }
-  assert.equal(bands.excepted.filter((site) => site.kind === 'shorthand').length, 0);
+  for (const site of bands.debt.filter((site) => site.kind === 'shorthand')) {
+    const pin = baseline.pinnedDebt[site.path];
+    assert.ok(pin, `${site.path} measures a shorthand no pin declares`);
+    const declaration = site.locator.split(' | ')[1];
+    assert.ok(pin.reason.includes(declaration), `${site.path} pins the site without writing \`${declaration}\``);
+  }
+  assert.deepEqual(
+    [...bands.excepted, ...bands.inert].filter((site) => site.kind === 'shorthand').map((site) => site.locator),
+    [],
+  );
 });
 
 // ---------------------------------------------------------------------------
