@@ -82,6 +82,7 @@ async function serverMarkup(
   viewport: DocumentViewportHint,
   locale: 'en' | 'es' = 'en',
   density?: DataTablePatternProps<Row>['density'],
+  overrides?: Partial<DataTablePatternProps<Row>>,
 ): Promise<string> {
   const { prelude } = await prerenderToNodeStream(
     <DesignSystemProvider
@@ -110,6 +111,7 @@ async function serverMarkup(
           messages={{ tableLabel: 'Roles' }}
           mobileCard={viewport === 'phone' ? (row) => <span>{row.name}</span> : undefined}
           density={density}
+          {...overrides}
         />
       </Suspense>
     </DesignSystemProvider>,
@@ -145,7 +147,15 @@ const markup = `<div id="grid">${grid}</div><div id="cards" style="inline-size:2
 const compactGrid = await serverMarkup('desktop', 'en', 'compact');
 const densityPair = `<div id="comfortable">${grid}</div><div id="compact">${compactGrid}</div>`;
 
-const ROOT = "#grid [data-part='root']";
+/**
+ * The grouped posture, also a separate markup string. The three readers of the
+ * section-title role weight are the empty/error state title, the group header
+ * cell and the editorial leading cell; the group header is the one a populated,
+ * default-recipe table renders, so it is where the weight posture is measured.
+ */
+const groupedGrid = await serverMarkup('desktop', 'en', undefined, { groupBy: 'status' });
+const groupedMarkup = `<div id="grouped">${groupedGrid}</div>`;
+
 const CELL = "#grid [data-part='data-cell']";
 const HEAD = "#grid [data-part='header-cell']";
 const SORT_ICON = "#grid [data-part='sort-icon']";
@@ -154,6 +164,7 @@ const TOOLBAR = "#grid [data-part='toolbar']";
 const BULK_BAR = "#grid [data-part='bulk-bar']";
 const PAGE_BAR = "#grid [data-part='pagination-bar']";
 const RANGE = "#grid [data-part='pagination-range']";
+const HEAD_CONTENT = "#grid [data-part='header-content']";
 const CUSTOM_CARD = "#cards [data-part='mobile-card-custom'][data-selected='true']";
 
 describeCausality({
@@ -174,6 +185,10 @@ describeCausality({
     { id: 'bulkShadow', selector: BULK_BAR, property: 'box-shadow' },
     { id: 'cardSelectedRing', selector: CUSTOM_CARD, property: 'outline-width' },
     { id: 'toolbarGap', selector: TOOLBAR, property: 'row-gap' },
+    { id: 'headContentGap', selector: HEAD_CONTENT, property: 'column-gap' },
+    { id: 'pageBarPad', selector: PAGE_BAR, property: 'padding-top' },
+    { id: 'bulkBarPad', selector: BULK_BAR, property: 'padding-top' },
+    { id: 'sortControlSize', selector: SORT_ICON, property: 'width' },
   ],
   decisions: {
     // `consumes: palette.*` -- the sort ink, the selected row and bulk-bar
@@ -223,6 +238,28 @@ describeCausality({
     'density.mode': {
       value: 'spacious',
       moves: ['toolbarGap'],
+      holds: 'bulkCorner',
+      in: VERTICALS,
+    },
+    // `consumes: spacing.rhythm` -- every gap and layout padding the family
+    // owns: the toolbar and header-content gaps, and the two chrome bars'
+    // padding. The cell paddings are deliberately NOT on this axis: a cell's
+    // block padding sets row height together with the Table primitive's own
+    // `--ds-table-padding-*`, which rhythm must not move, so scaling only the
+    // family's half would misalign the row.
+    'spacing.rhythm': {
+      value: 'airy',
+      moves: ['toolbarGap', 'headContentGap', 'pageBarPad', 'bulkBarPad'],
+      holds: 'bulkCorner',
+      in: VERTICALS,
+    },
+    // `consumes: surfaces.controlHeight` -- the family's control box ramp,
+    // derived as rem x density x control-height once (kit row 14). The sort
+    // affordance is the box a populated table renders; the drag grip and the
+    // expand button read the same ramp.
+    'shape.control-height': {
+      value: 'tall',
+      moves: ['sortControlSize'],
       holds: 'bulkCorner',
       in: VERTICALS,
     },
@@ -288,52 +325,63 @@ describe('data-table causality surface', () => {
   });
 
   /**
-   * Three of the eight keypaths the deriver declares reach no paint this
-   * family owns. They are pinned as measured facts -- the decision moves its
-   * own root channel, the family's readings do not move -- instead of being
-   * probed through a neighbouring family's paint or deleted from `consumes`.
+   * The weight half of `typography.roles`, routed.
+   *
+   * The three readers of the section-title role weight are the state title,
+   * the group header cell and the editorial leading cell; all three used to
+   * name `--ds-typography-section-title-weight`, which nothing writes, so the
+   * posture moved the type system and left this family at a literal 600. They
+   * now read the family's own channel over the produced role weight, which is
+   * why a posture arrives here at all -- and why a vertical that rests at 700
+   * (bithire) draws these three parts at 700 instead of 600.
    */
-  it('pins the consumes that reach no data-table paint', async () => {
-    const familyReadings = [
-      { id: 'cellFont', selector: CELL, property: 'font-size' },
-      { id: 'cellPad', selector: CELL, property: 'padding-top' },
-      { id: 'headWeight', selector: HEAD, property: 'font-weight' },
-      { id: 'toolbarGap', selector: TOOLBAR, property: 'row-gap' },
-      { id: 'bulkCorner', selector: BULK_BAR, property: 'border-end-start-radius' },
-      { id: 'pageBarMin', selector: PAGE_BAR, property: 'min-height' },
-      { id: 'cardRing', selector: CUSTOM_CARD, property: 'outline-width' },
-    ] as const;
+  it('moves the group header weight with the role-weight posture', async () => {
+    expect(groupedGrid).toContain('data-part="group-header-cell"');
+    const GROUP_CELL = "#grouped [data-part='group-header-cell']";
     const readings = await measureArms({
       vertical: 'rottay',
-      markup,
+      markup: groupedMarkup,
       arms: {
         base: {},
-        'spacing.rhythm': { 'spacing.rhythm': 'airy' },
-        'shape.control-height': { 'shape.control-height': 'tall' },
-        'typography.role-weights': { 'typography.role-weights': 'strong' },
+        strong: { 'typography.role-weights': 'strong' },
+        light: { 'typography.role-weights': 'light' },
       },
       targets: [
-        ...familyReadings,
-        { id: 'rhythmChannel', selector: ROOT, property: '--ds-rhythm-effective-scale' },
-        { id: 'controlHeightChannel', selector: ROOT, property: '--ds-control-height-scale' },
-        { id: 'roleWeightChannel', selector: ROOT, property: '--ds-type-section-title-font-weight' },
-        // The name the family's own skins read for the same idea. Nothing
-        // writes it, which is why the weight posture cannot reach the family.
-        { id: 'skinWeightChannel', selector: ROOT, property: '--ds-typography-section-title-weight' },
+        { id: 'groupWeight', selector: GROUP_CELL, property: 'font-weight' },
+        {
+          id: 'familyChannel',
+          selector: GROUP_CELL,
+          property: '--ds-data-table-group-header-font-weight',
+        },
+        {
+          id: 'roleChannel',
+          selector: "#grouped [data-part='root']",
+          property: '--ds-type-section-title-font-weight',
+        },
+        {
+          id: 'bulkCorner',
+          selector: "#grouped [data-part='bulk-bar']",
+          property: 'border-end-start-radius',
+        },
       ],
     });
+    const weight = (value: string): number => Number.parseFloat(value.trim());
     const base = readings.base!;
-    for (const arm of ['spacing.rhythm', 'shape.control-height', 'typography.role-weights'] as const) {
-      for (const reading of familyReadings) {
-        expect(readings[arm]![reading.id], `${arm} must not move ${reading.id}`).toBe(base[reading.id]);
-      }
+    // The family channel is produced and carries the role weight, not a
+    // literal of its own, so the paint and the decision are the same number.
+    expect(weight(base.familyChannel)).toBe(weight(base.groupWeight));
+    expect(weight(base.roleChannel)).toBe(weight(base.groupWeight));
+    // Both ends of the closed domain, so the reading cannot be a coincidence.
+    expect(weight(readings.strong!.groupWeight)).toBeGreaterThan(weight(base.groupWeight));
+    expect(weight(readings.light!.groupWeight)).toBeLessThan(weight(base.groupWeight));
+    for (const arm of ['strong', 'light'] as const) {
+      const moved = readings[arm]!;
+      expect(weight(moved.groupWeight), `${arm}: the header follows the posture`).toBe(
+        weight(moved.roleChannel),
+      );
+      // Negative control: a corner is not a weight.
+      expect(moved.bulkCorner, `${arm}: control bulkCorner`).toBe(base.bulkCorner);
     }
-    // Each decision does move its own channel: the break is the family's, not the kit's.
-    expect(readings['spacing.rhythm']!.rhythmChannel).not.toBe(base.rhythmChannel);
-    expect(readings['shape.control-height']!.controlHeightChannel).not.toBe(base.controlHeightChannel);
-    expect(readings['typography.role-weights']!.roleWeightChannel).not.toBe(base.roleWeightChannel);
-    // The weight channel the skins actually read has no writer at all.
-    expect(base.skinWeightChannel.trim()).toBe('');
   }, 180_000);
 
   it('mirrors the row anatomy and its logical offsets under dir=rtl', async () => {

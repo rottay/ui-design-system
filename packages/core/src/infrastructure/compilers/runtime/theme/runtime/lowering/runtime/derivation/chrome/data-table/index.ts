@@ -54,13 +54,16 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-editorial-header-bg",
     "--ds-data-table-editorial-header-padding-block",
     "--ds-data-table-editorial-header-transform",
+    "--ds-data-table-editorial-lead-font-weight",
     "--ds-data-table-editorial-row-shadow",
     "--ds-data-table-empty-description-font-size",
     "--ds-data-table-empty-title-font-size",
+    "--ds-data-table-empty-title-font-weight",
     "--ds-data-table-expanded-padding",
     "--ds-data-table-group-count-font-size",
     "--ds-data-table-group-disclosure-font-size",
     "--ds-data-table-group-header-font-size",
+    "--ds-data-table-group-header-font-weight",
     "--ds-data-table-header-content-gap",
     "--ds-data-table-header-focus-shadow",
     "--ds-data-table-header-font-family",
@@ -112,13 +115,14 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-action-cell-padding-compact"] = "0 0.5rem";
   vars["--ds-data-table-action-cell-padding-spacious"] = "0 0.75rem";
   vars["--ds-data-table-action-shadow"] = "none";
-  vars["--ds-data-table-bulk-bar-padding"] = "0.625rem 1rem";
+  vars["--ds-data-table-bulk-bar-padding"] =
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-caption-font-size"] = "var(--ds-font-size-xs)";
   vars["--ds-data-table-collapsed-min-inline-size"] = "34rem";
   vars["--ds-data-table-control-font-size"] = "var(--ds-button-sm-font-size, var(--ds-font-size-sm))";
-  vars["--ds-data-table-control-size"] = "2rem";
-  vars["--ds-data-table-control-size-compact"] = "1.75rem";
-  vars["--ds-data-table-control-size-spacious"] = "2.25rem";
+  vars["--ds-data-table-control-size"] = "calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
+  vars["--ds-data-table-control-size-compact"] = "calc(1.75rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
+  vars["--ds-data-table-control-size-spacious"] = "calc(2.25rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-data-table-drag-grip-bg"] = "color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)";
   vars["--ds-data-table-drag-grip-border"] = "color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)";
   vars["--ds-data-table-drag-grip-opacity"] = "0.58";
@@ -136,16 +140,20 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-editorial-header-bg"] = "transparent";
   vars["--ds-data-table-editorial-header-padding-block"] = "1rem";
   vars["--ds-data-table-editorial-header-transform"] = "uppercase";
+  vars["--ds-data-table-editorial-lead-font-weight"] = "var(--ds-type-section-title-font-weight, 600)";
   vars["--ds-data-table-editorial-row-shadow"] = "var(--ds-elevation-1)";
   vars["--ds-data-table-empty-description-font-size"] = "var(--ds-button-sm-font-size, var(--ds-font-size-sm))";
   vars["--ds-data-table-empty-title-font-size"] = "var(--ds-font-size-sm)";
-  vars["--ds-data-table-expanded-padding"] = "0.875rem 1rem 1rem";
+  vars["--ds-data-table-empty-title-font-weight"] = "var(--ds-type-section-title-font-weight, 600)";
+  vars["--ds-data-table-expanded-padding"] =
+    "calc(0.875rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-group-count-font-size"] = "calc(var(--ds-font-size-xs) * 0.9167)";
   vars["--ds-data-table-group-disclosure-font-size"] = "calc(var(--ds-font-size-xs) * 0.8333)";
   vars["--ds-data-table-group-header-font-size"] = "var(--ds-button-sm-font-size, var(--ds-font-size-sm))";
-  vars["--ds-data-table-header-content-gap"] = "0.375rem";
+  vars["--ds-data-table-group-header-font-weight"] = "var(--ds-type-section-title-font-weight, 600)";
+  vars["--ds-data-table-header-content-gap"] = "calc(0.375rem * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-header-focus-shadow"] = "inset 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)";
-  vars["--ds-data-table-header-font-family"] = "var(--ds-typography-label-family, inherit)";
+  vars["--ds-data-table-header-font-family"] = "var(--ds-type-label-font-family, inherit)";
   vars["--ds-data-table-header-pinned-bg"] = "var(--ds-table-header-bg, var(--ds-surface-inset))";
   vars["--ds-data-table-leading-cell-padding-comfortable"] = "0.75rem 1rem 0.75rem 0.1875rem";
   vars["--ds-data-table-leading-cell-padding-compact"] = "0.375rem 0.75rem 0.375rem 0.125rem";
@@ -153,7 +161,8 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-min-inline-size"] = "42rem";
   vars["--ds-data-table-minimal-shadow"] = "none";
   vars["--ds-data-table-open-cell-padding-block"] = "0.875rem";
-  vars["--ds-data-table-pagination-padding"] = "0.625rem 1rem";
+  vars["--ds-data-table-pagination-padding"] =
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-pinned-cell-bg"] = "var(--ds-table-row-bg, var(--ds-surface-card))";
   vars["--ds-data-table-pinned-cell-bg-focus"] = "var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)))";
   vars["--ds-data-table-pinned-cell-bg-hover"] = "var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card)))";
@@ -178,10 +187,10 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-sort-color-hover"] = "var(--ds-color-text-secondary)";
   vars["--ds-data-table-sort-control-offset"] = "0.125rem";
   vars["--ds-data-table-sort-control-radius"] = "var(--ds-radius-sm, 0.375rem)";
-  vars["--ds-data-table-sort-control-size"] = "1.375rem";
+  vars["--ds-data-table-sort-control-size"] = "calc(1.375rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-data-table-sort-opacity"] = "0.68";
   vars["--ds-data-table-state-copy-max-inline-size"] = "32rem";
-  vars["--ds-data-table-toolbar-gap"] = "var(--ds-spacing-2, 0.5rem)";
+  vars["--ds-data-table-toolbar-gap"] = "calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-touch-hit-expansion"] = "0.5625rem";
   vars["--ds-data-table-touch-target"] = "2.75rem";
   return vars;

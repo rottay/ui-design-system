@@ -334,7 +334,10 @@
   text-wrap: balance;
   font-family: var(--ds-typography-section-title-family, inherit);
   font-size: var(--ds-data-table-empty-title-font-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-typography-section-title-weight, 600);
+  font-weight: var(
+    --ds-data-table-empty-title-font-weight,
+    var(--ds-type-section-title-font-weight, 600)
+  );
   letter-spacing: var(--ds-typography-section-title-tracking, -0.01em);
 }
 
@@ -385,7 +388,7 @@
   font-size: var(--ds-table-header-font-size, 13px);
   font-family: var(
     --ds-data-table-header-font-family,
-    var(--ds-typography-label-family, inherit)
+    var(--ds-type-label-font-family, inherit)
   );
   font-weight: var(--ds-table-header-font-weight, 500);
   letter-spacing: var(
@@ -789,7 +792,10 @@
     --ds-data-table-group-header-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
-  font-weight: var(--ds-typography-section-title-weight, 600);
+  font-weight: var(
+    --ds-data-table-group-header-font-weight,
+    var(--ds-type-section-title-font-weight, 600)
+  );
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-content"] {
@@ -1979,7 +1985,10 @@
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="header-cell"] {
   padding-block: var(--ds-data-table-editorial-header-padding-block, 1rem);
-  font-family: var(--ds-typography-label-family, inherit);
+  font-family: var(
+    --ds-data-table-header-font-family,
+    var(--ds-type-label-font-family, inherit)
+  );
   letter-spacing: var(--ds-typography-label-tracking, 0.08em);
   text-transform: var(--ds-data-table-editorial-header-transform, uppercase);
 }
@@ -1992,7 +2001,10 @@
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="data-cell"]:first-of-type {
   font-family: var(--ds-typography-section-title-family, inherit);
-  font-weight: var(--ds-typography-section-title-weight, 600);
+  font-weight: var(
+    --ds-data-table-editorial-lead-font-weight,
+    var(--ds-type-section-title-font-weight, 600)
+  );
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
