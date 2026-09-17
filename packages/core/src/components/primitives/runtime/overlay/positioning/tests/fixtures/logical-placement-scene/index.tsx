@@ -26,6 +26,7 @@ import ModernPopover from '@/components/primitives/overlay/popover/engines/moder
 import { Popconfirm as ModernPopconfirm } from '@/components/primitives/overlay/popconfirm/engines/modern';
 import ModernSlider from '@/components/primitives/inputs/slider/engines/modern';
 import ModernTooltip from '@/components/primitives/display/tooltip/engines/modern';
+import { readLocaleContext } from '@/components/primitives/runtime/overlay/portal-scope';
 
 /** Rect fields the assertions need; a full DOMRect does not serialize. */
 interface Edges {
@@ -83,28 +84,29 @@ export interface StampedDirectionScene {
 }
 
 /**
- * An IN-TREE surface (the `anchor-css` branch) whose tree declares one
- * direction and paints another: a locale ISLAND publishes `dir` on its own
- * scope element, and a container inside it sets `direction` in CSS without
- * declaring `dir`. The engine reads the island's `dir`, so the stamp and the
- * ancestry the surface is rendered into disagree, and every placement the
- * engine computed is expressed in the stamp.
+ * A panel whose tree DECLARES one direction and PAINTS another: a locale
+ * ISLAND publishes `dir="rtl"` on its own scope element, and a container
+ * inside it sets `direction: ltr` in CSS without declaring `dir`. The anchor
+ * therefore paints `ltr` while the nearest `[dir]` ancestor says `rtl`, and
+ * the two cannot both be the authority. What the anchor PAINTS is, so the
+ * stamp must be `ltr` and every logical rule the engine expressed in it --
+ * the placement side, the arrow edge, `text-align: start` -- must land on the
+ * `ltr` side. Measured for both families and both positioning branches.
  */
-export interface InTreeStampedScene {
-  /** The `dir` the nearest declaring ancestor carries -- what the engine reads. */
+export interface StampFollowsAnchorScene {
+  /** The `dir` the nearest declaring ancestor carries -- the island's `rtl`. */
   declaredDir: string | null;
-  /** The direction the anchor's own box resolves to, set in CSS below the island. */
+  /** The direction the anchor's own box PAINTS, set in CSS below the island. */
   anchorDirection: string;
-  /** The attribute the engine wrote on the surface. */
+  /** The attribute the engine wrote on the panel. */
   stampedDir: string | null;
-  /** The direction paint resolved for the surface; must follow the stamp. */
-  surfaceDirection: string;
+  /** The direction paint resolved for the panel; must follow the stamp. */
+  panelDirection: string;
   strategy: string | null;
   placementAttribute: string | null;
   anchor: Edges;
-  surface: Edges | null;
-  body: Edges | null;
-  /** The copy inside the body, which `text-align: start` lays at the inline start. */
+  panel: Edges | null;
+  /** The copy inside the panel, which `text-align: start` lays at the inline start. */
   ink: Edges | null;
 }
 
@@ -132,14 +134,39 @@ export interface PlacementProbeResult {
   popconfirmDir: { plain: NonUniformScene | null; portal: NonUniformScene | null };
   /** A portalled, aligned tooltip whose only direction authority is its own stamp. */
   stampedDirection: StampedDirectionScene | null;
-  /** An in-tree popover whose stamp contradicts the ancestry it renders into. */
-  inTreeStamped: InTreeStampedScene | null;
+  /**
+   * The declared-vs-painted island, for Popover and Tooltip, in the in-tree
+   * (`anchor-css`) and portalled (`js`) branches.
+   */
+  stampFollowsAnchor: {
+    popoverInTree: StampFollowsAnchorScene | null;
+    popoverPortal: StampFollowsAnchorScene | null;
+    tooltipInTree: StampFollowsAnchorScene | null;
+    tooltipPortal: StampFollowsAnchorScene | null;
+  };
+  /**
+   * What the shared reader answers for a node that DECLARES `ltr` and PAINTS
+   * `rtl`: `rtl` only when this runtime resolved `dir` into computed style, so
+   * it is the capability itself, read through the reader.
+   */
+  computedDirectionCapability: string;
 }
 
 const RTL = typeof window !== 'undefined' && window.location.hash === '#rtl';
 /** The reading direction the app locale is NOT, so every scene below is non-uniform. */
 const OPPOSITE: 'ltr' | 'rtl' = RTL ? 'ltr' : 'rtl';
 const NESTED_LOCALE = RTL ? 'en' : 'ar';
+
+/**
+ * `#reset` installs an author `* { direction: ltr }` before anything renders,
+ * so the shared reader's one-time capability probe runs against a page that
+ * would flip it to `false` unless the probe rolls the author origin back.
+ */
+if (typeof window !== 'undefined' && window.location.hash === '#reset') {
+  const reset = document.createElement('style');
+  reset.textContent = '* { direction: ltr }';
+  document.head.appendChild(reset);
+}
 
 function edges(element: Element): Edges {
   const rect = element.getBoundingClientRect();
@@ -249,29 +276,55 @@ function Scene(): React.ReactElement {
             </ModernTooltip>
           </div>
         </OverlayPortalBoundary>
-        {/* Scene 5: an IN-TREE surface (the `anchor-css` branch) under a tree
-            that DECLARES one direction and PAINTS another: a nested locale
-            island publishes `dir="rtl"` on its own scope element, and a
-            container inside it sets `direction: ltr` in CSS without declaring
-            `dir`. The engine reads the island and stamps `rtl`, and the branch
-            renders the surface under a trigger that declares nothing, so the
-            stamp is the only authority its logical paint may follow: the
-            placement, the arrow offset and `text-align: start` are all
-            expressed in it. Inheriting the container's `ltr` instead lays the
-            copy on the opposite physical side from everything else. */}
+        {/* Scene 5: a tree that DECLARES one direction and PAINTS another. A
+            nested locale island publishes `dir="rtl"` on its own scope
+            element, and a container inside it sets `direction: ltr` in CSS
+            without declaring `dir`, so the anchor paints `ltr` under an `rtl`
+            ancestor. What the anchor paints is the authority: the engine must
+            stamp `ltr` and place on the `ltr` side. Measured for Popover and
+            Tooltip, in the in-tree (`anchor-css`) and portalled (`js`)
+            branches, with the inline-start alias `left` so the painted side
+            names the direction that was resolved. */}
         <I18nProvider locale="ar" fallbackLocale="en" directionScope="element">
-          <div id="in-tree-stamped" style={{ padding: 120, direction: 'ltr' }}>
+          <div id="stamp-popover-in-tree" style={{ padding: 120, direction: 'ltr' }}>
             <ModernPopover
               content={<div style={{ width: 240 }}><span data-probe-ink="true">Copy rows</span></div>}
               open
-              placement="top"
+              placement="left"
             >
-              <button type="button" id="in-tree-stamped-anchor" style={{ width: 80, height: 24 }}>
+              <button type="button" id="stamp-popover-in-tree-anchor" style={{ width: 80, height: 24 }}>
                 anchor
               </button>
             </ModernPopover>
           </div>
         </I18nProvider>
+        <OverlayPortalBoundary>
+          <I18nProvider locale="ar" fallbackLocale="en" directionScope="element">
+            <div id="stamp-popover-portal" style={{ padding: 120, direction: 'ltr' }}>
+              <ModernPopover
+                content={<div style={{ width: 240 }}><span data-probe-ink="true">Copy rows</span></div>}
+                open
+                placement="left"
+              >
+                <button type="button" id="stamp-popover-portal-anchor" style={{ width: 80, height: 24 }}>
+                  anchor
+                </button>
+              </ModernPopover>
+            </div>
+          </I18nProvider>
+        </OverlayPortalBoundary>
+        <I18nProvider locale="ar" fallbackLocale="en" directionScope="element">
+          <div id="stamp-tooltip-in-tree" style={{ padding: 120, direction: 'ltr' }}>
+            <NonUniformTooltip anchorId="stamp-tooltip-in-tree-anchor" />
+          </div>
+        </I18nProvider>
+        <OverlayPortalBoundary>
+          <I18nProvider locale="ar" fallbackLocale="en" directionScope="element">
+            <div id="stamp-tooltip-portal" style={{ padding: 120, direction: 'ltr' }}>
+              <NonUniformTooltip anchorId="stamp-tooltip-portal-anchor" />
+            </div>
+          </I18nProvider>
+        </OverlayPortalBoundary>
       </div>
     </I18nProvider>
   );
@@ -363,28 +416,58 @@ function stampedDirectionScene(anchorId: string): StampedDirectionScene | null {
 }
 
 /**
- * The in-tree scene: the surface is a child of the trigger, so its ancestry is
- * the CSS container, while the `dir` it carries came from the island above it.
+ * The declared-vs-painted scene, read through the link that survives the
+ * portal: `aria-controls` for a Popover surface, `aria-describedby` for a
+ * Tooltip bubble. The anchor is the element the engine measured -- the
+ * Popover's trigger wrapper, the Tooltip's wrapper -- which is the box whose
+ * painted direction the stamp must equal.
  */
-function inTreeStampedScene(anchorId: string): InTreeStampedScene | null {
+function stampFollowsAnchorScene(
+  anchorId: string,
+  family: 'popover' | 'tooltip',
+): StampFollowsAnchorScene | null {
   const trigger = document.getElementById(anchorId);
-  const root = trigger?.closest<HTMLElement>('[data-part="trigger"]') ?? null;
-  if (!trigger || !root) return null;
-  const surface = root.querySelector('[data-part="surface"]');
-  const body = surface?.querySelector('[data-part="body"]') ?? null;
-  const ink = surface?.querySelector('[data-probe-ink]') ?? null;
+  const anchor =
+    family === 'popover'
+      ? trigger?.closest<HTMLElement>('[data-part="trigger"]') ?? null
+      : trigger?.parentElement ?? null;
+  if (!trigger || !anchor) return null;
+  const panelId = trigger.getAttribute(
+    family === 'popover' ? 'aria-controls' : 'aria-describedby',
+  );
+  const panel = panelId ? document.getElementById(panelId) : null;
+  const ink =
+    panel?.querySelector('[data-probe-ink]') ??
+    panel?.querySelector('[data-part="content"]') ??
+    null;
   return {
-    declaredDir: root.closest<HTMLElement>('[dir]')?.getAttribute('dir') ?? null,
-    anchorDirection: window.getComputedStyle(root).direction,
-    stampedDir: surface?.getAttribute('dir') ?? null,
-    surfaceDirection: surface ? window.getComputedStyle(surface).direction : '',
-    strategy: surface?.getAttribute('data-ds-position-strategy') ?? null,
-    placementAttribute: surface?.getAttribute('data-placement') ?? null,
-    anchor: edges(root),
-    surface: surface ? edges(surface) : null,
-    body: body ? edges(body) : null,
+    declaredDir: anchor.closest<HTMLElement>('[dir]')?.getAttribute('dir') ?? null,
+    anchorDirection: window.getComputedStyle(anchor).direction,
+    stampedDir: panel?.getAttribute('dir') ?? null,
+    panelDirection: panel ? window.getComputedStyle(panel).direction : '',
+    strategy: panel?.getAttribute('data-ds-position-strategy') ?? null,
+    placementAttribute: panel?.getAttribute('data-placement') ?? null,
+    anchor: edges(anchor),
+    panel: panel ? edges(panel) : null,
     ink: ink ? edges(ink) : null,
   };
+}
+
+/**
+ * Measures the capability through the reader itself: an anchor that declares
+ * `ltr` on its ancestor and paints `rtl` on its own box. The computed read
+ * answers `rtl`; the `[dir]` fallback would answer `ltr`.
+ */
+function measureComputedDirectionCapability(): string {
+  const declaring = document.createElement('div');
+  declaring.setAttribute('dir', 'ltr');
+  const anchor = document.createElement('button');
+  anchor.style.setProperty('direction', 'rtl', 'important');
+  declaring.appendChild(anchor);
+  document.body.appendChild(declaring);
+  const answer = readLocaleContext(anchor, false).direction;
+  declaring.remove();
+  return answer;
 }
 
 function probe(): void {
@@ -452,7 +535,13 @@ function probe(): void {
       portal: popconfirmScene('popconfirm-portal-anchor'),
     },
     stampedDirection: stampedDirectionScene('stamped-portal-anchor'),
-    inTreeStamped: inTreeStampedScene('in-tree-stamped-anchor'),
+    stampFollowsAnchor: {
+      popoverInTree: stampFollowsAnchorScene('stamp-popover-in-tree-anchor', 'popover'),
+      popoverPortal: stampFollowsAnchorScene('stamp-popover-portal-anchor', 'popover'),
+      tooltipInTree: stampFollowsAnchorScene('stamp-tooltip-in-tree-anchor', 'tooltip'),
+      tooltipPortal: stampFollowsAnchorScene('stamp-tooltip-portal-anchor', 'tooltip'),
+    },
+    computedDirectionCapability: measureComputedDirectionCapability(),
   };
   document.documentElement.setAttribute('data-probe-result', JSON.stringify(result));
 }

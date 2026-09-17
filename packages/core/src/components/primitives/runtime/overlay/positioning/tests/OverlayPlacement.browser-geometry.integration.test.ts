@@ -35,14 +35,15 @@
  *     keys at the inline end and its arrow on the anchor, both physically
  *     mirrored. Restoring `direction: inherit` on the bubble makes it compute
  *     `ltr` from the portal root and turns both readings around.
- *   - An IN-TREE surface (the `anchor-css` branch) does the same in the tree
- *     that DECLARES one direction and PAINTS another: a nested locale island
+ *   - THE ANCHOR'S PAINTED DIRECTION IS THE AUTHORITY, in the tree that
+ *     DECLARES one direction and PAINTS another: a nested locale island
  *     publishes `dir="rtl"`, a container inside it sets `direction: ltr` in CSS
- *     without declaring `dir`, and the surface is rendered under a trigger that
- *     declares nothing. The engine stamps the island's direction and expresses
- *     every placement in it, so the paint must follow the stamp; restoring
- *     `direction: inherit` on the surface makes it take the container's `ltr`
- *     and lays the copy on the opposite physical side.
+ *     without declaring `dir`, and the anchor therefore paints `ltr` under an
+ *     `rtl` ancestor. The engine must stamp what the anchor paints, and the
+ *     panel must land on the `ltr` side -- measured for Popover and Tooltip, in
+ *     the in-tree (`anchor-css`) and portalled (`js`) branches. Restoring the
+ *     old precedence (the nearest `[dir]` ancestor outranking the computed
+ *     direction) stamps `rtl` and mirrors all four panels to the far side.
  *   - ONE DIRECTION PER REQUEST, in the two trees where the app locale and the
  *     anchor's own context DISAGREE: an anchor inside a bare `dir` wrapper that
  *     contradicts the locale, and a nested locale provider that flips the
@@ -73,9 +74,9 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { findChromium } from '@checks/modern-rescue/cascade/probe/browser-analysis/index.mjs';
 
 import type {
-  InTreeStampedScene,
   NonUniformScene,
   PlacementProbeResult,
+  StampFollowsAnchorScene,
   StampedDirectionScene,
 } from './fixtures/logical-placement-scene';
 
@@ -142,7 +143,11 @@ function buildPage(): string {
   return page;
 }
 
-function measure(binary: string, page: string, direction: 'ltr' | 'rtl'): PlacementProbeResult {
+function measure(
+  binary: string,
+  page: string,
+  direction: 'ltr' | 'rtl' | 'reset',
+): PlacementProbeResult {
   const dom = execFileSync(
     binary,
     [
@@ -151,7 +156,7 @@ function measure(binary: string, page: string, direction: 'ltr' | 'rtl'): Placem
       '--no-sandbox',
       '--virtual-time-budget=5000',
       '--dump-dom',
-      `file://${page}${direction === 'rtl' ? '#rtl' : ''}`,
+      `file://${page}${direction === 'ltr' ? '' : `#${direction}`}`,
     ],
     { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] },
   );
@@ -226,6 +231,7 @@ function expectPlacedAgainstAnchorDirection(
 describe('logical overlay placement -- real Chromium geometry (NOT the DOM runner)', () => {
   let ltr: PlacementProbeResult;
   let rtl: PlacementProbeResult;
+  let authorReset: PlacementProbeResult;
 
   beforeAll(() => {
     const binary = findChromium();
@@ -241,11 +247,30 @@ describe('logical overlay placement -- real Chromium geometry (NOT the DOM runne
     const page = buildPage();
     ltr = measure(binary, page, 'ltr');
     rtl = measure(binary, page, 'rtl');
-  }, 120_000);
+    authorReset = measure(binary, page, 'reset');
+  }, 180_000);
 
   it('drives the scene in both reading directions through the i18n authority', () => {
     expect(ltr.dir).toBe('ltr');
     expect(rtl.dir).toBe('rtl');
+  });
+
+  it('resolves the computed-direction capability to TRUE in Chromium', () => {
+    // Without this, every stamp assertion below could be satisfied by the
+    // `[dir]` FALLBACK rather than by the ruling: the reader would have probed
+    // `false` and never read a computed direction at all. `rtl` here is only
+    // reachable through the computed read.
+    expect(ltr.computedDirectionCapability).toBe('rtl');
+    expect(rtl.computedDirectionCapability).toBe('rtl');
+  });
+
+  it('keeps the capability TRUE under an author `* { direction: ltr }` reset', () => {
+    // Chromium applies `dir` as a presentational hint at the start of the
+    // AUTHOR origin, so a document-scope `*` rule outranks it and a probe in
+    // the document would answer `ltr` -- silently downgrading the whole package
+    // to the fallback. The probe lives in a shadow root, which that selector
+    // does not match into.
+    expect(authorReset.computedDirectionCapability).toBe('rtl');
   });
 
   it('puts the overlay on the inline-start side of its anchor, mirrored under RTL', () => {
@@ -429,35 +454,54 @@ describe('logical overlay placement -- real Chromium geometry (NOT the DOM runne
       .toBeLessThanOrEqual(ARROW_TOLERANCE_PX);
   });
 
-  // The same law on the OTHER branch: an `anchor-css` surface stays in its
-  // anchor's tree, so it has an ancestry to inherit from -- and that ancestry
-  // is not the authority the engine used. Measured in the `ltr` navigation,
-  // where the island declares `rtl` and the container below it paints `ltr`.
-  it('resolves an in-tree surface\'s logical paint against the dir it stamps', () => {
-    const scene: InTreeStampedScene | null = ltr.inTreeStamped;
+  // The tree that declares one direction and paints another. The nearest
+  // `[dir]` ancestor is an `ar` locale island; the container below it sets
+  // `direction: ltr` in CSS and declares nothing, so the anchor PAINTS `ltr`.
+  // Placement, arrow and `text-align: start` are all resolved in whatever the
+  // engine decided, so a stamp that followed the ancestor would compute the
+  // whole geometry against a direction the anchor does not have.
+  const expectStampFollowsAnchor = (
+    scene: StampFollowsAnchorScene | null,
+    expectedStrategy: 'anchor-css' | 'js',
+  ): void => {
     expect(scene).not.toBeNull();
     const measured = scene!;
+    expect(measured.strategy).toBe(expectedStrategy);
 
-    // The branch is the in-tree one, and the tree really does disagree with
-    // itself: the nearest declared `dir` is not what the anchor's box paints.
-    expect(ltr.dir).toBe('ltr');
-    expect(measured.strategy).toBe('anchor-css');
+    // The tree really does disagree with itself.
     expect(measured.declaredDir).toBe('rtl');
     expect(measured.anchorDirection).toBe('ltr');
 
-    // The engine stamps the direction it resolved, and paint follows the stamp.
-    // A skin declaration that outranks the UA `[dir]` rule breaks this line.
-    expect(measured.stampedDir).toBe('rtl');
-    expect(measured.surfaceDirection).toBe('rtl');
+    // The stamp is the anchor's PAINTED direction, and the panel's own paint
+    // follows the stamp.
+    expect(measured.stampedDir).toBe('ltr');
+    expect(measured.panelDirection).toBe('ltr');
 
-    // `text-align: start` under the stamp is the physical RIGHT: the copy
-    // begins at the body's end edge. Inheriting the container's `ltr` puts it
-    // at the opposite edge, while the placement channels still read `rtl`.
-    expect(measured.body).not.toBeNull();
+    // `placement="left"` is the inline-start alias, so under `ltr` the panel
+    // ends before the anchor begins and NAMES that side. Stamped `rtl` it
+    // lands past the anchor's right edge and names `right` instead.
+    expect(measured.panel).not.toBeNull();
+    expect(measured.placementAttribute).toBe('left');
+    expect(measured.panel!.right).toBeLessThan(measured.anchor.left);
+
+    // And the copy inside starts at the panel's physical LEFT: `text-align:
+    // start` resolved in the stamp. Under `rtl` it sits at the opposite edge.
     expect(measured.ink).not.toBeNull();
-    expect(Math.abs(measured.ink!.right - measured.body!.right))
-      .toBeLessThanOrEqual(TOLERANCE_PX);
-    expect(measured.ink!.left).toBeGreaterThan(centre(measured.body!));
+    expect(measured.ink!.left).toBeLessThan(centre(measured.panel!));
+  };
+
+  it("stamps the anchor's PAINTED direction, not its declared ancestor (Popover)", () => {
+    for (const run of [ltr, rtl]) {
+      expectStampFollowsAnchor(run.stampFollowsAnchor.popoverInTree, 'anchor-css');
+      expectStampFollowsAnchor(run.stampFollowsAnchor.popoverPortal, 'js');
+    }
+  });
+
+  it("stamps the anchor's PAINTED direction, not its declared ancestor (Tooltip)", () => {
+    for (const run of [ltr, rtl]) {
+      expectStampFollowsAnchor(run.stampFollowsAnchor.tooltipInTree, 'anchor-css');
+      expectStampFollowsAnchor(run.stampFollowsAnchor.tooltipPortal, 'js');
+    }
   });
 
   it('keeps the horizontal slider readout centred on the thumb in both directions', () => {

@@ -71,6 +71,10 @@ import {
   type DsPortalVariableStyle,
 } from "../../../../runtime/overlay/foundation/portal-theme";
 import {
+  readLocaleContext,
+  type PortalScopeAttributes,
+} from "../../../../runtime/overlay/portal-scope";
+import {
   OverlayPortalBoundary,
   normalizeOverlayPlacement,
   parseOverlayPlacement,
@@ -90,15 +94,6 @@ type TooltipInstanceStyle = CSSProperties & {
   "--ds-tooltip-instance-max-width"?: string;
   "--ds-tooltip-instance-z-index"?: string | number;
   "--ds-tooltip-arrow-anchor-offset"?: string;
-};
-
-type TooltipPortalScope = {
-  "data-ds-root"?: string;
-  "data-vertical"?: string;
-  "data-tenant"?: string;
-  "data-theme"?: string;
-  "data-engine"?: string;
-  "data-density"?: string;
 };
 
 const FOCUSABLE_SELECTOR =
@@ -288,45 +283,6 @@ function resolvePlacementFromGeometry(
   }` as OverlayPlacement;
 }
 
-function readPortalScope(anchor: HTMLElement): TooltipPortalScope {
-  const localRoot = anchor.closest<HTMLElement>("[data-ds-root]");
-  if (!localRoot) return {};
-
-  const readRoot = (name: string): string | undefined =>
-    localRoot.getAttribute(name) ?? undefined;
-  const readNearest = (name: string): string | undefined =>
-    anchor.closest<HTMLElement>(`[${name}]`)?.getAttribute(name) ?? undefined;
-
-  return {
-    "data-ds-root": readRoot("data-ds-root") ?? "",
-    "data-vertical":
-      readNearest("data-vertical") ?? readRoot("data-vertical"),
-    "data-tenant": readNearest("data-tenant") ?? readRoot("data-tenant"),
-    "data-theme": readNearest("data-theme"),
-    "data-engine": readNearest("data-engine"),
-    "data-density": readNearest("data-density"),
-  };
-}
-
-function readLocaleContext(anchor: HTMLElement): {
-  direction: "ltr" | "rtl";
-  language: string | undefined;
-  portalScope: TooltipPortalScope;
-} {
-  const directionOwner = anchor.closest<HTMLElement>("[dir]");
-  const languageOwner = anchor.closest<HTMLElement>("[lang]");
-  const computedDirection = window.getComputedStyle(anchor).direction;
-  return {
-    direction:
-      directionOwner?.dir === "rtl" || computedDirection === "rtl"
-        ? "rtl"
-        : "ltr",
-    language:
-      languageOwner?.lang || document.documentElement.lang || undefined,
-    portalScope: readPortalScope(anchor),
-  };
-}
-
 function resolveArrowOffset(
   placement: OverlayPlacement,
   anchor: HTMLElement,
@@ -430,7 +386,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
   // also what the anchor-css branch resolves `self-*` against.
   const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
   const [language, setLanguage] = useState<string | undefined>();
-  const [portalScope, setPortalScope] = useState<TooltipPortalScope>({});
+  const [portalScope, setPortalScope] = useState<PortalScopeAttributes>({});
   const [portalVariables, setPortalVariables] =
     useState<DsPortalVariableStyle>({});
   const positioningPlacement = toPhysicalPlacement(

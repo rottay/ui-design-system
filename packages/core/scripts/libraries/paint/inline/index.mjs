@@ -174,6 +174,16 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
           transparentArgs: [],
         },
       ],
+      [
+        "readLocaleContext",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(),
+          nonStylePaths: new Set(["portalScope"]),
+          transparentArgs: [],
+        },
+      ],
     ]),
   ],
   [

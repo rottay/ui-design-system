@@ -9,9 +9,7 @@
  * (`dir`/`lang`) and any inline `--ds-*` overrides a white-labelled shell set
  * on the lineage.
  *
- * This module extracts the three private copies that Tooltip, Popover and
- * Tour modern engines used to carry (readPortalScope + readLocaleContext +
- * the lineage MutationObserver) into ONE shared implementation:
+ * This module is the ONE implementation of that context read.
  *
  * - `readPortalScope(anchor)` / `readLocaleContext(anchor)` -- pure readers.
  * - `usePortalScope(anchor)` -- reactive snapshot; a MutationObserver over
@@ -112,23 +110,64 @@ export function readPortalScope(anchor: HTMLElement): PortalScopeAttributes {
   };
 }
 
-/** Reads the locale (direction + language) and DS scope of an anchor. */
-export function readLocaleContext(anchor: HTMLElement): {
+let computedDirectionIsObservable: boolean | undefined;
+
+/**
+ * One-time probe: does this runtime resolve `dir` into computed style? Ruling,
+ * precedence and shadow-root rationale: direction-authority NAMED_EXCEPTIONS.
+ * Cached per module, not per document (iframes, popouts).
+ */
+function hasComputedDirection(): boolean {
+  if (computedDirectionIsObservable !== undefined) return computedDirectionIsObservable;
+  if (
+    typeof window === 'undefined' ||
+    typeof window.getComputedStyle !== 'function' ||
+    typeof document === 'undefined'
+  ) {
+    return false;
+  }
+  const host = document.createElement('div');
+  if (typeof host.attachShadow !== 'function') return false;
+  host.style.position = 'fixed';
+  document.documentElement.appendChild(host);
+  try {
+    const probe = document.createElement('div');
+    probe.setAttribute('dir', 'rtl');
+    host.attachShadow({ mode: 'open' }).appendChild(probe);
+    computedDirectionIsObservable = window.getComputedStyle(probe).direction === 'rtl';
+  } catch {
+    computedDirectionIsObservable = false;
+  } finally {
+    host.remove();
+  }
+  return computedDirectionIsObservable;
+}
+
+function readAnchorDirection(anchor: HTMLElement): 'ltr' | 'rtl' {
+  if (hasComputedDirection()) {
+    const computedDirection = window.getComputedStyle(anchor).direction;
+    if (computedDirection === 'rtl') return 'rtl';
+    if (computedDirection === 'ltr') return 'ltr';
+  }
+  const directionOwner = anchor.closest<HTMLElement>('[dir]');
+  return directionOwner?.dir === 'rtl' ? 'rtl' : 'ltr';
+}
+
+/**
+ * Reads the locale (direction + language) and, unless `withScope` is false,
+ * the DS scope of an anchor.
+ */
+export function readLocaleContext(anchor: HTMLElement, withScope = true): {
   direction: 'ltr' | 'rtl';
   language: string | undefined;
   portalScope: PortalScopeAttributes;
 } {
-  const directionOwner = anchor.closest<HTMLElement>('[dir]');
   const languageOwner = anchor.closest<HTMLElement>('[lang]');
-  const computedDirection = window.getComputedStyle(anchor).direction;
   return {
-    direction:
-      directionOwner?.dir === 'rtl' || computedDirection === 'rtl'
-        ? 'rtl'
-        : 'ltr',
+    direction: readAnchorDirection(anchor),
     language:
       languageOwner?.lang || document.documentElement.lang || undefined,
-    portalScope: readPortalScope(anchor),
+    portalScope: withScope ? readPortalScope(anchor) : {},
   };
 }
 
@@ -142,12 +181,9 @@ export function usePortalScope(
   anchor: HTMLElement | null,
 ): PortalScopeSnapshot {
   const [snapshot, setSnapshot] = useState<PortalScopeSnapshot>(EMPTY_SNAPSHOT);
-  // Dispatch guard: the observer also fires for lineage attribute noise that
-  // cannot change the snapshot (the layer-stack scroll-lock stamping
-  // `body.style.overflow`, unrelated class toggles). Comparing BEFORE calling
-  // setSnapshot matters -- a setState whose updater returns the previous value
-  // still schedules an update (and trips React's act() warning when the
-  // observer callback lands outside a test's act scope).
+  // Comparing BEFORE calling setSnapshot matters -- a setState whose updater
+  // returns the previous value still schedules an update (and trips React's
+  // act() warning when the observer callback lands outside a test's act scope).
   const snapshotRef = useRef<PortalScopeSnapshot>(snapshot);
 
   useLayoutEffect(() => {

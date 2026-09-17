@@ -112,15 +112,24 @@ test('the sandbox mirror measures exactly what the real tree measures', () => {
 test('the corpus is not vacuous and the clean files really are clean', () => {
   // The floor is the NAMED EXCEPTIONS, not the debt: debt is supposed to reach
   // zero -- it now IS zero -- and a floor tied to it would have to be lowered on
-  // every migration until it eventually asserted nothing. The three anchor/portal
-  // readers are permanent by adjudication, and each carries three lines the
-  // widened census sees (the `[dir]` selector, the computed-style read and the
-  // `.dir === 'rtl'` comparison), so nine probes is the honest "the scan really
-  // ran" signal. WO-INV-01's migrations took the debt from 21 to 0.
+  // every migration until it eventually asserted nothing. There is now exactly
+  // ONE anchor/portal reader, the shared portal-scope one, and it carries the
+  // four lines the widened census sees (the `[dir]` selector, the anchor's
+  // computed-style read, the one-time probe that asks whether this runtime
+  // resolves `dir` into computed style at all, and the `.dir === 'rtl'`
+  // fallback comparison), so four probes in one file is the honest "the scan
+  // really ran" signal. The tooltip and
+  // popover copies were retired with their exceptions; the drill below keeps a
+  // re-added copy red. WO-INV-01's migrations took the debt from 21 to 0.
   const sites = probeSites();
   const exceptionSites = sites.filter((site) => NAMED_EXCEPTIONS[site.path]);
-  assert.ok(sites.length >= 9, `only ${sites.length} probe sites found -- an empty scan is never a pass`);
-  assert.equal(exceptionSites.length, 9, 'the three anchor/portal readers carry three probe lines each');
+  assert.ok(sites.length >= 4, `only ${sites.length} probe sites found -- an empty scan is never a pass`);
+  assert.equal(exceptionSites.length, 4, 'the one anchor/portal reader carries four probe lines');
+  assert.equal(
+    Object.keys(NAMED_EXCEPTIONS).length,
+    1,
+    'the anchor/portal read has ONE implementation, so it has ONE exception',
+  );
   assert.equal(probeCounts()[CLEAN_FILE], undefined, `${CLEAN_FILE} must hold no probe of its own`);
   assert.equal(
     probeCounts()[CLEAN_FILE_OUTSIDE_COMPONENTS],
@@ -178,6 +187,34 @@ for (const [label, line] of SPELLINGS) {
           mentions(findings, CLEAN_FILE)[0].includes('does not pin'),
           'a probe in an unpinned file must be reported as a new owner',
         );
+      },
+    );
+  });
+}
+
+const RETIRED_PRIVATE_COPIES = [
+  'components/primitives/display/tooltip/engines/modern/index.tsx',
+  'components/primitives/overlay/popover/engines/modern/index.tsx',
+];
+
+for (const path of RETIRED_PRIVATE_COPIES) {
+  test(`a re-added private direction copy in ${path} is red`, () => {
+    // These two files used to carry their own `readLocaleContext`, each with
+    // the precedence the ruling overturned. They consume the shared reader now
+    // and hold no exception, so a re-added copy fails as a new unpinned owner
+    // rather than inheriting the retired exemption.
+    assert.equal(NAMED_EXCEPTIONS[path], undefined, `${path} must hold no exception`);
+    assert.equal(probeCounts()[path], undefined, `${path} must hold no probe of its own`);
+    withPlantedTree(
+      (sandbox) => plant(
+        sandbox,
+        path,
+        "const planted = anchor.closest<HTMLElement>('[dir]')?.dir === 'rtl';",
+      ),
+      (findings) => {
+        const reported = mentions(findings, path);
+        assert.equal(reported.length, 1, JSON.stringify(findings, null, 1));
+        assert.ok(reported[0].includes('does not pin'), reported[0]);
       },
     );
   });

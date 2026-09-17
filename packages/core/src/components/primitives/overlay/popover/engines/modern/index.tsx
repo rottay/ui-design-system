@@ -66,6 +66,7 @@ import {
   type FieldOverlayDismissReason,
 } from '../../../../runtime/overlay/field-overlay';
 import { Portal } from '../../../../runtime/overlay/portal';
+import { readLocaleContext } from '../../../../runtime/overlay/portal-scope';
 import {
   readDsPortalVariables,
   type DsPortalVariableStyle,
@@ -140,32 +141,23 @@ const POPOVER_EXIT_FALLBACK = {
   detachedFallbackMs: DEFAULT_EXIT_FALLBACK_MS,
 } as const;
 
-function readLocaleContext(anchor: HTMLElement): {
-  direction: 'ltr' | 'rtl';
-  language: string | undefined;
-  portalScope: PopoverPortalScope;
-} {
-  const directionOwner = anchor.closest<HTMLElement>('[dir]');
-  const languageOwner = anchor.closest<HTMLElement>('[lang]');
+/**
+ * The DS/tenant attributes the surface re-stamps after portaling. Unlike the
+ * shared portal-scope reader this one is not gated on a `[data-ds-root]`
+ * ancestor: a popover carries the nearest declaration of each attribute even
+ * outside a DS root.
+ */
+function readPopoverPortalScope(anchor: HTMLElement): PopoverPortalScope {
   const readNearest = (attribute: keyof PopoverPortalScope): string | undefined =>
     anchor.closest<HTMLElement>(`[${attribute}]`)?.getAttribute(attribute) ??
     undefined;
-  const computedDirection = window.getComputedStyle(anchor).direction;
   return {
-    direction:
-      directionOwner?.dir === 'rtl' || computedDirection === 'rtl'
-        ? 'rtl'
-        : 'ltr',
-    language:
-      languageOwner?.lang || document.documentElement.lang || undefined,
-    portalScope: {
-      'data-ds-root': readNearest('data-ds-root'),
-      'data-vertical': readNearest('data-vertical'),
-      'data-tenant': readNearest('data-tenant'),
-      'data-theme': readNearest('data-theme'),
-      'data-engine': readNearest('data-engine'),
-      'data-density': readNearest('data-density'),
-    },
+    'data-ds-root': readNearest('data-ds-root'),
+    'data-vertical': readNearest('data-vertical'),
+    'data-tenant': readNearest('data-tenant'),
+    'data-theme': readNearest('data-theme'),
+    'data-engine': readNearest('data-engine'),
+    'data-density': readNearest('data-density'),
   };
 }
 
@@ -425,10 +417,10 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     useLayoutEffect(() => {
       if (!anchorEl || typeof window === 'undefined') return undefined;
       const update = (): void => {
-        const locale = readLocaleContext(anchorEl);
+        const locale = readLocaleContext(anchorEl, false);
         setDirection(locale.direction);
         setLanguage(locale.language);
-        setPortalScope(locale.portalScope);
+        setPortalScope(readPopoverPortalScope(anchorEl));
         setPortalVariables(readDsPortalVariables(anchorEl));
       };
       update();
