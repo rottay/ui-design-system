@@ -51,18 +51,18 @@
     var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.875rem 1rem))
   );
   --ds-modern-table-leading-cell-padding: var(
-    --ds-table-leading-cell-padding-comfortable,
+    --ds-data-table-leading-cell-padding-comfortable,
     0.75rem 1rem 0.75rem 0.1875rem
   );
   --ds-modern-table-selection-cell-padding: var(
-    --ds-table-selection-cell-padding-comfortable,
+    --ds-data-table-selection-cell-padding-comfortable,
     0 0 0 0.4375rem
   );
   --ds-modern-table-action-cell-padding: var(
-    --ds-table-action-cell-padding-comfortable,
+    --ds-data-table-action-cell-padding-comfortable,
     0 0.625rem
   );
-  --ds-modern-table-control-size: var(--ds-table-control-size, 2rem);
+  --ds-modern-table-control-size: var(--ds-data-table-control-size, 2rem);
   --ds-modern-table-control-radius: var(
     --ds-table-control-radius,
     var(--ds-radius-md, 0.5rem)
@@ -88,6 +88,10 @@
      here as the designed default: an owner override on root or part wins. */
   --_ds-data-table-actions-rest-opacity: 0.4;
 
+  /* The shared loading renderer states its placeholder cells on the host's
+     own rhythm, so the pending rows keep the table's density. */
+  --ds-skeleton-cell-padding: var(--ds-modern-table-cell-padding);
+
   width: 100%;
   min-width: 0;
   color: var(--ds-table-cell-color, var(--ds-color-text-primary));
@@ -105,21 +109,21 @@
     var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.5rem 0.75rem))
   );
   --ds-modern-table-leading-cell-padding: var(
-    --ds-table-leading-cell-padding-compact,
+    --ds-data-table-leading-cell-padding-compact,
     0.375rem 0.75rem 0.375rem 0.125rem
   );
   --ds-modern-table-selection-cell-padding: var(
-    --ds-table-selection-cell-padding-compact,
+    --ds-data-table-selection-cell-padding-compact,
     0 0 0 0.375rem
   );
   --ds-modern-table-action-cell-padding: var(
-    --ds-table-action-cell-padding-compact,
+    --ds-data-table-action-cell-padding-compact,
     0 0.5rem
   );
-  --ds-modern-table-control-size: var(--ds-table-control-size-compact, 1.75rem);
-  /* Compact is a coordinated posture, not ±2px: chrome bars, skeleton bars
-     and the type step below all move together on the family's shared density
-     factor channel. */
+  --ds-modern-table-control-size: var(--ds-data-table-control-size-compact, 1.75rem);
+  /* Compact is a coordinated posture, not ±2px: chrome bars and the type
+     step below all move together on the family's shared density factor
+     channel. */
   --ds-table-pagination-min-height: 2.75rem;
   --ds-table-bulk-bar-min-height: 3rem;
 }
@@ -130,18 +134,18 @@
     var(--ds-density-cell-padding, var(--ds-table-cell-padding, 16px 16px))
   );
   --ds-modern-table-leading-cell-padding: var(
-    --ds-table-leading-cell-padding-spacious,
+    --ds-data-table-leading-cell-padding-spacious,
     1rem 1rem 1rem 0.25rem
   );
   --ds-modern-table-selection-cell-padding: var(
-    --ds-table-selection-cell-padding-spacious,
+    --ds-data-table-selection-cell-padding-spacious,
     0 0 0 0.5rem
   );
   --ds-modern-table-action-cell-padding: var(
-    --ds-table-action-cell-padding-spacious,
+    --ds-data-table-action-cell-padding-spacious,
     0 0.75rem
   );
-  --ds-modern-table-control-size: var(--ds-table-control-size-spacious, 2.25rem);
+  --ds-modern-table-control-size: var(--ds-data-table-control-size-spacious, 2.25rem);
   --ds-table-pagination-min-height: 3.75rem;
   --ds-table-bulk-bar-min-height: 4rem;
 }
@@ -171,12 +175,11 @@
   line-height: var(--ds-table-cell-line-height, 1.55);
 }
 
-/* The header label joins the SAME ladder (height + type + chrome + skeleton
-   move together): compact tightens the header toward the ledger's caption
+/* The header label joins the SAME ladder (height + type + chrome move
+   together): compact tightens the header toward the ledger's caption
    register — floored so an already-small authored header size never
    collapses into illegibility — and spacious opens it toward the editorial
-   register. The header control size and the skeleton header bars already
-   scale on these same channels. */
+   register. The header control size already scales on these same channels. */
 .ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
   [data-part="header-cell"] {
   font-size: max(
@@ -194,25 +197,6 @@
     var(--ds-table-header-font-size, 13px) *
       var(--ds-density-factor-spacious, 1.15)
   );
-}
-
-/* The loading skeleton keeps the posture's exact footprint: bar heights move
-   with the same factor the rows resolve, per density. */
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
-  [data-part="skeleton-cell"] {
-  height: calc(14px * var(--ds-density-factor-compact, 0.85));
-}
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"]
-  [data-part="skeleton-header-col"] {
-  height: calc(10px * var(--ds-density-factor-compact, 0.85));
-}
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
-  [data-part="skeleton-cell"] {
-  height: calc(14px * var(--ds-density-factor-spacious, 1.15));
-}
-.ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
-  [data-part="skeleton-header-col"] {
-  height: calc(10px * var(--ds-density-factor-spacious, 1.15));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="inline-edit-actions"] {
@@ -234,7 +218,7 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="inline-edit-action"]:disabled {
+  [data-part="inline-edit-action"]:is([data-state~="disabled"], :disabled) {
   cursor: wait;
 }
 
@@ -250,7 +234,7 @@
 
 .ds-pattern-data-table.ds-engine-modern [data-part="toolbar"] {
   display: grid;
-  gap: var(--ds-table-toolbar-gap, var(--ds-spacing-2, 0.5rem));
+  gap: var(--ds-data-table-toolbar-gap, var(--ds-spacing-2, 0.5rem));
   min-width: 0;
   margin-bottom: 0;
 }
@@ -303,42 +287,15 @@
   overflow-y: auto;
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton"] {
-  width: 100%;
-}
-
-/* The skeleton tracks the SAME density-aware cell padding the real header and
-   body rows paint (`--ds-modern-table-cell-padding` resolves per data-density
-   on the root), so the loading posture keeps the table's exact footprint and
-   nothing jumps when rows swap in. */
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header"] {
-  display: flex;
-  gap: var(--ds-spacing-4, 16px);
-  padding: var(--ds-modern-table-cell-padding);
-}
-
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
-  flex: 1;
-  height: 10px;
-  opacity: 0.5;
-}
-
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-header-col"][data-leading="true"],
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-cell"][data-leading="true"] {
-  flex-grow: 1.5;
-}
-
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-row"] {
-  display: flex;
-  gap: var(--ds-spacing-4, 16px);
-  padding: var(--ds-modern-table-cell-padding);
-}
-
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
-  flex: 1;
-  height: 14px;
+/* The loading announcement carries no visual weight of its own: the
+   placeholder rows are what the surface shows. */
+.ds-pattern-data-table.ds-engine-modern [data-part="loading-status"] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="empty-state"],
@@ -372,21 +329,21 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="state-title"] {
-  max-inline-size: var(--ds-table-state-copy-max-inline-size, 32rem);
+  max-inline-size: var(--ds-data-table-state-copy-max-inline-size, 32rem);
   text-align: center;
   text-wrap: balance;
   font-family: var(--ds-typography-section-title-family, inherit);
-  font-size: var(--ds-table-empty-title-font-size, var(--ds-font-size-sm));
+  font-size: var(--ds-data-table-empty-title-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-typography-section-title-weight, 600);
   letter-spacing: var(--ds-typography-section-title-tracking, -0.01em);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="state-description"] {
-  max-inline-size: var(--ds-table-state-copy-max-inline-size, 32rem);
+  max-inline-size: var(--ds-data-table-state-copy-max-inline-size, 32rem);
   text-align: center;
   text-wrap: pretty;
   font-size: var(
-    --ds-table-empty-description-font-size,
+    --ds-data-table-empty-description-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   line-height: 1.5;
@@ -394,7 +351,7 @@
 
 .ds-pattern-data-table.ds-engine-modern [data-part="table"] {
   width: 100%;
-  min-width: var(--ds-table-min-inline-size, 42rem);
+  min-width: var(--ds-data-table-min-inline-size, 42rem);
   border-collapse: collapse;
   color: inherit;
   font-variant-numeric: tabular-nums;
@@ -427,7 +384,7 @@
   padding: var(--ds-modern-table-cell-padding);
   font-size: var(--ds-table-header-font-size, 13px);
   font-family: var(
-    --ds-table-header-font-family,
+    --ds-data-table-header-font-family,
     var(--ds-typography-label-family, inherit)
   );
   font-weight: var(--ds-table-header-font-weight, 500);
@@ -525,25 +482,28 @@
   z-index: 2;
 }
 
+/* The stacking offset of a pinned cell is runtime geometry: the engine measures
+   the preceding pinned columns and sets it as an element-scoped custom
+   property, so the sticky inset itself stays declared here. */
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-pin-side="left"],
 .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"][data-pin-side="left"] {
-  inset-inline-start: 0;
+  inset-inline-start: var(--ds-data-table-pinned-inset-start, 0px);
 }
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-pin-side="right"],
 .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"][data-pin-side="right"] {
-  inset-inline-end: 0;
+  inset-inline-end: var(--ds-data-table-pinned-inset-end, 0px);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="header-content"] {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-table-header-content-gap, 0.375rem);
+  gap: var(--ds-data-table-header-content-gap, 0.375rem);
   width: 100%;
   min-width: 0;
 }
@@ -571,12 +531,12 @@
   margin-inline-end: var(--ds-table-drag-grip-offset, 0.125rem);
   padding: 0;
   font-size: var(
-    --ds-table-drag-handle-font-size,
+    --ds-data-table-drag-handle-font-size,
     calc(var(--ds-font-size-xs) * 0.9167)
   );
   line-height: 1;
   cursor: grab;
-  opacity: var(--ds-table-drag-grip-opacity, 0.58);
+  opacity: var(--ds-data-table-drag-grip-opacity, 0.58);
   transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
     border-color var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -616,20 +576,20 @@
   color: inherit;
   line-height: 1;
   cursor: pointer;
-  opacity: var(--ds-table-drag-grip-opacity, 0.58);
+  opacity: var(--ds-data-table-drag-grip-opacity, 0.58);
   transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
     var(--ds-motion-ease-move, ease-out);
 }
 
 @media (hover: hover) {
-  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:hover,
-  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]:hover {
+  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:is([data-state~="hovered"], :hover),
+  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]:is([data-state~="hovered"], :hover) {
     opacity: 1;
   }
 }
-.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:focus-visible,
+.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:is([data-state~="focus-visible"], :focus-visible),
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="hide-column-button"]:focus-visible {
+  [data-part="hide-column-button"]:is([data-state~="focus-visible"], :focus-visible) {
   opacity: 1;
 }
 
@@ -647,7 +607,7 @@
   flex-shrink: 0;
   gap: 1px;
   margin-inline-start: 0.125rem;
-  color: var(--ds-table-sort-color, var(--ds-color-text-muted));
+  color: var(--ds-data-table-sort-color, var(--ds-color-text-muted));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="drop-indicator"] {
@@ -666,14 +626,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--ds-table-resize-hit-size, 1rem);
+  width: var(--ds-data-table-resize-hit-size, 1rem);
   cursor: col-resize;
   touch-action: none;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"] {
-  width: var(--ds-table-resize-bar-width, 0.125rem);
-  height: var(--ds-table-resize-bar-height, 58%);
+  width: var(--ds-data-table-resize-bar-width, 0.125rem);
+  height: var(--ds-data-table-resize-bar-height, 58%);
   transition: width var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
     height var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -696,7 +656,7 @@
   border-inline-start: 1px solid
     var(--ds-table-action-border, var(--ds-table-row-border, transparent));
   background: var(--ds-table-action-bg, var(--ds-surface-card));
-  box-shadow: var(--ds-table-action-shadow, none);
+  box-shadow: var(--ds-data-table-action-shadow, none);
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -732,7 +692,7 @@
   justify-content: center;
   width: var(--ds-modern-table-control-size);
   height: var(--ds-modern-table-control-size);
-  font-size: var(--ds-table-caption-font-size, var(--ds-font-size-xs));
+  font-size: var(--ds-data-table-caption-font-size, var(--ds-font-size-xs));
   cursor: pointer;
   transition: background var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
@@ -778,13 +738,13 @@
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-input"] {
   box-sizing: border-box;
   width: 100%;
-  padding: var(--ds-table-editor-input-padding, 0.25rem 0.5rem);
+  padding: var(--ds-data-table-editor-input-padding, 0.25rem 0.5rem);
   font-family: inherit;
   font-size: var(
-    --ds-table-editor-input-font-size,
+    --ds-data-table-editor-input-font-size,
     var(--ds-font-size-sm, 0.875rem)
   );
-  line-height: var(--ds-table-editor-input-line-height, 1.5);
+  line-height: var(--ds-data-table-editor-input-line-height, 1.5);
 }
 
 .ds-pattern-data-table.ds-engine-modern select[data-part="editor-input"] {
@@ -794,8 +754,8 @@
 
 .ds-pattern-data-table.ds-engine-modern [data-part="editor-checkbox"] {
   flex-shrink: 0;
-  inline-size: var(--ds-table-editor-checkbox-size, 1rem);
-  block-size: var(--ds-table-editor-checkbox-size, 1rem);
+  inline-size: var(--ds-data-table-editor-checkbox-size, 1rem);
+  block-size: var(--ds-data-table-editor-checkbox-size, 1rem);
   cursor: pointer;
 }
 
@@ -804,7 +764,7 @@
      the cell never grew for, so half of it lands outside the table. */
   display: block;
   margin-block-start: var(--ds-spacing-1, 0.25rem);
-  font-size: var(--ds-table-editor-error-font-size, var(--ds-font-size-xs));
+  font-size: var(--ds-data-table-editor-error-font-size, var(--ds-font-size-xs));
   overflow-wrap: anywhere;
 }
 
@@ -815,7 +775,7 @@
 
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
   width: 100%;
-  padding: var(--ds-table-expanded-padding, 0.875rem 1rem 1rem);
+  padding: var(--ds-data-table-expanded-padding, 0.875rem 1rem 1rem);
   /* Disclosure continuity: the detail arrives from the row that spawned it,
      on the semantic reveal dial (quieted wholesale by the RM block). */
   animation: ds-data-table-expanded-enter
@@ -826,7 +786,7 @@
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
   font-family: var(--ds-typography-section-title-family, inherit);
   font-size: var(
-    --ds-table-group-header-font-size,
+    --ds-data-table-group-header-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   font-weight: var(--ds-typography-section-title-weight, 600);
@@ -845,7 +805,7 @@
   width: 18px;
   height: 18px;
   font-size: var(
-    --ds-table-group-disclosure-font-size,
+    --ds-data-table-group-disclosure-font-size,
     calc(var(--ds-font-size-xs) * 0.8333)
   );
   transition: transform var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -860,7 +820,7 @@
   height: 20px;
   padding: 0 6px;
   font-size: var(
-    --ds-table-group-count-font-size,
+    --ds-data-table-group-count-font-size,
     calc(var(--ds-font-size-xs) * 0.9167)
   );
   font-weight: 500;
@@ -873,7 +833,7 @@
   align-items: center;
   gap: 6px;
   margin-inline-start: 4px;
-  font-size: var(--ds-table-caption-font-size, var(--ds-font-size-xs));
+  font-size: var(--ds-data-table-caption-font-size, var(--ds-font-size-xs));
   font-weight: 400;
 }
 
@@ -888,9 +848,9 @@
   align-items: center;
   justify-content: space-between;
   min-height: var(--ds-table-pagination-min-height, 3.25rem);
-  padding: var(--ds-table-pagination-padding, 0.625rem 1rem);
+  padding: var(--ds-data-table-pagination-padding, 0.625rem 1rem);
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   /* Flush with the card's bottom corners whenever it is the last chrome
@@ -917,7 +877,7 @@
   height: 32px;
   padding: 0 10px;
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   font-weight: 500;
@@ -930,9 +890,8 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="pagination-nav-button"]:disabled {
+  [data-part="pagination-nav-button"]:is([data-state~="disabled"], :disabled) {
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="pagination-ellipsis"],
@@ -943,7 +902,7 @@
   width: 32px;
   height: 32px;
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
 }
@@ -975,7 +934,7 @@
   justify-content: space-between;
   gap: 12px;
   min-height: var(--ds-table-bulk-bar-min-height, 3.5rem);
-  padding: var(--ds-table-bulk-bar-padding, 0.625rem 1rem);
+  padding: var(--ds-data-table-bulk-bar-padding, 0.625rem 1rem);
   /* Last chrome region: keep the card's bottom radius unbroken. */
   border-end-start-radius: var(--ds-table-radius, var(--ds-radius-lg));
   border-end-end-radius: var(--ds-table-radius, var(--ds-radius-lg));
@@ -987,7 +946,7 @@
 
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
   font-size: var(
-    --ds-table-control-font-size,
+    --ds-data-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
   font-weight: 500;
@@ -1006,9 +965,8 @@
     var(--ds-motion-ease-move, ease);
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"]:disabled {
+.ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-action"]:is([data-state~="disabled"], :disabled) {
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 /* ---- card surface ---- */
@@ -1029,59 +987,6 @@
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="card"][data-part="card"] {
   border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
-}
-
-/* ---- loading skeleton parts ---- */
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header"] {
-  background: var(
-    --ds-table-header-bg,
-    var(--ds-surface-inset, var(--ds-surface-panel))
-  );
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-header"][data-part="skeleton-header"] {
-  /* The skeleton reproduces the header's terminal emphasis rule too, so the
-     loading handoff keeps the exact footprint at any tenant edge width. */
-  border-bottom: var(--ds-table-header-rule-width, 1px) solid
-    var(--ds-table-border, var(--ds-color-border-subtle));
-}
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(
-    --ds-table-skeleton-fill,
-    linear-gradient(
-      105deg,
-      var(--ds-color-border-subtle) 24%,
-      color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent) 44%,
-      var(--ds-color-border-subtle) 64%
-    )
-  );
-  background-size: 220% 100%;
-  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
-    var(--ds-motion-ease-standard, ease-in-out) infinite;
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="skeleton-row"][data-divider="true"] {
-  border-bottom: 1px solid
-    var(--ds-modern-table-divider);
-}
-.ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(
-    --ds-table-skeleton-fill,
-    linear-gradient(
-      105deg,
-      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 24%,
-      color-mix(in srgb, var(--ds-color-bg-elevated) 74%, transparent) 44%,
-      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 64%
-    )
-  );
-  background-size: 220% 100%;
-  animation: ds-data-table-skeleton-scan var(--ds-motion-attention)
-    var(--ds-motion-ease-standard, ease-in-out) infinite;
-  animation-delay: calc(
-    var(--ds-modern-table-skeleton-index, 0) * var(--ds-motion-fast)
-  );
 }
 
 /* ---- empty/error state (container tint + default icon-tile/title/description) ---- */
@@ -1233,7 +1138,7 @@
 .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
   border-radius: var(--ds-modern-table-control-radius);
   background: var(
-    --ds-table-drag-grip-bg,
+    --ds-data-table-drag-grip-bg,
     color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)
   );
   color: var(--ds-color-text-secondary);
@@ -1242,19 +1147,19 @@
   [data-part="drag-grip"][data-part="drag-grip"] {
   border: 1px solid
     var(
-      --ds-table-drag-grip-border,
+      --ds-data-table-drag-grip-border,
       color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)
     );
 }
 @media (hover: hover) {
-  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover {
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="hovered"], :hover) {
     border-color: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
     background: var(--ds-table-reorder-bg, var(--ds-surface-inset));
     opacity: 1;
     transform: translateY(-1px);
   }
 }
-.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible {
+.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="focus-visible"], :focus-visible) {
   border-color: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
   background: var(--ds-table-reorder-bg, var(--ds-surface-inset));
   opacity: 1;
@@ -1309,13 +1214,13 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-selected="true"] > td {
   box-shadow: var(
-    --ds-table-row-selected-shadow,
+    --ds-data-table-row-selected-shadow,
     inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
   );
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible {
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: none;
   background-color: var(
     --ds-table-row-bg-selected,
@@ -1323,7 +1228,7 @@
   );
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible > td {
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible) > td {
   box-shadow: var(
     --ds-table-row-focus-shadow,
     inset 0 0 0 2px
@@ -1334,7 +1239,7 @@
   .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover {
+  ):is([data-state~="hovered"], :hover) {
     background-color: var(
       --ds-table-row-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
@@ -1343,7 +1248,7 @@
   .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover > td {
+  ):is([data-state~="hovered"], :hover) > td {
     box-shadow: var(
       --ds-table-row-hover-shadow,
       inset 0 0 0 1px
@@ -1365,7 +1270,7 @@
   color: var(--ds-color-text-secondary);
 }
 @media (hover: hover) {
-  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover {
+  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:is([data-state~="hovered"], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
     transform: scale(1.03);
   }
@@ -1503,7 +1408,7 @@
   border: 0;
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="pagination-nav-button"]:disabled {
+  [data-part="pagination-nav-button"]:is([data-state~="disabled"], :disabled) {
   color: var(--ds-color-text-muted);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="pagination-ellipsis"] {
@@ -1516,7 +1421,7 @@
 }
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="pagination-page-button"]:hover {
+    [data-part="pagination-page-button"]:is([data-state~="hovered"], :hover) {
     box-shadow: var(--ds-table-page-button-hover-shadow, none);
   }
 }
@@ -1586,7 +1491,7 @@
   }
 
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"]:hover
+    [data-part="body-row"]:is([data-state~="hovered"], :hover)
     [data-part="actions-content"],
   .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"]:focus-within
@@ -1622,11 +1527,11 @@
   .ds-data-table__column-tooltip--resize.ds-data-table__column-tooltip--resize {
   position: absolute;
   inset-block: 0;
-  inset-inline-end: calc(var(--ds-table-resize-hit-size, 1rem) / -2);
+  inset-inline-end: calc(var(--ds-data-table-resize-hit-size, 1rem) / -2);
   z-index: 4;
   display: block;
-  width: var(--ds-table-resize-hit-size, 1rem);
-  min-width: var(--ds-table-resize-hit-size, 1rem);
+  width: var(--ds-data-table-resize-hit-size, 1rem);
+  min-width: var(--ds-data-table-resize-hit-size, 1rem);
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -1652,16 +1557,16 @@
 .ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"] {
   display: inline-grid;
   place-items: center;
-  width: var(--ds-table-sort-control-size, 1.375rem);
-  height: var(--ds-table-sort-control-size, 1.375rem);
-  margin-inline-start: var(--ds-table-sort-control-offset, 0.125rem);
+  width: var(--ds-data-table-sort-control-size, 1.375rem);
+  height: var(--ds-data-table-sort-control-size, 1.375rem);
+  margin-inline-start: var(--ds-data-table-sort-control-offset, 0.125rem);
   border-radius: var(
-    --ds-table-sort-control-radius,
+    --ds-data-table-sort-control-radius,
     var(--ds-radius-sm, 0.375rem)
   );
-  background: var(--ds-table-sort-bg, transparent);
-  color: var(--ds-table-sort-color, var(--ds-color-text-muted));
-  opacity: var(--ds-table-sort-opacity, 0.68);
+  background: var(--ds-data-table-sort-bg, transparent);
+  color: var(--ds-data-table-sort-color, var(--ds-color-text-muted));
+  opacity: var(--ds-data-table-sort-opacity, 0.68);
   transform: rotate(0deg);
   transition:
     color var(--ds-motion-feedback, var(--ds-motion-fast))
@@ -1678,52 +1583,52 @@
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="sort-icon"][data-part="sort-icon"] {
-  border: 1px solid var(--ds-table-sort-border, transparent);
+  border: 1px solid var(--ds-data-table-sort-border, transparent);
 }
 
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="header-cell"][data-sortable="true"]:hover
+    [data-part="header-cell"][data-sortable="true"]:is([data-state~="hovered"], :hover)
     [data-part="sort-icon"] {
     border-color: var(
-      --ds-table-sort-border-hover,
+      --ds-data-table-sort-border-hover,
       color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
     );
     background: var(
-      --ds-table-sort-bg-hover,
+      --ds-data-table-sort-bg-hover,
       color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
     );
-    color: var(--ds-table-sort-color-hover, var(--ds-color-text-secondary));
+    color: var(--ds-data-table-sort-color-hover, var(--ds-color-text-secondary));
     opacity: 1;
   }
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)
   [data-part="sort-icon"] {
   border-color: var(
-    --ds-table-sort-border-hover,
+    --ds-data-table-sort-border-hover,
     color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
   background: var(
-    --ds-table-sort-bg-hover,
+    --ds-data-table-sort-bg-hover,
     color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
   );
-  color: var(--ds-table-sort-color-hover, var(--ds-color-text-secondary));
+  color: var(--ds-data-table-sort-color-hover, var(--ds-color-text-secondary));
   opacity: 1;
 }
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="sort-icon"][data-active="true"] {
   border-color: var(
-    --ds-table-sort-border-active,
+    --ds-data-table-sort-border-active,
     color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
   );
   background: var(
-    --ds-table-sort-bg-active,
+    --ds-data-table-sort-bg-active,
     color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
   );
-  color: var(--ds-table-sort-color-active, var(--ds-color-primary));
+  color: var(--ds-data-table-sort-color-active, var(--ds-color-primary));
   opacity: 1;
 }
 
@@ -1739,17 +1644,17 @@
   box-shadow: inset 0 -2px 0 0
     color-mix(
       in srgb,
-      var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+      var(--ds-data-table-sort-color-active, var(--ds-color-primary)) 42%,
       transparent
     );
 }
 
 .ds-pattern-data-table.ds-engine-modern
   [data-part="drop-indicator"][data-part="drop-indicator"] {
-  inset: var(--ds-table-drop-indicator-inset, 0.1875rem);
+  inset: var(--ds-data-table-drop-indicator-inset, 0.1875rem);
   border: 1px solid
     var(
-      --ds-table-drop-indicator-border,
+      --ds-data-table-drop-indicator-border,
       color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
     );
   border-radius: var(
@@ -1757,11 +1662,11 @@
     var(--ds-modern-table-control-radius)
   );
   background: var(
-    --ds-table-drop-indicator-bg,
+    --ds-data-table-drop-indicator-bg,
     color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
   );
   box-shadow: var(
-    --ds-table-drop-indicator-shadow,
+    --ds-data-table-drop-indicator-shadow,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
   );
 }
@@ -1771,7 +1676,7 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-pinned="true"] {
   background: var(
-    --ds-table-header-pinned-bg,
+    --ds-data-table-header-pinned-bg,
     var(--ds-table-header-bg, var(--ds-surface-inset))
   );
 }
@@ -1779,7 +1684,7 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"]
   [data-part="data-cell"][data-pinned="true"] {
-  background: var(--ds-table-pinned-cell-bg, var(--ds-table-row-bg, var(--ds-surface-card)));
+  background: var(--ds-data-table-pinned-cell-bg, var(--ds-table-row-bg, var(--ds-surface-card)));
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -1802,7 +1707,7 @@
   [data-part="body-row"][data-striped="true"]
   :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
   background: var(
-    --ds-table-pinned-cell-bg-striped,
+    --ds-data-table-pinned-cell-bg-striped,
     var(--ds-table-row-bg-striped, var(--ds-surface-inset))
   );
 }
@@ -1811,7 +1716,7 @@
   [data-part="body-row"][data-selected="true"]
   :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
   background: var(
-    --ds-table-pinned-cell-bg-selected,
+    --ds-data-table-pinned-cell-bg-selected,
     var(
       --ds-table-row-bg-selected,
       color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
@@ -1821,10 +1726,10 @@
 
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):is([data-state~="hovered"], :hover)
     :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
     background: var(
-      --ds-table-pinned-cell-bg-hover,
+      --ds-data-table-pinned-cell-bg-hover,
       var(
         --ds-table-row-bg-hover,
         color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card))
@@ -1834,10 +1739,10 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
   :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
   background: var(
-    --ds-table-pinned-cell-bg-focus,
+    --ds-data-table-pinned-cell-bg-focus,
     var(
       --ds-table-row-bg-selected,
       color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
@@ -1846,10 +1751,10 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible {
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: none;
   box-shadow: var(
-    --ds-table-header-focus-shadow,
+    --ds-data-table-header-focus-shadow,
     inset 0 0 0 2px
       color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
   );
@@ -1884,7 +1789,7 @@
 }
 
 /* The always-sticky actions column carries data-pinned/data-pin-side as well,
-   but it already owns its directional border + --ds-table-action-shadow
+   but it already owns its directional border + --ds-data-table-action-shadow
    channel, so the edge grammar below skips it. */
 .ds-pattern-data-table.ds-engine-modern
   :is([data-part="header-cell"], [data-part="data-cell"])[data-pinned="true"][data-pin-side="left"]:not([data-cell-kind="actions"]) {
@@ -1902,7 +1807,7 @@
   [data-part="body-row"][data-selected="true"]
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
   box-shadow: var(
-      --ds-table-row-selected-shadow,
+      --ds-data-table-row-selected-shadow,
       inset 0 0 0 1px
         color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
     ),
@@ -1912,7 +1817,7 @@
   [data-part="body-row"][data-selected="true"]
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
   box-shadow: var(
-      --ds-table-row-selected-shadow,
+      --ds-data-table-row-selected-shadow,
       inset 0 0 0 1px
         color-mix(in srgb, var(--ds-color-primary) 30%, transparent)
     ),
@@ -1920,7 +1825,7 @@
 }
 @media (hover: hover) {
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):is([data-state~="hovered"], :hover)
     > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
     box-shadow: var(
         --ds-table-row-hover-shadow,
@@ -1930,7 +1835,7 @@
       var(--_ds-data-table-pin-edge-start);
   }
   .ds-pattern-data-table.ds-engine-modern
-    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):is([data-state~="hovered"], :hover)
     > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
     box-shadow: var(
         --ds-table-row-hover-shadow,
@@ -1941,7 +1846,7 @@
   }
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="left"] {
   box-shadow: var(
       --ds-table-row-focus-shadow,
@@ -1951,7 +1856,7 @@
     var(--_ds-data-table-pin-edge-start);
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"]:focus-visible
+  [data-part="body-row"]:is([data-state~="focus-visible"], :focus-visible)
   > [data-part="data-cell"][data-pinned="true"][data-pin-side="right"] {
   box-shadow: var(
       --ds-table-row-focus-shadow,
@@ -1964,18 +1869,18 @@
 /* A pinned SORTABLE header cell keeps its keyboard ring without losing the
    edge keyline. */
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible[data-pinned="true"][data-pin-side="left"] {
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)[data-pinned="true"][data-pin-side="left"] {
   box-shadow: var(
-      --ds-table-header-focus-shadow,
+      --ds-data-table-header-focus-shadow,
       inset 0 0 0 2px
         color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
     ),
     var(--_ds-data-table-pin-edge-start);
 }
 .ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:focus-visible[data-pinned="true"][data-pin-side="right"] {
+  [data-part="header-cell"][data-sortable="true"]:is([data-state~="focus-visible"], :focus-visible)[data-pinned="true"][data-pin-side="right"] {
   box-shadow: var(
-      --ds-table-header-focus-shadow,
+      --ds-data-table-header-focus-shadow,
       inset 0 0 0 2px
         color-mix(in srgb, var(--ds-color-primary) 48%, transparent)
     ),
@@ -1988,7 +1893,7 @@
   box-shadow: inset 0 -2px 0 0
       color-mix(
         in srgb,
-        var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+        var(--ds-data-table-sort-color-active, var(--ds-color-primary)) 42%,
         transparent
       ),
     var(--_ds-data-table-pin-edge-start);
@@ -1998,7 +1903,7 @@
   box-shadow: inset 0 -2px 0 0
       color-mix(
         in srgb,
-        var(--ds-table-sort-color-active, var(--ds-color-primary)) 42%,
+        var(--ds-data-table-sort-color-active, var(--ds-color-primary)) 42%,
         transparent
       ),
     var(--_ds-data-table-pin-edge-end);
@@ -2022,13 +1927,13 @@
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="minimal"]
   [data-part="card"] {
-  box-shadow: var(--ds-table-minimal-shadow, none);
+  box-shadow: var(--ds-data-table-minimal-shadow, none);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="ruled"]
   [data-part="body-row"][data-last="false"] {
   border-bottom: 1px solid
-    var(--ds-table-rule-strong, var(--ds-color-border-secondary));
+    var(--ds-data-table-rule-strong, var(--ds-color-border-secondary));
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
@@ -2067,21 +1972,21 @@
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="header-row"] {
-  background: var(--ds-table-editorial-header-bg, transparent);
+  background: var(--ds-data-table-editorial-header-bg, transparent);
   box-shadow: none;
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="header-cell"] {
-  padding-block: var(--ds-table-editorial-header-padding-block, 1rem);
+  padding-block: var(--ds-data-table-editorial-header-padding-block, 1rem);
   font-family: var(--ds-typography-label-family, inherit);
   letter-spacing: var(--ds-typography-label-tracking, 0.08em);
-  text-transform: var(--ds-table-editorial-header-transform, uppercase);
+  text-transform: var(--ds-data-table-editorial-header-transform, uppercase);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="data-cell"] {
-  padding-block: var(--ds-table-editorial-cell-padding-block, 1.125rem);
+  padding-block: var(--ds-data-table-editorial-cell-padding-block, 1.125rem);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
@@ -2104,9 +2009,9 @@
   .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover
+  ):is([data-state~="hovered"], :hover)
     > td:not([data-pinned="true"]) {
-    box-shadow: var(--ds-table-editorial-row-shadow, var(--ds-elevation-1));
+    box-shadow: var(--ds-data-table-editorial-row-shadow, var(--ds-elevation-1));
   }
 }
 
@@ -2156,7 +2061,7 @@
     .ds-pattern-data-table.ds-engine-modern
     [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
-  ):hover {
+  ):is([data-state~="hovered"], :hover) {
     background-color: var(
       --ds-table-row-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)
@@ -2184,7 +2089,7 @@
 [data-anatomy-table="open"]
   .ds-pattern-data-table.ds-engine-modern
   [data-part="data-cell"] {
-  padding-block: var(--ds-table-open-cell-padding-block, 0.875rem);
+  padding-block: var(--ds-data-table-open-cell-padding-block, 0.875rem);
 }
 
 @keyframes ds-data-table-arrive {
@@ -2227,14 +2132,14 @@
   .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]::after {
     content: "";
     position: absolute;
-    inset: calc(var(--ds-table-touch-hit-expansion, 0.5625rem) * -1);
+    inset: calc(var(--ds-data-table-touch-hit-expansion, 0.5625rem) * -1);
   }
 
   .ds-pattern-data-table.ds-engine-modern
     .ds-data-table__column-tooltip--resize.ds-data-table__column-tooltip--resize {
-    inset-inline-end: calc(var(--ds-table-touch-target, 2.75rem) / -2);
-    width: var(--ds-table-touch-target, 2.75rem);
-    min-width: var(--ds-table-touch-target, 2.75rem);
+    inset-inline-end: calc(var(--ds-data-table-touch-target, 2.75rem) / -2);
+    width: var(--ds-data-table-touch-target, 2.75rem);
+    min-width: var(--ds-data-table-touch-target, 2.75rem);
   }
 }
 
@@ -2255,7 +2160,7 @@
 
 @container ds-table (max-width: 640px) {
   .ds-pattern-data-table.ds-engine-modern [data-part="table"] {
-    min-width: var(--ds-table-collapsed-min-inline-size, 34rem);
+    min-width: var(--ds-data-table-collapsed-min-inline-size, 34rem);
   }
 
   .ds-pattern-data-table.ds-engine-modern
@@ -2325,9 +2230,9 @@
     transition: none;
   }
 
-  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover,
-  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible,
-  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover,
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="hovered"], :hover),
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:is([data-state~="focus-visible"], :focus-visible),
+  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:is([data-state~="hovered"], :hover),
   .ds-pattern-data-table.ds-engine-modern
     [data-part="expand-button"]:focus-within {
     transform: none;

@@ -50,6 +50,7 @@ import {
   XIcon as X,
 } from "../../../../../../graphics/icons";
 import { arrayValueAt } from "@/foundation/kernel/collections";
+import { partAttributes, useInteractionState } from "@/foundation/behavior";
 import {
   useOptionalDirection,
   useOptionalTranslation,
@@ -57,6 +58,7 @@ import {
 import type { DataTablePatternProps } from "../../contracts";
 import { resolveAccessor, resolveRowKey } from "../../runtime/row-resolution";
 import ModernCheckbox from "../../../../../primitives/inputs/checkbox/engines/modern";
+import { AnatomySkeleton } from "../../../../../primitives/feedback/skeleton";
 import { Button } from "../../../../../primitives/inputs/button";
 import { Tooltip } from "../../../../../primitives/display/tooltip";
 import { useVirtualScroll } from "../../../../runtime/virtualization/virtual-scroll";
@@ -64,7 +66,8 @@ import { useGroupedData } from "../../runtime/grouping";
 import type { EditableConfig } from "../../../../../../foundation/contracts/runtime/components/patterns/core";
 import { InlineCellEditor } from "./cell-editor";
 
-/** A tbody may contain only rows (or fragments whose children are rows). */
+/** A tbody may contain only rows (or fragments whose children are rows). The
+ *  stateful `BodyRow` below IS a row: it renders one `<tr>` and nothing else. */
 function isValidTableBodyRowOutput(node: React.ReactNode): boolean {
   let valid = true;
 
@@ -74,7 +77,7 @@ function isValidTableBodyRowOutput(node: React.ReactNode): boolean {
       valid = false;
       return;
     }
-    if (child.type === "tr") return;
+    if (child.type === "tr" || child.type === BodyRow) return;
     if (child.type === React.Fragment) {
       valid = isValidTableBodyRowOutput(
         (child.props as { children?: React.ReactNode }).children,
@@ -103,6 +106,15 @@ function isValidTableBodyRowOutput(node: React.ReactNode): boolean {
 const DEFAULT_PINNED_COLUMN_WIDTH = 150;
 
 /**
+ * A caller-supplied dimension as a CSS length. `undefined` leaves the channel
+ * unset, so the skin's own default applies instead of a zero.
+ */
+function cssLength(value: number | string | undefined): string | undefined {
+  if (value === undefined || value === null || value === "") return undefined;
+  return typeof value === "number" ? `${value}px` : value;
+}
+
+/**
  * Resolves the EditableConfig for a column.
  * Returns null if the column is not editable, or a normalized config object.
  */
@@ -112,6 +124,174 @@ function resolveEditableConfig<T>(
   if (!editable) return null;
   if (editable === true) return { type: "text" };
   return editable;
+}
+
+/** Anatomy attributes a caller stamps on one of the stateful parts below. */
+type DataAttributes = {
+  [key in `data-${string}`]?: string | number | boolean | undefined;
+};
+
+/** Runs the part's own kernel handler after the caller's. */
+function chainHandler<E>(
+  own: ((event: E) => void) | undefined,
+  kernel: (event: E) => void
+): (event: E) => void {
+  return (event: E) => {
+    own?.(event);
+    kernel(event);
+  };
+}
+
+/**
+ * The interaction triad for one part, decided by the anatomy kernel. A repeated
+ * part cannot call the hook in a loop, so each stateful part below is its own
+ * element; the caller's handlers keep running, the kernel's run after them.
+ */
+function useStatefulPart<E extends Element>(
+  props: React.DOMAttributes<E>,
+  options?: { disabled?: boolean }
+) {
+  const interaction = useInteractionState(options);
+  return {
+    state: interaction.state,
+    handlers: {
+      onPointerEnter: chainHandler(
+        props.onPointerEnter,
+        interaction.handlers.onPointerEnter
+      ),
+      onPointerLeave: chainHandler(
+        props.onPointerLeave,
+        interaction.handlers.onPointerLeave
+      ),
+      onPointerDown: chainHandler(
+        props.onPointerDown,
+        interaction.handlers.onPointerDown
+      ),
+      onPointerUp: chainHandler(
+        props.onPointerUp,
+        interaction.handlers.onPointerUp
+      ),
+      onFocus: chainHandler(props.onFocus, interaction.handlers.onFocus),
+      onBlur: chainHandler(props.onBlur, interaction.handlers.onBlur),
+    },
+  };
+}
+
+/** The edit-trigger handler a cell carries, per the resolved `editTrigger`. */
+type CellTriggerProps = {
+  onClick?: React.MouseEventHandler<HTMLTableCellElement>;
+  onDoubleClick?: React.MouseEventHandler<HTMLTableCellElement>;
+};
+
+type RowProps = React.HTMLAttributes<HTMLTableRowElement> & DataAttributes;
+type CellProps = React.TdHTMLAttributes<HTMLTableCellElement> & DataAttributes;
+type SlotProps = React.HTMLAttributes<HTMLSpanElement> & DataAttributes;
+type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+  DataAttributes;
+
+function BodyRow({ children, ...rest }: RowProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLTableRowElement>(rest);
+  return (
+    <tr {...rest} {...handlers} {...partAttributes("body-row", state)}>
+      {children}
+    </tr>
+  );
+}
+
+function ColumnHeaderCell({ children, ...rest }: CellProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLTableCellElement>(rest);
+  return (
+    <th {...rest} {...handlers} {...partAttributes("header-cell", state)}>
+      {children}
+    </th>
+  );
+}
+
+/** A cell that opens an editor under the pointer, so its own hover is painted. */
+function EditableDataCell({ children, ...rest }: CellProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLTableCellElement>(rest);
+  return (
+    <td {...rest} {...handlers} {...partAttributes("data-cell", state)}>
+      {children}
+    </td>
+  );
+}
+
+function DataCell({ children, ...rest }: CellProps): React.ReactElement {
+  return (
+    <td {...rest} data-part="data-cell">
+      {children}
+    </td>
+  );
+}
+
+function ResizeHandle({ children, ...rest }: SlotProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  return (
+    <span {...rest} {...handlers} {...partAttributes("resize-handle", state)}>
+      {children}
+    </span>
+  );
+}
+
+function DragGrip({ children, ...rest }: SlotProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  return (
+    <span {...rest} {...handlers} {...partAttributes("drag-grip", state)}>
+      {children}
+    </span>
+  );
+}
+
+function ExpandButtonSlot({ children, ...rest }: SlotProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  return (
+    <span {...rest} {...handlers} {...partAttributes("expand-button", state)}>
+      {children}
+    </span>
+  );
+}
+
+function PageButtonSlot({ children, ...rest }: SlotProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLSpanElement>(rest);
+  return (
+    <span
+      {...rest}
+      {...handlers}
+      {...partAttributes("pagination-page-button", state)}
+    >
+      {children}
+    </span>
+  );
+}
+
+function PinToggle({ children, ...rest }: IconButtonProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLButtonElement>(rest, {
+    disabled: rest.disabled,
+  });
+  return (
+    <button {...rest} {...handlers} {...partAttributes("pin-toggle", state)}>
+      {children}
+    </button>
+  );
+}
+
+function HideColumnButton({
+  children,
+  ...rest
+}: IconButtonProps): React.ReactElement {
+  const { state, handlers } = useStatefulPart<HTMLButtonElement>(rest, {
+    disabled: rest.disabled,
+  });
+  return (
+    <button
+      {...rest}
+      {...handlers}
+      {...partAttributes("hide-column-button", state)}
+    >
+      {children}
+    </button>
+  );
 }
 
 type InlineEditorControls = {
@@ -838,10 +1018,12 @@ export default function ModernDataTable<T extends object>(
         terms.unshift(actionsWidthTerm);
       }
 
-      const offset = terms.length > 0 ? `calc(${terms.join(" + ")})` : 0;
-      return side === "left"
-        ? { insetInlineStart: offset }
-        : { insetInlineEnd: offset };
+      const offset = terms.length > 0 ? `calc(${terms.join(" + ")})` : "0px";
+      return {
+        [side === "left"
+          ? "--ds-data-table-pinned-inset-start"
+          : "--ds-data-table-pinned-inset-end"]: offset,
+      } as React.CSSProperties;
     },
     [
       actions,
@@ -1106,7 +1288,7 @@ export default function ModernDataTable<T extends object>(
       return (
         <span data-part="inline-edit-actions">
           <span
-            data-part="inline-edit-action"
+            {...partAttributes("inline-edit-action", { disabled: isSaving })}
             data-intent="save"
             data-saving={isSaving ? "true" : "false"}
           >
@@ -1130,7 +1312,7 @@ export default function ModernDataTable<T extends object>(
             />
           </span>
           <span
-            data-part="inline-edit-action"
+            {...partAttributes("inline-edit-action", { disabled: isSaving })}
             data-intent="cancel"
             data-saving={isSaving ? "true" : "false"}
           >
@@ -1191,9 +1373,19 @@ export default function ModernDataTable<T extends object>(
   // Render
   // ---------------------------------------------------------------------------
 
-  // Skeleton row count for loading state
-  const skeletonRowCount =
+  // How many placeholder rows the loading state stands in for.
+  const loadingRowCount =
     pagination && pagination.pageSize ? Math.min(pagination.pageSize, 8) : 5;
+
+  // The loading state is the real table with one placeholder row per pending
+  // record: the shared renderer draws them from the column anatomy, so the
+  // pending posture cannot drift from the loaded one.
+  const loadingCells = [
+    ...(selectable ? [{ key: "selection", kind: "control" }] : []),
+    ...(expandedRow ? [{ key: "expand", kind: "control" }] : []),
+    ...visibleColumns.map((col) => ({ key: String(col.key) })),
+    ...(actions ? [{ key: "actions" }] : []),
+  ];
 
   return (
     <div
@@ -1242,8 +1434,23 @@ export default function ModernDataTable<T extends object>(
           data-part="scroll"
           data-scrolled={scrollRegionScrolled ? "true" : "false"}
           data-state={error ? "error" : loading ? "loading" : data.length === 0 ? "empty" : "ready"}
-          style={maxHeight ? { maxHeight } : undefined}
+          style={
+            maxHeight
+              ? ({
+                  "--ds-data-table-scroll-max-block-size": cssLength(maxHeight),
+                } as React.CSSProperties)
+              : undefined
+          }
         >
+          {/* The loading state announces itself once, next to the placeholder
+              rows the shared renderer draws inside the table body. */}
+          {loading && !error && (
+            <span
+              data-part="loading-status"
+              role="status"
+              aria-label={messages?.loadingLabel ?? "Loading"}
+            />
+          )}
           {error ? (
             <div role="alert" data-part="error-state">
               {errorState ?? (
@@ -1261,46 +1468,7 @@ export default function ModernDataTable<T extends object>(
                 </>
               )}
             </div>
-          ) : loading ? (
-            <div
-              role="status"
-              aria-label={messages?.loadingLabel ?? "Loading"}
-              data-part="skeleton"
-            >
-              {/* Skeleton header */}
-              <div data-part="skeleton-header">
-                {visibleColumns.slice(0, 5).map((col, ci) => (
-                  <div
-                    key={col.key}
-                    data-part="skeleton-header-col"
-                    data-leading={ci === 0 ? "true" : "false"}
-                  />
-                ))}
-              </div>
-              {/* Skeleton rows */}
-              {Array.from({ length: skeletonRowCount }).map((_, i) => (
-                <div
-                  key={i}
-                  className="ds-skeleton-row"
-                  data-part="skeleton-row"
-                  data-divider={i < skeletonRowCount - 1 ? "true" : "false"}
-                  style={
-                    {
-                      "--ds-modern-table-skeleton-index": i,
-                    } as React.CSSProperties
-                  }
-                >
-                  {visibleColumns.slice(0, 5).map((col, ci) => (
-                    <div
-                      key={col.key}
-                      data-part="skeleton-cell"
-                      data-leading={ci === 0 ? "true" : "false"}
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          ) : data.length === 0 ? (
+          ) : !loading && data.length === 0 ? (
             /* Empty state: centered, muted, generous padding */
             <div data-part="empty-state" role="status">
               {emptyState ?? (
@@ -1398,7 +1566,7 @@ export default function ModernDataTable<T extends object>(
                       !(lockedColumns ?? []).includes(col.key);
 
                     return (
-                      <th
+                      <ColumnHeaderCell
                         key={col.key}
                         role="columnheader"
                         aria-sort={
@@ -1411,12 +1579,19 @@ export default function ModernDataTable<T extends object>(
                             : undefined
                         }
                         tabIndex={col.sortable ? 0 : undefined}
-                        style={{
-                          width: cellWidth,
-                          minWidth: col.minWidth,
-                          maxWidth: col.maxWidth,
-                          ...getPinnedOffsetStyle(col.key, pinSide),
-                        }}
+                        style={
+                          {
+                            "--ds-data-table-col-inline-size":
+                              cssLength(cellWidth),
+                            "--ds-data-table-col-min-inline-size": cssLength(
+                              col.minWidth
+                            ),
+                            "--ds-data-table-col-max-inline-size": cssLength(
+                              col.maxWidth
+                            ),
+                            ...getPinnedOffsetStyle(col.key, pinSide),
+                          } as React.CSSProperties
+                        }
                         data-align={col.align}
                         data-col-key={col.key}
                         data-col-priority={col.priority || undefined}
@@ -1438,7 +1613,6 @@ export default function ModernDataTable<T extends object>(
                         data-resizable={resizable ? "true" : "false"}
                         data-sortable={col.sortable ? "true" : undefined}
                         data-sort-state={col.sortable ? sortState : undefined}
-                        data-part="header-cell"
                         data-pinned={pinSide ? "true" : "false"}
                         data-drag-over={
                           dragOverKey === col.key &&
@@ -1466,14 +1640,13 @@ export default function ModernDataTable<T extends object>(
                               recipe="inverse"
                               showDelay={280}
                             >
-                              <span
+                              <DragGrip
                                 onPointerDown={(e) =>
                                   handleReorderStart(e, col.key)
                                 }
                                 data-drag-source={
                                   dragSourceKey === col.key ? "true" : "false"
                                 }
-                                data-part="drag-grip"
                                 aria-label={moveColumnLabel}
                                 role="button"
                                 tabIndex={0}
@@ -1487,7 +1660,7 @@ export default function ModernDataTable<T extends object>(
                                   strokeWidth={2.2}
                                   aria-hidden
                                 />
-                              </span>
+                              </DragGrip>
                             </Tooltip>
                           )}
                           <span data-part="header-label" title={columnLabel}>
@@ -1524,9 +1697,8 @@ export default function ModernDataTable<T extends object>(
                               recipe="inverse"
                               showDelay={360}
                             >
-                              <button
+                              <PinToggle
                                 type="button"
-                                data-part="pin-toggle"
                                 data-pin-side={pinSide}
                                 aria-label={pinColumnLabel}
                                 aria-pressed={pinSide !== undefined}
@@ -1546,7 +1718,7 @@ export default function ModernDataTable<T extends object>(
                                 }}
                               >
                                 <PinIcon size={12} strokeWidth={2} aria-hidden />
-                              </button>
+                              </PinToggle>
                             </Tooltip>
                           )}
                           {/* Hide-column affordance: emits the contracted
@@ -1560,9 +1732,8 @@ export default function ModernDataTable<T extends object>(
                               recipe="inverse"
                               showDelay={360}
                             >
-                              <button
+                              <HideColumnButton
                                 type="button"
-                                data-part="hide-column-button"
                                 aria-label={hideColumnLabel}
                                 onClick={(event) => {
                                   event.stopPropagation();
@@ -1584,7 +1755,7 @@ export default function ModernDataTable<T extends object>(
                                   strokeWidth={2}
                                   aria-hidden
                                 />
-                              </button>
+                              </HideColumnButton>
                             </Tooltip>
                           )}
                           {/* Drop indicator line */}
@@ -1602,10 +1773,9 @@ export default function ModernDataTable<T extends object>(
                             recipe="inverse"
                             showDelay={360}
                           >
-                            <span
+                            <ResizeHandle
                               className="ds-resize-handle"
                               data-column-resize-handle="true"
-                              data-part="resize-handle"
                               role="separator"
                               aria-orientation="vertical"
                               aria-valuemin={col.minWidth ?? 50}
@@ -1655,10 +1825,10 @@ export default function ModernDataTable<T extends object>(
                                 className="ds-resize-handle__bar"
                                 data-part="resize-handle-bar"
                               />
-                            </span>
+                            </ResizeHandle>
                           </Tooltip>
                         )}
-                      </th>
+                      </ColumnHeaderCell>
                     );
                   })}
                   {/* Actions column header */}
@@ -1668,10 +1838,13 @@ export default function ModernDataTable<T extends object>(
                       data-part="header-cell"
                       data-pin-side="right"
                       data-pinned="true"
-                      style={{
-                        width: resolvedActionsColumnWidth,
-                        minWidth: resolvedActionsColumnWidth,
-                      }}
+                      style={
+                        {
+                          "--ds-data-table-actions-col-inline-size": cssLength(
+                            resolvedActionsColumnWidth
+                          ),
+                        } as React.CSSProperties
+                      }
                     >
                       {messages?.actionsColumn ?? "Actions"}
                     </th>
@@ -1679,10 +1852,20 @@ export default function ModernDataTable<T extends object>(
                 </tr>
               </thead>
               <tbody ref={tbodyRef}>
+                {/* Loading: one placeholder row per pending record, derived by
+                    the shared renderer from the columns this table stamps. */}
+                {loading && (
+                  <AnatomySkeleton
+                    mode="table-rows"
+                    rowCount={loadingRowCount}
+                    cells={loadingCells}
+                  />
+                )}
                 {/* --------------------------------------------------------- */}
                 {/* Grouped rendering: group headers + collapsible sections    */}
                 {/* --------------------------------------------------------- */}
-                {isGrouped &&
+                {!loading &&
+                  isGrouped &&
                   (() => {
                     let globalIndex = 0;
 
@@ -1727,11 +1910,10 @@ export default function ModernDataTable<T extends object>(
 
                           const groupedRowNodes = (
                             <>
-                              <tr
+                              <BodyRow
                                 data-row-index={index}
                                 data-row-key={key}
                                 data-clickable={onRowClick ? "true" : "false"}
-                                data-part="body-row"
                                 data-selected={isSelected ? "true" : "false"}
                                 data-striped={
                                   rowsAreStriped && index % 2 === 1
@@ -1785,8 +1967,7 @@ export default function ModernDataTable<T extends object>(
                                 )}
                                 {expandedRow && (
                                   <td data-part="expand-cell">
-                                    <span
-                                      data-part="expand-button"
+                                    <ExpandButtonSlot
                                       data-expanded={
                                         isRowExpanded ? "true" : "false"
                                       }
@@ -1830,7 +2011,7 @@ export default function ModernDataTable<T extends object>(
                                           });
                                         }}
                                       />
-                                    </span>
+                                    </ExpandButtonSlot>
                                   </td>
                                 )}
                                 {/* Data cells (grouped path -- with inline editing) */}
@@ -1866,10 +2047,7 @@ export default function ModernDataTable<T extends object>(
                                       ? String(cellValue)
                                       : undefined;
 
-                                  const grpTriggerProps: Record<
-                                    string,
-                                    unknown
-                                  > = {};
+                                  const grpTriggerProps: CellTriggerProps = {};
                                   if (isCellEditable && !isCellEditing) {
                                     const handler = (e: React.MouseEvent) => {
                                       clearPendingEditableRowClick();
@@ -1883,9 +2061,14 @@ export default function ModernDataTable<T extends object>(
                                       grpTriggerProps.onDoubleClick = handler;
                                     }
                                   }
+                                  // Only a cell that opens an editor under the
+                                  // pointer owns an interaction state.
+                                  const GroupedCell = isCellEditable
+                                    ? EditableDataCell
+                                    : DataCell;
 
                                   return (
-                                    <td
+                                    <GroupedCell
                                       key={col.key}
                                       data-align={col.align}
                                       data-col-priority={
@@ -1902,7 +2085,6 @@ export default function ModernDataTable<T extends object>(
                                           ? "true"
                                           : "false"
                                       }
-                                      data-part="data-cell"
                                       data-pin-side={pinSide}
                                       data-pinned={pinSide ? "true" : "false"}
                                       aria-description={
@@ -1920,15 +2102,20 @@ export default function ModernDataTable<T extends object>(
                                           ? "ds-nums-tabular"
                                           : undefined
                                       }
-                                      style={{
-                                        width: cellWidth,
-                                        minWidth: col.minWidth,
-                                        maxWidth: col.maxWidth,
-                                        ...getPinnedOffsetStyle(
-                                          col.key,
-                                          pinSide
-                                        ),
-                                      }}
+                                      style={
+                                        {
+                                          "--ds-data-table-col-inline-size":
+                                            cssLength(cellWidth),
+                                          "--ds-data-table-col-min-inline-size":
+                                            cssLength(col.minWidth),
+                                          "--ds-data-table-col-max-inline-size":
+                                            cssLength(col.maxWidth),
+                                          ...getPinnedOffsetStyle(
+                                            col.key,
+                                            pinSide
+                                          ),
+                                        } as React.CSSProperties
+                                      }
                                     >
                                       {isCellEditing && editableCfg ? (
                                         <InlineCellEditor
@@ -2009,16 +2196,18 @@ export default function ModernDataTable<T extends object>(
                                       ) : (
                                         String(cellValue ?? "")
                                       )}
-                                    </td>
+                                    </GroupedCell>
                                   );
                                 })}
                                 {actions && (
                                   <td
                                     data-part="actions-cell"
-                                    style={{
-                                      width: resolvedActionsColumnWidth,
-                                      minWidth: resolvedActionsColumnWidth,
-                                    }}
+                                    style={
+                                      {
+                                        "--ds-data-table-actions-col-inline-size":
+                                          cssLength(resolvedActionsColumnWidth),
+                                      } as React.CSSProperties
+                                    }
                                     onClick={(e) => e.stopPropagation()}
                                   >
                                     <div data-part="actions-content">
@@ -2028,7 +2217,7 @@ export default function ModernDataTable<T extends object>(
                                     </div>
                                   </td>
                                 )}
-                              </tr>
+                              </BodyRow>
                               {expandedRow && isRowExpanded && (
                                 <tr>
                                   <td
@@ -2133,14 +2322,19 @@ export default function ModernDataTable<T extends object>(
                 {/* --------------------------------------------------------- */}
                 {/* Flat rendering (no groupBy): virtual scroll + inline edit  */}
                 {/* --------------------------------------------------------- */}
-                {!isGrouped && (
+                {!loading && !isGrouped && (
                   <>
                     {/* Virtual scroll: top spacer row to push visible content down */}
                     {virtualized && virtualScroll.offsetTop > 0 && (
                       <tr
                         aria-hidden="true"
                         data-part="virtual-spacer"
-                        style={{ height: virtualScroll.offsetTop }}
+                        style={
+                          {
+                            "--ds-data-table-virtual-spacer-block-size":
+                              cssLength(virtualScroll.offsetTop),
+                          } as React.CSSProperties
+                        }
                       >
                         <td colSpan={totalColSpan} data-part="virtual-spacer" />
                       </tr>
@@ -2159,11 +2353,10 @@ export default function ModernDataTable<T extends object>(
 
                       const flatRowNodes = (
                         <>
-                          <tr
+                          <BodyRow
                             data-row-index={index}
                             data-row-key={key}
                             data-clickable={onRowClick ? "true" : "false"}
-                            data-part="body-row"
                             data-selected={isSelected ? "true" : "false"}
                             data-striped={
                               rowsAreStriped && index % 2 === 1
@@ -2196,7 +2389,10 @@ export default function ModernDataTable<T extends object>(
                             onFocus={() => setActiveRowIndex(index)}
                             style={
                               virtualized
-                                ? { height: virtualRowHeight }
+                                ? ({
+                                    "--ds-data-table-row-block-size":
+                                      cssLength(virtualRowHeight),
+                                  } as React.CSSProperties)
                                 : undefined
                             }
                           >
@@ -2220,8 +2416,7 @@ export default function ModernDataTable<T extends object>(
                             {/* Expand toggle */}
                             {expandedRow && (
                               <td data-part="expand-cell">
-                                <span
-                                  data-part="expand-button"
+                                <ExpandButtonSlot
                                   data-expanded={isExpanded ? "true" : "false"}
                                 >
                                   <Button
@@ -2258,7 +2453,7 @@ export default function ModernDataTable<T extends object>(
                                       });
                                     }}
                                   />
-                                </span>
+                                </ExpandButtonSlot>
                               </td>
                             )}
                             {/* Data cells (with inline editing support) */}
@@ -2296,7 +2491,7 @@ export default function ModernDataTable<T extends object>(
                                   : undefined;
 
                               // Build the edit-trigger event handler
-                              const triggerProps: Record<string, unknown> = {};
+                              const triggerProps: CellTriggerProps = {};
                               if (isCellEditable && !isCellEditing) {
                                 const handler = (e: React.MouseEvent) => {
                                   clearPendingEditableRowClick();
@@ -2310,9 +2505,14 @@ export default function ModernDataTable<T extends object>(
                                   triggerProps.onDoubleClick = handler;
                                 }
                               }
+                              // Only a cell that opens an editor under the
+                              // pointer owns an interaction state.
+                              const FlatCell = isCellEditable
+                                ? EditableDataCell
+                                : DataCell;
 
                               return (
-                                <td
+                                <FlatCell
                                   key={col.key}
                                   data-align={col.align}
                                   data-col-priority={col.priority || undefined}
@@ -2327,7 +2527,6 @@ export default function ModernDataTable<T extends object>(
                                       ? "true"
                                       : "false"
                                   }
-                                  data-part="data-cell"
                                   data-pin-side={pinSide}
                                   data-pinned={pinSide ? "true" : "false"}
                                   aria-description={
@@ -2345,15 +2544,20 @@ export default function ModernDataTable<T extends object>(
                                       ? "ds-nums-tabular"
                                       : undefined
                                   }
-                                  style={{
-                                    width: cellWidth,
-                                    minWidth: col.minWidth,
-                                    maxWidth: col.maxWidth,
-                                    ...getPinnedOffsetStyle(
-                                      col.key,
-                                      pinSide
-                                    ),
-                                  }}
+                                  style={
+                                    {
+                                      "--ds-data-table-col-inline-size":
+                                        cssLength(cellWidth),
+                                      "--ds-data-table-col-min-inline-size":
+                                        cssLength(col.minWidth),
+                                      "--ds-data-table-col-max-inline-size":
+                                        cssLength(col.maxWidth),
+                                      ...getPinnedOffsetStyle(
+                                        col.key,
+                                        pinSide
+                                      ),
+                                    } as React.CSSProperties
+                                  }
                                 >
                                   {isCellEditing && editableCfg ? (
                                     <InlineCellEditor
@@ -2434,17 +2638,19 @@ export default function ModernDataTable<T extends object>(
                                   ) : (
                                     String(cellValue ?? "")
                                   )}
-                                </td>
+                                </FlatCell>
                               );
                             })}
                             {/* Actions cell */}
                             {actions && (
                               <td
                                 data-part="actions-cell"
-                                style={{
-                                  width: resolvedActionsColumnWidth,
-                                  minWidth: resolvedActionsColumnWidth,
-                                }}
+                                style={
+                                  {
+                                    "--ds-data-table-actions-col-inline-size":
+                                      cssLength(resolvedActionsColumnWidth),
+                                  } as React.CSSProperties
+                                }
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <div data-part="actions-content">
@@ -2454,7 +2660,7 @@ export default function ModernDataTable<T extends object>(
                                 </div>
                               </td>
                             )}
-                          </tr>
+                          </BodyRow>
                           {/* Expanded row content */}
                           {expandedRow && isExpanded && (
                             <tr>
@@ -2487,7 +2693,12 @@ export default function ModernDataTable<T extends object>(
                       <tr
                         aria-hidden="true"
                         data-part="virtual-spacer"
-                        style={{ height: virtualBottomSpacerHeight }}
+                        style={
+                          {
+                            "--ds-data-table-virtual-spacer-block-size":
+                              cssLength(virtualBottomSpacerHeight),
+                          } as React.CSSProperties
+                        }
                       >
                         <td colSpan={totalColSpan} data-part="virtual-spacer" />
                       </tr>
@@ -2551,7 +2762,11 @@ export default function ModernDataTable<T extends object>(
                 </span>
                 <div data-part="pagination-controls">
                   {/* Previous */}
-                  <span data-part="pagination-nav-button">
+                  <span
+                    {...partAttributes("pagination-nav-button", {
+                      disabled: isFirstPage,
+                    })}
+                  >
                     <Button
                       disabled={isFirstPage}
                       variant="ghost"
@@ -2578,9 +2793,8 @@ export default function ModernDataTable<T extends object>(
                         {"\u2026"}
                       </span>
                     ) : (
-                      <span
+                      <PageButtonSlot
                         key={page}
-                        data-part="pagination-page-button"
                         data-current={
                           page === pagination.current ? "true" : "false"
                         }
@@ -2601,11 +2815,15 @@ export default function ModernDataTable<T extends object>(
                         >
                           {page}
                         </Button>
-                      </span>
+                      </PageButtonSlot>
                     )
                   )}
                   {/* Next */}
-                  <span data-part="pagination-nav-button">
+                  <span
+                    {...partAttributes("pagination-nav-button", {
+                      disabled: isLastPage,
+                    })}
+                  >
                     <Button
                       disabled={isLastPage}
                       variant="ghost"
@@ -2639,7 +2857,9 @@ export default function ModernDataTable<T extends object>(
               {bulkActions.map((action) => (
                 <span
                   key={action.key}
-                  data-part="bulk-bar-action"
+                  {...partAttributes("bulk-bar-action", {
+                    disabled: action.disabled,
+                  })}
                   data-variant={action.variant ?? "default"}
                 >
                   <Button

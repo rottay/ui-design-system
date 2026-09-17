@@ -9,7 +9,6 @@ import React, {
   useState,
 } from "react";
 import { createEngineComponent } from "../../../../../../infrastructure/runtime/engines/presentation/component-factory";
-import { stampDataPart } from "../../../../../../infrastructure/runtime/dom/foundation/data-part";
 import { RESPONSIVE_BREAKPOINTS } from "@/foundation/contracts/kernel/responsive/breakpoints";
 import {
   DATA_TABLE_ADAPTATION_BASE,
@@ -19,8 +18,10 @@ import {
 } from "@/foundation/contracts/kernel/adaptation";
 import { useAdaptation } from "@/infrastructure/runtime/adaptation";
 import { useResponsive } from "@/infrastructure/runtime/responsive";
+import { AnatomySkeleton } from "@/components/primitives/feedback/skeleton";
 import { Box } from "@/components/primitives/layout/box";
 import { Button } from "@/components/primitives/inputs/button";
+import { Card } from "@/components/primitives/display/card";
 import { Flex } from "@/components/primitives/layout/flex";
 import { Stack } from "@/components/primitives/layout/stack";
 import { Text } from "@/components/primitives/display/typography";
@@ -80,10 +81,6 @@ function MobileBulkActions<T extends object>({
   bulkActions?: DataTablePatternProps<T>["bulkActions"];
   messages?: DataTablePatternProps<T>["messages"];
 }): React.ReactElement | null {
-  const setBulkRootRef = useCallback((node: HTMLDivElement | null) => {
-    if (node) stampDataPart(node, "mobile-bulk-actions");
-  }, []);
-
   if (!bulkActions || bulkActions.length === 0 || selectedKeys.length === 0) {
     return null;
   }
@@ -94,7 +91,7 @@ function MobileBulkActions<T extends object>({
 
   return (
     <Flex
-      ref={setBulkRootRef}
+      data-part="mobile-bulk-actions"
       align="center"
       justify="between"
       gap={12}
@@ -464,29 +461,49 @@ export function PatternDataTable<T extends object>(
               role="status"
               aria-label={messages?.loadingLabel ?? "Loading"}
             >
-              {/* Card-projection skeleton: two anonymous card anatomies mirror
-                  the loaded list's exact footprint (identity bar + summary
-                  fields + action bar), so the handoff to real cards does not
-                  jump. The accessible name stays on the host; the visible
-                  label is redundant noise next to the anatomy. */}
+              {/* Card-projection loading state: two card anatomies mirror the
+                  loaded list's exact footprint, and the shared renderer draws
+                  one bone per stamped part so it cannot drift from the cards.
+                  The accessible name stays on the host. */}
               <VisuallyHidden>
                 {messages?.loadingLabel ?? "Loading…"}
               </VisuallyHidden>
               {[0, 1].map((cardIndex) => (
-                <Box
-                  key={cardIndex}
-                  data-part="mobile-skeleton-card"
-                  data-skeleton-index={cardIndex}
-                  aria-hidden="true"
-                >
-                  <Box data-part="mobile-skeleton-title" />
-                  <Box data-part="mobile-skeleton-field" />
-                  <Box
-                    data-part="mobile-skeleton-field"
-                    data-short="true"
-                  />
-                  <Box data-part="mobile-skeleton-actions" />
-                </Box>
+                <AnatomySkeleton key={cardIndex} busy={false}>
+                  <Card variant="outlined">
+                    <Card.Body>
+                      <Stack spacing="md">
+                        <Box data-part="mobile-card-title">{"\u00a0"}</Box>
+                        <Flex
+                          data-part="mobile-card-summary-row"
+                          justify="between"
+                          align="start"
+                          gap={12}
+                        >
+                          <Box data-part="mobile-card-summary-label">
+                            {"\u00a0"}
+                          </Box>
+                          <Box data-part="mobile-card-summary-value">
+                            {"\u00a0"}
+                          </Box>
+                        </Flex>
+                        <Flex
+                          data-part="mobile-card-summary-row"
+                          justify="between"
+                          align="start"
+                          gap={12}
+                        >
+                          <Box data-part="mobile-card-summary-label">
+                            {"\u00a0"}
+                          </Box>
+                          <Box data-part="mobile-card-summary-value">
+                            {"\u00a0"}
+                          </Box>
+                        </Flex>
+                      </Stack>
+                    </Card.Body>
+                  </Card>
+                </AnatomySkeleton>
               ))}
             </Box>
           ) : data.length === 0 ? (

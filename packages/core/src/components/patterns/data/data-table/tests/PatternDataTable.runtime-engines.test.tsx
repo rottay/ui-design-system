@@ -81,6 +81,15 @@ function renderTable(
   return { onSelectionChange, onSortChange, onRowClick, onBulkExecute, onPageChange };
 }
 
+/** The column-size channels the modern engine sets inline for the skin to read. */
+function columnChannels(cell: HTMLElement | null) {
+  return {
+    inline: cell?.style.getPropertyValue('--ds-data-table-col-inline-size'),
+    min: cell?.style.getPropertyValue('--ds-data-table-col-min-inline-size'),
+    max: cell?.style.getPropertyValue('--ds-data-table-col-max-inline-size'),
+  };
+}
+
 describe('PatternDataTable runtime engines', () => {
   it('keeps modern body cells from collapsing visible data columns', () => {
     render(
@@ -109,12 +118,14 @@ describe('PatternDataTable runtime engines', () => {
 
     const firstDataCell = screen.getByText('Spring Summit').closest('td');
 
-    expect(firstDataCell).toHaveStyle({
-      width: '220px',
-      minWidth: '180px',
-      maxWidth: '320px',
+    // The column model is runtime data, so it travels as the channels the skin
+    // sizes the cell from -- never as an inline width.
+    expect(columnChannels(firstDataCell)).toEqual({
+      inline: '220px',
+      min: '180px',
+      max: '320px',
     });
-    expect(firstDataCell?.style.maxWidth).not.toBe('0px');
+    expect(firstDataCell?.style.width).toBe('');
   });
 
   it('uses minWidth as the modern fixed-table width when a resizable column has no explicit width', () => {
@@ -142,9 +153,9 @@ describe('PatternDataTable runtime engines', () => {
 
     const firstDataCell = screen.getByText('Spring Summit').closest('td');
 
-    expect(firstDataCell).toHaveStyle({
-      width: '260px',
-      minWidth: '260px',
+    expect(columnChannels(firstDataCell)).toMatchObject({
+      inline: '260px',
+      min: '260px',
     });
   });
 
@@ -164,6 +175,10 @@ describe('PatternDataTable runtime engines', () => {
         expect(document.querySelector('.ant-spin-spinning')).toBeTruthy();
       } else if (engine === 'modern') {
         expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
+        // The placeholder rows are derived from the table's own anatomy by the
+        // shared renderer, inside the real table, never drawn by this family.
+        expect(document.querySelectorAll('.ds-skeleton-anatomy-rows').length).toBeGreaterThan(0);
+        expect(document.querySelector('[data-part="table"]')).not.toBeNull();
       } else {
         expect(screen.getByRole('status', { name: /loading/i })).toBeInTheDocument();
       }

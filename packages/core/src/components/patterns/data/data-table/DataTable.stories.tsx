@@ -135,9 +135,9 @@ const managementTableTokens: TableTokenPreviewStyle = {
     "linear-gradient(180deg, #2f2b27 0%, #25221f 100%)",
   "--ds-table-header-bg-hover":
     "linear-gradient(180deg, #3a342e 0%, #2a2622 100%)",
-  "--ds-table-header-pinned-bg": "#292521",
+  "--ds-data-table-header-pinned-bg": "#292521",
   "--ds-table-header-color": "#fffaf0",
-  "--ds-table-header-font-family": "Georgia, 'Times New Roman', serif",
+  "--ds-data-table-header-font-family": "Georgia, 'Times New Roman', serif",
   "--ds-table-header-letter-spacing": "0.02em",
   "--ds-table-header-text-transform": "none",
   "--ds-table-row-bg-hover": "#f6f0e5",

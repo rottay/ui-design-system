@@ -167,6 +167,8 @@ export function DataTableMobileCards<T extends object>({
     );
   }
 
+  const isListPresentation = presentation === "list";
+
   const renderMeta = (row: T, index: number) =>
     metaColumns.length > 0 ? (
       <Flex gap={8} wrap="wrap" align="center" data-part="record-meta">
@@ -180,10 +182,10 @@ export function DataTableMobileCards<T extends object>({
 
   return (
     <Stack
-      spacing={presentation === "list" ? "xs" : "md"}
+      spacing={isListPresentation ? "xs" : "md"}
       className="ds-pattern-data-table ds-data-table--mobile"
-      data-part={presentation === "list" ? "record-list" : "record-cards"}
-      role={presentation === "list" ? "list" : undefined}
+      data-part={isListPresentation ? "record-list" : "record-cards"}
+      role={isListPresentation ? "list" : undefined}
     >
       {data.map((row, index) => {
         const rowKey = getRowKey(row, index);
@@ -251,7 +253,7 @@ export function DataTableMobileCards<T extends object>({
             </Box>
           ) : null;
 
-        if (presentation === "list") {
+        if (isListPresentation) {
           const openRow = onRowClick ? () => onRowClick(row, index) : undefined;
           return withSwipe(
             <Box

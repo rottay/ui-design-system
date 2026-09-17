@@ -359,6 +359,11 @@ describe("DataTable data-part contract (mobile branch)", () => {
     expect(loadingPanel.className).toContain("ds-pattern-data-table");
     expect(loadingPanel.className).toContain("ds-data-table--mobile");
     expect(loadingPanel.textContent).toContain("Loading");
+    // The card projection's loading state is one anatomy skeleton per card,
+    // derived from the card anatomy itself.
+    expect(
+      loadingPanel.querySelectorAll(".ds-skeleton-anatomy").length
+    ).toBeGreaterThan(0);
 
     rerender(
       <PatternDataTable<Row>

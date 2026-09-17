@@ -25,5 +25,5 @@
   background: var(--ds-table-action-bg, var(--ds-surface-card));
   border-inline-start: 1px solid
     var(--ds-table-action-border, var(--ds-table-row-border, transparent));
-  box-shadow: var(--ds-table-action-shadow, none);
+  box-shadow: var(--ds-data-table-action-shadow, none);
 }

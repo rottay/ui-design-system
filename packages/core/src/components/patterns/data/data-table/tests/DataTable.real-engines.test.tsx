@@ -82,18 +82,58 @@ function cssRules(css: string): Array<{ selector: string; body: string }> {
   return rules;
 }
 
-/** The specificity "b" column (classes + attributes + pseudo-classes) for one comma-free selector. */
-function bColumn(selector: string): number {
+/** Splits a selector list on the commas that sit OUTSIDE parentheses. */
+function selectorParts(selector: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const char of selector) {
+    if (char === '(') depth += 1;
+    else if (char === ')') depth -= 1;
+    if (char === ',' && depth === 0) {
+      parts.push(current);
+      current = '';
+      continue;
+    }
+    current += char;
+  }
+  parts.push(current);
+  return parts.map((part) => part.trim()).filter(Boolean);
+}
+
+/**
+ * `:is(a, b)` carries the specificity of its most specific argument and nothing
+ * of its own, so it is flattened to that argument before the columns are counted.
+ */
+function flattenIs(selector: string): string {
+  let out = selector;
+  for (let guard = 0; guard < 8; guard += 1) {
+    const next = out.replace(/:is\(([^()]*)\)/g, (_match, args: string) =>
+      selectorParts(args).sort((a, b) => rawBColumn(b) - rawBColumn(a))[0] ?? ''
+    );
+    if (next === out) break;
+    out = next;
+  }
+  return out;
+}
+
+/** The b column of a selector that holds no `:is()`. */
+function rawBColumn(selector: string): number {
   const classes = (selector.match(/\.[A-Za-z_-][\w-]*/g) || []).length;
   const attrs = (selector.match(/\[[^\]]*\]/g) || []).length;
   const pseudos = (selector.match(/(?<!:):[A-Za-z-]+/g) || []).length;
-  const notArgs = (selector.match(/:not\(([^)]*)\)/g) || []).reduce((n, frag) => n + bColumn(frag.slice(5, -1)), 0);
+  const notArgs = (selector.match(/:not\(([^)]*)\)/g) || []).reduce((n, frag) => n + rawBColumn(frag.slice(5, -1)), 0);
   return classes + attrs + pseudos + notArgs;
+}
+
+/** The specificity "b" column (classes + attributes + pseudo-classes) for one comma-free selector. */
+function bColumn(selector: string): number {
+  return rawBColumn(flattenIs(selector));
 }
 
 /** Max b-column across the comma-separated parts of a selector list. */
 function maxB(selector: string): number {
-  return Math.max(...selector.split(',').map((s) => bColumn(s.trim())));
+  return Math.max(...selectorParts(selector).map((s) => bColumn(s)));
 }
 
 /** True if the declaration block sets a border COLOR (paints), not a `none`/`0` reset. */
@@ -124,8 +164,8 @@ describe.each(['modern', 'rustic', 'mobile'] as const)('DataTable %s skin — st
     const offenders: string[] = [];
     for (const { selector, body } of rules) {
       if (!paintsBorder(body)) continue;
-      for (const part of selector.split(',')) {
-        if (bColumn(part) < 4) offenders.push(part.trim());
+      for (const part of selectorParts(selector)) {
+        if (bColumn(part) < 4) offenders.push(part);
       }
     }
     expect(
@@ -152,7 +192,9 @@ describe.each(['modern', 'rustic', 'mobile'] as const)('DataTable %s skin — st
 describe('DataTable modern skin — engine-specific rules', () => {
   it('replaces both imperative row-hover handler pairs with ONE hover rule, gated on hoverable and not-selected', () => {
     expect(
-      /\[data-part='body-row'\]\[data-hoverable='true'\]:not\(\s*\[data-selected='true'\]\s*\):hover/.test(MODERN_CONTRACT_CSS),
+      /\[data-part='body-row'\]\[data-hoverable='true'\]:not\(\s*\[data-selected='true'\]\s*\):is\(\[data-state~='hovered'\], :hover\)/.test(
+        MODERN_CONTRACT_CSS
+      ),
       'the modern body-row hover rule (hoverable && !selected) is missing'
     ).toBe(true);
   });
@@ -258,9 +300,11 @@ describe('DataTable engines — embedded CSS recovery contract', () => {
   const modernSrc = engineSrc('engines/modern/index.tsx');
   const rusticSrc = engineSrc('engines/rustic/index.tsx');
 
-  it('moves modern inline-edit/shimmer and dirty-cell rules to the canonical skin', () => {
+  it('moves modern inline-edit and dirty-cell rules to the canonical skin', () => {
     expect(INTERACTION_CSS).toContain('@keyframes ds-inline-edit-enter');
-    expect(INTERACTION_CSS).toContain('@keyframes ds-data-table-shimmer');
+    // The extracted shimmer keyframe is retired: loading is drawn by the shared
+    // anatomy renderer, so no skeleton paint may come back into this skin.
+    expect(INTERACTION_CSS).not.toContain('@keyframes ds-data-table-shimmer');
     expect(INTERACTION_CONTRACT_CSS).toContain("td[data-cell-dirty='true']::before");
     expect(INTERACTION_CSS).toContain('background: var(--ds-table-resize-bg-hover, var(--ds-color-primary))');
     expect(modernSrc).not.toContain('<style>');

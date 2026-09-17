@@ -153,7 +153,7 @@ test('legacy compatibility is inert while functional affordances remain availabl
   // border-collapse -- asserting the ring there passed on a rule that painted
   // nothing.
   const focusedRowSelector =
-    '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible';
+    '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible)';
   const focusedRowRule = soleRuleBody(tableInteractions, focusedRowSelector, 'focused row');
   assert.match(focusedRowRule, /background-color:\s*var\(\s*--ds-table-row-bg-selected/);
   assert.match(focusedRowRule, /outline:\s*none;/);

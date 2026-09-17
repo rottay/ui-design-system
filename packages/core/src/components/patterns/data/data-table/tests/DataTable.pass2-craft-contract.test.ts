@@ -51,13 +51,13 @@ describe("DataTable pass 2 craft contract", () => {
 
   it("keeps premium interaction paint configurable through table tokens", () => {
     for (const token of [
-      "--ds-table-sort-bg-active",
-      "--ds-table-sort-border-active",
-      "--ds-table-drop-indicator-border",
-      "--ds-table-header-pinned-bg",
-      "--ds-table-pinned-cell-bg-selected",
-      "--ds-table-pinned-cell-bg-hover",
-      "--ds-table-header-focus-shadow",
+      "--ds-data-table-sort-bg-active",
+      "--ds-data-table-sort-border-active",
+      "--ds-data-table-drop-indicator-border",
+      "--ds-data-table-header-pinned-bg",
+      "--ds-data-table-pinned-cell-bg-selected",
+      "--ds-data-table-pinned-cell-bg-hover",
+      "--ds-data-table-header-focus-shadow",
     ]) {
       expect(modernSkin, `missing ${token}`).toContain(token);
     }

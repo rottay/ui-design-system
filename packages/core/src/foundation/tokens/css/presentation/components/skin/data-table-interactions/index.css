@@ -6,14 +6,13 @@
  * They deliberately keep their original specificity and source order. The
  * zero-weight `:where(.ds-pattern-data-table)` root contains their formerly
  * mount-local reach without changing selector weight. Frame bodies remain
- * exact. The former generic `ds-shimmer` name is the sole keyframe rename:
- * `ds-data-table-shimmer` prevents a live same-name/different-body collision
- * with ShimmerText's global producer.
+ * exact. The extracted shimmer keyframe was retired with the hand-made
+ * skeleton it painted; loading is drawn by the shared anatomy renderer.
  */
 
 @media (hover: hover) {
   .ds-engine-modern:where(.ds-pattern-data-table)
-    .ds-resize-handle:hover
+    .ds-resize-handle:is([data-state~="hovered"], :hover)
     .ds-resize-handle__bar {
     width: var(--ds-table-resize-bar-width-active, 0.1875rem);
     height: var(--ds-table-resize-bar-height-active, 74%);
@@ -24,7 +23,7 @@
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  .ds-resize-handle:focus-visible
+  .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)
   .ds-resize-handle__bar {
   width: var(--ds-table-resize-bar-width-active, 0.1875rem);
   height: var(--ds-table-resize-bar-height-active, 74%);
@@ -34,14 +33,15 @@
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  .ds-resize-handle:focus-visible {
+  .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 @media (hover: hover) {
-  .ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    th[data-col-key]:is([data-state~="hovered"], :hover) {
     background-color: var(
       --ds-table-header-bg-hover,
       color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
@@ -50,14 +50,17 @@
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  th[data-col-key][data-sortable="true"]:focus-visible {
+  th[data-col-key][data-sortable="true"]:is(
+    [data-state~="focus-visible"],
+    :focus-visible
+  ) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
-  tr[data-row-index]:focus-visible {
+  tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible) {
   outline: none;
   background-color: var(
     --ds-table-row-bg-selected,
@@ -68,7 +71,7 @@
    under border-collapse (same td rule the modern skin and the primitive
    table.css selection keyline follow). */
 .ds-engine-modern:where(.ds-pattern-data-table)
-  tr[data-row-index]:focus-visible
+  tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible)
   > td {
   box-shadow: inset 0 0 0 1px
     color-mix(in srgb, var(--ds-color-primary) 48%, transparent);
@@ -85,7 +88,8 @@
 }
 
 @media (hover: hover) {
-  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    td[data-editable="true"]:is([data-state~="hovered"], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
     box-shadow: inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
@@ -135,25 +139,6 @@
   pointer-events: none;
 }
 
-@keyframes ds-data-table-shimmer {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-@keyframes ds-data-table-skeleton-scan {
-  from {
-    background-position: 100% 50%;
-  }
-  to {
-    background-position: -100% 50%;
-  }
-}
-
 @keyframes ds-spin {
   to {
     transform: rotate(360deg);
@@ -173,12 +158,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"],
-  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"],
-  .ds-engine-modern:where(.ds-pattern-data-table) .ds-skeleton-row,
-  .ds-engine-modern:where(.ds-pattern-data-table)
-    [data-part="skeleton-header-col"],
-  .ds-engine-modern:where(.ds-pattern-data-table)
-    [data-part="skeleton-cell"] {
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"] {
     animation: none;
     transition: none;
   }
@@ -186,21 +166,75 @@
 
 @media (forced-colors: active) {
   .ds-engine-modern:where(.ds-pattern-data-table)
-    .ds-resize-handle:hover
+    .ds-resize-handle:is([data-state~="hovered"], :hover)
     .ds-resize-handle__bar,
   .ds-engine-modern:where(.ds-pattern-data-table)
-    .ds-resize-handle:focus-visible
+    .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)
     .ds-resize-handle__bar {
     background: Highlight;
     box-shadow: none;
   }
 
   .ds-engine-modern:where(.ds-pattern-data-table)
-    th[data-col-key][data-sortable="true"]:focus-visible,
+    th[data-col-key][data-sortable="true"]:is(
+      [data-state~="focus-visible"],
+      :focus-visible
+    ),
   .ds-engine-modern:where(.ds-pattern-data-table)
-    tr[data-row-index]:focus-visible {
+    tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: -2px;
     box-shadow: none;
   }
+}
+
+/* ---------------------------------------------------------------------------
+ * RUNTIME GEOMETRY. The caller's column model, bounded height and virtual
+ * window are measured at runtime, so only their VALUES travel inline, as the
+ * `--ds-data-table-*` properties declared below. The rules that consume them
+ * live here, with the rest of the recovered per-instance geometry, so the
+ * engine skin's channel set stays exactly what the family deriver produces.
+ * The two pinned insets are consumed by the engine skin's sticky rules, which
+ * is why their resting value is declared here rather than beside them.
+ * ------------------------------------------------------------------------ */
+
+.ds-engine-modern:where(.ds-pattern-data-table)[data-part="root"] {
+  --ds-data-table-col-inline-size: auto;
+  --ds-data-table-col-min-inline-size: auto;
+  --ds-data-table-col-max-inline-size: none;
+  --ds-data-table-actions-col-inline-size: auto;
+  --ds-data-table-scroll-max-block-size: none;
+  --ds-data-table-row-block-size: auto;
+  --ds-data-table-virtual-spacer-block-size: 0;
+  --ds-data-table-pinned-inset-start: 0px;
+  --ds-data-table-pinned-inset-end: 0px;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="header-cell"],
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="data-cell"] {
+  inline-size: var(--ds-data-table-col-inline-size, auto);
+  min-inline-size: var(--ds-data-table-col-min-inline-size, auto);
+  max-inline-size: var(--ds-data-table-col-max-inline-size, none);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  [data-part="header-cell"][data-cell-kind="actions"],
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="actions-cell"] {
+  inline-size: var(--ds-data-table-actions-col-inline-size, auto);
+  min-inline-size: var(--ds-data-table-actions-col-inline-size, auto);
+  max-inline-size: none;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  [data-part="scroll"][data-bounded="true"] {
+  max-block-size: var(--ds-data-table-scroll-max-block-size, none);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table)
+  [data-part="body-row"][data-virtualized="true"] {
+  block-size: var(--ds-data-table-row-block-size, auto);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) [data-part="virtual-spacer"] {
+  block-size: var(--ds-data-table-virtual-spacer-block-size, 0);
 }

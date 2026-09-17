@@ -28,12 +28,21 @@ const readEngineSkin = (family: string) =>
 // below -- this test file's own last touch predates it, a97ddd736 2026-08-03).
 // Verified against the tree today with `shasum -a 256` before writing.
 const SKIN_HASHES = {
-  // C0 re-pin: a3ba2e479 folded every skin family into `<family>/index.css` and
-  // rewrote one header line ('WO-SKIN-06' -> 'skin ownership migration'). That is
-  // the WHOLE diff against the previous pin -- no rule, selector or paint property
-  // moved -- so paintCount and every ruleContract below are unaffected and only
-  // this byte-exact hash changes. Verified with `shasum -a 256` against the tree.
-  'data-table-interactions': '22634a0c6f8a2fd9b50261a2bb35f56b474a299a11acd97782e0b17e12a1cbbd',
+  // B4 re-pin: the wave-8 data-table family cut rewrote this file -- the hand-made
+  // shimmer keyframe retired with the skeleton it painted (loading is now the
+  // shared anatomy renderer), every state selector became the paired
+  // `:is([data-state~="..."], :...)` form, and the per-instance runtime geometry
+  // recovered from the inline `<style>` producers landed at the foot of the file
+  // as element-scoped `--ds-data-table-*` properties. Superseded hash, kept as
+  // the record of the pre-cut state:
+  // 22634a0c6f8a2fd9b50261a2bb35f56b474a299a11acd97782e0b17e12a1cbbd. The same
+  // cut then added the two pinned-inset properties to that runtime-geometry
+  // block, superseding the intermediate
+  // c93df7978044b24eb994443df4e7a8e766b44edef151103eb7b9eedf0dbbda99. Every
+  // consequence is re-pinned below: paintCount, the paired selector contracts,
+  // the keyframe roster and the animation-name roster. Verified with
+  // `shasum -a 256` against the tree today.
+  'data-table-interactions': '0964c43860b077c8cbf49834446814f7814c9d7fb9eb17cf4721de309e4f2321',
   // CI-1 re-pin: same commit as the paint-count and rule-content re-pins
   // below (4afa74b353, 2026-08-11) -- the file's whole content changed when
   // the Input placeholder rule and its header comment moved out. Verified
@@ -222,7 +231,12 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       navigation: paintCount(SKINS.navigation),
       formPlaceholders: paintCount(SKINS.formPlaceholders),
     }).toEqual({
-      dataTable: 34,
+      // B4 re-pin: 34 -> 32. The retired shimmer skeleton took the only two
+      // `background-position` declarations in this file with it (the sweep's
+      // 0%/100% and 50% stops); the census is otherwise declaration-identical,
+      // property by property, against the pre-cut file. Nothing was relocated,
+      // so there is no new owner to re-point this count at.
+      dataTable: 32,
       primitiveMotion: 8,
       toast: 20,
       // L6 / STOP-3: 18 -> 0. The decomposition was measured before the move and
@@ -278,7 +292,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     expect(
       ruleContractInMedia(
         SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:hover .ds-resize-handle__bar',
+        '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:is([data-state~="hovered"], :hover) .ds-resize-handle__bar',
         '(hover: hover)',
       )
     ).toEqual({
@@ -288,7 +302,10 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       'box-shadow': '0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 9%, transparent)',
     });
     expect(
-      ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:focus-visible')
+      ruleContract(
+        SKINS.dataTable,
+        '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible)'
+      )
     ).toEqual({
       outline: '2px solid var(--ds-color-primary)',
       'outline-offset': '-2px',
@@ -297,7 +314,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     expect(
       ruleContractInMedia(
         SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover',
+        '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:is([data-state~="hovered"], :hover)',
         '(hover: hover)',
       )
     ).toEqual({
@@ -307,7 +324,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     expect(
       ruleContract(
         SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key][data-sortable="true"]:focus-visible'
+        '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key][data-sortable="true"]:is( [data-state~="focus-visible"], :focus-visible )'
       )
     ).toEqual({
       outline: '2px solid var(--ds-color-primary)',
@@ -324,7 +341,10 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     // not relocated onto THIS selector: there is nothing to re-point this
     // particular contract at without asserting a different selector.
     expect(
-      ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible')
+      ruleContract(
+        SKINS.dataTable,
+        '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:is([data-state~="focus-visible"], :focus-visible)'
+      )
     ).toEqual({
       outline: 'none',
       'background-color':
@@ -340,13 +360,13 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     expect(
       ruleContracts(
         SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover::after'
+        '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:is([data-state~="hovered"], :hover)::after'
       )
     ).toHaveLength(0);
     expect(
       ruleContractInMedia(
         SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover',
+        '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:is([data-state~="hovered"], :hover)',
         '(hover: hover)',
       )
     ).toEqual({
@@ -383,14 +403,15 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
       'pointer-events': 'none',
     });
 
+    // B4 re-pin: `ds-data-table-shimmer` left this roster because the frame it
+    // named was retired with the hand-made skeleton it painted -- loading is
+    // drawn by the shared anatomy renderer, which owns its own motion. It was
+    // removed, not relocated, so there is no new owner to re-point it at; the
+    // three frames that survive are still pinned body-for-body below.
     expectKeyframeContracts(SKINS.dataTable, {
       'ds-inline-edit-enter': {
         from: { transform: 'scale(0.985)', opacity: '0.78' },
         to: { transform: 'scale(1)', opacity: '1' },
-      },
-      'ds-data-table-shimmer': {
-        '0%, 100%': { opacity: '1' },
-        '50%': { opacity: '0.35' },
       },
       'ds-spin': {
         to: { transform: 'rotate(360deg)' },
@@ -801,10 +822,14 @@ describe('skin ownership migration embedded CSS recovery — producer and hook c
     // them, the names]. A keyframe may be defined by a shared owner, but it
     // must always stay reachable from a real consumer.
     const families = [
+      // B4 re-pin: same retirement as the keyframe roster above -- the modern
+      // engine no longer plays `ds-data-table-shimmer` and the stylesheet no
+      // longer defines it, so naming it here would assert a frame that exists
+      // on neither side.
       [
         `${SKIN_DIR}/data-table-interactions/index.css`,
         'components/patterns/data/data-table/engines/modern/index.tsx',
-        ['ds-inline-edit-enter', 'ds-data-table-shimmer'],
+        ['ds-inline-edit-enter'],
       ],
       [
         `${SKIN_DIR}/data-table-interactions/index.css`,

@@ -98,6 +98,7 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'list-table': 'pass',
   'main-row': 'pass',
   'mobile-actions': 'pass',
+  'mobile-bulk-actions': 'pass',
   'mobile-card-actions': 'pass',
   'mobile-card-custom': 'pass',
   'mobile-card-primary': 'pass',

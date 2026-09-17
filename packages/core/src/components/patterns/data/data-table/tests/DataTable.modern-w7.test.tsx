@@ -30,6 +30,13 @@ const modernSkin = readFileSync(
   ),
   'utf8'
 );
+const interactionsSkin = readFileSync(
+  join(
+    here,
+    '../../../../../foundation/tokens/css/presentation/components/skin/data-table-interactions/index.css'
+  ),
+  'utf8'
+);
 
 type Row = { id: string; name: string; venue: string; attendance: number };
 
@@ -48,6 +55,55 @@ function headerCell(key: string): HTMLElement {
   const cell = document.querySelector(`th[data-col-key="${key}"]`);
   if (!cell) throw new Error(`missing header cell for column ${key}`);
   return cell as HTMLElement;
+}
+
+/** The inline-size channel the engine hands the skin for one cell's column. */
+function columnInlineSize(cell: HTMLElement): string {
+  return cell.style.getPropertyValue('--ds-data-table-col-inline-size');
+}
+
+/**
+ * The sticky offset channel the engine hands the skin for one pinned cell. The
+ * engine never writes `inset-inline-*` itself: it measures the preceding pinned
+ * columns and stamps the result here, and the skin rule turns it into the inset.
+ */
+function pinnedInset(cell: HTMLElement, side: 'start' | 'end'): string {
+  return cell.style.getPropertyValue(`--ds-data-table-pinned-inset-${side}`);
+}
+
+/**
+ * Loads the skin's own pinned-inset rules, verbatim, so the computed inset can
+ * be read back instead of inferred from the channel the engine stamped.
+ */
+function loadPinnedInsetSkinRules(): void {
+  const rules = modernSkin.match(
+    /\.ds-pattern-data-table\.ds-engine-modern[^{}]*\[data-pin-side="(?:left|right)"\]\s*\{[^{}]*inset-inline-(?:start|end): var\(--ds-data-table-pinned-inset-(?:start|end), 0px\);[^{}]*\}/g
+  );
+  if (!rules || rules.length !== 2) {
+    throw new Error(
+      `expected 2 pinned-inset skin rules, found ${rules?.length ?? 0}`
+    );
+  }
+  const style = document.createElement('style');
+  style.textContent = rules.join('\n');
+  document.head.appendChild(style);
+}
+
+/**
+ * Loads the resting declaration of the two pinned-inset channels, verbatim from
+ * the runtime-geometry block that produces them, so the unstamped cascade can
+ * be read back instead of resting on the skin rule's own `0px` fallback.
+ */
+function loadPinnedInsetRestingRule(): void {
+  const rule = interactionsSkin.match(
+    /\.ds-engine-modern:where\(\.ds-pattern-data-table\)\[data-part="root"\]\s*\{[^{}]*--ds-data-table-pinned-inset-start: 0px;[^{}]*--ds-data-table-pinned-inset-end: 0px;[^{}]*\}/
+  );
+  if (!rule) {
+    throw new Error('missing pinned-inset resting declaration on [data-part="root"]');
+  }
+  const style = document.createElement('style');
+  style.textContent = rule[0];
+  document.head.appendChild(style);
 }
 
 function bodyCell(rowText: string, colKey: string): HTMLElement {
@@ -77,17 +133,22 @@ describe('W7/D3 — pinned columns resolve concrete widths (no gap/overlap)', ()
 
     const first = headerCell('name');
     const second = headerCell('venue');
-    expect(first.style.width).toBe('150px');
-    expect(second.style.width).toBe('150px');
+    expect(columnInlineSize(first)).toBe('150px');
+    expect(columnInlineSize(second)).toBe('150px');
     // First pinned column sticks at 0; the second at exactly the first's
     // resolved width — the same 150px stamped on the cell, so no drift.
-    expect(first.style.insetInlineStart).toBe('0');
-    expect(second.style.insetInlineStart).toBe('calc(150px)');
+    expect(pinnedInset(first, 'start')).toBe('0px');
+    expect(pinnedInset(second, 'start')).toBe('calc(150px)');
 
     // Body cells carry the same concrete width as their header.
     const firstBody = bodyCell('Spring Summit', 'name');
-    expect(firstBody.style.width).toBe('150px');
-    expect(firstBody.style.insetInlineStart).toBe('0');
+    expect(columnInlineSize(firstBody)).toBe('150px');
+    expect(pinnedInset(firstBody, 'start')).toBe('0px');
+
+    // The channel IS the inset: under the skin's own rule the cell computes to
+    // exactly the offset the engine measured.
+    loadPinnedInsetSkinRules();
+    expect(getComputedStyle(second).insetInlineStart).toBe('calc(150px)');
   });
 
   it('sums declared widths for later pinned columns', () => {
@@ -104,7 +165,7 @@ describe('W7/D3 — pinned columns resolve concrete widths (no gap/overlap)', ()
       />
     );
 
-    expect(headerCell('venue').style.insetInlineStart).toBe('calc(200px)');
+    expect(pinnedInset(headerCell('venue'), 'start')).toBe('calc(200px)');
   });
 
   it('measures right pins against the fixed-width actions column', () => {
@@ -118,8 +179,8 @@ describe('W7/D3 — pinned columns resolve concrete widths (no gap/overlap)', ()
       />
     );
 
-    expect(headerCell('attendance').style.insetInlineEnd).toBe('calc(120px)');
-    expect(headerCell('attendance').style.width).toBe('150px');
+    expect(pinnedInset(headerCell('attendance'), 'end')).toBe('calc(120px)');
+    expect(columnInlineSize(headerCell('attendance'))).toBe('150px');
   });
 
   it('sticks a right-pinned column at 0 when there is no actions column', () => {
@@ -132,7 +193,7 @@ describe('W7/D3 — pinned columns resolve concrete widths (no gap/overlap)', ()
       />
     );
 
-    expect(headerCell('attendance').style.insetInlineEnd).toBe('0');
+    expect(pinnedInset(headerCell('attendance'), 'end')).toBe('0px');
   });
 
   it('leaves width-less non-pinned columns on content sizing and unpinned tables on auto layout', () => {
@@ -142,7 +203,34 @@ describe('W7/D3 — pinned columns resolve concrete widths (no gap/overlap)', ()
 
     const table = document.querySelector('[data-part="table"]');
     expect(table?.getAttribute('data-has-pinned')).toBe('false');
-    expect(headerCell('name').style.width).toBe('');
+    expect(columnInlineSize(headerCell('name'))).toBe('');
+  });
+
+  it('resolves an unstamped pinned cell through the root resting declaration', () => {
+    render(
+      <ModernDataTable<Row>
+        data={ROWS}
+        rowKey="id"
+        columns={BASE_COLUMNS}
+        pinnedColumns={{ left: ['name', 'venue'], right: [] }}
+      />
+    );
+
+    loadPinnedInsetRestingRule();
+    loadPinnedInsetSkinRules();
+
+    const root = document.querySelector<HTMLElement>('[data-part="root"]');
+    if (!root) throw new Error('missing data-table root');
+    const cell = headerCell('venue');
+    // Drop the measured stamp: what is left is the resting cascade alone.
+    cell.style.removeProperty('--ds-data-table-pinned-inset-start');
+    expect(pinnedInset(cell, 'start')).toBe('');
+    expect(getComputedStyle(cell).insetInlineStart).toBe('0px');
+
+    // The resting value is a real producer, not the rule's fallback: setting the
+    // channel at the root moves the unstamped cell with it.
+    root.style.setProperty('--ds-data-table-pinned-inset-start', '24px');
+    expect(getComputedStyle(cell).insetInlineStart).toBe('24px');
   });
 
   it('backs the data-has-pinned hook with a fixed-layout skin rule', () => {
