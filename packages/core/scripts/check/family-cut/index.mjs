@@ -1150,10 +1150,11 @@ export function measureFamily(resolved, { producers } = {}) {
   const vocabularies = [...new Set(ownClassTokens.map((token) => token.slice(0, token.indexOf('-'))))].sort();
   const legacyNamespaceClasses = ownClassTokens.filter((token) => !token.startsWith('ds-'));
 
-  const readWithoutProducer = classifyReadWithoutProducer(
-    resolved.skins.filter((file) => file.includes(MODERN_SKIN_SEGMENT)),
-    producerSet,
-  );
+  /* The whole Modern-scope skin corpus `resolveFamily` admitted -- engine skins
+   * AND presentation-tier skins -- exactly the corpus every other arm reads. A
+   * narrower filter here understated the debt of any family whose channels are
+   * read from a presentation skin (data-table read 1 of its 4). */
+  const readWithoutProducer = classifyReadWithoutProducer(resolved.skins, producerSet);
   const readNames = new Set(readWithoutProducer.denominator);
 
   const partsStampedNotConsumed = [...stampedParts].filter((part) => !consumedParts.has(part)).sort();

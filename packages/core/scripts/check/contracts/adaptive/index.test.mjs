@@ -28,9 +28,9 @@ async function put(root, relative, source) {
   return absolute;
 }
 
-async function fixtureWorkspace() {
+async function fixtureWorkspace(designSystemDirectory = 'ui-design-system') {
   const workspaceRoot = await mkdtemp(path.join(tmpdir(), 'rottay-cra11-'));
-  const designSystemRoot = path.join(workspaceRoot, 'ui-design-system');
+  const designSystemRoot = path.join(workspaceRoot, designSystemDirectory);
   const coreRoot = path.join(designSystemRoot, 'packages/core');
   for (const root of [
     coreRoot,
@@ -149,8 +149,34 @@ async function fixtureWorkspace() {
     build();
   `);
 
+  await put(designSystemRoot, 'package.json', `${JSON.stringify({
+    name: '@rottay/design-system',
+    repository: { type: 'git', url: 'git+https://github.com/rottay/ui-design-system.git' },
+  }, null, 2)}\n`);
+
   return { workspaceRoot, designSystemRoot, coreRoot, platform };
 }
+
+test('census ids are anchored logically: renaming the checkout directory cannot move one byte', async () => {
+  // The census used to stamp `path.relative(workspaceRoot, fileName)`, so ~800
+  // ids carried the physical folder name and a regeneration from a worktree
+  // rewrote the whole artifact. The id is the REPOSITORY plus the path inside
+  // it, and the repository's name is declared by its own manifest.
+  const canonical = await fixtureWorkspace('ui-design-system');
+  const renamed = await fixtureWorkspace('r4-recon-opus');
+  try {
+    const first = serializeCra11Census(await buildCra11Census(canonical));
+    const second = serializeCra11Census(await buildCra11Census(renamed));
+
+    assert.notEqual(canonical.designSystemRoot, renamed.designSystemRoot);
+    assert.equal(second, first, 'the artifact must be byte-identical from any checkout name');
+    assert.ok(first.includes('"ui-design-system/packages/core/src/'), 'ids stay anchored on the logical repository');
+    assert.equal(first.includes('r4-recon-opus'), false, 'no physical directory name may reach an id');
+  } finally {
+    await rm(canonical.workspaceRoot, { recursive: true, force: true });
+    await rm(renamed.workspaceRoot, { recursive: true, force: true });
+  }
+});
 
 test('StringLiteral offsets exclude quotes exactly', () => {
   const source = ts.createSourceFile('fixture.ts', `const value = { 'mobile-field': true };`, ts.ScriptTarget.Latest, true);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "law": "a family under the cut contract holds every BLOCKING arm of scripts/check/family-cut and never grows a pinned counter",
-  "policy": "decrease-only: a pinned counter may shrink -- and must then be lowered here -- but may never grow",
+  "law": "a family under the cut contract holds every BLOCKING arm of scripts/check/family-cut and never grows a pinned counter. A pinned counter is only ever the gate's own measurement: re-pins are taken from the gate's output, never hand-computed",
+  "policy": "decrease-only: a pinned counter may shrink -- and must then be lowered here -- but may never grow. The one sanctioned exception is an INSTRUMENT-COVERAGE move: when the gate itself starts measuring a corpus it did not scan before, the affected rows are re-pinned to what the gate then measures, the growth is recorded in each row's cutNote as newly visible debt, and no ceiling is raised for source that changed.",
   "roster": "a family enters this file when its cut work order opens and leaves the debt columns at 0 when the cut closes; `cut` names the owning work order",
   "families": {
     "button": {
@@ -10,12 +10,12 @@
       "denominators": {
         "skinFiles": 3,
         "sourceFiles": 6,
-        "channelsRead": 252,
+        "channelsRead": 258,
         "classTokens": 13,
         "partsStamped": 12,
         "partsConsumed": 11
       },
-      "readWithoutProducer": 0,
+      "readWithoutProducer": 1,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 1,
@@ -24,14 +24,14 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-01: the 32 shadow channels and the label weight/family are emitted by derivation/chrome/button; the press recipe timing is stamped onto the button channels; one `ds-` vocabulary. One pin stays above 0 for adjudication, never by a fabricated reader: partsStampedNotConsumed=1 is `trigger`, the default root part a composite may rename (P-79), so the skin anchors on `[data-variant]` and the part is read by the anatomy skeleton renderer instead. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
+      "cutNote": "WO-FAM-01: the 32 shadow channels and the label weight/family are emitted by derivation/chrome/button; the press recipe timing is stamped onto the button channels; one `ds-` vocabulary. One pin stays above 0 for adjudication, never by a fabricated reader: partsStampedNotConsumed=1 is `trigger`, the default root part a composite may rename (P-79), so the skin anchors on `[data-variant]` and the part is read by the anatomy skeleton renderer instead. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 252 -> 258, readWithoutProducer 0 -> 1. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "checkbox": {
       "cut": "WO-FAM-01",
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 80,
+        "channelsRead": 82,
         "classTokens": 3,
         "partsStamped": 7,
         "partsConsumed": 7
@@ -45,14 +45,14 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/checkbox, structural constants by presentation/components/checkbox; state decided by the interaction kernel on the root; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/checkbox, structural constants by presentation/components/checkbox; state decided by the interaction kernel on the root; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 80 -> 82. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "radio": {
       "cut": "WO-FAM-01",
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 68,
+        "channelsRead": 74,
         "classTokens": 4,
         "partsStamped": 8,
         "partsConsumed": 8
@@ -66,7 +66,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/radio, structural constants by presentation/components/radio; state decided by the interaction kernel on the root and on each Radio.Group segment; the segment colour resolves from data-color, never from inline channels; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
+      "cutNote": "WO-FAM-01: every channel the Modern skin reads is written -- decision relations by derivation/chrome/radio, structural constants by presentation/components/radio; state decided by the interaction kernel on the root and on each Radio.Group segment; the segment colour resolves from data-color, never from inline channels; one ds- vocabulary. WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 68 -> 74. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "toggle": {
       "cut": "WO-FAM-01",
@@ -115,12 +115,12 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 10,
-        "channelsRead": 169,
+        "channelsRead": 197,
         "classTokens": 7,
         "partsStamped": 14,
         "partsConsumed": 15
       },
-      "readWithoutProducer": 0,
+      "readWithoutProducer": 1,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -129,7 +129,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-02: every channel the Modern skin reads is written -- field relations by derivation/chrome/input, structural constants by presentation/components/input; clear, search and reveal actions decide state through the field-action kernel; one ds-input vocabulary (the rottay-input classes and the comment-only input-residual skin are gone). One pin stays above 0 for adjudication, never by a fabricated stamp: partsConsumedNotStamped=1 is `trigger`, the Select trigger part the input-compounds skin composes inside a compact Input.Group (select is WO-FAM-03's family). WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
+      "cutNote": "WO-FAM-02: every channel the Modern skin reads is written -- field relations by derivation/chrome/input, structural constants by presentation/components/input; clear, search and reveal actions decide state through the field-action kernel; one ds-input vocabulary (the rottay-input classes and the comment-only input-residual skin are gone). One pin stays above 0 for adjudication, never by a fabricated stamp: partsConsumedNotStamped=1 is `trigger`, the Select trigger part the input-compounds skin composes inside a compact Input.Group (select is WO-FAM-03's family). WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 169 -> 197, readWithoutProducer 0 -> 1. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "textarea": {
       "cut": "WO-FAM-02",
@@ -285,7 +285,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 221,
+        "channelsRead": 222,
         "classTokens": 4,
         "partsStamped": 37,
         "partsConsumed": 37
@@ -299,7 +299,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-03: every channel the Modern skin reads is written -- field and dropdown relations by derivation/chrome/select, structural constants by presentation/components/select; keyboard and type-ahead come from runtime/collection/listbox, the dropdown from useFieldOverlay, and clear, tag-remove and search decide state through the interaction and field-action kernels; one ds-select vocabulary (the rottay-select option and optgroup compounds answer to ds-select-option/ds-select-optgroup). WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out."
+      "cutNote": "WO-FAM-03: every channel the Modern skin reads is written -- field and dropdown relations by derivation/chrome/select, structural constants by presentation/components/select; keyboard and type-ahead come from runtime/collection/listbox, the dropdown from useFieldOverlay, and clear, tag-remove and search decide state through the interaction and field-action kernels; one ds-select vocabulary (the rottay-select option and optgroup compounds answer to ds-select-option/ds-select-optgroup). WO-DER-06 (2d-i): fanOutUnreached 1 -> 0 -- recipe-profile is `data-only`: the selection reaches its families as runtime data, the row declares no channel, and fanOutFor no longer counts it as cascade fan-out. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 221 -> 222. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "auto-complete": {
       "cut": "WO-FAM-03",
@@ -482,7 +482,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 8,
-        "channelsRead": 145,
+        "channelsRead": 147,
         "classTokens": 6,
         "partsStamped": 13,
         "partsConsumed": 14
@@ -496,14 +496,14 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-04: every channel the Modern skin reads is written -- panel, scrim, header/footer and action relations by derivation/chrome/modal, structural constants by presentation/components/modal; one ds-modal vocabulary (header/body/footer/close compounds answer to ds-modal-*); the native dialog is promoted by the shared top-layer dialog kernel, the close and footer actions decide state through the interaction kernel; adapt/data-posture through useAdaptation with the overlay adaptation (phone -> fullscreen, 100dvh)."
+      "cutNote": "WO-FAM-04: every channel the Modern skin reads is written -- panel, scrim, header/footer and action relations by derivation/chrome/modal, structural constants by presentation/components/modal; one ds-modal vocabulary (header/body/footer/close compounds answer to ds-modal-*); the native dialog is promoted by the shared top-layer dialog kernel, the close and footer actions decide state through the interaction kernel; adapt/data-posture through useAdaptation with the overlay adaptation (phone -> fullscreen, 100dvh). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 145 -> 147. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "drawer": {
       "cut": "WO-FAM-04",
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 96,
+        "channelsRead": 103,
         "classTokens": 8,
         "partsStamped": 9,
         "partsConsumed": 9
@@ -517,7 +517,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-04: panel, scrim and section relations by derivation/chrome/drawer, extents and motion defaults by presentation/components/drawer; one ds-drawer vocabulary (ds-drawer-backdrop, ds-drawer-trap, ds-drawer-* compounds); FocusTrap answers to ds-focus-trap; caller style never strands the panel (position, layer band and edges belong to the engine); adapt/data-posture through useAdaptation (phone -> fullscreen)."
+      "cutNote": "WO-FAM-04: panel, scrim and section relations by derivation/chrome/drawer, extents and motion defaults by presentation/components/drawer; one ds-drawer vocabulary (ds-drawer-backdrop, ds-drawer-trap, ds-drawer-* compounds); FocusTrap answers to ds-focus-trap; caller style never strands the panel (position, layer band and edges belong to the engine); adapt/data-posture through useAdaptation (phone -> fullscreen). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 96 -> 103. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "sheet": {
       "cut": "WO-FAM-04",
@@ -650,7 +650,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 6,
-        "channelsRead": 154,
+        "channelsRead": 164,
         "classTokens": 4,
         "partsStamped": 7,
         "partsConsumed": 7
@@ -664,7 +664,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-04: the material recipes and tone bubbles by derivation/chrome/tooltip, constants by presentation/components/tooltip and the default theme's tooltip tokens; TooltipContent drains its inline chrome to the compound skin keyed on data-side; one ds-tooltip vocabulary (ds-tooltip-bubble, ds-tooltip-content, ds-tooltip-trigger)."
+      "cutNote": "WO-FAM-04: the material recipes and tone bubbles by derivation/chrome/tooltip, constants by presentation/components/tooltip and the default theme's tooltip tokens; TooltipContent drains its inline chrome to the compound skin keyed on data-side; one ds-tooltip vocabulary (ds-tooltip-bubble, ds-tooltip-content, ds-tooltip-trigger). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 154 -> 164. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "tour": {
       "cut": "WO-FAM-04",
@@ -713,7 +713,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 132,
+        "channelsRead": 135,
         "classTokens": 3,
         "partsStamped": 7,
         "partsConsumed": 7
@@ -727,14 +727,14 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-04: Callout is folded into Alert -- both Modern engines render feedback/alert/runtime/surface (Callout stays a deprecated role entry point); tone, surface, type and dismiss relations by derivation/chrome/alert, constants by presentation/components/alert; the dismiss decides state through the interaction kernel; one ds-alert vocabulary (the compound answers to ds-alert-description). callout is not a separate cut family."
+      "cutNote": "WO-FAM-04: Callout is folded into Alert -- both Modern engines render feedback/alert/runtime/surface (Callout stays a deprecated role entry point); tone, surface, type and dismiss relations by derivation/chrome/alert, constants by presentation/components/alert; the dismiss decides state through the interaction kernel; one ds-alert vocabulary (the compound answers to ds-alert-description). callout is not a separate cut family. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 132 -> 135. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "menu": {
       "cut": "WO-FAM-05",
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 8,
-        "channelsRead": 146,
+        "channelsRead": 151,
         "classTokens": 7,
         "partsStamped": 11,
         "partsConsumed": 11
@@ -748,7 +748,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-05 lot 1: surface, row, current-marker, icon, panel, group and divider relations by derivation/chrome/menu (92 --ds-menu-* channels on the spacing ramp, the type roles, the elevation scale and the produced --ds-sidebar-* roots); skin/menu paints the engine tree and skin/menu-compounds the compounds, both on one ds-menu vocabulary; rows, triggers and compounds decide state through the interaction kernel; keyboard and the RTL-aware disclosure axis from runtime/collection/roving-focus; the submenu compound is a menuitem row with a data-open track, no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+      "cutNote": "WO-FAM-05 lot 1: surface, row, current-marker, icon, panel, group and divider relations by derivation/chrome/menu (92 --ds-menu-* channels on the spacing ramp, the type roles, the elevation scale and the produced --ds-sidebar-* roots); skin/menu paints the engine tree and skin/menu-compounds the compounds, both on one ds-menu vocabulary; rows, triggers and compounds decide state through the interaction kernel; keyboard and the RTL-aware disclosure axis from runtime/collection/roving-focus; the submenu compound is a menuitem row with a data-open track, no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 146 -> 151. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "tabs": {
       "cut": "WO-FAM-05",
@@ -776,7 +776,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 5,
-        "channelsRead": 63,
+        "channelsRead": 64,
         "classTokens": 3,
         "partsStamped": 8,
         "partsConsumed": 8
@@ -790,7 +790,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-05 lot 2: trail, crumb, current cell, link ink, icon, separator, ellipsis and overflow-trigger relations by derivation/chrome/breadcrumb (43 --ds-breadcrumb-* channels on the spacing ramp, the supporting type role, the card material and the elevation scale); skin/breadcrumb paints the engine tree and skin/breadcrumb-compounds the Breadcrumb.Item compound, both on one ds-breadcrumb vocabulary; crumbs, the overflow trigger and the compound link decide state through the interaction kernel; the compound carries no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+      "cutNote": "WO-FAM-05 lot 2: trail, crumb, current cell, link ink, icon, separator, ellipsis and overflow-trigger relations by derivation/chrome/breadcrumb (43 --ds-breadcrumb-* channels on the spacing ramp, the supporting type role, the card material and the elevation scale); skin/breadcrumb paints the engine tree and skin/breadcrumb-compounds the Breadcrumb.Item compound, both on one ds-breadcrumb vocabulary; crumbs, the overflow trigger and the compound link decide state through the interaction kernel; the compound carries no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 63 -> 64. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "pagination": {
       "cut": "WO-FAM-05",
@@ -818,7 +818,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 87,
+        "channelsRead": 95,
         "classTokens": 5,
         "partsStamped": 12,
         "partsConsumed": 12
@@ -832,14 +832,14 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-05 lot 3: the unified steps/stepper family. Stepper absorbs Steps (the D-16 idiom: Steps is a deprecated compound under stepper/compound/steps that maps its legacy props onto Stepper, one StepStatus, no engine, skin or namespace of its own); track, circle, connector, text column, dot slot, compound Step and Content relations by derivation/chrome/stepper (71 --ds-stepper-* channels, the wait-label ink folded from the retired steps skin, on the spacing ramp, the type roles, the card material, the elevation scale and the intent cadences, the tenant's authored --ds-steps-* roots chained ahead of the seeds); skin/stepper paints the engine track and skin/stepper-compounds the compounds, both on one ds-stepper vocabulary; the trigger and the compound step decide state through the interaction kernel; the content panel carries its lifecycle as data-presence, never as the kernel's data-state; not layout-sensitive, so no adapt slot; every part carries a skeleton role."
+      "cutNote": "WO-FAM-05 lot 3: the unified steps/stepper family. Stepper absorbs Steps (the D-16 idiom: Steps is a deprecated compound under stepper/compound/steps that maps its legacy props onto Stepper, one StepStatus, no engine, skin or namespace of its own); track, circle, connector, text column, dot slot, compound Step and Content relations by derivation/chrome/stepper (71 --ds-stepper-* channels, the wait-label ink folded from the retired steps skin, on the spacing ramp, the type roles, the card material, the elevation scale and the intent cadences, the tenant's authored --ds-steps-* roots chained ahead of the seeds); skin/stepper paints the engine track and skin/stepper-compounds the compounds, both on one ds-stepper vocabulary; the trigger and the compound step decide state through the interaction kernel; the content panel carries its lifecycle as data-presence, never as the kernel's data-state; not layout-sensitive, so no adapt slot; every part carries a skeleton role. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 87 -> 95. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "sidebar-surface": {
       "cut": "WO-FAM-05",
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 0,
+        "channelsRead": 12,
         "classTokens": 4,
         "partsStamped": 4,
         "partsConsumed": 4
@@ -853,14 +853,14 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-05 lot 3: the collapsible sidebar structure (structures/shell/navigation/sidebar-surface). Tracks, region gap, stacked posture and the panel-to-main separator by derivation/chrome/sidebar-surface (10 --ds-sidebar-surface-* channels on the spacing ramp scaled by the rhythm dial, the tenant's authored --ds-sidebar-width and --ds-sidebar-collapsed-width chained ahead of the family's own tracks, the separator on the edge decision and --ds-sidebar-border, the track change on the rearrange cadence); one presentation skin (presentation/components/skin/sidebar-surface, the structures layer; channelsRead is 0 because the gate's read census walks engine skins only and the presentation skin reads its ten channels with a producer) on one ds-sidebar-surface vocabulary; the panel, aside and toggle are Card and Button and paint their own material and states; declared layout-sensitive (WO-INV-07): adapt: Adapt<SidebarSurfaceAdaptation> on the props, the legacy stackOnMobile/stackOnTablet config as the per-posture defaults, data-posture resolved through useAdaptation; the config-stated widths are the only inline channels; every part carries a skeleton role."
+      "cutNote": "WO-FAM-05 lot 3: the collapsible sidebar structure (structures/shell/navigation/sidebar-surface). Tracks, region gap, stacked posture and the panel-to-main separator by derivation/chrome/sidebar-surface (10 --ds-sidebar-surface-* channels on the spacing ramp scaled by the rhythm dial, the tenant's authored --ds-sidebar-width and --ds-sidebar-collapsed-width chained ahead of the family's own tracks, the separator on the edge decision and --ds-sidebar-border, the track change on the rearrange cadence); one presentation skin (presentation/components/skin/sidebar-surface, the structures layer; the presentation skin reads its ten channels with a producer) on one ds-sidebar-surface vocabulary; the panel, aside and toggle are Card and Button and paint their own material and states; declared layout-sensitive (WO-INV-07): adapt: Adapt<SidebarSurfaceAdaptation> on the props, the legacy stackOnMobile/stackOnTablet config as the per-posture defaults, data-posture resolved through useAdaptation; the config-stated widths are the only inline channels; every part carries a skeleton role. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 0 -> 12. readWithoutProducer stays 0: the newly measured presentation skin reads all twelve channels with a producer."
     },
     "card": {
       "cut": "WO-FAM-06",
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 8,
-        "channelsRead": 176,
+        "channelsRead": 235,
         "classTokens": 16,
         "partsStamped": 25,
         "partsConsumed": 25
@@ -874,7 +874,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-06 lot 1: the display card (primitives/display/card). Size steps on the type roles, the five toned title inks on the palette's 900 steps (--ds-card-{primary,success,warning,error,info}-title-color, painted on the engine title and the Card.Header title under [data-tone]), the tenant-authored --ds-card-header-color and --ds-card-border-accent-hover wired as inputs of --ds-card-header-ink, --ds-card-header-eyebrow-color and --ds-card-outlined-border-hover, the header icon and extra well on the elevation scale, the edge weight and the spacing ramp scaled by density, the underline anatomy edge and the nested shadow, and the Card.Image runtime channels (--ds-card-image-block-size, --ds-card-image-aspect-ratio) with their resting defaults, all by derivation/chrome/card (25 channels); constants stay in presentation/components/card. One ds-card vocabulary: the compounds are ds-card-{header,body,footer,image} with their inner anatomy as data-part (content, header-main, icon, avatar, eyebrow, title, subtitle, extra, actions, img, placeholder, spinner, error-icon, gradient, overlay); the kernel decides hovered/pressed/focused/disabled on the root as data-state; the hand-made skeleton (four inline bars, ds-card-skeleton-sweep) is retired and the loading state is the reserved anatomy (loading-content on --ds-card-loading-min-height) under the frosted spinner scrim -- the shared anatomy renderer stays a WO decision because a primitive may not depend on the sibling feedback/skeleton owner (structure:check sibling-owner-dependency); Card.Image paints object-fit and radius from data-fit and data-radius instead of inline style; declared layout-sensitive: adapt: Adapt<CardAdaptation> (coverPosition, padding) on the props, no family default, data-posture resolved through useAdaptation. channelsRead 191 -> 174: the eleven skeleton channels the engine no longer stamps, the two -current intermediates now written as --_ds- privates, and the four unwritten names repointed to produced channels. | 2026-09-15 F6b: channelsRead 174 -> 176 -- the md inset now falls to --ds-card-padding-base (derivation/chrome/card chains the tenant-authored --ds-card-padding ahead of the md constant, so the authored base inset paints and the skin stops reading --ds-card-md-padding directly) and the card gains its xl padding step (padding='xl' on the contract, [data-padding='xl'] reading --ds-card-padding-xl over --ds-card-xl-padding); --ds-card-header-extra-min-height is respelled 2rem x density x control-height (the ramp already carries density)."
+      "cutNote": "WO-FAM-06 lot 1: the display card (primitives/display/card). Size steps on the type roles, the five toned title inks on the palette's 900 steps (--ds-card-{primary,success,warning,error,info}-title-color, painted on the engine title and the Card.Header title under [data-tone]), the tenant-authored --ds-card-header-color and --ds-card-border-accent-hover wired as inputs of --ds-card-header-ink, --ds-card-header-eyebrow-color and --ds-card-outlined-border-hover, the header icon and extra well on the elevation scale, the edge weight and the spacing ramp scaled by density, the underline anatomy edge and the nested shadow, and the Card.Image runtime channels (--ds-card-image-block-size, --ds-card-image-aspect-ratio) with their resting defaults, all by derivation/chrome/card (25 channels); constants stay in presentation/components/card. One ds-card vocabulary: the compounds are ds-card-{header,body,footer,image} with their inner anatomy as data-part (content, header-main, icon, avatar, eyebrow, title, subtitle, extra, actions, img, placeholder, spinner, error-icon, gradient, overlay); the kernel decides hovered/pressed/focused/disabled on the root as data-state; the hand-made skeleton (four inline bars, ds-card-skeleton-sweep) is retired and the loading state is the reserved anatomy (loading-content on --ds-card-loading-min-height) under the frosted spinner scrim -- the shared anatomy renderer stays a WO decision because a primitive may not depend on the sibling feedback/skeleton owner (structure:check sibling-owner-dependency); Card.Image paints object-fit and radius from data-fit and data-radius instead of inline style; declared layout-sensitive: adapt: Adapt<CardAdaptation> (coverPosition, padding) on the props, no family default, data-posture resolved through useAdaptation. channelsRead 191 -> 174: the eleven skeleton channels the engine no longer stamps, the two -current intermediates now written as --_ds- privates, and the four unwritten names repointed to produced channels. | 2026-09-15 F6b: channelsRead 174 -> 176 -- the md inset now falls to --ds-card-padding-base (derivation/chrome/card chains the tenant-authored --ds-card-padding ahead of the md constant, so the authored base inset paints and the skin stops reading --ds-card-md-padding directly) and the card gains its xl padding step (padding='xl' on the contract, [data-padding='xl'] reading --ds-card-padding-xl over --ds-card-xl-padding); --ds-card-header-extra-min-height is respelled 2rem x density x control-height (the ramp already carries density). WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 176 -> 235. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "table": {
       "cut": "WO-FAM-06",
@@ -921,7 +921,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 5,
-        "channelsRead": 77,
+        "channelsRead": 81,
         "classTokens": 4,
         "partsStamped": 5,
         "partsConsumed": 4
@@ -934,19 +934,20 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 10,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 0
+      "fanOutUnreached": 0,
+      "cutNote": "WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 77 -> 81. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "avatar": {
       "cut": "WO-FAM-06",
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 84,
+        "channelsRead": 99,
         "classTokens": 5,
         "partsStamped": 9,
         "partsConsumed": 9
       },
-      "readWithoutProducer": 0,
+      "readWithoutProducer": 8,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 5,
       "partsStampedNotConsumed": 0,
@@ -954,7 +955,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 7,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 0
+      "fanOutUnreached": 0,
+      "cutNote": "WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 84 -> 99, readWithoutProducer 0 -> 8. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "tree": {
       "cut": "WO-FAM-06",
@@ -1001,12 +1003,12 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 3,
-        "channelsRead": 58,
+        "channelsRead": 65,
         "classTokens": 7,
         "partsStamped": 17,
         "partsConsumed": 18
       },
-      "readWithoutProducer": 0,
+      "readWithoutProducer": 5,
       "classVocabularies": 2,
       "legacyNamespaceClasses": 6,
       "partsStampedNotConsumed": 0,
@@ -1014,7 +1016,8 @@
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 4,
       "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 0
+      "fanOutUnreached": 0,
+      "cutNote": "WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 58 -> 65, readWithoutProducer 0 -> 5. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     },
     "container": {
       "cut": "WO-FAM-07",
@@ -1325,12 +1328,12 @@
       "denominators": {
         "skinFiles": 4,
         "sourceFiles": 13,
-        "channelsRead": 175,
+        "channelsRead": 237,
         "classTokens": 3,
         "partsStamped": 88,
         "partsConsumed": 88
       },
-      "readWithoutProducer": 16,
+      "readWithoutProducer": 46,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -1339,7 +1342,7 @@
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
-      "cutNote": "WO-FAM-08: the data-table pattern measured on the wave-8/9 lot tree over HEAD 212439653 (B4-1 deriver, B4-2 skin/TSX and B4-4 namespace/disabled/pinned-offset closure all live in the working tree), unfixed debt pinned as measured. Every blocking cut is clean: inlineStyleViolations 0, visualLiterals 0, antReads 0, one owner, stampsAnatomy/skinReadsAnatomy/variantContract/stateContract/stateGoverned all true, skeleton by the shared anatomy renderer with no hand-made part and no part without a role, a11y 7 probes / 53 assertions. NAMESPACE (B4-4): the family's own channels are --ds-data-table-*, one namespace from the folder name. The 76 names derivation/chrome/data-table produces are now read under that spelling: 113 read sites were renamed from --ds-table-<suffix> (101 in the modern engine skin, 2 in data-table-mobile, 1 in data-table-actions, 0 in data-table-interactions, 2 in DataTable.stories.tsx, 7 in DataTable.pass2-craft-contract.test.ts), fallback literals byte-identical, the deriver's produces list taken as the exact rename set and nothing outside it touched. The engine skin's 100-site figure in the worker inventory measured 101 against the tree; the measurement wins. The ~38 --ds-table-* names the primitive Table's typed catalog produces (--ds-table-header-bg, --ds-table-row-bg-selected, --ds-table-cell-padding, --ds-table-radius, --ds-table-border and the rest) were deliberately left alone: they are legitimate cross-family reads of produced channels, and renaming them would have orphaned 38 names and GROWN this row. Verified before the rename that none of the 76 is declared anywhere under src/scripts, so every renamed site was an unproduced read. RUNTIME GEOMETRY (ratified, not deriver channels): the element-scoped --ds-data-table-* custom properties declared on the root in presentation/components/skin/data-table-interactions -- col-inline-size, col-min-inline-size, col-max-inline-size, actions-col-inline-size, scroll-max-block-size, row-block-size, virtual-spacer-block-size, plus the two pinned insets below -- carry per-instance measurements the caller's column model produces at runtime. They are not part of the family's derived channel set and the deriver must not grow to cover them. DISABLED PAINT (ruling): the pagination-nav-button and bulk-bar-action wrapper rules in the modern skin dropped their opacity: 0.5 and keep only cursor: not-allowed. Both wrappers compose a DS Button, which owns --ds-button-disabled-opacity, so the wrapper no longer double-paints the disabled state; state and disabled paint belong to the Button. PINNED OFFSETS (closed): getPinnedOffsetStyle() in engines/modern/index.tsx no longer emits raw insetInlineStart/insetInlineEnd inline through a spread the inline-paint gate cannot see. It stamps --ds-data-table-pinned-inset-start / --ds-data-table-pinned-inset-end instead, the modern skin's [data-pin-side] rules consume them with a 0px fallback, and the resting 0px is declared with the other runtime geometry in data-table-interactions so the pair has a producer. Behaviour is identical and DataTable.modern-w7.test.tsx proves it: the same six offsets, plus two new assertions -- one loads the skin's own two rules verbatim and reads getComputedStyle().insetInlineStart back as calc(150px) (the stamped path), the other also loads the data-table-interactions [data-part=\"root\"] declaration verbatim, strips the stamp from a pinned cell and reads 0px back through inheritance, then moves the root channel to 24px and reads that back (the resting path, which proves the declaration is a real producer and not the rule's fallback). That pair is why denominator channelsRead moved 173 -> 175. RATCHET: readWithoutProducer falls 92 -> 16, exactly the value the B4-3 projection named, and the 16 survivors are three categories measured from the tree, not projected. (a) 6 --ds-table-* names that no deriver and no CSS declaration writes and that the skins read at divergent resting values, so they look customizable and are not: --ds-table-cell-line-height (three resting values, 1.25 / 1.35 / 1.55), --ds-table-control-radius (var(--ds-radius-md, 0.5rem) and var(--ds-radius-full, 9999px)), --ds-table-drag-grip-offset (0 and 0.125rem), --ds-table-drag-grip-size (calc(var(--ds-modern-table-control-size) - 0.375rem)), --ds-table-drop-indicator-radius (var(--ds-modern-table-control-radius)) and --ds-table-shadow (var(--ds-workspace-card-shadow, var(--ds-elevation-1)) in the engine skin, var(--ds-elevation-1) in data-table-mobile). The B4-3 projection called these 'four paint-decision names with 2+ resting values' plus 'two element-scoped ladder aliases'; the measurement says six --ds-table-* names with no producer at all, and the measurement wins. (b) 7 --ds-typography-* foreign names no deriver owns -- body-family, label-family, label-tracking, section-title-family, section-title-tracking, section-title-weight, supporting-family. (c) 3 --ds-density-* names, cell-padding, factor-compact and factor-spacious, unchanged from the B4-3 measurement: no CSS declares them, the two factors have no writer anywhere, and PatternDataTable.density.test.tsx asserts density arrives as the class ds-table-density-<mode> rather than an inline property. --ds-modern-table-skeleton-index left the list with the hand-made skeleton, so the projection's mention of it is spent. Every other ratchet is 0; classVocabularies 1 is the single ds- vocabulary; fanOutUnreached 0 is vacuous here, since no typed catalog control lists data-table in its families. BLIND SPOT of this ratchet, stated rather than implied: readWithoutProducer scans the modern-engine skin ONLY (runtime/engines/modern/skin/data-table/index.css). The other three data-table skins -- presentation/components/skin/data-table-{actions,interactions,mobile} -- count in skinFiles but their reads never enter this list, so 3 of 4 skins are unscanned and this 16 is a floor, not a total. Do not widen the gate to close the gap; that is a gate work order, not a family cut. CAUSALITY: the decision-causality suite is src/components/patterns/data/data-table/tests/PatternDataTable.causality.integration.test.tsx (11 tests). It probes six of the eight keypaths the deriver declares in consumes against the family's OWN computed paint with a negative control -- palette.* (sort ink, selected row and bulk-bar grounds, sortable-header focus shadow, selected mobile-card ring), typography.roles through typography.scale (cell, header and chrome type steps), surfaces.radiusScale (both chrome bars' corners and the mobile card corner), surfaces.elevation (bulk-bar shadow), states.focus (mobile-card ring width) and density (toolbar rhythm) -- and PINS the three readings that reach no data-table paint as an executable inventory instead of borrowing a neighbour reading: spacing.rhythm (no data-table skin reads --ds-rhythm-*), surfaces.controlHeight (none reads --ds-control-height-scale) and the weight half of typography.roles (the skin reads --ds-typography-section-title-weight, which nothing writes, while the kit produces --ds-type-section-title-font-weight). Its axe arm pins node-identified debt in all four gated scopes: aria-conditional-attr on the select-all checkbox in every scope, plus phone-chrome contrast on the bulk count and pagination range (light scopes) and on the mobile toolbar and custom-card slots (bithire dark). SCOPE LIMIT of that arm: the suite keeps the whole prerender prelude (no truncation, as the list-toolbar precedent), but React defers four desktop boundaries into <div hidden id=\"S:n\"> completion containers -- the page-14 and page-1235 pagination buttons, the next-page nav button and the bulk-action button -- and [hidden] keeps them out of the audited DOM, so the axe evidence covers the family's own chrome and the three phone-posture Buttons only."
+      "cutNote": "WO-FAM-08: the data-table pattern measured on the wave-8/9 lot tree over HEAD 212439653 (B4-1 deriver, B4-2 skin/TSX and B4-4 namespace/disabled/pinned-offset closure all live in the working tree), unfixed debt pinned as measured. Every blocking cut is clean: inlineStyleViolations 0, visualLiterals 0, antReads 0, one owner, stampsAnatomy/skinReadsAnatomy/variantContract/stateContract/stateGoverned all true, skeleton by the shared anatomy renderer with no hand-made part and no part without a role, a11y 7 probes / 53 assertions. NAMESPACE (B4-4): the family's own channels are --ds-data-table-*, one namespace from the folder name. The 76 names derivation/chrome/data-table produces are now read under that spelling: 113 read sites were renamed from --ds-table-<suffix> (101 in the modern engine skin, 2 in data-table-mobile, 1 in data-table-actions, 0 in data-table-interactions, 2 in DataTable.stories.tsx, 7 in DataTable.pass2-craft-contract.test.ts), fallback literals byte-identical, the deriver's produces list taken as the exact rename set and nothing outside it touched. The engine skin's 100-site figure in the worker inventory measured 101 against the tree; the measurement wins. The ~38 --ds-table-* names the primitive Table's typed catalog produces (--ds-table-header-bg, --ds-table-row-bg-selected, --ds-table-cell-padding, --ds-table-radius, --ds-table-border and the rest) were deliberately left alone: they are legitimate cross-family reads of produced channels, and renaming them would have orphaned 38 names and GROWN this row. Verified before the rename that none of the 76 is declared anywhere under src/scripts, so every renamed site was an unproduced read. RUNTIME GEOMETRY (ratified, not deriver channels): the element-scoped --ds-data-table-* custom properties declared on the root in presentation/components/skin/data-table-interactions -- col-inline-size, col-min-inline-size, col-max-inline-size, actions-col-inline-size, scroll-max-block-size, row-block-size, virtual-spacer-block-size, plus the two pinned insets below -- carry per-instance measurements the caller's column model produces at runtime. They are not part of the family's derived channel set and the deriver must not grow to cover them. DISABLED PAINT (ruling): the pagination-nav-button and bulk-bar-action wrapper rules in the modern skin dropped their opacity: 0.5 and keep only cursor: not-allowed. Both wrappers compose a DS Button, which owns --ds-button-disabled-opacity, so the wrapper no longer double-paints the disabled state; state and disabled paint belong to the Button. PINNED OFFSETS (closed): getPinnedOffsetStyle() in engines/modern/index.tsx no longer emits raw insetInlineStart/insetInlineEnd inline through a spread the inline-paint gate cannot see. It stamps --ds-data-table-pinned-inset-start / --ds-data-table-pinned-inset-end instead, the modern skin's [data-pin-side] rules consume them with a 0px fallback, and the resting 0px is declared with the other runtime geometry in data-table-interactions so the pair has a producer. Behaviour is identical and DataTable.modern-w7.test.tsx proves it: the same six offsets, plus two new assertions -- one loads the skin's own two rules verbatim and reads getComputedStyle().insetInlineStart back as calc(150px) (the stamped path), the other also loads the data-table-interactions [data-part=\"root\"] declaration verbatim, strips the stamp from a pinned cell and reads 0px back through inheritance, then moves the root channel to 24px and reads that back (the resting path, which proves the declaration is a real producer and not the rule's fallback). That pair is why denominator channelsRead moved 173 -> 175. RATCHET: readWithoutProducer falls 92 -> 16, exactly the value the B4-3 projection named, and the 16 survivors are three categories measured from the tree, not projected. (a) 6 --ds-table-* names that no deriver and no CSS declaration writes and that the skins read at divergent resting values, so they look customizable and are not: --ds-table-cell-line-height (three resting values, 1.25 / 1.35 / 1.55), --ds-table-control-radius (var(--ds-radius-md, 0.5rem) and var(--ds-radius-full, 9999px)), --ds-table-drag-grip-offset (0 and 0.125rem), --ds-table-drag-grip-size (calc(var(--ds-modern-table-control-size) - 0.375rem)), --ds-table-drop-indicator-radius (var(--ds-modern-table-control-radius)) and --ds-table-shadow (var(--ds-workspace-card-shadow, var(--ds-elevation-1)) in the engine skin, var(--ds-elevation-1) in data-table-mobile). The B4-3 projection called these 'four paint-decision names with 2+ resting values' plus 'two element-scoped ladder aliases'; the measurement says six --ds-table-* names with no producer at all, and the measurement wins. (b) 7 --ds-typography-* foreign names no deriver owns -- body-family, label-family, label-tracking, section-title-family, section-title-tracking, section-title-weight, supporting-family. (c) 3 --ds-density-* names, cell-padding, factor-compact and factor-spacious, unchanged from the B4-3 measurement: no CSS declares them, the two factors have no writer anywhere, and PatternDataTable.density.test.tsx asserts density arrives as the class ds-table-density-<mode> rather than an inline property. --ds-modern-table-skeleton-index left the list with the hand-made skeleton, so the projection's mention of it is spent. Every other ratchet is 0; classVocabularies 1 is the single ds- vocabulary; fanOutUnreached 0 is vacuous here, since no typed catalog control lists data-table in its families. BLIND SPOT of this ratchet, stated rather than implied: readWithoutProducer scans the modern-engine skin ONLY (runtime/engines/modern/skin/data-table/index.css). The other three data-table skins -- presentation/components/skin/data-table-{actions,interactions,mobile} -- count in skinFiles but their reads never enter this list, so 3 of 4 skins are unscanned and this 16 is a floor, not a total. Do not widen the gate to close the gap; that is a gate work order, not a family cut. CAUSALITY: the decision-causality suite is src/components/patterns/data/data-table/tests/PatternDataTable.causality.integration.test.tsx (11 tests). It probes six of the eight keypaths the deriver declares in consumes against the family's OWN computed paint with a negative control -- palette.* (sort ink, selected row and bulk-bar grounds, sortable-header focus shadow, selected mobile-card ring), typography.roles through typography.scale (cell, header and chrome type steps), surfaces.radiusScale (both chrome bars' corners and the mobile card corner), surfaces.elevation (bulk-bar shadow), states.focus (mobile-card ring width) and density (toolbar rhythm) -- and PINS the three readings that reach no data-table paint as an executable inventory instead of borrowing a neighbour reading: spacing.rhythm (no data-table skin reads --ds-rhythm-*), surfaces.controlHeight (none reads --ds-control-height-scale) and the weight half of typography.roles (the skin reads --ds-typography-section-title-weight, which nothing writes, while the kit produces --ds-type-section-title-font-weight). Its axe arm pins node-identified debt in all four gated scopes: aria-conditional-attr on the select-all checkbox in every scope, plus phone-chrome contrast on the bulk count and pagination range (light scopes) and on the mobile toolbar and custom-card slots (bithire dark). SCOPE LIMIT of that arm: the suite keeps the whole prerender prelude (no truncation, as the list-toolbar precedent), but React defers four desktop boundaries into <div hidden id=\"S:n\"> completion containers -- the page-14 and page-1235 pagination buttons, the next-page nav button and the bulk-action button -- and [hidden] keeps them out of the audited DOM, so the axe evidence covers the family's own chrome and the three phone-posture Buttons only. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 175 -> 237, readWithoutProducer 16 -> 46. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
     }
   }
 }

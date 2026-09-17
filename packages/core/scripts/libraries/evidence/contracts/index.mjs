@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { readFile, readdir, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import ts from 'typescript';
@@ -29,6 +30,45 @@ function toPosix(value) {
 
 function normalizeAbsolute(value) {
   return path.normalize(path.resolve(value));
+}
+
+/**
+ * The census stamps every site with a LOGICAL source id: `<repository>/<path
+ * relative to that repository's root>`. Anchoring on the physical workspace
+ * directory made ~800 ids depend on the folder the clone happens to sit in, so
+ * a regeneration from a worktree named anything but `ui-design-system` rewrote
+ * the artifact. The design-system repository's logical name is read from its
+ * own package.json `repository.url`, never from its directory name.
+ */
+function createSourceAnchor(workspaceRoot, designSystem, repositories) {
+  const roots = repositories
+    .map(({ name, root }) => ({ name, root: normalizeAbsolute(root) }))
+    .sort((left, right) => right.root.length - left.root.length);
+  return { workspaceRoot: normalizeAbsolute(workspaceRoot), designSystem, roots };
+}
+
+function anchoredSource(anchor, absolutePath) {
+  const absolute = normalizeAbsolute(absolutePath);
+  for (const { name, root } of anchor.roots) {
+    const relative = path.relative(root, absolute);
+    if (relative && !relative.startsWith('..') && !path.isAbsolute(relative)) {
+      return toPosix(path.join(name, relative));
+    }
+  }
+  return toPosix(path.relative(anchor.workspaceRoot, absolute));
+}
+
+/** The logical repository name declared by a checkout's own manifest. */
+export function designSystemRepositoryName(designSystemRoot) {
+  try {
+    const manifest = JSON.parse(readFileSync(path.join(designSystemRoot, 'package.json'), 'utf8'));
+    const url = typeof manifest.repository === 'string' ? manifest.repository : manifest.repository?.url;
+    const match = /([^/]+?)(?:\.git)?$/u.exec(String(url ?? '').replace(/\/+$/u, ''));
+    if (match && match[1]) return match[1];
+  } catch {
+    // fall through to the directory name
+  }
+  return path.basename(normalizeAbsolute(designSystemRoot));
 }
 
 function hasExportModifier(node) {
@@ -66,9 +106,9 @@ function sourceLocation(sourceFile, node) {
   return { line: position.line + 1, column: position.character + 1 };
 }
 
-function stableSite(workspaceRoot, sourceFile, node, extra = {}) {
+function stableSite(anchor, sourceFile, node, extra = {}) {
   return {
-    source: toPosix(path.relative(workspaceRoot, sourceFile.fileName)),
+    source: anchoredSource(anchor, sourceFile.fileName),
     ...sourceLocation(sourceFile, node),
     ...extra,
   };
@@ -238,10 +278,10 @@ async function createRepoProgram(repoRoot, {
   return { files, program, checker: program.getTypeChecker() };
 }
 
-function parseErrors(program, workspaceRoot, repository) {
+function parseErrors(program, anchor, repository) {
   const errors = [];
   for (const sourceFile of program.getSourceFiles()) {
-    if (sourceFile.isDeclarationFile || !normalizeAbsolute(sourceFile.fileName).startsWith(normalizeAbsolute(workspaceRoot))) {
+    if (sourceFile.isDeclarationFile || !normalizeAbsolute(sourceFile.fileName).startsWith(anchor.workspaceRoot)) {
       continue;
     }
     for (const diagnostic of sourceFile.parseDiagnostics) {
@@ -250,7 +290,7 @@ function parseErrors(program, workspaceRoot, repository) {
       errors.push({
         code: 'typescript-parse-error',
         repository,
-        source: toPosix(path.relative(workspaceRoot, sourceFile.fileName)),
+        source: anchoredSource(anchor, sourceFile.fileName),
         line: position.line + 1,
         column: position.character + 1,
         detail: ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'),
@@ -260,7 +300,7 @@ function parseErrors(program, workspaceRoot, repository) {
   return errors;
 }
 
-function collectAdaptiveFields(program, checker, designSystemRoot, workspaceRoot) {
+function collectAdaptiveFields(program, checker, designSystemRoot, anchor) {
   const contractsRoot = normalizeAbsolute(path.join(
     designSystemRoot,
     'packages/core/src/components/surfaces/foundation/contracts',
@@ -270,7 +310,7 @@ function collectAdaptiveFields(program, checker, designSystemRoot, workspaceRoot
   function addMember(sourceFile, owner, member, fieldPath) {
     if (!member.name) return;
     const span = nodeContentSpan(sourceFile, member.name);
-    const relative = toPosix(path.relative(workspaceRoot, sourceFile.fileName));
+    const relative = anchoredSource(anchor, sourceFile.fileName);
     const location = sourceLocation(sourceFile, member.name);
     const symbol = checker.getSymbolAtLocation(member.name);
     fields.push({
@@ -387,7 +427,7 @@ function symbolForObjectProperty(checker, node) {
   return contextual ?? direct;
 }
 
-function collectFieldOccurrences(program, checker, fields, workspaceRoot, analysisErrors) {
+function collectFieldOccurrences(program, checker, fields, anchor, analysisErrors) {
   const symbolToFields = new Map();
   const declarationToFields = new Map();
   function declarationKey(declaration) {
@@ -429,10 +469,10 @@ function collectFieldOccurrences(program, checker, fields, workspaceRoot, analys
 
   function record(sourceFile, node, matches, role) {
     if (matches.length === 0 || isTypePosition(node)) return;
-    const relative = toPosix(path.relative(workspaceRoot, sourceFile.fileName));
+    const relative = anchoredSource(anchor, sourceFile.fileName);
     const classification = sourceClass(relative);
     if (classification === 'generated') return;
-    const site = stableSite(workspaceRoot, sourceFile, node, { role });
+    const site = stableSite(anchor, sourceFile, node, { role });
     for (const field of matches) {
       if (classification === 'test') field.testOnly.push(site);
       else if (classification === 'builder-default') field.builderDefaults.push(site);
@@ -442,7 +482,7 @@ function collectFieldOccurrences(program, checker, fields, workspaceRoot, analys
   }
 
   for (const sourceFile of program.getSourceFiles()) {
-    if (sourceFile.isDeclarationFile || !normalizeAbsolute(sourceFile.fileName).startsWith(normalizeAbsolute(workspaceRoot))) {
+    if (sourceFile.isDeclarationFile || !normalizeAbsolute(sourceFile.fileName).startsWith(anchor.workspaceRoot)) {
       continue;
     }
     function visit(node) {
@@ -462,8 +502,8 @@ function collectFieldOccurrences(program, checker, fields, workspaceRoot, analys
         if (candidates.length > 0) {
           analysisErrors.push({
             code: 'opaque-adaptive-field-access',
-            repository: 'ui-design-system',
-            ...stableSite(workspaceRoot, sourceFile, node),
+            repository: anchor.designSystem,
+            ...stableSite(anchor, sourceFile, node),
             detail: `computed adaptive access could reference: ${candidates.join(', ')}`,
           });
         }
@@ -502,7 +542,7 @@ function collectFieldOccurrences(program, checker, fields, workspaceRoot, analys
   };
 
   for (const sourceFile of program.getSourceFiles()) {
-    const relative = toPosix(path.relative(workspaceRoot, sourceFile.fileName));
+    const relative = anchoredSource(anchor, sourceFile.fileName);
     if (sourceFile.isDeclarationFile || sourceClass(relative) !== 'productive') continue;
     function visitFunctions(node) {
       if (functionLikeWithBody(node)) {
@@ -717,7 +757,7 @@ function collectFieldOccurrences(program, checker, fields, workspaceRoot, analys
   }
 
   for (const sourceFile of program.getSourceFiles()) {
-    const relative = toPosix(path.relative(workspaceRoot, sourceFile.fileName));
+    const relative = anchoredSource(anchor, sourceFile.fileName);
     if (sourceFile.isDeclarationFile || sourceClass(relative) !== 'productive') continue;
     function visitTransportCalls(node) {
       if (ts.isCallExpression(node)) {
@@ -822,7 +862,7 @@ function finalizeFactories(definitions, calls, edges) {
   }).sort((left, right) => left.id.localeCompare(right.id));
 }
 
-async function createSyntaxRepository(repository, repoRoot, workspaceRoot) {
+async function createSyntaxRepository(repository, repoRoot, anchor) {
   const files = await listTypeScriptFiles(repoRoot);
   const fileSet = new Set(files.map(normalizeAbsolute));
   const candidateText = new Map();
@@ -882,7 +922,7 @@ async function createSyntaxRepository(repository, repoRoot, workspaceRoot) {
       analysisErrors.push({
         code: 'typescript-parse-error',
         repository,
-        source: toPosix(path.relative(workspaceRoot, absolute)),
+        source: anchoredSource(anchor, absolute),
         line: position.line + 1,
         column: position.character + 1,
         detail: ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'),
@@ -923,7 +963,7 @@ async function createSyntaxRepository(repository, repoRoot, workspaceRoot) {
       if (target && !records.has(target)) pending.push(target);
     }
   }
-  return { repository, repoRoot, workspaceRoot, records, analysisErrors };
+  return { repository, repoRoot, anchor, records, analysisErrors };
 }
 
 function syntaxModuleTarget(syntaxRepo, sourceRecord, specifier) {
@@ -967,7 +1007,7 @@ function buildSyntaxFactoryGraph(syntaxRepo) {
       repository: syntaxRepo.repository,
       name: exportedName,
       localName,
-      source: toPosix(path.relative(syntaxRepo.workspaceRoot, record.absolute)),
+      source: anchoredSource(syntaxRepo.anchor, record.absolute),
       ...sourceLocation(sourceFile, nameNode),
       declaration,
       container: declaration,
@@ -1175,7 +1215,7 @@ function analyzeSyntaxFactoryCalls({
   }
 
   for (const record of syntaxRepo.records.values()) {
-    const relative = toPosix(path.relative(syntaxRepo.workspaceRoot, record.absolute));
+    const relative = anchoredSource(syntaxRepo.anchor, record.absolute);
     if (GENERATED_SOURCE.test(relative)) continue;
     function visit(node) {
       if (ts.isCallExpression(node)) {
@@ -1188,7 +1228,7 @@ function analyzeSyntaxFactoryCalls({
           analysisErrors.push({
             code: 'opaque-factory-namespace-call',
             repository: syntaxRepo.repository,
-            ...stableSite(syntaxRepo.workspaceRoot, record.sourceFile, callee),
+            ...stableSite(syntaxRepo.anchor, record.sourceFile, callee),
             detail: 'namespace factory calls require a static StringLiteral member',
           });
         }
@@ -1196,7 +1236,7 @@ function analyzeSyntaxFactoryCalls({
         const callerFactories = enclosingFactories(record, node);
         for (const target of targets) {
           if (!allDefinitions.has(target)) continue;
-          const site = stableSite(syntaxRepo.workspaceRoot, record.sourceFile, node, {
+          const site = stableSite(syntaxRepo.anchor, record.sourceFile, node, {
             repository: syntaxRepo.repository,
           });
           if (callerFactories.size > 0) {
@@ -1225,7 +1265,7 @@ function analyzeSyntaxFactoryCalls({
             analysisErrors.push({
               code: 'opaque-factory-reference',
               repository: syntaxRepo.repository,
-              ...stableSite(syntaxRepo.workspaceRoot, record.sourceFile, node),
+              ...stableSite(syntaxRepo.anchor, record.sourceFile, node),
               detail: `factory value escapes static call graph: ${[...targets].sort().join(', ')}`,
             });
           }
@@ -1238,12 +1278,19 @@ function analyzeSyntaxFactoryCalls({
 }
 
 export async function buildCra11Census({ designSystemRoot, workspaceRoot = path.dirname(designSystemRoot) }) {
+  const designSystemName = designSystemRepositoryName(designSystemRoot);
   const repositories = [
-    { name: 'ui-design-system', root: path.join(designSystemRoot, 'packages/core') },
+    { name: designSystemName, root: path.join(designSystemRoot, 'packages/core') },
     { name: 'app-bithire', root: path.join(workspaceRoot, 'app-bithire') },
     { name: 'app-platform', root: path.join(workspaceRoot, 'app-platform') },
     { name: 'app-evnto', root: path.join(workspaceRoot, 'app-evnto') },
   ];
+  /* The design-system repository is anchored at its REPOSITORY root, so its ids
+   * keep the `packages/core/` segment the workspace-relative stamp produced. */
+  const anchor = createSourceAnchor(workspaceRoot, designSystemName, [
+    { name: designSystemName, root: designSystemRoot },
+    ...repositories.slice(1),
+  ]);
   const analysisErrors = [];
   const contractProgram = await createRepoProgram(repositories[0].root, {
     sourceDirectory: 'src/components/surfaces/foundation/contracts',
@@ -1252,7 +1299,7 @@ export async function buildCra11Census({ designSystemRoot, workspaceRoot = path.
     contractProgram.program,
     contractProgram.checker,
     designSystemRoot,
-    workspaceRoot,
+    anchor,
   );
   const adaptiveTerms = [...new Set(contractSeed.flatMap((field) => [
     ...(ADAPTIVE_NAME.test(field.field) ? [field.field] : []),
@@ -1263,18 +1310,18 @@ export async function buildCra11Census({ designSystemRoot, workspaceRoot = path.
     candidateTerms: adaptiveTerms,
     alwaysIncludeDirectory: 'src/components/surfaces',
   });
-  analysisErrors.push(...parseErrors(designSystemProgram.program, workspaceRoot, repositories[0].name));
+  analysisErrors.push(...parseErrors(designSystemProgram.program, anchor, repositories[0].name));
   const rawFields = collectAdaptiveFields(
     designSystemProgram.program,
     designSystemProgram.checker,
     designSystemRoot,
-    workspaceRoot,
+    anchor,
   );
   const fields = collectFieldOccurrences(
     designSystemProgram.program,
     designSystemProgram.checker,
     rawFields,
-    workspaceRoot,
+    anchor,
     analysisErrors,
   );
   const fieldIds = new Map();
@@ -1288,7 +1335,7 @@ export async function buildCra11Census({ designSystemRoot, workspaceRoot = path.
     const [first] = declarations;
     analysisErrors.push({
       code: 'duplicate-adaptive-field-id',
-      repository: 'ui-design-system',
+      repository: anchor.designSystem,
       source: first.source,
       line: first.line,
       column: first.column,
@@ -1305,7 +1352,7 @@ export async function buildCra11Census({ designSystemRoot, workspaceRoot = path.
   const designSystemSyntax = await createSyntaxRepository(
     repositories[0].name,
     repositories[0].root,
-    workspaceRoot,
+    anchor,
   );
   analysisErrors.push(...designSystemSyntax.analysisErrors);
   const designSystemDefinitions = buildSyntaxFactoryGraph(designSystemSyntax);
@@ -1327,7 +1374,7 @@ export async function buildCra11Census({ designSystemRoot, workspaceRoot = path.
   });
 
   for (const repository of repositories.slice(1)) {
-    const syntaxRepo = await createSyntaxRepository(repository.name, repository.root, workspaceRoot);
+    const syntaxRepo = await createSyntaxRepository(repository.name, repository.root, anchor);
     analysisErrors.push(...syntaxRepo.analysisErrors);
     const repositoryDefinitions = buildSyntaxFactoryGraph(syntaxRepo);
     for (const definition of repositoryDefinitions) {

@@ -17,8 +17,8 @@
     ]
   },
   "summary": {
-    "adaptiveFields": 74,
-    "adaptiveFieldsWithProductiveConsumers": 74,
+    "adaptiveFields": 71,
+    "adaptiveFieldsWithProductiveConsumers": 71,
     "typeOnlyAdaptiveFields": 0,
     "configFactories": 14,
     "liveConfigFactories": 14,
@@ -29,210 +29,6 @@
     "typeOnlyFields": [],
     "fields": [
       {
-        "id": "AdaptiveConfig.desktop",
-        "owner": "AdaptiveConfig",
-        "field": "desktop",
-        "path": "desktop",
-        "declaration": {
-          "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 90,
-          "column": 3,
-          "offsetStart": 3427,
-          "offsetEnd": 3434
-        },
-        "productiveConsumers": [
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 112,
-            "column": 26,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-            "line": 610,
-            "column": 38,
-            "role": "transport-read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 893,
-            "column": 38,
-            "role": "transport-read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/runtime/adaptive-posture/index.ts",
-            "line": 48,
-            "column": 26,
-            "role": "transport-read"
-          }
-        ],
-        "productiveProducers": [],
-        "builderDefaults": [],
-        "testOnly": [
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 9,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 19,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 30,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 42,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 56,
-            "column": 9,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.grid-columns.test.tsx",
-            "line": 120,
-            "column": 5,
-            "role": "write"
-          }
-        ],
-        "status": "productive-consumer"
-      },
-      {
-        "id": "AdaptiveConfig.phone",
-        "owner": "AdaptiveConfig",
-        "field": "phone",
-        "path": "phone",
-        "declaration": {
-          "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 92,
-          "column": 3,
-          "offsetStart": 3482,
-          "offsetEnd": 3487
-        },
-        "productiveConsumers": [
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 114,
-            "column": 40,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-            "line": 610,
-            "column": 38,
-            "role": "transport-read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 893,
-            "column": 38,
-            "role": "transport-read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/runtime/adaptive-posture/index.ts",
-            "line": 48,
-            "column": 26,
-            "role": "transport-read"
-          }
-        ],
-        "productiveProducers": [],
-        "builderDefaults": [],
-        "testOnly": [
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 32,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 44,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.grid-columns.test.tsx",
-            "line": 135,
-            "column": 5,
-            "role": "write"
-          }
-        ],
-        "status": "productive-consumer"
-      },
-      {
-        "id": "AdaptiveConfig.tablet",
-        "owner": "AdaptiveConfig",
-        "field": "tablet",
-        "path": "tablet",
-        "declaration": {
-          "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 91,
-          "column": 3,
-          "offsetStart": 3455,
-          "offsetEnd": 3461
-        },
-        "productiveConsumers": [
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 113,
-            "column": 42,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/guided-draft-form/index.tsx",
-            "line": 610,
-            "column": 38,
-            "role": "transport-read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 893,
-            "column": 38,
-            "role": "transport-read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/runtime/adaptive-posture/index.ts",
-            "line": 48,
-            "column": 26,
-            "role": "transport-read"
-          }
-        ],
-        "productiveProducers": [],
-        "builderDefaults": [],
-        "testOnly": [
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 20,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 31,
-            "column": 7,
-            "role": "write"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 43,
-            "column": 7,
-            "role": "write"
-          }
-        ],
-        "status": "productive-consumer"
-      },
-      {
         "id": "AuthSurfacePresentationConfig.mobileHero",
         "owner": "AuthSurfacePresentationConfig",
         "field": "mobileHero",
@@ -241,19 +37,19 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1619,
           "column": 3,
-          "offsetStart": 66964,
-          "offsetEnd": 66974
+          "offsetStart": 67129,
+          "offsetEnd": 67139
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/auth/index.tsx",
-            "line": 87,
+            "line": 89,
             "column": 37,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/auth/index.tsx",
-            "line": 88,
+            "line": 90,
             "column": 29,
             "role": "read"
           }
@@ -285,14 +81,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1600,
           "column": 3,
-          "offsetStart": 66177,
-          "offsetEnd": 66190
+          "offsetStart": 66331,
+          "offsetEnd": 66344
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/auth/index.tsx",
-            "line": 75,
-            "column": 64,
+            "line": 77,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -330,14 +126,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1601,
           "column": 3,
-          "offsetStart": 66204,
-          "offsetEnd": 66217
+          "offsetStart": 66358,
+          "offsetEnd": 66371
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/auth/index.tsx",
-            "line": 75,
-            "column": 64,
+            "line": 77,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -362,13 +158,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1387,
           "column": 3,
-          "offsetStart": 57640,
-          "offsetEnd": 57656
+          "offsetStart": 57761,
+          "offsetEnd": 57777
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/chat/index.tsx",
-            "line": 190,
+            "line": 195,
             "column": 39,
             "role": "read"
           }
@@ -387,14 +183,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1384,
           "column": 3,
-          "offsetStart": 57531,
-          "offsetEnd": 57544
+          "offsetStart": 57652,
+          "offsetEnd": 57665
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/chat/index.tsx",
-            "line": 185,
-            "column": 85,
+            "line": 191,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -419,14 +215,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1385,
           "column": 3,
-          "offsetStart": 57558,
-          "offsetEnd": 57571
+          "offsetStart": 57679,
+          "offsetEnd": 57692
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/chat/index.tsx",
-            "line": 185,
-            "column": 85,
+            "line": 191,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -444,13 +240,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1389,
           "column": 3,
-          "offsetStart": 57743,
-          "offsetEnd": 57762
+          "offsetStart": 57864,
+          "offsetEnd": 57883
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/chat/index.tsx",
-            "line": 191,
+            "line": 196,
             "column": 58,
             "role": "read"
           }
@@ -469,13 +265,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 471,
           "column": 3,
-          "offsetStart": 18937,
-          "offsetEnd": 18949
+          "offsetStart": 18948,
+          "offsetEnd": 18960
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 194,
+            "line": 192,
             "column": 48,
             "role": "read"
           },
@@ -507,19 +303,19 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 469,
           "column": 3,
-          "offsetStart": 18833,
-          "offsetEnd": 18847
+          "offsetStart": 18844,
+          "offsetEnd": 18858
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 201,
+            "line": 199,
             "column": 15,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 202,
+            "line": 200,
             "column": 16,
             "role": "read"
           },
@@ -563,13 +359,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 473,
           "column": 3,
-          "offsetStart": 19049,
-          "offsetEnd": 19059
+          "offsetStart": 19060,
+          "offsetEnd": 19070
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 123,
+            "line": 124,
             "column": 29,
             "role": "read"
           },
@@ -593,7 +389,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/operational/index.tsx",
-            "line": 151,
+            "line": 152,
             "column": 37,
             "role": "read"
           },
@@ -618,8 +414,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 504,
           "column": 3,
-          "offsetStart": 20633,
-          "offsetEnd": 20648
+          "offsetStart": 20644,
+          "offsetEnd": 20659
         },
         "productiveConsumers": [
           {
@@ -662,8 +458,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 485,
           "column": 3,
-          "offsetStart": 19572,
-          "offsetEnd": 19593
+          "offsetStart": 19583,
+          "offsetEnd": 19604
         },
         "productiveConsumers": [
           {
@@ -687,19 +483,19 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 481,
           "column": 3,
-          "offsetStart": 19358,
-          "offsetEnd": 19374
+          "offsetStart": 19369,
+          "offsetEnd": 19385
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 206,
+            "line": 204,
             "column": 31,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/dashboard/index.tsx",
-            "line": 207,
+            "line": 205,
             "column": 62,
             "role": "read"
           }
@@ -725,8 +521,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 487,
           "column": 3,
-          "offsetStart": 19687,
-          "offsetEnd": 19708
+          "offsetStart": 19698,
+          "offsetEnd": 19719
         },
         "productiveConsumers": [
           {
@@ -781,14 +577,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 888,
           "column": 3,
-          "offsetStart": 37198,
-          "offsetEnd": 37211
+          "offsetStart": 37253,
+          "offsetEnd": 37266
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/detail-form/index.tsx",
-            "line": 52,
-            "column": 85,
+            "line": 54,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -813,14 +609,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 889,
           "column": 3,
-          "offsetStart": 37225,
-          "offsetEnd": 37238
+          "offsetStart": 37280,
+          "offsetEnd": 37293
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/detail-form/index.tsx",
-            "line": 52,
-            "column": 85,
+            "line": 54,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -845,8 +641,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 625,
           "column": 3,
-          "offsetStart": 26146,
-          "offsetEnd": 26169
+          "offsetStart": 26168,
+          "offsetEnd": 26191
         },
         "productiveConsumers": [
           {
@@ -877,14 +673,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1102,
           "column": 3,
-          "offsetStart": 45797,
-          "offsetEnd": 45810
+          "offsetStart": 45885,
+          "offsetEnd": 45898
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/editor/index.tsx",
-            "line": 66,
-            "column": 85,
+            "line": 68,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -902,14 +698,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1103,
           "column": 3,
-          "offsetStart": 45824,
-          "offsetEnd": 45837
+          "offsetStart": 45912,
+          "offsetEnd": 45925
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/editor/index.tsx",
-            "line": 66,
-            "column": 85,
+            "line": 68,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -927,13 +723,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 672,
           "column": 3,
-          "offsetStart": 27954,
-          "offsetEnd": 27971
+          "offsetStart": 27987,
+          "offsetEnd": 28004
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 70,
+            "line": 72,
             "column": 80,
             "role": "read"
           }
@@ -978,13 +774,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 674,
           "column": 3,
-          "offsetStart": 28067,
-          "offsetEnd": 28086
+          "offsetStart": 28100,
+          "offsetEnd": 28119
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 84,
+            "line": 86,
             "column": 65,
             "role": "read"
           }
@@ -1041,14 +837,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 668,
           "column": 3,
-          "offsetStart": 27750,
-          "offsetEnd": 27763
+          "offsetStart": 27783,
+          "offsetEnd": 27796
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 48,
-            "column": 85,
+            "line": 50,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1066,14 +862,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 670,
           "column": 3,
-          "offsetStart": 27845,
-          "offsetEnd": 27858
+          "offsetStart": 27878,
+          "offsetEnd": 27891
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/form/index.tsx",
-            "line": 48,
-            "column": 85,
+            "line": 50,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1091,13 +887,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 2502,
           "column": 3,
-          "offsetStart": 99181,
-          "offsetEnd": 99199
+          "offsetStart": 99467,
+          "offsetEnd": 99485
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/kanban/index.tsx",
-            "line": 111,
+            "line": 112,
             "column": 30,
             "role": "read"
           }
@@ -1116,13 +912,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 2504,
           "column": 3,
-          "offsetStart": 99286,
-          "offsetEnd": 99306
+          "offsetStart": 99572,
+          "offsetEnd": 99592
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/kanban/index.tsx",
-            "line": 126,
+            "line": 127,
             "column": 62,
             "role": "read"
           }
@@ -1267,19 +1063,19 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1680,
           "column": 3,
-          "offsetStart": 69201,
-          "offsetEnd": 69211
+          "offsetStart": 69377,
+          "offsetEnd": 69387
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/marketing/index.tsx",
-            "line": 122,
+            "line": 124,
             "column": 37,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/marketing/index.tsx",
-            "line": 123,
+            "line": 125,
             "column": 29,
             "role": "read"
           }
@@ -1305,19 +1101,19 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1678,
           "column": 3,
-          "offsetStart": 69149,
-          "offsetEnd": 69165
+          "offsetStart": 69325,
+          "offsetEnd": 69341
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/marketing/index.tsx",
-            "line": 126,
+            "line": 128,
             "column": 37,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/marketing/index.tsx",
-            "line": 127,
+            "line": 129,
             "column": 29,
             "role": "read"
           }
@@ -1343,14 +1139,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1658,
           "column": 3,
-          "offsetStart": 68560,
-          "offsetEnd": 68573
+          "offsetStart": 68725,
+          "offsetEnd": 68738
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/marketing/index.tsx",
-            "line": 118,
-            "column": 64,
+            "line": 120,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1388,14 +1184,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1659,
           "column": 3,
-          "offsetStart": 68587,
-          "offsetEnd": 68600
+          "offsetStart": 68752,
+          "offsetEnd": 68765
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/marketing/index.tsx",
-            "line": 118,
-            "column": 64,
+            "line": 120,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1413,14 +1209,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1298,
           "column": 3,
-          "offsetStart": 53788,
-          "offsetEnd": 53806
+          "offsetStart": 53898,
+          "offsetEnd": 53916
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/media/index.tsx",
-            "line": 261,
-            "column": 44,
+            "line": 263,
+            "column": 48,
             "role": "read"
           }
         ],
@@ -1438,14 +1234,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1295,
           "column": 3,
-          "offsetStart": 53680,
-          "offsetEnd": 53693
+          "offsetStart": 53790,
+          "offsetEnd": 53803
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/media/index.tsx",
-            "line": 200,
-            "column": 55,
+            "line": 202,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1463,14 +1259,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1296,
           "column": 3,
-          "offsetStart": 53707,
-          "offsetEnd": 53720
+          "offsetStart": 53817,
+          "offsetEnd": 53830
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/experience/media/index.tsx",
-            "line": 200,
-            "column": 55,
+            "line": 202,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1488,8 +1284,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1208,
           "column": 3,
-          "offsetStart": 50238,
-          "offsetEnd": 50264
+          "offsetStart": 50337,
+          "offsetEnd": 50363
         },
         "productiveConsumers": [
           {
@@ -1520,8 +1316,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1206,
           "column": 3,
-          "offsetStart": 50102,
-          "offsetEnd": 50120
+          "offsetStart": 50201,
+          "offsetEnd": 50219
         },
         "productiveConsumers": [
           {
@@ -1552,8 +1348,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1204,
           "column": 3,
-          "offsetStart": 49976,
-          "offsetEnd": 49995
+          "offsetStart": 50075,
+          "offsetEnd": 50094
         },
         "productiveConsumers": [
           {
@@ -1584,8 +1380,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1196,
           "column": 3,
-          "offsetStart": 49643,
-          "offsetEnd": 49664
+          "offsetStart": 49742,
+          "offsetEnd": 49763
         },
         "productiveConsumers": [
           {
@@ -1609,8 +1405,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1202,
           "column": 3,
-          "offsetStart": 49871,
-          "offsetEnd": 49887
+          "offsetStart": 49970,
+          "offsetEnd": 49986
         },
         "productiveConsumers": [
           {
@@ -1647,14 +1443,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1199,
           "column": 3,
-          "offsetStart": 49761,
-          "offsetEnd": 49774
+          "offsetStart": 49860,
+          "offsetEnd": 49873
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/operational/index.tsx",
-            "line": 208,
-            "column": 55,
+            "line": 210,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1672,14 +1468,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1200,
           "column": 3,
-          "offsetStart": 49788,
-          "offsetEnd": 49801
+          "offsetStart": 49887,
+          "offsetEnd": 49900
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/operational/index.tsx",
-            "line": 208,
-            "column": 55,
+            "line": 210,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1697,8 +1493,8 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1210,
           "column": 3,
-          "offsetStart": 50374,
-          "offsetEnd": 50395
+          "offsetStart": 50473,
+          "offsetEnd": 50494
         },
         "productiveConsumers": [
           {
@@ -1741,13 +1537,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1458,
           "column": 3,
-          "offsetStart": 60805,
-          "offsetEnd": 60825
+          "offsetStart": 60937,
+          "offsetEnd": 60957
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/scheduler/index.tsx",
-            "line": 124,
+            "line": 126,
             "column": 39,
             "role": "read"
           }
@@ -1766,13 +1562,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1456,
           "column": 3,
-          "offsetStart": 60709,
-          "offsetEnd": 60719
+          "offsetStart": 60841,
+          "offsetEnd": 60851
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/scheduler/index.tsx",
-            "line": 127,
+            "line": 129,
             "column": 37,
             "role": "read"
           }
@@ -1791,14 +1587,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1453,
           "column": 3,
-          "offsetStart": 60564,
-          "offsetEnd": 60577
+          "offsetStart": 60696,
+          "offsetEnd": 60709
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/scheduler/index.tsx",
-            "line": 116,
-            "column": 85,
+            "line": 118,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1816,14 +1612,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1454,
           "column": 3,
-          "offsetStart": 60591,
-          "offsetEnd": 60604
+          "offsetStart": 60723,
+          "offsetEnd": 60736
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/operations/scheduler/index.tsx",
-            "line": 116,
-            "column": 85,
+            "line": 118,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1841,14 +1637,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1029,
           "column": 3,
-          "offsetStart": 42551,
-          "offsetEnd": 42564
+          "offsetStart": 42628,
+          "offsetEnd": 42641
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/search/index.tsx",
-            "line": 159,
-            "column": 64,
+            "line": 161,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1879,14 +1675,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1030,
           "column": 3,
-          "offsetStart": 42578,
-          "offsetEnd": 42591
+          "offsetStart": 42655,
+          "offsetEnd": 42668
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/search/index.tsx",
-            "line": 159,
-            "column": 64,
+            "line": 161,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1911,14 +1707,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1757,
           "column": 3,
-          "offsetStart": 72172,
-          "offsetEnd": 72185
+          "offsetStart": 72359,
+          "offsetEnd": 72372
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/admin/settings/index.tsx",
-            "line": 65,
-            "column": 64,
+            "line": 67,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1936,14 +1732,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 1758,
           "column": 3,
-          "offsetStart": 72199,
-          "offsetEnd": 72212
+          "offsetStart": 72386,
+          "offsetEnd": 72399
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/admin/settings/index.tsx",
-            "line": 65,
-            "column": 64,
+            "line": 67,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -1959,10 +1755,10 @@
         "path": "actionBar",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 61,
+          "line": 75,
           "column": 3,
-          "offsetStart": 2358,
-          "offsetEnd": 2367
+          "offsetStart": 2987,
+          "offsetEnd": 2996
         },
         "productiveConsumers": [
           {
@@ -1973,13 +1769,13 @@
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 998,
+            "line": 921,
             "column": 46,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2727,
+            "line": 2617,
             "column": 16,
             "role": "read"
           }
@@ -1996,27 +1792,27 @@
         "path": "collection",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 50,
+          "line": 64,
           "column": 3,
-          "offsetStart": 1943,
-          "offsetEnd": 1953
+          "offsetStart": 2572,
+          "offsetEnd": 2582
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1012,
+            "line": 935,
             "column": 17,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1013,
+            "line": 936,
             "column": 22,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1016,
+            "line": 939,
             "column": 15,
             "role": "read"
           }
@@ -2033,10 +1829,10 @@
         "path": "compactHeader",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 65,
+          "line": 79,
           "column": 3,
-          "offsetStart": 2502,
-          "offsetEnd": 2515
+          "offsetStart": 3131,
+          "offsetEnd": 3144
         },
         "productiveConsumers": [
           {
@@ -2047,19 +1843,19 @@
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1000,
+            "line": 923,
             "column": 13,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1018,
+            "line": 941,
             "column": 39,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2173,
+            "line": 2064,
             "column": 28,
             "role": "read"
           }
@@ -2076,21 +1872,21 @@
         "path": "filters",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 63,
+          "line": 77,
           "column": 3,
-          "offsetStart": 2420,
-          "offsetEnd": 2427
+          "offsetStart": 3049,
+          "offsetEnd": 3056
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 991,
+            "line": 914,
             "column": 27,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 994,
+            "line": 917,
             "column": 27,
             "role": "read"
           }
@@ -2107,10 +1903,10 @@
         "path": "formLayout",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 57,
+          "line": 71,
           "column": 3,
-          "offsetStart": 2210,
-          "offsetEnd": 2220
+          "offsetStart": 2839,
+          "offsetEnd": 2849
         },
         "productiveConsumers": [
           {
@@ -2138,57 +1934,63 @@
         "path": "gridColumns",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 55,
+          "line": 69,
           "column": 3,
-          "offsetStart": 2145,
-          "offsetEnd": 2156
+          "offsetStart": 2774,
+          "offsetEnd": 2785
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 128,
+            "line": 112,
+            "column": 15,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 115,
+            "column": 20,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 116,
+            "column": 33,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 117,
             "column": 16,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 131,
+            "line": 118,
+            "column": 16,
+            "role": "read"
+          },
+          {
+            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
+            "line": 124,
             "column": 21,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 132,
-            "column": 34,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 133,
-            "column": 17,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 134,
-            "column": 17,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-            "line": 140,
-            "column": 21,
-            "role": "read"
+            "line": 148,
+            "column": 33,
+            "role": "transport-read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2053,
+            "line": 1944,
             "column": 44,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 2608,
+            "line": 2498,
             "column": 44,
             "role": "read"
           }
@@ -2198,20 +2000,20 @@
         "testOnly": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 47,
-            "column": 46,
+            "line": 64,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 48,
-            "column": 45,
+            "line": 65,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 49,
-            "column": 44,
+            "line": 66,
+            "column": 53,
             "role": "read"
           }
         ],
@@ -2224,51 +2026,51 @@
         "path": "pane",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
-          "line": 59,
+          "line": 73,
           "column": 3,
-          "offsetStart": 2303,
-          "offsetEnd": 2307
+          "offsetStart": 2932,
+          "offsetEnd": 2936
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1031,
+            "line": 954,
             "column": 31,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1478,
+            "line": 1392,
             "column": 41,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1479,
+            "line": 1393,
             "column": 45,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1522,
+            "line": 1442,
             "column": 15,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1530,
+            "line": 1450,
             "column": 39,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1531,
+            "line": 1451,
             "column": 43,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1541,
+            "line": 1461,
             "column": 56,
             "role": "read"
           }
@@ -2278,56 +2080,50 @@
         "testOnly": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 12,
-            "column": 46,
+            "line": 16,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 13,
-            "column": 45,
+            "line": 17,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 14,
-            "column": 44,
+            "line": 18,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 23,
-            "column": 46,
+            "line": 19,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 24,
-            "column": 45,
+            "line": 28,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 25,
-            "column": 44,
+            "line": 29,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 35,
-            "column": 46,
+            "line": 30,
+            "column": 53,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 36,
-            "column": 45,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/tests/adaptive.test.ts",
-            "line": 37,
-            "column": 44,
+            "line": 31,
+            "column": 53,
             "role": "read"
           }
         ],
@@ -2342,14 +2138,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 954,
           "column": 3,
-          "offsetStart": 39741,
-          "offsetEnd": 39762
+          "offsetStart": 39807,
+          "offsetEnd": 39828
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/visualization/index.tsx",
             "line": 119,
-            "column": 19,
+            "column": 54,
             "role": "read"
           }
         ],
@@ -2367,14 +2163,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 951,
           "column": 3,
-          "offsetStart": 39605,
-          "offsetEnd": 39618
+          "offsetStart": 39671,
+          "offsetEnd": 39684
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/visualization/index.tsx",
-            "line": 111,
-            "column": 55,
+            "line": 113,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -2399,14 +2195,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 952,
           "column": 3,
-          "offsetStart": 39632,
-          "offsetEnd": 39645
+          "offsetStart": 39698,
+          "offsetEnd": 39711
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/data/visualization/index.tsx",
-            "line": 111,
-            "column": 55,
+            "line": 113,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -2424,13 +2220,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 802,
           "column": 3,
-          "offsetStart": 33616,
-          "offsetEnd": 33636
+          "offsetStart": 33660,
+          "offsetEnd": 33680
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 385,
+            "line": 387,
             "column": 62,
             "role": "read"
           }
@@ -2449,13 +2245,13 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 804,
           "column": 3,
-          "offsetStart": 33726,
-          "offsetEnd": 33745
+          "offsetStart": 33770,
+          "offsetEnd": 33789
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 389,
+            "line": 391,
             "column": 60,
             "role": "read"
           }
@@ -2474,14 +2270,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 799,
           "column": 3,
-          "offsetStart": 33515,
-          "offsetEnd": 33528
+          "offsetStart": 33559,
+          "offsetEnd": 33572
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 123,
-            "column": 85,
+            "line": 125,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -2499,14 +2295,14 @@
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/index.ts",
           "line": 800,
           "column": 3,
-          "offsetStart": 33542,
-          "offsetEnd": 33555
+          "offsetStart": 33586,
+          "offsetEnd": 33599
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/forms/wizard/index.tsx",
-            "line": 123,
-            "column": 85,
+            "line": 125,
+            "column": 63,
             "role": "transport-read"
           }
         ],
@@ -2522,33 +2318,33 @@
         "path": "mobileNavigation",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
-          "line": 349,
+          "line": 355,
           "column": 3,
-          "offsetStart": 12337,
-          "offsetEnd": 12353
+          "offsetStart": 12588,
+          "offsetEnd": 12604
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1477,
+            "line": 1391,
             "column": 48,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1516,
+            "line": 1436,
             "column": 30,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1529,
+            "line": 1449,
             "column": 46,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1541,
+            "line": 1461,
             "column": 30,
             "role": "read"
           }
@@ -2565,33 +2361,33 @@
         "path": "mobileNavigation.enabled",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
-          "line": 351,
+          "line": 357,
           "column": 5,
-          "offsetStart": 12417,
-          "offsetEnd": 12424
+          "offsetStart": 12668,
+          "offsetEnd": 12675
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1479,
+            "line": 1393,
             "column": 77,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1480,
+            "line": 1394,
             "column": 48,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1531,
+            "line": 1451,
             "column": 75,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1534,
+            "line": 1454,
             "column": 21,
             "role": "read"
           }
@@ -2608,33 +2404,27 @@
         "path": "mobileNavigation.href",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
-          "line": 353,
+          "line": 364,
           "column": 5,
-          "offsetStart": 12549,
-          "offsetEnd": 12553
+          "offsetStart": 12982,
+          "offsetEnd": 12986
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1485,
+            "line": 1406,
             "column": 49,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1486,
-            "column": 44,
-            "role": "read"
-          },
-          {
-            "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1535,
+            "line": 1455,
             "column": 21,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1540,
+            "line": 1460,
             "column": 22,
             "role": "read"
           }
@@ -2651,21 +2441,21 @@
         "path": "mobileNavigation.onClick",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
-          "line": 355,
+          "line": 366,
           "column": 5,
-          "offsetStart": 12646,
-          "offsetEnd": 12653
+          "offsetStart": 13079,
+          "offsetEnd": 13086
         },
         "productiveConsumers": [
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1489,
+            "line": 1409,
             "column": 49,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-            "line": 1490,
+            "line": 1410,
             "column": 21,
             "role": "read"
           }
@@ -2682,10 +2472,10 @@
         "path": "mobileBreakpoint",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
-          "line": 431,
+          "line": 449,
           "column": 3,
-          "offsetStart": 15597,
-          "offsetEnd": 15613
+          "offsetStart": 16348,
+          "offsetEnd": 16364
         },
         "productiveConsumers": [
           {
@@ -2696,7 +2486,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/runtime/collection-workspace/index.ts",
-            "line": 98,
+            "line": 95,
             "column": 41,
             "role": "read"
           }
@@ -2713,10 +2503,10 @@
         "path": "mobileView",
         "declaration": {
           "source": "ui-design-system/packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
-          "line": 432,
+          "line": 450,
           "column": 3,
-          "offsetStart": 15626,
-          "offsetEnd": 15636
+          "offsetStart": 16394,
+          "offsetEnd": 16404
         },
         "productiveConsumers": [
           {
@@ -2727,19 +2517,19 @@
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/runtime/collection-workspace/index.ts",
-            "line": 217,
+            "line": 206,
             "column": 54,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/runtime/collection-workspace/index.ts",
-            "line": 218,
+            "line": 207,
             "column": 45,
             "role": "read"
           },
           {
             "source": "ui-design-system/packages/core/src/components/surfaces/runtime/collection-workspace/index.ts",
-            "line": 221,
+            "line": 210,
             "column": 95,
             "role": "read"
           }
@@ -3078,7 +2868,7 @@
         "localName": "createTenantConfig",
         "declaration": {
           "source": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/runtime/authoring/configuration/index.ts",
-          "line": 83,
+          "line": 88,
           "column": 17
         },
         "productiveCallers": [
@@ -3102,7 +2892,7 @@
           },
           {
             "source": "ui-design-system/packages/core/src/infrastructure/runtime/tenant/composition/react/authoring/use-create-tenant/index.ts",
-            "line": 173,
+            "line": 189,
             "column": 14,
             "repository": "ui-design-system"
           }

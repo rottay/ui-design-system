@@ -61,6 +61,13 @@ function inspectCounterMap(name, value) {
   return { errors, entries, keys };
 }
 
+/*
+ * Structural errors (an exotic or malformed map) are fatal: the data cannot be
+ * trusted, so nothing downstream may read it. Roster errors (a counter with no
+ * baseline, a deleted baseline counter, misdeclared governance) are reported
+ * AND allow the value comparison to run, so one invocation lists every real
+ * regression instead of stopping at the first unbaselined counter.
+ */
 function inspectPolicyMaps({ baseline, subjectName, subject, exact, minimum }) {
   const inspected = {
     baseline: inspectCounterMap('baseline', baseline),
@@ -68,28 +75,29 @@ function inspectPolicyMaps({ baseline, subjectName, subject, exact, minimum }) {
     exact: inspectCounterMap('exact', exact),
     minimum: inspectCounterMap('minimum', minimum),
   };
-  const errors = Object.values(inspected).flatMap((entry) => entry.errors);
-  if (errors.length > 0) return { inspected, errors };
+  const structuralErrors = Object.values(inspected).flatMap((entry) => entry.errors);
+  if (structuralErrors.length > 0) return { inspected, structuralErrors, rosterErrors: [] };
 
+  const rosterErrors = [];
   for (const key of [...inspected.subject.keys].filter((key) => !inspected.baseline.keys.has(key)).sort()) {
     const value = inspected.subject.entries.find(([entry]) => entry === key)?.[1];
-    errors.push(`counter has no baseline: ${key}=${value}`);
+    rosterErrors.push(`counter has no baseline: ${key}=${value}`);
   }
   for (const key of [...inspected.baseline.keys].filter((key) => !inspected.subject.keys.has(key)).sort()) {
-    errors.push(`baseline counter disappeared: ${key}`);
+    rosterErrors.push(`baseline counter disappeared: ${key}`);
   }
 
   for (const key of [...inspected.exact.keys].sort()) {
-    if (inspected.minimum.keys.has(key)) errors.push(`counter cannot be both exact and minimum-governed: ${key}`);
-    if (!inspected.baseline.keys.has(key)) errors.push(`exact invariant has no baseline counter: ${key}`);
-    if (!inspected.subject.keys.has(key)) errors.push(`exact invariant has no ${subjectName} counter: ${key}`);
+    if (inspected.minimum.keys.has(key)) rosterErrors.push(`counter cannot be both exact and minimum-governed: ${key}`);
+    if (!inspected.baseline.keys.has(key)) rosterErrors.push(`exact invariant has no baseline counter: ${key}`);
+    if (!inspected.subject.keys.has(key)) rosterErrors.push(`exact invariant has no ${subjectName} counter: ${key}`);
   }
   for (const key of [...inspected.minimum.keys].sort()) {
-    if (!inspected.baseline.keys.has(key)) errors.push(`minimum floor has no baseline counter: ${key}`);
-    if (!inspected.subject.keys.has(key)) errors.push(`minimum floor has no ${subjectName} counter: ${key}`);
+    if (!inspected.baseline.keys.has(key)) rosterErrors.push(`minimum floor has no baseline counter: ${key}`);
+    if (!inspected.subject.keys.has(key)) rosterErrors.push(`minimum floor has no ${subjectName} counter: ${key}`);
   }
 
-  return { inspected, errors };
+  return { inspected, structuralErrors, rosterErrors };
 }
 
 function entryMap(inspected) {
@@ -98,14 +106,15 @@ function entryMap(inspected) {
 
 /** Validate a normal audit check without throwing for adversarial input. */
 export function evaluateZeroLockCheck({ baseline, current, exact = {}, minimum = {} } = {}) {
-  const { inspected, errors } = inspectPolicyMaps({
+  const { inspected, structuralErrors, rosterErrors } = inspectPolicyMaps({
     baseline,
     subjectName: 'current',
     subject: current,
     exact,
     minimum,
   });
-  if (errors.length > 0) return { ok: false, errors };
+  if (structuralErrors.length > 0) return { ok: false, errors: structuralErrors };
+  const errors = [...rosterErrors];
 
   const baselineValues = entryMap(inspected.baseline);
   const currentValues = entryMap(inspected.subject);
@@ -113,23 +122,28 @@ export function evaluateZeroLockCheck({ baseline, current, exact = {}, minimum =
   const minimumValues = entryMap(inspected.minimum);
 
   for (const [key, required] of exactValues) {
-    const count = currentValues.get(key);
-    if (count !== required) errors.push(`exact invariant broken: ${key}=${count}; required ${required}`);
-    if (baselineValues.get(key) !== required) {
+    if (currentValues.has(key)) {
+      const count = currentValues.get(key);
+      if (count !== required) errors.push(`exact invariant broken: ${key}=${count}; required ${required}`);
+    }
+    if (baselineValues.has(key) && baselineValues.get(key) !== required) {
       errors.push(`exact baseline drift: ${key} baseline=${baselineValues.get(key)}; required ${required}`);
     }
   }
 
   for (const [key, required] of minimumValues) {
-    const count = currentValues.get(key);
-    if (count < required) errors.push(`below minimum floor: ${key}=${count}; required >=${required}`);
-    if (baselineValues.get(key) < required) {
+    if (currentValues.has(key)) {
+      const count = currentValues.get(key);
+      if (count < required) errors.push(`below minimum floor: ${key}=${count}; required >=${required}`);
+    }
+    if (baselineValues.has(key) && baselineValues.get(key) < required) {
       errors.push(`minimum baseline drift: ${key} baseline=${baselineValues.get(key)}; required >=${required}`);
     }
   }
 
   for (const [key, count] of currentValues) {
     if (exactValues.has(key) || minimumValues.has(key)) continue;
+    if (!baselineValues.has(key)) continue;
     const ceiling = baselineValues.get(key);
     if (count > ceiling) errors.push(`ceiling regression: ${key}=${count}; baseline=${ceiling}`);
     if (count === 0 && ceiling > 0) {
@@ -142,23 +156,19 @@ export function evaluateZeroLockCheck({ baseline, current, exact = {}, minimum =
 
 /** Validate the candidate written by --update-baseline without throwing. */
 export function evaluateBaselineTightening({ baseline, candidate, exact = {}, minimum = {} } = {}) {
-  const { inspected, errors } = inspectPolicyMaps({
+  const { inspected, structuralErrors, rosterErrors } = inspectPolicyMaps({
     baseline,
     subjectName: 'candidate',
     subject: candidate,
     exact,
     minimum,
   });
-  if (errors.length > 0) {
-    return {
-      ok: false,
-      errors: errors.map((error) => error.startsWith('counter has no baseline:')
-        ? error.replace('counter has no baseline:', 'new counter requires an explicit reviewed baseline entry:')
-        : error.startsWith('baseline counter disappeared:')
-        ? error.replace('baseline counter disappeared:', 'baseline counter cannot be deleted by update:')
-        : error),
-    };
-  }
+  if (structuralErrors.length > 0) return { ok: false, errors: structuralErrors };
+  const errors = rosterErrors.map((error) => error.startsWith('counter has no baseline:')
+    ? error.replace('counter has no baseline:', 'new counter requires an explicit reviewed baseline entry:')
+    : error.startsWith('baseline counter disappeared:')
+    ? error.replace('baseline counter disappeared:', 'baseline counter cannot be deleted by update:')
+    : error);
 
   const baselineValues = entryMap(inspected.baseline);
   const candidateValues = entryMap(inspected.subject);
@@ -175,20 +185,25 @@ export function evaluateBaselineTightening({ baseline, candidate, exact = {}, mi
      * may rise freely and may never fall under its required value.
      */
     if (minimumValues.has(key)) continue;
+    if (!baselineValues.has(key)) continue;
     const previous = baselineValues.get(key);
     if (count > previous) errors.push(`baseline update would absorb an increase: ${key} ${previous} -> ${count}`);
   }
   for (const [key, required] of exactValues) {
-    const count = candidateValues.get(key);
-    if (count !== required) errors.push(`candidate breaks exact invariant: ${key}=${count}; required ${required}`);
-    if (baselineValues.get(key) !== required) {
+    if (candidateValues.has(key)) {
+      const count = candidateValues.get(key);
+      if (count !== required) errors.push(`candidate breaks exact invariant: ${key}=${count}; required ${required}`);
+    }
+    if (baselineValues.has(key) && baselineValues.get(key) !== required) {
       errors.push(`exact baseline drift: ${key} baseline=${baselineValues.get(key)}; required ${required}`);
     }
   }
   for (const [key, required] of minimumValues) {
-    const count = candidateValues.get(key);
-    if (count < required) errors.push(`candidate falls below minimum floor: ${key}=${count}; required >=${required}`);
-    if (baselineValues.get(key) < required) {
+    if (candidateValues.has(key)) {
+      const count = candidateValues.get(key);
+      if (count < required) errors.push(`candidate falls below minimum floor: ${key}=${count}; required >=${required}`);
+    }
+    if (baselineValues.has(key) && baselineValues.get(key) < required) {
       errors.push(`minimum baseline drift: ${key} baseline=${baselineValues.get(key)}; required >=${required}`);
     }
   }

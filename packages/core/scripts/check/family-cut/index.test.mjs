@@ -188,6 +188,43 @@ test('PLANT: a `--ds-button-x` read with no producer grows the ratchet', () => {
   );
 });
 
+const PRESENTATION_SKIN = 'src/foundation/tokens/css/presentation/components/skin/button-group/index.css';
+
+test('PLANT: a read with no producer in a PRESENTATION-tier skin grows the ratchet', () => {
+  // The arm used to filter the corpus down to `engines/modern`, so a family
+  // whose channels are read from a presentation-tier skin understated its debt
+  // (data-table read 1 of its 4 skins). Every skin `resolveFamily` admits is
+  // measured.
+  withPlantedFamily(
+    (sandbox) => patch(sandbox, PRESENTATION_SKIN, (text) =>
+      `${text}\n.ds-button-group--planted { color: var(--ds-button-group-y, #ff0000); }\n`),
+    (findings, measured) => {
+      assert.ok(
+        measured.detail.readWithoutProducer.includes('--ds-button-group-y'),
+        'a presentation-tier skin read with no producer is the family\'s debt',
+      );
+      expectFinding(
+        findings,
+        grew('readWithoutProducer'),
+        'the presentation-tier read must turn the family red',
+      );
+    },
+  );
+});
+
+test('CONTROL: the presentation-tier skin is in the measured corpus and its produced reads are not debt', () => {
+  withPlantedFamily(
+    (sandbox) => patch(sandbox, PRESENTATION_SKIN, (text) => text),
+    (findings, measured) => {
+      assert.ok(
+        measured.denominators.skinFiles > 1,
+        'the family measures its presentation-tier skins, not only engines/modern',
+      );
+      expectNoFinding(findings, '`readWithoutProducer` GREW', 'an untouched corpus cannot grow the ratchet');
+    },
+  );
+});
+
 test('CONTROL: the same `--ds-button-x` WITH a producer does not grow the ratchet', () => {
   // Proves the red above is caused by the MISSING PRODUCER and not by the
   // appearance of a new name.
