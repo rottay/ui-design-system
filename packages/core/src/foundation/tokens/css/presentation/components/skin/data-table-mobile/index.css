@@ -282,16 +282,16 @@
         Text prop-swapped to color="subtle", not a rule) ---- */
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-title"] {
   color: var(--ds-color-text-primary);
-  font-family: var(--ds-typography-section-title-family, inherit);
-  font-weight: var(--ds-typography-section-title-weight, 600);
+  font-family: var(--ds-type-section-title-font-family, inherit);
+  font-weight: var(--ds-type-section-title-font-weight, 600);
 }
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-card-summary-label"] {
   flex-shrink: 0;
-  font-family: var(--ds-typography-label-family, inherit);
+  font-family: var(--ds-type-label-font-family, inherit);
   font-size: var(--ds-typography-label-size, 0.6875rem);
-  font-weight: var(--ds-typography-label-weight, 600);
-  letter-spacing: var(--ds-typography-label-tracking, 0.04em);
+  font-weight: var(--ds-type-label-font-weight, 600);
+  letter-spacing: var(--ds-type-label-letter-spacing, 0.04em);
   text-transform: var(--ds-typography-label-transform, uppercase);
 }
 .ds-pattern-data-table.ds-data-table--mobile
@@ -340,8 +340,8 @@
 }
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-bulk-count"] {
-  font-size: var(--ds-typography-supporting-size, 0.8125rem);
-  font-weight: var(--ds-typography-label-weight, 600);
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
+  font-weight: var(--ds-type-label-font-weight, 600);
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
@@ -376,7 +376,7 @@
   [data-part="mobile-pagination-range"],
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-pagination-page"] {
-  font-size: var(--ds-typography-supporting-size, 0.8125rem);
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
   font-variant-numeric: tabular-nums;
 }
 
@@ -493,7 +493,7 @@
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="record-meta-value"] {
   min-inline-size: 0;
-  font-size: var(--ds-typography-supporting-size, 0.8125rem);
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
   overflow-wrap: anywhere;
 }
 

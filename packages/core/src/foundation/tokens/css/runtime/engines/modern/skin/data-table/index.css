@@ -95,7 +95,7 @@
   width: 100%;
   min-width: 0;
   color: var(--ds-table-cell-color, var(--ds-color-text-primary));
-  font-family: var(--ds-typography-body-family, inherit);
+  font-family: var(--ds-type-body-font-family, inherit);
   contain: layout style;
   container-name: ds-table;
   container-type: inline-size;
@@ -332,13 +332,13 @@
   max-inline-size: var(--ds-data-table-state-copy-max-inline-size, 32rem);
   text-align: center;
   text-wrap: balance;
-  font-family: var(--ds-typography-section-title-family, inherit);
+  font-family: var(--ds-type-section-title-font-family, inherit);
   font-size: var(--ds-data-table-empty-title-font-size, var(--ds-font-size-sm));
   font-weight: var(
     --ds-data-table-empty-title-font-weight,
     var(--ds-type-section-title-font-weight, 600)
   );
-  letter-spacing: var(--ds-typography-section-title-tracking, -0.01em);
+  letter-spacing: var(--ds-type-section-title-letter-spacing, -0.01em);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="state-description"] {
@@ -787,7 +787,7 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
-  font-family: var(--ds-typography-section-title-family, inherit);
+  font-family: var(--ds-type-section-title-font-family, inherit);
   font-size: var(
     --ds-data-table-group-header-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
@@ -2000,7 +2000,7 @@
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="data-cell"]:first-of-type {
-  font-family: var(--ds-typography-section-title-family, inherit);
+  font-family: var(--ds-type-section-title-font-family, inherit);
   font-weight: var(
     --ds-data-table-editorial-lead-font-weight,
     var(--ds-type-section-title-font-weight, 600)
@@ -2009,7 +2009,7 @@
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
   [data-part="pagination-bar"] {
-  font-family: var(--ds-typography-supporting-family, inherit);
+  font-family: var(--ds-type-supporting-font-family, inherit);
 }
 
 @media (hover: hover) {
