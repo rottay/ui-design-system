@@ -147,3 +147,19 @@ the stateful row — export the row guard from the engine, or move the
 focused-row concern into the renderRow contract so the workspace never sniffs
 element types. The silent-no-op failure mode deserves a regression either way:
 a decorator that matches nothing must fail loudly, not pass undecorated rows.
+
+## 2026-09-18 (fifth sitting) — PresenceBar avatar geometry: premise retired, not a paint regression
+
+Reproduced: `presence.modern-rescue.test.tsx:41` — `face.style.width` reads `''`
+where the test expects the literal `var(--ds-avatar-sm-size)`. Named cause:
+`6627914f0` (WO-FAM-06 avatar cut) deleted the modern Avatar engine's inline
+`sizeStyle` (`width/height: var(--ds-avatar-<size>-size)`) and moved the geometry
+to the skin — `skin/avatar/index.css:383-385` rules
+`[data-size='sm'] { inline-size: var(--ds-avatar-sm-size) }` on the same element,
+with the engine stamping only `data-size` (engines/modern/index.tsx:201). The
+governance chain the test exists to prove (token, not a pattern pixel table) is
+INTACT — it lives one layer over, which is exactly where the inline-paint zero
+lock requires it. Writer brief: rewrite the assertion against the skin contract
+(a computed-style read in the real-browser suite, or data-size + the skin rule),
+not a re-pin of the retired premise; the line-43 slot assertion never ran (the
+test dies at line 41) and needs its first honest reading.
