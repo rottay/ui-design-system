@@ -34,7 +34,7 @@ interface CalendarHeatMapOwnProps extends ChartBaseProps, ChartColorSchemeProps,
   endDate?: Date | string;
   /** Color range [low, high]. Default: [--ds-color-bg-tertiary, personality primary] */
   colorRange?: [string, string];
-  /** Number of discrete color steps. Default: 5 */
+  /** Number of discrete color steps. Defaults to the family's declared ramp. */
   colorSteps?: number;
   /** Day cell size in pixels. Default: 14 */
   cellSize?: number;
@@ -86,7 +86,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   endDate: endDateProp,
   colorRange,
   colorScheme,
-  colorSteps = 5,
+  colorSteps,
   cellSize = 14,
   cellGap = 2,
   showMonthLabels = true,
@@ -119,6 +119,11 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   const resolvedColorRange = useMemo<[string, string]>(() => (
     colorRange ?? ['var(--ds-color-bg-tertiary)', chartPersonality.colors[0] ?? 'var(--ds-color-primary-500)']
   ), [chartPersonality.colors, colorRange]);
+  // How many discrete steps this family's ramp quantizes into is the registry's
+  // declared fact; a caller's `colorSteps` still wins over it.
+  const rampSteps = paint.sequential?.steps;
+  const resolvedColorSteps = colorSteps
+    ?? (typeof rampSteps === 'number' && Number.isFinite(rampSteps) ? rampSteps : undefined);
 
   const endDate = useMemo(() => {
     if (endDateProp) {
@@ -288,7 +293,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
           height={heightProp}
           responsive={responsive}
           colorRange={resolvedColorRange}
-          colorSteps={colorSteps}
+          {...(resolvedColorSteps === undefined ? {} : { colorSteps: resolvedColorSteps })}
           cellSize={cellSize}
           cellGap={cellGap}
           showMonthLabels={showMonthLabels}
