@@ -474,3 +474,52 @@ derivation/index.ts registrations (DT's own lines, one commit per sub-lot).
   the close audit against the WO's own acceptance gate (RWP=0 per family, axe
   per family, the closure criteria of F-55/F-41/F-64) plus the routed residue
   owners remain.
+
+## 2026-09-18 (seventeenth sitting) — the full red ledger, attributed (4-agent forensic sweep)
+
+Every red gate in gates:ci --continue reproduced and classified. CURED by the DT
+window + re-pins this session (all instrument-verified): family-cut (gate+drill),
+state-material-arm, theme-population (+drill), read-without-producer (+drill),
+normalization-contract (+drill), artifact-coverage (+drill), decisions-lit-freshness,
+fanout-facts-freshness (ordering defect found: fanout must run AFTER
+foundation-defaults — 9eebadbdf had it backwards), docs-public-set (+drill),
+customization-controls-freshness, foundation-defaults-freshness, vertical-css-source-staleness.
+Commits: bfcac0099 (five instruments), 9eebadbdf, 70240e376.
+
+REMAINING, by route:
+- WRITER LOTS: cascade-wiring (~298 FAM-10 channels with no root path — the
+  template's "produced value = the skin's literal fallback" doctrine collides
+  with the ratchet's every-channel-roots law; needs the DER-lane ruling or a
+  multi-lot wiring program — flagged for the owner as a doctrine question);
+  channel-liveness SEMANTIC_OWNER_RULES extension for the 19 new derivers
+  (precedent 748cdf85c); engine-token-audit real regressions (kanban
+  c0ea6e447, file-manager/upload e4f1db1b9, chart renderers b23ac47a9 inline
+  paint) plus the header-tone zero-counters re-pin; physical-properties
+  (orphaned copyToClipboard exception + 2 offsetMargins sites); wiring-coverage
+  (register the FAM-09 probe as a manual tool); baseline-discipline (3 ledger
+  purpose fields, empty-ledger law, stale WIDENINGS entry, APCA drill synth);
+  tenant-reachability drill corpus (REACH_CORPUS missing palette sub-owners
+  since 4624e4555); integration-audit (12 --ds-sidebar-* orphan premium
+  emissions, menu-cut residue); customization manifest stale bindings
+  (11 families + notifier inventory row — RET-03 quarantine territory);
+  engine-token-audit-drill control class ds-switch__track gone since 9d924e9f2
+  (pick a live control); fanout-facts-drill line anchors follow the reads.
+- OWNER DECISIONS (added): error-boundary exemption floor (SKIN-EXEMPT-
+  CRASH-SAFE-FALLBACK=8 vs the measured 3-property floor — restore paint or
+  re-declare); theme-channel-parity new buckets (collapse, type-tier letter
+  spacing, sidebar — the gate law requires reviewed manual adoption);
+  tenant-reachability 338 newly-resolved literals (route per class or
+  accept-with-reason); theme-lowering-single-door ?? shape (9d7294e33 vs the
+  arity census law); engine-posture classic/surfaces cell (measured gap 0 vs a
+  pin that asserts unaccounted > 0 — reclassification); motion-contracts
+  re-anchor over the settled sibling worktree (ratchet GREW — adjudication,
+  not blind re-pin); csspaint --radius-field ownership; dead-writers anchor
+  move (5 exits lawful, 9 new dead writers must be wired-or-retired first).
+- PRE-EXISTING, already routed: D3 nested owners (toggle/switch,
+  stepper/steps — quality-evidence-v2-drills + taxonomy-parity), the
+  channel-liveness 3 STOP NO-GO rows (748cdf85c's packet).
+
+A dispatched writer lot (brief-instrument-repairs-1.md) covers the four
+mechanical instrument repairs: retired-vertical-identity comment word,
+physical-properties exception+band, wiring-coverage probe registration,
+baseline-discipline ledgers.
