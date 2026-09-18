@@ -210,3 +210,25 @@ eagerly for the default window target (the `useState(false)` initializer knows
 `scrollTop >= visibilityHeight` without any effect), keeping the two-pass
 resolution only for ref-backed targets — which also removes a real
 two-frame pop-in on first paint, not only the test flake.
+
+## 2026-09-18 (ninth sitting) — D/E draft PRE-AUDIT, part 1 (writer still quota-blocked)
+
+Audited ahead of integration so the writer's cardGround repair is the only open
+item when the seat returns. PASS so far:
+
+- derivation/index.ts: five derivers imported and registered, placement clean.
+- cockpit modern engine: the hand skeleton retires for
+  `AnatomySkeleton{busy:false}` around the live chrome — the skeleton's source
+  wrapper carries `aria-hidden` + `inert` while loading, so the invisible
+  controls are unreachable; the root keeps the single busy announcement
+  (role=status + aria-busy + translated label). Interaction kernel adopted with
+  the pointer-only split on the card documented (a bubbled crumb focus must not
+  stamp the card's ring). No `React.` leftovers after the import change.
+- section-frame: the retired `rt-section-frame__*` BEM names survive ONLY as
+  negative assertions in the draft's own cut/causality tests; no production
+  selector reads them.
+- workbench keeps its `React` default import (its `React.KeyboardEvent` at :181
+  is safe); section-frame's `React.JSX.Element` predates the draft.
+
+Still to audit: the workbench engine diff, the mobile-header rendering diff, the
+four skin diffs, the five new derivers, the new test files.
