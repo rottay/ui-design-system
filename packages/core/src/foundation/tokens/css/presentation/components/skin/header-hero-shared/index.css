@@ -178,7 +178,7 @@
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-/* `:is(<kernel token>, <platform pseudo>)` is ONE decision with its platform
+/* `:is(<kernel token>, <bare pseudo>)` is ONE decision with its native
    fallback, and it carries the same specificity the bare pseudo did (both arms are
    (0,1,0)), so nothing below moves. The kernel arm is what keeps the chip lit while
    the pointer sits on the ANCHOR rather than on the chip's own box. */

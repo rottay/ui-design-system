@@ -93,7 +93,7 @@
 
 /* The region is tabbable (scrollable-region law): keyboard focus must read on
    the region itself before its items take over. The kernel decides when the
-   region carries a focus ring; `:focus-visible` is that decision's platform
+   region carries a focus ring; `:focus-visible` is that decision's native
    fallback, not a second opinion. */
 .ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid

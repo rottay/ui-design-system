@@ -109,7 +109,7 @@
   outline: none;
 }
 
-/* One decision, with its platform fallback: the panel's ring is the kernel's
+/* One decision, with its native fallback: the panel's ring is the kernel's
    answer, and `:focus-visible` is what the kernel falls through to (F-37). */
 .ds-structure.ds-column-menu-panel[data-part="surface"]
   [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {
