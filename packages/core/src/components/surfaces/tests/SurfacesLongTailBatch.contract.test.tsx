@@ -255,16 +255,16 @@ describe('long-tail anatomy layout and workspace anatomy (I-3)', () => {
     await waitForSelectors(container, [
       '.ds-surface.ds-collection-shell[data-part="root"][data-variant="default"][data-mood="focus"][data-intensity="high"][data-continuity="segmented"][data-field-pattern="orbital"][data-focus-reaction="true"][data-preview-emphasis="true"][data-focus-active="true"][data-preview-active="true"]',
       '.ds-surface.ds-header[data-part="root"][data-loading="false"]',
-      '.ds-surface.ds-sidebar[data-part="root"][data-collapsed="true"][data-stacked="false"][data-bordered="false"]',
+      '.ds-structure.ds-sidebar-surface[data-part="root"][data-collapsed="true"][data-stacked="false"][data-bordered="false"]',
     ]);
     expect(q(container, '.ds-collection-shell__overlay[data-part="overlay"]')).toHaveLength(1);
     expect(q(container, '.ds-collection-shell__content[data-part="content"]')).toHaveLength(1);
     expect(q(container, '.ds-header__muted-text[data-part="root"]')).toHaveLength(1);
-    expect(q(container, '.ds-sidebar__panel')).toHaveLength(1);
-    expect(q(container, '.ds-sidebar__toggle[data-collapsed="true"]')).toHaveLength(1);
-    expect(q(container, '.ds-sidebar__navigation[data-part="navigation"]')).toHaveLength(1);
-    expect(q(container, '.ds-sidebar__main[data-part="main"]')).toHaveLength(1);
-    expect(q(container, '.ds-sidebar__aside')).toHaveLength(1);
+    expect(q(container, '.ds-sidebar-surface-panel')).toHaveLength(1);
+    expect(q(container, '.ds-sidebar-surface-toggle[data-collapsed="true"]')).toHaveLength(1);
+    expect(q(container, '.ds-sidebar-surface [data-part="navigation"]')).toHaveLength(1);
+    expect(q(container, '.ds-sidebar-surface [data-part="main"]')).toHaveLength(1);
+    expect(q(container, '.ds-sidebar-surface-aside')).toHaveLength(1);
   });
 
   it('pins workspace roots, lifecycle/tone/active/disabled states and BEM primitive hooks', async () => {
