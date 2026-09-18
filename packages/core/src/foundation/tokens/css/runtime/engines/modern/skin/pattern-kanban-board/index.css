@@ -426,3 +426,23 @@
     outline-color: Highlight;
   }
 }
+
+/* Reduced motion: durations collapse to near-zero but the transitions still
+   run to completion, so nothing is hidden or left waiting on an event that
+   never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body'],
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

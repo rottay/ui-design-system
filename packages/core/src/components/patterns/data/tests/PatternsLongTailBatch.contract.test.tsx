@@ -152,7 +152,9 @@ describe('long-tail anatomy patterns/data anatomy', () => {
       loading.container,
       '.ds-pattern-gallery-view[data-part="root"][data-loading="true"][data-empty="false"]',
     );
-    expect(q(loading.container, '[data-part="skeleton-card"]')).toHaveLength(8);
+    expect(q(loading.container, '[data-part="card"]')).toHaveLength(8);
+    expect(q(loading.container, '[data-part="image-frame"]')).toHaveLength(8);
+    expect(q(loading.container, '[data-part="caption-text"]')).toHaveLength(8);
     loading.unmount();
 
     const empty = renderWithEngine(
@@ -197,7 +199,8 @@ describe('long-tail anatomy patterns/data anatomy', () => {
       loading.container,
       '.ds-pattern-grid-view[data-part="root"][data-loading="true"][data-empty="false"]',
     );
-    expect(q(loading.container, '.ds-grid-view__skeleton')).toHaveLength(6);
+    expect(q(loading.container, '[data-part="card-shell"]')).toHaveLength(6);
+    expect(q(loading.container, '[data-part="card-content"]')).toHaveLength(6);
     loading.unmount();
 
     const empty = renderWithEngine(

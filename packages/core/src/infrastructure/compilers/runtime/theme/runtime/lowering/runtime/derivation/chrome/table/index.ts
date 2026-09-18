@@ -48,7 +48,7 @@ export function deriveTableChannels(): Record<string, string> {
   vars["--ds-table-pagination-margin-block-start"] = "var(--ds-spacing-4)";
 
   vars["--ds-table-selection-control-coarse-size"] =
-    "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))";
+    "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-table-touch-target-min"] = "var(--ds-touch-target-min)";
 
   return vars;

@@ -133,6 +133,17 @@
   background-color: var(--ds-tree-node-bg-hover);
 }
 
+/* Reduced motion: durations collapse to near-zero but the transition still
+   runs to completion, so nothing is hidden or left waiting on an event that
+   never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  [data-engine='modern'] .rottay-tree .rottay-tree-node {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 /* =============================================================================
    EMPTY
    ============================================================================= */

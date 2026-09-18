@@ -54,6 +54,14 @@ import { renderWithEngine } from '@tests/support/engine';
 //      sibling has hover/focus on all three. That asymmetry is behaviour being
 //      preserved, not a defect to fix, and it is photographed (twice, at rest
 //      and on hover) in headers-patterns-batch.spec.ts.
+//
+//   4. THE LOADING BRANCH SPEAKS TWO SKELETON VOCABULARIES in this file.
+//      PageShell (modern) hand-stamps `data-part="skeleton"` blocks under a
+//      `skeleton-group`; CockpitHeader and WorkbenchHeader render the shared
+//      AnatomySkeleton over their own chrome, which reads the stamped
+//      `data-part` tree and draws one `data-part="bone"` per drawn part, named
+//      by `data-source-part`. The pins below assert each engine against the
+//      vocabulary its source actually stamps.
 // ---------------------------------------------------------------------------
 
 /**
@@ -84,6 +92,17 @@ async function partsOf(container: HTMLElement): Promise<Set<string>> {
 
 function partCount(container: HTMLElement, part: string): number {
   return container.querySelectorAll(`[data-part="${part}"]`).length;
+}
+
+/**
+ * Bones the shared AnatomySkeleton drew for one stamped part. The loading
+ * branches of CockpitHeader and WorkbenchHeader ARE the AnatomySkeleton
+ * reading the header's own `data-part` tree: one `data-part="bone"` per drawn
+ * part, named by `data-source-part`, so the skeleton mirrors the anatomy the
+ * caller declared and cannot drift from it.
+ */
+function boneCountFor(container: HTMLElement, sourcePart: string): number {
+  return container.querySelectorAll(`[data-part="bone"][data-source-part="${sourcePart}"]`).length;
 }
 
 const noop = () => undefined;
@@ -200,7 +219,19 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
 
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
       expect(root.getAttribute('data-loading')).toBe('true');
-      expect(partCount(container, 'skeleton')).toBe(5);
+
+      // The loading branch is the shared AnatomySkeleton reading this header's
+      // own anatomy (engine fact 4): the full header draws three crumb blocks,
+      // the back button's `trigger`, the title and subtitle lines, and one
+      // line per status pill -- 11 bones.
+      await waitFor(() => {
+        expect(partCount(container, 'bone')).toBe(11);
+      });
+      expect(boneCountFor(container, 'crumb')).toBe(3);
+      expect(boneCountFor(container, 'trigger')).toBe(1);
+      expect(boneCountFor(container, 'title')).toBe(1);
+      expect(boneCountFor(container, 'subtitle')).toBe(1);
+      expect(boneCountFor(container, 'status')).toBe(5);
 
       // The skeleton mirrors the REQUESTED anatomy: a title-only header must
       // not reserve chrome the loaded render never shows.
@@ -209,7 +240,10 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
         'modern',
       );
       await partsOf(bare.container);
-      expect(partCount(bare.container, 'skeleton')).toBe(1);
+      await waitFor(() => {
+        expect(partCount(bare.container, 'bone')).toBe(1);
+      });
+      expect(boneCountFor(bare.container, 'title')).toBe(1);
     });
   });
 
@@ -452,18 +486,26 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
       expect(container.querySelectorAll('[data-part="tab"][data-active="false"]')).toHaveLength(1);
     });
 
-    it('stamps the loading skeleton branch (six blocks, one shared PULSE_STYLE)', async () => {
+    it('stamps the loading skeleton branch (eight bones drawn from the anatomy)', async () => {
       // The skeleton mirrors the shape the CALLER declared -- icon, eyebrow,
-      // subtitle, each quick action and the tab strip are all conditional -- so
-      // the six only appear for the full header. A title-only header skeletons
-      // exactly one block, which is the branch asserted just below.
+      // exception badge, subtitle, each quick action and the tab strip are all
+      // conditional -- so the eight bones only appear for the full header. A
+      // title-only header skeletons exactly one bone, which is the branch
+      // asserted just below.
       const { container } = renderFull({ loading: true });
       await partsOf(container);
 
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
       expect(root.getAttribute('data-loading')).toBe('true');
-      // title + subtitle + three quick actions + tabs.
-      expect(partCount(container, 'skeleton')).toBe(6);
+      // title + exception + subtitle + three quick actions + two tab labels.
+      await waitFor(() => {
+        expect(partCount(container, 'bone')).toBe(8);
+      });
+      expect(boneCountFor(container, 'title')).toBe(1);
+      expect(boneCountFor(container, 'exception')).toBe(1);
+      expect(boneCountFor(container, 'subtitle')).toBe(1);
+      expect(boneCountFor(container, 'action')).toBe(3);
+      expect(boneCountFor(container, 'tab-label')).toBe(2);
     });
 
     it('skeletons only the blocks the caller declared', async () => {
@@ -473,8 +515,14 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
       );
       await partsOf(container);
 
-      expect(partCount(container, 'skeleton')).toBe(1);
-      expect(container.querySelector('[data-part="skeleton-actions"]')).toBeNull();
+      await waitFor(() => {
+        expect(partCount(container, 'bone')).toBe(1);
+      });
+      expect(boneCountFor(container, 'title')).toBe(1);
+      // No quick actions were declared: the `actions` part is not even
+      // stamped, so the skeleton draws no bone for it.
+      expect(container.querySelector('[data-part="actions"]')).toBeNull();
+      expect(boneCountFor(container, 'action')).toBe(0);
     });
 
     it('renders NO back button -- WorkbenchHeader s BackButton is unreachable', async () => {
