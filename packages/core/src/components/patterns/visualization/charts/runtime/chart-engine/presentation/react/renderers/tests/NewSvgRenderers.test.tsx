@@ -8,6 +8,10 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import type { TenantConfig } from '@/foundation/contracts';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
+import {
+  requireChartSemanticPaint,
+  resolveChartPaint,
+} from '../../../../../theming/composition/foundation/paint';
 import { SvgAreaRenderer } from '../area';
 import { SvgHistogramRenderer } from '../histogram';
 import { SvgWaterfallRenderer } from '../waterfall';
@@ -116,7 +120,10 @@ describe('New React-owned SVG renderers', () => {
     const decreaseBar = container.querySelector('[data-part="bar"][data-status="decrease"]');
     expect(decreaseBar).toHaveAttribute('fill', '#aa00cc');
     const increaseBar = container.querySelector('[data-part="bar"][data-status="increase"]');
-    expect(increaseBar).toHaveAttribute('fill', 'var(--ds-color-success)');
+    expect(increaseBar).toHaveAttribute(
+      'fill',
+      requireChartSemanticPaint(resolveChartPaint({ family: 'waterfall' })).toneFor('increase'),
+    );
   });
 
   it('renders a standalone sparkline without chart chrome', () => {

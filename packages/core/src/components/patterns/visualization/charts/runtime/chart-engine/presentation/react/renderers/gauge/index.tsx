@@ -12,6 +12,7 @@ import {
   buildSvgGaugeGeometry,
   type SvgGaugeSegment,
 } from '../../../../foundation/renderers/geometry';
+import { requireChartSemanticPaint } from '../../../../../theming/composition/foundation/paint';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
@@ -81,7 +82,7 @@ export function SvgGaugeRenderer({
   endAngle,
   innerRadius,
   showNeedle = true,
-  needleColor = 'var(--ds-color-text-primary)',
+  needleColor,
   trackCornerRadius,
   segmentCornerRadius,
   showSegmentTitles = true,
@@ -93,6 +94,8 @@ export function SvgGaugeRenderer({
   const chartPersonality = useResolvedChartPersonality();
   const reducedMotion = useReducedMotion();
   const { containerRef, dimensions } = useChartDimensions(width, height, responsive);
+  const paint = useChartPaintRoot('gauge');
+  const needlePaint = needleColor ?? requireChartSemanticPaint(paint).toneFor('needle');
   const geometryWidth = responsive
     ? dimensions.width
     : typeof width === 'number'
@@ -172,7 +175,6 @@ export function SvgGaugeRenderer({
   const description = ariaDescription
     ?? `Gauge chart showing ${displayValue}. Range: ${geometry.rangeMin} to ${geometry.rangeMax}.`;
 
-  const paint = useChartPaintRoot('gauge');
   const surface = (
     <ChartRendererSurface
       rendererId="svg.gauge"
@@ -307,8 +309,8 @@ export function SvgGaugeRenderer({
               <path
                 data-part="needle-mark"
                 d={geometry.needlePath}
-                fill={needleColor}
-                stroke={needleColor}
+                fill={needlePaint}
+                stroke={needlePaint}
                 strokeWidth={0.5}
               />
               <circle
@@ -316,7 +318,7 @@ export function SvgGaugeRenderer({
                 cx={0}
                 cy={0}
                 r={geometry.needleCapRadius}
-                fill={needleColor}
+                fill={needlePaint}
               />
             </g>
           ) : null}

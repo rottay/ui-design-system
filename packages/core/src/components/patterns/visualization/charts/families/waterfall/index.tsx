@@ -35,6 +35,7 @@ import type {
   ChartStateProps,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
+import { requireChartSemanticPaint } from '../../runtime/theming/composition/foundation/paint';
 import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
@@ -62,11 +63,11 @@ interface WaterfallChartOwnProps
     ChartMarginProps,
     ChartCompactProps<ChartCartesianCompactConfig> {
   data: WaterfallDataPoint[];
-  /** Color for increase bars. Default: var(--ds-color-success) */
+  /** Color for increase bars. Defaults to the family's `increase` tone. */
   increaseColor?: string;
-  /** Color for decrease bars. Default: var(--ds-color-error) */
+  /** Color for decrease bars. Defaults to the family's `decrease` tone. */
   decreaseColor?: string;
-  /** Color for total bars. Default: var(--ds-color-primary) */
+  /** Color for total bars. Defaults to the family's `total` tone. */
   totalColor?: string;
   /** Show dashed connector lines between bars. Default: true */
   showConnectors?: boolean;
@@ -95,9 +96,9 @@ function defaultFormatValue(value: number): string {
  */
 export const WaterfallChart = memo(function WaterfallChart({
   data,
-  increaseColor = 'var(--ds-color-success)',
-  decreaseColor = 'var(--ds-color-error)',
-  totalColor = 'var(--ds-color-primary)',
+  increaseColor,
+  decreaseColor,
+  totalColor,
   showConnectors = true,
   showValues = true,
   formatValue,
@@ -130,6 +131,10 @@ export const WaterfallChart = memo(function WaterfallChart({
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { dimensions } = useChartDimensions(width, height);
   const paint = useChartPaint({ family: 'waterfall' });
+  const tones = requireChartSemanticPaint(paint);
+  const increasePaint = increaseColor ?? tones.toneFor('increase');
+  const decreasePaint = decreaseColor ?? tones.toneFor('decrease');
+  const totalPaint = totalColor ?? tones.toneFor('total');
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const formatVal = formatValue ?? defaultFormatValue;
@@ -149,9 +154,9 @@ export const WaterfallChart = memo(function WaterfallChart({
   const legendNode = legend ? (
     <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
       {[
-        { label: 'Increase', color: increaseColor },
-        { label: 'Decrease', color: decreaseColor },
-        { label: 'Total', color: totalColor },
+        { label: 'Increase', color: increasePaint },
+        { label: 'Decrease', color: decreasePaint },
+        { label: 'Total', color: totalPaint },
       ].map((item) => (
         <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
           <span data-part="legend-swatch" data-status={item.label.toLowerCase()} style={{ width: 12, height: 12, backgroundColor: item.color, display: 'inline-block' }} />
@@ -239,9 +244,9 @@ export const WaterfallChart = memo(function WaterfallChart({
           height={height}
           responsive={responsive}
           orientation={orientation}
-          increaseColor={increaseColor}
-          decreaseColor={decreaseColor}
-          totalColor={totalColor}
+          increaseColor={increasePaint}
+          decreaseColor={decreasePaint}
+          totalColor={totalPaint}
           showConnectors={showConnectors}
           showValues={showValues}
           formatValue={formatVal}

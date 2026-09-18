@@ -8,6 +8,7 @@ import { resolveChartSeriesPaint } from '../../../../../chart-engine/foundation/
 import {
   CHART_CATEGORICAL_SIZE,
   materializeChartPaint,
+  requireChartSemanticPaint,
   resolveChartPaint,
 } from '../index';
 
@@ -15,6 +16,10 @@ const SCHEMES = ['default', 'pastel', 'vibrant', 'monochrome', 'accessible'] as 
 
 const CATEGORICAL = CHART_FAMILY_IDS.filter(
   (id) => CHART_FAMILY_REGISTRY[id].paintModel === 'categorical',
+);
+
+const SEMANTIC = CHART_FAMILY_IDS.filter(
+  (id) => CHART_FAMILY_REGISTRY[id].paintModel === 'semantic',
 );
 
 describe('resolveChartPaint precedence', () => {
@@ -129,6 +134,51 @@ describe('the non-categorical models', () => {
       expect(decision.categorical, family).toBeNull();
       expect(decision.sequential, family).toBeNull();
     }
+  });
+
+  it('gives every semantic family a non-empty tone domain, and nobody else one', () => {
+    expect(SEMANTIC.length).toBeGreaterThan(0);
+    for (const family of CHART_FAMILY_IDS) {
+      const decision = resolveChartPaint({ family });
+      if (CHART_FAMILY_REGISTRY[family].paintModel === 'semantic') {
+        expect(decision.semantic, family).not.toBeNull();
+        expect(requireChartSemanticPaint(decision).tones.length, family).toBeGreaterThan(0);
+        continue;
+      }
+      expect(decision.semantic, family).toBeNull();
+      expect(() => requireChartSemanticPaint(decision)).toThrow(/has no semantic tones/u);
+    }
+  });
+
+  it('chains a tone over the family namespace and lands on the root it means', () => {
+    for (const family of SEMANTIC) {
+      const tones = requireChartSemanticPaint(resolveChartPaint({ family }));
+      const namespace = CHART_FAMILY_REGISTRY[family].namespace;
+      for (const tone of tones.tones) {
+        const expression = tones.toneFor(tone);
+        expect(expression, `${family}/${tone}`).toMatch(
+          new RegExp(`^var\\(--${namespace}-${tone}, var\\(--ds-color-[a-z0-9-]+\\)\\)$`, 'u'),
+        );
+      }
+    }
+  });
+
+  it('keeps a tone out of the slot machine: no scheme moves it', () => {
+    for (const family of SEMANTIC) {
+      const baseline = requireChartSemanticPaint(resolveChartPaint({ family }));
+      for (const scheme of SCHEMES) {
+        const tones = requireChartSemanticPaint(resolveChartPaint({ family, scheme }));
+        expect(tones.tones, `${family}/${scheme}`).toEqual(baseline.tones);
+        for (const tone of tones.tones) {
+          expect(tones.toneFor(tone), `${family}/${scheme}/${tone}`).toBe(baseline.toneFor(tone));
+        }
+      }
+    }
+  });
+
+  it('refuses a tone the family never declared', () => {
+    const tones = requireChartSemanticPaint(resolveChartPaint({ family: 'waterfall' }));
+    expect(() => tones.toneFor('error')).toThrow(/outside the domain/u);
   });
 
   it('gives a single-colour family no slot machine either', () => {

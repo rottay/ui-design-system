@@ -6,6 +6,10 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { GaugeChart, SankeyChart, Sparkline } from '..';
+import {
+  requireChartSemanticPaint,
+  resolveChartPaint,
+} from '../runtime/theming/composition/foundation/paint';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
 const CHART_C_SKIN = readFileSync(
@@ -94,33 +98,29 @@ describe('visualization skin chart C skin migration', () => {
     }
 
     const defaultSwatches = [...defaults.container.querySelectorAll('[data-part="legend-swatch"]')];
-    expect(defaultSwatches.map((swatch) => swatch.getAttribute('data-tone'))).toEqual([
-      'error',
-      'warning',
-      'success',
-    ]);
-    const defaultInlinePaint = [
-      'var(--ds-color-error)',
-      'var(--ds-color-warning)',
-      'var(--ds-color-success)',
-    ];
-    for (const [index, swatch] of defaultSwatches.entries()) {
+    const defaultTones = ['error', 'warning', 'success'];
+    expect(defaultSwatches.map((swatch) => swatch.getAttribute('data-tone'))).toEqual(defaultTones);
+    for (const swatch of defaultSwatches) {
       expect(swatch).toHaveAttribute('data-color-source', 'default');
-      expect((swatch as HTMLElement).style.backgroundColor).toBe(defaultInlinePaint[index]);
-      expect(computed(swatch, 'background-color')).toBe(defaultInlinePaint[index]);
     }
+    // The swatch's default paint is the family's tone chain. happy-dom drops
+    // ANY `var(name, fallback)` from a standard CSS property, so the chain is
+    // asserted at the resolver and only the anatomy is asserted on the node.
+    const tones = requireChartSemanticPaint(resolveChartPaint({ family: 'gauge' }));
+    expect(defaultTones.map((tone) => tones.toneFor(tone))).toEqual([
+      'var(--ds-chart-gauge-error, var(--ds-color-error))',
+      'var(--ds-chart-gauge-warning, var(--ds-color-warning))',
+      'var(--ds-chart-gauge-success, var(--ds-color-success))',
+    ]);
 
-    // Both rules are ordinary author CSS. The SVG override wins because the
-    // finite default selector is zero-specificity; the swatch remains caller-
-    // compatible inline paint and therefore keeps its original precedence.
+    // Ordinary author CSS. The SVG override wins because the finite default
+    // selector is zero-specificity.
     injectStyles(`
       .consumer-gauge.consumer-gauge [data-part='segment'][data-color-source='default'][data-tone] {
         fill: rgb(7, 8, 9);
       }
-      .consumer-gauge [data-part='legend-swatch'] { background-color: rgb(9, 8, 7); }
     `);
     expect(computed(defaultSegments[0], 'fill')).toBe('rgb(7, 8, 9)');
-    expect(computed(defaultSwatches[0], 'background-color')).toBe(defaultInlinePaint[0]);
 
     defaults.unmount();
 

@@ -19,6 +19,7 @@ import type {
   ChartStateProps,
 } from '../../contracts';
 import { useChartCompact, useChartDimensions, useChartPersonality } from '../../runtime';
+import { requireChartSemanticPaint } from '../../runtime/theming/composition/foundation/paint';
 import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
@@ -67,7 +68,7 @@ interface GaugeChartOwnProps
   innerRadius?: number;
   /** Show needle indicator. Default: true. */
   showNeedle?: boolean;
-  /** Needle color. Default: var(--ds-color-text-primary). */
+  /** Needle color. Defaults to the family's `needle` tone. */
   needleColor?: string;
 }
 
@@ -75,11 +76,6 @@ interface GaugeChartOwnProps
 export type GaugeChartProps = GaugeChartOwnProps & ChartStateProps;
 
 const DEFAULT_SEGMENT_TONES = ['error', 'warning', 'success'] as const;
-const DEFAULT_SEGMENT_COLORS = [
-  'var(--ds-color-error)',
-  'var(--ds-color-warning)',
-  'var(--ds-color-success)',
-] as const;
 
 function resolveGaugeRange(min: number | undefined, max: number | undefined): readonly [number, number] {
   const finiteMin = Number.isFinite(min) ? min as number : 0;
@@ -135,7 +131,7 @@ export const GaugeChart = memo(function GaugeChart({
   endAngle = 120,
   innerRadius = 0.7,
   showNeedle = true,
-  needleColor = 'var(--ds-color-text-primary)',
+  needleColor,
   skeleton,
   width,
   height = 300,
@@ -170,6 +166,8 @@ export const GaugeChart = memo(function GaugeChart({
   );
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const paint = useChartPaint({ family: 'gauge' });
+  const tones = requireChartSemanticPaint(paint);
+  const needlePaint = needleColor ?? tones.toneFor('needle');
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({
     compact,
@@ -243,36 +241,37 @@ export const GaugeChart = memo(function GaugeChart({
         justifyContent: 'center',
       }}
     >
-      {resolvedSegments.map((segment) => (
-        <div
-          key={`${segment.from}-${segment.to}`}
-          data-part="legend-item"
-          data-state={segment === activeSegment ? 'active' : 'inactive'}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--ds-chart-legend-item-gap, 6px)',
-            fontSize: 'var(--ds-chart-legend-font-size, 12px)',
-          }}
-        >
-          <span
-            data-part="legend-swatch"
-            data-color-source={usesDefaultSegments ? 'default' : 'custom'}
-            data-tone={segmentTone(usesDefaultSegments, segment.toneIndex)}
+      {resolvedSegments.map((segment) => {
+        const tone = segmentTone(usesDefaultSegments, segment.toneIndex);
+        return (
+          <div
+            key={`${segment.from}-${segment.to}`}
+            data-part="legend-item"
+            data-state={segment === activeSegment ? 'active' : 'inactive'}
             style={{
-              width: 12,
-              height: 12,
-              backgroundColor: usesDefaultSegments
-                ? DEFAULT_SEGMENT_COLORS[segment.toneIndex]
-                : segment.color,
-              display: 'inline-block',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--ds-chart-legend-item-gap, 6px)',
+              fontSize: 'var(--ds-chart-legend-font-size, 12px)',
             }}
-          />
-          <span data-part="legend-label">
-            {segment.label ?? `${segment.from}-${segment.to}`}
-          </span>
-        </div>
-      ))}
+          >
+            <span
+              data-part="legend-swatch"
+              data-color-source={usesDefaultSegments ? 'default' : 'custom'}
+              data-tone={tone}
+              style={{
+                width: 12,
+                height: 12,
+                backgroundColor: tone === 'custom' ? segment.color : tones.toneFor(tone),
+                display: 'inline-block',
+              }}
+            />
+            <span data-part="legend-label">
+              {segment.label ?? `${segment.from}-${segment.to}`}
+            </span>
+          </div>
+        );
+      })}
     </div>
   ) : null;
 
@@ -357,7 +356,7 @@ export const GaugeChart = memo(function GaugeChart({
           endAngle={endAngle}
           innerRadius={innerRadius}
           showNeedle={showNeedle}
-          needleColor={needleColor}
+          needleColor={needlePaint}
           // Corner radius stays unset so the renderer derives it from tenant
           // grammar; a literal would pin every gauge to one posture.
           showSegmentTitles={chartPersonality.tooltip}

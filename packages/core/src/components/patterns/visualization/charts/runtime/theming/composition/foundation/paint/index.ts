@@ -80,6 +80,13 @@ export interface ChartSequentialPaint {
   stopFor(t: number): string;
 }
 
+export interface ChartSemanticPaint {
+  /** The family's closed tone domain, in declaration order. */
+  readonly tones: readonly string[];
+  /** The chained expression for one tone. A tone outside the domain is refused. */
+  toneFor(tone: string): string;
+}
+
 export interface ChartPaintRootAttributes {
   readonly 'data-chart-color-scheme': ChartColorScheme;
   readonly 'data-chart-paint-model': ChartPaintModel;
@@ -94,6 +101,8 @@ export interface ChartPaintDecision {
   readonly categorical: ChartCategoricalPaint | null;
   /** Present only when model === 'sequential'. */
   readonly sequential: ChartSequentialPaint | null;
+  /** Present only when model === 'semantic'. */
+  readonly semantic: ChartSemanticPaint | null;
   /** The attributes the family MUST stamp on its renderer root. */
   readonly rootAttributes: ChartPaintRootAttributes;
   /** True when `override` was supplied AND the registry honours it. */
@@ -121,6 +130,35 @@ const SEQUENTIAL_SEEDS: Readonly<
   'calendar-heat-map': Object.freeze({
     low: 'var(--ds-color-bg-tertiary)',
     steps: 5,
+  }),
+});
+
+/**
+ * The tone domains the `semantic` families paint, each tone with the root it
+ * means. A tone is a MEANING, not a slot: the scheme tiers are deliberately
+ * absent, so switching to `monochrome` cannot turn a gauge's danger band into a
+ * shade of blue. The order is the order each family paints its tones in.
+ */
+const SEMANTIC_TONES: Readonly<
+  Partial<Record<ChartFamilyId, Readonly<Record<string, string>>>>
+> = Object.freeze({
+  gauge: Object.freeze({
+    error: 'var(--ds-color-error)',
+    warning: 'var(--ds-color-warning)',
+    success: 'var(--ds-color-success)',
+    needle: 'var(--ds-color-text-primary)',
+  }),
+  waterfall: Object.freeze({
+    increase: 'var(--ds-color-success)',
+    decrease: 'var(--ds-color-error)',
+    total: 'var(--ds-color-primary)',
+  }),
+  bullet: Object.freeze({
+    poor: 'var(--ds-color-primary-200)',
+    satisfactory: 'var(--ds-color-primary-100)',
+    good: 'var(--ds-color-primary-50)',
+    value: 'var(--ds-color-text-primary)',
+    target: 'var(--ds-color-error)',
   }),
 });
 
@@ -190,6 +228,33 @@ function createSequentialPaint(
   });
 }
 
+/**
+ * A tone read is `var(--<namespace>-<tone>, <root>)`: the family's own channel
+ * above the root it means, which is the cascade law's chain shape. The channel
+ * is consumption-only, so an unauthored tone paints exactly its root.
+ */
+function createSemanticPaint(
+  namespace: string,
+  tones: Readonly<Record<string, string>>,
+): ChartSemanticPaint {
+  const names = Object.freeze(Object.keys(tones));
+  const expressions = Object.freeze(
+    Object.fromEntries(
+      names.map((tone) => [tone, `var(--${namespace}-${tone}, ${tones[tone] as string})`]),
+    ) as Record<string, string>,
+  );
+  return Object.freeze({
+    tones: names,
+    toneFor: (tone: string) => {
+      const expression = expressions[tone];
+      if (expression === undefined) {
+        refuse(`tone "${String(tone)}" is outside the domain [${names.join(', ')}]`);
+      }
+      return expression;
+    },
+  });
+}
+
 /** What the resolver needs from a root identity. A registry row satisfies it. */
 type ChartPaintIdentity = Pick<
   ChartFamilyRow,
@@ -232,12 +297,20 @@ function buildDecision(request: ChartPaintRequest): ChartPaintDecision {
       ? createSequentialPaint(seed.low, chain[0] as string, seed.steps)
       : null;
 
+  const family = request.family;
+  const toneDomain = family === null ? undefined : SEMANTIC_TONES[family];
+  const semantic =
+    familyRow.paintModel === 'semantic' && family !== null && toneDomain
+      ? createSemanticPaint(CHART_FAMILY_REGISTRY[family].namespace, toneDomain)
+      : null;
+
   return Object.freeze({
     family: familyRow.id,
     model: familyRow.paintModel,
     scheme,
     categorical,
     sequential,
+    semantic,
     rootAttributes: Object.freeze({
       'data-chart-color-scheme': scheme,
       'data-chart-paint-model': familyRow.paintModel,
@@ -273,6 +346,20 @@ export function resolveChartPaint(request: ChartPaintRequest): ChartPaintDecisio
   return decision;
 }
 
+/**
+ * The semantic arm of a decision whose family declares that model. Refuses
+ * rather than falling back: a tone read that silently lost its chain would
+ * paint correctly today and drop a tenant's authored tone forever.
+ */
+export function requireChartSemanticPaint(decision: ChartPaintDecision): ChartSemanticPaint {
+  if (decision.semantic === null) {
+    refuse(
+      `family "${String(decision.family)}" has no semantic tones; its paint model is "${decision.model}"`,
+    );
+  }
+  return decision.semantic;
+}
+
 function paintOwnerOf(owner: Element | null | undefined): CssColorOwner | null {
   if (!owner || typeof owner !== 'object' || !('style' in owner)) return null;
   return owner as CssColorOwner;
@@ -284,8 +371,8 @@ function paintOwnerOf(owner: Element | null | undefined): CssColorOwner | null {
  * back as an empty string rather than a manufactured partial value; the caller
  * decides what an unresolvable slot means for its output format.
  *
- * `semantic` and `single` families resolve nothing here: their tones are
- * per-family meanings that the resolver does not model.
+ * The door materializes slots and ramp stops only. A `semantic` family's tones
+ * are read from `decision.semantic`, and a `single` family has neither.
  */
 export function materializeChartPaint(
   decision: ChartPaintDecision,

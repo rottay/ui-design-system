@@ -11,6 +11,7 @@ import {
   type SvgBulletTier,
 } from '../../../../foundation/renderers/geometry';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { requireChartSemanticPaint } from '../../../../../theming/composition/foundation/paint';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
@@ -42,12 +43,6 @@ export interface SvgBulletRendererProps {
   readonly style?: CSSProperties;
 }
 
-const DEFAULT_RANGE_COLORS: readonly [string, string, string] = [
-  'var(--ds-color-primary-200)',
-  'var(--ds-color-primary-100)',
-  'var(--ds-color-primary-50)',
-];
-
 function tierColor(
   tier: SvgBulletTier,
   colors: readonly [string, string, string],
@@ -74,9 +69,9 @@ export function SvgBulletRenderer({
   gap = 16,
   showLabels = true,
   formatValue,
-  rangeColors = DEFAULT_RANGE_COLORS,
-  valueColor = 'var(--ds-color-text-primary)',
-  targetColor = 'var(--ds-color-error)',
+  rangeColors,
+  valueColor,
+  targetColor,
   showTitles = true,
   compactTooltip = false,
   className,
@@ -85,6 +80,15 @@ export function SvgBulletRenderer({
   const chartPersonality = useResolvedChartPersonality();
   const reducedMotion = useReducedMotion();
   const { containerRef, dimensions } = useChartDimensions(width, height, responsive);
+  const paint = useChartPaintRoot('bullet');
+  const tones = requireChartSemanticPaint(paint);
+  const rangePaint: readonly [string, string, string] = rangeColors ?? [
+    tones.toneFor('poor'),
+    tones.toneFor('satisfactory'),
+    tones.toneFor('good'),
+  ];
+  const valuePaint = valueColor ?? tones.toneFor('value');
+  const targetPaint = targetColor ?? tones.toneFor('target');
   const geometryWidth = responsive
     ? dimensions.width
     : typeof width === 'number'
@@ -123,7 +127,6 @@ export function SvgBulletRenderer({
     .filter(Boolean)
     .join(' ');
 
-  const paint = useChartPaintRoot('bullet');
   const surface = (
     <ChartRendererSurface
       rendererId="svg.bullet"
@@ -174,7 +177,7 @@ export function SvgBulletRenderer({
                     height={band.height}
                     rx={2}
                     ry={2}
-                    fill={tierColor(band.tier, rangeColors)}
+                    fill={tierColor(band.tier, rangePaint)}
                     aria-hidden="true"
                   />
                 ))}
@@ -185,7 +188,7 @@ export function SvgBulletRenderer({
                     y1={item.zeroBaseline.y1}
                     x2={item.zeroBaseline.x2}
                     y2={item.zeroBaseline.y2}
-                    stroke={valueColor}
+                    stroke={valuePaint}
                     strokeOpacity={0.45}
                     strokeWidth={1}
                     aria-hidden="true"
@@ -200,7 +203,7 @@ export function SvgBulletRenderer({
                   height={item.valueBar.height}
                   rx={1}
                   ry={1}
-                  fill={valueColor}
+                  fill={valuePaint}
                   aria-hidden="true"
                 />
                 <rect
@@ -210,7 +213,7 @@ export function SvgBulletRenderer({
                   width={item.targetMarker.width}
                   height={item.targetMarker.height}
                   rx={1}
-                  fill={targetColor}
+                  fill={targetPaint}
                   aria-hidden="true"
                 />
                 {showLabels ? (

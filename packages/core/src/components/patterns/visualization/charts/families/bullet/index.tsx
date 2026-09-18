@@ -21,6 +21,7 @@ import type {
 } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality, useChartCompact, useChartDimensions } from '../../runtime';
+import { requireChartSemanticPaint } from '../../runtime/theming/composition/foundation/paint';
 import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import {
   buildSvgBulletGeometry,
@@ -59,16 +60,16 @@ interface BulletChartOwnProps
   showLabels?: boolean;
   /** Format values */
   formatValue?: (value: number) => string;
-  /** Range colors [poor, satisfactory, good]. Default: decreasing opacity of --ds-color-primary */
+  /** Range colors [poor, satisfactory, good]. Defaults to the family's tier tones. */
   rangeColors?: [string, string, string];
   /**
    * Qualitative range labels [poor, satisfactory, good] used by the legend and
    * ready for locale override. Default: ['Poor', 'Satisfactory', 'Good'].
    */
   rangeLabels?: [string, string, string];
-  /** Value bar color. Default: var(--ds-color-text-primary) */
+  /** Value bar color. Defaults to the family's `value` tone. */
   valueColor?: string;
-  /** Target marker color. Default: var(--ds-color-error) */
+  /** Target marker color. Defaults to the family's `target` tone. */
   targetColor?: string;
 }
 
@@ -92,8 +93,8 @@ export const BulletChart = memo(function BulletChart({
   formatValue,
   rangeColors,
   rangeLabels,
-  valueColor = 'var(--ds-color-text-primary)',
-  targetColor = 'var(--ds-color-error)',
+  valueColor,
+  targetColor,
   width,
   height: heightProp,
   className,
@@ -133,6 +134,9 @@ export const BulletChart = memo(function BulletChart({
 
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const paint = useChartPaint({ family: 'bullet' });
+  const tones = requireChartSemanticPaint(paint);
+  const valuePaint = valueColor ?? tones.toneFor('value');
+  const targetPaint = targetColor ?? tones.toneFor('target');
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({
     compact,
@@ -146,11 +150,11 @@ export const BulletChart = memo(function BulletChart({
   const formatVal = formatValue ?? defaultFormatValue;
   const resolvedRangeColors = useMemo<[string, string, string]>(
     () => rangeColors ?? [
-      'var(--ds-color-primary-200)',
-      'var(--ds-color-primary-100)',
-      'var(--ds-color-primary-50)',
+      tones.toneFor('poor'),
+      tones.toneFor('satisfactory'),
+      tones.toneFor('good'),
     ],
-    [rangeColors],
+    [rangeColors, tones],
   );
 
   // Validation is resolved from the same pure engine as the visible renderer.
@@ -201,8 +205,8 @@ export const BulletChart = memo(function BulletChart({
         { label: resolvedRangeLabels[0], color: resolvedRangeColors[0], variant: 'range' },
         { label: resolvedRangeLabels[1], color: resolvedRangeColors[1], variant: 'range' },
         { label: resolvedRangeLabels[2], color: resolvedRangeColors[2], variant: 'range' },
-        { label: 'Actual', color: valueColor, variant: 'value' },
-        { label: 'Target', color: targetColor, variant: 'target' },
+        { label: 'Actual', color: valuePaint, variant: 'value' },
+        { label: 'Target', color: targetPaint, variant: 'target' },
       ].map((item) => (
         <div key={item.label} data-part="legend-item">
           <span data-part="legend-swatch" data-variant={item.variant} style={{ backgroundColor: item.color }} />
@@ -300,8 +304,8 @@ export const BulletChart = memo(function BulletChart({
           showLabels={showLabels}
           formatValue={formatVal}
           rangeColors={resolvedRangeColors}
-          valueColor={valueColor}
-          targetColor={targetColor}
+          valueColor={valuePaint}
+          targetColor={targetPaint}
           showTitles={chartPersonality.tooltip}
           compactTooltip={compactState.compactTooltip}
         />

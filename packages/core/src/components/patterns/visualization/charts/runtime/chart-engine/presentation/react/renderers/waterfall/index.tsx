@@ -11,6 +11,7 @@ import {
   type SvgWaterfallDatum,
   type SvgWaterfallType,
 } from '../../../../foundation/renderers/geometry';
+import { requireChartSemanticPaint } from '../../../../../theming/composition/foundation/paint';
 import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
@@ -36,7 +37,7 @@ export interface SvgWaterfallRendererProps {
   /** Recompute geometry from the container width. Defaults to true. */
   readonly responsive?: boolean;
   readonly orientation?: 'vertical' | 'horizontal';
-  /** Increase-bar paint (semantic status token, not the categorical palette). */
+  /** Increase-bar paint (a semantic tone, not a categorical slot). */
   readonly increaseColor?: string;
   readonly decreaseColor?: string;
   readonly totalColor?: string;
@@ -51,10 +52,6 @@ export interface SvgWaterfallRendererProps {
   readonly className?: string;
   readonly style?: CSSProperties;
 }
-
-const DEFAULT_INCREASE_PAINT = 'var(--ds-color-success)';
-const DEFAULT_DECREASE_PAINT = 'var(--ds-color-error)';
-const DEFAULT_TOTAL_PAINT = 'var(--ds-color-primary)';
 
 /**
  * React-owned semantic SVG waterfall renderer. Bars reuse the shared bar
@@ -72,9 +69,9 @@ export function SvgWaterfallRenderer({
   height = 360,
   responsive = true,
   orientation = 'vertical',
-  increaseColor = DEFAULT_INCREASE_PAINT,
-  decreaseColor = DEFAULT_DECREASE_PAINT,
-  totalColor = DEFAULT_TOTAL_PAINT,
+  increaseColor,
+  decreaseColor,
+  totalColor,
   showConnectors = true,
   showValues = true,
   formatValue,
@@ -86,6 +83,11 @@ export function SvgWaterfallRenderer({
   style,
 }: SvgWaterfallRendererProps): React.ReactElement {
   const { containerRef, dimensions } = useChartDimensions(width, height, responsive);
+  const paint = useChartPaintRoot('waterfall');
+  const tones = requireChartSemanticPaint(paint);
+  const increasePaint = increaseColor ?? tones.toneFor('increase');
+  const decreasePaint = decreaseColor ?? tones.toneFor('decrease');
+  const totalPaint = totalColor ?? tones.toneFor('total');
   const geometryWidth = responsive ? dimensions.width : width;
   const geometry = useMemo(
     () => buildSvgWaterfallGeometry({
@@ -101,9 +103,9 @@ export function SvgWaterfallRenderer({
   const radius = Number.isFinite(barRadius) ? Math.max(0, barRadius) : 2;
   const formatVal = (value: number): string => (formatValue ? formatValue(value) : String(value));
   const paintForType = (type: SvgWaterfallType): string => {
-    if (type === 'increase') return increaseColor;
-    if (type === 'decrease') return decreaseColor;
-    return totalColor;
+    if (type === 'increase') return increasePaint;
+    if (type === 'decrease') return decreasePaint;
+    return totalPaint;
   };
   const interactionItems = useMemo(
     () => geometry.bars.map((bar) => ({
@@ -122,7 +124,7 @@ export function SvgWaterfallRenderer({
     })),
     // paintForType is pure in the color props; listing them keeps the memo
     // honest without depending on the inline arrow identity.
-    [decreaseColor, geometry.bars, increaseColor, orientation, totalColor],
+    [decreasePaint, geometry.bars, increasePaint, orientation, totalPaint],
   );
   const interactionState = useChartInteraction({
     items: interactionItems,
@@ -137,7 +139,6 @@ export function SvgWaterfallRenderer({
     ? interaction.renderTooltip?.(interactionState.activeDatum)
     : undefined;
 
-  const paint = useChartPaintRoot('waterfall');
   const surface = (
     <ChartRendererSurface
       rendererId="svg.waterfall"
