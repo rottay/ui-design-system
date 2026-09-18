@@ -49,3 +49,32 @@ Card/List loading anatomy (Display1/2Batch), the CollectionWorkspace focused-row
 class, the LongTail gallery/grid anatomy pins, the PresenceBar avatar geometry
 read, FloatButton's backtop flake class, and the theme-contract-freeze minting
 census (re-pins when the D/E drafts land — measuring twice is the trap).
+
+## 2026-09-18 (second sitting) — the D/E drafts re-measured over a quiet tree
+
+The preserved FAM-10 cohort D/E drafts (cockpit / workbench / mobile / stats /
+section-frame) re-ran focal: 9 of 10 test files green (69 passed, 5 skipped).
+The one known calibration red (the cockpit causality probe's `radiusScale: 1.25`,
+over the rottay envelope 0.8..1.2) was masking everything behind it — admission
+throws before any arm measures, so the writer never saw the rest of that block.
+
+**DT calibration, measured:** the probe moved to `1.2`, the envelope maximum and
+the fleet-wide convention (mobile-header, column-menu, saved-views, cascader,
+color-picker all probe 1.2). The edit stays INSIDE the preserved draft
+(uncommitted, part of cohort D), recorded here, not landed apart.
+
+**Newly exposed red, diagnosed, routed to the writer:** with admission repaired,
+`palette.seeds` fails first in rottay — `cardGround` (the root's
+`background-image`) reads `none` in the base AND the moved arm. Root cause is
+structural, not a probe slip: the deriver produces
+`--ds-cockpit-header-bg: var(--ds-card-header-bg, <seeded gradient>)`, but
+`foundation/tokens/css/presentation/components/card/index.css:96` states
+`--ds-card-header-bg: transparent` on `:root`, and that default ships in all
+three vertical artifacts (dist measured: rottay/bithire/evnto each carry it
+once). The fallback gradient is dead code — the card ground never responds to
+palette in ANY vertical; rottay simply measures first in
+`FIRST_PARTY_VERTICALS` order. The writer's own deriver comment states the
+intent ("the gradient is the foundation's own reading of it when no tenant
+states one"), so either the chain must distinguish authored from default, or
+the arm over-claims and drops `cardGround`. A semantic decision on the draft —
+parked for the writer seat, with this measurement as the brief.
