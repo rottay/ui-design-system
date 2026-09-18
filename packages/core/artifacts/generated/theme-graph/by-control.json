@@ -16,7 +16,7 @@
     },
     {
       "channels": 26,
-      "channelsThroughAliases": 792,
+      "channelsThroughAliases": 837,
       "decision": "density.mode",
       "derivers": [
         "density",
@@ -80,6 +80,7 @@
         "comment-thread",
         "compare",
         "confirm-dialog",
+        "container",
         "context-menu",
         "crop-marks",
         "dashboard-header",
@@ -95,6 +96,7 @@
         "detail-form-surface",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -118,6 +120,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",
@@ -146,6 +149,7 @@
         "metrics-chart",
         "metrics-minimal",
         "metrics-rows",
+        "mobile-header",
         "modal",
         "modal-compounds",
         "moderation-gallery",
@@ -192,6 +196,7 @@
         "skeleton",
         "skeleton-anatomy",
         "slider",
+        "space",
         "spinner",
         "splitter",
         "stack",
@@ -234,7 +239,7 @@
     },
     {
       "channels": 226,
-      "channelsThroughAliases": 1683,
+      "channelsThroughAliases": 1743,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -274,6 +279,7 @@
         "badge",
         "billing",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -314,6 +320,7 @@
         "comment-thread",
         "compare",
         "confirm-dialog",
+        "container",
         "context-menu",
         "crop-marks",
         "dashboard",
@@ -332,6 +339,7 @@
         "detail-form-surface",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -356,6 +364,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",
@@ -441,6 +450,7 @@
         "skeleton",
         "skeleton-anatomy",
         "slider",
+        "space",
         "spinner",
         "splitter",
         "stack",
@@ -489,8 +499,8 @@
       "tier": "standard"
     },
     {
-      "channels": 695,
-      "channelsThroughAliases": 909,
+      "channels": 706,
+      "channelsThroughAliases": 929,
       "decision": "motion.character",
       "derivers": [
         "active-filters-bar",
@@ -687,6 +697,7 @@
         "space",
         "spinner",
         "splitter",
+        "stack",
         "statistic",
         "stats-grid",
         "stats-header",
@@ -722,8 +733,8 @@
       "tier": "pro"
     },
     {
-      "channels": 695,
-      "channelsThroughAliases": 909,
+      "channels": 706,
+      "channelsThroughAliases": 929,
       "decision": "motion.dial",
       "derivers": [
         "active-filters-bar",
@@ -920,6 +931,7 @@
         "space",
         "spinner",
         "splitter",
+        "stack",
         "statistic",
         "stats-grid",
         "stats-header",
@@ -969,8 +981,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2072,
-      "channelsThroughAliases": 3637,
+      "channels": 2104,
+      "channelsThroughAliases": 3656,
       "decision": "palette.contrast-posture",
       "derivers": [
         "active-filters-bar",
@@ -1078,6 +1090,7 @@
         "badge",
         "billing",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -1311,8 +1324,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2072,
-      "channelsThroughAliases": 3637,
+      "channels": 2104,
+      "channelsThroughAliases": 3656,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "active-filters-bar",
@@ -1420,6 +1433,7 @@
         "badge",
         "billing",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -1645,8 +1659,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2168,
-      "channelsThroughAliases": 3837,
+      "channels": 2200,
+      "channelsThroughAliases": 3856,
       "decision": "palette.seeds",
       "derivers": [
         "active-filters-bar",
@@ -1758,6 +1772,7 @@
         "badge",
         "billing",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -1983,8 +1998,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2158,
-      "channelsThroughAliases": 3817,
+      "channels": 2190,
+      "channelsThroughAliases": 3836,
       "decision": "palette.status-seeds",
       "derivers": [
         "active-filters-bar",
@@ -2095,6 +2110,7 @@
         "badge",
         "billing",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -2321,7 +2337,7 @@
     },
     {
       "channels": 226,
-      "channelsThroughAliases": 1683,
+      "channelsThroughAliases": 1743,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2361,6 +2377,7 @@
         "badge",
         "billing",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -2401,6 +2418,7 @@
         "comment-thread",
         "compare",
         "confirm-dialog",
+        "container",
         "context-menu",
         "crop-marks",
         "dashboard",
@@ -2419,6 +2437,7 @@
         "detail-form-surface",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -2443,6 +2462,7 @@
         "form-sections",
         "form-surface",
         "gallery-view",
+        "grid",
         "grid-view",
         "guided-draft-form",
         "hover-card",
@@ -2528,6 +2548,7 @@
         "skeleton",
         "skeleton-anatomy",
         "slider",
+        "space",
         "spinner",
         "splitter",
         "stack",
@@ -2598,7 +2619,7 @@
     },
     {
       "channels": 54,
-      "channelsThroughAliases": 667,
+      "channelsThroughAliases": 675,
       "decision": "shape.button-style",
       "derivers": [
         "axes",
@@ -2633,6 +2654,7 @@
         "avatar",
         "badge",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -2683,6 +2705,7 @@
         "descriptions",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -2958,8 +2981,8 @@
       "tier": "pro"
     },
     {
-      "channels": 894,
-      "channelsThroughAliases": 1488,
+      "channels": 903,
+      "channelsThroughAliases": 1500,
       "decision": "shape.radius-scale",
       "derivers": [
         "avatar",
@@ -3069,6 +3092,7 @@
         "descriptions",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -3216,7 +3240,7 @@
     },
     {
       "channels": 25,
-      "channelsThroughAliases": 152,
+      "channelsThroughAliases": 181,
       "decision": "spacing.rhythm",
       "derivers": [
         "rhythm",
@@ -3241,9 +3265,11 @@
         "collection-header",
         "column-menu",
         "confirm-dialog",
+        "container",
         "dashboard-header",
         "detail-form-surface",
         "detail-panel",
+        "divider",
         "drawer",
         "dropdown",
         "edit-header",
@@ -3255,7 +3281,9 @@
         "grid",
         "grid-view",
         "layout",
+        "layout-primitives",
         "list-toolbar",
+        "mobile-header",
         "modal",
         "notifier",
         "page-shell",
@@ -3264,7 +3292,9 @@
         "sheet",
         "shortcuts-overlay",
         "sidebar-surface",
+        "space",
         "splitter",
+        "stack",
         "stats-grid",
         "status-filter-pills",
         "table-toolbar",
@@ -3500,7 +3530,7 @@
     },
     {
       "channels": 346,
-      "channelsThroughAliases": 1075,
+      "channelsThroughAliases": 1076,
       "decision": "states.focus-style",
       "derivers": [
         "avatar",
@@ -4024,7 +4054,7 @@
     },
     {
       "channels": 130,
-      "channelsThroughAliases": 374,
+      "channelsThroughAliases": 384,
       "decision": "typography.families",
       "derivers": [
         "tenant",
@@ -4078,6 +4108,7 @@
         "descriptions",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -4183,7 +4214,7 @@
     },
     {
       "channels": 243,
-      "channelsThroughAliases": 487,
+      "channelsThroughAliases": 497,
       "decision": "typography.numeric",
       "derivers": [
         "pagination",
@@ -4239,6 +4270,7 @@
         "descriptions",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -4344,7 +4376,7 @@
     },
     {
       "channels": 132,
-      "channelsThroughAliases": 877,
+      "channelsThroughAliases": 893,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -4373,6 +4405,7 @@
         "avatar-compounds",
         "badge",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -4422,6 +4455,7 @@
         "descriptions",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",
@@ -4568,7 +4602,7 @@
     },
     {
       "channels": 405,
-      "channelsThroughAliases": 648,
+      "channelsThroughAliases": 654,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
@@ -4736,8 +4770,8 @@
       "tier": "standard"
     },
     {
-      "channels": 352,
-      "channelsThroughAliases": 1057,
+      "channels": 373,
+      "channelsThroughAliases": 1090,
       "decision": "typography.scale",
       "derivers": [
         "axes",
@@ -4780,6 +4814,7 @@
         "avatar-compounds",
         "badge",
         "bottom-tab-bar",
+        "box",
         "brand-studio",
         "branding-preview-sandbox",
         "breadcrumb",
@@ -4829,6 +4864,7 @@
         "descriptions",
         "detail-header",
         "detail-panel",
+        "divider",
         "drawer",
         "drawer-compounds",
         "dropdown",

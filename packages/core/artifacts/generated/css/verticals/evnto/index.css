@@ -16213,7 +16213,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
   overflow: hidden;
   container: ds-record-facts / inline-size;
-  border: 1px solid var(--ds-record-facts-border);
+  border: 1px solid
+    var(
+      --ds-record-facts-border,
+      var(--ds-surface-card-border-strong, var(--ds-color-border-secondary))
+    );
   border-radius: var(--ds-record-facts-radius, var(--ds-radius-xl, 16px));
   background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
   box-shadow: inset 0 1px 0
@@ -16232,7 +16236,15 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   min-width: 0;
   min-height: var(--ds-record-facts-header-height, 66px);
   padding: var(--ds-record-facts-header-padding, 14px 18px);
-  border-bottom: 1px solid var(--ds-record-facts-divider);
+  border-bottom: 1px solid
+    var(
+      --ds-record-facts-divider,
+      color-mix(
+        in srgb,
+        var(--ds-surface-card-border, var(--ds-color-border-primary)) 82%,
+        transparent
+      )
+    );
   background: radial-gradient(
       circle at 10% 0%,
       color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
@@ -16353,7 +16365,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 .ds-pattern-record-facts[data-density="compact"] .ds-record-facts__fact {
   min-height: var(--ds-record-facts-compact-item-height, 70px);
-  padding: var(--ds-record-facts-compact-item-padding, 12px 16px);
+  padding: var(
+    --ds-record-facts-compact-item-padding,
+    var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px)
+  );
 }
 
 .ds-pattern-record-facts .ds-record-facts__fact[data-span="full"] {
@@ -16476,7 +16491,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   align-content: center;
   gap: 8px;
   min-height: var(--ds-record-facts-compact-item-height, 70px);
-  padding: var(--ds-record-facts-compact-item-padding, 12px 16px);
+  padding: var(
+    --ds-record-facts-compact-item-padding,
+    var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px)
+  );
   background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
 }
 
@@ -21344,6 +21362,17 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-tree-node-bg-hover);
 }
 
+/* Reduced motion: durations collapse to near-zero but the transition still
+   runs to completion, so nothing is hidden or left waiting on an event that
+   never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  [data-engine='modern'] .rottay-tree .rottay-tree-node {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 /* =============================================================================
    EMPTY
    ============================================================================= */
@@ -23113,12 +23142,12 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 .rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-gap="uniform"] {
-  gap: var(--ds-flex-gap);
+  gap: var(--ds-flex-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-gap="split"] {
-  column-gap: var(--ds-flex-column-gap);
-  row-gap: var(--ds-flex-row-gap);
+  column-gap: var(--ds-flex-column-gap, var(--ds-spacing-0, 0px));
+  row-gap: var(--ds-flex-row-gap, var(--ds-spacing-0, 0px));
 }
 
 /* Flex's rhythm-aware preset gaps moved to the Modern skin
@@ -23152,7 +23181,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   --_ds-stack-gap-current: var(--ds-spacing-4);
   gap: var(--_ds-stack-gap-current);
   --_ds-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
-  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-inset, 0px);
+  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px));
 }
 
 /* Stack's Modern arm -- the rhythm-scaled rungs and the divider geometry --
@@ -23162,7 +23191,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-direction="horizontal"] {
   flex-direction: row;
-  --_ds-stack-divider-gap-block: var(--ds-stack-divider-inset, 0px);
+  --_ds-stack-divider-gap-block: var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px));
   --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
@@ -23261,7 +23290,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* A consumer's numeric gap is exact geometry: honored as-is, never
    density-scaled. */
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="custom"] {
-  --_ds-stack-gap-current: var(--ds-stack-gap);
+  --_ds-stack-gap-current: var(--ds-stack-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-full-width="true"] {
@@ -23283,7 +23312,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    axis at every breakpoint. */
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic) > .rottay-stack-divider[data-part="divider"] {
   align-self: stretch;
-  flex: 0 0 var(--ds-stack-divider-size, 1px);
+  flex: 0 0 var(--ds-stack-divider-size, var(--ds-border-width-1, 1px));
   min-inline-size: 0;
   min-block-size: 0;
   margin-block: var(
@@ -23292,7 +23321,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   );
   margin-inline: var(
     --_ds-stack-divider-gap-inline,
-    var(--ds-stack-divider-inset, 0px)
+    var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px))
   );
   background: var(
     --ds-stack-divider-color,
@@ -24917,57 +24946,57 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  */
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='xs'] {
-  border-radius: var(--ds-box-corner-xs);
+  border-radius: var(--ds-box-corner-xs, var(--ds-radius-xs));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='sm'] {
-  border-radius: var(--ds-box-corner-sm);
+  border-radius: var(--ds-box-corner-sm, var(--ds-radius-sm));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='md'] {
-  border-radius: var(--ds-box-corner-md);
+  border-radius: var(--ds-box-corner-md, var(--ds-radius-md));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='lg'] {
-  border-radius: var(--ds-box-corner-lg);
+  border-radius: var(--ds-box-corner-lg, var(--ds-radius-lg));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='xl'] {
-  border-radius: var(--ds-box-corner-xl);
+  border-radius: var(--ds-box-corner-xl, var(--ds-radius-xl));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='2xl'] {
-  border-radius: var(--ds-box-corner-2xl);
+  border-radius: var(--ds-box-corner-2xl, var(--ds-radius-2xl));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='full'] {
-  border-radius: var(--ds-box-corner-full);
+  border-radius: var(--ds-box-corner-full, var(--ds-radius-full));
 }
 
 /* Depth rides the DS elevation scale only, so a tenant re-themes it from one place. */
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='xs'] {
-  box-shadow: var(--ds-box-depth-xs);
+  box-shadow: var(--ds-box-depth-xs, var(--ds-elevation-1));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='sm'] {
-  box-shadow: var(--ds-box-depth-sm);
+  box-shadow: var(--ds-box-depth-sm, var(--ds-elevation-2));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='md'] {
-  box-shadow: var(--ds-box-depth-md);
+  box-shadow: var(--ds-box-depth-md, var(--ds-elevation-3));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='lg'] {
-  box-shadow: var(--ds-box-depth-lg);
+  box-shadow: var(--ds-box-depth-lg, var(--ds-elevation-4));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='xl'] {
-  box-shadow: var(--ds-box-depth-xl);
+  box-shadow: var(--ds-box-depth-xl, var(--ds-elevation-5));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='2xl'] {
-  box-shadow: var(--ds-box-depth-2xl);
+  box-shadow: var(--ds-box-depth-2xl, var(--ds-elevation-6));
 }
 
 }
@@ -60829,13 +60858,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 .rottay-mobile-header__bar[data-part='bar'] {
   block-size: 100%;
   position: relative;
-  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
-  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-left, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-right, 0px));
 }
 
 .rottay-mobile-header__bar[data-part='bar']:dir(rtl) {
-  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
-  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-right, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-left, 0px));
 }
 
 /* Side slots share the leftover width equally (flex-basis 0 + equal grow), so
@@ -60861,7 +60890,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   flex: 0 1 auto;
   overflow: hidden;
   text-align: center;
-  padding-inline: var(--ds-mobile-header-center-padding-inline, 8px);
+  padding-inline: var(--ds-mobile-header-center-padding-inline, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-mobile-header__back[data-part='trigger'] {
@@ -60910,7 +60939,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    (an auto minimum would let its content set the header's width). */
 .rottay-mobile-header[data-part='root'] > [data-part='body'] {
   min-inline-size: 0;
-  padding-inline: var(--ds-mobile-header-bar-padding-inline, 4px);
+  padding-inline: var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* Title is now a Box as="h1" (the composed Text resolved its size inline,
@@ -60927,7 +60956,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   font-size: var(--ds-mobile-header-title-font-size, calc(var(--ds-font-size-lg) * 1.0625));
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: var(--ds-mobile-header-title-line-height, 1.29);
-  letter-spacing: var(--ds-mobile-header-title-tracking, -0.01em);
+  letter-spacing: var(--ds-mobile-header-title-tracking, var(--ds-letter-spacing-subtle, -0.01em));
 }
 
 /* ---- responsive posture: the bar reads its OWN slot, not the viewport, so a
@@ -62022,19 +62051,19 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   min-inline-size: 0;
   max-inline-size: var(--ds-aspect-ratio-instance-max-width);
   aspect-ratio: var(--ds-aspect-ratio-instance-ratio);
-  overflow: var(--ds-aspect-ratio-clip);
+  overflow: var(--ds-aspect-ratio-clip, var(--ds-aspect-ratio-overflow, hidden));
   box-sizing: border-box;
-  background: var(--ds-aspect-ratio-surface);
-  border: var(--ds-aspect-ratio-frame);
-  border-radius: var(--ds-aspect-ratio-corner);
-  box-shadow: var(--ds-aspect-ratio-depth);
+  background: var(--ds-aspect-ratio-surface, var(--ds-aspect-ratio-background, transparent));
+  border: var(--ds-aspect-ratio-frame, var(--ds-aspect-ratio-border, 0 solid transparent));
+  border-radius: var(--ds-aspect-ratio-corner, var(--ds-aspect-ratio-radius, 0));
+  box-shadow: var(--ds-aspect-ratio-depth, var(--ds-aspect-ratio-shadow, none));
   transition:
-    aspect-ratio var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    max-inline-size var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    border-radius var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    background-color var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    border-color var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    box-shadow var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing);
+    aspect-ratio var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    max-inline-size var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    border-radius var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    background-color var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    border-color var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    box-shadow var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out)));
 }
 
 /*
@@ -64082,39 +64111,39 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   min-inline-size: 0;
   box-sizing: border-box;
   /* Logical, so `data-fluid` below actually lifts the cap and RTL stays neutral. */
-  max-inline-size: var(--ds-container-measure);
-  padding: var(--ds-container-pad);
-  background: var(--ds-container-surface);
-  border: var(--ds-container-frame);
-  border-radius: var(--ds-container-corner);
-  box-shadow: var(--ds-container-depth);
+  max-inline-size: var(--ds-container-measure, var(--ds-container-lg));
+  padding: var(--ds-container-pad, var(--ds-container-padding-md));
+  background: var(--ds-container-surface, var(--ds-container-background, transparent));
+  border: var(--ds-container-frame, var(--ds-container-border, 0 solid transparent));
+  border-radius: var(--ds-container-corner, var(--ds-container-radius, 0));
+  box-shadow: var(--ds-container-depth, var(--ds-container-shadow, none));
   transition:
-    max-inline-size var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    padding var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    margin var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    background-color var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    border-color var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    box-shadow var(--ds-container-transition-duration) var(--ds-container-transition-timing);
+    max-inline-size var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    padding var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    margin var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    background-color var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    border-color var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    box-shadow var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='sm'] {
-  --ds-container-measure: var(--ds-container-sm);
+  --ds-container-measure: var(--ds-container-sm, var(--ds-breakpoint-sm));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='md'] {
-  --ds-container-measure: var(--ds-container-md);
+  --ds-container-measure: var(--ds-container-md, var(--ds-breakpoint-md));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='lg'] {
-  --ds-container-measure: var(--ds-container-lg);
+  --ds-container-measure: var(--ds-container-lg, var(--ds-breakpoint-lg));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='xl'] {
-  --ds-container-measure: var(--ds-container-xl);
+  --ds-container-measure: var(--ds-container-xl, var(--ds-breakpoint-xl));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='2xl'] {
-  --ds-container-measure: var(--ds-container-2xl);
+  --ds-container-measure: var(--ds-container-2xl, var(--ds-breakpoint-2xl));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='full'],
@@ -64123,19 +64152,19 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='none'] {
-  --ds-container-pad: var(--ds-container-padding-none);
+  --ds-container-pad: var(--ds-container-padding-none, var(--ds-spacing-0));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='sm'] {
-  --ds-container-pad: var(--ds-container-padding-sm);
+  --ds-container-pad: var(--ds-container-padding-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='md'] {
-  --ds-container-pad: var(--ds-container-padding-md);
+  --ds-container-pad: var(--ds-container-padding-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='lg'] {
-  --ds-container-pad: var(--ds-container-padding-lg);
+  --ds-container-pad: var(--ds-container-padding-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-centered='true'] {
@@ -64791,11 +64820,11 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   align-items: center;
   align-self: stretch;
   min-inline-size: 0;
-  gap: var(--ds-divider-gap);
+  gap: var(--ds-divider-gap, var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))));
   transition:
-    gap var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
-    margin var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
-    opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);
+    gap var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out))),
+    margin var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out))),
+    opacity var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out)));
 }
 
 /* ---- orientation: the axis, the box it hugs, and the inset it keeps ---- */
@@ -64805,7 +64834,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   inline-size: 100%;
   block-size: auto;
   min-block-size: 0;
-  margin-block: var(--ds-divider-inset);
+  margin-block: var(--ds-divider-inset, var(--ds-divider-inset-md));
   margin-inline: 0;
 }
 
@@ -64822,33 +64851,33 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   block-size: 100%;
   min-block-size: var(--ds-divider-vertical-min);
   margin-block: 0;
-  margin-inline: var(--ds-divider-inset);
+  margin-inline: var(--ds-divider-inset, var(--ds-divider-inset-md));
 }
 
 /* ---- inset rungs ---- */
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='none'] {
-  --ds-divider-inset: var(--ds-divider-inset-none);
+  --ds-divider-inset: var(--ds-divider-inset-none, var(--ds-spacing-0, 0));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xs'] {
-  --ds-divider-inset: var(--ds-divider-inset-xs);
+  --ds-divider-inset: var(--ds-divider-inset-xs, calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='sm'] {
-  --ds-divider-inset: var(--ds-divider-inset-sm);
+  --ds-divider-inset: var(--ds-divider-inset-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='md'] {
-  --ds-divider-inset: var(--ds-divider-inset-md);
+  --ds-divider-inset: var(--ds-divider-inset-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='lg'] {
-  --ds-divider-inset: var(--ds-divider-inset-lg);
+  --ds-divider-inset: var(--ds-divider-inset-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xl'] {
-  --ds-divider-inset: var(--ds-divider-inset-xl);
+  --ds-divider-inset: var(--ds-divider-inset-xl, calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- the hairline ---- */
@@ -64883,13 +64912,13 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
    */
   inline-size: auto;
   block-size: 0;
-  min-inline-size: var(--ds-divider-segment-min);
+  min-inline-size: var(--ds-divider-segment-min, var(--ds-divider-min-segment, 5%));
   min-block-size: 0;
   border-top: var(--ds-divider-line);
   border-inline-start: none;
   transition:
-    border-color var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
-    opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);
+    border-color var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out))),
+    opacity var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out)));
 }
 
 /*
@@ -64900,7 +64929,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-text-position='start'] [data-part='line-before'],
 .ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-text-position='end'] [data-part='line-after'] {
   flex-grow: 0;
-  flex-basis: var(--ds-divider-edge-basis);
+  flex-basis: var(--ds-divider-edge-basis, var(--ds-divider-edge-segment, 5%));
 }
 
 /* ---- the label ---- */
@@ -64910,7 +64939,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   align-items: center;
   justify-content: center;
   min-inline-size: 0;
-  max-inline-size: var(--ds-divider-label-measure);
+  max-inline-size: var(--ds-divider-label-measure, var(--ds-divider-label-max-width, 100%));
   white-space: normal;
   overflow-wrap: anywhere;
   text-align: center;
@@ -64918,12 +64947,12 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-plain='false'] [data-part='text'] {
-  color: var(--ds-divider-label-ink);
-  font-size: var(--ds-divider-label-size);
-  font-weight: var(--ds-divider-label-weight);
-  line-height: var(--ds-divider-label-leading);
-  text-transform: var(--ds-divider-label-case);
-  letter-spacing: var(--ds-divider-label-track);
+  color: var(--ds-divider-label-ink, var(--ds-divider-text-color, var(--ds-color-text-secondary)));
+  font-size: var(--ds-divider-label-size, var(--ds-divider-label-font-size, var(--ds-type-label-font-size)));
+  font-weight: var(--ds-divider-label-weight, var(--ds-divider-label-font-weight, var(--ds-type-label-font-weight)));
+  line-height: var(--ds-divider-label-leading, var(--ds-divider-label-line-height, var(--ds-type-label-line-height)));
+  text-transform: var(--ds-divider-label-case, var(--ds-divider-label-transform, uppercase));
+  letter-spacing: var(--ds-divider-label-track, var(--ds-divider-label-tracking, var(--ds-type-label-letter-spacing)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-plain='true'] [data-part='text'] {
@@ -65066,12 +65095,12 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- gap: the unscaled base, then the rung that rhythm may size ---- */
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform'] {
-  gap: var(--ds-flex-gap);
+  gap: var(--ds-flex-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split'] {
-  column-gap: var(--ds-flex-column-gap);
-  row-gap: var(--ds-flex-row-gap);
+  column-gap: var(--ds-flex-column-gap, var(--ds-spacing-0, 0px));
+  row-gap: var(--ds-flex-row-gap, var(--ds-spacing-0, 0px));
 }
 
 /*
@@ -65089,7 +65118,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   [data-gap-preset='3xl'],
   [data-gap-preset='4xl']
 ) {
-  gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));
+  gap: calc(var(--ds-flex-gap, var(--ds-spacing-0, 0px)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
@@ -65102,7 +65131,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   [data-column-gap-preset='3xl'],
   [data-column-gap-preset='4xl']
 ) {
-  column-gap: calc(var(--ds-flex-column-gap) * var(--ds-rhythm-effective-scale, 1));
+  column-gap: calc(var(--ds-flex-column-gap, var(--ds-spacing-0, 0px)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
@@ -65115,13 +65144,13 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   [data-row-gap-preset='3xl'],
   [data-row-gap-preset='4xl']
 ) {
-  row-gap: calc(var(--ds-flex-row-gap) * var(--ds-rhythm-effective-scale, 1));
+  row-gap: calc(var(--ds-flex-row-gap, var(--ds-spacing-0, 0px)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-layout-motion='rearrange'] {
-  transition: var(--ds-flex-reflow-transition);
+  transition: var(--ds-flex-reflow-transition, var(--ds-transition-rearrange));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -65182,7 +65211,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- the uniform gap ---- */
 
 .rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset] {
-  gap: var(--ds-grid-gap);
+  gap: var(--ds-grid-gap, var(--ds-spacing-4, 1rem));
 }
 
 .rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset]:where(
@@ -65195,7 +65224,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   [data-gap-preset='3xl'],
   [data-gap-preset='4xl']
 ) {
-  gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1));
+  gap: calc(var(--ds-grid-gap, var(--ds-spacing-4, 1rem)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* ---- the split axes ---- */
@@ -65247,7 +65276,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- reflow: the only motion this primitive owns ---- */
 
 .rottay-grid.rottay-grid--modern[data-component='grid'][data-layout-motion='rearrange'] {
-  transition: var(--ds-grid-reflow-transition);
+  transition: var(--ds-grid-reflow-transition, var(--ds-transition-rearrange));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -67376,25 +67405,25 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   align-items: center;
   min-inline-size: 0;
   max-inline-size: 100%;
-  gap: var(--ds-space-gap);
+  gap: var(--ds-space-gap, var(--ds-space-gap-sm));
   transition:
-    gap var(--ds-space-transition-duration) var(--ds-space-transition-timing),
-    align-items var(--ds-space-transition-duration) var(--ds-space-transition-timing);
+    gap var(--ds-space-transition-duration, var(--ds-space-motion-duration, var(--ds-motion-feedback))) var(--ds-space-transition-timing, var(--ds-space-motion-easing, var(--ds-motion-ease-out))),
+    align-items var(--ds-space-transition-duration, var(--ds-space-motion-duration, var(--ds-motion-feedback))) var(--ds-space-transition-timing, var(--ds-space-motion-easing, var(--ds-motion-ease-out)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-size='small'],
 .ds-space.ds-space--modern[data-part='root'][data-size='sm'] {
-  --ds-space-gap: var(--ds-space-gap-sm);
+  --ds-space-gap: var(--ds-space-gap-sm, calc(var(--ds-space-small-size, var(--ds-spacing-2)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-size='middle'],
 .ds-space.ds-space--modern[data-part='root'][data-size='md'] {
-  --ds-space-gap: var(--ds-space-gap-md);
+  --ds-space-gap: var(--ds-space-gap-md, calc(var(--ds-space-middle-size, var(--ds-spacing-4)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-size='large'],
 .ds-space.ds-space--modern[data-part='root'][data-size='lg'] {
-  --ds-space-gap: var(--ds-space-gap-lg);
+  --ds-space-gap: var(--ds-space-gap-lg, calc(var(--ds-space-large-size, var(--ds-spacing-6)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-direction='vertical'] {
@@ -67466,7 +67495,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   justify-content: flex-start;
   /* Pinned by the quality contract so flexible content can shrink and ellipsize. */
   min-inline-size: 0;
-  --_ds-stack-gap-current: var(--ds-stack-gap-md);
+  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
   gap: var(--_ds-stack-gap-current);
   /*
    * The divider's axis flags live on the ROOT so a RESPONSIVE direction, which
@@ -67474,12 +67503,12 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
    * every breakpoint.
    */
   --_ds-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
-  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-gutter);
+  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-gutter, var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-direction='horizontal'] {
   flex-direction: row;
-  --_ds-stack-divider-gap-block: var(--ds-stack-divider-gutter);
+  --_ds-stack-divider-gap-block: var(--ds-stack-divider-gutter, var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px)));
   --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
@@ -67534,44 +67563,44 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- the rungs ---- */
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='none'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-none);
+  --_ds-stack-gap-current: var(--ds-stack-gap-none, var(--ds-spacing-0, 0));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xs'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-xs);
+  --_ds-stack-gap-current: var(--ds-stack-gap-xs, calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='sm'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-sm);
+  --_ds-stack-gap-current: var(--ds-stack-gap-sm, calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='md'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-md);
+  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='lg'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-lg);
+  --_ds-stack-gap-current: var(--ds-stack-gap-lg, calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-xl, calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='2xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-2xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-2xl, calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='3xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-3xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-3xl, calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='4xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-4xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-4xl, calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never scaled. */
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='custom'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap);
+  --_ds-stack-gap-current: var(--ds-stack-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-full-width='true'] {
@@ -67591,20 +67620,20 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
  */
 .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
   align-self: stretch;
-  flex: 0 0 var(--ds-stack-divider-thickness);
+  flex: 0 0 var(--ds-stack-divider-thickness, var(--ds-stack-divider-size, var(--ds-border-width-1, 1px)));
   min-inline-size: 0;
   min-block-size: 0;
   margin-block: var(--_ds-stack-divider-gap-block);
   margin-inline: var(--_ds-stack-divider-gap-inline);
-  background: var(--ds-stack-divider-ink);
-  opacity: var(--ds-stack-divider-veil);
+  background: var(--ds-stack-divider-ink, var(--ds-stack-divider-color, var(--ds-color-border-subtle)));
+  opacity: var(--ds-stack-divider-veil, var(--ds-stack-divider-opacity, 0.72));
   pointer-events: none;
 }
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-layout-motion='rearrange'] {
-  transition: var(--ds-stack-reflow-transition);
+  transition: var(--ds-stack-reflow-transition, var(--ds-transition-rearrange));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -67690,15 +67719,15 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   position: relative;
   flex-shrink: 0;
   touch-action: none;
-  transition: background var(--ds-splitter-gutter-transition-duration)
-    var(--ds-splitter-gutter-transition-timing);
+  transition: background var(--ds-splitter-gutter-transition-duration, var(--ds-motion-feedback))
+    var(--ds-splitter-gutter-transition-timing, var(--ds-motion-ease-out));
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal'] {
-  inline-size: var(--ds-splitter-gutter-size);
+  inline-size: var(--ds-splitter-gutter-size, calc(0.5rem * var(--ds-density-effective-scale)));
   cursor: col-resize;
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical'] {
-  block-size: var(--ds-splitter-gutter-size);
+  block-size: var(--ds-splitter-gutter-size, calc(0.5rem * var(--ds-density-effective-scale)));
   cursor: row-resize;
 }
 
@@ -67709,17 +67738,17 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         Dragging reads as a primary TINT, never a loud full-strength bar. ---- */
 @media (hover: hover) {
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:hover:not([data-resizable='false']) {
-    background: var(--ds-splitter-gutter-bg-hover);
+    background: var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel))));
   }
 }
 
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:active:not([data-resizable='false']) {
-  background: var(--ds-splitter-gutter-bg-hover);
+  background: var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel))));
 }
 
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true'],
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:hover {
-  background: var(--ds-splitter-gutter-bg-dragging);
+  background: var(--ds-splitter-gutter-bg-dragging, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-material-panel-background, var(--ds-surface-panel))));
 }
 
 /* ---- gutter grip: the always-visible quiet affordance (three-tone hairline
@@ -67731,15 +67760,15 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   inset: 0;
   margin: auto;
   border-radius: var(--ds-radius-full);
-  background: var(--ds-splitter-gutter-grip-color);
+  background: var(--ds-splitter-gutter-grip-color, color-mix(in srgb, var(--ds-color-text-primary) 32%, transparent));
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal']::after {
-  inline-size: var(--ds-splitter-gutter-grip-thickness);
+  inline-size: var(--ds-splitter-gutter-grip-thickness, var(--ds-border-width-2, 2px));
   block-size: var(--ds-splitter-gutter-grip-length);
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical']::after {
   inline-size: var(--ds-splitter-gutter-grip-length);
-  block-size: var(--ds-splitter-gutter-grip-thickness);
+  block-size: var(--ds-splitter-gutter-grip-thickness, var(--ds-border-width-2, 2px));
 }
 
 /* ---- gutter: locked boundary (an adjacent panel is `resizable={false}`;
@@ -67758,14 +67787,14 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   content: none;
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-resizable='false']::after {
-  background: var(--ds-splitter-gutter-grip-color-locked);
+  background: var(--ds-splitter-gutter-grip-color-locked, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent));
 }
 
 /* ---- gutter: keyboard focus ring (the K3-C engine made gutters real
         `role="separator"` tab stops). ---- */
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
-  outline-offset: var(--ds-splitter-gutter-focus-ring-offset);
+  outline-offset: var(--ds-splitter-gutter-focus-ring-offset, var(--ds-edge-hairline-width, 1px));
 }
 
 /* ---- gutter: coarse-pointer hit expansion. The rail keeps its own size in
@@ -74898,7 +74927,7 @@ html[data-ds-motion='reduced']
   container-name: ds-cockpit-header;
   /* Layout migrated from the engine (R2+R3): full padding, with the compact
      and sticky variants keyed on the engine's data hooks below. */
-  padding: var(--ds-cockpit-header-padding);
+  padding: var(--ds-cockpit-header-padding, calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
   transition:
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -74906,12 +74935,12 @@ html[data-ds-motion='reduced']
     padding var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] {
-  padding: var(--ds-cockpit-header-padding-compact);
+  padding: var(--ds-cockpit-header-padding-compact, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true'] {
   position: sticky;
   top: var(--ds-cockpit-header-sticky-top, env(safe-area-inset-top, 0px));
-  z-index: var(--ds-cockpit-header-sticky-z, 100);
+  z-index: var(--ds-cockpit-header-sticky-z, var(--ds-z-affix, 100));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
@@ -74966,6 +74995,9 @@ html[data-ds-motion='reduced']
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
+  /* Rootless by measurement: the produced spacing rung recomputes under the
+     density dial (37.5px in the measured arm), and the tile's 40px identity
+     never moves. The channel stays produced at the same literal. */
   width: var(--ds-cockpit-header-icon-size, 40px);
   height: var(--ds-cockpit-header-icon-size, 40px);
   place-items: center;
@@ -75069,7 +75101,7 @@ html[data-ds-motion='reduced']
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2, 8px);
-  margin-block-end: var(--ds-cockpit-header-item-gap);
+  margin-block-end: var(--ds-cockpit-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-body);
 }
@@ -75133,14 +75165,14 @@ html[data-ds-motion='reduced']
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-cockpit-header-section-gap);
+  gap: var(--ds-cockpit-header-section-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='lead'] {
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--ds-cockpit-header-item-gap);
+  gap: var(--ds-cockpit-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
   min-width: 0;
 }
 
@@ -75153,7 +75185,7 @@ html[data-ds-motion='reduced']
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--ds-cockpit-header-item-gap);
+  gap: var(--ds-cockpit-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status-list'] {
@@ -75166,7 +75198,7 @@ html[data-ds-motion='reduced']
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: var(--ds-cockpit-header-action-gap);
+  gap: var(--ds-cockpit-header-action-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- back button wrapper (migrated from the engine, R2+R3) ---- */
@@ -76329,7 +76361,7 @@ html[data-ds-motion='reduced']
   container-type: inline-size;
   container-name: ds-workbench-header;
   /* Layout migrated from the engine (R2+R3). */
-  padding: var(--ds-workbench-header-padding);
+  padding: var(--ds-workbench-header-padding, calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
 }
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-loading] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
@@ -76344,8 +76376,8 @@ html[data-ds-motion='reduced']
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
-  width: var(--ds-workbench-header-icon-size, 40px);
-  height: var(--ds-workbench-header-icon-size, 40px);
+  width: var(--ds-workbench-header-icon-size, var(--ds-spacing-10, 40px));
+  height: var(--ds-workbench-header-icon-size, var(--ds-spacing-10, 40px));
   place-items: center;
   border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg);
@@ -76502,14 +76534,14 @@ html[data-ds-motion='reduced']
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--ds-workbench-header-section-gap);
+  gap: var(--ds-workbench-header-section-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-pattern-workbench-header.ds-engine-modern [data-part='lead'] {
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--ds-workbench-header-item-gap);
+  gap: var(--ds-workbench-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
   min-width: 0;
 }
 
@@ -76521,7 +76553,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-workbench-header.ds-engine-modern [data-part='title-row'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-workbench-header-item-gap);
+  gap: var(--ds-workbench-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
 }
 
 .ds-pattern-workbench-header.ds-engine-modern [data-part='actions'] {
@@ -76529,7 +76561,7 @@ html[data-ds-motion='reduced']
   flex-shrink: 0;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--ds-workbench-header-action-gap);
+  gap: var(--ds-workbench-header-action-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- quick action geometry: the Button carries the part, so the rail's
@@ -76602,7 +76634,7 @@ html[data-ds-motion='reduced']
   display: flex;
   align-items: center;
   gap: var(--ds-tabs-gap);
-  margin-block-start: var(--ds-workbench-header-section-gap);
+  margin-block-start: var(--ds-workbench-header-section-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 @container ds-workbench-header (max-width: 640px) {
@@ -82402,8 +82434,8 @@ html[data-ds-motion='reduced']
    the only box-shadow in the family. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'] {
   border-radius: var(--ds-radius-xl, 18px);
-  border: 1px solid var(--ds-form-sections-border);
-  background: var(--ds-form-sections-muted-surface);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -82412,15 +82444,15 @@ html[data-ds-motion='reduced']
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'][data-open='true'] {
-  border-color: var(--ds-form-sections-active-border);
-  background: var(--ds-form-sections-surface);
-  box-shadow: var(--ds-form-sections-shadow);
+  border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
+  background: var(--ds-form-sections-surface, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  box-shadow: var(--ds-form-sections-shadow, var(--ds-material-raised-shadow-selected, 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'] {
   border-radius: var(--ds-radius-xl, 18px);
-  border: 1px solid var(--ds-form-sections-border);
-  background: var(--ds-form-sections-muted-surface);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -82438,7 +82470,7 @@ html[data-ds-motion='reduced']
    Divider grammar channels: ruled/dashed tenant divider postures reach the
    separator; floors keep the exact 1px solid pre-wave render. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child) {
-  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider);
+  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* Section-level error (C-12): on framed appearances the shell takes the error
@@ -82460,13 +82492,13 @@ html[data-ds-motion='reduced']
   color: var(--ds-color-text-primary);
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 62%, transparent);
   background-image:
-    radial-gradient(circle at 12% 14%, var(--ds-form-sections-accent) 0%, transparent 48%),
-    radial-gradient(circle at 84% 0%, var(--ds-form-sections-accent-secondary) 0%, transparent 30%),
+    radial-gradient(circle at 12% 14%, var(--ds-form-sections-accent, color-mix(in srgb, var(--ds-color-text-secondary) 14%, transparent)) 0%, transparent 48%),
+    radial-gradient(circle at 84% 0%, var(--ds-form-sections-accent-secondary, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)) 0%, transparent 30%),
     radial-gradient(circle at 70% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
     linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
     linear-gradient(180deg, transparent 0%, transparent 34%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 36%, transparent) 100%),
-    linear-gradient(var(--ds-form-sections-grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--ds-form-sections-grid-color) 1px, transparent 1px);
+    linear-gradient(var(--ds-form-sections-grid-color, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-form-sections-grid-color, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)) 1px, transparent 1px);
   background-size:
     100% 100%,
     100% 100%,
@@ -82496,7 +82528,7 @@ html[data-ds-motion='reduced']
    only worked while the header itself was the button. The rule rides the tenant
    divider grammar (floors 1px solid). */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'][data-collapsible='false'] {
-  border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider);
+  border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* The header is a row: the disclosure takes the measure, the trailing cluster
@@ -82566,18 +82598,18 @@ html[data-ds-motion='reduced']
   font-size: var(--ds-font-size-2xs);
   font-weight: 700;
   border-radius: var(--ds-radius-md, 9px);
-  border: 1px solid var(--ds-form-sections-border);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: transparent;
   color: var(--ds-color-text-tertiary);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'] {
-  border-color: var(--ds-form-sections-active-border);
-  background: var(--ds-form-sections-muted-surface);
+  border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
+  background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'] {
-  border-color: var(--ds-form-sections-divider);
+  border-color: var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
   background: transparent;
 }
 
@@ -82613,8 +82645,8 @@ html[data-ds-motion='reduced']
   overflow: hidden;
   white-space: nowrap;
   border-radius: 999px;
-  border: 1px solid var(--ds-form-sections-badge-border);
-  background: var(--ds-form-sections-badge-bg);
+  border: 1px solid var(--ds-form-sections-badge-border, var(--ds-color-border-secondary));
+  background: var(--ds-form-sections-badge-bg, var(--ds-color-bg-secondary));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary-text'] {
@@ -82690,17 +82722,17 @@ html[data-ds-motion='reduced']
   align-items: center;
   justify-content: center;
   border-radius: var(--ds-radius-md, 9px);
-  border: 1px solid var(--ds-form-sections-border);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: transparent;
   transform: rotate(0deg);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
-  border-color: var(--ds-form-sections-active-border);
+  border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'] {
-  border-color: var(--ds-form-sections-divider);
+  border-color: var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* Part repeated so this OUTRANKS the resting `rotate(0deg)` above rather than
@@ -83015,7 +83047,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The description's trailing rhythm: the Stack spacing above it is
    profile-driven and stays in the TSX, so the channel rests at 0. */
 .ds-surface.ds-form-surface[data-part='root'] [data-part='description'] {
-  margin-block-end: var(--ds-form-surface-description-margin-block-end, 0);
+  margin-block-end: var(--ds-form-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
 
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
@@ -84398,7 +84430,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* The description's trailing rhythm: the Stack spacing above it is
    profile-driven and stays in the TSX, so the channel rests at 0. */
 .ds-surface.ds-wizard[data-part='root'] [data-part='description'] {
-  margin-block-end: var(--ds-wizard-surface-description-margin-block-end, 0);
+  margin-block-end: var(--ds-wizard-surface-description-margin-block-end, var(--ds-spacing-0, 0));
 }
 
 /* The error surface is a ruled alert: the recessed error ground, an emphasis
@@ -84611,7 +84643,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   position: relative;
   isolation: isolate;
   inline-size: 100%;
-  margin-block-end: var(--ds-detail-header-root-margin-block-end, 24px);
+  margin-block-end: var(--ds-detail-header-root-margin-block-end, var(--ds-spacing-6, 24px));
   overflow: hidden;
   background: var(--_ds-detail-header-ground);
   /* The family's own channel stays first; the tenant geometry ramp supplies
@@ -84677,7 +84709,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-detail-header [data-part='back-button'] {
-  padding: var(--ds-detail-header-back-button-padding, 7px 12px);
+  padding: var(--ds-detail-header-back-button-padding, 7px var(--ds-spacing-3, 12px));
   border-radius: var(--ds-radius-md, 11px);
   background: var(--_ds-detail-header-control-bg);
   box-shadow: var(--_ds-detail-header-control-shadow);
@@ -84766,7 +84798,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   object-fit: cover;
 }
 .ds-structure.ds-detail-header [data-part='avatar-initials'][data-part='avatar-initials'][data-part='avatar-initials'] {
-  font-size: var(--ds-detail-header-avatar-initials-size, 24px);
+  font-size: var(--ds-detail-header-avatar-initials-size, var(--ds-font-size-3xl, 24px));
   font-weight: 700;
 }
 
@@ -84830,7 +84862,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   line-height: var(--ds-detail-header-subtitle-leading, 1.65);
   /* measure, not width: a character cap follows the type scale, a pixel cap
      does not */
-  max-inline-size: var(--ds-detail-header-subtitle-max-inline-size, 68ch);
+  max-inline-size: var(--ds-detail-header-subtitle-max-inline-size, var(--ds-type-paragraph-measure, 68ch));
 }
 
 .ds-structure.ds-detail-header [data-part='context-rail'] {
@@ -84892,7 +84924,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    the second grid motif and the inset highlight are retired; what remains is
    one hairline and the pairs themselves, aligned to the hero's own gutter. */
 .ds-structure.ds-detail-header [data-part='metadata-card'] {
-  margin-block-start: var(--ds-detail-header-metadata-card-margin-block-start, 24px);
+  margin-block-start: var(--ds-detail-header-metadata-card-margin-block-start, var(--ds-spacing-6, 24px));
   padding-block: var(--ds-spacing-4, 16px) 0;
   padding-inline: 0;
   border-radius: 0;
@@ -84990,7 +85022,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-structure.ds-detail-header [data-part='tab'] {
   position: relative;
-  padding: var(--ds-detail-header-tab-padding, 10px 12px 12px);
+  padding: var(--ds-detail-header-tab-padding, 10px var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px));
   cursor: pointer;
   border-top-left-radius: var(--ds-radius-md, 10px);
   border-top-right-radius: var(--ds-radius-md, 10px);
@@ -85101,7 +85133,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    de-escalate together instead of drifting apart. */
 @container ds-detail-header (max-width: 640px) {
   .ds-structure.ds-detail-header[data-part='root'] {
-    --_ds-detail-header-gutter: var(--ds-detail-header-hero-panel-padding-compact, 20px);
+    --_ds-detail-header-gutter: var(--ds-detail-header-hero-panel-padding-compact, var(--ds-spacing-5, 20px));
   }
   .ds-structure.ds-detail-header[data-part='root'] [data-part='title'] {
     font-size: var(
@@ -85113,8 +85145,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     letter-spacing: var(--ds-detail-header-title-tracking-compact, var(--ds-type-page-title-letter-spacing, -0.025em));
   }
   .ds-structure.ds-detail-header [data-part='avatar'] {
-    inline-size: var(--ds-detail-header-avatar-size-compact, 56px);
-    block-size: var(--ds-detail-header-avatar-size-compact, 56px);
+    inline-size: var(--ds-detail-header-avatar-size-compact, var(--ds-spacing-14, 56px));
+    block-size: var(--ds-detail-header-avatar-size-compact, var(--ds-spacing-14, 56px));
   }
   .ds-structure.ds-detail-header [data-part='metadata-card'] {
     padding-block-start: var(--ds-detail-header-metadata-card-padding-compact, 14px);
@@ -85629,8 +85661,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* top bar */
 .ds-structure.ds-edit-header [data-part='top-bar'] {
-  padding-block: var(--ds-edit-header-top-bar-padding-block, 12px);
-  padding-inline: var(--ds-edit-header-top-bar-padding-inline, 24px);
+  padding-block: var(--ds-edit-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-edit-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-bg-secondary);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] {
@@ -85694,7 +85726,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* hero panel geometry + copy hierarchy */
 .ds-structure.ds-edit-header [data-part='hero-panel'] {
-  padding: var(--ds-edit-header-hero-padding, 28px);
+  padding: var(--ds-edit-header-hero-padding, calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
    visual value in the TSX and the one measurement here no ramp could see. The channel
@@ -85717,8 +85749,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: var(--ds-edit-header-icon-badge-size, 52px);
 }
 .ds-structure.ds-edit-header [data-part='icon-badge-glyph'] {
-  inline-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
-  block-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
+  inline-size: var(--ds-edit-header-icon-badge-glyph-size, var(--ds-icon-lg-size, 24px));
+  block-size: var(--ds-edit-header-icon-badge-glyph-size, var(--ds-icon-lg-size, 24px));
 }
 /* the shared-helper and Save/Cancel icons size from the skin (was an inline
    14px on every one of them) — the FormHeader posture. The selector is the part the
@@ -85769,7 +85801,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-block: 4px;
   padding-inline: 12px;
   border-radius: 999px;
-  background: var(--ds-edit-header-status-tone-bg);
+  background: var(--ds-edit-header-status-tone-bg, var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
 }
 .ds-structure.ds-edit-header [data-part='status-pill'][data-variant='success'] {
@@ -85793,10 +85825,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
-  border: 1px solid var(--ds-edit-header-status-tone-bd);
+  border: 1px solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'] {
-  color: var(--ds-edit-header-status-tone-fg);
+  color: var(--ds-edit-header-status-tone-fg, var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary)));
   letter-spacing: 0.04em;
   text-transform: capitalize;
 }
@@ -85833,8 +85865,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* context section below the hero: a RULE, not a card (see the header's
    "Forms are not card stacks" note) */
 .ds-structure.ds-edit-header [data-part='context-card'] {
-  margin-block-start: var(--ds-edit-header-context-gap, 24px);
-  padding-block-start: var(--ds-edit-header-context-gap, 24px);
+  margin-block-start: var(--ds-edit-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-start: var(--ds-edit-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   /* The context section is the RECESSED continuation of the hero, so its
      optical top edge reads the governed `inset` role's highlight facet.
      Declared by neither the default theme nor any shipped artifact, so the
@@ -86049,7 +86081,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   --ds-form-header-context-gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
   container: ds-form-header / inline-size;
   inline-size: 100%;
-  margin-block-end: var(--ds-form-header-root-margin, 24px);
+  margin-block-end: var(--ds-form-header-root-margin, var(--ds-spacing-6, 24px));
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   border-radius: 20px;
@@ -86071,8 +86103,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         live here, on the Back link's baseline and a hero-panel away from the
         title it commits; it now sits in the hero row, the EditHeader posture. ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] {
-  padding-block: var(--ds-form-header-top-bar-padding-block);
-  padding-inline: var(--ds-form-header-top-bar-padding-inline);
+  padding-block: var(--ds-form-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-form-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   border-bottom: 1px solid var(--ds-color-border-secondary);
   background: var(--ds-color-bg-secondary);
 }
@@ -86110,7 +86142,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- hero panel (padding drained; the gradient itself lives in
         edit-header.css, shared) ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
-  padding: var(--ds-form-header-hero-padding);
+  padding: var(--ds-form-header-hero-padding, calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
    visual value in the TSX and the one measurement here no ramp could see. The channel
@@ -86190,8 +86222,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         "Forms are not card stacks" note). One dominant boundary, optical
         padding, and the governed inset highlight for the optical top edge. ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
-  margin-block-start: var(--ds-form-header-context-gap);
-  padding-block-start: var(--ds-form-header-context-gap);
+  margin-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   /* The context section is the RECESSED continuation of the hero, so its
      optical top edge reads the governed `inset` role's highlight facet — the
      edit-header sibling carries the same chain. Declared by neither the default
@@ -86709,7 +86741,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   letter-spacing: var(--ds-collection-header-subtitle-tracking-technical, 0.135em);
 }
 .ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-subtitle-treatment='mono-technical'][data-compact-layout='true'] {
-  letter-spacing: var(--ds-collection-header-subtitle-tracking-compact-technical, 0.05em);
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-compact-technical, var(--ds-letter-spacing-wider, 0.05em));
 }
 .ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-subtitle-treatment='mono-technical']:not([data-compact-layout='true']) {
   letter-spacing: var(--ds-collection-header-subtitle-tracking-code, var(--ds-type-code-letter-spacing, 0.09em));
@@ -86785,7 +86817,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='editorial-tech'] {
   margin-block-start: var(--ds-collection-header-subtitle-row-gap-editorial, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
   max-inline-size: var(--ds-collection-header-subtitle-row-measure-editorial, 760px);
-  gap: var(--ds-collection-header-subtitle-row-inline-gap-editorial, 12px);
+  gap: var(--ds-collection-header-subtitle-row-inline-gap-editorial, var(--ds-spacing-3, 12px));
 }
 
 /* action partition divider: the hairline seam between the dominant primary
@@ -86869,7 +86901,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   max-inline-size: 100%;
   border-radius: var(--ds-radius-md, 8px);
   /* Glass is opt-in (default none): PT29/PT32 fix, Sheet glass precedent. */
-  backdrop-filter: var(--ds-collection-header-actions-backdrop, none);
+  backdrop-filter: var(--ds-collection-header-actions-backdrop, var(--ds-dashboard-header-actions-backdrop, none));
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
@@ -86963,7 +86995,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-radius: var(--ds-collection-header-keycap-radius, var(--ds-kbd-radius, var(--ds-radius-sm, 4px)));
   font-family: var(--ds-collection-header-keycap-family, var(--ds-kbd-font-family, var(--ds-font-family-mono)));
   font-size: var(--ds-collection-header-keycap-size, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
-  font-weight: var(--ds-collection-header-keycap-weight, var(--ds-kbd-font-weight, 500));
+  font-weight: var(--ds-collection-header-keycap-weight, var(--ds-font-weight-medium, 500));
   line-height: 1;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -86976,7 +87008,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    `data-part` ancestor buys the fourth unit over the tenant border floor. */
 .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-collection-header-keycap-frame, var(--ds-kbd-frame, var(--ds-color-border)));
-  border-block-end-width: var(--ds-collection-header-keycap-depth-width, var(--ds-kbd-depth-width, 2px));
+  border-block-end-width: var(--ds-collection-header-keycap-depth-width, var(--ds-border-width-2, 2px));
   border-block-end-color: var(
     --ds-kbd-depth,
     color-mix(in srgb, var(--ds-collection-header-keycap-frame, var(--ds-kbd-frame, var(--ds-color-border))) 72%, var(--ds-color-neutral-900) 28%)
@@ -87212,7 +87244,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact] {
-  border: var(--ds-dashboard-header-rule, 1px) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -87288,7 +87320,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'] {
-  border: var(--ds-dashboard-header-rule, 1px) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(
       --ds-dashboard-header-icon-border,
       color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-subtle))
@@ -87439,7 +87471,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'] {
-  border-top: var(--ds-dashboard-header-rule, 1px) solid
+  border-top: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -87463,7 +87495,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding: 0 var(--ds-dashboard-header-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
   /* The chip-frame channels stay reachable but default to nothing: a tenant
      that declares them gets a framed chip back; the default is the cell. */
-  border-radius: var(--ds-dashboard-header-metric-radius, 0);
+  border-radius: var(--ds-dashboard-header-metric-radius, var(--ds-radius-none, 0));
   background: var(--ds-dashboard-header-metric-bg, none);
   gap: var(
     --ds-dashboard-header-gap-hair,
@@ -87478,7 +87510,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* One rule between cells — the readout is a rhythm, not a row of boxes. */
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] + [data-part='metric-chip'] {
-  border-inline-start: var(--ds-dashboard-header-rule, 1px) solid
+  border-inline-start: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(
       --ds-dashboard-header-metric-rule,
       var(--ds-dashboard-header-border, var(--ds-color-border-subtle))
@@ -91095,7 +91127,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   min-inline-size: 0;
   min-block-size: var(--ds-stats-header-card-min-height, 140px);
   overflow: hidden;
-  padding: var(--ds-stats-header-card-padding, 20px 24px);
+  padding: var(--ds-stats-header-card-padding, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px));
   /* edge posture derives from the tenant radius scale (canonical channel;
      the 12px fallback is the exact former hardcoded value) */
   border-radius: var(--ds-stats-header-card-radius, var(--ds-radius-lg, 12px));
@@ -91153,7 +91185,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         never the other way around. ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-card'] [data-part='statistic'] [data-part='value'] {
   font-size: var(--ds-stats-header-value-font-size, 2.25rem);
-  font-weight: var(--ds-stats-header-value-font-weight, 800);
+  font-weight: var(--ds-stats-header-value-font-weight, var(--ds-font-weight-extrabold, 800));
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -91210,8 +91242,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   gap: var(--ds-stats-header-spark-dot-gap, 6px);
 }
 .ds-stats-header[data-part='root'] [data-part='spark-dot'] {
-  inline-size: var(--ds-stats-header-spark-dot-size, 4px);
-  block-size: var(--ds-stats-header-spark-dot-size, 4px);
+  inline-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
+  block-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   border-radius: 50%;
   /* The dot's share of the series maximum arrives as a closed `data-level`
      domain (0-7) rather than as a computed opacity in the style attribute, and
@@ -91267,7 +91299,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- insight ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight'] {
-  margin-block-start: var(--ds-stats-header-insight-margin-block-start, 8px);
+  margin-block-start: var(--ds-stats-header-insight-margin-block-start, var(--ds-spacing-2, 8px));
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-meta-font-size, var(--ds-font-size-2xs));
   font-style: italic;
@@ -91279,7 +91311,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
-  block-size: var(--ds-stats-header-glow-block-size, 40px);
+  block-size: var(--ds-stats-header-glow-block-size, var(--ds-spacing-10, 40px));
   pointer-events: none;
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
@@ -110391,15 +110423,15 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--ds-chart-legend-gap, 16px);
-  margin-block-start: var(--ds-chart-legend-margin-top, 8px);
+  gap: var(--ds-chart-legend-gap, var(--ds-spacing-4, 16px));
+  margin-block-start: var(--ds-chart-legend-margin-top, var(--ds-spacing-2, 8px));
 }
 
 :where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='legend-item'] {
   display: flex;
   align-items: center;
   gap: var(--ds-chart-legend-item-gap, 6px);
-  font-size: var(--ds-chart-legend-font-size, 12px);
+  font-size: var(--ds-chart-legend-font-size, var(--ds-font-size-xs, 12px));
   /* Legend typography posture protos: a dense technical tenant keeps the
    * fallback (normal/none, byte-equal to the historical render); an editorial
    * tenant can track and case the legend without touching anatomy. */
@@ -113680,7 +113712,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   padding-inline: 0;
   color: var(--ds-surface-fg, currentColor);
   border-block-start:
-    var(--ds-section-frame-rule-width, 1px) solid
+    var(--ds-section-frame-rule-width, var(--ds-divider-width, 1px)) solid
     var(--ds-section-frame-rule-color, var(--ds-color-hairline));
 }
 
@@ -115022,6 +115054,26 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
     > [data-part='card-list']
     > [data-part='card']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
+  }
+}
+
+/* Reduced motion: durations collapse to near-zero but the transitions still
+   run to completion, so nothing is hidden or left waiting on an event that
+   never arrives. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body'],
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card'] {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -120175,10 +120227,15 @@ html[lang]:lang(ar) {
   --ds-checkbox-description-line-height: var(--ds-type-caption-line-height);
   --ds-checkbox-error-border-color: var(--ds-color-error);
   --ds-checkbox-label-color: var(--ds-color-text-primary);
+  --ds-cockpit-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-cockpit-header-actions-backdrop: none;
   --ds-cockpit-header-bg: var(--ds-card-header-bg);
   --ds-cockpit-header-icon-size: 40px;
-  --ds-cockpit-header-sticky-z: 100;
+  --ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  --ds-cockpit-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-cockpit-header-padding-compact: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-cockpit-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-cockpit-header-sticky-z: var(--ds-z-affix, 100);
   --ds-collapse-arrow-focus-ring-radius: var(--ds-radius-sm);
   --ds-collapse-arrow-hover-color: var(--ds-color-primary);
   --ds-collapse-arrow-motion-duration: var(--ds-motion-feedback);
@@ -120204,7 +120261,7 @@ html[lang]:lang(ar) {
   --ds-collapse-touch-target-min: var(--ds-touch-target-min);
   --ds-collection-header-accent: var(--ds-collection-header-display-color, var(--ds-color-primary));
   --ds-collection-header-action-icon-gap: calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1));
-  --ds-collection-header-actions-backdrop: none;
+  --ds-collection-header-actions-backdrop: var(--ds-dashboard-header-actions-backdrop, none);
   --ds-collection-header-bg: linear-gradient(116deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card) 56%, var(--ds-surface-panel));
   --ds-collection-header-border: var(--ds-color-border-primary);
   --ds-collection-header-chip-block-size: var(--ds-spacing-6, 24px);
@@ -120222,7 +120279,7 @@ html[lang]:lang(ar) {
   --ds-collection-header-identity-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-collection-header-inline-meta-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-collection-header-keycap-block-size: var(--ds-spacing-5, 20px);
-  --ds-collection-header-keycap-depth-width: var(--ds-kbd-depth-width, 2px);
+  --ds-collection-header-keycap-depth-width: var(--ds-border-width-2, 2px);
   --ds-collection-header-keycap-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));
   --ds-collection-header-keycap-frame: var(--ds-kbd-frame, var(--ds-color-border));
   --ds-collection-header-keycap-ink: var(--ds-kbd-ink, var(--ds-color-text-muted));
@@ -120230,7 +120287,7 @@ html[lang]:lang(ar) {
   --ds-collection-header-keycap-radius: var(--ds-kbd-radius, var(--ds-radius-sm, 4px));
   --ds-collection-header-keycap-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
   --ds-collection-header-keycap-surface: var(--ds-kbd-surface, var(--ds-surface-inset, var(--ds-color-neutral-100)));
-  --ds-collection-header-keycap-weight: var(--ds-kbd-font-weight, 500);
+  --ds-collection-header-keycap-weight: var(--ds-font-weight-medium, 500);
   --ds-collection-header-overline-case: var(--ds-page-header-eyebrow-text-transform, uppercase);
   --ds-collection-header-overline-family: inherit;
   --ds-collection-header-overline-size: var(--ds-page-header-eyebrow-size, var(--ds-font-size-xs, 12px));
@@ -120271,7 +120328,7 @@ html[lang]:lang(ar) {
   --ds-collection-header-subtitle-row-gap-editorial: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-collection-header-subtitle-row-gap-treated: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-collection-header-subtitle-row-inline-gap: 10px;
-  --ds-collection-header-subtitle-row-inline-gap-editorial: 12px;
+  --ds-collection-header-subtitle-row-inline-gap-editorial: var(--ds-spacing-3, 12px);
   --ds-collection-header-subtitle-row-measure: 620px;
   --ds-collection-header-subtitle-row-measure-editorial: 760px;
   --ds-collection-header-subtitle-row-rule-gap: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
@@ -120279,7 +120336,7 @@ html[lang]:lang(ar) {
   --ds-collection-header-subtitle-size-caption: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
   --ds-collection-header-subtitle-tracking-caption: var(--ds-type-caption-letter-spacing, 0.03em);
   --ds-collection-header-subtitle-tracking-code: var(--ds-type-code-letter-spacing, 0.09em);
-  --ds-collection-header-subtitle-tracking-compact-technical: 0.05em;
+  --ds-collection-header-subtitle-tracking-compact-technical: var(--ds-letter-spacing-wider, 0.05em);
   --ds-collection-header-subtitle-tracking-dotted: 0.08em;
   --ds-collection-header-subtitle-tracking-technical: 0.135em;
   --ds-collection-header-title-measure: var(--ds-page-header-title-max-width, 35rem);
@@ -120409,7 +120466,7 @@ html[lang]:lang(ar) {
   --ds-container-pad: var(--ds-container-padding-md);
   --ds-container-padding-lg: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
   --ds-container-padding-md: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
-  --ds-container-padding-none: 0;
+  --ds-container-padding-none: var(--ds-spacing-0);
   --ds-container-padding-sm: calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1));
   --ds-container-sm: var(--ds-breakpoint-sm);
   --ds-container-surface: var(--ds-container-background, transparent);
@@ -120430,12 +120487,12 @@ html[lang]:lang(ar) {
   --ds-dashboard-header-icon-size: 42px;
   --ds-dashboard-header-metric-bg: none;
   --ds-dashboard-header-metric-icon-color: var(--ds-color-primary);
-  --ds-dashboard-header-metric-radius: 0;
+  --ds-dashboard-header-metric-radius: var(--ds-radius-none, 0);
   --ds-dashboard-header-metric-rule: var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
   --ds-dashboard-header-radius: var(--ds-radius-xl);
   --ds-dashboard-header-room: calc(clamp(var(--ds-spacing-4, 16px), 2.2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
   --ds-dashboard-header-room-tight: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
-  --ds-dashboard-header-rule: 1px;
+  --ds-dashboard-header-rule: var(--ds-border-width-1, 1px);
   --ds-dashboard-header-shadow: var(--ds-elevation-1);
   --ds-dashboard-header-sheen-duration: var(--ds-motion-calm, var(--ds-motion-slow));
   --ds-dashboard-header-sheen-opacity: 0.2;
@@ -120603,28 +120660,28 @@ html[lang]:lang(ar) {
   --ds-descriptions-title-letter-spacing: -0.02em;
   --ds-descriptions-title-line-height: 1.25;
   --ds-detail-form-surface-error-banner-padding: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
-  --ds-detail-header-avatar-initials-size: 24px;
+  --ds-detail-header-avatar-initials-size: var(--ds-font-size-3xl, 24px);
   --ds-detail-header-avatar-size: 68px;
-  --ds-detail-header-avatar-size-compact: 56px;
-  --ds-detail-header-back-button-padding: 7px 12px;
+  --ds-detail-header-avatar-size-compact: var(--ds-spacing-14, 56px);
+  --ds-detail-header-back-button-padding: 7px var(--ds-spacing-3, 12px);
   --ds-detail-header-context-rail-margin-block-start: 2px;
   --ds-detail-header-eyebrow-tracking: 0.14em;
   --ds-detail-header-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
   --ds-detail-header-hero-panel-padding: var(--ds-spacing-6, 24px);
-  --ds-detail-header-hero-panel-padding-compact: 20px;
+  --ds-detail-header-hero-panel-padding-compact: var(--ds-spacing-5, 20px);
   --ds-detail-header-metadata-card-children-margin-block-start: 18px;
-  --ds-detail-header-metadata-card-margin-block-start: 24px;
+  --ds-detail-header-metadata-card-margin-block-start: var(--ds-spacing-6, 24px);
   --ds-detail-header-metadata-card-padding-compact: 14px;
   --ds-detail-header-metadata-chip-label-tracking: 0.12em;
   --ds-detail-header-radius: var(--ds-radius-xl, 22px);
-  --ds-detail-header-root-margin-block-end: 24px;
+  --ds-detail-header-root-margin-block-end: var(--ds-spacing-6, 24px);
   --ds-detail-header-shadow: var(--ds-detail-hero-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent), var(--ds-elevation-1));
   --ds-detail-header-subtitle-leading: 1.65;
-  --ds-detail-header-subtitle-max-inline-size: 68ch;
+  --ds-detail-header-subtitle-max-inline-size: var(--ds-type-paragraph-measure, 68ch);
   --ds-detail-header-tab-active-bg: transparent;
   --ds-detail-header-tab-count-padding: 2px 6px;
   --ds-detail-header-tab-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
-  --ds-detail-header-tab-padding: 10px 12px 12px;
+  --ds-detail-header-tab-padding: 10px var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px);
   --ds-detail-header-title-leading: var(--ds-type-page-title-line-height, 1.2);
   --ds-detail-header-title-size: var(--ds-type-page-title-font-size, 32px);
   --ds-detail-header-title-size-compact: calc(var(--ds-type-page-title-font-size, 32px) * 0.8125);
@@ -120638,7 +120695,7 @@ html[lang]:lang(ar) {
   --ds-divider-inset: var(--ds-divider-inset-md);
   --ds-divider-inset-lg: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
   --ds-divider-inset-md: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
-  --ds-divider-inset-none: 0;
+  --ds-divider-inset-none: var(--ds-spacing-0, 0);
   --ds-divider-inset-sm: calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1));
   --ds-divider-inset-xl: calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1));
   --ds-divider-inset-xs: calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1));
@@ -120720,9 +120777,17 @@ html[lang]:lang(ar) {
   --ds-edge-hairline-width: 1px;
   --ds-edge-standard-width: 1px;
   --ds-edit-header-context-card-filter: none;
+  --ds-edit-header-context-gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-edit-header-hero-padding: calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1));
   --ds-edit-header-hero-row-gap: calc(20px * var(--ds-rhythm-effective-scale, 1));
+  --ds-edit-header-icon-badge-glyph-size: var(--ds-icon-lg-size, 24px);
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
   --ds-edit-header-title-font-size: var(--ds-type-page-title-font-size, var(--ds-font-size-2xl));
   --ds-edit-header-title-font-size-compact: var(--ds-type-section-title-font-size, var(--ds-font-size-xl));
+  --ds-edit-header-top-bar-padding-block: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-edit-header-top-bar-padding-inline: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
   --ds-effect-intensity: 0.2;
   --ds-file-manager-content-min-height: 12.5rem;
   --ds-file-manager-link-color: var(--ds-color-link, var(--ds-color-primary));
@@ -120741,10 +120806,10 @@ html[lang]:lang(ar) {
   --ds-filter-panel-range-gap: var(--ds-spacing-2);
   --ds-filter-panel-stacked-gap: var(--ds-spacing-3);
   --ds-filter-panel-touch-target: 2.75rem;
-  --ds-flex-column-gap: 0px;
-  --ds-flex-gap: 0px;
+  --ds-flex-column-gap: var(--ds-spacing-0, 0px);
+  --ds-flex-gap: var(--ds-spacing-0, 0px);
   --ds-flex-reflow-transition: var(--ds-transition-rearrange);
-  --ds-flex-row-gap: 0px;
+  --ds-flex-row-gap: var(--ds-spacing-0, 0px);
   --ds-focus-ring: 0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary), 0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
   --ds-focus-ring-offset: 2px;
   --ds-focus-ring-width: 2px;
@@ -120773,22 +120838,37 @@ html[lang]:lang(ar) {
   --ds-form-field-label-text-transform: var(--ds-type-label-text-transform);
   --ds-form-field-required-color: var(--ds-input-label-required-color);
   --ds-form-header-context-backdrop: none;
+  --ds-form-header-context-gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-form-header-hero-padding: calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1));
   --ds-form-header-hero-padding-compact: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
   --ds-form-header-hero-row-gap: calc(20px * var(--ds-rhythm-effective-scale, 1));
-  --ds-form-header-root-margin: 24px;
+  --ds-form-header-root-margin: var(--ds-spacing-6, 24px);
   --ds-form-header-title-font-size: var(--ds-type-page-title-font-size, var(--ds-font-size-2xl));
   --ds-form-header-title-font-size-compact: var(--ds-type-section-title-font-size, var(--ds-font-size-xl));
+  --ds-form-header-top-bar-padding-block: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-form-header-top-bar-padding-inline: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
   --ds-form-label-color: var(--ds-input-label-color);
   --ds-form-label-color-focus: var(--ds-color-primary);
   --ds-form-label-font-family: var(--ds-input-label-font-family);
   --ds-form-label-text-transform: var(--ds-type-label-text-transform);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-secondary) 14%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
+  --ds-form-sections-active-border: var(--ds-color-border);
+  --ds-form-sections-badge-bg: var(--ds-color-bg-secondary);
+  --ds-form-sections-badge-border: var(--ds-color-border-secondary);
+  --ds-form-sections-border: var(--ds-color-border-secondary);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
   --ds-form-sections-facts-title-font-size: 17px;
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent);
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%);
+  --ds-form-sections-shadow: var(--ds-material-raised-shadow-selected, 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent));
+  --ds-form-sections-surface: var(--ds-surface-card, var(--ds-color-bg-elevated));
   --ds-form-spinner-duration: var(--ds-motion-glacial);
   --ds-form-supporting-color: var(--ds-color-text-secondary);
   --ds-form-surface-actions-gap: calc(8px * var(--ds-rhythm-effective-scale, 1));
-  --ds-form-surface-description-margin-block-end: 0;
+  --ds-form-surface-description-margin-block-end: var(--ds-spacing-0, 0);
   --ds-form-surface-error-banner-padding: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
-  --ds-grid-gap: var(--ds-spacing-4);
+  --ds-grid-gap: var(--ds-spacing-4, 1rem);
   --ds-grid-reflow-transition: var(--ds-transition-rearrange);
   --ds-guided-draft-form-heading-font-weight: var(--ds-font-weight-semibold, 600);
   --ds-header-back-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
@@ -121059,8 +121139,8 @@ html[lang]:lang(ar) {
   --ds-menu-trigger-open-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-trigger-open-color: var(--ds-color-text-primary);
   --ds-mobile-header-bar-block-size: 56px;
-  --ds-mobile-header-bar-padding-inline: 4px;
-  --ds-mobile-header-center-padding-inline: 8px;
+  --ds-mobile-header-bar-padding-inline: calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-mobile-header-center-padding-inline: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-mobile-header-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
   --ds-mobile-header-hairline-color: var(--ds-color-border);
   --ds-mobile-header-sticky-backdrop: none;
@@ -121069,7 +121149,7 @@ html[lang]:lang(ar) {
   --ds-mobile-header-stuck-shadow: var(--ds-elevation-2);
   --ds-mobile-header-title-font-size: calc(var(--ds-font-size-lg) * 1.0625);
   --ds-mobile-header-title-line-height: 1.29;
-  --ds-mobile-header-title-tracking: -0.01em;
+  --ds-mobile-header-title-tracking: var(--ds-letter-spacing-subtle, -0.01em);
   --ds-mobile-header-trigger-press-scale: 0.94;
   --ds-mobile-header-trigger-radius: var(--ds-radius-md, 8px);
   --ds-mobile-header-trigger-tint: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
@@ -121393,7 +121473,7 @@ html[lang]:lang(ar) {
   --ds-section-frame-ordinal-ink: color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary));
   --ds-section-frame-padding-block: var(--ds-spacing-10, 2.5rem);
   --ds-section-frame-rule-color: var(--ds-color-hairline);
-  --ds-section-frame-rule-width: 1px;
+  --ds-section-frame-rule-width: var(--ds-divider-width, 1px);
   --ds-segmented-border: var(--ds-material-control-border);
   --ds-segmented-border-hover: var(--ds-material-control-border-hover);
   --ds-segmented-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift), var(--ds-card-bg, var(--ds-color-bg-secondary)));
@@ -121508,30 +121588,30 @@ html[lang]:lang(ar) {
   --ds-splitter-gutter-bg: var(--ds-material-panel-background, var(--ds-surface-panel));
   --ds-splitter-gutter-bg-dragging: color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-material-panel-background, var(--ds-surface-panel)));
   --ds-splitter-gutter-bg-hover: color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel)));
-  --ds-splitter-gutter-focus-ring-offset: 1px;
+  --ds-splitter-gutter-focus-ring-offset: var(--ds-edge-hairline-width, 1px);
   --ds-splitter-gutter-grip-color: color-mix(in srgb, var(--ds-color-text-primary) 32%, transparent);
   --ds-splitter-gutter-grip-color-locked: color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent);
   --ds-splitter-gutter-grip-length: 1rem;
-  --ds-splitter-gutter-grip-thickness: 2px;
+  --ds-splitter-gutter-grip-thickness: var(--ds-border-width-2, 2px);
   --ds-splitter-gutter-reach: 18px;
   --ds-splitter-gutter-size: calc(0.5rem * var(--ds-density-effective-scale));
   --ds-splitter-gutter-transition-duration: var(--ds-motion-feedback);
   --ds-splitter-gutter-transition-timing: var(--ds-motion-ease-out);
   --ds-splitter-panel-grow: 50;
-  --ds-stack-divider-gutter: var(--ds-stack-divider-inset, 0px);
+  --ds-stack-divider-gutter: var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px));
   --ds-stack-divider-ink: var(--ds-stack-divider-color, var(--ds-color-border-subtle));
-  --ds-stack-divider-thickness: var(--ds-stack-divider-size, 1px);
+  --ds-stack-divider-thickness: var(--ds-stack-divider-size, var(--ds-border-width-1, 1px));
   --ds-stack-divider-veil: var(--ds-stack-divider-opacity, 0.72);
-  --ds-stack-gap: 0px;
-  --ds-stack-gap-2xl: calc(var(--ds-spacing-10) * var(--ds-rhythm-effective-scale, 1));
-  --ds-stack-gap-3xl: calc(var(--ds-spacing-12) * var(--ds-rhythm-effective-scale, 1));
-  --ds-stack-gap-4xl: calc(var(--ds-spacing-16) * var(--ds-rhythm-effective-scale, 1));
-  --ds-stack-gap-lg: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
-  --ds-stack-gap-md: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
-  --ds-stack-gap-none: 0;
-  --ds-stack-gap-sm: calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1));
-  --ds-stack-gap-xl: calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1));
-  --ds-stack-gap-xs: calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap: var(--ds-spacing-0, 0px);
+  --ds-stack-gap-2xl: calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-3xl: calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-4xl: calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-lg: calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-md: calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-none: var(--ds-spacing-0, 0);
+  --ds-stack-gap-sm: calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-xl: calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1));
+  --ds-stack-gap-xs: calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1));
   --ds-stack-reflow-transition: var(--ds-transition-rearrange);
   --ds-state-active-shift: 7%;
   --ds-state-disabled-mix: 82%;
@@ -121543,20 +121623,20 @@ html[lang]:lang(ar) {
   --ds-stats-header-card-frame: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
   --ds-stats-header-card-min-height: 140px;
   --ds-stats-header-card-min-height-compact: 120px;
-  --ds-stats-header-card-padding: 20px 24px;
+  --ds-stats-header-card-padding: var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px);
   --ds-stats-header-card-padding-compact: 18px;
   --ds-stats-header-card-radius: var(--ds-radius-lg, 12px);
   --ds-stats-header-change-column-gap: 3px;
   --ds-stats-header-change-row-gap: 2px;
   --ds-stats-header-columns: 4;
   --ds-stats-header-focus-ring-color: var(--ds-focus-ring-color, var(--ds-color-primary));
-  --ds-stats-header-glow-block-size: 40px;
+  --ds-stats-header-glow-block-size: var(--ds-spacing-10, 40px);
   --ds-stats-header-glow-strength: 6%;
   --ds-stats-header-grid-gap: var(--ds-spacing-3, 12px);
   --ds-stats-header-hover-lift: translateY(-2px);
   --ds-stats-header-hover-shadow: 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
   --ds-stats-header-icon-opacity: 0.6;
-  --ds-stats-header-insight-margin-block-start: 8px;
+  --ds-stats-header-insight-margin-block-start: var(--ds-spacing-2, 8px);
   --ds-stats-header-kicker-font-size: var(--ds-font-size-2xs);
   --ds-stats-header-kicker-tracking: 0.04em;
   --ds-stats-header-label-font-size: var(--ds-font-size-sm);
@@ -121567,11 +121647,11 @@ html[lang]:lang(ar) {
   --ds-stats-header-progress-margin-block-start: 10px;
   --ds-stats-header-spark-dot-gap: 6px;
   --ds-stats-header-spark-dot-opacity-floor: 0.15;
-  --ds-stats-header-spark-dot-size: 4px;
+  --ds-stats-header-spark-dot-size: var(--ds-spacing-1, 4px);
   --ds-stats-header-spark-margin-block-start: 14px;
   --ds-stats-header-value-font-size: 2.25rem;
   --ds-stats-header-value-font-size-compact: 1.75rem;
-  --ds-stats-header-value-font-weight: 800;
+  --ds-stats-header-value-font-weight: var(--ds-font-weight-extrabold, 800);
   --ds-stepper-circles-ring: 0 0 0 calc(var(--ds-spacing-1) * 0.75) color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   --ds-stepper-connector-block-gap: var(--ds-spacing-1);
   --ds-stepper-connector-clearance: var(--ds-spacing-1);
@@ -121655,7 +121735,7 @@ html[lang]:lang(ar) {
   --ds-table-pagination-font-size: var(--ds-type-supporting-font-size);
   --ds-table-pagination-margin-block-start: var(--ds-spacing-4);
   --ds-table-pagination-numeric: tabular-nums;
-  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1));
+  --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-table-title-font-weight: var(--ds-font-weight-semibold);
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
   --ds-table-touch-target-min: var(--ds-touch-target-min);
@@ -122200,11 +122280,15 @@ html[lang]:lang(ar) {
   --ds-widget-board-catalog-no-results-min-height: 96px;
   --ds-widget-board-catalog-search-margin-block-end: var(--ds-spacing-3);
   --ds-widget-board-catalog-search-max-width: 680px;
-  --ds-wizard-surface-description-margin-block-end: 0;
+  --ds-wizard-surface-description-margin-block-end: var(--ds-spacing-0, 0);
   --ds-wizard-surface-error-banner-padding: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-workbench-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   --ds-workbench-header-actions-backdrop: none;
   --ds-workbench-header-bg: var(--ds-card-header-bg);
-  --ds-workbench-header-icon-size: 40px;
+  --ds-workbench-header-icon-size: var(--ds-spacing-10, 40px);
+  --ds-workbench-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  --ds-workbench-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-workbench-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
   --ds-z-index-base: 0;
   --ds-z-index-drawer: 1400;
   --ds-z-index-dropdown: 1000;

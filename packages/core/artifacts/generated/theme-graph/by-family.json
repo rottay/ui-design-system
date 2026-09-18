@@ -621,8 +621,17 @@
     },
     {
       "decisions": [
+        "experience.profile",
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "profiles.expressive",
+        "shape.button-style",
         "shape.radius-scale",
-        "surfaces.elevation-posture"
+        "surfaces.elevation-posture",
+        "typography.pairing",
+        "typography.scale"
       ],
       "family": "box",
       "tier": "primitive"
@@ -1556,9 +1565,13 @@
     },
     {
       "decisions": [
+        "density.mode",
+        "experience.profile",
         "motion.character",
         "motion.dial",
-        "responsive.posture"
+        "profiles.expressive",
+        "responsive.posture",
+        "spacing.rhythm"
       ],
       "family": "container",
       "tier": "primitive"
@@ -1976,13 +1989,23 @@
     },
     {
       "decisions": [
+        "density.mode",
+        "experience.profile",
         "motion.character",
         "motion.dial",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
         "palette.status-seeds",
-        "typography.role-weights"
+        "profiles.expressive",
+        "shape.button-style",
+        "shape.radius-scale",
+        "spacing.rhythm",
+        "typography.families",
+        "typography.numeric",
+        "typography.pairing",
+        "typography.role-weights",
+        "typography.scale"
       ],
       "family": "divider",
       "tier": "primitive"
@@ -2583,8 +2606,11 @@
     },
     {
       "decisions": [
+        "density.mode",
+        "experience.profile",
         "motion.character",
         "motion.dial",
+        "profiles.expressive",
         "spacing.rhythm"
       ],
       "family": "grid",
@@ -2925,7 +2951,8 @@
         "palette.neutral-temperature",
         "palette.seeds",
         "palette.status-seeds",
-        "profiles.expressive"
+        "profiles.expressive",
+        "spacing.rhythm"
       ],
       "family": "layout-primitives"
     },
@@ -3304,6 +3331,7 @@
     },
     {
       "decisions": [
+        "density.mode",
         "experience.profile",
         "motion.character",
         "motion.dial",
@@ -3314,6 +3342,7 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
+        "spacing.rhythm",
         "states.emphasis",
         "states.focus-style",
         "typography.families",
@@ -4595,8 +4624,12 @@
     },
     {
       "decisions": [
+        "density.mode",
+        "experience.profile",
         "motion.character",
-        "motion.dial"
+        "motion.dial",
+        "profiles.expressive",
+        "spacing.rhythm"
       ],
       "family": "space",
       "tier": "primitive"
@@ -4654,11 +4687,14 @@
       "decisions": [
         "density.mode",
         "experience.profile",
+        "motion.character",
+        "motion.dial",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
         "palette.status-seeds",
-        "profiles.expressive"
+        "profiles.expressive",
+        "spacing.rhythm"
       ],
       "family": "stack",
       "tier": "primitive"
