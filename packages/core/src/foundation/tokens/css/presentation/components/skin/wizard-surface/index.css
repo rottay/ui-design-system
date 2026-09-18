@@ -1,56 +1,68 @@
 /**
- * WizardSurface skin (record-and-form skin ownership, premium pass 2026-07-30).
+ * WizardSurface skin — engine-agnostic.
  *
- * LAYER: imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
- * "deliberately unlayered" note predates the wiring). `rottay-components`
- * sorts BEFORE `rottay-engines`, so paint the composed engines apply
- * themselves outranks any selector weight here: the two legacy repetition
- * rules were already dead and are retired.
+ * LAYER: imported by `facade/entrypoints/base.css` into `layer(rottay-components)`.
+ * `rottay-components` sorts BEFORE `rottay-engines`, so paint the composed
+ * engines apply themselves outranks any selector weight here: description ink
+ * stays on the Typography `color="subtle"` prop, and the composed primitives
+ * (Grid, Card, Text, Button, StepWizard, FormBuilder) keep their own chrome.
  *
- * SCOPE: the surface composes public primitives and patterns (PageShell,
- * Grid, Card, Text, Button, StepWizard, FormBuilder) — each owns its own
- * chrome, states and forced-colors treatment. This file paints ONLY what the
- * surface owns:
+ * SCOPE: the surface owns ONE page rhythm (the record-and-form doctrine:
+ * ruled sections on a flat canvas). Every rule keys on the anatomy the
+ * surface stamps — the scope classes + `[data-part]`; the only class-keyed
+ * rule left is the composed aside Card root, which does not take consumer
+ * data-part (P-79).
  *
- *   - Error banner card (`ds-wizard__error-card`): border tint through the
- *     Card engine's bordered border channel. The composed Card already
- *     consumes `--ds-card-bordered-border-color` (outlined variant,
- *     card.css), so this retunes an existing channel — it is NOT a new
- *     token. It lands wherever the resolved tenant variant paints a border,
- *     the same reach the legacy `border-color` rule had.
+ *   - `description`: the trailing rhythm channel. The profile-driven Stack
+ *     already supplies the gap today, so the channel rests at 0 — producing
+ *     the name moves nothing and gives the tenant the reach.
  *
- *   - Sticky aside (`ds-wizard__aside-card`, deep pass 2026-08-02): in the
- *     split layout the step-aware aside (contextual help, progress summary)
- *     follows scroll on long steps, matching the checkout-style posture the
- *     form/detail-form asides already have. Keyed on the surface-stamped
- *     `data-stacked` landing hook (added this pass, family idiom); stacked
- *     layouts stay static. Logical `inset-block-start`, spacing token with
- *     literal fallback — posture only, zero paint, so no forced-colors
- *     re-keying is needed.
+ *   - `error-banner`: a RULED ALERT, not a second card frame (forms are not
+ *     card stacks). The recessed error ground, one emphasis inline-start
+ *     edge and optical padding on the rhythm plane; the retired error Card
+ *     and its `--ds-card-bordered-border-color` retune went with the frame.
  *
- *   Description ink moved to the Typography `color="subtle"` prop (the exact
- *   `--ds-color-text-muted` value the dead rule intended) — engine-owned and
- *   tenant-remappable, no skin rule needed.
+ *   - the sticky aside posture reads the surface-stamped `data-stacked`
+ *     hook off the root part; the offset rides the spacing plane.
  *
- * SPECIFICITY: single-pass selectors only (attribute/class repetition is
- * forbidden). No forced-colors block on purpose: the only surface-owned
- * paint is the border channel, and forced colors are applied to the Card's
- * border by the UA with system colors.
+ * SPECIFICITY: single-pass selectors only (never a repeated `[data-part]` on
+ * one compound).
  *
- * The legacy rule tinted with `--ds-color-error-500`; the form-family idiom
- * (form-surface.css, guided-draft-form.css) is `--ds-color-error`. The
- * premium pass aligns on the family channel — the divergence the old header
- * deferred is resolved here.
+ * FORCED COLORS: the alert re-asserts in system colors — the recessed ground
+ * becomes Canvas and the emphasis edge takes the text system color; the
+ * composed Card, Button and typography keep their own forced-colors
+ * contracts.
  */
 
-.ds-surface.ds-wizard .ds-wizard__error-card {
-  --ds-card-bordered-border-color: var(--ds-color-error);
+/* The description's trailing rhythm: the Stack spacing above it is
+   profile-driven and stays in the TSX, so the channel rests at 0. */
+.ds-surface.ds-wizard[data-part='root'] [data-part='description'] {
+  margin-block-end: var(--ds-wizard-surface-description-margin-block-end, 0);
 }
 
-/* Split layout: the step-aware aside follows scroll on long steps
-   (form-surface.css / detail-form-surface.css idiom); stacked stays static. */
-.ds-surface.ds-wizard[data-stacked='false'] .ds-wizard__aside-card {
+/* The error surface is a ruled alert: the recessed error ground, one emphasis
+   inline-start edge, optical padding on the rhythm plane — no second card
+   frame. */
+.ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
+  padding: var(--ds-wizard-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  background: var(--ds-color-error-bg, transparent);
+  border-inline-start: var(--ds-edge-emphasis-width, 1px) solid var(--ds-color-error);
+}
+
+/* Split layout: the step-aware aside follows scroll on long steps; stacked
+   stays static. The aside is a composed Card root (P-79), so the rule keys
+   the class the surface stamps on it; the sticky offset rides the spacing
+   plane. */
+.ds-surface.ds-wizard[data-part='root'][data-stacked='false'] .ds-wizard__aside-card {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
+}
+
+/* forced-colors: the alert's recessed ground and emphasis edge re-assert in
+   system colors. */
+@media (forced-colors: active) {
+  .ds-surface.ds-wizard[data-part='root'] [data-part='error-banner'] {
+    background: Canvas;
+    border-inline-start-color: CanvasText;
+  }
 }

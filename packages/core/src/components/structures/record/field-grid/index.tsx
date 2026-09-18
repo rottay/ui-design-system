@@ -4,11 +4,12 @@
  * @fileoverview RecordFieldGrid — the pure CSS-grid wrapper that lays out
  * `RecordField` cards.
  *
- * INLINE BOUNDARY: `gridTemplateColumns` is the only inline value and it is the
- * caller's runtime `columns` prop. Display, gap and alignment are skin-owned.
- * The default track embeds the private `--_ds-record-field-measure` channel
- * (fallback 16rem) so a tenant density/geometry posture can retune the 2→1
- * reflow point from one place; an explicit `columns` prop always wins.
+ * INLINE BOUNDARY: the caller's runtime `columns` prop is the ONE legal inline
+ * write — the `--ds-record-field-grid-columns` channel. Display, gap,
+ * alignment and the channel's DEFAULT (the intrinsic auto-fit measure over a
+ * 16rem minimum, private measure channel included) are skin-owned: the skin
+ * authors the default declaration, so an unset prop changes nothing. An
+ * explicit `columns` prop still always wins.
  *
  * SPECIFICITY HOOK: the root stamps `data-structure='record'`, the family's
  * always-present attribute.
@@ -23,14 +24,11 @@ import { Box } from '../../../primitives/layout/box';
 
 export function RecordFieldGrid({
   children,
-  /* The default is intrinsic: tracks auto-fit a minimum measure, so a
-     narrow container re-flows 2→1 columns and long labels/values never force
-     an overflow. The measure rides the private
-     `--_ds-record-field-measure` channel (fallback 16rem, the exact
-     value painted before) so a tenant density/geometry posture can retune
-     the 2→1 reflow point from one place. A caller's explicit `columns`
-     always wins (runtime prop). */
-  columns = 'repeat(auto-fit, minmax(min(100%, var(--_ds-record-field-measure, 16rem)), 1fr))',
+  /* Unset by default: the skin authors the intrinsic default (auto-fit over a
+     16rem minimum measure), so a narrow container re-flows 2→1 columns with
+     no caller override. A caller's explicit `columns` rides the
+     `--ds-record-field-grid-columns` channel and always wins. */
+  columns,
   style,
 }: {
   children: ReactNode;
@@ -42,10 +40,10 @@ export function RecordFieldGrid({
       className="ds-structure ds-record"
       data-part="field-grid"
       data-structure="record"
-      /* gridTemplateColumns stays inline: it is the caller's runtime `columns`
-         prop. Display/gap/alignment are skin-owned. */
       style={{
-        gridTemplateColumns: columns,
+        ...(columns !== undefined
+          ? ({ '--ds-record-field-grid-columns': columns } as CSSProperties)
+          : undefined),
         ...style,
       }}
     >

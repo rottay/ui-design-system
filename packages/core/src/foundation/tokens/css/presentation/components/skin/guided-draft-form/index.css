@@ -1,20 +1,25 @@
 /**
- * GuidedDraftFormSurface skin (record-and-form skin ownership, premium pass 2026-07-30).
+ * GuidedDraftFormSurface skin — anatomy-complete paint: every stamped part is
+ * selected here; the ruled-page rhythm (hairline seams, recessed surfaces,
+ * rhythm-plane gutters) replaces the retired per-element inline paint.
  *
- * LAYER: imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
- * "deliberately unlayered" note predates the wiring). Every engine skin
- * (`rottay-engines`) sorts AFTER this file, so a declaration painted over a
- * composed primitive would lose by layer regardless of selector weight.
+ * LAYER: imported by `facade/entrypoints/base.css` into `layer(rottay-components)`.
+ * Every engine skin (`rottay-engines`) sorts AFTER this file, so a declaration
+ * painted over a composed primitive would lose by layer regardless of selector
+ * weight.
  *
  * SCOPE: the surface composes public primitives and the step-wizard pattern —
- * Button, Select, Card, Progress, Skeleton, Text — each owning its chrome,
- * states and forced-colors treatment. This file paints ONLY what the surface
- * owns (its Box/Flex anatomy: badge, dots, rails, panels, grids) and retunes
- * composed primitives exclusively through their public channels:
+ * Button, Select, Card, Progress, Text — each owning its chrome, states and
+ * forced-colors treatment. This file paints ONLY what the surface owns (its
+ * Box/Flex anatomy: badge, dots, rails, panels, grids) and retunes composed
+ * primitives exclusively through their public channels:
  *   - ghost Button nav items:  `--ds-button-ghost-{bg,color,border}` (+ -hover)
  *     `--ds-button-sm-radius`, `--ds-button-sm-height`, `--ds-button-font-weight`
  *   - Cards (recovery / section / summary): `--ds-card-bordered-border-color`
+ *   - the two Heading titles carry the engine's inline role read
+ *     `var(--ds-type-section-title-font-weight)`; the family retunes that
+ *     channel per element onto `--ds-guided-draft-form-heading-font-weight`,
+ *     the single runtime value the root stamps from the personality profile.
  *   Channel defaults live at `:root`, so an element-scoped override resolves
  *   per-element and survives the layer order honestly — no specificity war,
  *   no repeated attribute/class selectors (4th-tanda prohibition).
@@ -27,6 +32,10 @@
  * consumer className on composed primitives (P-79: Button/Card drop a
  * consumer `data-part`, so classes are their only honest hook).
  *
+ * LOADING: the loading state is the shared anatomy renderer's bones over the
+ * surface's own DOM; there are no family-owned skeleton rules (shimmer,
+ * reduced-motion and forced-colors treatment belong to the renderer).
+ *
  * MOTION: state transitions ride the engine channels (Button/Card transition
  * contracts already cover their chrome). The only surface-owned transitions
  * (draft badge) use `--ds-motion-*` channels, zeroed by the motion authority
@@ -37,8 +46,17 @@
  */
 
 /* ==========================================================================
-   Title bar
+   Title bar — the region seam is one hairline rule (ruled page, no card frame)
    ========================================================================== */
+
+.ds-surface.ds-guided-draft-form[data-part='root'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='title-bar'] {
+  min-inline-size: 0;
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary, var(--ds-color-border));
+}
 
 .ds-surface.ds-guided-draft-form [data-part='title-copy'] {
   flex: 1;
@@ -47,6 +65,16 @@
 
 .ds-surface.ds-guided-draft-form [data-part='title-copy'] [data-part='title'] {
   margin-block-end: var(--ds-spacing-1);
+  /* The Modern engine paints these two headings' weight inline off the
+     governed section-title role; the family retunes that channel onto its own
+     heading-weight channel so the personality profile bias reaches them. */
+  --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
+}
+
+.ds-surface.ds-guided-draft-form [data-part='subtitle'] {
+  /* Collapses with the title's own spacing-1 block-end, so the rest gap is
+     unchanged; declares the subtitle's rhythm on the spacing plane. */
+  margin-block-start: var(--ds-spacing-1);
 }
 
 .ds-surface.ds-guided-draft-form [data-part='progress'] {
@@ -112,10 +140,13 @@
 
 /* Eyebrow label. text-transform/letter-spacing are safe declarations here:
    typography.css only paints them under `data-text-style`, which these plain
-   size/weight Texts never stamp. */
+   size/weight Texts never stamp. The weight rides the family's
+   heading-weight channel (the personality profile bias), not the caption
+   role the tier would otherwise bind to. */
 .ds-surface.ds-guided-draft-form [data-part='section-nav-label'] {
   display: block;
   margin-block-end: var(--ds-spacing-2);
+  font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
   text-transform: uppercase;
   letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
 }
@@ -242,6 +273,20 @@
 }
 
 /* ==========================================================================
+   Content — nav + form body. Gaps ride the primitives' own channels (Flex
+   `--ds-flex-gap`, Stack spacing); the region rules own the shrink contract
+   so flexible content can narrow and ellipsize instead of overflowing.
+   ========================================================================== */
+
+.ds-surface.ds-guided-draft-form [data-part='content'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='content-body'] {
+  min-inline-size: 0;
+}
+
+/* ==========================================================================
    Template picker
    ========================================================================== */
 
@@ -259,6 +304,15 @@
   margin-block-end: var(--ds-spacing-1);
   font-size: var(--ds-font-size-2xl, 1.25rem);
   color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='template-card-title'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='template-card-description'] {
+  min-inline-size: 0;
 }
 
 /* ==========================================================================
@@ -286,6 +340,20 @@
   min-inline-size: 12ch;
 }
 
+.ds-surface.ds-guided-draft-form [data-part='draft-recovery-title'] {
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-recovery-description'] {
+  /* Collapses with the title's reset trailing margin, so the rest gap is
+     unchanged; declares the supporting line's rhythm on the spacing plane. */
+  margin-block-start: var(--ds-spacing-1);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-recovery-actions'] {
+  flex-shrink: 0;
+}
+
 /* ==========================================================================
    Section cards (scroll mode)
    ========================================================================== */
@@ -308,6 +376,18 @@
 .ds-surface.ds-guided-draft-form [data-part='section-card-icon'] {
   flex-shrink: 0;
   color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-card-header'] {
+  min-inline-size: 0;
+}
+
+/* The Modern engine reads the governed section-title role for this heading
+   inline; the family retunes that channel onto its heading-weight channel
+   (same contract as the page title above). */
+.ds-surface.ds-guided-draft-form [data-part='section-card-title'] {
+  --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
+  min-inline-size: 0;
 }
 
 .ds-surface.ds-guided-draft-form [data-part='section-card-complete'],
@@ -334,6 +414,36 @@
 
 .ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning {
   --ds-card-bordered-border-color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='validation-summary-header'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='validation-summary-title'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='validation-issue-list'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='validation-issue'] {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='validation-issue-message'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='validation-issue-field'] {
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='validation-issue-overflow'] {
+  min-inline-size: 0;
 }
 
 .ds-surface.ds-guided-draft-form [data-part='validation-issue-dot'] {
@@ -409,12 +519,18 @@
   text-align: center;
 }
 
-/* ==========================================================================
-   Loading skeleton (form-shaped: title row + field rows per section card)
-   ========================================================================== */
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-progress-placeholder'] {
+  flex: 1;
+  min-inline-size: 0;
+}
 
-.ds-surface.ds-guided-draft-form [data-part='loading-skeleton-title'] {
-  max-inline-size: 40%;
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-actions'] {
+  flex-shrink: 0;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-secondary'] {
+  min-inline-size: 0;
 }
 
 /* ==========================================================================

@@ -8,7 +8,7 @@
  *
  * For: job posting, event creation, candidate intake, complex forms.
  *
- * Implementation notes (2026-07-30 premium pass):
+ * Implementation notes:
  * - Every visible string flows through `tSurfaceOr` under
  *   `surfaces.guided_draft_form.*` with an English floor.
  * - Geometry and paint live in `skin/guided-draft-form.css`. Composed
@@ -17,13 +17,21 @@
  *   BEFORE the engine skins (`rottay-engines`): declarations painted over a
  *   composed primitive would lose by layer, while channel overrides resolve
  *   per-element and hold honestly.
- * - The inline styles left here are `fontWeight` values resolved at runtime
- *   from the tenant personality (heading weight bias) — instance values, not
- *   reusable paint.
+ * - The heading weight the personality profile resolves (title, section
+ *   titles, nav eyebrow) is stamped once on the root as the
+ *   `--ds-guided-draft-form-heading-font-weight` channel and inherited by the
+ *   skin's rules — one runtime value, no per-element inline paint.
+ * - Keyboard submit: Enter anywhere on the surface commits the form through
+ *   the shared submit-intent kernel, except while typing in editable elements
+ *   (input/textarea/select/contenteditable), where the consumer field owns
+ *   Enter, and except on buttons and links, which activate themselves.
+ * - Loading renders the real body anatomy through the shared anatomy skeleton
+ *   (the root keeps the single `aria-busy` announcement); the wait has the
+ *   shape of the form it stands in for.
  */
 
 import React, { useCallback, useId, useMemo, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { Box } from '../../../../../primitives/layout/box';
 import { Stack } from '../../../../../primitives/layout/stack';
 import { Flex } from '../../../../../primitives/layout/flex';
@@ -33,7 +41,7 @@ import { Select } from '../../../../../primitives/inputs/select';
 import { Card } from '../../../../../primitives/display/card';
 import type { CardVariant } from '../../../../../primitives/display/card/contracts';
 import { Progress } from '../../../../../primitives/feedback/progress';
-import { Skeleton } from '../../../../../primitives/feedback';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
 import { PatternStepWizard } from '../../../../../patterns/forms/step-wizard';
 import type { WizardStep } from '../../../../../patterns/forms/step-wizard';
 import { FadeIn } from '@/graphics/motion';
@@ -44,7 +52,7 @@ import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/sta
 import { WorkflowTemplateIcon } from '@/graphics/icons/semantic/generated/roles/workflow-template';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
-import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
+import { resolveSubmitIntent } from '@/foundation/behavior/runtime/submit-intent';
 import { resolveSurfacePosture } from '../../../../foundation/contracts/adaptive';
 import { useSurfaceProfileDefaults } from '../../../../../structures/foundation/chrome/runtime/profile-defaults';
 import {
@@ -225,14 +233,12 @@ function SectionNav({
   sections,
   activeSection,
   onSectionClick,
-  headingWeight,
   layout,
   mode,
 }: {
   sections: FormSection[];
   activeSection: string;
   onSectionClick: (key: string) => void;
-  headingWeight: number;
   layout: SectionNavLayout;
   mode: 'wizard' | 'scroll';
 }) {
@@ -266,7 +272,6 @@ function SectionNav({
           size="xs"
           weight="semibold"
           color="muted"
-          style={{ fontWeight: headingWeight }}
         >
           {tSurfaceOr('guided_draft_form.section_nav_label', 'Section')}
         </Text>
@@ -299,7 +304,6 @@ function SectionNav({
           size="xs"
           weight="semibold"
           color="muted"
-          style={{ fontWeight: headingWeight }}
         >
           {tSurfaceOr('guided_draft_form.section_nav_label_plural', 'Sections')}
         </Text>
@@ -353,7 +357,6 @@ function SectionNav({
         size="xs"
         weight="semibold"
         color="muted"
-        style={{ fontWeight: headingWeight }}
       >
         {tSurfaceOr('guided_draft_form.section_nav_label_plural', 'Sections')}
       </Text>
@@ -448,14 +451,12 @@ function GuidedDraftFormSectionCard({
   section,
   isActive,
   cardVariant,
-  headingWeight,
   completeLabel,
   errorsLabel,
 }: {
   section: FormSection;
   isActive: boolean;
   cardVariant: CardVariant;
-  headingWeight: number;
   completeLabel: string;
   errorsLabel: string;
 }) {
@@ -488,7 +489,6 @@ function GuidedDraftFormSectionCard({
                 level="h2"
                 size="xs"
                 weight="semibold"
-                style={{ fontWeight: headingWeight }}
               >
                 {section.title}
               </Heading>
@@ -519,49 +519,6 @@ function GuidedDraftFormSectionCard({
         </Stack>
       </Card.Body>
     </Card>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Loading skeleton -- mirrors the section-card anatomy so the swap to real
-// content does not shift layout.
-// ---------------------------------------------------------------------------
-
-function FormLoadingSkeleton({
-  cardVariant,
-  sectionSpacing,
-}: {
-  cardVariant: CardVariant;
-  sectionSpacing: 'sm' | 'md' | 'lg';
-}) {
-  const tokens = useTokens();
-  const { prefersReducedMotion } = useBreakpoints();
-  // Same animation governance as the shared states kit: reduced motion or a
-  // calm personality falls back to pulse.
-  const skeletonAnimation =
-    prefersReducedMotion || tokens.personality.animation.skeletonStyle === 'pulse'
-      ? 'pulse'
-      : 'wave';
-
-  return (
-    <Stack data-part="loading-skeleton" spacing={sectionSpacing}>
-      {[0, 1].map((index) => (
-        <Card
-          key={index}
-          className="ds-guided-draft-form__section-card"
-          variant={cardVariant}
-        >
-          <Card.Body>
-            <Stack spacing="sm">
-              <Box data-part="loading-skeleton-title">
-                <Skeleton variant="text" rows={1} animation={skeletonAnimation} active />
-              </Box>
-              <Skeleton variant="text" rows={3} animation={skeletonAnimation} active />
-            </Stack>
-          </Card.Body>
-        </Card>
-      ))}
-    </Stack>
   );
 }
 
@@ -689,6 +646,24 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     [sections],
   );
 
+  // Enter commits the form anywhere on the surface, decided by the shared
+  // submit-intent kernel. Editable elements keep their own Enter behaviour
+  // (consumer fields live inside sections), and buttons/links activate
+  // themselves, so both are left to their owners.
+  const handleRootKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      if (event.key !== 'Enter') return;
+      const target = event.target as HTMLElement | null;
+      if (!target || target.isContentEditable) return;
+      if (target.closest('input, textarea, select, button, a')) return;
+      if (submitDisabled || submitLoading) return;
+      if (resolveSubmitIntent(event) !== 'submit') return;
+      event.preventDefault();
+      onSubmit();
+    },
+    [onSubmit, submitDisabled, submitLoading],
+  );
+
   const resolvedSubmitLabel =
     submitLabel ?? tSurfaceOr('guided_draft_form.submit', 'Submit');
   const submittingLabel = tSurfaceOr('guided_draft_form.submitting', 'Submitting…');
@@ -718,7 +693,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
           section={section}
           isActive={activeSection === section.key}
           cardVariant={profileDefaults.cardVariant}
-          headingWeight={headingWeight}
           completeLabel={completeLabel}
           errorsLabel={sectionErrorsLabel}
         />
@@ -751,7 +725,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             sections={sections}
             activeSection={activeSection}
             onSectionClick={handleSectionClick}
-            headingWeight={headingWeight}
             layout={sectionNavLayout}
             mode={mode}
           />
@@ -771,7 +744,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             sections={sections}
             activeSection={activeSection}
             onSectionClick={handleSectionClick}
-            headingWeight={headingWeight}
             layout={sectionNavLayout}
             mode={mode}
           />
@@ -975,6 +947,12 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading || undefined}
       spacing={sectionSpacing}
+      onKeyDown={handleRootKeyDown}
+      style={
+        {
+          '--ds-guided-draft-form-heading-font-weight': headingWeight,
+        } as CSSProperties
+      }
     >
       {headerSlot}
 
@@ -1038,7 +1016,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             level="h1"
             size="md"
             weight="semibold"
-            style={{ fontWeight: headingWeight }}
           >
             {title}
           </Heading>
@@ -1106,14 +1083,11 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         </Box>
       )}
 
-      {/* Body: error kit | structural skeleton | empty kit | form */}
+      {/* Body: error kit | real anatomy under the shared skeleton | empty kit | form */}
       {hasError ? (
         <SurfaceErrorState error={error} onRetry={onRetry} />
       ) : loading ? (
-        <FormLoadingSkeleton
-          cardVariant={profileDefaults.cardVariant}
-          sectionSpacing={sectionSpacing}
-        />
+        <AnatomySkeleton busy={false}>{formBody}</AnatomySkeleton>
       ) : isEmpty ? (
         <SurfaceEmptyState
           title={tSurfaceOr(

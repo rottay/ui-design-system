@@ -342,10 +342,11 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
           )}
 
           {config.presentation.error && (
+            // The banner is a ruled alert, not a second card frame: the skin
+            // paints the recessed ground, the emphasis edge and the optical
+            // padding on the part the surface stamps.
             <Box data-part="error-banner" role="alert">
-              <Card className="ds-wizard__error-card" variant={profileDefaults.cardVariant}>
-                <Card.Body>{config.presentation.error}</Card.Body>
-              </Card>
+              {config.presentation.error}
             </Box>
           )}
 

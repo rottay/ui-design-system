@@ -20,9 +20,9 @@
  * Companion exports:
  *   - `FormFactsCard` — a sibling card component that renders
  *     a vertical list of label/value facts with optional eyebrow +
- *     helper text and a `loading` skeleton state that reserves the
- *     final row footprint. Uses the same DS tokens so it composes
- *     visually with the section container.
+ *     helper text and a `loading` state the shared anatomy renderer
+ *     builds from the card's own parts. Uses the same DS tokens so it
+ *     composes visually with the section container.
  *
  * The family stays domain-agnostic. Section titles, descriptions,
  * summaries, and chip text are all consumer-supplied; the component
@@ -43,8 +43,10 @@ import { type CSSProperties, type ReactNode, useEffect, useId, useMemo, useState
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { AnatomySkeleton } from '@/components/primitives/feedback/skeleton/runtime/anatomy-renderer';
 
-import { Box, Flex, Skeleton, Stack, Text } from '../../../primitives';
+import { Box, Flex, Stack, Text } from '../../../primitives';
 
 export type FormSectionsAppearance = 'card' | 'soft' | 'divided';
 export type FormSectionTone = 'default' | 'editorial' | 'technical' | 'governance';
@@ -91,8 +93,8 @@ export interface FormFactsCardProps {
   description?: string;
   eyebrow?: string;
   items: FormFactItem[];
-  /** Reserves the final label/value footprint with skeleton bars (one pair
-      per fact row) while the facts resolve. */
+  /** While the facts resolve, the shared anatomy renderer stands in for the
+      card's own parts — the wait has the shape of the loaded card. */
   loading?: boolean;
   style?: CSSProperties;
 }
@@ -128,15 +130,18 @@ function buildInitialKeys(
  * `foundation/tokens/css/presentation/components/skin/form-sections/index.css`,
  * which also owns the per-appearance shell/header/content geometry drained
  * from this engine (the former `getSectionShellStyles` and the header/content
- * padding maps). INLINE BOUNDARY: Typography owns font-size inline by
- * architecture (the engine stamps it per node), so the inline styles left
- * here are the facts-card title's family-private 17px
- * (`--_ds-form-sections-facts-title-size`, exact fallback) and the
- * consumer `style` passthrough. Everything else typographic — weights via
- * the `Text` weight classes, line-heights, measures, tracking, letter-case,
- * mono treatments — resolves through roles or the skin. The copy stacks
- * carry `data-part="section-copy"` / `data-part="facts-card-item-copy"` so
- * their flex survival geometry is skin-owned too.
+ * padding maps), the facts-card title's display type (size + weight + ink on
+ * the `--ds-form-sections-facts-title-font-size` family channel), and the
+ * disclosure's hover/press/focus paint, read off `data-state`. INLINE
+ * BOUNDARY: this file carries no inline paint at all — the engine stamps
+ * state only (`data-part`, `data-state`, `data-tone`, `data-appearance`,
+ * `data-open`, `data-collapsible`, `data-loading`, `data-mono`), and the
+ * consumer `style` passthrough stays opaque. Everything typographic — sizes
+ * via the `Text` size roles or the skin display-type rule, weights via the
+ * `Text` weight classes, line-heights, measures, tracking, letter-case, mono
+ * treatments — resolves through roles or the skin. The copy stacks carry
+ * `data-part="section-copy"` / `data-part="facts-card-item-copy"` so their
+ * flex survival geometry is skin-owned too.
  */
 
 export function FormSections({
@@ -289,18 +294,17 @@ export function FormSections({
                 button, so the trailing slot stays outside the control. */}
             <Box data-part="section-header" data-collapsible={collapsible}>
               {collapsible ? (
-                <button
-                  type="button"
-                  data-part="section-disclosure"
-                  aria-expanded={isOpen}
-                  aria-controls={sectionContentId}
-                  onClick={() => toggleSection(section.key)}
+                <SectionDisclosure
+                  sectionKey={section.key}
+                  isOpen={isOpen}
+                  contentId={sectionContentId}
+                  onToggle={toggleSection}
                 >
                   {sectionLead}
                   <Box data-part="section-toggle" data-open={isOpen}>
                     <NavigationDownIcon size={15} decorative data-part="section-toggle-icon" />
                   </Box>
-                </button>
+                </SectionDisclosure>
               ) : (
                 sectionLead
               )}
@@ -333,6 +337,41 @@ export function FormSections({
   );
 }
 
+/**
+ * The disclosure is the section's only control: the hover/press/focus triad
+ * is decided once, by the shared interaction kernel, and the skin reads it
+ * back off `data-state` — never a second `:hover`/`:active` decision in the
+ * stylesheet. The press goes through the kernel's handlers, so a pointer
+ * press and the space/enter key report the same `pressed` state.
+ */
+function SectionDisclosure({
+  sectionKey,
+  isOpen,
+  contentId,
+  onToggle,
+  children,
+}: {
+  sectionKey: string;
+  isOpen: boolean;
+  contentId: string;
+  onToggle: (sectionKey: string) => void;
+  children: ReactNode;
+}) {
+  const interaction = useInteractionState();
+  return (
+    <button
+      type="button"
+      {...partAttributes('section-disclosure', interaction.state)}
+      {...interaction.handlers}
+      aria-expanded={isOpen}
+      aria-controls={contentId}
+      onClick={() => onToggle(sectionKey)}
+    >
+      {children}
+    </button>
+  );
+}
+
 export function FormFactsCard({
   title,
   description,
@@ -346,6 +385,74 @@ export function FormFactsCard({
     [items],
   );
 
+  /* The resolved card is built once; while the facts resolve the shared
+     anatomy renderer stands in for THIS card's own parts, so the wait has the
+     shape of the loaded card and cannot drift from it. The root keeps the
+     announcement (`aria-busy`), so the renderer is told not to announce a
+     second time. */
+  const chrome = (
+    <Box data-part="facts-card-body">
+      <Stack spacing="sm">
+        {eyebrow ? (
+          /* Tracking/case/mono family are skin-owned. */
+          <Text
+            data-part="facts-card-eyebrow"
+            size="xs"
+            weight="bold"
+          >
+            {eyebrow}
+          </Text>
+        ) : null}
+        {/* Display type, not a tier: the editorial 17px is skin-owned on the
+            `--ds-form-sections-facts-title-font-size` family channel (the
+            header families' title precedent), so no size prop competes. */}
+        <Box data-part="facts-card-title">{title}</Box>
+        {description ? (
+          <Text data-part="facts-card-description" size="sm">
+            {description}
+          </Text>
+        ) : null}
+      </Stack>
+
+      <Stack spacing="sm" data-part="facts-card-items">
+        {visibleItems.map((item) => (
+          <Flex
+            key={item.label}
+            data-part="facts-card-item"
+            align="start"
+            justify="between"
+            gap={16}
+          >
+            <Stack spacing="xs" data-part="facts-card-item-copy">
+              <Text
+                data-part="facts-card-item-label"
+                size="xs"
+                weight="bold"
+              >
+                {item.label}
+              </Text>
+              {item.helper ? (
+                <Text data-part="facts-card-item-helper" size="xs">
+                  {item.helper}
+                </Text>
+              ) : null}
+            </Stack>
+            {/* Measure, end alignment, break strategy and the mono
+                treatment are skin-owned; `data-mono` stamps the state. */}
+            <Text
+              data-part="facts-card-item-value"
+              size="sm"
+              weight="medium"
+              data-mono={item.mono ? 'true' : undefined}
+            >
+              {item.value}
+            </Text>
+          </Flex>
+        ))}
+      </Stack>
+    </Box>
+  );
+
   return (
     <Box
       className="ds-structure ds-form-sections"
@@ -354,91 +461,7 @@ export function FormFactsCard({
       aria-busy={loading ? true : undefined}
       style={style}
     >
-      <Box data-part="facts-card-body">
-        <Stack spacing="sm">
-          {eyebrow ? (
-            /* Tracking/case/mono family are skin-owned. */
-            <Text
-              data-part="facts-card-eyebrow"
-              size="xs"
-              weight="bold"
-            >
-              {eyebrow}
-            </Text>
-          ) : null}
-          {/* The editorial 17px has no canonical font-size role (base=16,
-              lg=18): Typography stamps font-size inline by architecture, so
-              the size remains family-private with the exact rendered fallback.
-              Weight takes the `bold` class. */}
-          <Text
-            data-part="facts-card-title"
-            weight="bold"
-            style={{
-              fontSize: 'var(--_ds-form-sections-facts-title-size, 17px)',
-            }}
-          >
-            {title}
-          </Text>
-          {description ? (
-            <Text data-part="facts-card-description" size="sm">
-              {description}
-            </Text>
-          ) : null}
-        </Stack>
-
-        <Stack spacing="sm" data-part="facts-card-items">
-          {visibleItems.map((item) => (
-            <Flex
-              key={item.label}
-              data-part="facts-card-item"
-              align="start"
-              justify="between"
-              gap={16}
-            >
-              {loading ? (
-                <>
-                  {/* Loading keeps the ledger hierarchy: a narrow label bar
-                      on the copy side and a shorter value bar on the measure
-                      side, same row footprint as the resolved fact. */}
-                  <Box data-part="facts-card-item-skeleton-label">
-                    <Skeleton variant="rounded" width="9em" height="0.7rem" />
-                  </Box>
-                  <Box data-part="facts-card-item-skeleton-value">
-                    <Skeleton variant="rounded" width="5em" height="0.9rem" />
-                  </Box>
-                </>
-              ) : (
-                <>
-                  <Stack spacing="xs" data-part="facts-card-item-copy">
-                    <Text
-                      data-part="facts-card-item-label"
-                      size="xs"
-                      weight="bold"
-                    >
-                      {item.label}
-                    </Text>
-                    {item.helper ? (
-                      <Text data-part="facts-card-item-helper" size="xs">
-                        {item.helper}
-                      </Text>
-                    ) : null}
-                  </Stack>
-                  {/* Measure, end alignment, break strategy and the mono
-                      treatment are skin-owned; `data-mono` stamps the state. */}
-                  <Text
-                    data-part="facts-card-item-value"
-                    size="sm"
-                    weight="medium"
-                    data-mono={item.mono ? 'true' : undefined}
-                  >
-                    {item.value}
-                  </Text>
-                </>
-              )}
-            </Flex>
-          ))}
-        </Stack>
-      </Box>
+      {loading ? <AnatomySkeleton busy={false}>{chrome}</AnatomySkeleton> : chrome}
     </Box>
   );
 }

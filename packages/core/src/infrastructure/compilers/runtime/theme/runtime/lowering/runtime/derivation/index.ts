@@ -56,6 +56,12 @@ import { collectionHeaderChromeDeriver } from "./chrome/collection-header";
 import { dashboardHeaderChromeDeriver } from "./chrome/dashboard-header";
 import { detailHeaderChromeDeriver } from "./chrome/detail-header";
 import { headerSurfaceChromeDeriver } from "./chrome/header-surface";
+import { recordChromeDeriver } from "./chrome/record";
+import { formSectionsChromeDeriver } from "./chrome/form-sections";
+import { formSurfaceChromeDeriver } from "./chrome/form-surface";
+import { wizardSurfaceChromeDeriver } from "./chrome/wizard-surface";
+import { detailFormSurfaceChromeDeriver } from "./chrome/detail-form-surface";
+import { guidedDraftFormChromeDeriver } from "./chrome/guided-draft-form";
 import { cardChromeDeriver } from "./chrome/card";
 import { tableChromeDeriver } from "./chrome/table";
 import { dataTableChromeDeriver } from "./chrome/data-table";
@@ -187,6 +193,12 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   dashboardHeaderChromeDeriver,
   detailHeaderChromeDeriver,
   headerSurfaceChromeDeriver,
+  recordChromeDeriver,
+  formSectionsChromeDeriver,
+  formSurfaceChromeDeriver,
+  wizardSurfaceChromeDeriver,
+  detailFormSurfaceChromeDeriver,
+  guidedDraftFormChromeDeriver,
   cardChromeDeriver,
   tableChromeDeriver,
   dataTableChromeDeriver,

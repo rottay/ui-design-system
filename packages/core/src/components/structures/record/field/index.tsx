@@ -10,16 +10,18 @@
  * aria-label floors keep the exact `Copy {label}` / `Copied {label}` templates
  * the copy-confirm tests pin.
  *
- * STATES (C-12): `loading` reserves the final label/value footprint with
- * skeleton bars while the copy/link affordances stay unmounted, so no control
- * acts on placeholder content; `error` renders the semantic status icon plus
- * copy, never colour alone. An empty value keeps the deliberate `data-empty`
- * placeholder, which the skin expresses as a dashed frame — a shape cue, not a
- * tint.
+ * STATES (C-12): `loading` renders the shared anatomy-derived skeleton — the
+ * resolved chrome is built once, mirrored bone-for-part, and inert under the
+ * bones, so no control acts on placeholder content; `error` renders the
+ * semantic status icon plus copy, never colour alone. An empty value keeps the
+ * deliberate `data-empty` placeholder, which the skin expresses as a dashed
+ * frame — a shape cue, not a tint. Hover and focus-within paint is the shared
+ * kernel's decision, read off `data-state` on the field root.
  *
- * INLINE BOUNDARY: the only inline value is the runtime `grid-column: span N`.
- * The linked-value cluster's fit-content measure and the link arrow's 13px
- * frame live in the skin.
+ * INLINE BOUNDARY: nothing. The runtime `span` prop is a `data-span` stamp the
+ * skin arms answer, and the linked-value cluster's fit-content measure and the
+ * link arrow's 13px frame live in the skin. The grid-columns default is
+ * skin-authored on the grid.
  *
  * Framework note: `href` rendering resolves through the `useNavigationLink()`
  * hook from `runtime/adapters/navigation`. Apps mount a
@@ -27,7 +29,10 @@
  * Link primitive (e.g. Next.js's `Link`, Remix's `Link`); the DS picks it up
  * automatically. With no provider mounted the field falls back to a native
  * `<a>`, which still navigates but loses client-side transitions and
- * prefetching. This keeps the DS package framework-agnostic.
+ * prefetching. This keeps the DS package framework-agnostic. The injected
+ * Link's contract admits no `data-*` attributes, so the link's hover/press/
+ * focus paint lives on the surface-owned `field-link-body` wrapper, stamped by
+ * its own interaction state, never through the composed anchor.
  *
  * @see `../index.ts` for the record family narrative and the pre-Checkpoint-D
  * `Surface*` compatibility aliases.
@@ -44,10 +49,11 @@ import { CopyToCheck } from '../../../../graphics/motion';
 import { Box } from '../../../primitives/layout/box';
 import { Button } from '../../../primitives/inputs/button';
 import { Flex } from '../../../primitives/layout/flex';
-import { Skeleton } from '../../../primitives/feedback/skeleton';
 import { Stack } from '../../../primitives/layout/stack';
 import { Text } from '../../../primitives/display/typography/compound/text';
 import { Tooltip } from '../../../primitives/display/tooltip';
+import { AnatomySkeleton } from '../../../primitives/feedback/skeleton/runtime/anatomy-renderer';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { writeClipboard } from '@/infrastructure/runtime/application/data/foundation/export-kernel';
@@ -116,9 +122,9 @@ export function RecordField({
   helper?: ReactNode;
   href?: string;
   copyValue?: string;
-  /** Reserves the final label/value footprint with skeleton bars while the
-      field's data resolves; the copy/link affordances stay unmounted so no
-      control acts on placeholder content. */
+  /** Mirrors the resolved chrome with the shared anatomy-derived skeleton
+      while the field's data resolves; the affordances render inert under the
+      bones, so no control acts on placeholder content. */
   loading?: boolean;
   /** Per-field error copy (consumer-supplied). Rendered with the semantic
       `status.error` icon and the error ink — the state never reads through
@@ -128,6 +134,16 @@ export function RecordField({
   const NavLink = useNavigationLink();
   const { tOr } = useRecordTranslation();
   const resolvedEmptyLabel = emptyLabel ?? tOr('record.notSet', 'Not set');
+
+  /* Hover, press and focus-within on the card are decided once, by the shared
+     kernel, and the skin reads them off `data-state`. Focus events bubble, so
+     `focused` here IS focus-within semantics: the keyboard path into the copy
+     button or the linked value reads the same state. */
+  const fieldInteraction = useInteractionState();
+  /* The linked-value cluster owns its own affordance paint. The anchor may be
+     an app-injected Link whose contract admits no event handlers or `data-*`
+     attributes, so the state is read on the surface-owned wrapper instead. */
+  const linkInteraction = useInteractionState();
 
   // Copy-to-clipboard confirm feedback: the icon morphs copy -> check on click,
   // then reverts. CopyToCheck is opacity/transform-only and honors reduced
@@ -169,10 +185,17 @@ export function RecordField({
   // prefetching at all RecordField call sites where the provider is
   // mounted.
   const linkInner = (
-    /* Geometry lives in the skin: the cluster hugs its content
-       (`inline-size: fit-content`) and the arrow takes its 13px frame from
-       the `field-link-icon` rule — no inline sizing. */
-    <Flex align="center" gap={8} wrap="wrap" data-part="field-link-body">
+    /* Geometry and interaction paint live in the skin on this surface-owned
+       wrapper: the cluster hugs its content (`inline-size: fit-content`), the
+       arrow takes its 13px frame from the `field-link-icon` rule, and the
+       hover/press/focus ring reads `data-state` — no inline anything. */
+    <Flex
+      {...linkInteraction.handlers}
+      {...partAttributes('field-link-body', linkInteraction.state)}
+      align="center"
+      gap={8}
+      wrap="wrap"
+    >
       {valueNode}
       <ArrowUpRight data-part="field-link-icon" />
     </Flex>
@@ -196,80 +219,71 @@ export function RecordField({
       valueNode
     );
 
+  const chrome = (
+    <Stack spacing={6}>
+      <Text
+        data-part="field-label"
+        size="xs"
+        weight="bold"
+      >
+        {label}
+      </Text>
+
+      <Flex align="start" justify="between" gap={12}>
+        <Box data-part="field-body">{maybeLinkedValue}</Box>
+        {copyValue ? (
+          <Tooltip content={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopy}
+              data-part="field-copy"
+              aria-label={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}
+            >
+              <CopyToCheck copied={copied} size={13} />
+            </Button>
+          </Tooltip>
+        ) : null}
+      </Flex>
+
+      {helper ? (
+        <Text data-part="field-helper" size="xs">
+          {helper}
+        </Text>
+      ) : null}
+
+      {error ? (
+        <Flex data-part="field-error-row" align="start" gap={6}>
+          {/* Decorative: the adjacent copy carries the error meaning;
+              the icon is the non-colour shape cue. */}
+          <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
+          <Text data-part="field-error" size="xs">
+            {error}
+          </Text>
+        </Flex>
+      ) : null}
+    </Stack>
+  );
+
   return (
     <Box
+      {...fieldInteraction.handlers}
+      {...partAttributes('field', fieldInteraction.state)}
       className="ds-structure ds-record"
-      data-part="field"
       data-structure="record"
+      data-span={span}
       data-empty={resolved.empty}
       data-mono={mono}
       data-loading={loading ? 'true' : undefined}
       data-error={error ? 'true' : undefined}
       aria-busy={loading ? true : undefined}
-      /* grid-column stays inline: runtime `span` prop. */
-      style={{
-        gridColumn: `span ${span}`,
-      }}
     >
-      <Stack spacing={6}>
-        {loading ? (
-          <>
-            {/* Loading keeps the read hierarchy: a short label bar above a
-                wider value bar, so the resolving content lands on the same
-                footprint. */}
-            <Box data-part="field-skeleton-label">
-              <Skeleton variant="rounded" width="9em" height="0.7rem" />
-            </Box>
-            <Box data-part="field-skeleton-value">
-              <Skeleton variant="rounded" width="72%" height="0.9rem" />
-            </Box>
-          </>
-        ) : (
-          <>
-            <Text
-              data-part="field-label"
-              size="xs"
-              weight="bold"
-            >
-              {label}
-            </Text>
-
-            <Flex align="start" justify="between" gap={12}>
-              <Box data-part="field-body">{maybeLinkedValue}</Box>
-              {copyValue ? (
-                <Tooltip content={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleCopy}
-                    data-part="field-copy"
-                    aria-label={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}
-                  >
-                    <CopyToCheck copied={copied} size={13} />
-                  </Button>
-                </Tooltip>
-              ) : null}
-            </Flex>
-
-            {helper ? (
-              <Text data-part="field-helper" size="xs">
-                {helper}
-              </Text>
-            ) : null}
-
-            {error ? (
-              <Flex data-part="field-error-row" align="start" gap={6}>
-                {/* Decorative: the adjacent copy carries the error meaning;
-                    the icon is the non-colour shape cue. */}
-                <StatusErrorIcon decorative size={13} data-part="field-error-icon" />
-                <Text data-part="field-error" size="xs">
-                  {error}
-                </Text>
-              </Flex>
-            ) : null}
-          </>
-        )}
-      </Stack>
+      {/* The loading state is built from the anatomy, not hand-written: the
+          shared renderer reads the chrome's own `data-part` tree and draws one
+          bone per part, so the wait has the shape of the field it stands in
+          for. The root keeps the announcement (`aria-busy`), so the skeleton
+          is told not to announce a second time. */}
+      {loading ? <AnatomySkeleton busy={false}>{chrome}</AnatomySkeleton> : chrome}
     </Box>
   );
 }

@@ -1,54 +1,59 @@
 /**
- * DetailFormSurface skin (record-and-form skin ownership, premium pass 2026-07-30).
+ * DetailFormSurface skin — engine-agnostic.
  *
- * LAYER: imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
- * "deliberately unlayered" note predates the wiring). `rottay-components`
- * sorts BEFORE `rottay-engines`, so paint the composed engines apply
- * themselves outranks any selector weight here.
+ * LAYER: imported by `facade/entrypoints/base.css` into `layer(rottay-components)`.
+ * `rottay-components` sorts BEFORE `rottay-engines`, so paint the composed
+ * engines apply themselves outranks any selector weight here; the composed
+ * primitives (Grid, Stack, Card, Button, FormBuilder, section-card recipe)
+ * keep their own chrome.
  *
- * SCOPE: the surface composes public primitives and patterns (PageShell,
- * Grid, Stack, Card, Button, FormBuilder, section-card recipe) — each owns
- * its own chrome, states and forced-colors treatment. This file paints ONLY
- * what the surface owns:
+ * SCOPE: the surface owns ONE page rhythm (the record-and-form doctrine:
+ * ruled sections on a flat canvas). Every stamped part gets a rule keyed on
+ * the anatomy — the scope classes + `[data-part]` — and the only class-keyed
+ * rule left is the composed summary column, which the surface stamps as a
+ * Stack root and does not re-part (P-79: composed primitives do not take
+ * consumer data-part).
  *
- *   - Error banner card (`ds-detail-form__error-card`): border tint through
- *     the Card engine's bordered border channel. The composed Card already
- *     consumes `--ds-card-bordered-border-color` (outlined variant,
- *     card.css), so this retunes an existing channel — it is NOT a new
- *     token. It lands wherever the resolved tenant variant paints a border,
- *     the same reach the legacy `border-color` rule had. The legacy rule
- *     tinted with `--ds-color-error-500`; the form-family idiom
- *     (form-surface.css, wizard-surface.css) is `--ds-color-error`. The
- *     premium pass aligns on the family channel — the divergence the old
- *     header deferred is resolved here.
+ *   - `error-banner`: a RULED ALERT, not a second card frame (forms are not
+ *     card stacks). The recessed error ground, one emphasis inline-start
+ *     edge and optical padding on the rhythm plane; the retired error Card
+ *     and its `--ds-card-bordered-border-color` retune went with the frame.
  *
- *   - Sticky summary column (`ds-detail-form__summary`): in split layout the
- *     read-only summary follows scroll on long forms (the checkout-style
- *     posture the contract describes); stacked layouts stay static. Logical
- *     `inset-block-start`, spacing token with literal fallback.
+ *   - the sticky summary posture reads the surface-stamped `data-stacked`
+ *     hook off the root part (split Grid stamps `false`, the stacked Stack
+ *     stamps `true`, one-for-one with the `--split`/`--stacked` modifier
+ *     classes); the offset rides the spacing plane.
  *
- * ANATOMY: the pinned anatomy is the surface-stamped classNames —
- * `.ds-surface.ds-detail-form` with the `--stacked` / `--split` modifier and
- * `.ds-detail-form__error-card` (RecordBatch.contract.test.tsx) — so every
- * rule keys on classes, never on data-part. The modern Grid/Stack engines
- * rest-spread HTML attributes, so the state hooks the surface stamps
- * (`data-part='root'`, `data-mobile`, `data-stacked`, `data-loading`,
- * `aria-busy`) do land on the root; they are additive landing hooks, not the
- * pinned contract.
+ * SPECIFICITY: single-pass selectors only (never a repeated `[data-part]` on
+ * one compound).
  *
- * SPECIFICITY: single-pass selectors only (attribute/class repetition is
- * forbidden). No forced-colors block on purpose: the only surface-owned
- * paint is the border channel, and forced colors are applied to the Card's
- * border by the UA with system colors.
+ * FORCED COLORS: the alert re-asserts in system colors — the recessed ground
+ * becomes Canvas and the emphasis edge takes the text system color; the
+ * composed section cards and buttons keep their own forced-colors contracts.
  */
 
-.ds-surface.ds-detail-form .ds-detail-form__error-card {
-  --ds-card-bordered-border-color: var(--ds-color-error);
+/* The error surface is a ruled alert: the recessed error ground, one emphasis
+   inline-start edge, optical padding on the rhythm plane — no second card
+   frame. */
+.ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
+  padding: var(--ds-detail-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  background: var(--ds-color-error-bg, transparent);
+  border-inline-start: var(--ds-edge-emphasis-width, 1px) solid var(--ds-color-error);
 }
 
-/* Split layout: the summary column follows scroll on long forms. */
-.ds-surface.ds-detail-form--split .ds-detail-form__summary {
+/* Split layout: the summary column follows scroll on long forms; stacked
+   stays static. The summary is the surface-stamped Stack root (P-79), so the
+   rule keys its class; the sticky offset rides the spacing plane. */
+.ds-surface.ds-detail-form[data-part='root'][data-stacked='false'] .ds-detail-form__summary {
   position: sticky;
   inset-block-start: var(--ds-spacing-4, 1rem);
+}
+
+/* forced-colors: the alert's recessed ground and emphasis edge re-assert in
+   system colors. */
+@media (forced-colors: active) {
+  .ds-surface.ds-detail-form[data-part='root'] [data-part='error-banner'] {
+    background: Canvas;
+    border-inline-start-color: CanvasText;
+  }
 }

@@ -14,7 +14,7 @@
  * user sees instead of the generic page skeleton.
  */
 
-import { Box, Button, Card, Grid, Stack } from '../../../../../primitives';
+import { Box, Button, Grid, Stack } from '../../../../../primitives';
 import { PatternFormBuilder } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
 import { useUnsavedChangesGuard } from '../../../../../../infrastructure/runtime/application/forms';
@@ -118,10 +118,11 @@ export function DetailFormSurface({
     >
       <Stack spacing={sectionSpacing}>
         {config.presentation.error && (
+          // The banner is a ruled alert, not a second card frame: the skin
+          // paints the recessed ground, the emphasis edge and the optical
+          // padding on the part the surface stamps.
           <Box data-part="error-banner" role="alert">
-            <Card className="ds-detail-form__error-card" variant={profileDefaults.cardVariant}>
-              <Card.Body>{config.presentation.error}</Card.Body>
-            </Card>
+            {config.presentation.error}
           </Box>
         )}
 

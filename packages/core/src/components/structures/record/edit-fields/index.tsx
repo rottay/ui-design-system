@@ -412,30 +412,20 @@ export function InlineEditSection({
 /* InlineEditControl                                                         */
 /* -------------------------------------------------------------------------- */
 
-const controlWidthStyles: Record<InlineEditControlWidth, CSSProperties> = {
-  full: { width: '100%' },
-  wide: { width: 'min(100%, 520px)' },
-  compact: { width: 'min(100%, 280px)' },
-  natural: { width: 'fit-content' },
-};
-
 export function InlineEditControl({
   children,
   width = 'full',
   className,
   style,
 }: InlineEditControlProps): React.ReactElement {
+  /* Width is a variant, not paint: the engine stamps `data-width` and the
+     skin owns the four arms (inline-size per width value). */
   return (
     <Box
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="control"
       data-width={width}
-      /* The per-width style is a pinned runtime value (the public test
-         asserts the inline `style.width` per variant), so it stays inline. */
-      style={{
-        ...controlWidthStyles[width],
-        ...style,
-      }}
+      style={style}
     >
       {children}
     </Box>
@@ -445,13 +435,6 @@ export function InlineEditControl({
 /* -------------------------------------------------------------------------- */
 /* InlineEditField                                                           */
 /* -------------------------------------------------------------------------- */
-
-const spanColumn: Record<InlineEditFieldSpan, string> = {
-  1: 'span 1',
-  2: 'span 2',
-  3: 'span 3',
-  full: '1 / -1',
-};
 
 export function InlineEditField({
   children,
@@ -496,9 +479,10 @@ export function InlineEditField({
       data-part="field"
       data-requirement={requirement}
       data-error={Boolean(hasError)}
-      /* The span → grid-column mapping is a pinned runtime value (the public
-         test asserts the inline `style.gridColumn`), so it stays inline. */
-      style={{ gridColumn: spanColumn[span], ...style }}
+      /* Span is a variant, not paint: the engine stamps `data-span` and the
+         skin owns the grid-column arms. */
+      data-span={span}
+      style={style}
     >
       <Box data-part="field-label-row" data-has-hint={Boolean(hint)}>
         <Flex align="center" gap={8} wrap="wrap">
@@ -597,11 +581,17 @@ export function MoreFieldsToggle({
       data-part="toggle"
       data-expanded={expanded}
       data-sticky={sticky}
-      /* The sticky dock (position/top) is a pinned runtime value (the public
-         test asserts the inline `style.position`/`style.top`), so it stays
-         inline; the rest of the frame is skin-owned. */
+      /* The sticky dock is runtime-computed geometry, so it rides the ONE
+         legal inline: the family's `--ds-edit-fields-toggle-*` channels, read
+         by the skin's armed rule with static resting fallbacks. Nothing is
+         written unless the dock is armed (sticky AND expanded). */
       style={{
-        ...(sticky && expanded ? { position: 'sticky', top: stickyOffset, zIndex: 1 } : null),
+        ...(sticky && expanded
+          ? ({
+              '--ds-edit-fields-toggle-position': 'sticky',
+              '--ds-edit-fields-toggle-sticky-offset': `${stickyOffset}px`,
+            } as CSSProperties)
+          : null),
         ...style,
       }}
     >

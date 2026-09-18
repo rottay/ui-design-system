@@ -495,20 +495,20 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
   });
 
   describe('FormSurface / WizardSurface / DetailFormSurface', () => {
-    // FormSurface/WizardSurface/DetailFormSurface own no DOM of their own --
-    // they compose Grid/Stack/Card. Grid has no rest-spread in its own prop
-    // destructuring, and Card stamps its own data-part after caller rest in
-    // every engine, so neither forwards a consumer-passed
-    // data-part to the DOM (confirmed for both engines of each), so their
-    // anatomy is the className already on them (`ds-surface ds-form-surface` /
-    // `ds-wizard` / `ds-detail-form`, `ds-form-surface__error-card`, etc.), never a
-    // data-part attribute. Asserting `[data-part='root']` here would give a
-    // FALSE PASS by matching Card's own unrelated internal `root` stamp
-    // instead of proving this surface's own root landed -- verified by a
-    // raw DOM dump: querying [data-part="root"] found Card's stamp, not the
-    // Grid's (Grid drops it silently; tsc does not catch this because
-    // BaseComponentProps types data-part broadly across the fleet).
-    it('FormSurface: stamps root(className)/error-card(className)', async () => {
+    // FormSurface/WizardSurface/DetailFormSurface compose Grid/Stack whose own
+    // prop destructuring has no rest-spread, so a consumer-passed data-part
+    // never reaches the DOM on those roots: the surface roots are identified
+    // by the className already on them (`ds-surface ds-form-surface` /
+    // `ds-wizard` / `ds-detail-form`). Asserting `[data-part='root']` here
+    // would give a FALSE PASS by matching a composed Card's own unrelated
+    // internal `root` stamp instead of proving this surface's own root
+    // landed -- verified by a raw DOM dump (Grid drops the attribute
+    // silently; tsc does not catch this because BaseComponentProps types
+    // data-part broadly across the fleet). The error banner is different:
+    // it is a surface-owned Box, so its anatomy is the stamped
+    // `[data-part='error-banner']` (the de-carded alert carries no
+    // `__error-card` class since the family cut).
+    it('FormSurface: stamps root(className)/error-banner(part)', async () => {
       const config: FormSurfaceConfig = {
         visual: {},
         presentation: { chrome: { title: 'Create record' }, error: <div>error</div> },
@@ -517,10 +517,10 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       const { container } = renderWithEngine(<FormSurface config={config} />, 'modern');
 
       await waitForClass(container, 'ds-form-surface');
-      await waitForClass(container, 'ds-form-surface__error-card');
+      await waitForPart(container, 'error-banner');
     });
 
-    it('WizardSurface: stamps root(className)/error-card(className)', async () => {
+    it('WizardSurface: stamps root(className)/error-banner(part)', async () => {
       const config: WizardSurfaceConfig = {
         visual: {},
         presentation: { chrome: { title: 'Setup flow' }, error: <div>error</div> },
@@ -532,13 +532,13 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       const { container } = renderWithEngine(<WizardSurface config={config} />, 'modern');
 
       await waitForClass(container, 'ds-wizard');
-      await waitForClass(container, 'ds-wizard__error-card');
+      await waitForPart(container, 'error-banner');
     });
 
     // `config.visual.layout: 'stacked'` short-circuits the layout decision
     // regardless of breakpoint -- a deterministic way to force the Stack
     // branch without depending on jsdom's default viewport.
-    it('DetailFormSurface: stamps root(className, stacked layout)/error-card(className)', async () => {
+    it('DetailFormSurface: stamps root(className, stacked layout)/error-banner(part)', async () => {
       const config: DetailFormSurfaceConfig = {
         visual: { layout: 'stacked' },
         presentation: { chrome: { title: 'Edit workspace' }, summary: <div>summary</div>, error: <div>error</div> },
@@ -547,7 +547,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       const { container } = renderWithEngine(<DetailFormSurface config={config} />, 'modern');
 
       await waitForClass(container, 'ds-detail-form--stacked');
-      await waitForClass(container, 'ds-detail-form__error-card');
+      await waitForPart(container, 'error-banner');
     });
 
     // `stackOnMobile`/`stackOnTablet: false` opt out of the responsive
@@ -555,7 +555,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
     // the Grid branch -- the other deterministic override
     // useSurfaceResponsiveLayout exposes (no `adaptive` prop here, unlike
     // GuidedDraftFormSurface).
-    it('DetailFormSurface: stamps root(className, split layout)/error-card(className)', async () => {
+    it('DetailFormSurface: stamps root(className, split layout)/error-banner(part)', async () => {
       const config: DetailFormSurfaceConfig = {
         visual: { stackOnMobile: false, stackOnTablet: false },
         presentation: { chrome: { title: 'Edit workspace' }, summary: <div>summary</div>, error: <div>error</div> },
@@ -564,7 +564,7 @@ describe('Record + workflow + form-surfaces data-part contract (skin ownership m
       const { container } = renderWithEngine(<DetailFormSurface config={config} />, 'modern');
 
       await waitForClass(container, 'ds-detail-form--split');
-      await waitForClass(container, 'ds-detail-form__error-card');
+      await waitForPart(container, 'error-banner');
     });
   });
 });

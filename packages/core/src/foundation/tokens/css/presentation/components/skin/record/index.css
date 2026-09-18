@@ -28,14 +28,16 @@
  * INLINE BOUNDARY: static geometry migrated here from the engine (strip
  * rhythm + per-variant grid, field padding, label typography, bar/panel
  * padding, the linked-value cluster's fit-content measure and the link
- * arrow's 13px icon frame). The engine's surviving `style`-prop writes are
- * runtime values: the field-grid `gridTemplateColumns` prop and the
- * field's `grid-column: span N`. The prop's DEFAULT is intrinsic
- * (`auto-fit` over a 16rem minimum measure), so a narrow container
- * re-flows without a caller override; an explicit `columns` value still
- * wins and remains caller-owned. Action-bar icons are NOT sized here:
- * they ride the Button's own governed icon channel
- * (`--ds-button-sm-icon-size`).
+ * arrow's 13px icon frame). The only surviving runtime writes are
+ * `--ds-*` channels: the field-grid's `columns` prop rides
+ * `--ds-record-field-grid-columns`, and the SKIN authors that channel's
+ * default below (the intrinsic `auto-fit` over a 16rem minimum measure,
+ * private measure channel included) — an authored declaration IS the
+ * producer, so an unset prop changes nothing and an explicit `columns`
+ * value still wins through the style attribute. The field's runtime
+ * `span` prop is a `data-span` stamp answered by the arms below; 1 is the
+ * absence of an arm. Action-bar icons are NOT sized here: they ride the
+ * Button's own governed icon channel (`--ds-button-sm-icon-size`).
  *
  * `RecordSummaryStrip`'s five variants and `form-sections`' four tones share two
  * byte-identical border formulas. They are NOT unified here: each file resolves
@@ -58,26 +60,41 @@
  *    profiles get tabular lining figures, editorial ones oldstyle.
  *  - GEOMETRY/EDGE: card radii resolve `--ds-radius-*` with the exact
  *    pre-wave literals as fallbacks; frame widths resolve the expressive
- *    `--ds-edge-standard-width` (floor 1px); the action-bar rule resolves
- *    `--ds-divider-width`/`--ds-divider-style` (floor 1px solid) so ruled or
- *    dashed tenant divider grammar reaches the record chrome.
- *  - STATES: `data-loading` reserves the label/value footprint with
- *    Skeleton bars; `data-error` paints the error frame + icon + copy
- *    (never colour-only); `data-empty` now also expresses as a dashed frame
- *    (a shape cue forced-colors keeps).
+ *    `--ds-edge-standard-width` (floor 1px); hairline SEAMS — the ledger
+ *    cell gaps and the action rail's top rule — resolve
+ *    `--ds-edge-hairline-width` (floor 1px) over the divider grammar, so a
+ *    tenant's edge profile reaches every seam of the family while a
+ *    ruled/dashed divider posture keeps its floor. The three edge-width
+ *    roles (`hairline`/`standard`/`emphasis`) are the seam vocabulary this
+ *    family answers on; `emphasis` is deliberately not read here — one
+ *    first-party vertical states it at 2px where this family's paint is a
+ *    1px seam, so adopting it would move that vertical's pixels (the
+ *    cardGround fence).
+ *  - STATES: `data-loading` renders the shared anatomy-derived skeleton
+ *    (one bone per stamped part — the hand-written skeleton wrappers are
+ *    retired); `data-error` paints the error frame + icon + copy (never
+ *    colour-only); `data-empty` now also expresses as a dashed frame
+ *    (a shape cue forced-colors keeps). Hover and focus paint is the
+ *    shared interaction kernel's decision, stamped `data-state` on the
+ *    field root (focus events bubble, so `focused` IS focus-within
+ *    semantics) and on the surface-owned `field-link-body` wrapper, and
+ *    every pseudo below pairs with its `data-state` twin:
+ *    `:is([data-state~='hovered'], :hover)` and so on — the platform
+ *    pseudo stays the twin's fallback, not a second authority.
  *
  * C1 ELEVATION (record ledger + docked rail):
  *  - ONE DATA PLANE: the field grid stops reading as a wall of N identical
  *    mini-cards and becomes ONE ledger — a single frame, a single radius and
  *    hairline seams between cells (the RecordFacts / facts-card anatomy:
- *    `gap` = the divider-grammar width over the family's hairline colour,
+ *    `gap` = the hairline-role width over the family's hairline colour,
  *    cells painting the plane surface). Cells stretch so row seams stay
- *    level; the inline auto-fit measure channel still drives the 2→1
- *    reflow, and the seams survive the collapse as row rules at 320/390px.
- *    A RecordField OUTSIDE a grid keeps its standalone card untouched.
- *    The seam's width leg rides `--ds-divider-width`; its style leg cannot
- *    paint through a grid gap, so ledger seams stay solid — ruled/dashed
- *    tenant postures keep reaching every other seam of the family.
+ *    level; the skin-authored auto-fit measure channel still drives the
+ *    2→1 reflow, and the seams survive the collapse as row rules at
+ *    320/390px. A RecordField OUTSIDE a grid keeps its standalone card
+ *    untouched. The seam's width leg rides the hairline role over the
+ *    divider grammar; its style leg cannot paint through a grid gap, so
+ *    ledger seams stay solid — ruled/dashed tenant postures keep reaching
+ *    every other seam of the family.
  *  - CELL STATES RE-EXPRESSED: hover is a quiet wash over the plane, the
  *    focus-within path an inset keyline, the per-field error an inset
  *    error keyline + wash (declared last so it persists through hover and
@@ -95,16 +112,16 @@
  * decision above IS the material decision: the field grid was deliberately
  * taken from N floating mini-cards to ONE data plane divided by hairline
  * seams, which is the opposite of depth and the reason nothing here casts a
- * shadow. The three `box-shadow` declarations in this file are all INSET
- * keylines (focus-within, per-field error, empty-cell dash) — state cues drawn
- * as rules, never lift.
+ * shadow. The two `box-shadow` declarations in this file are INSET keylines
+ * (focus-within, per-field error) — state cues drawn as rules, never lift —
+ * plus one `box-shadow: none` reset in the forced-colors ledger block.
  *
  * That makes this family the one that already answers a rule-led tenant
- * correctly, and it answers on the EDGE axis rather than the depth axis: every
- * frame resolves `--ds-edge-standard-width` and every seam resolves
- * `--ds-divider-width`/`--ds-divider-style`, both of which a tenant reaches
- * through the expressive `edge` profile. Adding a material shadow read here
- * would invent paint the anatomy spent a whole wave removing.
+ * correctly, and it answers on the EDGE axis rather than the depth axis:
+ * every frame resolves `--ds-edge-standard-width`, every seam resolves
+ * `--ds-edge-hairline-width` over the divider grammar, and a tenant reaches
+ * both through the expressive `edge` profile. Adding a material shadow read
+ * here would invent paint the anatomy spent a whole wave removing.
  */
 
 /* --- RecordSummaryStrip ---------------------------------------------------- */
@@ -205,23 +222,6 @@
   font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, normal);
 }
 
-/* Loading: the skeleton wrappers reserve the exact line boxes the label and
-   value occupy once resolved (xs × 1.35, sm × 1.6), so late content lands
-   without a jump. */
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-label'],
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-value'] {
-  display: flex;
-  align-items: center;
-}
-
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-label'] {
-  block-size: calc(var(--ds-font-size-xs, 0.75rem) * 1.35);
-}
-
-.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-value'] {
-  block-size: calc(var(--ds-font-size-sm, 0.875rem) * 1.6);
-}
-
 .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-value'][data-mono='true'] {
   font-family: var(--ds-font-family-mono, monospace);
 }
@@ -243,6 +243,12 @@
 .ds-structure.ds-record[data-part='field-grid'] {
   container: ds-record-fields / inline-size;
   display: grid;
+  /* The ONE producer of the channel: the intrinsic default (auto-fit over a
+     16rem minimum measure, private measure channel included). A caller's
+     explicit `columns` prop overrides it through the style attribute, which
+     outranks every layered rule here. */
+  --ds-record-field-grid-columns: repeat(auto-fit, minmax(min(100%, var(--_ds-record-field-measure, 16rem)), 1fr));
+  grid-template-columns: var(--ds-record-field-grid-columns);
   gap: var(--_ds-record-field-grid-gap, calc(14px * var(--_ds-record-density, 1)));
   inline-size: 100%;
   align-items: start;
@@ -253,13 +259,14 @@
    their row so horizontal seams stay level, and `overflow: hidden` clips the
    corner cells to the shared radius (nested-radius law: the container has no
    padding, so the cells keep no radius of their own). The seam width rides
-   the tenant divider grammar; the hairline colour is the same family border
-   the mini-cards painted per-field, now spent ONCE per seam. Border colour
+   the hairline-role channel over the divider grammar (both rest at the exact
+   pre-role 1px); the hairline colour is the same family border the
+   mini-cards painted per-field, now spent ONCE per seam. Border colour
    clears the P-48 floor from the two scope classes + the two DISTINCT
    contract attributes (data-part, data-structure — always stamped). */
 .ds-structure.ds-record[data-part='field-grid'][data-structure='record'] {
   align-items: stretch;
-  gap: var(--ds-divider-width, 1px);
+  gap: var(--ds-edge-hairline-width, var(--ds-divider-width, 1px));
   border: var(--ds-edge-standard-width, 1px) solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-lg, 14px);
   background: var(--ds-color-border-secondary);
@@ -294,16 +301,19 @@
 
 /* Cell hover: a quiet wash over the plane (hover-capable only). Declared
    after the mono/empty fills so it reaches every cell; the dashed empty
-   outline stays, so the slot cue never disappears under the pointer. */
+   outline stays, so the slot cue never disappears under the pointer. The
+   wash reads the kernel's `hovered` state, with the platform pseudo as its
+   twin. */
 @media (hover: hover) {
-  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:hover {
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-bg-secondary) 30%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
   }
 }
 
 /* Keyboard path into the copy button / linked value: an inset keyline that
-   never shifts the ledger's geometry. */
-.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:focus-within {
+   never shifts the ledger's geometry. Focus events bubble to the field root,
+   so the kernel's `focused` state IS focus-within semantics. */
+.ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='focused'], :focus-within) {
   box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, var(--ds-color-primary));
 }
 
@@ -344,9 +354,10 @@
 }
 
 /* Field interaction: the card is a read surface, so the affordance stays a
-   quiet border shift (hover-capable only), and a focus-within ring keeps the
-   keyboard path into the copy button / link visible against the card's own
-   border. `data-mono` is always stamped, so these buy their floor from it. */
+   quiet border shift (hover-capable only, kernel-stamped with the platform
+   pseudo as twin), and a focus-within ring keeps the keyboard path into the
+   copy button / link visible against the card's own border. `data-mono` is
+   always stamped, so these buy their floor from it. */
 .ds-structure.ds-record[data-part='field'][data-mono] {
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -354,17 +365,28 @@
 }
 
 @media (hover: hover) {
-  .ds-structure.ds-record[data-part='field'][data-mono='false']:hover {
+  .ds-structure.ds-record[data-part='field'][data-mono='false']:is([data-state~='hovered'], :hover) {
     border-color: var(--ds-color-border);
   }
 
-  .ds-structure.ds-record[data-part='field'][data-mono='true']:hover {
+  .ds-structure.ds-record[data-part='field'][data-mono='true']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-text-muted) 28%);
   }
 }
 
-.ds-structure.ds-record[data-part='field'][data-mono]:focus-within {
+.ds-structure.ds-record[data-part='field'][data-mono]:is([data-state~='focused'], :focus-within) {
   border-color: var(--ds-focus-ring-color, var(--ds-color-primary));
+}
+
+/* The runtime `span` prop lands as a `data-span` stamp; the arms cover the
+   values the ledger domain admits (1 is the absence of an arm, values above
+   3 keep a single track — no caller spans wider today). */
+.ds-structure.ds-record[data-part='field'][data-span='2'] {
+  grid-column: span 2;
+}
+
+.ds-structure.ds-record[data-part='field'][data-span='3'] {
+  grid-column: span 3;
 }
 
 /* Per-field error frame: error ink mixed onto the family's border voice.
@@ -392,23 +414,6 @@
 .ds-structure.ds-record[data-part='field'][data-error='true'] [data-part='field-error'] {
   color: var(--ds-color-error);
   line-height: 1.4;
-}
-
-/* Loading: the skeleton wrappers reserve the exact line boxes the label and
-   value occupy once resolved (xs × 1.35, sm × 1.6 — the value rule below
-   paints line-height 1.6), so the resolving content lands without a jump. */
-.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-label'],
-.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-value'] {
-  display: flex;
-  align-items: center;
-}
-
-.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-label'] {
-  block-size: calc(var(--ds-font-size-xs, 0.75rem) * 1.35);
-}
-
-.ds-structure.ds-record[data-part='field'] [data-part='field-skeleton-value'] {
-  block-size: calc(var(--ds-font-size-sm, 0.875rem) * 1.6);
 }
 
 .ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-label'] {
@@ -463,9 +468,16 @@
 }
 
 /* The linked-value cluster hugs its content so the hover/focus affordance
-   does not span the field's full measure (drained inline width: fit-content). */
+   does not span the field's full measure (drained inline width: fit-content).
+   The affordance itself lives HERE, not on the anchor: `NavigationLinkProps`
+   admits no `data-*` attributes or event handlers, and a consumer-supplied
+   Link adapter is not this component's DOM, so the kernel's state is stamped
+   on this surface-owned wrapper and the skin reads it paired with the
+   platform pseudo. The wrapper's box is the anchor's box (the anchor wraps
+   nothing else), so the ring geometry is unchanged. */
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
   inline-size: fit-content;
+  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
@@ -481,29 +493,29 @@
   transform: scaleX(-1);
 }
 
-/* `NavigationLinkProps` accepts a className but not a `data-part`, and a
-   consumer-supplied Link adapter is not this component's DOM. The anchor keeps
-   the field's own colour rather than the UA link colour, gets no underline,
-   and its hover is hover-capable-only. */
+/* The anchor keeps the field's own colour rather than the UA link colour and
+   gets no underline; its class is the only skin hook because the composed
+   Link's DOM is the app's. No pseudo state paints through it — the states
+   moved to the wrapper above with the kernel's `data-state`. */
 .ds-structure.ds-record[data-part='field'] .ds-record__field-link {
   color: inherit;
   text-decoration: none;
-  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 @media (hover: hover) {
-  .ds-structure.ds-record[data-part='field'] .ds-record__field-link:hover {
+  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='hovered'], :hover) {
     color: var(--ds-color-primary);
   }
 }
 
-.ds-structure.ds-record[data-part='field'] .ds-record__field-link:active {
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-primary);
 }
 
-/* Keyboard path into the linked value: the anchor carries no data-part (the
-   consumer's Link adapter owns its DOM), so the ring keys on the class. */
-.ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
+/* Keyboard path into the linked value: the wrapper is not focusable, so the
+   platform twin is `:focus-within` (the anchor's focus bubbles here, where
+   the kernel decides whether the ring belongs). */
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   border-radius: var(--ds-radius-sm, 4px);
@@ -519,7 +531,10 @@
    gradient it replaces could not promise. The block-start padding keeps the
    exact pre-dock air; the block-end padding is the dock's lower air. Safe-area
    belongs to the app shell, not this rail. Ancestors with `overflow: hidden`
-   (a collapsible section shell) simply degrade the dock to static. */
+   (a collapsible section shell) simply degrade the dock to static. The bare
+   z-index: 1 stays: the cascade's z-index scale has no rung at 1 (its sticky
+   rung is 1100, which would reorder the rail above dropdowns), so the
+   first-party-integer convention for a quiet in-flow dock holds. */
 .ds-structure.ds-record[data-part='action-bar'] {
   container: ds-record-actions / inline-size;
   position: sticky;
@@ -529,9 +544,11 @@
 }
 
 .ds-structure.ds-record[data-part='action-bar'][data-structure='record'] {
-  /* Divider grammar channels: a ruled/dashed tenant divider posture reaches
-     the rail's top rule; floors keep the exact 1px solid pre-wave render. */
-  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
+  /* The rail's top rule is a hairline seam (hairline role over the divider
+     grammar; both rest at the exact 1px solid pre-wave render), so a ruled/
+     dashed tenant divider posture keeps its floor and the edge profile
+     reaches the seam. */
+  border-top: var(--ds-edge-hairline-width, var(--ds-divider-width, 1px)) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
   background: var(--ds-surface-canvas, var(--ds-color-bg-primary));
 }
 
@@ -580,7 +597,7 @@
 /* --- reduced motion: field/link affordance transitions go quiet ------------ */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-record[data-part='field'][data-mono],
-  .ds-structure.ds-record[data-part='field'] .ds-record__field-link {
+  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
     transition: none;
   }
 }
@@ -665,12 +682,12 @@
     color: CanvasText;
   }
 
-  .ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
+  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
 
-  .ds-structure.ds-record[data-part='field'][data-mono]:focus-within {
+  .ds-structure.ds-record[data-part='field'][data-mono]:is([data-state~='focused'], :focus-within) {
     border-color: Highlight;
   }
 
@@ -695,7 +712,7 @@
     outline-offset: -4px;
   }
 
-  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:focus-within {
+  .ds-structure.ds-record[data-part='field-grid'] > .ds-structure.ds-record[data-part='field']:is([data-state~='focused'], :focus-within) {
     outline: 2px solid Highlight;
     outline-offset: -2px;
   }

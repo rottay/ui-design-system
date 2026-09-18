@@ -134,7 +134,9 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
       {actionButtons}
     </ActionDock>
   ) : (
-    <Flex data-part="actions" direction={isMobile ? 'column' : 'row'} gap={8} wrap="wrap" justify="end">
+    // The rail's gap is skin-owned (the surface skin reads the family channel);
+    // the Flex keeps only direction/wrap/justify, which are posture, not paint.
+    <Flex data-part="actions" direction={isMobile ? 'column' : 'row'} wrap="wrap" justify="end">
       {actionButtons}
     </Flex>
   );
@@ -166,10 +168,11 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
               )}
 
               {config.presentation.error && (
+                // The banner is a ruled alert, not a second card frame: the skin
+                // paints the recessed ground, the emphasis edge and the optical
+                // padding on the part the surface stamps.
                 <Box data-part="error-banner" role="alert">
-                  <Card className="ds-form-surface__error-card" variant={profileDefaults.cardVariant}>
-                    <Card.Body>{config.presentation.error}</Card.Body>
-                  </Card>
+                  {config.presentation.error}
                 </Box>
               )}
 

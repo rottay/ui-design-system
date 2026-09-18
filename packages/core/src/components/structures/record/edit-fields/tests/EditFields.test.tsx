@@ -153,7 +153,7 @@ describe('InlineEditField', () => {
     expect(hint.id).toBe('bio-hint');
   });
 
-  it('maps span to the expected grid-column value', async () => {
+  it('stamps the span variant on the field root for the skin to own', async () => {
     const { container } = renderSurface(
       <InlineEditField label="Notes" span="full">
         <textarea />
@@ -161,12 +161,24 @@ describe('InlineEditField', () => {
     );
     await screen.findByText('Notes');
     const root = container.firstElementChild as HTMLElement;
-    expect(root.style.gridColumn).toBe('1 / -1');
+    expect(root.getAttribute('data-span')).toBe('full');
+    expect(root.style.gridColumn).toBe('');
+  });
+
+  it('stamps the default span as 1', async () => {
+    const { container } = renderSurface(
+      <InlineEditField label="Title">
+        <input />
+      </InlineEditField>,
+    );
+    await screen.findByText('Title');
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.getAttribute('data-span')).toBe('1');
   });
 });
 
 describe('InlineEditControl', () => {
-  it('applies the full-width style by default', async () => {
+  it('stamps the full width variant by default, with no inline width', async () => {
     const { container } = renderSurface(
       <InlineEditControl>
         <input aria-label="bounded control" />
@@ -174,10 +186,11 @@ describe('InlineEditControl', () => {
     );
     await screen.findByLabelText('bounded control');
     const root = container.firstElementChild as HTMLElement;
-    expect(root.style.width).toBe('100%');
+    expect(root.getAttribute('data-width')).toBe('full');
+    expect(root.style.width).toBe('');
   });
 
-  it('applies a distinct style per width variant', async () => {
+  it('stamps each width variant for the skin to own', async () => {
     const { container, rerender } = renderSurface(
       <InlineEditControl width="natural">
         <input aria-label="bounded control" />
@@ -185,15 +198,17 @@ describe('InlineEditControl', () => {
     );
     await screen.findByLabelText('bounded control');
     const naturalRoot = container.firstElementChild as HTMLElement;
-    expect(naturalRoot.style.width).toBe('fit-content');
+    expect(naturalRoot.getAttribute('data-width')).toBe('natural');
+    expect(naturalRoot.style.width).toBe('');
 
     rerender(
-      <InlineEditControl width="full">
+      <InlineEditControl width="compact">
         <input aria-label="bounded control" />
       </InlineEditControl>,
     );
-    const fullRoot = container.firstElementChild as HTMLElement;
-    expect(fullRoot.style.width).toBe('100%');
+    const compactRoot = container.firstElementChild as HTMLElement;
+    expect(compactRoot.getAttribute('data-width')).toBe('compact');
+    expect(compactRoot.style.width).toBe('');
   });
 });
 
@@ -271,18 +286,21 @@ describe('MoreFieldsToggle', () => {
     expect(expandedButton.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('docks with position sticky only while expanded and sticky is true', async () => {
+  it('arms the sticky dock channels only while expanded and sticky is true', async () => {
     const { container, rerender } = renderSurface(
       <MoreFieldsToggle expanded={false} onToggle={() => {}} sticky />,
     );
     await screen.findByRole('button', { name: 'Show more fields' });
     let root = container.firstElementChild as HTMLElement;
-    expect(root.style.position).not.toBe('sticky');
+    expect(root.style.position).toBe('');
+    expect(root.style.getPropertyValue('--ds-edit-fields-toggle-position')).toBe('');
 
     rerender(<MoreFieldsToggle expanded onToggle={() => {}} sticky stickyOffset={96} />);
     root = container.firstElementChild as HTMLElement;
-    expect(root.style.position).toBe('sticky');
-    expect(root.style.top).toBe('96px');
+    // The dock's runtime geometry rides the family's channels; the skin owns
+    // the armed rule that reads them.
+    expect(root.style.getPropertyValue('--ds-edit-fields-toggle-position')).toBe('sticky');
+    expect(root.style.getPropertyValue('--ds-edit-fields-toggle-sticky-offset')).toBe('96px');
   });
 });
 

@@ -40,6 +40,16 @@
  * error grew the semantic `status.error` icon beside the message — the
  * per-field state never reads through colour alone.
  *
+ * VARIANT + RUNTIME CONTRACT: the engine stamps state only (`data-width`,
+ * `data-span`, `data-sticky`, `data-expanded`, `data-kind`, `data-requirement`,
+ * `data-error`, `data-saving`) and carries no inline paint. Fixed
+ * enum-keyed geometry (the control's bounded widths, the field's grid spans)
+ * is owned here as arms on the stamped variant; runtime-computed geometry
+ * (the sticky dock's position/offset, the grid's per-instance columns/gap)
+ * rides the family's `--ds-edit-fields-*` channels — the engine writes them
+ * per instance, this file authors their resting defaults, and the skin rules
+ * read both through one `var()` chain.
+ *
  * C1 ELEVATION (shared cell rhythm): the read view's ledger cell padding
  * (12px/14px, the record.css literals) reaches the edit cell scaled by the
  * SAME density factor, so toggling read↔edit keeps every label and control
@@ -140,6 +150,12 @@
 /* --- InlineEditGrid -------------------------------------------------------- */
 
 .ds-structure.ds-edit-fields[data-part='grid'] {
+  /* Authored defaults (an authored declaration IS a producer): the engine's
+     per-instance inline channel writes override these only when a caller
+     passes a non-default `columns`/`gap`, so the read below is never an
+     orphan name. */
+  --ds-edit-fields-grid-columns: repeat(3, minmax(0, 1fr));
+  --ds-edit-fields-grid-gap: 14px;
   container: ds-edit-fields-grid / inline-size;
   display: grid;
   grid-template-columns: var(--ds-edit-fields-grid-columns, repeat(3, minmax(0, 1fr)));
@@ -215,10 +231,35 @@
   color: var(--ds-color-text-primary);
 }
 
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-content'] {
+  /* The body region consumer fields land in: it can shrink below its content's
+     intrinsic measure instead of blowing out the section's row (the survival
+     hook every copy stack in this file carries); the header above owns the
+     air between the title and the first field. */
+  min-inline-size: 0;
+}
+
 /* --- InlineEditField ------------------------------------------------------- */
 
 .ds-structure.ds-edit-fields[data-part='field'] {
   min-inline-size: 0;
+}
+
+/* Span is a stamped variant (`data-span`), not paint: the arms the grid reads
+   are owned here. The retired inline wrote `grid-column` unconditionally,
+   and these arms reproduce it exactly — including its behaviour under the
+   narrow cut, where a multi-column span still reaches into implicit columns
+   (parity, not a silently fixed wart). */
+.ds-structure.ds-edit-fields[data-part='field'][data-span='2'] {
+  grid-column: span 2;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'][data-span='3'] {
+  grid-column: span 3;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'][data-span='full'] {
+  grid-column: 1 / -1;
 }
 
 /* Shared read↔edit cell rhythm (C1): the edit cell takes the read ledger
@@ -365,6 +406,25 @@
   max-inline-size: 100%;
 }
 
+/* Width is a stamped variant (`data-width`), not paint: the bounded-measure
+   arms the control reads are owned here, on the logical axis like every
+   other measure in this file. */
+.ds-structure.ds-edit-fields[data-part='control'][data-width='full'] {
+  inline-size: 100%;
+}
+
+.ds-structure.ds-edit-fields[data-part='control'][data-width='wide'] {
+  inline-size: min(100%, 520px);
+}
+
+.ds-structure.ds-edit-fields[data-part='control'][data-width='compact'] {
+  inline-size: min(100%, 280px);
+}
+
+.ds-structure.ds-edit-fields[data-part='control'][data-width='natural'] {
+  inline-size: fit-content;
+}
+
 /* --- MoreFieldsToggle ------------------------------------------------------- */
 
 .ds-structure.ds-edit-fields[data-part='toggle'] {
@@ -378,11 +438,27 @@
   justify-content: flex-end;
 }
 
-/* Sticky dock: while expanded + sticky the engine docks the control inline
-   (`position: sticky`), so the skin gives it a real surface — content that
-   scrolls under the dock must not bleed through. The canonical canvas surface
-   owns that paint; this structure does not introduce a second theme channel. */
+/* Sticky dock: while expanded + sticky the engine arms the dock through its
+   per-instance `--ds-edit-fields-toggle-*` channels (the only legal inline:
+   runtime-computed geometry), and the skin gives it a real surface — content
+   that scrolls under the dock must not bleed through. The canonical canvas
+   surface owns that paint; this structure does not introduce a second theme
+   channel. `z-index: 1` is a measured refusal, not an oversight: the scale's
+   sticky rung (`--ds-z-index-sticky`, 1100) would lift the dock above the
+   overlay band (`--ds-z-index-dropdown`, 1000), and the dock must never
+   eclipse an open menu; 1 keeps it above the scrolling page and below every
+   overlay, exactly what the retired inline painted. */
 .ds-structure.ds-edit-fields[data-part='toggle'][data-sticky='true'][data-expanded='true'] {
+  /* Authored resting defaults (an authored declaration IS a producer): the
+     engine's per-instance inline channel writes override these, and the two
+     conditions are the same props — whenever this rule matches, the engine
+     armed the dock — so the defaults only stand for the props' own resting
+     values. */
+  --ds-edit-fields-toggle-position: static;
+  --ds-edit-fields-toggle-sticky-offset: 72px;
+  position: var(--ds-edit-fields-toggle-position, static);
+  inset-block-start: var(--ds-edit-fields-toggle-sticky-offset, 72px);
+  z-index: 1;
   padding-block: 8px;
   background: var(--ds-surface-canvas, var(--ds-color-bg-primary));
   border-block-start: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
@@ -399,6 +475,12 @@
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] {
   flex: 1 1 280px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-impact-preview'] {
+  /* The impact line rides the support stack's flex row: long unbreakable
+     preview content shrinks instead of overflowing the footer's measure. */
   min-inline-size: 0;
 }
 

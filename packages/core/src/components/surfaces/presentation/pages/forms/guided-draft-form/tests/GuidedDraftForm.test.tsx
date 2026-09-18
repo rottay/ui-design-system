@@ -69,4 +69,97 @@ describe('GuidedDraftFormSurface', () => {
     expect(await screen.findByText(/unsaved draft/i)).toBeInTheDocument();
     expect(await screen.findByText('Recover')).toBeInTheDocument();
   });
+
+  it('names the page, the section nav and the submit action in scroll mode', async () => {
+    renderSurface(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={baseSections}
+        onSubmit={vi.fn()}
+        submitLabel="Create"
+      />,
+    );
+    expect(screen.getByRole('heading', { level: 1, name: 'Create Event' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Form sections' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Create' })).toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  it('keeps the same landmarks in wizard mode', async () => {
+    renderSurface(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={baseSections}
+        mode="wizard"
+        onSubmit={vi.fn()}
+        submitLabel="Create"
+      />,
+    );
+    expect(await screen.findByRole('heading', { level: 1, name: 'Create Event' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Form sections' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Create' })).toBeInTheDocument();
+  });
+
+  it('announces the autosave state through the draft status badge', async () => {
+    const { rerender } = renderSurface(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={baseSections}
+        onSubmit={vi.fn()}
+        draftStatus="saving"
+      />,
+    );
+    expect(await screen.findByRole('status')).toHaveTextContent('Saving…');
+
+    rerender(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={baseSections}
+        onSubmit={vi.fn()}
+        draftStatus="saved"
+        lastSavedAt="12:30"
+      />,
+    );
+    expect(await screen.findByRole('status')).toHaveTextContent('Saved 12:30');
+  });
+
+  it('exposes the template picker as a labelled region', async () => {
+    renderSurface(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={baseSections}
+        onSubmit={vi.fn()}
+        templates={{
+          items: [
+            { id: 'blank', name: 'Blank', description: 'Start empty' },
+            { id: 'meetup', name: 'Meetup', description: 'Social event' },
+          ],
+          onSelect: vi.fn(),
+        }}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Templates' }));
+    const region = await screen.findByRole('region', { name: 'Form templates' });
+    expect(region).toHaveAttribute('aria-label', 'Form templates');
+    expect(region.textContent).toContain('Blank');
+    expect(region.textContent).toContain('Meetup');
+  });
+
+  it('announces validation issues as a list with a severity summary', async () => {
+    renderSurface(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={baseSections}
+        onSubmit={vi.fn()}
+        validationIssues={[
+          { field: 'Name', message: 'Required', severity: 'error' },
+          { field: 'Date', message: 'In the past', severity: 'warning' },
+        ]}
+      />,
+    );
+    expect(screen.getByRole('list')).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    expect(await screen.findByText(/errors: 1/iu)).toBeInTheDocument();
+    expect(screen.getByText(/warnings: 1/iu)).toBeInTheDocument();
+  });
 });
