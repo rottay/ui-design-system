@@ -334,14 +334,16 @@ describe('ColumnMenu drag transport', () => {
 });
 
 /**
- * MEASURED BASELINE, not a desired behavior.
+ * DECLARED CHANGE, FLIPPED by the press-cancel repairs (WO-FAM-08, F-69 lots
+ * 6a + 6b).
  *
  * The row and its handle each own an interaction-state instance, and an HTML5
- * drag swallows the `pointerup` that would end the press. Both therefore stay
- * pressed after a drag that starts and ends on the handle. These two values are
- * recorded here so that the repair -- one instance at a time, the row inside
- * this family and the handle inside the Button primitive -- shows up as a
- * change to a named line rather than as a silent improvement.
+ * drag swallows the `pointerup` that would end the press, so both used to stay
+ * pressed after a drag that starts and ends on the handle -- the baseline this
+ * file recorded before the repair. Each instance now takes `dragend` as its own
+ * press-cancel: the row inside this family (6a) and the handle inside the
+ * Button primitive (6b). The case below asserts the repaired pair, and it takes
+ * both repairs to pass -- either one alone leaves its own instance latched.
  */
 describe('ColumnMenu row press state through a drag', () => {
   it('stamps no state on a resting row or handle', async () => {
@@ -351,7 +353,7 @@ describe('ColumnMenu row press state through a drag', () => {
     expect(handleFor(surface, 'Name').hasAttribute('data-state')).toBe(false);
   });
 
-  it('latches the press on BOTH instances after a drag that ends on the handle', async () => {
+  it('clears the press on BOTH instances after a drag that ends on the handle', async () => {
     const { surface } = await openMenu();
     const row = rowFor(surface, 'Name');
     const handle = handleFor(surface, 'Name');
@@ -363,13 +365,14 @@ describe('ColumnMenu row press state through a drag', () => {
     await waitFor(() => expect(row.getAttribute('data-state')).toContain('pressed'));
     expect(handle.getAttribute('data-state')).toContain('pressed');
 
-    // The browser fires no pointerup for a drag gesture.
+    // The browser fires no pointerup for a drag gesture; `dragend` fires on the
+    // handle and bubbles, which is how each instance reaches its own cancel.
     fireEvent.dragStart(handle, { dataTransfer });
     fireEvent.dragEnd(handle);
     await waitFor(() => expect(row.getAttribute('data-dragging')).toBe('false'));
 
-    expect(row.getAttribute('data-state')).toContain('pressed');
-    expect(handle.getAttribute('data-state')).toContain('pressed');
+    expect(row.getAttribute('data-state') ?? '').not.toContain('pressed');
+    expect(handle.getAttribute('data-state') ?? '').not.toContain('pressed');
   });
 
   it('clears both presses on the next pointer up', async () => {

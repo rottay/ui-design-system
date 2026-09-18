@@ -190,6 +190,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     onPointerDown,
     onPointerUp,
     onPointerCancel,
+    onDragEnd,
     onKeyDown,
     onKeyUp,
     onFocus,
@@ -490,6 +491,12 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     onPointerDown: chain(interactionHandlers.onPointerDown, onPointerDown as never),
     onPointerUp: chain(interactionHandlers.onPointerUp, onPointerUp as never),
     onPointerCancel: chain(interactionHandlers.onPointerUp, onPointerCancel as never),
+    // A drag gesture delivers no pointerup, so its end is the press-cancel
+    // route for every Button used as a drag source.
+    onDragEnd: (event: React.DragEvent<Element>) => {
+      interactionHandlers.onPointerUp(event as unknown as React.PointerEvent);
+      (onDragEnd as unknown as React.DragEventHandler<Element> | undefined)?.(event);
+    },
     onKeyDown: (event: React.KeyboardEvent<Element>) => {
       if (event.key === ' ' || event.key === 'Enter') {
         interactionHandlers.onPointerDown(event as unknown as React.PointerEvent);

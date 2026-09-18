@@ -167,6 +167,31 @@ describe('ModernButton press lifecycle', () => {
     expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
   });
 
+  it('cancels the press when a drag gesture ends', () => {
+    render(<ModernButton>Save</ModernButton>);
+    const button = screen.getByRole('button', { name: /save/i });
+
+    // A drag consumes the pointer: the browser fires no `pointerup`, so
+    // `dragend` is the only end this press ever sees.
+    fireEvent.pointerDown(button);
+    expect(button.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.dragEnd(button);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
+  it('still forwards a caller onDragEnd while cancelling the press', () => {
+    const handleDragEnd = vi.fn();
+    render(<ModernButton onDragEnd={handleDragEnd}>Save</ModernButton>);
+    const button = screen.getByRole('button', { name: /save/i });
+
+    fireEvent.pointerDown(button);
+    fireEvent.dragEnd(button);
+
+    expect(handleDragEnd).toHaveBeenCalledTimes(1);
+    expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
+  });
+
   it('does not resurrect a press interrupted by the busy state', () => {
     const { rerender } = render(<ModernButton>Save</ModernButton>);
     const button = screen.getByRole('button', { name: /save/i });

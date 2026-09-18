@@ -1071,6 +1071,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
  */
 function StatefulRow({
   children,
+  onDragEnd,
   ...rest
 }: ComponentProps<typeof Box> & { children?: ReactNode }) {
   const interaction = useInteractionState();
@@ -1078,6 +1079,14 @@ function StatefulRow({
     <Box
       {...rest}
       {...interaction.handlers}
+      // A drag delivers no pointerup, so the dragend that bubbles up from the
+      // handle is the only end this row's own press ever sees.
+      onDragEnd={(event: React.DragEvent<HTMLElement>) => {
+        interaction.handlers.onPointerUp(
+          event as unknown as React.PointerEvent
+        );
+        onDragEnd?.(event);
+      }}
       {...partAttributes("row", interaction.state)}
     >
       {children}
