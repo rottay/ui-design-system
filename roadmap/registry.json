@@ -5260,6 +5260,11 @@
      "at": "2026-09-17 20:59",
      "by": "kimi-dt",
      "note": "OLA DE TRANSPORTE F-69 COMPLETA: kanban (4a1c8a7ca) cerro la ola — saved-views, column-menu, tree, kanban, upload, file-manager adoptados; los 4 transportes y las 2 drop zones miden 0 owners independientes en el brazo F-69; frozen engines = excepciones nombradas. El family-cut gate OK 77/77 con el censo vivo. En vuelo: W32 (6a/6b press-cancel en StatefulRow y Button) y W33 (5b: announcements repetidos de kanban). Quedan para cerrar F-69: 6c (operabilidad keyboard+announcements de saved-views/column-menu), lot 7 (tree Move affordance — diseño A3 pendiente: affordance explicito, no flechas), lot 9 (retiro de useSortableList — public API, necesita tu autorizacion)."
+    },
+    {
+     "at": "2026-09-17 22:15",
+     "by": "kimi-dt",
+     "note": "F-69 casi cerrado: lot 5b (announcements por regiones alternadas, 6b0... integrate) y lot 6 (operabilidad grab+announcements en saved-views y column-menu, adicion declarada con drills por familia y RTL) INTEGRADOS; pins drenados de badge/tag por identidad (6739960e0) y button con piso verificado (6027d09b7). La ola completa queda: kernel (f1d74ef81) + 6 adopciones + reparaciones. Ventana serializada corrida sobre la ola (build verde, artefactos, decisions-lit fresco, family-cut 77/77, cascade sigue rojo solo contra el pin falso — decision del owner pendiente). En vuelo: W38 (adjudicacion residual DER-08: 6 sitios flat-authoring) y W39 (lot 7: Move affordance del tree). Unico freno restante de F-69: lot 9 (retiro de useSortableList de la entrypoint publica) necesita TU autorizacion de API publica — sus consumers en repo son cero y el kernel lo reemplaza; la pregunta queda en el paquete de decisiones."
     }
    ]
   },
