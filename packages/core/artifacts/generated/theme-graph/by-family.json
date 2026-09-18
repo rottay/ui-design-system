@@ -1284,6 +1284,7 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
+        "spacing.rhythm",
         "states.emphasis",
         "states.focus-style",
         "surfaces.border-style",
@@ -1913,7 +1914,14 @@
       "decisions": [
         "density.mode",
         "experience.profile",
-        "profiles.expressive"
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "profiles.expressive",
+        "spacing.rhythm",
+        "surfaces.border-style",
+        "surfaces.elevation-posture"
       ],
       "family": "detail-form-surface"
     },
@@ -2541,7 +2549,14 @@
       "decisions": [
         "density.mode",
         "experience.profile",
-        "profiles.expressive"
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "profiles.expressive",
+        "spacing.rhythm",
+        "surfaces.border-style",
+        "surfaces.elevation-posture"
       ],
       "family": "form-surface"
     },
@@ -2612,7 +2627,12 @@
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
+        "surfaces.border-style",
+        "surfaces.elevation-posture",
+        "typography.families",
+        "typography.numeric",
         "typography.pairing",
+        "typography.role-weights",
         "typography.scale"
       ],
       "family": "guided-draft-form"
@@ -4871,6 +4891,8 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
+        "states.emphasis",
+        "states.focus-style",
         "typography.families",
         "typography.numeric",
         "typography.pairing",
@@ -5595,7 +5617,14 @@
       "decisions": [
         "density.mode",
         "experience.profile",
-        "profiles.expressive"
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "profiles.expressive",
+        "spacing.rhythm",
+        "surfaces.border-style",
+        "surfaces.elevation-posture"
       ],
       "family": "wizard-surface"
     },
