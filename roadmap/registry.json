@@ -6050,6 +6050,11 @@
      "at": "2026-09-18 01:50",
      "by": "kimi-dt",
      "note": "FAM-09 avanza con evidencia de browser: lot 2 integrado (e9e042279 — bifurcacion de paletas eliminada, bridge generado, 25 sitios de app-platform ahora SI reciben paleta tenant; la pierna Chromium mide 18/20 con el unico rojo residual = bar@default, la pregunta Q1 del owner). FAM-10 arranca con el censo medido (evidence/fam10-census): 123 reads sin productor, 155 inline paints, y S1 — el gate de family-cut no VE las familias de surfaces (su medicion es ficcion hoy; sub-lote A en vuelo para reparar el instrumento ANTES de cortar familias)."
+    },
+    {
+     "at": "2026-09-18 06:23",
+     "by": "kimi-dt",
+     "note": "Certificacion de la ola (evidence/wave-certification-2026-09-18): A/B completo contra la base auditada (52 -> 68 rojos, 26 curados, 16 nuevos clasificados). La ventana serializada corrio en el worktree pineado (14960a8ee) y cerro la clase de staleness (artifacts + mount + parity 40/40). Re-pins mecanicos integrados: TreeView drag-handle (la fixture mide el draggable) y probe-roster grid (data-posture). Quedan con dueno: el censo de minting owners de theme-contract-freeze (+26 derivers de la ola — se re-pinea cuando los drafts D/E aterricen para no medir dos veces), la premisa retirada del consumer test (display ya conduce), los rojos por diagnosticar (Input/InputNumber axe, antd bridge, presence, LongTail, Display1/2, FloatButton, CollectionWorkspace) y la particion D3. Todo eso necesita el asiento writer (cuota: 20/09) o tu decision."
     }
    ]
   },
