@@ -17,19 +17,19 @@
   min-inline-size: 0;
   max-inline-size: var(--ds-aspect-ratio-instance-max-width);
   aspect-ratio: var(--ds-aspect-ratio-instance-ratio);
-  overflow: var(--ds-aspect-ratio-clip);
+  overflow: var(--ds-aspect-ratio-clip, var(--ds-aspect-ratio-overflow, hidden));
   box-sizing: border-box;
-  background: var(--ds-aspect-ratio-surface);
-  border: var(--ds-aspect-ratio-frame);
-  border-radius: var(--ds-aspect-ratio-corner);
-  box-shadow: var(--ds-aspect-ratio-depth);
+  background: var(--ds-aspect-ratio-surface, var(--ds-aspect-ratio-background, transparent));
+  border: var(--ds-aspect-ratio-frame, var(--ds-aspect-ratio-border, 0 solid transparent));
+  border-radius: var(--ds-aspect-ratio-corner, var(--ds-aspect-ratio-radius, 0));
+  box-shadow: var(--ds-aspect-ratio-depth, var(--ds-aspect-ratio-shadow, none));
   transition:
-    aspect-ratio var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    max-inline-size var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    border-radius var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    background-color var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    border-color var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing),
-    box-shadow var(--ds-aspect-ratio-transition-duration) var(--ds-aspect-ratio-transition-timing);
+    aspect-ratio var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    max-inline-size var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    border-radius var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    background-color var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    border-color var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out))),
+    box-shadow var(--ds-aspect-ratio-transition-duration, var(--ds-aspect-ratio-motion-duration, var(--ds-motion-resize))) var(--ds-aspect-ratio-transition-timing, var(--ds-aspect-ratio-motion-easing, var(--ds-motion-ease-out)));
 }
 
 /*

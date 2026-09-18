@@ -81,12 +81,12 @@
 }
 
 .rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-gap="uniform"] {
-  gap: var(--ds-flex-gap);
+  gap: var(--ds-flex-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-flex:where(.rottay-flex--classic, .rottay-flex--rustic)[data-gap="split"] {
-  column-gap: var(--ds-flex-column-gap);
-  row-gap: var(--ds-flex-row-gap);
+  column-gap: var(--ds-flex-column-gap, var(--ds-spacing-0, 0px));
+  row-gap: var(--ds-flex-row-gap, var(--ds-spacing-0, 0px));
 }
 
 /* Flex's rhythm-aware preset gaps moved to the Modern skin
@@ -120,7 +120,7 @@
   --_ds-stack-gap-current: var(--ds-spacing-4);
   gap: var(--_ds-stack-gap-current);
   --_ds-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
-  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-inset, 0px);
+  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px));
 }
 
 /* Stack's Modern arm -- the rhythm-scaled rungs and the divider geometry --
@@ -130,7 +130,7 @@
 
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-direction="horizontal"] {
   flex-direction: row;
-  --_ds-stack-divider-gap-block: var(--ds-stack-divider-inset, 0px);
+  --_ds-stack-divider-gap-block: var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px));
   --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
@@ -229,7 +229,7 @@
 /* A consumer's numeric gap is exact geometry: honored as-is, never
    density-scaled. */
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-spacing="custom"] {
-  --_ds-stack-gap-current: var(--ds-stack-gap);
+  --_ds-stack-gap-current: var(--ds-stack-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic)[data-full-width="true"] {
@@ -251,7 +251,7 @@
    axis at every breakpoint. */
 .rottay-stack:where(.rottay-stack--classic, .rottay-stack--rustic) > .rottay-stack-divider[data-part="divider"] {
   align-self: stretch;
-  flex: 0 0 var(--ds-stack-divider-size, 1px);
+  flex: 0 0 var(--ds-stack-divider-size, var(--ds-border-width-1, 1px));
   min-inline-size: 0;
   min-block-size: 0;
   margin-block: var(
@@ -260,7 +260,7 @@
   );
   margin-inline: var(
     --_ds-stack-divider-gap-inline,
-    var(--ds-stack-divider-inset, 0px)
+    var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px))
   );
   background: var(
     --ds-stack-divider-color,

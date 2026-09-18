@@ -179,7 +179,7 @@
   position: relative;
   isolation: isolate;
   inline-size: 100%;
-  margin-block-end: var(--ds-detail-header-root-margin-block-end, 24px);
+  margin-block-end: var(--ds-detail-header-root-margin-block-end, var(--ds-spacing-6, 24px));
   overflow: hidden;
   background: var(--_ds-detail-header-ground);
   /* The family's own channel stays first; the tenant geometry ramp supplies
@@ -245,7 +245,7 @@
 }
 
 .ds-structure.ds-detail-header [data-part='back-button'] {
-  padding: var(--ds-detail-header-back-button-padding, 7px 12px);
+  padding: var(--ds-detail-header-back-button-padding, 7px var(--ds-spacing-3, 12px));
   border-radius: var(--ds-radius-md, 11px);
   background: var(--_ds-detail-header-control-bg);
   box-shadow: var(--_ds-detail-header-control-shadow);
@@ -334,7 +334,7 @@
   object-fit: cover;
 }
 .ds-structure.ds-detail-header [data-part='avatar-initials'][data-part='avatar-initials'][data-part='avatar-initials'] {
-  font-size: var(--ds-detail-header-avatar-initials-size, 24px);
+  font-size: var(--ds-detail-header-avatar-initials-size, var(--ds-font-size-3xl, 24px));
   font-weight: 700;
 }
 
@@ -398,7 +398,7 @@
   line-height: var(--ds-detail-header-subtitle-leading, 1.65);
   /* measure, not width: a character cap follows the type scale, a pixel cap
      does not */
-  max-inline-size: var(--ds-detail-header-subtitle-max-inline-size, 68ch);
+  max-inline-size: var(--ds-detail-header-subtitle-max-inline-size, var(--ds-type-paragraph-measure, 68ch));
 }
 
 .ds-structure.ds-detail-header [data-part='context-rail'] {
@@ -460,7 +460,7 @@
    the second grid motif and the inset highlight are retired; what remains is
    one hairline and the pairs themselves, aligned to the hero's own gutter. */
 .ds-structure.ds-detail-header [data-part='metadata-card'] {
-  margin-block-start: var(--ds-detail-header-metadata-card-margin-block-start, 24px);
+  margin-block-start: var(--ds-detail-header-metadata-card-margin-block-start, var(--ds-spacing-6, 24px));
   padding-block: var(--ds-spacing-4, 16px) 0;
   padding-inline: 0;
   border-radius: 0;
@@ -558,7 +558,7 @@
 
 .ds-structure.ds-detail-header [data-part='tab'] {
   position: relative;
-  padding: var(--ds-detail-header-tab-padding, 10px 12px 12px);
+  padding: var(--ds-detail-header-tab-padding, 10px var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px));
   cursor: pointer;
   border-top-left-radius: var(--ds-radius-md, 10px);
   border-top-right-radius: var(--ds-radius-md, 10px);
@@ -669,7 +669,7 @@
    de-escalate together instead of drifting apart. */
 @container ds-detail-header (max-width: 640px) {
   .ds-structure.ds-detail-header[data-part='root'] {
-    --_ds-detail-header-gutter: var(--ds-detail-header-hero-panel-padding-compact, 20px);
+    --_ds-detail-header-gutter: var(--ds-detail-header-hero-panel-padding-compact, var(--ds-spacing-5, 20px));
   }
   .ds-structure.ds-detail-header[data-part='root'] [data-part='title'] {
     font-size: var(
@@ -681,8 +681,8 @@
     letter-spacing: var(--ds-detail-header-title-tracking-compact, var(--ds-type-page-title-letter-spacing, -0.025em));
   }
   .ds-structure.ds-detail-header [data-part='avatar'] {
-    inline-size: var(--ds-detail-header-avatar-size-compact, 56px);
-    block-size: var(--ds-detail-header-avatar-size-compact, 56px);
+    inline-size: var(--ds-detail-header-avatar-size-compact, var(--ds-spacing-14, 56px));
+    block-size: var(--ds-detail-header-avatar-size-compact, var(--ds-spacing-14, 56px));
   }
   .ds-structure.ds-detail-header [data-part='metadata-card'] {
     padding-block-start: var(--ds-detail-header-metadata-card-padding-compact, 14px);

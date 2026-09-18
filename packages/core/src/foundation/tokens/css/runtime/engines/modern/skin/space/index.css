@@ -17,25 +17,25 @@
   align-items: center;
   min-inline-size: 0;
   max-inline-size: 100%;
-  gap: var(--ds-space-gap);
+  gap: var(--ds-space-gap, var(--ds-space-gap-sm));
   transition:
-    gap var(--ds-space-transition-duration) var(--ds-space-transition-timing),
-    align-items var(--ds-space-transition-duration) var(--ds-space-transition-timing);
+    gap var(--ds-space-transition-duration, var(--ds-space-motion-duration, var(--ds-motion-feedback))) var(--ds-space-transition-timing, var(--ds-space-motion-easing, var(--ds-motion-ease-out))),
+    align-items var(--ds-space-transition-duration, var(--ds-space-motion-duration, var(--ds-motion-feedback))) var(--ds-space-transition-timing, var(--ds-space-motion-easing, var(--ds-motion-ease-out)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-size='small'],
 .ds-space.ds-space--modern[data-part='root'][data-size='sm'] {
-  --ds-space-gap: var(--ds-space-gap-sm);
+  --ds-space-gap: var(--ds-space-gap-sm, calc(var(--ds-space-small-size, var(--ds-spacing-2)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-size='middle'],
 .ds-space.ds-space--modern[data-part='root'][data-size='md'] {
-  --ds-space-gap: var(--ds-space-gap-md);
+  --ds-space-gap: var(--ds-space-gap-md, calc(var(--ds-space-middle-size, var(--ds-spacing-4)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-size='large'],
 .ds-space.ds-space--modern[data-part='root'][data-size='lg'] {
-  --ds-space-gap: var(--ds-space-gap-lg);
+  --ds-space-gap: var(--ds-space-gap-lg, calc(var(--ds-space-large-size, var(--ds-spacing-6)) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-space.ds-space--modern[data-part='root'][data-direction='vertical'] {

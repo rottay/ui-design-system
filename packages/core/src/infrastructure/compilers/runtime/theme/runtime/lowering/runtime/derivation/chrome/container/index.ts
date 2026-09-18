@@ -63,7 +63,7 @@ export function deriveContainerChannels(): Record<string, string> {
   vars["--ds-container-xl"] = "var(--ds-breakpoint-xl)";
   vars["--ds-container-2xl"] = "var(--ds-breakpoint-2xl)";
   vars["--ds-container-measure"] = "var(--ds-container-lg)";
-  vars["--ds-container-padding-none"] = "0";
+  vars["--ds-container-padding-none"] = "var(--ds-spacing-0)";
   vars["--ds-container-padding-sm"] = "calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-container-padding-md"] = "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-container-padding-lg"] = "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))";

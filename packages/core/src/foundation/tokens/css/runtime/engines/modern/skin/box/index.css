@@ -35,55 +35,55 @@
  */
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='xs'] {
-  border-radius: var(--ds-box-corner-xs);
+  border-radius: var(--ds-box-corner-xs, var(--ds-radius-xs));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='sm'] {
-  border-radius: var(--ds-box-corner-sm);
+  border-radius: var(--ds-box-corner-sm, var(--ds-radius-sm));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='md'] {
-  border-radius: var(--ds-box-corner-md);
+  border-radius: var(--ds-box-corner-md, var(--ds-radius-md));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='lg'] {
-  border-radius: var(--ds-box-corner-lg);
+  border-radius: var(--ds-box-corner-lg, var(--ds-radius-lg));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='xl'] {
-  border-radius: var(--ds-box-corner-xl);
+  border-radius: var(--ds-box-corner-xl, var(--ds-radius-xl));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='2xl'] {
-  border-radius: var(--ds-box-corner-2xl);
+  border-radius: var(--ds-box-corner-2xl, var(--ds-radius-2xl));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-radius='full'] {
-  border-radius: var(--ds-box-corner-full);
+  border-radius: var(--ds-box-corner-full, var(--ds-radius-full));
 }
 
 /* Depth rides the DS elevation scale only, so a tenant re-themes it from one place. */
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='xs'] {
-  box-shadow: var(--ds-box-depth-xs);
+  box-shadow: var(--ds-box-depth-xs, var(--ds-elevation-1));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='sm'] {
-  box-shadow: var(--ds-box-depth-sm);
+  box-shadow: var(--ds-box-depth-sm, var(--ds-elevation-2));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='md'] {
-  box-shadow: var(--ds-box-depth-md);
+  box-shadow: var(--ds-box-depth-md, var(--ds-elevation-3));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='lg'] {
-  box-shadow: var(--ds-box-depth-lg);
+  box-shadow: var(--ds-box-depth-lg, var(--ds-elevation-4));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='xl'] {
-  box-shadow: var(--ds-box-depth-xl);
+  box-shadow: var(--ds-box-depth-xl, var(--ds-elevation-5));
 }
 
 .rottay-box.rottay-box--modern[data-part='box-surface'][data-shadow='2xl'] {
-  box-shadow: var(--ds-box-depth-2xl);
+  box-shadow: var(--ds-box-depth-2xl, var(--ds-elevation-6));
 }

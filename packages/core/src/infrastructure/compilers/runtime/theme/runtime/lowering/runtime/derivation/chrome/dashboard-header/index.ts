@@ -96,7 +96,7 @@ export function deriveDashboardHeaderChannels(): Record<string, string> {
   /* The one hairline the header draws: its weight and its ink. The ink is the
      border channel over the neutral ramp -- the alias the skin used to mount
      privately is gone. */
-  vars["--ds-dashboard-header-rule"] = "1px";
+  vars["--ds-dashboard-header-rule"] = "var(--ds-border-width-1, 1px)";
   vars["--ds-dashboard-header-border"] = "var(--ds-color-border-subtle)";
 
   /* The quiet top-down wash: the card material with the primary's faintest
@@ -125,7 +125,7 @@ export function deriveDashboardHeaderChannels(): Record<string, string> {
      that declares the frame channels gets a framed chip back. The rule between
      cells rides the border channel over the neutral ramp. */
   vars["--ds-dashboard-header-metric-bg"] = "none";
-  vars["--ds-dashboard-header-metric-radius"] = "0";
+  vars["--ds-dashboard-header-metric-radius"] = "var(--ds-radius-none, 0)";
   vars["--ds-dashboard-header-metric-icon-color"] = "var(--ds-color-primary)";
   vars["--ds-dashboard-header-metric-rule"] =
     "var(--ds-dashboard-header-border, var(--ds-color-border-subtle))";

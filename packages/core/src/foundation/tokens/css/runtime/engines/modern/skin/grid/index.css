@@ -48,7 +48,7 @@
 /* ---- the uniform gap ---- */
 
 .rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset] {
-  gap: var(--ds-grid-gap);
+  gap: var(--ds-grid-gap, var(--ds-spacing-4, 1rem));
 }
 
 .rottay-grid.rottay-grid--modern[data-component='grid'][data-gap-preset]:where(
@@ -61,7 +61,7 @@
   [data-gap-preset='3xl'],
   [data-gap-preset='4xl']
 ) {
-  gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1));
+  gap: calc(var(--ds-grid-gap, var(--ds-spacing-4, 1rem)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* ---- the split axes ---- */
@@ -113,7 +113,7 @@
 /* ---- reflow: the only motion this primitive owns ---- */
 
 .rottay-grid.rottay-grid--modern[data-component='grid'][data-layout-motion='rearrange'] {
-  transition: var(--ds-grid-reflow-transition);
+  transition: var(--ds-grid-reflow-transition, var(--ds-transition-rearrange));
 }
 
 @media (prefers-reduced-motion: reduce) {

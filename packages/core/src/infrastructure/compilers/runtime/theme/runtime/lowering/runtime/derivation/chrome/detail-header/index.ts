@@ -87,8 +87,8 @@ export function deriveDetailHeaderChannels(): Record<string, string> {
      a portrait that grows with the density dial stops being the identity
      block the hero grid positions against. */
   vars["--ds-detail-header-avatar-size"] = "68px";
-  vars["--ds-detail-header-avatar-size-compact"] = "56px";
-  vars["--ds-detail-header-avatar-initials-size"] = "24px";
+  vars["--ds-detail-header-avatar-size-compact"] = "var(--ds-spacing-14, 56px)";
+  vars["--ds-detail-header-avatar-initials-size"] = "var(--ds-font-size-3xl, 24px)";
 
   /* The hero's display type. Every rung defers to the page-title role the
      C1 wave converged on; the family channel stays first, the role second,
@@ -110,33 +110,33 @@ export function deriveDetailHeaderChannels(): Record<string, string> {
   /* The hero copy around the title. */
   vars["--ds-detail-header-eyebrow-tracking"] = "0.14em";
   vars["--ds-detail-header-subtitle-leading"] = "1.65";
-  vars["--ds-detail-header-subtitle-max-inline-size"] = "68ch";
+  vars["--ds-detail-header-subtitle-max-inline-size"] = "var(--ds-type-paragraph-measure, 68ch)";
   vars["--ds-detail-header-context-rail-margin-block-start"] = "2px";
 
   /* The frame itself: the single dominant card, its gutter and its ground.
      The shadow states the tenant identity chrome chain verbatim, so a
      `--ds-detail-hero-shadow` still wins through the family channel. */
   vars["--ds-detail-header-radius"] = "var(--ds-radius-xl, 22px)";
-  vars["--ds-detail-header-root-margin-block-end"] = "24px";
+  vars["--ds-detail-header-root-margin-block-end"] = "var(--ds-spacing-6, 24px)";
   vars["--ds-detail-header-hero-panel-padding"] = "var(--ds-spacing-6, 24px)";
-  vars["--ds-detail-header-hero-panel-padding-compact"] = "20px";
+  vars["--ds-detail-header-hero-panel-padding-compact"] = "var(--ds-spacing-5, 20px)";
   vars["--ds-detail-header-shadow"] =
     "var(--ds-detail-hero-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent), var(--ds-elevation-1))";
 
   /* The metadata lane. */
-  vars["--ds-detail-header-metadata-card-margin-block-start"] = "24px";
+  vars["--ds-detail-header-metadata-card-margin-block-start"] = "var(--ds-spacing-6, 24px)";
   vars["--ds-detail-header-metadata-card-children-margin-block-start"] = "18px";
   vars["--ds-detail-header-metadata-card-padding-compact"] = "14px";
   vars["--ds-detail-header-metadata-chip-label-tracking"] = "0.12em";
 
   /* The back chip: padding, and the keyboard ring shared with the tab. */
-  vars["--ds-detail-header-back-button-padding"] = "7px 12px";
+  vars["--ds-detail-header-back-button-padding"] = "7px var(--ds-spacing-3, 12px)";
   vars["--ds-detail-header-focus-ring"] =
     "var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent))";
 
   /* The tab strip: a rail, not a folder -- the selection is the rail's paint,
      the active wash stays a tenant opt-in over a transparent ground. */
-  vars["--ds-detail-header-tab-padding"] = "10px 12px 12px";
+  vars["--ds-detail-header-tab-padding"] = "10px var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px)";
   vars["--ds-detail-header-tab-active-bg"] = "transparent";
   vars["--ds-detail-header-tab-count-padding"] = "2px 6px";
   vars["--ds-detail-header-tab-focus-ring"] =

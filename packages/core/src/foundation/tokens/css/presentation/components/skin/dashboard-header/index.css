@@ -110,7 +110,7 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact] {
-  border: var(--ds-dashboard-header-rule, 1px) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -186,7 +186,7 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'] {
-  border: var(--ds-dashboard-header-rule, 1px) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(
       --ds-dashboard-header-icon-border,
       color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-subtle))
@@ -337,7 +337,7 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'] {
-  border-top: var(--ds-dashboard-header-rule, 1px) solid
+  border-top: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -361,7 +361,7 @@
   padding: 0 var(--ds-dashboard-header-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
   /* The chip-frame channels stay reachable but default to nothing: a tenant
      that declares them gets a framed chip back; the default is the cell. */
-  border-radius: var(--ds-dashboard-header-metric-radius, 0);
+  border-radius: var(--ds-dashboard-header-metric-radius, var(--ds-radius-none, 0));
   background: var(--ds-dashboard-header-metric-bg, none);
   gap: var(
     --ds-dashboard-header-gap-hair,
@@ -376,7 +376,7 @@
 
 /* One rule between cells — the readout is a rhythm, not a row of boxes. */
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] + [data-part='metric-chip'] {
-  border-inline-start: var(--ds-dashboard-header-rule, 1px) solid
+  border-inline-start: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
     var(
       --ds-dashboard-header-metric-rule,
       var(--ds-dashboard-header-border, var(--ds-color-border-subtle))

@@ -46,8 +46,9 @@ export function deriveFormSurfaceChannels(): Record<string, string> {
     "calc(8px * var(--ds-rhythm-effective-scale, 1))";
 
   /* The profile-driven Stack already supplies the description's trailing gap,
-     so the channel rests at 0: producing the name moves nothing. */
-  vars["--ds-form-surface-description-margin-block-end"] = "0";
+     so the channel rests at 0, chained to the produced zero rung: the produced
+     `--ds-spacing-0` is itself `0`, so producing the name moves nothing. */
+  vars["--ds-form-surface-description-margin-block-end"] = "var(--ds-spacing-0, 0)";
 
   /* The ruled alert's optical padding on the rhythm plane. */
   vars["--ds-form-surface-error-banner-padding"] =

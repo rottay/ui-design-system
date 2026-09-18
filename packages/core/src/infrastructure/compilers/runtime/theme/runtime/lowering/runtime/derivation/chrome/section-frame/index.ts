@@ -54,7 +54,7 @@ export function deriveSectionFrameChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
 
   vars["--ds-section-frame-padding-block"] = "var(--ds-spacing-10, 2.5rem)";
-  vars["--ds-section-frame-rule-width"] = "1px";
+  vars["--ds-section-frame-rule-width"] = "var(--ds-divider-width, 1px)";
   vars["--ds-section-frame-rule-color"] = "var(--ds-color-hairline)";
 
   vars["--ds-section-frame-label-column-gap"] = "var(--ds-spacing-3, 0.75rem)";

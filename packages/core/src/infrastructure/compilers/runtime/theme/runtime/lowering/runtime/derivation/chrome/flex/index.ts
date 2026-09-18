@@ -32,9 +32,9 @@ export const flexChromeDeriver: FamilyDeriver = {
  */
 export function deriveFlexChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
-  vars["--ds-flex-gap"] = "0px";
-  vars["--ds-flex-column-gap"] = "0px";
-  vars["--ds-flex-row-gap"] = "0px";
+  vars["--ds-flex-gap"] = "var(--ds-spacing-0, 0px)";
+  vars["--ds-flex-column-gap"] = "var(--ds-spacing-0, 0px)";
+  vars["--ds-flex-row-gap"] = "var(--ds-spacing-0, 0px)";
   vars["--ds-flex-reflow-transition"] = "var(--ds-transition-rearrange)";
   return vars;
 }

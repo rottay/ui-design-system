@@ -65,15 +65,15 @@
   position: relative;
   flex-shrink: 0;
   touch-action: none;
-  transition: background var(--ds-splitter-gutter-transition-duration)
-    var(--ds-splitter-gutter-transition-timing);
+  transition: background var(--ds-splitter-gutter-transition-duration, var(--ds-motion-feedback))
+    var(--ds-splitter-gutter-transition-timing, var(--ds-motion-ease-out));
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal'] {
-  inline-size: var(--ds-splitter-gutter-size);
+  inline-size: var(--ds-splitter-gutter-size, calc(0.5rem * var(--ds-density-effective-scale)));
   cursor: col-resize;
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical'] {
-  block-size: var(--ds-splitter-gutter-size);
+  block-size: var(--ds-splitter-gutter-size, calc(0.5rem * var(--ds-density-effective-scale)));
   cursor: row-resize;
 }
 
@@ -84,17 +84,17 @@
         Dragging reads as a primary TINT, never a loud full-strength bar. ---- */
 @media (hover: hover) {
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:hover:not([data-resizable='false']) {
-    background: var(--ds-splitter-gutter-bg-hover);
+    background: var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel))));
   }
 }
 
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:active:not([data-resizable='false']) {
-  background: var(--ds-splitter-gutter-bg-hover);
+  background: var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel))));
 }
 
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true'],
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:hover {
-  background: var(--ds-splitter-gutter-bg-dragging);
+  background: var(--ds-splitter-gutter-bg-dragging, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-material-panel-background, var(--ds-surface-panel))));
 }
 
 /* ---- gutter grip: the always-visible quiet affordance (three-tone hairline
@@ -106,15 +106,15 @@
   inset: 0;
   margin: auto;
   border-radius: var(--ds-radius-full);
-  background: var(--ds-splitter-gutter-grip-color);
+  background: var(--ds-splitter-gutter-grip-color, color-mix(in srgb, var(--ds-color-text-primary) 32%, transparent));
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal']::after {
-  inline-size: var(--ds-splitter-gutter-grip-thickness);
+  inline-size: var(--ds-splitter-gutter-grip-thickness, var(--ds-border-width-2, 2px));
   block-size: var(--ds-splitter-gutter-grip-length);
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical']::after {
   inline-size: var(--ds-splitter-gutter-grip-length);
-  block-size: var(--ds-splitter-gutter-grip-thickness);
+  block-size: var(--ds-splitter-gutter-grip-thickness, var(--ds-border-width-2, 2px));
 }
 
 /* ---- gutter: locked boundary (an adjacent panel is `resizable={false}`;
@@ -133,14 +133,14 @@
   content: none;
 }
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-resizable='false']::after {
-  background: var(--ds-splitter-gutter-grip-color-locked);
+  background: var(--ds-splitter-gutter-grip-color-locked, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent));
 }
 
 /* ---- gutter: keyboard focus ring (the K3-C engine made gutters real
         `role="separator"` tab stops). ---- */
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
-  outline-offset: var(--ds-splitter-gutter-focus-ring-offset);
+  outline-offset: var(--ds-splitter-gutter-focus-ring-offset, var(--ds-edge-hairline-width, 1px));
 }
 
 /* ---- gutter: coarse-pointer hit expansion. The rail keeps its own size in

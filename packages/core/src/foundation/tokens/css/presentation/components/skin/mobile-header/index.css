@@ -175,13 +175,13 @@
 .rottay-mobile-header__bar[data-part='bar'] {
   block-size: 100%;
   position: relative;
-  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
-  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-left, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-right, 0px));
 }
 
 .rottay-mobile-header__bar[data-part='bar']:dir(rtl) {
-  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
-  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-right, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))), env(safe-area-inset-left, 0px));
 }
 
 /* Side slots share the leftover width equally (flex-basis 0 + equal grow), so
@@ -207,7 +207,7 @@
   flex: 0 1 auto;
   overflow: hidden;
   text-align: center;
-  padding-inline: var(--ds-mobile-header-center-padding-inline, 8px);
+  padding-inline: var(--ds-mobile-header-center-padding-inline, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-mobile-header__back[data-part='trigger'] {
@@ -256,7 +256,7 @@
    (an auto minimum would let its content set the header's width). */
 .rottay-mobile-header[data-part='root'] > [data-part='body'] {
   min-inline-size: 0;
-  padding-inline: var(--ds-mobile-header-bar-padding-inline, 4px);
+  padding-inline: var(--ds-mobile-header-bar-padding-inline, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* Title is now a Box as="h1" (the composed Text resolved its size inline,
@@ -273,7 +273,7 @@
   font-size: var(--ds-mobile-header-title-font-size, calc(var(--ds-font-size-lg) * 1.0625));
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: var(--ds-mobile-header-title-line-height, 1.29);
-  letter-spacing: var(--ds-mobile-header-title-tracking, -0.01em);
+  letter-spacing: var(--ds-mobile-header-title-tracking, var(--ds-letter-spacing-subtle, -0.01em));
 }
 
 /* ---- responsive posture: the bar reads its OWN slot, not the viewport, so a

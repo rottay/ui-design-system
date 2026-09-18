@@ -27,7 +27,7 @@ export const gridChromeDeriver: FamilyDeriver = {
  */
 export function deriveGridChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
-  vars["--ds-grid-gap"] = "var(--ds-spacing-4)";
+  vars["--ds-grid-gap"] = "var(--ds-spacing-4, 1rem)";
   vars["--ds-grid-reflow-transition"] = "var(--ds-transition-rearrange)";
   return vars;
 }

@@ -152,8 +152,10 @@ describe('wizard-surface causality surface', () => {
   it('rests every family channel at the single value the skin reads it with', () => {
     // Asserted through the deriver, not the compile: registration is DT-serialized
     // after this lot, so the productive door does not emit these names yet.
+    // The description margin's value STRING chained to the produced zero rung;
+    // it still resolves to 0, so no pixel moved.
     expect(deriveWizardSurfaceChannels()).toEqual({
-      '--ds-wizard-surface-description-margin-block-end': '0',
+      '--ds-wizard-surface-description-margin-block-end': 'var(--ds-spacing-0, 0)',
       '--ds-wizard-surface-error-banner-padding':
         'calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))',
     });

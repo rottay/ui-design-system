@@ -426,7 +426,9 @@ describe("leg -- the SCALAR path is Modern-only too (Finding 3)", () => {
       expect(CSS, rung).toContain(
         `.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='${rung}'] {`
       );
-      expect(CSS, rung).toContain(`--_ds-stack-gap-current: var(--ds-stack-gap-${rung});`);
+      expect(CSS, rung).toContain(
+        `--_ds-stack-gap-current: var(--ds-stack-gap-${rung}, ${DERIVED[`--ds-stack-gap-${rung}`]});`
+      );
     }
     expect(FROZEN_CSS).not.toContain("rottay-stack--modern");
     for (const line of FROZEN_CSS.split("\n")) {
@@ -451,12 +453,22 @@ describe("leg -- the SCALAR path is Modern-only too (Finding 3)", () => {
       "3xl": "12",
       "4xl": "16",
     };
+    const EXPECTED_REST: Record<(typeof RUNGS)[number], string> = {
+      xs: "0.25rem",
+      sm: "0.5rem",
+      md: "1rem",
+      lg: "1.5rem",
+      xl: "2rem",
+      "2xl": "2.5rem",
+      "3xl": "3rem",
+      "4xl": "4rem",
+    };
     for (const rung of RUNGS) {
       expect(DERIVED[`--ds-stack-gap-${rung}`], rung).toBe(
-        `calc(var(--ds-spacing-${EXPECTED_BASE[rung]}) * var(${RHYTHM_CHANNEL}, 1))`
+        `calc(var(--ds-spacing-${EXPECTED_BASE[rung]}, ${EXPECTED_REST[rung]}) * var(${RHYTHM_CHANNEL}, 1))`
       );
     }
-    expect(DERIVED["--ds-stack-gap-none"]).toBe("0");
+    expect(DERIVED["--ds-stack-gap-none"]).toBe("var(--ds-spacing-0, 0)");
   });
 
   it("Modern stamps the --modern class; Classic and Rustic never do", () => {

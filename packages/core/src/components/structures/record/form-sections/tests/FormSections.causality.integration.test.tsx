@@ -270,8 +270,31 @@ describe('form-sections causality surface', () => {
   }, 120_000);
 
   it('states the family channel at the single resting value the deriver produces', () => {
+    // The per-tone tone set is produced at the DEFAULT tone's resting value,
+    // quoted byte-identically to the chained fallback the skin states at each
+    // read site; the [data-tone] arms redeclare every one of them on the
+    // section element, so the four-tone product contract is untouched. Only
+    // the value STRINGS chained to produced roots — no resolved pixel moved.
     expect(deriveFormSectionsChannels()).toEqual({
+      '--ds-form-sections-accent':
+        'color-mix(in srgb, var(--ds-color-text-secondary) 14%, transparent)',
+      '--ds-form-sections-accent-secondary':
+        'color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)',
+      '--ds-form-sections-active-border': 'var(--ds-color-border)',
+      '--ds-form-sections-badge-bg': 'var(--ds-color-bg-secondary)',
+      '--ds-form-sections-badge-border': 'var(--ds-color-border-secondary)',
+      '--ds-form-sections-border': 'var(--ds-color-border-secondary)',
+      '--ds-form-sections-divider':
+        'color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)',
       '--ds-form-sections-facts-title-font-size': '17px',
+      '--ds-form-sections-grid-color':
+        'color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)',
+      '--ds-form-sections-muted-surface':
+        'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%)',
+      '--ds-form-sections-shadow':
+        'var(--ds-material-raised-shadow-selected, 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent))',
+      '--ds-form-sections-surface':
+        'var(--ds-surface-card, var(--ds-color-bg-elevated))',
     });
   });
 

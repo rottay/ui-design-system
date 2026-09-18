@@ -29,7 +29,7 @@
   padding-inline: 0;
   color: var(--ds-surface-fg, currentColor);
   border-block-start:
-    var(--ds-section-frame-rule-width, 1px) solid
+    var(--ds-section-frame-rule-width, var(--ds-divider-width, 1px)) solid
     var(--ds-section-frame-rule-color, var(--ds-color-hairline));
 }
 

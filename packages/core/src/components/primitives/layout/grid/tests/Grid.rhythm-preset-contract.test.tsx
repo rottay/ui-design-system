@@ -107,7 +107,7 @@ describe("leg 1 -- a preset rung scales with rhythm", () => {
     expect(CSS).toContain("[data-gap-preset]:where(");
     // The shared sheet keeps no Grid rule at all now.
     expect(SHARED_CSS).not.toContain(".rottay-grid");
-    expect(CSS).toContain(`gap: calc(var(--ds-grid-gap) * var(${RHYTHM}, 1))`);
+    expect(CSS).toContain(`gap: calc(var(--ds-grid-gap, var(--ds-spacing-4, 1rem)) * var(${RHYTHM}, 1))`);
     for (const rung of RUNGS) {
       expect(CSS, rung).toContain(`[data-gap-preset='${rung}']`);
     }
@@ -268,7 +268,7 @@ describe("leg 4 -- a preset AXIS rung scales with rhythm, like the uniform one",
   it("sorts the axis rules AFTER the uniform gap rules, so an axis still overrides", () => {
     // An axis longhand and the `gap` shorthand tie at (0,2,0); source order is
     // the whole mechanism behind `columnGap` overriding `gap`.
-    const uniform = CSS.indexOf(`gap: calc(var(--ds-grid-gap) * var(${RHYTHM}`);
+    const uniform = CSS.indexOf(`gap: calc(var(--ds-grid-gap, var(--ds-spacing-4, 1rem)) * var(${RHYTHM}`);
     expect(uniform).toBeGreaterThan(-1);
     expect(CSS.indexOf("[data-column-gap-preset] {")).toBeGreaterThan(uniform);
     expect(CSS.indexOf("[data-row-gap-preset] {")).toBeGreaterThan(uniform);
@@ -416,7 +416,7 @@ describe("leg 8 -- the axis fix is provably Modern-only", () => {
 
   it("scopes every scaled gap rule to the modern engine class", () => {
     for (const declaration of [
-      `gap: calc(var(--ds-grid-gap) * var(${RHYTHM}, 1))`,
+      `gap: calc(var(--ds-grid-gap, var(--ds-spacing-4, 1rem)) * var(${RHYTHM}, 1))`,
       `column-gap: calc(var(--_ds-grid-column-gap) * var(${RHYTHM}, 1))`,
       `row-gap: calc(var(--_ds-grid-row-gap) * var(${RHYTHM}, 1))`,
     ]) {
@@ -437,7 +437,7 @@ describe("leg 8 -- the axis fix is provably Modern-only", () => {
     // onto the read-only engines and was the latent hazard the `:where()` scope
     // was added to close.
     for (const declaration of [
-      "gap: var(--ds-grid-gap)",
+      "gap: var(--ds-grid-gap, var(--ds-spacing-4, 1rem))",
       "column-gap: var(--_ds-grid-column-gap)",
       "row-gap: var(--_ds-grid-row-gap)",
     ]) {
@@ -488,7 +488,7 @@ describe("leg 9 -- the tri-stop rhythm law: 0.85 / 1 / 1.2, monotonicity, exact 
 
   it("EXACT REMOVAL: `normal` is the identity factor the CSS fallback already defaults to", () => {
     expect(TENANT_THEME_RHYTHM_FACTORS.normal).toBe(1);
-    expect(CSS).toContain(`gap: calc(var(--ds-grid-gap) * var(${RHYTHM}, 1))`);
+    expect(CSS).toContain(`gap: calc(var(--ds-grid-gap, var(--ds-spacing-4, 1rem)) * var(${RHYTHM}, 1))`);
     // The base magnitude a caller's rung resolves to is untouched by rhythm
     // -- only wrapped. GAP_MAP (leg 1's own channel source) and the calc()
     // wrapper's left operand are fed by the identical map.

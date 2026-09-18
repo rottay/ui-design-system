@@ -17,39 +17,39 @@
   min-inline-size: 0;
   box-sizing: border-box;
   /* Logical, so `data-fluid` below actually lifts the cap and RTL stays neutral. */
-  max-inline-size: var(--ds-container-measure);
-  padding: var(--ds-container-pad);
-  background: var(--ds-container-surface);
-  border: var(--ds-container-frame);
-  border-radius: var(--ds-container-corner);
-  box-shadow: var(--ds-container-depth);
+  max-inline-size: var(--ds-container-measure, var(--ds-container-lg));
+  padding: var(--ds-container-pad, var(--ds-container-padding-md));
+  background: var(--ds-container-surface, var(--ds-container-background, transparent));
+  border: var(--ds-container-frame, var(--ds-container-border, 0 solid transparent));
+  border-radius: var(--ds-container-corner, var(--ds-container-radius, 0));
+  box-shadow: var(--ds-container-depth, var(--ds-container-shadow, none));
   transition:
-    max-inline-size var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    padding var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    margin var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    background-color var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    border-color var(--ds-container-transition-duration) var(--ds-container-transition-timing),
-    box-shadow var(--ds-container-transition-duration) var(--ds-container-transition-timing);
+    max-inline-size var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    padding var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    margin var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    background-color var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    border-color var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out))),
+    box-shadow var(--ds-container-transition-duration, var(--ds-container-motion-duration, var(--ds-motion-resize))) var(--ds-container-transition-timing, var(--ds-container-motion-easing, var(--ds-motion-ease-out)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='sm'] {
-  --ds-container-measure: var(--ds-container-sm);
+  --ds-container-measure: var(--ds-container-sm, var(--ds-breakpoint-sm));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='md'] {
-  --ds-container-measure: var(--ds-container-md);
+  --ds-container-measure: var(--ds-container-md, var(--ds-breakpoint-md));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='lg'] {
-  --ds-container-measure: var(--ds-container-lg);
+  --ds-container-measure: var(--ds-container-lg, var(--ds-breakpoint-lg));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='xl'] {
-  --ds-container-measure: var(--ds-container-xl);
+  --ds-container-measure: var(--ds-container-xl, var(--ds-breakpoint-xl));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='2xl'] {
-  --ds-container-measure: var(--ds-container-2xl);
+  --ds-container-measure: var(--ds-container-2xl, var(--ds-breakpoint-2xl));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-max-width='full'],
@@ -58,19 +58,19 @@
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='none'] {
-  --ds-container-pad: var(--ds-container-padding-none);
+  --ds-container-pad: var(--ds-container-padding-none, var(--ds-spacing-0));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='sm'] {
-  --ds-container-pad: var(--ds-container-padding-sm);
+  --ds-container-pad: var(--ds-container-padding-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='md'] {
-  --ds-container-pad: var(--ds-container-padding-md);
+  --ds-container-pad: var(--ds-container-padding-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-padding='lg'] {
-  --ds-container-pad: var(--ds-container-padding-lg);
+  --ds-container-pad: var(--ds-container-padding-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-container.ds-container--modern[data-part='root'][data-centered='true'] {

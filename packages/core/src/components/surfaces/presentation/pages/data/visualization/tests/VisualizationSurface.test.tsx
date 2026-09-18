@@ -244,7 +244,7 @@ describe('VisualizationSurface', () => {
       lineLegend.querySelector<HTMLElement>('[data-part="legend-item"]')?.style.gap
     ).toBe('');
     expect(chartFoundationCss).toMatch(
-      /\[data-part='legend'\]\s*\{[\s\S]*?gap:\s*var\(--ds-chart-legend-gap, 16px\)/
+      /\[data-part='legend'\]\s*\{[\s\S]*?gap:\s*var\(--ds-chart-legend-gap, var\(--ds-spacing-4, 16px\)\)/
     );
     expect(chartFoundationCss).toMatch(
       /\[data-part='legend-item'\]\s*\{[\s\S]*?gap:\s*var\(--ds-chart-legend-item-gap, 6px\)/

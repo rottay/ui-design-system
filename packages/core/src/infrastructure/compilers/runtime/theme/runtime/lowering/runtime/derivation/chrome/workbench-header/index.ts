@@ -1,7 +1,7 @@
 /**
  * @fileoverview The `workbench-header` channels the Modern skin read with no
- * producer: the card ground, the identity tile's size and the action rail's
- * glass opt-in.
+ * producer: the preset room tiers (padding, section/item/action gaps), the
+ * card ground, the identity tile's size and the action rail's glass opt-in.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/workbench-header
  * @category Compilers
@@ -32,9 +32,13 @@ export const workbenchHeaderChromeDeriver: FamilyDeriver = {
     "typography.scale",
   ],
   produces: [
+    "--ds-workbench-header-action-gap",
     "--ds-workbench-header-actions-backdrop",
     "--ds-workbench-header-bg",
     "--ds-workbench-header-icon-size",
+    "--ds-workbench-header-item-gap",
+    "--ds-workbench-header-padding",
+    "--ds-workbench-header-section-gap",
   ],
   derive: () => deriveWorkbenchHeaderChannels(),
 };
@@ -50,7 +54,23 @@ export function deriveWorkbenchHeaderChannels(): Record<string, string> {
      is the identity tile's ink. */
   vars["--ds-workbench-header-bg"] = "var(--ds-card-header-bg)";
 
-  vars["--ds-workbench-header-icon-size"] = "40px";
+  /* Room channels are PRESET tiers: each produced value is verbatim the fallback
+     the skin states at its read sites, so the rhythm axis still mounts once at
+     the root declaration and producing the name cannot move a pixel. The gap
+     channels state the same words the cockpit-header deriver states them, for
+     the same reason the ground does. */
+  vars["--ds-workbench-header-padding"] =
+    "calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-workbench-header-section-gap"] =
+    "calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-workbench-header-item-gap"] =
+    "var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)))";
+  vars["--ds-workbench-header-action-gap"] =
+    "calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))";
+
+  /* The identity tile is the 40px spacing step; the literal tail is the resting
+     value the skin already resolved to. */
+  vars["--ds-workbench-header-icon-size"] = "var(--ds-spacing-10, 40px)";
 
   /* Glass is opt-in: a default-ON backdrop blur taxes every scroll frame. */
   vars["--ds-workbench-header-actions-backdrop"] = "none";

@@ -398,7 +398,7 @@
   letter-spacing: var(--ds-collection-header-subtitle-tracking-technical, 0.135em);
 }
 .ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-subtitle-treatment='mono-technical'][data-compact-layout='true'] {
-  letter-spacing: var(--ds-collection-header-subtitle-tracking-compact-technical, 0.05em);
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-compact-technical, var(--ds-letter-spacing-wider, 0.05em));
 }
 .ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-subtitle-treatment='mono-technical']:not([data-compact-layout='true']) {
   letter-spacing: var(--ds-collection-header-subtitle-tracking-code, var(--ds-type-code-letter-spacing, 0.09em));
@@ -474,7 +474,7 @@
 .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='editorial-tech'] {
   margin-block-start: var(--ds-collection-header-subtitle-row-gap-editorial, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
   max-inline-size: var(--ds-collection-header-subtitle-row-measure-editorial, 760px);
-  gap: var(--ds-collection-header-subtitle-row-inline-gap-editorial, 12px);
+  gap: var(--ds-collection-header-subtitle-row-inline-gap-editorial, var(--ds-spacing-3, 12px));
 }
 
 /* action partition divider: the hairline seam between the dominant primary
@@ -558,7 +558,7 @@
   max-inline-size: 100%;
   border-radius: var(--ds-radius-md, 8px);
   /* Glass is opt-in (default none): PT29/PT32 fix, Sheet glass precedent. */
-  backdrop-filter: var(--ds-collection-header-actions-backdrop, none);
+  backdrop-filter: var(--ds-collection-header-actions-backdrop, var(--ds-dashboard-header-actions-backdrop, none));
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
@@ -652,7 +652,7 @@
   border-radius: var(--ds-collection-header-keycap-radius, var(--ds-kbd-radius, var(--ds-radius-sm, 4px)));
   font-family: var(--ds-collection-header-keycap-family, var(--ds-kbd-font-family, var(--ds-font-family-mono)));
   font-size: var(--ds-collection-header-keycap-size, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
-  font-weight: var(--ds-collection-header-keycap-weight, var(--ds-kbd-font-weight, 500));
+  font-weight: var(--ds-collection-header-keycap-weight, var(--ds-font-weight-medium, 500));
   line-height: 1;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
@@ -665,7 +665,7 @@
    `data-part` ancestor buys the fourth unit over the tenant border floor. */
 .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
   border: var(--ds-edge-hairline-width, 1px) solid var(--ds-collection-header-keycap-frame, var(--ds-kbd-frame, var(--ds-color-border)));
-  border-block-end-width: var(--ds-collection-header-keycap-depth-width, var(--ds-kbd-depth-width, 2px));
+  border-block-end-width: var(--ds-collection-header-keycap-depth-width, var(--ds-border-width-2, 2px));
   border-block-end-color: var(
     --ds-kbd-depth,
     color-mix(in srgb, var(--ds-collection-header-keycap-frame, var(--ds-kbd-frame, var(--ds-color-border))) 72%, var(--ds-color-neutral-900) 28%)

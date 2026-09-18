@@ -75,7 +75,7 @@
   container-name: ds-cockpit-header;
   /* Layout migrated from the engine (R2+R3): full padding, with the compact
      and sticky variants keyed on the engine's data hooks below. */
-  padding: var(--ds-cockpit-header-padding);
+  padding: var(--ds-cockpit-header-padding, calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
   transition:
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -83,12 +83,12 @@
     padding var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] {
-  padding: var(--ds-cockpit-header-padding-compact);
+  padding: var(--ds-cockpit-header-padding-compact, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true'] {
   position: sticky;
   top: var(--ds-cockpit-header-sticky-top, env(safe-area-inset-top, 0px));
-  z-index: var(--ds-cockpit-header-sticky-z, 100);
+  z-index: var(--ds-cockpit-header-sticky-z, var(--ds-z-affix, 100));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
@@ -143,6 +143,9 @@
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
+  /* Rootless by measurement: the produced spacing rung recomputes under the
+     density dial (37.5px in the measured arm), and the tile's 40px identity
+     never moves. The channel stays produced at the same literal. */
   width: var(--ds-cockpit-header-icon-size, 40px);
   height: var(--ds-cockpit-header-icon-size, 40px);
   place-items: center;
@@ -246,7 +249,7 @@
   display: flex;
   align-items: center;
   gap: var(--ds-spacing-2, 8px);
-  margin-block-end: var(--ds-cockpit-header-item-gap);
+  margin-block-end: var(--ds-cockpit-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-body);
 }
@@ -310,14 +313,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-cockpit-header-section-gap);
+  gap: var(--ds-cockpit-header-section-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='lead'] {
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--ds-cockpit-header-item-gap);
+  gap: var(--ds-cockpit-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
   min-width: 0;
 }
 
@@ -330,7 +333,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--ds-cockpit-header-item-gap);
+  gap: var(--ds-cockpit-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status-list'] {
@@ -343,7 +346,7 @@
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: var(--ds-cockpit-header-action-gap);
+  gap: var(--ds-cockpit-header-action-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- back button wrapper (migrated from the engine, R2+R3) ---- */

@@ -47,25 +47,27 @@ export const stackChromeDeriver: FamilyDeriver = {
  */
 export function deriveStackChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
-  const rung = (step: string) =>
-    `calc(var(--ds-spacing-${step}) * var(--ds-rhythm-effective-scale, 1))`;
+  const rung = (step: string, rest: string) =>
+    `calc(var(--ds-spacing-${step}, ${rest}) * var(--ds-rhythm-effective-scale, 1))`;
 
-  vars["--ds-stack-gap-none"] = "0";
-  vars["--ds-stack-gap-xs"] = rung("1");
-  vars["--ds-stack-gap-sm"] = rung("2");
-  vars["--ds-stack-gap-md"] = rung("4");
-  vars["--ds-stack-gap-lg"] = rung("6");
-  vars["--ds-stack-gap-xl"] = rung("8");
-  vars["--ds-stack-gap-2xl"] = rung("10");
-  vars["--ds-stack-gap-3xl"] = rung("12");
-  vars["--ds-stack-gap-4xl"] = rung("16");
-  vars["--ds-stack-gap"] = "0px";
+  vars["--ds-stack-gap-none"] = "var(--ds-spacing-0, 0)";
+  vars["--ds-stack-gap-xs"] = rung("1", "0.25rem");
+  vars["--ds-stack-gap-sm"] = rung("2", "0.5rem");
+  vars["--ds-stack-gap-md"] = rung("4", "1rem");
+  vars["--ds-stack-gap-lg"] = rung("6", "1.5rem");
+  vars["--ds-stack-gap-xl"] = rung("8", "2rem");
+  vars["--ds-stack-gap-2xl"] = rung("10", "2.5rem");
+  vars["--ds-stack-gap-3xl"] = rung("12", "3rem");
+  vars["--ds-stack-gap-4xl"] = rung("16", "4rem");
+  vars["--ds-stack-gap"] = "var(--ds-spacing-0, 0px)";
 
-  vars["--ds-stack-divider-thickness"] = "var(--ds-stack-divider-size, 1px)";
+  vars["--ds-stack-divider-thickness"] =
+    "var(--ds-stack-divider-size, var(--ds-border-width-1, 1px))";
   vars["--ds-stack-divider-ink"] =
     "var(--ds-stack-divider-color, var(--ds-color-border-subtle))";
   vars["--ds-stack-divider-veil"] = "var(--ds-stack-divider-opacity, 0.72)";
-  vars["--ds-stack-divider-gutter"] = "var(--ds-stack-divider-inset, 0px)";
+  vars["--ds-stack-divider-gutter"] =
+    "var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px))";
   vars["--ds-stack-reflow-transition"] = "var(--ds-transition-rearrange)";
   return vars;
 }

@@ -92,7 +92,7 @@ export function deriveDividerChannels(
   vars["--ds-divider-gap"] =
     "var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))";
 
-  vars["--ds-divider-inset-none"] = "0";
+  vars["--ds-divider-inset-none"] = "var(--ds-spacing-0, 0)";
   vars["--ds-divider-inset-xs"] = inset("--ds-spacing-1");
   vars["--ds-divider-inset-sm"] = inset("--ds-spacing-2");
   vars["--ds-divider-inset-md"] = inset("--ds-spacing-4");

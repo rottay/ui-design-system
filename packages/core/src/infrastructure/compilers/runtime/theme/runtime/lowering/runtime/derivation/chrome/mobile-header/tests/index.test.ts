@@ -74,8 +74,8 @@ describe("chrome/mobile-header", () => {
     expect([...mobileHeaderChromeDeriver.produces]).not.toContain(
       "--ds-mobile-header-safe-area"
     );
-    expect(skinFallbacks("--ds-mobile-header-safe-area")).toEqual([
-      "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
+    expect(skinFallbacks("--ds-safe-area-top")).toEqual([
+      "env(safe-area-inset-top, 0px)",
     ]);
   });
 

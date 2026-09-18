@@ -194,8 +194,8 @@
    the only box-shadow in the family. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'] {
   border-radius: var(--ds-radius-xl, 18px);
-  border: 1px solid var(--ds-form-sections-border);
-  background: var(--ds-form-sections-muted-surface);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -204,15 +204,15 @@
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'][data-open='true'] {
-  border-color: var(--ds-form-sections-active-border);
-  background: var(--ds-form-sections-surface);
-  box-shadow: var(--ds-form-sections-shadow);
+  border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
+  background: var(--ds-form-sections-surface, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  box-shadow: var(--ds-form-sections-shadow, var(--ds-material-raised-shadow-selected, 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'] {
   border-radius: var(--ds-radius-xl, 18px);
-  border: 1px solid var(--ds-form-sections-border);
-  background: var(--ds-form-sections-muted-surface);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
+  background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -230,7 +230,7 @@
    Divider grammar channels: ruled/dashed tenant divider postures reach the
    separator; floors keep the exact 1px solid pre-wave render. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child) {
-  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider);
+  border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* Section-level error (C-12): on framed appearances the shell takes the error
@@ -252,13 +252,13 @@
   color: var(--ds-color-text-primary);
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 62%, transparent);
   background-image:
-    radial-gradient(circle at 12% 14%, var(--ds-form-sections-accent) 0%, transparent 48%),
-    radial-gradient(circle at 84% 0%, var(--ds-form-sections-accent-secondary) 0%, transparent 30%),
+    radial-gradient(circle at 12% 14%, var(--ds-form-sections-accent, color-mix(in srgb, var(--ds-color-text-secondary) 14%, transparent)) 0%, transparent 48%),
+    radial-gradient(circle at 84% 0%, var(--ds-form-sections-accent-secondary, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)) 0%, transparent 30%),
     radial-gradient(circle at 70% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
     linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
     linear-gradient(180deg, transparent 0%, transparent 34%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 36%, transparent) 100%),
-    linear-gradient(var(--ds-form-sections-grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--ds-form-sections-grid-color) 1px, transparent 1px);
+    linear-gradient(var(--ds-form-sections-grid-color, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-form-sections-grid-color, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)) 1px, transparent 1px);
   background-size:
     100% 100%,
     100% 100%,
@@ -288,7 +288,7 @@
    only worked while the header itself was the button. The rule rides the tenant
    divider grammar (floors 1px solid). */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'][data-collapsible='false'] {
-  border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider);
+  border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* The header is a row: the disclosure takes the measure, the trailing cluster
@@ -358,18 +358,18 @@
   font-size: var(--ds-font-size-2xs);
   font-weight: 700;
   border-radius: var(--ds-radius-md, 9px);
-  border: 1px solid var(--ds-form-sections-border);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: transparent;
   color: var(--ds-color-text-tertiary);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'] {
-  border-color: var(--ds-form-sections-active-border);
-  background: var(--ds-form-sections-muted-surface);
+  border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
+  background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'] {
-  border-color: var(--ds-form-sections-divider);
+  border-color: var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
   background: transparent;
 }
 
@@ -405,8 +405,8 @@
   overflow: hidden;
   white-space: nowrap;
   border-radius: 999px;
-  border: 1px solid var(--ds-form-sections-badge-border);
-  background: var(--ds-form-sections-badge-bg);
+  border: 1px solid var(--ds-form-sections-badge-border, var(--ds-color-border-secondary));
+  background: var(--ds-form-sections-badge-bg, var(--ds-color-bg-secondary));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary-text'] {
@@ -482,17 +482,17 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--ds-radius-md, 9px);
-  border: 1px solid var(--ds-form-sections-border);
+  border: 1px solid var(--ds-form-sections-border, var(--ds-color-border-secondary));
   background: transparent;
   transform: rotate(0deg);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
-  border-color: var(--ds-form-sections-active-border);
+  border-color: var(--ds-form-sections-active-border, var(--ds-color-border));
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'] {
-  border-color: var(--ds-form-sections-divider);
+  border-color: var(--ds-form-sections-divider, color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent));
 }
 
 /* Part repeated so this OUTRANKS the resting `rotate(0deg)` above rather than

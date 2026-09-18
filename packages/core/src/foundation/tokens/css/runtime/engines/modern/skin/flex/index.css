@@ -102,12 +102,12 @@
 /* ---- gap: the unscaled base, then the rung that rhythm may size ---- */
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='uniform'] {
-  gap: var(--ds-flex-gap);
+  gap: var(--ds-flex-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split'] {
-  column-gap: var(--ds-flex-column-gap);
-  row-gap: var(--ds-flex-row-gap);
+  column-gap: var(--ds-flex-column-gap, var(--ds-spacing-0, 0px));
+  row-gap: var(--ds-flex-row-gap, var(--ds-spacing-0, 0px));
 }
 
 /*
@@ -125,7 +125,7 @@
   [data-gap-preset='3xl'],
   [data-gap-preset='4xl']
 ) {
-  gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));
+  gap: calc(var(--ds-flex-gap, var(--ds-spacing-0, 0px)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
@@ -138,7 +138,7 @@
   [data-column-gap-preset='3xl'],
   [data-column-gap-preset='4xl']
 ) {
-  column-gap: calc(var(--ds-flex-column-gap) * var(--ds-rhythm-effective-scale, 1));
+  column-gap: calc(var(--ds-flex-column-gap, var(--ds-spacing-0, 0px)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-gap='split']:where(
@@ -151,13 +151,13 @@
   [data-row-gap-preset='3xl'],
   [data-row-gap-preset='4xl']
 ) {
-  row-gap: calc(var(--ds-flex-row-gap) * var(--ds-rhythm-effective-scale, 1));
+  row-gap: calc(var(--ds-flex-row-gap, var(--ds-spacing-0, 0px)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
 .rottay-flex.rottay-flex--modern[data-component='flex'][data-layout-motion='rearrange'] {
-  transition: var(--ds-flex-reflow-transition);
+  transition: var(--ds-flex-reflow-transition, var(--ds-transition-rearrange));
 }
 
 @media (prefers-reduced-motion: reduce) {

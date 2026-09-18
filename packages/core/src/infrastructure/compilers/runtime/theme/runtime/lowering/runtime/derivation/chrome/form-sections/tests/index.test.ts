@@ -1,9 +1,11 @@
 /**
  * The `form-sections` vocabulary at rest: every channel equals the one fallback
  * its Modern skin reads it with, so producing the name cannot move a pixel,
- * and any higher-ranked statement still wins. The per-tone names the skin
- * DECLARES (rather than reads) stay this deriver's non-producers: a second
- * authority there would flatten the tone contract.
+ * and any higher-ranked statement still wins. The per-tone names are produced
+ * at the DEFAULT tone's resting value: the skin's `[data-tone]` arms
+ * redeclare each of them on the section element and outrank this derived
+ * statement, so the tone contract stands; `--ds-form-sections-grid-size` is
+ * deliberately not produced (no spacing rung equals 26/22/24px).
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -77,7 +79,7 @@ describe("chrome/form-sections", () => {
     }
   });
 
-  it("does not produce the names the skin declares per tone arm", () => {
+  it("produces the per-tone names at the default tone's resting value", () => {
     const derived = formSectionsChromeDeriver.derive(context(), {});
     for (const name of [
       "--ds-form-sections-surface",
@@ -90,10 +92,13 @@ describe("chrome/form-sections", () => {
       "--ds-form-sections-accent",
       "--ds-form-sections-accent-secondary",
       "--ds-form-sections-grid-color",
-      "--ds-form-sections-grid-size",
+      "--ds-form-sections-shadow",
     ]) {
-      expect(derived[name], name).toBeUndefined();
+      expect(typeof derived[name], name).toBe("string");
     }
+    /* The header grid tile is a structural constant: no produced spacing rung
+       equals the per-tone 26/22/24px, so the name stays unproduced. */
+    expect(derived["--ds-form-sections-grid-size"]).toBeUndefined();
   });
 
   it("does not produce the material lane's routed channel", () => {

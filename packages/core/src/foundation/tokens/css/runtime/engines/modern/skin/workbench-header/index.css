@@ -80,7 +80,7 @@
   container-type: inline-size;
   container-name: ds-workbench-header;
   /* Layout migrated from the engine (R2+R3). */
-  padding: var(--ds-workbench-header-padding);
+  padding: var(--ds-workbench-header-padding, calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
 }
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-loading] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
@@ -95,8 +95,8 @@
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
-  width: var(--ds-workbench-header-icon-size, 40px);
-  height: var(--ds-workbench-header-icon-size, 40px);
+  width: var(--ds-workbench-header-icon-size, var(--ds-spacing-10, 40px));
+  height: var(--ds-workbench-header-icon-size, var(--ds-spacing-10, 40px));
   place-items: center;
   border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg);
@@ -253,14 +253,14 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--ds-workbench-header-section-gap);
+  gap: var(--ds-workbench-header-section-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-pattern-workbench-header.ds-engine-modern [data-part='lead'] {
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--ds-workbench-header-item-gap);
+  gap: var(--ds-workbench-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
   min-width: 0;
 }
 
@@ -272,7 +272,7 @@
 .ds-pattern-workbench-header.ds-engine-modern [data-part='title-row'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-workbench-header-item-gap);
+  gap: var(--ds-workbench-header-item-gap, var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))));
 }
 
 .ds-pattern-workbench-header.ds-engine-modern [data-part='actions'] {
@@ -280,7 +280,7 @@
   flex-shrink: 0;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--ds-workbench-header-action-gap);
+  gap: var(--ds-workbench-header-action-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- quick action geometry: the Button carries the part, so the rail's
@@ -353,7 +353,7 @@
   display: flex;
   align-items: center;
   gap: var(--ds-tabs-gap);
-  margin-block-start: var(--ds-workbench-header-section-gap);
+  margin-block-start: var(--ds-workbench-header-section-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 @container ds-workbench-header (max-width: 640px) {

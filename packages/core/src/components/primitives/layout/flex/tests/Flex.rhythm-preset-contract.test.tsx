@@ -87,14 +87,14 @@ describe("leg 1 -- a preset rung scales with rhythm", () => {
       expect(CSS, rung).toContain(`[data-gap-preset='${rung}']`);
     }
     expect(CSS).toContain(
-      `gap: calc(var(--ds-flex-gap) * var(${RHYTHM}, 1))`
+      `gap: calc(var(--ds-flex-gap, var(--ds-spacing-0, 0px)) * var(${RHYTHM}, 1))`
     );
     // Split axes are separate rules: [column, row] may mix a rung with a number.
     expect(CSS).toContain(
-      `column-gap: calc(var(--ds-flex-column-gap) * var(${RHYTHM}, 1))`
+      `column-gap: calc(var(--ds-flex-column-gap, var(--ds-spacing-0, 0px)) * var(${RHYTHM}, 1))`
     );
     expect(CSS).toContain(
-      `row-gap: calc(var(--ds-flex-row-gap) * var(${RHYTHM}, 1))`
+      `row-gap: calc(var(--ds-flex-row-gap, var(--ds-spacing-0, 0px)) * var(${RHYTHM}, 1))`
     );
   });
 
@@ -482,7 +482,7 @@ describe("leg 7 -- the tri-stop rhythm law: 0.85 / 1 / 1.2, monotonicity, exact 
 
   it("EXACT REMOVAL: `normal` is the identity factor the CSS fallback already defaults to", () => {
     expect(TENANT_THEME_RHYTHM_FACTORS.normal).toBe(1);
-    expect(CSS).toContain(`gap: calc(var(--ds-flex-gap) * var(${RHYTHM}, 1))`);
+    expect(CSS).toContain(`gap: calc(var(--ds-flex-gap, var(--ds-spacing-0, 0px)) * var(${RHYTHM}, 1))`);
     // The base magnitude a caller's rung resolves to is untouched by rhythm
     // -- only wrapped. resolveFlexGapValue (leg 1's own channel source) and
     // the calc() wrapper's operand are the SAME text.

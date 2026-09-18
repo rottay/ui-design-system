@@ -23,11 +23,11 @@
   align-items: center;
   align-self: stretch;
   min-inline-size: 0;
-  gap: var(--ds-divider-gap);
+  gap: var(--ds-divider-gap, var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))));
   transition:
-    gap var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
-    margin var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
-    opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);
+    gap var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out))),
+    margin var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out))),
+    opacity var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out)));
 }
 
 /* ---- orientation: the axis, the box it hugs, and the inset it keeps ---- */
@@ -37,7 +37,7 @@
   inline-size: 100%;
   block-size: auto;
   min-block-size: 0;
-  margin-block: var(--ds-divider-inset);
+  margin-block: var(--ds-divider-inset, var(--ds-divider-inset-md));
   margin-inline: 0;
 }
 
@@ -54,33 +54,33 @@
   block-size: 100%;
   min-block-size: var(--ds-divider-vertical-min);
   margin-block: 0;
-  margin-inline: var(--ds-divider-inset);
+  margin-inline: var(--ds-divider-inset, var(--ds-divider-inset-md));
 }
 
 /* ---- inset rungs ---- */
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='none'] {
-  --ds-divider-inset: var(--ds-divider-inset-none);
+  --ds-divider-inset: var(--ds-divider-inset-none, var(--ds-spacing-0, 0));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xs'] {
-  --ds-divider-inset: var(--ds-divider-inset-xs);
+  --ds-divider-inset: var(--ds-divider-inset-xs, calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='sm'] {
-  --ds-divider-inset: var(--ds-divider-inset-sm);
+  --ds-divider-inset: var(--ds-divider-inset-sm, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='md'] {
-  --ds-divider-inset: var(--ds-divider-inset-md);
+  --ds-divider-inset: var(--ds-divider-inset-md, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='lg'] {
-  --ds-divider-inset: var(--ds-divider-inset-lg);
+  --ds-divider-inset: var(--ds-divider-inset-lg, calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-spacing='xl'] {
-  --ds-divider-inset: var(--ds-divider-inset-xl);
+  --ds-divider-inset: var(--ds-divider-inset-xl, calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- the hairline ---- */
@@ -115,13 +115,13 @@
    */
   inline-size: auto;
   block-size: 0;
-  min-inline-size: var(--ds-divider-segment-min);
+  min-inline-size: var(--ds-divider-segment-min, var(--ds-divider-min-segment, 5%));
   min-block-size: 0;
   border-top: var(--ds-divider-line);
   border-inline-start: none;
   transition:
-    border-color var(--ds-divider-transition-duration) var(--ds-divider-transition-timing),
-    opacity var(--ds-divider-transition-duration) var(--ds-divider-transition-timing);
+    border-color var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out))),
+    opacity var(--ds-divider-transition-duration, var(--ds-divider-motion-duration, var(--ds-motion-feedback))) var(--ds-divider-transition-timing, var(--ds-divider-motion-easing, var(--ds-motion-ease-out)));
 }
 
 /*
@@ -132,7 +132,7 @@
 .ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-text-position='start'] [data-part='line-before'],
 .ds-divider.ds-divider--modern[data-part='root'][data-orientation='horizontal'][data-text-position='end'] [data-part='line-after'] {
   flex-grow: 0;
-  flex-basis: var(--ds-divider-edge-basis);
+  flex-basis: var(--ds-divider-edge-basis, var(--ds-divider-edge-segment, 5%));
 }
 
 /* ---- the label ---- */
@@ -142,7 +142,7 @@
   align-items: center;
   justify-content: center;
   min-inline-size: 0;
-  max-inline-size: var(--ds-divider-label-measure);
+  max-inline-size: var(--ds-divider-label-measure, var(--ds-divider-label-max-width, 100%));
   white-space: normal;
   overflow-wrap: anywhere;
   text-align: center;
@@ -150,12 +150,12 @@
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-plain='false'] [data-part='text'] {
-  color: var(--ds-divider-label-ink);
-  font-size: var(--ds-divider-label-size);
-  font-weight: var(--ds-divider-label-weight);
-  line-height: var(--ds-divider-label-leading);
-  text-transform: var(--ds-divider-label-case);
-  letter-spacing: var(--ds-divider-label-track);
+  color: var(--ds-divider-label-ink, var(--ds-divider-text-color, var(--ds-color-text-secondary)));
+  font-size: var(--ds-divider-label-size, var(--ds-divider-label-font-size, var(--ds-type-label-font-size)));
+  font-weight: var(--ds-divider-label-weight, var(--ds-divider-label-font-weight, var(--ds-type-label-font-weight)));
+  line-height: var(--ds-divider-label-leading, var(--ds-divider-label-line-height, var(--ds-type-label-line-height)));
+  text-transform: var(--ds-divider-label-case, var(--ds-divider-label-transform, uppercase));
+  letter-spacing: var(--ds-divider-label-track, var(--ds-divider-label-tracking, var(--ds-type-label-letter-spacing)));
 }
 
 .ds-divider.ds-divider--modern[data-part='root'][data-plain='true'] [data-part='text'] {

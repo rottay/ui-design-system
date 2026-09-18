@@ -93,7 +93,7 @@
   --ds-form-header-context-gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
   container: ds-form-header / inline-size;
   inline-size: 100%;
-  margin-block-end: var(--ds-form-header-root-margin, 24px);
+  margin-block-end: var(--ds-form-header-root-margin, var(--ds-spacing-6, 24px));
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   border-radius: 20px;
@@ -115,8 +115,8 @@
         live here, on the Back link's baseline and a hero-panel away from the
         title it commits; it now sits in the hero row, the EditHeader posture. ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='top-bar'] {
-  padding-block: var(--ds-form-header-top-bar-padding-block);
-  padding-inline: var(--ds-form-header-top-bar-padding-inline);
+  padding-block: var(--ds-form-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-form-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   border-bottom: 1px solid var(--ds-color-border-secondary);
   background: var(--ds-color-bg-secondary);
 }
@@ -154,7 +154,7 @@
 /* ---- hero panel (padding drained; the gradient itself lives in
         edit-header.css, shared) ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
-  padding: var(--ds-form-header-hero-padding);
+  padding: var(--ds-form-header-hero-padding, calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
    visual value in the TSX and the one measurement here no ramp could see. The channel
@@ -234,8 +234,8 @@
         "Forms are not card stacks" note). One dominant boundary, optical
         padding, and the governed inset highlight for the optical top edge. ---- */
 .ds-structure.ds-form-header[data-part='root'] [data-part='context-card'] {
-  margin-block-start: var(--ds-form-header-context-gap);
-  padding-block-start: var(--ds-form-header-context-gap);
+  margin-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-start: var(--ds-form-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   /* The context section is the RECESSED continuation of the hero, so its
      optical top edge reads the governed `inset` role's highlight facet — the
      edit-header sibling carries the same chain. Declared by neither the default

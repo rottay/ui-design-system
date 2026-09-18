@@ -60,10 +60,10 @@ export function deriveSplitterChannels(): Record<string, string> {
   vars["--ds-splitter-gutter-grip-color-locked"] =
     "color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)";
   vars["--ds-splitter-gutter-grip-length"] = "1rem";
-  vars["--ds-splitter-gutter-grip-thickness"] = "2px";
+  vars["--ds-splitter-gutter-grip-thickness"] = "var(--ds-border-width-2, 2px)";
   vars["--ds-splitter-gutter-size"] =
     "calc(0.5rem * var(--ds-density-effective-scale))";
-  vars["--ds-splitter-gutter-focus-ring-offset"] = "1px";
+  vars["--ds-splitter-gutter-focus-ring-offset"] = "var(--ds-edge-hairline-width, 1px)";
   // Physical px on purpose: the coarse-pointer target is a hand, not a rem.
   vars["--ds-splitter-gutter-reach"] = "18px";
   vars["--ds-splitter-gutter-transition-duration"] = "var(--ds-motion-feedback)";

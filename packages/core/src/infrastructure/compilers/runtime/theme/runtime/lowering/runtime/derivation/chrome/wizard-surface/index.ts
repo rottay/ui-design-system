@@ -32,8 +32,9 @@ export function deriveWizardSurfaceChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
 
   /* The profile-driven Stack already supplies the description's trailing gap,
-     so the channel rests at 0: producing the name moves nothing. */
-  vars["--ds-wizard-surface-description-margin-block-end"] = "0";
+     so the channel rests at 0, chained to the produced zero rung: the produced
+     `--ds-spacing-0` is itself `0`, so producing the name moves nothing. */
+  vars["--ds-wizard-surface-description-margin-block-end"] = "var(--ds-spacing-0, 0)";
 
   /* The ruled alert's optical padding on the rhythm plane. */
   vars["--ds-wizard-surface-error-banner-padding"] =

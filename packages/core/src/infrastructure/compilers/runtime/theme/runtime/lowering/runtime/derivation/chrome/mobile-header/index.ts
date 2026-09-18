@@ -31,7 +31,10 @@
  *
  * The rest were literals in the skin. Each is stated here at exactly the fallback the
  * skin reads it with, so naming it moves no pixel and changes only whether a tenant
- * can reach it.
+ * can reach it. The two gutter paddings and the title tracking chain a governed
+ * root (spacing times the layout rhythm, the subtle tracking step) at the same
+ * resting value; the 56px bar row and the optical title leading/press stay
+ * literal -- no produced root shares their value and meaning.
  */
 
 import type { FamilyDeriver } from "../../../../foundation/contract";
@@ -77,8 +80,12 @@ export function deriveMobileHeaderChannels(): Record<string, string> {
      density-neutral by decision -- a mobile bar that grows with the density dial
      stops being the platform-height bar its consumers position against. */
   vars["--ds-mobile-header-bar-block-size"] = "56px";
-  vars["--ds-mobile-header-bar-padding-inline"] = "4px";
-  vars["--ds-mobile-header-center-padding-inline"] = "8px";
+  /* The bar's inline gutters ride the spacing rung times the layout rhythm --
+     padding is a layout relation, never control geometry (C-E1). */
+  vars["--ds-mobile-header-bar-padding-inline"] =
+    "calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-mobile-header-center-padding-inline"] =
+    "calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))";
 
   vars["--ds-mobile-header-hairline-color"] = "var(--ds-color-border)";
   vars["--ds-mobile-header-sticky-bg"] =
@@ -91,7 +98,7 @@ export function deriveMobileHeaderChannels(): Record<string, string> {
   /* 17px optical: the one size on this bar with no canonical rung. */
   vars["--ds-mobile-header-title-font-size"] = "calc(var(--ds-font-size-lg) * 1.0625)";
   vars["--ds-mobile-header-title-line-height"] = "1.29";
-  vars["--ds-mobile-header-title-tracking"] = "-0.01em";
+  vars["--ds-mobile-header-title-tracking"] = "var(--ds-letter-spacing-subtle, -0.01em)";
 
   vars["--ds-mobile-header-trigger-radius"] = "var(--ds-radius-md, 8px)";
   vars["--ds-mobile-header-trigger-tint"] =

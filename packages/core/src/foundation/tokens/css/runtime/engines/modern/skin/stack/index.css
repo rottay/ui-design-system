@@ -33,7 +33,7 @@
   justify-content: flex-start;
   /* Pinned by the quality contract so flexible content can shrink and ellipsize. */
   min-inline-size: 0;
-  --_ds-stack-gap-current: var(--ds-stack-gap-md);
+  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
   gap: var(--_ds-stack-gap-current);
   /*
    * The divider's axis flags live on the ROOT so a RESPONSIVE direction, which
@@ -41,12 +41,12 @@
    * every breakpoint.
    */
   --_ds-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
-  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-gutter);
+  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-gutter, var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-direction='horizontal'] {
   flex-direction: row;
-  --_ds-stack-divider-gap-block: var(--ds-stack-divider-gutter);
+  --_ds-stack-divider-gap-block: var(--ds-stack-divider-gutter, var(--ds-stack-divider-inset, var(--ds-spacing-0, 0px)));
   --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
@@ -101,44 +101,44 @@
 /* ---- the rungs ---- */
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='none'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-none);
+  --_ds-stack-gap-current: var(--ds-stack-gap-none, var(--ds-spacing-0, 0));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xs'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-xs);
+  --_ds-stack-gap-current: var(--ds-stack-gap-xs, calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='sm'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-sm);
+  --_ds-stack-gap-current: var(--ds-stack-gap-sm, calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='md'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-md);
+  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='lg'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-lg);
+  --_ds-stack-gap-current: var(--ds-stack-gap-lg, calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-xl, calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='2xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-2xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-2xl, calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='3xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-3xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-3xl, calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='4xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-4xl);
+  --_ds-stack-gap-current: var(--ds-stack-gap-4xl, calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never scaled. */
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='custom'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap);
+  --_ds-stack-gap-current: var(--ds-stack-gap, var(--ds-spacing-0, 0px));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-full-width='true'] {
@@ -158,20 +158,20 @@
  */
 .rottay-stack.rottay-stack--modern[data-component='stack'] > [data-part='divider'] {
   align-self: stretch;
-  flex: 0 0 var(--ds-stack-divider-thickness);
+  flex: 0 0 var(--ds-stack-divider-thickness, var(--ds-stack-divider-size, var(--ds-border-width-1, 1px)));
   min-inline-size: 0;
   min-block-size: 0;
   margin-block: var(--_ds-stack-divider-gap-block);
   margin-inline: var(--_ds-stack-divider-gap-inline);
-  background: var(--ds-stack-divider-ink);
-  opacity: var(--ds-stack-divider-veil);
+  background: var(--ds-stack-divider-ink, var(--ds-stack-divider-color, var(--ds-color-border-subtle)));
+  opacity: var(--ds-stack-divider-veil, var(--ds-stack-divider-opacity, 0.72));
   pointer-events: none;
 }
 
 /* ---- reflow: the only motion this primitive owns ---- */
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-layout-motion='rearrange'] {
-  transition: var(--ds-stack-reflow-transition);
+  transition: var(--ds-stack-reflow-transition, var(--ds-transition-rearrange));
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -91,7 +91,7 @@ export function deriveStatsHeaderChannels(): Record<string, string> {
 
   vars["--ds-stats-header-card-min-height"] = "140px";
   vars["--ds-stats-header-card-min-height-compact"] = "120px";
-  vars["--ds-stats-header-card-padding"] = "20px 24px";
+  vars["--ds-stats-header-card-padding"] = "var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px)";
   vars["--ds-stats-header-card-padding-compact"] = "18px";
   vars["--ds-stats-header-card-radius"] = "var(--ds-radius-lg, 12px)";
   vars["--ds-stats-header-card-bg"] = "var(--ds-color-bg-primary)";
@@ -106,7 +106,7 @@ export function deriveStatsHeaderChannels(): Record<string, string> {
 
   vars["--ds-stats-header-value-font-size"] = "2.25rem";
   vars["--ds-stats-header-value-font-size-compact"] = "1.75rem";
-  vars["--ds-stats-header-value-font-weight"] = "800";
+  vars["--ds-stats-header-value-font-weight"] = "var(--ds-font-weight-extrabold, 800)";
   vars["--ds-stats-header-label-font-size"] = "var(--ds-font-size-sm)";
   vars["--ds-stats-header-kicker-font-size"] = "var(--ds-font-size-2xs)";
   vars["--ds-stats-header-kicker-tracking"] = "0.04em";
@@ -118,7 +118,7 @@ export function deriveStatsHeaderChannels(): Record<string, string> {
   vars["--ds-stats-header-change-row-gap"] = "2px";
   vars["--ds-stats-header-change-column-gap"] = "3px";
   vars["--ds-stats-header-spark-dot-gap"] = "6px";
-  vars["--ds-stats-header-spark-dot-size"] = "4px";
+  vars["--ds-stats-header-spark-dot-size"] = "var(--ds-spacing-1, 4px)";
   vars["--ds-stats-header-spark-margin-block-start"] = "14px";
   /* The quietest dot of a series. The loudest is opaque, and the six steps in
      between are the dot's `data-level` stamp read through the skin. */
@@ -126,8 +126,8 @@ export function deriveStatsHeaderChannels(): Record<string, string> {
   vars["--ds-stats-header-ping-duration"] = "400ms";
 
   vars["--ds-stats-header-progress-margin-block-start"] = "10px";
-  vars["--ds-stats-header-insight-margin-block-start"] = "8px";
-  vars["--ds-stats-header-glow-block-size"] = "40px";
+  vars["--ds-stats-header-insight-margin-block-start"] = "var(--ds-spacing-2, 8px)";
+  vars["--ds-stats-header-glow-block-size"] = "var(--ds-spacing-10, 40px)";
   vars["--ds-stats-header-glow-strength"] = "6%";
 
   return vars;

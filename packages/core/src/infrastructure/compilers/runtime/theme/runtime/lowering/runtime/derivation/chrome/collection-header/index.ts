@@ -153,7 +153,8 @@ export function deriveCollectionHeaderChannels(): Record<string, string> {
   vars["--ds-collection-header-shadow-hover"] = "var(--ds-elevation-2)";
   vars["--ds-collection-header-sheen-duration"] = "17s";
   vars["--ds-collection-header-sheen-opacity"] = "0.22";
-  vars["--ds-collection-header-actions-backdrop"] = "none";
+  vars["--ds-collection-header-actions-backdrop"] =
+    "var(--ds-dashboard-header-actions-backdrop, none)";
   vars["--ds-collection-header-display-color"] = "var(--ds-color-primary)";
   vars["--ds-collection-header-display-shade"] = "var(--ds-color-text-primary)";
   vars["--ds-collection-header-accent"] =
@@ -181,8 +182,9 @@ export function deriveCollectionHeaderChannels(): Record<string, string> {
   vars["--ds-collection-header-chip-tracking"] =
     "var(--ds-type-caption-letter-spacing, 0.02em)";
 
-  /* Key cap material on the governed `--ds-kbd-*` set: the kbd family owns
-     those names, this family only relays them into its own rungs. */
+  /* Key cap material: geometry relays the governed `--ds-kbd-*` set (the kbd
+     family owns those names); weight rides the generic weight ramp and the
+     depth edge rides the generic border-width ramp. */
   vars["--ds-collection-header-keycap-block-size"] = "var(--ds-spacing-5, 20px)";
   vars["--ds-collection-header-keycap-inline-padding"] = "var(--ds-spacing-2, 8px)";
   vars["--ds-collection-header-keycap-radius"] = "var(--ds-kbd-radius, var(--ds-radius-sm, 4px))";
@@ -190,12 +192,13 @@ export function deriveCollectionHeaderChannels(): Record<string, string> {
     "var(--ds-kbd-font-family, var(--ds-font-family-mono))";
   vars["--ds-collection-header-keycap-size"] =
     "var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px))";
-  vars["--ds-collection-header-keycap-weight"] = "var(--ds-kbd-font-weight, 500)";
+  vars["--ds-collection-header-keycap-weight"] =
+    "var(--ds-font-weight-medium, 500)";
   vars["--ds-collection-header-keycap-frame"] = "var(--ds-kbd-frame, var(--ds-color-border))";
   vars["--ds-collection-header-keycap-surface"] =
     "var(--ds-kbd-surface, var(--ds-surface-inset, var(--ds-color-neutral-100)))";
   vars["--ds-collection-header-keycap-ink"] = "var(--ds-kbd-ink, var(--ds-color-text-muted))";
-  vars["--ds-collection-header-keycap-depth-width"] = "var(--ds-kbd-depth-width, 2px)";
+  vars["--ds-collection-header-keycap-depth-width"] = "var(--ds-border-width-2, 2px)";
 
   /* The hero measure rides the shared page-header group recipe. */
   vars["--ds-collection-header-title-measure"] = "var(--ds-page-header-title-max-width, 35rem)";
@@ -240,7 +243,8 @@ export function deriveCollectionHeaderChannels(): Record<string, string> {
     "var(--ds-type-code-font-family, var(--ds-font-family-mono, var(--ds-font-family-base)))";
   vars["--ds-collection-header-subtitle-tracking-technical"] = "0.135em";
   vars["--ds-collection-header-subtitle-tracking-dotted"] = "0.08em";
-  vars["--ds-collection-header-subtitle-tracking-compact-technical"] = "0.05em";
+  vars["--ds-collection-header-subtitle-tracking-compact-technical"] =
+    "var(--ds-letter-spacing-wider, 0.05em)";
   vars["--ds-collection-header-subtitle-tracking-code"] =
     "var(--ds-type-code-letter-spacing, 0.09em)";
   vars["--ds-collection-header-subtitle-tracking-caption"] =
@@ -255,7 +259,8 @@ export function deriveCollectionHeaderChannels(): Record<string, string> {
   vars["--ds-collection-header-subtitle-row-gap-editorial"] = rhythm("var(--ds-spacing-2, 8px)");
   vars["--ds-collection-header-subtitle-row-rule-gap"] = rhythm("var(--ds-spacing-3, 12px)");
   vars["--ds-collection-header-subtitle-row-inline-gap"] = "10px";
-  vars["--ds-collection-header-subtitle-row-inline-gap-editorial"] = "12px";
+  vars["--ds-collection-header-subtitle-row-inline-gap-editorial"] =
+    "var(--ds-spacing-3, 12px)";
   vars["--ds-collection-header-subtitle-row-measure"] = "620px";
   vars["--ds-collection-header-subtitle-row-measure-editorial"] = "760px";
 

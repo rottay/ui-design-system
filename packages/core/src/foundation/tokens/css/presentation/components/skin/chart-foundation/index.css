@@ -45,15 +45,15 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--ds-chart-legend-gap, 16px);
-  margin-block-start: var(--ds-chart-legend-margin-top, 8px);
+  gap: var(--ds-chart-legend-gap, var(--ds-spacing-4, 16px));
+  margin-block-start: var(--ds-chart-legend-margin-top, var(--ds-spacing-2, 8px));
 }
 
 :where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='legend-item'] {
   display: flex;
   align-items: center;
   gap: var(--ds-chart-legend-item-gap, 6px);
-  font-size: var(--ds-chart-legend-font-size, 12px);
+  font-size: var(--ds-chart-legend-font-size, var(--ds-font-size-xs, 12px));
   /* Legend typography posture protos: a dense technical tenant keeps the
    * fallback (normal/none, byte-equal to the historical render); an editorial
    * tenant can track and case the legend without touching anatomy. */

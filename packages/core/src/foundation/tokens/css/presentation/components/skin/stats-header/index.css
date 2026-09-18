@@ -78,7 +78,7 @@
   min-inline-size: 0;
   min-block-size: var(--ds-stats-header-card-min-height, 140px);
   overflow: hidden;
-  padding: var(--ds-stats-header-card-padding, 20px 24px);
+  padding: var(--ds-stats-header-card-padding, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px));
   /* edge posture derives from the tenant radius scale (canonical channel;
      the 12px fallback is the exact former hardcoded value) */
   border-radius: var(--ds-stats-header-card-radius, var(--ds-radius-lg, 12px));
@@ -136,7 +136,7 @@
         never the other way around. ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-card'] [data-part='statistic'] [data-part='value'] {
   font-size: var(--ds-stats-header-value-font-size, 2.25rem);
-  font-weight: var(--ds-stats-header-value-font-weight, 800);
+  font-weight: var(--ds-stats-header-value-font-weight, var(--ds-font-weight-extrabold, 800));
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -193,8 +193,8 @@
   gap: var(--ds-stats-header-spark-dot-gap, 6px);
 }
 .ds-stats-header[data-part='root'] [data-part='spark-dot'] {
-  inline-size: var(--ds-stats-header-spark-dot-size, 4px);
-  block-size: var(--ds-stats-header-spark-dot-size, 4px);
+  inline-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
+  block-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   border-radius: 50%;
   /* The dot's share of the series maximum arrives as a closed `data-level`
      domain (0-7) rather than as a computed opacity in the style attribute, and
@@ -250,7 +250,7 @@
 
 /* ---- insight ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight'] {
-  margin-block-start: var(--ds-stats-header-insight-margin-block-start, 8px);
+  margin-block-start: var(--ds-stats-header-insight-margin-block-start, var(--ds-spacing-2, 8px));
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-meta-font-size, var(--ds-font-size-2xs));
   font-style: italic;
@@ -262,7 +262,7 @@
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
-  block-size: var(--ds-stats-header-glow-block-size, 40px);
+  block-size: var(--ds-stats-header-glow-block-size, var(--ds-spacing-10, 40px));
   pointer-events: none;
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }

@@ -1,7 +1,7 @@
 /**
  * @fileoverview The `form-header` channels the Modern skin read with no producer:
- * the root's page gutter, the compact hero rung, the hero row's gap, the glass
- * opt-in and the two title sizes.
+ * the root's page gutter, the top-bar and hero paddings, the context gap, the
+ * compact hero rung, the hero row's gap, the glass opt-in and the two title sizes.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/form-header
  * @category Compilers
@@ -32,11 +32,15 @@ export const formHeaderChromeDeriver: FamilyDeriver = {
   ],
   produces: [
     "--ds-form-header-context-backdrop",
+    "--ds-form-header-context-gap",
+    "--ds-form-header-hero-padding",
     "--ds-form-header-hero-padding-compact",
     "--ds-form-header-hero-row-gap",
     "--ds-form-header-root-margin",
     "--ds-form-header-title-font-size",
     "--ds-form-header-title-font-size-compact",
+    "--ds-form-header-top-bar-padding-block",
+    "--ds-form-header-top-bar-padding-inline",
   ],
   derive: () => deriveFormHeaderChannels(),
 };
@@ -44,7 +48,21 @@ export const formHeaderChromeDeriver: FamilyDeriver = {
 export function deriveFormHeaderChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
 
-  vars["--ds-form-header-root-margin"] = "24px";
+  /* The root's page gutter rests at the spacing step of the same value. */
+  vars["--ds-form-header-root-margin"] = "var(--ds-spacing-6, 24px)";
+
+  /* The preset-tier paddings and the context gap: the same rhythm plane the root
+     declares them on, so a read whose channel is never stated still rests at the
+     tier the root would have set. */
+  vars["--ds-form-header-top-bar-padding-block"] =
+    "calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-form-header-top-bar-padding-inline"] =
+    "calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-form-header-hero-padding"] =
+    "calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-form-header-context-gap"] =
+    "calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1))";
+
   vars["--ds-form-header-hero-padding-compact"] =
     "calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1))";
   /* The hero row's gap was a `gap={20}` prop on the Flex: a visual value in the TSX,

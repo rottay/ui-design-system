@@ -142,8 +142,8 @@
 
 /* top bar */
 .ds-structure.ds-edit-header [data-part='top-bar'] {
-  padding-block: var(--ds-edit-header-top-bar-padding-block, 12px);
-  padding-inline: var(--ds-edit-header-top-bar-padding-inline, 24px);
+  padding-block: var(--ds-edit-header-top-bar-padding-block, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-edit-header-top-bar-padding-inline, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-bg-secondary);
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] {
@@ -207,7 +207,7 @@
 
 /* hero panel geometry + copy hierarchy */
 .ds-structure.ds-edit-header [data-part='hero-panel'] {
-  padding: var(--ds-edit-header-hero-padding, 28px);
+  padding: var(--ds-edit-header-hero-padding, calc(var(--ds-spacing-7, 28px) * var(--ds-rhythm-effective-scale, 1)));
 }
 /* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
    visual value in the TSX and the one measurement here no ramp could see. The channel
@@ -230,8 +230,8 @@
   block-size: var(--ds-edit-header-icon-badge-size, 52px);
 }
 .ds-structure.ds-edit-header [data-part='icon-badge-glyph'] {
-  inline-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
-  block-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
+  inline-size: var(--ds-edit-header-icon-badge-glyph-size, var(--ds-icon-lg-size, 24px));
+  block-size: var(--ds-edit-header-icon-badge-glyph-size, var(--ds-icon-lg-size, 24px));
 }
 /* the shared-helper and Save/Cancel icons size from the skin (was an inline
    14px on every one of them) — the FormHeader posture. The selector is the part the
@@ -282,7 +282,7 @@
   padding-block: 4px;
   padding-inline: 12px;
   border-radius: 999px;
-  background: var(--ds-edit-header-status-tone-bg);
+  background: var(--ds-edit-header-status-tone-bg, var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
 }
 .ds-structure.ds-edit-header [data-part='status-pill'][data-variant='success'] {
@@ -306,10 +306,10 @@
   --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
-  border: 1px solid var(--ds-edit-header-status-tone-bd);
+  border: 1px solid var(--ds-edit-header-status-tone-bd, var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary)));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'] {
-  color: var(--ds-edit-header-status-tone-fg);
+  color: var(--ds-edit-header-status-tone-fg, var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary)));
   letter-spacing: 0.04em;
   text-transform: capitalize;
 }
@@ -346,8 +346,8 @@
 /* context section below the hero: a RULE, not a card (see the header's
    "Forms are not card stacks" note) */
 .ds-structure.ds-edit-header [data-part='context-card'] {
-  margin-block-start: var(--ds-edit-header-context-gap, 24px);
-  padding-block-start: var(--ds-edit-header-context-gap, 24px);
+  margin-block-start: var(--ds-edit-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-start: var(--ds-edit-header-context-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   /* The context section is the RECESSED continuation of the hero, so its
      optical top edge reads the governed `inset` role's highlight facet.
      Declared by neither the default theme nor any shipped artifact, so the
