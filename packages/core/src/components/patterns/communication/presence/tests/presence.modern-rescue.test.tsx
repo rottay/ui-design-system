@@ -1,9 +1,19 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
 
 import { renderWithEngine } from '@tests/support/engine';
 import { PresenceBar, PresenceTypingIndicator } from '..';
+
+const AVATAR_SKIN = readFileSync(
+  resolve(
+    __dirname,
+    '../../../../../foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css',
+  ),
+  'utf8',
+);
 
 const USERS = [
   { id: 'u1', name: 'Alice Moreau', avatar: '/alice.jpg' },
@@ -32,16 +42,23 @@ describe('PresenceBar composes the Avatar primitive', () => {
     expect(container.querySelector('[data-part="avatar-initials"]')).toBeNull();
   });
 
-  it('takes its face geometry from the governed avatar size token, not a pattern pixel table', async () => {
+  it('takes its face geometry from the governed avatar size token via the skin, not a pattern pixel table', async () => {
     const { container } = renderWithEngine(<PresenceBar users={USERS} size="sm" />, 'modern');
     await screen.findByRole('list');
 
     const face = container.querySelector('.rottay-avatar') as HTMLElement;
+    // The face size is stamped, not inlined: 6627914f0 retired the inline
+    // style.width, so the governed step must resolve through the skin's
+    // [data-size] rule for the stamped size.
     expect(face).toHaveAttribute('data-size', 'sm');
-    expect(face.style.width).toBe('var(--ds-avatar-sm-size)');
+    expect(face.style.width).toBe('');
+    expect(AVATAR_SKIN).toMatch(
+      /\[data-size='sm'\][^{]*\{[^}]*inline-size: var\(--ds-avatar-sm-size\)/,
+    );
 
     const slot = container.querySelector('[data-part="avatar"]') as HTMLElement;
-    // The slot is the face token plus the pattern-owned ring — no raw 28/36px.
+    // First honest reading: the slot is the face token plus the pattern-owned
+    // ring — the only geometry the stack still inlines. No raw 28/36px.
     expect(slot.style.inlineSize).toBe('calc(var(--ds-avatar-sm-size) + 4px)');
   });
 

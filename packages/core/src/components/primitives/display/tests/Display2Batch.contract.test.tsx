@@ -187,17 +187,52 @@ describe('Display2 (data display) data-part contract (WO-SKIN-05 checkpoint D2)'
       },
     );
 
-    it.each(ENGINES)(
-      'loading: stamps root(data-loading=true)/skeleton-row/skeleton-avatar/skeleton-line under the %s engine',
-      async (engine) => {
-        const { container } = renderWithEngine(<List loading />, engine);
+    it(
+      'modern: loading keeps the SAME stamped root with the single busy announcement, three AnatomySkeleton items in a track-reserving loading-grid (6a4910dc1)',
+      async () => {
+        const { container } = renderWithEngine(
+          <List
+            loading
+            header="Header"
+            footer="Footer"
+            bordered
+            grid={{ column: 3 }}
+          />,
+          'modern',
+        );
         const root = await waitForPart(container, 'root');
         expect(root.getAttribute('data-loading')).toBe('true');
-        expect(container.querySelectorAll('[data-part="skeleton-row"]').length).toBeGreaterThan(0);
-        expect(container.querySelector('[data-part="skeleton-avatar"]')).not.toBeNull();
-        expect(container.querySelectorAll('[data-part="skeleton-line"]').length).toBeGreaterThan(0);
+        // The host root owns the ONE busy announcement.
+        expect(root.getAttribute('aria-busy')).toBe('true');
+        // The loading posture is the same list: shell stamps and header/footer
+        // survive, so nothing jumps when the data resolves.
+        expect(root.getAttribute('data-bordered')).toBe('true');
+        expect(container.querySelector('[data-part="header"]')).not.toBeNull();
+        expect(container.querySelector('[data-part="footer"]')).not.toBeNull();
+
+        const loadingGrid = container.querySelector('[data-part="loading-grid"]') as HTMLElement;
+        expect(loadingGrid).not.toBeNull();
+        // The grid projection is reserved while loading: the rows must not
+        // reflow from a stack into N columns on resolve.
+        expect(loadingGrid.getAttribute('data-grid')).toBe('fixed');
+        expect(loadingGrid.style.gridTemplateColumns).toBe('repeat(3, 1fr)');
+
+        const skeletons = loadingGrid.querySelectorAll('.ds-skeleton-anatomy');
+        expect(skeletons.length).toBe(3);
+        for (const skeleton of Array.from(skeletons)) {
+          expect(skeleton.getAttribute('aria-busy')).toBeNull();
+        }
       },
     );
+
+    it('rustic: loading: stamps root(data-loading=true)/skeleton-row/skeleton-avatar/skeleton-line under the rustic engine', async () => {
+      const { container } = renderWithEngine(<List loading />, 'rustic');
+      const root = await waitForPart(container, 'root');
+      expect(root.getAttribute('data-loading')).toBe('true');
+      expect(container.querySelectorAll('[data-part="skeleton-row"]').length).toBeGreaterThan(0);
+      expect(container.querySelector('[data-part="skeleton-avatar"]')).not.toBeNull();
+      expect(container.querySelectorAll('[data-part="skeleton-line"]').length).toBeGreaterThan(0);
+    });
 
     describe('compounds', () => {
       it.each(ENGINES)(

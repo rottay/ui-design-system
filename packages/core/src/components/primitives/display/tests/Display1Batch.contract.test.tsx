@@ -87,7 +87,7 @@ describe('Display1 (surfaces + media) data-part contract (WO-SKIN-05 checkpoint 
       expect(container.querySelectorAll('[data-part="cover"]').length).toBeGreaterThan(0);
     });
 
-    it('modern: loading renders cover/skeleton/skeleton-bar/loading-overlay/spinner (no root data-part, matching the shipped early-return)', async () => {
+    it('modern: loading renders the SAME stamped root with loading-content/loading-overlay/spinner (3aea57452)', async () => {
       const { container } = renderWithEngine(
         <Card loading cover="/cover.jpg">Body</Card>,
         'modern',
@@ -95,10 +95,20 @@ describe('Display1 (surfaces + media) data-part contract (WO-SKIN-05 checkpoint 
       await waitFor(() => {
         expect(container.querySelector('[data-part="loading-overlay"]')).not.toBeNull();
       });
-      expect(container.querySelector('[data-part="cover"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="skeleton"]')).not.toBeNull();
-      expect(container.querySelectorAll('[data-part="skeleton-bar"]').length).toBeGreaterThan(0);
+      const root = container.querySelector('[data-part="root"]') as HTMLElement;
+      expect(root).toHaveAttribute('data-loading', 'true');
+      expect(root.getAttribute('aria-busy')).toBe('true');
+      expect(container.querySelector('[data-part="loading-content"]')).not.toBeNull();
+      expect(container.querySelector('[data-part="loading-overlay"]')).not.toBeNull();
       expect(container.querySelector('[data-part="spinner"]')).not.toBeNull();
+      // The cover shell still reserves its slot but withholds the img while loading.
+      expect(container.querySelector('[data-part="cover"]')).not.toBeNull();
+      expect(container.querySelector('[data-part="cover-image"]')).toBeNull();
+      // The retired skeleton premise: the body hands the surface to the
+      // loading overlay instead of rendering skeleton anatomy.
+      expect(container.querySelector('[data-part="body"]')).toBeNull();
+      expect(container.querySelector('[data-part="skeleton"]')).toBeNull();
+      expect(container.querySelector('[data-part="skeleton-bar"]')).toBeNull();
     });
 
     it('rustic: loading renders loading-overlay/spinner atop the normal root/body tree', async () => {
