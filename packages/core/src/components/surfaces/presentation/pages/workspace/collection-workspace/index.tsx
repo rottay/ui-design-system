@@ -65,6 +65,7 @@ import {
 } from '../../../../runtime/helpers';
 import { PatternDataTable } from '../../../../../patterns/data/data-table';
 import type { DataTablePatternProps } from '../../../../../patterns/data/data-table';
+import { isDataTableBodyRowElement } from '../../../../../patterns/data/data-table/engines/modern';
 import { PatternFilterPanel } from '../../../../../patterns/forms/filter-panel';
 import { PatternSavedViewsBar } from '../../../../../patterns/data/saved-views';
 import { PatternListToolbar } from '../../../../../patterns/data/list-toolbar';
@@ -226,38 +227,64 @@ type CollectionWorkspaceTableRowProps = React.HTMLAttributes<HTMLTableRowElement
 /**
  * Decorates the table row in place. A table body may only contain table rows;
  * wrapping a row with a Box/div produces invalid HTML and breaks hydration.
+ *
+ * The row is recognized through the data-table engine's exported body-row
+ * guard, which covers BOTH the host `<tr>` and the engine's stateful `BodyRow`
+ * component (FAM-08 B4 stamps `data-part="body-row"` inside BodyRow, so the
+ * part can no longer be read off the element's props). A host `<tr>` still
+ * requires the `body-row` part so sibling rows legitimately rendered as plain
+ * `<tr>`s (the expanded-detail row) are left alone.
+ *
+ * The decoration is a hard contract: it runs only for the row whose key IS the
+ * focused key, so a render where nothing matched means the row's shape changed
+ * again — fail loudly instead of silently shipping an unfocused row.
  */
 function markCollectionWorkspaceFocusedRow(node: ReactNode): ReactNode {
-  return React.Children.map(node, (child) => {
-    if (!React.isValidElement(child)) return child;
+  let matched = false;
 
-    const childProps = child.props as CollectionWorkspaceTableRowProps & {
-      children?: ReactNode;
-    };
+  const decorate = (current: ReactNode): ReactNode =>
+    React.Children.map(current, (child) => {
+      if (!React.isValidElement(child)) return child;
 
-    if (child.type === React.Fragment) {
+      const childProps = child.props as CollectionWorkspaceTableRowProps & {
+        children?: ReactNode;
+      };
+
+      if (child.type === React.Fragment) {
+        return React.cloneElement(
+          child,
+          undefined,
+          decorate(childProps.children),
+        );
+      }
+
+      if (!isDataTableBodyRowElement(child)) return child;
+      if (child.type === 'tr' && childProps['data-part'] !== 'body-row') {
+        return child;
+      }
+
+      matched = true;
       return React.cloneElement(
-        child,
-        undefined,
-        markCollectionWorkspaceFocusedRow(childProps.children),
+        child as React.ReactElement<CollectionWorkspaceTableRowProps>,
+        {
+          className: [
+            childProps.className,
+            'ds-collection-workspace__focused-row',
+          ].filter(Boolean).join(' '),
+          'data-focused': 'true',
+        },
       );
-    }
+    });
 
-    if (child.type !== 'tr' || childProps['data-part'] !== 'body-row') {
-      return child;
-    }
-
-    return React.cloneElement(
-      child as React.ReactElement<CollectionWorkspaceTableRowProps>,
-      {
-        className: [
-          childProps.className,
-          'ds-collection-workspace__focused-row',
-        ].filter(Boolean).join(' '),
-        'data-focused': 'true',
-      },
+  const decorated = decorate(node);
+  if (!matched) {
+    throw new Error(
+      'CollectionWorkspace focused-row: the focused row rendered but the row '
+        + 'decorator matched no table body row. The data-table row output '
+        + 'shape changed; re-point the decorator at the new row element.',
     );
-  });
+  }
+  return decorated;
 }
 
 function readCollectionRecordValue(value: unknown, key: PropertyKey): unknown {

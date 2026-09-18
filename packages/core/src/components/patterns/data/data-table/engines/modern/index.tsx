@@ -66,6 +66,17 @@ import { useGroupedData } from "../../runtime/grouping";
 import type { EditableConfig } from "../../../../../../foundation/contracts/runtime/components/patterns/core";
 import { InlineCellEditor } from "./cell-editor";
 
+/** A node IS a table body row when it renders as a host `<tr>` or as the
+ *  stateful `BodyRow` below. Exported so row decorators (for example the
+ *  collection workspace's focused-row mark) recognize the row by the same
+ *  membership the engine's tbody validation uses, instead of re-deriving it. */
+export function isDataTableBodyRowElement(node: React.ReactNode): boolean {
+  return (
+    React.isValidElement(node) &&
+    (node.type === "tr" || node.type === BodyRow)
+  );
+}
+
 /** A tbody may contain only rows (or fragments whose children are rows). The
  *  stateful `BodyRow` below IS a row: it renders one `<tr>` and nothing else. */
 function isValidTableBodyRowOutput(node: React.ReactNode): boolean {
@@ -77,7 +88,7 @@ function isValidTableBodyRowOutput(node: React.ReactNode): boolean {
       valid = false;
       return;
     }
-    if (child.type === "tr" || child.type === BodyRow) return;
+    if (isDataTableBodyRowElement(child)) return;
     if (child.type === React.Fragment) {
       valid = isValidTableBodyRowOutput(
         (child.props as { children?: React.ReactNode }).children,
