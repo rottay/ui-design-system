@@ -59,9 +59,35 @@ Until then the class stays emitted and pinned.
   verification (`evidence/dnd-kernel-debrief/`).
 - The chart paint contract: adopted (`evidence/chart-paint-debrief/` + the root-or-read addendum).
 
-## F. Quota (the current blocker)
+## F2. New from the 2026-09-18 red-ledger attribution (post-FAM-10-wave gates sweep)
 
-`claude-admin` weekly limit hit 2026-09-17 ~23:59; resets **Sep 20, 1pm (America/New_York)**.
-FAM-10 cohorts D/E drafts are preserved uncommitted in the tree (E nearly complete; D covers 3 of
-7 headers; the one red is a probe value outside the rottay envelope — a one-line calibration).
-No new writer lots until the reset or an authorized account change.
+1. **Error-boundary exemption floor** — `SKIN-EXEMPT-CRASH-SAFE-FALLBACK=8` was pinned for the OLD
+   error-boundary paint; the G lot measured the honest failure-mode floor at 3 properties
+   (bb29b085b). Either re-declare the floor at 3 (the measured floor, recommended) or restore paint.
+2. **theme-channel-parity new buckets** — `--ds-collapse-border`, `--ds-type-tier-{sm,xs}-letter-spacing`,
+   5 sidebar channels: the gate law requires reviewed manual adoption (or consumers wired).
+3. **tenant-reachability: 338 newly-resolved literals** — the drained skins resolved channel reads
+   into literals in the regenerated artifacts; route per name-class or accept-with-reason.
+4. **theme-lowering-single-door** — the door's `baseline: target.baseline ?? baselineFor(...)`
+   (9d7294e33) trips the arity census law; admit the shape or restructure the call.
+5. **engine-posture cell** — classic/surfaces.elevation-posture: measured gap is 0 but the pin
+   asserts unaccounted=3 AND unaccounted>0; the "unsupported" cell needs reclassification.
+6. **motion-contracts re-anchor** — the sibling worktree (ui-design-system) holds preserved
+   historical changes; the gate's pins drifted (66>64 keyframes). Re-anchor once the sibling
+   settles, or point the gate at the execution checkout only. Ratchet GREW: adjudication, never
+   a blind re-pin.
+7. **customization dead-writers anchor** — 5 lawful exits (Container ladder) + 9 new dead writers
+   from 09-16/17 lots that must be wired-or-retired BEFORE the anchor moves.
+8. **cascade-wiring doctrine** — the cut template's "produced value = the skin's literal fallback"
+   collided with the ratchet's every-channel-roots law (298 new unwired). A writer lot now wires
+   the wave's channels; CONFIRM the doctrine going forward: derivers should produce root-chained
+   values by default (the lot's pattern), making the ratchet's law the template's law.
+9. **channel-liveness STOP NO-GO tail** — `--ds-elevation-6`, `--ds-type-tier-{sm,xs}-letter-spacing`:
+   the 748cdf85c packet's owner proposals still await a ruling.
+10. **csspaint `--radius-field` ownership** — the pre-existing projection finding (12866efbd) needs
+    an owner; the ceilings re-pin (157->123, 23->18) is queued behind it.
+
+## F. Quota (RESOLVED 2026-09-18 — superseded by the owner)
+
+RESOLVED: the owner moved the writer seat to the Kimi CLI (`kimi-code/kimi-for-coding`) on 2026-09-18;
+the D/E drafts landed as e5c3a7334 and the queue has been running on the new seat since.
