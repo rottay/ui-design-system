@@ -72,8 +72,10 @@ import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/na
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { useMediaQuery } from '@/infrastructure/runtime/responsive';
-import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useFlipLayout } from '@/graphics/motion/react/runtime';
+import type { MoveIntent } from '../../../../../primitives/runtime/collection/sortable';
+import { useDragSession } from '../../../../../primitives/runtime/collection/sortable';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
@@ -89,8 +91,13 @@ const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-modern';
  */
 const BoardCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {
   draggable?: boolean;
+  /** Keys the card itself owns (activation), ahead of the move protocol. */
+  onActivate?: React.KeyboardEventHandler<HTMLDivElement>;
   children: React.ReactNode;
-}>(function BoardCard({ children, onDragEnd, onPointerCancel, ...rest }, ref) {
+}>(function BoardCard(
+  { children, onDragEnd, onKeyDown, onPointerCancel, onActivate, ...rest },
+  ref,
+) {
   const interaction = useInteractionState();
   const kernel = interaction.handlers;
   const chained = {
@@ -111,6 +118,7 @@ const BoardCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
       {...rest}
       {...chained}
       {...partAttributes('card', interaction.state)}
+      onKeyDown={composeHandlers(onActivate, onKeyDown)}
       onDragEnd={(event) => {
         onDragEnd?.(event);
         cancelPress(event as unknown as React.PointerEvent);
@@ -126,9 +134,23 @@ const BoardCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
   );
 });
 
-/** A single card move expressed on the logical axes, so the pointer and the
-    keyboard entrypoints share one protocol. */
-type KanbanMoveIntent = 'prev-item' | 'next-item' | 'prev-column' | 'next-column';
+/** The rail's `data-move-intent` vocabulary names columns where the shared
+    move protocol names containers; the stamp keeps the board's own wording. */
+const MOVE_INTENT_STAMP: Record<MoveIntent, string> = {
+  'prev-item': 'prev-item',
+  'next-item': 'next-item',
+  'prev-container': 'prev-column',
+  'next-container': 'next-column',
+};
+
+/** What a card carries while it moves, and where a move may land. */
+type KanbanPayload = {
+  key: string;
+  fromColumn: string;
+  columnIndex: number;
+  index: number;
+};
+type KanbanTarget = { columnId: string; position: number };
 
 /** Coarse pointers get no HTML5 drag events and no arrow keys, so the move
     protocol needs visible controls there (fine pointers keep drag + keys). */
@@ -150,10 +172,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   // Optional channel with an English floor: the board renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
-  // The reading direction comes from the shared i18n authority, not a DOM
-  // probe of a node's `dir` chain: the locale knows it on the server too, and a
-  // probe re-derives from paint a fact the provider already holds.
-  const direction = useOptionalDirection();
 
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
@@ -181,19 +199,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const emptyColumnLabel = tOr('kanbanBoard.empty_column', 'No items');
   const cardRoleLabel = tOr('kanbanBoard.card_role', 'Movable card');
 
-  // Two pieces of drag state: `dragData` mirrors what we put in dataTransfer
-  // (needed because the browser API restricts reading dataTransfer during
-  // dragOver), and `dropTarget` tracks which column is being hovered so we
-  // can highlight it with a ring indicator.
-  const [dragData, setDragData] = useState<{
-    itemId: string;
-    fromColumn: string;
-  } | null>(null);
-  const [dropTarget, setDropTarget] = useState<{
-    columnId: string;
-    position: number;
-  } | null>(null);
-
   /* Keyboard-move announcements: the polite live region renders the last
      instruction result; `pendingFocusId` asks the post-render effect to
      return focus to the card that just re-parented. */
@@ -217,122 +222,107 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   // the hook inverts+plays once the new columns prop re-renders it.
   const { register, measure } = useFlipLayout<string>();
 
-  // Store item ID in both dataTransfer (for the native DnD pipeline) and
-  // React state (for rendering hover indicators during dragOver).
-  const handleDragStart = useCallback(
-    (e: React.DragEvent, item: T, columnId: string) => {
-      const id = itemKey(item);
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', id);
-      setDragData({ itemId: id, fromColumn: columnId });
-    },
-    [itemKey]
-  );
+  /* The shared move protocol, stated once: where an intent lands, what the
+     landing is called, and the single commit that reaches the parent. Both
+     entrypoints -- the drag session and the coarse-pointer rail -- run them. */
+  const resolveMove = (
+    payload: KanbanPayload,
+    intent: MoveIntent,
+  ): { kind: 'target'; target: KanbanTarget } | { kind: 'blocked' } => {
+    const { columnIndex, index } = payload;
+    const column = columns[columnIndex];
+    const crossesColumn = intent === 'prev-container' || intent === 'next-container';
+    const toColumnIndex = crossesColumn
+      ? columnIndex + (intent === 'prev-container' ? -1 : 1)
+      : columnIndex;
+    const toPosition = crossesColumn ? index : index + (intent === 'prev-item' ? -1 : 1);
 
-  // preventDefault on dragOver is mandatory -- without it the browser
-  // defaults to "not droppable" and will never fire the drop event.
-  const handleDragOver = useCallback(
-    (e: React.DragEvent, columnId: string, position: number) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      setDropTarget({ columnId, position });
-    },
-    []
-  );
+    const blocked =
+      toColumnIndex < 0 ||
+      toColumnIndex >= columns.length ||
+      (!crossesColumn && (toPosition < 0 || toPosition >= column.items.length)) ||
+      (crossesColumn && columns[toColumnIndex].collapsed);
+    if (blocked) return { kind: 'blocked' };
+
+    const destination = columns[toColumnIndex];
+    return {
+      kind: 'target',
+      target: {
+        columnId: destination.id,
+        position: crossesColumn ? destination.items.length : toPosition,
+      },
+    };
+  };
+
+  const edgeMessage = () =>
+    tOr('kanbanBoard.move_edge', 'Cannot move further in that direction');
+
+  const moveMessage = (payload: KanbanPayload, target: KanbanTarget): string => {
+    const params = {
+      column: columns.find((column) => column.id === target.columnId)?.title ?? '',
+      position: target.position + 1,
+    };
+    return target.columnId === payload.fromColumn
+      ? tOr('kanbanBoard.move_reorder', 'Moved to position {position} in {column}', params)
+      : tOr('kanbanBoard.move_column', 'Moved to {column}, position {position}', params);
+  };
 
   // Delegate actual data mutation to the parent via onItemMove so the
   // board remains a controlled component (data source of truth is external).
-  const handleDrop = useCallback(
-    (e: React.DragEvent, columnId: string, position: number) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (dragData) {
-        measure(); // snapshot every registered card's rect before the parent's reorder
-        onItemMove(dragData.itemId, dragData.fromColumn, columnId, position);
-      }
-      setDragData(null);
-      setDropTarget(null);
+  // measure() snapshots every registered card's rect BEFORE that reorder.
+  const commitMove = (payload: KanbanPayload, target: KanbanTarget): void => {
+    measure();
+    onItemMove(payload.key, payload.fromColumn, target.columnId, target.position);
+  };
+
+  const drag = useDragSession<KanbanPayload, KanbanTarget>({
+    onDrop: commitMove,
+    /* An arrow moves the card NOW: no grabbed phase, so no session is ever
+       open between two key presses and none can be stamped. */
+    keyboard: {
+      mode: 'immediate',
+      orientation: 'vertical',
+      crossAxis: 'horizontal',
+      resolveKeyboardTarget: ({ payload, intent }) => resolveMove(payload, intent),
     },
-    [dragData, onItemMove, measure]
-  );
-
-  // Always clean up drag state on end, even if the drop landed outside a
-  // valid target, to avoid stale ghost opacity on cards.
-  const handleDragEnd = useCallback(() => {
-    setDragData(null);
-    setDropTarget(null);
-  }, []);
-
-  /* Keyboard move protocol (see the module docblock). Reuses the controlled
-     onItemMove contract — the parent stays the source of truth — and the
-     FLIP measure, so a keyboard move animates exactly like a drag move. */
-  const applyMove = useCallback(
-    (intent: KanbanMoveIntent, item: T, columnIndex: number, index: number) => {
-      const column = columns[columnIndex];
-      const id = itemKey(item);
-      const crossesColumn = intent === 'prev-column' || intent === 'next-column';
-      const toColumnIndex = crossesColumn
-        ? columnIndex + (intent === 'prev-column' ? -1 : 1)
-        : columnIndex;
-      const toPosition = crossesColumn
-        ? index
-        : index + (intent === 'prev-item' ? -1 : 1);
-
-      const blocked =
-        toColumnIndex < 0 ||
-        toColumnIndex >= columns.length ||
-        (!crossesColumn && (toPosition < 0 || toPosition >= column.items.length)) ||
-        (crossesColumn && columns[toColumnIndex].collapsed);
-      if (blocked) {
-        setAnnouncement(
-          tOr('kanbanBoard.move_edge', 'Cannot move further in that direction')
-        );
+    /* A pointer drop says nothing: the board speaks for the keyboard protocol,
+       where there is no drag ghost to watch. */
+    onAnnounce: (event) => {
+      if (event.origin === 'pointer') return;
+      if (event.kind === 'blocked') {
+        setAnnouncement(edgeMessage());
         return;
       }
-
-      const target = columns[toColumnIndex];
-      const position = crossesColumn ? target.items.length : toPosition;
-      measure(); // same FLIP snapshot as a drag drop
-      onItemMove(id, column.id, target.id, position);
-      setPendingFocusId(id);
-      setAnnouncement(
-        crossesColumn
-          ? tOr('kanbanBoard.move_column', 'Moved to {column}, position {position}', {
-              column: target.title,
-              position: position + 1,
-            })
-          : tOr('kanbanBoard.move_reorder', 'Moved to position {position} in {column}', {
-              column: target.title,
-              position: position + 1,
-            })
-      );
+      if (event.kind !== 'dropped') return;
+      setPendingFocusId(event.payload.key);
+      setAnnouncement(moveMessage(event.payload, event.target));
     },
-    [columns, itemKey, onItemMove, measure, tOr]
-  );
+  });
 
-  const handleCardKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLElement>, item: T, columnIndex: number, index: number) => {
+  /* The coarse-pointer rail commits outside the keyboard entrypoint, on the
+     same protocol: resolve, announce the blocked edge or commit, then focus. */
+  const runRailMove = (payload: KanbanPayload, intent: MoveIntent): void => {
+    const outcome = resolveMove(payload, intent);
+    if (outcome.kind === 'blocked') {
+      setAnnouncement(edgeMessage());
+      return;
+    }
+    commitMove(payload, outcome.target);
+    setPendingFocusId(payload.key);
+    setAnnouncement(moveMessage(payload, outcome.target));
+  };
+
+  const handleCardActivate = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>, item: T, columnId: string) => {
       // renderCard is a consumer slot: a key pressed on a control INSIDE the
       // card belongs to that control, never to the move protocol.
       if (e.target !== e.currentTarget) return;
-
       if ((e.key === 'Enter' || e.key === ' ') && onItemClick) {
         e.preventDefault();
-        onItemClick(item, columns[columnIndex].id);
-        return;
+        onItemClick(item, columnId);
       }
-
-      const rtl = direction === 'rtl';
-      let intent: KanbanMoveIntent;
-      if (e.key === 'ArrowUp') intent = 'prev-item';
-      else if (e.key === 'ArrowDown') intent = 'next-item';
-      else if (e.key === 'ArrowLeft') intent = rtl ? 'next-column' : 'prev-column';
-      else if (e.key === 'ArrowRight') intent = rtl ? 'prev-column' : 'next-column';
-      else return;
-      e.preventDefault();
-      applyMove(intent, item, columnIndex, index);
     },
-    [columns, onItemClick, applyMove]
+    [onItemClick]
   );
 
   /* Return focus to a keyboard-moved card once the parent's reorder has
@@ -376,7 +366,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
      flips them under :dir(rtl); swapping the two here as well would mirror
      twice and point the arrow back the wrong way. */
   const moveControls: ReadonlyArray<{
-    intent: KanbanMoveIntent;
+    intent: MoveIntent;
     label: string;
     icon: React.ReactNode;
   }> = [
@@ -391,12 +381,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
       icon: <NavigationDownIcon decorative size={14} />,
     },
     {
-      intent: 'prev-column',
+      intent: 'prev-container',
       label: tOr('kanbanBoard.move_prev_column', 'Move to previous column'),
       icon: <NavigationBackIcon decorative size={14} />,
     },
     {
-      intent: 'next-column',
+      intent: 'next-container',
       label: tOr('kanbanBoard.move_next_column', 'Move to next column'),
       icon: <NavigationForwardIcon decorative size={14} />,
     },
@@ -490,7 +480,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
             column.limit !== undefined && column.items.length >= column.limit;
           // Track whether this column is the active drop target so we can
           // show a primary-tinted ring as a drop affordance.
-          const isDropping = dropTarget?.columnId === column.id;
+          const isDropping = drag.session?.target?.columnId === column.id;
 
           return (
             <div
@@ -546,11 +536,13 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   data-part="column-body"
                   data-dropping={isDropping}
                   data-empty={column.items.length === 0}
-                  data-drop-at-end={isDropping && dropTarget?.position === column.items.length}
-                  onDragOver={(e) =>
-                    handleDragOver(e, column.id, column.items.length)
+                  data-drop-at-end={
+                    isDropping && drag.session?.target?.position === column.items.length
                   }
-                  onDrop={(e) => handleDrop(e, column.id, column.items.length)}
+                  {...drag.getTargetProps({
+                    columnId: column.id,
+                    position: column.items.length,
+                  })}
                 >
                   {column.items.length === 0 ? (
                     <div data-part="empty-column">
@@ -558,65 +550,67 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                     </div>
                   ) : (
                     <div data-part="card-list" role="list" aria-label={column.title}>
-                      {/* Each card is both a drag source (draggable) and a
-                          drop target (onDragOver/onDrop) to allow reordering
-                          within the same column or moving across columns —
-                          and a keyboard move target (see handleCardKeyDown). */}
-                      {column.items.map((item, index) => (
-                        <BoardCard
-                          data-dragging={dragData?.itemId === itemKey(item)}
-                          data-clickable={Boolean(onItemClick)}
-                          data-drop-before={isDropping && dropTarget?.position === index}
-                          key={itemKey(item)}
-                          ref={(el: HTMLElement | null) => {
-                            register(itemKey(item))(el);
-                            if (el) cardRefs.current.set(itemKey(item), el);
-                            else cardRefs.current.delete(itemKey(item));
-                          }}
-                          role="listitem"
-                          aria-roledescription={cardRoleLabel}
-                          tabIndex={0}
-                          draggable
-                          onDragStart={(e) =>
-                            handleDragStart(e, item, column.id)
-                          }
-                          onDragOver={(e) => {
-                            e.stopPropagation();
-                            handleDragOver(e, column.id, index);
-                          }}
-                          onDrop={(e) => handleDrop(e, column.id, index)}
-                          onDragEnd={handleDragEnd}
-                          onClick={() => onItemClick?.(item, column.id)}
-                          onKeyDown={(e) =>
-                            handleCardKeyDown(e, item, columnIndex, index)
-                          }
-                        >
-                          <div data-part="card-content">
-                            {renderCard(item, column.id)}
-                          </div>
-                          {/* Coarse-pointer move rail: the same controlled
-                              protocol the arrow keys drive, on real Buttons. */}
-                          {isCoarsePointer && (
-                            <div data-part="card-move">
-                              {moveControls.map((control) => (
-                                <ModernButton
-                                  key={control.intent}
-                                  variant="text"
-                                  size="sm"
-                                  data-part="card-move-button"
-                                  data-move-intent={control.intent}
-                                  aria-label={control.label}
-                                  icon={control.icon}
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    applyMove(control.intent, item, columnIndex, index);
-                                  }}
-                                />
-                              ))}
+                      {/* Each card is both a drag source and a drop target, so
+                          a card reorders within its column or moves across
+                          columns, and it is a keyboard move target besides. */}
+                      {column.items.map((item, index) => {
+                        const payload: KanbanPayload = {
+                          key: itemKey(item),
+                          fromColumn: column.id,
+                          columnIndex,
+                          index,
+                        };
+                        return (
+                          <BoardCard
+                            {...drag.getSourceProps(payload)}
+                            {...drag.getTargetProps(
+                              { columnId: column.id, position: index },
+                              { stopPropagation: true },
+                            )}
+                            data-dragging={drag.session?.payload.key === payload.key}
+                            data-clickable={Boolean(onItemClick)}
+                            data-drop-before={
+                              isDropping && drag.session?.target?.position === index
+                            }
+                            key={payload.key}
+                            ref={(el: HTMLElement | null) => {
+                              register(payload.key)(el);
+                              if (el) cardRefs.current.set(payload.key, el);
+                              else cardRefs.current.delete(payload.key);
+                            }}
+                            role="listitem"
+                            aria-roledescription={cardRoleLabel}
+                            tabIndex={0}
+                            onClick={() => onItemClick?.(item, column.id)}
+                            onActivate={(e) => handleCardActivate(e, item, column.id)}
+                          >
+                            <div data-part="card-content">
+                              {renderCard(item, column.id)}
                             </div>
-                          )}
-                        </BoardCard>
-                      ))}
+                            {/* Coarse-pointer move rail: the same controlled
+                                protocol the arrow keys drive, on real Buttons. */}
+                            {isCoarsePointer && (
+                              <div data-part="card-move">
+                                {moveControls.map((control) => (
+                                  <ModernButton
+                                    key={control.intent}
+                                    variant="text"
+                                    size="sm"
+                                    data-part="card-move-button"
+                                    data-move-intent={MOVE_INTENT_STAMP[control.intent]}
+                                    aria-label={control.label}
+                                    icon={control.icon}
+                                    onClick={(event) => {
+                                      event.stopPropagation();
+                                      runRailMove(payload, control.intent);
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                            )}
+                          </BoardCard>
+                        );
+                      })}
                     </div>
                   )}
 

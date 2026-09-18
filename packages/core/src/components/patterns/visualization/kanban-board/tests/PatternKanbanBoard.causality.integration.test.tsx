@@ -191,17 +191,16 @@ describeCausality({
  * a new node and a same-count swap all go red and must be re-adjudicated.
  *
  * Every finding is contrast, and every offending node is content the family
- * does NOT own: the caller's toolbar slot (`[data-part='toolbar'] > span`), the
- * composed Empty's description in an empty column (`p`), and the composed
- * Badge's danger-tone WIP count at the limit (`span[title='1 / 1']`). The board
- * states no ground of its own beneath a caller slot, and the Empty and Badge
- * primitives own their own ink. Registered, never excluded; a scope with no
- * entry is a scope that must stay clean.
+ * does NOT own: the composed Empty's description in an empty column (`p`) and
+ * the composed Badge's danger-tone WIP count at the limit (`span[title='1 /
+ * 1']`). The board states no ground of its own beneath a caller slot, and the
+ * Empty and Badge primitives own their own ink. Registered, never excluded; a
+ * scope with no entry is a scope that must stay clean.
+ *
+ * `bithire dark` held a fourth node, the caller's toolbar slot, whose ground
+ * the mode-canvas derivation repaired; it leaves the map by identity.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': ['div[data-part="toolbar"] > span'],
-  },
   'bithire light': {
     'color-contrast': ['p'],
   },
