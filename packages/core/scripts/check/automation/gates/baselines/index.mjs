@@ -85,19 +85,15 @@ export const WIDENINGS = Object.freeze([
       + 'The record is kept verbatim rather than rewritten; what is closed here is the next silent one.',
   },
   {
-    id: 'customization-dead-writers',
-    owner: 'WO-DER-06 (2d-resto), WO-FAM-07, WO-FAM-12',
+    id: 'normalization-contract',
+    owner: 'WO-DER-06 (derivation carril), WO-FAM-10 (the wave that landed the re-attribution)',
     reason:
-      '2026-09-15 (DT-authorized, two measured movements). First: the anchor dropped 3 victories '
-      + '(--ds-card-padding and --ds-card-padding-xl wired by F6b, the --ds-card-shadow-elevated twin retired) '
-      + 'and widened ONLY 24 names with a registered owner and resolution path: 6 --ds-breakpoint-* to '
-      + 'WO-FAM-07 and 4 --ds-posture-* to WO-FAM-12 (the same registrations as the liveness dispositions), '
-      + 'and 14 --ds-switch-* to WO-DER-06 2d-resto (namespace retirement with token-lane reclassification); '
-      + 'the eleven ownerless names were resolved outside the anchor by wire-or-retire (F6c, 008eb19e2). '
-      + 'Second (D6-2c-ii): +11 names the neutral compile ships with zero readers anywhere '
-      + '(--ds-color-text-page, seven --ds-control-*, --ds-sidebar-item-color, --ds-surface-shadow(-hover)), '
-      + 'same class and same owner (WO-DER-06 2d-resto). '
-      + 'Decrease-only from here: each owner removes its names.',
+      '2026-09-18 (DT re-pin sweep after the FAM-10 wave, bfcac0099): shadowingLiteralPins rose 4 -> 7 '
+      + 'through the governed --write-baseline --reattribution door, authorized by name in the sweep commit: '
+      + '--ds-motion-intensity now roots at motion.intensity with a derivation law '
+      + '(foundation/animations/transitions + the compiled copies in runtime/engines/modern/compiled), so the '
+      + 'pins that name it are coverage gained, not regression. The record is kept verbatim rather than '
+      + 'rewritten; decrease-only from here.',
   },
 ]);
 

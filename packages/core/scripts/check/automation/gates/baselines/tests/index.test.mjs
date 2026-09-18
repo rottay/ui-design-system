@@ -145,8 +145,13 @@ describe('baseline discipline drills — the next quiet move is refused', () => 
 
   it('MUTANT: an APCA pairing that got FIXED must be unpinned in the same commit', () => {
     const dir = sandbox({ [LEDGER]: { purpose: 'f'.repeat(40), count: 1 } });
+    // PINNED_APCA_PAIRS drained to empty on 2026-09-15, so there is no real
+    // pair to slice off: synthesize the pinned-set state the mutant describes
+    // (a pair on the pin that the ledger no longer ships) instead of slicing
+    // an empty list, which would make actual === pinned and assert nothing.
+    const pinned = ['rottay|base|--ds-color-fixed-900'];
     const failures = evaluate(measure({ root: dir, gates: [gate()] }), {
-      apca: { actual: PINNED_APCA_PAIRS.slice(1), pinned: [...PINNED_APCA_PAIRS] },
+      apca: { actual: [], pinned },
     });
     assert.ok(failures.some((line) => line.includes('is pinned and no longer on the ledger')), failures.join(' | '));
   });

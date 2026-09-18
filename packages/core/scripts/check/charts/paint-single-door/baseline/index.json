@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "policy": "decrease-only",
+  "purpose": "The chart paint single door: every hand-written paint-modulus site in the chart families is pinned here by name until the family adopts the shared resolver; growth fails, a fix fails with an instruction to remove the pin in the same commit.",
   "findings": {
     "hand-written-paint-modulus:components/patterns/visualization/charts/families/area-chart/index.tsx": {
       "count": 1,
