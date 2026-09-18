@@ -296,3 +296,22 @@ roster, landmark/heading semantics — the family's first test file).
 returns: the focal ten files green, tsc on the final candidate, then the DT
 window (build → hooks → cascade extract → derive → vertical-css →
 decisions-lit) and the deferred theme-contract-freeze census re-pin.
+
+## 2026-09-18 (thirteenth sitting) — D/E PRE-AUDIT part 5: modified tests — PASS, audit complete
+
+The draft's edits to EXISTING tests are honest and in places stronger: the
+skeleton tests now assert exact bone sequences measured from the chrome (not
+declared sizes); workbench adds an explicit single-announcement a11y contract
+(root role=status + label, source inert + aria-hidden, bones aria-hidden);
+cockpit adds role/aria-label assertions and wraps focus in act(); the mobile
+elevation test re-pins the retired `--_ds-*` private names to the public
+channels the deriver promoted. One nuance recorded: the elevation assertions
+read the SKIN source (root decls), not the emitted artifact — which is why they
+pass while the door drops the deriver's env() channel; the two measurements
+answer different questions and the FAIL in part 3 stands.
+
+**Pre-audit closed.** Full surface covered: registry, 3 engines, 5 derivers,
+channel correspondence both directions, 5 skins (skeleton retirement, pseudo
+twins), new + modified tests. Verdict unchanged: clean except (a) cardGround
+chain (cockpit + workbench), (b) mobile-header env channel. Gates at
+integration: focal ten green, tsc on the candidate, DT window, census re-pin.
