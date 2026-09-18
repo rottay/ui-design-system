@@ -49,8 +49,8 @@
  *   - STALE and OFFLINE were never duplicated and are unchanged.
  *
  * All paint and typography belongs to `surface-states.css` in the skin. The
- * components stamp anatomy (`data-part`, BEM class names) and nothing else --
- * see the drain contract asserted in `tests/`.
+ * components stamp anatomy (`data-part`) and nothing else -- see the drain
+ * contract asserted in `tests/`.
  */
 
 import type { ReactNode } from 'react';
@@ -59,7 +59,7 @@ import { Alert } from '../../../../primitives/feedback/alert';
 import { Button } from '../../../../primitives/inputs/button';
 import { Card } from '../../../../primitives/display/card';
 import { Flex } from '../../../../primitives/layout/flex';
-import { Skeleton } from '../../../../primitives/feedback/skeleton';
+import { AnatomySkeleton } from '../../../../primitives/feedback/skeleton';
 import { Stack } from '../../../../primitives/layout/stack';
 import { Text } from '../../../../primitives/display/typography/compound/text';
 import { PatternEmptyState } from '../../../../patterns/feedback/empty-state';
@@ -67,8 +67,6 @@ import type { SurfaceAction } from '../../../foundation/chrome/contracts';
 import { resolveSurfaceButtonVariant } from '../../../foundation/chrome/runtime/access';
 import { normalizeSurfaceError } from '../../../foundation/chrome/runtime/errors';
 import { useSurfaceTranslations } from '../../../foundation/chrome/runtime/i18n';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive';
-import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 
 // ---------------------------------------------------------------------------
 // SurfaceLoadingSkeleton -- state: loading (replaces content)
@@ -82,52 +80,46 @@ export interface SurfaceLoadingSkeletonProps {
 }
 
 /**
- * A skeleton placeholder for surfaces in the `loading` state.
+ * A loading placeholder for surfaces in the `loading` state.
  *
- * Renders shimmer bars that approximate a data table or list. The animation
- * style respects the user's reduced-motion preference and the personality
- * token `animation.skeletonStyle`.
+ * The wait is BUILT FROM THE ANATOMY, not hand-written: the shared renderer
+ * reads the family's canonical content shape -- a header line, a secondary
+ * line, then the rows -- and draws one bone per measured part, so the
+ * placeholder cannot drift from the vocabulary it stands in for. Bone sizes
+ * are skin-owned (`surface-states.css`); the parts stamp the anatomy and the
+ * landing classes the long-tail contract pins, and nothing else. The renderer
+ * owns the shimmer (the motion vocabulary, reduced-motion safe); the root
+ * keeps the single announcement.
  */
 export function SurfaceLoadingSkeleton({
   rows = 6,
   showHeader = true,
 }: SurfaceLoadingSkeletonProps): React.ReactElement {
-  const tokens = useTokens();
-  const { prefersReducedMotion } = useBreakpoints();
-
-  const skeletonAnimation =
-    prefersReducedMotion || tokens.personality.animation.skeletonStyle === 'pulse'
-      ? 'pulse'
-      : 'wave';
+  const { tSurfaceOr } = useSurfaceTranslations();
+  const loadingLabel = tSurfaceOr('states.loading_title', 'Loading surface');
 
   return (
-    <Stack className="ds-surface ds-loading-skeleton" data-part="root" spacing="md">
-      {showHeader && (
-        <Flex data-part="header" gap={4} align="center">
-          <Skeleton
-            className="ds-loading-skeleton__header-primary"
-            variant="text"
-            rows={1}
-            animation={skeletonAnimation}
-            active
-          />
-          <Skeleton
-            className="ds-loading-skeleton__header-secondary"
-            variant="text"
-            rows={1}
-            animation={skeletonAnimation}
-            active
-          />
-        </Flex>
-      )}
-      <Skeleton
-        className="ds-loading-skeleton__rows"
-        variant="text"
-        rows={rows}
-        animation={skeletonAnimation}
-        active
-      />
-    </Stack>
+    <div
+      className="ds-surface ds-surface-lifecycle-loading ds-loading-skeleton"
+      data-part="root"
+      role="status"
+      aria-busy={true}
+      aria-label={loadingLabel}
+    >
+      <AnatomySkeleton busy={false}>
+        {showHeader && (
+          <div data-part="header">
+            <div data-part="title" className="ds-loading-skeleton__header-primary" />
+            <div data-part="text" className="ds-loading-skeleton__header-secondary" />
+          </div>
+        )}
+        <div data-part="rows" className="ds-loading-skeleton__rows">
+          {Array.from({ length: rows }, (_, index) => (
+            <div key={index} data-part="text" />
+          ))}
+        </div>
+      </AnatomySkeleton>
+    </div>
   );
 }
 
@@ -228,7 +220,7 @@ export function SurfaceErrorState({
   return (
     <Card className="ds-surface ds-error-state" variant="outlined">
       <Card.Body className="ds-error-state__body">
-        <Stack data-part="content" spacing="md">
+        <Stack spacing="md">
           <Text data-part="title">
             {title ?? tSurface('states.error_title')}
           </Text>

@@ -65,14 +65,26 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
  * when the crashed tree took the I18nProvider down with it, the floor still
  * renders a complete sentence.
  *
- * STYLING ESCAPE HATCH (documented): the fallback keeps its paint inline so
- * it renders correctly even when the theming provider or the CSS token chain
- * is the crash source. Every color is a `--ds-error-boundary-*` channel with
- * a literal fallback — the token wins in a healthy tree, the literal keeps
- * the message legible in a broken one. No other component may copy this
+ * FAILURE-MODE FLOOR (measured, and the doctrine's answer to whether a
+ * boundary may paint inline): this surface must render a legible failure
+ * message when the stylesheet itself is the thing that failed, so the root
+ * keeps the smallest paint legibility requires — a readable contrast pair
+ * and a delineating edge, three properties, riding the family's
+ * `--ds-surface-lifecycle-error-*` channels with literal fallbacks. The
+ * literals are per-mode (`light-dark`): a single light-only pair was
+ * measured at 1.7–2.5:1 in dark scopes, which is a pink box with pink text,
+ * not a legible failure. In a healthy tree the channels resolve and the
+ * floor literals never render; everything beyond the floor (padding, radii,
+ * type scale, the retry button's paint) is governed paint in
+ * `skin/surface-states`. The floor is the measured minimum, commented as
+ * the failure mode, never the paint. No other component may copy this
  * pattern; it exists because this boundary outlives its own design system.
+ *
+ * Exported for the family's causality suite: React 19 renders no error
+ * boundary on the server, so the SSR paint probes mount this fallback
+ * directly (the catch path itself is client-rendered and client-tested).
  */
-function DefaultSurfaceErrorFallback({
+export function DefaultSurfaceErrorFallback({
   surfaceName,
   error,
   onRetry,
@@ -99,47 +111,18 @@ function DefaultSurfaceErrorFallback({
   return (
     <div
       role="alert"
+      className="ds-surface ds-surface-lifecycle-error"
+      data-part="root"
       style={{
-        padding: '24px',
-        border: '1px solid var(--ds-error-boundary-border, #fca5a5)',
-        borderRadius: '8px',
-        backgroundColor: 'var(--ds-error-boundary-bg, #fef2f2)',
-        color: 'var(--ds-error-boundary-color, #991b1b)',
+        backgroundColor:
+          'var(--ds-surface-lifecycle-error-bg, light-dark(#fef2f2, #2a1215))',
+        color: 'var(--ds-surface-lifecycle-error-color, light-dark(#991b1b, #fca8a5))',
+        border: '1px solid var(--ds-surface-lifecycle-error-border, light-dark(#fca5a5, #8c3a42))',
       }}
     >
-      <div
-        style={{
-          fontSize: '16px',
-          fontWeight: 700,
-          marginBottom: '8px',
-        }}
-      >
-        {title}
-      </div>
-      <div
-        style={{
-          fontSize: '14px',
-          opacity: 0.8,
-          marginBottom: '16px',
-          lineHeight: 1.5,
-        }}
-      >
-        {error.message}
-      </div>
-      <button
-        type="button"
-        onClick={onRetry}
-        style={{
-          padding: '8px 20px',
-          fontSize: '14px',
-          fontWeight: 500,
-          cursor: 'pointer',
-          border: '1px solid var(--ds-error-boundary-border, #fca5a5)',
-          borderRadius: '6px',
-          backgroundColor: 'var(--ds-error-boundary-action-bg, #ffffff)',
-          color: 'var(--ds-error-boundary-color, #991b1b)',
-        }}
-      >
+      <div data-part="title">{title}</div>
+      <div data-part="description">{error.message}</div>
+      <button type="button" data-part="action" onClick={onRetry}>
         {retryLabel}
       </button>
     </div>
@@ -223,9 +206,10 @@ export class SurfaceErrorBoundary extends Component<SurfaceErrorBoundaryProps, S
       }
 
       // The default fallback is a function component: copy resolves through
-      // the i18n channel with an English floor, and its inline paint rides
-      // documented --ds-error-boundary-* escape hatches so it renders even
-      // when the theming provider itself is the crash source.
+      // the i18n channel with an English floor, and its three-property
+      // failure-mode floor rides the family's error channels so the message
+      // stays legible even when the theming provider itself is the crash
+      // source (see the fallback's own documentation).
       return (
         <DefaultSurfaceErrorFallback
           surfaceName={this.props.surfaceName}

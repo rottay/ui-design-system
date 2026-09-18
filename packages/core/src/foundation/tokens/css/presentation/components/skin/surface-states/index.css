@@ -6,17 +6,30 @@
  * an unlayered skin keeps component paint above that reset while leaving
  * caller inline overrides in charge.
  *
- * These state helpers compose Card, Alert and Typography primitives. Their
- * root classNames provide the stable surface scope. Text color rules repeat
- * the owned part three times to reach (0,5,0), above both engines' (0,4,0)
- * default Typography color rule. The stale-banner border repeats its own part
- * to reach the tenant border-color floor at (0,4,0).
+ * Four scopes live here:
  *
- * R2+R3: every inline style the state components used to carry (title
- * weights, skeleton geometry, banner rhythm, capability-anatomy grid) lives
- * here now, on governed tokens; the engines stamp anatomy only. No
- * hardcoded color literals: the stale-banner fallbacks derive from
- * --ds-color-info via color-mix.
+ *   - the error boundary's GOVERNED paint (`ds-surface-lifecycle-error`),
+ *     carried in full over the runtime's three-property failure-mode floor:
+ *     padding, radii, type scale, the description rhythm and the retry
+ *     button's paint all belong to the skin, reading the family's
+ *     `--ds-surface-lifecycle-error-*` channels (produced by
+ *     `derivation/chrome/surface-lifecycle`);
+ *   - the loading surface's SOURCE geometry (`ds-surface-lifecycle-loading`):
+ *     the shared anatomy renderer draws the bones from the parts stamped in
+ *     the runtime; this file only sizes those parts so the bones take the
+ *     family's canonical shape (header line, secondary line, rows). No
+ *     selector here may name a skeleton: the renderer owns the bones;
+ *   - the stale banner's compact info strip, on the family channels the
+ *     retired `--ds-stale-banner-*` names became;
+ *   - the capability-anatomy inventory, ROUTED: this block paints
+ *     `structures/feedback/capability-anatomy`, a separate family whose own
+ *     cut must claim it (`--ds-capability-*` stays unproduced by design here
+ *     — a local producer would be a second authority).
+ *
+ * Text color rules repeat the owned part three times to reach (0,5,0), above
+ * both engines' (0,4,0) default Typography color rule. The stale-banner
+ * border repeats its own part to reach the tenant border-color floor at
+ * (0,4,0).
  *
  * CONVERGENCE (owner ruling, 2026-08-12): the lifecycle used to ship two
  * components for the same role, so this file used to skin two anatomies for
@@ -30,15 +43,71 @@
  * artifacts. Renaming it is a build-owned change, not a source-owned one.
  */
 
-/* ---- loading skeleton: header bar geometry (was inline width/height) ---- */
-.ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-primary[data-part='root'] {
-  inline-size: 30%;
-  block-size: var(--ds-loading-skeleton-header-height, 24px);
+/* ---- error boundary: the governed paint over the measured failure-mode
+        floor. The runtime root carries only the three-property legibility
+        floor inline; everything below is the skin's. ---- */
+.ds-surface-lifecycle-error[data-part='root'] {
+  padding: var(--ds-spacing-6, 24px);
+  border: 1px solid var(--ds-surface-lifecycle-error-border, color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border)));
+  border-radius: var(--ds-radius-lg, 8px);
+  background: var(--ds-surface-lifecycle-error-bg, color-mix(in oklab, var(--ds-color-error) 8%, var(--ds-color-bg-primary)));
+  color: var(--ds-surface-lifecycle-error-color, color-mix(in oklab, var(--ds-color-error) 60%, var(--ds-color-text-primary)));
 }
 
-.ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-secondary[data-part='root'] {
+.ds-surface-lifecycle-error [data-part='title'] {
+  font-size: var(--ds-font-size-lg, 1rem);
+  font-weight: var(--ds-font-weight-bold, 700);
+  margin-block-end: var(--ds-spacing-2, 8px);
+}
+
+.ds-surface-lifecycle-error [data-part='description'] {
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  line-height: var(--ds-line-height-normal, 1.5);
+  color: var(--ds-surface-lifecycle-error-color, color-mix(in oklab, var(--ds-color-error) 60%, var(--ds-color-text-primary)));
+  margin-block-end: var(--ds-spacing-4, 16px);
+}
+
+.ds-surface-lifecycle-error [data-part='action'] {
+  padding: var(--ds-spacing-2, 8px) var(--ds-spacing-5, 20px);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-medium, 500);
+  cursor: pointer;
+  border: 1px solid var(--ds-surface-lifecycle-error-border, color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border)));
+  border-radius: var(--ds-radius-md, 6px);
+  background: var(--ds-surface-lifecycle-error-action-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-surface-lifecycle-error-color, color-mix(in oklab, var(--ds-color-error) 60%, var(--ds-color-text-primary)));
+}
+
+/* ---- loading surface: the source anatomy the shared renderer measures.
+        The renderer draws one bone per part; these rules only size the
+        parts so the bones take the family's canonical shape. Geometry the
+        long-tail contract pins (30% / 20% header bars) stays readable as
+        the percent rungs below. ---- */
+.ds-surface-lifecycle-loading [data-part='header'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-end: var(--ds-spacing-3, 12px);
+}
+
+.ds-surface-lifecycle-loading [data-part='title'] {
+  inline-size: 30%;
+  block-size: var(--ds-spacing-6, 24px);
+}
+
+.ds-surface-lifecycle-loading [data-part='header'] > [data-part='text'] {
   inline-size: 20%;
-  block-size: var(--ds-loading-skeleton-header-height, 24px);
+  block-size: var(--ds-spacing-6, 24px);
+}
+
+.ds-surface-lifecycle-loading [data-part='rows'] {
+  display: grid;
+  gap: var(--ds-spacing-3, 12px);
+}
+
+.ds-surface-lifecycle-loading [data-part='rows'] > [data-part='text'] {
+  inline-size: 100%;
+  block-size: var(--ds-spacing-4, 16px);
 }
 
 /* ---- error state: title weight ---- */
@@ -46,14 +115,20 @@
   font-weight: var(--ds-font-weight-bold, 700);
 }
 
-/* ---- stale banner: compact info strip (no color literals; fallbacks derive
-        from --ds-color-info) ---- */
+/* ---- stale banner: compact info strip (no color literals; every value
+        derives from --ds-color-info at a measured ratio). The wash mixes
+        toward transparent, NOT the `--ds-color-info-bg` constant: that token
+        was measured staying light in dark scopes (2.3:1 with the info ink on
+        rottay dark), while transparent rides whatever canvas the banner
+        lands on. The ink is the accent mixed toward the mode's own text
+        ink -- `--ds-color-info` is an accent (the system's `--ds-color-info-ink`
+        aliases it), and accents do not carry text. ---- */
 .ds-surface.ds-stale-banner[data-part='banner'] {
-  padding: var(--ds-stale-banner-padding-block, var(--ds-spacing-2, 8px))
-    var(--ds-stale-banner-padding-inline, var(--ds-spacing-3, 12px));
+  padding: var(--ds-surface-lifecycle-stale-banner-padding-block, var(--ds-spacing-2, 8px))
+    var(--ds-surface-lifecycle-stale-banner-padding-inline, var(--ds-spacing-3, 12px));
   border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-color-info-bg, color-mix(in srgb, var(--ds-color-info) 8%, transparent));
-  color: var(--ds-color-info);
+  background: color-mix(in srgb, var(--ds-color-info) 8%, transparent);
+  color: color-mix(in oklab, var(--ds-color-info) 60%, var(--ds-color-text-primary));
   font-size: var(--ds-font-size-sm, 0.875rem);
 }
 
@@ -67,7 +142,10 @@
 }
 
 /* ---- capability anatomy: the data-independent inventory beside a failed
-        surface load (was fully inline in the engine) ---- */
+        surface load (was fully inline in the engine). ROUTED: this block
+        paints `structures/feedback/capability-anatomy`, a separate family;
+        its `--ds-capability-*` channels stay unproduced here on purpose —
+        the family cut that claims this block owns its producers. ---- */
 .ds-surface.ds-capability-anatomy[data-part='capability-anatomy'] {
   display: grid;
   gap: var(--ds-spacing-2, 8px);

@@ -208,7 +208,13 @@ describe('surface-states.css', () => {
     // second lifecycle vocabulary the source no longer renders.
     expect(rules).not.toContain('ds-loading-state');
     expect(rules).not.toContain('ds-empty-state-card');
-    // The surviving skeleton anatomy must not have been dropped with them.
-    expect(rules).toContain('ds-loading-skeleton__header-primary');
+    // The loading surface is keyed on the stamped anatomy now: the shared
+    // renderer owns the bones, and the skin sizes the source parts.
+    expect(rules).toContain('.ds-surface-lifecycle-loading');
+    expect(rules).not.toContain('ds-loading-skeleton__');
+    // The error boundary's governed paint rides the family channels.
+    expect(rules).toContain('--ds-surface-lifecycle-error-bg');
+    // The stale banner's rhythm is renamed into the family namespace.
+    expect(rules).not.toContain('--ds-stale-banner-');
   });
 });

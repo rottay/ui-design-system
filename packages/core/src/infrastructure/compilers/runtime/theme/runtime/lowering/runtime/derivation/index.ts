@@ -51,6 +51,7 @@ import { workbenchHeaderChromeDeriver } from "./chrome/workbench-header";
 import { sectionFrameChromeDeriver } from "./chrome/section-frame";
 import { mobileHeaderChromeDeriver } from "./chrome/mobile-header";
 import { statsHeaderChromeDeriver } from "./chrome/stats-header";
+import { surfaceLifecycleChromeDeriver } from "./chrome/surface-lifecycle";
 import { cardChromeDeriver } from "./chrome/card";
 import { tableChromeDeriver } from "./chrome/table";
 import { dataTableChromeDeriver } from "./chrome/data-table";
@@ -177,6 +178,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   sectionFrameChromeDeriver,
   mobileHeaderChromeDeriver,
   statsHeaderChromeDeriver,
+  surfaceLifecycleChromeDeriver,
   cardChromeDeriver,
   tableChromeDeriver,
   dataTableChromeDeriver,
