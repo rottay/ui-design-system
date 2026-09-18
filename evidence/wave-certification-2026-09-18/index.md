@@ -190,3 +190,23 @@ anatomy. Writer brief: rewrite both against the shipped loading contract (List:
 loading-grid + derived skeleton items + root busy; Card: overlay/spinner per
 the cut) — the loading-state coverage the checkpoints exist for must be
 re-asserted, not dropped.
+
+## 2026-09-18 (eighth sitting) — FloatButton/BackTop flake: mechanism characterized
+
+The batch runs green in isolation (NavigationBatch 36/36, twice) — as a flake
+class should. The mechanism is structural, in the modern BackTop engine
+(engines/modern/index.tsx:204-221): visibility is a TWO-PASS effect chain.
+Mount stamps `visible=false` and `scrollSource=undefined`; a commit-every-
+render effect resolves the target into `scrollSource` (second render); only
+then does the listener effect run `handleScroll()`, which is the first moment
+`visible` can become true (third render). The listener effect's
+`scrollSource === undefined` bail means the initial `handleScroll` NEVER runs
+on first commit, even for the default window target whose answer is known
+eagerly. With `visibilityHeight={0}` the trigger therefore appears two effect
+passes after mount, and under parallel-suite load that lands outside the
+`waitForPart` window intermittently — the recorded flake. Same shape in the
+FloatButton.BackTop composition. Writer brief: compute the initial visibility
+eagerly for the default window target (the `useState(false)` initializer knows
+`scrollTop >= visibilityHeight` without any effect), keeping the two-pass
+resolution only for ref-backed targets — which also removes a real
+two-frame pop-in on first paint, not only the test flake.
