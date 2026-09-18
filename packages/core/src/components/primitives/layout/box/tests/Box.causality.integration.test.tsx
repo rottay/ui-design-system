@@ -43,23 +43,18 @@ const MD = '#md .rottay-box';
  * it with descendant selectors. The name was censused clear against stamps,
  * skin reads and skeleton roles before it was adopted.
  *
- * NOT this family's debt: in bithire's dark mode the harness ground
- * `--ds-color-bg-primary` stays #FFFFFF while the ink follows the mode, so ANY
- * text in that scope fails the contrast floor. A bare `<p>` with no box fails
- * identically (measured control). Box paints no ground of its own.
+ * Measured debt, pinned by node IDENTITY. Registered, never excluded.
+ *
+ * `bithire dark` had six rows -- the two unstamped boxes and the four radius
+ * rungs -- and they DRAINED: that scope's dark block now re-derives its own
+ * canvas ground instead of inheriting the light body's, so the ink no longer
+ * sits on a near-white ground. The debt was never this family's (Box paints no
+ * ground of its own; a bare `<p>` with no box used to fail identically), which
+ * is why a repair outside the family cleared all six at once. Dropped by
+ * identity, not waived: with no entry every scope must now measure clean, and a
+ * relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '#caller > .rottay-box.rottay-box--modern[data-part="box-surface"]',
-      '#flat > .rottay-box.rottay-box--modern[data-part="box-surface"]',
-      'div[data-radius="full"]',
-      'div[data-radius="md"]',
-      'div[data-radius="sm"]',
-      'div[data-radius="xl"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describeCausality({
   family: 'box',

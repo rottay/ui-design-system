@@ -12,6 +12,10 @@ export type {
   BoxDisplay,
   BoxPosition,
   BoxOverflow,
+  BoxMotion,
+  BoxTextAlign,
+  BoxTextAlignInput,
+  LegacyPhysicalBoxTextAlign,
 } from './box';
 export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_RUNGS } from './box';
 
