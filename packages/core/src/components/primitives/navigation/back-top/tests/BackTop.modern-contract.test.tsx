@@ -38,6 +38,34 @@ afterEach(() => {
 });
 
 describe('BackTop modern contract: anatomy', () => {
+  it('computes initial visibility eagerly for the default window target', () => {
+    // Mount-time scroll position decides the first paint without any scroll
+    // pass: a visibilityHeight={0} trigger (or a window already scrolled past
+    // the threshold) must not wait for the listener effect's first run.
+    Object.defineProperty(document.documentElement, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 500,
+    });
+    const scrolled = render(<BackTop visibilityHeight={300} />);
+    expect(screen.getByRole('button', { name: 'Back to top' })).toBeInTheDocument();
+    scrolled.unmount();
+
+    Object.defineProperty(document.documentElement, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 0,
+    });
+    const atTop = render(<BackTop visibilityHeight={0} onClick={() => {}} />);
+    // visibilityHeight={0} means "always visible" — even at scrollTop 0.
+    expect(screen.getByRole('button', { name: 'Back to top' })).toBeInTheDocument();
+    atTop.unmount();
+
+    const hidden = render(<BackTop visibilityHeight={300} />);
+    expect(screen.queryByRole('button', { name: 'Back to top' })).toBeNull();
+    hidden.unmount();
+  });
+
   it('stays unmounted below the visibility threshold and mounts above it', () => {
     render(<BackTop visibilityHeight={300} />);
     expect(screen.queryByRole('button')).toBeNull();

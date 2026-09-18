@@ -149,8 +149,15 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     // State
     // ========================================================================
 
-    /** Controls button visibility - component unmounts when false */
-    const [visible, setVisible] = useState(false);
+    /** Controls button visibility - component unmounts when false. The
+     *  initial value is computed eagerly for the default window target
+     *  (scrollTop >= visibilityHeight needs no effect when the source is
+     *  window); ref-backed targets resolve in a later commit and start
+     *  hidden on the two-pass path. */
+    const [visible, setVisible] = useState(() => {
+      if (target || typeof window === 'undefined') return false;
+      return readScrollTop(window) >= visibilityHeight;
+    });
 
     /** Internal trigger handle, merged with the forwarded ref so the click
      *  path can tell whether the activation held focus (focus return, P2-20). */
