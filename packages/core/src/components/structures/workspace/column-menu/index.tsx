@@ -18,6 +18,18 @@
  *   - Visible drag handle plus up/down arrows for reordering
  *   - Listens to a custom DOM event for external open requests
  *
+ * KEYBOARD REORDER (a11y, DECLARED ADDITION -- WO-FAM-08, F-69 lot 6): the drag
+ * handle runs the kernel's `'grab'` protocol -- Space/Enter grabs, Up/Down choose
+ * a position in the complete draft order, Space/Enter drops into the DRAFT (Apply
+ * still publishes), Escape cancels and the draft was never written. While a grab
+ * is live the panel yields Escape to it. Every step is announced through a
+ * visually-hidden pair of `aria-live="polite"` regions the panel alternates, so a
+ * repeated identical outcome still changes a region's text; focus returns to the
+ * moved row's handle. The grab keys bind on the HANDLE ONLY -- where Space/Enter
+ * previously produced a prevented click -- so the Move buttons, the pin toggles,
+ * the checkboxes and the width field keep their own keys. A POINTER drag still
+ * announces nothing, as before.
+ *
  * The family stays domain-agnostic: it works with any column shape that
  * has `key: string` and `title: string`. Generic over `T` so consumers can
  * pass their full table column definitions without losing type safety.
@@ -47,11 +59,13 @@ import { Flex } from "../../../primitives/layout/flex";
 import { InputNumber } from "../../../primitives/inputs/input-number";
 import { Popover } from "../../../primitives/overlay/popover";
 import { Text } from "../../../primitives/display/typography/compound/text";
+import { VisuallyHidden } from "../../../primitives/foundation/visually-hidden";
 import {
   reorderByKey,
   useDragSession,
 } from "../../../primitives/runtime/collection/sortable";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
+import { interpolateTranslation } from "@/foundation/i18n/runtime/resolution/translation";
 
 function readColumnRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== "object" || value === null) return undefined;
@@ -239,22 +253,40 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
   const i18n = useOptionalTranslation("components");
   /**
    * Catalog lookup with an honest English floor: when the provider is absent
-   * or echoes the raw key (missing entry), the historical default wins.
+   * or echoes the raw key (missing entry), the historical default wins. The
+   * floor carries the same placeholders as catalog copy, so a standalone
+   * render interpolates its own English instead of echoing `{position}`.
    */
   const tOr = useCallback(
-    (key: string, fallback: string): string => {
-      const resolved = i18n?.t(key);
+    (
+      key: string,
+      fallback: string,
+      params?: Record<string, string | number>
+    ): string => {
+      const resolved = i18n?.t(key, params);
       if (
         resolved === undefined ||
         resolved === key ||
         resolved === `components.${key}`
       ) {
-        return fallback;
+        return interpolateTranslation(fallback, params);
       }
       return resolved;
     },
     [i18n]
   );
+
+  /* A polite region is only spoken when its own text CHANGES, so the two
+     regions alternate: every message is an addition to whichever was empty. */
+  const [announcement, setAnnouncement] = useState<{ slot: 0 | 1; text: string }>(
+    { slot: 0, text: "" }
+  );
+  const announce = (text: string): void =>
+    setAnnouncement((previous) => ({
+      slot: previous.slot === 0 ? 1 : 0,
+      text,
+    }));
+
   const orderedColumns = useMemo(() => {
     const known = new Map(
       columns.map((column) => [column.key, column] as const)
@@ -375,6 +407,44 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
     [columns]
   );
 
+  /* The kernel says WHEN, the family says WHAT -- over the COMPLETE normalized
+     draft order `handleMove` and the drop write, never the rendered section. */
+  const completeDraftOrder = (): string[] =>
+    normalizeDraftOrder(
+      draftOrder,
+      columns.map((column) => column.key)
+    );
+  const columnTitleOf = (key: string) =>
+    columns.find((column) => column.key === key)?.title ?? key;
+  const positionOf = (key: string) => completeDraftOrder().indexOf(key) + 1;
+  const grabbedMessage = (key: string) =>
+    tOr(
+      "columnMenu.reorderGrabbed",
+      "Reordering {title}. Use the arrow keys to choose a position, Enter to drop, Escape to cancel.",
+      { title: columnTitleOf(key) }
+    );
+  const movedMessage = (key: string) =>
+    tOr("columnMenu.reorderMoved", "Position {position} of {total}", {
+      position: positionOf(key),
+      total: completeDraftOrder().length,
+    });
+  const droppedMessage = (key: string, targetKey: string) =>
+    tOr(
+      "columnMenu.reorderDropped",
+      "{title} moved to position {position} of {total}",
+      {
+        title: columnTitleOf(key),
+        position: positionOf(targetKey),
+        total: completeDraftOrder().length,
+      }
+    );
+  const staysMessage = (key: string, floorKey: string, floor: string) =>
+    tOr(floorKey, floor, {
+      title: columnTitleOf(key),
+      position: positionOf(key),
+      total: completeDraftOrder().length,
+    });
+
   const drag = useDragSession<{ key: string }, { key: string }>({
     /* Hovering the dragged row holds the indicator where it was; dropping on
        it refuses the move, which is what an unchanged draft means here. */
@@ -397,6 +467,63 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           target.key
         )
       ),
+    /* The grab protocol binds on the drag HANDLE alone: the rows run down the
+       panel, so the block axis is the one that moves a column. */
+    keyboard: {
+      mode: "grab",
+      orientation: "vertical",
+      /* The CANDIDATE advances, not the payload: a grab stages nothing, so the
+         payload's own index is stale after the first arrow. */
+      resolveKeyboardTarget: ({ payload, intent, candidate }) => {
+        const order = completeDraftOrder();
+        const from = order.indexOf(candidate ? candidate.key : payload.key);
+        const step =
+          intent === "next-item" ? 1 : intent === "prev-item" ? -1 : 0;
+        const to = from + step;
+        if (step === 0 || from < 0 || to < 0 || to >= order.length) {
+          return { kind: "blocked" };
+        }
+        return { kind: "target", target: { key: order[to] } };
+      },
+    },
+    /* A pointer drag says nothing, exactly as it did before this lot: the panel
+       speaks for the keyboard protocol, where there is no drag image to watch. */
+    onAnnounce: (event) => {
+      if (event.origin === "pointer") return;
+      if (event.kind === "grabbed") {
+        announce(grabbedMessage(event.payload.key));
+        return;
+      }
+      if (event.kind === "moved") {
+        announce(movedMessage(event.target.key));
+        return;
+      }
+      if (event.kind === "dropped") {
+        announce(droppedMessage(event.payload.key, event.target.key));
+        return;
+      }
+      if (event.kind === "cancelled") {
+        announce(
+          staysMessage(
+            event.payload.key,
+            "columnMenu.reorderCancelled",
+            "Reorder cancelled. {title} stays at position {position} of {total}"
+          )
+        );
+        return;
+      }
+      announce(
+        event.reason === "edge"
+          ? tOr("columnMenu.reorderEdge", "Cannot move {title} further", {
+              title: columnTitleOf(event.payload.key),
+            })
+          : staysMessage(
+              event.payload.key,
+              "columnMenu.reorderNoPosition",
+              "No new position chosen. {title} stays at position {position} of {total}"
+            )
+      );
+    },
   });
 
   const handleToggleAction = useCallback((key: string, locked?: boolean) => {
@@ -540,7 +667,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
       open={isOpen}
       onOpenChange={handleOpenChange}
       arrow={false}
-      closeOnEscape
+      /* Escape belongs to a live grab: the layer stack routes it from a
+         capture-phase listener, so the panel stands down rather than race it. */
+      closeOnEscape={drag.session === null}
       closeOnInteractOutside
       destroyTooltipOnHide
       role="dialog"
@@ -630,6 +759,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             data-part="drag-handle"
                             data-drag-target={isDragTarget}
                             data-dragging={isDragging}
+                            // A keyboard drop returns focus here, to the handle
+                            // of the row that moved.
+                            ref={drag.registerItem(column.key)}
                             {...drag.getSourceProps({ key: column.key })}
                             aria-label={`${tOr(
                               "columnMenu.dragToMove",
@@ -1043,6 +1175,15 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               {tOr("columnMenu.apply", "Apply columns")}
             </Button>
           </Flex>
+
+          {/* Both regions stay mounted and empty, so one exists before the first
+              message and one is free for the next. No part: the primitive clips. */}
+          <VisuallyHidden role="status" aria-live="polite">
+            {announcement.slot === 0 ? announcement.text : ""}
+          </VisuallyHidden>
+          <VisuallyHidden role="status" aria-live="polite">
+            {announcement.slot === 1 ? announcement.text : ""}
+          </VisuallyHidden>
         </Box>
       }
     >

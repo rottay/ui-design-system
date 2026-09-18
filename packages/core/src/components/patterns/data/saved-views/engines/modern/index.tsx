@@ -24,6 +24,17 @@
  *   role (status.featured), not an ad-hoc inline SVG: its weight follows the
  *   tenant's icon profile for the status role like every other status glyph.
  *
+ * KEYBOARD REORDER (a11y, DECLARED ADDITION — WO-FAM-08, F-69 lot 6): the drag
+ * grip is a real control (`role="button"`, a tab stop, its own accessible name)
+ * and runs the kernel's `'grab'` protocol — Space/Enter grabs, the inline arrows
+ * choose a position (mirrored under RTL by the shared direction authority),
+ * Space/Enter drops, Escape cancels and nothing was ever written. Every step is
+ * announced through a visually-hidden pair of `aria-live="polite"` regions the
+ * bar alternates, so a repeated identical outcome still changes a region's text;
+ * focus follows the grip of the view that moved. The grab keys bind on the GRIP
+ * ONLY: the pill's select Button, rename Input and actions menu keep Space,
+ * Enter and Escape. A POINTER drag still announces nothing, as before.
+ *
  * The pill shell stays a plain layout element (drag source + testid hook);
  * the select action moved INTO a real Button inside it, so no interactive
  * element nests inside another (the Collapse K3-C header-row remediation
@@ -67,7 +78,9 @@ import { ActionReorderIcon } from '@/graphics/icons/semantic/generated/roles/act
 import { NavigationMoreIcon } from '@/graphics/icons/semantic/generated/roles/navigation-more';
 import { StatusFeaturedIcon } from '@/graphics/icons/semantic/generated/roles/status-featured';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { VisuallyHidden } from '../../../../../primitives/foundation/visually-hidden';
 
 /**
  * The pill shell is a STATEFUL PART: its hover wash and press wash are painted,
@@ -134,12 +147,19 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
 
   /* ---- localized copy (components catalog, English floor) ---- */
   const translation = useOptionalTranslation('components');
-  const renameLabel = translation?.tOr('savedViews.rename', 'Rename') ?? 'Rename';
-  const duplicateLabel = translation?.tOr('savedViews.duplicate', 'Duplicate') ?? 'Duplicate';
-  const deleteLabel = translation?.tOr('savedViews.delete', 'Delete') ?? 'Delete';
-  const optionsLabel = translation?.tOr('savedViews.options', 'options') ?? 'options';
-  const unsavedChangesTitle =
-    translation?.tOr('savedViews.unsavedChanges', 'Unsaved changes') ?? 'Unsaved changes';
+  // The floor carries the same placeholders as catalog copy, so a standalone
+  // render interpolates its own English instead of echoing `{position}`.
+  const tOr = (
+    key: string,
+    floor: string,
+    params?: Record<string, string | number>,
+  ): string => translation?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
+  const renameLabel = tOr('savedViews.rename', 'Rename');
+  const duplicateLabel = tOr('savedViews.duplicate', 'Duplicate');
+  const deleteLabel = tOr('savedViews.delete', 'Delete');
+  const optionsLabel = tOr('savedViews.options', 'options');
+  const unsavedChangesTitle = tOr('savedViews.unsavedChanges', 'Unsaved changes');
+  const reorderLabel = tOr('savedViews.reorder', 'Reorder');
 
   // --- Local UI state ---
   const [isCreating, setIsCreating] = useState(false);
@@ -147,6 +167,15 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const [editingViewId, setEditingViewId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  /* A polite region is only spoken when its own text CHANGES, so the two
+     regions alternate: every message is an addition to whichever was empty. */
+  const [announcement, setAnnouncement] = useState<{ slot: 0 | 1; text: string }>({
+    slot: 0,
+    text: '',
+  });
+  const announce = (text: string): void =>
+    setAnnouncement((previous) => ({ slot: previous.slot === 0 ? 1 : 0, text }));
 
   /* A keyboard exit (Enter/Escape) hands focus back to the control the editor
      replaced; a blur exit must not, or it steals the pointer's new target. */
@@ -221,6 +250,34 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     [editingViewId, handleRenameConfirm],
   );
 
+  /* The kernel says WHEN, the family says WHAT. A landing position is the
+     destination's own index -- where `reorderByKey` inserts, in both directions. */
+  const viewNameOf = (key: string) => views.find((v) => v.id === key)?.name ?? key;
+  const positionOf = (key: string) => views.findIndex((v) => v.id === key) + 1;
+  const grabbedMessage = (key: string) =>
+    tOr(
+      'savedViews.reorderGrabbed',
+      'Reordering {name}. Use the arrow keys to choose a position, Enter to drop, Escape to cancel.',
+      { name: viewNameOf(key) },
+    );
+  const movedMessage = (key: string) =>
+    tOr('savedViews.reorderMoved', 'Position {position} of {total}', {
+      position: positionOf(key),
+      total: views.length,
+    });
+  const droppedMessage = (key: string, targetKey: string) =>
+    tOr('savedViews.reorderDropped', '{name} dropped at position {position} of {total}', {
+      name: viewNameOf(key),
+      position: positionOf(targetKey),
+      total: views.length,
+    });
+  const staysMessage = (key: string, floorKey: string, floor: string) =>
+    tOr(floorKey, floor, {
+      name: viewNameOf(key),
+      position: positionOf(key),
+      total: views.length,
+    });
+
   const drag = useDragSession<{ key: string }, { key: string }>({
     disabled: !onViewReorder,
     /* Hovering the dragged pill holds the previous indicator; dropping on it
@@ -236,6 +293,62 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         return;
       }
       onViewReorder?.(reorderByKey(currentOrder, payload.key, target.key));
+    },
+    /* The grab protocol binds on the HANDLE alone (see the grip below): the
+       arrows walk the bar's inline axis, so their direction mirrors under RTL. */
+    keyboard: {
+      mode: 'grab',
+      orientation: 'horizontal',
+      /* The CANDIDATE advances, not the payload: nothing has committed during a
+         grab, so the payload's own index is stale after the first arrow. */
+      resolveKeyboardTarget: ({ payload, intent, candidate }) => {
+        const order = views.map((v) => v.id);
+        const from = order.indexOf(candidate ? candidate.key : payload.key);
+        const step = intent === 'next-item' ? 1 : intent === 'prev-item' ? -1 : 0;
+        const to = from + step;
+        if (step === 0 || from < 0 || to < 0 || to >= order.length) {
+          return { kind: 'blocked' };
+        }
+        return { kind: 'target', target: { key: order[to] } };
+      },
+    },
+    /* A pointer drag says nothing, exactly as it did before this lot: the bar
+       speaks for the keyboard protocol, where there is no drag image to watch. */
+    onAnnounce: (event) => {
+      if (event.origin === 'pointer') return;
+      if (event.kind === 'grabbed') {
+        announce(grabbedMessage(event.payload.key));
+        return;
+      }
+      if (event.kind === 'moved') {
+        announce(movedMessage(event.target.key));
+        return;
+      }
+      if (event.kind === 'dropped') {
+        announce(droppedMessage(event.payload.key, event.target.key));
+        return;
+      }
+      if (event.kind === 'cancelled') {
+        announce(
+          staysMessage(
+            event.payload.key,
+            'savedViews.reorderCancelled',
+            'Reorder cancelled. {name} stays at position {position} of {total}',
+          ),
+        );
+        return;
+      }
+      announce(
+        event.reason === 'edge'
+          ? tOr('savedViews.reorderEdge', 'Cannot move {name} further', {
+              name: viewNameOf(event.payload.key),
+            })
+          : staysMessage(
+              event.payload.key,
+              'savedViews.reorderNoPosition',
+              'No new position chosen. {name} stays at position {position} of {total}',
+            ),
+      );
     },
   });
 
@@ -325,6 +438,10 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
            empty trigger is itself an inert affordance. */
         const hasMenu = menuItems.length > 0;
 
+        // Only the key route is taken from the source bag: the pill keeps the
+        // whole bag, so the pointer transport still starts and ends there.
+        const gripKeyDown = drag.getSourceProps({ key: view.id }).onKeyDown;
+
         return (
           <ViewPill
             key={view.id}
@@ -337,9 +454,18 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             dragTarget={drag.getTargetProps({ key: view.id })}
             data-testid={`view-tab-${view.id}`}
           >
-            {/* Drag grip (decorative chrome; the pill shell is the drag source) */}
+            {/* The grip is the KEYBOARD move affordance: the pill owns the pointer
+                drag but is not focusable, and its controls already own Space/Enter. */}
             {onViewReorder && (
-              <span data-part="drag-handle" className="ds-saved-views__drag-handle" aria-hidden="true">
+              <span
+                ref={drag.registerItem(view.id)}
+                data-part="drag-handle"
+                className="ds-saved-views__drag-handle"
+                role="button"
+                tabIndex={0}
+                aria-label={`${reorderLabel} ${view.name}`}
+                onKeyDown={gripKeyDown}
+              >
                 <ActionReorderIcon decorative size={12} />
               </span>
             )}
@@ -484,6 +610,19 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             {createLabel}
           </Button>
         )
+      )}
+
+      {/* Both regions stay mounted and empty, so one exists before the first
+          message and one is free for the next. No part: the primitive owns the clip. */}
+      {onViewReorder && (
+        <>
+          <VisuallyHidden role="status" aria-live="polite">
+            {announcement.slot === 0 ? announcement.text : ''}
+          </VisuallyHidden>
+          <VisuallyHidden role="status" aria-live="polite">
+            {announcement.slot === 1 ? announcement.text : ''}
+          </VisuallyHidden>
+        </>
       )}
     </div>
   );
