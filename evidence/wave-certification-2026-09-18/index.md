@@ -33,3 +33,19 @@ the inventory's full state is measured only when the front clears; that is recor
 
 - The D/E header cohort drafts (in-flight, preserved, quota-blocked writer).
 - Milestone B's fleet evidence (awaits the chart lane + the owner decisions).
+
+## 2026-09-18 follow-up (the writer seat is quota-blocked; DT-only repairs)
+
+Repaired and committed by the DT (each verified by its own suite): the TreeView
+drag-handle pin, the probe-roster grid fixtures, the Input/InputNumber dark-scope
+axe pins (bithire dark drained; **rottay dark keeps a REAL residual**: the input
+field's ground stays `#ffffff` while its ink follows the dark ramp, 1.04:1 — a
+derivation defect routed to the input surface's mode channels, NOT a drained pin),
+and the antd bridge's dark-block pin (premise retired by the mode-canvas law, the
+assertion rewritten to the new contract).
+
+Still measured-parked for the writer seat (failure signatures measured this wave):
+Card/List loading anatomy (Display1/2Batch), the CollectionWorkspace focused-row
+class, the LongTail gallery/grid anatomy pins, the PresenceBar avatar geometry
+read, FloatButton's backtop flake class, and the theme-contract-freeze minting
+census (re-pins when the D/E drafts land — measuring twice is the trap).
