@@ -5993,6 +5993,11 @@
      "at": "2026-09-17 19:15",
      "by": "kimi-dt",
      "note": "R17-06 CERRADO: decisions-lit republicado sobre la puerta ACTUAL (874 archivos, digests frescos; check verde) en la ventana serializada del DT (83a4a0810: build verde, cascada+theme-graph re-escritos, CSS vertical y facades, hooks contract). R17-07: reparacion fuente P0+P1 integrada; medicion honesta actual 2342/2344/5443 vs baseline falso 2079/2114/5210 — el ratchet sigue rojo CONTRA EL PIN FALSO hasta tu decision de re-anclaje (o pin de conjunto nombrado); registrado, no oculto. Pendiente de esa decision: nada mas en esta WO por hoy; la poblacion frozen-only (330) espera la misma respuesta."
+    },
+    {
+     "at": "2026-09-17 21:35",
+     "by": "kimi-dt",
+     "note": "El drenaje transversal del mode-canvas fix (4f7d46751), medido por el sweep de W34 sobre 11 suites: button (6027d09b7, piso verificado: 3.2754 >= 3:1, +9.18% margen), badge y tag (bithire dark 3->{} — W36 en vuelo), saved-views y kanban (ya integrados en sus lotes). HALLAZGO NUEVO de la ley de identidad: typography es una SUSTITUCION, no un drenaje — bithire dark por fin es oscuro, y la tinta de link (ya pineada como deuda en rottay dark) falla ahi tambien. Defecto real de derivacion de tintas (link ink sobre grounds oscuros), NO una re-pin: ruteado a la lane de derivacion/axe como lote propio pendiente. Tambien registrado por W34: FIRST_PARTY_RATINGS pinea valores exactos sin asercion de piso — recomendacion de agregar el floor al loop (EVI lane)."
     }
    ]
   },
