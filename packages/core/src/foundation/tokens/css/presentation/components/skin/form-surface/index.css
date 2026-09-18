@@ -25,9 +25,10 @@
  *     the name moves nothing and gives the tenant the reach.
  *
  *   - `error-banner`: a RULED ALERT, not a second card frame (forms are not
- *     card stacks). The recessed error ground, one emphasis inline-start
- *     edge and optical padding on the rhythm plane; the retired error Card
- *     and its `--ds-card-bordered-border-color` retune went with the frame.
+ *     card stacks). The recessed error ground, an emphasis border that wraps
+ *     the full perimeter at the error tone and optical padding on the rhythm
+ *     plane; the retired error Card and its `--ds-card-bordered-border-color`
+ *     retune went with the frame.
  *
  *   - `actions`: the non-sticky rail's gap, drained from a fixed `gap={8}`
  *     prop on the Flex. A numeric gap used to stamp `data-gap='uniform'` and
@@ -43,7 +44,7 @@
  * set is anchored on the anatomy it reads.
  *
  * FORCED COLORS: the alert re-asserts in system colors — the recessed ground
- * becomes Canvas and the emphasis edge takes the text system color; the
+ * becomes Canvas and the emphasis border takes the text system color; the
  * composed Card, Button, ActionDock and typography keep their own
  * forced-colors contracts.
  */
@@ -59,13 +60,13 @@
   margin-block-end: var(--ds-form-surface-description-margin-block-end, 0);
 }
 
-/* The error surface is a ruled alert: the recessed error ground, one emphasis
-   inline-start edge, optical padding on the rhythm plane — no second card
-   frame. */
+/* The error surface is a ruled alert: the recessed error ground, an emphasis
+   border wrapping the full perimeter at the error tone, optical padding on
+   the rhythm plane — no second card frame. */
 .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
   padding: var(--ds-form-surface-error-banner-padding, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   background: var(--ds-color-error-bg, transparent);
-  border-inline-start: var(--ds-edge-emphasis-width, 1px) solid var(--ds-color-error);
+  border: var(--ds-edge-emphasis-width, 1px) solid var(--ds-color-error);
 }
 
 /* The non-sticky action rail's gap, drained from the Flex prop. */
@@ -81,11 +82,11 @@
   inset-block-start: var(--ds-spacing-4, 1rem);
 }
 
-/* forced-colors: the alert's recessed ground and emphasis edge re-assert in
+/* forced-colors: the alert's recessed ground and emphasis border re-assert in
    system colors; the rail, the aside and the reserved runway own no colour. */
 @media (forced-colors: active) {
   .ds-surface.ds-form-surface[data-part='root'] [data-part='error-banner'] {
     background: Canvas;
-    border-inline-start-color: CanvasText;
+    border-color: CanvasText;
   }
 }
