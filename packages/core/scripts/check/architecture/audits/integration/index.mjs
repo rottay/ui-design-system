@@ -5,7 +5,8 @@
  *
  * Detects:
  * 1. Premium chrome CSS variables emitted by the brand compiler that have
- *    no non-test reader in engines/, components/, or token CSS.
+ *    no non-test reader in engines/, components/, token CSS, or a
+ *    derivation source chaining its channels off them.
  * 2. Duplicate local `useCountUp` implementations that should use the
  *    canonical `useSmoothCounter` from motion/react/runtime/.
  * 3. Debug console.log/console.debug calls in runtime/ core files.
@@ -204,6 +205,24 @@ if (emittedVars.size > 0) {
   const nonTestConsumers = consumerFiles.filter(
     (f) => !f.includes('.test.') && !f.includes('.spec.') && !f.includes('.stories.')
   );
+
+  // Derivation sources are consumers too, not just producers: a family
+  // deriver chains its own --ds-<family>-* channels off premium roots (the
+  // menu deriver roots --ds-menu-* group, child and indent channels on
+  // --ds-sidebar-*), so a premium var referenced only from a derivation
+  // chain IS consumed. A census that sees only engines/components/token CSS
+  // reads those roots as orphans and over-retires live channels.
+  const derivationConsumers = walkFiles(
+    join(SRC_ROOT, 'infrastructure/compilers'),
+    /\.tsx?$/,
+  ).filter(
+    (f) =>
+      f.includes('/derivation/') &&
+      !f.includes('.test.') &&
+      !f.includes('.spec.') &&
+      !f.includes('.stories.'),
+  );
+  nonTestConsumers.push(...derivationConsumers);
 
   const allConsumerContent = nonTestConsumers.map((f) => readSafe(f)).join('\n');
 

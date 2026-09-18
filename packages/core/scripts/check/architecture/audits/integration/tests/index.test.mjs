@@ -252,6 +252,75 @@ test('T7: anti-silent-green — a broken fence never prints the success line', (
   assert.match(real.stdout, /all checks passed/);
 });
 
+test('T8: deriver-chain drill — a var referenced only from a derivation source is consumed; one referenced nowhere is still an orphan', () => {
+  // The census defect that over-retired the live --ds-sidebar-* roots: rule 1
+  // saw only engines/components/token CSS, so a premium var whose only
+  // reference sits in a derivation source (the menu deriver chains its
+  // --ds-menu-* channels off --ds-sidebar-* roots) read as an orphan. The
+  // drill plants one var consumed ONLY by a derivation source, one consumed
+  // by engine CSS, and one consumed by nothing; the first two must pass, the
+  // third must still be flagged. Assertions are on the rule-1 findings, not
+  // the exit code -- the fixture root carries none of the other rules'
+  // census trees, so they dominate the status (same contract as T6).
+  const root = join(mkdtempSync(join(tmpdir(), 'ds-integration-derivation-')), 'src');
+  const write = (relative, contents) => {
+    const absolute = join(root, relative);
+    mkdirSync(dirname(absolute), { recursive: true });
+    writeFileSync(absolute, contents);
+  };
+  write(
+    'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts',
+    [
+      'export function chromeToVariables(vars: Record<string, string>): void {',
+      "  vars['--ds-fixture-chrome-bg'] = 'transparent';",
+      "  vars['--ds-fixture-deriver-root'] = 'red';",
+      "  vars['--ds-fixture-true-orphan'] = 'blue';",
+      '}',
+      '',
+    ].join('\n'),
+  );
+  write('infrastructure/compilers/runtime/theme/runtime/lowering/index.ts', brandSource());
+  write(
+    'infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome/index.ts',
+    chromeOwnerSource(),
+  );
+  write('foundation/tokens/css/runtime/engines/modern/index.css', CONSUMER_CSS);
+  write(
+    'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.ts',
+    [
+      'export function deriveMenuChannels(): Record<string, string> {',
+      '  return {',
+      "    '--ds-menu-group-margin-block': 'var(--ds-fixture-deriver-root, 1px)',",
+      '  };',
+      '}',
+      '',
+    ].join('\n'),
+  );
+
+  const result = spawnSync(
+    process.execPath,
+    [AUDIT, '--package-root', CORE_ROOT, '--emitter-root', root],
+    { encoding: 'utf8' },
+  );
+  const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
+
+  assert.doesNotMatch(
+    output,
+    /Premium chrome var "--ds-fixture-deriver-root"/,
+    'a var referenced only from a derivation chain must not read as an orphan',
+  );
+  assert.doesNotMatch(
+    output,
+    /Premium chrome var "--ds-fixture-chrome-bg"/,
+    'the engine CSS consumer must still count, or the drill measures an empty census',
+  );
+  assert.match(
+    output,
+    /Premium chrome var "--ds-fixture-true-orphan" is emitted but has no non-test consumer/,
+    'a var referenced nowhere must still be flagged',
+  );
+});
+
 test('the resolver counts every declaration form, so absence cannot be undercounted', () => {
   const source = [
     'export function fn() {}',

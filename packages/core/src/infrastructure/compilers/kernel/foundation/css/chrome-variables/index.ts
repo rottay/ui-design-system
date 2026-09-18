@@ -1354,6 +1354,11 @@ export function chromeToVariables(
       vars["--ds-sidebar-header-height"] = s.headerHeight;
       vars["--ds-shell-sidebar-header-block-size"] = s.headerHeight;
     }
+    // The icon and item-height channels (icon size, icon column size, child
+    // padding, item height) stay un-emitted: nothing reads them under either
+    // the --ds-sidebar-* or the --ds-menu-* spelling. The remaining group and
+    // item geometry must keep emitting -- the menu deriver chains its
+    // --ds-menu-* channels off these --ds-sidebar-* roots.
     if (s.groupFontSize) vars["--ds-sidebar-group-font-size"] = s.groupFontSize;
     if (s.groupFontWeight != null)
       vars["--ds-sidebar-group-font-weight"] = String(s.groupFontWeight);
@@ -1374,18 +1379,13 @@ export function chromeToVariables(
       vars["--ds-sidebar-shell-padding-inline"] = s.shellPaddingInline;
     if (s.shellPaddingCollapsed)
       vars["--ds-sidebar-shell-padding-collapsed"] = s.shellPaddingCollapsed;
-    if (s.itemHeight) vars["--ds-sidebar-item-height"] = s.itemHeight;
     if (s.itemChildHeight)
       vars["--ds-sidebar-item-child-height"] = s.itemChildHeight;
     if (s.itemFontSizeChild)
       vars["--ds-sidebar-item-font-size-child"] = s.itemFontSizeChild;
     if (s.itemPaddingInline)
       vars["--ds-sidebar-item-padding-inline"] = s.itemPaddingInline;
-    if (s.iconColumnSize)
-      vars["--ds-sidebar-icon-column-size"] = s.iconColumnSize;
     if (s.itemGap) vars["--ds-sidebar-item-gap"] = s.itemGap;
-    if (s.childPaddingInline)
-      vars["--ds-sidebar-child-padding-inline"] = s.childPaddingInline;
     if (s.itemFontSize) vars["--ds-sidebar-item-font-size"] = s.itemFontSize;
     if (s.itemFontWeight != null)
       vars["--ds-sidebar-item-font-weight"] = String(s.itemFontWeight);
@@ -1399,7 +1399,6 @@ export function chromeToVariables(
     if (s.itemBgActive) vars["--ds-sidebar-item-bg-active"] = s.itemBgActive;
     if (s.itemBgHover) vars["--ds-sidebar-item-bg-hover"] = s.itemBgHover;
     if (s.itemPadding) vars["--ds-sidebar-item-padding"] = s.itemPadding;
-    if (s.iconSize) vars["--ds-sidebar-icon-size"] = s.iconSize;
     if (s.footerBg) vars["--ds-sidebar-footer-bg"] = s.footerBg;
     // A semantic posture is a high-level decision and therefore wins over the
     // code-owned vertical's concrete baseline leaves. It is lowered last, once
