@@ -5250,6 +5250,11 @@
      "at": "2026-09-17 19:35",
      "by": "kimi-dt",
      "note": "Adopcion DnD: lot 1 (saved-views) entregado por W23 con evidencia fuerte (name-sets pre/post sin flips, pin foreign-drag con plant-check rojo en HEAD) PERO con una violacion de la ley de congelados: adopto el kernel en classic/rustic (mi brief dijo 'engine' sin excluir; el debrief adoptado dice Modern-only). W23b despachado: revertir ambos engines a HEAD byte-identico, pins acotados a modern. Mis 3 rulings sobre las divergencias reportadas: T1 clear-before-callback inobservable bajo batching (declarado); disabled-sin-handlers browser-equivalente (excepcion declarada #7); identity re-render DOM-silencioso (aceptado). El baseline pressed de ViewPill queda asignado al lote 6c. En vuelo: W24 (tree), W25 (drop zones), W23b."
+    },
+    {
+     "at": "2026-09-17 20:30",
+     "by": "kimi-dt",
+     "note": "Adopcion DnD: lot 1 saved-views INTEGRADO 907da3148 (con la correccion frozen W23b: classic/rustic byte-identicos a HEAD; ViewPill con bags enumerables W27; pin axe bithire dark drenado por el mode-canvas fix — la ley de pins por identidad funciono: el pin detecto el drenaje). Lot 3 tree INTEGRADO 3546eef74 (C16 leg 3 preservado, dropEffect declarado, PRE-pins de cuartos de borde). Lot 4 drop zones INTEGRADO e4f1db1b9 (orden de callbacks de upload taladro incluido). Instrumento F-69 aprende spreads adyacentes (827e57dc3) + censo vivo (8b6fc4944). PRE-pin column-menu INTEGRADO 34277ef87 (13 casos; el press-latch de hoy queda MEDIDO: ambas instancias quedan pressed tras un drag — R2 confirmado, reparacion en lots 6a/6b). En vuelo: W30 (kanban, el ultimo transporte) y W31 (column-menu 2b). Quedan despues: lotes de operabilidad (6a/6b/6c), kanban 5b (announcements repetidos), lot 7 (tree Move affordance — bloqueado por la decision de diseño A3), lot 9 (retiro de useSortableList — requiere tu autorizacion de API publica)."
     }
    ]
   },
