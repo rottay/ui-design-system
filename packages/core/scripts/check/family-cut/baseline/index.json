@@ -1785,32 +1785,23 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 1,
-        "channelsRead": 54,
+        "channelsRead": 77,
         "classTokens": 1,
         "partsStamped": 20,
-        "partsConsumed": 18
+        "partsConsumed": 20
       },
-      "readWithoutProducer": 10,
+      "readWithoutProducer": 1,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 3,
-      "partsConsumedNotStamped": 1,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 4,
+      "unpairedStatePseudoSelectors": 1,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot C (the header contract and the two families that prove it)",
-        "debt": {
-          "visualLiterals": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
-      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both."
+      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract)."
     },
     "edit-header": {
       "cut": "WO-FAM-10",
@@ -1823,32 +1814,23 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 1,
-        "channelsRead": 54,
+        "channelsRead": 77,
         "classTokens": 1,
         "partsStamped": 28,
-        "partsConsumed": 26
+        "partsConsumed": 28
       },
-      "readWithoutProducer": 10,
+      "readWithoutProducer": 1,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 2,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 5,
+      "unpairedStatePseudoSelectors": 2,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot C (the header contract and the two families that prove it)",
-        "debt": {
-          "visualLiterals": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
-      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's."
+      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's. 2026-09-18: sub-lot C (the header contract) landed — the openCut debt drains to the named residuals (the --ds-material-inset-highlight name the material vocabulary never had, routed; the focus-visible arm awaiting the NavigationLink contract)."
     },
     "collection-header": {
       "cut": "WO-FAM-10",

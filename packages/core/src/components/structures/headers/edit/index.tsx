@@ -43,9 +43,9 @@
  *     header-actions helper), and an `extraActions` ReactNode slot
  *   - `saving` state on the Save button (the certified Button owns the
  *     width-stable loading posture — the ConfirmDialog precedent)
- *   - `loading` state for the entire header (a centered Spinner inside a
- *     named `status` live region, so the wait is announced rather than
- *     rendering as an unlabelled spinning glyph)
+ *   - `loading` state for the entire header: the shared `AnatomySkeleton` reads
+ *     this header's own `data-part` tree and draws the wait in the shape of the
+ *     header, inside a named `status` live region so it is announced once
  *   - Optional context-rail / children slot inside a card below the hero
  *   - 4 archetype variants (control, editorial, technical, governance)
  *     each with their own gradient + grid background pattern
@@ -59,7 +59,7 @@
  * only chrome labels ride the i18n channel (English floor).
  */
 
-import { type CSSProperties, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { ActionSaveIcon } from '@/graphics/icons/semantic/generated/roles/action-save';
@@ -67,9 +67,13 @@ import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/actio
 import type { ComponentType } from 'react';
 type HeaderIcon = ComponentType<any>;
 
-import { Box, Button, Flex, Spinner, Stack, Text, Tooltip } from '../../../primitives';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+
+import { AnatomySkeleton } from '../../../primitives/feedback/skeleton';
+import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { resolveHeaderTone } from '../../foundation/chrome/runtime/header-tone';
 import {
   type SharedHeaderActionDescriptor,
   resolveSharedHeaderActionIcon,
@@ -128,38 +132,6 @@ export interface EditHeaderProps {
   contextRail?: ReactNode;
 }
 
-const VARIANT_TOKEN_MAP: Record<'primary' | 'warning' | 'info' | 'success' | 'error' | 'secondary', string> = {
-  primary: 'primary',
-  warning: 'warning',
-  info: 'info',
-  success: 'success',
-  error: 'error',
-  secondary: 'secondary',
-};
-
-// The tone is prop-selected (colorVariant/status.color) and the pre-step stamped
-// no variant attribute to key a CSS rule on, so the computed tone rides a `--ds-*`
-// custom property (set inline, consumed by edit-header.css). The return keys are
-// deliberately NOT named `background`/`border`/`color`: those are custom-property
-// VALUES, not inline paint, and must not read as paint to the skin ratchet.
-function getVariantTone(variant?: 'primary' | 'warning' | 'info' | 'success' | 'error' | 'secondary') {
-  const token = VARIANT_TOKEN_MAP[variant || 'secondary'];
-
-  if (token === 'secondary') {
-    return {
-      bg: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
-      bd: 'var(--ds-color-border-secondary)',
-      fg: 'var(--ds-color-text-secondary)',
-    };
-  }
-
-  return {
-    bg: `color-mix(in srgb, var(--ds-color-${token}) 10%, var(--ds-color-bg-secondary) 90%)`,
-    bd: `color-mix(in srgb, var(--ds-color-${token}) 18%, var(--ds-color-border-secondary) 82%)`,
-    fg: `color-mix(in srgb, var(--ds-color-${token}) 78%, var(--ds-color-text-primary) 22%)`,
-  };
-}
-
 /* ============================================================================
  * COMPONENT
  * ========================================================================== */
@@ -200,6 +172,12 @@ export function EditHeader({
   const dirtyLabel = i18n?.tOr('unsaved_changes', 'Unsaved changes') ?? 'Unsaved changes';
   const actionsLabel = i18n?.tOr('actions', 'Actions') ?? 'Actions';
   const loadingLabel = i18n?.tOr('loading', 'Loading') ?? 'Loading';
+  // Hover and press on the back chip are decided once, by the shared kernel, and
+  // read off `data-state`. The KEYBOARD ring is not: the focusable element is the
+  // app-injected anchor above the chip, and `NavigationLinkProps` admits no event
+  // handlers, so `a:focus-visible` remains the platform's own (and only) authority
+  // there rather than a second one.
+  const backInteraction = useInteractionState();
   // The underline reset lives in the skin (`a:has(> [data-part='back-button'])`),
   // so the anchor carries no inline style of its own.
   const renderHrefAnchor = (href: string, content: ReactNode) => {
@@ -209,37 +187,16 @@ export function EditHeader({
     return <a href={href}>{content}</a>;
   };
 
-  const iconTone = getVariantTone(colorVariant);
-  const statusTone = getVariantTone(status?.color ?? 'secondary');
-
-  if (loading) {
-    return (
-      <Box
-        data-part="root"
-        className="ds-structure ds-edit-header"
-        data-loading="true"
-        role="status"
-        aria-busy="true"
-        aria-label={loadingLabel}
-      >
-        <Spinner size="lg" />
-      </Box>
-    );
-  }
-
-  return (
-    <Box
-      data-part="root"
-      className="ds-structure ds-edit-header"
-      data-loading={false}
-    >
+  const chrome = (
+    <>
       <Box data-part="top-bar">
         <Flex justify="between" align="center" wrap="wrap" gap={12}>
           <Flex align="center" gap={20}>
             {renderHrefAnchor(
               backHref,
               <Flex
-                data-part="back-button"
+                {...backInteraction.handlers}
+                {...partAttributes('back-button', backInteraction.state)}
                 align="center"
                 gap={8}
               >
@@ -298,17 +255,10 @@ export function EditHeader({
       </Box>
 
       <Box data-part="hero-panel" data-archetype={archetype}>
-        <Flex data-part="hero-row" justify="between" align="start" gap={20} wrap="wrap">
+        <Flex data-part="hero-row" justify="between" align="start" wrap="wrap">
           <Flex align="center" gap={20} data-part="hero-copy">
             {Icon && (
-              <Box
-                data-part="icon-badge"
-                style={{
-                  '--ds-header-icon-tone-bg': iconTone.bg,
-                  '--ds-header-icon-tone-bd': iconTone.bd,
-                  '--ds-header-icon-tone-fg': iconTone.fg,
-                } as CSSProperties}
-              >
+              <Box data-part="icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
                 {/* Glyph geometry is skin-owned (the FormHeader posture) so the
                     container ladder can step it down without a prop. */}
                 <Icon data-part="icon-badge-glyph" />
@@ -333,14 +283,7 @@ export function EditHeader({
                   {title}
                 </Box>
                 {status && (
-                  <Box
-                    data-part="status-pill"
-                    style={{
-                      '--ds-edit-header-status-tone-bg': statusTone.bg,
-                      '--ds-edit-header-status-tone-bd': statusTone.bd,
-                      '--ds-edit-header-status-tone-fg': statusTone.fg,
-                    } as CSSProperties}
-                  >
+                  <Box data-part="status-pill" data-variant={resolveHeaderTone(status.color)}>
                     <Text data-part="status-pill-text" size="xs" weight="medium">
                       {status.label}
                     </Text>
@@ -421,6 +364,24 @@ export function EditHeader({
           </Box>
         ) : null}
       </Box>
+    </>
+  );
+
+  /* The loading state is BUILT FROM THE ANATOMY, not hand-written: the shared
+     renderer reads the chrome's own `data-part` tree and draws one bone per part,
+     so the wait has the shape of the header it stands in for and cannot drift from
+     it. The root keeps the announcement (`role='status'` + `aria-busy` + a named
+     label), so the skeleton is told not to announce a second time. */
+  return (
+    <Box
+      data-part="root"
+      className="ds-structure ds-edit-header"
+      data-loading={loading ? 'true' : 'false'}
+      role={loading ? 'status' : undefined}
+      aria-busy={loading ? true : undefined}
+      aria-label={loading ? loadingLabel : undefined}
+    >
+      {loading ? <AnatomySkeleton busy={false}>{chrome}</AnatomySkeleton> : chrome}
     </Box>
   );
 }

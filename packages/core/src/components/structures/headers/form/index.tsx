@@ -55,15 +55,18 @@
  * entity.
  */
 
-import { type CSSProperties, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import type { ComponentType } from 'react';
 type FormHeaderIcon = ComponentType<any>;
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+
 import { Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { resolveHeaderTone } from '../../foundation/chrome/runtime/header-tone';
 import {
   type SharedHeaderActionKind,
   resolveSharedHeaderActionIcon,
@@ -115,38 +118,6 @@ export interface FormHeaderProps {
   contextRail?: ReactNode;
 }
 
-const VARIANT_TOKEN_MAP: Record<'primary' | 'secondary' | 'success' | 'warning' | 'info', string> = {
-  primary: 'primary',
-  secondary: 'secondary',
-  success: 'success',
-  warning: 'warning',
-  info: 'info',
-};
-
-// The tone is prop-selected (colorVariant) and the pre-step stamped no variant
-// attribute to key a CSS rule on, so the computed tone rides a `--ds-*` custom
-// property (set inline, consumed by edit-header.css's shared icon-badge rule).
-// The return keys are deliberately NOT named `background`/`border`/`color`: those
-// are custom-property VALUES, not inline paint, and must not read as paint to the
-// skin ratchet.
-function getVariantTone(variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'info') {
-  const token = VARIANT_TOKEN_MAP[variant || 'secondary'];
-
-  if (token === 'secondary') {
-    return {
-      bg: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
-      bd: 'var(--ds-color-border-secondary)',
-      fg: 'var(--ds-color-text-secondary)',
-    };
-  }
-
-  return {
-    bg: `color-mix(in srgb, var(--ds-color-${token}) 10%, var(--ds-color-bg-secondary) 90%)`,
-    bd: `color-mix(in srgb, var(--ds-color-${token}) 18%, var(--ds-color-border-secondary) 82%)`,
-    fg: `color-mix(in srgb, var(--ds-color-${token}) 78%, var(--ds-color-text-primary) 22%)`,
-  };
-}
-
 export function FormHeader({
   icon: MainIcon,
   title,
@@ -172,6 +143,12 @@ export function FormHeader({
   const i18n = useOptionalTranslation('common');
   const resolvedBackLabel = backLabel ?? i18n?.tOr('back', 'Back') ?? 'Back';
   const actionsLabel = i18n?.tOr('actions', 'Actions') ?? 'Actions';
+  // Hover and press on the back chip are decided once, by the shared kernel, and
+  // read off `data-state`. The KEYBOARD ring is not: the focusable element is the
+  // app-injected anchor above the chip, and `NavigationLinkProps` admits no event
+  // handlers, so `a:focus-visible` remains the platform's own (and only) authority
+  // there rather than a second one.
+  const backInteraction = useInteractionState();
   // The underline reset lives in the skin (`a:has(> [data-part='back-button'])`),
   // so the anchor carries no inline style of its own.
   const renderHrefAnchor = (href: string, content: ReactNode) => {
@@ -180,8 +157,6 @@ export function FormHeader({
     }
     return <a href={href}>{content}</a>;
   };
-
-  const iconTone = getVariantTone(colorVariant);
   const breadcrumbItems = breadcrumb?.map((item, index) => ({
     key: String(index),
     label: item.href ? renderHrefAnchor(item.href, item.label) : item.label,
@@ -200,7 +175,8 @@ export function FormHeader({
           {renderHrefAnchor(
             backHref,
             <Flex
-              data-part="back-button"
+              {...backInteraction.handlers}
+              {...partAttributes('back-button', backInteraction.state)}
               align="center"
               gap={8}
             >
@@ -224,16 +200,9 @@ export function FormHeader({
       </Box>
 
       <Box data-part="hero-panel" data-archetype={archetype}>
-        <Flex data-part="hero-row" justify="between" align="start" gap={20} wrap="wrap">
+        <Flex data-part="hero-row" justify="between" align="start" wrap="wrap">
           <Flex align="center" gap={16} data-part="hero-cluster">
-            <Box
-              data-part="icon-badge"
-              style={{
-                '--ds-header-icon-tone-bg': iconTone.bg,
-                '--ds-header-icon-tone-bd': iconTone.bd,
-                '--ds-header-icon-tone-fg': iconTone.fg,
-              } as CSSProperties}
-            >
+            <Box data-part="icon-badge" data-variant={resolveHeaderTone(colorVariant)}>
               <MainIcon data-part="icon-badge-glyph" />
             </Box>
             <Stack spacing="xs" data-part="hero-copy">
@@ -295,7 +264,7 @@ export function FormHeader({
           <Box data-part="context-card">
             {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
             {children ? (
-              <Box data-part="context-card-children" data-has-rail={contextRail ? 'true' : 'false'}>
+              <Box data-part="context-card-children">
                 {children}
               </Box>
             ) : null}

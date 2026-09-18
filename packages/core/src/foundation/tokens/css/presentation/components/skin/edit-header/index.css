@@ -47,22 +47,25 @@
  *     (until the swap, a composed Text resolved its size inline and the
  *     `--ds-edit-header-title-font-size` rule below was dead paint).
  *
- * SHARED WITH FormHeader (contract §2 — proven byte-identical): `buildPatternStyle`
- * (the archetype hero-panel gradient), `getVariantTone` (the icon-badge tone), the
- * back-button microinteraction/focus ring and the `ds-header-enter` keyframes are
- * identical between EditHeader and FormHeader down to every percentage. They live
- * in `skin/header-hero-shared.css` — a file named after NEITHER family, because
- * while they lived here an agent editing "the edit header skin" repainted
- * FormHeader with no signal. This file carries edit-private paint only.
+ * SHARED WITH FormHeader (contract §2 — proven byte-identical): the archetype
+ * hero-panel gradient, the icon-badge tone, the back-button microinteraction/focus
+ * ring and the `ds-header-enter` keyframes are identical between EditHeader and
+ * FormHeader down to every percentage. They live in `skin/header-hero-shared.css` —
+ * a file named after NEITHER family, because while they lived here an edit aimed at
+ * "the edit header skin" repainted FormHeader with no signal. This file carries
+ * edit-private paint only.
  *
- * HATCH (contract §5.1, kit "runtime-computed"): `getVariantTone(colorVariant)` /
- * `getVariantTone(status.color)` are prop-selected, and the pre-step stamped NO
- * variant/status attribute on `icon-badge`/`status-pill` to key a CSS rule on.
- * Their computed tone rides a `--ds-*` custom property set inline (uncounted) and
- * is consumed here. `icon-badge` sets `color` on itself so the composed glyph
- * inherits `currentColor`; `status-pill` sets a `--…-fg` the composed `status-pill-text`
- * consumes at (0,5,0), because a `Text` will not inherit `color` past the
- * typography skin.
+ * TONE (the header contract): `icon-badge` and `status-pill` stamp `data-variant`
+ * from the one header-tone resolver
+ * (`structures/foundation/chrome/runtime/header-tone`), and the paint is keyed on it
+ * here and in `header-hero-shared.css`. The retired hatch computed the same mixes in
+ * TypeScript and shipped them inline, which is why the two slots each called
+ * `getVariantTone` separately and could have drifted; they read one set of
+ * `--ds-header-tone-*` channels now. `icon-badge` sets `color` on itself so the
+ * composed glyph inherits `currentColor`; `status-pill` sets a `--…-fg` the composed
+ * `status-pill-text` consumes at (0,5,0), because a `Text` will not inherit `color`
+ * past the typography skin. The status domain has no `primary`: `status.color`
+ * never admitted one.
  *
  * FORMS ARE NOT CARD STACKS (monorepo law). The `context-card` part is a legacy
  * NAME — the §4 anatomy test in `headers/tests/` pins the string, so it stays —
@@ -127,15 +130,13 @@
 .ds-structure.ds-edit-header[data-part='root'][data-loading] {
   border: 1px solid var(--ds-color-border-secondary);
 }
-/* the loading early-return shares background + border with the main root but has
-   NO radius/shadow; suppress the two the main rule would otherwise add to it */
+/* The loading branch is the SAME card: it holds an anatomy-derived skeleton of this
+   header's own parts, not a centred spinner in a padded box, so the radius, the
+   frame and the depth all stay and the wait has the shape of what is coming. Only
+   the enter run is suppressed — a placeholder does not announce itself by flying in.
+   (The retired rule stripped radius and shadow and padded 48px, which was right for
+   the glyph it used to hold and wrong for a skeleton.) */
 .ds-structure.ds-edit-header[data-part='root'][data-loading='true'] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px;
-  border-radius: 0;
-  box-shadow: none;
   animation: none;
 }
 
@@ -164,7 +165,13 @@
   color: var(--ds-color-text-secondary);
 }
 
-/* breadcrumb (own grammar — see header) */
+/* breadcrumb (own grammar — see header). The underline reset for a breadcrumb
+   anchor lives HERE rather than in `header-hero-shared.css`: FormHeader composes the
+   Breadcrumb primitive and never stamps `breadcrumb-link`, so a shared rule was paint
+   with a stamp in only one of the two families. */
+.ds-structure.ds-edit-header a:has(> [data-part='breadcrumb-link']) {
+  text-decoration: none;
+}
 .ds-structure.ds-edit-header [data-part='breadcrumb-divider'] {
   inline-size: 1px;
   block-size: 16px;
@@ -202,6 +209,13 @@
 .ds-structure.ds-edit-header [data-part='hero-panel'] {
   padding: var(--ds-edit-header-hero-padding, 28px);
 }
+/* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
+   visual value in the TSX and the one measurement here no ramp could see. The channel
+   carries the same 20px at rest, on the rhythm plane every other gutter in this file
+   already rides -- a bare literal would also be a channel with no path to a root. */
+.ds-structure.ds-edit-header [data-part='hero-row'] {
+  gap: var(--ds-edit-header-hero-row-gap, calc(20px * var(--ds-rhythm-effective-scale, 1)));
+}
 /* the copy yields before the action rail does: the cluster may shrink, the
    rail may not */
 .ds-structure.ds-edit-header [data-part='hero-copy'] {
@@ -220,8 +234,11 @@
   block-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
 }
 /* the shared-helper and Save/Cancel icons size from the skin (was an inline
-   14px on every one of them) — the FormHeader posture */
-.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] svg {
+   14px on every one of them) — the FormHeader posture. The selector is the part the
+   family STAMPS, not `[data-part='actions'] svg`: a descendant-element selector
+   reaches into the composed Button's own internals, which this family does not own,
+   and it left `action-icon` stamped with no rule of its own. */
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
@@ -253,15 +270,40 @@
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
 }
 
-/* status pill (hatch): the pre-step stamped no status attribute, so the tone
-   rides --ds-edit-header-status-tone-* set inline on the pill; the text will not
-   inherit color past its own typography skin, so it reads the --…-fg at (0,5,0) */
+/* status pill: the tone is keyed on `data-variant`, stamped from the same
+   header-tone resolver the icon badge uses, over the same `--ds-header-tone-*`
+   channels. `secondary` is the resting tone and is declared on the part itself, so a
+   pill whose variant never resolved still paints it. The text will not inherit color
+   past its own typography skin, so it reads the --…-fg at (0,5,0). */
 .ds-structure.ds-edit-header [data-part='status-pill'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
   padding-block: 4px;
   padding-inline: 12px;
   border-radius: 999px;
   background: var(--ds-edit-header-status-tone-bg);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='success'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-success-bd, color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='warning'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='info'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='error'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
   border: 1px solid var(--ds-edit-header-status-tone-bd);
@@ -339,7 +381,7 @@
     --ds-edit-header-icon-badge-glyph-size: 20px;
   }
   .ds-structure.ds-edit-header [data-part='title'] {
-    font-size: var(--ds-type-section-title-font-size, var(--ds-font-size-xl));
+    font-size: var(--ds-edit-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
   .ds-structure.ds-edit-header [data-part='actions'] {
     inline-size: 100%;
@@ -415,6 +457,8 @@
     background: CanvasText;
   }
 
+  /* the ring's platform arm, for the same reason stated in header-hero-shared.css:
+     the focusable element is the app-injected anchor, which the kernel cannot reach */
   .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'] {
     outline: 2px solid Highlight;
     box-shadow: none;

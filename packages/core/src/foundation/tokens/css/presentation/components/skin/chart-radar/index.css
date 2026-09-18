@@ -15,24 +15,24 @@
 }
 
 /* Series cadence -----------------------------------------------------------
- * The renderer stamps the raw `data-series-index` on each series group;
- * indexes 1..4 receive a governed dash on the polygon outline so overlapping
+ * The renderer cycles `data-series-cadence` 0..4 on each series group;
+ * cadences 1..4 receive a governed dash on the polygon outline so overlapping
  * series separate by stroke rhythm as well as paint. Each cadence remains a
  * private implementation detail of this family. */
 
-.ds-chart-radar [data-part='series'][data-series-index='1'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='1'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-2, 6 4);
 }
 
-.ds-chart-radar [data-part='series'][data-series-index='2'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='2'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-3, 2 3);
 }
 
-.ds-chart-radar [data-part='series'][data-series-index='3'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='3'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-4, 8 3 2 3);
 }
 
-.ds-chart-radar [data-part='series'][data-series-index='4'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='4'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-5, 12 4);
 }
 

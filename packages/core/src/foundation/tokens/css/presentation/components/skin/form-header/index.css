@@ -30,15 +30,14 @@
  * only family/tracking/transform are reachable from here — a font-size rule on
  * them would be dead paint.
  *
- * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`),
- * the icon-badge tone (`getVariantTone`), the back-button microinteraction/focus
- * ring and the `ds-header-enter` keyframes are proven byte-identical to EditHeader
- * (contract §2) and live in `skin/header-hero-shared.css` — a file named after
- * NEITHER family, so neither can be repainted by an edit aimed at the other. They
- * are NOT restated here. The icon-badge tone rides the shared
- * `--ds-header-icon-tone-*` custom property, set inline by this component from
- * `getVariantTone(colorVariant)` because the pre-step stamped no variant attribute
- * to key a CSS rule on.
+ * SHARED WITH EditHeader: the archetype hero-panel gradient, the icon-badge tone,
+ * the back-button microinteraction/focus ring and the `ds-header-enter` keyframes
+ * are proven byte-identical to EditHeader (contract §2) and live in
+ * `skin/header-hero-shared.css` — a file named after NEITHER family, so neither can
+ * be repainted by an edit aimed at the other. They are NOT restated here. The tone
+ * is keyed on `data-variant`, stamped by this component from the one header-tone
+ * resolver (`structures/foundation/chrome/runtime/header-tone`); `colorVariant` here
+ * admits five tones, not EditHeader's six — this family has no `error`.
  *
  * FORMS ARE NOT CARD STACKS (monorepo law). The `context-card` part is a legacy
  * NAME — the §4 anatomy test in `headers/tests/` pins the string, so it stays —
@@ -157,6 +156,13 @@
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
   padding: var(--ds-form-header-hero-padding);
 }
+/* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
+   visual value in the TSX and the one measurement here no ramp could see. The channel
+   carries the same 20px at rest, on the rhythm plane every other gutter in this file
+   already rides -- a bare literal would also be a channel with no path to a root. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-row'] {
+  gap: var(--ds-form-header-hero-row-gap, calc(20px * var(--ds-rhythm-effective-scale, 1)));
+}
 /* The copy yields before the action rail does: the cluster may shrink, the
    rail may not. */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
@@ -169,8 +175,11 @@
   flex: 0 0 auto;
   margin-inline-start: auto;
 }
-/* the shared-helper icons size from the skin (was an inline 14px per icon) */
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] svg {
+/* the shared-helper icons size from the skin (was an inline 14px per icon). The
+   selector is the part the family STAMPS, not `[data-part='actions'] svg`: a
+   descendant-element selector reaches into the composed Button's own internals,
+   which this family does not own, and it left `action-icon` stamped with no rule. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
@@ -245,7 +254,11 @@
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'] {
   border-block-start: 1px solid var(--ds-color-border-secondary);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='context-card-children'][data-has-rail='true'] {
+/* the rail's own gap to the children below it — the EditHeader spelling. The
+   retired `[data-has-rail='true']` was a boolean the component computed and stamped
+   for one rule; the sibling combinator reads the same fact off the anatomy, and
+   `context-rail` stops being a part with no paint. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='context-rail'] + [data-part='context-card-children'] {
   margin-block-start: 18px;
 }
 

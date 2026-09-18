@@ -31,10 +31,18 @@
  * moved here the guard did NOT move with it — the families kept guarding a
  * `back-button` they no longer painted, and this file animated unguarded.
  *
- * CHANNELS: the tone rides `--ds-header-icon-tone-{bg,bd,fg}`, set inline by
- * both engines from `getVariantTone(...)` because the pre-step stamped no
- * variant attribute to key on. The focus ring rides
- * `--ds-header-back-focus-ring` over the governed `--ds-focus-ring`.
+ * CHANNELS: the tone is keyed on `data-variant`, stamped by both families from the
+ * one header-tone resolver (`structures/foundation/chrome/runtime/header-tone`).
+ * `secondary` is the resting tone and is declared on the part itself, so a badge
+ * whose variant never resolved still paints it; the other five override the three
+ * facets. Every value reads a `--ds-header-tone-*` channel the `header` chrome
+ * deriver produces, over the exact mix the retired `getVariantTone` computed inline.
+ * The focus ring rides `--ds-header-back-focus-ring`, produced by the same deriver.
+ *
+ * STATE: the back chip's hover and press are decided once by `useInteractionState`
+ * and stamped as `data-state`; each rule below pairs that token with its platform
+ * pseudo-class in one `:is(...)`, so neither is a second authority (F-37). The
+ * keyboard ring is the exception and says so where it is declared.
  */
 
 /* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
@@ -99,10 +107,13 @@
   background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
-/* ─── SHARED EDIT+FORM: icon-badge tone (getVariantTone, via hatch) ───────── */
+/* ─── SHARED EDIT+FORM: icon-badge tone, keyed on the header-tone contract ─── */
 
 .ds-structure.ds-edit-header [data-part='icon-badge'],
 .ds-structure.ds-form-header [data-part='icon-badge'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,6 +131,38 @@
   border: 1px solid var(--ds-header-icon-tone-bd);
 }
 
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='primary'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='primary'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-primary-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-primary-bd, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-primary-fg, color-mix(in srgb, var(--ds-color-primary) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='success'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='success'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-success-bd, color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='warning'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='warning'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='info'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='info'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
+}
+/* `error` is EditHeader's alone. FormHeader's `colorVariant` does not admit it, so a
+   `.ds-form-header` arm here would be paint for a stamp that family cannot make. */
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='error'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
+}
+
 /* ─── SHARED EDIT+FORM: back-button microinteraction + keyboard focus ────────
    Hover is hover-capable-only with a matching :active; the chip lifts 1px
    (an interactive affordance on a real link, never decorative motion). */
@@ -135,32 +178,43 @@
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
+/* `:is(<kernel token>, <platform pseudo>)` is ONE decision with its platform
+   fallback, and it carries the same specificity the bare pseudo did (both arms are
+   (0,1,0)), so nothing below moves. The kernel arm is what keeps the chip lit while
+   the pointer sits on the ANCHOR rather than on the chip's own box. */
 @media (hover: hover) {
-  .ds-structure.ds-edit-header [data-part='back-button']:hover,
-  .ds-structure.ds-form-header [data-part='back-button']:hover {
+  .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
     transform: translateY(-1px);
   }
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:hover,
-  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:hover {
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
   }
 }
-.ds-structure.ds-edit-header [data-part='back-button']:active,
-.ds-structure.ds-form-header [data-part='back-button']:active {
+.ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='pressed'], :active),
+.ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
 }
-/* the back button is a Flex inside an <a> — the ring lands on the chip */
+/* The keyboard ring has NO kernel twin, and that is a measurement rather than an
+   omission: the focusable element is the app-injected anchor above the chip, and
+   `NavigationLinkProps` (the DS navigation adapter's contract) admits no event
+   handlers, so the kernel cannot observe focus there. `:focus-visible` is therefore
+   the platform's own authority here and not a second one. A `[data-state~='focus-visible']`
+   arm would be paint for a token nothing can stamp. Closing it means widening that
+   adapter contract, which is not this file's to widen. */
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
 .ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
-/* anchors around the back chip and breadcrumb links carry no underline (the
-   reset moved out of the inline NavLink style) */
+/* anchors around the back chip carry no underline (the reset moved out of the
+   inline NavLink style). The breadcrumb-link arm is NOT here: FormHeader composes
+   the Breadcrumb primitive and never stamps that part, so the rule was paint this
+   file could only ever deliver to one of its two families. It lives in
+   `edit-header.css`, with the rest of EditHeader's own breadcrumb grammar. */
 .ds-structure.ds-edit-header a:has(> [data-part='back-button']),
-.ds-structure.ds-form-header a:has(> [data-part='back-button']),
-.ds-structure.ds-edit-header a:has(> [data-part='breadcrumb-link']),
-.ds-structure.ds-form-header a:has(> [data-part='breadcrumb-link']) {
+.ds-structure.ds-form-header a:has(> [data-part='back-button']) {
   text-decoration: none;
 }
 /* ─── SHARED EDIT+FORM: reduced motion for the back chip ─────────────────────

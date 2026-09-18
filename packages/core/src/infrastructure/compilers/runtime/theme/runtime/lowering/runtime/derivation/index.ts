@@ -43,6 +43,9 @@ import { breadcrumbChromeDeriver } from "./chrome/breadcrumb";
 import { paginationChromeDeriver } from "./chrome/pagination";
 import { stepperChromeDeriver } from "./chrome/stepper";
 import { sidebarSurfaceChromeDeriver } from "./chrome/sidebar-surface";
+import { headerChromeDeriver } from "./chrome/header";
+import { formHeaderChromeDeriver } from "./chrome/form-header";
+import { editHeaderChromeDeriver } from "./chrome/edit-header";
 import { cardChromeDeriver } from "./chrome/card";
 import { tableChromeDeriver } from "./chrome/table";
 import { dataTableChromeDeriver } from "./chrome/data-table";
@@ -161,6 +164,9 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   paginationChromeDeriver,
   stepperChromeDeriver,
   sidebarSurfaceChromeDeriver,
+  headerChromeDeriver,
+  formHeaderChromeDeriver,
+  editHeaderChromeDeriver,
   cardChromeDeriver,
   tableChromeDeriver,
   dataTableChromeDeriver,
