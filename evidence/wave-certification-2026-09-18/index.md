@@ -78,3 +78,50 @@ intent ("the gradient is the foundation's own reading of it when no tenant
 states one"), so either the chain must distinguish authored from default, or
 the arm over-claims and drops `cardGround`. A semantic decision on the draft —
 parked for the writer seat, with this measurement as the brief.
+
+## 2026-09-18 (third sitting) — pilot population re-pinned; fleet floor attribution
+
+**Pilot pin (WO-EVI-05): re-pinned, green.** The red was exactly the catalog
+revision digest (`d50537e438bdbcfa` -> `49bc4572fa60d2e5`): one catalog edit
+since the pin (`63aec5c5e`, the W14 display-role ingress — row 6's document
+keypath gains `display`), 29 decision rows and identical row ids on both sides,
+pilot membership/axes/denominators/N-A all unchanged. `pilot/index.json`
+republished at HEAD with the named cause in its provenance (DT re-pin, measured
+with the instrument over the checked-out bytes; `--pilot --check` exits 0).
+One DT error caught and reverted during the re-pin: the pin's `previousPin`
+block records the PRE-EXCLUSION membership (the unit drill pins
+`previousPin.denominators.shape === 5`), not the immediately prior publication —
+the first edit rolled it forward and the drill refused it; reverted.
+
+**Fleet floor: stale, attributed, NOT re-pinned — one axis needs an instrument
+decision first.** Live vs pinned (pinned at `7b35276d5`): shape 215->217,
+typography 180->181, rhythm 213->221, depth 193->194, states 155->**153**,
+motion 200->204. Measured family-by-family against a scratch worktree at the
+pinned commit (each tree measured by its own instrument):
+
+- *Additions* (the wave's new skin families): aspect-ratio, box, container
+  (shape/depth; container also rhythm/motion); avatar-compounds
+  (typography/rhythm); divider, flex, grid, sidebar-surface, skeleton-anatomy,
+  space, stack (rhythm; flex/grid/sidebar-surface/space/stack also motion).
+- *Cuts*: steps merged (FAM-05 `1ddfd6198`/`3ed62c175` era — already excluded
+  from the pin), layout-primitives and layout-sidebar cut (FAM-05), scroll-area
+  removed from depth/motion.
+- *states −2, the shrink that blocks a mechanical re-pin:*
+  - `filter-panel` — 8fb516981 moved its reset onto the composed Button's ghost
+    channels; the family STATES `--ds-button-ghost-*-hover/-active` for the
+    Button to paint. The state paint lives in Button (already in the states
+    population). A reviewed ownership move, not lost paint.
+  - `active-filters-bar` — e8c78c576/3ed62c175 moved its domain state from the
+    shared `data-state` to the namespaced `data-filter-state` (9 state rules
+    still on disk and painting). The population instrument's `stateSelectors`
+    recognize only the literal `[data-state=` substring — an instrument blind
+    spot over a reviewed product decision. With the namespaced attribute
+    recognized, states reads 154; without it, 153.
+
+The floor law forbids shrinking a denominator without a named, owner-visible
+reason. The honest re-pin therefore waits on the instrument question (teach
+`stateSelectors` the namespaced `[data-<ns>-state=` form — an EVI-lane
+instrument lot for the writer seat) and the owner-visible record of the
+filter-panel delegation. The three remaining population unit reds are exactly
+this floor staleness (the runner line constant `shape 216`, the floor constant
+assertions, the floor-vs-live check); the pilot arm of those tests is green.
