@@ -174,3 +174,19 @@ Consumer check first (the D21 lesson): no file in app-bithire, app-evnto or
 app-platform reads the retired names. Re-pinned to the measured vocabulary;
 the file's 6 tests green. The gallery/grid pins recorded beside it live in the
 same file and are green with it.
+
+## 2026-09-18 (seventh sitting) — Display1 Card / Display2 List loading anatomy: premise retired by the FAM-06 cuts
+
+Reproduced: `Display1Batch:99` (`skeleton` part absent in Card loading) and
+`Display2Batch:196` (zero `skeleton-row` in List loading). Named causes:
+`3aea57452` (WO-FAM-06 lot 1, card cut) restructured Card loading to
+`loading-content/loading-overlay/spinner`; `6a4910dc1` (WO-FAM-06 T3 phase 2)
+moved List loading to three `AnatomySkeleton`-derived items inside a
+`loading-grid` that reserves the real tracks (no reflow on resolve), with the
+single busy announcement on the root. Both tests pin the retired hand-rolled
+skeleton parts (`skeleton`/`skeleton-bar`, `skeleton-row`/`skeleton-avatar`/
+`skeleton-line`) — the WO-SKIN-05 checkpoint assertions written against the old
+anatomy. Writer brief: rewrite both against the shipped loading contract (List:
+loading-grid + derived skeleton items + root busy; Card: overlay/spinner per
+the cut) — the loading-state coverage the checkpoints exist for must be
+re-asserted, not dropped.
