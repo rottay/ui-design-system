@@ -80,12 +80,13 @@ describe('the classic bridge seeds antd from the compiled projection', () => {
     // is chosen, never by a substring of a theme name.
     expect(selected.token).toEqual({ ...CLASSIC.projection.seeds, ...dark?.seeds });
     expect(selected.algorithm).toBe(antdTheme.darkAlgorithm);
-    // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15)
-    // (pending DT registration): bithire's dark block restates every base seed
-    // instead of diverging, so the former `colorPrimary` divergence proof is
-    // vacuous and is pinned to the measured state until the lane lands. The
-    // authored theme carried a mode-aware palette; the preset does not.
-    expect(dark?.seeds).toEqual(CLASSIC.projection.seeds);
+    // The mode-canvas repair (4f7d46751): the dark block re-derives its canvas
+    // ground instead of restating the light body's — so the blocks agree on
+    // every seed EXCEPT the canvas leaves, which follow the mode by law.
+    const { colorBgBase: _lightGround, ...baseRest } = CLASSIC.projection.seeds;
+    const { colorBgBase: darkGround, ...darkRest } = dark?.seeds ?? {};
+    expect(darkRest).toEqual(baseRest);
+    expect(darkGround).not.toBe(CLASSIC.projection.seeds.colorBgBase);
   });
 
   it('resolves `base` to the mode the compile declares it IS', () => {
