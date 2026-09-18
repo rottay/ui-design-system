@@ -4,126 +4,70 @@
  * one DOM tree under every engine (no engines/ split), so it has a single skin.
  *
  * LAYER: imported by `facade/entrypoints/base.css` and
- * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
- * "deliberately unlayered" note predates the wiring). Being an EARLIER layer
- * than the Button engine skin is exactly why this file must never repaint
- * button chrome: the composed Button is the single paint owner of its own
- * variants/states (button.css, `rottay-engines`). Pill geometry is requested
- * through the Button contract (`radius="full"`), never by reaching into the
- * primitive's resolved channels.
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`. Being an
+ * EARLIER layer than the Button engine skin is exactly why this file must never
+ * repaint button chrome: the composed Button is the single paint owner of its own
+ * variants/states/sizing (button.css, `rottay-engines`). The family requests pill
+ * geometry through the Button contract (`radius="full"`) and paints NOTHING on
+ * the button — the retired inline floor/font/padding copies are gone, and the
+ * coarse-pointer touch floor is the Button's own `@media (hover: none),
+ * (pointer: coarse)` rule.
  *
  * SCOPE ROOT carries `ds-structure ds-collection-header` + `data-part='root'` +
- * `data-embedded` ('true'|'false', always stamped).
+ * ALWAYS-STAMPED `data-embedded` / `data-compact` / `data-minimal` /
+ * `data-editorial-tech` / `data-loading`.
+ *
+ * CHANNELS: every `--ds-collection-header-*` name this file reads is produced by
+ * `derivation/chrome/collection-header` at exactly the fallback stated beside it,
+ * so producing the name moves no pixel. What is NOT produced here, deliberate:
+ * `--ds-kbd-*` is the kbd family's vocabulary (this rail relays it, the kbd
+ * owner produces it) and `--ds-page-header-*` is the shared page-header group
+ * recipe the type profile drives.
+ *
+ * STATE (F-37): hover and press on the two chrome surfaces that lift on pointer
+ * contact (the root card and the quick-actions pill) are decided ONCE, by the
+ * shared interaction kernel, and read off `data-state`. The platform
+ * pseudo-classes stay beside each kernel token as the fallback arm of the same
+ * `:is()` rule — one decision, two arms, never a second authority.
+ *
+ * TYPE OWNERSHIP: the eyebrow and the subtitle are Box spans, not composed Text,
+ * so no later-layer typography skin competes for them — their whole ladder
+ * (family, size, weight, tracking, case, leading, opacity, measure) is owned
+ * here, keyed on the stamped treatment/posture attributes. The title was already
+ * a Box; its mechanics (fit-content block, balancing, the dotted glyph-clip
+ * recipe including the `-webkit-*` arms) live here too.
  *
  * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
  * (0,3,1); border-COLOR paint reaches (0,4,0) through the always-stamped root
- * `data-part` ancestor — repeating a class or attribute is forbidden. A `color`
- * on a composed `Text` (eyebrow, subtitle) can never win: the typography skin
- * lives in the LATER `rottay-engines` layer, so the ink rides the Text `color`
- * prop (`subtle`/`secondary`) and the rules below stay as the declared intent
- * (and as the paint for any context where the typography skin is absent). The
- * `Box as="h1"` title and the Box chips are NOT typography, so their color wins
- * at (0,3,0) and their text children inherit it.
+ * `data-part` ancestor — repeating a class or attribute is forbidden.
  *
- * GLASS: `backdrop-filter` is opt-in through the
- * `--ds-collection-header-actions-backdrop` channel (default `none`) — a
- * default-ON blur taxes every scroll frame (PT29/PT32 fix, Sheet glass
- * precedent).
+ * LOADING: the family renders the shared `AnatomySkeleton` over its own anatomy;
+ * this file owns only the loading root's quiet posture (no enter animation, no
+ * sheen). Bone paint belongs to `skin/skeleton-anatomy`.
  *
- * STATE: `surfaceVariant==='embedded'` → the stamped `data-embedded` (on the root,
- * eyebrow, and quick-actions; the shortcut chips carry no `data-embedded`, so their
- * embedded background is keyed off the ROOT's `data-embedded` as an ancestor).
- * `titleTreatment` / `compactLayout` / `layoutVariant` are STATE-SELECTED over
- * static tokens → keyed on the stamped `data-title-treatment` / `data-compact-layout`
- * / `data-editorial-tech`. `item.tone` → `data-tone`.
- *
- * C0-07: `loading` stamps `data-loading` on the root and renders the
- * hierarchy skeleton — eyebrow/title/subtitle/action/meta blocks whose
- * geometry lives here keyed on data-block (page-shell/cockpit-header idiom),
- * with the pulse cadence on the motion channel, stopped under
- * prefers-reduced-motion and re-asserted as GrayText under forced colors.
- * The loading root is quiet: no sheen layer and no enter animation.
- *
- * C1 (visual elevation): the subtitle-row hairline retires in the compact
- * composition (rhythm carries the separation on narrow measures) and the
- * primary-first action partition gains a hairline seam
- * (data-part='action-divider') so the dominant group reads apart from the
- * quiet cluster without another box.
- *
- * MATERIALS (one dominant boundary per semantic region): the secondary rail
- * used to render four parts — eyebrow, neutral meta chip, shortcuts label and
- * shortcut pill — with ONE material: 999px radius, `--ds-surface-panel` fill,
- * `--ds-color-border-subtle` hairline, 12px/700 caps. Nothing told identity
- * from data from affordance. They now carry three:
- *   · eyebrow / shortcuts label -> overline, no frame; the eyebrow keeps a
- *     single accent tick as the identity column's only brand chroma
- *   · meta chip -> the only framed object left in the rail, so the tone
- *     frames read again
- *   · shortcut cap -> real key material on the governed `--ds-kbd-*` set
- * Every value resolves through a family-private `--_ds-collection-header-*`
- * declared once on the scope root; this file mints no public channel.
- *
- * TYPE OWNERSHIP follows the LAYER, not preference. `Box` parts (title, meta
- * chip, shortcuts label, key cap) have no competing typography skin, so their
- * whole type ladder is owned here and reads the authored roles. `Text` parts
- * (eyebrow, subtitle) are painted by the typography skin in the LATER
- * `rottay-engines` layer, so a font declaration here would be inert — their
- * type stays on the caller channel engine-side and is channel-driven there.
+ * MATERIALS (one dominant boundary per semantic region): identity reads as an
+ * overline with a single accent tick, data (meta chips) is the only framed object
+ * in the rail, and keyboard affordances read as real key caps on the governed
+ * `--ds-kbd-*` set.
  *
  * FLUID STEPS are `cqi`, not `vw`: the root is a query container, and a hero
  * sized to the viewport renders at its widest inside a half-width rail, which
  * is the one place it must be smallest.
  */
 
-/* family-private channels ------------------------------------------------------
-   The one place this family resolves public channels into its own vocabulary.
-   Three semantic regions get three DISTINCT materials, because they carry three
-   different kinds of meaning and used to carry one:
-     · identity  (eyebrow)         -> overline, no frame, one accent tick
-     · data      (meta chips)      -> the ONLY framed object in the rail
-     · affordance(shortcut keys)   -> key caps on the governed `--ds-kbd-*` set
-   Every private resolves from an EXISTING public channel; this file mints none.
-   Reading `--ds-kbd-*` is deliberate: a tenant that styles its key caps once
-   styles them here too, instead of this rail inventing a second key material. */
-
-.ds-structure.ds-collection-header[data-part='root'] {
-  --_ds-collection-header-overline-size: var(--ds-page-header-eyebrow-size, var(--ds-font-size-xs, 12px));
-  --_ds-collection-header-overline-tracking: var(--ds-page-header-eyebrow-tracking, 0.13em);
-  --_ds-collection-header-overline-weight: var(--ds-font-weight-bold, 700);
-  --_ds-collection-header-overline-case: var(--ds-page-header-eyebrow-text-transform, uppercase);
-  --_ds-collection-header-accent: var(--ds-collection-header-display-color, var(--ds-color-primary));
-
-  --_ds-collection-header-chip-block-size: var(--ds-spacing-6, 24px);
-  --_ds-collection-header-chip-inline-padding: var(--ds-spacing-2, 8px);
-  --_ds-collection-header-chip-radius: var(--ds-radius-full, 9999px);
-  --_ds-collection-header-chip-family: var(--ds-type-caption-font-family, inherit);
-  --_ds-collection-header-chip-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
-  --_ds-collection-header-chip-weight: var(--ds-font-weight-bold, 700);
-  --_ds-collection-header-chip-tracking: var(--ds-type-caption-letter-spacing, 0.02em);
-
-  --_ds-collection-header-keycap-block-size: var(--ds-spacing-5, 20px);
-  --_ds-collection-header-keycap-inline-padding: var(--ds-spacing-2, 8px);
-  --_ds-collection-header-keycap-radius: var(--ds-kbd-radius, var(--ds-radius-sm, 4px));
-  --_ds-collection-header-keycap-family: var(--ds-kbd-font-family, var(--ds-font-family-mono));
-  --_ds-collection-header-keycap-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
-  --_ds-collection-header-keycap-weight: var(--ds-kbd-font-weight, 500);
-  --_ds-collection-header-keycap-frame: var(--ds-kbd-frame, var(--ds-color-border));
-  --_ds-collection-header-keycap-surface: var(--ds-kbd-surface, var(--ds-surface-inset, var(--ds-color-neutral-100)));
-  --_ds-collection-header-keycap-ink: var(--ds-kbd-ink, var(--ds-color-text-muted));
-  --_ds-collection-header-keycap-depth-width: var(--ds-kbd-depth-width, 2px);
-
-  --_ds-collection-header-title-measure: var(--ds-page-header-title-max-width, 35rem);
-  --_ds-collection-header-title-measure-editorial: var(--ds-page-header-title-max-width, 42.5rem);
-}
-
 /* root -------------------------------------------------------------------------- */
 
 .ds-structure.ds-collection-header[data-part='root'] {
+  position: relative;
+  overflow: hidden;
   isolation: isolate;
   background-position: 0% 50%;
   background-size: 180% 180%;
   border-radius: var(--ds-collection-header-radius, var(--ds-radius-xl, 16px));
   box-shadow: var(--ds-collection-header-shadow, var(--ds-elevation-1));
+  padding-block-start: var(--ds-collection-header-padding-block-start, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-collection-header-padding-inline, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-end: var(--ds-collection-header-padding-block-end, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   transition:
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -138,6 +82,34 @@
     var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-collection-header;
+}
+
+/* Posture padding, drained from the component's inline styles and keyed on the
+   stamped root attributes. The editorial-compact rung tightens all three pads;
+   the embedded arms only move the block ends; minimal is one pad for the
+   identity-only projection. */
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='false'][data-editorial-tech='true'][data-compact='true'][data-embedded='false'] {
+  padding-block-start: var(--ds-collection-header-padding-compact-block-start, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-collection-header-padding-compact-inline, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-end: var(--ds-collection-header-padding-compact-block-end, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='false'][data-embedded='true'][data-editorial-tech='false'] {
+  padding-block-end: var(--ds-collection-header-padding-embedded-block-end, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='false'][data-embedded='true'][data-editorial-tech='true'] {
+  padding-block-start: var(--ds-collection-header-padding-compact-block-start, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-end: var(--ds-collection-header-padding-embedded-editorial-block-end, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='false'][data-embedded='true'][data-editorial-tech='true'][data-compact='true'] {
+  padding-inline: var(--ds-collection-header-padding-compact-inline, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='true'] {
+  padding-block: var(--ds-collection-header-padding-minimal, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-collection-header-padding-minimal, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='true'][data-embedded='true'] {
+  padding-block: var(--ds-collection-header-padding-minimal-embedded-block, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-collection-header-padding-minimal-embedded-inline, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-structure.ds-collection-header[data-part='root'][data-embedded='true'] {
@@ -171,38 +143,48 @@
   z-index: var(--ds-z-index-relative-above, 1);
 }
 
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:active {
+/* The kernel token and the platform pseudo are the two arms of one decision
+   (F-37). The lift paint rides the governed elevation ramp. */
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='pressed'], :active) {
   background-position: 100% 50%;
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
   box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
 }
 
-/* eyebrow (Text) = IDENTITY -----------------------------------------------------
+/* eyebrow (Box span) = IDENTITY -------------------------------------------------
    An overline, not a chip. The frame it used to wear was the same 999px pill,
    the same panel fill and the same hairline as the neutral meta chip and the
    two shortcut pills beside it, so the rail read as one undifferentiated strip
    of grey capsules with no way to tell identity from data from hint. The frame
    retires; the only mark left is a single accent tick, which is also the one
-   place brand chroma enters the identity column.
-   The Text's typography skin lives in the LATER `rottay-engines` layer, so type
-   stays on the caller channel (engine-side) and this file owns the box. */
+   place brand chroma enters the identity column. The whole overline voice is
+   skin-owned here: the part is a Box, so the later `rottay-engines`
+   typography skin never competes for it. */
 
 .ds-structure.ds-collection-header [data-part='eyebrow'] {
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-2, 8px);
-  min-block-size: var(--_ds-collection-header-chip-block-size);
+  min-block-size: var(--ds-collection-header-chip-block-size, var(--ds-spacing-6, 24px));
+  color: var(--ds-color-text-muted);
+  /* The retired inline read `--_ds-page-hierarchy-eyebrow-family` resolved to
+     `inherit` in every shipped context (nothing writes the name — the page-shell
+     skin reads the same private with its own fallback), so the honest resting
+     fallback is `inherit`. */
+  font-family: var(--ds-collection-header-overline-family, inherit);
+  font-size: var(--ds-collection-header-overline-size, var(--ds-page-header-eyebrow-size, var(--ds-font-size-xs, 12px)));
+  font-weight: var(--ds-collection-header-overline-weight, var(--ds-font-weight-bold, 700));
+  letter-spacing: var(--ds-collection-header-overline-tracking, var(--ds-page-header-eyebrow-tracking, 0.13em));
+  line-height: 1;
+  text-transform: var(--ds-collection-header-overline-case, var(--ds-page-header-eyebrow-text-transform, uppercase));
 }
 .ds-structure.ds-collection-header [data-part='eyebrow']::before {
   content: '';
   flex-shrink: 0;
   inline-size: var(--ds-edge-emphasis-width, 1px);
   block-size: 0.75em;
-  border-radius: var(--_ds-collection-header-chip-radius);
-  background: var(--_ds-collection-header-accent);
-}
-.ds-structure.ds-collection-header[data-part='root'] [data-part='eyebrow'][data-embedded] {
-  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-collection-header-chip-radius, var(--ds-radius-full, 9999px));
+  background: var(--ds-collection-header-accent, var(--ds-collection-header-display-color, var(--ds-color-primary)));
 }
 
 /* meta-item chips (Box; text child inherits color) = DATA -----------------------
@@ -216,14 +198,14 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
-  min-block-size: var(--_ds-collection-header-chip-block-size);
-  padding-inline: var(--_ds-collection-header-chip-inline-padding);
-  border-radius: var(--_ds-collection-header-chip-radius);
+  min-block-size: var(--ds-collection-header-chip-block-size, var(--ds-spacing-6, 24px));
+  padding-inline: var(--ds-collection-header-chip-inline-padding, var(--ds-spacing-2, 8px));
+  border-radius: var(--ds-collection-header-chip-radius, var(--ds-radius-full, 9999px));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
-  font-family: var(--_ds-collection-header-chip-family);
-  font-size: var(--_ds-collection-header-chip-size);
-  font-weight: var(--_ds-collection-header-chip-weight);
-  letter-spacing: var(--_ds-collection-header-chip-tracking);
+  font-family: var(--ds-collection-header-chip-family, var(--ds-type-caption-font-family, inherit));
+  font-size: var(--ds-collection-header-chip-size, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
+  font-weight: var(--ds-collection-header-chip-weight, var(--ds-font-weight-bold, 700));
+  letter-spacing: var(--ds-collection-header-chip-tracking, var(--ds-type-caption-letter-spacing, 0.02em));
   white-space: nowrap;
   /* meta chips carry counts ("12 active") — align the figures */
   font-variant-numeric: tabular-nums;
@@ -247,15 +229,30 @@
 /* identity column --------------------------------------------------------------
    The measure rides the shared page-header group recipe (the same channel
    PageShell reads) instead of two hardcoded pixel caps, so a tenant that widens
-   its page measure widens this hero with it. */
+   its page measure widens this hero with it. The grid rhythm between the
+   overline/title/supporting stacks is posture-keyed: the compact column that
+   leads with the overline breathes, the editorial column is flush. */
 
+.ds-structure.ds-collection-header [data-part='identity'] {
+  min-inline-size: 0;
+  display: grid;
+}
+.ds-structure.ds-collection-header [data-part='identity'][data-editorial-tech='true'] {
+  gap: 0;
+}
+.ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='true']:has(> [data-part='eyebrow']) {
+  gap: var(--ds-collection-header-identity-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header[data-part='root'][data-minimal='true'] [data-part='identity'] {
+  gap: var(--ds-collection-header-identity-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+}
 .ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='false'] {
   flex: 1 1 clamp(17.5rem, 38%, 28.75rem);
-  max-width: var(--_ds-collection-header-title-measure);
+  max-width: var(--ds-collection-header-title-measure, var(--ds-page-header-title-max-width, 35rem));
 }
 .ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='false'][data-editorial-tech='true'] {
   flex: 1 1 clamp(18.75rem, 42%, 35rem);
-  max-width: var(--_ds-collection-header-title-measure-editorial);
+  max-width: var(--ds-collection-header-title-measure-editorial, var(--ds-page-header-title-max-width, 42.5rem));
 }
 .ds-structure.ds-collection-header [data-part='identity'][data-compact-layout='true'] {
   flex: 1 1 100%;
@@ -266,11 +263,19 @@
    The full type ladder lands here. The fluid steps are keyed to `cqi`, not
    `vw`: the root is a query container, and a hero that sizes to the viewport
    renders at its widest inside a half-width rail — the one place it must be
-   smallest. Rest of the ladder keys on the stamped treatment/posture pair. */
+   smallest. The mechanics below (fit-content block, balancing, word wrapping,
+   the dotted glyph-clip recipe with its `-webkit-*` arms) drained from the
+   component's inline styles: the title is a Box, so nothing in a later layer
+   competes for any of it. */
 
 .ds-structure.ds-collection-header [data-part='title'] {
+  margin: 0;
+  display: block;
+  inline-size: fit-content;
   color: var(--ds-color-text-primary);
   text-wrap: balance;
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
   font-family: var(--ds-type-display-font-family, var(--ds-font-family-heading));
   font-size: var(--ds-font-size-fluid-4xl);
   font-weight: var(--ds-type-display-font-weight, var(--ds-font-weight-bold, 700));
@@ -287,11 +292,11 @@
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: 0.015em;
   line-height: 0.9;
-  text-transform: var(--_ds-collection-header-overline-case);
+  text-transform: var(--ds-collection-header-overline-case, var(--ds-page-header-eyebrow-text-transform, uppercase));
 }
 
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
-  text-transform: var(--_ds-collection-header-overline-case);
+  text-transform: var(--ds-collection-header-overline-case, var(--ds-page-header-eyebrow-text-transform, uppercase));
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='true'] {
   font-size: clamp(calc(1.625rem * var(--ds-type-scale, 1)), calc(8.8cqi * var(--ds-type-scale, 1)), calc(2.125rem * var(--ds-type-scale, 1)));
@@ -325,14 +330,17 @@
   text-shadow: 0 0 24px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 12%, transparent);
 }
 
-/* dotted-title glyph-clip recipe: the counted background and filter move here; the
-   uncounted -webkit-background-clip / -webkit-text-fill-color / -webkit-text-stroke
-   stay inline (leave non-counted paint in place). background-position + clip are
-   constant across the three dotted branches; the image/size/filter branch on
-   compact vs editorial-tech vs default. */
+/* dotted-title glyph-clip recipe: the counted background and filter live here,
+   and so do the `-webkit-*` arms that drained from the component's inline
+   styles — the stroke rung is posture-keyed on the stamped treatment
+   attributes (compact 0.24px / editorial-tech 0.32px / default 1px, each mixed
+   from the family's display ink toward transparent at its authored strength). */
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
   background-position: 0 0, 0 0;
   background-clip: text, text;
+  -webkit-background-clip: text, text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: var(--ds-collection-header-dotted-stroke, 1px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 28%, transparent));
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='true'] {
   background-image:
@@ -340,6 +348,7 @@
     linear-gradient(180deg, color-mix(in srgb, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 60%, var(--ds-collection-header-display-color, var(--ds-color-primary)) 40%) 0%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 52%, transparent) 100%);
   background-size: 4px 4px, 100% 100%;
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 8%, transparent));
+  -webkit-text-stroke: var(--ds-collection-header-dotted-stroke-compact, 0.24px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 20%, transparent));
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='true'] {
   background-image:
@@ -347,6 +356,7 @@
     linear-gradient(180deg, color-mix(in srgb, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 58%, var(--ds-collection-header-display-color, var(--ds-color-primary)) 42%) 0%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 68%, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 20%) 54%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 42%, transparent) 100%);
   background-size: 5.2px 5.2px, 100% 100%;
   filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 10%, transparent));
+  -webkit-text-stroke: var(--ds-collection-header-dotted-stroke-editorial, 0.32px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 24%, transparent));
 }
 .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='false'] {
   background-image:
@@ -354,6 +364,73 @@
     linear-gradient(180deg, color-mix(in srgb, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 58%, var(--ds-collection-header-display-color, var(--ds-color-primary)) 42%) 0%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 56%, transparent) 100%);
   background-size: 6px 6px, 100% 100%;
   filter: drop-shadow(0 0 18px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 12%, transparent));
+}
+
+/* subtitle (Box span) ------------------------------------------------------------
+   Both variants' full ladder is skin-owned (a Box has no competing typography
+   skin), keyed on the stamped treatment × subtitle-treatment × posture
+   attributes. The default variant reads the supporting role at rest and drops
+   to the caption rung when the title treatment or the compact posture asks;
+   the editorial variant reads the caption rung under the same treated title
+   arms, keeps the supporting leading, and quiets its ink by the authored
+   opacity. */
+
+.ds-structure.ds-collection-header [data-part='subtitle'] {
+  display: block;
+  text-wrap: pretty;
+  max-inline-size: 100%;
+  font-size: var(--ds-collection-header-subtitle-size, var(--ds-type-supporting-font-size, var(--ds-font-size-sm, 14px)));
+  line-height: var(--ds-collection-header-subtitle-line-height, var(--ds-type-supporting-line-height, 1.5));
+}
+.ds-structure.ds-collection-header [data-part='subtitle']:is([data-title-treatment='display'], [data-title-treatment='dotted'], [data-compact-layout='true']) {
+  font-size: var(--ds-collection-header-subtitle-size-caption, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-title-treatment='dotted'] {
+  line-height: var(--ds-collection-header-subtitle-line-height-caption, var(--ds-type-caption-line-height, 1.35));
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-subtitle-treatment='mono-technical'] {
+  font-family: var(--ds-collection-header-subtitle-family-code, var(--ds-type-code-font-family, var(--ds-font-family-mono, var(--ds-font-family-base))));
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='editorial-tech'][data-subtitle-treatment='mono-technical'] {
+  font-family: var(--ds-collection-header-subtitle-family-technical, var(--ds-font-family-mono, var(--ds-font-family-base)));
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-subtitle-treatment='mono-technical'] {
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-technical, 0.135em);
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-subtitle-treatment='mono-technical'][data-compact-layout='true'] {
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-compact-technical, 0.05em);
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-subtitle-treatment='mono-technical']:not([data-compact-layout='true']) {
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-code, var(--ds-type-code-letter-spacing, 0.09em));
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-title-treatment='dotted']:not([data-subtitle-treatment='mono-technical']):not([data-compact-layout='true']) {
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-dotted, 0.08em);
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-title-treatment='dotted'][data-compact-layout='true']:not([data-subtitle-treatment='mono-technical']) {
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-caption, var(--ds-type-caption-letter-spacing, 0.03em));
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default'][data-title-treatment='display'] {
+  letter-spacing: var(--ds-collection-header-subtitle-tracking-caption, var(--ds-type-caption-letter-spacing, 0.03em));
+}
+.ds-structure.ds-collection-header [data-part='subtitle']:is([data-title-treatment='display'], [data-title-treatment='dotted']),
+.ds-structure.ds-collection-header [data-part='subtitle'][data-subtitle-treatment='mono-technical'] {
+  text-transform: uppercase;
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='editorial-tech'] {
+  opacity: var(--ds-collection-header-subtitle-opacity-editorial, 0.92);
+  max-inline-size: var(--ds-collection-header-subtitle-measure-editorial, 680px);
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-variant='default']:is([data-title-treatment='display'], [data-title-treatment='dotted']) {
+  opacity: var(--ds-collection-header-subtitle-opacity-treated, 0.88);
+}
+
+/* subtitle inks (both variants; the root ancestor + the contract data-variant
+   reach (0,5,0) over anything earlier). */
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='editorial-tech'] {
+  color: color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%);
+}
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='default'] {
+  color: var(--ds-color-text-secondary);
 }
 
 /* subtitle divider + editorial-tech rule ------------------------------------ */
@@ -373,20 +450,35 @@
   inline-size: min(100%, var(--ds-page-header-subtitle-max-width, 45rem));
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%);
 }
-/* subtitle-row: the default-branch subtitle wrapper. The root ancestor buys
-   (0,4,0) so its top border clears the tenant border-color floor at (0,3,1).
-   Compact: the rule retires — on a narrow measure rhythm alone separates
-   title from supporting copy; the hairline read as chrome noise between two
-   stacked text blocks (its padding retires with it, engine-side). */
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'] {
+
+/* subtitle-row: the default variant's wrapper carries the top hairline (the
+   root ancestor buys (0,4,0) so its border clears the tenant border-color
+   floor at (0,3,1)); compact retires the rule — on a narrow measure rhythm
+   alone separates title from supporting copy. The editorial wrapper is its
+   own band: no rule, its own measure, the tighter treated gap. */
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='default'] {
+  margin-block-start: var(--ds-collection-header-subtitle-row-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block-start: var(--ds-collection-header-subtitle-row-rule-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  max-inline-size: var(--ds-collection-header-subtitle-row-measure, 620px);
+  gap: var(--ds-collection-header-subtitle-row-inline-gap, 10px);
   border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
 }
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-compact-layout='true'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='default'][data-compact-layout='true'] {
+  padding-block-start: 0;
+  max-inline-size: 100%;
   border-top: none;
+}
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='default']:is([data-title-treatment='display'], [data-title-treatment='dotted']) {
+  margin-block-start: var(--ds-collection-header-subtitle-row-gap-treated, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'][data-variant='editorial-tech'] {
+  margin-block-start: var(--ds-collection-header-subtitle-row-gap-editorial, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+  max-inline-size: var(--ds-collection-header-subtitle-row-measure-editorial, 760px);
+  gap: var(--ds-collection-header-subtitle-row-inline-gap-editorial, 12px);
 }
 
 /* action partition divider: the hairline seam between the dominant primary
-   group and the quiet cluster (engine renders it only when both exist). */
+   group and the quiet cluster (the component renders it only when both exist). */
 .ds-structure.ds-collection-header [data-part='action-divider'] {
   flex-shrink: 0;
   align-self: center;
@@ -395,24 +487,94 @@
   background: var(--ds-color-border-subtle);
 }
 
-/* subtitle (Text) — two variants; the root ancestor + the contract
-   data-variant reach (0,5,0) over the typography skin's [data-color] rule. */
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='editorial-tech'] {
-  color: color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%);
+/* secondary rail ------------------------------------------------------------
+   The rail is a flex item of the hero row (shares the leftover width, yields
+   after the identity) and a container for its own rows. With the action
+   cluster it is a stretched column; without it a right-aligned grid whose gap
+   carries the rhythm. The compact posture turns it into a full-width band. */
+.ds-structure.ds-collection-header [data-part='secondary-rail'] {
+  flex: 1 1 min(100%, 420px);
+  inline-size: auto;
+  max-inline-size: 560px;
+  margin-inline-start: auto;
 }
-.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='default'] {
-  color: var(--ds-color-text-secondary);
+.ds-structure.ds-collection-header [data-part='secondary-rail']:has(> [data-part='quick-actions']) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-inline-size: 300px;
+}
+.ds-structure.ds-collection-header [data-part='secondary-rail']:not(:has(> [data-part='quick-actions'])) {
+  display: grid;
+  gap: var(--ds-collection-header-rail-grid-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+  justify-items: end;
+  min-inline-size: 260px;
+}
+.ds-structure.ds-collection-header[data-part='root'][data-compact='true'] [data-part='secondary-rail'] {
+  flex: 1 1 100%;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  margin-inline-start: 0;
+}
+.ds-structure.ds-collection-header[data-part='root'][data-compact='true'] [data-part='secondary-rail']:not(:has(> [data-part='quick-actions'])) {
+  justify-items: start;
 }
 
-/* quick-actions pill container -------------------------------------------------- */
+/* The rhythm above the cluster exists only when the overline row leads it —
+   the sibling combinator reads that fact off the anatomy instead of a
+   component-computed boolean. */
+.ds-structure.ds-collection-header [data-part='secondary-rail'] > * + [data-part='quick-actions'] {
+  margin-block-start: var(--ds-collection-header-quick-actions-above-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header [data-part='secondary-rail'] > * + [data-part='quick-actions'][data-editorial-tech='true'] {
+  margin-block-start: var(--ds-collection-header-quick-actions-above-gap-editorial, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+}
 
+/* The trailing block under the cluster (below meta items + shortcuts) is a
+   right-aligned stack; compact left-aligns it. It only renders behind the
+   cluster, so the sibling anchor is exact. */
+.ds-structure.ds-collection-header [data-part='secondary-rail'] > [data-part='quick-actions'] + * {
+  margin-block-start: var(--ds-collection-header-rail-trailing-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  display: grid;
+  gap: var(--ds-collection-header-rail-trailing-row-gap, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
+  justify-items: end;
+}
+.ds-structure.ds-collection-header[data-part='root'][data-compact='true'] [data-part='secondary-rail'] > [data-part='quick-actions'] + * {
+  justify-items: start;
+}
+
+/* quick-actions pill container --------------------------------------------------
+   The cluster is an inline-flex pill that hugs its content at rest and
+   stretches full-width in the compact band. Its gap tightens in the editorial
+   composition. Glass is opt-in (default none): a default-ON blur taxed every
+   scroll frame (PT29/PT32 fix, Sheet glass precedent). */
 .ds-structure.ds-collection-header [data-part='quick-actions'] {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-collection-header-quick-actions-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+  padding: var(--ds-collection-header-quick-actions-padding, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
+  max-inline-size: 100%;
   border-radius: var(--ds-radius-md, 8px);
   /* Glass is opt-in (default none): PT29/PT32 fix, Sheet glass precedent. */
   backdrop-filter: var(--ds-collection-header-actions-backdrop, none);
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-collection-header [data-part='quick-actions'][data-editorial-tech='true'] {
+  gap: var(--ds-collection-header-quick-actions-gap-editorial, 6px);
+}
+.ds-structure.ds-collection-header[data-part='root']:not([data-compact='true']) [data-part='quick-actions'] {
+  justify-content: flex-end;
+  inline-size: fit-content;
+  align-self: flex-end;
+}
+.ds-structure.ds-collection-header[data-part='root'][data-compact='true'] [data-part='quick-actions'] {
+  justify-content: flex-start;
+  inline-size: 100%;
+  align-self: stretch;
 }
 .ds-structure.ds-collection-header[data-part='root'] [data-part='quick-actions'] {
   border: 1px solid var(--ds-color-border-subtle);
@@ -430,16 +592,28 @@
   box-shadow: var(--ds-elevation-1);
 }
 
-.ds-structure.ds-collection-header [data-part='quick-actions']:active {
+/* The lift is the kernel's decision read off `data-state`, with the platform
+   pseudo as the fallback arm of the same rule (F-37). */
+.ds-structure.ds-collection-header [data-part='quick-actions']:is([data-state~='pressed'], :active) {
   transform: translateY(-1px);
 }
 
-/* quick-action Button: the composed primitive is the single paint owner of
-   its variant chrome and interaction states (button.css, a later layer — the
-   old BEM block duplicated that paint with quadrupled classes + !important
-   and is retired). The structure requests pill geometry through the Button
-   prop contract. Flex sizing (no shrink, natural width) rides the caller's
-   inline layout style. */
+/* The inline meta row leads the cluster only when present; its gutter to the
+   pill edge is keyed off the stamped meta-item it carries. */
+.ds-structure.ds-collection-header [data-part='quick-actions'] > :first-child:has(> [data-part='meta-item']) {
+  padding-inline-start: var(--ds-collection-header-inline-meta-gap, calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1)));
+}
+
+/* quick-action icon wrapper: the family's own span around the caller's glyph;
+   its gutter retires when the action collapses icon-only. The Button itself
+   is never painted here (earlier layer, and the Button owns its chrome). */
+.ds-structure.ds-collection-header [data-part='quick-action-icon'] {
+  display: inline-flex;
+  margin-inline-end: var(--ds-collection-header-action-icon-gap, calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1)));
+}
+.ds-structure.ds-collection-header [data-part='quick-action-icon'][data-icon-only='true'] {
+  margin-inline-end: 0;
+}
 
 /* shortcuts label + key caps = AFFORDANCE --------------------------------------
    The label is a rail overline with no frame at all (same voice as the eyebrow,
@@ -453,89 +627,58 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ds-spacing-1, 4px);
-  min-block-size: var(--_ds-collection-header-keycap-block-size);
+  min-block-size: var(--ds-collection-header-keycap-block-size, var(--ds-spacing-5, 20px));
   padding-inline-end: var(--ds-spacing-1, 4px);
-  font-size: var(--_ds-collection-header-overline-size);
-  font-weight: var(--_ds-collection-header-overline-weight);
-  letter-spacing: var(--_ds-collection-header-overline-tracking);
-  text-transform: var(--_ds-collection-header-overline-case);
+  font-size: var(--ds-collection-header-overline-size, var(--ds-page-header-eyebrow-size, var(--ds-font-size-xs, 12px)));
+  font-weight: var(--ds-collection-header-overline-weight, var(--ds-font-weight-bold, 700));
+  letter-spacing: var(--ds-collection-header-overline-tracking, var(--ds-page-header-eyebrow-tracking, 0.13em));
+  text-transform: var(--ds-collection-header-overline-case, var(--ds-page-header-eyebrow-text-transform, uppercase));
   color: var(--ds-color-text-muted);
 }
 /* The glyph was authored at 10px, below the legible floor for a mark that has
    to read beside 12px capitals. It now tracks the overline's own size. */
 .ds-structure.ds-collection-header [data-part='shortcuts-label-icon'] {
   flex-shrink: 0;
-  inline-size: var(--_ds-collection-header-overline-size);
-  block-size: var(--_ds-collection-header-overline-size);
+  inline-size: var(--ds-collection-header-overline-size, var(--ds-page-header-eyebrow-size, var(--ds-font-size-xs, 12px)));
+  block-size: var(--ds-collection-header-overline-size, var(--ds-page-header-eyebrow-size, var(--ds-font-size-xs, 12px)));
 }
 
 .ds-structure.ds-collection-header [data-part='shortcut-pill'] {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  min-block-size: var(--_ds-collection-header-keycap-block-size);
-  padding-inline: var(--_ds-collection-header-keycap-inline-padding);
-  border-radius: var(--_ds-collection-header-keycap-radius);
-  font-family: var(--_ds-collection-header-keycap-family);
-  font-size: var(--_ds-collection-header-keycap-size);
-  font-weight: var(--_ds-collection-header-keycap-weight);
+  min-block-size: var(--ds-collection-header-keycap-block-size, var(--ds-spacing-5, 20px));
+  padding-inline: var(--ds-collection-header-keycap-inline-padding, var(--ds-spacing-2, 8px));
+  border-radius: var(--ds-collection-header-keycap-radius, var(--ds-kbd-radius, var(--ds-radius-sm, 4px)));
+  font-family: var(--ds-collection-header-keycap-family, var(--ds-kbd-font-family, var(--ds-font-family-mono)));
+  font-size: var(--ds-collection-header-keycap-size, var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px)));
+  font-weight: var(--ds-collection-header-keycap-weight, var(--ds-kbd-font-weight, 500));
   line-height: 1;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  color: var(--_ds-collection-header-keycap-ink);
-  background: var(--_ds-collection-header-keycap-surface);
+  color: var(--ds-collection-header-keycap-ink, var(--ds-kbd-ink, var(--ds-color-text-muted)));
+  background: var(--ds-collection-header-keycap-surface, var(--ds-kbd-surface, var(--ds-surface-inset, var(--ds-color-neutral-100))));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 55%, transparent);
 }
 /* Shorthand, not a longhand colour: preflight zeroes `border-width` on every
    element, so a bare `border-color` would leave the cap frameless. The root
    `data-part` ancestor buys the fourth unit over the tenant border floor. */
 .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
-  border: var(--ds-edge-hairline-width, 1px) solid var(--_ds-collection-header-keycap-frame);
-  border-block-end-width: var(--_ds-collection-header-keycap-depth-width);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-collection-header-keycap-frame, var(--ds-kbd-frame, var(--ds-color-border)));
+  border-block-end-width: var(--ds-collection-header-keycap-depth-width, var(--ds-kbd-depth-width, 2px));
   border-block-end-color: var(
     --ds-kbd-depth,
-    color-mix(in srgb, var(--_ds-collection-header-keycap-frame) 72%, var(--ds-color-neutral-900) 28%)
+    color-mix(in srgb, var(--ds-collection-header-keycap-frame, var(--ds-kbd-frame, var(--ds-color-border))) 72%, var(--ds-color-neutral-900) 28%)
   );
 }
 
-/* loading skeleton (C0-07): quiet root + per-block geometry keyed on
-   data-block; blocks reserve the final hierarchy footprint so late content
-   lands without a jump. */
-
+/* loading root: quiet — no enter animation, no sheen. The bones themselves
+   belong to the shared renderer's skin (skeleton-anatomy). */
 .ds-structure.ds-collection-header[data-part='root'][data-loading='true'] {
   animation: none;
 }
 .ds-structure.ds-collection-header[data-part='root'][data-loading='true']::after {
   display: none;
-}
-
-.ds-structure.ds-collection-header [data-part='skeleton'] {
-  border-radius: var(--ds-radius-sm, 4px);
-  background: var(--ds-color-neutral-100);
-  animation: ds-foundation-pulse var(--ds-motion-attention) ease-in-out infinite;
-}
-.ds-structure.ds-collection-header [data-part='skeleton'][data-block='title'] {
-  inline-size: min(320px, 72%);
-  block-size: clamp(28px, 4vw, 40px);
-}
-.ds-structure.ds-collection-header [data-part='skeleton'][data-block='subtitle'] {
-  inline-size: min(220px, 88%);
-  block-size: 14px;
-}
-.ds-structure.ds-collection-header [data-part='skeleton'][data-block='eyebrow'] {
-  inline-size: 96px;
-  block-size: var(--ds-spacing-6, 24px);
-  border-radius: 999px;
-}
-.ds-structure.ds-collection-header [data-part='skeleton'][data-block='action'] {
-  inline-size: 96px;
-  block-size: var(--ds-spacing-8, 32px);
-  border-radius: 999px;
-}
-.ds-structure.ds-collection-header [data-part='skeleton'][data-block='meta-item'] {
-  inline-size: 72px;
-  block-size: var(--ds-spacing-6, 24px);
-  border-radius: 999px;
 }
 
 @keyframes ds-collection-header-enter {
@@ -548,24 +691,25 @@
   87% { background-position: -130% 50%; }
 }
 
-/* ---- hover is pointer-fine only; both treatments keep an unguarded
-        `:active` twin at their original cascade position. ---- */
+/* ---- hover is pointer-fine only; the press pair above keeps its unguarded
+        pseudo arm at its original cascade position. The hover lift is one
+        decision with the kernel token (F-37). ---- */
 @media (hover: hover) {
-  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:hover {
+  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:is([data-state~='hovered'], :hover) {
     background-position: 100% 50%;
     border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
     box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
   }
 
-  .ds-structure.ds-collection-header [data-part='quick-actions']:hover {
+  .ds-structure.ds-collection-header [data-part='quick-actions']:is([data-state~='hovered'], :hover) {
     transform: translateY(-1px);
   }
 }
 
 /* ---- forced colors: every pattern-owned frame reads as ButtonText. The
         dotted title recipe paints glyphs via background-clip + transparent
-        fill (inline), which would vanish under forced colors — restore the
-        plain system-colored text for that treatment. ---- */
+        fill, which would vanish under forced colors — restore the plain
+        system-colored text for that treatment. ---- */
 @media (forced-colors: active) {
   .ds-structure.ds-collection-header[data-part='root'][data-embedded='false'],
   .ds-structure.ds-collection-header [data-part='meta-item'],
@@ -597,18 +741,13 @@
     background-image: none;
     filter: none;
     -webkit-text-fill-color: CanvasText;
-    -webkit-text-stroke-width: 0;
+    -webkit-text-stroke: none;
   }
 
   /* The partition seam re-asserts as a system-ink rule (it is structure,
      not decoration). */
   .ds-structure.ds-collection-header [data-part='action-divider'] {
     background: ButtonText;
-  }
-
-  .ds-structure.ds-collection-header [data-part='skeleton'] {
-    background: GrayText;
-    animation: none;
   }
 }
 
@@ -645,11 +784,5 @@
   .ds-structure.ds-collection-header [data-part='quick-actions'] {
     animation: none;
     transition: none;
-  }
-
-  /* The skeleton pulse is ambient motion: the reserved footprint stays,
-     the cadence stops. */
-  .ds-structure.ds-collection-header [data-part='skeleton'] {
-    animation: none;
   }
 }

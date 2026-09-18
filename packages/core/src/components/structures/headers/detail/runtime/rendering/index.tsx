@@ -26,6 +26,7 @@
 import { type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Badge, Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '@/components/primitives';
 import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
 import {
@@ -35,11 +36,21 @@ import {
 } from '@/components/patterns/foundation/header-actions';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-import type { DetailHeaderProps } from '../../contracts';
+import type { DetailHeaderProps, DetailHeaderTab } from '../../contracts';
 
 // Tab-active background is STATE-SELECTED in the skin: the root carries
 // `data-archetype`, so per-archetype rules reach the sibling tab strip without
 // any inline custom property.
+
+// Hover and press on the back chip are decided once, by the shared
+// interaction kernel, and read off `data-state`. The KEYBOARD ring is not:
+// the focusable element is the anchor ABOVE the chip and the chip sits inside
+// it, so focus events never propagate down to the chip's handlers — the same
+// measurement the form/edit header contract recorded. `a:focus-visible` stays
+// the platform's own (and only) authority there, stated in the skin where the
+// rule is declared. The tabs ARE the focusable element, so their ring is
+// kernel-decided and paired. The platform pseudo-classes remain in the skin
+// as the fallback arm of each paired rule (F-37).
 
 function renderAvatarNode(avatar: string | ReactNode) {
   if (typeof avatar === 'string') {
@@ -62,6 +73,92 @@ function renderAvatarNode(avatar: string | ReactNode) {
   }
 
   return avatar;
+}
+
+function DetailTab({
+  tab,
+  isActive,
+  onSelect,
+}: {
+  tab: DetailHeaderTab;
+  isActive: boolean;
+  onSelect: (tabId: string) => void;
+}) {
+  // The APG tab keyboard contract: Enter/Space activates; the arrow keys
+  // (direction-aware under RTL), Home and End move focus between tabs without
+  // activating them.
+  const interaction = useInteractionState();
+  const TabIcon = tab.icon;
+
+  const handleTabKeyDown = (event: ReactKeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onSelect(tab.id);
+      return;
+    }
+    const navKeys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    if (!navKeys.includes(event.key)) {
+      return;
+    }
+    event.preventDefault();
+    const currentTab = event.currentTarget as HTMLElement;
+    const strip = currentTab.closest('[data-part="tab-strip"]');
+    const stripTabs = Array.from(
+      strip?.querySelectorAll<HTMLElement>('[data-part="tab"]') ?? [],
+    );
+    const currentIndex = stripTabs.indexOf(currentTab);
+    if (currentIndex < 0) {
+      return;
+    }
+    const rtl = Boolean(currentTab.closest('[dir="rtl"]'));
+    let nextIndex = currentIndex;
+    if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = stripTabs.length - 1;
+    } else {
+      const forward = event.key === 'ArrowRight' ? !rtl : rtl;
+      nextIndex =
+        (currentIndex + (forward ? 1 : -1) + stripTabs.length) % stripTabs.length;
+    }
+    stripTabs[nextIndex]?.focus();
+  };
+
+  return (
+    <Box
+      {...interaction.handlers}
+      {...partAttributes('tab', interaction.state)}
+      data-active={isActive}
+      role="tab"
+      aria-selected={isActive}
+      tabIndex={isActive ? 0 : -1}
+      onClick={() => onSelect(tab.id)}
+      onKeyDown={handleTabKeyDown}
+    >
+      <Flex align="center" gap={8}>
+        {TabIcon ? <TabIcon data-part="tab-icon" data-active={isActive} /> : null}
+        <Text
+          data-part="tab-label"
+          data-active={isActive}
+          size="sm"
+          weight={isActive ? 'medium' : undefined}
+          color={isActive ? undefined : 'secondary'}
+        >
+          {tab.label}
+        </Text>
+        {tab.count !== undefined ? (
+          <Box data-part="tab-count">
+            <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium" color={isActive ? undefined : 'secondary'}>
+              {tab.count}
+            </Text>
+          </Box>
+        ) : null}
+      </Flex>
+      {/* Selection rail: the state is a structural edge, not a
+          background wash. */}
+      <Box data-part="tab-rail" data-active={isActive} aria-hidden="true" />
+    </Box>
+  );
 }
 
 export function DetailHeader({
@@ -91,6 +188,7 @@ export function DetailHeader({
   // native <a> tag when no NavigationLinkProvider is mounted, which keeps
   // the DS package framework-agnostic.
   const NavLink = useNavigationLink();
+  const backInteraction = useInteractionState();
   const renderHrefAnchor = (href: string, content: ReactNode) => {
     if (NavLink) {
       return <NavLink href={href}>{content}</NavLink>;
@@ -114,7 +212,12 @@ export function DetailHeader({
           <Flex align="center" gap={16} wrap="wrap">
             {renderHrefAnchor(
               backHref,
-              <Flex data-part="back-button" align="center" gap={8}>
+              <Flex
+                {...backInteraction.handlers}
+                {...partAttributes('back-button', backInteraction.state)}
+                align="center"
+                gap={8}
+              >
                 {/* Governed semantic role (autoMirror: the arrow flips in
                     RTL); the retired catalog ArrowLeftIcon carried no
                     mirroring contract. The chip's visible label makes the
@@ -172,10 +275,10 @@ export function DetailHeader({
         <Box data-part="hero-spine" aria-hidden="true" />
 
         <Flex align="start" justify="between" gap={22} wrap="wrap">
-          <Flex align="start" gap={18} style={{ minWidth: 0, flex: 1 }}>
+          <Flex data-part="hero-cluster" align="start" gap={18}>
             {avatar ? renderAvatarNode(avatar) : null}
 
-            <Stack spacing="sm" style={{ minWidth: 0, flex: 1 }}>
+            <Stack data-part="hero-copy" spacing="sm">
               {eyebrow ? (
                 <Text data-part="eyebrow" size="xs" weight="bold" color="subtle">
                   {eyebrow}
@@ -251,83 +354,14 @@ export function DetailHeader({
               turns the lane from a wrapping stack of rows into one swipeable
               row, and an inline `flex-wrap` would outrank every engine. */}
           <Flex data-part="tab-list" align="center" gap={10}>
-            {tabs.map((tab) => {
-              const isActive = activeTab === tab.id;
-              const TabIcon = tab.icon;
-
-              // APG tab keyboard contract: Enter/Space activates; the arrow
-              // keys (direction-aware under RTL), Home and End move focus
-              // between tabs without activating them.
-              const handleTabKeyDown = (event: ReactKeyboardEvent) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  onTabChange?.(tab.id);
-                  return;
-                }
-                const navKeys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
-                if (!navKeys.includes(event.key)) {
-                  return;
-                }
-                event.preventDefault();
-                const currentTab = event.currentTarget as HTMLElement;
-                const strip = currentTab.closest('[data-part="tab-strip"]');
-                const stripTabs = Array.from(
-                  strip?.querySelectorAll<HTMLElement>('[data-part="tab"]') ?? [],
-                );
-                const currentIndex = stripTabs.indexOf(currentTab);
-                if (currentIndex < 0) {
-                  return;
-                }
-                const rtl = Boolean(currentTab.closest('[dir="rtl"]'));
-                let nextIndex = currentIndex;
-                if (event.key === 'Home') {
-                  nextIndex = 0;
-                } else if (event.key === 'End') {
-                  nextIndex = stripTabs.length - 1;
-                } else {
-                  const forward = event.key === 'ArrowRight' ? !rtl : rtl;
-                  nextIndex =
-                    (currentIndex + (forward ? 1 : -1) + stripTabs.length) % stripTabs.length;
-                }
-                stripTabs[nextIndex]?.focus();
-              };
-
-              return (
-                <Box
-                  data-part="tab"
-                  data-active={isActive}
-                  key={tab.id}
-                  role="tab"
-                  aria-selected={isActive}
-                  tabIndex={isActive ? 0 : -1}
-                  onClick={() => onTabChange?.(tab.id)}
-                  onKeyDown={handleTabKeyDown}
-                >
-                  <Flex align="center" gap={8}>
-                    {TabIcon ? <TabIcon data-part="tab-icon" data-active={isActive} /> : null}
-                    <Text
-                      data-part="tab-label"
-                      data-active={isActive}
-                      size="sm"
-                      weight={isActive ? 'medium' : undefined}
-                      color={isActive ? undefined : 'secondary'}
-                    >
-                      {tab.label}
-                    </Text>
-                    {tab.count !== undefined ? (
-                      <Box data-part="tab-count">
-                        <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium" color={isActive ? undefined : 'secondary'}>
-                          {tab.count}
-                        </Text>
-                      </Box>
-                    ) : null}
-                  </Flex>
-                  {/* Selection rail: the state is a structural edge, not a
-                      background wash. */}
-                  <Box data-part="tab-rail" data-active={isActive} aria-hidden="true" />
-                </Box>
-              );
-            })}
+            {tabs.map((tab) => (
+              <DetailTab
+                key={tab.id}
+                tab={tab}
+                isActive={activeTab === tab.id}
+                onSelect={(tabId) => onTabChange?.(tabId)}
+              />
+            ))}
           </Flex>
         </Box>
       ) : null}

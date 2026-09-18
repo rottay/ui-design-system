@@ -217,6 +217,9 @@ describe('DashboardHeader — status is skin-owned', () => {
 
     const glyph = container.querySelector('[data-part="status-dot-glyph"]') as HTMLElement;
     expect(glyph.style.animation).toBe('');
-    expect(glyph).toHaveAttribute('data-state', 'live');
+    // The operational state is a domain stamp, not an interaction state: it
+    // rides `data-status` (like the root), never the kernel's `data-state`.
+    expect(glyph).toHaveAttribute('data-status', 'live');
+    expect(glyph).not.toHaveAttribute('data-state');
   });
 });

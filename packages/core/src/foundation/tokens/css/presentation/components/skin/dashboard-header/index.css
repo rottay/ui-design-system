@@ -25,6 +25,15 @@
  * included — lives here. There is no `[data-size]` qualifier to lean on and no
  * competing engine-layer file.
  *
+ * CHANNELS: every visual value rides a `--ds-dashboard-header-*` channel
+ * produced by `derivation/chrome/dashboard-header` at exactly the fallback
+ * stated beside it. The family keeps NO private names: the rhythm aliases the
+ * root used to mount as `--_ds-*` for its descendants are produced channels
+ * now, and the four metric reads were respelled from `--ds-dashboard-metric-*`
+ * into the family namespace at byte-identical fallbacks (the kanban-board
+ * precedent) — one family, one namespace, whether a tenant ever turns the
+ * dial or not.
+ *
  * QUIET PREMIUM, three deliberate withdrawals from the previous skin:
  *
  *  1. No card affordance. Nothing in a page header is clickable, so the root
@@ -49,27 +58,30 @@
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-dashboard-header-actions-backdrop` channel (default `none`) — a
  * default-ON blur taxes every scroll frame (Sheet glass precedent).
+ *
+ * STATUS: the operational state is a DOMAIN stamp, not an interaction state:
+ * the structure stamps `data-status` on the marker (and the root), and the
+ * tone rules below key on it. `data-state` is reserved for the kernel's
+ * InteractionState vocabulary.
+ *
+ * STATE (F-37): the metrics readout is the family's one interactive part — a
+ * real tab stop, not a composed button — so its focus ring is decided ONCE,
+ * by the shared interaction kernel, and read off `data-state`. The platform
+ * pseudo-class stays beside the kernel token as the fallback arm of the same
+ * rule, never as a second authority. The composed action Buttons run their
+ * own kernel; the family double-stamps nothing on them.
  */
 
 /* ---- root: one boundary, one material, no affordance ---- */
 .ds-structure.ds-dashboard-header[data-part='root'] {
-  /* RHYTHM: the room axis mounts once here so every consume site stays a plain
-     channel read. `--ds-rhythm-effective-scale` is the tenant density dial;
-     each literal is a fallback, inert wherever its token is declared. */
-  --_ds-dashboard-header-room: calc(
-    clamp(var(--ds-spacing-4, 16px), 2.2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)
-  );
-  --_ds-dashboard-header-room-tight: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
-  --_ds-dashboard-header-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
-  --_ds-dashboard-header-gap-tight: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
-  --_ds-dashboard-header-gap-hair: calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1));
-  --_ds-dashboard-header-rule: 1px;
-  --_ds-dashboard-header-rule-color: var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
-  --_ds-dashboard-header-highlight: color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
-
   position: relative;
   isolation: isolate;
-  padding: var(--_ds-dashboard-header-room);
+  /* The room axis: the fluid clamp on the density dial, every consume site a
+     plain channel read. */
+  padding: var(
+    --ds-dashboard-header-room,
+    calc(clamp(var(--ds-spacing-4, 16px), 2.2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))
+  );
   overflow: hidden;
   /* A quiet top-down wash: material, not a diagonal that has to move to read
      as premium. */
@@ -84,7 +96,8 @@
   );
   border-radius: var(--ds-dashboard-header-radius, var(--ds-radius-xl));
   box-shadow:
-    inset 0 1px 0 var(--_ds-dashboard-header-highlight),
+    inset 0 1px 0
+      var(--ds-dashboard-header-highlight, color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent)),
     var(--ds-dashboard-header-shadow, var(--ds-elevation-1));
   /* `--ds-motion-calm` is declared ONLY by the three tenant artifacts — in
      foundation it exists solely as the reduced-motion `0s !important`. Read
@@ -97,7 +110,8 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact] {
-  border: var(--_ds-dashboard-header-rule) solid var(--_ds-dashboard-header-rule-color);
+  border: var(--ds-dashboard-header-rule, 1px) solid
+    var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] > * {
@@ -130,21 +144,27 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
-  gap: var(--_ds-dashboard-header-gap);
+  gap: var(--ds-dashboard-header-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-structure.ds-dashboard-header [data-part='identity'] {
   display: flex;
   align-items: flex-start;
   min-width: 0;
-  gap: var(--_ds-dashboard-header-gap-tight);
+  gap: var(
+    --ds-dashboard-header-gap-tight,
+    calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))
+  );
 }
 
 .ds-structure.ds-dashboard-header [data-part='copy'] {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: var(--_ds-dashboard-header-gap-hair);
+  gap: var(
+    --ds-dashboard-header-gap-hair,
+    calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))
+  );
 }
 
 /* ---- identity mark: a material object, not a region frame ---- */
@@ -166,7 +186,7 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'] {
-  border: var(--_ds-dashboard-header-rule) solid
+  border: var(--ds-dashboard-header-rule, 1px) solid
     var(
       --ds-dashboard-header-icon-border,
       color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-subtle))
@@ -179,7 +199,10 @@
   flex-wrap: wrap;
   align-items: baseline;
   min-width: 0;
-  gap: var(--_ds-dashboard-header-gap-tight);
+  gap: var(
+    --ds-dashboard-header-gap-tight,
+    calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))
+  );
 }
 
 /* TYPE ROLES: every text part consumes a `--ds-type-<role>-*` set rather than
@@ -220,7 +243,10 @@
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: var(--_ds-dashboard-header-gap-hair);
+  gap: var(
+    --ds-dashboard-header-gap-hair,
+    calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))
+  );
 }
 
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
@@ -243,24 +269,25 @@
 }
 
 /* Tone rides one tinted ancestor so the dot and its label can never disagree;
-   the label text is what carries the meaning. */
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='live'],
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='connected'] {
+   the label text is what carries the meaning. The key is the DOMAIN stamp
+   `data-status` — the operational state is not an interaction state. */
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-status='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-status='connected'] {
   color: var(--ds-color-success);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='syncing'],
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='warning'] {
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-status='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-status='warning'] {
   color: var(--ds-color-warning);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='offline'] {
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-status='offline'] {
   color: var(--ds-color-error);
 }
 
 /* The live/syncing pulse is skin-owned so the reduced-motion guard reaches it. */
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
-.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'] {
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-status='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-status='syncing'] {
   animation: ds-foundation-pulse var(--ds-motion-attention) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
@@ -271,7 +298,10 @@
   align-items: center;
   justify-content: flex-end;
   min-width: 0;
-  gap: var(--_ds-dashboard-header-gap-tight);
+  gap: var(
+    --ds-dashboard-header-gap-tight,
+    calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))
+  );
   /* Glass is opt-in (default none): a default-ON blur taxes every scroll frame. */
   backdrop-filter: var(--ds-dashboard-header-actions-backdrop, none);
 }
@@ -296,21 +326,28 @@
 .ds-structure.ds-dashboard-header [data-part='metrics-row'] {
   display: flex;
   align-items: stretch;
-  margin-top: var(--_ds-dashboard-header-gap);
-  padding-top: var(--_ds-dashboard-header-gap-tight);
+  margin-top: var(--ds-dashboard-header-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
+  padding-top: var(
+    --ds-dashboard-header-gap-tight,
+    calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))
+  );
   overflow-x: auto;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'] {
-  border-top: var(--_ds-dashboard-header-rule) solid var(--_ds-dashboard-header-rule-color);
+  border-top: var(--ds-dashboard-header-rule, 1px) solid
+    var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
 .ds-structure.ds-dashboard-header [data-part='metrics-row']::-webkit-scrollbar {
   display: none;
 }
 
+/* The readout's ring is the shared kernel's decision read off `data-state`,
+   with the platform pseudo as the fallback arm of the same rule (F-37). */
+.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-state~='focus-visible'],
 .ds-structure.ds-dashboard-header [data-part='metrics-row']:focus-visible {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -321,12 +358,15 @@
   flex: 0 0 auto;
   flex-direction: column;
   min-width: 0;
-  padding: 0 var(--_ds-dashboard-header-gap);
+  padding: 0 var(--ds-dashboard-header-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
   /* The chip-frame channels stay reachable but default to nothing: a tenant
      that declares them gets a framed chip back; the default is the cell. */
-  border-radius: var(--ds-dashboard-metric-radius, 0);
-  background: var(--ds-dashboard-metric-bg, none);
-  gap: var(--_ds-dashboard-header-gap-hair);
+  border-radius: var(--ds-dashboard-header-metric-radius, 0);
+  background: var(--ds-dashboard-header-metric-bg, none);
+  gap: var(
+    --ds-dashboard-header-gap-hair,
+    calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))
+  );
   scroll-snap-align: start;
 }
 
@@ -336,8 +376,11 @@
 
 /* One rule between cells — the readout is a rhythm, not a row of boxes. */
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] + [data-part='metric-chip'] {
-  border-inline-start: var(--_ds-dashboard-header-rule) solid
-    var(--ds-dashboard-metric-border, var(--_ds-dashboard-header-rule-color));
+  border-inline-start: var(--ds-dashboard-header-rule, 1px) solid
+    var(
+      --ds-dashboard-header-metric-rule,
+      var(--ds-dashboard-header-border, var(--ds-color-border-subtle))
+    );
 }
 
 .ds-structure.ds-dashboard-header [data-part='metric-chip-icon'] {
@@ -345,7 +388,7 @@
   width: var(--ds-spacing-6, 24px);
   height: var(--ds-spacing-6, 24px);
   place-items: center;
-  color: var(--ds-dashboard-metric-icon-color, var(--ds-color-primary));
+  color: var(--ds-dashboard-header-metric-icon-color, var(--ds-color-primary));
   background: color-mix(in srgb, currentColor 10%, transparent);
   border-radius: var(--ds-radius-md);
 }
@@ -368,7 +411,10 @@
   display: flex;
   align-items: baseline;
   min-width: 0;
-  gap: var(--_ds-dashboard-header-gap-hair);
+  gap: var(
+    --ds-dashboard-header-gap-hair,
+    calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))
+  );
 }
 
 .ds-structure.ds-dashboard-header [data-part='metric-chip-value'] {
@@ -390,7 +436,10 @@
   font-weight: var(--ds-type-caption-font-weight);
   font-variant-numeric: var(--ds-type-numeric-font-variant-numeric);
   line-height: var(--ds-type-caption-line-height);
-  gap: var(--_ds-dashboard-header-gap-hair);
+  gap: var(
+    --ds-dashboard-header-gap-hair,
+    calc(var(--ds-spacing-1, 4px) * var(--ds-rhythm-effective-scale, 1))
+  );
   white-space: nowrap;
 }
 
@@ -455,7 +504,10 @@
   }
 
   .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
-    padding: 0 var(--_ds-dashboard-header-gap-tight);
+    padding: 0 var(
+      --ds-dashboard-header-gap-tight,
+      calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))
+    );
   }
 }
 
@@ -477,7 +529,14 @@
 
 /* ---- consumer-forced compact: the same posture at any width ---- */
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] {
-  padding: var(--_ds-dashboard-header-room-tight) var(--_ds-dashboard-header-room);
+  padding: var(
+      --ds-dashboard-header-room-tight,
+      calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))
+    )
+    var(
+      --ds-dashboard-header-room,
+      calc(clamp(var(--ds-spacing-4, 16px), 2.2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))
+    );
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='header-row'] {
@@ -497,7 +556,10 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='metric-chip'] {
-  padding: 0 var(--_ds-dashboard-header-gap-tight);
+  padding: 0 var(
+    --ds-dashboard-header-gap-tight,
+    calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1))
+  );
 }
 
 @keyframes ds-dashboard-header-enter {
@@ -531,6 +593,9 @@
     border-color: ButtonText;
   }
 
+  /* Paired with the kernel token, same as the resting rule: forced-colors is
+     a media query, not a second authority on when the ring belongs. */
+  .ds-structure.ds-dashboard-header [data-part='metrics-row'][data-state~='focus-visible'],
   .ds-structure.ds-dashboard-header [data-part='metrics-row']:focus-visible {
     outline-color: Highlight;
   }

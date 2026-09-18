@@ -21,17 +21,25 @@
  * The `Box as="h1"` title and the icons are NOT typography, so their color
  * wins at (0,3,0).
  *
- * GEOMETRY: all static geometry (paddings, sizes, trackings) lives here behind
- * `--ds-detail-header-*` channels; the engine stamps parts and state only.
- * Wrappers composed from `Flex`/`Stack` keep their flex composition inline —
- * that is primitive composition, not reusable paint.
+ * GEOMETRY: all static geometry (paddings, sizes, trackings, the hero's flex
+ * shares) lives here behind `--ds-detail-header-*` channels; the engine stamps
+ * parts and state only. The two hero wrappers are stamped parts now
+ * (`hero-cluster`, `hero-copy`), so the flex shares the retired inline
+ * `min-width: 0; flex: 1` pairs painted live behind the family channel.
  *
  * STATE: archetype is STATE-SELECTED on the root's stamp; the four archetypes
  * set family-private wash locals that the hero panel reads, so the divergence
  * is one decision per archetype rather than four background stacks. Tab
  * active/inactive is keyed on the stamped `data-active`; the selection is the
  * `tab-rail` part, not a wash, and `--ds-detail-header-tab-active-bg` stays as
- * the tenant override on the tab's own ground.
+ * the tenant override on the tab's own ground. Hover, press and the keyboard
+ * ring on the tabs, and hover/press on the back chip, are decided once, by
+ * the shared interaction kernel, and each skin rule pairs the kernel token
+ * with its platform pseudo in one `:is(...)` — one decision plus its native
+ * fallback, never a second authority (F-37). The back chip's keyboard ring is
+ * the one exception, and says so where it is declared: the chip sits inside
+ * its anchor, so focus never reaches the chip's handlers and
+ * `a:focus-visible` is the platform's own (and only) authority there.
  *
  * ONE BOUNDARY PER REGION: the root is the single frame. The top bar, metadata
  * region and tab strip are separated by hairlines only — the earlier model gave
@@ -59,6 +67,15 @@
  * and `--ds-detail-rail-width` name the page BODY's surfaces and sidebar, which
  * this header does not render — `context-rail` is an inline chip lane, not a
  * page rail.
+ *
+ * CHANNELS: every `--ds-detail-header-*` value rides a channel produced by
+ * `derivation/chrome/detail-header`, stated at exactly the fallback written
+ * beside it, so producing the name moves no pixel and a tenant can reach each
+ * dial. The deriver is registered by the DT at integration (WO-FAM-10 sub-lot
+ * D2); until that line lands, the stated fallbacks are the resting render.
+ * `--ds-size-touch-target` is deliberately NOT a family channel: it is the
+ * root lane's governed 44px accessibility floor, read here with its literal
+ * fallback (WO-FAM-10 census §4, roots group).
  *
  * C-12 WAVE (record/detail composition):
  *  - TYPOGRAPHY AXIS: the h1's tracking chains the personality heading channel
@@ -268,14 +285,22 @@
 
 /* touch feedback twin: the hover treatment lives under (hover: hover) below.
    Material change, not movement — the lift made the chip jump against a
-   breadcrumb sitting on its own static baseline. */
-.ds-structure.ds-detail-header [data-part='back-button']:active {
+   breadcrumb sitting on its own static baseline. The kernel token and the
+   platform pseudo are the two arms of one rule (F-37). */
+.ds-structure.ds-detail-header [data-part='back-button']:is([data-state~='pressed'], :active) {
   background: var(--_ds-detail-header-control-bg-hover);
   border-color: var(--_ds-detail-header-control-border-hover);
 }
 
 /* keyboard focus: the back button is a Flex inside an <a>, so the ring lands
-   on the chip when the anchor is focus-visible */
+   on the chip when the anchor is focus-visible. The ring has NO kernel twin,
+   and that is a measurement rather than an omission: the focusable element is
+   the anchor ABOVE the chip and the chip sits inside it, so focus events
+   never reach the chip's handlers -- the same ruling the form/edit header
+   contract recorded against its shared skin. `:focus-visible` is the
+   platform's own authority here, not a second one; closing it means widening
+   the navigation adapter's prop contract, which is not this family's to
+   widen. */
 .ds-structure.ds-detail-header a:focus-visible [data-part='back-button'] {
   box-shadow: var(--ds-detail-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
@@ -329,23 +354,22 @@
 .ds-structure.ds-detail-header [data-part='title'] {
   margin: 0;
   color: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-detail-header-title-size, 32px);
-  font-weight: var(--ds-detail-header-title-weight, 720);
-  /* The family channel stays first; the personality heading channel carries
-     the tenant's authored tracking (BitHire's -0.025em grotesk vs The
-     Management's 0em serif) when the family channel is not authored. */
-  letter-spacing: var(--ds-detail-header-title-tracking, var(--ds-typography-heading-letter-spacing, -0.04em));
-  line-height: var(--ds-detail-header-title-leading, 1.02);
   /* C1: the hero converges on the authored page-title typography role (page
      hierarchy grammar — a detail page speaks the same type language as a
      list page). Lawful precedence: the family's own channels first, the
      role second, the exact pre-C1 chains last — a role-less artifact
      renders byte-identical, while an authored role turns the hero
-     serif/zero-track (editorial) or grotesk/tight (technical). */
+     serif/zero-track (editorial) or grotesk/tight (technical). The
+     pre-C1 duplicate declarations this rule used to carry first
+     (heading-family chain, 32px, 720, 1.02) were dead paint — a later
+     declaration in the same rule always wins — and are retired so each
+     family channel states exactly one fallback. */
   font-family: var(--ds-type-page-title-font-family, var(--ds-font-family-heading, var(--ds-font-family-base)));
   font-size: var(--ds-detail-header-title-size, var(--ds-type-page-title-font-size, 32px));
   font-weight: var(--ds-detail-header-title-weight, var(--ds-type-page-title-font-weight, 700));
+  /* The family channel stays first; the page-title role second; the
+     personality heading channel carries the tenant's authored tracking
+     (BitHire's -0.025em grotesk vs The Management's 0em serif) last. */
   letter-spacing: var(--ds-detail-header-title-tracking, var(--ds-type-page-title-letter-spacing, var(--ds-typography-heading-letter-spacing, -0.04em)));
   line-height: var(--ds-detail-header-title-leading, var(--ds-type-page-title-line-height, 1.2));
   text-wrap: balance;
@@ -413,6 +437,21 @@
   border-start-end-radius: var(--ds-radius-full, 9999px);
   border-end-end-radius: var(--ds-radius-full, 9999px);
   background: var(--_ds-detail-header-spine);
+}
+
+/* the hero's flex shares, stamped as parts so the skin owns them: the cluster
+   fills the hero row and the copy column fills the cluster, and the explicit
+   min-inline-size replaces a flex item's automatic minimum so a long title
+   wraps inside the frame instead of pushing the avatar out of it. Byte-for-byte
+   the retired inline `min-width: 0; flex: 1` pairs, now behind nothing -- the
+   values are composition, not a tenant dial. */
+.ds-structure.ds-detail-header [data-part='hero-cluster'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+.ds-structure.ds-detail-header [data-part='hero-copy'] {
+  flex: 1;
+  min-inline-size: 0;
 }
 
 /* ─── metadata card + chips ────────────────────────────────────────────────── */
@@ -555,15 +594,16 @@
   background: var(--_ds-detail-header-spine);
 }
 
-/* touch feedback twin: the hover treatment lives under (hover: hover) below */
-.ds-structure.ds-detail-header [data-part='tab'][data-active='false']:active {
+/* touch feedback twin: the hover treatment lives under (hover: hover) below.
+   The kernel token and the platform pseudo are the two arms of one rule. */
+.ds-structure.ds-detail-header [data-part='tab'][data-active='false']:is([data-state~='pressed'], :active) {
   background: var(--_ds-detail-header-control-bg-hover);
 }
 
 /* ---- hover is pointer-fine only; every treatment keeps an unguarded
         `:active` twin at its original cascade position above. ---- */
 @media (hover: hover) {
-  .ds-structure.ds-detail-header [data-part='back-button']:hover {
+  .ds-structure.ds-detail-header [data-part='back-button']:is([data-state~='hovered'], :hover) {
     background: var(--_ds-detail-header-control-bg-hover);
     border-color: var(--_ds-detail-header-control-border-hover);
   }
@@ -571,17 +611,18 @@
   /* the metadata pairs are read-only data and the avatar is chrome: neither
      lifts any more. A page header that moves whenever the pointer crosses it
      reads as a control. */
-  .ds-structure.ds-detail-header [data-part='tab'][data-active='false']:hover {
+  .ds-structure.ds-detail-header [data-part='tab'][data-active='false']:is([data-state~='hovered'], :hover) {
     background: var(--_ds-detail-header-control-bg-hover);
   }
-  .ds-structure.ds-detail-header [data-part='tab'][data-active='false']:hover [data-part='tab-rail'] {
+  .ds-structure.ds-detail-header [data-part='tab'][data-active='false']:is([data-state~='hovered'], :hover) [data-part='tab-rail'] {
     background: var(--_ds-detail-header-hairline);
   }
 }
 
 /* APG tab keyboard focus — the tab is focusable (tabIndex), so the ring must
-   be visible on both active and inactive tabs. */
-.ds-structure.ds-detail-header [data-part='tab']:focus-visible {
+   be visible on both active and inactive tabs. Decided by the kernel, with
+   the platform pseudo as the fallback arm of the same rule. */
+.ds-structure.ds-detail-header [data-part='tab']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(--ds-detail-header-tab-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }

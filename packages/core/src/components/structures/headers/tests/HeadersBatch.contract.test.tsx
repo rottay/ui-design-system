@@ -550,16 +550,16 @@ describe('Headers-family (structures) data-part contract (structure-header anato
       expect(container.querySelector('[data-part="metric-chip-change"][data-direction="flat"]')).not.toBeNull();
     });
 
-    it('StatusDot: stamps status-dot/status-dot-glyph/status-dot-text with data-state for every DashboardStatusState', async () => {
+    it('StatusDot: stamps status-dot/status-dot-glyph/status-dot-text with data-status for every DashboardStatusState', async () => {
       for (const state of ['live', 'connected', 'syncing', 'offline', 'warning'] as const) {
         const { container, unmount } = renderWithEngine(
           <DashboardHeader title="X" status={{ state }} />,
           'modern',
         );
         await waitForPart(container, 'root');
-        expect(container.querySelector(`[data-part="status-dot"][data-state="${state}"]`), `state ${state}`).not.toBeNull();
-        expect(container.querySelector(`[data-part="status-dot-glyph"][data-state="${state}"]`), `state ${state}`).not.toBeNull();
-        expect(container.querySelector(`[data-part="status-dot-text"][data-state="${state}"]`), `state ${state}`).not.toBeNull();
+        expect(container.querySelector(`[data-part="status-dot"][data-status="${state}"]`), `state ${state}`).not.toBeNull();
+        expect(container.querySelector(`[data-part="status-dot-glyph"][data-status="${state}"]`), `state ${state}`).not.toBeNull();
+        expect(container.querySelector(`[data-part="status-dot-text"][data-status="${state}"]`), `state ${state}`).not.toBeNull();
         unmount();
       }
     });
@@ -572,8 +572,10 @@ describe('Headers-family (structures) data-part contract (structure-header anato
 
       const glyph = (await waitForPart(container, 'status-dot-glyph')) as HTMLElement;
       expect(container.querySelector('[data-part="status-dot-text"]')?.textContent).toBe('Live');
-      // The pulse moved to dashboard-header.css (keyed on data-state) so the
-      // reduced-motion guard can reach it — the engine must not paint it inline.
+      // The pulse moved to dashboard-header.css (keyed on data-status — the
+      // family's domain status, not the kernel's interaction data-state) so
+      // the reduced-motion guard can reach it — the engine must not paint it
+      // inline.
       expect(glyph.style.animation).toBe('');
     });
   });

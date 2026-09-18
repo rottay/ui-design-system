@@ -11,7 +11,9 @@
  *
  * The structure stamps anatomy (`data-part`) and state (`data-compact`,
  * `data-has-icon`, `data-has-metrics`, `data-has-actions`, `data-status`,
- * `data-direction`) and nothing else: `skin/dashboard-header.css` owns 100% of
+ * `data-direction`) and nothing else; the metrics readout's interaction state
+ * (its focus ring -- it is a real tab stop) is the shared kernel's decision,
+ * read off `data-state`: `skin/dashboard-header.css` owns 100% of
  * layout and paint, anchored on the `.ds-structure.ds-dashboard-header` scope
  * class. No inline style survives here — one would outrank every tenant
  * channel. Engines resolve through the composed `Button`; the structure itself
@@ -28,6 +30,8 @@
  */
 
 import { useId } from 'react';
+
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 import { Button } from '../../../../../primitives/inputs/button';
 import { DataTrendIcon } from '@/graphics/icons/semantic/generated/roles/data-trend';
@@ -57,9 +61,9 @@ function StatusMarker({ state, label }: { state: DashboardStatusState; label?: s
     label ?? i18n?.tOr(`dashboard_status_${state}`, STATUS_LABEL_FLOOR[state]) ?? STATUS_LABEL_FLOOR[state];
 
   return (
-    <span data-part="status-dot" data-state={state}>
-      <span data-part="status-dot-glyph" data-state={state} aria-hidden="true" />
-      <span data-part="status-dot-text" data-state={state}>
+    <span data-part="status-dot" data-status={state}>
+      <span data-part="status-dot-glyph" data-status={state} aria-hidden="true" />
+      <span data-part="status-dot-text" data-status={state}>
         <bdi>{resolvedLabel}</bdi>
       </span>
     </span>
@@ -157,6 +161,9 @@ function DashboardHeaderImpl({
   const i18n = useOptionalTranslation('common');
   const keyMetricsLabel = i18n?.tOr('key_metrics', 'Key metrics') ?? 'Key metrics';
   const titleId = useId();
+  // The readout's focus ring is decided once, by the shared interaction kernel,
+  // and read off `data-state` -- it is a real tab stop, not a composed button.
+  const metricsInteraction = useInteractionState();
 
   const hasMetrics = !!metrics && metrics.length > 0;
   const hasActions = (!!actions && actions.length > 0) || !!searchSlot || !!timeRangeSlot;
@@ -210,10 +217,11 @@ function DashboardHeaderImpl({
 
       {/* The readout overflows by design on narrow containers, so it is its own
           tab stop: a keyboard-only user must be able to scroll it (WCAG 2.1.1).
-          Its focus ring is skin-owned. */}
+          Its focus ring is the kernel's decision, read off `data-state`. */}
       {metrics && metrics.length > 0 && (
         <div
-          data-part="metrics-row"
+          {...metricsInteraction.handlers}
+          {...partAttributes('metrics-row', metricsInteraction.state)}
           data-compact={compact ? 'true' : 'false'}
           role="group"
           aria-label={keyMetricsLabel}
