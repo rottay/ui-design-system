@@ -79,9 +79,17 @@ Until then the class stays emitted and pinned.
 7. **customization dead-writers anchor** — 5 lawful exits (Container ladder) + 9 new dead writers
    from 09-16/17 lots that must be wired-or-retired BEFORE the anchor moves.
 8. **cascade-wiring doctrine** — the cut template's "produced value = the skin's literal fallback"
-   collided with the ratchet's every-channel-roots law (298 new unwired). A writer lot now wires
-   the wave's channels; CONFIRM the doctrine going forward: derivers should produce root-chained
-   values by default (the lot's pattern), making the ratchet's law the template's law.
+   collided with the ratchet's every-channel-roots law (298 new unwired). The wiring lot landed
+   (7a67243d8): 164 channels re-chained to roots with deriver/skin lockstep parity, one pixel-move
+   caught and reverted by audit. CONFIRM the doctrine going forward: derivers produce root-chained
+   values by default. REMAINING, and it is yours: the gate reads 2215 against a decrease-only pin
+   of 2079 (+136). 85 of them are measured genuinely rootless — the governed vocabularies lack the
+   rungs (no 6/10/14/18px spacing steps, letter-spacing tops at 0.1em, motion canon lacks 400ms,
+   no opacity rungs, no measure roots at 35/42.5rem). The law forbids raising the pin, so the gate
+   stays honestly red until you pick: (a) DER-lane vocabulary widening (new rungs, then the
+   channels wire), or (b) an explicit amendment admitting named structural constants into the pin
+   (the pin's own debtNote already carries 64 such names from FAM-04). The other ~51 are
+   pre-wave families' post-pin debt, routable to writer lots.
 9. **channel-liveness STOP NO-GO tail** — `--ds-elevation-6`, `--ds-type-tier-{sm,xs}-letter-spacing`:
    the 748cdf85c packet's owner proposals still await a ruling.
 10. **csspaint `--radius-field` ownership** — the pre-existing projection finding (12866efbd) needs
