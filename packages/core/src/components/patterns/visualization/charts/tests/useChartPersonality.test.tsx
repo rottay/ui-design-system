@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import { useChartPersonality } from '../runtime';
+import { resolveChartSeriesPaint } from '../runtime/chart-engine/foundation/grammar/palette';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 const CHART_TEST_TENANT: TenantConfig = {
@@ -98,16 +99,28 @@ describe('useChartPersonality', () => {
     }
   });
 
-  it('keeps the bounded var-backed schemes on their existing palettes', () => {
+  it('resolves every bounded scheme through the chain, so a tenant palette reaches it', () => {
     mockMatchMedia(1440, false);
 
-    const { result } = renderHook(() => useChartPersonality({ colorScheme: 'monochrome' }), {
-      wrapper: buildWrapper('events.organizer'),
-    });
+    // Every scheme carries both tenant channels above the mode-aware scheme
+    // channel and the audited literal. A palette expressed as raw
+    // `--ds-color-primary-N` ramp reads names no chart channel at all, so a
+    // compiler-generated tenant palette cannot reach it.
+    for (const colorScheme of ['monochrome', 'pastel', 'vibrant'] as const) {
+      const { result } = renderHook(() => useChartPersonality({ colorScheme }), {
+        wrapper: buildWrapper('events.organizer'),
+      });
 
-    expect(result.current.colors[0]).toBe('var(--ds-color-primary-900)');
-    for (const color of result.current.colors) {
-      expect(color).toMatch(/^var\(--ds-color-primary-\d+\)$/);
+      expect(result.current.colors).toEqual([...resolveChartSeriesPaint(colorScheme)]);
+      result.current.colors.forEach((color, index) => {
+        const slot = index + 1;
+        expect(color).toMatch(
+          new RegExp(
+            `^var\\(--ds-chart-category-${slot}, var\\(--ds-chart-series-${slot}, var\\(--ds-chart-${colorScheme}-${slot}, #[0-9a-f]{6}\\)\\)\\)$`,
+          ),
+        );
+      });
+      expect(result.current.colors).not.toEqual([...resolveChartSeriesPaint('accessible')]);
     }
   });
 
