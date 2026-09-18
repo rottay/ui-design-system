@@ -125,3 +125,25 @@ instrument lot for the writer seat) and the owner-visible record of the
 filter-panel delegation. The three remaining population unit reds are exactly
 this floor staleness (the runner line constant `shape 216`, the floor constant
 assertions, the floor-vs-live check); the pilot arm of those tests is green.
+
+## 2026-09-18 (fourth sitting) — CollectionWorkspace focused-row: attributed
+
+Reproduced: `CollectionWorkspace.test.tsx:495` — the focused `<tr>` renders with
+NO class (received: empty), `data-focused` absent. Root cause is a shape change
+the wave landed underneath the decorator: FAM-08 B4 (`1f171b2db`) extracted the
+modern data-table's body row into the stateful `BodyRow` component
+(`useStatefulPart` + `partAttributes("body-row", ...)` stamped INSIDE the
+component). `markCollectionWorkspaceFocusedRow`
+(collection-workspace/index.tsx:230) still matches the pre-cut shape —
+`child.type === 'tr'` AND `data-part === 'body-row'` in the element's props —
+and a `<BodyRow>` element satisfies neither, so the decoration silently no-ops.
+The table engine's own output guard already encodes the correct membership test
+(`isValidTableBodyRowOutput`: `child.type === "tr" || child.type === BodyRow`,
+engines/modern/index.tsx:71-82), but neither `BodyRow` nor the guard is
+exported, so the workspace cannot share it.
+
+Writer brief (component contract, not a re-pin): make the decoration recognize
+the stateful row — export the row guard from the engine, or move the
+focused-row concern into the renderRow contract so the workspace never sniffs
+element types. The silent-no-op failure mode deserves a regression either way:
+a decorator that matches nothing must fail loudly, not pass undecorated rows.
