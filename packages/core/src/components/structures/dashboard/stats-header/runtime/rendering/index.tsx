@@ -6,11 +6,12 @@
  * the metric core (label, value, prefix/suffix, count-up) is the certified
  * Statistic primitive — the same composition stats-grid PT16 landed, so the
  * hand-rolled useCountUp, the inline value typography and the bespoke
- * label/affix spans are retired. The loading placeholder is the Skeleton
- * primitive; the back-compat progress meter is the Progress primitive (the
- * per-stat accent reaches it through its own `strokeColor` channel). The
- * trend icons are the governed semantic roles (`data-trend` /
- * `data-trend-down`), never raw inline SVG.
+ * label/affix spans are retired. The loading state is the shared
+ * anatomy-derived renderer's (`AnatomySkeleton` reads the stamped card
+ * anatomy and paints one bone per part); the back-compat progress meter is
+ * the Progress primitive (the per-stat accent reaches it through its own
+ * `strokeColor` channel). The trend icons are the governed semantic roles
+ * (`data-trend` / `data-trend-down`), never raw inline SVG.
  *
  * What the pattern keeps: the card chrome + glow (5-token `data-accent`
  * consumer channels), the sparkline dots (decorative pattern-owned data
@@ -25,9 +26,11 @@
 
 import type { CSSProperties } from 'react';
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box, Flex } from '../../../../../primitives/layout';
 import { Statistic, Text } from '../../../../../primitives/display';
-import { Progress, Skeleton } from '../../../../../primitives/feedback';
+import { Progress } from '../../../../../primitives/feedback';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import { DataTrendIcon } from '@/graphics/icons/semantic/generated/roles/data-trend';
 import { DataTrendDownIcon } from '@/graphics/icons/semantic/generated/roles/data-trend-down';
 
@@ -114,10 +117,17 @@ function ChangeIndicator({
 function StatCard({ stat }: { stat: StatItem }) {
   const accent = stat.accentColor ?? 'primary';
   const isClickable = !!stat.onClick;
+  // The card's hover/press/ring is decided once, by the shared interaction
+  // kernel, and read off `data-state`; the skin pairs every pseudo-class
+  // with it. Hover is stamped on any card — the sparkline ping answers to
+  // it — while lift, press and ring stay gated on `data-clickable` in the
+  // skin.
+  const interaction = useInteractionState();
 
   return (
     <Box
-      data-part="stat-card"
+      {...interaction.handlers}
+      {...partAttributes('stat-card', interaction.state)}
       data-accent={accent}
       data-clickable={isClickable}
       role={isClickable ? 'button' : undefined}
@@ -201,8 +211,8 @@ function StatCard({ stat }: { stat: StatItem }) {
 /**
  * StatsHeader - Pulse Cards
  *
- * Operational stat cards composed on the Statistic / Skeleton / Progress
- * primitives. The responsive frame is container-driven: the root is the
+ * Operational stat cards composed on the Statistic / Progress primitives.
+ * The responsive frame is container-driven: the root is the
  * `ds-stats-header` container and the skin owns the 1/2/N-column cuts; the
  * engine only publishes the wide-column count on a quoted channel.
  */
@@ -212,6 +222,14 @@ function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
   // container query cannot read a custom property from a selector, and the
   // cuts must not widen a single-stat header.
   const columns = Math.max(Math.min(stats.length, 4), 1);
+
+  const cardGrid = (
+    <div data-part="card-grid">
+      {stats.map((stat) => (
+        <StatCard key={stat.key} stat={stat} />
+      ))}
+    </div>
+  );
 
   return (
     <Box
@@ -224,17 +242,11 @@ function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
         '--ds-stats-header-columns': columns,
       } as CSSProperties}
     >
-      <div data-part="card-grid">
-        {loading
-          ? Array.from({ length: stats.length || 4 }).map((_, i) => (
-              <Box data-part="skeleton-card" key={`skeleton-${i}`}>
-                {/* The composed Skeleton mirrors the metric (title + value +
-                    supporting lines); its paint is skeleton.css's. */}
-                <Skeleton title paragraph={{ rows: 2 }} />
-              </Box>
-            ))
-          : stats.map((stat) => <StatCard key={stat.key} stat={stat} />)}
-      </div>
+      {/* The root keeps the announcement (`aria-busy`), so the skeleton is told
+          not to announce a second time. It reads the stamped card anatomy and
+          paints one bone per part — the waiting state has the exact footprint
+          of the cards it stands in for. */}
+      {loading ? <AnatomySkeleton busy={false}>{cardGrid}</AnatomySkeleton> : cardGrid}
     </Box>
   );
 }

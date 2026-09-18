@@ -297,9 +297,22 @@ describe('DashboardWidgets data-part contract (dashboard anatomy)', () => {
       mockMatchMedia(1280);
       const { container } = renderWithEngine(<StatsHeader engine={engine} stats={STATS} loading />, engine);
       await waitForPart(container, 'root');
+      if (engine === 'modern') {
+        // Loading is the shared anatomy-derived skeleton: the root keeps the
+        // single busy announcement, the renderer wraps the real card grid as
+        // its (aria-hidden) anatomy source, and the retired hand-made
+        // skeleton-card anatomy is gone.
+        const root = container.querySelector('.ds-stats-header') as HTMLElement;
+        expect(root.getAttribute('aria-busy')).toBe('true');
+        const source = root.querySelector('[data-part="source"]');
+        expect(source).not.toBeNull();
+        expect(source?.getAttribute('aria-hidden')).toBe('true');
+        expect(source?.querySelectorAll('[data-part="stat-card"]').length).toBeGreaterThanOrEqual(1);
+        expect(q(container, '[data-part="skeleton-card"]')).toHaveLength(0);
+        return;
+      }
+      // Frozen engines keep their pre-cut contract verbatim.
       expect(q(container, '[data-part="skeleton-card"]').length).toBeGreaterThanOrEqual(1);
-      // Loading now composes Skeleton rather than maintaining a second,
-      // structure-local skeleton anatomy.
       await waitFor(() =>
         expect(q(container, '[data-part="skeleton-card"] [data-part="root"]').length).toBeGreaterThanOrEqual(1),
       );

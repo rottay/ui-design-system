@@ -42,4 +42,31 @@ describe('StatsHeader integration', () => {
     },
     45000,
   );
+
+  it('derives the loading state from the stamped card anatomy', async () => {
+    mockMatchMedia(390);
+
+    const { container } = renderWithEngine(
+      <StatsHeader
+        stats={[
+          { key: 'tickets', label: 'Tickets', value: 3248, accentColor: 'primary' },
+          { key: 'finance', label: 'Revenue', value: '$182k', accentColor: 'success' },
+        ]}
+        loading
+      />,
+      'modern',
+    );
+
+    // The root keeps the single announcement; the shared renderer wraps the
+    // real card grid in its anatomy source and paints bones from it.
+    const root = container.querySelector('.ds-stats-header') as HTMLElement;
+    expect(root).not.toBeNull();
+    expect(root.getAttribute('aria-busy')).toBe('true');
+    const source = root.querySelector('[data-part="source"]');
+    expect(source).not.toBeNull();
+    expect(source?.getAttribute('aria-hidden')).toBe('true');
+    expect(source?.querySelectorAll('[data-part="stat-card"]')).toHaveLength(2);
+    // No hand-made skeleton anatomy survives the migration.
+    expect(container.querySelectorAll('[data-part="skeleton-card"]')).toHaveLength(0);
+  }, 45000);
 });
