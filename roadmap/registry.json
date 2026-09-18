@@ -5304,6 +5304,11 @@
      "at": "2026-09-18 03:15",
      "by": "kimi-dt",
      "note": "Lots 4b+4c integrados (8364c4ece): pie/scatter/radar adoptan slotIndexFor (A/B 84 filas sin drift); 4c midio que su cohorte YA estaba en la puerta y freno honestamente: queda bloqueada por Q1 (el alias default->accessible) y una NUEVA pregunta del owner que el writer midio: el resolver capea a 10 slots pero las 5 familias honran overrides de 12 colores hoy (pins paint-cycle ya commiteados en ese commit) — cap-or-keep es tuyo. Preguntas del owner acumuladas para FAM-09: Q1 (de-alias default — el mayor cambio visual del programa), Q2 (retiro del prop colors), la nueva de slot-cap, y los retiros publicos del lot 7."
+    },
+    {
+     "at": "2026-09-18 04:41",
+     "by": "kimi-dt",
+     "note": "Lots 5a (medido: solo lo que no repinta) y 5b (brazo semantico en el resolver; el swatch inline queda para lot 8) integrados. Lot 5c NUNCA CORRIO: el asiento claude-admin agoto su cuota semanal (mensaje exacto: 'You've hit your weekly limit · resets Sep 20 at 1pm (America/New_York)'). BLOQUEO DE CUOTA: sin writers Opus hasta el reset o una decision tuya de cuenta. Preservados sin tocar: los drafts parciales de los cohortes D y E de FAM-10 (en el arbol, sin commitear — cockpit/workbench/medidores miden 259 verdes + 1 rojo de calibracion de envelope en la suite nueva de cockpit; NO integro trabajo a medio hacer). Todo lo demas de la ola esta integrado y verde."
     }
    ]
   },
