@@ -5348,6 +5348,11 @@
      "at": "2026-09-18 07:33",
      "by": "Kimi",
      "note": "2026-09-18 (DT, writer quota-blocked until Sep 20): cohort D/E drafts re-measured over the quiet tree — 9/10 files green; the radiusScale probe calibrated 1.25 -> 1.2 (envelope max, fleet convention) inside the preserved draft. Calibration exposed a LATENT red the admission error had masked: palette.seeds -> cardGround reads none/none; root cause measured: :root --ds-card-header-bg transparent (card/index.css:96) ships in all three vertical artifacts and kills the deriver's seeded-gradient fallback in every vertical. Semantic repair briefed to the writer (brief-fam10-de-completion.md): authored-vs-default distinction or drop the over-claiming arm; workbench twin gets the same answer. Evidence: evidence/wave-certification-2026-09-18 (sittings 2, 3)"
+    },
+    {
+     "at": "2026-09-18 10:00",
+     "by": "kimi-dt",
+     "note": "Cohorts D/E landed at e5c3a7334 (Kimi writer kimi-for-coding; DT audit: focal 12/12 files 112 passed independently reproduced, tsc+typecheck:tests clean). Repairs resolved: cardGround dead-fallback chain made honest (palette arm claims tileInk only, deferral measured); mobile-header safe-area deliberately unproduced (env not door-admitted, cockpit disposition). Next: DT re-pin window (cascade extract, minting census), then sub-lots F/G per evidence/fam10-census."
     }
    ]
   },
