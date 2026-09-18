@@ -163,3 +163,14 @@ lock requires it. Writer brief: rewrite the assertion against the skin contract
 (a computed-style read in the real-browser suite, or data-size + the skin rule),
 not a re-pin of the retired premise; the line-43 slot assertion never ran (the
 test dies at line 41) and needs its first honest reading.
+
+## 2026-09-18 (sixth sitting) — LongTail sidebar pins: CURED by DT re-pin
+
+The failing pin was the sidebar block of the I-3 layout test: it expected the
+pre-cut `.ds-surface.ds-sidebar` / `.ds-sidebar__*` vocabulary. Named cause:
+`1ddfd6198` (WO-FAM-05 close) renamed the sidebar surface's BEM hooks to
+`ds-sidebar-surface-*` and moved navigation/main to bare `data-part` reads.
+Consumer check first (the D21 lesson): no file in app-bithire, app-evnto or
+app-platform reads the retired names. Re-pinned to the measured vocabulary;
+the file's 6 tests green. The gallery/grid pins recorded beside it live in the
+same file and are green with it.
