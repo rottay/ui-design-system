@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "types": [],
+    "lib": ["ES2022", "DOM"],
+    "baseUrl": ".",
+    "paths": {
+      "react": ["../../../../packages/core/node_modules/@types/react"],
+      "react/jsx-runtime": ["../../../../packages/core/node_modules/@types/react/jsx-runtime"]
+    }
+  },
+  "include": ["*.ts", "*.tsx"]
+}
