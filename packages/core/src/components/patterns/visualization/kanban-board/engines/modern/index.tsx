@@ -17,10 +17,12 @@
  * the adjacent column (inline arrows mirror under RTL via the house
  * the shared direction authority) — through the same controlled `onItemMove` contract
  * as drag-and-drop; Enter/Space fires `onItemClick`. Every move (and every
- * blocked edge) is announced through a visually-hidden `aria-live="polite"`
- * region (`data-part="move-announcer"`); focus follows the card to its new
- * position once the parent re-renders. Column positions/headers speak, so
- * the interaction never depends on seeing the drag ghost.
+ * blocked edge) is announced through a visually-hidden pair of
+ * `aria-live="polite"` regions (`data-part="move-announcer"`) the engine
+ * alternates, so a repeated identical outcome still changes a region's text;
+ * focus follows the card to its new position once the parent re-renders.
+ * Column positions/headers speak, so the interaction never depends on seeing
+ * the drag ghost.
  *
  * DROP GEOMETRY: beyond the column ring, the exact insertion point reads by
  * SHAPE — a primary insertion bar on the card the item would land before
@@ -199,10 +201,17 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const emptyColumnLabel = tOr('kanbanBoard.empty_column', 'No items');
   const cardRoleLabel = tOr('kanbanBoard.card_role', 'Movable card');
 
-  /* Keyboard-move announcements: the polite live region renders the last
-     instruction result; `pendingFocusId` asks the post-render effect to
-     return focus to the card that just re-parented. */
-  const [announcement, setAnnouncement] = useState('');
+  /* A polite region is only spoken when its own text CHANGES, so the two
+     regions alternate: every message is an addition to whichever was empty. */
+  const [announcement, setAnnouncement] = useState<{ slot: 0 | 1; text: string }>({
+    slot: 0,
+    text: '',
+  });
+  const announce = (text: string): void =>
+    setAnnouncement((previous) => ({ slot: previous.slot === 0 ? 1 : 0, text }));
+
+  /* `pendingFocusId` asks the post-render effect to return focus to the card
+     that just re-parented. */
   const [pendingFocusId, setPendingFocusId] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLElement>());
 
@@ -290,12 +299,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     onAnnounce: (event) => {
       if (event.origin === 'pointer') return;
       if (event.kind === 'blocked') {
-        setAnnouncement(edgeMessage());
+        announce(edgeMessage());
         return;
       }
       if (event.kind !== 'dropped') return;
       setPendingFocusId(event.payload.key);
-      setAnnouncement(moveMessage(event.payload, event.target));
+      announce(moveMessage(event.payload, event.target));
     },
   });
 
@@ -304,12 +313,12 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   const runRailMove = (payload: KanbanPayload, intent: MoveIntent): void => {
     const outcome = resolveMove(payload, intent);
     if (outcome.kind === 'blocked') {
-      setAnnouncement(edgeMessage());
+      announce(edgeMessage());
       return;
     }
     commitMove(payload, outcome.target);
     setPendingFocusId(payload.key);
-    setAnnouncement(moveMessage(payload, outcome.target));
+    announce(moveMessage(payload, outcome.target));
   };
 
   const handleCardActivate = useCallback(
@@ -632,10 +641,15 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         })}
       </div>
       )}
-      {/* Keyboard-move announcer: visually hidden, always mounted so the
-          live region exists before the first announcement. */}
-      <div data-part="move-announcer" aria-live="polite" role="status">
-        {announcement}
+      {/* Keyboard-move announcer: both regions stay mounted and empty, so one
+          exists before the first announcement and one is free for the next. */}
+      <div data-part="move-announcer">
+        <div role="status" aria-live="polite">
+          {announcement.slot === 0 ? announcement.text : ''}
+        </div>
+        <div role="status" aria-live="polite">
+          {announcement.slot === 1 ? announcement.text : ''}
+        </div>
       </div>
     </div>
   );

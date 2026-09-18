@@ -292,6 +292,36 @@ describe('KanbanBoard (modern) arrow protocol', () => {
 
     expect(announcer?.textContent).toBe('');
   });
+
+  /**
+   * A live region is spoken when its own text changes, so a repeated identical
+   * outcome written into one region is silent the second time. Both legs press
+   * the same key twice against a parent that does not reorder, which is the
+   * only way the two messages are byte-identical: the blocked edge, and a move
+   * that lands in the same place. The assertion is that the REGION CONTENTS
+   * change while the message does not -- a fix that distinguished the second
+   * announcement by altering the string would fail the second half.
+   */
+  it.each([
+    ['a blocked edge', 'ArrowUp', 'Cannot move further in that direction'],
+    ['an identical move', 'ArrowDown', 'Moved to position 2 in To do'],
+  ])('re-announces %s pressed twice', (_leg, key, message) => {
+    const { container } = render(<ModernKanbanBoard<Task> {...boardProps(columns)} />);
+    const announcer = container.querySelector('[data-part="move-announcer"]');
+    const regions = () =>
+      Array.from(announcer?.querySelectorAll('[aria-live="polite"]') ?? []).map(
+        (region) => region.textContent,
+      );
+
+    fireEvent.keyDown(cardFor('Task A'), { key });
+    const first = regions();
+    fireEvent.keyDown(cardFor('Task A'), { key });
+    const second = regions();
+
+    expect(first).not.toEqual(second);
+    expect(first.filter(Boolean)).toEqual([message]);
+    expect(second.filter(Boolean)).toEqual([message]);
+  });
 });
 
 describe('KanbanBoard (modern) drop targets', () => {
