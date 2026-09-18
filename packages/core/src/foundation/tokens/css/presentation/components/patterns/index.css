@@ -516,7 +516,7 @@
   /* The pill's active and count states. Declared at :root, beside the three
      above, because `chrome.filterPill` is a kernel-lowered door: a tenant's
      own value lands on this same element unlayered and outranks these. */
-  --ds-filter-pill-active-bg: var(--ds-color-alpha-primary-10);
+  --ds-filter-pill-active-bg: var(--ds-material-control-background-active);
   --ds-filter-pill-active-border: color-mix(
     in srgb,
     var(--ds-color-primary) 34%,
@@ -524,7 +524,7 @@
   );
   --ds-filter-pill-active-color: var(--ds-color-primary);
   --ds-filter-pill-active-shadow: inset 0 0 0 1px
-    color-mix(in srgb, currentColor 12%, transparent);
+    color-mix(in srgb, var(--ds-material-control-border-active) 12%, transparent);
   --ds-filter-pill-count-bg: var(--ds-surface-raised, var(--ds-color-bg-elevated));
   --ds-filter-pill-count-border: color-mix(
     in srgb,
@@ -532,15 +532,12 @@
     transparent
   );
   --ds-filter-pill-count-ring: none;
-  --ds-filter-pill-count-active-bg: var(--ds-surface-raised);
+  --ds-filter-pill-count-active-bg: var(--ds-material-raised-background);
   --ds-filter-pill-count-active-border: currentColor;
   --ds-filter-pill-count-active-ring: none;
   --ds-filter-pill-bg: transparent;
   --ds-filter-pill-color: var(--ds-color-text-secondary);
-  --ds-filter-pill-hover-bg: var(
-    --ds-surface-highlight,
-    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-  );
+  --ds-filter-pill-hover-bg: var(--ds-material-control-background-hover);
   --ds-filter-pill-shadow: none;
   /* The search field's resting chrome. `chrome.search` is kernel-lowered too,
      so a tenant's unlayered value outranks every declaration here. */
