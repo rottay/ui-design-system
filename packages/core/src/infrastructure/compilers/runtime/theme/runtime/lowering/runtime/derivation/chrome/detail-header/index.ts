@@ -84,8 +84,8 @@ export function deriveDetailHeaderChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
 
   /* The identity frame. The avatar rungs are density-neutral by decision --
-     a portrait that grows with the density dial stops being the platform
-     identity block the hero grid positions against. */
+     a portrait that grows with the density dial stops being the identity
+     block the hero grid positions against. */
   vars["--ds-detail-header-avatar-size"] = "68px";
   vars["--ds-detail-header-avatar-size-compact"] = "56px";
   vars["--ds-detail-header-avatar-initials-size"] = "24px";
