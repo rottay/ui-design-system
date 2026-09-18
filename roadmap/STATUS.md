@@ -198,7 +198,10 @@ Recorded vs measured — 4 row(s) disagree; neither side is authority, and the d
 | export | `.#artifactProvenanceOf` | added: projects a resolved ledger onto the artifact metadatum, dropping every authored value; `undefined` when the compile resolved no ledger, which is what keeps pre-existing artifacts unchanged | minor | `r2-publication-parity.md` |
 | export | `.#assembleTenantThemeArtifact` | added: the ONE artifact builder both publication transports share — digest, scopes, chart floor, CSS and the engine projection stated once; it takes `{ intent, identity, verticalEnvelope, document }` and reads provenance only from the resolution, never from a parameter beside the intent | minor | `r2-publication-parity.md` |
 | export | `.#bithireBrandTheme` | removed; same retirement | major | `der-06-brand-theme-authority-retired.md` |
+| export | `.#BoxMotion` | added | minor | `inv-01-layout-barrel-box-types.md` |
 | export | `.#BoxProps` | changed; `textAlign` narrows to the logical `start`/`center`/`end`/`justify`, keeps `left`/`right` as deprecated aliases normalized to `start`/`end` by the Modern engine | minor | `inv-01-box-text-align.md` |
+| export | `.#BoxTextAlign` | added | minor | `inv-01-layout-barrel-box-types.md` |
+| export | `.#BoxTextAlignInput` | added | minor | `inv-01-layout-barrel-box-types.md` |
 | export | `.#BrandStudioDraft` | added: the union a studio draft travels as (`Theme / DeepPartial<Theme> / FlatTheme / Partial<FlatTheme>`). It is the name a consumer holds instead of importing `Theme` from the server entry | major | `der-08-studio-callback-governed-theme.md` |
 | export | `.#BrandTheme` | renamed to FlatTheme; the flat view keeps its shape, only the name moves | major | `der-06-brand-theme-authority-retired.md` |
 | export | `.#BrandThemeMode` | renamed to FlatThemeMode; the flat view keeps its shape, only the name moves | major | `der-06-brand-theme-authority-retired.md` |
@@ -235,6 +238,7 @@ Recorded vs measured — 4 row(s) disagree; neither side is authority, and the d
 | export | `.#GridProps` | changed; gains the optional `adapt?: Adapt<GridAdaptation>` posture slot | major | `fam-07-l5-layout-cohort.md` |
 | export | `.#GuidedDraftFormSurfaceProps` | changed; `adaptive` takes SurfaceAdaptivePosture | major | `inv-04-one-responsive-mechanism.md` |
 | export | `.#HoverCardSide` | changed; adds the logical sides `inline-start`/`inline-end`, keeps `left`/`right` as deprecated aliases of them; the logical sides are honoured by the Modern engine only | major | `inv-01-logical-placement.md` |
+| export | `.#LegacyPhysicalBoxTextAlign` | added | minor | `inv-01-layout-barrel-box-types.md` |
 | export | `.#Posture` | added; the viewport and container posture names in one union | major | `inv-07-adaptation-slots.md` |
 | export | `.#projectThemeDraft` | added: the flat read view of a governed draft. This is the documented bridge for a caller still typed on the flat payload | major | `der-08-studio-callback-governed-theme.md` |
 | export | `.#readThemeDraft` | added: the ONE discriminant that lifts a draft to the governed `Theme`, whichever arm it arrived on. Optional second argument carries the dispositions a projection could not state | major | `der-08-studio-callback-governed-theme.md` |
