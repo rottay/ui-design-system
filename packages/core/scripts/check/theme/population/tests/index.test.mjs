@@ -329,7 +329,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.equal(report.exclusions.revision, exclusionsRevision());
 
     const line = populationLine();
-    assert.match(line, /shape 216 \(1 N\/A\)/);
+    assert.match(line, /shape 217 \(1 N\/A\)/);
     assert.match(line, /typography 181 \(0 N\/A\)/);
     assert.match(line, /exclusions [0-9a-f]{16} \(1 reviewed\)/);
 
@@ -354,12 +354,12 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     assert.deepEqual(pin.provenance.membershipMoves.shape.removed, ['radio']);
 
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.equal(floor.axes.shape, 216);
+    assert.equal(floor.axes.shape, 217);
     assert.equal(floor.notApplicable.shape, 1);
     assert.equal(floor.exclusionsRevision, exclusionsRevision());
-    assert.equal(floor.provenance.previousPin.axes.shape, 217);
-    assert.deepEqual(floor.provenance.membershipMoves.byAxis.shape, { removed: ['radio'], added: [] });
-    assert.deepEqual(floor.provenance.membershipMoves.physicalCornerLonghands.newEntrants, []);
+    assert.equal(floor.provenance.previousPin.axes.shape, 215);
+    assert.deepEqual(floor.provenance.membershipMoves.previousWave.byAxis.shape, { removed: ['radio'], added: [] });
+    assert.deepEqual(floor.provenance.membershipMoves.previousWave.physicalCornerLonghands.newEntrants, []);
 
     assert.deepEqual(checkPilotPopulation(ROOT, undefined, PILOT_PIN, { revision: true }).failures, []);
     assert.deepEqual(checkPopulationFloor().failures, []);
@@ -599,7 +599,7 @@ describe('theme population — the reviewed semantic-identity exclusion of radio
     const shape = populationReport().axes.find((entry) => entry.axis === 'shape').families;
     for (const family of Object.keys(authoring)) assert.ok(shape.includes(family), `${family} declares shape`);
     const floor = JSON.parse(readFileSync(FLOOR, 'utf8'));
-    assert.deepEqual(Object.keys(floor.provenance.membershipMoves.physicalCornerLonghands.familiesAuthoringThem).sort(), Object.keys(authoring).sort());
+    assert.deepEqual(Object.keys(floor.provenance.membershipMoves.previousWave.physicalCornerLonghands.familiesAuthoringThem).sort(), Object.keys(authoring).sort());
   });
 
   it('the rule tokenizer reads the same properties as the joined-text reader, attributes every SELECTOR_RULE selector, and shares the probe\'s literal', () => {

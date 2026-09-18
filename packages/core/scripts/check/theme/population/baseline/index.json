@@ -1,17 +1,17 @@
 {
   "purpose": "The per-axis denominator of the by-axis tenant-difference probe (kit-2026-09 section 5 rule 4), pinned so it cannot be shrunk to reach a threshold (WO-EVI-02 R4 amendment 3).",
   "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets. A reviewed semantic-identity exclusion is the one lawful subtraction: it is pinned beside the denominator it subtracts from (notApplicable per axis) and under the exclusion revision it was reviewed at, so neither can drift on its own.",
-  "catalogRevision": "d50537e438bdbcfa",
+  "catalogRevision": "49bc4572fa60d2e5",
   "exclusionsRevision": "ef3de957d72fda22",
-  "pinnedOn": "2026-09-15",
-  "skinFamilies": 269,
+  "pinnedOn": "2026-09-18",
+  "skinFamilies": 276,
   "axes": {
-    "shape": 215,
-    "typography": 180,
-    "rhythm": 213,
-    "depth": 193,
-    "states": 155,
-    "motion": 200
+    "shape": 217,
+    "typography": 181,
+    "rhythm": 221,
+    "depth": 194,
+    "states": 154,
+    "motion": 204
   },
   "notApplicable": {
     "shape": 1,
@@ -22,218 +22,145 @@
     "motion": 0
   },
   "provenance": {
-    "reconciles": "WO-EVI-05 lot E5 -- the reviewed exclusion of radio/shape and the physical corner longhands in the shape vocabulary | lot E5b (2026-09-14): the registry binds each reviewed declaration to its at-rule context (top-level for both), same membership, registry revision re-pinned | WO-FAM-05 lot 2 (2026-09-15): rhythm 213 -> 214, depth 193 -> 194, states 155 -> 156, one family entering each -- breadcrumb-compounds (presentation/components/skin/breadcrumb-compounds), which read only --ds-color-primary-500 before the cut and now reads --ds-breadcrumb-item-gap, --ds-breadcrumb-focus-ring and the compound's box-shadow ring through the breadcrumb chrome deriver; tabs, breadcrumb and pagination were already members of every axis they belong to, so their skin rewrites move no membership. shape, typography and motion unchanged; catalog revision left as pinned (the live digest differs through another lot's uncommitted catalog edit, not through this cut) | catalog revision 2a25f7c6068407fb -> d50537e438bdbcfa (2026-09-15), republished at HEAD 7b35276d5 with membership UNCHANGED: two catalog edits moved the content digest and neither moved a row or a family -- b68389160 (the recipe-profile row declares runtime scope via data-only, WO-DER-06 owner pick) 2a25f7c6068407fb -> 5fbbeface23f6b76, then 95a85b080 (--ds-elevation-border-style retired from the surfaces.border-style row, WO-DER-06 2d-ii) 5fbbeface23f6b76 -> d50537e438bdbcfa; 29 decision rows and identical row ids on every side, and populationReport on isolated copies of 61280a253, b68389160, 011910356 and 7b35276d5 gives the same axes, N/A set and 270 skin families at each step (breadcrumb-compounds +1 in rhythm, depth and states is the WO-FAM-05 lot 2 row already pinned here, not a catalog move). Measured with catalogRevision() over the checked-out bytes, which is what the gate hashes | WO-FAM-05 lot 3 (2026-09-15): skin families 270 -> 269 and every axis but motion down by one (shape 216 -> 215, typography 181 -> 180, rhythm 214 -> 213, depth 194 -> 193, states 156 -> 155): the retired modern steps skin (engines/modern/skin/steps) was a member of all six axes and leaves the corpus with the steps family absorbed into stepper (D-16 idiom); stepper stays a member of every axis it belonged to. Measured family by family against 38409b3b2 with populationReport over both trees: `steps` is the only exit on shape, typography, depth and states; on rhythm `layout-sidebar` exits and `sidebar-surface` enters (the sidebar structure's skin moved from presentation/components/skin/layout-sidebar to presentation/components/skin/sidebar-surface), so rhythm is net -1 for steps alone; on motion `steps` exits and `sidebar-surface` enters (the track transition), so motion holds at 200",
-    "sourceCommit": "7b35276d5",
-    "computedOn": "2026-09-15",
-    "computedBy": "node scripts/check/theme/population/index.mjs (populationReport), membership diffed family by family against the same computation over the previous pin's tree (HEAD owner, identical corpus)",
+    "reconciles": "2026-09-18 wave: FAM-07 layout primitive skins enter the corpus; FAM-05 close physically removes the steps skin; the states axis is re-pinned BELOW its old floor with the two named, reviewed subtractions; the instrument gains the namespaced domain-state matcher (f8298d417)",
+    "sourceCommit": "c9b8a835d",
+    "computedOn": "2026-09-18",
+    "computedBy": "node scripts/check/theme/population/index.mjs (populationReport) over this tree, and the same instrument over an isolated archive of the previous pin's sourceCommit 7b35276d5; membership diffed family by family between the two measurements",
     "previousPin": {
-      "pinnedOn": "2026-09-14",
-      "sourceCommit": "ce05c3d41",
-      "skinFamilies": 270,
+      "pinnedOn": "2026-09-15",
+      "sourceCommit": "7b35276d5",
+      "skinFamilies": 269,
       "axes": {
-        "shape": 217,
-        "typography": 181,
+        "shape": 215,
+        "typography": 180,
         "rhythm": 213,
         "depth": 193,
         "states": 155,
         "motion": 200
       },
       "notApplicable": {
-        "shape": 0,
+        "shape": 1,
         "typography": 0,
         "rhythm": 0,
         "depth": 0,
         "states": 0,
         "motion": 0
-      }
+      },
+      "knownDefect": "the 2026-09-15 pin was written one family short of its own tree: it narrated the steps skin as already removed (FAM-05 lot 3), but the folder physically left at 1ddfd6198, AFTER the pin's sourceCommit 7b35276d5. The current instrument over an isolated archive of 7b35276d5 measures 270 families and one more member in every axis but motion (steps), matching the pin's own provenance sentence '270 skin families at each step'. The written values (269 and the five denominators) are kept here verbatim as the record of what was pinned; the floor test compared the live tree against them, which is part of why the pin read stale before this re-pin."
     },
     "membershipMoves": {
-      "kind": "reviewed exclusion -- neither fold nor shrink",
-      "reviewedExclusion": {
-        "family": "radio",
-        "axis": "shape",
-        "registry": "scripts/check/theme/population/exclusions/index.json",
-        "review": "WO-EVI-05 core review 2026-09-14",
-        "declarations": [
-          ".ds-radio.ds-radio--modern [data-part='circle'] { border-radius: var(--ds-radius-full) }",
-          ".ds-radio.ds-radio--modern [data-part='dot'] { border-radius: var(--ds-radius-full) }"
-        ],
-        "effect": "radio leaves the shape denominator (217 -> 216) and is published NOT APPLICABLE on shape with its reason; it stays in the other five axes"
+      "kind": "measured family-by-family diff, one instrument over both trees (old tree = isolated archive of 7b35276d5)",
+      "corpus": {
+        "families": "269 pinned -> 276 live; against the pin's own tree as measured (270) the move is +6: the FAM-07 layout cuts (89976e4c7) add modern skins for aspect-ratio, box, container, flex, grid, space and stack (+7) and 1ddfd6198 (WO-FAM-05 close) physically removes steps (-1); layout-sidebar -> sidebar-surface is a rename (net 0), already narrated in the previous pin",
+        "removed": ["layout-primitives", "layout-sidebar", "scroll-area", "steps"],
+        "added": ["aspect-ratio", "avatar-compounds", "box", "container", "divider", "flex", "grid", "sidebar-surface", "skeleton-anatomy", "space", "stack"]
       },
-      "physicalCornerLonghands": {
-        "added": [
-          "border-top-left-radius",
-          "border-top-right-radius",
-          "border-bottom-left-radius",
-          "border-bottom-right-radius"
-        ],
-        "familiesAuthoringThem": {
-          "card-compounds": [
+      "byAxis": {
+        "shape": {
+          "removed": ["layout-primitives", "steps"],
+          "added": ["aspect-ratio", "box", "container"]
+        },
+        "typography": {
+          "removed": ["steps"],
+          "added": ["avatar-compounds"]
+        },
+        "rhythm": {
+          "removed": ["layout-sidebar", "steps"],
+          "added": ["avatar-compounds", "container", "divider", "flex", "grid", "sidebar-surface", "skeleton-anatomy", "space", "stack"]
+        },
+        "depth": {
+          "removed": ["layout-primitives", "scroll-area", "steps"],
+          "added": ["aspect-ratio", "box", "container"]
+        },
+        "states": {
+          "removed": ["filter-panel", "steps"],
+          "added": []
+        },
+        "motion": {
+          "removed": ["layout-primitives", "scroll-area", "steps"],
+          "added": ["aspect-ratio", "container", "flex", "grid", "sidebar-surface", "space", "stack"]
+        }
+      },
+      "statesFloorLowering": {
+        "pinned": 155,
+        "repinned": 154,
+        "reason": "two named, reviewed subtractions measured family by family, no shrink-to-pass: (1) filter-panel leaves the states axis by its REVIEWED delegation of state paint to the composed Button (8fb516981) -- the skin no longer declares state selectors because the kernel-owned child carries them; (2) the steps skin physically leaves the corpus (1ddfd6198, WO-FAM-05 close; the family was absorbed into stepper, D-16 idiom, and stepper stays a member of every axis it belonged to). The namespaced domain-state instrument repair (f8298d417) does NOT lower the floor: it restores active-filters-bar's nine live [data-filter-state=...] rules to the states count (without it the live tree reads 153); e8c78c576, which introduced the namespaced attribute, landed after the previous pin, so the repair moves no historical number.",
+        "ownerFacingNote": "the direction law reserves a floor lowering for an owner reason; the filter-panel delegation is the recorded, reviewed product decision and is quoted here verbatim as that reason"
+      },
+      "catalogRevisionMove": {
+        "from": "d50537e438bdbcfa",
+        "to": "49bc4572fa60d2e5",
+        "by": "63aec5c5e (WO-DER lane W14+W14b): catalog row 6's document keypath gains the display role; 29 decision rows / 4 annex / 2 retired with identical row ids on both sides, measured with catalogRevision() over the checked-out bytes. The digest moves, no row or family moves; population-neutral.",
+        "intervening": "none -- 63aec5c5e is the only commit touching the catalog source between 7b35276d5 and this re-pin"
+      },
+      "instrumentChange": "f8298d417 adds AXES.states.stateNamespacedSelector (/\\[data-[a-z0-9-]+-state=/) with a non-empty-namespace guard, so a family's own domain-state attribute declares states while the shared data-state keeps its literal needle. Drill: namespaced declares, shared keeps its needle, absence reads as none.",
+      "exclusionsUnchanged": "ef3de957d72fda22 at both ends; radio stays NOT APPLICABLE on shape under WO-EVI-05 core review 2026-09-14",
+      "previousWave": {
+        "kind": "reviewed exclusion -- neither fold nor shrink",
+        "reviewedExclusion": {
+          "family": "radio",
+          "axis": "shape",
+          "registry": "scripts/check/theme/population/exclusions/index.json",
+          "review": "WO-EVI-05 core review 2026-09-14",
+          "declarations": [
+            ".ds-radio.ds-radio--modern [data-part='circle'] { border-radius: var(--ds-radius-full) }",
+            ".ds-radio.ds-radio--modern [data-part='dot'] { border-radius: var(--ds-radius-full) }"
+          ],
+          "effect": "radio leaves the shape denominator (217 -> 216) and is published NOT APPLICABLE on shape with its reason; it stays in the other five axes"
+        },
+        "physicalCornerLonghands": {
+          "added": [
             "border-top-left-radius",
             "border-top-right-radius",
             "border-bottom-left-radius",
             "border-bottom-right-radius"
           ],
-          "detail-header": [
-            "border-top-left-radius",
-            "border-top-right-radius"
-          ]
-        },
-        "newEntrants": [],
-        "note": "both families already declared shape through border-radius, so the vocabulary widening moves no denominator; verified against presentation/components/skin/card-compounds/index.css and presentation/components/skin/detail-header/index.css"
-      },
-      "byAxis": {
-        "skinFamilies": {
-          "removed": [],
-          "added": []
-        },
-        "shape": {
-          "removed": [
-            "radio"
-          ],
-          "added": []
-        },
-        "typography": {
-          "removed": [],
-          "added": []
-        },
-        "rhythm": {
-          "removed": [],
-          "added": []
-        },
-        "depth": {
-          "removed": [],
-          "added": []
-        },
-        "states": {
-          "removed": [],
-          "added": []
-        },
-        "motion": {
-          "removed": [],
-          "added": []
-        }
-      },
-      "carriedForward": {
-        "priorPass": "the FAM-01/02/03/14 renames and merges reconciled at 2bd1d7799: skeleton-compounds -> skeleton-anatomy, autocomplete -> auto-complete, switch merged into Toggle behind a deprecated prop adapter, input-residual merged, select-compounds and form-field added by the FAM-02/03 cuts",
-        "toastCompoundsMotion": "toast-compounds entered `motion` at fe4eabadb (WO-INV-05) on two `animation: none !important` reduced-motion kill switches and is still in it here. Whether a suppression declares an axis is open and owned by the motion vocabulary, not by this pin; if it is ruled out, `motion` drops by one and this file is republished in that commit."
-      },
-      "priorPass": {
-        "reconciles": "G107-02, second pass -- the WO-FAM-04 skin folds",
-        "sourceCommit": "ce05c3d41",
-        "computedFrom": "f9e13791a",
-        "folds": [
-          "toast + notification + message -> notifier, one family with three roles (a4a8b6f2e)",
-          "callout -> alert, folded into the existing alert namespace (0866afe18)",
-          "overlay-modal -> modal, namespace rename by the modal cut (75d77e375)",
-          "tooltip-compounds rewritten onto the ds-tooltip channels by the tooltip cut (179da599a): it gained padding-block/padding-inline and a font shorthand, so it enters `typography` and `rhythm` without moving in or out of the corpus"
-        ],
-        "namespacesAdded": [
-          "modal",
-          "notifier"
-        ],
-        "rewrittenInPlace": [
-          "alert",
-          "tooltip",
-          "popover",
-          "drawer",
-          "sheet",
-          "dropdown"
-        ],
-        "byAxis": {
-          "skinFamilies": {
-            "removed": [
-              "callout",
-              "message",
-              "notification",
-              "overlay-modal",
-              "toast"
+          "familiesAuthoringThem": {
+            "card-compounds": [
+              "border-top-left-radius",
+              "border-top-right-radius",
+              "border-bottom-left-radius",
+              "border-bottom-right-radius"
             ],
-            "added": [
-              "modal",
-              "notifier"
+            "detail-header": [
+              "border-top-left-radius",
+              "border-top-right-radius"
             ]
           },
+          "newEntrants": [],
+          "note": "both families already declared shape through border-radius, so the vocabulary widening moves no denominator; verified against presentation/components/skin/card-compounds/index.css and presentation/components/skin/detail-header/index.css"
+        },
+        "byAxis": {
           "shape": {
             "removed": [
-              "callout",
-              "message",
-              "notification",
-              "overlay-modal",
-              "toast"
+              "radio"
             ],
-            "added": [
-              "modal",
-              "notifier"
-            ]
+            "added": []
           },
           "typography": {
-            "removed": [
-              "callout",
-              "message",
-              "notification",
-              "overlay-modal",
-              "toast"
-            ],
-            "added": [
-              "modal",
-              "notifier",
-              "tooltip-compounds"
-            ]
+            "removed": [],
+            "added": []
           },
           "rhythm": {
-            "removed": [
-              "callout",
-              "message",
-              "notification",
-              "overlay-modal",
-              "toast"
-            ],
-            "added": [
-              "modal",
-              "notifier",
-              "tooltip-compounds"
-            ]
+            "removed": [],
+            "added": []
           },
           "depth": {
-            "removed": [
-              "callout",
-              "message",
-              "notification",
-              "overlay-modal",
-              "toast"
-            ],
-            "added": [
-              "modal",
-              "notifier"
-            ]
+            "removed": [],
+            "added": []
           },
           "states": {
-            "removed": [
-              "callout",
-              "message",
-              "notification",
-              "overlay-modal",
-              "toast"
-            ],
-            "added": [
-              "modal",
-              "notifier"
-            ]
+            "removed": [],
+            "added": []
           },
           "motion": {
-            "removed": [
-              "callout",
-              "message",
-              "notification",
-              "overlay-modal",
-              "toast"
-            ],
-            "added": [
-              "modal",
-              "notifier"
-            ]
+            "removed": [],
+            "added": []
           }
+        },
+        "carriedForward": {
+          "priorPass": "the FAM-01/02/03/14 renames and merges reconciled at 2bd1d7799: skeleton-compounds -> skeleton-anatomy, autocomplete -> auto-complete, switch merged into Toggle behind a deprecated prop adapter, input-residual merged, select-compounds and form-field added by the FAM-02/03 cuts",
+          "toastCompoundsMotion": "toast-compounds entered `motion` at fe4eabadb (WO-INV-05) on two `animation: none !important` reduced-motion kill switches and is still in it here. Whether a suppression declares an axis is open and owned by the motion vocabulary, not by this pin; if it is ruled out, `motion` drops by one and this file is republished in that commit."
         }
       }
     }
