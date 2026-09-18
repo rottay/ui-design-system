@@ -1402,6 +1402,14 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     return seen ? { kernel: true, overridden, unverified: false } : undefined;
   };
 
+  /** The kernel bag spread at ONE position, raw or assembled into a local. */
+  const kernelSpreadAt = (properties, position) => {
+    const property = properties[position];
+    if (!property || !ts.isJsxSpreadAttribute(property)) return undefined;
+    if (isKernelBag(property.expression)) return { overridden: [], unverified: false };
+    return mergedKernelBag(property.expression);
+  };
+
   const attachments = [];
   const delegations = [];
   for (const element of elements) {
@@ -1410,15 +1418,25 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     let overwritten = [];
     let unverified = false;
     for (let position = 0; position < properties.length; position += 1) {
-      const property = properties[position];
-      if (!ts.isJsxSpreadAttribute(property)) continue;
-      if (isKernelBag(property.expression)) { index = position; break; }
-      const merged = mergedKernelBag(property.expression);
-      if (merged) {
-        index = position;
-        overwritten = [...merged.overridden];
-        unverified = merged.unverified;
-        break;
+      const bag = kernelSpreadAt(properties, position);
+      if (!bag) continue;
+      index = position;
+      overwritten = [...bag.overridden];
+      unverified = bag.unverified;
+      break;
+    }
+    /* The contract's sanctioned shape puts the source bag and the target bag
+     * on the SAME element; their keys are disjoint, so neither overwrites the
+     * other and a RUN of adjacent kernel bags is one attachment. Reading the
+     * second bag as an opaque later spread reported every row that is both
+     * source and target as unverified. Adjacency is the whole licence: a bag
+     * separated from the run by any other property is measured where it lands.
+     */
+    if (index !== -1) {
+      for (let bag = kernelSpreadAt(properties, index + 1); bag; bag = kernelSpreadAt(properties, index + 1)) {
+        overwritten.push(...bag.overridden);
+        unverified = unverified || bag.unverified;
+        index += 1;
       }
     }
     if (index === -1) {

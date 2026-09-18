@@ -1870,6 +1870,90 @@ export function Row() {
   assert.equal(measured.attachments[0].effective, true, 'the kernel wins what precedes it');
 });
 
+test('D20: the sanctioned TWO-spread shape -- source bag and target bag on one element -- IS wired', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Row({ nodeKey }) {
+  const drag = useDragSession({ onDrop: () => {} });
+  return (
+    <div
+      data-part="row"
+      {...drag.getSourceProps({ key: nodeKey })}
+      {...drag.getTargetProps({ key: nodeKey })}
+      data-testid="row"
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.declared, true);
+  assert.equal(measured.wired, true, 'the two bags carry disjoint keys, so neither overwrites the other');
+  assert.deepEqual(measured.rows, [], 'a row that is both source and target is not an unverified spread');
+});
+
+test('D21: the two-spread run followed by a plain onDrop is OVERWRITTEN, not credited', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Row({ nodeKey, onMine }) {
+  const drag = useDragSession({ onDrop: () => {} });
+  return (
+    <div
+      {...drag.getSourceProps({ key: nodeKey })}
+      {...drag.getTargetProps({ key: nodeKey })}
+      onDrop={onMine}
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.wired, false, 'merging the run must not swallow what comes AFTER it');
+  assert.equal(measured.rows.length, 1);
+  assert.match(measured.rows[0], /^OVERWRITTEN .*<div> onDrop$/u);
+});
+
+test('D22: ADJACENCY is the licence -- a bag separated from the run by an attribute fails closed', () => {
+  // `{...source} onDrop={mine} {...target}` is undecidable to a key-blind
+  // reader: the trailing bag may or may not carry the key the attribute took.
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Row({ nodeKey, onMine }) {
+  const drag = useDragSession({ onDrop: () => {} });
+  return (
+    <div
+      {...drag.getSourceProps({ key: nodeKey })}
+      onDrop={onMine}
+      {...drag.getTargetProps({ key: nodeKey })}
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.wired, false);
+  assert.equal(measured.rows.length, 1);
+  assert.match(measured.rows[0], /^SPREAD-UNVERIFIED /u);
+});
+
+test('D23: each member of the run keeps its own overrides -- a merged second bag still reddens', () => {
+  const measured = plantDnd(`
+${KERNEL_IMPORT}
+export function Row({ nodeKey, onMine }) {
+  const drag = useDragSession({ onDrop: () => {} });
+  const alsoTarget = { ...drag.getTargetProps({ key: nodeKey }), onDrop: onMine };
+  return <div {...drag.getSourceProps({ key: nodeKey })} {...alsoTarget} />;
+}
+`);
+
+  assert.equal(measured.attachments.length, 1, 'the run is ONE attachment');
+  assert.deepEqual(measured.attachments[0].overwritten, ['onDrop']);
+  assert.equal(measured.attachments[0].effective, false);
+});
+
 test('the blocking arm fires only when the kernel was DECLARED and not attached', () => {
   const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
   const pinned = readBaseline().families[FAMILY];
