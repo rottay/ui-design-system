@@ -477,6 +477,105 @@ test('SHAPE: a missing shared renderer is BLOCKING, never a vacuous pass', () =>
   );
 });
 
+/**
+ * The renderer's half of the same contract. The drills above move the FAMILY
+ * and hold the vocabulary; these move the VOCABULARY and hold the family, so a
+ * role that is renamed, dropped or given a word outside the six is caught from
+ * the other side too.
+ */
+const FAM10_PART = 'metadata-chip-value';
+const FAM10_ROLE = "  'metadata-chip-value': 'line',";
+
+/** Renames a part the family really stamps INTO a name WO-FAM-10 adjudicated. */
+const renameOntoVocabulary = (sandbox) => {
+  patch(sandbox, MODERN_TSX, (text) => {
+    const renamed = text.replace('<span data-part="prefix">', `<span data-part="${FAM10_PART}">`);
+    assert.notEqual(renamed, text, 'the drill must change a part the family really stamps');
+    return renamed;
+  });
+  patch(sandbox, MODERN_SKIN, (text) => {
+    const renamed = text.replace("[data-part='prefix']", `[data-part='${FAM10_PART}']`);
+    assert.notEqual(renamed, text, 'the drill must move the paint with the part');
+    return renamed;
+  });
+};
+
+const patchRenderer = (sandbox, replace) => patch(sandbox, RENDERER, (text) => {
+  const edited = replace(text);
+  assert.notEqual(edited, text, `the drill must edit \`${FAM10_ROLE.trim()}\` in the renderer`);
+  return edited;
+});
+
+test('CONTROL: a part the WO-FAM-10 vocabulary adjudicated is drawable, not drift', () => {
+  withPlantedFamily(renameOntoVocabulary, (findings, measured) => {
+    assert.deepEqual(measured.blocking.skeleton.partsWithoutRole, []);
+    assert.deepEqual(findings, [], 'a name the renderer was taught is not an anatomy change it cannot draw');
+  });
+});
+
+test('PLANT: dropping that role from the vocabulary is BLOCKING', () => {
+  withPlantedFamily(
+    (sandbox) => {
+      renameOntoVocabulary(sandbox);
+      patchRenderer(sandbox, (text) => text.replace(`${FAM10_ROLE}\n`, ''));
+    },
+    (findings, measured) => {
+      assert.deepEqual(measured.blocking.skeleton.partsWithoutRole, [FAM10_PART]);
+      expectFinding(
+        findings,
+        `${SKELETON_ARM} -- \`data-part\` \`${FAM10_PART}\` has no role`,
+        'a role the vocabulary loses is a loading state the renderer can no longer derive',
+      );
+    },
+  );
+});
+
+test('PLANT: renaming that role in the vocabulary is BLOCKING', () => {
+  withPlantedFamily(
+    (sandbox) => {
+      renameOntoVocabulary(sandbox);
+      patchRenderer(sandbox, (text) => text.replace(FAM10_ROLE, `  '${FAM10_PART}-renamed': 'line',`));
+    },
+    (findings, measured) => {
+      assert.deepEqual(measured.blocking.skeleton.partsWithoutRole, [FAM10_PART]);
+      expectFinding(
+        findings,
+        `${SKELETON_ARM} -- \`data-part\` \`${FAM10_PART}\` has no role`,
+        'a vocabulary key is the part name it draws; renaming it drops the part',
+      );
+    },
+  );
+});
+
+test('PLANT: a role outside the six the renderer can draw is BLOCKING', () => {
+  withPlantedFamily(
+    (sandbox) => {
+      renameOntoVocabulary(sandbox);
+      patchRenderer(sandbox, (text) => text.replace(FAM10_ROLE, `  '${FAM10_PART}': 'pill',`));
+    },
+    (findings, measured) => {
+      assert.deepEqual(measured.blocking.skeleton.invalidRoles, [FAM10_PART]);
+      expectFinding(
+        findings,
+        `${SKELETON_ARM} -- the renderer gives \`${FAM10_PART}\` a role outside`,
+        'a role the renderer has no bone for is not a role',
+      );
+    },
+  );
+});
+
+test('LIVE: every WO-FAM-10 family stamps only parts the renderer can draw', () => {
+  const baseline = readBaseline().families;
+  const families = Object.keys(baseline).filter((name) => baseline[name].openCut?.workOrder === 'WO-FAM-10');
+  assert.equal(families.length, 19, 'the WO-FAM-10 roster is the 19 families the census measured');
+  for (const family of families) {
+    const measured = measureFamily(resolveFamily(family, ROOT, baseline[family]), { producers: PRODUCERS });
+    assert.equal(measured.blocking.skeleton.renderer, true, family);
+    assert.deepEqual(measured.blocking.skeleton.partsWithoutRole, [], family);
+    assert.deepEqual(measured.blocking.skeleton.invalidRoles, [], family);
+  }
+});
+
 // ---------------------------------------------------------------------------
 // R4 (2026-09-08): the two arms the re-audit proved could report a false PASS
 //

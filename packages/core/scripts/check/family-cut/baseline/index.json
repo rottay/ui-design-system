@@ -1806,10 +1806,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot C (the header contract and the two families that prove it)",
         "debt": {
-          "visualLiterals": 1,
-          "skeletonPartsWithoutRole": 15
+          "visualLiterals": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both."
     },
@@ -1845,10 +1844,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot C (the header contract and the two families that prove it)",
         "debt": {
-          "visualLiterals": 1,
-          "skeletonPartsWithoutRole": 22
+          "visualLiterals": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's."
     },
@@ -1881,10 +1879,9 @@
         "lot": "sub-lot D (the remaining page headers)",
         "debt": {
           "inlineStyleViolations": 104,
-          "skeletonHandMade": 10,
-          "skeletonPartsWithoutRole": 12
+          "skeletonHandMade": 10
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. It carries 104 of the cut's 155 inline paints and 22 of its unproduced reads, 7 of which are the `kbd` namespace read by the search hint and routed to the `kbd` owner rather than produced locally."
     },
@@ -1916,10 +1913,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot D (the remaining page headers)",
         "debt": {
-          "stateGoverned": 1,
-          "skeletonPartsWithoutRole": 13
+          "stateGoverned": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. The blocking arm here is `stateGoverned`: the skin decides state through `[data-state]` and the source never calls `partAttributes` (F-37), which is also why 5 states are painted and never stamped."
     },
@@ -1951,10 +1947,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot D (the remaining page headers)",
         "debt": {
-          "inlineStyleViolations": 4,
-          "skeletonPartsWithoutRole": 21
+          "inlineStyleViolations": 4
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 31 of 79 channels have no producer -- the highest unproduced share in the cut."
     },
@@ -2020,10 +2015,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot D (the remaining page headers)",
         "debt": {
-          "inlineStyleViolations": 1,
-          "skeletonPartsWithoutRole": 4
+          "inlineStyleViolations": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. One of the cut's two families carrying a legacy non-`ds-` class."
     },
@@ -2060,10 +2054,9 @@
         "debt": {
           "inlineStyleViolations": 1,
           "skeletonHandMade": 6,
-          "skeletonPartsWithoutRole": 14,
           "a11yAssertions": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 12 unpaired state pseudo-selectors, the cut's second largest F-37 debt, and no executable a11y assertion of its own."
     },
@@ -2094,10 +2087,9 @@
         "lot": "sub-lot D (the remaining page headers)",
         "debt": {
           "skinReadsAnatomy": 1,
-          "skeletonPartsWithoutRole": 4,
           "a11yAssertions": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt, and the cleanest family in the cut: every channel it reads has a producer. Its debt is 8 unpainted parts, 4 parts with no skeleton role, a skin that selects no `[data-part]`, and no a11y assertion at all (0 test files)."
     },
@@ -2127,10 +2119,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot E (the shell headers)",
         "debt": {
-          "skeletonHandMade": 19,
-          "skeletonPartsWithoutRole": 8
+          "skeletonHandMade": 19
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot E. Admitted at its measured debt. One of the two cut families whose skin lives in `engines/modern/skin/` rather than the presentation tier; 19 hand-made skeleton constructs."
     },
@@ -2160,10 +2151,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot E (the shell headers)",
         "debt": {
-          "skeletonHandMade": 25,
-          "skeletonPartsWithoutRole": 6
+          "skeletonHandMade": 25
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot E. Admitted at its measured debt. The cut's largest F-37 debt (20 unpaired state pseudo-selectors) and its only shared-kernel adoption (`useOptionalDirection`)."
     },
@@ -2194,10 +2184,9 @@
         "lot": "sub-lot F (record and the form surfaces)",
         "debt": {
           "inlineStyleViolations": 11,
-          "skeletonHandMade": 20,
-          "skeletonPartsWithoutRole": 77
+          "skeletonHandMade": 20
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot F, cut as ONE family. `summary-strip`, `field-grid`, `field`, `action-bar` and `panel` are blocks of it, not families: every block root stamps `data-structure='record'` and all static geometry lives in the single `skin/record/index.css`. Measured as five families, each of them resolves zero skins and fails `skinReadsAnatomy` for that reason alone. The prefix siblings `record-facts` and `record-workbench` are excluded by the foreign-compound filter with their reasons printed, so no pin is needed here."
     },
@@ -2228,10 +2217,9 @@
         "lot": "sub-lot F (record and the form surfaces)",
         "debt": {
           "inlineStyleViolations": 1,
-          "skeletonHandMade": 8,
-          "skeletonPartsWithoutRole": 30
+          "skeletonHandMade": 8
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 43 channels read, 1 without a producer, 8 hand-made skeleton constructs."
     },
@@ -2261,10 +2249,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot F (record and the form surfaces)",
         "debt": {
-          "inlineStyleViolations": 8,
-          "skeletonPartsWithoutRole": 34
+          "inlineStyleViolations": 8
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 8 inline paints and 34 parts with no skeleton role."
     },
@@ -2296,10 +2283,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot F (record and the form surfaces)",
         "debt": {
-          "skinReadsAnatomy": 1,
-          "skeletonPartsWithoutRole": 1
+          "skinReadsAnatomy": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot F, and one of the four owners S1 made visible. Its skin selects classes and never `[data-part]`: a near-empty shell reading 3 channels, so the anatomy contract has to be built rather than drained."
     },
@@ -2331,10 +2317,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot F (record and the form surfaces)",
         "debt": {
-          "skinReadsAnatomy": 1,
-          "skeletonPartsWithoutRole": 1
+          "skinReadsAnatomy": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin."
     },
@@ -2366,10 +2351,9 @@
         "opened": "2026-09-18",
         "lot": "sub-lot F (record and the form surfaces)",
         "debt": {
-          "skinReadsAnatomy": 1,
-          "skeletonPartsWithoutRole": 1
+          "skinReadsAnatomy": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin."
     },
@@ -2401,10 +2385,9 @@
         "debt": {
           "inlineStyleViolations": 5,
           "skeletonHandMade": 8,
-          "skeletonPartsWithoutRole": 46,
           "a11yAssertions": 1
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot F, S1-visible, and the family the blind walk measured INVERTED: it reported 31 parts painted-and-never-stamped and zero source files, where the owner in fact stamps 53 parts and carries 5 inline paints, 8 hand-made skeleton constructs and 46 parts with no skeleton role. It owns no executable a11y assertion."
     },
@@ -2440,10 +2423,9 @@
         "debt": {
           "inlineStyleViolations": 20,
           "visualLiterals": 6,
-          "skeletonHandMade": 9,
-          "skeletonPartsWithoutRole": 1
+          "skeletonHandMade": 9
         },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot G (surface-lifecycle) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot G (surface-lifecycle) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot G. Admitted at its measured debt. All 20 inline paints and all 6 source colour literals live in one file, `surface-lifecycle/error-boundary/index.tsx`: an error boundary paints itself inline so it still renders when the stylesheet is the thing that failed. That is a product constraint the cut answers with a static fallback rule in the skin, not a sweep."
     }
