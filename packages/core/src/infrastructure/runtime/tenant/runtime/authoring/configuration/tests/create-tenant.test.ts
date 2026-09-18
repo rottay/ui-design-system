@@ -4,11 +4,20 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { createTenantFlatTheme, createTenantConfig, type TenantCreationConfig } from '..';
+import { createTenantTheme, createTenantConfig, type TenantCreationConfig } from '..';
+import { projectThemeDraft } from '@/infrastructure/compilers/runtime/theme';
 import {
   resolvePersonalityPreset,
   type PersonalityPreset,
 } from '../../../../foundation/personality/presets';
+
+/*
+ * The draft is the governed `Theme` (WO-DER-08); every channel assertion below
+ * reads the lowering's own projection of it, which is the flat shape's one
+ * sanctioned role.
+ */
+const channels = (config: TenantCreationConfig) =>
+  projectThemeDraft(createTenantTheme(config));
 
 describe('resolvePersonalityPreset', () => {
   it('should return complete personality tokens for each preset', () => {
@@ -73,22 +82,22 @@ describe('createTenantConfig', () => {
     expect(config.branding.primaryColor).toBe('#3B82F6');
   });
 
-  it('carries no visual payload at all -- that is the FlatTheme half', () => {
+  it('carries no visual payload at all -- that is the theme half', () => {
     const config = createTenantConfig({
       ...minimalConfig,
       personality: 'formal',
       density: 'spacious',
     });
 
-    // The five removed fields. A draft's preset and density are FlatTheme
+    // The five removed fields. A draft's preset and density are theme
     // channels; the identity config cannot restate them.
     for (const field of ['brandTheme', 'personality', 'tokenOverrides', 'appearance', 'engine']) {
       expect(Object.prototype.hasOwnProperty.call(config, field)).toBe(false);
     }
   });
 
-  it('projects the personality preset onto the FlatTheme channels', () => {
-    const theme = createTenantFlatTheme({ ...minimalConfig, personality: 'formal' });
+  it('projects the personality preset onto the theme channels', () => {
+    const theme = channels({ ...minimalConfig, personality: 'formal' });
 
     expect(theme.motion!.entrance).toBe('fade');
     expect(theme.motion!.intensity).toBeLessThan(0.5);
@@ -96,20 +105,34 @@ describe('createTenantConfig', () => {
     expect(theme.palette!.primaryColor).toBe('#3B82F6');
   });
 
-  it('projects density onto the FlatTheme surfaces', () => {
-    const compact = createTenantFlatTheme({ ...minimalConfig, density: 'compact' });
+  it('projects density onto the theme surfaces', () => {
+    const compact = channels({ ...minimalConfig, density: 'compact' });
     expect(compact.surfaces?.densityScale).toBe(0.95);
     expect(compact.chrome!.card!.paddingDensity).toBe('compact');
 
-    const spacious = createTenantFlatTheme({ ...minimalConfig, density: 'spacious' });
+    const spacious = channels({ ...minimalConfig, density: 'spacious' });
     expect(spacious.surfaces?.densityScale).toBe(1.1);
     expect(spacious.chrome!.card!.paddingDensity).toBe('spacious');
     expect(spacious.surfaces?.borderRadius).toBeDefined();
   });
 
   it('states no density scale for the comfortable baseline', () => {
-    const theme = createTenantFlatTheme({ ...minimalConfig, density: 'comfortable' });
+    const theme = channels({ ...minimalConfig, density: 'comfortable' });
     expect(theme.surfaces?.densityScale).toBeUndefined();
+  });
+
+  it('emits the GOVERNED draft, not the flat view', () => {
+    const theme = createTenantTheme({ ...minimalConfig, personality: 'formal' });
+
+    // The wrapper is what the ingress door discriminates on, so this is the
+    // transport's identity and not a shape detail: an authored family arrives
+    // wrapped, and one the draft never states carries its reason instead.
+    expect(Object.keys(theme.motion).sort()).toEqual(['disposition', 'value']);
+    expect(theme.motion.value!.entrance).toBe('fade');
+    expect(theme.recipes.disposition).toBe('not-authored');
+    // and the flat shape is reachable only as the projection, which the
+    // channel assertions above read.
+    expect(projectThemeDraft(theme).motion).toEqual(theme.motion.value);
   });
 
   it('should pass through optional fields', () => {
@@ -130,7 +153,7 @@ describe('createTenantConfig', () => {
   });
 
   it('should default personality to neutral', () => {
-    const theme = createTenantFlatTheme(minimalConfig);
+    const theme = channels(minimalConfig);
     const neutralTokens = resolvePersonalityPreset('neutral');
 
     expect(theme.motion!.intensity).toBe(neutralTokens.animation!.intensity);

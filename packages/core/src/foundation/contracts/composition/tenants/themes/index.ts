@@ -239,14 +239,20 @@ export type BrandCapabilityCatalog = Readonly<
 
 /**
  * The flat projection of the governed `Theme`: the READ VIEW the lowering's
- * channel writers consume, and nothing else. It is not an authoring surface and
- * not a transport (WO-DER-08).
+ * channel writers consume. It is not a transport and no productive owner
+ * returns it as an authored draft (WO-DER-08).
  *
- * Two named exceptions remain, both registered rather than incidental:
- * test/fixture material still authors this shape and is lifted at the ingress
- * door by `readThemeDraft`, and the superseded `serializeFlatTheme` /
- * `deserializeFlatTheme` window keeps a published spelling alive until its
- * named end trigger fires.
+ * THE EXCEPTIONS ARE NAMED, and the list is the measured one rather than a
+ * round number: (1) test/fixture material still authors this shape and is
+ * lifted at the ingress door by `readThemeDraft`; (2) the superseded
+ * `serializeFlatTheme` / `deserializeFlatTheme` window keeps a published
+ * spelling alive until its named end trigger fires; (3) the ingress's own
+ * draft constructors assemble a flat literal and lift it in the same
+ * expression, because this shape is the type `liftAuthoredTheme` DECLARES as
+ * its input -- retyping that input is the deferred (b) lot, and assembling a
+ * `Theme` field by field instead would be a second interpretation of the same
+ * bounded set; (4) `tenant-preview`'s superseded `brand-theme` source arm
+ * carries an incoming serialized flat payload forward.
  */
 export interface FlatTheme {
   /** Unique identifier for this brand theme */

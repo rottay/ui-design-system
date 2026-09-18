@@ -37,6 +37,7 @@ import {
   draftPreviewThemeIntent,
   emitThemeCss,
   governedTenantTheme,
+  projectThemeDraft,
   staticThemeIntent,
 } from '@/infrastructure/compilers/runtime/theme';
 import { brandTenantSelector } from '@/infrastructure/compilers/kernel/foundation/css/tenant-selectors';
@@ -46,7 +47,7 @@ import {
   hydrateTenantThemeConfig,
 } from '../../../../../../../infrastructure/compilers/composition/tenant-theme';
 import {
-  createTenantFlatTheme,
+  createTenantTheme,
   createTenantConfig,
 } from '../../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import type { FlatTheme } from '../../../../../../../foundation/contracts/composition/tenants/themes';
@@ -603,10 +604,10 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
     expect(css).not.toContain('prefers-color-scheme');
   });
 
-  it('a draft compiles the FlatTheme its preset and density project to', () => {
+  it('a draft compiles the channels its preset and density project to', () => {
     // `draftPreviewSource` is the arm the three preview engines use. It is the
     // only one that can paint a preset, because the preset's channels --
-    // motion, chrome, surfaces -- are FlatTheme channels; a `TenantConfig`
+    // motion, chrome, surfaces -- are theme channels; a `TenantConfig`
     // carries none of them.
     const draft = {
       slug: 'acme',
@@ -619,16 +620,29 @@ describe('buildPreviewCss resolving a TenantConfig directly (CMP-02 restoration)
 
     const source = draftPreviewSource(draft);
     expect(source).not.toBeNull();
+    // WO-DER-08: the source carries the GOVERNED draft, so the transport is
+    // asserted on the wrapper the compile door discriminates on, and the
+    // preset/density mapping on the projection of it. Comparing the arm
+    // against a re-run of its own constructor would assert nothing.
+    const theme = (source as { theme: Theme }).theme;
+    expect(Object.keys(theme.motion).sort()).toEqual(['disposition', 'value']);
+    const view = projectThemeDraft(theme);
+    expect(view.motion!.entrance).toBe('fade');
+    expect(view.chrome!.card!.paddingDensity).toBe('spacious');
+    expect(view.surfaces!.densityScale).toBe(1.1);
+    expect(view.surfaces!.borderRadius!.xl).toBe('24px');
 
     const direct = buildPreviewCss(source!);
-    const fromTheme = buildPreviewCss({
+    // and a caller holding the flat view still reaches the same compile
+    // through the ingress lift -- the named test/fixture exception.
+    const fromView = buildPreviewCss({
       kind: 'theme-draft',
       vertical: 'bithire',
       slug: 'acme',
-      theme: governedTenantTheme(createTenantFlatTheme(draft)),
+      theme: governedTenantTheme(view),
     });
 
-    expect(direct.css).toBe(fromTheme.css);
+    expect(direct.css).toBe(fromView.css);
     expect(direct.unsupportedAxes).toEqual([]);
     expect(direct.css).toContain('#111827');
   });

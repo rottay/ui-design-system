@@ -3,9 +3,9 @@
  * @description Projects one minimal draft (slug, name, primaryColor) into the
  * two things an onboarding flow needs and which are deliberately NOT the same
  * object: the tenant's IDENTITY (`createTenantConfig`) and its VISUAL SOURCE
- * (`createTenantFlatTheme`). A `TenantConfig` carries no paint, so a draft's
- * personality preset and density posture land on the FlatTheme the compiler
- * lowers, never back on the config.
+ * (`createTenantTheme`). A `TenantConfig` carries no paint, so a draft's
+ * personality preset and density posture land on the theme the compiler lowers,
+ * never back on the config.
  */
 
 import type { TenantConfig, TenantPlan } from '../../../../../../foundation/contracts';
@@ -16,7 +16,9 @@ import type {
   FlatTheme,
   BrandTypography,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
+import type { Theme } from '../../../../../../foundation/contracts/composition/tenants/themes/iso';
 import { assertTenantIdentityAllowed } from '@/foundation/presets/verticals/roster';
+import { governedTenantTheme } from '@/infrastructure/compilers/runtime/theme';
 import {
   resolvePersonalityPreset,
   type PersonalityPreset,
@@ -125,12 +127,17 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
 }
 
 /**
- * Generates the tenant's VISUAL SOURCE from the same input.
+ * Generates the tenant's VISUAL SOURCE from the same input, as the governed
+ * `Theme` the compile door takes.
  *
- * The preset lands on the channels `flatThemeToPersonality` reads back, and
- * density on `surfaces`, so one draft produces one theme.
+ * The preset lands on the channels the lowering's read view reports back, and
+ * density on `surfaces`, so one draft produces one theme. The bounded values are
+ * assembled in the flat vocabulary the intake's lift DECLARES as its input and
+ * lifted once through the ingress: a `Theme` assembled field by field here would
+ * be a second interpretation of the same bounded set. The flat value therefore
+ * never leaves this function -- it is the lift's argument, not a transport.
  */
-export function createTenantFlatTheme(config: TenantCreationConfig): FlatTheme {
+export function createTenantTheme(config: TenantCreationConfig): Theme {
   const {
     slug,
     name,
@@ -159,7 +166,7 @@ export function createTenantFlatTheme(config: TenantCreationConfig): FlatTheme {
       : {}),
   };
 
-  return {
+  const flat: FlatTheme = {
     id: slug,
     name,
     palette: {
@@ -171,4 +178,5 @@ export function createTenantFlatTheme(config: TenantCreationConfig): FlatTheme {
     chrome,
     ...(Object.keys(surfaces).length > 0 ? { surfaces } : {}),
   };
+  return governedTenantTheme(flat);
 }

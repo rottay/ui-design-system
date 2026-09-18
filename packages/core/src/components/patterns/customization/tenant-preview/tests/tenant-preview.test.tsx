@@ -66,8 +66,8 @@ describe('TenantPreview', () => {
 
     it('should produce genuinely different CSS across personality presets', () => {
       // Each preset authors a different `entranceDuration` (formal 160,
-      // neutral 220, expressive 300, playful 400), which `createTenantFlatTheme`
-      // places on `BrandMotion.entranceDuration` and `compileTheme` feeds
+      // neutral 220, expressive 300, playful 400), which `createTenantTheme`
+      // places on the motion family and `compileTheme` feeds
       // verbatim into `--ds-motion-calm`. `--ds-motion-intensity` was rejected
       // as the proof axis because two presets saturate to the same clamped
       // value there -- see `runtime/preview-css/tests/preview-css.test.ts`.

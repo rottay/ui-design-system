@@ -39,10 +39,7 @@
 
 import type { TenantConfig } from '../../../../../../foundation/contracts/composition/tenants';
 import type {
-  BrandChrome,
-  BrandMotion,
   BrandPalette,
-  BrandSurfaces,
   FlatTheme,
   BrandTypography,
 } from '../../../../../../foundation/contracts/composition/tenants/themes';
@@ -60,7 +57,7 @@ import {
 } from '@/infrastructure/compilers/runtime/theme';
 import { verifyTenantThemeArtifactV1 } from '../../../../../../infrastructure/runtime/theming/foundation/visual-authority';
 import {
-  createTenantFlatTheme,
+  createTenantTheme,
   type TenantCreationConfig,
 } from '@/infrastructure/runtime/tenant/runtime/authoring/configuration';
 import {
@@ -326,7 +323,7 @@ export function draftPreviewSource(draft: TenantCreationConfig): PreviewSource |
     kind: 'theme-draft',
     vertical: draft.vertical,
     slug: draft.slug,
-    theme: governedTenantTheme(createTenantFlatTheme(draft)),
+    theme: createTenantTheme(draft),
   };
 }
 

@@ -1,4 +1,3 @@
-import { createTenantFlatTheme } from "@/infrastructure/runtime/tenant/runtime/authoring/configuration";
 import { liftAuthoredTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake";
 /**
  * The ingress owner is the only producer of a ThemeIntent, and each of its
@@ -348,11 +347,15 @@ describe("WO-DER-08: the draft transport is the governed Theme", () => {
        Theme does not carry, so every governed draft took the flat arm and was
        lifted twice. It stayed green because the second lift is near-idempotent.
        This pins the arm itself rather than its happy outcome. */
-    const flat = createTenantFlatTheme({
-      slug: "der08", name: "Der08", vertical: "bithire",
-      primaryColor: "#3355ff", secondaryColor: "#22aa88",
-    } as never);
-    const governed = liftAuthoredTheme(flat);
+    /* Authored flat ON PURPOSE: test/fixture material is the flat shape's one
+       remaining authoring exception, and the flat ARM is what this pins. */
+    const flat = {
+      id: "der08",
+      name: "Der08",
+      palette: { primaryColor: "#3355ff", secondaryColor: "#22aa88" },
+      motion: { intensity: 0.4, entrance: "fade" },
+    } as const;
+    const governed = liftAuthoredTheme(flat as never);
 
     expect(typeof (governed as { motion?: unknown }).motion).toBe("object");
     expect((governed as { motion: object }).motion).toHaveProperty("disposition");
