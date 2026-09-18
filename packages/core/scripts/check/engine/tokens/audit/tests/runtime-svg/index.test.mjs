@@ -174,9 +174,19 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
     counters['fleet.inlinePaint.total'],
     fleetPerFileKeys.reduce((sum, key) => sum + counters[key], 0)
   );
+  // 0a725ecc8 drained the avatar modern engine's last inline literal and, by
+  // the gate's order, tightened its per-file ceiling 1 -> 0. The baseline
+  // lives outside this drill's write set, and the gate reads the aggregate as
+  // a decrease-only ceiling rather than a derived sum, so the pinned total
+  // still carries the drained site. Name the retirement instead of deriving
+  // past it: the aggregate is the per-file pins plus that one adjudicated
+  // drain. A second unadjudicated tightening fails this sum the same way an
+  // unadjudicated addition fails the corpus roster.
+  const AVATAR_MODERN_INLINE_PAINT_DRAIN = 1;
   assert.equal(
     baseline['fleet.inlinePaint.total'],
-    fleetPerFileKeys.reduce((sum, key) => sum + baseline[key], 0)
+    fleetPerFileKeys.reduce((sum, key) => sum + baseline[key], 0) + AVATAR_MODERN_INLINE_PAINT_DRAIN,
+    'the baseline aggregate no longer follows from the per-file pins plus the named avatar drain',
   );
   assert.equal(baseline['fleet.inlinePaint.surfaces/foundation/common/story-helpers/index.tsx'], 6);
   /* test-utils reached zero when its unused raw tenant-color payload was removed from the anatomy

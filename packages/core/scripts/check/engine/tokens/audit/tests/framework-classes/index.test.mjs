@@ -431,10 +431,11 @@ test('a Daisy modifier rendered without its base is still detected and reported'
  * which one left, not whether either was adjudicated.
  *
  * The roster below states membership instead, and the total is derived from it.
- * Every addition since the anchor is named, the retirement is named, and the
- * count is an arithmetic consequence of both. A file swapped for another file
- * keeps the total at 136 and still fails, because the names are asserted; a
- * fifth, unadjudicated addition fails because the total is no longer free.
+ * Every addition since the anchor is named, every retirement is named, and the
+ * count is an arithmetic consequence of all of them. A file swapped for
+ * another file keeps the total at 133 and still fails, because the names are
+ * asserted; a fifth, unadjudicated addition fails because the total is no
+ * longer free.
  */
 
 /**
@@ -468,6 +469,25 @@ const CANONICAL_MODAL_ENGINE = 'primitives/feedback/modal/engines/modern/index.t
  * behind one capability again.
  */
 const RETIRED_OVERLAY_MODAL_ENGINE = 'primitives/overlay/modal/engines/modern/index.tsx';
+
+/**
+ * The three modern engines the D-16 merge wave retired after the overlay
+ * adapter. Each was the second engine behind a surface whose surviving owner
+ * already carried its own counted engine -- a retirement, not a relocation.
+ * Each is asserted ABSENT for the same reason as the overlay adapter: a merge
+ * that resurrects the duplicate puts two engines behind one capability again.
+ */
+const RETIRED_MERGE_WAVE_ENGINES = [
+  // e31c1174e (2026-09-12, WO-FAM-01): Switch merges into Toggle; Switch
+  // survives only as a deprecated compound mapping onto the toggle owner.
+  'primitives/inputs/switch/engines/modern/index.tsx',
+  // 230c5b982 (2026-09-14): Callout folds into the alert owner; the callout
+  // entry point persists as a presentation of the alert surface.
+  'primitives/display/callout/engines/modern/index.tsx',
+  // 1ddfd6198 (2026-09-15, WO-FAM-05): Steps merges into stepper; Steps
+  // survives only as the deprecated compound under stepper/compound/steps.
+  'primitives/navigation/steps/engines/modern/index.tsx',
+];
 
 /**
  * The deep-nesting half of this test is older than the roster half and stays.
@@ -506,13 +526,21 @@ test('the corpus is the anchor roster plus its four adjudicated additions, and r
     !files.includes(RETIRED_OVERLAY_MODAL_ENGINE),
     'the retired duplicate overlay adapter must not come back',
   );
+  for (const retired of RETIRED_MERGE_WAVE_ENGINES) {
+    assert.ok(
+      !files.includes(retired),
+      `${retired} is an adjudicated D-16 merge retirement and must not come back`,
+    );
+  }
 
   // `- 1` is the retirement of RETIRED_OVERLAY_MODAL_ENGINE, which existed in
-  // the corpus at a5a4c3b43 and does not exist now. Anchor 133, plus the four
-  // named additions, minus that one retirement, is 136.
+  // the corpus at a5a4c3b43 and does not exist now; `- RETIRED_MERGE_WAVE_ENGINES.length`
+  // is the D-16 merge wave, each retirement named above. Anchor 133, plus the
+  // four named additions, minus the overlay adapter, minus the three merge
+  // retirements, is 133.
   assert.equal(
     files.length,
-    ANCHOR_ENGINE_FILE_COUNT + POST_ANCHOR_ADDITIONS.length - 1,
+    ANCHOR_ENGINE_FILE_COUNT + POST_ANCHOR_ADDITIONS.length - 1 - RETIRED_MERGE_WAVE_ENGINES.length,
     'the corpus total no longer follows from the adjudicated roster',
   );
 });

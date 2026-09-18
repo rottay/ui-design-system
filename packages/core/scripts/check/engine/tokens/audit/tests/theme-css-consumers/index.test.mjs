@@ -31,7 +31,7 @@
  *
  * EVERY LEG IS NON-VACUOUS. The two negative legs would also "pass" against a
  * scanner that read nothing at all, so each of them renders a positive control
- * class (`ds-switch__track`) in the same fixture file. The control must lower
+ * class (`ds-card`) in the same fixture file. The control must lower
  * the count -- proving the file was read and classified -- and the prose must
  * then add nothing on top of it.
  */
@@ -75,8 +75,14 @@ function rusticDeadWith(source) {
 
 /** Dead in the rustic theme; named only in prose by the two negative legs. */
 const DEAD_CLASSES = 'ds-btn ds-btn--primary ds-btn--ghost ds-checkbox__input ds-radio__input';
-/** Also dead in the rustic theme; RENDERED by the negative legs as their proof-of-read. */
-const CONTROL_CLASS = 'ds-switch__track';
+/**
+ * Also dead in the rustic theme; RENDERED by the negative legs as their proof-of-read.
+ * The original control (`ds-switch__track`) was drained from every skin on 2026-09-12
+ * when Switch merged into Toggle (9d924e9f2), so it lowered nothing. `ds-card` is
+ * the audited dead list's own entry (rustic theme, line 446): present in the frozen
+ * skin, consumed by no rustic source file.
+ */
+const CONTROL_CLASS = 'ds-card';
 
 const baseline = counters(null);
 const rusticBaseline = baseline['themeCss.deadSelectorsRustic'];
