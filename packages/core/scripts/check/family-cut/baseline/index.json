@@ -1839,32 +1839,22 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 78,
+        "channelsRead": 156,
         "classTokens": 1,
-        "partsStamped": 18,
-        "partsConsumed": 15
+        "partsStamped": 16,
+        "partsConsumed": 16
       },
-      "readWithoutProducer": 22,
+      "readWithoutProducer": 12,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 3,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 4,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot D (the remaining page headers)",
-        "debt": {
-          "inlineStyleViolations": 104,
-          "skeletonHandMade": 10
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. It carries 104 of the cut's 155 inline paints and 22 of its unproduced reads, 7 of which are the `kbd` namespace read by the search hint and routed to the `kbd` owner rather than produced locally."
     },
     "dashboard-header": {
@@ -1874,31 +1864,22 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 73,
+        "channelsRead": 80,
         "classTokens": 1,
         "partsStamped": 23,
         "partsConsumed": 23
       },
-      "readWithoutProducer": 16,
+      "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
-      "statesConsumedNotStamped": 5,
-      "unpairedStatePseudoSelectors": 2,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot D (the remaining page headers)",
-        "debt": {
-          "stateGoverned": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. The blocking arm here is `stateGoverned`: the skin decides state through `[data-state]` and the source never calls `partAttributes` (F-37), which is also why 5 states are painted and never stamped."
     },
     "detail-header": {
@@ -1910,29 +1891,20 @@
         "sourceFiles": 3,
         "channelsRead": 79,
         "classTokens": 1,
-        "partsStamped": 30,
-        "partsConsumed": 30
+        "partsStamped": 32,
+        "partsConsumed": 32
       },
-      "readWithoutProducer": 31,
+      "readWithoutProducer": 1,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 7,
+      "unpairedStatePseudoSelectors": 1,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot D (the remaining page headers)",
-        "debt": {
-          "inlineStyleViolations": 4
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 31 of 79 channels have no producer -- the highest unproduced share in the cut."
     },
     "header-surface": {
@@ -1947,12 +1919,12 @@
         "channelsRead": 0,
         "classTokens": 0,
         "partsStamped": 1,
-        "partsConsumed": 0
+        "partsConsumed": 1
       },
       "readWithoutProducer": 0,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 1,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -1960,15 +1932,6 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot D (the remaining page headers)",
-        "debt": {
-          "skinReadsAnatomy": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
-      },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. Its skin reads no channel at all (0 of 0) and selects no `[data-part]`; the anatomy contract has to be built here, not drained."
     },
     "mobile-header": {
@@ -1976,31 +1939,22 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 17,
+        "channelsRead": 29,
         "classTokens": 1,
         "partsStamped": 9,
-        "partsConsumed": 8
+        "partsConsumed": 9
       },
-      "readWithoutProducer": 3,
+      "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 1,
-      "partsStampedNotConsumed": 1,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 4,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot D (the remaining page headers)",
-        "debt": {
-          "inlineStyleViolations": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. One of the cut's two families carrying a legacy non-`ds-` class."
     },
     "stats-header": {
@@ -2013,18 +1967,18 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 4,
-        "channelsRead": 28,
+        "channelsRead": 51,
         "classTokens": 1,
         "partsStamped": 16,
-        "partsConsumed": 17
+        "partsConsumed": 16
       },
-      "readWithoutProducer": 9,
+      "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 1,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 12,
+      "unpairedStatePseudoSelectors": 2,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
@@ -2035,7 +1989,7 @@
         "lot": "sub-lot D (the remaining page headers)",
         "debt": {
           "inlineStyleViolations": 1,
-          "skeletonHandMade": 6,
+          "skeletonHandMade": 2,
           "a11yAssertions": 1
         },
         "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
@@ -2047,15 +2001,15 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 2,
-        "channelsRead": 12,
+        "channelsRead": 24,
         "classTokens": 1,
         "partsStamped": 8,
-        "partsConsumed": 0
+        "partsConsumed": 8
       },
       "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 1,
-      "partsStampedNotConsumed": 8,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -2063,16 +2017,6 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot D (the remaining page headers)",
-        "debt": {
-          "skinReadsAnatomy": 1,
-          "a11yAssertions": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt, and the cleanest family in the cut: every channel it reads has a producer. Its debt is 8 unpainted parts, 4 parts with no skeleton role, a skin that selects no `[data-part]`, and no a11y assertion at all (0 test files)."
     },
     "cockpit-header": {
@@ -2080,31 +2024,22 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 89,
+        "channelsRead": 85,
         "classTokens": 0,
-        "partsStamped": 24,
-        "partsConsumed": 24
+        "partsStamped": 18,
+        "partsConsumed": 18
       },
-      "readWithoutProducer": 11,
+      "readWithoutProducer": 6,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 10,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot E (the shell headers)",
-        "debt": {
-          "skeletonHandMade": 19
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot E. Admitted at its measured debt. One of the two cut families whose skin lives in `engines/modern/skin/` rather than the presentation tier; 19 hand-made skeleton constructs."
     },
     "workbench-header": {
@@ -2112,31 +2047,22 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 90,
+        "channelsRead": 84,
         "classTokens": 0,
-        "partsStamped": 19,
-        "partsConsumed": 19
+        "partsStamped": 15,
+        "partsConsumed": 15
       },
-      "readWithoutProducer": 9,
+      "readWithoutProducer": 5,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 20,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot E (the shell headers)",
-        "debt": {
-          "skeletonHandMade": 25
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot E. Admitted at its measured debt. The cut's largest F-37 debt (20 unpaired state pseudo-selectors) and its only shared-kernel adoption (`useOptionalDirection`)."
     },
     "record": {
@@ -2146,79 +2072,13 @@
         "sourceFiles": 8,
         "channelsRead": 32,
         "classTokens": 1,
-        "partsStamped": 93,
-        "partsConsumed": 28
+        "partsStamped": 87,
+        "partsConsumed": 24
       },
-      "readWithoutProducer": 1,
+      "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 65,
-      "partsConsumedNotStamped": 0,
-      "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 7,
-      "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 0,
-      "dndTransportOwners": 0,
-      "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot F (record and the form surfaces)",
-        "debt": {
-          "inlineStyleViolations": 11,
-          "skeletonHandMade": 20
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
-      "cutNote": "WO-FAM-10 sub-lot F, cut as ONE family. `summary-strip`, `field-grid`, `field`, `action-bar` and `panel` are blocks of it, not families: every block root stamps `data-structure='record'` and all static geometry lives in the single `skin/record/index.css`. Measured as five families, each of them resolves zero skins and fails `skinReadsAnatomy` for that reason alone. The prefix siblings `record-facts` and `record-workbench` are excluded by the foreign-compound filter with their reasons printed, so no pin is needed here."
-    },
-    "form-sections": {
-      "cut": "WO-FAM-10",
-      "denominators": {
-        "skinFiles": 1,
-        "sourceFiles": 1,
-        "channelsRead": 43,
-        "classTokens": 1,
-        "partsStamped": 35,
-        "partsConsumed": 35
-      },
-      "readWithoutProducer": 1,
-      "classVocabularies": 1,
-      "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 0,
-      "partsConsumedNotStamped": 0,
-      "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 3,
-      "colorLiteralsInSkin": 0,
-      "fanOutUnreached": 0,
-      "dndTransportOwners": 0,
-      "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot F (record and the form surfaces)",
-        "debt": {
-          "inlineStyleViolations": 1,
-          "skeletonHandMade": 8
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
-      "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 43 channels read, 1 without a producer, 8 hand-made skeleton constructs."
-    },
-    "edit-fields": {
-      "cut": "WO-FAM-10",
-      "denominators": {
-        "skinFiles": 1,
-        "sourceFiles": 1,
-        "channelsRead": 27,
-        "classTokens": 1,
-        "partsStamped": 42,
-        "partsConsumed": 40
-      },
-      "readWithoutProducer": 2,
-      "classVocabularies": 1,
-      "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 2,
+      "partsStampedNotConsumed": 63,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -2226,15 +2086,52 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot F (record and the form surfaces)",
-        "debt": {
-          "inlineStyleViolations": 8
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
+      "cutNote": "WO-FAM-10 sub-lot F, cut as ONE family. `summary-strip`, `field-grid`, `field`, `action-bar` and `panel` are blocks of it, not families: every block root stamps `data-structure='record'` and all static geometry lives in the single `skin/record/index.css`. Measured as five families, each of them resolves zero skins and fails `skinReadsAnatomy` for that reason alone. The prefix siblings `record-facts` and `record-workbench` are excluded by the foreign-compound filter with their reasons printed, so no pin is needed here."
+    },
+    "form-sections": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 42,
+        "classTokens": 1,
+        "partsStamped": 33,
+        "partsConsumed": 33
       },
+      "readWithoutProducer": 1,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 43 channels read, 1 without a producer, 8 hand-made skeleton constructs."
+    },
+    "edit-fields": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 29,
+        "classTokens": 1,
+        "partsStamped": 42,
+        "partsConsumed": 42
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
       "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 8 inline paints and 34 parts with no skeleton role."
     },
     "form-surface": {
@@ -2244,15 +2141,15 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 3,
+        "channelsRead": 10,
         "classTokens": 2,
         "partsStamped": 4,
-        "partsConsumed": 0
+        "partsConsumed": 4
       },
-      "readWithoutProducer": 1,
+      "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 4,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -2260,15 +2157,6 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot F (record and the form surfaces)",
-        "debt": {
-          "skinReadsAnatomy": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot F, and one of the four owners S1 made visible. Its skin selects classes and never `[data-part]`: a near-empty shell reading 3 channels, so the anatomy contract has to be built rather than drained."
     },
     "wizard-surface": {
@@ -2278,15 +2166,15 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 2,
+        "channelsRead": 8,
         "classTokens": 0,
         "partsStamped": 3,
-        "partsConsumed": 0
+        "partsConsumed": 3
       },
       "readWithoutProducer": 0,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 3,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -2294,15 +2182,6 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot F (record and the form surfaces)",
-        "debt": {
-          "skinReadsAnatomy": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin."
     },
     "detail-form-surface": {
@@ -2312,15 +2191,15 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 2,
+        "channelsRead": 7,
         "classTokens": 0,
         "partsStamped": 2,
-        "partsConsumed": 0
+        "partsConsumed": 2
       },
       "readWithoutProducer": 0,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 2,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -2328,15 +2207,6 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot F (record and the form surfaces)",
-        "debt": {
-          "skinReadsAnatomy": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin."
     },
     "guided-draft-form": {
@@ -2344,15 +2214,15 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 29,
+        "channelsRead": 32,
         "classTokens": 1,
-        "partsStamped": 53,
-        "partsConsumed": 31
+        "partsStamped": 51,
+        "partsConsumed": 51
       },
       "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 22,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -2360,17 +2230,6 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot F (record and the form surfaces)",
-        "debt": {
-          "inlineStyleViolations": 5,
-          "skeletonHandMade": 8,
-          "a11yAssertions": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot F, S1-visible, and the family the blind walk measured INVERTED: it reported 31 parts painted-and-never-stamped and zero source files, where the owner in fact stamps 53 parts and carries 5 inline paints, 8 hand-made skeleton constructs and 46 parts with no skeleton role. It owns no executable a11y assertion."
     },
     "surface-lifecycle": {
@@ -2382,15 +2241,15 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 17,
-        "classTokens": 0,
-        "partsStamped": 6,
-        "partsConsumed": 9
+        "channelsRead": 30,
+        "classTokens": 2,
+        "partsStamped": 8,
+        "partsConsumed": 13
       },
-      "readWithoutProducer": 7,
-      "classVocabularies": 0,
+      "readWithoutProducer": 4,
+      "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 2,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 5,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
@@ -2403,13 +2262,13 @@
         "opened": "2026-09-18",
         "lot": "sub-lot G (surface-lifecycle)",
         "debt": {
-          "inlineStyleViolations": 20,
-          "visualLiterals": 6,
-          "skeletonHandMade": 9
+          "inlineStyleViolations": 3,
+          "visualLiterals": 3,
+          "skeletonHandMade": 1
         },
         "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot G (surface-lifecycle) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
-      "cutNote": "WO-FAM-10 sub-lot G. Admitted at its measured debt. All 20 inline paints and all 6 source colour literals live in one file, `surface-lifecycle/error-boundary/index.tsx`: an error boundary paints itself inline so it still renders when the stylesheet is the thing that failed. That is a product constraint the cut answers with a static fallback rule in the skin, not a sweep."
+      "cutNote": "WO-FAM-10 sub-lot G. Admitted at its measured debt. All 20 inline paints and all 6 source colour literals live in one file, `surface-lifecycle/error-boundary/index.tsx`: an error boundary paints itself inline so it still renders when the stylesheet is the thing that failed. That is a product constraint the cut answers with a static fallback rule in the skin, not a sweep. classVocabularies 0 -> 1 (2026-09-18, sub-lot G): the family gained exactly its one governed namespace (ds-surface-lifecycle-error/loading) — the template target, not a split; the prefix set is [ds]."
     }
   },
   "routed": [
