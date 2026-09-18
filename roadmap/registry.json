@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-17",
+ "updated": "2026-09-18",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -6013,6 +6013,11 @@
      "at": "2026-09-17 23:04",
      "by": "kimi-dt",
      "note": "FAM-09 arranca: debrief de chart-paint ADOPTADO (evidence/chart-paint-debrief; Kimi ACCEPT — Codex retirado por orden del owner; Fable pendiente). Census medido: useChartTheme tiene CERO consumidores (retiro, no migracion); dos hooks de personalidad que no se ven (la divergencia §0.5 ejecutada); 18 familias en 4 paint models; instrumento chart-paint-single-door + parity + registry-closure + scope-causality en el lot 0 (despachado). Preguntas del owner: Q1 (de-alias de default — el cambio visual mas grande del programa) y Q2 (retiro del prop colors — API publica) quedan en el paquete, junto con la autorizacion de retiros publicos (useSortableList, useChartTheme, ChartFamilyFrame, arrays de paleta). Condicion registrada: FAM-09 no cierra antes de FAM-14 (brazo skeleton)."
+    },
+    {
+     "at": "2026-09-18 00:06",
+     "by": "kimi-dt",
+     "note": "Sweep de pins axe INTEGRADO (3b5d11262): 36 familias, 180 filas drenadas (todas bithire dark, reparadas por el mode-canvas fix), 404/404 verde tras; 4 familias con tinta propia NO drenadas (avatar, menu, file-manager, table — deuda real que queda). Dos sustituciones ruteadas: link ink de typography + overline ink de divider (#737373 authored) — W46 en vuelo sobre la derivacion de tintas. El eje de a11y renderizada hoy: drenado lo que era ground; quedan las tintas propias y la sustitucion de links/divider."
     }
    ]
   },
