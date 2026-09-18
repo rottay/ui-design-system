@@ -432,3 +432,45 @@ before any pin moves — no blanket widening.
 the cut's inline paints), sub-lot F (record + 4 form surfaces, the ledger
 doctrine), sub-lot G (surface-lifecycle). Deriver registration lines in
 derivation/index.ts stay DT-owned at integration, one commit per sub-lot.
+
+## 2026-09-18 (sixteenth sitting) — FAM-10 sub-lots D2/F/G landed; family-cut gate green
+
+All three parallel Kimi writers returned; each candidate audited by the DT with
+independent test reproduction and tsc, then integrated with serialized
+derivation/index.ts registrations (DT's own lines, one commit per sub-lot).
+
+- **D2 `7e13ee2e0`** — collection/dashboard/detail/header-surface: 4 derivers
+  (82/23/30/0 channels — header-surface honestly zero-channel with a drift
+  guard), collection-header's 104 inline paints drained to 0, dashboard's
+  stateGoverned repair (domain status off the kernel's data-state onto
+  data-status), detail-header RWP 31->1. DT integration edits: the HeadersBatch
+  data-status premise. Audit: 157/157 reproduced, tsc clean.
+- **G `bb29b085b`** — surface-lifecycle: 6 channels (incl. the census-mandated
+  stale-banner pair), the error-boundary floor measured at exactly 3 inline
+  properties with per-mode light-dark literals (the light-only pair measured
+  1.7-2.5:1 in dark scopes). 38/38 reproduced.
+- **F `97a4fb058`** — record + 4 form surfaces: 6 derivers, ledger doctrine
+  (forms de-carded onto the ruled-alert banner), guided-draft-form's first
+  kernel adoption and a11y assertions (0->17). 236/236 reproduced; one
+  integration follow-through (the form-sections probe asserts the produced
+  channel post-registration).
+- **Rail repair `2fddf8f1b`** — F's ruled-alert banner used the banned
+  chromatic left rail; the emphasis now wraps the perimeter (csssource green).
+  Audit-gap recorded: the DT candidate checklist lacked csssource:check; it is
+  now standard per candidate.
+- **stats-header `843f03077`** — the four growing debts repaired: kernel wired
+  (useInteractionState + partAttributes), hand-made skeleton retired for the
+  house AnatomySkeleton; the batch contract splits the premise (modern vs
+  frozen engines verbatim). family-cut gate GREEN from here.
+- **family-cut baseline re-pin `f9d25a44c`** — 15 rows closed at zero debt,
+  ratchets lowered to the gate's own measurements, stats-header and
+  surface-lifecycle stay open with exact residual debt, surface-lifecycle
+  classVocabularies 0->1 recorded as the single governed namespace (template
+  target), not a split.
+- **changeset format fix `a808102f5`** — a D2 changeset's contract-diff block
+  used a non-grammar kind (DOM) and blocked the roadmap status generator;
+  removed (prose carries the note, as in the sibling changesets).
+- Receipts: WO-FAM-10 progress entry 7 (`644e9ce94`). WO-FAM-10 is NOT closed:
+  the close audit against the WO's own acceptance gate (RWP=0 per family, axe
+  per family, the closure criteria of F-55/F-41/F-64) plus the routed residue
+  owners remain.
