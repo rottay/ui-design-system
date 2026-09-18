@@ -134,9 +134,9 @@ export const OWED_ARMS = Object.freeze([
   },
   {
     id: 'axe-per-family',
-    owner: 'WO-GAT-04',
+    owner: 'WO-INV-03',
     reason:
-      'axe needs a rendered DOM. WO-GAT-04 owns the axe run and its decrease-only baseline over the per-state galleries; a static gate cannot run it. What this gate CAN prove, and does, is the blocking arm `a11yAssertions`: the family EXECUTES at least one accessibility assertion of its own -- an assertion inside a suppressed suite is text, not evidence',
+      'axe needs a rendered DOM; a static gate cannot run it. The live acceptance is WO-INV-03: axe per family over the Modern x bithire matrix in CI, on a baseline carrying zero `critical` rows -- the shipped run measures eight flagship galleries, which is not one cut per family. What this gate CAN prove, and does, is the blocking arm `a11yAssertions`: the family EXECUTES at least one accessibility assertion of its own -- an assertion inside a suppressed suite is text, not evidence',
   },
 ]);
 
