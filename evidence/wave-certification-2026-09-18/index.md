@@ -252,3 +252,24 @@ four skin diffs, the five new derivers, the new test files.
 
 Still to audit: the four skin diffs (cockpit, workbench, mobile-header,
 section-frame, stats-header), the five new derivers, the new test files.
+
+## 2026-09-18 (eleventh sitting) — D/E PRE-AUDIT part 3: derivers — one FAIL found
+
+- workbench-header deriver: PASS-with-note — same dead-gradient chain as
+  cockpit (already in the completion brief; the twin gets the same answer).
+- mobile-header deriver: **FAIL**. `--ds-mobile-header-safe-area` is produced
+  as `var(--ds-safe-area-top, env(safe-area-inset-top, 0px))` — but `env` is
+  NOT in the emission door's ALLOWED_VALUE_FUNCTIONS, and `admitCssVariables`
+  omits an inadmissible channel WHOLE, in silence. Measured directly: the
+  deriver's 16 channels enter the door, 15 leave; `safe-area` is the dropped
+  one. The pixels survive only because the skin's double fallback restates the
+  inset — which is exactly the silent-drop class the cockpit deriver's own
+  docblock refuses (`--ds-cockpit-header-sticky-top` stays unproduced THERE for
+  this precise reason). The draft is internally inconsistent: one header obeys
+  the door law, the other claims a channel the door deletes. Repair (writer,
+  added to brief-fam10-de-completion): either drop the channel from the
+  deriver with the cockpit-style note, or route `env` admission as its own
+  door decision — the door is kernel governance, not this lot's call. No
+  census caught this: produced-vs-EMITTED is not counted anywhere; routed as
+  instrument residue.
+- cockpit deriver: already audited during the cardGround sitting.
