@@ -1340,6 +1340,8 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   [/^--ds-color-picker-/, () => 'chrome.color-picker'],
   [/^--ds-color-/, () => 'palette'],
   [/^--ds-material-/, () => 'surfaces.material'],
+  // The surface-lifecycle chrome family shares the surfaces prefix, so it resolves first.
+  [/^--ds-surface-lifecycle-/, () => 'chrome.surface-lifecycle'],
   [/^--ds-surface-/, () => 'surfaces'],
   [/^--ds-font-family-/, () => 'typography'],
   // The three families the recursive producer walk made visible. A census that
@@ -1379,7 +1381,7 @@ export const SEMANTIC_OWNER_RULES = Object.freeze([
   // to leave the emitting control unnamed.
   [/^--ds-posture-/, () => 'responsive.posture'],
   // A family cut's deriver owns its family namespace (roadmap/family-cut-template.md 1.1).
-  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card|active-filters-bar|aspect-ratio|avatar|badge|box|calendar-view|collapse|column-menu|column-settings|container|data-table|descriptions|divider|file-manager|filter-chip|filter-panel|flex|grid|kanban-board|list|saved-views|space|splitter|stack|table|tag|toolbar|tree|widget-board)-/, (m) => `chrome.${m[1]}`],
+  [/^--ds-(button|checkbox|radio|toggle|segmented|input-number|password-input|otp-input|tag-input|form-header|form-sections|form-surface|form-field|textarea|input|form|select|auto-complete|cascader|tree-select|mentions|transfer|date-picker|time-picker|modal|drawer|sheet|alert-dialog|confirm-dialog|popover|dropdown|hover-card|tooltip|tour|notifier|alert|menu|tabs|breadcrumb|pagination|stepper|sidebar-surface|card|active-filters-bar|aspect-ratio|avatar|badge|box|calendar-view|collapse|column-menu|column-settings|container|data-table|descriptions|divider|file-manager|filter-chip|filter-panel|flex|grid|kanban-board|list|saved-views|space|splitter|stack|table|tag|toolbar|tree|widget-board|cockpit-header|workbench-header|mobile-header|stats-header|section-frame|collection-header|dashboard-header|detail-header|detail-form-surface|header-surface|record|guided-draft-form|edit-header|edit-fields-if-present|wizard-surface|header)-/, (m) => `chrome.${m[1]}`],
 ]);
 
 export function classifySemanticOwner(name) {
