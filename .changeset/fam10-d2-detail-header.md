@@ -42,8 +42,3 @@ CONSUMER-VISIBLE CONTRACT. Two new `data-part` values render in the hero
 (`hero-cluster`, `hero-copy`); `data-state` now appears on the back chip and
 each tab as the kernel reports hover/press/focus-visible. No prop shape moved.
 
-```contract-diff
-DOM  [data-part='hero-cluster'] — added; the hero identity row, its flex share skin-owned
-DOM  [data-part='hero-copy'] — added; the hero copy column, its flex share skin-owned
-DOM  [data-state] on back-button / tab — added; kernel-decided hover/press/focus-visible (absent at rest)
-```
