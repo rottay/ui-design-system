@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "policy": "decrease-only",
+  "findings": {
+    "hand-stamped-series-index:components/patterns/visualization/charts/families/area-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4a)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/families/bar-chart/index.tsx": {
+      "count": 2,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4a)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/families/line-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4a)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/families/pie-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/families/radar-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/families/scatter/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/area/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lots 4a-4c)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/bar/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lots 4a-4c)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/line/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lots 4a-4c)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/pie/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lots 4a-4c)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/radar/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lots 4a-4c)."
+    },
+    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/scatter/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/families/area-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4a)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/families/bar-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4a)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/families/line-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4a)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/families/network-graph/index.tsx": {
+      "count": 2,
+      "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4c)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/families/pie-chart/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4b)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/families/sankey/index.tsx": {
+      "count": 2,
+      "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4c)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/families/scatter/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4b)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts": {
+      "count": 4,
+      "reason": "Pre-migration: the engine geometry builders cycle their own palette; drained as each family adopts paintFor (lots 4a-4c)."
+    },
+    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts": {
+      "count": 1,
+      "reason": "Pre-migration: the zero-consumer fourth palette authority; drained by the public retirement (lot 7)."
+    },
+    "paint-expression-outside-resolver:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/bar/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: assembles a paint expression outside the resolver; drained when this family adopts the resolver (lots 4a-4c)."
+    },
+    "paint-expression-outside-resolver:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/line/index.tsx": {
+      "count": 1,
+      "reason": "Pre-migration: assembles a paint expression outside the resolver; drained when this family adopts the resolver (lots 4a-4c)."
+    }
+  }
+}

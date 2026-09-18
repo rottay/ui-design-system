@@ -217,6 +217,17 @@ export const CI_GATES = Object.freeze([
   { id: 'physical-css-drill', run: ['node', '--test', 'scripts/check/localization/physical-css/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['physical-css'], },
   { id: 'physical-css', run: ['node', 'scripts/check/localization/physical-css/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'physical-css-drill', ratchet: 'scripts/check/localization/physical-css/baseline/index.json', },
 
+  // --- chart paint (WO-FAM-09 lot 0): one resolver, one registry, bound tables ---
+  { id: 'chart-paint-single-door-drill', run: ['node', '--test', 'scripts/check/charts/paint-single-door/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['chart-paint-single-door'], },
+  { id: 'chart-paint-single-door', run: ['node', 'scripts/check/charts/paint-single-door/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'chart-paint-single-door-drill', ratchet: 'scripts/check/charts/paint-single-door/baseline/index.json', },
+  { id: 'chart-palette-table-parity-drill', run: ['node', '--test', 'scripts/check/charts/palette-table-parity/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['chart-palette-table-parity'], },
+  { id: 'chart-palette-table-parity', run: ['node', 'scripts/check/charts/palette-table-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'chart-palette-table-parity-drill', },
+  { id: 'chart-family-registry-closure-drill', run: ['node', '--test', 'scripts/check/charts/family-registry-closure/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['chart-family-registry-closure'], },
+  { id: 'chart-family-registry-closure', run: ['node', 'scripts/check/charts/family-registry-closure/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'chart-family-registry-closure-drill', },
+  // scheme-scope-causality stays OUT of the manifest until lot 1 makes it green;
+  // it is expected-red at base by design (the divergence it measures is the
+  // defect lot 1 fixes), and a red blocking gate would fail every build.
+
   // --- source-owned artifact freshness: this manifest runs before Build ---
   // These gates execute the authored TypeScript roster and compile CSS from
   // source in memory. A dist/-backed check here is invalid on a clean clone and
