@@ -58,19 +58,14 @@ describeCausality({
  * rule id AND the identity of every failing node: another rule, one more node,
  * a repaired node or a same-count swap reddens the scope, and a scope absent
  * from this map must still audit clean (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 6 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the menu ink is read against the ground it was designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
-const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'bithire dark': {
-    'color-contrast': [
-      'div[data-stacked="false"] > .ds-sidebar-surface-panel[data-part="root"] > div[data-part="panel-body"] > nav > a',
-      'div[data-stacked="false"] > div[data-part="main"] > h2',
-      'div[data-stacked="false"] > div[data-part="main"] > p',
-      'div[data-stacked="true"] > .ds-sidebar-surface-panel[data-part="root"] > div[data-part="panel-body"] > nav > a',
-      'div[data-stacked="true"] > div[data-part="main"] > h2',
-      'div[data-stacked="true"] > div[data-part="main"] > p',
-    ],
-  },
-};
+const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {};
 
 describe('sidebar surface direction, posture and accessibility', () => {
   it('seats the panel on the reading side and stacks the phone posture into a column', async () => {

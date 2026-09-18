@@ -72,15 +72,15 @@ describeCausality({
  * reddens when the debt spreads, when a node is repaired, and when one node is
  * fixed while another starts failing in its place -- the substitution a count
  * could not see (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 2 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the family's quiet ink is read against the ground it was designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
-    'color-contrast': [
-      'textarea[aria-label="Reply"]',
-      'textarea[placeholder="Type @ to mention"]',
-    ],
-  },
-  'bithire dark': {
     'color-contrast': [
       'textarea[aria-label="Reply"]',
       'textarea[placeholder="Type @ to mention"]',

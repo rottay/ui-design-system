@@ -57,22 +57,18 @@ const LEAD = "#row [data-part='panel']";
 
 /**
  * NOT this family's debt: the panels show the caller's own text, and in
- * bithire's dark mode the harness ground `--ds-color-bg-primary` stays #FFFFFF
- * while the ink follows the mode, so any text in that scope fails the contrast
- * floor. A bare `<p>` with no splitter fails identically (measured control).
+ * bithire's dark mode the harness ground `--ds-color-bg-primary` stayed #FFFFFF
+ * while the ink followed the mode, so any text in that scope failed the
+ * contrast floor. A bare `<p>` with no splitter failed identically (measured
+ * control).
+ *
+ * `bithire dark` had 6 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the caller's panel copy no longer sits on a near-white ground.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '#locked > div > .ds-splitter.ds-splitter--modern[data-part="root"] > div[data-part="panel"]:nth-child(1)',
-      '#locked > div > .ds-splitter.ds-splitter--modern[data-part="root"] > div[data-part="panel"]:nth-child(3)',
-      '#row > div > .ds-splitter.ds-splitter--modern[data-part="root"] > div[data-part="panel"]:nth-child(1)',
-      '#row > div > .ds-splitter.ds-splitter--modern[data-part="root"] > div[data-part="panel"]:nth-child(3)',
-      '.ds-splitter.ds-splitter--modern[data-orientation="vertical"] > div[data-part="panel"]:nth-child(1)',
-      '.ds-splitter.ds-splitter--modern[data-orientation="vertical"] > div[data-part="panel"]:nth-child(3)',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describeCausality({
   family: 'splitter',

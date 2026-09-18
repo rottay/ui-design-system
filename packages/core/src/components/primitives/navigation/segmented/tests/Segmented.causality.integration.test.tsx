@@ -78,18 +78,16 @@ describeCausality({
  * rule id AND the identity of every failing node: another rule, one more node,
  * a repaired node or a same-count swap reddens the scope, and a scope absent
  * from this map must still audit clean (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 5 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the unselected option inks are read against the ground they were designed
+ * for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
   'bithire light': {
-    'color-contrast': [
-      'button[data-selected="false"]:nth-child(2) > span',
-      'div[data-size="middle"] > button[data-selected="false"]:nth-child(1) > span',
-      'div[data-size="middle"] > button[data-selected="false"]:nth-child(3) > span',
-      'div[data-size="small"] > button[data-selected="false"]:nth-child(1) > span',
-      'div[data-size="small"] > button[data-selected="false"]:nth-child(3) > span',
-    ],
-  },
-  'bithire dark': {
     'color-contrast': [
       'button[data-selected="false"]:nth-child(2) > span',
       'div[data-size="middle"] > button[data-selected="false"]:nth-child(1) > span',

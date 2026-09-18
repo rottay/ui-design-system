@@ -78,6 +78,12 @@ describeCausality({
  * another kind of violation, one more node, one node repaired, a same-count
  * swap, or a finding in a scope pinned clean turns this row red. It clears when
  * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` DRAINED: that scope's dark block now re-derives its own canvas
+ * ground instead of inheriting the light body's, so the placeholder tone is
+ * legible there. Dropped by identity, not waived -- with no entry the scope
+ * must measure clean, and a relapse reddens here. The light scopes and rottay
+ * keep the same four placeholders.
  */
 const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
@@ -89,14 +95,6 @@ const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
     ],
   },
   'bithire light': {
-    'color-contrast': [
-      '.ds-cascader.ds-cascader--modern[data-part="root"]:nth-child(1) > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-      '.ds-cascader.ds-cascader--modern[data-part="root"]:nth-child(2) > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-      'div[data-loading="true"] > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-      'div[data-status="error"] > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-    ],
-  },
-  'bithire dark': {
     'color-contrast': [
       '.ds-cascader.ds-cascader--modern[data-part="root"]:nth-child(1) > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
       '.ds-cascader.ds-cascader--modern[data-part="root"]:nth-child(2) > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',

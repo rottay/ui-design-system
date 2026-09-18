@@ -74,20 +74,19 @@ describeCausality({
   },
 });
 
-// Measured contrast debt pinned by node identity; the fix is ink derivation, never an axe exclusion.
+/**
+ * Measured contrast debt pinned by node identity; the fix is ink derivation,
+ * never an axe exclusion.
+ *
+ * `bithire dark` had eight rows -- the three field labels, the placeholder, the
+ * range separator, the search input and both range inputs -- and they DRAINED:
+ * that scope's dark block now re-derives its own canvas ground instead of
+ * inheriting the light body's, so the quiet inks and the transparent control
+ * chrome are read against the ground they were designed for. Dropped by
+ * identity, not waived: with no entry the scope must measure clean, and a
+ * relapse reddens here. The light scopes keep their own rows.
+ */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '#input-_R_9d_',
-      'div[data-part="field-row"]:nth-child(1) > span[data-part="field-label"]',
-      'div[data-part="field-row"]:nth-child(2) > span[data-part="field-label"]',
-      'div[data-part="field-row"]:nth-child(3) > span[data-part="field-label"]',
-      'input[placeholder="Max"]',
-      'input[placeholder="Min"]',
-      'span[data-part="placeholder"]',
-      'span[data-part="range-separator"]',
-    ],
-  },
   'bithire light': {
     'color-contrast': [
       'div[data-part="field-row"]:nth-child(1) > span[data-part="field-label"]',

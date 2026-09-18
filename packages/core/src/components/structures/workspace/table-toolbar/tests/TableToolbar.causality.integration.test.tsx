@@ -134,17 +134,17 @@ describeCausality({
  * re-adjudicated. Registered, never excluded; a scope with no entry is a
  * scope that must stay clean.
  *
- * The one finding is the composed ghost Button's own `label` part under
+ * The one finding was the composed ghost Button's own `label` part under
  * bithire dark -- the reset affordance. The toolbar relays no colour into it
  * and paints none of its chrome; the primitive owns its ink.
+ *
+ * `bithire dark` had 1 row and it DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the ghost Button's label is read against the ground it was designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '.ds-button--ghost > span[data-part="content"][data-state="visible"] > span[data-part="label"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('table-toolbar causality surface', () => {
   it('serves the anatomy every probe reads', () => {

@@ -164,11 +164,8 @@ describeCausality({
  * re-adjudicated. Registered, never excluded; a scope with no entry is a
  * scope that must stay clean.
  *
- * Every finding is contrast, in three groups, and the groups are NOT the same
+ * Every finding is contrast, in two groups, and the groups are NOT the same
  * kind of debt:
- *  - composed primitives the family does not paint: the Select surface and the
- *    ghost "Today" Button label under bithire dark (`#_R_2_`, `select`, the
- *    Button's own label part). Each primitive owns its own ink;
  *  - the family's OWN weekday header under the two light scopes
  *    (`--ds-color-text-secondary` on `--ds-surface-inset`) -- this cut's named
  *    residue, a tone decision for the owner rather than a cut edit;
@@ -177,15 +174,15 @@ describeCausality({
  *    `var(--ds-color-info)` in evnto light). The chip reads by TITLE TEXT
  *    inside its accent, so the fix is a readable-ink relation on the accent
  *    channel, which is a derivation question and not a skin literal.
+ *
+ * A third group is gone. `bithire dark` held the composed primitives the family
+ * does not paint -- the Select surface and the ghost "Today" Button label
+ * (`#_R_2_`, `select`, the Button's own label part) -- and all three DRAINED:
+ * that scope's dark block now re-derives its own canvas ground instead of
+ * inheriting the light body's, and each of those primitives leaves the canvas
+ * showing. Dropped by identity, not waived, so a relapse reddens here.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '#_R_2_',
-      'button[data-action="today"] > span[data-part="content"][data-state="visible"] > span[data-part="label"]',
-      'select',
-    ],
-  },
   'bithire light': {
     'color-contrast': [
       'div[data-part="weekday"][role="columnheader"]:nth-child(1)',

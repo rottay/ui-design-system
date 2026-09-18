@@ -88,17 +88,15 @@ describeCausality({
  * another kind of violation, one more node, one node repaired, a same-count
  * swap, or a finding in a scope pinned clean turns this row red. It clears when
  * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 4 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the family's quiet ink is read against the ground it was designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
-    'color-contrast': [
-      '.ds-date-picker.ds-date-picker--modern[data-part="root"]:nth-child(1) > input[value=""][placeholder="Select date"][aria-label="Select date"]',
-      'input[data-range-input="end"]',
-      'input[data-range-input="start"]',
-      'input[data-status="error"]',
-    ],
-  },
-  'bithire dark': {
     'color-contrast': [
       '.ds-date-picker.ds-date-picker--modern[data-part="root"]:nth-child(1) > input[value=""][placeholder="Select date"][aria-label="Select date"]',
       'input[data-range-input="end"]',

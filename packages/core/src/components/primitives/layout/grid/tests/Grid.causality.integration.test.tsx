@@ -46,30 +46,18 @@ const EXACT = "#exact [data-part='root']";
 
 /**
  * NOT this family's debt: the cells show the caller's own text, and in
- * bithire's dark mode the harness ground `--ds-color-bg-primary` stays #FFFFFF
- * while the ink follows the mode, so any text in that scope fails the contrast
- * floor. A bare `<p>` with no grid fails identically (measured control).
+ * bithire's dark mode the harness ground `--ds-color-bg-primary` stayed #FFFFFF
+ * while the ink followed the mode, so any text in that scope failed the
+ * contrast floor. A bare `<p>` with no grid failed identically (measured
+ * control).
+ *
+ * `bithire dark` had 14 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the caller's cell copy no longer sits on a near-white ground.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '#axisExact > .rottay-grid.rottay-grid--modern[data-gap-preset="md"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(1)',
-      '#axisExact > .rottay-grid.rottay-grid--modern[data-gap-preset="md"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(2)',
-      '#exact > .rottay-grid.rottay-grid--modern[data-part="root"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(1)',
-      '#exact > .rottay-grid.rottay-grid--modern[data-part="root"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(2)',
-      '#rung > .rottay-grid.rottay-grid--modern[data-gap-preset="md"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(1)',
-      '#rung > .rottay-grid.rottay-grid--modern[data-gap-preset="md"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(2)',
-      'div[data-column-gap-preset="2xl"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(1)',
-      'div[data-column-gap-preset="2xl"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(2)',
-      'div[data-gap-preset="xs"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(1)',
-      'div[data-gap-preset="xs"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(2)',
-      'div[data-inline="true"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(1)',
-      'div[data-inline="true"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(2)',
-      'div[data-layout-motion="rearrange"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(1)',
-      'div[data-layout-motion="rearrange"] > .rottay-grid-item.rottay-grid-item--modern[data-part="grid-cell"]:nth-child(2)',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describeCausality({
   family: 'grid',

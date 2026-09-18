@@ -66,19 +66,16 @@ describeCausality({
  * reddens when the debt spreads, when a node is repaired, and when one node is
  * fixed while another starts failing in its place -- the substitution a count
  * could not see (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 5 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the form's quiet ink is read against the ground it was designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
   'bithire light': {
     'color-contrast': [
-      'span[data-error="false"]',
-      'span[data-part="extra-text"]',
-    ],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      'label[for="form-email"] > span[data-part="label-text"]',
-      'label[for="form-name"] > span[data-part="label-text"]',
-      'label[for="form-nick"] > span[data-part="label-text"]',
       'span[data-error="false"]',
       'span[data-part="extra-text"]',
     ],

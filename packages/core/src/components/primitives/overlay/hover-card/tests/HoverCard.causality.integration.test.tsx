@@ -97,17 +97,19 @@ describe('hover-card direction, loading and accessibility', () => {
    * The mode-aware derivation gap, pinned by scope and by finding.
    *
    * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): no preset
-   * seeds a per-mode palette, so the tenant's base (light) canvas cascades into
-   * the dark block and the dark ink lands on it. Measured here: bithire dark
-   * paints #f3f4f6 on #ffffff, one node, 1.1:1. Every other gated scope stays
-   * clean, and the shape below fails on a new finding id, a new scope, one more
-   * node, a repaired node or a same-count swap: the pin is the IDENTITY of the
-   * failing node, not its count (EVI-02, 2026-09-15). It is the measured state,
-   * not a waiver.
+   * seeded a per-mode palette, so the tenant's base (light) canvas cascaded
+   * into the dark block and the dark ink landed on it. Measured then: bithire
+   * dark painted #f3f4f6 on #ffffff, one node, 1.1:1.
+   *
+   * That one row DRAINED: the dark block now re-derives its own canvas ground
+   * instead of inheriting the light body's, so the anchor is read against the
+   * ground it was designed for. Dropped by identity, not waived -- with no
+   * entry every gated scope must measure clean, and the shape below still fails
+   * on a new finding id, a new scope, one more node, a repaired node or a
+   * same-count swap: the pin is the IDENTITY of the failing node, not its count
+   * (EVI-02, 2026-09-15).
    */
-  const PINNED_CONTRAST_SCOPES: Readonly<Record<string, AxeDebt>> = {
-    'bithire dark': { 'color-contrast': ['a'] },
-  };
+  const PINNED_CONTRAST_SCOPES: Readonly<Record<string, AxeDebt>> = {};
 
   it('has no serious or critical axe violation beyond the pinned contrast gap', async () => {
     for (const scope of AXE_SCOPES) {

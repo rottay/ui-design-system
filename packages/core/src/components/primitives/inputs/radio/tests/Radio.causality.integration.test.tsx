@@ -73,30 +73,18 @@ describeCausality({
  * reddens when the debt spreads, when a node is repaired, and when one node is
  * fixed while another starts failing in its place -- the substitution a count
  * could not see (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 15 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the label and description inks are read against the ground they were
+ * designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
   'bithire light': {
     'color-contrast': [
       '#radio-modern-_R_1_-description',
-    ],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      '#radio-modern-_R_1_-description',
-      '#radio-modern-_R_1_-label',
-      '#radio-modern-_R_2_-label',
-      '#radio-modern-_R_3_-label',
-      '.ds-radio-group--button[data-color="primary"][data-button-style="solid"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="default"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="default"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="error"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="error"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="secondary"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="secondary"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="success"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="success"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="warning"] > label[data-testid="radio-option-a"][data-checked="true"][data-part="option"] > span[data-part="option-label"]',
-      'div[data-color="warning"] > label[data-testid="radio-option-b"][data-checked="false"][data-part="option"] > span[data-part="option-label"]',
     ],
   },
   'evnto light': {

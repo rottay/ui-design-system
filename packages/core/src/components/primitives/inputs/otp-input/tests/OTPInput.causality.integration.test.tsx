@@ -63,6 +63,12 @@ describeCausality({
  * reddens when the debt spreads, when a node is repaired, and when one node is
  * fixed while another starts failing in its place -- the substitution a count
  * could not see (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 7 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the cell chrome is read against the ground it was designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
@@ -73,17 +79,6 @@ const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
       '#otp-modern-_R_2_-1',
       '#otp-modern-_R_2_-2',
       '#otp-modern-_R_2_-3',
-    ],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      '#otp-modern-_R_1_-2',
-      '#otp-modern-_R_1_-3',
-      '#otp-modern-_R_2_-0',
-      '#otp-modern-_R_2_-1',
-      '#otp-modern-_R_2_-2',
-      '#otp-modern-_R_2_-3',
-      '#otp-modern-_R_2_-error',
     ],
   },
 };

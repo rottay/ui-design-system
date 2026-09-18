@@ -52,23 +52,22 @@ const CONTROL = '<p id="control">Bare control paragraph</p>';
 /**
  * MEASURED GAP, registered rather than forced.
  *
- * In bithire's dark mode the harness ground `--ds-color-bg-primary` stays
- * #FFFFFF while the ink follows the mode, so ANY text on it fails -- the
- * `#control` paragraph above fails at the same 1.1:1 with no collapse in the
+ * In bithire's dark mode the harness ground `--ds-color-bg-primary` stayed
+ * #FFFFFF while the ink followed the mode, so ANY text on it failed -- the
+ * `#control` paragraph above failed at the same 1.1:1 with no collapse in the
  * tree. A ghost panel paints no surface of its own by contract, so its content
- * inherits that ground and fails with it. The fix belongs to whoever owns that
- * vertical's dark ground, and an axe exclusion would hide it.
+ * inherited that ground and failed with it. The fix belonged to whoever owns
+ * that vertical's dark ground, and it landed there rather than as an axe
+ * exclusion here.
+ *
+ * `bithire dark` had 2 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * neither the bare control paragraph nor the ghost panel's inherited copy sits
+ * on a near-white ground.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '#control',
-      '.rottay-collapse--ghost > div[data-part="panel"][data-disabled="false"][data-expanded="true"]'
-        + ' > .rottay-collapse-content[data-part="content"][data-expanded="true"]'
-        + ' > .rottay-collapse-content-inner[data-part="content-inner"][data-expanded="true"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 const OPEN_TRACK = "#open [data-part='content']";
 const OPEN_HEADER = "#open [data-part='header']";

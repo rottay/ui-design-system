@@ -67,6 +67,13 @@ describeCausality({
  * another kind of violation, one more node, one node repaired, a same-count
  * swap, or a finding in a scope pinned clean turns this row red. It clears when
  * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 9 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the panel chrome and its quiet copy are read against the ground they were
+ * designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
@@ -84,19 +91,6 @@ const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
       'div[data-panel="source"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
       'div[data-panel="target"][data-part="panel"][data-disabled="true"] > div[data-part="panel-header"] > span[data-part="panel-count"]',
       'div[data-part="panel-empty"]',
-    ],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      '#checkbox-modern-_R_dt_-label',
-      '#checkbox-modern-_R_ll_-label',
-      '#checkbox-modern-_R_lm_-label',
-      '#checkbox-modern-_R_pl_-label',
-      '#checkbox-modern-_R_pm_-label',
-      'div[data-panel="source"][data-part="panel"] > div[data-part="panel-search-field"] > input[type="text"][data-part="panel-search"][placeholder="Search"]',
-      'div[data-panel="target"][data-part="panel"] > div[data-part="panel-search-field"] > input[type="text"][data-part="panel-search"][placeholder="Search"]',
-      'div[data-part="panel-empty"]',
-      'span[data-part="panel-item-label"]',
     ],
   },
   'evnto light': {

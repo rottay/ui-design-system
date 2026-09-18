@@ -70,6 +70,12 @@ describeCausality({
  * rule id AND the identity of every failing node: another rule, one more node,
  * a repaired node or a same-count swap reddens the scope, and a scope absent
  * from this map must still audit clean (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 1 row and it DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the page-item chrome is read against the ground it was designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
@@ -80,11 +86,6 @@ const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
     ],
   },
   'bithire light': {
-    'color-contrast': [
-      'div[data-part="pagination-range"]',
-    ],
-  },
-  'bithire dark': {
     'color-contrast': [
       'div[data-part="pagination-range"]',
     ],

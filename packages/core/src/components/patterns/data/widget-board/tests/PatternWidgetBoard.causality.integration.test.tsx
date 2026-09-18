@@ -222,26 +222,20 @@ const HEADING = 'h2';
  * a new node and a same-count swap all go red and must be re-adjudicated.
  *
  * Every finding is `color-contrast` on the board's OWN toolbar copy -- the
- * eyebrow (`--ds-color-text-muted`), the mode hint (the composed Text at
- * `color="muted"`) and, in bithire dark, the heading itself. It is a palette
- * reading, not a skin one: the three nodes take their ink from the neutral ramp
- * and their ground from the canvas, and neither is a `--ds-widget-board-*`
- * channel this cut owns. Repairing it means moving the vertical's muted ink or
- * giving the toolbar copy a tone of its own, both of which are decisions
- * outside this lot. Registered, never excluded: the rottay scopes are clean and
- * have no entry, so they must stay clean.
+ * eyebrow (`--ds-color-text-muted`) and the mode hint (the composed Text at
+ * `color="muted"`). It is a palette reading, not a skin one: the nodes take
+ * their ink from the neutral ramp and their ground from the canvas, and neither
+ * is a `--ds-widget-board-*` channel this cut owns. Repairing it means moving
+ * the vertical's muted ink or giving the toolbar copy a tone of its own, both
+ * of which are decisions outside this lot. Registered, never excluded: the
+ * rottay scopes are clean and have no entry, so they must stay clean.
+ *
+ * `bithire dark` had six rows -- the same four plus both headings, which fail
+ * only when a dark ink sits on a light ground -- and they DRAINED: that scope's
+ * dark block now re-derives its own canvas ground instead of inheriting the
+ * light body's. Dropped by identity, not waived, and a relapse reddens here.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      TOOLBAR_COPY('board', CONTEXT),
-      TOOLBAR_COPY('board', HINT),
-      TOOLBAR_COPY('board', HEADING),
-      TOOLBAR_COPY('empty', CONTEXT),
-      TOOLBAR_COPY('empty', HINT),
-      TOOLBAR_COPY('empty', HEADING),
-    ].sort(),
-  },
   'bithire light': {
     'color-contrast': [
       TOOLBAR_COPY('board', CONTEXT),

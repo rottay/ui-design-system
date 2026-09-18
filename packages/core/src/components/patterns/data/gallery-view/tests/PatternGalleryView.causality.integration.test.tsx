@@ -217,22 +217,16 @@ describeCausality({
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired node,
  * a new node and a same-count swap all go red and must be re-adjudicated.
  *
- * The one failing scope is contrast on the caption line in bithire dark: the
+ * The one failing scope was contrast on the caption line in bithire dark: the
  * caption strip grounds itself on `--ds-color-bg-primary` and inks itself with
- * `--ds-color-text-primary`, and that vertical's dark pair does not clear the
- * ratio over a media card. It is a token-pair finding, not a family one, and
- * moving either side is a palette decision this cut did not take. Registered,
- * never excluded; a scope with no entry is a scope that must stay clean.
+ * `--ds-color-text-primary`, and that vertical's dark pair did not clear the
+ * ratio over a media card. It was a token-pair finding, not a family one, and
+ * the token pair moved: the dark block re-derives its own canvas ground instead
+ * of inheriting the light body's, so all three caption rows DRAINED. Dropped by
+ * identity, not waived; a scope with no entry is a scope that must stay clean,
+ * so a relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '.ds-gallery-card[data-part="card"][data-clickable="false"]:nth-child(2) > .rottay-box.rottay-box--modern[data-part="caption"] > .ds-gallery-view__caption-text.rottay-typography[data-part="caption-text"]',
-      '.ds-gallery-card[data-part="card"][data-clickable="false"]:nth-child(3) > .rottay-box.rottay-box--modern[data-part="caption"] > .ds-gallery-view__caption-text.rottay-typography[data-part="caption-text"]',
-      '.ds-gallery-card[data-selected="true"][data-part="card"] > .rottay-box.rottay-box--modern[data-part="caption"] > .ds-gallery-view__caption-text.rottay-typography[data-part="caption-text"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('gallery-view causality surface', () => {
   it('serves the anatomy every probe reads', () => {

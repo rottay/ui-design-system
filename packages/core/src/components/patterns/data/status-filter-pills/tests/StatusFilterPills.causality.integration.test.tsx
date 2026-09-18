@@ -131,22 +131,16 @@ describeCausality({
  * re-adjudicated. Registered, never excluded; a scope with no entry is a
  * scope that must stay clean.
  *
- * Every finding is the family's OWN pill label under bithire dark: the quiet
+ * Every finding was the family's OWN pill label under bithire dark: the quiet
  * `--ds-filter-pill-color` on the transparent pill for the two unselected
- * pills, and the brand ink of the selected one. That is this cut's named
- * residue -- the label tone is a shared `--ds-filter-pill-*` decision, so
- * repairing it means moving a channel two families read, not inventing a
- * literal here.
+ * pills, and the brand ink of the selected one. All three DRAINED: a
+ * transparent pill shows the canvas, and that scope's dark block now re-derives
+ * its own ground instead of inheriting the light body's, so the pill tones are
+ * read against the ground they were designed for. Dropped by identity, not
+ * waived: with no entry the scope must measure clean, and a relapse reddens
+ * here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '.ds-status-filter-pills__pill-label[data-part="pill-label"][data-selected="true"]',
-      'button:nth-child(2) > .ds-status-filter-pills__pill-label[data-part="pill-label"]',
-      'button:nth-child(3) > .ds-status-filter-pills__pill-label[data-part="pill-label"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('status-filter-pills causality surface', () => {
   it('serves the anatomy every probe reads', () => {

@@ -164,23 +164,16 @@ describeCausality({
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired node,
  * a new node and a same-count swap all go red and must be re-adjudicated.
  *
- * The one failing scope is contrast on the CALLER's rows -- the `renderItem`
+ * The one failing scope was contrast on the CALLER's rows -- the `renderItem`
  * slot, five `<span>`s of plain text the family neither grounds nor inks. The
- * family paints no ground beneath a caller slot, so this is the consumer's
- * ink against the surface the consumer mounted it on. Registered, never
- * excluded; a scope with no entry is a scope that must stay clean.
+ * family paints no ground beneath a caller slot, so it was the consumer's ink
+ * against the surface the consumer mounted it on, and the surface moved: that
+ * scope's dark block now re-derives its own canvas ground instead of inheriting
+ * the light body's, so all five rows DRAINED. Dropped by identity, not waived;
+ * a scope with no entry is a scope that must stay clean, so a relapse reddens
+ * here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      'div[aria-posinset="1"] > span',
-      'div[aria-posinset="2"] > span',
-      'div[aria-posinset="3"] > span',
-      'div[aria-posinset="4"] > span',
-      'div[aria-posinset="5"] > span',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('virtual-list causality surface', () => {
   it('serves the anatomy every probe reads', () => {

@@ -45,28 +45,21 @@ const markup = [
 const ROOT = "#default [data-part='root']";
 
 /**
- * NOT this family's debt, pinned here because this is where it is measured: in
- * bithire's dark mode the harness ground `--ds-color-bg-primary` stays #FFFFFF
- * while `--ds-color-text-primary` follows the mode, so ANY text in that scope
- * fails the contrast floor -- a bare `<p>` with no container fails identically
- * (measured control, 2026-09-15). The container paints `transparent`, so it
- * contributes no ground of its own. Pinned by node identity, so a repair of the
- * mode ground and a swap both go red.
+ * NOT this family's debt, pinned here because this is where it was measured:
+ * in bithire's dark mode the harness ground `--ds-color-bg-primary` stayed
+ * #FFFFFF while `--ds-color-text-primary` followed the mode, so ANY text in
+ * that scope failed the contrast floor -- a bare `<p>` with no container failed
+ * identically (measured control, 2026-09-15). The container paints
+ * `transparent`, so it contributes no ground of its own, which is why a repair
+ * outside the family cleared every row at once.
+ *
+ * `bithire dark` had 8 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the caller's copy no longer sits on a near-white ground.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '.ds-container[data-max-width="lg"][data-padding="md"] > p',
-      'div[data-max-width="2xl"] > p',
-      'div[data-max-width="custom"] > p',
-      'div[data-max-width="fluid"] > p',
-      'div[data-max-width="md"] > p',
-      'div[data-max-width="sm"] > p',
-      'div[data-max-width="xl"] > p',
-      'div[data-padding="sm"] > p',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describeCausality({
   family: 'container',

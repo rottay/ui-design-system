@@ -74,16 +74,14 @@ describeCausality({
  * another kind of violation, one more node, one node repaired, a same-count
  * swap, or a finding in a scope pinned clean turns this row red. It clears when
  * the derivation lane gives the family a legible pair (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` DRAINED: that scope's dark block now re-derives its own canvas
+ * ground instead of inheriting the light body's, so the pair is legible there.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
-    'color-contrast': [
-      'input[aria-label="Destination"]',
-      'input[aria-label="Origin"]',
-      'input[placeholder="Search a city"]',
-    ],
-  },
-  'bithire dark': {
     'color-contrast': [
       'input[aria-label="Destination"]',
       'input[aria-label="Origin"]',

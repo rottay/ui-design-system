@@ -81,29 +81,18 @@ describeCausality({
  * reddens when the debt spreads, when a node is repaired, and when one node is
  * fixed while another starts failing in its place -- the substitution a count
  * could not see (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had 13 rows and they DRAINED: that scope's dark block now
+ * re-derives its own canvas ground instead of inheriting the light body's, so
+ * the track and label inks are read against the ground they were designed for.
+ * Dropped by identity, not waived -- with no entry the scope must measure
+ * clean, and a relapse reddens here.
  */
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
   'bithire light': {
     'color-contrast': [
       '#toggle-modern-_R_1_-description',
       '#toggle-modern-_R_4_-helper',
-      'span[data-part="state-label"]',
-    ],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      '#toggle-modern-_R_11_-label',
-      '#toggle-modern-_R_19_-label',
-      '#toggle-modern-_R_1_-description',
-      '#toggle-modern-_R_1_-label',
-      '#toggle-modern-_R_1h_-label',
-      '#toggle-modern-_R_3_-error',
-      '#toggle-modern-_R_4_-helper',
-      '#toggle-modern-_R_9_-label',
-      '#toggle-modern-_R_h_-label',
-      '#toggle-modern-_R_p_-label',
-      '.ds-toggle-field[data-part="field"]:nth-child(2) > label[data-checked="false"][data-color="primary"][data-disabled="false"] > span[data-part="text"] > span[data-part="label"]',
-      'label[data-error="true"] > span[data-part="text"] > span[data-part="label"]',
       'span[data-part="state-label"]',
     ],
   },

@@ -311,29 +311,23 @@ describeCausality({
  * The surviving rule is owned OUTSIDE this family, which is why it is still
  * here after the family's own two contrast pairs were drained.
  *
- * `color-contrast` survives only on bithire dark, and only on the two slots the
- * family deliberately leaves unpainted beneath caller content: the toolbar slot
- * and the custom mobile card. Their ink is the page's, and their ground is the
+ * `color-contrast` survived only on bithire dark, on the two slots the family
+ * deliberately leaves unpainted beneath caller content: the toolbar slot and
+ * the custom mobile card. Their ink was the page's and their ground was the
  * page's -- `#f3f4f6` on `#ffffff` at 1.1:1, because bithire states
- * `palette.seeds.background: '#FFFFFF'` and that seed lowers mode-lessly while
- * the ink ramp mirrors into dark. Recompiling the same scope with a dark
- * background seed takes the three nodes to zero, so the ground is the defect
- * and painting one here would only hide it for one family.
+ * `palette.seeds.background: '#FFFFFF'` and that seed lowered mode-lessly while
+ * the ink ramp mirrored into dark. The prediction this file already carried --
+ * that recompiling the scope with a dark ground takes the three nodes to zero
+ * -- is now the measurement: the mode block re-derives its own canvas ground,
+ * and all three DRAINED. Dropped by identity, not waived: with no entry every
+ * scope must measure clean, and a relapse reddens here.
  *
  * Scope limit, stated rather than implied: the four Buttons React defers into
  * `[hidden]` completion containers (see `serverMarkup`) sit outside every
  * scope's audited DOM, so this map is evidence for the family's own chrome and
  * for the three phone-posture Buttons only.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      '.rottay-box.rottay-box--modern[data-part="mobile-card-custom"]:nth-child(1) > span',
-      '.rottay-box.rottay-box--modern[data-part="mobile-card-custom"]:nth-child(2) > span',
-      'div[data-part="mobile-toolbar"] > span',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('data-table causality surface', () => {
   it('serves the anatomy every probe reads', () => {
