@@ -6018,6 +6018,11 @@
      "at": "2026-09-18 00:06",
      "by": "kimi-dt",
      "note": "Sweep de pins axe INTEGRADO (3b5d11262): 36 familias, 180 filas drenadas (todas bithire dark, reparadas por el mode-canvas fix), 404/404 verde tras; 4 familias con tinta propia NO drenadas (avatar, menu, file-manager, table — deuda real que queda). Dos sustituciones ruteadas: link ink de typography + overline ink de divider (#737373 authored) — W46 en vuelo sobre la derivacion de tintas. El eje de a11y renderizada hoy: drenado lo que era ground; quedan las tintas propias y la sustitucion de links/divider."
+    },
+    {
+     "at": "2026-09-18 01:50",
+     "by": "kimi-dt",
+     "note": "FAM-09 avanza con evidencia de browser: lot 2 integrado (e9e042279 — bifurcacion de paletas eliminada, bridge generado, 25 sitios de app-platform ahora SI reciben paleta tenant; la pierna Chromium mide 18/20 con el unico rojo residual = bar@default, la pregunta Q1 del owner). FAM-10 arranca con el censo medido (evidence/fam10-census): 123 reads sin productor, 155 inline paints, y S1 — el gate de family-cut no VE las familias de surfaces (su medicion es ficcion hoy; sub-lote A en vuelo para reparar el instrumento ANTES de cortar familias)."
     }
    ]
   },
