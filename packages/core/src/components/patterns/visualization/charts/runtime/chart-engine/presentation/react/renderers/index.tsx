@@ -113,7 +113,10 @@ export function ChartRendererSurface({
       data-chart-marks={grammar.marks}
       data-chart-annotations={grammar.annotations}
       data-chart-motion={grammar.motion}
-      {...paint.rootAttributes}
+      /* The paint decision's root stamp is a fixed pair of data attributes;
+         named here so the surface keeps no opaque spread. */
+      data-chart-color-scheme={paint.rootAttributes['data-chart-color-scheme']}
+      data-chart-paint-model={paint.rootAttributes['data-chart-paint-model']}
       data-chart-line-style={chartPersonality.lineStyle}
       data-chart-show-dots={chartPersonality.showDots ? 'true' : 'false'}
       data-chart-gradient-fill={chartPersonality.useGradientFill ? 'true' : 'false'}

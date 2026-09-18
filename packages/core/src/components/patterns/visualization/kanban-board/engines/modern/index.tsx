@@ -490,6 +490,14 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
           // Track whether this column is the active drop target so we can
           // show a primary-tinted ring as a drop affordance.
           const isDropping = drag.session?.target?.columnId === column.id;
+          /* The kernel's target bag carries the drop handlers only; bound
+             here and named on the surface so no opaque spread remains. */
+          const columnDropTarget = column.collapsed
+            ? null
+            : drag.getTargetProps({
+                columnId: column.id,
+                position: column.items.length,
+              });
 
           return (
             <div
@@ -548,10 +556,8 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   data-drop-at-end={
                     isDropping && drag.session?.target?.position === column.items.length
                   }
-                  {...drag.getTargetProps({
-                    columnId: column.id,
-                    position: column.items.length,
-                  })}
+                  onDragOver={columnDropTarget?.onDragOver}
+                  onDrop={columnDropTarget?.onDrop}
                 >
                   {column.items.length === 0 ? (
                     <div data-part="empty-column">

@@ -394,7 +394,11 @@ export default function ModernFileManager(props: FileManagerProps) {
         <div
           data-part="content"
           data-drag-over={fileDrop.isDragOver ? 'true' : 'false'}
-          {...fileDrop.dropZoneProps}
+          /* The drop-zone bag carries the transport handlers only; named here
+             so the surface keeps no opaque spread. */
+          onDragOver={fileDrop.dropZoneProps.onDragOver}
+          onDragLeave={fileDrop.dropZoneProps.onDragLeave}
+          onDrop={fileDrop.dropZoneProps.onDrop}
         >
           {items.length === 0 ? (
             <div data-part="empty">

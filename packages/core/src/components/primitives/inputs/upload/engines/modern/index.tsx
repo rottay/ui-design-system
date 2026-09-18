@@ -966,7 +966,11 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           onKeyDown={(e) => {
             if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); inputRef.current?.click(); }
           }}
-          {...fileDrop.dropZoneProps}
+          /* The drop-zone bag carries the transport handlers only; named here
+             so the surface keeps no opaque spread. */
+          onDragOver={fileDrop.dropZoneProps.onDragOver}
+          onDragLeave={fileDrop.dropZoneProps.onDragLeave}
+          onDrop={fileDrop.dropZoneProps.onDrop}
           data-part="dropzone"
           data-state={fileDrop.isDragOver ? 'dragging' : 'idle'}
           data-disabled={disabled || undefined}
