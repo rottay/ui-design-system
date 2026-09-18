@@ -166,18 +166,14 @@ describe('input geometry, direction, language and accessibility in a real browse
     );
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
-      // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): both dark
-      // scopes (pending DT registration); pinned to the measured state until the
-      // lane lands. A dark mode block paints the dark near-white ink (#f8fafc)
-      // while the ground falls back to white (#ffffff) -- 1.04:1, measured across
-      // 5 nodes on rottay and 7 on bithire. Pinned rather than filtered so the
-      // finding stays visible and any change in it reddens this gate.
-      //
-      // This REPLACES the narrower bithire exception that stood here, which
-      // excluded a single-node finding on the `Invalid` field because bithire
-      // authored `--ds-input-error-color` in its body. That authored value is
-      // gone with the theme, so the exception had no subject left.
-      if (scope.theme === 'dark') {
+      // bithire dark is DRAINED (the mode-canvas repair re-grounds its dark
+      // block; measured clean 2026-09-18). rottay dark is NOT: the input's
+      // field ground stays #ffffff while the ink follows the dark ramp
+      // (#f8fafc on white, 1.04:1) — a real residual defect: the mode-canvas
+      // repair covers the page canvas, not the input's own surface channel.
+      // Pinned until the input's ground derives with the mode. A change in
+      // either direction reddens this gate.
+      if (scope.theme === 'dark' && scope.vertical === 'rottay') {
         expect(findings.map((finding) => finding.id), `${scope.vertical} dark`).toEqual(['color-contrast']);
         expect(findings[0]?.sample, `${scope.vertical} dark`).toContain('background color: #ffffff');
         continue;

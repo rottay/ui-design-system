@@ -142,7 +142,12 @@ describe('input-number geometry, direction, language and accessibility in a real
       // lane lands. A dark mode block paints the dark near-white ink (#f8fafc)
       // while the ground falls back to white (#ffffff). Pinned rather than
       // filtered so the finding stays visible and any change reddens this gate.
-      if (scope.theme === 'dark') {
+      // bithire dark is DRAINED (the mode-canvas repair re-grounds its dark
+      // block; measured clean 2026-09-18). rottay dark is NOT: the field ground
+      // stays #ffffff while the ink follows the dark ramp — a real residual
+      // defect in the input surface's mode derivation. Pinned until the
+      // ground derives with the mode. A change in either direction reddens.
+      if (scope.theme === 'dark' && scope.vertical === 'rottay') {
         expect(findings.map((finding) => finding.id), `${scope.vertical} dark`).toEqual(['color-contrast']);
         expect(findings[0]?.sample, `${scope.vertical} dark`).toContain('background color: #ffffff');
         continue;
