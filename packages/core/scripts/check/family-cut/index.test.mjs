@@ -1991,17 +1991,39 @@ test('both DnD ratchets are decrease-only, so a new independent implementation r
   expectFinding(grown('dndDropZoneOwners'), '`dndDropZoneOwners` GREW from 0 to 1', 'the drop-zone ratchet holds');
 });
 
-test('the live census is the four sortable owners and one drop zone, and nobody has adopted yet', () => {
-  const owners = ['tree', 'saved-views', 'kanban-board', 'column-menu'];
-  for (const family of owners) {
-    const measured = measureFamily(resolveFamily(family, ROOT, readBaseline().families[family]), { producers: PRODUCERS });
-    assert.equal(measured.ratchets.dndTransportOwners, 1, `${family} owns its transport today`);
-    assert.equal(measured.blocking.dndKernelDeclared, false, `${family} has not adopted the kernel yet`);
+test('the live DnD census: four adopted families, two still owning their own transport', () => {
+  // ADOPTED = the kernel is declared AND effectively attached at a DOM element,
+  // so the family's own counter reads 0. PENDING = one owner, kernel unimported.
+  const CENSUS = [
+    { family: 'tree', role: 'transport', adopted: true },
+    { family: 'saved-views', role: 'transport', adopted: true },
+    { family: 'upload', role: 'dropZone', adopted: true },
+    { family: 'file-manager', role: 'dropZone', adopted: true },
+    { family: 'kanban-board', role: 'transport', adopted: false },
+    { family: 'column-menu', role: 'transport', adopted: false },
+  ];
+  const RATCHET = { transport: 'dndTransportOwners', dropZone: 'dndDropZoneOwners' };
+
+  const baseline = readBaseline().families;
+  for (const { family, role, adopted } of CENSUS) {
+    const measured = measureFamily(resolveFamily(family, ROOT, baseline[family]), { producers: PRODUCERS });
+    const own = RATCHET[role];
+    const other = own === 'dndTransportOwners' ? 'dndDropZoneOwners' : 'dndTransportOwners';
+
+    assert.equal(
+      measured.ratchets[own],
+      adopted ? 0 : 1,
+      `${family} ${adopted ? 'moved its' : 'still owns its'} ${role} implementation`,
+    );
+    assert.equal(measured.ratchets[other], 0, `${family} is one role, never counted twice`);
+    assert.equal(measured.blocking.dndKernelDeclared, adopted, `${family} kernel declared`);
+    assert.equal(measured.blocking.dndKernelWired, adopted, `${family} kernel effectively attached`);
+
+    if (family === 'upload') {
+      assert.equal(family in baseline, false, 'upload is a DnD owner the family-cut roster does not pin, so the gate never judges it');
+      continue;
+    }
+    assert.equal(baseline[family][own], measured.ratchets[own], `${family}: the pin follows the tree -- an adoption that is not written down is not adopted`);
+    assert.equal(baseline[family][other], 0, `${family}: the unused counter stays pinned at 0`);
   }
-  const fileManager = measureFamily(
-    resolveFamily('file-manager', ROOT, readBaseline().families['file-manager']),
-    { producers: PRODUCERS },
-  );
-  assert.equal(fileManager.ratchets.dndDropZoneOwners, 1);
-  assert.equal(fileManager.ratchets.dndTransportOwners, 0, 'a drop zone is not counted twice');
 });
