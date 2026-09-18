@@ -315,3 +315,120 @@ channel correspondence both directions, 5 skins (skeleton retirement, pseudo
 twins), new + modified tests. Verdict unchanged: clean except (a) cardGround
 chain (cockpit + workbench), (b) mobile-header env channel. Gates at
 integration: focal ten green, tsc on the candidate, DT window, census re-pin.
+
+## 2026-09-18 (fourteenth sitting) — writer-seat succession executed; two Kimi-writer lots audited and landed
+
+Owner decision 2026-09-18: the claude-admin weekly quota exhausted (reset
+Sep 20 1pm NY) is superseded — the writer seat moves to the Kimi CLI under
+model `kimi-code/kimi-for-coding` (the requested "k2.7" alias does not exist
+in this installation; the configured cheaper-than-k3 coding model was used,
+pinned per dispatch via `kimi -m`). The DT seat, audit discipline and
+integration serialization are unchanged. Dispatch mechanics recorded:
+`kimi -p` rejects `-y`/`--auto`; non-interactive mode already runs under the
+auto permission policy (official docs), so the dispatch is plain
+`kimi -m <alias> -p <prompt> --output-format stream-json`.
+
+**Lot 1 — FAM-10 cohorts D/E completion** (brief-fam10-de-completion.md,
+receipt-fam10-de-kimi.jsonl): the writer resolved both pre-audit repairs.
+(a) cardGround: shape (b) — the ground is the shared card-header ground
+verbatim; derivers produce `var(--ds-card-header-bg)` with the dead seeded
+gradient removed (it never painted: the foundation ships
+`--ds-card-header-bg: transparent` on :root in all three verticals), the
+palette arm claims `tileInk` only, and the deferral is MEASURED by a new
+test (produced ground resolves non-empty, background-image stays none under
+a seeded palette). Workbench twin: same disposition. (b) mobile-header
+safe-area: the channel is deliberately unproduced (cockpit sticky-top
+disposition — `env` is not door-admitted; NOT a request to admit env, that
+stays a kernel-governance question), the skin keeps its
+`var(--ds-safe-area-top, env(...))` fallback, pinned by a deriver unit test
+plus the flipped elevation assertion. DT audit: focal suite independently
+reproduced 12/12 files / 112 passed; `tsc --noEmit` and `typecheck:tests`
+(0 errors at baseline 0) clean on the final candidate; staged set exact
+(33 files, writer-2 in-flight files excluded). Landed `e5c3a7334`; WO-FAM-10
+progress receipt `ec3b0fc4e`.
+
+**Lot 2 — wave-residue repairs** (brief-wave-residue-repairs.md,
+receipt-wave-residue-kimi.jsonl), four tasks, four commits:
+- `37efe1b49` CollectionWorkspace focused-row: the engine exports
+  `isDataTableBodyRowElement` (single tr-or-BodyRow membership), the
+  decorator consumes it and throws loudly on a no-match.
+- `63e2d25e0` BackTop: eager initial visibility for the default window
+  target in the useState initializer; ref-backed targets keep two-pass;
+  rustic untouched.
+- `35fb962ef` presence + Display1/Display2: premise-retired checkpoints
+  rewritten against the shipped contracts (skin [data-size] rule;
+  FAM-06 loading anatomies; rustic verbatim).
+- `f8298d417` population instrument: `stateNamespacedSelector`
+  `/\[data-[a-z0-9-]+-state=/` with a non-empty-namespace guard; drill
+  added (namespaced declares states, shared keeps its needle, absence reads
+  as none).
+DT audit: 33 vitest files / 387 tests independently reproduced green;
+population node --test 34 pass / 3 fail where the 3 reds are exactly the
+stale floor pin (tree moved via the header lot + instrument change) and the
+two N/A tests that read that floor — the new drill itself passes; tsc +
+typecheck:tests clean on the final tree.
+
+**Live instrument reading after both lots** (pre-re-pin): shape 217 (1 N/A),
+typography 181, rhythm 221, depth 194, states 154, motion 204 — matches the
+attribution recorded in the eighth sitting to the unit. The fleet floor
+re-pin and the deferred theme-contract-freeze census re-pin run in the DT
+window next. Writer-flagged residue: float-button carries the same two-pass
+visibility pattern as BackTop (engines/modern:490) — routed to a future
+dispatch.
+
+## 2026-09-18 (fifteenth sitting) — integration window, fleet floor re-pin, and the gates inventory behind the front
+
+**Micro-lot (Kimi writer, 2 min):** the DT window's build refused the wave at
+`hooks:check` — UNADJUDICATED_GROWTH, `--ds-mobile-header-safe-area` read by the
+skin with no producer (the deriver's deliberate non-production made the read
+unowned; cockpit's grandfathered sticky-top read is the contrast). Repair:
+the skin reads the canonical `var(--ds-safe-area-top, env(...))` directly in
+all three declarations (pixel-identical — the outer var always fell through);
+the elevation test pins both directions. Landed `b20bfb8b5` (mobile suite
+31/31 reproduced by the DT).
+
+**DT window, second run — GREEN end to end:** hooks:generate (first — the D/E
+hook surface changed), build (incl. hooks:check), cascade extract --write,
+ds:derive, build:vertical-css, decisions-lit. Regenerated artifacts and
+contracts committed as `c9b8a835d`.
+
+**Fleet floor re-pin `2249c3067`** (population suite 37/37): measured with one
+instrument over this tree and over an isolated archive of the previous pin's
+sourceCommit `7b35276d5`. Corpus 269->276: FAM-07 (89976e4c7) adds seven modern
+layout skins (aspect-ratio, box, container, flex, grid, space, stack); the
+WO-FAM-05 close (1ddfd6198) physically removes steps. Found and recorded: the
+2026-09-15 pin was written ONE FAMILY SHORT of its own tree — it narrated steps
+as already removed, but the folder left at 1ddfd6198, AFTER the pin's
+sourceCommit (the pin's own provenance says "270 skin families at each step").
+States re-pinned 155->154 with the two named, reviewed subtractions
+(filter-panel's delegation to the composed Button 8fb516981; the steps exit) —
+no shrink-to-pass; the namespaced-state instrument repair restores
+active-filters-bar and moves no historical number (e8c78c576 postdates the old
+pin). Catalog revision move d50537e438bdbcfa -> 49bc4572fa60d2e5 is 63aec5c5e's
+membership-neutral row-6 keypath edit (identical row ids, measured). The
+radio/shape exclusion record carries forward under `previousWave`; two stale
+test literals (written for the E5 pin 216/217, stale since 2026-09-15) now
+match the live derivation and the true previous pin (217/215).
+
+**gates:ci --continue (full matrix, diagnostic):** the fail-fast front is the
+KNOWN D3 leftover (inventory-correspondence: stepper/compound/steps and
+toggle/compound/switch dual ownership — routed with the retirement question,
+unchanged by this wave). Behind it, the accumulated wave-staleness surface the
+front had hidden: fanout-facts / customization-surface / manifest-generation /
+foundation-defaults / controls-doc freshness (generator re-runs owed), the
+customization manifest's 11 stale family manifests referencing retired sources
+(callout, message, notification, toast, auto-complete, switch, collapse, modal,
+steps, tooltip, button — the FAM-01/02/03/14 renames/merges never propagated;
+361 resolution FAILs) plus `notifier` missing its family-inventory row — SAME
+root class as the D3 overlap (retirement never completed in the governance
+artifacts). Ratchet movements needing named attribution before any re-pin:
+state-material-arm 19 vs pinned 15 (4 new, to attribute per family),
+4 ungoverned filter-pill channels without disposition, engine-token-audit,
+cascade-wiring-ratchet, read-without-producer-ratchet. Each gets measured
+before any pin moves — no blanket widening.
+
+**Dispatched (Kimi writers, parallel, disjoint write sets):** FAM-10 sub-lot D2
+(collection/dashboard/detail/header-surface — collection-header carries 104 of
+the cut's inline paints), sub-lot F (record + 4 form surfaces, the ledger
+doctrine), sub-lot G (surface-lifecycle). Deriver registration lines in
+derivation/index.ts stay DT-owned at integration, one commit per sub-lot.
