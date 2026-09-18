@@ -202,7 +202,7 @@ export const ScatterChart = memo(function ScatterChart({
           <div key={point.label ?? index} data-part="legend-item">
             <span
               data-part="legend-swatch"
-              data-series-index={index % 10}
+              data-series-index={paint.categorical?.slotIndexFor(index)}
               style={{ backgroundColor: palette[index % palette.length] ?? 'var(--ds-color-primary)' }}
             />
             <span data-part="legend-label">{point.label}</span>

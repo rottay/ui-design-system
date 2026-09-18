@@ -121,7 +121,7 @@ export const RadarChart = memo(function RadarChart({
           <span
             data-part="legend-swatch"
             data-color-source={currentSeries.colorSource}
-            data-series-index={seriesIndex}
+            data-series-index={paint.categorical?.slotIndexFor(seriesIndex)}
             style={{ backgroundColor: currentSeries.color }}
           />
           <span data-part="legend-label">{currentSeries.name}</span>

@@ -69,6 +69,28 @@ describe("SvgPieRenderer presentation", () => {
     );
   });
 
+  it("stamps the paint slot alone, cycling at ten and carrying no cadence", () => {
+    const html = renderToString(
+      <SvgPieRenderer
+        ariaLabel="Revenue share"
+        responsive={false}
+        data={Array.from({ length: 12 }, (_, sliceIndex) => ({
+          id: `slice-${sliceIndex}`,
+          label: `Slice ${sliceIndex}`,
+          value: 10,
+        }))}
+      />
+    );
+
+    const marks = html.match(/data-part="pie-slice-mark"[^>]*/gu) ?? [];
+    expect(marks).toHaveLength(12);
+    expect(
+      marks.map((mark) => /data-series-index="(\d+)"/u.exec(mark)?.[1])
+    ).toEqual(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1"]);
+    // The family declares no cadence, so the second quantity is never invented.
+    expect(html).not.toContain("data-series-cadence");
+  });
+
   it("renders a truthful empty surface for zero totals", () => {
     render(
       <SvgPieRenderer

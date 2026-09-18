@@ -160,7 +160,7 @@ export const PieChart = memo(function PieChart({
     <div data-part="legend">
       {data.map((d, i) => (
         <div key={`${d.label}-${i}`} data-part="legend-item">
-          <span data-part="legend-swatch" data-series-index={i % 10} style={{ backgroundColor: d.color ?? palette[i % palette.length] }} />
+          <span data-part="legend-swatch" data-series-index={paint.categorical?.slotIndexFor(i)} style={{ backgroundColor: d.color ?? palette[i % palette.length] }} />
           <span data-part="legend-label">{d.label}</span>
         </div>
       ))}

@@ -249,7 +249,8 @@ export function SvgRadarRenderer({
               key={currentSeries.id}
               data-part="series"
               data-series={currentSeries.name}
-              data-series-index={seriesIndex}
+              data-series-index={paint.categorical?.slotIndexFor(seriesIndex)}
+              data-series-cadence={paint.categorical?.cadenceIndexFor(seriesIndex) ?? undefined}
               data-color-source={currentSeries.colorSource}
             >
               {shouldAnimate ? (

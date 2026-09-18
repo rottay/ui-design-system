@@ -307,7 +307,7 @@ export function SvgScatterRenderer({
               data-part="scatter-point-mark"
               data-datum-id={point.id}
               data-series-id={point.series ?? 'default'}
-              data-series-index={point.seriesIndex}
+              data-series-index={paint.categorical?.slotIndexFor(point.seriesIndex)}
               data-mark-index={pointIndex % 5}
               data-chart-datum-key={datumProps['data-chart-datum-key']}
               data-active={datumProps['data-active']}

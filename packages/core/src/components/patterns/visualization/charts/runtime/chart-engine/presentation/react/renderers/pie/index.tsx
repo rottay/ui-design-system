@@ -205,7 +205,7 @@ export function SvgPieRenderer({
               data-part="pie-slice-mark"
               data-datum-id={slice.id}
               data-mark-index={sliceIndex % 5}
-              data-series-index={sliceIndex % 10}
+              data-series-index={paint.categorical?.slotIndexFor(sliceIndex)}
               data-chart-datum-key={datumProps["data-chart-datum-key"]}
               data-active={datumProps["data-active"]}
               data-focused={datumProps["data-focused"]}

@@ -118,6 +118,31 @@ describe('SvgScatterRenderer', () => {
       .toHaveAttribute('data-empty', 'true');
   });
 
+  it('stamps the paint slot alone, cycling at ten and carrying no cadence', () => {
+    const html = renderToString(
+      <SvgScatterRenderer
+        ariaLabel="Opportunity landscape"
+        responsive={false}
+        data={Array.from({ length: 12 }, (_, pointIndex) => ({
+          id: `point-${pointIndex}`,
+          label: `Point ${pointIndex}`,
+          x: pointIndex,
+          y: pointIndex,
+          series: `Series ${pointIndex}`,
+        }))}
+      />,
+    );
+
+    const marks = html.match(/data-part="scatter-point-mark"[^>]*/gu) ?? [];
+    expect(marks).toHaveLength(12);
+    expect(marks.map((mark) => /data-series-index="(\d+)"/u.exec(mark)?.[1])).toEqual(
+      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1'],
+    );
+    // The family declares no cadence, so the second quantity is never invented;
+    // the forced-colours hollow/solid decode keeps riding the slot's parity.
+    expect(html).not.toContain('data-series-cadence');
+  });
+
   it('owns palette, forced-colour and reduced-motion presentation in the skin', () => {
     expect(CHART_FOUNDATION_CSS).toContain('.ds-chart-renderer-scatter.ds-chart-renderer-scatter');
     expect(CHART_FOUNDATION_CSS).toContain("[data-part='scatter-point-mark'][data-series-index='9']");

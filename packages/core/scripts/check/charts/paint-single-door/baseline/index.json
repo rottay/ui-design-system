@@ -2,30 +2,6 @@
   "schemaVersion": 1,
   "policy": "decrease-only",
   "findings": {
-    "hand-stamped-series-index:components/patterns/visualization/charts/families/pie-chart/index.tsx": {
-      "count": 1,
-      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
-    },
-    "hand-stamped-series-index:components/patterns/visualization/charts/families/radar-chart/index.tsx": {
-      "count": 1,
-      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
-    },
-    "hand-stamped-series-index:components/patterns/visualization/charts/families/scatter/index.tsx": {
-      "count": 1,
-      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
-    },
-    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/pie/index.tsx": {
-      "count": 1,
-      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lots 4a-4c)."
-    },
-    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/radar/index.tsx": {
-      "count": 1,
-      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lots 4a-4c)."
-    },
-    "hand-stamped-series-index:components/patterns/visualization/charts/runtime/chart-engine/presentation/react/renderers/scatter/index.tsx": {
-      "count": 1,
-      "reason": "Pre-migration: stamps data-series-index by hand; drained when this family adopts the resolver (lot 4b)."
-    },
     "hand-written-paint-modulus:components/patterns/visualization/charts/families/area-chart/index.tsx": {
       "count": 1,
       "reason": "Pre-migration: computes its own paint slot; drained when this family adopts the resolver (lot 4a)."
