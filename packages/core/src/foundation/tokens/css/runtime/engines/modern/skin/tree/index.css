@@ -214,7 +214,8 @@
    without setting the engine's focus state, so the visible indicator is a
    Rottay :focus-visible ring owned here (the state ring only exists once
    the engine's focusedKey is set). */
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible {
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible,
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-offset));
 }
@@ -306,6 +307,42 @@
   flex-shrink: 0;
   color: var(--ds-tree-icon-color);
 }
+/* ---- drag handle: the switcher's box on the row's trailing edge; what it
+        MEANS arrives as `data-move-mode` and only recolours it. ---- */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'] {
+  width: var(--ds-tree-switcher-size);
+  height: var(--ds-tree-switcher-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-inline-start: 4px;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ds-tree-icon-color, var(--ds-color-text-primary));
+  border-radius: 50%;
+  border: none;
+}
+
+/* The node being moved: the same emphasis the selected row carries, so the
+   origin of an open move reads as held rather than merely hovered. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'][data-move-mode='origin'] {
+  background: var(--ds-tree-node-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
+  color: var(--ds-tree-node-color-selected, var(--ds-color-primary));
+}
+
+/* A row that can receive the move reads in the drop indicator's own colour. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'][data-move-mode='destination'] {
+  color: var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
+}
+
+/* A refused destination stays operable -- it announces why -- so it is dimmed
+   rather than disabled. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'][data-move-mode='refused'] {
+  opacity: var(--ds-tree-disabled-opacity, 0.5);
+}
+
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight'] {
   padding-inline: 2px;
   border-radius: 2px;
@@ -336,6 +373,13 @@
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] {
     position: relative;
+  }
+
+  /* The drag handle is a real tap target and takes the physical floor
+     outright -- there is no glyph size to preserve, only a hit area. */
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'] {
+    min-inline-size: var(--ds-tree-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-tree-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']::after {
@@ -376,6 +420,17 @@
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside'] {
     box-shadow: inset 0 0 0 2px Highlight;
+  }
+
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'][data-move-mode='origin'] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle'][data-move-mode='refused'] {
+    color: GrayText;
+    opacity: 1;
   }
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'] {

@@ -29,6 +29,18 @@
  * name from the catalog (`tree.label`), and the per-level indent scales with
  * the governed density authority.
  *
+ * KEYBOARD AND TOUCH MOVE (a11y, DECLARED ADDITION): a draggable row carries a
+ * real Move control (`data-part="drag-handle"`) that opens move mode. The up and
+ * down arrows choose a destination among the visible rows, the left and right
+ * arrows step the before/inside/after position (mirrored by the shared reading
+ * direction), Enter or Space drops through the kernel and Escape cancels; the
+ * node itself and its own subtree are never offered, and the control that names
+ * one refuses it aloud. Every step is announced through a visually-hidden pair
+ * of `aria-live="polite"` regions the tree alternates, so a repeated identical
+ * outcome still changes a region's text. The control shares the tree's roving
+ * tab stop, so the WAI-ARIA TreeView single-tab-stop contract is unchanged, and
+ * a pointer drag still announces nothing.
+ *
  * The component is split into a recursive `TreeNodeInternal` (one per visible node)
  * and a root `ModernTree` that manages shared state and event handlers.
  *
@@ -51,11 +63,14 @@ import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { TreeProps, TreeDataNode } from '../../contracts';
 import { TREE_DEFAULTS } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
+import { ActionReorderIcon } from '@/graphics/icons/semantic/generated/roles/action-reorder';
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
+import { VisuallyHidden } from '../../../../foundation/visually-hidden';
 import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
 import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
-import { resolveEdgeZone, useDragSession } from '../../../../runtime/collection/sortable';
+import { resolveEdgeZone, resolveMoveIntent, useDragSession } from '../../../../runtime/collection/sortable';
 import type { SortableDropZone, UseDragSessionResult } from '../../../../runtime/collection/sortable';
 import {
   type TreeEngineKey,
@@ -128,6 +143,24 @@ type TreeDragSession = UseDragSessionResult<TreeDragPayload, TreeDragPayload, Tr
 const DROP_POSITION: Record<SortableDropZone, number> = { before: -1, inside: 0, after: 1 };
 
 // ---------------------------------------------------------------------------
+// Keyboard/touch move affordance
+// ---------------------------------------------------------------------------
+
+// The pointer's 3-zone model, ordered as the row reads top to bottom; the
+// cross axis steps through it.
+const MOVE_ZONES: readonly SortableDropZone[] = ['before', 'inside', 'after'];
+
+/** What the row's Move control means right now. */
+type TreeMoveMode = 'idle' | 'origin' | 'destination' | 'refused';
+
+/** Everything a row needs to render its Move control; the root owns every decision. */
+interface TreeMoveAffordance {
+  mode: (key: TreeEngineKey) => TreeMoveMode;
+  label: (key: TreeEngineKey, title: string) => string;
+  activate: (key: TreeEngineKey) => void;
+}
+
+// ---------------------------------------------------------------------------
 // Drop indicator line
 // ---------------------------------------------------------------------------
 
@@ -188,6 +221,8 @@ interface TreeNodeInternalProps extends TreeDataNode {
   searchValue?: string;
   findNode: (key: TreeEngineKey) => TreeDataNode | undefined;
   drag: TreeDragSession;
+  /** The row's Move control, or null when the tree is not draggable. */
+  move: TreeMoveAffordance | null;
   nodeRef: (key: TreeEngineKey, el: HTMLDivElement | null) => void;
   isLast: boolean;
   parentIsLast: boolean[];
@@ -234,6 +269,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   searchValue,
   findNode,
   drag,
+  move,
   nodeRef,
   isLast,
   parentIsLast,
@@ -362,6 +398,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           drained. The selected row never carries a left accent rail (product
           law; the skin's framed-surface treatment replaced it). */}
       <div
+        ref={drag.registerItem(nodeKey) as React.Ref<HTMLDivElement>}
         style={{ '--ds-tree-row-indent': paddingInlineStart } as React.CSSProperties}
         onClick={handleClick}
         role="treeitem"
@@ -451,6 +488,25 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         >
           {displayTitle}
         </span>
+
+        {/* Shares the row's roving tab stop rather than adding one per row, and
+            stays enabled on a refusal: a disabled control announces nothing. */}
+        {isDraggable && move && (
+          <button
+            type="button"
+            data-part="drag-handle"
+            data-move-mode={move.mode(nodeKey)}
+            aria-label={move.label(nodeKey, nodeTitle)}
+            aria-pressed={move.mode(nodeKey) === 'origin' ? true : undefined}
+            tabIndex={nodeKey === tabbableKey ? 0 : -1}
+            onClick={(e) => {
+              e.stopPropagation();
+              move.activate(nodeKey);
+            }}
+          >
+            <ActionReorderIcon decorative size={12} />
+          </button>
+        )}
       </div>
 
       {/* Children */}
@@ -494,6 +550,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 searchValue={searchValue}
                 findNode={findNode}
                 drag={drag}
+                move={move}
                 nodeRef={nodeRef}
                 isLast={childIsLast}
                 parentIsLast={[...parentIsLast, isLast]}
@@ -566,6 +623,17 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
   const rootLabelTranslated = rootI18n?.t('tree.label');
   const rootLabel = rootLabelTranslated && !rootLabelTranslated.endsWith('tree.label') ? rootLabelTranslated : 'Tree';
+
+  // The floor carries the same placeholders as catalog copy, so a standalone
+  // render interpolates its own English instead of echoing `{title}`.
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    rootI18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
+
+  /* A polite region is only spoken when its own text CHANGES, so the two
+     regions alternate: every message is an addition to whichever was empty. */
+  const [announcement, setAnnouncement] = useState<{ slot: 0 | 1; text: string }>({ slot: 0, text: '' });
+  const announce = (text: string): void =>
+    setAnnouncement((previous) => ({ slot: previous.slot === 0 ? 1 : 0, text }));
 
   // Refs
   const treeContainerRef = useRef<HTMLDivElement>(null);
@@ -765,6 +833,55 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   // TreeView contract below, so the session binds no key of its own.
   // -----------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------
+  // Move mode -- the keyboard and touch half of the same transport. A node
+  // cannot land on itself or inside its own subtree, so the walk skips those
+  // keys and the control that names one refuses it instead of committing.
+  // -----------------------------------------------------------------------
+
+  const titleOfKey = useCallback(
+    (key: TreeEngineKey): string => {
+      const node = findNode(key);
+      return typeof node?.title === 'string' ? node.title : String(key);
+    },
+    [findNode]
+  );
+
+  const ineligibleKeys = useCallback(
+    (payloadKey: TreeEngineKey): Set<TreeEngineKey> => {
+      const node = findNode(payloadKey);
+      return new Set<TreeEngineKey>([payloadKey, ...(node ? getDescendantKeys(node) : [])]);
+    },
+    [findNode]
+  );
+
+  // The nearest destination that is a real move: one step down if anything is
+  // below, otherwise one step up. Null means the tree offers nowhere to land.
+  const seedDestination = useCallback(
+    (payloadKey: TreeEngineKey): TreeDragDestination | null => {
+      const blocked = ineligibleKeys(payloadKey);
+      const from = visibleKeys.indexOf(payloadKey);
+      if (from === -1) return null;
+      for (let at = from + 1; at < visibleKeys.length; at += 1) {
+        const key = arrayValueAt(visibleKeys, at);
+        if (key !== undefined && !blocked.has(key)) return { key, position: 'after' };
+      }
+      for (let at = from - 1; at >= 0; at -= 1) {
+        const key = arrayValueAt(visibleKeys, at);
+        if (key !== undefined && !blocked.has(key)) return { key, position: 'before' };
+      }
+      return null;
+    },
+    [ineligibleKeys, visibleKeys]
+  );
+
+  const positionWord = (position: SortableDropZone, title: string): string =>
+    position === 'before'
+      ? tOr('tree.move_before', 'before {title}', { title })
+      : position === 'inside'
+        ? tOr('tree.move_inside', 'into {title}', { title })
+        : tOr('tree.move_after', 'after {title}', { title });
+
   const drag = useDragSession<TreeDragPayload, TreeDragPayload, TreeDragDestination>({
     disabled: !draggable,
     resolveTarget: ({ phase, event, payload, target, current }) => {
@@ -791,8 +908,134 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       const node = findNode(payload.key);
       if (node) onDragStart?.({ node });
     },
-    keyboard: { mode: 'delegated' },
+    /* Delegated: the arrows, Space and Enter are the WAI-ARIA TreeView
+       contract, so the kernel binds none of them and the family drives. */
+    keyboard: {
+      mode: 'delegated',
+      resolveKeyboardTarget: ({ payload, intent, candidate }) => {
+        if (intent === 'prev-container' || intent === 'next-container') {
+          if (!candidate) return { kind: 'blocked' };
+          const at = MOVE_ZONES.indexOf(candidate.position) + (intent === 'next-container' ? 1 : -1);
+          if (at < 0) return { kind: 'blocked' };
+          const zone = arrayValueAt(MOVE_ZONES, at);
+          if (zone === undefined) return { kind: 'blocked' };
+          return { kind: 'target', target: { key: candidate.key, position: zone } };
+        }
+        // The CANDIDATE advances, not the payload: nothing has committed during
+        // a move, so the payload's own index is stale after the first arrow.
+        const blocked = ineligibleKeys(payload.key);
+        const from = visibleKeys.indexOf(candidate ? candidate.key : payload.key);
+        if (from === -1) return { kind: 'blocked' };
+        const step = intent === 'next-item' ? 1 : -1;
+        for (let at = from + step; at >= 0 && at < visibleKeys.length; at += step) {
+          const key = arrayValueAt(visibleKeys, at);
+          if (key === undefined || blocked.has(key)) continue;
+          return { kind: 'target', target: { key, position: candidate?.position ?? 'after' } };
+        }
+        return { kind: 'blocked' };
+      },
+    },
+    /* The kernel says WHEN, the family says WHAT -- and a pointer drag says
+       nothing at all. */
+    onAnnounce: (event) => {
+      if (event.origin === 'pointer') return;
+      const name = titleOfKey(event.payload.key);
+      if (event.kind === 'grabbed') {
+        announce(
+          tOr(
+            'tree.move_grabbed',
+            'Moving {name}. Use the up and down arrows to choose a destination, the left and right arrows to choose the position, Enter to drop, Escape to cancel.',
+            { name }
+          )
+        );
+        return;
+      }
+      if (event.kind === 'moved') {
+        announce(positionWord(event.target.position, titleOfKey(event.target.key)));
+        return;
+      }
+      if (event.kind === 'dropped') {
+        announce(
+          tOr('tree.move_dropped', '{name} moved {position}', {
+            name,
+            position: positionWord(event.target.position, titleOfKey(event.target.key)),
+          })
+        );
+        return;
+      }
+      if (event.kind === 'cancelled') {
+        announce(tOr('tree.move_cancelled', 'Move cancelled. {name} stays where it was', { name }));
+        return;
+      }
+      announce(
+        event.reason === 'edge'
+          ? tOr('tree.move_edge', 'Cannot move {name} any further in that direction', { name })
+          : tOr('tree.move_no_destination', 'No destination chosen. {name} stays where it was', { name })
+      );
+    },
   });
+
+  const moveSession = drag.session?.origin === 'keyboard' ? drag.session : null;
+
+  // Escape and the Move control's own cancel both land the user back on the row
+  // they were moving -- the kernel restores focus for a COMMIT only.
+  const cancelMove = (): void => {
+    const open = moveSession;
+    drag.cancel();
+    if (!open) return;
+    setFocusedKey(open.payload.key);
+    nodeRefs.current.get(open.payload.key)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
+  };
+
+  const moveAffordance: TreeMoveAffordance | null = draggable
+    ? {
+        mode: (key) => {
+          if (!moveSession) return 'idle';
+          if (moveSession.payload.key === key) return 'origin';
+          return ineligibleKeys(moveSession.payload.key).has(key) ? 'refused' : 'destination';
+        },
+        label: (key, title) => {
+          const named = title || String(key);
+          if (!moveSession) return tOr('tree.move', 'Move {title}', { title: named });
+          const name = titleOfKey(moveSession.payload.key);
+          if (moveSession.payload.key === key) {
+            return tOr('tree.move_cancel', 'Cancel moving {name}', { name });
+          }
+          if (ineligibleKeys(moveSession.payload.key).has(key)) {
+            return tOr('tree.move_refuse', 'Cannot move {name} into {title}', { name, title: named });
+          }
+          return tOr('tree.move_drop_here', 'Move {name} {position}', {
+            name,
+            position: positionWord(moveSession.target?.position ?? 'after', named),
+          });
+        },
+        activate: (key) => {
+          if (!moveSession) {
+            const seed = seedDestination(key);
+            if (!seed) {
+              announce(tOr('tree.move_nowhere', 'There is nowhere to move {name}', { name: titleOfKey(key) }));
+              return;
+            }
+            drag.start({ key }, { target: seed });
+            return;
+          }
+          if (moveSession.payload.key === key) {
+            cancelMove();
+            return;
+          }
+          if (ineligibleKeys(moveSession.payload.key).has(key)) {
+            announce(
+              tOr('tree.move_refused', 'Cannot move {name} into {title} -- it is inside {name}', {
+                name: titleOfKey(moveSession.payload.key),
+                title: titleOfKey(key),
+              })
+            );
+            return;
+          }
+          drag.commit({ key, position: moveSession.target?.position ?? 'after' });
+        },
+      }
+    : null;
 
   // -----------------------------------------------------------------------
   // Keyboard navigation -- follows WAI-ARIA TreeView pattern:
@@ -805,6 +1048,32 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      // Move mode is modal over the arrows, Space and Enter; every other key
+      // falls through untouched, so typeahead and Tab keep working.
+      if (moveSession) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          cancelMove();
+          return;
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          drag.commit();
+          return;
+        }
+        // The reading-direction law is the navigation authority's: on the cross
+        // axis ArrowLeft steps the position forward in RTL, backward in LTR.
+        const intent = resolveMoveIntent(e.key, {
+          orientation: 'vertical',
+          crossAxis: 'horizontal',
+          rtl: direction === 'rtl',
+        });
+        if (intent === null) return;
+        e.preventDefault();
+        drag.move(intent);
+        return;
+      }
+
       // Roving-stop bootstrap: Tab lands DOM focus on the tabbable node
       // WITHOUT setting focusedKey. Anchor on that node instead of swallowing
       // the first keystroke -- previously the auto-init path consumed the
@@ -969,6 +1238,10 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       handleToggle,
       handleCheck,
       handleSelect,
+      moveSession,
+      cancelMove,
+      drag,
+      direction,
     ]
   );
 
@@ -1027,6 +1300,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
             searchValue={searchValue}
             findNode={findNode}
             drag={drag}
+            move={moveAffordance}
             nodeRef={registerNodeRef}
             isLast={nodeIsLast}
             parentIsLast={[]}
@@ -1035,6 +1309,19 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
           />
         );
       })}
+
+      {/* Both regions stay mounted and empty, so one exists before the first
+          message and one is free for the next. No part: the primitive owns the clip. */}
+      {draggable && (
+        <>
+          <VisuallyHidden role="status" aria-live="polite">
+            {announcement.slot === 0 ? announcement.text : ''}
+          </VisuallyHidden>
+          <VisuallyHidden role="status" aria-live="polite">
+            {announcement.slot === 1 ? announcement.text : ''}
+          </VisuallyHidden>
+        </>
+      )}
     </div>
   );
 }
