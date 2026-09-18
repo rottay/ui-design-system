@@ -19,10 +19,9 @@
  * ancestor, and rules ON the root buy it from `data-sticky`, which the
  * engine always stamps ('true'|'false').
  *
- * Interaction paint that the removed React hover/focus state used to own now
- * lives here: hovers ride the `@media (hover: hover)` guard (house hover
- * law) with unguarded `:active` twins; keyboard focus keeps its unguarded
- * `:focus` rules.
+ * Interaction paint rides the `@media (hover: hover)` guard for hover (house
+ * hover law) with unguarded press twins beside it, and the governed ring on
+ * `:focus-visible`.
  *
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-cockpit-header-actions-backdrop` channel (default `none`) — a
@@ -30,14 +29,21 @@
  * contract (precedent: Sheet's explicit `--ds-glass-*` channels).
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
- * 100% of layout and paint — typography, sticky positioning, compact padding,
- * skeleton geometry and the pulse animation included. The skeleton blocks
- * share one `data-part` but differ in geometry, so each block carries a
- * `data-size` attribute (skin-owned geometry) and, where it deviates from the
- * default, its radius on the sanctioned inline
- * `--ds-cockpit-header-skeleton-radius` custom-property data channel
- * (uncounted). The remaining inline style in the engine is the caller's
- * own `style` prop on the root.
+ * 100% of layout and paint — typography, sticky positioning and compact padding
+ * included. The only inline style the engine writes is the caller's own `style`
+ * prop on the root.
+ *
+ * STATE: every state pseudo is paired with the `data-state` token the shared
+ * kernel stamps. The pseudo is the pre-hydration floor and the token is the
+ * decision; they name the same rule so the two can never disagree.
+ *
+ * THE BACK BUTTON IS NOT PAINTED FROM HERE. `[data-part='back']` states the
+ * Button's own `--ds-button-ghost-*` channels and the Button paints itself from
+ * its own interaction state, so this file never selects into another component's
+ * internals (the `guided-draft-form` / `filter-panel` precedent).
+ *
+ * LOADING: drawn by the shared `AnatomySkeleton` from this header's own stamped
+ * anatomy. This file owns no skeleton geometry, no skeleton part and no pulse.
  */
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
@@ -56,18 +62,7 @@
   --ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   --ds-cockpit-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   overflow: hidden;
-  background: var(
-    --ds-cockpit-header-bg,
-    var(
-      --ds-card-header-bg,
-      linear-gradient(
-        112deg,
-        color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
-        var(--ds-surface-card) 56%,
-        var(--ds-surface-panel)
-      )
-    )
-  );
+  background: var(--ds-cockpit-header-bg, var(--ds-card-header-bg));
   background-position: 0% 50%;
   background-size: 180% 180%;
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
@@ -98,7 +93,8 @@
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active,
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='pressed'] {
   background-position: 100% 50%;
   border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border-subtle)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
@@ -126,7 +122,8 @@
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   scrollbar-width: none;
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:active {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:active,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='pressed'] {
   color: var(--ds-color-text-secondary);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
@@ -158,7 +155,8 @@
     0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'] {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'],
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='pressed'] [data-part='header-icon'] {
   transform: translateY(-1px) scale(1.025);
 }
 
@@ -173,18 +171,17 @@
   text-transform: uppercase;
 }
 
-/* ---- back button: ghost with a visible border only when highlighted. Rest
-        `border: 1px solid transparent` is NOT a reset, so the rule reaches the
-        (0,4,0) border floor through the root ancestor. Highlight = hover
-        (guarded below) || focus || active. ---- */
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button {
-  color: var(--ds-color-text-secondary);
-}
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:focus,
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:active {
-  border-color: var(--ds-color-border);
-  background: var(--ds-color-neutral-50);
-  color: var(--ds-color-text-primary);
+/* ---- back button: the ghost Button paints ITSELF. This slot only states the
+        channels it reads, so the highlight follows the Button's own hover and
+        press decision and its keyboard ring stays the governed one. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] {
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: var(--ds-color-neutral-50);
+  --ds-button-ghost-border-hover: var(--ds-color-border);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+  --ds-button-ghost-bg-active: var(--ds-color-neutral-50);
+  --ds-button-ghost-border-active: var(--ds-color-border);
+  --ds-button-ghost-color-active: var(--ds-color-text-primary);
 }
 
 /* ---- status pill: shared radius + per-variant soft palette (bg -100, text
@@ -243,13 +240,6 @@
   backdrop-filter: var(--ds-cockpit-header-actions-backdrop, none);
 }
 
-/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
-        the inline custom property (default sm). ---- */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
-  border-radius: var(--ds-cockpit-header-skeleton-radius, var(--ds-radius-sm));
-  background: var(--ds-color-neutral-100);
-}
-
 /* ---- breadcrumb nav + crumb layout/typography (migrated from the engine,
         R2+R3). Colors stay below; these own the frame and the type. ---- */
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'] {
@@ -280,7 +270,8 @@
 
 /* The trail is a tab stop now (scrollable region), so it needs the governed
    ring — a focusable element with no indicator is worse than no tab stop. */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'][data-state~='focus-visible'] {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -298,7 +289,8 @@
 
 /* Keyboard users get the governed ring on crumb links (the UA default was
    the only indicator before); hover/active keep their color-only cue. */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='focus-visible'] {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -404,68 +396,6 @@
   white-space: nowrap;
 }
 
-/* ---- loading skeleton: cluster layout + per-block geometry (migrated from
-        the engine, R2+R3). `data-size` is the skin-owned geometry hook; the
-        pulse animation lives here now. ---- */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-stack'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-cockpit-header-item-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-row'] {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ds-cockpit-header-section-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-lead'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-cockpit-header-item-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-column'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-spacing-2, 8px);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-actions'] {
-  display: flex;
-  gap: var(--ds-cockpit-header-action-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='crumb'] {
-  width: 160px;
-  height: 12px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='icon'] {
-  width: 34px;
-  height: 34px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
-  width: 260px;
-  height: 24px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='subtitle'] {
-  width: 180px;
-  height: 14px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='action'] {
-  width: 80px;
-  height: 34px;
-}
-
 @container ds-cockpit-header (max-width: 640px) {
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='main-row'] {
     align-items: stretch;
@@ -519,24 +449,21 @@
         `:active` twin at its original cascade position (touch press
         feedback matches), and keyboard focus keeps its own rules. ---- */
 @media (hover: hover) {
-  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover,
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='hovered'] {
     background-position: 100% 50%;
     border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border-subtle)));
     box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
   }
 
-  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'],
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='hovered'] [data-part='header-icon'] {
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover,
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='hovered'] {
     color: var(--ds-color-text-secondary);
-  }
-
-  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:hover {
-    border-color: var(--ds-color-border);
-    background: var(--ds-color-neutral-50);
-    color: var(--ds-color-text-primary);
   }
 }
 
@@ -556,8 +483,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'],
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='header-icon'],
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='title'],
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='title'] {
     animation: none;
     transition: none;
   }
@@ -572,10 +498,5 @@
     display: inline-flex;
     align-items: center;
     min-block-size: var(--ds-touch-target-min, 44px);
-  }
-
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .ds-button {
-    min-block-size: var(--ds-touch-target-min, 44px);
-    min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }

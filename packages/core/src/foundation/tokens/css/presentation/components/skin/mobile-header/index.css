@@ -60,19 +60,34 @@
  * blur taxes every scroll frame (PT29/PT32/S06/S07 fix, Sheet glass precedent).
  *
  * STUCK: the runtime probes stickiness with a 1px sentinel + IntersectionObserver
- * and stamps `data-stuck`; the governed elevation (`--ds-elevation-2`, public
- * token surface frozen — no new family channel) fades in only while content is
+ * and stamps `data-stuck`; the governed elevation (now reachable as
+ * `--ds-mobile-header-stuck-shadow` over the same ramp) fades in only while content is
  * actually scrolled under the bar. The sentinel is OUT OF FLOW (absolute +
  * visibility:hidden below) so it never lands as a spurious item in the
  * consumer's grid/flex (R-5). The observer is rooted at the viewport because
  * the contract exposes no scroll root: inside a nested scroller the sticky
  * posture still sticks, but the probe fails closed (no shadow), never wrong.
  *
- * GEOMETRY (R-5): all paint geometry lives here — the 56px bar (kept literal
- * and density-neutral, same precedent as the 17px title), the safe-area
- * insets, the slot flex shares and the touch floors. The runtime stamps no
- * geometry of its own; only `position: sticky` travels inline because the
- * engine contract test pins `root.style.position`.
+ * GEOMETRY (R-5): all paint geometry lives here — the 56px bar row and the
+ * safe-area inset (both density-neutral by decision: a mobile bar that grows
+ * with the density dial stops being the platform-height bar its consumers
+ * position against), the slot flex shares and the touch floors. The runtime
+ * stamps NO geometry at all now: `position: sticky` moved into the sticky
+ * posture rule below, so the only inline style left on the root is the
+ * consumer's own `style` prop (WO-FAM-10 sub-lot D).
+ *
+ * CHANNELS: every value above rides a `--ds-mobile-header-*` channel produced by
+ * `derivation/chrome/mobile-header`, at exactly the fallback stated beside it.
+ * That includes the two names this family used to keep private — the bar row and
+ * the notch inset — because a leading underscore puts a channel outside the
+ * producer census and outside the tenant's reach at once, and those two carry the
+ * whole box model.
+ *
+ * STATE (F-37): hover, press and the focus ring are decided ONCE, by the shared
+ * interaction kernel, and read off `data-state`. The platform pseudo-classes stay
+ * beside each token arm as the fallback for a trigger the kernel has not reached
+ * (a consumer's own `leftAction` replaces the family's button entirely), never as
+ * a second authority.
  *
  * TITLE: a Box as="h1" (one per page) — its optical 17px/600 type lives here;
  * a composed Text would resolve its size inline, unreachable to any skin.
@@ -85,12 +100,6 @@
  */
 
 .rottay-mobile-header[data-part='root'] {
-  /* family-private geometry — the bar row and the notch inset are stated once
-     here, so the root box, the bar's own 100% and the safe-area padding
-     cannot disagree about which of the two the 56px describes. */
-  --_ds-mobile-header-bar-block-size: 56px;
-  --_ds-mobile-header-safe-area: var(--ds-safe-area-top, env(safe-area-inset-top, 0px));
-
   background: var(--ds-color-bg-primary);
   inline-size: 100%;
   /* 56px mobile BAR ROW: no governed rung adopted — kept literal and
@@ -99,12 +108,14 @@
      no inset the computed height is the retired 56px exactly. */
   box-sizing: border-box;
   block-size: calc(
-    var(--_ds-mobile-header-bar-block-size) + var(--_ds-mobile-header-safe-area)
+    var(--ds-mobile-header-bar-block-size, 56px) +
+      var(--ds-mobile-header-safe-area, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
   );
   min-block-size: calc(
-    var(--_ds-mobile-header-bar-block-size) + var(--_ds-mobile-header-safe-area)
+    var(--ds-mobile-header-bar-block-size, 56px) +
+      var(--ds-mobile-header-safe-area, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
   );
-  padding-block-start: var(--_ds-mobile-header-safe-area);
+  padding-block-start: var(--ds-mobile-header-safe-area, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)));
   container: ds-mobile-header / inline-size;
 }
 
@@ -112,27 +123,26 @@
    opt-in via the family channel (default none). The stuck shadow rides the
    governed elevation ramp and fades in through the motion token — it appears
    only once content actually scrolls under the bar (data-stuck). The sticky
-   offset and stacking live here; `position: sticky` itself stays inline
-   (engine contract test pin — see GEOMETRY above). */
+   offset, the stacking and `position` itself all live here. */
 .rottay-mobile-header[data-part='root'][data-sticky='true'] {
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
+  position: sticky;
+  background: var(--ds-mobile-header-sticky-bg, color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent));
   backdrop-filter: var(--ds-mobile-header-sticky-backdrop, none);
   inset-block-start: 0;
   z-index: var(--ds-mobile-header-sticky-z, 40);
   transition: box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
 }
 
-/* The stuck shadow rides the governed elevation ramp directly (no new family
-   channel: the public --ds-* surface is frozen). */
+/* The stuck shadow rides the governed elevation ramp through the family channel. */
 .rottay-mobile-header[data-part='root'][data-sticky='true'][data-stuck='true'] {
-  box-shadow: var(--ds-elevation-2);
+  box-shadow: var(--ds-mobile-header-stuck-shadow, var(--ds-elevation-2));
 }
 
 /* The colored hairline clears the P-48 floor at (0,4,0); the fourth unit is
    the always-present `data-testid` (see SPECIFICITY above — if the engine ever
    stops stamping it, this rule silently drops back under the floor). */
 .rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border-bottom: 1px solid var(--ds-mobile-header-hairline-color, var(--ds-color-border));
 }
 
 /* Out-of-flow stuck probe (R-5): absolute + visibility:hidden keep the
@@ -164,13 +174,13 @@
 .rottay-mobile-header__bar[data-part='bar'] {
   block-size: 100%;
   position: relative;
-  padding-inline-start: max(4px, env(safe-area-inset-left, 0px));
-  padding-inline-end: max(4px, env(safe-area-inset-right, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
 }
 
 .rottay-mobile-header__bar[data-part='bar']:dir(rtl) {
-  padding-inline-start: max(4px, env(safe-area-inset-right, 0px));
-  padding-inline-end: max(4px, env(safe-area-inset-left, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
 }
 
 /* Side slots share the leftover width equally (flex-basis 0 + equal grow), so
@@ -196,7 +206,7 @@
   flex: 0 1 auto;
   overflow: hidden;
   text-align: center;
-  padding-inline: 8px;
+  padding-inline: var(--ds-mobile-header-center-padding-inline, 8px);
 }
 
 .rottay-mobile-header__back[data-part='trigger'] {
@@ -211,7 +221,7 @@
   padding: 0;
   background: none;
   border: none;
-  border-radius: var(--ds-radius-md, 8px);
+  border-radius: var(--ds-mobile-header-trigger-radius, var(--ds-radius-md, 8px));
   color: var(--ds-color-text-primary);
   transition:
     background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -219,21 +229,33 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
+.rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
 .rottay-mobile-header__back[data-part='trigger']:active {
-  transform: scale(0.94);
+  transform: scale(var(--ds-mobile-header-trigger-press-scale, 0.94));
 }
 
+.rottay-mobile-header__back[data-part='trigger'][data-state~='focus-visible'],
 .rottay-mobile-header__back[data-part='trigger']:focus-visible {
   outline: none;
   box-shadow: var(--ds-mobile-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
 
-/* Hover is pointer-fine only (the `:active` press scale above is the real
-   touch feedback). */
+/* Hover is pointer-fine only (the press scale above is the real touch feedback).
+   The kernel token and the platform pseudo are the two arms of one rule. */
 @media (hover: hover) {
+  .rottay-mobile-header__back[data-part='trigger'][data-state~='hovered'],
   .rottay-mobile-header__back[data-part='trigger']:hover {
-    background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+    background: var(--ds-mobile-header-trigger-tint, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   }
+}
+
+/* The optional slot below the bar. It shares the bar's inline gutter so a
+   subtitle or a search field lines up with the back action above it instead of
+   sitting flush against the root edge, and it may shrink inside a flex/grid host
+   (an auto minimum would let its content set the header's width). */
+.rottay-mobile-header[data-part='root'] > [data-part='body'] {
+  min-inline-size: 0;
+  padding-inline: var(--ds-mobile-header-bar-padding-inline, 4px);
 }
 
 /* Title is now a Box as="h1" (the composed Text resolved its size inline,
@@ -247,10 +269,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--ds-color-text-primary);
-  font-size: calc(var(--ds-font-size-lg) * 1.0625);
+  font-size: var(--ds-mobile-header-title-font-size, calc(var(--ds-font-size-lg) * 1.0625));
   font-weight: var(--ds-font-weight-semibold, 600);
-  line-height: 1.29;
-  letter-spacing: -0.01em;
+  line-height: var(--ds-mobile-header-title-line-height, 1.29);
+  letter-spacing: var(--ds-mobile-header-title-tracking, -0.01em);
 }
 
 /* ---- responsive posture: the bar reads its OWN slot, not the viewport, so a
@@ -295,6 +317,7 @@
   .rottay-mobile-header__back[data-part='trigger'] {
     transition: none;
   }
+  .rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
   .rottay-mobile-header__back[data-part='trigger']:active {
     transform: none;
   }

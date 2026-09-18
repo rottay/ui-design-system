@@ -7,15 +7,14 @@
  * - Entity identity: optional avatar + name (large, bold) + optional subtitle
  * - Status badge: clean pill with semantic color
  * - Action buttons: primary (Edit, Save) + secondary (Delete, Archive) with proper spacing
- * - Back navigation: clean back arrow ghost button
  * - Saved views: integrated tab strip with active underline highlight and the
  *   full APG tabs keyboard contract (roving tabindex, logical arrows with RTL
  *   mirroring, Home/End, automatic activation — page-shell idiom)
  * - Exception count badge with warning icon and a parametric accessible name
  *
- * Ownership (R2+R3): the engine stamps anatomy (`data-part`), state
- * (`data-active`, `data-variant`, `data-loading`) and the sanctioned skeleton
- * radius data channel; the modern skin
+ * Ownership (R2+R3): the engine stamps anatomy (`data-part`), posture
+ * (`data-active`, `data-variant`, `data-loading`, `data-has-*`) and the shared
+ * kernel's interaction state (`data-state`); the modern skin
  * (`runtime/engines/modern/skin/workbench-header/index.css`) owns 100% of layout and
  * paint — typography included. Token-driven styling, zero DaisyUI dependency,
  * zero inline paint. Consistent visual family with CockpitHeader.
@@ -28,6 +27,8 @@
 import React from 'react';
 import type { WorkbenchHeaderProps, WorkbenchQuickAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -39,34 +40,37 @@ const SAVED_VIEWS_LABEL_KEY = 'workbenchHeader.savedViews';
 const SAVED_VIEWS_LABEL_FALLBACK = 'Saved views';
 const EXCEPTIONS_LABEL_KEY = 'workbenchHeader.exceptions';
 const EXCEPTIONS_LABEL_FALLBACK = '{count} exceptions';
+const LOADING_LABEL_KEY = 'workbenchHeader.loading';
+const LOADING_LABEL_FALLBACK = 'Loading';
 
 /* ------------------------------------------------------------------ */
 /* QuickActionButton                                                   */
 /* ------------------------------------------------------------------ */
 
 /**
- * Renders a single quick action button with token-driven variant styling.
- * Primary uses filled background, danger uses error tokens, default is ghost/outlined.
+ * One quick action. The Button IS the `action` part: it paints itself from the
+ * variant channels the skin states for this slot, and it decides its own hover,
+ * press and keyboard ring. Nothing here wraps it to reach into it.
  */
 function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
   const variant = action.variant ?? 'default';
 
   return (
-    <span
+    <Button
       data-part="action"
+      /* The tone is this header's decision, stated here and keyed by the skin.
+         The closed prop domain is exactly the Button's own three, so the Button
+         re-derives the identical attribute rather than a competing one. */
       data-variant={variant}
+      htmlType="button"
+      size="sm"
+      variant={variant}
+      disabled={action.disabled}
+      onClick={action.onClick}
+      icon={action.icon}
     >
-      <Button
-        htmlType="button"
-        size="sm"
-        variant={variant}
-        disabled={action.disabled}
-        onClick={action.onClick}
-        icon={action.icon}
-      >
-        {action.label}
-      </Button>
-    </span>
+      {action.label}
+    </Button>
   );
 }
 
@@ -75,8 +79,9 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
 /* ------------------------------------------------------------------ */
 
 /**
- * Individual saved-view tab button with hover and active indicator.
- * Roving tabindex: only the active tab sits in the Tab order (APG tabs).
+ * Individual saved-view tab button. Roving tabindex: only the active tab sits in
+ * the Tab order (APG tabs). Hover, press and the keyboard ring are the shared
+ * kernel's decision, read off `data-state`.
  */
 function SavedViewTab({
   label,
@@ -87,6 +92,8 @@ function SavedViewTab({
   isActive: boolean;
   onClick?: () => void;
 }) {
+  const interaction = useInteractionState();
+
   return (
     <button
       type="button"
@@ -94,30 +101,14 @@ function SavedViewTab({
       aria-selected={isActive}
       tabIndex={isActive ? 0 : -1}
       onClick={onClick}
-      data-part="tab"
+      {...interaction.handlers}
+      {...partAttributes('tab', interaction.state)}
       data-active={isActive ? 'true' : 'false'}
     >
-      <bdi>{label}</bdi>
+      {/* The label is the tab's only content, so it is also the shape the
+          loading state stands in for. */}
+      <bdi data-part="tab-label">{label}</bdi>
     </button>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Skeleton                                                            */
-/* ------------------------------------------------------------------ */
-
-/**
- * One skeleton block. `size` is the skin-owned geometry hook (`data-size`);
- * the optional inline style carries the sanctioned radius
- * custom-property data channel.
- */
-function SkeletonBlock(props: { size: string; style?: React.CSSProperties }) {
-  return (
-    <div
-      data-part="skeleton"
-      data-size={props.size}
-      style={props.style}
-    />
   );
 }
 
@@ -132,12 +123,11 @@ function SkeletonBlock(props: { size: string; style?: React.CSSProperties }) {
  * DaisyUI dependency. Consistent visual family with CockpitHeader.
  *
  * Features:
- * - Optional back navigation button
  * - Avatar + title (large, bold) + optional subtitle
  * - Exception count badge with semantic error styling
  * - Primary + secondary quick action buttons
  * - Saved views tab strip with active underline indicator
- * - Loading skeleton with premium pulse animation
+ * - Loading state drawn from this header's own anatomy
  *
  * @param props - {@link WorkbenchHeaderProps}
  * @returns The rendered workbench header.
@@ -168,6 +158,8 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
 
   const savedViewsLabel =
     i18n?.tOr(SAVED_VIEWS_LABEL_KEY, SAVED_VIEWS_LABEL_FALLBACK) ?? SAVED_VIEWS_LABEL_FALLBACK;
+  const loadingLabel =
+    i18n?.tOr(LOADING_LABEL_KEY, LOADING_LABEL_FALLBACK) ?? LOADING_LABEL_FALLBACK;
   // ONE parametric message for the exception badge's accessible name — never
   // a translated fragment concatenated with the count (i18n law).
   const exceptionsLabelFor = (count: number) =>
@@ -176,6 +168,12 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
      native digits belong to the active locale, not to the host default. */
   const formattedExceptionCount = (count: number) =>
     new Intl.NumberFormat(i18n?.locale).format(count);
+
+  /* The card's own hover and press are the kernel's decision. Only the pointer
+     handlers are wired: a descendant's focus bubbles to this element, and a card
+     that reported itself keyboard-focused because a tab was would stamp a ring
+     state no part of it owns. */
+  const card = useInteractionState();
 
   /* ---- APG tabs keyboard contract for the saved-views strip: roving focus
           with automatic activation (page-shell idiom). Arrow keys are logical
@@ -211,61 +209,8 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
   const hasActions = Boolean(quickActions && quickActions.length > 0);
   const hasTabs = Boolean(savedViews && savedViews.length > 0);
 
-  /* ---- Loading skeleton ---- */
-  if (loading) {
-    return (
-      <div
-        className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
-        data-part="root"
-        data-loading="true"
-        data-has-icon={hasIcon ? 'true' : 'false'}
-        data-has-actions={hasActions ? 'true' : 'false'}
-        data-has-tabs={hasTabs ? 'true' : 'false'}
-        aria-busy="true"
-        style={style}
-      >
-        <div data-part="skeleton-row">
-          <div data-part="skeleton-lead">
-            {hasIcon ? (
-              <SkeletonBlock
-                size="avatar"
-                style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-full)' } as React.CSSProperties}
-              />
-            ) : null}
-            <div data-part="skeleton-column">
-              {eyebrow ? <SkeletonBlock size="eyebrow" /> : null}
-              <SkeletonBlock size="title" />
-              {subtitle ? <SkeletonBlock size="subtitle" /> : null}
-            </div>
-          </div>
-          {hasActions ? (
-            <div data-part="skeleton-actions">
-              {quickActions?.map((_, idx) => (
-                <SkeletonBlock
-                  key={`qa-skeleton-${idx}`}
-                  size="action"
-                  style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-                />
-              ))}
-            </div>
-          ) : null}
-        </div>
-        {hasTabs ? <SkeletonBlock size="tabs" /> : null}
-      </div>
-    );
-  }
-
-  /* ---- Main render ---- */
-  return (
-    <div
-      className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
-      data-part="root"
-      data-loading="false"
-      data-has-icon={hasIcon ? 'true' : 'false'}
-      data-has-actions={hasActions ? 'true' : 'false'}
-      data-has-tabs={hasTabs ? 'true' : 'false'}
-      style={style}
-    >
+  const chrome = (
+    <>
       {/* ---- Header row: back + title + badge | quick actions ---- */}
       <div data-part="header-row">
         {/* Left: title group */}
@@ -345,6 +290,31 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
           })}
         </div>
       )}
+    </>
+  );
+
+  /* The loading state is BUILT FROM THE ANATOMY: the shared renderer reads this
+     header's own `data-part` tree and draws one bone per part, so the wait has the
+     shape of the header the caller asked for and cannot drift from it. The root
+     keeps the single announcement, so the skeleton is told not to add a second. */
+  return (
+    <div
+      className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
+      onPointerEnter={card.handlers.onPointerEnter}
+      onPointerLeave={card.handlers.onPointerLeave}
+      onPointerDown={card.handlers.onPointerDown}
+      onPointerUp={card.handlers.onPointerUp}
+      {...partAttributes('root', card.state)}
+      data-loading={loading ? 'true' : 'false'}
+      data-has-icon={hasIcon ? 'true' : 'false'}
+      data-has-actions={hasActions ? 'true' : 'false'}
+      data-has-tabs={hasTabs ? 'true' : 'false'}
+      role={loading ? 'status' : undefined}
+      aria-busy={loading ? true : undefined}
+      aria-label={loading ? loadingLabel : undefined}
+      style={style}
+    >
+      {loading ? <AnatomySkeleton busy={false}>{chrome}</AnatomySkeleton> : chrome}
     </div>
   );
 }

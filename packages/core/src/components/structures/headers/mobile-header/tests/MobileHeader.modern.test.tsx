@@ -57,7 +57,10 @@ describe('MobileHeader (modern engine) contract', () => {
 
     const root = await waitForRoot(container);
     expect(root.getAttribute('data-sticky')).toBe('true');
-    expect((root as HTMLElement).style.position).toBe('sticky');
+    // The stamp is the whole posture now: `position: sticky` moved into the skin's
+    // `[data-sticky='true']` rule, so the runtime writes no geometry of its own
+    // (WO-FAM-10 sub-lot D; the elevation suite pins the rule that took it).
+    expect((root as HTMLElement).style.position).toBe('');
   });
 
   it('omits the back trigger when neither onBack nor leftAction is provided', async () => {

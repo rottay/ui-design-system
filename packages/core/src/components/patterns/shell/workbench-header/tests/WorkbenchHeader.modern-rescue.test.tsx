@@ -10,18 +10,19 @@ const VIEWS = [
   { id: 'v2', label: 'Exceptions' },
 ];
 
-describe('WorkbenchHeader modern — the skeleton mirrors the requested anatomy', () => {
+/** Every bone the shared renderer drew, in document order, by the part it read. */
+const boneParts = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll('[data-part="bone"]')).map((bone) =>
+    bone.getAttribute('data-source-part'),
+  );
+
+describe('WorkbenchHeader modern — the skeleton IS the requested anatomy', () => {
   it('reserves only the title for a title-only header', () => {
     const { container } = render(<ModernWorkbenchHeader title="Hub" loading />);
 
-    const skeletons = container.querySelectorAll('[data-part="skeleton"]');
-    expect(skeletons).toHaveLength(1);
-    expect(skeletons[0].getAttribute('data-size')).toBe('title');
-
-    expect(container.querySelector('[data-size="avatar"]')).toBeNull();
-    expect(container.querySelector('[data-size="subtitle"]')).toBeNull();
-    expect(container.querySelector('[data-size="tabs"]')).toBeNull();
-    expect(container.querySelector('[data-part="skeleton-actions"]')).toBeNull();
+    // Not a hand-written reserve that happens to match: the renderer walked this
+    // header's own parts, and a title-only header has exactly one to draw.
+    expect(boneParts(container)).toEqual(['title']);
   });
 
   it('grows each reserved block only when the matching prop is supplied', () => {
@@ -41,12 +42,36 @@ describe('WorkbenchHeader modern — the skeleton mirrors the requested anatomy'
       />,
     );
 
-    expect(container.querySelector('[data-size="avatar"]')).not.toBeNull();
-    expect(container.querySelector('[data-size="eyebrow"]')).not.toBeNull();
-    expect(container.querySelector('[data-size="subtitle"]')).not.toBeNull();
-    expect(container.querySelector('[data-size="tabs"]')).not.toBeNull();
-    // One reserve per action, not a fixed pair.
-    expect(container.querySelectorAll('[data-size="action"]')).toHaveLength(3);
+    // One bone per part the caller actually asked for, including one per action
+    // and one per saved view -- never a fixed pair and never a flat tab block.
+    expect(boneParts(container)).toEqual([
+      'header-icon',
+      'eyebrow',
+      'title',
+      'subtitle',
+      'action',
+      'action',
+      'action',
+      'tab-label',
+      'tab-label',
+    ]);
+  });
+
+  it('keeps the wait to one announcement: the root names it, the stand-in is hidden', () => {
+    const { container } = render(<ModernWorkbenchHeader title="Hub" savedViews={VIEWS} loading />);
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root).toHaveAttribute('role', 'status');
+    expect(root).toHaveAttribute('aria-label', 'Loading');
+
+    // The renderer is told not to announce a second time, and the chrome it
+    // measures is inert and out of the accessibility tree.
+    const skeleton = container.querySelector('.ds-skeleton-anatomy') as HTMLElement;
+    expect(skeleton.getAttribute('aria-busy')).toBeNull();
+    const source = container.querySelector('[data-part="source"]') as HTMLElement;
+    expect(source).toHaveAttribute('aria-hidden', 'true');
+    expect(source).toHaveAttribute('inert');
+    expect(container.querySelector('[data-part="bones"]')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('announces the busy state and keeps the anatomy stamps across the swap', () => {

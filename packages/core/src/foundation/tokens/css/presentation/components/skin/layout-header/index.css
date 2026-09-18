@@ -24,13 +24,24 @@
  * active (the `min-inline-size: 0` flex/grid resilience rule — layout, not
  * paint, so layer order does not contest it).
  *
- * SPECIFICITY: anatomy class + one always-stamped attribute; no repetition,
+ * ANATOMY: the rule keys on `[data-part='root']`, the contract the component stamps,
+ * rather than on the class alone -- the class says which surface this is, the part
+ * says which element of it. (WO-FAM-10 sub-lot D.)
+ *
+ * NO FAMILY DERIVER, and this is a measurement rather than an omission: the surface
+ * reads zero custom properties and carries zero inline paint, because every visual
+ * decision it makes belongs to a component it composes -- PageShellSurface, Tabs,
+ * Stack and Typography each own their own chrome, their own channels and their own
+ * family row. The one thing left here is flex/grid resilience, which has no value a
+ * tenant could state. Producing a channel for it would name a dial nobody turns.
+ *
+ * SPECIFICITY: anatomy class + part + one always-stamped attribute; no repetition,
  * no `!important`, logical properties only.
  *
  * FORCED-COLORS: no surface-owned color to re-key (the one remaining rule is
  * geometry), so no FC block — same documented omission as skin/profile.css.
  */
 
-.ds-surface.ds-header[data-mobile-compact='true'] {
+.ds-surface.ds-header[data-part='root'][data-mobile-compact='true'] {
   min-inline-size: 0;
 }

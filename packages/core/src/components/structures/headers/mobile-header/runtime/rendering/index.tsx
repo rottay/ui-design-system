@@ -29,8 +29,9 @@
  * @package @rottay/design-system
  */
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box } from '@/components/primitives/layout/box';
 import { Flex } from '@/components/primitives/layout/flex';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
@@ -61,6 +62,11 @@ export function MobileHeader({
   // Accessible back-button label via the DS i18n channel with an English floor.
   const i18n = useOptionalTranslation('common');
   const backAriaLabel = i18n?.tOr('go_back', 'Go back') ?? 'Go back';
+  // Hover, press and the focus ring on the family's own back button are decided
+  // once, by the shared kernel, and read off `data-state`. A consumer's own
+  // `leftAction` replaces this button entirely, which is why the skin keeps the
+  // platform pseudo-classes beside each token arm.
+  const backInteraction = useInteractionState();
 
   // Stuck evidence for the sticky posture: a 1px sentinel sits immediately
   // before the bar; the bar sticks exactly when the sentinel leaves the
@@ -100,10 +106,11 @@ export function MobileHeader({
         as="button"
         type="button"
         onClick={onBack}
+        {...backInteraction.handlers}
         className="rottay-mobile-header__back"
         aria-label={backAriaLabel}
         data-testid="mobile-header-back"
-        data-part="trigger"
+        {...partAttributes('trigger', backInteraction.state)}
       >
         {/* Governed glyph: navigation.back ships autoMirror, so the chevron
             flips itself under RTL (the skin's manual scaleX(-1) is retired). */}
@@ -111,16 +118,6 @@ export function MobileHeader({
       </Box>
     ) : null
   );
-
-  /* All paint geometry lives in the mobile-header skin (56px bar, safe-area
-     insets, slot flex shares, touch floors, sticky offset and stacking).
-     Only `position: sticky` itself travels inline: the engine contract test
-     pins `root.style.position`. The consumer `style` prop keeps last-word
-     precedence over the skin, as before. */
-  const containerStyle: CSSProperties = {
-    ...(sticky ? { position: 'sticky' } : {}),
-    ...style,
-  };
 
   return (
     <>
@@ -135,7 +132,10 @@ export function MobileHeader({
     <Box
       as="header"
       className="rottay-mobile-header"
-      style={containerStyle}
+      /* The runtime stamps no geometry of its own: `position: sticky` is the
+         skin's, keyed on the `data-sticky` stamp below. What travels inline is
+         the consumer's own `style`, which keeps its last word over the skin. */
+      style={style}
       data-testid="mobile-header"
       role="banner"
       data-part="root"
@@ -183,8 +183,9 @@ export function MobileHeader({
         </Box>
       </Flex>
 
-      {/* Optional children below the header bar (subtitle, search, etc.);
-          the part is a pure anatomy hook — the skin paints no chrome on it. */}
+      {/* Optional children below the header bar (subtitle, search, etc.); the skin
+          gives the slot the bar's own inline gutter so it lines up with the back
+          action above it. */}
       {children ? <Box data-part="body">{children}</Box> : null}
     </Box>
     </>

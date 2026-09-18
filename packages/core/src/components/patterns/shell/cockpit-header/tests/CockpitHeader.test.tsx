@@ -252,7 +252,7 @@ describe('PatternCockpitHeader (modern engine)', () => {
     expect(root.style.padding).toBe('');
   });
 
-  it('renders the loading skeleton with skin-owned geometry hooks', async () => {
+  it('draws the wait from its own anatomy, with no skeleton of its own', async () => {
     const { container } = renderHeader(
       <PatternCockpitHeader
         title="Detail"
@@ -268,14 +268,17 @@ describe('PatternCockpitHeader (modern engine)', () => {
     const root = container.querySelector('[data-part="root"]') as HTMLElement;
     expect(root).toHaveAttribute('data-loading', 'true');
 
-    const skeletons = container.querySelectorAll('[data-part="skeleton"]');
-    expect(skeletons.length).toBeGreaterThanOrEqual(5);
-    for (const el of skeletons) {
-      expect((el as HTMLElement).getAttribute('data-size')).toBeTruthy();
-      // Only the sanctioned custom-property data channel may be inline.
-      expect((el as HTMLElement).style.width).toBe('');
-      expect((el as HTMLElement).style.height).toBe('');
-      expect((el as HTMLElement).style.animation).toBe('');
+    // The shared renderer draws it, and this family owns no skeleton part,
+    // no `data-size` geometry hook and no radius channel of its own.
+    expect(container.querySelector('.ds-skeleton-anatomy')).not.toBeNull();
+    expect(container.querySelector('[data-part^="skeleton"]')).toBeNull();
+    expect(container.querySelector('[data-size]')).toBeNull();
+    expect(container.innerHTML).not.toContain('--ds-cockpit-header-skeleton-radius');
+
+    // The real chrome is what the bones are measured from, so it is still there.
+    const source = container.querySelector('[data-part="source"]') as HTMLElement;
+    for (const part of ['breadcrumb', 'header-icon', 'title', 'subtitle', 'actions']) {
+      expect(source.querySelector(`[data-part="${part}"]`), part).not.toBeNull();
     }
   });
 });

@@ -19,14 +19,18 @@
  * ancestor, and the rule ON the root buys it from `data-loading`, which the
  * engine always stamps ('true'|'false'). `border: none` resets are exempt.
  *
- * Interaction paint that the removed React hover/focus state used to own now
- * lives here: hovers ride the `@media (hover: hover)` guard (house hover
- * law) with unguarded `:active` twins; keyboard focus keeps its unguarded
- * `:focus` rules. QuickActionButton merged `vs.hover` over `vs.base` when
- * `(hovered||focused) && !disabled`; the button is natively `disabled`, so
- * `:hover:not(:disabled), :focus:not(:disabled)` reproduces that gate. SavedViewTab
- * tracks `onFocus`/`onBlur` in addition to hover (a keyboard-focus affordance the
- * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`.
+ * STATE: every state pseudo is paired with the `data-state` token the shared
+ * kernel stamps. The pseudo is the pre-hydration floor and the token is the
+ * decision; they name the same rule so the two can never disagree. Hovers ride
+ * the `@media (hover: hover)` guard (house hover law) with unguarded press twins
+ * beside them.
+ *
+ * THE QUICK ACTIONS ARE NOT PAINTED FROM HERE. The Button IS `[data-part='action']`,
+ * and this file states the `--ds-button-{primary,error,default}-*` channels it
+ * reads for each variant, so the Button paints itself from its own interaction
+ * state (the `guided-draft-form` / `filter-panel` precedent). The retired
+ * descendant rules also outranked the Button's focus ring with their own
+ * `box-shadow`, so a keyboard-focused quick action had no ring at all; it does now.
  *
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-workbench-header-actions-backdrop` channel (default `none`) — a
@@ -35,18 +39,16 @@
  *
  * WAVE p612b: the saved-views strip gains the full APG keyboard contract in
  * the engine (roving tabindex, logical arrows with RTL mirroring, Home/End,
- * automatic activation), so any tab's keyboard focus gets the governed
- * `:focus-visible` ring here; quick-action buttons join the coarse-pointer
- * 44px floor; the exception badge names itself parametrically for AT.
+ * automatic activation), so any tab's keyboard focus gets the governed ring
+ * here; the exception badge names itself parametrically for AT. The
+ * quick-action coarse-pointer floor is the Button's own and is not restated.
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
- * 100% of layout and paint — typography, tab geometry, skeleton geometry and
- * the pulse animation included. The skeleton blocks share one `data-part` but
- * differ in geometry, so each block carries a `data-size` attribute and, where
- * it deviates from the default, its radius on the sanctioned inline
- * `--ds-workbench-header-skeleton-radius` custom-property data channel
- * (uncounted). The remaining inline style in the engine is the caller's
- * own `style` prop on the root.
+ * 100% of layout and paint — typography and tab geometry included. The only
+ * inline style the engine writes is the caller's own `style` prop on the root.
+ *
+ * LOADING: drawn by the shared `AnatomySkeleton` from this header's own stamped
+ * anatomy. This file owns no skeleton geometry, no skeleton part and no pulse.
  */
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
@@ -62,18 +64,7 @@
   --ds-workbench-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   --ds-workbench-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   overflow: hidden;
-  background: var(
-    --ds-workbench-header-bg,
-    var(
-      --ds-card-header-bg,
-      linear-gradient(
-        112deg,
-        color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
-        var(--ds-surface-card) 56%,
-        var(--ds-surface-panel)
-      )
-    )
-  );
+  background: var(--ds-workbench-header-bg, var(--ds-card-header-bg));
   background-position: 0% 50%;
   background-size: 180% 180%;
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
@@ -94,7 +85,8 @@
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-loading] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
-.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active,
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='pressed'] {
   background-position: 100% 50%;
   border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
@@ -115,7 +107,8 @@
     0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'] {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'],
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='pressed'] [data-part='header-icon'] {
   transform: translateY(-1px) scale(1.025);
 }
 
@@ -130,48 +123,47 @@
   text-transform: uppercase;
 }
 
-/* ---- quick action button: shared radius/outline + per-variant base and merged
-        hover/focus (gated `:not(:disabled)`, matching `!action.disabled`). ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
-  outline: none;
+/* ---- quick action: the Button IS this part, and it paints itself. Each variant
+        states the channels the Button reads at rest, on hover and under press, so
+        the values this header authored survive without a single rule reaching
+        into the Button's internals. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] {
+  --ds-button-primary-bg: var(--ds-color-primary);
+  --ds-button-primary-color: var(--ds-color-text-on-primary);
+  --ds-button-primary-border: var(--ds-color-primary);
+  --ds-button-primary-shadow: var(--ds-elevation-1);
+  --ds-button-primary-bg-hover: var(--ds-color-primary-600);
+  --ds-button-primary-color-hover: var(--ds-color-text-on-primary);
+  --ds-button-primary-border-hover: var(--ds-color-primary-600);
+  --ds-button-primary-shadow-hover: var(--ds-elevation-2);
+  --ds-button-primary-bg-active: var(--ds-color-primary-600);
+  --ds-button-primary-color-active: var(--ds-color-text-on-primary);
+  --ds-button-primary-border-active: var(--ds-color-primary-600);
+  --ds-button-primary-shadow-active: var(--ds-elevation-2);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border: 1px solid var(--ds-color-primary);
-  box-shadow: var(--ds-elevation-1);
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] {
+  --ds-button-error-bg: transparent;
+  --ds-button-error-color: var(--ds-color-error-600);
+  --ds-button-error-border: var(--ds-color-error-200);
+  --ds-button-error-bg-hover: var(--ds-color-error-50);
+  --ds-button-error-color-hover: var(--ds-color-error-600);
+  --ds-button-error-border-hover: var(--ds-color-error-300);
+  --ds-button-error-bg-active: var(--ds-color-error-50);
+  --ds-button-error-color-active: var(--ds-color-error-600);
+  --ds-button-error-border-active: var(--ds-color-error-300);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:active:not(:disabled) {
-  background: var(--ds-color-primary-600);
-  border-color: var(--ds-color-primary-600);
-  box-shadow: var(--ds-elevation-2);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button {
-  background: transparent;
-  color: var(--ds-color-error-600);
-  border: 1px solid var(--ds-color-error-200);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:active:not(:disabled) {
-  background: var(--ds-color-error-50);
-  border-color: var(--ds-color-error-300);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button {
-  background: transparent;
-  color: var(--ds-color-text-secondary);
-  border: 1px solid var(--ds-color-border);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:active:not(:disabled) {
-  background: var(--ds-color-neutral-50);
-  color: var(--ds-color-text-primary);
-  border-color: var(--ds-color-neutral-300);
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] {
+  --ds-button-default-bg: transparent;
+  --ds-button-default-color: var(--ds-color-text-secondary);
+  --ds-button-default-border: var(--ds-color-border);
+  --ds-button-default-bg-hover: var(--ds-color-neutral-50);
+  --ds-button-default-color-hover: var(--ds-color-text-primary);
+  --ds-button-default-border-hover: var(--ds-color-neutral-300);
+  --ds-button-default-bg-active: var(--ds-color-neutral-50);
+  --ds-button-default-color-active: var(--ds-color-text-primary);
+  --ds-button-default-border-active: var(--ds-color-neutral-300);
 }
 
-/* ---- back button: borderless ghost, highlighted on hover||focus. This button is
-        defined but currently mounted by nothing; its paint is migrated for parity
-        and renders nothing today. ---- */
 /* ---- title / subtitle ---- */
 .ds-pattern-workbench-header.ds-engine-modern [data-part='title'] {
   color: var(--ds-color-text-primary);
@@ -226,7 +218,9 @@
   transform: translateY(-1px);
 }
 .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:active:not([data-active='true']) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='focused']:not([data-active='true']),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:active:not([data-active='true']),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='pressed']:not([data-active='true']) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
   border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
@@ -236,7 +230,8 @@
    automatic activation), so keyboard focus gets the governed ring on ANY
    tab -- ordered after the active rule so the ring wins the box-shadow tie
    at equal specificity (page-shell idiom). */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible,
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='focus-visible'] {
   outline: none;
   box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
 }
@@ -288,12 +283,9 @@
   gap: var(--ds-workbench-header-action-gap);
 }
 
-/* ---- quick action wrapper (migrated from the engine, R2+R3) ---- */
+/* ---- quick action geometry: the Button carries the part, so the rail's
+        no-shrink rule lands on the control itself. ---- */
 .ds-pattern-workbench-header.ds-engine-modern [data-part='action'] {
-  display: contents;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
   flex-shrink: 0;
 }
 
@@ -350,75 +342,17 @@
   font-weight: var(--ds-tabs-item-font-weight-active);
 }
 
+/* The strip scrolls horizontally, so a two-word view name rides off its end
+   rather than wrapping one tab onto two lines. */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab-label'] {
+  white-space: nowrap;
+}
+
 /* ---- saved-views strip layout (migrated from the engine, R2+R3) ---- */
 .ds-pattern-workbench-header.ds-engine-modern [data-part='tabs'] {
   display: flex;
   align-items: center;
   gap: var(--ds-tabs-gap);
-  margin-block-start: var(--ds-workbench-header-section-gap);
-}
-
-/* ---- loading skeleton: cluster layout + per-block geometry (migrated from
-        the engine, R2+R3). `data-size` is the skin-owned geometry hook; the
-        pulse animation lives here now. ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-row'] {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-lead'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-workbench-header-item-gap);
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-column'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-spacing-2, 8px);
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-actions'] {
-  display: flex;
-  gap: var(--ds-workbench-header-action-gap);
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='avatar'] {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-}
-
-/* The eyebrow reserve matches the mono/uppercase strip above the title, so a
-   header that uses one does not gain a line on hydrate. */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='eyebrow'] {
-  width: 96px;
-  height: 10px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
-  width: 200px;
-  height: 22px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='subtitle'] {
-  width: 300px;
-  height: 14px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='action'] {
-  width: 80px;
-  height: 34px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='tabs'] {
-  width: 100%;
-  height: 36px;
   margin-block-start: var(--ds-workbench-header-section-gap);
 }
 
@@ -438,13 +372,6 @@
   }
 }
 
-/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
-        the inline custom property (default sm). ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
-  border-radius: var(--ds-workbench-header-skeleton-radius, var(--ds-radius-sm));
-  background: var(--ds-color-neutral-100);
-}
-
 @keyframes ds-workbench-header-arrive {
   from { opacity: 0; transform: translateY(8px) scale(0.995); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -454,34 +381,20 @@
         `:active` twin beside its base rule (touch press feedback matches),
         and keyboard focus keeps its own unguarded `:focus` rules. ---- */
 @media (hover: hover) {
-  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover {
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover,
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='hovered'] {
     background-position: 100% 50%;
     border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border)));
     box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'],
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='hovered'] [data-part='header-icon'] {
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:hover:not(:disabled) {
-    background: var(--ds-color-primary-600);
-    border-color: var(--ds-color-primary-600);
-    box-shadow: var(--ds-elevation-2);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:hover:not(:disabled) {
-    background: var(--ds-color-error-50);
-    border-color: var(--ds-color-error-300);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:hover:not(:disabled) {
-    background: var(--ds-color-neutral-50);
-    color: var(--ds-color-text-primary);
-    border-color: var(--ds-color-neutral-300);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']),
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='hovered']:not([data-active='true']) {
     color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
     background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
     border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
@@ -502,7 +415,8 @@
     border-color: ButtonText;
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible,
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='focus-visible'] {
     outline: 2px solid Highlight;
     outline-offset: 1px;
   }
@@ -511,8 +425,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-workbench-header.ds-engine-modern[data-part='root'],
   .ds-pattern-workbench-header.ds-engine-modern [data-part='header-icon'],
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'],
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'] {
     animation: none;
     transition: none;
   }
@@ -523,10 +436,6 @@
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

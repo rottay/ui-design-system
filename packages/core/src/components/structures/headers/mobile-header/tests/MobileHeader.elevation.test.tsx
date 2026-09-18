@@ -17,6 +17,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { waitFor } from '@testing-library/react';
 
 import { MobileHeader } from '..';
+import { deriveMobileHeaderChannels } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/mobile-header';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 import {
   readSkinDeclarations,
@@ -75,17 +76,36 @@ describe('MobileHeader elevation contract', () => {
     expect(root!.decls['box-sizing']).toBe('border-box');
 
     for (const property of ['block-size', 'min-block-size']) {
-      expect(root!.decls[property]).toContain('--_ds-mobile-header-bar-block-size');
-      expect(root!.decls[property]).toContain('--_ds-mobile-header-safe-area');
+      expect(root!.decls[property]).toContain('--ds-mobile-header-bar-block-size');
+      expect(root!.decls[property]).toContain('--ds-mobile-header-safe-area');
     }
-    expect(root!.decls['padding-block-start']).toBe('var(--_ds-mobile-header-safe-area)');
+    expect(root!.decls['padding-block-start']).toContain('--ds-mobile-header-safe-area');
 
-    // The inset travels on the DS channel `page-shell` already reads.
-    expect(root!.decls['--_ds-mobile-header-safe-area']).toContain('--ds-safe-area-top');
+    // The bar row is the family's own channel now rather than a `--_ds-` private,
+    // stated by the deriver at the value the skin reads it with. The safe-area
+    // channel is deliberately NOT produced: its only honest value is an `env()`
+    // chain, and `env` is not in the emission door's admitted value functions —
+    // the door would drop the channel whole and the `produces` claim would be
+    // false. The skin keeps stating the inset as its own double fallback (the
+    // loop below), so the pixels survive and the name stays tenant-reachable.
+    expect(deriveMobileHeaderChannels()['--ds-mobile-header-safe-area']).toBeUndefined();
+    expect(deriveMobileHeaderChannels()['--ds-mobile-header-bar-block-size']).toBe('56px');
     for (const match of SKIN.matchAll(/env\(safe-area-inset-top[^)]*\)/g)) {
       const before = SKIN.slice(Math.max(0, match.index! - 120), match.index!);
       expect(before).toContain('--ds-safe-area-top');
     }
+  });
+
+  it('keeps `position` out of the runtime: the sticky posture is the skin\'s', async () => {
+    const { container } = await renderFull();
+    const root = container.querySelector<HTMLElement>('.rottay-mobile-header');
+    // The retired inline `position: sticky` is the family's last stamped geometry.
+    expect(root!.style.position).toBe('');
+    expect(root!.getAttribute('data-sticky')).toBe('true');
+    const sticky = RULES.find(
+      (rule) => rule.selector === `${ROOT}[data-sticky='true']` && !rule.conditions,
+    );
+    expect(sticky!.decls.position).toBe('sticky');
   });
 
   it('keeps the hairline and its forced-colors override on one selector', () => {
@@ -137,11 +157,17 @@ describe('MobileHeader elevation contract', () => {
     // not ship, so the component's guard fails closed and the attribute stays
     // false by design (documented in the family's own runtime). Saying "I
     // could not reach this" is a different claim from "this is dead".
-    const unreachedState = (selector: string) => selector.includes("[data-stuck='true']");
+    // The kernel state tokens are the same kind of claim: `data-state` is stamped
+    // by a pointer or focus event this static render never fires, so the arms are
+    // states not reached. Their paint is measured in the browser suite, which
+    // stamps the token and reads the computed value back.
+    const unreachedState = (selector: string) =>
+      selector.includes("[data-stuck='true']") || selector.includes('[data-state~=');
 
     expect(
       unreachableSelectors({ rules: RULES, scopes: [container], exempt: unreachedState }),
     ).toEqual([]);
-    expect(RULES.some((rule) => unreachedState(rule.selector))).toBe(true);
+    expect(RULES.some((rule) => rule.selector.includes("[data-stuck='true']"))).toBe(true);
+    expect(RULES.some((rule) => rule.selector.includes('[data-state~='))).toBe(true);
   });
 });

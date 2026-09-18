@@ -5,50 +5,56 @@
  * a top hairline rule, so no section floats unframed. The label is real text (a heading);
  * only the bracket/rule chrome is presentational.
  *
- * Rhythm and type consume the shared `--ds-spacing-*` / `--ds-font-size-*` roles WITH literal
- * fallbacks (the kit's self-contained idiom), so tenant density scale reshapes the section
- * rhythm without a markup change. Label tracking stays private to this editorial frame
- * (fallback: the shipped 0.12em).
- * All properties are logical: the `meta` annotation flips to the inline end under RTL (the
- * old `margin-left: auto` pinned it to the physical left — an RTL bug). The label row wraps
- * intentionally on narrow measures: long titles break onto their own line instead of
- * overflowing, and `meta` never collides with the title.
+ * ANATOMY: the rules key on `[data-part]`, the contract the component stamps, and the
+ * `rt-section-frame` class is the scope only. The class VOCABULARY stays `rt-`: it is the
+ * monochrome kit's, shared with AsciiFrame, TreeView, MonoStat, CropMarks and five more
+ * owners outside this cut, so renaming one member alone would fragment it rather than
+ * converge it.
+ *
+ * Rhythm, type and ink ride this family's OWN channels (`--ds-section-frame-*`, produced by
+ * `derivation/chrome/section-frame`) over the shared roles they resolved to before, so a
+ * tenant can move the section without moving `--ds-spacing-10` for the whole product.
+ * All properties are logical: the `meta` annotation flips to the inline end under RTL. The
+ * label row wraps intentionally on narrow measures: long titles break onto their own line
+ * instead of overflowing, and `meta` never collides with the title.
  */
 
 /* `max-inline-size` bounds the label row so a wide container with a short title cannot push
    `meta` to a distant far edge via `margin-inline-start: auto`. */
 
-.rt-section-frame {
+.rt-section-frame[data-part='root'] {
   position: relative;
   display: block;
-  padding-block: var(--ds-spacing-10, 2.5rem);
+  padding-block: var(--ds-section-frame-padding-block, var(--ds-spacing-10, 2.5rem));
   padding-inline: 0;
   color: var(--ds-surface-fg, currentColor);
-  border-block-start: 1px solid var(--ds-color-hairline);
+  border-block-start:
+    var(--ds-section-frame-rule-width, 1px) solid
+    var(--ds-section-frame-rule-color, var(--ds-color-hairline));
 }
 
-.rt-section-frame__label {
+.rt-section-frame[data-part='root'] [data-part='label-row'] {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  column-gap: var(--ds-spacing-3, 0.75rem);
-  row-gap: var(--ds-spacing-1, 0.25rem);
-  margin-block-end: var(--ds-spacing-6, 1.5rem);
+  column-gap: var(--ds-section-frame-label-column-gap, var(--ds-spacing-3, 0.75rem));
+  row-gap: var(--ds-section-frame-label-row-gap, var(--ds-spacing-1, 0.25rem));
+  margin-block-end: var(--ds-section-frame-label-margin-block-end, var(--ds-spacing-6, 1.5rem));
   margin-inline: 0;
-  max-inline-size: var(--ds-type-paragraph-measure, 68ch);
+  max-inline-size: var(--ds-section-frame-label-measure, var(--ds-type-paragraph-measure, 68ch));
   font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-medium, 500);
-  letter-spacing: var(--_ds-section-frame-label-tracking, 0.12em);
+  font-size: var(--ds-section-frame-label-font-size, var(--ds-font-size-xs, 0.75rem));
+  font-weight: var(--ds-section-frame-label-font-weight, var(--ds-font-weight-medium, 500));
+  letter-spacing: var(--ds-section-frame-label-tracking, 0.12em);
   text-transform: uppercase;
 }
 
-.rt-section-frame__index {
-  color: var(--ds-color-mono-500);
+.rt-section-frame[data-part='root'] [data-part='index'] {
+  color: var(--ds-section-frame-ordinal-ink, color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary)));
   font-variant-numeric: tabular-nums;
 }
 
-.rt-section-frame__title {
+.rt-section-frame[data-part='root'] [data-part='title'] {
   margin: 0;
   font: inherit;
   min-inline-size: 0;
@@ -56,31 +62,39 @@
   color: var(--ds-surface-fg, currentColor);
 }
 
-.rt-section-frame__dash {
-  color: var(--ds-color-mono-500);
+.rt-section-frame[data-part='root'] [data-part='dash'] {
+  color: var(--ds-section-frame-ordinal-ink, color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary)));
 }
 
-.rt-section-frame__meta {
+.rt-section-frame[data-part='root'] [data-part='meta'] {
   margin-inline-start: auto;
-  /* meta is real (non-aria-hidden) text; gray-500 alone measures 4.42:1 on ink, just under
-     the 4.5 AA floor, so this routes through the re-keyed text-secondary role instead. */
-  color: var(--ds-color-text-secondary, var(--ds-color-mono-500));
+  /* `meta` is announced text and the ordinal is decoration, so meta carries the
+     stronger of the frame's two quiet inks. Both are mixed from the mode's own ink
+     toward its own canvas: a fixed neutral step cannot clear the AA floor on two
+     canvases, and the mono-500 / text-secondary chain this replaced did not. */
+  color: var(--ds-section-frame-meta-ink, color-mix(in oklab, var(--ds-color-text-primary) 78%, var(--ds-color-bg-primary)));
   font-variant-numeric: tabular-nums;
 }
 
-.rt-section-frame__body {
+/* The ordinal's visually-hidden twin carries the announced name and paints nothing;
+   it is stamped so the anatomy contract is complete, not so a rule can reach it. */
+.rt-section-frame[data-part='root'] [data-part='index-label'] {
+  font-variant-numeric: tabular-nums;
+}
+
+.rt-section-frame[data-part='root'] [data-part='body'] {
   display: block;
   min-inline-size: 0;
 }
 
 /* Forced colors: the framing rule re-keys to system ink so the section never floats. */
 @media (forced-colors: active) {
-  .rt-section-frame {
+  .rt-section-frame[data-part='root'] {
     border-block-start-color: CanvasText;
   }
-  .rt-section-frame__index,
-  .rt-section-frame__dash,
-  .rt-section-frame__meta {
+  .rt-section-frame[data-part='root'] [data-part='index'],
+  .rt-section-frame[data-part='root'] [data-part='dash'],
+  .rt-section-frame[data-part='root'] [data-part='meta'] {
     color: GrayText;
   }
 }

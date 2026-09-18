@@ -37,12 +37,13 @@ export function SectionFrame({
   const classes = ["rt-section-frame", className].filter(Boolean).join(" ");
   const ordinal = marker != null ? (indexLabel ?? formatIndexText(index)) : null;
 
-  // data-part hooks match the kit-wide anatomy contract (product-window, tree-view, ...).
+  // The skin keys on these `data-part` hooks; the `rt-section-frame` class is the
+  // monochrome kit's scope, and the per-element BEM names it no longer selects are gone.
   return (
     <As className={classes} data-part="root">
-      <div className="rt-section-frame__label" data-part="label-row">
+      <div data-part="label-row">
         {marker != null && (
-          <span className="rt-section-frame__index" data-part="index" aria-hidden="true">
+          <span data-part="index" aria-hidden="true">
             {marker}
           </span>
         )}
@@ -52,12 +53,12 @@ export function SectionFrame({
         )}
         {title != null && (
           <>
-            <span className="rt-section-frame__dash" data-part="dash" aria-hidden="true">
+            <span data-part="dash" aria-hidden="true">
               —
             </span>
             {/* Inside the heading the ordinal joins its natural name, so no loose ordinal node
                 exists to announce twice and no id wiring is needed. */}
-            <Heading className="rt-section-frame__title" data-part="title">
+            <Heading data-part="title">
               {marker != null && (
                 <VisuallyHidden data-part="index-label">{ordinal} </VisuallyHidden>
               )}
@@ -66,12 +67,12 @@ export function SectionFrame({
           </>
         )}
         {meta != null && (
-          <span className="rt-section-frame__meta" data-part="meta">
+          <span data-part="meta">
             {meta}
           </span>
         )}
       </div>
-      <div className="rt-section-frame__body" data-part="body">
+      <div data-part="body">
         {children}
       </div>
     </As>

@@ -29,9 +29,12 @@
  *  - `data-change` (increase/decrease/neutral) selects the change row + value
  *    tint — the former `CHANGE_COLORS[changeType]`; the DIRECTION is carried
  *    by the governed trend icon, never by colour alone.
- *  - the interactive card's hover/press reads are pure CSS now
- *    (`[data-clickable='true']` gates both) — the JS hover/pressed state and
- *    its two custom-property channels are retired.
+ *  - a card's interaction state is decided once by the kernel and arrives as
+ *    `data-state`; every platform pseudo-class below is PAIRED with it as the
+ *    fallback of one decision, never as a second authority (F-37).
+ *    `[data-clickable='true']` still gates the lift, the press and the ring —
+ *    a card with no `onClick` is not an affordance — while the sparkline ping
+ *    answers to hover on any card, as it did before.
  *  - `data-columns` mirrors `--ds-stats-header-columns` as an attribute so the
  *    container cuts can cap the track count without widening a one-stat
  *    header; the grid reads the channel, the cuts write it.
@@ -63,7 +66,7 @@
     var(--_ds-stats-header-track-count, var(--ds-stats-header-columns, 4)),
     minmax(0, 1fr)
   );
-  gap: var(--ds-spacing-3, 12px);
+  gap: var(--ds-stats-header-grid-gap, var(--ds-spacing-3, 12px));
   inline-size: 100%;
 }
 
@@ -77,14 +80,14 @@
   padding: var(--ds-stats-header-card-padding, 20px 24px);
   /* edge posture derives from the tenant radius scale (canonical channel;
      the 12px fallback is the exact former hardcoded value) */
-  border-radius: var(--ds-radius-lg, 12px);
-  background: var(--ds-color-bg-primary);
+  border-radius: var(--ds-stats-header-card-radius, var(--ds-radius-lg, 12px));
+  background: var(--ds-stats-header-card-bg, var(--ds-color-bg-primary));
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  border: 1px solid var(--ds-stats-header-card-frame, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'] {
   cursor: pointer;
@@ -94,17 +97,20 @@
    the press is a real :active gated on clickable — replacing the retired JS
    hover/pressed state. */
 @media (hover: hover) {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='hovered'],
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+    transform: var(--ds-stats-header-hover-lift, translateY(-2px));
+    box-shadow: var(--ds-stats-header-hover-shadow, 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   }
 }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='pressed'],
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:active {
-  transform: scale(0.98);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
+  transform: var(--ds-stats-header-press-scale, scale(0.98));
+  box-shadow: var(--ds-stats-header-press-shadow, 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent));
 }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='focus-visible'],
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible {
-  outline: 2px solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: 2px solid var(--ds-stats-header-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: 2px;
 }
 
@@ -138,12 +144,18 @@
   align-items: center;
   color: var(--ds-color-text-muted);
   line-height: 0;
-  opacity: 0.6;
+  opacity: var(--ds-stats-header-icon-opacity, 0.6);
 }
 
-/* ---- change indicator: typography drained from inline; tint by data-change ---- */
+/* ---- change indicator: typography and BOTH gaps drained from the TSX (they were
+        `gap` props: visual values in the component, on no plane at all); tint by
+        data-change ---- */
 .ds-stats-header[data-part='root'] [data-part='change-indicator'] {
   flex: 0 0 auto;
+  gap: var(--ds-stats-header-change-row-gap, 2px);
+}
+.ds-stats-header[data-part='root'] [data-part='change-row'] {
+  gap: var(--ds-stats-header-change-column-gap, 3px);
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'] {
   font-size: var(--ds-stats-header-label-font-size, var(--ds-font-size-sm));
@@ -167,7 +179,7 @@
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-kicker-font-size, var(--ds-font-size-2xs));
   font-weight: var(--ds-font-weight-medium, 500);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ds-stats-header-kicker-tracking, 0.04em);
   line-height: 1;
   text-transform: uppercase;
 }
@@ -175,29 +187,52 @@
 /* ---- sparkline dots: decorative data viz (aria-hidden); the hover ping is
         pure CSS on the parent card, staggered on the ping channel ---- */
 .ds-stats-header[data-part='root'] [data-part='spark-dots'] {
-  margin-block-start: 14px;
+  margin-block-start: var(--ds-stats-header-spark-margin-block-start, 14px);
+  gap: var(--ds-stats-header-spark-dot-gap, 6px);
 }
 .ds-stats-header[data-part='root'] [data-part='spark-dot'] {
-  inline-size: 4px;
-  block-size: 4px;
+  inline-size: var(--ds-stats-header-spark-dot-size, 4px);
+  block-size: var(--ds-stats-header-spark-dot-size, 4px);
   border-radius: 50%;
-  /* per-dot opacity is a runtime instance channel published by the engine
-     (`--_ds-stats-header-spark-dot-opacity`); the declaration lives
-     here. Unset ⇒ fully opaque, matching a flat series. */
-  opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
+  /* The dot's share of the series maximum arrives as a closed `data-level`
+     domain (0-7) rather than as a computed opacity in the style attribute, and
+     the ramp from the floor to opaque is this file's. An unstamped dot reads
+     level 0 only if the series is flat at its own minimum; the component always
+     stamps, so the 0 here is the resting value, not a guess. */
+  opacity: calc(
+    var(--ds-stats-header-spark-dot-opacity-floor, 0.15) +
+      var(--_ds-stats-header-spark-dot-level, 0) *
+        (1 - var(--ds-stats-header-spark-dot-opacity-floor, 0.15)) / 7
+  );
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
     opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
 }
+/* The eight steps of the level domain. A level is a share of the series maximum,
+   so the ramp is linear and the top step is opaque. */
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='1'] { --_ds-stats-header-spark-dot-level: 1; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='2'] { --_ds-stats-header-spark-dot-level: 2; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='3'] { --_ds-stats-header-spark-dot-level: 3; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='4'] { --_ds-stats-header-spark-dot-level: 4; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='5'] { --_ds-stats-header-spark-dot-level: 5; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='6'] { --_ds-stats-header-spark-dot-level: 6; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='7'] { --_ds-stats-header-spark-dot-level: 7; }
+
 @media (hover: hover) {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'] {
     animation: pulse-dot-ping var(--ds-stats-header-ping-duration, 400ms) ease both;
   }
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='1'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='2'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='2'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 2); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='3'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='3'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 3); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='4'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='4'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 4); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='5'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='5'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 5); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='6'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='6'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 6); }
 }
 .ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='primary'] { background: var(--ds-color-primary); }
@@ -208,12 +243,12 @@
 
 /* ---- progress meter slot (the composed Progress owns track + fill) ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-progress'] {
-  margin-block-start: 10px;
+  margin-block-start: var(--ds-stats-header-progress-margin-block-start, 10px);
 }
 
 /* ---- insight ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight'] {
-  margin-block-start: 8px;
+  margin-block-start: var(--ds-stats-header-insight-margin-block-start, 8px);
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-meta-font-size, var(--ds-font-size-2xs));
   font-style: italic;
@@ -225,29 +260,14 @@
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
-  block-size: 40px;
+  block-size: var(--ds-stats-header-glow-block-size, 40px);
   pointer-events: none;
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) 6%, transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='success'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-success) 6%, transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='warning'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-warning) 6%, transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='success'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-success) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='warning'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-warning) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='error']   [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-error) 6%, transparent), transparent); }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='info']    [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-info) 6%, transparent), transparent); }
-
-/* ---- loading: the skeleton card frame mirrors the stat card (the composed
-        Skeleton owns the placeholder bars) ---- */
-.ds-stats-header[data-part='root'] [data-part='skeleton-card'] {
-  flex: 1 1 0;
-  min-inline-size: 0;
-  min-block-size: var(--ds-stats-header-card-min-height, 140px);
-  padding: var(--ds-stats-header-card-padding, 20px 24px);
-  /* mirrors the stat card's edge posture (same canonical channel) */
-  border-radius: var(--ds-radius-lg, 12px);
-  background: var(--ds-color-bg-primary);
-}
-.ds-stats-header[data-part='root'][data-loading='true'] [data-part='skeleton-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
-}
 
 /* ---- container cuts: 2 columns mid, 1 narrow + compact measure.
         The cuts CAP the track count instead of replacing the grid, and they
@@ -271,13 +291,12 @@
   .ds-stats-header[data-part='root']:not([data-columns='1']) {
     --_ds-stats-header-track-count: 1;
   }
-  .ds-stats-header[data-part='root'] [data-part='stat-card'],
-  .ds-stats-header[data-part='root'] [data-part='skeleton-card'] {
-    min-block-size: 120px;
+  .ds-stats-header[data-part='root'] [data-part='stat-card'] {
+    min-block-size: var(--ds-stats-header-card-min-height-compact, 120px);
     padding: var(--ds-stats-header-card-padding-compact, 18px);
   }
   .ds-stats-header[data-part='root'] [data-part='stat-card'] {
-    --ds-stats-header-value-font-size: 1.75rem;
+    --ds-stats-header-value-font-size: var(--ds-stats-header-value-font-size-compact, 1.75rem);
   }
 }
 
@@ -286,6 +305,7 @@
   .ds-stats-header[data-part='root'] [data-part='spark-dot'] {
     transition: none;
   }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'] {
     animation: none;
   }
@@ -297,8 +317,7 @@
    removed (they carry no information); the composed Statistic / Skeleton /
    Progress primitives keep their own forced-colors contracts. */
 @media (forced-colors: active) {
-  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent],
-  .ds-stats-header[data-part='root'][data-loading='true'] [data-part='skeleton-card'] {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;

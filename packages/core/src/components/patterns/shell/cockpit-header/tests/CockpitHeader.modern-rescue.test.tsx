@@ -41,23 +41,23 @@ describe('CockpitHeader modern — rescue drills', () => {
   });
 });
 
+/** Every bone the shared renderer drew, in document order, by the part it read. */
+const boneParts = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll('[data-part="bone"]')).map((bone) =>
+    bone.getAttribute('data-source-part'),
+  );
+
 /**
- * The skeleton must reserve the footprint the caller actually asked for. A
- * skeleton that always draws breadcrumb + icon + subtitle + two actions
- * collapses on hydrate for every header that does not use them.
+ * The loading state must stand in for the header the caller actually asked for.
+ * It is no longer a hand-written reserve that has to be kept in step with the
+ * chrome: the shared renderer walks this header's own parts, so the two cannot
+ * drift.
  */
-describe('CockpitHeader modern — skeleton mirrors the requested anatomy', () => {
+describe('CockpitHeader modern — skeleton IS the requested anatomy', () => {
   it('reserves only the title for a title-only header', () => {
     const { container } = render(<ModernCockpitHeader title="Detail" loading />);
 
-    const skeletons = container.querySelectorAll('[data-part="skeleton"]');
-    expect(skeletons.length).toBe(1);
-    expect(skeletons[0].getAttribute('data-size')).toBe('title');
-
-    expect(container.querySelector('[data-size="crumb"]')).toBeNull();
-    expect(container.querySelector('[data-size="icon"]')).toBeNull();
-    expect(container.querySelector('[data-size="subtitle"]')).toBeNull();
-    expect(container.querySelector('[data-part="skeleton-actions"]')).toBeNull();
+    expect(boneParts(container)).toEqual(['title']);
   });
 
   it('grows each reserved block only when the matching prop is supplied', () => {
@@ -69,14 +69,22 @@ describe('CockpitHeader modern — skeleton mirrors the requested anatomy', () =
         icon={<span data-testid="icon" />}
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Detail' }]}
         actions={<button type="button">Save</button>}
+        onBack={() => {}}
         loading
       />,
     );
 
-    expect(container.querySelectorAll('[data-size="crumb"]').length).toBe(2);
-    expect(container.querySelector('[data-size="icon"]')).not.toBeNull();
-    expect(container.querySelector('[data-size="subtitle"]')).not.toBeNull();
-    expect(container.querySelectorAll('[data-size="action"]').length).toBe(2);
+    // One bone per crumb, the back control's own box, the framed tile, and the
+    // copy column -- all measured from the chrome rather than declared here.
+    expect(boneParts(container)).toEqual([
+      'crumb',
+      'crumb',
+      'trigger',
+      'header-icon',
+      'eyebrow',
+      'title',
+      'subtitle',
+    ]);
   });
 
   it('announces the busy state and keeps the anatomy stamps across the swap', () => {
@@ -86,6 +94,8 @@ describe('CockpitHeader modern — skeleton mirrors the requested anatomy', () =
 
     const root = container.querySelector('[data-part="root"]') as HTMLElement;
     expect(root).toHaveAttribute('aria-busy', 'true');
+    expect(root).toHaveAttribute('role', 'status');
+    expect(root).toHaveAttribute('aria-label', 'Loading');
     // The loading root carries the same anatomy stamps the loaded root does,
     // so the skin cannot paint a different lead footprint across the swap.
     expect(root).toHaveAttribute('data-has-icon', 'true');
@@ -103,7 +113,9 @@ describe('CockpitHeader modern — the compact posture never drops navigation', 
     );
 
     const home = screen.getByRole('link', { name: 'Home' });
-    home.focus();
+    // Focus is a kernel state update now (the crumb stamps `data-state`), so the
+    // move is committed inside `act` rather than left for React to warn about.
+    act(() => home.focus());
     expect(document.activeElement).toBe(home);
 
     act(() => {
