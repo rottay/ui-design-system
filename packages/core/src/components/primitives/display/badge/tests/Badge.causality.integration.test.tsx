@@ -57,15 +57,17 @@ describeCausality({
 
 /**
  * Measured debt, pinned by node IDENTITY. Registered, never excluded: the soft
- * chip's ink does not clear the contrast floor on these dark grounds, and
- * bithire's dark ground fails it for the anchor as well. The fix is a
- * mode-aware ink derivation for the soft tone, never an axe exclusion.
+ * chip's ink does not clear the contrast floor on this dark ground. The fix is
+ * a mode-aware ink derivation for the soft tone, never an axe exclusion.
+ *
+ * `bithire dark` had three rows -- the anchor and both chip labels -- and they
+ * DRAINED: that scope's dark block now re-derives its own canvas ground instead
+ * of inheriting the light body's, so those nodes no longer sit on a near-white
+ * ground. Dropped by identity, not waived: with no entry the scope must now
+ * measure clean, and a relapse reddens here.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'rottay dark': { 'color-contrast': ['span[title="Done"]'] },
-  'bithire dark': {
-    'color-contrast': ['.rottay-badge-anchor', 'span[title="Chip"]', 'span[title="Inbox"]'],
-  },
 };
 
 describe('badge derived channels and accessibility', () => {
