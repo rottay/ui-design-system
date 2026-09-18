@@ -1991,16 +1991,17 @@ test('both DnD ratchets are decrease-only, so a new independent implementation r
   expectFinding(grown('dndDropZoneOwners'), '`dndDropZoneOwners` GREW from 0 to 1', 'the drop-zone ratchet holds');
 });
 
-test('the live DnD census: four adopted families, two still owning their own transport', () => {
+test('the live DnD census: all six owners adopted the kernel', () => {
   // ADOPTED = the kernel is declared AND effectively attached at a DOM element,
-  // so the family's own counter reads 0. PENDING = one owner, kernel unimported.
+  // so the family's own counter reads 0. A family owning its transport again
+  // (a rollback) flips its row and reddens this census.
   const CENSUS = [
     { family: 'tree', role: 'transport', adopted: true },
     { family: 'saved-views', role: 'transport', adopted: true },
     { family: 'upload', role: 'dropZone', adopted: true },
     { family: 'file-manager', role: 'dropZone', adopted: true },
-    { family: 'kanban-board', role: 'transport', adopted: false },
-    { family: 'column-menu', role: 'transport', adopted: false },
+    { family: 'kanban-board', role: 'transport', adopted: true },
+    { family: 'column-menu', role: 'transport', adopted: true },
   ];
   const RATCHET = { transport: 'dndTransportOwners', dropZone: 'dndDropZoneOwners' };
 
