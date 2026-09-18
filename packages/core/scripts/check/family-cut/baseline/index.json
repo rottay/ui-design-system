@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "law": "a family under the cut contract holds every BLOCKING arm of scripts/check/family-cut and never grows a pinned counter. A pinned counter is only ever the gate's own measurement: re-pins are taken from the gate's output, never hand-computed",
   "policy": "decrease-only: a pinned counter may shrink -- and must then be lowered here -- but may never grow. The one sanctioned exception is an INSTRUMENT-COVERAGE move: when the gate itself starts measuring a corpus it did not scan before, the affected rows are re-pinned to what the gate then measures, the growth is recorded in each row's cutNote as newly visible debt, and no ceiling is raised for source that changed.",
-  "roster": "a family enters this file when its cut work order opens and leaves the debt columns at 0 when the cut closes; `cut` names the owning work order",
+  "roster": "a family enters this file when its cut work order opens and leaves the debt columns at 0 when the cut closes; `cut` names the owning work order. A row admitted before its cut lands carries `openCut`: the work order that owns it and the exact BLOCKING debt it inherited. That is an admission at a measured debt, never a pass -- the gate reports the row separately, refuses growth in any declared arm, and refuses a shrink that is not written down here",
   "families": {
     "button": {
       "cut": "WO-FAM-01",
@@ -1095,6 +1095,7 @@
     },
     "list": {
       "cut": "WO-FAM-06",
+      "owner": "src/components/primitives/display/list",
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 3,
@@ -1114,7 +1115,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 58 -> 65, readWithoutProducer 0 -> 5. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
+      "cutNote": "WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 58 -> 65, readWithoutProducer 0 -> 5. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. WO-FAM-10 sub-lot A (2026-09-18): pinned to its primitive owner. The S1 owner-walk fix made `surfaces/presentation/pages/data/list` visible, and a family resolving to two owners is a refusal rather than a guess -- the pin selects the owner this row has always measured."
     },
     "container": {
       "cut": "WO-FAM-07",
@@ -1772,6 +1773,746 @@
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
       "cutNote": "WO-FAM-08 (B9): the field-filters-panel structure measured on the B9 lot tree over HEAD be69bb75e. Every blocking arm is clean: inlineStyleViolations 0, visualLiterals 0, antReads 0, one owner (src/components/structures/workspace/field-filters-panel), stampsAnatomy/skinReadsAnatomy/variantContract/stateContract/stateGoverned all true, skeleton by the shared anatomy renderer, a11y 1 probe / 3 assertions. SKELETON (1 finding -> 0): the family draws NO loading state and never did -- no `loading` prop, no skeleton branch, no skeleton rule or keyframe -- so there was nothing to retire onto AnatomySkeleton, exactly as with virtual-list in B7. The single finding was a stamped part the shared renderer had no role for: `presets-row` is now 'pass' in SKELETON_PART_ROLES, beside `presets-region`, because the quick-slice pill and the chips it holds are drawn and the wrapping lane itself is not. NO DERIVER, DELIBERATELY: the family's only unproduced read is --ds-material-control-highlight, which is the MATERIALS vocabulary owned by derivation/materials; a chrome/field-filters-panel that produced it would be a second owner of another family's channel. readWithoutProducer stays 1 and is named residue for the materials family, not a gap here. Every other name the skin reads is a cascade root or a --ds-button-*/--ds-input-* relay it hands a composed primitive, and all of those have producers. ANATOMY (2 orphans -> 0): title-group and presets-row were stamped and painted by nobody. Both are wrapping flex lanes holding free-form copy, so both now state min-inline-size: 0 -- the same floor header-copy and filter-card-copy already state for the same reason, and without it a long subtitle or a long preset label pushed its lane past the panel instead of wrapping inside it. unpairedStatePseudoSelectors STAYS AT 1 and is the one pin this row carries above 0; it is adjudicated, never fabricated away. The family's single state-bearing part is `preset-chip`, which IS the composed Button primitive: that primitive runs the interaction kernel itself and spreads partAttributes(dataPart ?? 'trigger', interaction) AFTER the caller's props, so its stamp is authoritative and a caller-supplied data-state is silently dropped. State is therefore already decided ONCE for this part, and the skin could pair the selector truthfully -- but the gate's stateGoverned arm is spelled `skin reads [data-state] implies the FAMILY's own source calls partAttributes`, so pairing alone would turn a BLOCKING arm red, and satisfying that arm would mean installing a second interaction kernel on a node the primitive already governs, which is F-37 itself. Pairing was therefore NOT done and the pin stands with the mechanism written down; the gate-proxy question is escalated to the owner with the measurement above. Retiring the family's Box-as-button chip in favour of the primitive was a premium-wave decision this cut does not reverse. ADAPT: field-filters-panel is NOT declared in LAYOUT_SENSITIVE_FAMILIES, so the adaptSlot arm is vacuously clean; the family answers narrow compositions with an auto-fit 230px card grid instead of a posture. CAUSALITY: the decision-causality suite is src/components/structures/workspace/field-filters-panel/tests/FieldFiltersPanel.causality.integration.test.tsx (7 tests, Chromium). With no deriver there is no consumes list to discharge, so it probes what actually reaches the family's own paint, each with a negative control -- palette.seeds (the live filter count's ink and the chip glyph's ground), typography.scale and density.mode (the composed chip's type step and its target, measured where they LAND rather than where they are written, per the table-toolbar ruling) -- with the card's px corner as the control. It also pins, EXECUTABLY, the three decisions that reach none of this family's paint: shape.radius-scale (every corner it owns is a px literal and the chip is a `round` Button on the full rung), motion.dial (the panel entrance reads --ds-motion-normal, an alias of the cadence step the theme's entrance duration sets and the dial does not bend) and states.focus-style (delivered under :focus-visible, a platform state no static probe can enter). Each is asserted to leave every reading identical, so the day one of them starts to reach the family the inventory is re-adjudicated instead of silently outgrown. REPAIRED BY THIS CUT, not pinned: the axe `aria-input-field-name` findings. Every filter's Select/Input rendered with no accessible name -- the card's label Text was never associated with the control it labelled -- so each control now carries its filter's own name. AXE: CLEAN in all four gated scopes afterwards, so the debt pin is {}. Re-pin 2026-09-17 (DT, wave R17/FAM-08): measured after the reviewed lots 8fb516981 (census reconciliation), c43433737 (typography sweep) and a44456774 (P0); every move is a decrease of pinned debt or a census re-read the gate itself instructed, with the lot named."
+    },
+    "form-header": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/structures/headers/form",
+      "skins": [
+        "form-header",
+        "header-hero-shared"
+      ],
+      "namingNote": "the owner folder is `form`, an id the `form` primitive already holds together with the `--ds-form-*` namespace, so this family is `form-header` after its own skin. `skin/header-hero-shared` is the hero paint proven byte-identical between FormHeader and EditHeader and named after neither, so BOTH rows measure it: its debt is counted twice and discharged once. No file is renamed by this row.",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 1,
+        "channelsRead": 54,
+        "classTokens": 1,
+        "partsStamped": 20,
+        "partsConsumed": 18
+      },
+      "readWithoutProducer": 10,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 3,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 4,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot C (the header contract and the two families that prove it)",
+        "debt": {
+          "visualLiterals": 1,
+          "skeletonPartsWithoutRole": 15
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt, not as a pass. 10 of its 47 channels have no producer, 4 of them read through the shared hero skin; the one source colour literal is the `color-mix(...)` secondary arm of `getVariantTone`, whose second byte-identical copy lives in `edit-header` -- extracting the contract once clears both."
+    },
+    "edit-header": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/structures/headers/edit",
+      "skins": [
+        "edit-header",
+        "header-hero-shared"
+      ],
+      "namingNote": "the owner folder is `edit` and the paint is `skin/edit-header`, so the family takes the name of its skin. `skin/header-hero-shared` is shared with `form-header` and is measured by both rows.",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 1,
+        "channelsRead": 54,
+        "classTokens": 1,
+        "partsStamped": 28,
+        "partsConsumed": 26
+      },
+      "readWithoutProducer": 10,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 2,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 5,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot C (the header contract and the two families that prove it)",
+        "debt": {
+          "visualLiterals": 1,
+          "skeletonPartsWithoutRole": 22
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot C (the header contract and the two families that prove it) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot C. Admitted at its measured debt. Same shared hero skin and the same single `getVariantTone` colour literal as `form-header`; 4 of its 5 unpaired state pseudo-selectors are the shared skin's."
+    },
+    "collection-header": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/structures/headers/collection",
+      "namingNote": "the owner folder is `collection`; as a family id that prefix swallows `skin/collection-workspace` and `skin/collection-workspace-render-dispatch`, which are another cut's surface. `collection-header` is the skin holding exactly this header's paint.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 78,
+        "classTokens": 1,
+        "partsStamped": 18,
+        "partsConsumed": 15
+      },
+      "readWithoutProducer": 22,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 3,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 4,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot D (the remaining page headers)",
+        "debt": {
+          "inlineStyleViolations": 104,
+          "skeletonHandMade": 10,
+          "skeletonPartsWithoutRole": 12
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. It carries 104 of the cut's 155 inline paints and 22 of its unproduced reads, 7 of which are the `kbd` namespace read by the search hint and routed to the `kbd` owner rather than produced locally."
+    },
+    "dashboard-header": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/structures/headers/dashboard",
+      "namingNote": "the owner folder is `dashboard`, shared with `structures/dashboard`, whose insights subtree carries 183 inline paints that are not this header's. The id is the skin name, which holds only the header.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 73,
+        "classTokens": 1,
+        "partsStamped": 23,
+        "partsConsumed": 23
+      },
+      "readWithoutProducer": 16,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 5,
+      "unpairedStatePseudoSelectors": 2,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot D (the remaining page headers)",
+        "debt": {
+          "stateGoverned": 1,
+          "skeletonPartsWithoutRole": 13
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. The blocking arm here is `stateGoverned`: the skin decides state through `[data-state]` and the source never calls `partAttributes` (F-37), which is also why 5 states are painted and never stamped."
+    },
+    "detail-header": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/structures/headers/detail",
+      "namingNote": "the owner folder is `detail`; as a family id it swallows `skin/detail` (DetailSurface) and `skin/detail-form-surface`, both of which self-identify as other owners in their own file headers.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 79,
+        "classTokens": 1,
+        "partsStamped": 30,
+        "partsConsumed": 30
+      },
+      "readWithoutProducer": 31,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 7,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot D (the remaining page headers)",
+        "debt": {
+          "inlineStyleViolations": 4,
+          "skeletonPartsWithoutRole": 21
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 31 of 79 channels have no producer -- the highest unproduced share in the cut."
+    },
+    "header-surface": {
+      "cut": "WO-FAM-10",
+      "skins": [
+        "layout-header"
+      ],
+      "namingNote": "the owner is `structures/headers/header-surface` and its paint is `skin/layout-header`. With no pin the family resolved zero skins and failed `skinReadsAnatomy` for a naming difference instead of for its paint.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 0,
+        "classTokens": 0,
+        "partsStamped": 1,
+        "partsConsumed": 0
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot D (the remaining page headers)",
+        "debt": {
+          "skinReadsAnatomy": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. Its skin reads no channel at all (0 of 0) and selects no `[data-part]`; the anatomy contract has to be built here, not drained."
+    },
+    "mobile-header": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 17,
+        "classTokens": 1,
+        "partsStamped": 9,
+        "partsConsumed": 8
+      },
+      "readWithoutProducer": 3,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 1,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 4,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot D (the remaining page headers)",
+        "debt": {
+          "inlineStyleViolations": 1,
+          "skeletonPartsWithoutRole": 4
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. One of the cut's two families carrying a legacy non-`ds-` class."
+    },
+    "stats-header": {
+      "cut": "WO-FAM-10",
+      "skins": [
+        "stats-header",
+        "stats-header-keyframes"
+      ],
+      "namingNote": "`skin/stats-header-keyframes` holds this family's own `@keyframes` and therefore selects no class, so the foreign-compound filter read it as another owner's paint and dropped it. It is this family's motion and is pinned back in.",
+      "denominators": {
+        "skinFiles": 2,
+        "sourceFiles": 4,
+        "channelsRead": 28,
+        "classTokens": 1,
+        "partsStamped": 16,
+        "partsConsumed": 17
+      },
+      "readWithoutProducer": 9,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 12,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot D (the remaining page headers)",
+        "debt": {
+          "inlineStyleViolations": 1,
+          "skeletonHandMade": 6,
+          "skeletonPartsWithoutRole": 14,
+          "a11yAssertions": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 12 unpaired state pseudo-selectors, the cut's second largest F-37 debt, and no executable a11y assertion of its own."
+    },
+    "section-frame": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 2,
+        "channelsRead": 12,
+        "classTokens": 1,
+        "partsStamped": 8,
+        "partsConsumed": 0
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 1,
+      "partsStampedNotConsumed": 8,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot D (the remaining page headers)",
+        "debt": {
+          "skinReadsAnatomy": 1,
+          "skeletonPartsWithoutRole": 4,
+          "a11yAssertions": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt, and the cleanest family in the cut: every channel it reads has a producer. Its debt is 8 unpainted parts, 4 parts with no skeleton role, a skin that selects no `[data-part]`, and no a11y assertion at all (0 test files)."
+    },
+    "cockpit-header": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 89,
+        "classTokens": 0,
+        "partsStamped": 24,
+        "partsConsumed": 24
+      },
+      "readWithoutProducer": 11,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 10,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot E (the shell headers)",
+        "debt": {
+          "skeletonHandMade": 19,
+          "skeletonPartsWithoutRole": 8
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot E. Admitted at its measured debt. One of the two cut families whose skin lives in `engines/modern/skin/` rather than the presentation tier; 19 hand-made skeleton constructs."
+    },
+    "workbench-header": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 90,
+        "classTokens": 0,
+        "partsStamped": 19,
+        "partsConsumed": 19
+      },
+      "readWithoutProducer": 9,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 20,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot E (the shell headers)",
+        "debt": {
+          "skeletonHandMade": 25,
+          "skeletonPartsWithoutRole": 6
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot E (the shell headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot E. Admitted at its measured debt. The cut's largest F-37 debt (20 unpaired state pseudo-selectors) and its only shared-kernel adoption (`useOptionalDirection`)."
+    },
+    "record": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 8,
+        "channelsRead": 32,
+        "classTokens": 1,
+        "partsStamped": 93,
+        "partsConsumed": 28
+      },
+      "readWithoutProducer": 1,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 65,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 7,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot F (record and the form surfaces)",
+        "debt": {
+          "inlineStyleViolations": 11,
+          "skeletonHandMade": 20,
+          "skeletonPartsWithoutRole": 77
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot F, cut as ONE family. `summary-strip`, `field-grid`, `field`, `action-bar` and `panel` are blocks of it, not families: every block root stamps `data-structure='record'` and all static geometry lives in the single `skin/record/index.css`. Measured as five families, each of them resolves zero skins and fails `skinReadsAnatomy` for that reason alone. The prefix siblings `record-facts` and `record-workbench` are excluded by the foreign-compound filter with their reasons printed, so no pin is needed here."
+    },
+    "form-sections": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 43,
+        "classTokens": 1,
+        "partsStamped": 35,
+        "partsConsumed": 35
+      },
+      "readWithoutProducer": 1,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 3,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot F (record and the form surfaces)",
+        "debt": {
+          "inlineStyleViolations": 1,
+          "skeletonHandMade": 8,
+          "skeletonPartsWithoutRole": 30
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 43 channels read, 1 without a producer, 8 hand-made skeleton constructs."
+    },
+    "edit-fields": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 27,
+        "classTokens": 1,
+        "partsStamped": 42,
+        "partsConsumed": 40
+      },
+      "readWithoutProducer": 2,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 2,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot F (record and the form surfaces)",
+        "debt": {
+          "inlineStyleViolations": 8,
+          "skeletonPartsWithoutRole": 34
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot F. Admitted at its measured debt. 8 inline paints and 34 parts with no skeleton role."
+    },
+    "form-surface": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/surfaces/presentation/pages/forms/form",
+      "namingNote": "the owner folder is `form`, an id the `form` primitive holds, so the surface is admitted under the name of its skin. This owner is also one of the four the census could not see at all before S1.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 3,
+        "classTokens": 2,
+        "partsStamped": 4,
+        "partsConsumed": 0
+      },
+      "readWithoutProducer": 1,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 4,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot F (record and the form surfaces)",
+        "debt": {
+          "skinReadsAnatomy": 1,
+          "skeletonPartsWithoutRole": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot F, and one of the four owners S1 made visible. Its skin selects classes and never `[data-part]`: a near-empty shell reading 3 channels, so the anatomy contract has to be built rather than drained."
+    },
+    "wizard-surface": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/surfaces/presentation/pages/forms/wizard",
+      "namingNote": "the owner folder is `wizard` and the paint is `skin/wizard-surface`; the family takes the name of its skin so the id matches the paint it must reconcile.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 2,
+        "classTokens": 0,
+        "partsStamped": 3,
+        "partsConsumed": 0
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 3,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot F (record and the form surfaces)",
+        "debt": {
+          "skinReadsAnatomy": 1,
+          "skeletonPartsWithoutRole": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin."
+    },
+    "detail-form-surface": {
+      "cut": "WO-FAM-10",
+      "owner": "src/components/surfaces/presentation/pages/forms/detail-form",
+      "namingNote": "the owner folder is `detail-form` and the paint is `skin/detail-form-surface`; the family takes the name of its skin.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 2,
+        "classTokens": 0,
+        "partsStamped": 2,
+        "partsConsumed": 0
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 2,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot F (record and the form surfaces)",
+        "debt": {
+          "skinReadsAnatomy": 1,
+          "skeletonPartsWithoutRole": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot F, S1-visible. A near-empty shell: 2 channels, no `[data-part]` in the skin."
+    },
+    "guided-draft-form": {
+      "cut": "WO-FAM-10",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 29,
+        "classTokens": 1,
+        "partsStamped": 53,
+        "partsConsumed": 31
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 22,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot F (record and the form surfaces)",
+        "debt": {
+          "inlineStyleViolations": 5,
+          "skeletonHandMade": 8,
+          "skeletonPartsWithoutRole": 46,
+          "a11yAssertions": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot F (record and the form surfaces) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot F, S1-visible, and the family the blind walk measured INVERTED: it reported 31 parts painted-and-never-stamped and zero source files, where the owner in fact stamps 53 parts and carries 5 inline paints, 8 hand-made skeleton constructs and 46 parts with no skeleton role. It owns no executable a11y assertion."
+    },
+    "surface-lifecycle": {
+      "cut": "WO-FAM-10",
+      "skins": [
+        "surface-states"
+      ],
+      "namingNote": "the owner is `structures/feedback/surface-lifecycle` and its paint is `skin/surface-states`. With no pin the family resolved zero skins and failed `skinReadsAnatomy` for a naming difference instead of for its paint.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 17,
+        "classTokens": 0,
+        "partsStamped": 6,
+        "partsConsumed": 9
+      },
+      "readWithoutProducer": 7,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 2,
+      "partsConsumedNotStamped": 5,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-10",
+        "opened": "2026-09-18",
+        "lot": "sub-lot G (surface-lifecycle)",
+        "debt": {
+          "inlineStyleViolations": 20,
+          "visualLiterals": 6,
+          "skeletonHandMade": 9,
+          "skeletonPartsWithoutRole": 1
+        },
+        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot G (surface-lifecycle) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here"
+      },
+      "cutNote": "WO-FAM-10 sub-lot G. Admitted at its measured debt. All 20 inline paints and all 6 source colour literals live in one file, `surface-lifecycle/error-boundary/index.tsx`: an error boundary paints itself inline so it still renders when the stylesheet is the thing that failed. That is a product constraint the cut answers with a static fallback rule in the skin, not a sweep."
     }
-  }
+  },
+  "routed": [
+    {
+      "family": "panel",
+      "declaredBy": [
+        "surfaces.border-style"
+      ],
+      "route": "WO-CAT-02 (the control catalog is the single listing)",
+      "note": "the owner `structures/record/panel` exists but is a BLOCK of the `record` family, not a family of its own: it has no skin, and its paint is `skin/record/index.css`, which does read `--ds-edge-standard-width`. The cascade arrives and the declaration does not. Measured as its own family, `panel` resolves zero skins and reports `fanOutUnreached=1`, which is an artifact of the id rather than of the paint. Either the catalog row declares `record`, or sub-lot F splits the skin. Registered, not fixed: the catalog is singleton-owned and outside this lot's write set."
+    },
+    {
+      "family": "glass",
+      "declaredBy": [
+        "surfaces.effect-intensity"
+      ],
+      "route": "WO-CAT-02",
+      "note": "no component owner and no skin of this name exists anywhere under `src/components` or the two skin roots. `glass` is an effect ROLE, not a family; `--ds-effect-intensity` is read by roster families instead. Registered, not fixed."
+    },
+    {
+      "family": "blur",
+      "declaredBy": [
+        "surfaces.effect-intensity"
+      ],
+      "route": "WO-CAT-02",
+      "note": "no component owner and no skin of this name exists; an effect role declared where a family id belongs. Registered, not fixed."
+    },
+    {
+      "family": "glow",
+      "declaredBy": [
+        "surfaces.effect-intensity"
+      ],
+      "route": "WO-CAT-02",
+      "note": "no component owner and no skin of this name exists; an effect role declared where a family id belongs. Registered, not fixed."
+    },
+    {
+      "family": "section-card",
+      "declaredBy": [
+        "recipe-profile"
+      ],
+      "route": "WO-CAT-02",
+      "note": "no component owner and no skin of this name exists. The row is `data-only`, so `fanOutFor` never counts it as an unreached cascade claim -- which is exactly why nothing else would ever have caught the id. Registered, not fixed."
+    },
+    {
+      "family": "cardComponent",
+      "declaredBy": [
+        "chrome.anatomy"
+      ],
+      "route": "WO-CAT-02",
+      "note": "a chrome SECTION name (`TenantAppearanceAdvanced.chrome.cardComponent`) declared in a family fan-out. No family id in this package is camelCase; the family is `card`. Registered, not fixed."
+    },
+    {
+      "family": "sidebar",
+      "declaredBy": [
+        "chrome.anatomy"
+      ],
+      "route": "WO-CAT-02",
+      "note": "a chrome section name. The nearest family is `sidebar-surface` (`structures/shell/navigation/sidebar-surface`), which is a roster row; the declared id is one word off and reaches nothing. Registered, not fixed."
+    },
+    {
+      "family": "layout",
+      "declaredBy": [
+        "chrome.anatomy"
+      ],
+      "route": "WO-CAT-02",
+      "note": "a chrome section name. `primitives/layout` is a tier group directory rather than a component owner, and `skin/layout` is the layout chrome rather than a family skin. Registered, not fixed."
+    }
+  ],
+  "routedLaw": "every family id a catalog `declared-fan-out` row names must either be a roster row -- where the `fanOutUnreached` ratchet checks the claim on every run -- or be registered in `routed` with the owner it belongs to. An id that is neither is a fan-out claim nobody can ever check"
 }

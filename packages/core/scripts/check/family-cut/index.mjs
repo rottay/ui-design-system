@@ -227,6 +227,24 @@ function walkFiles(dir, predicate, found = []) {
  */
 const NESTED_OWNER_SEGMENT = /\/(?:compound|engines|contracts|tests|runtime|foundation|composition|presentation)\//u;
 
+/**
+ * One word, two meanings. Inside `primitives/`, `patterns/` and `structures/`
+ * a `presentation/` segment is a sub-owner of the owner above it. Inside
+ * `surfaces/` it is the tier's own first-level dependency BRANCH -- the tier
+ * declares `foundation/`, `runtime/` and `presentation/pages/`, and every page
+ * owner lives below the third of them. Reading the branch as a sub-owner hid
+ * the whole tier from the census, so the branch segment is forgiven exactly
+ * once, at the tier's first level: `surfaces/presentation/pages/forms/form` is
+ * an owner, `surfaces/presentation` itself is a branch and never an owner, and
+ * a nested-owner segment deeper down (`.../form/tests`) still excludes.
+ */
+const TIER_BRANCH_PREFIX = '/surfaces/presentation/';
+
+const withoutTierBranch = (rel) =>
+  (rel.startsWith(TIER_BRANCH_PREFIX) && rel.length > TIER_BRANCH_PREFIX.length
+    ? `/surfaces/${rel.slice(TIER_BRANCH_PREFIX.length)}`
+    : rel);
+
 function collectOwnerDirs(root) {
   const dirs = [];
   const componentRoot = join(root, COMPONENT_ROOT);
@@ -241,7 +259,7 @@ function collectOwnerDirs(root) {
       if (!entry.isDirectory()) continue;
       const full = join(dir, entry.name);
       const rel = `/${toPosix(relative(componentRoot, full))}/`;
-      if (!NESTED_OWNER_SEGMENT.test(rel)) dirs.push(full);
+      if (!NESTED_OWNER_SEGMENT.test(withoutTierBranch(rel))) dirs.push(full);
       walk(full);
     }
   };
@@ -492,16 +510,25 @@ export function countExecutableA11yAssertions(file, text = readFileSync(file, 'u
 }
 
 /**
- * `pin.owner` names the family's one owner when its folder name is shared with
- * another tier (`form` is both the primitive and the FormHeader structure).
- * It selects among the candidates and never adds one: a pin that matches none
- * leaves the family with zero owners, which is a BLOCKING refusal.
+ * `pin.owner` names the family's one owner directory. Two jobs: it selects
+ * among same-named candidates when a folder name is shared with another tier
+ * (`form` is both the primitive and the FormHeader structure), and it resolves
+ * a family whose id is not its folder name (`form-header` is owned by
+ * `structures/headers/form`; a rename is a different lot). It never invents an
+ * owner: the pin must name a directory the owner walk admits, or the family
+ * resolves to zero owners, which is a BLOCKING refusal.
+ *
+ * `pin.skins` names the skin directories that ARE this family's paint, for the
+ * families whose skin is not named after them (`header-surface` is painted by
+ * `skin/layout-header`). It is exact: name inference and the foreign-compound
+ * filter both step aside, a pinned name that matches no skin file is reported,
+ * and a skin outside the list is not this family's.
  */
 export function resolveFamily(family, root = DEFAULT_ROOT, pin = {}) {
   const ownerDirs = collectOwnerDirs(root);
   const candidates = findComponentDirs(root, family, ownerDirs);
   const componentDirs = pin.owner
-    ? candidates.filter((dir) => toPosix(relative(root, dir)) === pin.owner)
+    ? ownerDirs.filter((dir) => toPosix(relative(root, dir)) === pin.owner)
     : candidates;
   const frozenOnly = collectFrozenOnlyModules(componentDirs);
   const sources = componentDirs
@@ -513,15 +540,22 @@ export function resolveFamily(family, root = DEFAULT_ROOT, pin = {}) {
     .matchAll(new RegExp(`(?<![\\w-])(?:${CLASS_PREFIXES.join('|')})-[a-z0-9]+(?:-{1,2}[a-z0-9]+)*`, 'gu'))]
     .map((match) => match[0])));
   const foreignSkins = [];
-  const skins = collectSkinFiles(root)
-    .filter((file) => file.includes(MODERN_SKIN_SEGMENT) || toPosix(file).includes('/presentation/components/skin/'))
-    .filter((file) => skinBelongsToFamily(file, family))
-    .filter((file) => {
-      const reason = foreignCompoundReason(file, family, ownerNames, familyClassTokens);
-      if (reason) foreignSkins.push({ skin: toPosix(relative(root, file)), reason });
-      return !reason;
-    })
-    .sort();
+  const pinnedSkins = pin.skins ? new Set(pin.skins) : undefined;
+  const modernScope = collectSkinFiles(root)
+    .filter((file) => file.includes(MODERN_SKIN_SEGMENT) || toPosix(file).includes('/presentation/components/skin/'));
+  const skins = (pinnedSkins
+    ? modernScope.filter((file) => pinnedSkins.has(basename(dirname(file))))
+    : modernScope
+      .filter((file) => skinBelongsToFamily(file, family))
+      .filter((file) => {
+        const reason = foreignCompoundReason(file, family, ownerNames, familyClassTokens);
+        if (reason) foreignSkins.push({ skin: toPosix(relative(root, file)), reason });
+        return !reason;
+      })
+  ).sort();
+  const unmatchedPinnedSkins = pinnedSkins
+    ? [...pinnedSkins].filter((name) => !skins.some((file) => basename(dirname(file)) === name)).sort()
+    : [];
   const recipe = join(
     root,
     'src/infrastructure/runtime/foundation/recipes/contracts/families',
@@ -540,6 +574,8 @@ export function resolveFamily(family, root = DEFAULT_ROOT, pin = {}) {
     foreignSkins,
     ownerCandidates: candidates.map((dir) => toPosix(relative(root, dir))),
     pinnedOwner: pin.owner,
+    pinnedSkins: pin.skins ? [...pin.skins] : undefined,
+    unmatchedPinnedSkins,
     componentDirs,
     sources,
     recipe: existsSync(recipe) ? recipe : undefined,
@@ -1014,6 +1050,27 @@ export function fanOutFor(family, readNames, catalog = readThemeCatalog()) {
     rows.push({ control: row.id, channels, reached, unreached: reached.length === 0 });
   }
   return rows;
+}
+
+/**
+ * Every family id the catalog declares in a fan-out, and the controls that
+ * declare it. A declaration names a family the cut contract is supposed to
+ * measure; an id that matches no roster row is a claim nobody can ever check,
+ * so `collectFindings` refuses one that is not registered as routed.
+ */
+export function declaredFanOutFamilies(catalog = readThemeCatalog()) {
+  const declared = new Map();
+  for (const row of catalog) {
+    const minimum = row.minimumFamilies ?? {};
+    if (minimum.kind !== 'declared-fan-out') continue;
+    for (const family of minimum.families ?? []) {
+      if (!declared.has(family)) declared.set(family, { controls: [], channels: new Set() });
+      const entry = declared.get(family);
+      entry.controls.push(row.id);
+      for (const channel of row.produces?.channels ?? []) entry.channels.add(channel);
+    }
+  }
+  return declared;
 }
 
 // ---------------------------------------------------------------------------
@@ -1694,6 +1751,7 @@ export function measureFamily(resolved, { producers } = {}) {
       stateGoverned: skinUsesStateAttribute ? usesPartAttributes : true,
       a11yProbes: resolved.a11yProbes.length,
       a11yAssertions: resolved.a11yAssertions ?? 0,
+      unmatchedPinnedSkins: resolved.unmatchedPinnedSkins ?? [],
       dndKernelDeclared: dnd.declared,
       dndKernelWired: dnd.wired,
       adaptSlot,
@@ -1724,6 +1782,7 @@ export function measureFamily(resolved, { producers } = {}) {
       variantComposedFrom: [...variantComposedFrom].sort(),
       partsReadThroughComponent: [...anchoredParts].sort(),
       readWithoutProducer: readWithoutProducer.debt,
+      readChannels: [...readNames].sort(),
       fanOut,
       dndTransportOwners: dnd.transportOwners,
       dndDropZoneOwners: dnd.dropZoneOwners,
@@ -1732,6 +1791,8 @@ export function measureFamily(resolved, { producers } = {}) {
       owners: resolved.componentDirs.map((dir) => toPosix(relative(root, dir))),
       ownerCandidates: resolved.ownerCandidates ?? [],
       pinnedOwner: resolved.pinnedOwner,
+      pinnedSkins: resolved.pinnedSkins,
+      unmatchedPinnedSkins: resolved.unmatchedPinnedSkins ?? [],
       foreignSkins: resolved.foreignSkins ?? [],
       skins: resolved.skins.map((file) => toPosix(relative(root, file))),
       sources: resolved.sources.map((file) => toPosix(relative(root, file))),
@@ -1762,9 +1823,106 @@ const RATCHET_LABEL = Object.freeze({
   dndDropZoneOwners: 'files carrying their own external-file drop zone instead of the shared kernel (F-69)',
 });
 
+/**
+ * The BLOCKING arms a row may carry as declared opening debt while its cut is
+ * open, and the count each one measures. Everything NOT in this table is
+ * unwaivable: an ambiguous owner, an empty corpus, a missing or invalid
+ * skeleton vocabulary and a skin pin that names no file all break the
+ * measurement itself, and a broken measurement is never a state a work order
+ * may declare.
+ */
+const OPEN_CUT_LABEL = Object.freeze({
+  inlineStyleViolations: 'inline paints in the family source',
+  visualLiterals: 'colour literals in the family source',
+  antReads: 'Ant Design private variables read by the family skin (F-67)',
+  anatomyStamped: 'the family stamps no `data-part`',
+  skinReadsAnatomy: 'the family skin selects no `[data-part]`',
+  variantContract: '`data-variant` is on exactly one side of the contract',
+  stateContract: '`data-state` is on exactly one side of the contract',
+  stateGoverned: 'the skin decides state through `[data-state]` with no `partAttributes` call (F-37)',
+  adaptSlot: 'adapt-slot findings on a layout-sensitive family',
+  skeletonHandMade: 'hand-made skeleton constructs',
+  skeletonPartsWithoutRole: '`data-part` values the shared skeleton renderer has no role for',
+  dndKernelUnwired: 'the DnD kernel declared and never effectively attached (F-69)',
+  a11yAssertions: 'the family owns no executable accessibility assertion',
+});
+
+export function blockingDebt(measured) {
+  const b = measured.blocking;
+  return {
+    inlineStyleViolations: b.inlineStyleViolations.length,
+    visualLiterals: b.visualLiterals.length,
+    antReads: b.antReads.length,
+    anatomyStamped: b.stampsAnatomy ? 0 : 1,
+    skinReadsAnatomy: b.skinReadsAnatomy ? 0 : 1,
+    variantContract: b.variantContract ? 0 : 1,
+    stateContract: b.stateContract ? 0 : 1,
+    stateGoverned: b.stateGoverned ? 0 : 1,
+    adaptSlot: (b.adaptSlot ?? []).length,
+    skeletonHandMade: (b.skeleton?.handMade ?? []).length,
+    skeletonPartsWithoutRole: (b.skeleton?.partsWithoutRole ?? []).length,
+    dndKernelUnwired: b.dndKernelDeclared && !b.dndKernelWired ? 1 : 0,
+    a11yAssertions: b.a11yAssertions === 0 ? 1 : 0,
+  };
+}
+
+const OPEN_CUT_ARMS = Object.freeze(Object.keys(blockingDebt({
+  blocking: {
+    inlineStyleViolations: [], visualLiterals: [], antReads: [], stampsAnatomy: true,
+    skinReadsAnatomy: true, variantContract: true, stateContract: true, stateGoverned: true,
+    a11yAssertions: 1, dndKernelDeclared: false, dndKernelWired: false, adaptSlot: [], skeleton: undefined,
+  },
+})));
+
+/**
+ * What an open row carries today, for the run's own output. A row is OPEN when
+ * its work order has admitted it at a measured debt; the notes are evidence,
+ * not a pass, and `judgeFamily` still reddens the moment a declared count and
+ * the tree disagree in either direction.
+ */
+export function describeOpenDebt(measured, pinned) {
+  const open = pinned?.openCut;
+  if (!open) return [];
+  const measuredDebt = blockingDebt(measured);
+  const carried = OPEN_CUT_ARMS
+    .filter((arm) => (measuredDebt[arm] ?? 0) > 0)
+    .map((arm) => `${arm}=${measuredDebt[arm]}`);
+  return [
+    `${measured.family}: admitted by ${open.workOrder} at a declared opening debt of `
+      + `${carried.length > 0 ? carried.join(' ') : '(none)'} -- ${open.note}`,
+  ];
+}
+
 export function judgeFamily(measured, pinned) {
   const findings = [];
   const { family, blocking, ratchets, denominators, detail } = measured;
+  const open = pinned?.openCut;
+  const declaredDebt = open?.debt ?? {};
+  const measuredDebt = blockingDebt(measured);
+
+  /* A waivable BLOCKING arm. With no open cut it speaks exactly as it always
+   * has, one finding per violation. With one, the arm's COUNT is pinned like a
+   * ratchet: growth is the family's to fix, and a shrink has to be written
+   * down, so an open row can never drift in either direction unnoticed. */
+  const waivable = (arm, emit) => {
+    const count = measuredDebt[arm] ?? 0;
+    if (!open) {
+      findings.push(...emit());
+      return;
+    }
+    const pin = declaredDebt[arm] ?? 0;
+    if (count > pin) {
+      findings.push(
+        `${family}: open-cut debt \`${arm}\` GREW from ${pin} to ${count} -- ${OPEN_CUT_LABEL[arm]}. `
+          + `An open cut declares the debt it inherited, never debt it added: ${JSON.stringify(emit().slice(0, 3))}`,
+      );
+    } else if (count < pin) {
+      findings.push(
+        `${family}: open-cut debt \`${arm}\` SHRANK from ${pin} to ${count} -- good news that still has to be `
+          + 'written down: lower it in the row\'s `openCut.debt` (an open cut is decrease-only too)',
+      );
+    }
+  };
 
   if (denominators.skinFiles === 0) {
     findings.push(`${family}: resolves to zero Modern skin files -- an empty corpus is never a pass`);
@@ -1772,54 +1930,49 @@ export function judgeFamily(measured, pinned) {
   if (denominators.sourceFiles === 0) {
     findings.push(`${family}: resolves to zero authored source files -- an empty corpus is never a pass`);
   }
+  for (const name of detail.unmatchedPinnedSkins ?? []) {
+    findings.push(
+      `${family}: the roster pins skin \`${name}\` and no skin directory of that name exists -- `
+        + 'a skin pin declares which paint IS the family, so a pin that names nothing is a claim with no file behind it',
+    );
+  }
+  if ((pinned?.skins || (pinned?.owner && basename(pinned.owner) !== family)) && !pinned?.namingNote) {
+    findings.push(
+      `${family}: the roster pins an owner or skin whose name is not the family id and states no \`namingNote\` -- `
+        + 'a divergence between the family id, its owner folder and its skin folder is admitted only with its reason written down',
+    );
+  }
 
-  for (const violation of blocking.inlineStyleViolations) {
-    findings.push(
-      `${family}: BLOCKING inline paint -- \`style\` sets \`${violation.property}\` at ${toPosix(violation.file)}:${violation.line}. `
-        + 'The skin paints; the TSX stamps state. Only a runtime-computed `--ds-*` custom property may travel inline',
-    );
-  }
-  for (const literal of blocking.visualLiterals) {
-    findings.push(
-      `${family}: BLOCKING visual literal \`${literal.value}\` at ${toPosix(literal.file)}:${literal.line} -- a colour belongs to a channel, not to a component source`,
-    );
-  }
-  for (const read of blocking.antReads) {
-    findings.push(
-      `${family}: BLOCKING \`${read.name}\` in ${toPosix(read.file)} -- an Ant Design private variable is not a channel of this design system (F-67)`,
-    );
-  }
+  waivable('inlineStyleViolations', () => blocking.inlineStyleViolations.map((violation) =>
+    `${family}: BLOCKING inline paint -- \`style\` sets \`${violation.property}\` at ${toPosix(violation.file)}:${violation.line}. `
+      + 'The skin paints; the TSX stamps state. Only a runtime-computed `--ds-*` custom property may travel inline'));
+  waivable('visualLiterals', () => blocking.visualLiterals.map((literal) =>
+    `${family}: BLOCKING visual literal \`${literal.value}\` at ${toPosix(literal.file)}:${literal.line} -- a colour belongs to a channel, not to a component source`));
+  waivable('antReads', () => blocking.antReads.map((read) =>
+    `${family}: BLOCKING \`${read.name}\` in ${toPosix(read.file)} -- an Ant Design private variable is not a channel of this design system (F-67)`));
   if (blocking.owners !== 1) {
     findings.push(
       `${family}: BLOCKING resolves to ${blocking.owners} component owner(s) ${JSON.stringify(detail.owners)} -- `
         + 'a family has exactly one source owner; resolution is exact or refused, never a guess between two',
     );
   }
-  if (!blocking.stampsAnatomy) {
-    findings.push(`${family}: BLOCKING the family stamps no \`data-part\`; the anatomy contract is mandatory`);
-  }
-  if (!blocking.skinReadsAnatomy) {
-    findings.push(`${family}: BLOCKING the family skin selects no \`[data-part]\`; it paints something this contract cannot see`);
-  }
-  if (!blocking.variantContract) {
-    findings.push(
-      `${family}: BLOCKING \`data-variant\` is on exactly one side of the contract -- stamped without a rule, or painted without a stamp`,
-    );
-  }
-  if (!blocking.stateContract) {
-    findings.push(
-      `${family}: BLOCKING \`data-state\` is on exactly one side of the contract -- stamped with no rule, or painted with no stamp`,
-    );
-  }
-  if (!blocking.stateGoverned) {
-    findings.push(
-      `${family}: BLOCKING the skin decides state through \`[data-state]\` but the source never calls \`partAttributes\` -- `
-        + 'one place decides when a part is pressed, or none does (F-37)',
-    );
-  }
-  for (const finding of blocking.adaptSlot ?? []) {
-    findings.push(`${family}: BLOCKING adapt-slot ${finding}`);
-  }
+  waivable('anatomyStamped', () => (blocking.stampsAnatomy
+    ? []
+    : [`${family}: BLOCKING the family stamps no \`data-part\`; the anatomy contract is mandatory`]));
+  waivable('skinReadsAnatomy', () => (blocking.skinReadsAnatomy
+    ? []
+    : [`${family}: BLOCKING the family skin selects no \`[data-part]\`; it paints something this contract cannot see`]));
+  waivable('variantContract', () => (blocking.variantContract
+    ? []
+    : [`${family}: BLOCKING \`data-variant\` is on exactly one side of the contract -- stamped without a rule, or painted without a stamp`]));
+  waivable('stateContract', () => (blocking.stateContract
+    ? []
+    : [`${family}: BLOCKING \`data-state\` is on exactly one side of the contract -- stamped with no rule, or painted with no stamp`]));
+  waivable('stateGoverned', () => (blocking.stateGoverned
+    ? []
+    : [`${family}: BLOCKING the skin decides state through \`[data-state]\` but the source never calls \`partAttributes\` -- `
+      + 'one place decides when a part is pressed, or none does (F-37)']));
+  waivable('adaptSlot', () => (blocking.adaptSlot ?? []).map((finding) => `${family}: BLOCKING adapt-slot ${finding}`));
   const skeleton = blocking.skeleton;
   if (skeleton) {
     if (!skeleton.renderer) {
@@ -1830,37 +1983,28 @@ export function judgeFamily(measured, pinned) {
     for (const part of skeleton.invalidRoles) {
       findings.push(`${family}: BLOCKING anatomy-derived-skeleton -- the renderer gives \`${part}\` a role outside ${JSON.stringify([...SKELETON_ROLES])}`);
     }
-    for (const sign of skeleton.handMade) {
+    waivable('skeletonHandMade', () => skeleton.handMade.map((sign) => {
       const where = sign.file ? ` at ${toPosix(relative(measured.root ?? DEFAULT_ROOT, sign.file))}:${sign.line}` : '';
-      findings.push(
-        `${family}: BLOCKING anatomy-derived-skeleton -- hand-made skeleton: ${sign.what}${where}. `
-          + 'A family does not draw its own loading state; `AnatomySkeleton` derives it from the family anatomy',
-      );
-    }
-    for (const part of skeleton.partsWithoutRole) {
-      findings.push(
-        `${family}: BLOCKING anatomy-derived-skeleton -- \`data-part\` \`${part}\` has no role in the shared skeleton renderer; `
-          + `give it one in \`SKELETON_PART_ROLES\` (${SKELETON_RENDERER_PATH}) with the anatomy change, or the loading state drifts from the component`,
-      );
-    }
+      return `${family}: BLOCKING anatomy-derived-skeleton -- hand-made skeleton: ${sign.what}${where}. `
+        + 'A family does not draw its own loading state; `AnatomySkeleton` derives it from the family anatomy';
+    }));
+    waivable('skeletonPartsWithoutRole', () => skeleton.partsWithoutRole.map((part) =>
+      `${family}: BLOCKING anatomy-derived-skeleton -- \`data-part\` \`${part}\` has no role in the shared skeleton renderer; `
+        + `give it one in \`SKELETON_PART_ROLES\` (${SKELETON_RENDERER_PATH}) with the anatomy change, or the loading state drifts from the component`));
   }
   /* F-69: the arm means exactly one thing -- you brought the kernel in and did
    * not attach it. The `declared` conjunct is what keeps it silent on a family
    * that has not adopted yet; the two ratchets carry the "must reach zero"
    * half, and reaching zero is the consolidation criterion. */
-  if (blocking.dndKernelDeclared && !blocking.dndKernelWired) {
-    findings.push(
-      `${family}: BLOCKING the DnD kernel is declared and never effectively attached -- `
-        + 'JSX resolves later attributes and later spreads over an earlier one, so a spread bag whose '
-        + 'kernel-owned props are overwritten (or followed by a spread this gate cannot enumerate) never '
-        + `reaches the DOM${detail.dndUnverified?.length ? `: ${JSON.stringify(detail.dndUnverified).slice(0, 400)}` : ''}`,
-    );
-  }
-  if (blocking.a11yAssertions === 0) {
-    findings.push(
-      `${family}: BLOCKING the family owns no executable accessibility assertion; a cut without an a11y probe is not verified`,
-    );
-  }
+  waivable('dndKernelUnwired', () => (blocking.dndKernelDeclared && !blocking.dndKernelWired
+    ? [`${family}: BLOCKING the DnD kernel is declared and never effectively attached -- `
+      + 'JSX resolves later attributes and later spreads over an earlier one, so a spread bag whose '
+      + 'kernel-owned props are overwritten (or followed by a spread this gate cannot enumerate) never '
+      + `reaches the DOM${detail.dndUnverified?.length ? `: ${JSON.stringify(detail.dndUnverified).slice(0, 400)}` : ''}`]
+    : []));
+  waivable('a11yAssertions', () => (blocking.a11yAssertions === 0
+    ? [`${family}: BLOCKING the family owns no executable accessibility assertion; a cut without an a11y probe is not verified`]
+    : []));
 
   if (!pinned) {
     findings.push(
@@ -1868,6 +2012,27 @@ export function judgeFamily(measured, pinned) {
         + `with its cut's work order: ${JSON.stringify(ratchets)}`,
     );
     return findings;
+  }
+
+  if (open) {
+    if (typeof open.workOrder !== 'string' || typeof open.note !== 'string') {
+      findings.push(
+        `${family}: \`openCut\` states no \`workOrder\` and \`note\` -- an admitted family says which work order owns its debt and why`,
+      );
+    }
+    for (const arm of Object.keys(declaredDebt)) {
+      if (!OPEN_CUT_ARMS.includes(arm)) {
+        findings.push(
+          `${family}: \`openCut.debt\` declares \`${arm}\`, which is no BLOCKING arm this gate measures `
+            + `(${JSON.stringify(OPEN_CUT_ARMS)}) -- a declaration the gate cannot read waives nothing and hides that it waives nothing`,
+        );
+      }
+    }
+    if (OPEN_CUT_ARMS.every((arm) => (measuredDebt[arm] ?? 0) === 0)) {
+      findings.push(
+        `${family}: \`openCut\` is declared and the family now holds every BLOCKING arm -- close the row by removing \`openCut\``,
+      );
+    }
   }
 
   for (const [key, value] of Object.entries(ratchets)) {
@@ -1917,12 +2082,67 @@ export function collectFindings({ baselinePath = BASELINE_PATH, root = DEFAULT_R
   const producerSet = producers ?? collectChannelProducers().producers;
   const findings = [];
   const measurements = [];
+  const open = [];
   for (const family of families) {
-    const measured = measureFamily(resolveFamily(family, root, baseline.families?.[family] ?? {}), { producers: producerSet });
+    const pinned = baseline.families?.[family];
+    const measured = measureFamily(resolveFamily(family, root, pinned ?? {}), { producers: producerSet });
     measurements.push(measured);
-    findings.push(...judgeFamily(measured, baseline.families?.[family]));
+    findings.push(...judgeFamily(measured, pinned));
+    open.push(...describeOpenDebt(measured, pinned));
   }
-  return { findings, measurements, baseline };
+  const routed = judgeRoutedDeclarations(baseline, roster, only ? [] : measurements);
+  findings.push(...routed.findings);
+  return { findings, measurements, baseline, open, routed: routed.evidence };
+}
+
+/**
+ * A catalog fan-out declaration names a family id. When that id is a roster
+ * row the `fanOutUnreached` ratchet checks the claim every run. When it is
+ * NOT, nobody checks it and nobody ever will -- so the id has to be registered
+ * in `baseline.routed` with the owner it belongs to. The registration is a
+ * measurement, not a waiver: the evidence line states, from this run's own
+ * measurements, which roster families actually read the declared channels.
+ */
+export function judgeRoutedDeclarations(baseline, roster, measurements = [], declared = declaredFanOutFamilies()) {
+  const findings = [];
+  const evidence = [];
+  const registered = new Map((baseline.routed ?? []).map((entry) => [entry.family, entry]));
+  for (const [family, { controls, channels }] of declared) {
+    if (roster.includes(family)) continue;
+    const entry = registered.get(family);
+    if (!entry) {
+      findings.push(
+        `family-cut: the control catalog declares family \`${family}\` in the fan-out of ${controls.join(', ')}, `
+          + 'and no roster row and no `routed` entry owns that id -- a fan-out claim no family measures is a claim '
+          + 'nobody can ever check. Register it in baseline/index.json `routed` with the owner it belongs to, '
+          + 'or make it a roster row',
+      );
+      continue;
+    }
+    if (typeof entry.route !== 'string' || typeof entry.note !== 'string') {
+      findings.push(`family-cut: \`routed\` entry \`${family}\` states no \`route\` and \`note\``);
+    }
+    const readers = measurements
+      .filter((measured) => (measured.detail.readChannels ?? []).some((channel) => channels.has(channel)))
+      .map((measured) => measured.family);
+    evidence.push(
+      `${family} declared by ${controls.join(', ')} -> ${entry.route}: ${entry.note}`
+        + ` [channels ${[...channels].sort().join(' ')}; read today by ${readers.length > 0 ? readers.join(', ') : '(no roster family)'}]`,
+    );
+  }
+  for (const entry of baseline.routed ?? []) {
+    if (roster.includes(entry.family)) {
+      findings.push(
+        `family-cut: \`routed\` entry \`${entry.family}\` is now a roster row -- the gate measures its fan-out itself; remove the entry`,
+      );
+    } else if (!declared.has(entry.family)) {
+      findings.push(
+        `family-cut: \`routed\` entry \`${entry.family}\` matches no catalog fan-out declaration -- `
+          + 'the registration outlived the claim it records; remove it',
+      );
+    }
+  }
+  return { findings, evidence };
 }
 
 function main() {
@@ -1930,15 +2150,18 @@ function main() {
   const familyArg = args.find((arg) => arg.startsWith('--family='));
   const only = familyArg ? familyArg.slice('--family='.length) : undefined;
 
-  const { findings, measurements } = collectFindings({ only });
+  const { findings, measurements, open, routed } = collectFindings({ only });
 
   if (args.includes('--json')) {
-    console.log(JSON.stringify({ findings, measurements }, null, 2));
+    console.log(JSON.stringify({ findings, measurements, open, routed }, null, 2));
     process.exit(findings.length > 0 ? 1 : 0);
   }
 
   for (const arm of OWED_ARMS) {
     console.log(`family-cut OWED ${arm.id} -> ${arm.owner}: ${arm.reason}`);
+  }
+  for (const entry of routed ?? []) {
+    console.log(`family-cut ROUTED ${entry}`);
   }
   /* Printed before the verdict, because what the DnD walk cannot resolve is
    * evidence whether or not the run goes red. */
@@ -1955,6 +2178,9 @@ function main() {
     for (const finding of findings) console.error(`  - ${finding}`);
     process.exit(1);
   }
+  for (const entry of open ?? []) {
+    console.log(`family-cut OPEN -- ${entry}`);
+  }
   for (const measured of measurements) {
     for (const foreign of measured.detail.foreignSkins ?? []) {
       console.log(`family-cut EXCLUDED -- ${measured.family}: ${foreign.skin} (${foreign.reason})`);
@@ -1967,7 +2193,14 @@ function main() {
         + `${measured.denominators.sourceFiles} source file(s), ${measured.denominators.channelsRead} channels read; ${ratchets}`,
     );
   }
-  console.log(`family-cut OK -- ${measurements.length} family cut(s) hold their contract`);
+  /* Two numbers, never one: a family admitted at a declared opening debt has
+   * NOT passed the cut contract, and a summary that folded it into the held
+   * count would read as a green the tree has not earned. */
+  const admitted = (open ?? []).length;
+  console.log(
+    `family-cut OK -- ${measurements.length - admitted} family cut(s) hold their contract; `
+      + `${admitted} admitted with declared opening debt (${measurements.length} rows)`,
+  );
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();

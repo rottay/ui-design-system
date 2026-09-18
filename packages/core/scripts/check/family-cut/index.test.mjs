@@ -14,7 +14,7 @@
 import assert from 'node:assert/strict';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import test from 'node:test';
 
 import ts from 'typescript';
@@ -28,9 +28,13 @@ import {
   analyzeDragAndDrop,
   analyzeSkin,
   analyzeSource,
+  blockingDebt,
   collectFindings,
+  declaredFanOutFamilies,
+  describeOpenDebt,
   fanOutFor,
   judgeFamily,
+  judgeRoutedDeclarations,
   measureDragAndDropArm,
   measureFamily,
   readBaseline,
@@ -2027,4 +2031,470 @@ test('the live DnD census: all six owners adopted the kernel', () => {
     assert.equal(baseline[family][own], measured.ratchets[own], `${family}: the pin follows the tree -- an adoption that is not written down is not adopted`);
     assert.equal(baseline[family][other], 0, `${family}: the unused counter stays pinned at 0`);
   }
+});
+
+// ---------------------------------------------------------------------------
+// S1: `presentation/` is a sub-owner in three tiers and a BRANCH in the fourth
+// ---------------------------------------------------------------------------
+
+const SURFACE_FAMILY = 'planted-surface';
+const SURFACE_BRANCH = 'src/components/surfaces/presentation/pages/forms';
+const SURFACE_TSX = [
+  'export function PlantedSurface() {',
+  '  return <section className="ds-planted-surface" data-part="frame" />;',
+  '}',
+  '',
+].join('\n');
+const SURFACE_CSS = ".ds-planted-surface[data-part='frame'] { display: block; }\n";
+const SKELETON_OWNER = 'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer';
+
+const writeFile = (file, text) => {
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, text);
+};
+
+/**
+ * A tree with ONE planted page owner and its skin, plus the shared skeleton
+ * renderer the anatomy arm reads. `owner` is where the component is planted,
+ * which is the whole point of the drill: the same directory shape is an owner
+ * inside the surfaces branch and a sub-owner everywhere else.
+ */
+function withSurfaceSandbox(options, run) {
+  const {
+    owner = `${SURFACE_BRANCH}/${SURFACE_FAMILY}`,
+    tsx = SURFACE_TSX,
+    skinDir = SURFACE_FAMILY,
+    css = SURFACE_CSS,
+    family = SURFACE_FAMILY,
+    pin = {},
+    extra = () => {},
+  } = options;
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-surface-'));
+  try {
+    mkdirSync(dirname(join(sandbox, SKELETON_OWNER)), { recursive: true });
+    cpSync(join(ROOT, SKELETON_OWNER), join(sandbox, SKELETON_OWNER), { recursive: true });
+    writeFile(join(sandbox, owner, 'index.tsx'), tsx);
+    writeFile(join(sandbox, `src/foundation/tokens/css/presentation/components/skin/${skinDir}/index.css`), css);
+    extra(sandbox);
+    const resolved = resolveFamily(family, sandbox, pin);
+    run(resolved, measureFamily(resolved, { producers: PRODUCERS }), sandbox);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
+
+test('CONTROL: a page owner under the surfaces branch is an owner, and its skin is measured', () => {
+  withSurfaceSandbox({}, (resolved, measured) => {
+    assert.deepEqual(resolved.ownerCandidates, [`${SURFACE_BRANCH}/${SURFACE_FAMILY}`]);
+    assert.equal(measured.denominators.sourceFiles, 1);
+    assert.equal(measured.denominators.skinFiles, 1);
+    assert.equal(measured.blocking.owners, 1);
+  });
+});
+
+test('PLANT: a violation inside a surfaces page owner is the family debt the gate reports', () => {
+  // Before the branch rule this owner resolved to NO source file at all, so
+  // every violation inside it measured zero and the row read as clean.
+  withSurfaceSandbox({
+    tsx: SURFACE_TSX.replace('data-part="frame"', 'data-part="frame" style={{ color: \'red\' }}'),
+  }, (resolved, measured) => {
+    assert.equal(measured.blocking.inlineStyleViolations.length, 1);
+    expectFinding(
+      judgeFamily(measured, undefined),
+      'BLOCKING inline paint',
+      'a surfaces owner the census could not see reported none of its violations',
+    );
+  });
+});
+
+test('PLANT: the same directory shape outside the surfaces branch stays a sub-owner', () => {
+  // The scope control. If the fix had simply stopped skipping `presentation/`,
+  // every sub-owner in three tiers would have become a family candidate.
+  for (const owner of [
+    `src/components/patterns/data/host/presentation/${SURFACE_FAMILY}`,
+    `src/components/structures/record/host/presentation/${SURFACE_FAMILY}`,
+    `src/components/primitives/inputs/host/presentation/${SURFACE_FAMILY}`,
+  ]) {
+    withSurfaceSandbox({ owner }, (resolved) => {
+      assert.deepEqual(resolved.ownerCandidates, [], owner);
+    });
+  }
+});
+
+test('PLANT: a nested-owner segment BELOW the surfaces branch still excludes', () => {
+  for (const owner of [
+    `${SURFACE_BRANCH}/host/contracts/${SURFACE_FAMILY}`,
+    `${SURFACE_BRANCH}/host/tests/${SURFACE_FAMILY}`,
+    `${SURFACE_BRANCH}/host/engines/${SURFACE_FAMILY}`,
+    `src/components/surfaces/foundation/contracts/${SURFACE_FAMILY}`,
+  ]) {
+    withSurfaceSandbox({ owner }, (resolved) => {
+      assert.deepEqual(resolved.ownerCandidates, [], owner);
+    });
+  }
+});
+
+test('PLANT: the branch directory itself is never an owner', () => {
+  withSurfaceSandbox({}, (_resolved, _measured, sandbox) => {
+    assert.deepEqual(
+      resolveFamily('presentation', sandbox).ownerCandidates,
+      [],
+      'the branch segment is forgiven for what is BELOW it, never admitted as an owner itself',
+    );
+    assert.deepEqual(
+      resolveFamily('surfaces', sandbox).ownerCandidates,
+      ['src/components/surfaces'],
+      'the tier root was a candidate before this fix and still is; the fix adds what is under the branch',
+    );
+    assert.deepEqual(
+      resolveFamily('pages', sandbox).ownerCandidates,
+      ['src/components/surfaces/presentation/pages'],
+      'a grouping directory below the branch is a candidate like every other tier group',
+    );
+  });
+});
+
+test('LIVE: the four form surfaces resolve to their own owner under the surfaces branch', () => {
+  const baseline = readBaseline().families;
+  for (const family of ['form-surface', 'wizard-surface', 'detail-form-surface', 'guided-draft-form']) {
+    const resolved = resolveFamily(family, ROOT, baseline[family]);
+    assert.equal(resolved.componentDirs.length, 1, family);
+    assert.match(
+      resolved.componentDirs[0].split(sep).join('/'),
+      /\/src\/components\/surfaces\/presentation\/pages\/forms\//u,
+      family,
+    );
+    assert.ok(resolved.sources.length > 0, `${family}: an owner with no source is what the blind walk reported`);
+  }
+});
+
+test('LIVE: guided-draft-form is measured, not inverted', () => {
+  // The census measured the blind walk at sourceFiles=0, partsStamped=0 and
+  // partsConsumedNotStamped=31 -- it reported 31 parts painted and never
+  // stamped on a family that stamps 53 of them.
+  const measured = measureFamily(
+    resolveFamily('guided-draft-form', ROOT, readBaseline().families['guided-draft-form']),
+    { producers: PRODUCERS },
+  );
+  assert.equal(measured.denominators.sourceFiles, 1);
+  assert.equal(measured.denominators.partsStamped, 53);
+  assert.equal(measured.ratchets.partsConsumedNotStamped, 0);
+  assert.equal(measured.ratchets.partsStampedNotConsumed, 22);
+});
+
+// ---------------------------------------------------------------------------
+// S2: the family id, its owner folder and its skin folder may differ -- with
+// the reason written down, and no file renamed
+// ---------------------------------------------------------------------------
+
+test('CONTROL: an owner pin resolves a family whose id is not its folder name', () => {
+  const owner = `${SURFACE_BRANCH}/form`;
+  withSurfaceSandbox({ owner, family: 'form-surface', skinDir: 'form-surface' }, (resolved) => {
+    assert.deepEqual(resolved.ownerCandidates, [], 'nothing is named after the family id');
+    assert.equal(resolved.componentDirs.length, 0, 'and with no pin the family resolves nothing');
+  });
+  withSurfaceSandbox({
+    owner,
+    family: 'form-surface',
+    skinDir: 'form-surface',
+    css: ".ds-form-surface[data-part='frame'] { display: block; }\n",
+    tsx: SURFACE_TSX.replace('ds-planted-surface', 'ds-form-surface'),
+    pin: { owner },
+  }, (resolved, measured) => {
+    assert.deepEqual(resolved.componentDirs.map((dir) => dir.split(sep).slice(-5).join('/')), [
+      'surfaces/presentation/pages/forms/form',
+    ]);
+    assert.equal(measured.blocking.owners, 1);
+    assert.equal(measured.denominators.skinFiles, 1);
+  });
+});
+
+test('PLANT: an owner pin naming a directory the walk does not admit resolves nothing', () => {
+  for (const pinned of [
+    `${SURFACE_BRANCH}/host/contracts/${SURFACE_FAMILY}`,
+    `${SURFACE_BRANCH}/never-planted`,
+  ]) {
+    withSurfaceSandbox({
+      owner: `${SURFACE_BRANCH}/host/contracts/${SURFACE_FAMILY}`,
+      pin: { owner: pinned, namingNote: 'drill' },
+    }, (resolved, measured) => {
+      assert.equal(resolved.componentDirs.length, 0, pinned);
+      expectFinding(judgeFamily(measured, undefined), 'resolves to 0 component owner(s)', pinned);
+    });
+  }
+});
+
+test('CONTROL: a skins pin admits paint named after neither the family nor any owner', () => {
+  const options = { skinDir: 'planted-chrome', css: ".ds-planted-surface[data-part='frame'] { display: block; }\n" };
+  withSurfaceSandbox(options, (resolved) => {
+    assert.deepEqual(resolved.skins, [], 'inference cannot find a skin named after nothing');
+  });
+  withSurfaceSandbox({ ...options, pin: { skins: ['planted-chrome'], namingNote: 'drill' } }, (resolved, measured) => {
+    assert.equal(resolved.skins.length, 1);
+    assert.deepEqual(resolved.unmatchedPinnedSkins, []);
+    assert.equal(measured.blocking.skinReadsAnatomy, true);
+  });
+});
+
+test('PLANT: a skins pin that names no skin directory is reported', () => {
+  withSurfaceSandbox({ pin: { skins: [SURFACE_FAMILY, 'planted-nothing'], namingNote: 'drill' } }, (resolved, measured) => {
+    assert.deepEqual(resolved.unmatchedPinnedSkins, ['planted-nothing']);
+    expectFinding(
+      judgeFamily(measured, { ...readBaseline().families[FAMILY], skins: [SURFACE_FAMILY, 'planted-nothing'], namingNote: 'drill' }),
+      'pins skin `planted-nothing` and no skin directory of that name exists',
+      'a pin that names nothing is a claim with no file behind it',
+    );
+  });
+});
+
+test('PLANT: a divergent pin with no `namingNote` is refused', () => {
+  const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
+  const pinned = readBaseline().families[FAMILY];
+  for (const divergent of [
+    { ...pinned, skins: ['button'] },
+    { ...pinned, owner: 'src/components/primitives/inputs/not-the-family-name' },
+  ]) {
+    expectFinding(
+      judgeFamily(measured, divergent),
+      'states no `namingNote`',
+      'a divergence between id, owner folder and skin folder is admitted only with its reason',
+    );
+  }
+  expectNoFinding(
+    judgeFamily(measured, { ...pinned, skins: ['button'], namingNote: 'drill' }),
+    'states no `namingNote`',
+    'a stated reason admits the divergence',
+  );
+  expectNoFinding(
+    judgeFamily(measured, pinned),
+    'states no `namingNote`',
+    'a pin that only selects among same-named candidates explains itself',
+  );
+});
+
+test('LIVE: every roster row whose pin diverges from the family id states its reason', () => {
+  for (const [family, row] of Object.entries(readBaseline().families)) {
+    const diverges = Boolean(row.skins) || (Boolean(row.owner) && row.owner.split('/').pop() !== family);
+    if (!diverges) continue;
+    assert.equal(typeof row.namingNote, 'string', `${family}: a divergent pin states its reason`);
+    assert.ok(row.namingNote.length > 40, `${family}: the reason is written down, not a label`);
+  }
+});
+
+test('LIVE: every WO-FAM-10 row resolves to exactly one owner and at least one skin', () => {
+  const baseline = readBaseline().families;
+  const cut = Object.entries(baseline).filter(([, row]) => row.cut === 'WO-FAM-10');
+  assert.equal(cut.length, 19, 'the census admitted nineteen families');
+  for (const [family, row] of cut) {
+    const resolved = resolveFamily(family, ROOT, row);
+    assert.equal(resolved.componentDirs.length, 1, family);
+    assert.ok(resolved.skins.length > 0, `${family}: a naming difference is not an empty corpus`);
+    assert.deepEqual(resolved.unmatchedPinnedSkins, [], family);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// An open cut is an admission at a measured debt, never a pass
+// ---------------------------------------------------------------------------
+
+const openRow = (debt) => ({
+  ...readBaseline().families[FAMILY],
+  openCut: { workOrder: 'WO-DRILL', opened: '2026-09-18', debt, note: 'drill' },
+});
+
+/** The calibration family with one authored inline paint planted in it. */
+function withOnePlantedPaint(run) {
+  withPlantedFamily(
+    (sandbox) => patch(sandbox, MODERN_TSX, (text) => {
+      const site = styleSites(text)[0];
+      return `${text.slice(0, site.start)}${merged(site.text, AUTHORED_PAINT)}${text.slice(site.end)}`;
+    }),
+    (_findings, measured) => {
+      assert.equal(measured.blocking.inlineStyleViolations.length, 1, 'the drill plants exactly one paint');
+      run(measured);
+    },
+  );
+}
+
+test('PLANT: a family with NO open cut still fails on the violation itself', () => {
+  withOnePlantedPaint((measured) => {
+    const findings = judgeFamily(measured, readBaseline().families[FAMILY]);
+    expectFinding(findings, 'BLOCKING inline paint', 'the violation itself is what a closed row reports');
+    // Shape, not just substring: the counted spelling quotes the per-violation
+    // message inside itself, so a drill that only looked for the violation
+    // text would stay green on a row that had silently become count-based.
+    expectNoFinding(findings, 'open-cut debt', 'the open-cut state must not leak into a row that declared none');
+    assert.equal(findings.length, 1, 'one violation, one finding');
+  });
+});
+
+test('CONTROL: an open cut that declares the debt it inherited reports it and does not fail', () => {
+  withOnePlantedPaint((measured) => {
+    const pinned = openRow({ inlineStyleViolations: 1 });
+    assert.deepEqual(judgeFamily(measured, pinned), []);
+    expectFinding(
+      describeOpenDebt(measured, pinned),
+      'inlineStyleViolations=1',
+      'an admitted row states its debt on every run',
+    );
+  });
+});
+
+test('PLANT: an open cut whose debt GROWS is red', () => {
+  withOnePlantedPaint((measured) => {
+    expectFinding(
+      judgeFamily(measured, openRow({ inlineStyleViolations: 0 })),
+      'open-cut debt `inlineStyleViolations` GREW from 0 to 1',
+      'an open cut declares the debt it inherited, never debt it added',
+    );
+  });
+});
+
+test('PLANT: an arm the open cut does not declare at all is debt it added', () => {
+  withOnePlantedPaint((measured) => {
+    expectFinding(
+      judgeFamily(measured, openRow({})),
+      'open-cut debt `inlineStyleViolations` GREW from 0 to 1',
+      'an undeclared arm is declared at zero',
+    );
+  });
+});
+
+test('PLANT: an open cut whose debt SHRANK has to be written down', () => {
+  withOnePlantedPaint((measured) => {
+    expectFinding(
+      judgeFamily(measured, openRow({ inlineStyleViolations: 4 })),
+      'open-cut debt `inlineStyleViolations` SHRANK from 4 to 1',
+      'an open cut is decrease-only too',
+    );
+  });
+});
+
+test('PLANT: an open cut cannot waive an arm that breaks the measurement itself', () => {
+  const resolved = resolveFamily(FAMILY);
+  const doubled = measureFamily(
+    { ...resolved, componentDirs: [...resolved.componentDirs, ...resolved.componentDirs] },
+    { producers: PRODUCERS },
+  );
+  expectFinding(
+    judgeFamily(doubled, openRow({ owners: 2, inlineStyleViolations: 99 })),
+    'resolves to 2 component owner(s)',
+    'an ambiguous owner is not a debt a work order may declare',
+  );
+  const empty = measureFamily(
+    { family: FAMILY, root: ROOT, skins: [], sources: [], componentDirs: [], a11yProbes: [] },
+    { producers: PRODUCERS },
+  );
+  const emptyFindings = judgeFamily(empty, openRow({ a11yAssertions: 1, anatomyStamped: 1, skinReadsAnatomy: 1 }));
+  expectFinding(emptyFindings, 'resolves to zero Modern skin files', 'an empty corpus is never a declarable debt');
+  expectFinding(emptyFindings, 'resolves to zero authored source files', 'an empty corpus is never a declarable debt');
+});
+
+test('PLANT: an open cut declaring an arm this gate does not measure waives nothing, and says so', () => {
+  withOnePlantedPaint((measured) => {
+    expectFinding(
+      judgeFamily(measured, openRow({ inlineStyleViolations: 1, inlineStyles: 3 })),
+      'declares `inlineStyles`, which is no BLOCKING arm this gate measures',
+      'a declaration the gate cannot read hides that it waives nothing',
+    );
+  });
+});
+
+test('PLANT: an open cut on a family that holds every BLOCKING arm has to be closed', () => {
+  const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
+  expectFinding(
+    judgeFamily(measured, openRow({})),
+    'holds every BLOCKING arm -- close the row',
+    'a stale open row would hide a green family behind an admission forever',
+  );
+});
+
+test('PLANT: an open cut with no work order and no reason is refused', () => {
+  withOnePlantedPaint((measured) => {
+    expectFinding(
+      judgeFamily(measured, {
+        ...readBaseline().families[FAMILY],
+        openCut: { debt: { inlineStyleViolations: 1 } },
+      }),
+      'states no `workOrder` and `note`',
+      'an admitted family says which work order owns its debt and why',
+    );
+  });
+});
+
+test('LIVE: every open row declares exactly the debt the gate measures, and the run says so', () => {
+  const baseline = readBaseline().families;
+  const open = Object.entries(baseline).filter(([, row]) => row.openCut);
+  assert.equal(open.length, 19, 'the nineteen WO-FAM-10 rows are the only admitted rows');
+  for (const [family, row] of open) {
+    const measured = measureFamily(resolveFamily(family, ROOT, row), { producers: PRODUCERS });
+    const debt = Object.fromEntries(Object.entries(blockingDebt(measured)).filter(([, count]) => count > 0));
+    assert.deepEqual(row.openCut.debt, debt, `${family}: the declared debt IS the measurement`);
+    assert.deepEqual(judgeFamily(measured, row), [], family);
+    assert.equal(describeOpenDebt(measured, row).length, 1, family);
+  }
+});
+
+test('LIVE: the run separates the families that hold the contract from the families admitted with debt', () => {
+  const { measurements, open } = collectFindings();
+  assert.equal(open.length, 19);
+  assert.equal(measurements.length - open.length, 77, 'the pre-existing roster still holds its contract');
+});
+
+// ---------------------------------------------------------------------------
+// A catalog fan-out declares a family id; an id nobody measures is registered
+// ---------------------------------------------------------------------------
+
+const declaredMap = (rows) => new Map(rows.map(([family, controls, channels]) =>
+  [family, { controls, channels: new Set(channels) }]));
+
+test('PLANT: a catalog fan-out naming an id that is neither a roster row nor routed is red', () => {
+  const { findings } = judgeRoutedDeclarations({ routed: [] }, ['button'], [],
+    declaredMap([['ghost-family', ['surfaces.border-style'], ['--ds-edge-standard-width']]]));
+  expectFinding(
+    findings,
+    'the control catalog declares family `ghost-family`',
+    'a fan-out claim no family measures is a claim nobody can ever check',
+  );
+});
+
+test('CONTROL: a registered id is admitted, and the run states who reads its channels today', () => {
+  const routed = [{ family: 'ghost-family', route: 'WO-DRILL', note: 'drill' }];
+  const measurements = [{ family: 'record', detail: { readChannels: ['--ds-edge-standard-width'] } }];
+  const result = judgeRoutedDeclarations({ routed }, ['button'], measurements,
+    declaredMap([['ghost-family', ['surfaces.border-style'], ['--ds-edge-standard-width']]]));
+  assert.deepEqual(result.findings, []);
+  expectFinding(result.evidence, 'read today by record', 'the registration carries the measurement, not a waiver');
+});
+
+test('PLANT: a registration that outlived its claim, or became a roster row, is red', () => {
+  expectFinding(
+    judgeRoutedDeclarations({ routed: [{ family: 'ghost-family', route: 'x', note: 'y' }] }, ['button'], [], declaredMap([])).findings,
+    'matches no catalog fan-out declaration',
+    'the registration outlived the claim it records',
+  );
+  expectFinding(
+    judgeRoutedDeclarations({ routed: [{ family: 'button', route: 'x', note: 'y' }] }, ['button'], [],
+      declaredMap([['button', ['surfaces.border-style'], []]])).findings,
+    'is now a roster row',
+    'the gate measures a roster fan-out itself',
+  );
+});
+
+test('LIVE: every catalog fan-out id is a roster row or a registered route', () => {
+  const baseline = readBaseline();
+  const roster = Object.keys(baseline.families);
+  const unowned = [...declaredFanOutFamilies().keys()].filter((family) => !roster.includes(family));
+  assert.deepEqual(
+    unowned.slice().sort(),
+    (baseline.routed ?? []).map((entry) => entry.family).slice().sort(),
+    'the registered set is exactly the unowned set',
+  );
+  const panel = (baseline.routed ?? []).find((entry) => entry.family === 'panel');
+  assert.deepEqual(panel.declaredBy, ['surfaces.border-style'], 'S3 is registered against the control that declares it');
+  // S3 measured: the channels the declaration names ARE read -- by `record`,
+  // the family id the owner `structures/record/panel` is a block of.
+  const record = measureFamily(resolveFamily('record', ROOT, baseline.families.record), { producers: PRODUCERS });
+  assert.ok(record.detail.readChannels.includes('--ds-edge-standard-width'));
+  assert.deepEqual(record.detail.fanOut, [], 'and the catalog row reaches `record` under no declaration at all');
 });
