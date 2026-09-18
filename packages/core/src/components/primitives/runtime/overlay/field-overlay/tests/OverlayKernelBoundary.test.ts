@@ -138,7 +138,6 @@ const NUMERIC_Z_INDEX_LEDGER: Record<string, LedgerEntry> = {
   'primitives/overlay/watermark/contracts/index.ts': { max: 1, reason: PUBLIC_PROP_DEFAULT },
   // Tier residue.
   'patterns/visualization/charts/presentation/tooltip/index.tsx': { max: 1, reason: TIER_RESIDUE },
-  'structures/record/edit-fields/index.tsx': { max: 1, reason: TIER_RESIDUE },
   'structures/shell/workspace-shell/index.tsx': { max: 1, reason: TIER_RESIDUE },
   'surfaces/presentation/pages/workspace/collection-workspace/index.tsx': {
     max: 1,

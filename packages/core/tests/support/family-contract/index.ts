@@ -11,6 +11,10 @@
  * @package @rottay/design-system
  */
 
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { describe, expect, it } from "vitest";
 
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
@@ -80,6 +84,45 @@ function deepFreeze<T>(value: T): T {
 }
 
 /**
+ * The measured zero-channel ruling: a deriver that produces nothing must have
+ * its emptiness pinned by its own drift-guard test on disk -- one that asserts
+ * the empty `produces` and measures the skin as reading zero family channels.
+ * Without that file an empty `produces` is an omission, not a ruling.
+ */
+function documentsZeroChannelRuling(family: string): boolean {
+  const derivationRoot = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "../../../src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation"
+  );
+
+  const findFamilyDir = (dir: string): string | undefined => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const full = join(dir, entry.name);
+      if (entry.name === family && existsSync(join(full, "tests"))) return full;
+      const nested = findFamilyDir(full);
+      if (nested !== undefined) return nested;
+    }
+    return undefined;
+  };
+
+  const familyDir = findFamilyDir(derivationRoot);
+  if (familyDir === undefined) return false;
+
+  const testsDir = join(familyDir, "tests");
+  for (const entry of readdirSync(testsDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith(".test.ts")) continue;
+    const text = readFileSync(join(testsDir, entry.name), "utf8");
+    const pinsEmptyProduces = /\.produces\)\s*\.toEqual\(\[\]\)/.test(text);
+    const measuresSkin =
+      new RegExp(`match\\(\\s*/--ds-${family}-`).test(text) &&
+      /\.toBeNull\(\)/.test(text);
+    if (pinsEmptyProduces && measuresSkin) return true;
+  }
+  return false;
+}
+
+/**
  * The battery every family is asked to survive.
  *
  * Purity is asserted against a FROZEN context and a FROZEN `below` map: a
@@ -96,7 +139,14 @@ export function describeFamilyContract(
       expect(deriver.family.length).toBeGreaterThan(0);
       expect(Object.keys(MERGE_RANK)).toContain(deriver.rank);
       expect(deriver.consumes.length).toBeGreaterThan(0);
-      expect(deriver.produces.length).toBeGreaterThan(0);
+      if (deriver.produces.length === 0) {
+        expect(
+          documentsZeroChannelRuling(deriver.family),
+          `${deriver.family}: an empty produces is admitted only with a drift-guard test that pins the measured zero-channel ruling`
+        ).toBe(true);
+      } else {
+        expect(deriver.produces.length).toBeGreaterThan(0);
+      }
     });
 
     it("produces nothing it did not declare", () => {
