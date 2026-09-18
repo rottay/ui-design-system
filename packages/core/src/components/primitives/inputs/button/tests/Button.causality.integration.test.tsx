@@ -83,24 +83,23 @@ beforeAll(async () => {
 /**
  * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): under the
  * neutral compile a governed chrome pair can reach a scope with no producer --
- * the menu ink IS the sidebar ink, and the tenant's light ground cascades into
- * the dark block -- so axe reports `color-contrast` in the scopes pinned below.
+ * the menu ink IS the sidebar ink -- so axe reports `color-contrast` in the
+ * scopes pinned below.
  * Nothing is lowered: every other serious rule must still be empty, and the
  * contrast debt is pinned by the IDENTITY of every failing node, so this row
  * reddens when the debt spreads, when a node is repaired, and when one node is
  * fixed while another starts failing in its place -- the substitution a count
  * could not see (EVI-02, 2026-09-15).
+ *
+ * `bithire dark` had three rows -- ghost, link and text labels -- and they
+ * DRAINED: that scope's dark block now re-derives its own canvas ground
+ * instead of inheriting the light body's, so those labels no longer sit on a
+ * near-white ground. Dropped by identity, not waived: with no entry the scope
+ * must now measure clean, and a relapse reddens here.
  */
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
   'rottay dark': {
     'color-contrast': [
-      '.ds-button--link > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-      '.ds-button--text > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-    ],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      '.ds-button--ghost > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '.ds-button--link > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '.ds-button--text > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
     ],

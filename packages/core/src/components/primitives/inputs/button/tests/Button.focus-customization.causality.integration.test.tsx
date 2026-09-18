@@ -150,12 +150,24 @@ beforeAll(async () => {
   }
 }, 300_000);
 
-/** The N1 cells, as measured on the tree that closed it. */
+/**
+ * The N1 cells, as measured on the tree that closed it.
+ *
+ * `bithire dark` moved 5.02 -> 3.28 when that scope's dark block stopped
+ * inheriting the light body's ground. The old figure was the ring `#3563EF`
+ * measured against an inherited `#FFFFFF` -- a canvas a dark block never owns;
+ * the cell now reads `#2A55E0` (the dark ramp's own 400 stop, re-derived
+ * against the real ground) on `#0A0A0A`. The ring is adjacent to that ground,
+ * not to the button's fill: the shadow's inner layer is a `bg-primary` spacer.
+ * 3.2754 clears RING_FLOOR with margin, and the two dark counterexample cells
+ * below prove the floor still MOVES a failing seed here, so this stop stands
+ * as a compliant colour left as authored rather than as a waiver.
+ */
 const FIRST_PARTY_RATIOS: Readonly<Record<string, number>> = {
   'rottay light': 17.18,
   'rottay dark': 7.42,
   'bithire light': 5.55,
-  'bithire dark': 5.02,
+  'bithire dark': 3.28,
   'evnto light': 17.18,
   'evnto dark': 7.42,
 };
