@@ -5265,6 +5265,11 @@
      "at": "2026-09-17 22:15",
      "by": "kimi-dt",
      "note": "F-69 casi cerrado: lot 5b (announcements por regiones alternadas, 6b0... integrate) y lot 6 (operabilidad grab+announcements en saved-views y column-menu, adicion declarada con drills por familia y RTL) INTEGRADOS; pins drenados de badge/tag por identidad (6739960e0) y button con piso verificado (6027d09b7). La ola completa queda: kernel (f1d74ef81) + 6 adopciones + reparaciones. Ventana serializada corrida sobre la ola (build verde, artefactos, decisions-lit fresco, family-cut 77/77, cascade sigue rojo solo contra el pin falso — decision del owner pendiente). En vuelo: W38 (adjudicacion residual DER-08: 6 sitios flat-authoring) y W39 (lot 7: Move affordance del tree). Unico freno restante de F-69: lot 9 (retiro de useSortableList de la entrypoint publica) necesita TU autorizacion de API publica — sus consumers en repo son cero y el kernel lo reemplaza; la pregunta queda en el paquete de decisiones."
+    },
+    {
+     "at": "2026-09-17 23:04",
+     "by": "kimi-dt",
+     "note": "F-69 LOT 7 INTEGRADO (daa739788): el tree gana su Move affordance explicito (comparte el roving stop del TreeView; destino por flechas saltando self/descendientes; posicion before/inside/after espejada por la autoridad de direccion; announce+cancel con foco restaurado; touch por el mismo control; cero canales nuevos — el candidato pinta via los stamps existentes). F-69 queda pendiente SOLO del lot 9 (retiro de useSortableList — tu autorizacion de API publica). Residual DER-08 adjudicado e integrado (d1973a6d7): createTenantTheme sobre la puerta gobernada; B2 = clase (b) diferida; la rama LegacyBrandThemeSource sin ningun caller queda con retiro aprobado por mi (lote propio). docs-engineering sync commiteado alli (eeaf3f6, solo tenancy README — el resto del dirty state de ese repo es trabajo ajeno viejo, no tocado)."
     }
    ]
   },
@@ -6003,6 +6008,11 @@
      "at": "2026-09-17 21:35",
      "by": "kimi-dt",
      "note": "El drenaje transversal del mode-canvas fix (4f7d46751), medido por el sweep de W34 sobre 11 suites: button (6027d09b7, piso verificado: 3.2754 >= 3:1, +9.18% margen), badge y tag (bithire dark 3->{} — W36 en vuelo), saved-views y kanban (ya integrados en sus lotes). HALLAZGO NUEVO de la ley de identidad: typography es una SUSTITUCION, no un drenaje — bithire dark por fin es oscuro, y la tinta de link (ya pineada como deuda en rottay dark) falla ahi tambien. Defecto real de derivacion de tintas (link ink sobre grounds oscuros), NO una re-pin: ruteado a la lane de derivacion/axe como lote propio pendiente. Tambien registrado por W34: FIRST_PARTY_RATINGS pinea valores exactos sin asercion de piso — recomendacion de agregar el floor al loop (EVI lane)."
+    },
+    {
+     "at": "2026-09-17 23:04",
+     "by": "kimi-dt",
+     "note": "FAM-09 arranca: debrief de chart-paint ADOPTADO (evidence/chart-paint-debrief; Kimi ACCEPT — Codex retirado por orden del owner; Fable pendiente). Census medido: useChartTheme tiene CERO consumidores (retiro, no migracion); dos hooks de personalidad que no se ven (la divergencia §0.5 ejecutada); 18 familias en 4 paint models; instrumento chart-paint-single-door + parity + registry-closure + scope-causality en el lot 0 (despachado). Preguntas del owner: Q1 (de-alias de default — el cambio visual mas grande del programa) y Q2 (retiro del prop colors — API publica) quedan en el paquete, junto con la autorizacion de retiros publicos (useSortableList, useChartTheme, ChartFamilyFrame, arrays de paleta). Condicion registrada: FAM-09 no cierra antes de FAM-14 (brazo skeleton)."
     }
    ]
   },
