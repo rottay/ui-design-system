@@ -45,6 +45,7 @@ import type {
   Series,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
 import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
@@ -163,6 +164,7 @@ export const BarChart = memo(function BarChart({
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { dimensions } = useChartDimensions(width, height);
+  const paint = useChartPaint({ family: 'bar-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
@@ -348,7 +350,7 @@ export const BarChart = memo(function BarChart({
     yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
   ].filter(Boolean).join(' '));
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -393,4 +395,6 @@ export const BarChart = memo(function BarChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

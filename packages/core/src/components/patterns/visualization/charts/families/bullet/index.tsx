@@ -21,6 +21,7 @@ import type {
 } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality, useChartCompact, useChartDimensions } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import {
   buildSvgBulletGeometry,
   type SvgBulletDatum,
@@ -131,6 +132,7 @@ export const BulletChart = memo(function BulletChart({
   const height = heightProp ?? defaultHeight;
 
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const paint = useChartPaint({ family: 'bullet' });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({
     compact,
@@ -239,7 +241,7 @@ export const BulletChart = memo(function BulletChart({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={containerRef}
       svgRef={legacySvgRef}
@@ -306,4 +308,6 @@ export const BulletChart = memo(function BulletChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

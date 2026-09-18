@@ -31,6 +31,7 @@ import type {
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { useChartCompact, useChartDimensions, useChartPersonality, useChartTooltip } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { ChartTooltip } from '../../presentation/tooltip';
 import type {
@@ -141,6 +142,7 @@ export const ScatterChart = memo(function ScatterChart({
   // The renderer governs motion and native point titles from the resolved
   // personality; the family retains `animate`/`tooltip` in its contract and
   // sources the loading label and the governed palette from the hook.
+  const paint = useChartPaint({ family: 'scatter' });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const palette = chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
@@ -238,7 +240,7 @@ export const ScatterChart = memo(function ScatterChart({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -290,4 +292,6 @@ export const ScatterChart = memo(function ScatterChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

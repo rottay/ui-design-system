@@ -16,6 +16,7 @@ import {
   type SvgLineSeries,
   type SvgLineXType,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 import { createSvgLineDatumKey } from './datum-key';
 
@@ -194,7 +195,8 @@ export function SvgLineRenderer({
     0,
   );
 
-  return (
+  const paint = useChartPaintRoot('line-chart');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.line"
       ariaLabel={ariaLabel}
@@ -406,4 +408,6 @@ export function SvgLineRenderer({
       />
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

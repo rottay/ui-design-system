@@ -9,6 +9,7 @@ import {
   buildSvgHistogramGeometry,
   type ChartGeometryInsets,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 /** Tooltip/keyboard datum exposed to the family for each rendered bin. */
@@ -129,7 +130,8 @@ export function SvgHistogramRenderer({
     ? interaction.renderTooltip?.(interactionState.activeDatum)
     : undefined;
 
-  return (
+  const paint = useChartPaintRoot('histogram');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.histogram"
       ariaLabel={ariaLabel}
@@ -350,4 +352,6 @@ export function SvgHistogramRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

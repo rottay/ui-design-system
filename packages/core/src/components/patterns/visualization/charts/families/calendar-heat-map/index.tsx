@@ -14,6 +14,7 @@ import { memo, useMemo, useRef, type CSSProperties } from 'react';
 import type { ChartBaseProps, ChartColorSchemeProps, ChartLegendProps, ChartStateProps } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { SvgCalendarHeatMapRenderer } from '../../runtime/chart-engine/presentation/react/renderers/calendar-heat-map';
 
 /** A single day data point in the calendar heatmap. */
@@ -113,6 +114,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
 }: CalendarHeatMapProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
+  const paint = useChartPaint({ family: 'calendar-heat-map', scheme: colorScheme });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const resolvedColorRange = useMemo<[string, string]>(() => (
     colorRange ?? ['var(--ds-color-bg-tertiary)', chartPersonality.colors[0] ?? 'var(--ds-color-primary-500)']
@@ -254,7 +256,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -303,4 +305,6 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

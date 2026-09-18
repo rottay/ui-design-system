@@ -21,6 +21,7 @@ import {
   type ChartGeometryInsets,
   type SvgHeatMapDatum,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 const DEFAULT_LOW_COLOR = 'var(--ds-color-info-bg)';
@@ -169,7 +170,8 @@ export function SvgHeatMapRenderer({
     : undefined;
   const radius = Number.isFinite(cellRadius) ? Math.max(0, cellRadius) : 3;
 
-  return (
+  const paint = useChartPaintRoot('heat-map');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.heatmap"
       ariaLabel={ariaLabel}
@@ -334,4 +336,6 @@ export function SvgHeatMapRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

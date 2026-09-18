@@ -9,6 +9,7 @@ import {
   type SvgTreeMapNode,
 } from '../../../../foundation/renderers/geometry';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 export interface SvgTreeMapRendererProps {
@@ -87,7 +88,8 @@ export function SvgTreeMapRenderer({
     .filter(Boolean)
     .join(' ');
 
-  return (
+  const paint = useChartPaintRoot('tree-map');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.treemap"
       ariaLabel={ariaLabel}
@@ -163,4 +165,6 @@ export function SvgTreeMapRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

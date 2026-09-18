@@ -11,6 +11,7 @@ import {
   type SvgWaterfallDatum,
   type SvgWaterfallType,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 /** Tooltip/keyboard datum exposed to the family for each rendered bar. */
@@ -136,7 +137,8 @@ export function SvgWaterfallRenderer({
     ? interaction.renderTooltip?.(interactionState.activeDatum)
     : undefined;
 
-  return (
+  const paint = useChartPaintRoot('waterfall');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.waterfall"
       ariaLabel={ariaLabel}
@@ -311,4 +313,6 @@ export function SvgWaterfallRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

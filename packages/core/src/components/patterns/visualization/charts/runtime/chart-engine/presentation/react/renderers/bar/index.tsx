@@ -18,6 +18,7 @@ import {
   type SvgBarSeriesGeometryDatum,
   type SvgBarSeriesInput,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 type ChartPaintStyle = CSSProperties & {
@@ -207,7 +208,8 @@ export function SvgBarRenderer({
       ? Math.max(0, barRadius)
       : grammarRadius;
 
-  return (
+  const paint = useChartPaintRoot('bar-chart');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.bar"
       ariaLabel={ariaLabel}
@@ -438,4 +440,6 @@ export function SvgBarRenderer({
       />
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

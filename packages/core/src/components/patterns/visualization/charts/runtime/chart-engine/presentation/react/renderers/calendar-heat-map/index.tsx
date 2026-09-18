@@ -16,6 +16,7 @@ import {
   buildSvgCalendarHeatMapGeometry,
 } from '../../../../foundation/renderers/geometry';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 const DEFAULT_LOW_COLOR = 'var(--ds-color-bg-tertiary)';
@@ -161,7 +162,8 @@ export function SvgCalendarHeatMapRenderer({
     .filter(Boolean)
     .join(' ');
 
-  return (
+  const paint = useChartPaintRoot('calendar-heat-map');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.calendar-heatmap"
       ariaLabel={ariaLabel}
@@ -241,4 +243,6 @@ export function SvgCalendarHeatMapRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

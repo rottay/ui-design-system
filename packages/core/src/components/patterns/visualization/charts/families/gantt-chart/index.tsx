@@ -15,6 +15,7 @@ import type { ChartBaseProps, ChartColorsProps, ChartMarginProps, ChartStateProp
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import type { SvgGanttTask } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgGanttRenderer } from '../../runtime/chart-engine/presentation/react/renderers/gantt';
 
@@ -77,6 +78,7 @@ export const GanttChart = memo(function GanttChart({
 }: GanttChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
+  const paint = useChartPaint({ family: 'gantt-chart', override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const parsedTasks = useMemo<SvgGanttTask[]>(() => {
@@ -157,7 +159,7 @@ export const GanttChart = memo(function GanttChart({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -192,4 +194,6 @@ export const GanttChart = memo(function GanttChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

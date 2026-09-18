@@ -12,6 +12,7 @@ import {
   buildSvgGaugeGeometry,
   type SvgGaugeSegment,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 export interface SvgGaugeRendererProps {
@@ -171,7 +172,8 @@ export function SvgGaugeRenderer({
   const description = ariaDescription
     ?? `Gauge chart showing ${displayValue}. Range: ${geometry.rangeMin} to ${geometry.rangeMax}.`;
 
-  return (
+  const paint = useChartPaintRoot('gauge');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.gauge"
       ariaLabel={ariaLabel}
@@ -358,4 +360,6 @@ export function SvgGaugeRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

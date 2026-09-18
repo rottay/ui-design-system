@@ -22,6 +22,7 @@ import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
 import {
   buildSvgFunnelGeometry,
@@ -76,6 +77,7 @@ export const FunnelChart = memo(function FunnelChart({
 }: FunnelChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
+  const paint = useChartPaint({ family: 'funnel-chart', override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   // Validation and legend colors are resolved from the same pure engine as
@@ -198,7 +200,7 @@ export const FunnelChart = memo(function FunnelChart({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -240,4 +242,6 @@ export const FunnelChart = memo(function FunnelChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

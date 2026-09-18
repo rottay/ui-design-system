@@ -40,6 +40,7 @@ import type {
   DataPoint,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import {
   buildSvgPieGeometry,
@@ -104,6 +105,7 @@ export const PieChart = memo(function PieChart({
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
+  const paint = useChartPaint({ family: 'pie-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
@@ -202,7 +204,7 @@ export const PieChart = memo(function PieChart({
     [donut ? 'Rendered as a donut chart.' : null, fallbackMessage].filter(Boolean).join(' ') || undefined,
   );
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={containerRef}
       svgRef={legacySvgRef}
@@ -254,4 +256,6 @@ export const PieChart = memo(function PieChart({
       )) : undefined}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

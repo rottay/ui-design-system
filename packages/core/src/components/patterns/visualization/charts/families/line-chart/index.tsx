@@ -39,6 +39,7 @@ import type {
   Series,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { ChartTooltip, TooltipValue } from '../../presentation/tooltip';
 import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
@@ -155,6 +156,7 @@ export const LineChart = memo(function LineChart({
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { dimensions } = useChartDimensions(width, height);
+  const paint = useChartPaint({ family: 'line-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
@@ -264,7 +266,7 @@ export const LineChart = memo(function LineChart({
     yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
   ].filter(Boolean).join(' '));
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -307,4 +309,6 @@ export const LineChart = memo(function LineChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

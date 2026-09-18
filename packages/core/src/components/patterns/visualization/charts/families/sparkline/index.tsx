@@ -30,6 +30,7 @@
 import { memo } from 'react';
 
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import type { ChartColorScheme, ChartStateProps } from '../../contracts';
 import { resolveChartScaffoldState } from '../../presentation/scaffold';
 import { SvgSparklineRenderer } from '../../runtime/chart-engine/presentation/react/renderers/sparkline';
@@ -104,6 +105,7 @@ export const Sparkline = memo(function Sparkline({
   style,
   colorScheme,
 }: SparklineProps) {
+  const paint = useChartPaint({ family: 'sparkline', scheme: colorScheme });
   const chartPersonality = useChartPersonality({ animate, colorScheme });
   const resolvedColor = color ?? chartPersonality.colors[0] ?? 'var(--ds-color-primary)';
   const resolvedFill = fill ?? chartPersonality.useGradientFill;
@@ -136,7 +138,7 @@ export const Sparkline = memo(function Sparkline({
           ? errorLabel
           : emptyLabel;
     const midY = height / 2;
-    return (
+    const placeholder = (
       <svg
         width={width}
         height={height}
@@ -169,9 +171,10 @@ export const Sparkline = memo(function Sparkline({
         )}
       </svg>
     );
+    return <ChartPaintProvider decision={paint}>{placeholder}</ChartPaintProvider>;
   }
 
-  return (
+  const chart = (
     <SvgSparklineRenderer
       data={data}
       width={width}
@@ -189,4 +192,6 @@ export const Sparkline = memo(function Sparkline({
       style={style}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

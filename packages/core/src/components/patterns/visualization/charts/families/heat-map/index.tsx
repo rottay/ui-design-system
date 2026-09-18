@@ -21,6 +21,7 @@ import { memo, useMemo, useRef, type CSSProperties } from 'react';
 import type { ChartBaseProps, ChartLegendProps, ChartMarginProps, ChartStateProps } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import type { SvgHeatMapDatum } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgHeatMapRenderer } from '../../runtime/chart-engine/presentation/react/renderers/heat-map';
 
@@ -82,6 +83,7 @@ export const HeatMap = memo(function HeatMap({
   // The renderer governs motion and native cell titles from the resolved
   // personality; the family retains `animate`/`tooltip` in its contract and
   // sources only the loading label from the personality hook.
+  const paint = useChartPaint({ family: 'heat-map' });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const finiteData = useMemo(
     () => data.filter((item) => Number.isFinite(item.value)),
@@ -168,7 +170,7 @@ export const HeatMap = memo(function HeatMap({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -206,4 +208,6 @@ export const HeatMap = memo(function HeatMap({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

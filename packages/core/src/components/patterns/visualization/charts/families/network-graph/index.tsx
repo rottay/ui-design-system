@@ -50,6 +50,7 @@ import type {
   ChartStateProps,
 } from '../../contracts';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
 import {
   ChartImperativePlot,
@@ -221,6 +222,7 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
   const instanceToken = instanceId.replace(/[^a-zA-Z0-9_-]/g, '');
   const definitionsId = `network-definitions-${instanceToken}`;
   const markerId = `network-arrow-${instanceToken}`;
+  const paint = useChartPaint({ family: 'network-graph', override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const validation = useMemo(() => validateNetworkData(nodes, links), [nodes, links]);
   const graphNodes = validation.ok ? validation.nodes : [];
@@ -513,7 +515,7 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
     </div>
   ) : null;
 
-  return (
+  const chart = (
     <ChartScaffold
       {...scaffoldStateProps}
       containerRef={scaffoldRef}
@@ -552,4 +554,6 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

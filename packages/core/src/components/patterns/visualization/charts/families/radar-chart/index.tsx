@@ -19,6 +19,7 @@ import type {
 } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import {
   buildSvgRadarGeometry,
 } from '../../runtime/chart-engine/foundation/renderers/geometry';
@@ -70,6 +71,7 @@ export const RadarChart = memo(function RadarChart({
 }: RadarChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
+  const paint = useChartPaint({ family: 'radar-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const allSeries = useMemo(
@@ -157,7 +159,7 @@ export const RadarChart = memo(function RadarChart({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -212,4 +214,6 @@ export const RadarChart = memo(function RadarChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

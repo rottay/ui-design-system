@@ -11,6 +11,7 @@ import {
   type SvgBulletTier,
 } from '../../../../foundation/renderers/geometry';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 export interface SvgBulletRendererProps {
@@ -122,7 +123,8 @@ export function SvgBulletRenderer({
     .filter(Boolean)
     .join(' ');
 
-  return (
+  const paint = useChartPaintRoot('bullet');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.bullet"
       ariaLabel={ariaLabel}
@@ -244,4 +246,6 @@ export function SvgBulletRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

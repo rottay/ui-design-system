@@ -62,6 +62,7 @@ import type {
   ChartStateProps,
 } from '../../contracts';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
@@ -561,6 +562,7 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
   } as ChartStateProps;
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
+  const paint = useChartPaint({ family: 'sankey', override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip });
 
   const fmt = useCallback(
@@ -911,7 +913,7 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
     </div>
   ) : null;
 
-  return (
+  const chart = (
     <ChartScaffold
       {...scaffoldStateProps}
       containerRef={scaffoldRef}
@@ -950,4 +952,6 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

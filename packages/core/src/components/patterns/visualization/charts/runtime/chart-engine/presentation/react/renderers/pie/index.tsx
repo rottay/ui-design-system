@@ -11,6 +11,7 @@ import {
   type ChartGeometryInsets,
   type SvgPieDatum,
 } from "../../../../foundation/renderers/geometry";
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from "..";
 
 export interface SvgPieRendererProps {
@@ -145,7 +146,8 @@ export function SvgPieRenderer({
     : 0.05;
   const showCenter = geometry.innerRadius > 0 && (centerLabel || centerValue);
 
-  return (
+  const paint = useChartPaintRoot('pie-chart');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.pie"
       ariaLabel={ariaLabel}
@@ -292,4 +294,6 @@ export function SvgPieRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

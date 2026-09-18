@@ -10,6 +10,7 @@ import {
   type SvgAreaSeries,
   type SvgLineCurve,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 const FALLBACK_SERIES_PAINT = 'var(--ds-color-primary)';
@@ -92,7 +93,8 @@ export function SvgAreaRenderer({
     0,
   );
 
-  return (
+  const paint = useChartPaintRoot('area-chart');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.area"
       ariaLabel={ariaLabel}
@@ -231,4 +233,6 @@ export function SvgAreaRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

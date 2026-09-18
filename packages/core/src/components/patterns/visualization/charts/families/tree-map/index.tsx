@@ -19,6 +19,7 @@ import type {
 } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import {
   buildSvgTreeMapGeometry,
   type SvgTreeMapNode,
@@ -96,6 +97,7 @@ export const TreeMap = memo(function TreeMap({
 }: TreeMapProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
+  const paint = useChartPaint({ family: 'tree-map', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const normalizedData = useMemo(
@@ -166,7 +168,7 @@ export const TreeMap = memo(function TreeMap({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -199,4 +201,6 @@ export const TreeMap = memo(function TreeMap({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

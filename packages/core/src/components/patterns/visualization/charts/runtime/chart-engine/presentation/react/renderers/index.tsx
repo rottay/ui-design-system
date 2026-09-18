@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import { useResolvedChartPersonality } from '@/infrastructure/runtime/personality';
+import { useChartPaintDecision } from '../../../../theming/composition/react/paint';
 import { useResolvedChartGrammar } from '../../../runtime/grammar';
 import type {
   ChartInteractionMode,
@@ -78,7 +79,7 @@ export function ChartRendererSurface({
   ].filter(Boolean).join(' ') || undefined;
   const grammar = useResolvedChartGrammar();
   const chartPersonality = useResolvedChartPersonality();
-  const colorScheme = chartPersonality.colorScheme ?? 'default';
+  const paint = useChartPaintDecision();
   const surfaceClassName = ['ds-chart-renderer', className].filter(Boolean).join(' ');
   const interactive = interactionMode !== 'static';
   const hasTooltip = tooltip !== null && tooltip !== undefined && tooltip !== false;
@@ -112,7 +113,7 @@ export function ChartRendererSurface({
       data-chart-marks={grammar.marks}
       data-chart-annotations={grammar.annotations}
       data-chart-motion={grammar.motion}
-      data-chart-color-scheme={colorScheme}
+      {...paint.rootAttributes}
       data-chart-line-style={chartPersonality.lineStyle}
       data-chart-show-dots={chartPersonality.showDots ? 'true' : 'false'}
       data-chart-gradient-fill={chartPersonality.useGradientFill ? 'true' : 'false'}

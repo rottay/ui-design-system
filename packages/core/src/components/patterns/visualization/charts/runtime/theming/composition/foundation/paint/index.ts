@@ -41,8 +41,15 @@ export { CHART_CATEGORICAL_SIZE };
 /** The scheme a family falls back to when neither prop nor token decides. */
 export const CHART_DEFAULT_SCHEME: ChartColorScheme = 'default';
 
+/**
+ * The identity a chart root resolves under. `null` is the one root the design
+ * system does not own: the published imperative bridge, whose body is app-owned
+ * and whose paint is categorical by construction of that bridge's own API.
+ */
+export type ChartPaintFamily = ChartFamilyId | null;
+
 export interface ChartPaintRequest {
-  readonly family: ChartFamilyId;
+  readonly family: ChartPaintFamily;
   /** The component prop. Highest precedence. */
   readonly scheme?: ChartColorScheme;
   /** The token decision. */
@@ -79,7 +86,7 @@ export interface ChartPaintRootAttributes {
 }
 
 export interface ChartPaintDecision {
-  readonly family: ChartFamilyId;
+  readonly family: ChartPaintFamily;
   readonly model: ChartPaintModel;
   /** prop > token > 'default'. This value is what gets stamped. */
   readonly scheme: ChartColorScheme;
@@ -183,8 +190,22 @@ function createSequentialPaint(
   });
 }
 
+/** What the resolver needs from a root identity. A registry row satisfies it. */
+type ChartPaintIdentity = Pick<
+  ChartFamilyRow,
+  'paintModel' | 'cadenceSize' | 'honoursColorsProp'
+> & { readonly id: ChartPaintFamily };
+
+const UNOWNED_ROOT: ChartPaintIdentity = Object.freeze({
+  id: null,
+  paintModel: 'categorical',
+  cadenceSize: null,
+  honoursColorsProp: false,
+});
+
 /** Registered rows only: an inherited Object.prototype key is not a family. */
-function rowFor(family: ChartFamilyId): ChartFamilyRow {
+function rowFor(family: ChartPaintFamily): ChartPaintIdentity {
+  if (family === null) return UNOWNED_ROOT;
   if (!isChartFamilyId(family)) refuse(`unknown family "${String(family)}"`);
   return CHART_FAMILY_REGISTRY[family];
 }
@@ -205,7 +226,7 @@ function buildDecision(request: ChartPaintRequest): ChartPaintDecision {
         )
       : null;
 
-  const seed = SEQUENTIAL_SEEDS[request.family];
+  const seed = request.family === null ? undefined : SEQUENTIAL_SEEDS[request.family];
   const sequential =
     familyRow.paintModel === 'sequential' && seed
       ? createSequentialPaint(seed.low, chain[0] as string, seed.steps)
@@ -244,7 +265,7 @@ export function resolveChartPaint(request: ChartPaintRequest): ChartPaintDecisio
   if (wantsOverride && familyRow.honoursColorsProp) return buildDecision(request);
 
   const scheme = request.scheme ?? request.tokenScheme ?? CHART_DEFAULT_SCHEME;
-  const key = `${request.family}${CACHE_KEY_SEPARATOR}${scheme}`;
+  const key = `${String(request.family)}${CACHE_KEY_SEPARATOR}${scheme}`;
   const cached = decisionCache.get(key);
   if (cached) return cached;
   const decision = buildDecision({ family: request.family, scheme });

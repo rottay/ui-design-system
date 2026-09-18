@@ -14,6 +14,7 @@ import {
   type SvgScatterDatum,
   type SvgScatterVariant,
 } from '../../../../foundation/renderers/geometry';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 export interface SvgScatterRendererProps {
@@ -168,7 +169,8 @@ export function SvgScatterRenderer({
     ? interaction.renderTooltip?.(interactionState.activeDatum)
     : undefined;
 
-  return (
+  const paint = useChartPaintRoot('scatter');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.scatter"
       ariaLabel={ariaLabel}
@@ -402,4 +404,6 @@ export function SvgScatterRenderer({
       />
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

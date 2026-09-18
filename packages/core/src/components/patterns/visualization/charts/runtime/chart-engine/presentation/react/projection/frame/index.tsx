@@ -17,6 +17,7 @@ import {
 
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { useResolvedChartPersonality } from '@/infrastructure/runtime/personality';
+import { useChartTokenScheme } from '../../../../../theming/composition/react/paint';
 import { useResolvedChartGrammar } from '../../../../runtime/grammar';
 import {
   resolveChartProjection,
@@ -114,6 +115,7 @@ export function ChartFrame(props: ChartFrameProps): React.ReactElement {
   const { deviceClass: responsiveDeviceClass } = useResponsive();
   const grammar = useResolvedChartGrammar();
   const chartPersonality = useResolvedChartPersonality();
+  const colorScheme = useChartTokenScheme();
   const deviceClass = deviceClassOverride ?? responsiveDeviceClass;
   const resolvedView = resolveChartProjection(projection, deviceClass);
   const state = props.state ?? 'ready';
@@ -124,7 +126,6 @@ export function ChartFrame(props: ChartFrameProps): React.ReactElement {
   ]);
   const frameClassName = ['ds-chart-frame', className].filter(Boolean).join(' ');
   const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  const colorScheme = chartPersonality.colorScheme ?? 'default';
 
   return (
     <section

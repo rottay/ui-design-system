@@ -38,6 +38,7 @@ import type {
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { ChartTooltip } from '../../presentation/tooltip';
 import type { SvgAreaSeries, SvgLineCurve } from '../../runtime/chart-engine/foundation/renderers/geometry';
@@ -118,6 +119,7 @@ export const AreaChart = memo(function AreaChart({
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { dimensions } = useChartDimensions(width, height);
+  const paint = useChartPaint({ family: 'area-chart', scheme: colorScheme, override: colors });
   const chartPersonality = useChartPersonality({ animate, curved, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
@@ -219,7 +221,7 @@ export const AreaChart = memo(function AreaChart({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -273,4 +275,6 @@ export const AreaChart = memo(function AreaChart({
       ) : null)}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

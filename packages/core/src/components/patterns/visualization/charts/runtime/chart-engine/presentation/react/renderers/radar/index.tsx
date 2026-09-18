@@ -13,6 +13,7 @@ import {
 import { useChartInteraction } from '../../../../runtime/interaction/controller';
 import { useChartDimensions } from '../../../../runtime/dimensions';
 import { useResolvedChartGrammar } from '../../../../runtime/grammar';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 /** The application datum exposed when a radar vertex becomes interactive. */
@@ -174,7 +175,8 @@ export function SvgRadarRenderer({
       ? geometry.fallbackMessage
       : `Radar chart with ${geometry.axes.length} axes and ${geometry.series.length} series.`);
 
-  return (
+  const paint = useChartPaintRoot('radar-chart');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.radar"
       ariaLabel={ariaLabel}
@@ -355,4 +357,6 @@ export function SvgRadarRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

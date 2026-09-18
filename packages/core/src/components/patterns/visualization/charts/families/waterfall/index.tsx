@@ -35,6 +35,7 @@ import type {
   ChartStateProps,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
 import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
@@ -128,6 +129,7 @@ export const WaterfallChart = memo(function WaterfallChart({
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { dimensions } = useChartDimensions(width, height);
+  const paint = useChartPaint({ family: 'waterfall' });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const formatVal = formatValue ?? defaultFormatValue;
@@ -209,7 +211,7 @@ export const WaterfallChart = memo(function WaterfallChart({
     }
     : undefined;
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -248,4 +250,6 @@ export const WaterfallChart = memo(function WaterfallChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

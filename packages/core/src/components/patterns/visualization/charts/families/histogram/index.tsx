@@ -31,6 +31,7 @@ import type {
   ChartStateProps,
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
 import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
@@ -124,6 +125,7 @@ export const Histogram = memo(function Histogram({
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
   const { dimensions } = useChartDimensions(width, height);
+  const paint = useChartPaint({ family: 'histogram' });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({ compact, compactMode, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const fmtVal = formatValue ?? defaultFormatValue;
@@ -220,7 +222,7 @@ export const Histogram = memo(function Histogram({
     yLabel ? `Y axis: ${yLabel}.` : null,
   ].filter(Boolean).join(' '));
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -262,4 +264,6 @@ export const Histogram = memo(function Histogram({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

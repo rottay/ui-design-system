@@ -10,6 +10,7 @@ import {
   type SvgGanttTask,
 } from '../../../../foundation/renderers/geometry';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 export interface SvgGanttRendererProps {
@@ -106,7 +107,8 @@ export function SvgGanttRenderer({
     .join(' ');
   const taskById = useMemo(() => new Map(tasks.map((task) => [task.id, task])), [tasks]);
 
-  return (
+  const paint = useChartPaintRoot('gantt-chart');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.gantt"
       ariaLabel={ariaLabel}
@@ -283,4 +285,6 @@ export function SvgGanttRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

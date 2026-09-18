@@ -19,6 +19,7 @@ import type {
   ChartStateProps,
 } from '../../contracts';
 import { useChartCompact, useChartDimensions, useChartPersonality } from '../../runtime';
+import { ChartPaintProvider, useChartPaint } from '../../runtime/theming/composition/react/paint';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { TooltipValue } from '../../presentation/tooltip';
 import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
@@ -168,6 +169,7 @@ export const GaugeChart = memo(function GaugeChart({
     Boolean(autoCompact),
   );
   const legacySvgRef = useRef<SVGSVGElement>(null);
+  const paint = useChartPaint({ family: 'gauge' });
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({
     compact,
@@ -306,7 +308,7 @@ export const GaugeChart = memo(function GaugeChart({
         ...(emptyAction === undefined ? {} : { emptyAction }),
       };
 
-  return (
+  const chart = (
     <ChartScaffold
       containerRef={scaffoldRef}
       svgRef={legacySvgRef}
@@ -364,4 +366,6 @@ export const GaugeChart = memo(function GaugeChart({
       )}
     />
   );
+
+  return <ChartPaintProvider decision={paint}>{chart}</ChartPaintProvider>;
 });

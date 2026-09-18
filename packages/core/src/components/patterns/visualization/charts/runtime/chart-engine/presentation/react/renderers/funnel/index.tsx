@@ -13,6 +13,7 @@ import {
 } from '../../../../foundation/renderers/geometry';
 import { useChartInteraction } from '../../../../runtime/interaction/controller';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 export interface SvgFunnelRendererProps {
@@ -136,7 +137,8 @@ export function SvgFunnelRenderer({
     .filter(Boolean)
     .join(' ');
 
-  return (
+  const paint = useChartPaintRoot('funnel-chart');
+  const surface = (
     <ChartRendererSurface
       rendererId="svg.funnel"
       ariaLabel={ariaLabel}
@@ -271,4 +273,6 @@ export function SvgFunnelRenderer({
       </g>
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }

@@ -16,10 +16,10 @@ import {
   type CSSProperties,
 } from 'react';
 
-import { useResolvedChartPersonality } from '@/infrastructure/runtime/personality';
 import type { ChartPersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 import { resolveChartSeriesPaint } from '../../../../foundation/grammar/palette';
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import { ChartPaintProvider, useChartPaintRoot } from '../../../../../theming/composition/react/paint';
 import { ChartRendererSurface } from '..';
 
 /** Everything an imperative body may touch. Nothing outside it is owned. */
@@ -94,13 +94,15 @@ export function ChartImperativePlot({
   style,
   draw,
 }: ChartImperativePlotProps): React.ReactElement {
-  const chartPersonality = useResolvedChartPersonality();
+  const paint = useChartPaintRoot(null, colorScheme ? { scheme: colorScheme } : {});
   const { containerRef, dimensions } = useChartDimensions(width, height, responsive);
   const [mount, setMount] = useState<SVGGElement | null>(null);
   const mountRef = useCallback((node: SVGGElement | null) => {
     setMount(node);
   }, []);
-  const seriesPaint = resolveChartSeriesPaint(colorScheme ?? chartPersonality.colorScheme);
+  // A body under a non-categorical family still draws series; it takes the
+  // chain for the scheme that family resolved, never a scheme of its own.
+  const seriesPaint = paint.categorical?.slots ?? resolveChartSeriesPaint(paint.scheme);
 
   useEffect(() => {
     if (!mount) return undefined;
@@ -119,7 +121,7 @@ export function ChartImperativePlot({
     };
   }, [dimensions.height, dimensions.width, draw, mount, seriesPaint]);
 
-  return (
+  const surface = (
     <ChartRendererSurface
       rendererId={rendererId}
       ariaLabel={ariaLabel}
@@ -136,4 +138,6 @@ export function ChartImperativePlot({
       <g ref={mountRef} data-part="imperative-mount" />
     </ChartRendererSurface>
   );
+
+  return <ChartPaintProvider decision={paint}>{surface}</ChartPaintProvider>;
 }
