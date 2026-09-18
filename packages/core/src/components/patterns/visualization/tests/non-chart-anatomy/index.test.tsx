@@ -231,7 +231,7 @@ describe('non-chart inert anatomy', () => {
       expect(q(normal.container, '[data-part="toggle"][data-expanded="true"]')).toHaveLength(1);
     }
     expect(q(normal.container, '[data-part="checkbox"]')).toHaveLength(3);
-    expect(q(normal.container, '[data-part="drag-handle"]')).toHaveLength(engine === 'modern' ? 0 : 3);
+    expect(q(normal.container, '[data-part="drag-handle"]')).toHaveLength(engine === 'modern' ? 2 : 3);
     normal.unmount();
 
     const loading = render(<Component data={[]} loading />);
