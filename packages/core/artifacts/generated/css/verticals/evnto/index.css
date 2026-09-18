@@ -91025,19 +91025,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * are retired).
  *
  * COMPOSITION LAW (S04): the metric core (label/value/affix/count-up) is the
- * Statistic primitive, the loading placeholder is the Skeleton primitive and
- * the progress meter is the Progress primitive — their paint is theirs; the
- * former `stat-label`/`stat-value`/`stat-prefix`/`stat-suffix` color rules,
- * the `progress-track`/`progress-fill` rules and the `skeleton-bar`/
- * `skeleton-dot` rules are retired (duplication). What this file owns: the
- * card chrome + glow, the sparkline dots (decorative pattern data viz), the
- * change indicator's tint channels, the insight line, the responsive frame
- * (container queries — the engine publishes the wide-column count on the
- * `--ds-stats-header-columns` channel), the interactive card state triad and
- * the forced-colors contract. The composed metric's value scale is drained
- * here from the retired inline `valueStyle` (identical values, same
- * `--ds-stats-header-value-*` channels), and each spark dot's opacity is a
- * private runtime instance channel (`--_ds-stats-header-spark-dot-opacity`)
+ * Statistic primitive and the progress meter is the Progress primitive —
+ * their paint is theirs; the loading state is the shared anatomy-derived
+ * renderer's (it reads the stamped card anatomy and paints one bone per
+ * part). The former `stat-label`/`stat-value`/`stat-prefix`/`stat-suffix`
+ * color rules, the `progress-track`/`progress-fill` rules and the
+ * `skeleton-bar`/`skeleton-dot` rules are retired (duplication). What this
+ * file owns: the card chrome + glow, the sparkline dots (decorative pattern
+ * data viz), the change indicator's tint channels, the insight line, the
+ * responsive frame (container queries — the engine publishes the wide-column
+ * count on the `--ds-stats-header-columns` channel), the interactive card
+ * state triad and the forced-colors contract. The composed metric's value
+ * scale is drained here from the retired inline `valueStyle` (identical
+ * values, same `--ds-stats-header-value-*` channels), and each spark dot's
+ * opacity is a private runtime instance channel (`--_ds-stats-header-spark-dot-opacity`)
  * published by the engine and declared here.
  *
  * STATE:
@@ -91111,8 +91112,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* Interactive triad: hover only where hovering is real (house hover law);
-   the press is a real :active gated on clickable — replacing the retired JS
-   hover/pressed state. */
+   the press is a real :active gated on clickable. Both are the kernel's
+   decision, paired here with the matching pseudo-class as one decision's
+   fallback. */
 @media (hover: hover) {
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='hovered'],
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:hover {
@@ -91331,8 +91333,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* forced-colors: glow, accent fills and shadows are forced away. Cards keep
    a system frame; the change DIRECTION survives through the governed trend
    icon (never colour alone); the decorative spark dots and the glow are
-   removed (they carry no information); the composed Statistic / Skeleton /
-   Progress primitives keep their own forced-colors contracts. */
+   removed (they carry no information); the composed Statistic /
+   Progress primitives and the anatomy-derived loading renderer keep their
+   own forced-colors contracts. */
 @media (forced-colors: active) {
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
     border-color: ButtonText;
