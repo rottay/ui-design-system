@@ -278,19 +278,20 @@ describe('ColumnMenu drag transport', () => {
   });
 
   /**
-   * DECLARED CHANGE, written to be flipped.
+   * DECLARED CHANGE, FLIPPED by the kernel adoption (WO-FAM-08, F-69 lot 2b).
    *
-   * With no drag of its own in flight, the drop handler still recovers a key
-   * from `text/plain`, so a drag that originated outside this panel and happens
-   * to carry the text of a column key reorders the user's columns. The
-   * expectation below is today's measured result and is the one assertion in
-   * this file a later transport change is expected to rewrite -- to the
-   * unchanged order -- in the same commit that declares the change.
+   * The hand-rolled drop handler recovered a key from `text/plain` with no
+   * drag of its own in flight, so a drag that originated outside this panel
+   * and happened to carry the text of a column key reordered the user's
+   * columns. The kernel's drop opens on a session or not at all, so the same
+   * gesture is now refused and the draft below is the UNCHANGED order -- the
+   * one assertion in this file the adoption rewrites, and the reason it was
+   * written before the adoption rather than after.
    *
-   * The hover half already refuses: an unstarted drag stamps nothing, so no
-   * indicator promises a drop, and that half must NOT move.
+   * The hover half did not move: an unstarted drag stamped nothing then and
+   * stamps nothing now, so no indicator ever promised this drop.
    */
-  it('reorders the draft under a foreign drag whose text matches a column key', async () => {
+  it('refuses a foreign drag whose text matches a column key', async () => {
     const onColumnsChange = vi.fn();
     const { surface } = await openMenu(onColumnsChange);
     const dataTransfer = transfer('name');
@@ -301,14 +302,16 @@ describe('ColumnMenu drag transport', () => {
 
     fireEvent.drop(target, { dataTransfer });
 
-    await waitFor(() => expect(draftOrder(surface)).toEqual(['Email', 'Notes', 'Name']));
+    await waitFor(() => expect(draftOrder(surface)).toEqual(['Name', 'Email', 'Notes']));
     expect(onColumnsChange).not.toHaveBeenCalled();
 
+    // Apply is the discriminating read: it publishes the draft React has
+    // finished flushing, and would carry the reorder if the drop had landed.
     fireEvent.click(applyButton(surface));
     expect(onColumnsChange.mock.calls).toEqual([
       [
         ['name', 'email', 'notes'],
-        ['email', 'notes', 'name'],
+        ['name', 'email', 'notes'],
       ],
     ]);
   });

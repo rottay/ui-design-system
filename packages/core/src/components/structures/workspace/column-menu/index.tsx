@@ -47,6 +47,10 @@ import { Flex } from "../../../primitives/layout/flex";
 import { InputNumber } from "../../../primitives/inputs/input-number";
 import { Popover } from "../../../primitives/overlay/popover";
 import { Text } from "../../../primitives/display/typography/compound/text";
+import {
+  reorderByKey,
+  useDragSession,
+} from "../../../primitives/runtime/collection/sortable";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 
 function readColumnRecordValue(value: unknown, key: PropertyKey): unknown {
@@ -231,10 +235,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
     new Set()
   );
   const [editingWidthKey, setEditingWidthKey] = useState<string | null>(null);
-  const [draggedColumnKey, setDraggedColumnKey] = useState<string | null>(null);
-  const [dragOverColumnKey, setDragOverColumnKey] = useState<string | null>(
-    null
-  );
   const panelRef = useRef<HTMLElement | null>(null);
   const i18n = useOptionalTranslation("components");
   /**
@@ -375,63 +375,29 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
     [columns]
   );
 
-  const moveDraftColumn = useCallback(
-    (sourceKey: string, targetKey: string) => {
-      if (sourceKey === targetKey) return;
-
-      setDraftOrder((previous) => {
-        const completeOrder = normalizeDraftOrder(
-          previous,
-          columns.map((column) => column.key)
-        );
-        const sourceIndex = completeOrder.indexOf(sourceKey);
-        const targetIndex = completeOrder.indexOf(targetKey);
-
-        return moveItem(completeOrder, sourceIndex, targetIndex);
-      });
-    },
-    [columns]
-  );
-
-  const handleColumnDragStart = useCallback(
-    (event: React.DragEvent<HTMLElement>, key: string) => {
-      setDraggedColumnKey(key);
-      setDragOverColumnKey(null);
-      event.dataTransfer.effectAllowed = "move";
-      event.dataTransfer.setData("text/plain", key);
-    },
-    []
-  );
-
-  const handleColumnDragOver = useCallback(
-    (event: React.DragEvent<HTMLElement>, key: string) => {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "move";
-      if (draggedColumnKey && draggedColumnKey !== key) {
-        setDragOverColumnKey(key);
-      }
-    },
-    [draggedColumnKey]
-  );
-
-  const handleColumnDrop = useCallback(
-    (event: React.DragEvent<HTMLElement>, key: string) => {
-      event.preventDefault();
-      const sourceKey =
-        event.dataTransfer.getData("text/plain") || draggedColumnKey;
-      if (sourceKey) {
-        moveDraftColumn(sourceKey, key);
-      }
-      setDraggedColumnKey(null);
-      setDragOverColumnKey(null);
-    },
-    [draggedColumnKey, moveDraftColumn]
-  );
-
-  const handleColumnDragEnd = useCallback(() => {
-    setDraggedColumnKey(null);
-    setDragOverColumnKey(null);
-  }, []);
+  const drag = useDragSession<{ key: string }, { key: string }>({
+    /* Hovering the dragged row holds the indicator where it was; dropping on
+       it refuses the move, which is what an unchanged draft means here. */
+    resolveTarget: ({ phase, payload, target, current }) =>
+      target.key === payload.key
+        ? phase === "hover"
+          ? current
+          : null
+        : target,
+    /* The draft is the commit point: a drop stages an order and only Apply
+       publishes it through `onColumnsChange`. */
+    onDrop: (payload, target) =>
+      setDraftOrder((previous) =>
+        reorderByKey(
+          normalizeDraftOrder(
+            previous,
+            columns.map((column) => column.key)
+          ),
+          payload.key,
+          target.key
+        )
+      ),
+  });
 
   const handleToggleAction = useCallback((key: string, locked?: boolean) => {
     if (locked) return;
@@ -640,10 +606,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     column.key
                   ) as number | undefined;
                   const isEditingWidth = editingWidthKey === column.key;
-                  const isDragging = draggedColumnKey === column.key;
-                  const isDragTarget =
-                    dragOverColumnKey === column.key &&
-                    draggedColumnKey !== column.key;
+                  const isDragging = drag.session?.payload.key === column.key;
+                  const isDragTarget = drag.session?.target?.key === column.key;
 
                   return (
                     <StatefulRow
@@ -651,12 +615,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                       data-drag-target={isDragTarget}
                       data-visible={isVisible}
                       data-dragging={isDragging}
-                      onDragOver={(event: React.DragEvent<HTMLElement>) =>
-                        handleColumnDragOver(event, column.key)
-                      }
-                      onDrop={(event: React.DragEvent<HTMLElement>) =>
-                        handleColumnDrop(event, column.key)
-                      }
+                      {...drag.getTargetProps({ key: column.key })}
                     >
                       <Flex
                         data-part="row-content"
@@ -671,7 +630,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             data-part="drag-handle"
                             data-drag-target={isDragTarget}
                             data-dragging={isDragging}
-                            draggable
+                            {...drag.getSourceProps({ key: column.key })}
                             aria-label={`${tOr(
                               "columnMenu.dragToMove",
                               "Drag to move"
@@ -680,10 +639,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               "columnMenu.dragToMove",
                               "Drag to move"
                             )} ${column.title}`}
-                            onDragStart={(
-                              event: React.DragEvent<HTMLElement>
-                            ) => handleColumnDragStart(event, column.key)}
-                            onDragEnd={handleColumnDragEnd}
                             onClick={(event: React.MouseEvent<HTMLElement>) =>
                               event.preventDefault()
                             }
