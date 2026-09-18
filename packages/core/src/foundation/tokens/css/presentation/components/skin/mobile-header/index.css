@@ -78,10 +78,11 @@
  *
  * CHANNELS: every value above rides a `--ds-mobile-header-*` channel produced by
  * `derivation/chrome/mobile-header`, at exactly the fallback stated beside it.
- * That includes the two names this family used to keep private — the bar row and
- * the notch inset — because a leading underscore puts a channel outside the
- * producer census and outside the tenant's reach at once, and those two carry the
- * whole box model.
+ * The bar row is one of the two names this family used to keep private, because
+ * a leading underscore puts a channel outside the producer census and outside
+ * the tenant's reach at once. The notch inset is NOT a family channel: the
+ * emission door does not admit `env()`, so the deriver cannot produce it, and
+ * the skin reads the canonical `--ds-safe-area-top` directly instead.
  *
  * STATE (F-37): hover, press and the focus ring are decided ONCE, by the shared
  * interaction kernel, and read off `data-state`. The platform pseudo-classes stay
@@ -109,13 +110,13 @@
   box-sizing: border-box;
   block-size: calc(
     var(--ds-mobile-header-bar-block-size, 56px) +
-      var(--ds-mobile-header-safe-area, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
+      var(--ds-safe-area-top, env(safe-area-inset-top, 0px))
   );
   min-block-size: calc(
     var(--ds-mobile-header-bar-block-size, 56px) +
-      var(--ds-mobile-header-safe-area, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
+      var(--ds-safe-area-top, env(safe-area-inset-top, 0px))
   );
-  padding-block-start: var(--ds-mobile-header-safe-area, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)));
+  padding-block-start: var(--ds-safe-area-top, env(safe-area-inset-top, 0px));
   container: ds-mobile-header / inline-size;
 }
 

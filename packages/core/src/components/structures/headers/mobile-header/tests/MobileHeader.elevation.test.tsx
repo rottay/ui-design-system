@@ -77,17 +77,20 @@ describe('MobileHeader elevation contract', () => {
 
     for (const property of ['block-size', 'min-block-size']) {
       expect(root!.decls[property]).toContain('--ds-mobile-header-bar-block-size');
-      expect(root!.decls[property]).toContain('--ds-mobile-header-safe-area');
+      expect(root!.decls[property]).toContain('--ds-safe-area-top');
+      expect(root!.decls[property]).not.toContain('--ds-mobile-header-safe-area');
     }
-    expect(root!.decls['padding-block-start']).toContain('--ds-mobile-header-safe-area');
+    expect(root!.decls['padding-block-start']).toContain('--ds-safe-area-top');
+    expect(root!.decls['padding-block-start']).not.toContain('--ds-mobile-header-safe-area');
 
     // The bar row is the family's own channel now rather than a `--_ds-` private,
     // stated by the deriver at the value the skin reads it with. The safe-area
     // channel is deliberately NOT produced: its only honest value is an `env()`
     // chain, and `env` is not in the emission door's admitted value functions —
     // the door would drop the channel whole and the `produces` claim would be
-    // false. The skin keeps stating the inset as its own double fallback (the
-    // loop below), so the pixels survive and the name stays tenant-reachable.
+    // false. The skin therefore reads the canonical `--ds-safe-area-top` directly
+    // and never re-states an unproduced family channel around it — the two
+    // NOT-contain assertions above guard against that read silently coming back.
     expect(deriveMobileHeaderChannels()['--ds-mobile-header-safe-area']).toBeUndefined();
     expect(deriveMobileHeaderChannels()['--ds-mobile-header-bar-block-size']).toBe('56px');
     for (const match of SKIN.matchAll(/env\(safe-area-inset-top[^)]*\)/g)) {
