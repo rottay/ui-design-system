@@ -48,7 +48,7 @@
     "channelsWithoutReaders": 195,
     "channelsPaintsFalse": 981,
     "channelsPaintsInModernFalse": 2064,
-    "readers": 40215,
+    "readers": 40218,
     "readersByPlane": {
       "modern-skin-css": 15438,
       "presentation-css": 11608,
@@ -62,7 +62,7 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 4150
+      "ts-other": 4153
     },
     "channelsByPlane": {
       "modern-skin-css": 4784,
@@ -73816,7 +73816,8 @@
       "channel": "--ds-color-alpha-black-100",
       "kind": "ds",
       "declaredIn": [
-        "src/foundation/tokens/css/foundation/themes/default/index.css"
+        "src/foundation/tokens/css/foundation/themes/default/index.css",
+        "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts"
       ],
       "planes": [
         "modern-skin-css",
@@ -73937,7 +73938,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 154,
+          "line": 155,
           "prop": "--ds-color-shadow",
           "scalars": []
         }
@@ -74152,7 +74153,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 63,
+          "line": 64,
           "prop": "--ds-color-bg-overlay",
           "scalars": []
         }
@@ -74445,7 +74446,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 105,
+          "line": 106,
           "prop": "--ds-color-interactive-bg-active",
           "scalars": []
         },
@@ -78075,7 +78076,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 106,
+          "line": 107,
           "prop": "--ds-color-interactive-bg-hover",
           "scalars": []
         },
@@ -80085,28 +80086,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 56,
+          "line": 57,
           "prop": "--ds-color-background",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 57,
+          "line": 58,
           "prop": "--ds-color-bg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 58,
+          "line": 59,
           "prop": "--ds-color-bg-canvas",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 169,
+          "line": 170,
           "prop": "--ds-color-surface",
           "scalars": []
         },
@@ -81865,21 +81866,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 66,
+          "line": 67,
           "prop": "--ds-color-bg-subtle",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 67,
+          "line": 68,
           "prop": "--ds-color-bg-surface",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 170,
+          "line": 171,
           "prop": "--ds-color-surface-secondary",
           "scalars": []
         },
@@ -95735,14 +95736,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 76,
+          "line": 77,
           "prop": "--ds-color-danger",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 90,
+          "line": 91,
           "prop": "--ds-color-error-ink",
           "scalars": []
         },
@@ -96664,7 +96665,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 77,
+          "line": 78,
           "prop": "--ds-color-error",
           "scalars": []
         }
@@ -96817,7 +96818,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 88,
+          "line": 89,
           "prop": "--ds-color-error-bg",
           "scalars": []
         },
@@ -98880,7 +98881,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 104,
+          "line": 105,
           "prop": "--ds-color-info-ink",
           "scalars": []
         },
@@ -99289,7 +99290,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 91,
+          "line": 92,
           "prop": "--ds-color-info",
           "scalars": []
         }
@@ -99370,14 +99371,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 61,
+          "line": 62,
           "prop": "--ds-color-bg-info",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 102,
+          "line": 103,
           "prop": "--ds-color-info-bg",
           "scalars": []
         },
@@ -100771,21 +100772,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 59,
+          "line": 60,
           "prop": "--ds-color-bg-elevated",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 62,
+          "line": 63,
           "prop": "--ds-color-bg-input",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 227,
+          "line": 230,
           "prop": "--ds-color-text-inverse",
           "scalars": []
         }
@@ -101331,28 +101332,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 60,
+          "line": 61,
           "prop": "--ds-color-bg-hover",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 65,
+          "line": 66,
           "prop": "--ds-color-bg-secondary",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 74,
+          "line": 75,
           "prop": "--ds-color-border-subtle",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 75,
+          "line": 76,
           "prop": "--ds-color-border-tertiary",
           "scalars": []
         },
@@ -102135,21 +102136,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 68,
+          "line": 69,
           "prop": "--ds-color-bg-tertiary",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 70,
+          "line": 71,
           "prop": "--ds-color-border",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 72,
+          "line": 73,
           "prop": "--ds-color-border-primary",
           "scalars": []
         },
@@ -102618,14 +102619,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 73,
+          "line": 74,
           "prop": "--ds-color-border-secondary",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 210,
+          "line": 211,
           "prop": "--ds-color-border-primary",
           "scalars": []
         },
@@ -103199,7 +103200,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 64,
+          "line": 65,
           "prop": "--ds-color-bg-primary",
           "scalars": []
         },
@@ -103812,21 +103813,21 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 109,
+          "line": 110,
           "prop": "--ds-color-link-visited",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 228,
+          "line": 231,
           "prop": "--ds-color-text-muted",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 232,
+          "line": 235,
           "prop": "--ds-color-text-tertiary",
           "scalars": []
         },
@@ -104055,7 +104056,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 231,
+          "line": 234,
           "prop": "--ds-color-text-secondary",
           "scalars": []
         },
@@ -104737,28 +104738,28 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 90,
+          "line": 91,
           "prop": "--ds-color-error-ink",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 168,
+          "line": 169,
           "prop": "--ds-color-success-ink",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 177,
+          "line": 178,
           "prop": "--ds-color-text-primary",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 194,
+          "line": 195,
           "prop": "--ds-color-warning-ink",
           "scalars": []
         },
@@ -115069,14 +115070,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 71,
+          "line": 72,
           "prop": "--ds-color-border-focus",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 107,
+          "line": 108,
           "prop": "--ds-color-link",
           "scalars": []
         },
@@ -117516,7 +117517,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 140,
+          "line": 141,
           "prop": "--ds-color-primary-subtle",
           "scalars": []
         },
@@ -118105,6 +118106,13 @@
         },
         {
           "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
+          "line": 216,
+          "prop": "--ds-color-link-hover",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
           "file": "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
           "line": 148,
           "prop": "itemBgActive",
@@ -118253,8 +118261,15 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 209,
+          "line": 210,
           "prop": "--ds-color-border-focus",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
+          "line": 215,
+          "prop": "--ds-color-link",
           "scalars": []
         }
       ]
@@ -119863,7 +119878,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 138,
+          "line": 139,
           "prop": "--ds-color-primary-hover",
           "scalars": []
         }
@@ -120379,7 +120394,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 108,
+          "line": 109,
           "prop": "--ds-color-link-hover",
           "scalars": []
         },
@@ -120510,14 +120525,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 38,
+          "line": 39,
           "prop": "--ds-color-alpha-primary-10",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 39,
+          "line": 40,
           "prop": "--ds-color-alpha-primary-20",
           "scalars": []
         }
@@ -121403,7 +121418,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 141,
+          "line": 142,
           "prop": "--ds-color-secondary",
           "scalars": []
         },
@@ -121484,7 +121499,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 152,
+          "line": 153,
           "prop": "--ds-color-secondary-hover",
           "scalars": []
         }
@@ -121662,14 +121677,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 40,
+          "line": 41,
           "prop": "--ds-color-alpha-secondary-10",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 41,
+          "line": 42,
           "prop": "--ds-color-alpha-secondary-20",
           "scalars": []
         }
@@ -123563,7 +123578,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 168,
+          "line": 169,
           "prop": "--ds-color-success-ink",
           "scalars": []
         },
@@ -124290,7 +124305,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 166,
+          "line": 167,
           "prop": "--ds-color-success-bg",
           "scalars": []
         },
@@ -124735,7 +124750,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 155,
+          "line": 156,
           "prop": "--ds-color-success",
           "scalars": []
         },
@@ -129504,7 +129519,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 179,
+          "line": 180,
           "prop": "--ds-color-text-subtle",
           "scalars": []
         },
@@ -131145,14 +131160,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 123,
+          "line": 124,
           "prop": "--ds-color-on-primary",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 174,
+          "line": 175,
           "prop": "--ds-color-text-inverse",
           "scalars": []
         },
@@ -136781,7 +136796,14 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 172,
+          "line": 26,
+          "prop": "--ds-color-alpha-black-100",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
+          "line": 173,
           "prop": "--ds-color-text",
           "scalars": []
         },
@@ -144103,7 +144125,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 194,
+          "line": 195,
           "prop": "--ds-color-warning-ink",
           "scalars": []
         },
@@ -144839,7 +144861,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 192,
+          "line": 193,
           "prop": "--ds-color-warning-bg",
           "scalars": []
         },
@@ -145239,7 +145261,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 181,
+          "line": 182,
           "prop": "--ds-color-warning",
           "scalars": []
         }
@@ -146101,7 +146123,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 110,
+          "line": 111,
           "prop": "--ds-color-neutral-0",
           "scalars": []
         },
@@ -358285,7 +358307,7 @@
         {
           "plane": "ts-other",
           "file": "src/foundation/tokens/ts/foundation/base/declared-defaults/index.ts",
-          "line": 171,
+          "line": 172,
           "prop": "--ds-color-surface-subtle",
           "scalars": []
         }

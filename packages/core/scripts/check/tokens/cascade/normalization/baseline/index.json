@@ -3,8 +3,8 @@
   "law": "decrece-solo, sin excepcion tacita. Jamas se re-ancla un hallazgo nuevo.",
   "counters": {
     "shadowingLiteralPins": {
-      "value": 4,
-      "reason": "D6-2c-ii (2026-09-15): el universo pasa de los tres temas autorados al baseline compuesto neutro+preset (slots: 3594 -> 115 filas, digest b874f2bfd5b3). shadowingLiteralPins 200 -> 4, divergentGroups 235 -> 1, divergentSlots 1609 -> 2: no es cobertura perdida -- los keypaths que nadie autora ya no existen; los 4 pins, 1 grupo y 2 slots que sobreviven son la cola medida del carril de derivacion (WO-DER-06), y la ley L2 con sus dos contadores quedo retirada con su sujeto (campo retired, razon escrita)."
+      "value": 7,
+      "reason": "cobertura ganada, no regresion: --ds-motion-intensity ahora nace de motion.intensity con ley de derivacion (foundation/animations/transitions + las copias compiladas); medido por el batch A del ledger 2026-09-18"
     },
     "divergentGroups": {
       "value": 1,
@@ -18,14 +18,17 @@
   "namedDebt": {
     "shadowingLiteralPins": [
       "--ds-motion-duration-scale -> motion.duration (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:98",
-      "--ds-state-hover-shift -> state.delta.hover (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:821",
-      "--ds-state-disabled-opacity -> state.delta.disabled (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:823",
-      "--ds-color-bg-input -> tier.control.bg (declared-fallback) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2037"
+      "--ds-motion-intensity -> motion.intensity (head-exact) @ packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:110",
+      "--ds-state-hover-shift -> state.delta.hover (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:813",
+      "--ds-state-disabled-opacity -> state.delta.disabled (head-exact) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:815",
+      "--ds-color-bg-input -> tier.control.bg (declared-fallback) @ packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1999",
+      "--ds-motion-duration-scale -> motion.duration (head-exact) @ packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled/index.css:36",
+      "--ds-motion-intensity -> motion.intensity (head-exact) @ packages/core/src/foundation/tokens/css/runtime/engines/modern/compiled/index.css:37"
     ],
     "divergentGroupsTop": [
       "bithire|control.ratio.radius|radius|sin-estado|base: 2 slots, 2 posiciones"
     ]
   },
-  "lastMove": "D6-2c-ii (2026-09-15): el universo pasa de los tres temas autorados al baseline compuesto neutro+preset (slots: 3594 -> 115 filas, digest b874f2bfd5b3). shadowingLiteralPins 200 -> 4, divergentGroups 235 -> 1, divergentSlots 1609 -> 2: no es cobertura perdida -- los keypaths que nadie autora ya no existen; los 4 pins, 1 grupo y 2 slots que sobreviven son la cola medida del carril de derivacion (WO-DER-06), y la ley L2 con sus dos contadores quedo retirada con su sujeto (campo retired, razon escrita).",
-  "lastMoveKind": "decrece-solo"
+  "lastMove": "re-atribucion autorizada, cobertura ganada (no regresion): --ds-motion-intensity ahora nace de motion.intensity con ley de derivacion (foundation/animations/transitions + las copias compiladas en runtime/engines/modern/compiled); medido por el batch A del ledger 2026-09-18",
+  "lastMoveKind": "re-atribucion (subida autorizada por nombre)"
 }

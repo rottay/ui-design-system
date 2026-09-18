@@ -155,6 +155,7 @@ Support: `shell/contracts/`.
 
 ### foundation/ (support owner)
 
+- `foundation/active-filter-state-glyph/`
 - `foundation/engine-styles/`
 - `foundation/header-actions/`
 - `foundation/motion/`
