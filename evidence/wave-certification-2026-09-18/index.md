@@ -273,3 +273,26 @@ section-frame, stats-header), the five new derivers, the new test files.
   census caught this: produced-vs-EMITTED is not counted anywhere; routed as
   instrument residue.
 - cockpit deriver: already audited during the cardGround sitting.
+
+## 2026-09-18 (twelfth sitting) — D/E PRE-AUDIT part 4: skins + tests — verdict
+
+Channel correspondence, both directions, measured mechanically across all five
+families: every deriver-produced channel has a skin reader, and no skin reads a
+family-namespaced channel nobody produces — except the two DOCUMENTED cases
+(cockpit's `--ds-cockpit-header-sticky-top`, deliberately unproduced per the
+door law; the cockpit/workbench `*-padding`/`*-gap` mounts the skin writes and
+reads itself, the established "axis mounts once" idiom). stats-header's skin
+conditionally remaps `--ds-stats-header-value-font-size` to the produced
+`-compact` channel under the compact posture — a produced-channel shadow, noted
+as acceptable (the compact value is itself tenant-reachable); watched.
+Skeleton geometry is gone from both runtime skins (one comment mention each);
+every `:hover`/`:active` arm keeps its `[data-state]` twin at its cascade
+position; the section-frame cut test is a REAL contract (exact sorted part
+roster, landmark/heading semantics — the family's first test file).
+
+**Pre-audit verdict: the candidate is clean except the two named repairs** —
+(a) the cardGround chain resolution (cockpit + workbench), (b) the mobile-header
+`env` channel the door silently drops. Integration gates when the writer
+returns: the focal ten files green, tsc on the final candidate, then the DT
+window (build → hooks → cascade extract → derive → vertical-css →
+decisions-lit) and the deferred theme-contract-freeze census re-pin.
