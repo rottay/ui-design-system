@@ -234,7 +234,7 @@
     },
     {
       "channels": 144,
-      "channelsThroughAliases": 1602,
+      "channelsThroughAliases": 1603,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -960,8 +960,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1833,
-      "channelsThroughAliases": 3405,
+      "channels": 1862,
+      "channelsThroughAliases": 3441,
       "decision": "palette.contrast-posture",
       "derivers": [
         "active-filters-bar",
@@ -986,11 +986,14 @@
         "divider",
         "drawer",
         "dropdown",
+        "edit-header",
         "file-manager",
         "filter-chip",
         "filter-panel",
         "form",
         "form-field",
+        "form-header",
+        "header",
         "hover-card",
         "input",
         "input-number",
@@ -1284,8 +1287,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1833,
-      "channelsThroughAliases": 3405,
+      "channels": 1862,
+      "channelsThroughAliases": 3441,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "active-filters-bar",
@@ -1310,11 +1313,14 @@
         "divider",
         "drawer",
         "dropdown",
+        "edit-header",
         "file-manager",
         "filter-chip",
         "filter-panel",
         "form",
         "form-field",
+        "form-header",
+        "header",
         "hover-card",
         "input",
         "input-number",
@@ -1600,8 +1606,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1929,
-      "channelsThroughAliases": 3602,
+      "channels": 1958,
+      "channelsThroughAliases": 3638,
       "decision": "palette.seeds",
       "derivers": [
         "active-filters-bar",
@@ -1627,11 +1633,14 @@
         "divider",
         "drawer",
         "dropdown",
+        "edit-header",
         "file-manager",
         "filter-chip",
         "filter-panel",
         "form",
         "form-field",
+        "form-header",
+        "header",
         "hover-card",
         "input",
         "input-number",
@@ -1920,8 +1929,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1919,
-      "channelsThroughAliases": 3582,
+      "channels": 1948,
+      "channelsThroughAliases": 3618,
       "decision": "palette.status-seeds",
       "derivers": [
         "active-filters-bar",
@@ -1946,11 +1955,14 @@
         "divider",
         "drawer",
         "dropdown",
+        "edit-header",
         "file-manager",
         "filter-chip",
         "filter-panel",
         "form",
         "form-field",
+        "form-header",
+        "header",
         "hover-card",
         "input",
         "input-number",
@@ -2240,7 +2252,7 @@
     },
     {
       "channels": 144,
-      "channelsThroughAliases": 1602,
+      "channelsThroughAliases": 1603,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2516,7 +2528,7 @@
     },
     {
       "channels": 54,
-      "channelsThroughAliases": 662,
+      "channelsThroughAliases": 663,
       "decision": "shape.button-style",
       "derivers": [
         "axes",
@@ -2877,7 +2889,7 @@
     },
     {
       "channels": 887,
-      "channelsThroughAliases": 1476,
+      "channelsThroughAliases": 1477,
       "decision": "shape.radius-scale",
       "derivers": [
         "avatar",
@@ -3132,7 +3144,7 @@
     },
     {
       "channels": 25,
-      "channelsThroughAliases": 121,
+      "channelsThroughAliases": 123,
       "decision": "spacing.rhythm",
       "derivers": [
         "rhythm",
@@ -3409,13 +3421,14 @@
       "tier": "standard"
     },
     {
-      "channels": 256,
-      "channelsThroughAliases": 979,
+      "channels": 275,
+      "channelsThroughAliases": 1003,
       "decision": "states.focus-style",
       "derivers": [
         "avatar",
         "badge",
         "collapse",
+        "header",
         "saved-views",
         "sidebar-surface",
         "splitter",
@@ -3920,7 +3933,7 @@
     },
     {
       "channels": 130,
-      "channelsThroughAliases": 363,
+      "channelsThroughAliases": 364,
       "decision": "typography.families",
       "derivers": [
         "tenant",
@@ -4078,7 +4091,7 @@
     },
     {
       "channels": 243,
-      "channelsThroughAliases": 476,
+      "channelsThroughAliases": 477,
       "decision": "typography.numeric",
       "derivers": [
         "pagination",
@@ -4238,7 +4251,7 @@
     },
     {
       "channels": 132,
-      "channelsThroughAliases": 864,
+      "channelsThroughAliases": 865,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -4462,7 +4475,7 @@
     },
     {
       "channels": 405,
-      "channelsThroughAliases": 637,
+      "channelsThroughAliases": 638,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
@@ -4629,11 +4642,13 @@
       "tier": "standard"
     },
     {
-      "channels": 132,
-      "channelsThroughAliases": 864,
+      "channels": 142,
+      "channelsThroughAliases": 872,
       "decision": "typography.scale",
       "derivers": [
         "axes",
+        "edit-header",
+        "form-header",
         "tenant",
         "typography"
       ],

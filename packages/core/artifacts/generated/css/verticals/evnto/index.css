@@ -85108,10 +85108,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * moved here the guard did NOT move with it — the families kept guarding a
  * `back-button` they no longer painted, and this file animated unguarded.
  *
- * CHANNELS: the tone rides `--ds-header-icon-tone-{bg,bd,fg}`, set inline by
- * both engines from `getVariantTone(...)` because the pre-step stamped no
- * variant attribute to key on. The focus ring rides
- * `--ds-header-back-focus-ring` over the governed `--ds-focus-ring`.
+ * CHANNELS: the tone is keyed on `data-variant`, stamped by both families from the
+ * one header-tone resolver (`structures/foundation/chrome/runtime/header-tone`).
+ * `secondary` is the resting tone and is declared on the part itself, so a badge
+ * whose variant never resolved still paints it; the other five override the three
+ * facets. Every value reads a `--ds-header-tone-*` channel the `header` chrome
+ * deriver produces, over the exact mix the retired `getVariantTone` computed inline.
+ * The focus ring rides `--ds-header-back-focus-ring`, produced by the same deriver.
+ *
+ * STATE: the back chip's hover and press are decided once by `useInteractionState`
+ * and stamped as `data-state`; each rule below pairs that token with its platform
+ * pseudo-class in one `:is(...)`, so neither is a second authority (F-37). The
+ * keyboard ring is the exception and says so where it is declared.
  */
 
 /* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
@@ -85176,10 +85184,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
-/* ─── SHARED EDIT+FORM: icon-badge tone (getVariantTone, via hatch) ───────── */
+/* ─── SHARED EDIT+FORM: icon-badge tone, keyed on the header-tone contract ─── */
 
 .ds-structure.ds-edit-header [data-part='icon-badge'],
 .ds-structure.ds-form-header [data-part='icon-badge'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85197,6 +85208,38 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border: 1px solid var(--ds-header-icon-tone-bd);
 }
 
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='primary'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='primary'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-primary-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-primary-bd, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-primary-fg, color-mix(in srgb, var(--ds-color-primary) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='success'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='success'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-success-bd, color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='warning'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='warning'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='info'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-variant='info'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
+}
+/* `error` is EditHeader's alone. FormHeader's `colorVariant` does not admit it, so a
+   `.ds-form-header` arm here would be paint for a stamp that family cannot make. */
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-variant='error'] {
+  --ds-header-icon-tone-bg: var(--ds-header-tone-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-header-icon-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-header-icon-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
+}
+
 /* ─── SHARED EDIT+FORM: back-button microinteraction + keyboard focus ────────
    Hover is hover-capable-only with a matching :active; the chip lifts 1px
    (an interactive affordance on a real link, never decorative motion). */
@@ -85212,32 +85255,43 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
+/* `:is(<kernel token>, <bare pseudo>)` is ONE decision with its native
+   fallback, and it carries the same specificity the bare pseudo did (both arms are
+   (0,1,0)), so nothing below moves. The kernel arm is what keeps the chip lit while
+   the pointer sits on the ANCHOR rather than on the chip's own box. */
 @media (hover: hover) {
-  .ds-structure.ds-edit-header [data-part='back-button']:hover,
-  .ds-structure.ds-form-header [data-part='back-button']:hover {
+  .ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
     transform: translateY(-1px);
   }
-  .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:hover,
-  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:hover {
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover),
+  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:is([data-state~='hovered'], :hover) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
   }
 }
-.ds-structure.ds-edit-header [data-part='back-button']:active,
-.ds-structure.ds-form-header [data-part='back-button']:active {
+.ds-structure.ds-edit-header [data-part='back-button']:is([data-state~='pressed'], :active),
+.ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
 }
-/* the back button is a Flex inside an <a> — the ring lands on the chip */
+/* The keyboard ring has NO kernel twin, and that is a measurement rather than an
+   omission: the focusable element is the app-injected anchor above the chip, and
+   `NavigationLinkProps` (the DS navigation adapter's contract) admits no event
+   handlers, so the kernel cannot observe focus there. `:focus-visible` is therefore
+   the platform's own authority here and not a second one. A `[data-state~='focus-visible']`
+   arm would be paint for a token nothing can stamp. Closing it means widening that
+   adapter contract, which is not this file's to widen. */
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
 .ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
-/* anchors around the back chip and breadcrumb links carry no underline (the
-   reset moved out of the inline NavLink style) */
+/* anchors around the back chip carry no underline (the reset moved out of the
+   inline NavLink style). The breadcrumb-link arm is NOT here: FormHeader composes
+   the Breadcrumb primitive and never stamps that part, so the rule was paint this
+   file could only ever deliver to one of its two families. It lives in
+   `edit-header.css`, with the rest of EditHeader's own breadcrumb grammar. */
 .ds-structure.ds-edit-header a:has(> [data-part='back-button']),
-.ds-structure.ds-form-header a:has(> [data-part='back-button']),
-.ds-structure.ds-edit-header a:has(> [data-part='breadcrumb-link']),
-.ds-structure.ds-form-header a:has(> [data-part='breadcrumb-link']) {
+.ds-structure.ds-form-header a:has(> [data-part='back-button']) {
   text-decoration: none;
 }
 /* ─── SHARED EDIT+FORM: reduced motion for the back chip ─────────────────────
@@ -85318,22 +85372,25 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *     (until the swap, a composed Text resolved its size inline and the
  *     `--ds-edit-header-title-font-size` rule below was dead paint).
  *
- * SHARED WITH FormHeader (contract §2 — proven byte-identical): `buildPatternStyle`
- * (the archetype hero-panel gradient), `getVariantTone` (the icon-badge tone), the
- * back-button microinteraction/focus ring and the `ds-header-enter` keyframes are
- * identical between EditHeader and FormHeader down to every percentage. They live
- * in `skin/header-hero-shared.css` — a file named after NEITHER family, because
- * while they lived here an agent editing "the edit header skin" repainted
- * FormHeader with no signal. This file carries edit-private paint only.
+ * SHARED WITH FormHeader (contract §2 — proven byte-identical): the archetype
+ * hero-panel gradient, the icon-badge tone, the back-button microinteraction/focus
+ * ring and the `ds-header-enter` keyframes are identical between EditHeader and
+ * FormHeader down to every percentage. They live in `skin/header-hero-shared.css` —
+ * a file named after NEITHER family, because while they lived here an edit aimed at
+ * "the edit header skin" repainted FormHeader with no signal. This file carries
+ * edit-private paint only.
  *
- * HATCH (contract §5.1, kit "runtime-computed"): `getVariantTone(colorVariant)` /
- * `getVariantTone(status.color)` are prop-selected, and the pre-step stamped NO
- * variant/status attribute on `icon-badge`/`status-pill` to key a CSS rule on.
- * Their computed tone rides a `--ds-*` custom property set inline (uncounted) and
- * is consumed here. `icon-badge` sets `color` on itself so the composed glyph
- * inherits `currentColor`; `status-pill` sets a `--…-fg` the composed `status-pill-text`
- * consumes at (0,5,0), because a `Text` will not inherit `color` past the
- * typography skin.
+ * TONE (the header contract): `icon-badge` and `status-pill` stamp `data-variant`
+ * from the one header-tone resolver
+ * (`structures/foundation/chrome/runtime/header-tone`), and the paint is keyed on it
+ * here and in `header-hero-shared.css`. The retired hatch computed the same mixes in
+ * TypeScript and shipped them inline, which is why the two slots each called
+ * `getVariantTone` separately and could have drifted; they read one set of
+ * `--ds-header-tone-*` channels now. `icon-badge` sets `color` on itself so the
+ * composed glyph inherits `currentColor`; `status-pill` sets a `--…-fg` the composed
+ * `status-pill-text` consumes at (0,5,0), because a `Text` will not inherit `color`
+ * past the typography skin. The status domain has no `primary`: `status.color`
+ * never admitted one.
  *
  * FORMS ARE NOT CARD STACKS (monorepo law). The `context-card` part is a legacy
  * NAME — the §4 anatomy test in `headers/tests/` pins the string, so it stays —
@@ -85398,15 +85455,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-edit-header[data-part='root'][data-loading] {
   border: 1px solid var(--ds-color-border-secondary);
 }
-/* the loading early-return shares background + border with the main root but has
-   NO radius/shadow; suppress the two the main rule would otherwise add to it */
+/* The loading branch is the SAME card: it holds an anatomy-derived skeleton of this
+   header's own parts, not a centred spinner in a padded box, so the radius, the
+   frame and the depth all stay and the wait has the shape of what is coming. Only
+   the enter run is suppressed — a placeholder does not announce itself by flying in.
+   (The retired rule stripped radius and shadow and padded 48px, which was right for
+   the glyph it used to hold and wrong for a skeleton.) */
 .ds-structure.ds-edit-header[data-part='root'][data-loading='true'] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px;
-  border-radius: 0;
-  box-shadow: none;
   animation: none;
 }
 
@@ -85435,7 +85490,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-text-secondary);
 }
 
-/* breadcrumb (own grammar — see header) */
+/* breadcrumb (own grammar — see header). The underline reset for a breadcrumb
+   anchor lives HERE rather than in `header-hero-shared.css`: FormHeader composes the
+   Breadcrumb primitive and never stamps `breadcrumb-link`, so a shared rule was paint
+   with a stamp in only one of the two families. */
+.ds-structure.ds-edit-header a:has(> [data-part='breadcrumb-link']) {
+  text-decoration: none;
+}
 .ds-structure.ds-edit-header [data-part='breadcrumb-divider'] {
   inline-size: 1px;
   block-size: 16px;
@@ -85473,6 +85534,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-edit-header [data-part='hero-panel'] {
   padding: var(--ds-edit-header-hero-padding, 28px);
 }
+/* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
+   visual value in the TSX and the one measurement here no ramp could see. The channel
+   carries the same 20px at rest, on the rhythm plane every other gutter in this file
+   already rides -- a bare literal would also be a channel with no path to a root. */
+.ds-structure.ds-edit-header [data-part='hero-row'] {
+  gap: var(--ds-edit-header-hero-row-gap, calc(20px * var(--ds-rhythm-effective-scale, 1)));
+}
 /* the copy yields before the action rail does: the cluster may shrink, the
    rail may not */
 .ds-structure.ds-edit-header [data-part='hero-copy'] {
@@ -85491,8 +85559,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: var(--ds-edit-header-icon-badge-glyph-size, 24px);
 }
 /* the shared-helper and Save/Cancel icons size from the skin (was an inline
-   14px on every one of them) — the FormHeader posture */
-.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] svg {
+   14px on every one of them) — the FormHeader posture. The selector is the part the
+   family STAMPS, not `[data-part='actions'] svg`: a descendant-element selector
+   reaches into the composed Button's own internals, which this family does not own,
+   and it left `action-icon` stamped with no rule of its own. */
+.ds-structure.ds-edit-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
@@ -85524,15 +85595,40 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   letter-spacing: var(--ds-type-supporting-letter-spacing, var(--ds-letter-spacing-normal));
 }
 
-/* status pill (hatch): the pre-step stamped no status attribute, so the tone
-   rides --ds-edit-header-status-tone-* set inline on the pill; the text will not
-   inherit color past its own typography skin, so it reads the --…-fg at (0,5,0) */
+/* status pill: the tone is keyed on `data-variant`, stamped from the same
+   header-tone resolver the icon badge uses, over the same `--ds-header-tone-*`
+   channels. `secondary` is the resting tone and is declared on the part itself, so a
+   pill whose variant never resolved still paints it. The text will not inherit color
+   past its own typography skin, so it reads the --…-fg at (0,5,0). */
 .ds-structure.ds-edit-header [data-part='status-pill'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-secondary-bg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-secondary-bd, var(--ds-color-border-secondary));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-secondary-fg, var(--ds-color-text-secondary));
   padding-block: 4px;
   padding-inline: 12px;
   border-radius: 999px;
   background: var(--ds-edit-header-status-tone-bg);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='success'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-success-bg, color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-success-bd, color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-success-fg, color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='warning'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-warning-bg, color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-warning-bd, color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-warning-fg, color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='info'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-info-bg, color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-info-bd, color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-info-fg, color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%));
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-variant='error'] {
+  --ds-edit-header-status-tone-bg: var(--ds-header-tone-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%));
+  --ds-edit-header-status-tone-bd: var(--ds-header-tone-error-bd, color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%));
+  --ds-edit-header-status-tone-fg: var(--ds-header-tone-error-fg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%));
 }
 .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
   border: 1px solid var(--ds-edit-header-status-tone-bd);
@@ -85610,7 +85706,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     --ds-edit-header-icon-badge-glyph-size: 20px;
   }
   .ds-structure.ds-edit-header [data-part='title'] {
-    font-size: var(--ds-type-section-title-font-size, var(--ds-font-size-xl));
+    font-size: var(--ds-edit-header-title-font-size-compact, var(--ds-type-section-title-font-size, var(--ds-font-size-xl)));
   }
   .ds-structure.ds-edit-header [data-part='actions'] {
     inline-size: 100%;
@@ -85686,6 +85782,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     background: CanvasText;
   }
 
+  /* the ring's platform arm, for the same reason stated in header-hero-shared.css:
+     the focusable element is the app-injected anchor, which the kernel cannot reach */
   .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'] {
     outline: 2px solid Highlight;
     box-shadow: none;
@@ -85726,15 +85824,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * only family/tracking/transform are reachable from here — a font-size rule on
  * them would be dead paint.
  *
- * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`),
- * the icon-badge tone (`getVariantTone`), the back-button microinteraction/focus
- * ring and the `ds-header-enter` keyframes are proven byte-identical to EditHeader
- * (contract §2) and live in `skin/header-hero-shared.css` — a file named after
- * NEITHER family, so neither can be repainted by an edit aimed at the other. They
- * are NOT restated here. The icon-badge tone rides the shared
- * `--ds-header-icon-tone-*` custom property, set inline by this component from
- * `getVariantTone(colorVariant)` because the pre-step stamped no variant attribute
- * to key a CSS rule on.
+ * SHARED WITH EditHeader: the archetype hero-panel gradient, the icon-badge tone,
+ * the back-button microinteraction/focus ring and the `ds-header-enter` keyframes
+ * are proven byte-identical to EditHeader (contract §2) and live in
+ * `skin/header-hero-shared.css` — a file named after NEITHER family, so neither can
+ * be repainted by an edit aimed at the other. They are NOT restated here. The tone
+ * is keyed on `data-variant`, stamped by this component from the one header-tone
+ * resolver (`structures/foundation/chrome/runtime/header-tone`); `colorVariant` here
+ * admits five tones, not EditHeader's six — this family has no `error`.
  *
  * FORMS ARE NOT CARD STACKS (monorepo law). The `context-card` part is a legacy
  * NAME — the §4 anatomy test in `headers/tests/` pins the string, so it stays —
@@ -85853,6 +85950,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] {
   padding: var(--ds-form-header-hero-padding);
 }
+/* the hero row's gap: drained from a `gap={20}` prop on the Flex, which was a
+   visual value in the TSX and the one measurement here no ramp could see. The channel
+   carries the same 20px at rest, on the rhythm plane every other gutter in this file
+   already rides -- a bare literal would also be a channel with no path to a root. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='hero-row'] {
+  gap: var(--ds-form-header-hero-row-gap, calc(20px * var(--ds-rhythm-effective-scale, 1)));
+}
 /* The copy yields before the action rail does: the cluster may shrink, the
    rail may not. */
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-cluster'] {
@@ -85865,8 +85969,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 0 0 auto;
   margin-inline-start: auto;
 }
-/* the shared-helper icons size from the skin (was an inline 14px per icon) */
-.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] svg {
+/* the shared-helper icons size from the skin (was an inline 14px per icon). The
+   selector is the part the family STAMPS, not `[data-part='actions'] svg`: a
+   descendant-element selector reaches into the composed Button's own internals,
+   which this family does not own, and it left `action-icon` stamped with no rule. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='actions'] [data-part='action-icon'] {
   inline-size: 14px;
   block-size: 14px;
 }
@@ -85941,7 +86048,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='context-card'] {
   border-block-start: 1px solid var(--ds-color-border-secondary);
 }
-.ds-structure.ds-form-header[data-part='root'] [data-part='context-card-children'][data-has-rail='true'] {
+/* the rail's own gap to the children below it — the EditHeader spelling. The
+   retired `[data-has-rail='true']` was a boolean the component computed and stamped
+   for one rule; the sibling combinator reads the same fact off the anatomy, and
+   `context-rail` stops being a part with no paint. */
+.ds-structure.ds-form-header[data-part='root'] [data-part='context-rail'] + [data-part='context-card-children'] {
   margin-block-start: 18px;
 }
 
@@ -96027,7 +96138,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   outline: none;
 }
 
-/* One decision, with its platform fallback: the panel's ring is the kernel's
+/* One decision, with its native fallback: the panel's ring is the kernel's
    answer, and `:focus-visible` is what the kernel falls through to (F-37). */
 .ds-structure.ds-column-menu-panel[data-part="surface"]
   [data-part="panel"]:is([data-state~="focus-visible"], :focus-visible) {
@@ -98753,7 +98864,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* The region is tabbable (scrollable-region law): keyboard focus must read on
    the region itself before its items take over. The kernel decides when the
-   region carries a focus ring; `:focus-visible` is that decision's platform
+   region carries a focus ring; `:focus-visible` is that decision's native
    fallback, not a second opinion. */
 .ds-pattern-virtual-list[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
@@ -111016,19 +111127,11 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   }
 
   /* Forced colors erase series paint; grouped/stacked bar series stay
-   * separable by fill posture instead — odd series indexes read hollow
-   * against the solid even indexes, the same decode the scatter foundation
+   * separable by fill posture instead — odd series cadences read hollow
+   * against the solid even ones, the same decode the scatter foundation
    * owns below. Series order in the legend keeps the name mapping. */
   .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='1'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='3'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='5'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='7'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='9'] [data-part='bar'] {
+    [data-part='bar-mark'][data-series-cadence='1'] [data-part='bar'] {
     fill: Canvas;
     stroke: CanvasText;
   }
@@ -111058,22 +111161,22 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='1'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='1'] [data-part='line'] {
     stroke-dasharray: 8 3;
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='2'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='2'] [data-part='line'] {
     stroke-dasharray: 2 3;
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='3'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='3'] [data-part='line'] {
     stroke-dasharray: 10 3 2 3;
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='4'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='4'] [data-part='line'] {
     stroke-dasharray: 1 3;
   }
 
@@ -111276,24 +111379,24 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* Series cadence -----------------------------------------------------------
- * The renderer cycles `data-series-index` 0..4 on each `area-series`; the
- * series outline receives a governed dash for indexes 1..4 so stacked series
+ * The renderer cycles `data-series-cadence` 0..4 on each `area-series`; the
+ * series outline receives a governed dash for cadences 1..4 so stacked series
  * separate by stroke rhythm as well as paint. The cadence remains an
  * implementation detail of this family. */
 
-.ds-chart-area [data-part='area-series'][data-series-index='1'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='1'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-2, 6 4);
 }
 
-.ds-chart-area [data-part='area-series'][data-series-index='2'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='2'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-3, 2 3);
 }
 
-.ds-chart-area [data-part='area-series'][data-series-index='3'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='3'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-4, 8 3 2 3);
 }
 
-.ds-chart-area [data-part='area-series'][data-series-index='4'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='4'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-5, 12 4);
 }
 
@@ -111707,25 +111810,25 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   border-radius: var(--_ds-line-marker-radius, 999px);
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='1'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='1'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 9px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 9px);
   mask-mode: alpha;
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='2'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='2'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 5px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 5px);
   mask-mode: alpha;
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='3'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='3'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 6px, transparent 6px 8px, CanvasText 8px 9px, transparent 9px 12px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 6px, transparent 6px 8px, CanvasText 8px 9px, transparent 9px 12px);
   mask-mode: alpha;
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='4'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='4'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 9px, transparent 9px 13px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 9px, transparent 9px 13px);
   mask-mode: alpha;
@@ -111736,23 +111839,23 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* Series cadence -----------------------------------------------------------
- * The renderer cycles `data-series-index` 0..4; indexes 1..4 receive a
+ * The renderer cycles `data-series-cadence` 0..4; cadences 1..4 receive a
  * governed dash so overlapping series separate by stroke rhythm as well as
  * paint. Each cadence is a private implementation detail of this family. */
 
-.ds-chart-line [data-part='line-series'][data-series-index='1'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='1'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-2, 6 4);
 }
 
-.ds-chart-line [data-part='line-series'][data-series-index='2'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='2'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-3, 2 3);
 }
 
-.ds-chart-line [data-part='line-series'][data-series-index='3'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='3'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-4, 8 3 2 3);
 }
 
-.ds-chart-line [data-part='line-series'][data-series-index='4'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='4'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-5, 12 4);
 }
 
@@ -111936,24 +112039,24 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 
 /* Series cadence -----------------------------------------------------------
- * The renderer stamps the raw `data-series-index` on each series group;
- * indexes 1..4 receive a governed dash on the polygon outline so overlapping
+ * The renderer cycles `data-series-cadence` 0..4 on each series group;
+ * cadences 1..4 receive a governed dash on the polygon outline so overlapping
  * series separate by stroke rhythm as well as paint. Each cadence remains a
  * private implementation detail of this family. */
 
-.ds-chart-radar [data-part='series'][data-series-index='1'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='1'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-2, 6 4);
 }
 
-.ds-chart-radar [data-part='series'][data-series-index='2'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='2'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-3, 2 3);
 }
 
-.ds-chart-radar [data-part='series'][data-series-index='3'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='3'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-4, 8 3 2 3);
 }
 
-.ds-chart-radar [data-part='series'][data-series-index='4'] [data-part='series-area'] {
+.ds-chart-radar [data-part='series'][data-series-cadence='4'] [data-part='series-area'] {
   stroke-dasharray: var(--_ds-radar-series-dash-5, 12 4);
 }
 
@@ -119991,6 +120094,10 @@ html[lang]:lang(ar) {
   --ds-edge-emphasis-width: 1px;
   --ds-edge-hairline-width: 1px;
   --ds-edge-standard-width: 1px;
+  --ds-edit-header-context-card-filter: none;
+  --ds-edit-header-hero-row-gap: calc(20px * var(--ds-rhythm-effective-scale, 1));
+  --ds-edit-header-title-font-size: var(--ds-type-page-title-font-size, var(--ds-font-size-2xl));
+  --ds-edit-header-title-font-size-compact: var(--ds-type-section-title-font-size, var(--ds-font-size-xl));
   --ds-effect-intensity: 0.2;
   --ds-file-manager-content-min-height: 12.5rem;
   --ds-file-manager-link-color: var(--ds-color-link, var(--ds-color-primary));
@@ -120039,6 +120146,12 @@ html[lang]:lang(ar) {
   --ds-form-field-label-font-weight: var(--ds-input-label-font-weight);
   --ds-form-field-label-text-transform: var(--ds-type-label-text-transform);
   --ds-form-field-required-color: var(--ds-input-label-required-color);
+  --ds-form-header-context-backdrop: none;
+  --ds-form-header-hero-padding-compact: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-form-header-hero-row-gap: calc(20px * var(--ds-rhythm-effective-scale, 1));
+  --ds-form-header-root-margin: 24px;
+  --ds-form-header-title-font-size: var(--ds-type-page-title-font-size, var(--ds-font-size-2xl));
+  --ds-form-header-title-font-size-compact: var(--ds-type-section-title-font-size, var(--ds-font-size-xl));
   --ds-form-label-color: var(--ds-input-label-color);
   --ds-form-label-color-focus: var(--ds-color-primary);
   --ds-form-label-font-family: var(--ds-input-label-font-family);
@@ -120047,6 +120160,25 @@ html[lang]:lang(ar) {
   --ds-form-supporting-color: var(--ds-color-text-secondary);
   --ds-grid-gap: var(--ds-spacing-4);
   --ds-grid-reflow-transition: var(--ds-transition-rearrange);
+  --ds-header-back-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
+  --ds-header-tone-error-bd: color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%);
+  --ds-header-tone-error-bg: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%);
+  --ds-header-tone-error-fg: color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-text-primary) 22%);
+  --ds-header-tone-info-bd: color-mix(in srgb, var(--ds-color-info) 18%, var(--ds-color-border-secondary) 82%);
+  --ds-header-tone-info-bg: color-mix(in srgb, var(--ds-color-info) 10%, var(--ds-color-bg-secondary) 90%);
+  --ds-header-tone-info-fg: color-mix(in srgb, var(--ds-color-info) 78%, var(--ds-color-text-primary) 22%);
+  --ds-header-tone-primary-bd: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary) 82%);
+  --ds-header-tone-primary-bg: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-color-bg-secondary) 90%);
+  --ds-header-tone-primary-fg: color-mix(in srgb, var(--ds-color-primary) 78%, var(--ds-color-text-primary) 22%);
+  --ds-header-tone-secondary-bd: var(--ds-color-border-secondary);
+  --ds-header-tone-secondary-bg: color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent);
+  --ds-header-tone-secondary-fg: var(--ds-color-text-secondary);
+  --ds-header-tone-success-bd: color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-border-secondary) 82%);
+  --ds-header-tone-success-bg: color-mix(in srgb, var(--ds-color-success) 10%, var(--ds-color-bg-secondary) 90%);
+  --ds-header-tone-success-fg: color-mix(in srgb, var(--ds-color-success) 78%, var(--ds-color-text-primary) 22%);
+  --ds-header-tone-warning-bd: color-mix(in srgb, var(--ds-color-warning) 18%, var(--ds-color-border-secondary) 82%);
+  --ds-header-tone-warning-bg: color-mix(in srgb, var(--ds-color-warning) 10%, var(--ds-color-bg-secondary) 90%);
+  --ds-header-tone-warning-fg: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
   --ds-hover-card-bg: var(--ds-material-overlay-background);
   --ds-hover-card-border-color: color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%);
   --ds-hover-card-focus-color: var(--ds-focus-ring-color);
