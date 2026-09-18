@@ -232,3 +232,23 @@ item when the seat returns. PASS so far:
 
 Still to audit: the workbench engine diff, the mobile-header rendering diff, the
 four skin diffs, the five new derivers, the new test files.
+
+## 2026-09-18 (tenth sitting) — D/E draft PRE-AUDIT, part 2 (engines done)
+
+- workbench modern engine: PASS. The QuickActionButton wrapper span retires —
+  the Button IS the `action` part and re-derives `data-variant` from its closed
+  prop domain; verified the workbench variant domain (`primary|default|danger`,
+  contracts:27) is a subset of `ButtonVariant`. SavedViewTab adopts the kernel
+  keeping roving tabindex + data-active; new `tab-label` part is the loading
+  stand-in. Same AnatomySkeleton composition as cockpit (busy=false, root owns
+  the announcement). `import React` kept for `React.KeyboardEvent` — safe.
+  INTEGRATION GATE: tsc must run on the final candidate (the draft was never
+  type-checked by the DT; vitest does not typecheck).
+- mobile-header rendering: PASS. Kernel adoption on the family's own back
+  trigger; `position: sticky` moved from an inline style to the skin keyed on
+  `data-sticky` — verified the stamp exists (rendering/index.tsx:141) and the
+  consumer `style` keeps its last word. (First grep looked like a missing
+  stamp; the full read found it. Recorded so nobody re-chases it.)
+
+Still to audit: the four skin diffs (cockpit, workbench, mobile-header,
+section-frame, stats-header), the five new derivers, the new test files.
