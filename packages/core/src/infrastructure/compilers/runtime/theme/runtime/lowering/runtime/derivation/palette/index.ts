@@ -86,7 +86,7 @@ export function derivePaletteChannels(
   Object.assign(vars, derivePaletteInks(palette, inkPair));
   Object.assign(
     vars,
-    deriveExtendedPaletteFloor(palette.primaryColor, inkPair)
+    deriveExtendedPaletteFloor(palette.primaryColor, inkPair, palette.backgroundColor)
   );
   Object.assign(vars, statusTints);
   setExtendedPaletteVariables(vars, palette);

@@ -26,6 +26,18 @@
  *     from an unresolvable seed would be a claim about a pairing that was
  *     never measured, and the cascade's own default is the honest answer.
  *
+ * THE TWO LINK INKS FOLLOW THE GROUND. `--ds-color-link` and
+ * `--ds-color-link-hover` are the only channels here that paint the seed AS
+ * TEXT, on the canvas this block compiles for, and they used to restate the
+ * seed verbatim in every mode. A seed is a BRAND statement, not a contrast one
+ * -- rottay's near-black seed painted a 1.04:1 link on its own dark canvas, and
+ * bithire's blue measured 3.56:1 there -- so each is now checked against that
+ * ground and moved along lightness only when it fails, exactly as
+ * `safeFocusRingColor` does for the ring. A seed that already reads resolves to
+ * itself, so every light-surface block is byte-unchanged. `--ds-color-border-focus`
+ * keeps the pass-through: it is a border, graded by the non-text floor the
+ * ramps family already checks for `--ds-focus-ring-color`.
+ *
  * A RAISED FLOOR NEVER LOWERS CONTRAST. `palette.contrast-posture` may raise
  * `pair.minimumRatio` above AA, and withholding the foreground on a seed that
  * misses the raised ratio hands the channel to a cascade fallback nobody
@@ -36,10 +48,13 @@
  * raise the emitted ink, never withdraw one the identity posture would emit.
  */
 
+import { safeInkOnGround } from '@/foundation/kernel/color/oklch/ink';
+
 import { isValidCssColor } from '..';
 import { HOVER_LIGHTNESS_STEP, shadeSeed } from '../palette-derivations';
 import {
   CANONICAL_READABLE_INK,
+  WCAG_AA_NORMAL_TEXT_RATIO,
   apcaReadableInk,
   measureReadableInk,
   type ReadableInkMeasurement,
@@ -77,6 +92,12 @@ export interface InteractionFloor {
  * `derivePaletteSemantics`, so the button/focus defaults and this floor can
  * never disagree about which primary a surface has.
  *
+ * `ground` is the canvas the theme STATES, passed by the caller that holds it.
+ * Omitted, or not a hex literal, the two link inks keep the verbatim
+ * pass-through: a theme that states no canvas paints the sheet's, so an ink
+ * moved against a guessed one would be a claim rather than a check, and the
+ * sheet's own two scopes are the answer for it.
+ *
  * Every channel reads the primary alone. None of them has an accent-keyed
  * precedent anywhere in this codebase, and the retired runtime derivation this
  * replaces read the primary alone too.
@@ -89,16 +110,25 @@ export interface InteractionFloor {
 export function deriveInteractionFloor(
   effectivePrimary: string | undefined,
   pair?: ReadableInkPair,
+  ground?: string,
 ): InteractionFloor {
   if (!effectivePrimary || !isValidCssColor(effectivePrimary)) {
     return { variables: {}, ink: undefined };
   }
 
-  // Pass-through: these two restate the seed verbatim, so they hold for a
-  // `var()` seed exactly as they hold for a hex one.
+  // The AA TEXT floor, not `pair.minimumRatio`: the pair's ratio grades an ink
+  // painted ON a tone, and reading it here would let `palette.contrast-posture`
+  // repaint a link that already clears the text floor on its own canvas.
+  // Extending the posture to the link ink is a catalog decision, not this one.
+  const readableOn = (ink: string): string =>
+    ground === undefined ? ink : safeInkOnGround(ink, ground, WCAG_AA_NORMAL_TEXT_RATIO);
+
+  // The focus border restates the seed verbatim, so it holds for a `var()` seed
+  // exactly as it holds for a hex one; the link ink is the seed this ground can
+  // carry as text.
   const variables: Record<string, string> = {
     [INTERACTION_FLOOR_CHANNELS.borderFocus]: effectivePrimary,
-    [INTERACTION_FLOOR_CHANNELS.link]: effectivePrimary,
+    [INTERACTION_FLOOR_CHANNELS.link]: readableOn(effectivePrimary),
   };
 
   const ink = measureReadableInk(effectivePrimary, pair);
@@ -114,9 +144,8 @@ export function deriveInteractionFloor(
     // pair than the better of the two candidates.
     const onPrimary = apcaReadableInk(effectivePrimary, pair);
     if (onPrimary) variables[INTERACTION_FLOOR_CHANNELS.onPrimary] = onPrimary;
-    variables[INTERACTION_FLOOR_CHANNELS.linkHover] = shadeSeed(
-      effectivePrimary,
-      HOVER_LIGHTNESS_STEP,
+    variables[INTERACTION_FLOOR_CHANNELS.linkHover] = readableOn(
+      shadeSeed(effectivePrimary, HOVER_LIGHTNESS_STEP),
     );
   }
 

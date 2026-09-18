@@ -207,6 +207,13 @@ describeCausality({
  *    columns are deliberately subordinate to the name). That is this cut's
  *    named residue: a tone decision for the owner, not a skin literal a cut
  *    may invent.
+ *
+ * DROPPED BY IDENTITY: `rottay dark`'s folder-link label. That link resolves
+ * `--ds-color-link`, which took the raw primary seed in every mode -- the DS's
+ * own near-black on a dark canvas. The sheet's dark scope now states the ink
+ * that canvas can carry, so the node is measured clean; a relapse reddens this
+ * pin. The SAME node stays pinned in `bithire dark`, where its ink is the ghost
+ * Button's own, not the link channel's.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
@@ -248,7 +255,6 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   },
   'rottay dark': {
     'color-contrast': [
-      '#_R_2_-f1-name > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '#fm-grid > .ds-pattern-file-manager.ds-engine-modern[data-loading="false"] > div[data-part="body"] > div[data-part="toolbar"] > div[data-part="breadcrumb"] > nav > ol > li[data-part="item"]:nth-child(3) > span[data-current="true"][aria-current="page"][data-part="crumb"] > span[title="Workspace"][data-part="label"]',
       '#fm-list > .ds-pattern-file-manager.ds-engine-modern[data-loading="false"] > div[data-part="body"] > div[data-part="toolbar"] > div[data-part="breadcrumb"] > nav > ol > li[data-part="item"]:nth-child(3) > span[data-current="true"][aria-current="page"][data-part="crumb"] > span[title="Workspace"][data-part="label"]',
     ],

@@ -167,6 +167,10 @@ export function setExtendedPaletteVariables(
  * "what does this seed imply" differently. This wrapper exists only to keep
  * the static path's own call site named after the channel group it feeds.
  *
+ * `ground` is the canvas this block STATES; the two link inks are checked
+ * against it and the other three channels do not read it. A theme that states
+ * no ground defers them -- see `deriveInteractionFloor`.
+ *
  * Merged BEFORE `setExtendedPaletteVariables`, whose unconditional "write
  * when the string is present" then overwrites exactly the keys the theme
  * supplies -- derivation is the floor, authored is the ceiling, and it is
@@ -175,7 +179,8 @@ export function setExtendedPaletteVariables(
  */
 export function deriveExtendedPaletteFloor(
   effectivePrimary: string | undefined,
-  inkPair?: ReadableInkPair
+  inkPair?: ReadableInkPair,
+  ground?: string
 ): Record<string, string> {
-  return deriveInteractionFloor(effectivePrimary, inkPair).variables;
+  return deriveInteractionFloor(effectivePrimary, inkPair, ground).variables;
 }

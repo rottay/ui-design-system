@@ -71,32 +71,27 @@ const TIER_RAMP: Readonly<Record<string, readonly [leading: string, tracking: st
 };
 
 /**
- * Measured ink debt, pinned by node IDENTITY. Registered, never excluded, and
- * NOT caused by this cut: the computed style of every compound and tier is
- * byte-identical to what it was before the ramp moved owner, so these are the
- * inks the family already rendered. The muted and secondary tones fail the
- * floor in three scopes; bithire's dark ground fails it for the whole family.
- * A mode-aware ink derivation is the fix, never an axe exclusion.
+ * Measured ink debt, pinned by node IDENTITY. Registered, never excluded.
+ *
+ * What is left is ONE ladder: `--ds-color-text-secondary` (#A0A0A5) and
+ * `--ds-color-muted`, which clear no text floor on a light canvas -- 2.60:1 on
+ * bithire's white and 2.49:1 on evnto's #fafafa. That ladder belongs to the
+ * palette/text roles, not to any one compound, and a mode-aware repair of it is
+ * its own cut.
+ *
+ * DROPPED BY IDENTITY, both genuinely repaired (a relapse reddens this pin):
+ *  - `rottay dark: a` and `bithire dark: a` -- the link took its ink from
+ *    `--ds-color-primary`, the raw seed, which is a BRAND statement and not a
+ *    contrast one: it measured 1.04:1 on rottay's dark ground and 3.56:1 on
+ *    bithire's. The link now reads `--ds-color-link`, the channel that already
+ *    existed for it, and that channel is derived against the canvas the block
+ *    compiles for.
+ *  - the ten `bithire dark` ground-ink rows -- drained upstream by the
+ *    mode-canvas repair (4f7d46751), measured absent at HEAD before this cut.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'rottay dark': { 'color-contrast': ['a'] },
   'bithire light': {
     'color-contrast': ['span[data-color="muted"]', 'span[data-color="secondary"]'],
-  },
-  'bithire dark': {
-    'color-contrast': [
-      '#t > span',
-      'h2[data-size="2xl"]',
-      'h2[data-size="3xl"]',
-      'h2[data-size="lg"]',
-      'h2[data-size="md"]',
-      'h2[data-size="sm"]',
-      'h2[data-size="xl"]',
-      'h2[data-size="xs"]',
-      'p',
-      'span[data-color="muted"]',
-      'span[data-color="secondary"]',
-    ],
   },
   'evnto light': {
     'color-contrast': ['span[data-color="muted"]', 'span[data-color="secondary"]'],

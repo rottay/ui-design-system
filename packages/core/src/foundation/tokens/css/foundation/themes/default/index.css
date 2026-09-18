@@ -2029,6 +2029,16 @@ html.dark {
      ring from this same preference, ground-checked (D6-FAM-01). */
   --ds-focus-ring-color: var(--ds-color-primary-400);
 
+  /* A link is body-adjacent TEXT, so it owes the 4.5:1 floor on the canvas it
+     is painted on. `:root` states the seed itself, and the foundation's own
+     near-black primary measures 1.04:1 here. Step 400 is that same seed at the
+     lightness this canvas carries (7.4:1) -- the stop the focus ring above
+     already prefers on dark -- and 300 is the lighter hover the dark idiom
+     wants. A SEEDED tenant never reaches these lines: its compiled block emits
+     its own ground-checked link ink and outranks the sheet. */
+  --ds-color-link: var(--ds-color-primary-400);
+  --ds-color-link-hover: var(--ds-color-primary-300);
+
   --ds-color-neutral-0: #020617;
   --ds-color-neutral-50: #0b1220;
   --ds-color-neutral-100: #111827;
@@ -2097,4 +2107,11 @@ html.dark {
      #6B6B72. Without this line the dark theme would inherit the darker light
      value and regress to 3.0:1. */
   --ds-textarea-count-color: #a3a3a3;
+
+  /* The overline label's quiet, on this canvas. `:root` declares
+     `--ds-divider-text-color: #737373` mode-lessly, which measures 3.95:1 here
+     and so cannot be the answer in both modes; the DS's own quiet text role is
+     already mode-aware and clears the text floor (7.3:1). A tenant that authors
+     `chrome.layout.dividerTextColor` still outranks this line. */
+  --ds-divider-text-color: var(--ds-color-text-tertiary);
 }

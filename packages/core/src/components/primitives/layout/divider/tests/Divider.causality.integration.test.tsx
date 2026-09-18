@@ -49,36 +49,30 @@ const WEIGHT_VERTICALS = ['rottay', 'evnto'] as const;
 const LABEL = "#label [data-part='text']";
 
 /**
- * MEASURED GAPS, registered rather than forced.
+ * MEASURED GAP, registered rather than forced.
  *
- * No `palette.*` decision reaches this family in any first-party vertical: all
- * three author BOTH `chrome.layout.dividerColor` (rottay #334155, bithire and
- * evnto #e5e5e5) and `chrome.layout.dividerTextColor` (#737373 everywhere), and
- * a vertical's own chrome outranks a derived relation by rank. The deriver
- * chains those authored names ahead of the palette, so the reach is theirs to
- * give back; this suite states that rather than pretending the decision covers
- * it. `typography.role-weights` reaches the overline only where the vertical
- * has not already settled the label role at `strong` -- bithire has.
+ * No `palette.*` decision reaches this family in any first-party vertical, and
+ * the reason is NOT that the verticals author over it: measured on the compiled
+ * arm, none of the three emits `--ds-divider-color` or `--ds-divider-text-color`
+ * at all. Both literals are the DS SHEET's own mode-less `:root` defaults
+ * (#e5e5e5 and #737373), so the reach is the foundation's to give, not a
+ * vertical's to give back. `typography.role-weights` reaches the overline only
+ * where the vertical has not already settled the label role at `strong` --
+ * bithire has.
+ *
+ * CLEAN, and it must stay clean: five rows dropped by identity, each measured
+ * absent, and a relapse reddens this pin.
+ *  - `rottay dark` and `bithire dark`, the three overline rows each -- the ink
+ *    was that mode-less `#737373`, which measured 3.95:1 on rottay's dark ground
+ *    and 4.18:1 on bithire's while reading 4.74:1 on white: one declaration
+ *    cannot answer for both canvases. `--ds-divider-label-ink` is now derived
+ *    against the ground the block compiles for, and the sheet's dark scope
+ *    answers for a theme that states no ground of its own.
+ *  - `bithire dark`'s `Quiet` row -- a `plain` label inherits the ground ink,
+ *    and the mode-canvas repair (4f7d46751) re-grounded that scope upstream.
+ *    Measured absent at HEAD before this cut.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  // The overline ink is the vertical's authored #737373, which does not clear
-  // the floor on rottay's dark ground. Same class as the tag and table
-  // families': a mode-aware ink derivation is the fix, never an axe exclusion,
-  // and it belongs to whoever owns that authored value.
-  'rottay dark': {
-    'color-contrast': [
-      'div[aria-label="End"] > span[data-part="text"]',
-      'div[aria-label="Section"] > span[data-part="text"]',
-      'div[aria-label="Start"] > span[data-part="text"]',
-    ],
-  },
-  // NOT this family's: a `plain` label inherits the ground ink, and in bithire's
-  // dark mode the harness ground `--ds-color-bg-primary` stays #FFFFFF while the
-  // ink follows the mode. A bare `<p>` with no divider fails identically.
-  'bithire dark': {
-    'color-contrast': ['div[aria-label="Quiet"] > span[data-part="text"]'],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describeCausality({
   family: 'divider',

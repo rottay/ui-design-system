@@ -177,12 +177,13 @@ interface TenantSeedProvenance {
 export function applyTenantSeedDerivations(
   vars: Record<string, string>,
   effectivePrimary: string | undefined,
-  provenance: TenantSeedProvenance | undefined
+  provenance: TenantSeedProvenance | undefined,
+  ground?: string
 ): void {
   if (!provenance || !provenance.seedIsTenantAuthored) return;
   const derived: Record<string, string> = {
     ...derivePrimarySemantics({ primary: effectivePrimary }),
-    ...deriveInteractionFloor(effectivePrimary).variables,
+    ...deriveInteractionFloor(effectivePrimary, undefined, ground).variables,
   };
   for (const [channel, derivedValue] of Object.entries(derived)) {
     const currentRank = (SEED_SHADOWING_FIELDS[channel] ?? []).some((field) =>

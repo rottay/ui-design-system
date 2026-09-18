@@ -58,11 +58,16 @@ export const seedsDeriver: FamilyDeriver = {
     const tenant = context.tenant;
     if (!tenant || tenant.authoredPaths === undefined) return {};
     const next: Record<string, string> = { ...below };
-    applyTenantSeedDerivations(next, context.theme.palette?.primaryColor, {
-      authoredPaths: tenant.authoredPaths,
-      modePrefix: context.modePrefix,
-      seedIsTenantAuthored: tenant.seedIsTenantAuthored,
-    });
+    applyTenantSeedDerivations(
+      next,
+      context.theme.palette?.primaryColor,
+      {
+        authoredPaths: tenant.authoredPaths,
+        modePrefix: context.modePrefix,
+        seedIsTenantAuthored: tenant.seedIsTenantAuthored,
+      },
+      context.theme.palette?.backgroundColor
+    );
     applyTenantStatusSeedDerivations(next, context.statusTints, {
       authoredPaths: tenant.authoredPaths,
       modePrefix: context.modePrefix,

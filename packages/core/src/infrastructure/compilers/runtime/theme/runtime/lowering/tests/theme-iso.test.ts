@@ -20,7 +20,10 @@ import postcss from "postcss";
 import ts from "typescript";
 import { describe, expect, it } from "vitest";
 
+import { contrastRatio } from "@/foundation/kernel/color/contrast";
+import { safeInkOnGround } from "@/foundation/kernel/color/oklch/ink";
 import { themeModeSelector } from "@/infrastructure/compilers/kernel/foundation/css/tenant-selectors";
+import { WCAG_AA_NORMAL_TEXT_RATIO } from "@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink";
 import { compileTheme } from "@/infrastructure/compilers/runtime/theme/runtime/lowering";
 import type {
   Theme,
@@ -806,10 +809,22 @@ describe("T0 DB mode projection through the common compiler", () => {
       ]) {
         expect(projected[channel]).toBe(noProvenance[channel]);
       }
-      expect(projected["--ds-color-link"]).toBe(seed);
       expect(projected["--ds-color-border-focus"]).toBe(seed);
-      expect(noProvenance["--ds-color-link"]).toBe(seed);
       expect(noProvenance["--ds-color-border-focus"]).toBe(seed);
+      // The link is the same seed READ AS TEXT on this mode's own canvas, so it
+      // is the seed itself wherever the seed clears the floor and the seed's own
+      // hue at a carryable lightness where it does not -- #315D4D measures
+      // 3.3:1 on this theme's dark ground. Both arms still answer identically,
+      // which is what this block is measuring.
+      for (const arm of [projected, noProvenance]) {
+        const ground = arm["--ds-color-bg-primary"];
+        expect(arm["--ds-color-link"]).toBe(
+          safeInkOnGround(seed, ground, WCAG_AA_NORMAL_TEXT_RATIO)
+        );
+        expect(contrastRatio(arm["--ds-color-link"], ground)).toBeGreaterThanOrEqual(
+          WCAG_AA_NORMAL_TEXT_RATIO
+        );
+      }
 
       // Everything outside that set is untouched, which is the half of the
       // convergence law provenance must not disturb.

@@ -211,6 +211,13 @@
 .rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='primary'] {
   color: var(--ds-color-primary);
 }
+/* A link's ink is `--ds-color-link`, not the raw seed: the seed is a brand
+   statement and the link is body-adjacent TEXT, so only the link channel is
+   derived against the ground it is painted on. Every other compound keeps the
+   seed, where `primary` is a deliberate accent the caller asked for. */
+.rottay-typography.rottay-typography--modern.rottay-typography--modern:is(a)[data-color='primary'] {
+  color: var(--ds-color-link, var(--ds-color-primary));
+}
 .rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='success'] {
   color: var(--ds-color-success);
 }

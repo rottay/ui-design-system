@@ -1297,7 +1297,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 9,
-        "channelsRead": 127,
+        "channelsRead": 128,
         "classTokens": 2,
         "partsStamped": 1,
         "partsConsumed": 1
@@ -1312,7 +1312,8 @@
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
-      "dndDropZoneOwners": 0
+      "dndDropZoneOwners": 0,
+      "cutNote": "undefined 2026-09-18: +1 channel read (the typography skin reads the derived --ds-color-link) — the ink derivation lot; census re-read per the gate instruction."
     },
     "box": {
       "cut": "WO-FAM-07",

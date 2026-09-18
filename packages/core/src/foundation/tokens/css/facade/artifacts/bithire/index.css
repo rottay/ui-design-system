@@ -834,7 +834,7 @@
   --ds-divider-inset-xl: calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1));
   --ds-divider-inset-xs: calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1));
   --ds-divider-label-case: var(--ds-divider-label-transform, uppercase);
-  --ds-divider-label-ink: var(--ds-divider-text-color, var(--ds-color-text-secondary));
+  --ds-divider-label-ink: #737373;
   --ds-divider-label-leading: var(--ds-divider-label-line-height, var(--ds-type-label-line-height));
   --ds-divider-label-measure: var(--ds-divider-label-max-width, 100%);
   --ds-divider-label-size: var(--ds-divider-label-font-size, var(--ds-type-label-font-size));
@@ -2386,6 +2386,8 @@
   --ds-color-info-700: #82C1F2;
   --ds-color-info-800: #B2DDFF;
   --ds-color-info-900: #EDF7FF;
+  --ds-color-link: #3F6FFD;
+  --ds-color-link-hover: #3E6FFD;
   --ds-color-primary-100: #040F5B;
   --ds-color-primary-200: #0B218C;
   --ds-color-primary-300: #1839B9;
@@ -2426,6 +2428,7 @@
   --ds-color-warning-700: #F6A275;
   --ds-color-warning-800: #FFCAAE;
   --ds-color-warning-900: #FFF2EC;
+  --ds-divider-label-ink: #797979;
   --ds-focus-ring-color: #2A55E0;
   --ds-sidebar-item-color-active: var(--ds-color-neutral-100);
 }
