@@ -1252,19 +1252,11 @@
   }
 
   /* Forced colors erase series paint; grouped/stacked bar series stay
-   * separable by fill posture instead — odd series indexes read hollow
-   * against the solid even indexes, the same decode the scatter foundation
+   * separable by fill posture instead — odd series cadences read hollow
+   * against the solid even ones, the same decode the scatter foundation
    * owns below. Series order in the legend keeps the name mapping. */
   .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='1'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='3'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='5'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='7'] [data-part='bar'],
-  .ds-chart-renderer-bar.ds-chart-renderer-bar[data-part='chart-renderer']
-    [data-part='bar-mark'][data-series-index='9'] [data-part='bar'] {
+    [data-part='bar-mark'][data-series-cadence='1'] [data-part='bar'] {
     fill: Canvas;
     stroke: CanvasText;
   }
@@ -1294,22 +1286,22 @@
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='1'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='1'] [data-part='line'] {
     stroke-dasharray: 8 3;
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='2'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='2'] [data-part='line'] {
     stroke-dasharray: 2 3;
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='3'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='3'] [data-part='line'] {
     stroke-dasharray: 10 3 2 3;
   }
 
   .ds-chart-renderer-line.ds-chart-renderer-line[data-part='chart-renderer']
-    [data-part='line-series'][data-series-index='4'] [data-part='line'] {
+    [data-part='line-series'][data-series-cadence='4'] [data-part='line'] {
     stroke-dasharray: 1 3;
   }
 

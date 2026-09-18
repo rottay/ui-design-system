@@ -17,25 +17,25 @@
   border-radius: var(--_ds-line-marker-radius, 999px);
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='1'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='1'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 9px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 9px);
   mask-mode: alpha;
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='2'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='2'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 5px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 5px);
   mask-mode: alpha;
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='3'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='3'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 6px, transparent 6px 8px, CanvasText 8px 9px, transparent 9px 12px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 6px, transparent 6px 8px, CanvasText 8px 9px, transparent 9px 12px);
   mask-mode: alpha;
 }
 
-.ds-chart-line [data-part='legend-swatch'][data-series-index='4'] {
+.ds-chart-line [data-part='legend-swatch'][data-series-cadence='4'] {
   -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 9px, transparent 9px 13px);
   mask: repeating-linear-gradient(90deg, CanvasText 0 9px, transparent 9px 13px);
   mask-mode: alpha;
@@ -46,23 +46,23 @@
 }
 
 /* Series cadence -----------------------------------------------------------
- * The renderer cycles `data-series-index` 0..4; indexes 1..4 receive a
+ * The renderer cycles `data-series-cadence` 0..4; cadences 1..4 receive a
  * governed dash so overlapping series separate by stroke rhythm as well as
  * paint. Each cadence is a private implementation detail of this family. */
 
-.ds-chart-line [data-part='line-series'][data-series-index='1'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='1'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-2, 6 4);
 }
 
-.ds-chart-line [data-part='line-series'][data-series-index='2'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='2'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-3, 2 3);
 }
 
-.ds-chart-line [data-part='line-series'][data-series-index='3'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='3'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-4, 8 3 2 3);
 }
 
-.ds-chart-line [data-part='line-series'][data-series-index='4'] [data-part='line'] {
+.ds-chart-line [data-part='line-series'][data-series-cadence='4'] [data-part='line'] {
   stroke-dasharray: var(--_ds-line-series-dash-5, 12 4);
 }
 

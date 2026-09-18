@@ -20,24 +20,24 @@
 }
 
 /* Series cadence -----------------------------------------------------------
- * The renderer cycles `data-series-index` 0..4 on each `area-series`; the
- * series outline receives a governed dash for indexes 1..4 so stacked series
+ * The renderer cycles `data-series-cadence` 0..4 on each `area-series`; the
+ * series outline receives a governed dash for cadences 1..4 so stacked series
  * separate by stroke rhythm as well as paint. The cadence remains an
  * implementation detail of this family. */
 
-.ds-chart-area [data-part='area-series'][data-series-index='1'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='1'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-2, 6 4);
 }
 
-.ds-chart-area [data-part='area-series'][data-series-index='2'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='2'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-3, 2 3);
 }
 
-.ds-chart-area [data-part='area-series'][data-series-index='3'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='3'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-4, 8 3 2 3);
 }
 
-.ds-chart-area [data-part='area-series'][data-series-index='4'] [data-part='series-line'] {
+.ds-chart-area [data-part='area-series'][data-series-cadence='4'] [data-part='series-line'] {
   stroke-dasharray: var(--_ds-area-series-dash-5, 12 4);
 }
 

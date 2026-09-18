@@ -282,7 +282,7 @@ export function SvgLineRenderer({
         {geometry.series.map((currentSeries, seriesIndex) => {
           const paintStyle: ChartPaintStyle = {
             '--ds-chart-mark-color': currentSeries.seriesColor
-              ?? `var(--ds-chart-paint-${(seriesIndex % 10) + 1}, var(--ds-color-primary))`,
+              ?? paint.categorical?.paintFor(seriesIndex),
           };
 
           return (
@@ -290,7 +290,8 @@ export function SvgLineRenderer({
               key={currentSeries.id}
               data-part="line-series"
               data-series-id={currentSeries.id}
-              data-series-index={seriesIndex % 5}
+              data-series-index={paint.categorical?.slotIndexFor(seriesIndex)}
+              data-series-cadence={paint.categorical?.cadenceIndexFor(seriesIndex) ?? undefined}
               aria-label={currentSeries.label}
               style={paintStyle}
             >

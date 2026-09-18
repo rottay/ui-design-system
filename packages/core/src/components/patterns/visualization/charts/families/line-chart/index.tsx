@@ -201,7 +201,12 @@ export const LineChart = memo(function LineChart({
     <div data-part="legend" data-legend-encoding="series">
       {finiteSeries.map((s, i) => (
         <div key={`${s.name}-${i}`} data-part="legend-item">
-          <span data-part="legend-swatch" data-series-index={i % 5} style={{ backgroundColor: s.color ?? lineColor(palette, i) }} />
+          <span
+            data-part="legend-swatch"
+            data-series-index={paint.categorical?.slotIndexFor(i)}
+            data-series-cadence={paint.categorical?.cadenceIndexFor(i) ?? undefined}
+            style={{ backgroundColor: s.color ?? lineColor(palette, i) }}
+          />
           <span data-part="legend-label">{s.name}</span>
         </div>
       ))}

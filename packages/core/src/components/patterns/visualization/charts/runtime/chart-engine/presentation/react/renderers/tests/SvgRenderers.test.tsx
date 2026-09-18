@@ -808,11 +808,15 @@ describe('React-owned SVG renderers', () => {
       'data-series-index',
       '1',
     );
+    expect(container.querySelector('[data-series-id="second"]')).toHaveAttribute(
+      'data-series-cadence',
+      '1',
+    );
     expect(CHART_FOUNDATION_CSS).toContain(
       "[data-interaction]:not([data-interaction='static'])\n  [data-part='bar-mark']:hover",
     );
     expect(CHART_FOUNDATION_CSS).toContain(
-      "[data-part='line-series'][data-series-index='1'] [data-part='line']",
+      "[data-part='line-series'][data-series-cadence='1'] [data-part='line']",
     );
   });
 });

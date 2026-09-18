@@ -185,7 +185,7 @@ export const AreaChart = memo(function AreaChart({
     <div data-part="legend">
       {finiteSeries.map((currentSeries, seriesIndex) => (
         <div key={`${currentSeries.name}-${seriesIndex}`} data-part="legend-item">
-          <span data-part="legend-swatch" data-series-index={seriesIndex % 5} style={{ backgroundColor: currentSeries.color ?? areaColor(palette, seriesIndex), opacity: resolvedOpacity }} />
+          <span data-part="legend-swatch" data-series-index={paint.categorical?.slotIndexFor(seriesIndex)} style={{ backgroundColor: currentSeries.color ?? areaColor(palette, seriesIndex), opacity: resolvedOpacity }} />
           <span data-part="legend-label">{currentSeries.name}</span>
         </div>
       ))}

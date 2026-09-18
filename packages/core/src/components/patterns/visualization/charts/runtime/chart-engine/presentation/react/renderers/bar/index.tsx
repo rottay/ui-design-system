@@ -303,7 +303,7 @@ export function SvgBarRenderer({
       <g data-part="marks">
         {bars.map((bar, barIndex) => {
           const paintStyle: ChartPaintStyle = {
-            '--ds-chart-mark-color': bar.color ?? 'var(--ds-chart-paint-1, var(--ds-color-primary))',
+            '--ds-chart-mark-color': bar.color ?? paint.categorical?.paintFor(0),
           };
           const accessibleLabel = bar.ariaLabel
             ?? (bar.seriesLabel
@@ -335,7 +335,12 @@ export function SvgBarRenderer({
               data-part="bar-mark"
               data-datum-id={bar.id}
               data-mark-index={barIndex % 5}
-              data-series-index={bar.seriesIndex === undefined ? undefined : bar.seriesIndex % 10}
+              data-series-index={bar.seriesIndex === undefined
+                ? undefined
+                : paint.categorical?.slotIndexFor(bar.seriesIndex)}
+              data-series-cadence={bar.seriesIndex === undefined
+                ? undefined
+                : (paint.categorical?.cadenceIndexFor(bar.seriesIndex) ?? undefined)}
               data-layout={isSeries ? layout : undefined}
               data-orientation={orientation}
               data-chart-datum-key={datumProps['data-chart-datum-key']}

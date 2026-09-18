@@ -271,7 +271,7 @@ export const BarChart = memo(function BarChart({
       <div data-part="legend" data-legend-encoding="series">
         {renderSeries.map((s, i) => (
           <div key={`${s.name}-${i}`} data-part="legend-item">
-            <span data-part="legend-swatch" data-series-index={i % 10} style={{ backgroundColor: arrayValueAt(seriesColors, i) }} />
+            <span data-part="legend-swatch" data-series-index={paint.categorical?.slotIndexFor(i)} style={{ backgroundColor: arrayValueAt(seriesColors, i) }} />
             <span data-part="legend-label">{s.name}</span>
           </div>
         ))}
@@ -280,7 +280,7 @@ export const BarChart = memo(function BarChart({
       <div data-part="legend" data-legend-encoding="categories">
         {singleData.map((d, i) => (
           <div key={`${d.label}-${i}`} data-part="legend-item">
-            <span data-part="legend-swatch" data-series-index={i % 10} style={{ backgroundColor: d.color ?? resolvePaletteColor(palette, i) }} />
+            <span data-part="legend-swatch" data-series-index={paint.categorical?.slotIndexFor(i)} style={{ backgroundColor: d.color ?? resolvePaletteColor(palette, i) }} />
             <span data-part="legend-label">{d.label}</span>
           </div>
         ))}

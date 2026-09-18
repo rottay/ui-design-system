@@ -160,7 +160,8 @@ export function SvgAreaRenderer({
                 key={currentSeries.id}
                 data-part="area-series"
                 data-series-id={currentSeries.id}
-                data-series-index={seriesIndex % 5}
+                data-series-index={paint.categorical?.slotIndexFor(seriesIndex)}
+                data-series-cadence={paint.categorical?.cadenceIndexFor(seriesIndex) ?? undefined}
                 aria-label={currentSeries.label}
               >
                 {resolvedGradient ? (
