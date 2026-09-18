@@ -5343,6 +5343,11 @@
      "at": "2026-09-18 03:46",
      "by": "kimi-dt",
      "note": "Sub-lote C INTEGRADO (d3808d06f): el contrato de headers queda partido honestamente (vocabulario de tonos cerrado en TS + deriver chrome/header de 19 canales; los dominios admitidos DIFIEREN por familia y se documentan — ninguna prop publica ensanchada). form-header y edit-header drenados (0 inline paint, skeleton derivado, axe con pins vacios). Residuos ruteados: --ds-material-inset-highlight (el vocabulario de materiales nunca tuvo ese nombre — lote del lane de materiales) y el brazo focus-visible (espera el contrato NavigationLink). AUTO-REPORTE DT: el skin de chart-radar del lot 4b entro en este commit por un pathspec mio que no cubria la ruta del skin (el contenido es el revisado y validado del 4b; la colocacion en el commit es mia). La regla de staging ahora incluye los skins bajo foundation/tokens/css/** en todo lote de familia. Siguiente: sub-lotes D/E/F/G en paralelo cuando la serie de charts 5x libere la ventana."
+    },
+    {
+     "at": "2026-09-18 07:33",
+     "by": "Kimi",
+     "note": "2026-09-18 (DT, writer quota-blocked until Sep 20): cohort D/E drafts re-measured over the quiet tree — 9/10 files green; the radiusScale probe calibrated 1.25 -> 1.2 (envelope max, fleet convention) inside the preserved draft. Calibration exposed a LATENT red the admission error had masked: palette.seeds -> cardGround reads none/none; root cause measured: :root --ds-card-header-bg transparent (card/index.css:96) ships in all three vertical artifacts and kills the deriver's seeded-gradient fallback in every vertical. Semantic repair briefed to the writer (brief-fam10-de-completion.md): authored-vs-default distinction or drop the over-claiming arm; workbench twin gets the same answer. Evidence: evidence/wave-certification-2026-09-18 (sittings 2, 3)"
     }
    ]
   },
@@ -6055,6 +6060,11 @@
      "at": "2026-09-18 06:23",
      "by": "kimi-dt",
      "note": "Certificacion de la ola (evidence/wave-certification-2026-09-18): A/B completo contra la base auditada (52 -> 68 rojos, 26 curados, 16 nuevos clasificados). La ventana serializada corrio en el worktree pineado (14960a8ee) y cerro la clase de staleness (artifacts + mount + parity 40/40). Re-pins mecanicos integrados: TreeView drag-handle (la fixture mide el draggable) y probe-roster grid (data-posture). Quedan con dueno: el censo de minting owners de theme-contract-freeze (+26 derivers de la ola — se re-pinea cuando los drafts D/E aterricen para no medir dos veces), la premisa retirada del consumer test (display ya conduce), los rojos por diagnosticar (Input/InputNumber axe, antd bridge, presence, LongTail, Display1/2, FloatButton, CollectionWorkspace) y la particion D3. Todo eso necesita el asiento writer (cuota: 20/09) o tu decision."
+    },
+    {
+     "at": "2026-09-18 07:33",
+     "by": "Kimi",
+     "note": "2026-09-18 (DT): WO-EVI-05 pilot population pin re-published at catalog 49bc4572fa60d2e5 (one W14 catalog edit moved only the digest; membership unchanged, gate green). Fleet floor stale, attributed family-by-family, NOT re-pinned: states 155->153 decomposes as active-filters-bar under the instrument's data-filter-state blind spot (e8c78c576) + filter-panel's reviewed state-paint delegation to Button (8fb516981) — floor law refuses the shrink until the stateSelectors instrument lot lands (briefed) and the delegation is on the record. Wave red ledger fully worked: LongTail cured (63e8ee144), 6 attributed with writer briefs (brief-wave-residue-repairs.md). Evidence: evidence/wave-certification-2026-09-18"
     }
    ]
   },
