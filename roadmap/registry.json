@@ -5333,6 +5333,11 @@
      "at": "2026-09-18 02:21",
      "by": "kimi-dt",
      "note": "Censo medido (evidence/fam10-census) y sub-lote A integrado (6493656ff): el censo de family-cut ahora VE el tier surfaces; las 19 familias rosteradas con su deuda medida declarada (openCut rows, unwaivable). Siguiente: sub-lote B (vocabulario de roles de skeleton — FAM-14 done, el renderer existe) y luego C (contrato de headers, singleton)."
+    },
+    {
+     "at": "2026-09-18 03:46",
+     "by": "kimi-dt",
+     "note": "Sub-lote C INTEGRADO (d3808d06f): el contrato de headers queda partido honestamente (vocabulario de tonos cerrado en TS + deriver chrome/header de 19 canales; los dominios admitidos DIFIEREN por familia y se documentan — ninguna prop publica ensanchada). form-header y edit-header drenados (0 inline paint, skeleton derivado, axe con pins vacios). Residuos ruteados: --ds-material-inset-highlight (el vocabulario de materiales nunca tuvo ese nombre — lote del lane de materiales) y el brazo focus-visible (espera el contrato NavigationLink). AUTO-REPORTE DT: el skin de chart-radar del lot 4b entro en este commit por un pathspec mio que no cubria la ruta del skin (el contenido es el revisado y validado del 4b; la colocacion en el commit es mia). La regla de staging ahora incluye los skins bajo foundation/tokens/css/** en todo lote de familia. Siguiente: sub-lotes D/E/F/G en paralelo cuando la serie de charts 5x libere la ventana."
     }
    ]
   },
