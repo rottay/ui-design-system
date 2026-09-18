@@ -212,6 +212,35 @@ describe('theme population drills — a shrunken denominator is refused', () => 
       assert.ok(AXES[axis].computed.length > 0, `${axis}: no computed vocabulary`);
     }
   });
+
+  it('(namespaced state) a family\'s own [data-<ns>-state=] rule declares states; the shared attribute keeps its own needle; a skin with no state selector declares none', () => {
+    const dir = sandbox();
+
+    mkdirSync(join(dir, SKIN_ROOT, 'drill-domain-state'), { recursive: true });
+    writeFileSync(
+      join(dir, SKIN_ROOT, 'drill-domain-state/index.css'),
+      '.ds-drill-domain-state[data-filter-state=\'active\'] { opacity: 0.9; }\n',
+    );
+    const domainState = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-domain-state');
+    assert.deepEqual(domainState.axes.states.stateSelectors, ['[data-<ns>-state=']);
+
+    mkdirSync(join(dir, SKIN_ROOT, 'drill-shared-state'), { recursive: true });
+    writeFileSync(
+      join(dir, SKIN_ROOT, 'drill-shared-state/index.css'),
+      '.ds-drill-shared-state[data-state=\'selected\'] { opacity: 0.5; }\n',
+    );
+    const sharedState = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-shared-state');
+    assert.deepEqual(sharedState.axes.states.stateSelectors, ['[data-state='],
+      'the namespaced matcher must not re-admit the shared attribute');
+
+    mkdirSync(join(dir, SKIN_ROOT, 'drill-no-state'), { recursive: true });
+    writeFileSync(
+      join(dir, SKIN_ROOT, 'drill-no-state/index.css'),
+      '.ds-drill-no-state { opacity: 1; }\n',
+    );
+    const noState = familyAxisDeclarations(dir, catalogIn(dir)).get('drill-no-state');
+    assert.equal(noState.axes.states, undefined, 'a bare absence of any state selector reads as no declaration');
+  });
 });
 
 describe('theme population — the pilot population of WO-EVI-05', () => {

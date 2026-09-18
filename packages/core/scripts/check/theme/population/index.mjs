@@ -121,8 +121,16 @@ export const AXES = Object.freeze({
      * reading a `*-hover`/`*-active`/`*-selected` channel. The probe reads the
      * same element twice, once in the state, which is why the declaration has
      * to be about the SELECTOR rather than about a longhand.
+     *
+     * A family whose state is DOMAIN data, not kernel interaction state,
+     * carries it on its own namespaced attribute (`[data-filter-state=...]`,
+     * e8c78c576) instead of the shared `data-state`. The namespaced matcher
+     * requires a non-empty namespace, so the shared attribute keeps its own
+     * literal needle above and can never be re-admitted through the namespace
+     * door.
      */
     stateSelectors: [':hover', ':active', ':focus-visible', '[data-state='],
+    stateNamespacedSelector: /\[data-[a-z0-9-]+-state=/,
     stateChannelSuffixes: ['-hover', '-active', '-selected', '-pressed'],
   },
   motion: {
@@ -443,7 +451,10 @@ export function familyAxisDeclarations(root = DEFAULT_ROOT, sourcePath = CATALOG
       const byProperty = spec.authored.filter((name) => declaredNames.has(name));
       const byHeadChannel = [...channelsByAxis.get(axis)].filter((channel) => channels.has(channel));
       const bySelector = axis === 'states'
-        ? spec.stateSelectors.filter((needle) => stripped.includes(needle))
+        ? [
+            ...spec.stateSelectors.filter((needle) => stripped.includes(needle)),
+            ...(spec.stateNamespacedSelector.test(stripped) ? ['[data-<ns>-state='] : []),
+          ]
         : [];
       const byStateChannel = axis === 'states'
         ? [...channels].filter((channel) => spec.stateChannelSuffixes.some((suffix) => channel.endsWith(suffix)))
