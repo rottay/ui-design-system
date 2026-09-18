@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { MERGE_RANK } from "../foundation/contract";
+import { MERGE_RANK, type FamilyDeriver } from "../foundation/contract";
 import { FAMILY_DERIVERS } from "../runtime/derivation";
 import { buildLoweringContext } from "../runtime/pipeline";
 import {
@@ -46,7 +46,58 @@ for (const deriver of FAMILY_DERIVERS) {
   describeFamilyContract(deriver, FIXTURES);
 }
 
+// Inherited pre-wave channel names exempt from the family-namespace rule.
+// --ds-form-action-dock-reserved-space is named for the SHARED form action
+// dock, not the form-surface family, but it has been tenant-facing since
+// 2026-07 (71f57d91a), ships in three facade artifacts and has exactly one
+// consumer (the form-surface skin). Renaming it is unsafe, so the channel
+// stays until a versioned break. Frozen set of one: any NEW stray name must
+// still fail the namespace check.
+const INHERITED_PREWAVE_CHANNELS: ReadonlySet<string> = new Set([
+  "--ds-form-action-dock-reserved-space",
+]);
+
+const isNamespaceStray = (family: string, channel: string): boolean =>
+  channel !== `--ds-${family}` &&
+  !channel.startsWith(`--ds-${family}-`) &&
+  !INHERITED_PREWAVE_CHANNELS.has(channel);
+
+const collectNamespaceStrays = (
+  derivers: readonly FamilyDeriver[],
+  chromeFamilies: ReadonlySet<string>,
+  fixtures: readonly FamilyFixture[],
+): string[] => {
+  const strays: string[] = [];
+  for (const fixture of fixtures) {
+    const context = buildLoweringContext({
+      theme: fixture.theme,
+      tenant: fixture.tenant,
+    });
+    for (const deriver of derivers) {
+      if (!chromeFamilies.has(deriver.family)) continue;
+      for (const channel of Object.keys(deriver.derive(context, {}))) {
+        if (isNamespaceStray(deriver.family, channel)) {
+          strays.push(`${deriver.family} produces ${channel}`);
+        }
+      }
+    }
+  }
+  return [...new Set(strays)].sort();
+};
+
 describe("the family registry", () => {
+  const chromeFamilies = (): Set<string> => {
+    const root = join(
+      dirname(fileURLToPath(import.meta.url)),
+      "../runtime/derivation/chrome",
+    );
+    return new Set(
+      readdirSync(root, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map((entry) => entry.name),
+    );
+  };
+
   it("gives every family exactly one id", () => {
     const ids = FAMILY_DERIVERS.map((deriver) => deriver.family);
     expect([...new Set(ids)].sort()).toEqual([...ids].sort());
@@ -75,34 +126,25 @@ describe("the family registry", () => {
   });
 
   it("keeps every family chrome deriver inside its own channel namespace", () => {
-    const root = join(
-      dirname(fileURLToPath(import.meta.url)),
-      "../runtime/derivation/chrome",
-    );
-    const chromeFamilies = new Set(
-      readdirSync(root, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory())
-        .map((entry) => entry.name),
-    );
-    const strays: string[] = [];
-    for (const fixture of FIXTURES) {
-      const context = buildLoweringContext({
-        theme: fixture.theme,
-        tenant: fixture.tenant,
-      });
-      for (const deriver of FAMILY_DERIVERS) {
-        if (!chromeFamilies.has(deriver.family)) continue;
-        for (const channel of Object.keys(deriver.derive(context, {}))) {
-          if (
-            channel !== `--ds-${deriver.family}` &&
-            !channel.startsWith(`--ds-${deriver.family}-`)
-          ) {
-            strays.push(`${deriver.family} produces ${channel}`);
-          }
-        }
-      }
-    }
-    expect([...new Set(strays)].sort()).toEqual([]);
+    expect(collectNamespaceStrays(FAMILY_DERIVERS, chromeFamilies(), FIXTURES)).toEqual([]);
+  });
+
+  it("still flags a planted stray channel outside the carve-out", () => {
+    const planted: FamilyDeriver[] = [
+      {
+        family: "form-surface",
+        rank: "chrome",
+        consumes: [],
+        produces: [],
+        derive: () => ({ "--ds-planted-cross-family-channel": "1px" }),
+      },
+    ];
+    expect(
+      collectNamespaceStrays(planted, new Set(["form-surface"]), FIXTURES),
+    ).toEqual(["form-surface produces --ds-planted-cross-family-channel"]);
+    expect(
+      isNamespaceStray("form-surface", "--ds-form-action-dock-reserved-space"),
+    ).toBe(false);
   });
 
   it("has no deriver that imports another deriver", () => {
