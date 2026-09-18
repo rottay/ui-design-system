@@ -72,13 +72,9 @@ describeCausality({
 });
 
 // Measured contrast debt pinned by node identity; the fix is ink derivation, never an axe exclusion.
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire dark': {
-    'color-contrast': [
-      'div[data-testid="view-tab-active"] > .ds-saved-views__pill-select.ds-button--sm[data-part="pill-select"] > span[data-part="content"][data-state="visible"] > span[data-part="label"]',
-    ],
-  },
-};
+// Empty since the bithire-dark `pill-select` label stopped painting on the body's inherited
+// ground: the mode block re-derives its own canvas now (`withModeCanvas`, 4f7d46751).
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('saved-views accessibility', () => {
   it('carries no serious axe finding beyond the pinned debt', async () => {

@@ -197,6 +197,111 @@ describe('PatternSavedViewsBar advanced engine coverage', () => {
   );
 
   it.each(STABLE_ENGINES)(
+    'stamps the source affordance on the pill itself through the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+
+      const { unmount } = renderWithEngine(
+        <Component {...createBarProps({ onViewReorder: vi.fn() })} />,
+        engine
+      );
+
+      // `draggable` is the one transport prop that is an attribute rather than
+      // a handler: a dispatched drag event fires without it, so only the DOM
+      // says whether a pointer user can start the gesture at all.
+      expect(screen.getByTestId('view-tab-view-2')).toHaveAttribute(
+        'draggable',
+        'true'
+      );
+
+      unmount();
+
+      renderWithEngine(<Component {...createBarProps()} />, engine);
+
+      expect(screen.getByTestId('view-tab-view-2')).not.toHaveAttribute(
+        'draggable',
+        'true'
+      );
+    }
+  );
+
+  it.each(STABLE_ENGINES)(
+    'reorders forward and backward across the same pair through the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const onViewReorder = vi.fn();
+      const dataTransfer = {
+        effectAllowed: 'move',
+        dropEffect: 'move',
+        setData: vi.fn(),
+        getData: vi.fn(),
+      };
+
+      renderWithEngine(
+        <Component {...createBarProps({ onViewReorder })} />,
+        engine
+      );
+
+      const firstTab = screen.getByTestId('view-tab-view-1');
+      const thirdTab = screen.getByTestId('view-tab-view-3');
+
+      fireEvent.dragStart(firstTab, { dataTransfer });
+      fireEvent.dragOver(thirdTab, { dataTransfer });
+      fireEvent.drop(thirdTab, { dataTransfer });
+      fireEvent.dragEnd(firstTab);
+
+      fireEvent.dragStart(thirdTab, { dataTransfer });
+      fireEvent.dragOver(firstTab, { dataTransfer });
+      fireEvent.drop(firstTab, { dataTransfer });
+      fireEvent.dragEnd(thirdTab);
+
+      // The bar is controlled, so both moves are computed from the same order:
+      // the source leaves its slot and lands on the target's ORIGINAL index.
+      expect(onViewReorder.mock.calls).toEqual([
+        [['view-2', 'view-3', 'view-1']],
+        [['view-3', 'view-1', 'view-2']],
+      ]);
+    }
+  );
+
+  // Rustic marks any dragged-over tab, so it is outside this pin: it is a
+  // frozen engine and its behavior may not change to satisfy an assertion.
+  it.each(['classic', 'modern'] as const)(
+    'leaves a tab unmarked under a foreign drag through the %s engine',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      const onViewReorder = vi.fn();
+      const dataTransfer = {
+        effectAllowed: 'move',
+        dropEffect: 'move',
+        setData: vi.fn(),
+        getData: vi.fn(() => 'view-1'),
+      };
+
+      renderWithEngine(
+        <Component {...createBarProps({ onViewReorder })} />,
+        engine
+      );
+
+      const targetTab = screen.getByTestId('view-tab-view-3');
+      const unmarked = targetTab.outerHTML;
+
+      // No `dragstart` in this bar: the drag came from outside it, so no
+      // indicator may promise a drop that will not happen. Classic paints its
+      // indicator with a `var()` border the DOM runner drops, so only the
+      // modern arm discriminates.
+      fireEvent.dragOver(targetTab, { dataTransfer });
+
+      expect(targetTab.outerHTML).toBe(unmarked);
+
+      fireEvent.drop(targetTab, { dataTransfer });
+
+      expect(onViewReorder).not.toHaveBeenCalled();
+      expect(targetTab.outerHTML).toBe(unmarked);
+    }
+  );
+
+  it.each(STABLE_ENGINES)(
     'does not show delete for default view through the %s engine',
     async (engine) => {
       const Component = COMPONENTS[engine];

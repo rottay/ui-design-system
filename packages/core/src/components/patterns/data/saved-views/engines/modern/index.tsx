@@ -54,6 +54,11 @@ import Dropdown from '../../../../../primitives/overlay/dropdown/engines/modern'
 import Button from '../../../../../primitives/inputs/button/engines/modern';
 import Input from '../../../../../primitives/inputs/input/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
+import type {
+  SortableSourceProps,
+  SortableTargetProps,
+} from '../../../../../primitives/runtime/collection/sortable';
+import { reorderByKey, useDragSession } from '../../../../../primitives/runtime/collection/sortable';
 import { ActionEditIcon } from '@/graphics/icons/semantic/generated/roles/action-edit';
 import { ActionCopyIcon } from '@/graphics/icons/semantic/generated/roles/action-copy';
 import { ActionDeleteIcon } from '@/graphics/icons/semantic/generated/roles/action-delete';
@@ -69,14 +74,29 @@ import { partAttributes, useInteractionState } from '@/foundation/behavior';
  * so one place decides them and the skin reads the result back. It is a
  * component rather than a bare element because a row inside `views.map` cannot
  * hold a hook.
+ *
+ * The two kernel bags arrive as NAMED props and land LAST on the element: their
+ * keys are disjoint from the interaction triad and from `data-part`/`data-state`.
  */
 function ViewPill({
   children,
+  dragSource,
+  dragTarget,
   ...rest
-}: React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>) {
+}: React.HTMLAttributes<HTMLDivElement> &
+  Record<string, unknown> & {
+    dragSource: SortableSourceProps;
+    dragTarget: SortableTargetProps;
+  }) {
   const interaction = useInteractionState();
   return (
-    <div {...rest} {...interaction.handlers} {...partAttributes('pill', interaction.state)}>
+    <div
+      {...rest}
+      {...interaction.handlers}
+      {...partAttributes('pill', interaction.state)}
+      {...dragSource}
+      {...dragTarget}
+    >
       {children}
     </div>
   );
@@ -127,8 +147,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const [editingViewId, setEditingViewId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  const [dragViewId, setDragViewId] = useState<string | null>(null);
-  const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
   /* A keyboard exit (Enter/Escape) hands focus back to the control the editor
      replaced; a blur exit must not, or it steals the pointer's new target. */
@@ -203,50 +221,23 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     [editingViewId, handleRenameConfirm],
   );
 
-  const handleDragStart = useCallback(
-    (e: React.DragEvent, viewId: string) => {
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', viewId);
-      setDragViewId(viewId);
-    },
-    [],
-  );
-
-  const handleDragOver = useCallback(
-    (e: React.DragEvent, viewId: string) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      if (viewId !== dragViewId) {
-        setDropTargetId(viewId);
+  const drag = useDragSession<{ key: string }, { key: string }>({
+    disabled: !onViewReorder,
+    /* Hovering the dragged pill holds the previous indicator; dropping on it
+       refuses the move, which is what an unchanged order means here. */
+    resolveTarget: ({ phase, payload, target, current }) =>
+      target.key === payload.key ? (phase === 'hover' ? current : null) : target,
+    onDrop: (payload, target) => {
+      const currentOrder = views.map((v) => v.id);
+      if (
+        currentOrder.indexOf(payload.key) === -1 ||
+        currentOrder.indexOf(target.key) === -1
+      ) {
+        return;
       }
+      onViewReorder?.(reorderByKey(currentOrder, payload.key, target.key));
     },
-    [dragViewId],
-  );
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, targetViewId: string) => {
-      e.preventDefault();
-      if (dragViewId && dragViewId !== targetViewId && onViewReorder) {
-        const currentOrder = views.map((v) => v.id);
-        const fromIndex = currentOrder.indexOf(dragViewId);
-        const toIndex = currentOrder.indexOf(targetViewId);
-        if (fromIndex !== -1 && toIndex !== -1) {
-          const newOrder = [...currentOrder];
-          newOrder.splice(fromIndex, 1);
-          newOrder.splice(toIndex, 0, dragViewId);
-          onViewReorder(newOrder);
-        }
-      }
-      setDragViewId(null);
-      setDropTargetId(null);
-    },
-    [dragViewId, views, onViewReorder],
-  );
-
-  const handleDragEnd = useCallback(() => {
-    setDragViewId(null);
-    setDropTargetId(null);
-  }, []);
+  });
 
   /* -- Loading state (geometry lives in the skin, keyed on data-loading) -- */
   if (loading) {
@@ -284,8 +275,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       {views.map((view) => {
         const isActive = view.id === activeViewId;
         const isEditing = editingViewId === view.id;
-        const isDragging = dragViewId === view.id;
-        const isDropTarget = dropTargetId === view.id;
+        const isDragging = drag.session?.payload.key === view.id;
+        const isDropTarget = drag.session?.target?.key === view.id;
         const isMenuOpen = openMenuId === view.id;
         const customActions = getMenuActions?.(view) ?? [];
 
@@ -342,11 +333,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             data-dragging={isDragging}
             data-drop-target={isDropTarget}
             data-dirty={view.isDirty || undefined}
-            draggable={!!onViewReorder}
-            onDragStart={(e) => handleDragStart(e, view.id)}
-            onDragOver={(e) => handleDragOver(e, view.id)}
-            onDrop={(e) => handleDrop(e, view.id)}
-            onDragEnd={handleDragEnd}
+            dragSource={drag.getSourceProps({ key: view.id })}
+            dragTarget={drag.getTargetProps({ key: view.id })}
             data-testid={`view-tab-${view.id}`}
           >
             {/* Drag grip (decorative chrome; the pill shell is the drag source) */}
