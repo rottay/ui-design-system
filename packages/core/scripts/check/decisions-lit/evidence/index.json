@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-09-18T02:10:27.428Z",
+  "producedAt": "2026-09-18T14:30:03.662Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 8-family sample: 16/22 move at least one sampled family",
   "denominators": {
@@ -22,7 +22,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-09-18T02:07:47.575Z"
+      "builtAt": "2026-09-18T14:27:55.901Z"
     },
     "sources": {
       "door": {
@@ -30,13 +30,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 874,
-        "digest": "f9a3ff7f547c053dfbe570e2f0d92c2d8bd3b97a62062cb5ecc72e604f8f0d83"
+        "fileCount": 883,
+        "digest": "f0bf08b7a80073474c84153056f8a9ff429da67b2e045e185bfb0137a80e29bf"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 17,
-        "digest": "ee9dfac00b1fdf5bd9fbd8b5dad881c49f8af9cd733c8de0a617afcbdcb13e0f"
+        "digest": "80a196758af5d44a29c534f129b1a8847d57e7d1333d51292309db644e3ab9d0"
       }
     },
     "browser": {
@@ -64,7 +64,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "5d81d39b8cde23923bf021bc6ca284b07dc7aa8779b5cee0c4bf80af0d5dbdd2",
+        "bundleSha": "97a567eec82e3d69472b2d2f0070c14fd3bf23b5435cbcfe809baac749674f52",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -86,7 +86,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "882a5fac79f7442f2053e97b0b63377e941f8c18731398a3341c18e52b904686",
+        "bundleSha": "e5d303139e83d0a9cb871563ec5b4d1b185567af9411cb9a7b9ebdf8ff02c375",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -108,7 +108,7 @@
           "space-modern-numeric-gap"
         ],
         "unmatched": [],
-        "bundleSha": "852de5cd1a0948778dc1a65a818d490be84b677850475ad1bb20c0d5b00efd2a",
+        "bundleSha": "b6c1b052ae919cf22a6e95a30fa04c10f287d8e288238516c013daf584baa29e",
         "bundleMode": "fresh",
         "theme": "light"
       }

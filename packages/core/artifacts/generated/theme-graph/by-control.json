@@ -16,7 +16,7 @@
     },
     {
       "channels": 26,
-      "channelsThroughAliases": 759,
+      "channelsThroughAliases": 764,
       "decision": "density.mode",
       "derivers": [
         "density",
@@ -234,7 +234,7 @@
     },
     {
       "channels": 144,
-      "channelsThroughAliases": 1603,
+      "channelsThroughAliases": 1611,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -488,8 +488,8 @@
       "tier": "standard"
     },
     {
-      "channels": 556,
-      "channelsThroughAliases": 769,
+      "channels": 589,
+      "channelsThroughAliases": 803,
       "decision": "motion.character",
       "derivers": [
         "active-filters-bar",
@@ -508,6 +508,7 @@
         "sidebar-surface",
         "space",
         "splitter",
+        "stats-header",
         "stepper",
         "tabs",
         "tenant"
@@ -717,8 +718,8 @@
       "tier": "pro"
     },
     {
-      "channels": 556,
-      "channelsThroughAliases": 769,
+      "channels": 589,
+      "channelsThroughAliases": 803,
       "decision": "motion.dial",
       "derivers": [
         "active-filters-bar",
@@ -737,6 +738,7 @@
         "sidebar-surface",
         "space",
         "splitter",
+        "stats-header",
         "stepper",
         "tabs",
         "tenant"
@@ -960,8 +962,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1862,
-      "channelsThroughAliases": 3441,
+      "channels": 1929,
+      "channelsThroughAliases": 3511,
       "decision": "palette.contrast-posture",
       "derivers": [
         "active-filters-bar",
@@ -975,6 +977,7 @@
         "card",
         "cascader",
         "checkbox",
+        "cockpit-header",
         "collapse",
         "color-picker",
         "column-menu",
@@ -1001,6 +1004,7 @@
         "list",
         "mentions",
         "menu",
+        "mobile-header",
         "modal",
         "notifier",
         "otp-input",
@@ -1010,11 +1014,13 @@
         "popover",
         "radio",
         "saved-views",
+        "section-frame",
         "segmented",
         "select",
         "sheet",
         "splitter",
         "stack",
+        "stats-header",
         "stepper",
         "tabs",
         "tag",
@@ -1027,7 +1033,8 @@
         "tour",
         "transfer",
         "tree",
-        "tree-select"
+        "tree-select",
+        "workbench-header"
       ],
       "families": [
         "action-dock",
@@ -1287,8 +1294,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1862,
-      "channelsThroughAliases": 3441,
+      "channels": 1929,
+      "channelsThroughAliases": 3511,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "active-filters-bar",
@@ -1302,6 +1309,7 @@
         "card",
         "cascader",
         "checkbox",
+        "cockpit-header",
         "collapse",
         "color-picker",
         "column-menu",
@@ -1328,6 +1336,7 @@
         "list",
         "mentions",
         "menu",
+        "mobile-header",
         "modal",
         "notifier",
         "otp-input",
@@ -1337,11 +1346,13 @@
         "popover",
         "radio",
         "saved-views",
+        "section-frame",
         "segmented",
         "select",
         "sheet",
         "splitter",
         "stack",
+        "stats-header",
         "stepper",
         "tabs",
         "tag",
@@ -1354,7 +1365,8 @@
         "tour",
         "transfer",
         "tree",
-        "tree-select"
+        "tree-select",
+        "workbench-header"
       ],
       "families": [
         "action-dock",
@@ -1606,8 +1618,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1958,
-      "channelsThroughAliases": 3638,
+      "channels": 2025,
+      "channelsThroughAliases": 3711,
       "decision": "palette.seeds",
       "derivers": [
         "active-filters-bar",
@@ -1622,6 +1634,7 @@
         "cascader",
         "charts",
         "checkbox",
+        "cockpit-header",
         "collapse",
         "color-picker",
         "column-menu",
@@ -1648,6 +1661,7 @@
         "list",
         "mentions",
         "menu",
+        "mobile-header",
         "modal",
         "notifier",
         "otp-input",
@@ -1658,12 +1672,14 @@
         "radio",
         "ramps",
         "saved-views",
+        "section-frame",
         "seeds",
         "segmented",
         "select",
         "sheet",
         "splitter",
         "stack",
+        "stats-header",
         "stepper",
         "tabs",
         "tag",
@@ -1677,7 +1693,8 @@
         "tour",
         "transfer",
         "tree",
-        "tree-select"
+        "tree-select",
+        "workbench-header"
       ],
       "families": [
         "action-dock",
@@ -1929,8 +1946,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1948,
-      "channelsThroughAliases": 3618,
+      "channels": 2015,
+      "channelsThroughAliases": 3691,
       "decision": "palette.status-seeds",
       "derivers": [
         "active-filters-bar",
@@ -1944,6 +1961,7 @@
         "card",
         "cascader",
         "checkbox",
+        "cockpit-header",
         "collapse",
         "color-picker",
         "column-menu",
@@ -1970,6 +1988,7 @@
         "list",
         "mentions",
         "menu",
+        "mobile-header",
         "modal",
         "notifier",
         "otp-input",
@@ -1980,12 +1999,14 @@
         "radio",
         "ramps",
         "saved-views",
+        "section-frame",
         "seeds",
         "segmented",
         "select",
         "sheet",
         "splitter",
         "stack",
+        "stats-header",
         "stepper",
         "tabs",
         "tag",
@@ -1999,7 +2020,8 @@
         "tour",
         "transfer",
         "tree",
-        "tree-select"
+        "tree-select",
+        "workbench-header"
       ],
       "families": [
         "action-dock",
@@ -2252,7 +2274,7 @@
     },
     {
       "channels": 144,
-      "channelsThroughAliases": 1603,
+      "channelsThroughAliases": 1611,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2528,7 +2550,7 @@
     },
     {
       "channels": 54,
-      "channelsThroughAliases": 663,
+      "channelsThroughAliases": 665,
       "decision": "shape.button-style",
       "derivers": [
         "axes",
@@ -2888,8 +2910,8 @@
       "tier": "pro"
     },
     {
-      "channels": 887,
-      "channelsThroughAliases": 1477,
+      "channels": 894,
+      "channelsThroughAliases": 1486,
       "decision": "shape.radius-scale",
       "derivers": [
         "avatar",
@@ -2899,6 +2921,7 @@
         "breadcrumb",
         "calendar-view",
         "card",
+        "cockpit-header",
         "collapse",
         "column-menu",
         "column-settings",
@@ -2918,7 +2941,8 @@
         "tag",
         "tenant",
         "toolbar",
-        "tree"
+        "tree",
+        "workbench-header"
       ],
       "families": [
         "action-dock",
@@ -3201,7 +3225,7 @@
     },
     {
       "channels": 82,
-      "channelsThroughAliases": 825,
+      "channelsThroughAliases": 829,
       "decision": "states.emphasis",
       "derivers": [
         "segmented",
@@ -3370,6 +3394,7 @@
         "scroll-area",
         "search",
         "search-command-bar",
+        "section-frame",
         "segmented",
         "select",
         "select-compounds",
@@ -3421,18 +3446,20 @@
       "tier": "standard"
     },
     {
-      "channels": 275,
-      "channelsThroughAliases": 1003,
+      "channels": 323,
+      "channelsThroughAliases": 1053,
       "decision": "states.focus-style",
       "derivers": [
         "avatar",
         "badge",
         "collapse",
         "header",
+        "mobile-header",
         "saved-views",
         "sidebar-surface",
         "splitter",
         "states",
+        "stats-header",
         "surfaces",
         "tag",
         "tenant",
@@ -3596,6 +3623,7 @@
         "scroll-area",
         "search",
         "search-command-bar",
+        "section-frame",
         "segmented",
         "select",
         "select-compounds",
@@ -3933,7 +3961,7 @@
     },
     {
       "channels": 130,
-      "channelsThroughAliases": 364,
+      "channelsThroughAliases": 365,
       "decision": "typography.families",
       "derivers": [
         "tenant",
@@ -4091,7 +4119,7 @@
     },
     {
       "channels": 243,
-      "channelsThroughAliases": 477,
+      "channelsThroughAliases": 478,
       "decision": "typography.numeric",
       "derivers": [
         "pagination",
@@ -4251,7 +4279,7 @@
     },
     {
       "channels": 132,
-      "channelsThroughAliases": 865,
+      "channelsThroughAliases": 868,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -4475,7 +4503,7 @@
     },
     {
       "channels": 405,
-      "channelsThroughAliases": 638,
+      "channelsThroughAliases": 639,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
@@ -4642,15 +4670,20 @@
       "tier": "standard"
     },
     {
-      "channels": 142,
-      "channelsThroughAliases": 872,
+      "channels": 209,
+      "channelsThroughAliases": 935,
       "decision": "typography.scale",
       "derivers": [
         "axes",
+        "cockpit-header",
         "edit-header",
         "form-header",
+        "mobile-header",
+        "section-frame",
+        "stats-header",
         "tenant",
-        "typography"
+        "typography",
+        "workbench-header"
       ],
       "families": [
         "active-filters-bar",

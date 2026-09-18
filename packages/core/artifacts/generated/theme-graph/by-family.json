@@ -4284,6 +4284,8 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.radius-scale",
+        "states.emphasis",
+        "states.focus-style",
         "typography.families",
         "typography.numeric",
         "typography.pairing",

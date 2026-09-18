@@ -60741,19 +60741,35 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * blur taxes every scroll frame (PT29/PT32/S06/S07 fix, Sheet glass precedent).
  *
  * STUCK: the runtime probes stickiness with a 1px sentinel + IntersectionObserver
- * and stamps `data-stuck`; the governed elevation (`--ds-elevation-2`, public
- * token surface frozen — no new family channel) fades in only while content is
+ * and stamps `data-stuck`; the governed elevation (now reachable as
+ * `--ds-mobile-header-stuck-shadow` over the same ramp) fades in only while content is
  * actually scrolled under the bar. The sentinel is OUT OF FLOW (absolute +
  * visibility:hidden below) so it never lands as a spurious item in the
  * consumer's grid/flex (R-5). The observer is rooted at the viewport because
  * the contract exposes no scroll root: inside a nested scroller the sticky
  * posture still sticks, but the probe fails closed (no shadow), never wrong.
  *
- * GEOMETRY (R-5): all paint geometry lives here — the 56px bar (kept literal
- * and density-neutral, same precedent as the 17px title), the safe-area
- * insets, the slot flex shares and the touch floors. The runtime stamps no
- * geometry of its own; only `position: sticky` travels inline because the
- * engine contract test pins `root.style.position`.
+ * GEOMETRY (R-5): all paint geometry lives here — the 56px bar row and the
+ * safe-area inset (both density-neutral by decision: a mobile bar that grows
+ * with the density dial stops being the platform-height bar its consumers
+ * position against), the slot flex shares and the touch floors. The runtime
+ * stamps NO geometry at all now: `position: sticky` moved into the sticky
+ * posture rule below, so the only inline style left on the root is the
+ * consumer's own `style` prop (WO-FAM-10 sub-lot D).
+ *
+ * CHANNELS: every value above rides a `--ds-mobile-header-*` channel produced by
+ * `derivation/chrome/mobile-header`, at exactly the fallback stated beside it.
+ * The bar row is one of the two names this family used to keep private, because
+ * a leading underscore puts a channel outside the producer census and outside
+ * the tenant's reach at once. The notch inset is NOT a family channel: the
+ * emission door does not admit `env()`, so the deriver cannot produce it, and
+ * the skin reads the canonical `--ds-safe-area-top` directly instead.
+ *
+ * STATE (F-37): hover, press and the focus ring are decided ONCE, by the shared
+ * interaction kernel, and read off `data-state`. The platform pseudo-classes stay
+ * beside each token arm as the fallback for a trigger the kernel has not reached
+ * (a consumer's own `leftAction` replaces the family's button entirely), never as
+ * a second authority.
  *
  * TITLE: a Box as="h1" (one per page) — its optical 17px/600 type lives here;
  * a composed Text would resolve its size inline, unreachable to any skin.
@@ -60766,12 +60782,6 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  */
 
 .rottay-mobile-header[data-part='root'] {
-  /* family-private geometry — the bar row and the notch inset are stated once
-     here, so the root box, the bar's own 100% and the safe-area padding
-     cannot disagree about which of the two the 56px describes. */
-  --_ds-mobile-header-bar-block-size: 56px;
-  --_ds-mobile-header-safe-area: var(--ds-safe-area-top, env(safe-area-inset-top, 0px));
-
   background: var(--ds-color-bg-primary);
   inline-size: 100%;
   /* 56px mobile BAR ROW: no governed rung adopted — kept literal and
@@ -60780,12 +60790,14 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
      no inset the computed height is the retired 56px exactly. */
   box-sizing: border-box;
   block-size: calc(
-    var(--_ds-mobile-header-bar-block-size) + var(--_ds-mobile-header-safe-area)
+    var(--ds-mobile-header-bar-block-size, 56px) +
+      var(--ds-safe-area-top, env(safe-area-inset-top, 0px))
   );
   min-block-size: calc(
-    var(--_ds-mobile-header-bar-block-size) + var(--_ds-mobile-header-safe-area)
+    var(--ds-mobile-header-bar-block-size, 56px) +
+      var(--ds-safe-area-top, env(safe-area-inset-top, 0px))
   );
-  padding-block-start: var(--_ds-mobile-header-safe-area);
+  padding-block-start: var(--ds-safe-area-top, env(safe-area-inset-top, 0px));
   container: ds-mobile-header / inline-size;
 }
 
@@ -60793,27 +60805,26 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    opt-in via the family channel (default none). The stuck shadow rides the
    governed elevation ramp and fades in through the motion token — it appears
    only once content actually scrolls under the bar (data-stuck). The sticky
-   offset and stacking live here; `position: sticky` itself stays inline
-   (engine contract test pin — see GEOMETRY above). */
+   offset, the stacking and `position` itself all live here. */
 .rottay-mobile-header[data-part='root'][data-sticky='true'] {
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
+  position: sticky;
+  background: var(--ds-mobile-header-sticky-bg, color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent));
   backdrop-filter: var(--ds-mobile-header-sticky-backdrop, none);
   inset-block-start: 0;
   z-index: var(--ds-mobile-header-sticky-z, 40);
   transition: box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
 }
 
-/* The stuck shadow rides the governed elevation ramp directly (no new family
-   channel: the public --ds-* surface is frozen). */
+/* The stuck shadow rides the governed elevation ramp through the family channel. */
 .rottay-mobile-header[data-part='root'][data-sticky='true'][data-stuck='true'] {
-  box-shadow: var(--ds-elevation-2);
+  box-shadow: var(--ds-mobile-header-stuck-shadow, var(--ds-elevation-2));
 }
 
 /* The colored hairline clears the P-48 floor at (0,4,0); the fourth unit is
    the always-present `data-testid` (see SPECIFICITY above — if the engine ever
    stops stamping it, this rule silently drops back under the floor). */
 .rottay-mobile-header[data-part='root'][data-sticky][data-testid='mobile-header'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border-bottom: 1px solid var(--ds-mobile-header-hairline-color, var(--ds-color-border));
 }
 
 /* Out-of-flow stuck probe (R-5): absolute + visibility:hidden keep the
@@ -60845,13 +60856,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 .rottay-mobile-header__bar[data-part='bar'] {
   block-size: 100%;
   position: relative;
-  padding-inline-start: max(4px, env(safe-area-inset-left, 0px));
-  padding-inline-end: max(4px, env(safe-area-inset-right, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
 }
 
 .rottay-mobile-header__bar[data-part='bar']:dir(rtl) {
-  padding-inline-start: max(4px, env(safe-area-inset-right, 0px));
-  padding-inline-end: max(4px, env(safe-area-inset-left, 0px));
+  padding-inline-start: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-right, 0px));
+  padding-inline-end: max(var(--ds-mobile-header-bar-padding-inline, 4px), env(safe-area-inset-left, 0px));
 }
 
 /* Side slots share the leftover width equally (flex-basis 0 + equal grow), so
@@ -60877,7 +60888,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   flex: 0 1 auto;
   overflow: hidden;
   text-align: center;
-  padding-inline: 8px;
+  padding-inline: var(--ds-mobile-header-center-padding-inline, 8px);
 }
 
 .rottay-mobile-header__back[data-part='trigger'] {
@@ -60892,7 +60903,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   padding: 0;
   background: none;
   border: none;
-  border-radius: var(--ds-radius-md, 8px);
+  border-radius: var(--ds-mobile-header-trigger-radius, var(--ds-radius-md, 8px));
   color: var(--ds-color-text-primary);
   transition:
     background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
@@ -60900,21 +60911,33 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
+.rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
 .rottay-mobile-header__back[data-part='trigger']:active {
-  transform: scale(0.94);
+  transform: scale(var(--ds-mobile-header-trigger-press-scale, 0.94));
 }
 
+.rottay-mobile-header__back[data-part='trigger'][data-state~='focus-visible'],
 .rottay-mobile-header__back[data-part='trigger']:focus-visible {
   outline: none;
   box-shadow: var(--ds-mobile-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
 
-/* Hover is pointer-fine only (the `:active` press scale above is the real
-   touch feedback). */
+/* Hover is pointer-fine only (the press scale above is the real touch feedback).
+   The kernel token and the platform pseudo are the two arms of one rule. */
 @media (hover: hover) {
+  .rottay-mobile-header__back[data-part='trigger'][data-state~='hovered'],
   .rottay-mobile-header__back[data-part='trigger']:hover {
-    background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+    background: var(--ds-mobile-header-trigger-tint, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   }
+}
+
+/* The optional slot below the bar. It shares the bar's inline gutter so a
+   subtitle or a search field lines up with the back action above it instead of
+   sitting flush against the root edge, and it may shrink inside a flex/grid host
+   (an auto minimum would let its content set the header's width). */
+.rottay-mobile-header[data-part='root'] > [data-part='body'] {
+  min-inline-size: 0;
+  padding-inline: var(--ds-mobile-header-bar-padding-inline, 4px);
 }
 
 /* Title is now a Box as="h1" (the composed Text resolved its size inline,
@@ -60928,10 +60951,10 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--ds-color-text-primary);
-  font-size: calc(var(--ds-font-size-lg) * 1.0625);
+  font-size: var(--ds-mobile-header-title-font-size, calc(var(--ds-font-size-lg) * 1.0625));
   font-weight: var(--ds-font-weight-semibold, 600);
-  line-height: 1.29;
-  letter-spacing: -0.01em;
+  line-height: var(--ds-mobile-header-title-line-height, 1.29);
+  letter-spacing: var(--ds-mobile-header-title-tracking, -0.01em);
 }
 
 /* ---- responsive posture: the bar reads its OWN slot, not the viewport, so a
@@ -60976,6 +60999,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   .rottay-mobile-header__back[data-part='trigger'] {
     transition: none;
   }
+  .rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],
   .rottay-mobile-header__back[data-part='trigger']:active {
     transform: none;
   }
@@ -74845,10 +74869,9 @@ html[data-ds-motion='reduced']
  * ancestor, and rules ON the root buy it from `data-sticky`, which the
  * engine always stamps ('true'|'false').
  *
- * Interaction paint that the removed React hover/focus state used to own now
- * lives here: hovers ride the `@media (hover: hover)` guard (house hover
- * law) with unguarded `:active` twins; keyboard focus keeps its unguarded
- * `:focus` rules.
+ * Interaction paint rides the `@media (hover: hover)` guard for hover (house
+ * hover law) with unguarded press twins beside it, and the governed ring on
+ * `:focus-visible`.
  *
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-cockpit-header-actions-backdrop` channel (default `none`) — a
@@ -74856,14 +74879,21 @@ html[data-ds-motion='reduced']
  * contract (precedent: Sheet's explicit `--ds-glass-*` channels).
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
- * 100% of layout and paint — typography, sticky positioning, compact padding,
- * skeleton geometry and the pulse animation included. The skeleton blocks
- * share one `data-part` but differ in geometry, so each block carries a
- * `data-size` attribute (skin-owned geometry) and, where it deviates from the
- * default, its radius on the sanctioned inline
- * `--ds-cockpit-header-skeleton-radius` custom-property data channel
- * (uncounted). The remaining inline style in the engine is the caller's
- * own `style` prop on the root.
+ * 100% of layout and paint — typography, sticky positioning and compact padding
+ * included. The only inline style the engine writes is the caller's own `style`
+ * prop on the root.
+ *
+ * STATE: every state pseudo is paired with the `data-state` token the shared
+ * kernel stamps. The pseudo is the pre-hydration floor and the token is the
+ * decision; they name the same rule so the two can never disagree.
+ *
+ * THE BACK BUTTON IS NOT PAINTED FROM HERE. `[data-part='back']` states the
+ * Button's own `--ds-button-ghost-*` channels and the Button paints itself from
+ * its own interaction state, so this file never selects into another component's
+ * internals (the `guided-draft-form` / `filter-panel` precedent).
+ *
+ * LOADING: drawn by the shared `AnatomySkeleton` from this header's own stamped
+ * anatomy. This file owns no skeleton geometry, no skeleton part and no pulse.
  */
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
@@ -74882,18 +74912,7 @@ html[data-ds-motion='reduced']
   --ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   --ds-cockpit-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   overflow: hidden;
-  background: var(
-    --ds-cockpit-header-bg,
-    var(
-      --ds-card-header-bg,
-      linear-gradient(
-        112deg,
-        color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
-        var(--ds-surface-card) 56%,
-        var(--ds-surface-panel)
-      )
-    )
-  );
+  background: var(--ds-cockpit-header-bg, var(--ds-card-header-bg));
   background-position: 0% 50%;
   background-size: 180% 180%;
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
@@ -74924,7 +74943,8 @@ html[data-ds-motion='reduced']
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active,
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='pressed'] {
   background-position: 100% 50%;
   border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border-subtle)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
@@ -74952,7 +74972,8 @@ html[data-ds-motion='reduced']
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   scrollbar-width: none;
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:active {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:active,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='pressed'] {
   color: var(--ds-color-text-secondary);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
@@ -74984,7 +75005,8 @@ html[data-ds-motion='reduced']
     0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'] {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'],
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='pressed'] [data-part='header-icon'] {
   transform: translateY(-1px) scale(1.025);
 }
 
@@ -74999,18 +75021,17 @@ html[data-ds-motion='reduced']
   text-transform: uppercase;
 }
 
-/* ---- back button: ghost with a visible border only when highlighted. Rest
-        `border: 1px solid transparent` is NOT a reset, so the rule reaches the
-        (0,4,0) border floor through the root ancestor. Highlight = hover
-        (guarded below) || focus || active. ---- */
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button {
-  color: var(--ds-color-text-secondary);
-}
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:focus,
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:active {
-  border-color: var(--ds-color-border);
-  background: var(--ds-color-neutral-50);
-  color: var(--ds-color-text-primary);
+/* ---- back button: the ghost Button paints ITSELF. This slot only states the
+        channels it reads, so the highlight follows the Button's own hover and
+        press decision and its keyboard ring stays the governed one. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] {
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: var(--ds-color-neutral-50);
+  --ds-button-ghost-border-hover: var(--ds-color-border);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+  --ds-button-ghost-bg-active: var(--ds-color-neutral-50);
+  --ds-button-ghost-border-active: var(--ds-color-border);
+  --ds-button-ghost-color-active: var(--ds-color-text-primary);
 }
 
 /* ---- status pill: shared radius + per-variant soft palette (bg -100, text
@@ -75069,13 +75090,6 @@ html[data-ds-motion='reduced']
   backdrop-filter: var(--ds-cockpit-header-actions-backdrop, none);
 }
 
-/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
-        the inline custom property (default sm). ---- */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
-  border-radius: var(--ds-cockpit-header-skeleton-radius, var(--ds-radius-sm));
-  background: var(--ds-color-neutral-100);
-}
-
 /* ---- breadcrumb nav + crumb layout/typography (migrated from the engine,
         R2+R3). Colors stay below; these own the frame and the type. ---- */
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'] {
@@ -75106,7 +75120,8 @@ html[data-ds-motion='reduced']
 
 /* The trail is a tab stop now (scrollable region), so it needs the governed
    ring — a focusable element with no indicator is worse than no tab stop. */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb']:focus-visible,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'][data-state~='focus-visible'] {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -75124,7 +75139,8 @@ html[data-ds-motion='reduced']
 
 /* Keyboard users get the governed ring on crumb links (the UA default was
    the only indicator before); hover/active keep their color-only cue. */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='focus-visible'] {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -75230,68 +75246,6 @@ html[data-ds-motion='reduced']
   white-space: nowrap;
 }
 
-/* ---- loading skeleton: cluster layout + per-block geometry (migrated from
-        the engine, R2+R3). `data-size` is the skin-owned geometry hook; the
-        pulse animation lives here now. ---- */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-stack'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-cockpit-header-item-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-row'] {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ds-cockpit-header-section-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-lead'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-cockpit-header-item-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-column'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-spacing-2, 8px);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-actions'] {
-  display: flex;
-  gap: var(--ds-cockpit-header-action-gap);
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='crumb'] {
-  width: 160px;
-  height: 12px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='icon'] {
-  width: 34px;
-  height: 34px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
-  width: 260px;
-  height: 24px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='subtitle'] {
-  width: 180px;
-  height: 14px;
-}
-
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='action'] {
-  width: 80px;
-  height: 34px;
-}
-
 @container ds-cockpit-header (max-width: 640px) {
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='main-row'] {
     align-items: stretch;
@@ -75345,24 +75299,21 @@ html[data-ds-motion='reduced']
         `:active` twin at its original cascade position (touch press
         feedback matches), and keyboard focus keeps its own rules. ---- */
 @media (hover: hover) {
-  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover,
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='hovered'] {
     background-position: 100% 50%;
     border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border-subtle)));
     box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
   }
 
-  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'],
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='hovered'] [data-part='header-icon'] {
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover,
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'][data-state~='hovered'] {
     color: var(--ds-color-text-secondary);
-  }
-
-  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .ds-button:hover {
-    border-color: var(--ds-color-border);
-    background: var(--ds-color-neutral-50);
-    color: var(--ds-color-text-primary);
   }
 }
 
@@ -75382,8 +75333,7 @@ html[data-ds-motion='reduced']
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'],
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='header-icon'],
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='title'],
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='title'] {
     animation: none;
     transition: none;
   }
@@ -75398,11 +75348,6 @@ html[data-ds-motion='reduced']
     display: inline-flex;
     align-items: center;
     min-block-size: var(--ds-touch-target-min, 44px);
-  }
-
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .ds-button {
-    min-block-size: var(--ds-touch-target-min, 44px);
-    min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }
 
@@ -76350,14 +76295,18 @@ html[data-ds-motion='reduced']
  * ancestor, and the rule ON the root buys it from `data-loading`, which the
  * engine always stamps ('true'|'false'). `border: none` resets are exempt.
  *
- * Interaction paint that the removed React hover/focus state used to own now
- * lives here: hovers ride the `@media (hover: hover)` guard (house hover
- * law) with unguarded `:active` twins; keyboard focus keeps its unguarded
- * `:focus` rules. QuickActionButton merged `vs.hover` over `vs.base` when
- * `(hovered||focused) && !disabled`; the button is natively `disabled`, so
- * `:hover:not(:disabled), :focus:not(:disabled)` reproduces that gate. SavedViewTab
- * tracks `onFocus`/`onBlur` in addition to hover (a keyboard-focus affordance the
- * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`.
+ * STATE: every state pseudo is paired with the `data-state` token the shared
+ * kernel stamps. The pseudo is the pre-hydration floor and the token is the
+ * decision; they name the same rule so the two can never disagree. Hovers ride
+ * the `@media (hover: hover)` guard (house hover law) with unguarded press twins
+ * beside them.
+ *
+ * THE QUICK ACTIONS ARE NOT PAINTED FROM HERE. The Button IS `[data-part='action']`,
+ * and this file states the `--ds-button-{primary,error,default}-*` channels it
+ * reads for each variant, so the Button paints itself from its own interaction
+ * state (the `guided-draft-form` / `filter-panel` precedent). The retired
+ * descendant rules also outranked the Button's focus ring with their own
+ * `box-shadow`, so a keyboard-focused quick action had no ring at all; it does now.
  *
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-workbench-header-actions-backdrop` channel (default `none`) — a
@@ -76366,18 +76315,16 @@ html[data-ds-motion='reduced']
  *
  * WAVE p612b: the saved-views strip gains the full APG keyboard contract in
  * the engine (roving tabindex, logical arrows with RTL mirroring, Home/End,
- * automatic activation), so any tab's keyboard focus gets the governed
- * `:focus-visible` ring here; quick-action buttons join the coarse-pointer
- * 44px floor; the exception badge names itself parametrically for AT.
+ * automatic activation), so any tab's keyboard focus gets the governed ring
+ * here; the exception badge names itself parametrically for AT. The
+ * quick-action coarse-pointer floor is the Button's own and is not restated.
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
- * 100% of layout and paint — typography, tab geometry, skeleton geometry and
- * the pulse animation included. The skeleton blocks share one `data-part` but
- * differ in geometry, so each block carries a `data-size` attribute and, where
- * it deviates from the default, its radius on the sanctioned inline
- * `--ds-workbench-header-skeleton-radius` custom-property data channel
- * (uncounted). The remaining inline style in the engine is the caller's
- * own `style` prop on the root.
+ * 100% of layout and paint — typography and tab geometry included. The only
+ * inline style the engine writes is the caller's own `style` prop on the root.
+ *
+ * LOADING: drawn by the shared `AnatomySkeleton` from this header's own stamped
+ * anatomy. This file owns no skeleton geometry, no skeleton part and no pulse.
  */
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
@@ -76393,18 +76340,7 @@ html[data-ds-motion='reduced']
   --ds-workbench-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   --ds-workbench-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   overflow: hidden;
-  background: var(
-    --ds-workbench-header-bg,
-    var(
-      --ds-card-header-bg,
-      linear-gradient(
-        112deg,
-        color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)),
-        var(--ds-surface-card) 56%,
-        var(--ds-surface-panel)
-      )
-    )
-  );
+  background: var(--ds-workbench-header-bg, var(--ds-card-header-bg));
   background-position: 0% 50%;
   background-size: 180% 180%;
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
@@ -76425,7 +76361,8 @@ html[data-ds-motion='reduced']
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-loading] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
-.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active,
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='pressed'] {
   background-position: 100% 50%;
   border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
@@ -76446,7 +76383,8 @@ html[data-ds-motion='reduced']
     0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'] {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'],
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='pressed'] [data-part='header-icon'] {
   transform: translateY(-1px) scale(1.025);
 }
 
@@ -76461,48 +76399,47 @@ html[data-ds-motion='reduced']
   text-transform: uppercase;
 }
 
-/* ---- quick action button: shared radius/outline + per-variant base and merged
-        hover/focus (gated `:not(:disabled)`, matching `!action.disabled`). ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
-  outline: none;
+/* ---- quick action: the Button IS this part, and it paints itself. Each variant
+        states the channels the Button reads at rest, on hover and under press, so
+        the values this header authored survive without a single rule reaching
+        into the Button's internals. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] {
+  --ds-button-primary-bg: var(--ds-color-primary);
+  --ds-button-primary-color: var(--ds-color-text-on-primary);
+  --ds-button-primary-border: var(--ds-color-primary);
+  --ds-button-primary-shadow: var(--ds-elevation-1);
+  --ds-button-primary-bg-hover: var(--ds-color-primary-600);
+  --ds-button-primary-color-hover: var(--ds-color-text-on-primary);
+  --ds-button-primary-border-hover: var(--ds-color-primary-600);
+  --ds-button-primary-shadow-hover: var(--ds-elevation-2);
+  --ds-button-primary-bg-active: var(--ds-color-primary-600);
+  --ds-button-primary-color-active: var(--ds-color-text-on-primary);
+  --ds-button-primary-border-active: var(--ds-color-primary-600);
+  --ds-button-primary-shadow-active: var(--ds-elevation-2);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border: 1px solid var(--ds-color-primary);
-  box-shadow: var(--ds-elevation-1);
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] {
+  --ds-button-error-bg: transparent;
+  --ds-button-error-color: var(--ds-color-error-600);
+  --ds-button-error-border: var(--ds-color-error-200);
+  --ds-button-error-bg-hover: var(--ds-color-error-50);
+  --ds-button-error-color-hover: var(--ds-color-error-600);
+  --ds-button-error-border-hover: var(--ds-color-error-300);
+  --ds-button-error-bg-active: var(--ds-color-error-50);
+  --ds-button-error-color-active: var(--ds-color-error-600);
+  --ds-button-error-border-active: var(--ds-color-error-300);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:active:not(:disabled) {
-  background: var(--ds-color-primary-600);
-  border-color: var(--ds-color-primary-600);
-  box-shadow: var(--ds-elevation-2);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button {
-  background: transparent;
-  color: var(--ds-color-error-600);
-  border: 1px solid var(--ds-color-error-200);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:active:not(:disabled) {
-  background: var(--ds-color-error-50);
-  border-color: var(--ds-color-error-300);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button {
-  background: transparent;
-  color: var(--ds-color-text-secondary);
-  border: 1px solid var(--ds-color-border);
-}
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:focus:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:active:not(:disabled) {
-  background: var(--ds-color-neutral-50);
-  color: var(--ds-color-text-primary);
-  border-color: var(--ds-color-neutral-300);
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] {
+  --ds-button-default-bg: transparent;
+  --ds-button-default-color: var(--ds-color-text-secondary);
+  --ds-button-default-border: var(--ds-color-border);
+  --ds-button-default-bg-hover: var(--ds-color-neutral-50);
+  --ds-button-default-color-hover: var(--ds-color-text-primary);
+  --ds-button-default-border-hover: var(--ds-color-neutral-300);
+  --ds-button-default-bg-active: var(--ds-color-neutral-50);
+  --ds-button-default-color-active: var(--ds-color-text-primary);
+  --ds-button-default-border-active: var(--ds-color-neutral-300);
 }
 
-/* ---- back button: borderless ghost, highlighted on hover||focus. This button is
-        defined but currently mounted by nothing; its paint is migrated for parity
-        and renders nothing today. ---- */
 /* ---- title / subtitle ---- */
 .ds-pattern-workbench-header.ds-engine-modern [data-part='title'] {
   color: var(--ds-color-text-primary);
@@ -76557,7 +76494,9 @@ html[data-ds-motion='reduced']
   transform: translateY(-1px);
 }
 .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:active:not([data-active='true']) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='focused']:not([data-active='true']),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:active:not([data-active='true']),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='pressed']:not([data-active='true']) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
   border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
@@ -76567,7 +76506,8 @@ html[data-ds-motion='reduced']
    automatic activation), so keyboard focus gets the governed ring on ANY
    tab -- ordered after the active rule so the ring wins the box-shadow tie
    at equal specificity (page-shell idiom). */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible,
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='focus-visible'] {
   outline: none;
   box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
 }
@@ -76619,12 +76559,9 @@ html[data-ds-motion='reduced']
   gap: var(--ds-workbench-header-action-gap);
 }
 
-/* ---- quick action wrapper (migrated from the engine, R2+R3) ---- */
+/* ---- quick action geometry: the Button carries the part, so the rail's
+        no-shrink rule lands on the control itself. ---- */
 .ds-pattern-workbench-header.ds-engine-modern [data-part='action'] {
-  display: contents;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
   flex-shrink: 0;
 }
 
@@ -76681,75 +76618,17 @@ html[data-ds-motion='reduced']
   font-weight: var(--ds-tabs-item-font-weight-active);
 }
 
+/* The strip scrolls horizontally, so a two-word view name rides off its end
+   rather than wrapping one tab onto two lines. */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab-label'] {
+  white-space: nowrap;
+}
+
 /* ---- saved-views strip layout (migrated from the engine, R2+R3) ---- */
 .ds-pattern-workbench-header.ds-engine-modern [data-part='tabs'] {
   display: flex;
   align-items: center;
   gap: var(--ds-tabs-gap);
-  margin-block-start: var(--ds-workbench-header-section-gap);
-}
-
-/* ---- loading skeleton: cluster layout + per-block geometry (migrated from
-        the engine, R2+R3). `data-size` is the skin-owned geometry hook; the
-        pulse animation lives here now. ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-row'] {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-lead'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-workbench-header-item-gap);
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-column'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-spacing-2, 8px);
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-actions'] {
-  display: flex;
-  gap: var(--ds-workbench-header-action-gap);
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='avatar'] {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-}
-
-/* The eyebrow reserve matches the mono/uppercase strip above the title, so a
-   header that uses one does not gain a line on hydrate. */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='eyebrow'] {
-  width: 96px;
-  height: 10px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
-  width: 200px;
-  height: 22px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='subtitle'] {
-  width: 300px;
-  height: 14px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='action'] {
-  width: 80px;
-  height: 34px;
-}
-
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='tabs'] {
-  width: 100%;
-  height: 36px;
   margin-block-start: var(--ds-workbench-header-section-gap);
 }
 
@@ -76769,13 +76648,6 @@ html[data-ds-motion='reduced']
   }
 }
 
-/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
-        the inline custom property (default sm). ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
-  border-radius: var(--ds-workbench-header-skeleton-radius, var(--ds-radius-sm));
-  background: var(--ds-color-neutral-100);
-}
-
 @keyframes ds-workbench-header-arrive {
   from { opacity: 0; transform: translateY(8px) scale(0.995); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -76785,34 +76657,20 @@ html[data-ds-motion='reduced']
         `:active` twin beside its base rule (touch press feedback matches),
         and keyboard focus keeps its own unguarded `:focus` rules. ---- */
 @media (hover: hover) {
-  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover {
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover,
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='hovered'] {
     background-position: 100% 50%;
     border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border)));
     box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'],
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='hovered'] [data-part='header-icon'] {
     transform: translateY(-1px) scale(1.025);
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .ds-button:hover:not(:disabled) {
-    background: var(--ds-color-primary-600);
-    border-color: var(--ds-color-primary-600);
-    box-shadow: var(--ds-elevation-2);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .ds-button:hover:not(:disabled) {
-    background: var(--ds-color-error-50);
-    border-color: var(--ds-color-error-300);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .ds-button:hover:not(:disabled) {
-    background: var(--ds-color-neutral-50);
-    color: var(--ds-color-text-primary);
-    border-color: var(--ds-color-neutral-300);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']),
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='hovered']:not([data-active='true']) {
     color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
     background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
     border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
@@ -76833,7 +76691,8 @@ html[data-ds-motion='reduced']
     border-color: ButtonText;
   }
 
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible,
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-state~='focus-visible'] {
     outline: 2px solid Highlight;
     outline-offset: 1px;
   }
@@ -76842,8 +76701,7 @@ html[data-ds-motion='reduced']
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-workbench-header.ds-engine-modern[data-part='root'],
   .ds-pattern-workbench-header.ds-engine-modern [data-part='header-icon'],
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'],
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'] {
     animation: none;
     transition: none;
   }
@@ -76854,10 +76712,6 @@ html[data-ds-motion='reduced']
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
-  }
-
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .ds-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }
@@ -90710,9 +90564,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *  - `data-change` (increase/decrease/neutral) selects the change row + value
  *    tint — the former `CHANGE_COLORS[changeType]`; the DIRECTION is carried
  *    by the governed trend icon, never by colour alone.
- *  - the interactive card's hover/press reads are pure CSS now
- *    (`[data-clickable='true']` gates both) — the JS hover/pressed state and
- *    its two custom-property channels are retired.
+ *  - a card's interaction state is decided once by the kernel and arrives as
+ *    `data-state`; every platform pseudo-class below is PAIRED with it as the
+ *    fallback of one decision, never as a second authority (F-37).
+ *    `[data-clickable='true']` still gates the lift, the press and the ring —
+ *    a card with no `onClick` is not an affordance — while the sparkline ping
+ *    answers to hover on any card, as it did before.
  *  - `data-columns` mirrors `--ds-stats-header-columns` as an attribute so the
  *    container cuts can cap the track count without widening a one-stat
  *    header; the grid reads the channel, the cuts write it.
@@ -90744,7 +90601,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     var(--_ds-stats-header-track-count, var(--ds-stats-header-columns, 4)),
     minmax(0, 1fr)
   );
-  gap: var(--ds-spacing-3, 12px);
+  gap: var(--ds-stats-header-grid-gap, var(--ds-spacing-3, 12px));
   inline-size: 100%;
 }
 
@@ -90758,14 +90615,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding: var(--ds-stats-header-card-padding, 20px 24px);
   /* edge posture derives from the tenant radius scale (canonical channel;
      the 12px fallback is the exact former hardcoded value) */
-  border-radius: var(--ds-radius-lg, 12px);
-  background: var(--ds-color-bg-primary);
+  border-radius: var(--ds-stats-header-card-radius, var(--ds-radius-lg, 12px));
+  background: var(--ds-stats-header-card-bg, var(--ds-color-bg-primary));
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  border: 1px solid var(--ds-stats-header-card-frame, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'] {
   cursor: pointer;
@@ -90775,17 +90632,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    the press is a real :active gated on clickable — replacing the retired JS
    hover/pressed state. */
 @media (hover: hover) {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='hovered'],
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+    transform: var(--ds-stats-header-hover-lift, translateY(-2px));
+    box-shadow: var(--ds-stats-header-hover-shadow, 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
   }
 }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='pressed'],
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:active {
-  transform: scale(0.98);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
+  transform: var(--ds-stats-header-press-scale, scale(0.98));
+  box-shadow: var(--ds-stats-header-press-shadow, 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent));
 }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true'][data-state~='focus-visible'],
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible {
-  outline: 2px solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: 2px solid var(--ds-stats-header-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: 2px;
 }
 
@@ -90819,12 +90679,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   align-items: center;
   color: var(--ds-color-text-muted);
   line-height: 0;
-  opacity: 0.6;
+  opacity: var(--ds-stats-header-icon-opacity, 0.6);
 }
 
-/* ---- change indicator: typography drained from inline; tint by data-change ---- */
+/* ---- change indicator: typography and BOTH gaps drained from the TSX (they were
+        `gap` props: visual values in the component, on no plane at all); tint by
+        data-change ---- */
 .ds-stats-header[data-part='root'] [data-part='change-indicator'] {
   flex: 0 0 auto;
+  gap: var(--ds-stats-header-change-row-gap, 2px);
+}
+.ds-stats-header[data-part='root'] [data-part='change-row'] {
+  gap: var(--ds-stats-header-change-column-gap, 3px);
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'] {
   font-size: var(--ds-stats-header-label-font-size, var(--ds-font-size-sm));
@@ -90848,7 +90714,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-kicker-font-size, var(--ds-font-size-2xs));
   font-weight: var(--ds-font-weight-medium, 500);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ds-stats-header-kicker-tracking, 0.04em);
   line-height: 1;
   text-transform: uppercase;
 }
@@ -90856,29 +90722,52 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* ---- sparkline dots: decorative data viz (aria-hidden); the hover ping is
         pure CSS on the parent card, staggered on the ping channel ---- */
 .ds-stats-header[data-part='root'] [data-part='spark-dots'] {
-  margin-block-start: 14px;
+  margin-block-start: var(--ds-stats-header-spark-margin-block-start, 14px);
+  gap: var(--ds-stats-header-spark-dot-gap, 6px);
 }
 .ds-stats-header[data-part='root'] [data-part='spark-dot'] {
-  inline-size: 4px;
-  block-size: 4px;
+  inline-size: var(--ds-stats-header-spark-dot-size, 4px);
+  block-size: var(--ds-stats-header-spark-dot-size, 4px);
   border-radius: 50%;
-  /* per-dot opacity is a runtime instance channel published by the engine
-     (`--_ds-stats-header-spark-dot-opacity`); the declaration lives
-     here. Unset ⇒ fully opaque, matching a flat series. */
-  opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
+  /* The dot's share of the series maximum arrives as a closed `data-level`
+     domain (0-7) rather than as a computed opacity in the style attribute, and
+     the ramp from the floor to opaque is this file's. An unstamped dot reads
+     level 0 only if the series is flat at its own minimum; the component always
+     stamps, so the 0 here is the resting value, not a guess. */
+  opacity: calc(
+    var(--ds-stats-header-spark-dot-opacity-floor, 0.15) +
+      var(--_ds-stats-header-spark-dot-level, 0) *
+        (1 - var(--ds-stats-header-spark-dot-opacity-floor, 0.15)) / 7
+  );
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
     opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
 }
+/* The eight steps of the level domain. A level is a share of the series maximum,
+   so the ramp is linear and the top step is opaque. */
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='1'] { --_ds-stats-header-spark-dot-level: 1; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='2'] { --_ds-stats-header-spark-dot-level: 2; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='3'] { --_ds-stats-header-spark-dot-level: 3; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='4'] { --_ds-stats-header-spark-dot-level: 4; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='5'] { --_ds-stats-header-spark-dot-level: 5; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='6'] { --_ds-stats-header-spark-dot-level: 6; }
+.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='7'] { --_ds-stats-header-spark-dot-level: 7; }
+
 @media (hover: hover) {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'] {
     animation: pulse-dot-ping var(--ds-stats-header-ping-duration, 400ms) ease both;
   }
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='1'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='2'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='2'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 2); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='3'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='3'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 3); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='4'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='4'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 4); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='5'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='5'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 5); }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'][data-dot-index='6'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='6'] { animation-delay: calc(var(--ds-stats-header-ping-duration, 400ms) / 8 * 6); }
 }
 .ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='primary'] { background: var(--ds-color-primary); }
@@ -90889,12 +90778,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- progress meter slot (the composed Progress owns track + fill) ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-progress'] {
-  margin-block-start: 10px;
+  margin-block-start: var(--ds-stats-header-progress-margin-block-start, 10px);
 }
 
 /* ---- insight ---- */
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight'] {
-  margin-block-start: 8px;
+  margin-block-start: var(--ds-stats-header-insight-margin-block-start, 8px);
   color: var(--ds-color-text-muted);
   font-size: var(--ds-stats-header-meta-font-size, var(--ds-font-size-2xs));
   font-style: italic;
@@ -90906,29 +90795,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   position: absolute;
   inset-inline: 0;
   inset-block-end: 0;
-  block-size: 40px;
+  block-size: var(--ds-stats-header-glow-block-size, 40px);
   pointer-events: none;
 }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) 6%, transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='success'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-success) 6%, transparent), transparent); }
-.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='warning'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-warning) 6%, transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-primary) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='success'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-success) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
+.ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='warning'] [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-warning) var(--ds-stats-header-glow-strength, 6%), transparent), transparent); }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='error']   [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-error) 6%, transparent), transparent); }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='info']    [data-part='card-glow'] { background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-info) 6%, transparent), transparent); }
-
-/* ---- loading: the skeleton card frame mirrors the stat card (the composed
-        Skeleton owns the placeholder bars) ---- */
-.ds-stats-header[data-part='root'] [data-part='skeleton-card'] {
-  flex: 1 1 0;
-  min-inline-size: 0;
-  min-block-size: var(--ds-stats-header-card-min-height, 140px);
-  padding: var(--ds-stats-header-card-padding, 20px 24px);
-  /* mirrors the stat card's edge posture (same canonical channel) */
-  border-radius: var(--ds-radius-lg, 12px);
-  background: var(--ds-color-bg-primary);
-}
-.ds-stats-header[data-part='root'][data-loading='true'] [data-part='skeleton-card'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
-}
 
 /* ---- container cuts: 2 columns mid, 1 narrow + compact measure.
         The cuts CAP the track count instead of replacing the grid, and they
@@ -90952,13 +90826,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-stats-header[data-part='root']:not([data-columns='1']) {
     --_ds-stats-header-track-count: 1;
   }
-  .ds-stats-header[data-part='root'] [data-part='stat-card'],
-  .ds-stats-header[data-part='root'] [data-part='skeleton-card'] {
-    min-block-size: 120px;
+  .ds-stats-header[data-part='root'] [data-part='stat-card'] {
+    min-block-size: var(--ds-stats-header-card-min-height-compact, 120px);
     padding: var(--ds-stats-header-card-padding-compact, 18px);
   }
   .ds-stats-header[data-part='root'] [data-part='stat-card'] {
-    --ds-stats-header-value-font-size: 1.75rem;
+    --ds-stats-header-value-font-size: var(--ds-stats-header-value-font-size-compact, 1.75rem);
   }
 }
 
@@ -90967,6 +90840,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-stats-header[data-part='root'] [data-part='spark-dot'] {
     transition: none;
   }
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],
   .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'] {
     animation: none;
   }
@@ -90978,8 +90852,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    removed (they carry no information); the composed Statistic / Skeleton /
    Progress primitives keep their own forced-colors contracts. */
 @media (forced-colors: active) {
-  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent],
-  .ds-stats-header[data-part='root'][data-loading='true'] [data-part='skeleton-card'] {
+  .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
     border-color: ButtonText;
     background: Canvas;
     box-shadow: none;
@@ -105099,14 +104972,25 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * active (the `min-inline-size: 0` flex/grid resilience rule — layout, not
  * paint, so layer order does not contest it).
  *
- * SPECIFICITY: anatomy class + one always-stamped attribute; no repetition,
+ * ANATOMY: the rule keys on `[data-part='root']`, the contract the component stamps,
+ * rather than on the class alone -- the class says which surface this is, the part
+ * says which element of it. (WO-FAM-10 sub-lot D.)
+ *
+ * NO FAMILY DERIVER, and this is a measurement rather than an omission: the surface
+ * reads zero custom properties and carries zero inline paint, because every visual
+ * decision it makes belongs to a component it composes -- PageShellSurface, Tabs,
+ * Stack and Typography each own their own chrome, their own channels and their own
+ * family row. The one thing left here is flex/grid resilience, which has no value a
+ * tenant could state. Producing a channel for it would name a dial nobody turns.
+ *
+ * SPECIFICITY: anatomy class + part + one always-stamped attribute; no repetition,
  * no `!important`, logical properties only.
  *
  * FORCED-COLORS: no surface-owned color to re-key (the one remaining rule is
  * geometry), so no FC block — same documented omission as skin/profile.css.
  */
 
-.ds-surface.ds-header[data-mobile-compact='true'] {
+.ds-surface.ds-header[data-part='root'][data-mobile-compact='true'] {
   min-inline-size: 0;
 }
 
@@ -113209,50 +113093,56 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
  * a top hairline rule, so no section floats unframed. The label is real text (a heading);
  * only the bracket/rule chrome is presentational.
  *
- * Rhythm and type consume the shared `--ds-spacing-*` / `--ds-font-size-*` roles WITH literal
- * fallbacks (the kit's self-contained idiom), so tenant density scale reshapes the section
- * rhythm without a markup change. Label tracking stays private to this editorial frame
- * (fallback: the shipped 0.12em).
- * All properties are logical: the `meta` annotation flips to the inline end under RTL (the
- * old `margin-left: auto` pinned it to the physical left — an RTL bug). The label row wraps
- * intentionally on narrow measures: long titles break onto their own line instead of
- * overflowing, and `meta` never collides with the title.
+ * ANATOMY: the rules key on `[data-part]`, the contract the component stamps, and the
+ * `rt-section-frame` class is the scope only. The class VOCABULARY stays `rt-`: it is the
+ * monochrome kit's, shared with AsciiFrame, TreeView, MonoStat, CropMarks and five more
+ * owners outside this cut, so renaming one member alone would fragment it rather than
+ * converge it.
+ *
+ * Rhythm, type and ink ride this family's OWN channels (`--ds-section-frame-*`, produced by
+ * `derivation/chrome/section-frame`) over the shared roles they resolved to before, so a
+ * tenant can move the section without moving `--ds-spacing-10` for the whole product.
+ * All properties are logical: the `meta` annotation flips to the inline end under RTL. The
+ * label row wraps intentionally on narrow measures: long titles break onto their own line
+ * instead of overflowing, and `meta` never collides with the title.
  */
 
 /* `max-inline-size` bounds the label row so a wide container with a short title cannot push
    `meta` to a distant far edge via `margin-inline-start: auto`. */
 
-.rt-section-frame {
+.rt-section-frame[data-part='root'] {
   position: relative;
   display: block;
-  padding-block: var(--ds-spacing-10, 2.5rem);
+  padding-block: var(--ds-section-frame-padding-block, var(--ds-spacing-10, 2.5rem));
   padding-inline: 0;
   color: var(--ds-surface-fg, currentColor);
-  border-block-start: 1px solid var(--ds-color-hairline);
+  border-block-start:
+    var(--ds-section-frame-rule-width, 1px) solid
+    var(--ds-section-frame-rule-color, var(--ds-color-hairline));
 }
 
-.rt-section-frame__label {
+.rt-section-frame[data-part='root'] [data-part='label-row'] {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  column-gap: var(--ds-spacing-3, 0.75rem);
-  row-gap: var(--ds-spacing-1, 0.25rem);
-  margin-block-end: var(--ds-spacing-6, 1.5rem);
+  column-gap: var(--ds-section-frame-label-column-gap, var(--ds-spacing-3, 0.75rem));
+  row-gap: var(--ds-section-frame-label-row-gap, var(--ds-spacing-1, 0.25rem));
+  margin-block-end: var(--ds-section-frame-label-margin-block-end, var(--ds-spacing-6, 1.5rem));
   margin-inline: 0;
-  max-inline-size: var(--ds-type-paragraph-measure, 68ch);
+  max-inline-size: var(--ds-section-frame-label-measure, var(--ds-type-paragraph-measure, 68ch));
   font-family: var(--ds-font-mono);
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-medium, 500);
-  letter-spacing: var(--_ds-section-frame-label-tracking, 0.12em);
+  font-size: var(--ds-section-frame-label-font-size, var(--ds-font-size-xs, 0.75rem));
+  font-weight: var(--ds-section-frame-label-font-weight, var(--ds-font-weight-medium, 500));
+  letter-spacing: var(--ds-section-frame-label-tracking, 0.12em);
   text-transform: uppercase;
 }
 
-.rt-section-frame__index {
-  color: var(--ds-color-mono-500);
+.rt-section-frame[data-part='root'] [data-part='index'] {
+  color: var(--ds-section-frame-ordinal-ink, color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary)));
   font-variant-numeric: tabular-nums;
 }
 
-.rt-section-frame__title {
+.rt-section-frame[data-part='root'] [data-part='title'] {
   margin: 0;
   font: inherit;
   min-inline-size: 0;
@@ -113260,31 +113150,39 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   color: var(--ds-surface-fg, currentColor);
 }
 
-.rt-section-frame__dash {
-  color: var(--ds-color-mono-500);
+.rt-section-frame[data-part='root'] [data-part='dash'] {
+  color: var(--ds-section-frame-ordinal-ink, color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary)));
 }
 
-.rt-section-frame__meta {
+.rt-section-frame[data-part='root'] [data-part='meta'] {
   margin-inline-start: auto;
-  /* meta is real (non-aria-hidden) text; gray-500 alone measures 4.42:1 on ink, just under
-     the 4.5 AA floor, so this routes through the re-keyed text-secondary role instead. */
-  color: var(--ds-color-text-secondary, var(--ds-color-mono-500));
+  /* `meta` is announced text and the ordinal is decoration, so meta carries the
+     stronger of the frame's two quiet inks. Both are mixed from the mode's own ink
+     toward its own canvas: a fixed neutral step cannot clear the AA floor on two
+     canvases, and the mono-500 / text-secondary chain this replaced did not. */
+  color: var(--ds-section-frame-meta-ink, color-mix(in oklab, var(--ds-color-text-primary) 78%, var(--ds-color-bg-primary)));
   font-variant-numeric: tabular-nums;
 }
 
-.rt-section-frame__body {
+/* The ordinal's visually-hidden twin carries the announced name and paints nothing;
+   it is stamped so the anatomy contract is complete, not so a rule can reach it. */
+.rt-section-frame[data-part='root'] [data-part='index-label'] {
+  font-variant-numeric: tabular-nums;
+}
+
+.rt-section-frame[data-part='root'] [data-part='body'] {
   display: block;
   min-inline-size: 0;
 }
 
 /* Forced colors: the framing rule re-keys to system ink so the section never floats. */
 @media (forced-colors: active) {
-  .rt-section-frame {
+  .rt-section-frame[data-part='root'] {
     border-block-start-color: CanvasText;
   }
-  .rt-section-frame__index,
-  .rt-section-frame__dash,
-  .rt-section-frame__meta {
+  .rt-section-frame[data-part='root'] [data-part='index'],
+  .rt-section-frame[data-part='root'] [data-part='dash'],
+  .rt-section-frame[data-part='root'] [data-part='meta'] {
     color: GrayText;
   }
 }
@@ -119714,6 +119612,10 @@ html[lang]:lang(ar) {
   --ds-checkbox-description-line-height: var(--ds-type-caption-line-height);
   --ds-checkbox-error-border-color: var(--ds-color-error);
   --ds-checkbox-label-color: var(--ds-color-text-primary);
+  --ds-cockpit-header-actions-backdrop: none;
+  --ds-cockpit-header-bg: var(--ds-card-header-bg);
+  --ds-cockpit-header-icon-size: 40px;
+  --ds-cockpit-header-sticky-z: 100;
   --ds-collapse-arrow-focus-ring-radius: var(--ds-radius-sm);
   --ds-collapse-arrow-hover-color: var(--ds-color-primary);
   --ds-collapse-arrow-motion-duration: var(--ds-motion-feedback);
@@ -120451,6 +120353,21 @@ html[lang]:lang(ar) {
   --ds-menu-trigger-open-bg: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))));
   --ds-menu-trigger-open-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-trigger-open-color: var(--ds-color-text-primary);
+  --ds-mobile-header-bar-block-size: 56px;
+  --ds-mobile-header-bar-padding-inline: 4px;
+  --ds-mobile-header-center-padding-inline: 8px;
+  --ds-mobile-header-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
+  --ds-mobile-header-hairline-color: var(--ds-color-border);
+  --ds-mobile-header-sticky-backdrop: none;
+  --ds-mobile-header-sticky-bg: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
+  --ds-mobile-header-sticky-z: 40;
+  --ds-mobile-header-stuck-shadow: var(--ds-elevation-2);
+  --ds-mobile-header-title-font-size: calc(var(--ds-font-size-lg) * 1.0625);
+  --ds-mobile-header-title-line-height: 1.29;
+  --ds-mobile-header-title-tracking: -0.01em;
+  --ds-mobile-header-trigger-press-scale: 0.94;
+  --ds-mobile-header-trigger-radius: var(--ds-radius-md, 8px);
+  --ds-mobile-header-trigger-tint: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
   --ds-modal-action-shadow-hover: var(--ds-shadow-md);
   --ds-modal-bg: var(--ds-material-overlay-background);
   --ds-modal-body-color: var(--ds-color-text-secondary);
@@ -120759,6 +120676,18 @@ html[lang]:lang(ar) {
   --ds-saved-views-pill-padding-inline: 12px;
   --ds-saved-views-touch-target-min: var(--ds-touch-target-min, 44px);
   --ds-saved-views-unsaved-dot-size: 7px;
+  --ds-section-frame-label-column-gap: var(--ds-spacing-3, 0.75rem);
+  --ds-section-frame-label-font-size: var(--ds-font-size-xs, 0.75rem);
+  --ds-section-frame-label-font-weight: var(--ds-font-weight-medium, 500);
+  --ds-section-frame-label-margin-block-end: var(--ds-spacing-6, 1.5rem);
+  --ds-section-frame-label-measure: var(--ds-type-paragraph-measure, 68ch);
+  --ds-section-frame-label-row-gap: var(--ds-spacing-1, 0.25rem);
+  --ds-section-frame-label-tracking: 0.12em;
+  --ds-section-frame-meta-ink: color-mix(in oklab, var(--ds-color-text-primary) 78%, var(--ds-color-bg-primary));
+  --ds-section-frame-ordinal-ink: color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary));
+  --ds-section-frame-padding-block: var(--ds-spacing-10, 2.5rem);
+  --ds-section-frame-rule-color: var(--ds-color-hairline);
+  --ds-section-frame-rule-width: 1px;
   --ds-segmented-border: var(--ds-material-control-border);
   --ds-segmented-border-hover: var(--ds-material-control-border-hover);
   --ds-segmented-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift), var(--ds-card-bg, var(--ds-color-bg-secondary)));
@@ -120904,6 +120833,39 @@ html[lang]:lang(ar) {
   --ds-state-hover-shift: 4%;
   --ds-state-press-scale: 0.98;
   --ds-state-selected-shift: 9%;
+  --ds-stats-header-card-bg: var(--ds-color-bg-primary);
+  --ds-stats-header-card-frame: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  --ds-stats-header-card-min-height: 140px;
+  --ds-stats-header-card-min-height-compact: 120px;
+  --ds-stats-header-card-padding: 20px 24px;
+  --ds-stats-header-card-padding-compact: 18px;
+  --ds-stats-header-card-radius: var(--ds-radius-lg, 12px);
+  --ds-stats-header-change-column-gap: 3px;
+  --ds-stats-header-change-row-gap: 2px;
+  --ds-stats-header-columns: 4;
+  --ds-stats-header-focus-ring-color: var(--ds-focus-ring-color, var(--ds-color-primary));
+  --ds-stats-header-glow-block-size: 40px;
+  --ds-stats-header-glow-strength: 6%;
+  --ds-stats-header-grid-gap: var(--ds-spacing-3, 12px);
+  --ds-stats-header-hover-lift: translateY(-2px);
+  --ds-stats-header-hover-shadow: 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  --ds-stats-header-icon-opacity: 0.6;
+  --ds-stats-header-insight-margin-block-start: 8px;
+  --ds-stats-header-kicker-font-size: var(--ds-font-size-2xs);
+  --ds-stats-header-kicker-tracking: 0.04em;
+  --ds-stats-header-label-font-size: var(--ds-font-size-sm);
+  --ds-stats-header-meta-font-size: var(--ds-font-size-2xs);
+  --ds-stats-header-ping-duration: 400ms;
+  --ds-stats-header-press-scale: scale(0.98);
+  --ds-stats-header-press-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
+  --ds-stats-header-progress-margin-block-start: 10px;
+  --ds-stats-header-spark-dot-gap: 6px;
+  --ds-stats-header-spark-dot-opacity-floor: 0.15;
+  --ds-stats-header-spark-dot-size: 4px;
+  --ds-stats-header-spark-margin-block-start: 14px;
+  --ds-stats-header-value-font-size: 2.25rem;
+  --ds-stats-header-value-font-size-compact: 1.75rem;
+  --ds-stats-header-value-font-weight: 800;
   --ds-stepper-circles-ring: 0 0 0 calc(var(--ds-spacing-1) * 0.75) color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   --ds-stepper-connector-block-gap: var(--ds-spacing-1);
   --ds-stepper-connector-clearance: var(--ds-spacing-1);
@@ -121526,6 +121488,9 @@ html[lang]:lang(ar) {
   --ds-widget-board-catalog-no-results-min-height: 96px;
   --ds-widget-board-catalog-search-margin-block-end: var(--ds-spacing-3);
   --ds-widget-board-catalog-search-max-width: 680px;
+  --ds-workbench-header-actions-backdrop: none;
+  --ds-workbench-header-bg: var(--ds-card-header-bg);
+  --ds-workbench-header-icon-size: 40px;
   --ds-z-index-base: 0;
   --ds-z-index-drawer: 1400;
   --ds-z-index-dropdown: 1000;
@@ -121956,6 +121921,10 @@ html[lang]:lang(ar) {
   --ds-checkbox-description-line-height: var(--ds-type-caption-line-height);
   --ds-checkbox-error-border-color: var(--ds-color-error);
   --ds-checkbox-label-color: var(--ds-color-text-primary);
+  --ds-cockpit-header-actions-backdrop: none;
+  --ds-cockpit-header-bg: var(--ds-card-header-bg);
+  --ds-cockpit-header-icon-size: 40px;
+  --ds-cockpit-header-sticky-z: 100;
   --ds-collapse-arrow-focus-ring-radius: var(--ds-radius-sm);
   --ds-collapse-arrow-hover-color: var(--ds-color-primary);
   --ds-collapse-arrow-motion-duration: var(--ds-motion-feedback);
@@ -122805,6 +122774,21 @@ html[lang]:lang(ar) {
   --ds-menu-trigger-open-bg: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))));
   --ds-menu-trigger-open-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-trigger-open-color: var(--ds-color-text-primary);
+  --ds-mobile-header-bar-block-size: 56px;
+  --ds-mobile-header-bar-padding-inline: 4px;
+  --ds-mobile-header-center-padding-inline: 8px;
+  --ds-mobile-header-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
+  --ds-mobile-header-hairline-color: var(--ds-color-border);
+  --ds-mobile-header-sticky-backdrop: none;
+  --ds-mobile-header-sticky-bg: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
+  --ds-mobile-header-sticky-z: 40;
+  --ds-mobile-header-stuck-shadow: var(--ds-elevation-2);
+  --ds-mobile-header-title-font-size: calc(var(--ds-font-size-lg) * 1.0625);
+  --ds-mobile-header-title-line-height: 1.29;
+  --ds-mobile-header-title-tracking: -0.01em;
+  --ds-mobile-header-trigger-press-scale: 0.94;
+  --ds-mobile-header-trigger-radius: var(--ds-radius-md, 8px);
+  --ds-mobile-header-trigger-tint: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
   --ds-modal-action-shadow-hover: var(--ds-shadow-md);
   --ds-modal-bg: var(--ds-material-overlay-background);
   --ds-modal-body-color: var(--ds-color-text-secondary);
@@ -123114,6 +123098,18 @@ html[lang]:lang(ar) {
   --ds-saved-views-pill-padding-inline: 12px;
   --ds-saved-views-touch-target-min: var(--ds-touch-target-min, 44px);
   --ds-saved-views-unsaved-dot-size: 7px;
+  --ds-section-frame-label-column-gap: var(--ds-spacing-3, 0.75rem);
+  --ds-section-frame-label-font-size: var(--ds-font-size-xs, 0.75rem);
+  --ds-section-frame-label-font-weight: var(--ds-font-weight-medium, 500);
+  --ds-section-frame-label-margin-block-end: var(--ds-spacing-6, 1.5rem);
+  --ds-section-frame-label-measure: var(--ds-type-paragraph-measure, 68ch);
+  --ds-section-frame-label-row-gap: var(--ds-spacing-1, 0.25rem);
+  --ds-section-frame-label-tracking: 0.12em;
+  --ds-section-frame-meta-ink: color-mix(in oklab, var(--ds-color-text-primary) 78%, var(--ds-color-bg-primary));
+  --ds-section-frame-ordinal-ink: color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary));
+  --ds-section-frame-padding-block: var(--ds-spacing-10, 2.5rem);
+  --ds-section-frame-rule-color: var(--ds-color-hairline);
+  --ds-section-frame-rule-width: 1px;
   --ds-segmented-border: var(--ds-material-control-border);
   --ds-segmented-border-hover: var(--ds-material-control-border-hover);
   --ds-segmented-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift), var(--ds-card-bg, var(--ds-color-bg-secondary)));
@@ -123262,6 +123258,39 @@ html[lang]:lang(ar) {
   --ds-state-hover-shift: 8%;
   --ds-state-press-scale: 0.965;
   --ds-state-selected-shift: 17%;
+  --ds-stats-header-card-bg: var(--ds-color-bg-primary);
+  --ds-stats-header-card-frame: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  --ds-stats-header-card-min-height: 140px;
+  --ds-stats-header-card-min-height-compact: 120px;
+  --ds-stats-header-card-padding: 20px 24px;
+  --ds-stats-header-card-padding-compact: 18px;
+  --ds-stats-header-card-radius: var(--ds-radius-lg, 12px);
+  --ds-stats-header-change-column-gap: 3px;
+  --ds-stats-header-change-row-gap: 2px;
+  --ds-stats-header-columns: 4;
+  --ds-stats-header-focus-ring-color: var(--ds-focus-ring-color, var(--ds-color-primary));
+  --ds-stats-header-glow-block-size: 40px;
+  --ds-stats-header-glow-strength: 6%;
+  --ds-stats-header-grid-gap: var(--ds-spacing-3, 12px);
+  --ds-stats-header-hover-lift: translateY(-2px);
+  --ds-stats-header-hover-shadow: 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  --ds-stats-header-icon-opacity: 0.6;
+  --ds-stats-header-insight-margin-block-start: 8px;
+  --ds-stats-header-kicker-font-size: var(--ds-font-size-2xs);
+  --ds-stats-header-kicker-tracking: 0.04em;
+  --ds-stats-header-label-font-size: var(--ds-font-size-sm);
+  --ds-stats-header-meta-font-size: var(--ds-font-size-2xs);
+  --ds-stats-header-ping-duration: 400ms;
+  --ds-stats-header-press-scale: scale(0.98);
+  --ds-stats-header-press-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
+  --ds-stats-header-progress-margin-block-start: 10px;
+  --ds-stats-header-spark-dot-gap: 6px;
+  --ds-stats-header-spark-dot-opacity-floor: 0.15;
+  --ds-stats-header-spark-dot-size: 4px;
+  --ds-stats-header-spark-margin-block-start: 14px;
+  --ds-stats-header-value-font-size: 2.25rem;
+  --ds-stats-header-value-font-size-compact: 1.75rem;
+  --ds-stats-header-value-font-weight: 800;
   --ds-stepper-circles-ring: 0 0 0 calc(var(--ds-spacing-1) * 0.75) color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   --ds-stepper-connector-block-gap: var(--ds-spacing-1);
   --ds-stepper-connector-clearance: var(--ds-spacing-1);
@@ -123912,6 +123941,9 @@ html[lang]:lang(ar) {
   --ds-widget-board-catalog-no-results-min-height: 96px;
   --ds-widget-board-catalog-search-margin-block-end: var(--ds-spacing-3);
   --ds-widget-board-catalog-search-max-width: 680px;
+  --ds-workbench-header-actions-backdrop: none;
+  --ds-workbench-header-bg: var(--ds-card-header-bg);
+  --ds-workbench-header-icon-size: 40px;
   --ds-z-index-base: 0;
   --ds-z-index-drawer: 1400;
   --ds-z-index-dropdown: 1000;
@@ -124405,6 +124437,10 @@ html[lang]:lang(ar) {
   --ds-checkbox-description-line-height: var(--ds-type-caption-line-height);
   --ds-checkbox-error-border-color: var(--ds-color-error);
   --ds-checkbox-label-color: var(--ds-color-text-primary);
+  --ds-cockpit-header-actions-backdrop: none;
+  --ds-cockpit-header-bg: var(--ds-card-header-bg);
+  --ds-cockpit-header-icon-size: 40px;
+  --ds-cockpit-header-sticky-z: 100;
   --ds-collapse-arrow-focus-ring-radius: var(--ds-radius-sm);
   --ds-collapse-arrow-hover-color: var(--ds-color-primary);
   --ds-collapse-arrow-motion-duration: var(--ds-motion-feedback);
@@ -125142,6 +125178,21 @@ html[lang]:lang(ar) {
   --ds-menu-trigger-open-bg: var(--ds-sidebar-item-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))));
   --ds-menu-trigger-open-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-menu-trigger-open-color: var(--ds-color-text-primary);
+  --ds-mobile-header-bar-block-size: 56px;
+  --ds-mobile-header-bar-padding-inline: 4px;
+  --ds-mobile-header-center-padding-inline: 8px;
+  --ds-mobile-header-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
+  --ds-mobile-header-hairline-color: var(--ds-color-border);
+  --ds-mobile-header-sticky-backdrop: none;
+  --ds-mobile-header-sticky-bg: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
+  --ds-mobile-header-sticky-z: 40;
+  --ds-mobile-header-stuck-shadow: var(--ds-elevation-2);
+  --ds-mobile-header-title-font-size: calc(var(--ds-font-size-lg) * 1.0625);
+  --ds-mobile-header-title-line-height: 1.29;
+  --ds-mobile-header-title-tracking: -0.01em;
+  --ds-mobile-header-trigger-press-scale: 0.94;
+  --ds-mobile-header-trigger-radius: var(--ds-radius-md, 8px);
+  --ds-mobile-header-trigger-tint: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
   --ds-modal-action-shadow-hover: var(--ds-shadow-md);
   --ds-modal-bg: var(--ds-material-overlay-background);
   --ds-modal-body-color: var(--ds-color-text-secondary);
@@ -125450,6 +125501,18 @@ html[lang]:lang(ar) {
   --ds-saved-views-pill-padding-inline: 12px;
   --ds-saved-views-touch-target-min: var(--ds-touch-target-min, 44px);
   --ds-saved-views-unsaved-dot-size: 7px;
+  --ds-section-frame-label-column-gap: var(--ds-spacing-3, 0.75rem);
+  --ds-section-frame-label-font-size: var(--ds-font-size-xs, 0.75rem);
+  --ds-section-frame-label-font-weight: var(--ds-font-weight-medium, 500);
+  --ds-section-frame-label-margin-block-end: var(--ds-spacing-6, 1.5rem);
+  --ds-section-frame-label-measure: var(--ds-type-paragraph-measure, 68ch);
+  --ds-section-frame-label-row-gap: var(--ds-spacing-1, 0.25rem);
+  --ds-section-frame-label-tracking: 0.12em;
+  --ds-section-frame-meta-ink: color-mix(in oklab, var(--ds-color-text-primary) 78%, var(--ds-color-bg-primary));
+  --ds-section-frame-ordinal-ink: color-mix(in oklab, var(--ds-color-text-primary) 66%, var(--ds-color-bg-primary));
+  --ds-section-frame-padding-block: var(--ds-spacing-10, 2.5rem);
+  --ds-section-frame-rule-color: var(--ds-color-hairline);
+  --ds-section-frame-rule-width: 1px;
   --ds-segmented-border: var(--ds-material-control-border);
   --ds-segmented-border-hover: var(--ds-material-control-border-hover);
   --ds-segmented-item-bg-hover: color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift), var(--ds-card-bg, var(--ds-color-bg-secondary)));
@@ -125595,6 +125658,39 @@ html[lang]:lang(ar) {
   --ds-state-hover-shift: 4%;
   --ds-state-press-scale: 0.98;
   --ds-state-selected-shift: 9%;
+  --ds-stats-header-card-bg: var(--ds-color-bg-primary);
+  --ds-stats-header-card-frame: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  --ds-stats-header-card-min-height: 140px;
+  --ds-stats-header-card-min-height-compact: 120px;
+  --ds-stats-header-card-padding: 20px 24px;
+  --ds-stats-header-card-padding-compact: 18px;
+  --ds-stats-header-card-radius: var(--ds-radius-lg, 12px);
+  --ds-stats-header-change-column-gap: 3px;
+  --ds-stats-header-change-row-gap: 2px;
+  --ds-stats-header-columns: 4;
+  --ds-stats-header-focus-ring-color: var(--ds-focus-ring-color, var(--ds-color-primary));
+  --ds-stats-header-glow-block-size: 40px;
+  --ds-stats-header-glow-strength: 6%;
+  --ds-stats-header-grid-gap: var(--ds-spacing-3, 12px);
+  --ds-stats-header-hover-lift: translateY(-2px);
+  --ds-stats-header-hover-shadow: 0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  --ds-stats-header-icon-opacity: 0.6;
+  --ds-stats-header-insight-margin-block-start: 8px;
+  --ds-stats-header-kicker-font-size: var(--ds-font-size-2xs);
+  --ds-stats-header-kicker-tracking: 0.04em;
+  --ds-stats-header-label-font-size: var(--ds-font-size-sm);
+  --ds-stats-header-meta-font-size: var(--ds-font-size-2xs);
+  --ds-stats-header-ping-duration: 400ms;
+  --ds-stats-header-press-scale: scale(0.98);
+  --ds-stats-header-press-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
+  --ds-stats-header-progress-margin-block-start: 10px;
+  --ds-stats-header-spark-dot-gap: 6px;
+  --ds-stats-header-spark-dot-opacity-floor: 0.15;
+  --ds-stats-header-spark-dot-size: 4px;
+  --ds-stats-header-spark-margin-block-start: 14px;
+  --ds-stats-header-value-font-size: 2.25rem;
+  --ds-stats-header-value-font-size-compact: 1.75rem;
+  --ds-stats-header-value-font-weight: 800;
   --ds-stepper-circles-ring: 0 0 0 calc(var(--ds-spacing-1) * 0.75) color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   --ds-stepper-connector-block-gap: var(--ds-spacing-1);
   --ds-stepper-connector-clearance: var(--ds-spacing-1);
@@ -126217,6 +126313,9 @@ html[lang]:lang(ar) {
   --ds-widget-board-catalog-no-results-min-height: 96px;
   --ds-widget-board-catalog-search-margin-block-end: var(--ds-spacing-3);
   --ds-widget-board-catalog-search-max-width: 680px;
+  --ds-workbench-header-actions-backdrop: none;
+  --ds-workbench-header-bg: var(--ds-card-header-bg);
+  --ds-workbench-header-icon-size: 40px;
   --ds-z-index-base: 0;
   --ds-z-index-drawer: 1400;
   --ds-z-index-dropdown: 1000;
