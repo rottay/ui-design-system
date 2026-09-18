@@ -202,6 +202,16 @@ const POPULATED_SEED_DERIVED: Readonly<Record<string, string>> = {
   // derivation now equals the baseline and the delta inherits it. The same
   // re-partition is recorded in `provenance-acceptance.test.ts`, which owns the
   // family's closure proof.
+  // The FAM-10 wave (181817599, WO-DER-06 D6-FAM-01): `--ds-focus-ring-color`.
+  // The focus ring now derives a safe color from the seed against the
+  // effective mode ground, so this document's primary reaches it: the tenant's
+  // `#0F766E` displaces the baseline's preset-seed `#2F5BE8` and the channel
+  // joins the delta. It is not a member of the seed-shadowing family above --
+  // that table's closure is untouched -- but it is seed-derived in exactly the
+  // same sense, so it is pinned here, by value, rather than in the plain
+  // additions list. `canonical-digest-identity.test.ts` pins the same channel
+  // from the digest side.
+  "--ds-focus-ring-color": "#0F766E",
 };
 
 /**
@@ -734,6 +744,12 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-elevation-4",
       "--ds-elevation-5",
       "--ds-elevation-6",
+      // The FAM-10 wave's one new member (181817599, WO-DER-06 D6-FAM-01):
+      // the focus ring derives a safe color from the seed against the
+      // effective mode ground, so the channel this document's seed produces
+      // displaces the baseline's preset-seed value. Its value is pinned in
+      // `POPULATED_SEED_DERIVED` above; this entry names it as an addition.
+      "--ds-focus-ring-color",
       // D6-2c-ii: `--ds-input-border-focus` and `--ds-input-shadow-focus` left
       // this list with `POPULATED_SEED_DERIVED`, and the two toggle corners
       // left it because the preset now STATES a silhouette -- so the tenant's

@@ -336,18 +336,23 @@ const dbOnlyAgainst = (staticSide: ReadonlySet<string>) =>
  * reachable from a customer document while the shipped identity no longer says
  * anything about them. Measured 0 -> 20 by the decision, not by drift.
  *
+ * The FAM-10 wave (measured 2026-09-18): 20 -> 18. WO-FAM-06's display badge
+ * cut (6627914f0) registered the badge chrome deriver, and the shipped bithire
+ * identity now authors `--ds-badge-ink` and `--ds-badge-surface` through it,
+ * so the two left this list the same way they entered it -- by a measured
+ * decision, not by drift. `--ds-badge-frame` stays: the deriver owns the
+ * hover/pressed frames, not the resting one. The list stays decrease-only.
+ *
  * The original warning still stands for its own case, and it is a DIFFERENT
  * case: a channel that reappears here because an identity started saying
  * something OUTSIDE the compiler (a hand-written `_source/extension.css`, as
  * the four shell/sidebar width entries once were) is a finding, not a re-pin.
- * These twenty are authored nowhere -- the sibling assertion below proves each
- * is still expressible statically, so this is an authoring gap the derivation
- * and vertical lanes close, never a second authority.
+ * These eighteen are authored nowhere -- the sibling assertion below proves
+ * each is still expressible statically, so this is an authoring gap the
+ * derivation and vertical lanes close, never a second authority.
  */
 const KNOWN_UNAUTHORED_BY_BITHIRE: readonly string[] = [
   "--ds-badge-frame",
-  "--ds-badge-ink",
-  "--ds-badge-surface",
   "--ds-card-border",
   "--ds-card-border-color",
   "--ds-card-border-radius",

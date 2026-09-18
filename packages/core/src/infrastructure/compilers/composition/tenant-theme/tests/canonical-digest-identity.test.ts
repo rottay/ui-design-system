@@ -819,7 +819,20 @@ describe("digest identity across the canonicalization extraction", () => {
     // rather than a refreshed baseline.
     const POST_NEUTRAL_PRESET_BASELINE_DIGEST =
       "sha256-f840df29112d93598f596bdde0aea0221aec4b9e597430a09f3369418444e24b";
-    expect(artifact.digest).toBe(POST_NEUTRAL_PRESET_BASELINE_DIGEST);
+    expect(artifact.digest).not.toBe(POST_NEUTRAL_PRESET_BASELINE_DIGEST);
+    // Fifteenth declared move, and the first the FAM-10 wave made (measured
+    // 2026-09-18): the bithire baseline gained `--ds-focus-ring-color`
+    // (181817599, WO-DER-06 D6-FAM-01 -- the focus ring derives a safe color
+    // from the seed against the effective mode ground), and this document
+    // authors a primary seed, so the tenant's own derivation reaches the
+    // delta: the baseline's preset-seed `#2F5BE8` against the tenant's
+    // `#0F766E`. The channel census below moves 63 -> 64 for exactly that one
+    // channel and nothing else, and the digest moves with it. Every prior pin
+    // stays asserted, so this reads as a fifteenth declared move rather than a
+    // refreshed baseline.
+    const POST_FOCUS_RING_DERIVATION_DIGEST =
+      "sha256-eccce2985d0189ae2b8580394989518f65dc0d052a6ca85c97c2b7346f2f72c8";
+    expect(artifact.digest).toBe(POST_FOCUS_RING_DERIVATION_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
     expect(
@@ -870,6 +883,9 @@ describe("digest identity across the canonicalization extraction", () => {
     // leave it in. Pinned BY NAME rather than counted, which is stronger than
     // the length it replaces: a channel joining or leaving the delta is named
     // by the diff instead of showing up as an off-by-one.
+    // 63 -> 64 (the FAM-10 wave, measured 2026-09-18): added 1, removed 0 --
+    // `--ds-focus-ring-color`, the fifteenth declared move above, pinned by
+    // value two-sided below.
     expect(Object.keys(artifact.variables).sort()).toEqual([
       "--ds-button-lg-radius",
       "--ds-button-md-radius",
@@ -923,6 +939,7 @@ describe("digest identity across the canonicalization extraction", () => {
       "--ds-elevation-4",
       "--ds-elevation-5",
       "--ds-elevation-6",
+      "--ds-focus-ring-color",
       "--ds-font-family-base",
       "--ds-font-family-heading",
       "--ds-motion-duration-scale",
@@ -970,6 +987,15 @@ describe("digest identity across the canonicalization extraction", () => {
     // value is pinned beside it.
     expect(baseline["--ds-color-primary-foreground"]).toBe("#ffffff");
     expect(artifact.variables["--ds-color-primary-foreground"]).toBeUndefined();
+
+    // The wave's one new delta member, pinned two-sided like the family above.
+    // D6-FAM-01 (181817599) made the focus ring derive a safe color from the
+    // seed, so the channel left the constant `#0F766E` the tenant's seed
+    // produces against the baseline's own preset-seed derivation -- absence
+    // alone would also pass if the derivation stopped firing, so the displaced
+    // baseline value is pinned beside it.
+    expect(baseline["--ds-focus-ring-color"]).toBe("#2F5BE8");
+    expect(artifact.variables["--ds-focus-ring-color"]).toBe("#0F766E");
   });
 
   it("moves the W4-absent advanced artifact digest for the same two reasons", () => {

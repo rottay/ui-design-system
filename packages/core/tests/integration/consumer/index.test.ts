@@ -287,12 +287,14 @@ describe('the application writes a tenant document v2 through the door', () => {
     ).toEqual(['appearance.general.shape.controlHeight']);
   });
 
-  it('still REPORTS unlit, by name and reason, for a role v1 cannot carry', () => {
-    // The mechanism outlives this app's own document. `typography.families`
-    // holds a keypath, but only two of its four roles have a v1 field, so a
-    // tenant that picks a display face activates a decision the projection
-    // cannot write -- accepted, reported, and distinguished from the whole-row
-    // gap by its own reason.
+  it('conducts the display role through v1, with the authored pack landing on the lowered document', () => {
+    // W14 (63aec5c5e) retired the premise this test used to pin: the v1
+    // transport dropped `display` at the projection boundary, so a tenant that
+    // picked a display face activated a decision the projection could not
+    // write. The role now conducts: the decision reports lit, and the bare
+    // pack reference -- the one grammar both doors accept -- reaches the v1
+    // typography field the patch is lowered from, where the channel
+    // derivation turns it into `--ds-font-family-display`.
     const { admission } = documentThemeAdmission({
       vertical: 'bithire',
       slug: TENANT_SLUG,
@@ -300,6 +302,44 @@ describe('the application writes a tenant document v2 through the door', () => {
         version: 2,
         plan: 'pro',
         decisions: { 'typography.families': { display: 'editorial-display' } },
+      },
+    });
+    expect(admission.unlit).toEqual([]);
+    expect(admission.decisions).toEqual([
+      {
+        id: 'typography.families',
+        tier: 'pro',
+        lit: true,
+        keypaths: [
+          'appearance.general.typography.{fontFamilyBase,fontFamilyHeading,fontFamilyDisplay}',
+        ],
+      },
+    ]);
+    const effectiveTypography = (
+      admission.effective as {
+        visualFoundation?: { general?: { typography?: Record<string, unknown> } };
+      }
+    ).visualFoundation?.general?.typography;
+    expect(effectiveTypography?.fontFamilyDisplay).toBe(
+      'var(--ds-font-pack-editorial-display)',
+    );
+  });
+
+  it('still REPORTS unlit, by name and reason, for a role v1 cannot carry', () => {
+    // The mechanism outlives this app's own document. `mono` is a registered
+    // role with no v1 field, and W14 left it unlit deliberately: its live
+    // producer writes a different grammar, so carrying it through the
+    // projection would overwrite the value the vertical already emits. A
+    // tenant that picks a mono face therefore activates a decision the
+    // projection cannot write -- accepted, reported, and distinguished from
+    // the whole-row gap by its own reason.
+    const { admission } = documentThemeAdmission({
+      vertical: 'bithire',
+      slug: TENANT_SLUG,
+      document: {
+        version: 2,
+        plan: 'pro',
+        decisions: { 'typography.families': { mono: 'plex-mono' } },
       },
     });
     expect(admission.unlit.map((decision) => decision.id)).toEqual([

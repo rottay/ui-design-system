@@ -140,6 +140,51 @@ function mixLabHex(fromChannel: string, percent: number, toChannel: string): str
   );
 }
 
+/** sRGB hex to Oklab and back, mirroring the Lab pair above: the section-frame family's two
+ *  quiet inks mix `in oklab`, so the contrast math must interpolate where the browser does. */
+function hexToOklab(hex: string): [number, number, number] {
+  const [r, g, b] = hexToRgbTuple(hex).map((c) => {
+    const srgb = c / 255;
+    return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+  }) as [number, number, number];
+  const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b;
+  const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b;
+  const s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b;
+  const [lp, mp, sp] = [l, m, s].map(Math.cbrt) as [number, number, number];
+  return [
+    0.2104542553 * lp + 0.793617785 * mp - 0.0040720468 * sp,
+    1.9779984951 * lp - 2.428592205 * mp + 0.4505937099 * sp,
+    0.0259040371 * lp + 0.7827717662 * mp - 0.808675766 * sp,
+  ];
+}
+
+function oklabToHex(oklab: [number, number, number]): string {
+  const [lightness, aStar, bStar] = oklab;
+  const lp = lightness + 0.3963377774 * aStar + 0.2158037573 * bStar;
+  const mp = lightness - 0.1055613458 * aStar - 0.0638541728 * bStar;
+  const sp = lightness - 0.0894841775 * aStar - 1.291485548 * bStar;
+  const [l, m, s] = [lp, mp, sp].map((t) => t ** 3) as [number, number, number];
+  const bytes = [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ].map((channel) => {
+    const clamped = Math.min(1, Math.max(0, channel));
+    const encoded = clamped <= 0.0031308 ? clamped * 12.92 : 1.055 * clamped ** (1 / 2.4) - 0.055;
+    return Math.round(encoded * 255);
+  });
+  return `#${bytes.map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
+function mixOklabHex(fromHex: string, percent: number, toHex: string): string {
+  const weight = percent / 100;
+  const from = hexToOklab(fromHex);
+  const to = hexToOklab(toHex);
+  return oklabToHex(
+    [0, 1, 2].map((i) => from[i]! * weight + to[i]! * (1 - weight)) as [number, number, number],
+  );
+}
+
 const INK = rampHex("--ds-color-surface-ink");
 const PAPER = rampHex("--ds-color-surface-paper");
 
@@ -707,18 +752,29 @@ describe("Defect F -- TerminalBlock's streamed rows reserve their settled box, n
 });
 
 describe("Defect 4 -- SectionFrame binds ordinal, title and meta into one header group", () => {
+  /* The rebuilt skin keys on the [data-part] hooks the component stamps, not per-element BEM
+     names; every lookup below goes through the same data-part contract the component test
+     suite (framing-anatomy) already exercises. */
+  const LABEL_ROW = ".rt-section-frame[data-part='root'] [data-part='label-row']";
+  const META = ".rt-section-frame[data-part='root'] [data-part='meta']";
+
   it("bounds the label row to a literal reading measure, so meta's auto-margin can never push it further than that measure away from the title -- instead of riding the full container width", () => {
-    const body = ruleBody(SECTION_FRAME_CSS, ".rt-section-frame__label");
-    expect(body).toMatch(/max-inline-size:\s*var\(--ds-type-paragraph-measure,\s*\d+ch\)/);
+    const body = ruleBody(SECTION_FRAME_CSS, LABEL_ROW);
+    /* The cap arrives through the family's own channel, whose resting value IS the paragraph
+       measure with its ch fallback, so the bound cannot silently widen when a tenant dials
+       the family's rhythm. */
+    expect(body).toMatch(
+      /max-inline-size:\s*var\(--ds-section-frame-label-measure,\s*var\(--ds-type-paragraph-measure,\s*\d+ch\)\)/,
+    );
   });
 
   it("keeps the existing intentional wrap behavior intact (regression guard) while adding the measure cap", () => {
-    const body = ruleBody(SECTION_FRAME_CSS, ".rt-section-frame__label");
+    const body = ruleBody(SECTION_FRAME_CSS, LABEL_ROW);
     expect(body).toMatch(/flex-wrap:\s*wrap/);
   });
 
   it("keeps meta bound with a logical property, never a physical left/right rule (RTL correctness -- bithire-ar)", () => {
-    const body = ruleBody(SECTION_FRAME_CSS, ".rt-section-frame__meta");
+    const body = ruleBody(SECTION_FRAME_CSS, META);
     expect(body).toMatch(/margin-inline-start:\s*auto/);
     expect(body).not.toMatch(/margin-left|margin-right/);
   });
@@ -1065,25 +1121,107 @@ describe("Reviewer source vetoes -- CLS reservations survive their own scaling",
 });
 
 describe("Defect B (refinement) -- section-frame meta is real text and was measured at 4.42:1 on ink, just under the 4.5 body-copy floor", () => {
-  it("routes meta's color through the canon-approved re-keyed role instead of the raw ramp step that measured under AA", () => {
-    const body = ruleBody(SECTION_FRAME_CSS, ".rt-section-frame__meta");
-    expect(body).toMatch(/color:\s*var\(--ds-color-text-secondary,\s*var\(--ds-color-mono-500\)\)/);
+  /* The rebuilt skin keys on the component's [data-part] hooks; the meta/ordinal inks arrive
+     through the family's own deriver-produced channels, quieted from the mode's text-primary
+     toward its own bg-primary, because the mono-500 / text-secondary chain they replaced
+     resolved one fixed grey for both canvases and measured under the AA floor in the family's
+     own scopes. */
+  const INDEX = ".rt-section-frame[data-part='root'] [data-part='index']";
+  const DASH = ".rt-section-frame[data-part='root'] [data-part='dash']";
+  const META = ".rt-section-frame[data-part='root'] [data-part='meta']";
+
+  it("routes meta's color through the family's own deriver-produced ink channel instead of the raw ramp step that measured under AA", () => {
+    const body = ruleBody(SECTION_FRAME_CSS, META);
+    expect(body).toMatch(/color:\s*var\(--ds-section-frame-meta-ink,/);
+    // The chain that measured under the floor must not creep back in, as the route or as the
+    // channel's own fallback.
+    expect(body).not.toMatch(/color:\s*var\(--ds-color-mono-500\)/);
+    expect(body).not.toMatch(/color:\s*var\(--ds-color-text-secondary/);
   });
 
-  it("leaves the aria-hidden index/dash markers on their existing step (they are decorative chrome, held to the 3:1 non-text floor, which gray-500 already clears)", () => {
-    const indexBody = ruleBody(SECTION_FRAME_CSS, ".rt-section-frame__index");
-    const dashBody = ruleBody(SECTION_FRAME_CSS, ".rt-section-frame__dash");
-    expect(indexBody).toMatch(/color:\s*var\(--ds-color-mono-500\)/);
-    expect(dashBody).toMatch(/color:\s*var\(--ds-color-mono-500\)/);
+  it("leaves the aria-hidden index/dash markers on the family's quieter ordinal ink (they are decorative chrome, held to the 3:1 non-text floor)", () => {
+    for (const part of [INDEX, DASH]) {
+      const body = ruleBody(SECTION_FRAME_CSS, part);
+      expect(body).toMatch(/color:\s*var\(--ds-section-frame-ordinal-ink,/);
+      expect(body).not.toMatch(/color:\s*var\(--ds-color-mono-500\)/);
+    }
   });
 
-  it("the re-keyed role's ink-scope and paper-scope values (already proven AA-safe in the Defect 2/3 suite above) are what meta now resolves through -- no new ramp step invented for this fix", () => {
-    // Re-derived from the InvertSection source, proving this fix rides the SAME canon-approved
-    // mechanism rather than a new one-off literal.
-    const inkBody = ruleBody(INVERT_SECTION_CSS, ".rt-invert-section");
-    const ref = inkBody.match(/--ds-color-text-secondary:\s*var\((--ds-color-mono-\d+)\)/)?.[1];
-    expect(ref).toBeTruthy();
-    expect(contrastRatio(rampHex(ref!), INK)).toBeGreaterThanOrEqual(4.5);
+  it("the deriver-produced ink values are what the skin's fallbacks restate, and both resolve at or above their floors in the ink AND paper scopes -- no fixed step one canvas cannot carry", () => {
+    const deriverSource = readFileSync(
+      join(
+        SOURCE_ROOT,
+        "infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/section-frame/index.ts",
+      ),
+      "utf8",
+    );
+
+    const OKLAB_MIX =
+      /color-mix\(in oklab,\s*var\((--[a-z0-9-]+)\)\s+([\d.]+)%,\s*var\((--[a-z0-9-]+)\)\)/;
+
+    function producedInk(channel: string): {
+      mix: string;
+      fgRole: string;
+      percent: number;
+      bgRole: string;
+    } {
+      const produced = deriverSource.match(new RegExp(`"${channel}"\\]\\s*=\\s*"([^"]+)"`))?.[1];
+      expect(produced, `${channel} is produced by the section-frame chrome deriver`).toBeTruthy();
+      const mix = produced!.match(OKLAB_MIX);
+      expect(mix, `${channel} quiets one role toward another with an oklab mix`).toBeTruthy();
+      return { mix: produced!, fgRole: mix![1]!, percent: Number(mix![2]), bgRole: mix![3]! };
+    }
+
+    const metaProduced = producedInk("--ds-section-frame-meta-ink");
+    const ordinalProduced = producedInk("--ds-section-frame-ordinal-ink");
+
+    // The skin's inline fallbacks restate the produced values verbatim, so an emitted sheet
+    // that lost its compiled block degrades to the SAME ink instead of a drifted literal.
+    expect(ruleBody(SECTION_FRAME_CSS, META)).toContain(metaProduced.mix);
+    expect(ruleBody(SECTION_FRAME_CSS, INDEX)).toContain(ordinalProduced.mix);
+    expect(ruleBody(SECTION_FRAME_CSS, DASH)).toContain(ordinalProduced.mix);
+
+    /* The two roles the mixes name, resolved per scope from the sheets the cascade reads.
+       The monochrome scopes seat --ds-color-text-primary off --ds-surface-fg (mono-1000 on
+       ink, mono-0 on paper) and never re-key --ds-color-bg-primary, so it stays the theme
+       base in both. Proven from the sheet rather than assumed. */
+    const inkScope = RAMP_CSS.match(/:where\(\.ds-mono-surface\)\s*\{([^}]*)\}/)?.[1] ?? "";
+    expect(inkScope).toMatch(/--ds-color-text-primary:\s*var\(--ds-surface-fg\)/);
+    const paperScope =
+      RAMP_CSS.match(/:where\(\.ds-mono-surface\[data-surface="paper"\]\)\s*\{([^}]*)\}/)?.[1] ??
+      "";
+    expect(paperScope).toMatch(/--ds-surface-fg:\s*var\(--ds-color-mono-0\)/);
+
+    const bgPrimary = resolveRampHex("--ds-color-bg-primary");
+    expect(bgPrimary, "--ds-color-bg-primary resolves in the theme sheet").toBeTruthy();
+    const ROLE_HEX: Record<"ink" | "paper", Record<string, string>> = {
+      ink: {
+        "--ds-color-text-primary": rampHex("--ds-color-mono-1000"),
+        "--ds-color-bg-primary": bgPrimary!,
+      },
+      paper: {
+        "--ds-color-text-primary": rampHex("--ds-color-mono-0"),
+        "--ds-color-bg-primary": bgPrimary!,
+      },
+    };
+    const SCOPE_CANVAS = { ink: INK, paper: PAPER } as const;
+
+    for (const [channel, produced, floor] of [
+      ["--ds-section-frame-meta-ink", metaProduced, 4.5],
+      ["--ds-section-frame-ordinal-ink", ordinalProduced, 3],
+    ] as const) {
+      for (const scope of ["ink", "paper"] as const) {
+        const mixed = mixOklabHex(
+          ROLE_HEX[scope][produced.fgRole]!,
+          produced.percent,
+          ROLE_HEX[scope][produced.bgRole]!,
+        );
+        expect(
+          contrastRatio(mixed, SCOPE_CANVAS[scope]),
+          `${channel} resolves to ${mixed} in the ${scope} scope`,
+        ).toBeGreaterThanOrEqual(floor);
+      }
+    }
   });
 });
 

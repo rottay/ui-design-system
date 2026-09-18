@@ -557,7 +557,49 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *   2463 / 2493 / 1874  measured 2026-09-15 (the a4bc94927 tree): 449e86e55 (texture, emission layer), 008eb19e2 (foundation retirements), b6ef4cc66 (gates) and 654fd1036 (docs) measure the same
      *  +15/-888   +6/-752  +15/-299  D6-2c-ii (WO-DER-06): the authored first-party themes are retired and a vertical is the neutral foundation plus its preset document
      *   1590 / 1747 / 1590  measured 2026-09-15 on this tree
-     * Totals: rottay +1227/-944, bithire +1232/-768, evnto +1318/-312.
+     * FAM-10 wave and its company, measured commit by commit (2026-09-18) with
+     * the same `lowerTheme` call, on isolated copies of the tree at every commit
+     * that touches packages/core/src -- the only commits that can move this
+     * lowering. The committed facade artifacts were read as an independent
+     * cross-check: their unique `--ds-*` key sets reproduce the lowering's
+     * `cssVariables` key sets byte-exactly at both ends (1590/1747/1590 at the
+     * anchor, 2454/2613/2454 at HEAD) and at every facade regeneration commit
+     * in between. Every row below is one commit and the parent of every row
+     * measures exactly the previous row; the sums close with no residue. The
+     * wave's rows are nearly always three equal cells because the landed lots
+     * are chrome derivers emitting on the shared neutral foundation -- the
+     * verticals differ only in palette and typeface, which these channels do
+     * not state. bithire's two solitary +1s are its own preset's moves: the
+     * focus ring and the display font role.
+     *         +0       +1       +0  181817599  --ds-focus-ring-color enters the bithire baseline: the focus ring derives a safe color from the seed against the effective mode ground (WO-DER-06 D6-FAM-01)
+     *        +10      +10      +10  9ad632c66  table chrome deriver: cell, footer, pagination, selection, title, touch (WO-FAM-06 table, arms 1-3)
+     *       +141     +141     +141  6627914f0  badge, tag and avatar display cuts (WO-FAM-06)
+     *        +54      +54      +54  e6a0d08e7  tree and descriptions family cuts, derivers registered (WO-FAM-06)
+     *      +0/-11   +0/-11   +0/-11  c2d5b929d  badge deriver returns to exactly its own namespace: the 11 filter-pill and alpha-black channels retire (WO-FAM-06 T2)
+     *        +68      +68      +68  89976e4c7  layout: container, aspect-ratio, space, splitter and divider cuts (WO-FAM-07, batches L1-L4)
+     *        +14      +14      +14  e3c0bafc1  typography textStyle; the ramp drains to channels with byte-identical output (WO-FAM-06)
+     *        +34      +34      +34  f56020c58  layout: flex, stack, box and grid cuts (WO-FAM-07, batch L5)
+     *      +0/-1    +0/-1    +0/-1  ba33315db  --ds-breakpoint-xs retired, the ladder's unread floor (WO-FAM-07)
+     *        +23      +23      +23  700cd127b  collapse family cut; the last bridge retires to its owning engine (WO-FAM-07 L7)
+     *        +60      +60      +60  9d0458d58  list-toolbar family cut with browser parity; saved-views, column-settings and filter-panel chrome derivers (WO-FAM-08)
+     *        +44      +44      +44  51593e697  B7 vocabulary derivers: chrome/toolbar (42 channels) and chrome/filter-chip (WO-FAM-08)
+     *        +76      +76      +76  1f171b2db  data-table family cut: the deriver owns the --ds-data-table-* namespace (WO-FAM-08 B4)
+     *         +5       +5       +5  32b2da644  kanban-board family cut (WO-FAM-08 B5)
+     *        +17      +17      +17  3ed62c175  five chrome families: calendar-view, file-manager, table-toolbar, status-filter-pills, active-filters-bar (WO-FAM-08 B6)
+     *         +3       +3       +3  39e13cd80  widget-board family cut (WO-FAM-08 B8)
+     *        +41      +41      +41  0d29e9fe8  three workspace structures: column-menu (deriver, 41 channels), saved-views-menu, field-filters-panel (WO-FAM-08 B9)
+     *      +1/-1    +1/-1    +1/-1  c7381099e  calendar-view accent rename: --ds-calendar-view-event-accent -> entry-accent, the theme name law (WO-FAM-08 B6 defect)
+     *         +3       +3       +3  db80e2cbd  data-table's three pinned inert consumes routed: --ds-type-* and control-height channels (WO-FAM-08 R17-04)
+     *         +0       +1       +0  63aec5c5e  --ds-font-family-display reaches the bithire baseline through the v1 display role (WO-DER-06 W14)
+     *         +4       +4       +4  51454e03b  data-table phone posture: bulk and pagination bars state ground and ink (WO-FAM-08 R17-04 a11y)
+     *        +29      +29      +29  d3808d06f  one header tone contract over a new chrome/header deriver (19 channels), proven on form-header and edit-header (WO-FAM-10 sub-lot C)
+     *        +67      +67      +67  e5c3a7334  FAM-10 cohorts D/E: chrome header derivers, skins and causality coverage (WO-FAM-10)
+     *         +6       +6       +6  bb29b085b  surface-lifecycle cut (WO-FAM-10 sub-lot G)
+     *       +135     +135     +135  7e13ee2e0  FAM-10 sub-lot D2: collection, dashboard, detail and header-surface header cuts (WO-FAM-10)
+     *        +10      +10      +10  97a4fb058  FAM-10 sub-lot F: record and the form surfaces on the ledger doctrine (WO-FAM-10)
+     *        +32      +32      +32  7a67243d8  cascade-wiring re-chain: the wave's component channels wired to their roots (WO-FAM-10 close)
+     *   2454 / 2613 / 2454  measured 2026-09-18 on this tree (the 6479c1808 tree)
+     * Totals: rottay +2104/-957, bithire +2111/-781, evnto +2195/-325.
      *
      * The D6-2c-ii row is the largest single move this table records and it is
      * measured, not inferred: both legs were compiled with the SAME
@@ -571,7 +613,23 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      * chrome the themes hand-wrote family by family (alert, badge, button and
      * the rest). rottay and evnto land on the SAME 1590 because their presets
      * are structural only and author no palette; bithire keeps 157 more because
-     * its preset authors palette seeds and typeface families. */
+     * its preset authors palette seeds and typeface families.
+     *
+     * The FAM-10 wave rows are the table's second great additive run, and like
+     * the family-cut wave they are measured, not inferred: every commit between
+     * the D6-2c-ii anchor and HEAD that can touch this lowering was compiled
+     * with the same `lowerTheme` call on an isolated copy of its own tree (159
+     * commits), and the committed facade artifacts were verified to carry
+     * byte-identical key sets at both ends and at every regeneration commit
+     * between. What the wave ADDS is what the FAM-06..FAM-10 lots advertise:
+     * the component families' chrome derivers (badge, tag, avatar, tree,
+     * descriptions, layout, collapse, list-toolbar, data-table, kanban-board,
+     * the workspace structures, headers, record, forms, surface-lifecycle)
+     * emitting their families' channels on the shared neutral foundation, which
+     * is why rottay and evnto move in lock-step and bithire only separates on
+     * its own preset's two decisions. What it REMOVES is small and named per
+     * row: the badge namespace cut, the unread breakpoint floor and the one
+     * rename the theme name law demanded. */
     const counts: Record<Vertical, number> = {
       // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
       // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
@@ -618,7 +676,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // and so does the vertical itself -- the authored theme is retired.
       // rottay 2463 -> 1590, added 15, removed 888, measured against an
       // isolated copy of the HEAD tree that reproduced 2463 byte-exact.
-      rottay: 1590,
+      // FAM-10 wave and company (measured, 2026-09-18): rottay 1590 -> 2454,
+      // added 877, removed 13, commit by commit in the table above; the removals
+      // are the badge namespace cut (11, c2d5b929d), --ds-breakpoint-xs (1,
+      // ba33315db) and the calendar-view accent rename (1, c7381099e).
+      rottay: 2454,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -653,7 +715,13 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // and so does the vertical itself -- the authored theme is retired.
       // bithire 2493 -> 1747, added 6, removed 752, measured against an
       // isolated copy of the HEAD tree that reproduced 2493 byte-exact.
-      bithire: 1747,
+      // FAM-10 wave and company (measured, 2026-09-18): bithire 1747 -> 2613,
+      // added 879, removed 13, commit by commit in the table above. Beside the
+      // three shared removals rottay records, bithire kept two solitary +1s:
+      // --ds-focus-ring-color (181817599, the seed-derived focus ring) and
+      // --ds-font-family-display (63aec5c5e, the v1 display role) -- both are
+      // its own preset's decisions arriving at the baseline.
+      bithire: 2613,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -690,7 +758,12 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // and so does the vertical itself -- the authored theme is retired.
       // evnto 1874 -> 1590, added 15, removed 299, measured against an
       // isolated copy of the HEAD tree that reproduced 1874 byte-exact.
-      evnto: 1590,
+      // FAM-10 wave and company (measured, 2026-09-18): evnto 1590 -> 2454,
+      // added 877, removed 13, commit by commit in the table above. evnto moves
+      // with rottay on every row: its preset authors no channel the wave's
+      // derivers state, and the rename row (c7381099e) is named for its noun
+      // precisely because evnto is the vertical that owns it.
+      evnto: 2454,
     };
     for (const vertical of VERTICALS) {
       expect(
