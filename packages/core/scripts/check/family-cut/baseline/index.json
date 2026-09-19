@@ -2404,18 +2404,18 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 22,
+        "channelsRead": 167,
         "classTokens": 1,
-        "partsStamped": 33,
+        "partsStamped": 32,
         "partsConsumed": 32
       },
       "readWithoutProducer": 0,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 1,
+      "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 1,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
@@ -2425,8 +2425,7 @@
         "opened": "2026-09-19",
         "lot": "sub-lot D (the command chain + the keyboard owner)",
         "debt": {
-          "skeletonPartsWithoutRole": 27,
-          "a11yAssertions": 1
+          "skeletonPartsWithoutRole": 26
         },
         "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot D owns it. a11yAssertions=1 means ZERO executable assertions: the owner has no `tests/` directory at all, so the arm has no partial credit to give. The 27 roleless parts are its voice-input sub-anatomy (`voice-badge`, `voice-help-*`, `suggestion-chip`, `top-rail`, ...), 27 of the cut's 61."
       },
@@ -2437,18 +2436,18 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 25,
+        "channelsRead": 76,
         "classTokens": 0,
-        "partsStamped": 24,
-        "partsConsumed": 24
+        "partsStamped": 19,
+        "partsConsumed": 19
       },
       "readWithoutProducer": 0,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
-      "partsStampedNotConsumed": 1,
-      "partsConsumedNotStamped": 1,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 1,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
@@ -2458,9 +2457,7 @@
         "opened": "2026-09-19",
         "lot": "sub-lot D (the command chain + the keyboard owner)",
         "debt": {
-          "inlineStyleViolations": 1,
-          "skeletonHandMade": 14,
-          "skeletonPartsWithoutRole": 11
+          "skeletonPartsWithoutRole": 10
         },
         "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot D owns it. Its 14 hand-made skeleton constructs and 11 roleless parts sit beside the cut's sharpest producer-without-reader defect: 8 `--ds-command-palette-*` channels are emitted by the legacy `chrome-variables` kernel and its Modern skin reads none of them -- 25 root-token reads instead."
       },
@@ -2471,7 +2468,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 24,
+        "channelsRead": 70,
         "classTokens": 0,
         "partsStamped": 17,
         "partsConsumed": 17

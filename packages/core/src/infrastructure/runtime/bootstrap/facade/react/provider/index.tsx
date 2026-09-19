@@ -147,6 +147,7 @@ import type { TenantAppearance } from '@/foundation/contracts/composition/tenant
 import { resolveEngine } from '../../../../engines/runtime/resolution';
 import { resolveAdapter } from '@/infrastructure/compilers/runtime/theme/presentation/adapters/facade/registry';
 import { CommandRegistryProvider } from '../../../../application/commands';
+import { ShortcutProvider } from '../../../../application/interaction/shortcuts';
 import {
   RecipeProfileProvider,
   RECIPE_PROFILE_SCHEMA_VERSION,
@@ -1267,6 +1268,18 @@ export function DesignSystemProvider({
                   <MotionProvider profile={motionProfile} tenantDial={tenantMotionDial}>
                     <ResponsiveProvider ssrViewport={ssrViewport}>
                       <CommandRegistryProvider>
+                        {/*
+                          The single keyboard owner. `ShortcutProvider` used to
+                          be a standalone provider an app had to mount itself,
+                          so `useGlobalShortcut` threw unless it did -- which is
+                          why four DS owners hand-rolled their own document
+                          `keydown` listeners instead. It is mounted here, once,
+                          inside the command registry: the registry's own
+                          shortcut listener is bubble-phase and this one is
+                          capture-phase, so a chord registered in both fires in
+                          the shortcut registry and never twice.
+                        */}
+                        <ShortcutProvider>
                         <AntdConfigProvider>
                           {/*
                             The provider paints nothing. It used to mount a
@@ -1279,6 +1292,7 @@ export function DesignSystemProvider({
                           */}
                           <MemoizedChildren>{children}</MemoizedChildren>
                         </AntdConfigProvider>
+                        </ShortcutProvider>
                       </CommandRegistryProvider>
                     </ResponsiveProvider>
                   </MotionProvider>

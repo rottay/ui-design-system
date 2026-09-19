@@ -7,107 +7,73 @@
  * component base and is in turn overridden by the structure and surface tiers;
  * the unlayered compiled tenant artifact wins over all of them.
  *
- * SCOPE ROOT: the pattern now composes the certified Modal, so the scope
- * classes `ds-pattern-command-palette ds-engine-modern` ride Modal's
- * `data-part='surface'` (two distinct classes + one attribute, (0,3,0);
- * repetition is prohibited — the old P-48 border-color floor is bought from
- * this scope + a single target part, never a repeated attribute). PORTALED:
- * the chamber is a native `<dialog>` under the shared portal root, and
- * `usePortalScope` re-stamps the tenant/locale/density lineage onto it, so
+ * SCOPE ROOT: the pattern composes the certified Modal, so the scope classes
+ * `ds-pattern-command-palette ds-engine-modern` ride Modal's surface node.
+ * PORTALED: the chamber is a native `<dialog>` under the shared portal root,
+ * and `usePortalScope` re-stamps the tenant/locale/density lineage onto it, so
  * descendant selectors and tenant `--ds-*` overrides still resolve.
  *
+ * CHANNELS: every paint decision below is a `--ds-command-palette-*` channel
+ * with the chained fallback to the cascade root it used to read directly, and
+ * `derivation/chrome/command-palette` produces each one at exactly that
+ * fallback. Three names the tenant could already author through
+ * `chrome.search.commandPalette` finally land here -- `-border` on the
+ * palette's own hairlines, `-group-color` on the section headings and
+ * `-shortcut-border` through the composed Kbd's own frame channel. The other
+ * five (`-bg`, `-shadow`, `-backdrop`, `-item-hover-bg`, `-empty-color`) name
+ * paint this pattern gave away when it adopted certified primitives, and their
+ * root rests disagree with the rest those primitives hold; adopting them here
+ * would repaint every tenant that never authored the field. They are routed,
+ * not invented -- see the lot's changeset.
+ *
+ * MEASURE: the palette's own `max-inline-size` used to be authored at (0,3,0)
+ * against Modal's own (0,4,0) surface rule and never applied. It now reaches
+ * the chamber through Modal's `--ds-modal-max-inline-size` channel, which is
+ * the sanctioned way one owner tunes a composed primitive.
+ *
  * COMPOSITION: the search box is the certified Input primitive, shortcut
- * hints are the certified Kbd, the argument chip wraps the certified Tag and
- * the empty state wraps the certified Empty — those primitives own their
- * paint (the pre-composition kbd/chip/empty color rules were deleted with
- * the raw elements). The overlay frame, backdrop, chamber fill, elevation,
- * border, entrance motion and z-index belong to Modal (overlay-modal.css);
- * the frame/backdrop/card blocks this file used to own were retired with the
- * hand-rolled overlay. What remains here is the palette's own content: the
- * card measure, the listbox scroll frame, row layout + keyboard/pointer
- * states, section labels, the argument panel and the footer hairline.
+ * hints are the certified Kbd, the argument chip wraps the certified Tag, the
+ * empty state wraps the certified Empty and the loading footprint is the
+ * SHARED `AnatomySkeleton` -- those owners paint themselves, and this file
+ * draws no skeleton of its own. The overlay frame, backdrop, chamber fill,
+ * elevation, border, entrance motion and z-index belong to Modal.
  *
- * CASCADE: `max-inline-size` on the surface ties overlay-modal.css's own
- * (0,3,0) surface rule and wins on source order — command-palette.css is
- * imported after it inside `layer(rottay-engines)`. The phone posture is
- * deliberately NOT contested: Modal's `[data-fullscreen='true']` rule is
- * (0,4,0) and correctly releases the measure. Modal's footer/body/header
- * rules all use a child combinator from the surface, so the palette's own
- * `[data-part='footer']` (a grandchild, inside Modal's body) never collides.
- *
- * INTERACTION: the keyboard-active row keys on `[data-active='true']`;
- * pointer hover is hover-capable-only (`@media (hover: hover)`) AND keyed on
- * `:not([data-active='true'])` so it never repaints the keyboard-selected
- * row — the exact `activeIndex !== idx` guard the removed onMouseEnter/Leave
- * writes had. In forced colors the active row re-expresses as
+ * INTERACTION: state is decided once. The row runs `useInteractionState` and
+ * stamps `partAttributes`, so the hover arm pairs the kernel's own
+ * `[data-state~='hovered']` with the platform `:hover`; the keyboard cursor
+ * stays a separate fact on `[data-active='true']`, and the hover arm never
+ * repaints it. In forced colors the active row re-expresses as
  * Highlight/HighlightText so the keyboard cursor stays visible.
  */
 
 /* ---- card measure: the ONE geometry the palette still owns on Modal's
-        chamber. Fill, elevation, border, radius (through Modal's `radius`
-        prop), entrance motion, z-index and the backdrop are all governed by
-        overlay-modal.css — the palette's former frame/backdrop/card blocks
-        were retired with the hand-rolled overlay they described. ---- */
-.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] {
-  max-inline-size: 32rem;
+        chamber, delivered through Modal's own channel. Fill, elevation,
+        border, radius, entrance motion, z-index and the backdrop are all
+        governed by the modal skin. ---- */
+.ds-pattern-command-palette.ds-engine-modern {
+  --ds-modal-max-inline-size: var(--ds-command-palette-max-inline-size, 32rem);
 }
 
-/* ---- loading footprint: skeleton rows mirror the real row anatomy (icon
-        well + label/hint bars) so the panel never reflows when async
-        results land; the wash rides the canonical shimmer keyframes ---- */
-.ds-pattern-command-palette.ds-engine-modern [data-part='loading-list'] {
-  padding-block: var(--ds-spacing-1, 4px);
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-row'] {
+/* ---- content wrapper: the palette's own column. `data-state~='loading'` is
+        stamped by the pattern and deliberately unpainted: the loading surface
+        is the shared anatomy skeleton's, not a second wash of this file's. ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='content'] {
   display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2, 8px);
-  margin-inline: var(--ds-spacing-1, 4px);
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-3, 12px);
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'],
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
-  border-radius: var(--ds-radius-md);
-  background: linear-gradient(
-    100deg,
-    var(--ds-surface-inset) 40%,
-    var(--ds-surface-highlight, var(--ds-surface-panel)) 50%,
-    var(--ds-surface-inset) 60%
-  );
-  background-size: 200% 100%;
-  animation: ds-foundation-shimmer var(--_ds-command-palette-shimmer-duration, calc(var(--ds-motion-glacial) * 4)) linear infinite;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'] {
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
-  flex-shrink: 0;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-text'] {
-  display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--ds-spacing-1, 4px);
-  min-inline-size: 0;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
-  display: block;
-  inline-size: 55%;
-  block-size: 0.625rem;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'][data-width='short'] {
-  inline-size: 35%;
-  block-size: 0.5rem;
+  min-block-size: 0;
 }
 
 /* ---- search row: always a flex line so the argument chip can sit beside
         the composed Input (which owns its own paint). ---- */
-.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='search'] {
+.ds-pattern-command-palette.ds-engine-modern [data-part='search'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 8px);
-  padding: var(--ds-spacing-3, 12px);
-  border-bottom: 1px solid var(--ds-color-border);
+  gap: var(--ds-command-palette-search-gap, var(--ds-spacing-2, 8px));
+  padding: var(--ds-command-palette-search-padding, var(--ds-spacing-3, 12px));
+  border-block-end: var(
+    --ds-command-palette-search-rule,
+    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+  );
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='search'] > :last-child {
   flex: 1 1 auto;
@@ -115,73 +81,90 @@
 }
 
 /* ---- listbox: internal scroll with the lane's thin, ink-derived bar
-        (ScrollArea is not composed — see the engine header). ---- */
+        (ScrollArea is not composed -- see the engine header). The measure is
+        the caller's runtime prop, written on the element as this family's
+        own channel. ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='list'] {
   overflow-y: auto;
-  padding-block: var(--ds-spacing-2, 8px);
-  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  max-block-size: var(--ds-command-palette-list-max-block-size, 25rem);
+  padding-block: var(--ds-command-palette-list-padding-block, var(--ds-spacing-2, 8px));
+  scrollbar-color: var(
+      --ds-command-palette-scrollbar-thumb,
+      color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border))
+    )
+    transparent;
   scrollbar-width: thin;
 }
 
-/* ---- sections: recent block + group labels (geometry transcribed from the
-        retired menuSectionTitleStyle spread) ---- */
+/* ---- sections: recent block + group labels ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] {
-  padding-inline: var(--ds-spacing-3, 12px);
-  padding-block-end: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-command-palette-recent-padding-inline, var(--ds-spacing-3, 12px));
+  padding-block-end: var(--ds-command-palette-recent-padding-block-end, var(--ds-spacing-2, 8px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='section-label'],
 .ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
-  padding-block: 6px 4px;
-  padding-inline: var(--ds-spacing-3, 12px);
-  margin-block-end: var(--ds-spacing-1, 4px);
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-xs, 12px);
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  padding-block: var(--ds-command-palette-section-label-padding-block, 6px 4px);
+  padding-inline: var(--ds-command-palette-section-label-padding-inline, var(--ds-spacing-3, 12px));
+  margin-block-end: var(--ds-command-palette-section-label-margin-block-end, var(--ds-spacing-1, 4px));
+  color: var(--ds-command-palette-section-label-color, var(--ds-color-text-muted));
+  font-size: var(--ds-command-palette-section-label-font-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(--ds-command-palette-section-label-font-weight, 500);
+  letter-spacing: var(--ds-command-palette-section-label-letter-spacing, 0.05em);
   text-transform: uppercase;
 }
+/* The group heading keeps the tenant's `chrome.search.categoryColor` ahead of
+   the family channel: it is the narrower statement, and it only exists when a
+   tenant authored it. */
 .ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
-  padding-block: var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px);
-  padding-inline: var(--ds-spacing-5, 20px);
+  padding-block: var(
+    --ds-command-palette-group-label-padding-block,
+    var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px)
+  );
+  padding-inline: var(--ds-command-palette-group-label-padding-inline, var(--ds-spacing-5, 20px));
   margin-block-end: 0;
-  /* a live per-tenant override channel (fallback: muted) */
-  color: var(--ds-search-category-color, var(--ds-color-text-muted));
+  color: var(
+    --ds-search-category-color,
+    var(--ds-command-palette-group-color, var(--ds-color-text-muted))
+  );
 }
 
-/* ---- option rows: keyboard-active and pointer-hover-while-not-active both
-        resolve to the inset surface; hover is hover-capable-only and the
+/* ---- option rows: the keyboard cursor is `[data-active='true']`; the
+        pointer arm is hover-capable-only and pairs the kernel state with the
+        platform pseudo, so one place decides when a row is hovered. The
         `:not([data-active='true'])` guard keeps a hovered pointer off the
-        keyboard-selected row (a plain :hover would light two rows at once).
-        The active row also carries a SHAPE indicator (inline-start accent
-        bar), never color alone; the inline margin lets the active pill and
-        the bar float clear of the dialog edge. ---- */
+        keyboard-selected row (a plain hover would light two rows at once). ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-2, 8px);
-  margin-inline: var(--ds-spacing-1, 4px);
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-3, 12px);
-  border-radius: var(--ds-radius-lg);
+  gap: var(--ds-command-palette-item-gap, var(--ds-spacing-2, 8px));
+  margin-inline: var(--ds-command-palette-item-margin-inline, var(--ds-spacing-1, 4px));
+  padding-block: var(--ds-command-palette-item-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-command-palette-item-padding-inline, var(--ds-spacing-3, 12px));
+  border-radius: var(--ds-command-palette-item-radius, var(--ds-radius-lg));
   cursor: pointer;
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: background-color
+    var(--ds-command-palette-item-transition, var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] [data-part='item'] {
-  padding-inline: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-command-palette-item-padding-inline, var(--ds-spacing-3, 12px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'][aria-disabled='true'] {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: var(--ds-command-palette-item-disabled-opacity, 0.5);
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
-  background: var(--ds-surface-inset);
-  box-shadow: inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary));
+  background: var(--ds-command-palette-item-active-bg, var(--ds-surface-inset));
+  box-shadow: var(
+    --ds-command-palette-item-active-ring,
+    inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary))
+  );
 }
 @media (hover: hover) {
-  .ds-pattern-command-palette.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
-    background: var(--ds-surface-inset);
+  .ds-pattern-command-palette.ds-engine-modern
+    [data-part='item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
+    background: var(--ds-command-palette-item-hover-surface, var(--ds-surface-inset));
   }
 }
 
@@ -189,7 +172,7 @@
 .ds-pattern-command-palette.ds-engine-modern [data-part='item-main'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 8px);
+  gap: var(--ds-command-palette-item-main-gap, var(--ds-spacing-2, 8px));
   min-inline-size: 0;
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item-text'] {
@@ -197,92 +180,90 @@
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='label'] {
   overflow: hidden;
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-font-size-sm, 14px);
-  font-weight: 500;
+  color: var(--ds-command-palette-label-color, var(--ds-color-text-primary));
+  font-size: var(--ds-command-palette-label-font-size, var(--ds-font-size-sm, 14px));
+  font-weight: var(--ds-command-palette-label-font-weight, 500);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='description'] {
   overflow: hidden;
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
+  color: var(--ds-command-palette-description-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-command-palette-description-font-size, var(--ds-font-size-xs, 12px));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ---- shortcut hint: layout only — the composed Kbd owns the key-cap paint ---- */
+/* ---- shortcut hint: layout only -- the composed Kbd owns the key-cap paint,
+        and the tenant's own command-palette shortcut rule reaches it through
+        the primitive's frame channel rather than through a selector war. ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='shortcut'] {
   flex-shrink: 0;
-  margin-inline-start: var(--ds-spacing-2, 8px);
+  margin-inline-start: var(--ds-command-palette-shortcut-margin-inline-start, var(--ds-spacing-2, 8px));
+  --ds-kbd-frame: var(--ds-command-palette-shortcut-border, var(--ds-color-border));
 }
 
-/* ---- empty state: rhythm only — the composed Empty owns its paint ---- */
+/* ---- empty state: rhythm only -- the composed Empty owns its paint ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='empty'] {
-  padding-block: var(--ds-spacing-8, 32px);
+  padding-block: var(--ds-command-palette-empty-padding-block, var(--ds-spacing-8, 32px));
 }
 
 /* ---- per-section provider error row (kind='error': rendered, never
         selectable) ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='error'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-4, 16px);
-  color: var(--ds-color-error, var(--ds-color-text-secondary));
+  padding-block: var(--ds-command-palette-error-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-command-palette-error-padding-inline, var(--ds-spacing-4, 16px));
+  color: var(--ds-command-palette-error-color, var(--ds-color-error, var(--ds-color-text-secondary)));
 }
 
 /* ---- argument mode: panel, prompt, validation error. The chip is layout
-        only — the composed Tag inside owns the pill paint. ---- */
+        only -- the composed Tag inside owns the pill paint. ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-panel'] {
-  padding-block: var(--ds-spacing-3, 12px);
-  padding-inline: var(--ds-spacing-4, 16px);
+  padding-block: var(--ds-command-palette-argument-panel-padding-block, var(--ds-spacing-3, 12px));
+  padding-inline: var(--ds-command-palette-argument-panel-padding-inline, var(--ds-spacing-4, 16px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-chip'] {
   flex-shrink: 0;
   white-space: nowrap;
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-prompt'] {
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-sm, 14px);
+  color: var(--ds-command-palette-argument-prompt-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-command-palette-argument-prompt-font-size, var(--ds-font-size-sm, 14px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-error'] {
-  margin-block-start: var(--ds-spacing-1, 4px);
-  color: var(--ds-color-error, var(--ds-color-text-primary));
-  font-size: var(--ds-font-size-xs, 12px);
+  margin-block-start: var(--ds-command-palette-argument-error-margin-block-start, var(--ds-spacing-1, 4px));
+  color: var(--ds-command-palette-argument-error-color, var(--ds-color-error, var(--ds-color-text-primary)));
+  font-size: var(--ds-command-palette-argument-error-font-size, var(--ds-font-size-xs, 12px));
 }
 
 /* ---- footer (caller slot; the pattern owns rhythm + hairline) ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='footer'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-4, 16px);
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
-}
-.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border);
+  padding-block: var(--ds-command-palette-footer-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-command-palette-footer-padding-inline, var(--ds-spacing-4, 16px));
+  color: var(--ds-command-palette-footer-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-command-palette-footer-font-size, var(--ds-font-size-xs, 12px));
+  border-block-start: var(
+    --ds-command-palette-footer-rule,
+    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+  );
 }
 
 /* The narrow-viewport `@container` block that used to live here is RETIRED.
    It keyed on a `container-type` declared by the palette's own overlay frame,
    which no longer exists, and the top offset it retuned is now Modal's inline
-   `padding-top` on the dialog root — unreachable from a stylesheet. Modal's
+   `padding-top` on the dialog root -- unreachable from a stylesheet. Modal's
    `adaptiveFullscreen` posture (default on) is the governed phone answer:
    full-viewport chamber, radius flattened, safe-area insets. */
-
-/* ---- coarse pointers: option rows meet the physical 44px floor ---- */
-@media (pointer: coarse) {
-  .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
-    min-block-size: 44px;
-  }
-}
 
 /* ---- forced colors: system colors only. The keyboard cursor row MUST stay
         visible, so the active option re-expresses as Highlight; hairlines,
         labels and the dialog frame follow in system ink. No data-viz here,
         so no forced-color-adjust opt-out anywhere. ---- */
 @media (forced-colors: active) {
-  /* The chamber frame is NOT re-declared here: overlay-modal.css already
-     paints `border: 1px solid CanvasText` on the surface in forced colors, at
-     (0,4,0) — a (0,3,0) palette rule would be dead CSS, not a floor. */
+  /* The chamber frame is NOT re-declared here: the modal skin already paints
+     `border: 1px solid CanvasText` on the surface in forced colors, at a
+     specificity a palette rule cannot reach -- a rule here would be dead CSS,
+     not a floor. */
 
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
     background: Highlight;
@@ -296,8 +277,8 @@
     color: HighlightText;
   }
 
-  .ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='search'],
-  .ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='footer'] {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='search'],
+  .ds-pattern-command-palette.ds-engine-modern [data-part='footer'] {
     border-color: ButtonText;
   }
 
@@ -314,21 +295,18 @@
 }
 
 /* C2c a11y floor (census-derived): coarse-pointer tap targets never render
-   below the canonical --ds-touch-target-min channel; fine pointers keep the
-   authored size untouched. */
+   below the canonical touch-target channel; fine pointers keep the authored
+   size untouched. */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
+    min-block-size: var(--ds-command-palette-item-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
    relaid out, or left waiting on an event that never arrives. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-command-palette.ds-engine-modern [data-part='item'],
-  .ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'], .ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
     transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
   }
 }

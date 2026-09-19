@@ -14,60 +14,70 @@
  * part, never a repeated attribute). NOT portaled: the dialog is a
  * `position:fixed` DOM descendant of the tenant-scoped root.
  *
+ * CHANNELS: every paint decision below is a `--ds-shortcuts-overlay-*` channel
+ * with the chained fallback to the cascade root it used to read directly, and
+ * `derivation/chrome/shortcuts-overlay` produces each one at exactly that
+ * fallback. Producing a name changes WHO can reach the value, never what it
+ * rests at.
+ *
  * COMPOSITION: the close control is the certified Button, the search box
  * the certified Input, key caps the certified Kbd, the scroll frame the
  * certified ScrollArea (its own skin owns the scrollbar), and the empty
- * state the certified Empty — those primitives own their paint (the
- * pre-composition kbd/close/input/empty color rules were deleted with the
- * raw elements). This file owns only the overlay chrome: root/backdrop/
- * dialog geometry, header/search/footer rhythm + hairlines, category
- * hierarchy and row layout.
+ * state the certified Empty — those primitives own their paint. This file
+ * owns only the overlay chrome: root/backdrop/dialog geometry,
+ * header/search/footer rhythm + hairlines, category hierarchy and row layout.
  *
  * Z-INDEX: the arbitrary Tailwind `z-50` is re-mapped to the sanctioned
  * `--ds-z-modal` rung — an overlay stacks with modal layers, not below them.
  */
 
-/* ---- root: fixed top-anchored overlay frame (was Tailwind
-        `fixed inset-0 z-50 flex items-start justify-center pt-[10vh]`) ---- */
+/* ---- root: fixed top-anchored overlay frame ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
   position: fixed;
   inset: 0;
-  z-index: var(--ds-z-modal, 1500);
+  z-index: var(--ds-shortcuts-overlay-z-index, var(--ds-z-modal, 1500));
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-block-start: 10vh;
-  padding-inline: var(--ds-spacing-3, 12px);
+  padding-block-start: var(--ds-shortcuts-overlay-inset-block-start, 10vh);
+  padding-inline: var(--ds-shortcuts-overlay-padding-inline, var(--ds-spacing-3, 12px));
   container: ds-shortcuts-overlay / inline-size;
 }
 
 /* backdrop: scrim + sanctioned glass layer, at parity with the command
    palette's overlay material (glass is sanctioned on overlay backdrops
-   only; tint + blur scale with --ds-effect-intensity, collapsing to a plain
-   scrim at 0). */
+   only; tint + blur scale with the effect-intensity dial, collapsing to a
+   plain scrim at 0). */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
   position: absolute;
   inset: 0;
-  background-color: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
-  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
-  backdrop-filter: var(--ds-glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+  background-color: var(
+    --ds-shortcuts-overlay-scrim,
+    var(--ds-overlay-scrim, var(--ds-color-bg-overlay))
+  );
+  background-image: linear-gradient(
+    var(--ds-shortcuts-overlay-scrim-tint, var(--ds-glass-scrim-tint)),
+    var(--ds-shortcuts-overlay-scrim-tint, var(--ds-glass-scrim-tint))
+  );
+  backdrop-filter: var(--ds-shortcuts-overlay-scrim-filter, var(--ds-glass-backdrop-filter));
+  -webkit-backdrop-filter: var(--ds-shortcuts-overlay-scrim-filter, var(--ds-glass-backdrop-filter));
 }
 
-/* ---- dialog card (was `relative rounded-xl w-full max-w-lg
-        overflow-hidden`). Widened to 40rem so the intrinsic two-column list
-        fits; the narrow container query below re-collapses it. Entrance
-        rides the canonical keyframes on the motion channel. ---- */
+/* ---- dialog card. 40rem so the intrinsic two-column list fits; the narrow
+        container query below re-collapses it. Entrance rides the canonical
+        keyframes on the motion channel. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
   position: relative;
   inline-size: 100%;
-  max-inline-size: 40rem;
+  max-inline-size: var(--ds-shortcuts-overlay-dialog-max-inline-size, 40rem);
   overflow: hidden;
-  border-radius: var(--ds-radius-xl);
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-3);
-  color: var(--ds-color-text-primary);
-  animation: ds-foundation-fade-in-down var(--ds-motion-normal) var(--ds-motion-ease-enter, ease-out);
+  border-radius: var(--ds-shortcuts-overlay-dialog-radius, var(--ds-radius-xl));
+  background: var(--ds-shortcuts-overlay-dialog-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-shortcuts-overlay-dialog-shadow, var(--ds-elevation-3));
+  color: var(--ds-shortcuts-overlay-dialog-color, var(--ds-color-text-primary));
+  animation: ds-foundation-fade-in-down
+    var(--ds-shortcuts-overlay-enter-duration, var(--ds-motion-normal))
+    var(--ds-shortcuts-overlay-enter-easing, var(--ds-motion-ease-enter, ease-out));
 }
 
 /* ---- header: title + composed close Button over a quiet hairline ---- */
@@ -75,23 +85,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-3, 12px);
-  padding-block: var(--ds-spacing-3, 12px);
-  padding-inline: var(--ds-spacing-5, 20px);
-  border-bottom: 1px solid var(--ds-color-border);
+  gap: var(--ds-shortcuts-overlay-header-gap, var(--ds-spacing-3, 12px));
+  padding-block: var(--ds-shortcuts-overlay-header-padding-block, var(--ds-spacing-3, 12px));
+  padding-inline: var(--ds-shortcuts-overlay-header-padding-inline, var(--ds-spacing-5, 20px));
+  border-block-end: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='title'] {
   margin: 0;
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-font-size-base, 16px);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  color: var(--ds-shortcuts-overlay-title-color, var(--ds-color-text-primary));
+  font-size: var(--ds-shortcuts-overlay-title-font-size, var(--ds-font-size-base, 16px));
+  font-weight: var(--ds-shortcuts-overlay-title-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
 /* ---- search row (the composed Input owns its paint + focus ring) ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='search'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-5, 20px);
-  border-bottom: 1px solid var(--ds-color-border);
+  padding-block: var(--ds-shortcuts-overlay-search-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-shortcuts-overlay-search-padding-inline, var(--ds-spacing-5, 20px));
+  border-block-end: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 
 /* ---- list rhythm (the certified ScrollArea owns the scroll frame). The
@@ -100,25 +110,28 @@
         to a single column without a breakpoint fork; groups never split
         across columns. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='list'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  column-width: 16rem;
-  column-gap: var(--ds-spacing-4, 16px);
+  padding-block: var(--ds-shortcuts-overlay-list-padding-block, var(--ds-spacing-2, 8px));
+  column-width: var(--ds-shortcuts-overlay-list-column-width, 16rem);
+  column-gap: var(--ds-shortcuts-overlay-list-column-gap, var(--ds-spacing-4, 16px));
 }
 
 /* ---- category groups: quiet uppercase label, hairline-free ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='group'] {
-  padding-block: var(--ds-spacing-1, 4px);
+  padding-block: var(--ds-shortcuts-overlay-group-padding-block, var(--ds-spacing-1, 4px));
   break-inside: avoid;
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-row'] {
-  padding-block: var(--ds-spacing-1, 4px);
-  padding-inline: var(--ds-spacing-5, 20px);
+  padding-block: var(--ds-shortcuts-overlay-category-padding-block, var(--ds-spacing-1, 4px));
+  padding-inline: var(--ds-shortcuts-overlay-category-padding-inline, var(--ds-spacing-5, 20px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label'] {
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
-  font-weight: var(--ds-font-weight-semibold, 600);
-  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  color: var(--ds-shortcuts-overlay-category-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-shortcuts-overlay-category-font-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(--ds-shortcuts-overlay-category-font-weight, var(--ds-font-weight-semibold, 600));
+  letter-spacing: var(
+    --ds-shortcuts-overlay-category-letter-spacing,
+    var(--ds-letter-spacing-wide, 0.025em)
+  );
   text-transform: uppercase;
 }
 
@@ -127,14 +140,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-3, 12px);
-  padding-block: 6px;
-  padding-inline: var(--ds-spacing-5, 20px);
+  gap: var(--ds-shortcuts-overlay-item-gap, var(--ds-spacing-3, 12px));
+  padding-block: var(--ds-shortcuts-overlay-item-padding-block, 6px);
+  padding-inline: var(--ds-shortcuts-overlay-item-padding-inline, var(--ds-spacing-5, 20px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='description'] {
   min-inline-size: 0;
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-font-size-sm, 14px);
+  color: var(--ds-shortcuts-overlay-description-color, var(--ds-color-text-primary));
+  font-size: var(--ds-shortcuts-overlay-description-font-size, var(--ds-font-size-sm, 14px));
 }
 
 /* ---- chord: caps separated by a consistent gap (dir="ltr" is stamped by
@@ -144,7 +157,7 @@
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: var(--ds-spacing-1, 4px);
+  gap: var(--ds-shortcuts-overlay-chord-gap, var(--ds-spacing-1, 4px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'] {
   display: inline-flex;
@@ -152,24 +165,27 @@
 
 /* ---- empty state: rhythm only — the composed Empty owns its paint ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='empty'] {
-  padding-block: var(--ds-spacing-8, 32px);
+  padding-block: var(--ds-shortcuts-overlay-empty-padding-block, var(--ds-spacing-8, 32px));
 }
 
 /* ---- footer (caller slot; the pattern owns rhythm + hairline) ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-5, 20px);
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
+  padding-block: var(--ds-shortcuts-overlay-footer-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-shortcuts-overlay-footer-padding-inline, var(--ds-spacing-5, 20px));
+  color: var(--ds-shortcuts-overlay-footer-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-shortcuts-overlay-footer-font-size, var(--ds-font-size-xs, 12px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border);
+  border-block-start: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 
 /* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
 @container ds-shortcuts-overlay (inline-size < 40rem) {
   .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
-    padding-block-start: var(--ds-spacing-8, 32px);
+    padding-block-start: var(
+      --ds-shortcuts-overlay-narrow-inset-block-start,
+      var(--ds-spacing-8, 32px)
+    );
   }
   .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
     max-inline-size: 100%;
@@ -179,8 +195,8 @@
 /* ---- coarse pointers: the close control meets the physical 44px floor ---- */
 @media (pointer: coarse) {
   .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='close'] {
-    min-inline-size: 44px;
-    min-block-size: 44px;
+    min-inline-size: var(--ds-shortcuts-overlay-close-touch-target, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-shortcuts-overlay-close-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
