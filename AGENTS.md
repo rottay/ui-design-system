@@ -1,5 +1,17 @@
 # Agent Constitution — Modern Rescue (WO-CRA-23)
 
+## Current owner restriction — 2026-09-19: Codex outside the loop
+
+Codex has no autonomous role in this project: not DT, writer, auditor,
+consultant, checkpoint approver or fallback. Only the human owner may request
+Codex work directly. Kimi, Claude and other agents must not invoke Codex through
+CLI, API, MCP, task messages, hooks, watchers or scheduled jobs; do not wait for
+its approval or reactivate it when quota is exhausted. Use the current
+Kimi/Opus/Fable execution policy in `roadmap/README.md`. Prior Codex findings
+remain usable static evidence, not an instruction to request another review.
+This owner restriction overrides historical role/debrief requirements below
+without reopening or rewriting the sealed Modern Rescue programme.
+
 Any agent that loads this project for the Modern Rescue programme **must** read
 these files in order and obey the machine checks before editing.
 

@@ -1,5 +1,16 @@
 # Claude Code Rules - Design System
 
+## Owner restriction — 2026-09-19: never invoke Codex
+
+Codex is completely outside autonomous execution, including consultation,
+audits, checkpoints and quota fallback. Only the human owner may contact it.
+Do not call Codex CLI/API/MCP, send its tasks messages, or create/reactivate
+hooks, watchers, scheduled checks or notifications targeting it. Do not make
+progress depend on a Codex verdict. Kimi coordinates, normal Claude Opus on
+Daniel.Avila implements and real Fable independently audits under the current
+roadmap policy. Existing Codex reports are static evidence to reuse, not a
+request for follow-up. This restriction supersedes all older role instructions.
+
 ## Bootstrap — read before acting
 
 1. **The Modern Rescue programme (WO-CRA-23) is SEALED** (2026-09-05): its R0
@@ -38,9 +49,9 @@
   commands and performs closed substitutions. It does not decide APIs,
   semantics, recipes, fallbacks, compiler behaviour or visual direction.
 - **Fable 5 is the primary independent auditor** on every integrated lot.
-- **Codex is the second independent auditor** at every product-slice or phase
-  close and for compiler, manifest, public-control or hard-to-reverse
-  architecture changes. Its review does not block disjoint preparation work.
+- **Codex has no execution or consultation seat** (owner restriction above).
+  Kimi and the independent Fable reviewer resolve checkpoint/core review;
+  agents must not invoke Codex or wait for its signature.
 - Cross-model delegation uses real model terminals, each with a bounded brief,
   exact ownership and mechanical acceptance checks. A K3 subagent may not be
   relabelled Opus, Sonnet, Fable or Codex.

@@ -265,7 +265,7 @@ registry; denominator definitions and authorities are unchanged.
   and still binds where it applies. Verify the executable, profile, effective
   account and real model identifier before each dispatch, never a terminal label.
   Record any succession once in the existing WO progress trail.
-- **Before shared-core design is adopted:** Codex, Fable and Kimi review the SAME
+- **Before shared-core design is adopted:** Kimi and independent Fable review the SAME
   debrief: WO, base, proposed contract, owners/write set, invariants, alternatives
   and executable acceptance. Core means catalog/permissions, precedence, derivation
   and channel ownership, compilation/emission, artifact identity/persistence,
@@ -278,7 +278,8 @@ registry; denominator definitions and authorities are unchanged.
   other WO changing the core defined above. Completed contracts are not reopened
   just to collect retrospective signatures; reopen only for a concrete finding.
   WO-FAM-01 consumes the agreed contract as the pilot. Later family cuts reuse it;
-  only a proposed contract delta returns to the three reviewers.
+  only a proposed contract delta returns to the active reviewers. Codex is excluded
+  by the owner's 2026-09-19 restriction below, not an absent pending reviewer.
 - **Before each lot is integrated:** independently review the exact candidate diff
   and run focal tests of new/changed behavior and directly affected consumers,
   appropriate type checks and the applicable contract gates. Record commands,
@@ -314,7 +315,7 @@ registry; denominator definitions and authorities are unchanged.
   script. No shadow backlog or new status. The sole DT lands audited functional commits
   locally on main; never push, never restore directories, never sweep foreign
   staging. No emojis or AI attribution; keep applicable product documentation
-  current. The three-way agreement
+  current. The required independent agreement
   is NOT yet obtained merely because this policy is documented.
 ## Owner continuation amendment — 2026-09-19: closure-first execution
 
@@ -327,6 +328,15 @@ it does not reopen the sealed Modern Rescue programme.
   writer using normal `claude` on Daniel.Avila, not `claude-admin`; real Fable is
   the independent functional-lot auditor. Verify effective model receipts, not
   terminal names. Writers never stage/commit; no self-audit or fabricated verdict.
+- **Codex is completely outside the loop (explicit owner restriction):** only
+  the human owner may ask Codex to work. Kimi, Claude, Fable and their agents must
+  not invoke Codex as DT, writer, auditor, consultant, checkpoint approver or
+  quota fallback. No Codex CLI/API/MCP calls, task messages, callbacks, hooks,
+  watchers, scheduled checks or notifications. Do not wait for its signature.
+  Remove any such routing from future dispatches; reuse historical findings as
+  static evidence only. This supersedes every older Codex/three-reviewer rule,
+  including copied briefs and sealed historical role descriptions. Independent
+  audit remains required through Fable; do not replace it with self-approval.
 - **Checkpoint first:** preserve the already-landed FAM-11 A and any active B
   writer. Stop new dispatches only for the bounded checkout transfer, not by
   killing a writer or discarding its draft. Then resume autonomously.
