@@ -118,6 +118,39 @@ describe('FloatButton.Group modern: the disclosure names its own panel', () => {
   });
 });
 
+describe('FloatButton.BackTop modern: initial visibility is eager for the window target', () => {
+  afterEach(() => {
+    Object.defineProperty(window, 'scrollY', {
+      configurable: true,
+      writable: true,
+      value: 0,
+    });
+  });
+
+  it('mounts from the first paint when the window is already past the threshold', () => {
+    // Mount-time scroll position decides the first paint without any scroll
+    // pass: the trigger must not wait for the listener effect's first run
+    // (parity with the BackTop modern contract).
+    Object.defineProperty(window, 'scrollY', {
+      configurable: true,
+      writable: true,
+      value: 500,
+    });
+    render(<BackTop visibilityHeight={300} description="Back to top" />);
+    expect(screen.getByRole('button', { name: /back to top/i })).toBeInTheDocument();
+  });
+
+  it('stays hidden from the first paint when the window is below the threshold', () => {
+    Object.defineProperty(window, 'scrollY', {
+      configurable: true,
+      writable: true,
+      value: 0,
+    });
+    render(<BackTop visibilityHeight={300} description="Back to top" />);
+    expect(screen.queryByRole('button', { name: /back to top/i })).toBeNull();
+  });
+});
+
 describe('FloatButton.BackTop modern: the duration axis drives the journey', () => {
   it('places two instances at different offsets at the same instant', () => {
     const fastHost = makeScrollHost(1000);

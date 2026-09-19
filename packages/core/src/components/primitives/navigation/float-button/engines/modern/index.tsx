@@ -487,7 +487,15 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
       style,
     } = props;
 
-    const [visible, setVisible] = useState(false);
+    /** Controls button visibility - component unmounts when false. The
+     *  initial value is computed eagerly for the default window target
+     *  (scrollTop >= visibilityHeight needs no effect when the source is
+     *  window); ref-backed targets resolve in a later commit and start
+     *  hidden on the two-pass path. */
+    const [visible, setVisible] = useState(() => {
+      if (target || typeof window === 'undefined') return false;
+      return readScrollTop(window) >= visibilityHeight;
+    });
 
     // Bound scroll source. A memoized `target` reading a ref that is still
     // empty on the first commit must not pin the listener to `window`.

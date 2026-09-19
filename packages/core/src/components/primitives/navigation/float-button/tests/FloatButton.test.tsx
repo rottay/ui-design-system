@@ -98,7 +98,12 @@ describe.each(['modern', 'rustic'] as const)('FloatButton group/backtop %s engin
     const button = await screen.findByRole('button', { name: /back to top/i });
     fireEvent.click(button);
 
-    expect(scrollToSpy).toHaveBeenCalled();
+    // The modern engine drives the journey over the contract's own `duration`
+    // (rAF-cadenced, parity with the standalone BackTop engine), so the first
+    // scrollTo lands on a later frame — await it like BackTop.modern-contract.
+    await waitFor(() => {
+      expect(scrollToSpy).toHaveBeenCalled();
+    });
     scrollToSpy.mockRestore();
   });
 });
