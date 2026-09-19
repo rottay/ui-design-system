@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-18",
+ "updated": "2026-09-19",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -5723,7 +5723,7 @@
    "lane": "retire",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-EVI-01"
    ],
@@ -5732,9 +5732,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 5; closes F-04, F-53, F-58, F-102, F-87; supersedes: WO-GAT-12",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "daniel",
+   "claimedAt": "2026-09-19",
+   "progressLog": [
+    {
+     "at": "2026-09-19 02:37",
+     "by": "daniel",
+     "note": "2026-09-19: the governance-manifest quarantine slice dispatched (Kimi writer, brief-ret03-manifest.md) — the 11 stale retired-family bindings are quarantine-deleted, not repaired (F-04: the manifest simulates). 12 production readers measured; each gets re-source-or-drop. The customization regen cascade unblocks behind this."
+    }
+   ]
   },
   {
    "id": "WO-RET-04",
