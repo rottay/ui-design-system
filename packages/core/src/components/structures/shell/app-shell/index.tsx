@@ -5,7 +5,8 @@
  *
  * Provides sidebar + header + content layout with:
  * - Controlled/uncontrolled collapse (desktop only)
- * - Shared phone/tablet navigation drawer (never inherits desktop collapsed)
+ * - A navigation presentation resolved through the shared adaptation kernel:
+ *   a fixed track, or an overlay drawer that never inherits desktop collapsed
  * - Canonical safe-area and fixed-bottom-chrome inset ownership
  * - DS token-driven geometry and styling
  * - Slot-based composition (app provides content, DS owns chrome)
@@ -15,6 +16,7 @@
  * <AppShell
  *   collapsed={collapsed}
  *   onCollapsedChange={setCollapsed}
+ *   adapt={{ tablet: { navigation: 'sidebar' } }}
  *   sidebar={{ logo: <Logo />, nav: <NavMenu />, footer: <UserCard /> }}
  *   header={{ center: <Search />, right: <Actions /> }}
  * >
@@ -36,9 +38,19 @@ import React, {
   createContext,
   useContext,
 } from 'react';
-import type { AppShellProps, ShellInset, ShellInsetByPosture, ShellPosture } from '../contracts';
-import { SHELL_DEFAULTS } from '../contracts';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive';
+import type {
+  AppShellAdaptation,
+  AppShellProps,
+  ResolvedAppShellAdaptation,
+  ShellInset,
+  ShellInsetByPosture,
+  ShellPosture,
+} from '../contracts';
+import { SHELL_DEFAULTS, SHELL_GEOMETRY_READS } from '../contracts';
+import type { Adapt } from '@/foundation/contracts/kernel/adaptation';
+import { partAttributes } from '@/foundation/behavior/kernel/anatomy';
+import { useInteractionState } from '@/foundation/behavior/runtime/interaction-state';
+import { useAdaptation } from '@/infrastructure/runtime/adaptation';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationMenuIcon } from '@/graphics/icons/semantic/generated/roles/navigation-menu';
@@ -52,13 +64,14 @@ export interface ShellContextValue {
   collapsed: boolean;
   /** Current shared responsive posture. */
   posture: ShellPosture;
-  /** Phone/tablet postures use overlay navigation instead of a fixed sidebar. */
+  /** The overlay-drawer presentation replaces the fixed track. */
   isCompact: boolean;
   /** Whether compact navigation is currently open. */
   navigationOpen: boolean;
-  sidebarWidth: number;
-  sidebarCollapsedWidth: number;
-  headerHeight: number;
+  /** The geometry the app stated, if it stated any. */
+  sidebarWidth: number | undefined;
+  sidebarCollapsedWidth: number | undefined;
+  headerHeight: number | undefined;
   toggleCollapse: () => void;
   openNavigation: () => void;
   closeNavigation: () => void;
@@ -73,6 +86,33 @@ export function useShellContext(): ShellContextValue | null {
 
 type ShellCustomProperties = React.CSSProperties &
   Partial<Record<`--ds-shell-${string}`, string | number>>;
+
+/** The family's navigation defaults: phone and tablet present an overlay. */
+const NAVIGATION_DEFAULTS: Adapt<AppShellAdaptation> = {
+  phone: { navigation: 'drawer' },
+  tablet: { navigation: 'drawer' },
+};
+
+const BASE_ADAPTATION: ResolvedAppShellAdaptation = { navigation: 'sidebar' };
+
+/**
+ * The collapse cadence, read the way the skin reads it but ending in the
+ * shell's own pre-derivation literal rather than in another name: a var()
+ * chain with no terminal value is invalid at computed-value time wherever the
+ * family deriver has not been registered, and an invalid `transition` is no
+ * transition at all.
+ */
+const SHELL_COLLAPSE_TRANSITION_READ =
+  'var(--ds-shell-collapse-transition, 220ms cubic-bezier(0.16, 1, 0.3, 1))';
+
+/**
+ * The adapt slot, declared on the owner the layout-sensitive registry names.
+ * Extending `Pick` makes this member and the group contract's one thing: they
+ * cannot drift apart without failing to compile.
+ */
+interface AppShellAdaptSlot extends Pick<AppShellProps, 'adapt'> {
+  adapt?: Adapt<AppShellAdaptation>;
+}
 
 function toCssLength(value: number | string): string {
   return typeof value === 'number' ? `${value}px` : value;
@@ -90,6 +130,14 @@ function resolveBottomInset(
   return postureValue === undefined ? SHELL_DEFAULTS.bottomInset : toCssLength(postureValue);
 }
 
+/** A stated geometry number travels on its own channel; an omission does not. */
+function statedChannel(
+  channel: `--ds-shell-${string}`,
+  value: number | string | undefined,
+): ShellCustomProperties {
+  return value === undefined ? {} : { [channel]: toCssLength(value) };
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -101,12 +149,13 @@ export function AppShell({
   collapsed: controlledCollapsed,
   defaultCollapsed = false,
   onCollapsedChange,
+  adapt,
   geometry,
   floatingContent,
   footer,
   className = '',
   style,
-}: AppShellProps) {
+}: AppShellProps & AppShellAdaptSlot) {
   // -- Desktop collapse state (controlled/uncontrolled) ---------------------
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
   const collapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
@@ -127,9 +176,13 @@ export function AppShell({
   const [navigationOpen, setNavigationOpen] = useState(false);
   const navigationDialogId = useId();
   const contentId = useId();
-  const { isMobile, isTablet, isMobileOrTablet } = useBreakpoints();
-  const posture: ShellPosture = isTablet ? 'tablet' : isMobile ? 'phone' : 'desktop';
-  const isCompact = isMobileOrTablet;
+  // The shell IS the viewport band: its structure changes with the device
+  // class, never with a box of its own, so no container is observed.
+  const { posture: resolvedPosture, adaptation, postureAttribute } = useAdaptation<
+    ResolvedAppShellAdaptation
+  >(adapt, { base: BASE_ADAPTATION, defaults: NAVIGATION_DEFAULTS });
+  const posture = resolvedPosture.viewport;
+  const isCompact = adaptation.navigation === 'drawer';
 
   const openNavigation = useCallback(() => setNavigationOpen(true), []);
   const closeNavigation = useCallback(() => setNavigationOpen(false), []);
@@ -144,12 +197,6 @@ export function AppShell({
   }, [children, isCompact]);
 
   // -- Geometry --------------------------------------------------------------
-  const sidebarWidth = geometry?.sidebarWidth ?? SHELL_DEFAULTS.sidebarWidth;
-  const sidebarCollapsedWidth =
-    geometry?.sidebarCollapsedWidth ?? SHELL_DEFAULTS.sidebarCollapsedWidth;
-  const headerHeight = geometry?.headerHeight ?? SHELL_DEFAULTS.headerHeight;
-  const sidebarHeaderHeight = geometry?.sidebarHeaderHeight ?? SHELL_DEFAULTS.sidebarHeaderHeight;
-  const transition = geometry?.collapseTransition ?? SHELL_DEFAULTS.collapseTransition;
   const bottomInset = resolveBottomInset(geometry?.bottomInset, posture);
 
   // -- Guarded i18n channel (K4 idiom): chrome labels resolve through the
@@ -177,10 +224,21 @@ export function AppShell({
   const direction = useOptionalDirection();
   const drawerSide = direction === 'rtl' ? 'right' : 'left';
 
-  const sidebarInlineSize = `var(--ds-shell-sidebar-width, ${sidebarWidth}px)`;
-  const sidebarCollapsedInlineSize = `var(--ds-shell-sidebar-collapsed-width, ${sidebarCollapsedWidth}px)`;
-  const headerBlockSize = `var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, ${headerHeight}px))`;
-  const sidebarHeaderBlockSize = `var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, ${sidebarHeaderHeight}px))`;
+  // The interaction triad for the two chrome actions is decided once, here,
+  // and read off `data-state` by the skin.
+  const triggerInteraction = useInteractionState();
+  const closeInteraction = useInteractionState();
+  const skipLinkInteraction = useInteractionState();
+
+  // The four geometry reads state the same chain their deriver produces, so
+  // the shell still resolves before the deriver is registered and inside the
+  // Sheet's portal, where the root's own stamps do not reach. The fallback
+  // arm is dead whenever the channel has a producer, and the deriver's
+  // contract suite pins the two texts identical so they cannot drift.
+  const sidebarInlineSize = SHELL_GEOMETRY_READS.sidebarWidth;
+  const sidebarCollapsedInlineSize = SHELL_GEOMETRY_READS.sidebarCollapsedWidth;
+  const headerBlockSize = SHELL_GEOMETRY_READS.headerBlockSize;
+  const sidebarHeaderBlockSize = SHELL_GEOMETRY_READS.sidebarHeaderBlockSize;
   const activeSidebarInlineSize = collapsed ? sidebarCollapsedInlineSize : sidebarInlineSize;
   const hasHeader = Boolean(header || (isCompact && sidebar));
   const desktopSidebarInset =
@@ -195,9 +253,9 @@ export function AppShell({
       posture,
       isCompact,
       navigationOpen,
-      sidebarWidth,
-      sidebarCollapsedWidth,
-      headerHeight,
+      sidebarWidth: geometry?.sidebarWidth,
+      sidebarCollapsedWidth: geometry?.sidebarCollapsedWidth,
+      headerHeight: geometry?.headerHeight,
       toggleCollapse,
       openNavigation,
       closeNavigation,
@@ -205,13 +263,13 @@ export function AppShell({
     [
       closeNavigation,
       collapsed,
-      headerHeight,
+      geometry?.headerHeight,
+      geometry?.sidebarCollapsedWidth,
+      geometry?.sidebarWidth,
       isCompact,
       navigationOpen,
       openNavigation,
       posture,
-      sidebarCollapsedWidth,
-      sidebarWidth,
       toggleCollapse,
     ],
   );
@@ -234,7 +292,8 @@ export function AppShell({
           <button
             type="button"
             className="rottay-app-shell__navigation-close"
-            data-part="navigation-close"
+            {...partAttributes('navigation-close', closeInteraction.state)}
+            {...closeInteraction.handlers}
             onClick={closeNavigation}
             aria-label={closeNavigationLabel}
           >
@@ -292,6 +351,11 @@ export function AppShell({
     '--ds-shell-safe-area-right': 'env(safe-area-inset-right, 0px)',
     '--ds-shell-safe-area-bottom': 'env(safe-area-inset-bottom, 0px)',
     '--ds-shell-safe-area-left': 'env(safe-area-inset-left, 0px)',
+    ...statedChannel('--ds-shell-sidebar-width', geometry?.sidebarWidth),
+    ...statedChannel('--ds-shell-sidebar-collapsed-width', geometry?.sidebarCollapsedWidth),
+    ...statedChannel('--ds-shell-header-block-size', geometry?.headerHeight),
+    ...statedChannel('--ds-shell-sidebar-header-block-size', geometry?.sidebarHeaderHeight),
+    ...statedChannel('--ds-shell-collapse-transition', geometry?.collapseTransition),
     '--ds-shell-header-height': headerBlockSize,
     '--ds-shell-top-inset': hasHeader
       ? `calc(${headerBlockSize} + var(--ds-shell-safe-area-top))`
@@ -301,8 +365,18 @@ export function AppShell({
       ? 'var(--ds-shell-safe-area-left)'
       : desktopSidebarInset,
     '--ds-shell-inline-end-inset': 'var(--ds-shell-safe-area-right)',
-    '--ds-shell-collapse-transition': transition,
-    '--ds-shell-resolved-main-transition': isCompact ? 'none' : `margin-inline-start ${transition}`,
+    // The overlay presentation has no track to slide, so it has no transition
+    // at all; otherwise the app's own `--ds-shell-main-transition` escape
+    // hatch wins over the collapse cadence, resolved on this element so a
+    // consumer statement on the same root still reaches it. The cadence read
+    // ends in a literal so the chain can never be invalid at computed-value
+    // time: without a terminal fallback a package consumed before the family
+    // deriver is registered drops the whole declaration and the main column
+    // stops animating. The literal is the shell's pre-derivation paint, and
+    // it is dead wherever the channel has a producer.
+    '--ds-shell-resolved-main-transition': isCompact
+      ? 'none'
+      : `var(--ds-shell-main-transition, margin-inline-start ${SHELL_COLLAPSE_TRANSITION_READ})`,
     ...style,
   };
 
@@ -311,7 +385,7 @@ export function AppShell({
       <div
         className={['rottay-app-shell', className].filter(Boolean).join(' ')}
         data-part="root"
-        data-posture={posture}
+        data-posture={postureAttribute}
         data-collapsed={collapsed ? 'true' : 'false'}
         data-compact={isCompact ? 'true' : 'false'}
         style={rootStyle}
@@ -320,7 +394,8 @@ export function AppShell({
         <a
           href={`#${contentId}`}
           className="rottay-app-shell__skip-link"
-          data-part="skip-link"
+          {...partAttributes('skip-link', skipLinkInteraction.state)}
+          {...skipLinkInteraction.handlers}
         >
           {skipToContentLabel}
         </a>
@@ -395,7 +470,8 @@ export function AppShell({
                 <button
                   type="button"
                   className="rottay-app-shell__navigation-trigger"
-                  data-part="navigation-trigger"
+                  {...partAttributes('navigation-trigger', triggerInteraction.state)}
+                  {...triggerInteraction.handlers}
                   onClick={openNavigation}
                   aria-label={openNavigationLabel}
                   aria-expanded={navigationOpen}

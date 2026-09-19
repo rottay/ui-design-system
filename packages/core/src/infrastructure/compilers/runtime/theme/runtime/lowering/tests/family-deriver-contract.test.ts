@@ -133,7 +133,7 @@ describe("the family registry", () => {
     const planted: FamilyDeriver[] = [
       {
         family: "form-surface",
-        rank: "chrome",
+        rank: "derived",
         consumes: [],
         produces: [],
         derive: () => ({ "--ds-planted-cross-family-channel": "1px" }),

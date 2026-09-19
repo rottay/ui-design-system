@@ -9,7 +9,7 @@ import {
 } from '../../../../../infrastructure/runtime/responsive';
 import { AppShell, useShellContext } from '..';
 import type { AppShellProps } from '../../contracts';
-import shellStyles from '../../../../../foundation/tokens/css/presentation/components/skin/app-shell/index.css?raw';
+import { SHELL_GEOMETRY_READS as READS } from '../../contracts';
 
 const PHONE_CONTEXT: ResponsiveContextValue = {
   deviceClass: 'phone',
@@ -77,24 +77,25 @@ describe('AppShell responsive contract', () => {
     const logo = container.querySelector('[data-part="navigation-logo"]') as HTMLElement;
     const header = container.querySelector('[data-part="header"]') as HTMLElement;
 
+    // No geometry stated: every resolution is a pure channel read, so the
+    // structure carries no number of its own.
     expect(root.style.getPropertyValue('--ds-shell-inline-start-inset')).toBe(
-      'calc(var(--ds-shell-sidebar-width, 296px) + var(--ds-shell-safe-area-left))',
+      `calc(${READS.sidebarWidth} + var(--ds-shell-safe-area-left))`,
     );
-    expect(root.style.getPropertyValue('--ds-shell-header-height')).toBe(
-      'var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px))',
-    );
+    expect(root.style.getPropertyValue('--ds-shell-header-height')).toBe(READS.headerBlockSize);
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
-      'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px)) + var(--ds-shell-safe-area-top))',
+      `calc(${READS.headerBlockSize} + var(--ds-shell-safe-area-top))`,
     );
+    expect(root.style.getPropertyValue('--ds-shell-sidebar-width')).toBe('');
+    expect(root.style.getPropertyValue('--ds-shell-header-block-size')).toBe('');
     expect(logo.style.getPropertyValue('--ds-shell-resolved-sidebar-header-block-size')).toBe(
-      'var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, 104px))',
+      READS.sidebarHeaderBlockSize,
     );
     expect(logo).toHaveClass('rottay-app-shell__navigation-logo');
     expect(logo.style.height).toBe('');
     expect(header).toHaveClass('rottay-app-shell__header');
     expect(header.style.height).toBe('');
-    expect(shellStyles).toContain('height: var(--ds-shell-resolved-sidebar-header-block-size)');
-    expect(shellStyles).toContain('height: var(--ds-shell-top-inset)');
+    expect(logo.style.height).toBe('');
   });
 
   it('keeps the fixed collapsible sidebar exclusively in desktop posture', () => {
@@ -114,8 +115,11 @@ describe('AppShell responsive contract', () => {
     expect(sidebar).toHaveAccessibleName('Primary navigation');
     expect(sidebar).toHaveClass('rottay-app-shell__navigation-sidebar');
     expect(sidebar).toHaveAttribute('data-collapsed', 'true');
+    // The stated collapsed track travels on the published channel; the
+    // resolution beside it reads that channel and nothing else.
+    expect(root.style.getPropertyValue('--ds-shell-sidebar-collapsed-width')).toBe('80px');
     expect(root.style.getPropertyValue('--ds-shell-inline-start-inset')).toBe(
-      'calc(var(--ds-shell-sidebar-collapsed-width, 80px) + var(--ds-shell-safe-area-left))',
+      `calc(${READS.sidebarCollapsedWidth} + var(--ds-shell-safe-area-left))`,
     );
     expect(sidebar.style.width).toBe('');
     expect(mainArea).toHaveClass('rottay-app-shell__main');
@@ -154,7 +158,7 @@ describe('AppShell responsive contract', () => {
 
     expect(root.style.getPropertyValue('--ds-shell-bottom-inset')).toBe(bottomInset);
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
-      'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 64px)) + var(--ds-shell-safe-area-top))',
+      `calc(${READS.headerBlockSize} + var(--ds-shell-safe-area-top))`,
     );
     expect(mainArea).toHaveClass('rottay-app-shell__main');
     expect(mainArea).toHaveAttribute('data-compact', 'true');
@@ -222,7 +226,7 @@ describe('AppShell responsive contract', () => {
     expect(dialog).toHaveClass('rottay-app-shell__navigation-drawer');
     expect(dialog.style.boxSizing).toBe('');
     expect(dialog.style.getPropertyValue('--ds-shell-resolved-drawer-inline-size')).toBe(
-      'min(var(--ds-shell-sidebar-width, 312px), var(--ds-viewport-inline-size))',
+      `min(${READS.sidebarWidth}, var(--ds-viewport-inline-size))`,
     );
     expect(dialog.style.width).toBe('var(--ds-shell-resolved-drawer-inline-size)');
     const drawerHeader = dialog.querySelector(
@@ -230,14 +234,10 @@ describe('AppShell responsive contract', () => {
     ) as HTMLElement;
     expect(
       drawerHeader.style.getPropertyValue('--ds-shell-resolved-sidebar-header-min-block-size'),
-    ).toBe(
-      'max(var(--ds-shell-sidebar-header-block-size, var(--ds-shell-topbar-height, 32px)), 44px)',
-    );
+    ).toBe(`max(${READS.sidebarHeaderBlockSize}, 44px)`);
     expect(drawerHeader).toHaveClass('rottay-app-shell__navigation-drawer-header');
     expect(drawerHeader.style.minHeight).toBe('');
-    expect(shellStyles).toContain(
-      'min-height: var(--ds-shell-resolved-sidebar-header-min-block-size)',
-    );
+    expect(drawerHeader.style.minHeight).toBe('');
     expect(close).toHaveClass('rottay-app-shell__navigation-close');
     expect(close.style.width).toBe('');
     expect(close.style.height).toBe('');
@@ -305,59 +305,36 @@ describe('AppShell responsive contract', () => {
     expect(root.style.getPropertyValue('--ds-shell-header-block-size')).toBe('72px');
     expect(root.style.getPropertyValue('--ds-shell-sidebar-header-block-size')).toBe('88px');
     expect(root.style.getPropertyValue('--ds-shell-inline-start-inset')).toBe(
-      'calc(var(--ds-shell-sidebar-width, 320px) + var(--ds-shell-safe-area-left))',
+      `calc(${READS.sidebarWidth} + var(--ds-shell-safe-area-left))`,
     );
     expect(root.style.getPropertyValue('--ds-shell-top-inset')).toBe(
-      'calc(var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, 68px)) + var(--ds-shell-safe-area-top))',
+      `calc(${READS.headerBlockSize} + var(--ds-shell-safe-area-top))`,
     );
     expect(screen.getByTestId('shell-geometry')).toHaveTextContent('320:76:68');
   });
 
-  it('publishes neutral shell remapping hooks from the canonical bundled skin', () => {
-    const hooks = [
-      '--ds-shell-navigation-background',
-      '--ds-shell-navigation-border',
-      '--ds-shell-navigation-radius',
-      '--ds-shell-navigation-shadow',
-      '--ds-shell-navigation-body-padding',
-      '--ds-shell-navigation-body-padding-collapsed',
-      '--ds-shell-navigation-footer-padding',
-      '--ds-shell-navigation-footer-padding-collapsed',
-      '--ds-shell-header-padding-inline',
-      '--ds-shell-header-background',
-      '--ds-shell-header-border',
-      '--ds-shell-header-radius',
-      '--ds-shell-header-shadow',
-      '--ds-shell-header-inset-block-start',
-      '--ds-shell-header-inset-inline',
-      '--ds-shell-main-transition',
-      '--ds-shell-main-background',
-      '--ds-shell-main-border',
-      '--ds-shell-footer-padding',
-      '--ds-shell-footer-background',
-      '--ds-shell-footer-border',
-      '--ds-shell-footer-shadow',
-    ];
-
-    for (const hook of hooks) {
-      expect(shellStyles).toContain(hook);
-    }
-  });
-
-  it('owns hover/active/reduced-motion chrome states in the skin, not the engine', () => {
-    // Wave R2+R3: the compact chrome buttons gained hover + active washes via
-    // documented escape hatches, motion rides --ds-motion-* channels, and the
-    // sidebar/main collapse transition is gated for reduced motion.
-    expect(shellStyles).toContain('[data-part="navigation-close"]:hover');
-    expect(shellStyles).toContain('[data-part="navigation-trigger"]:hover');
-    expect(shellStyles).toContain('--ds-shell-navigation-action-hover-bg');
-    expect(shellStyles).toContain('--ds-shell-navigation-action-active-bg');
-    expect(shellStyles).toContain('@media (prefers-reduced-motion: reduce)');
-
-    const { container } = renderShell(PHONE_CONTEXT);
+  it('routes the compact chrome actions through the interaction kernel', () => {
+    renderShell(PHONE_CONTEXT);
     const trigger = screen.getByRole('button', { name: 'Open Primary navigation' });
+
+    // Resting: the kernel serializes nothing, so `[data-state]` must not match.
+    expect(trigger).toHaveAttribute('data-part', 'navigation-trigger');
+    expect(trigger).not.toHaveAttribute('data-state');
+
+    fireEvent.pointerEnter(trigger);
+    expect(trigger.getAttribute('data-state')).toContain('hovered');
+
+    fireEvent.pointerDown(trigger);
+    expect(trigger.getAttribute('data-state')).toContain('pressed');
+
+    fireEvent.pointerUp(trigger);
+    expect(trigger.getAttribute('data-state')).not.toContain('pressed');
+
+    fireEvent.pointerLeave(trigger);
+    expect(trigger).not.toHaveAttribute('data-state');
+
+    // And no paint travels inline: the wash is the skin's, keyed on the stamp.
     expect(trigger.style.background).toBe('');
     expect(trigger.style.transition).toBe('');
-    expect(container.querySelector('[data-part="navigation-trigger"]')).toBe(trigger);
   });
 });

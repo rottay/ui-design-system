@@ -52,6 +52,7 @@ import { sectionFrameChromeDeriver } from "./chrome/section-frame";
 import { mobileHeaderChromeDeriver } from "./chrome/mobile-header";
 import { statsHeaderChromeDeriver } from "./chrome/stats-header";
 import { surfaceLifecycleChromeDeriver } from "./chrome/surface-lifecycle";
+import { appShellChromeDeriver } from "./chrome/app-shell";
 import { collectionHeaderChromeDeriver } from "./chrome/collection-header";
 import { dashboardHeaderChromeDeriver } from "./chrome/dashboard-header";
 import { detailHeaderChromeDeriver } from "./chrome/detail-header";
@@ -189,6 +190,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   mobileHeaderChromeDeriver,
   statsHeaderChromeDeriver,
   surfaceLifecycleChromeDeriver,
+  appShellChromeDeriver,
   collectionHeaderChromeDeriver,
   dashboardHeaderChromeDeriver,
   detailHeaderChromeDeriver,

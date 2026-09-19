@@ -2264,18 +2264,18 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 103,
+        "channelsRead": 112,
         "classTokens": 1,
         "partsStamped": 16,
-        "partsConsumed": 4
+        "partsConsumed": 16
       },
-      "readWithoutProducer": 62,
+      "readWithoutProducer": 1,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 1,
-      "partsStampedNotConsumed": 13,
-      "partsConsumedNotStamped": 1,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 4,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
@@ -2285,7 +2285,6 @@
         "opened": "2026-09-19",
         "lot": "sub-lot B (app-shell + the --ds-shell-* split)",
         "debt": {
-          "adaptSlot": 2,
           "skeletonPartsWithoutRole": 12
         },
         "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot B owns it. The adaptSlot arm is 2 of 2 failing halves: `app-shell` is the cut's only family in LAYOUT_SENSITIVE_FAMILIES and it neither accepts `adapt` nor resolves `data-posture` through useAdaptation -- it stamps a private `ShellPosture` vocabulary declared in `structures/shell/contracts`, which coincides by value with the kernel's viewport postures, which is why nothing caught it. The reference implementation is one directory away in `structures/shell/navigation/sidebar-surface`."
