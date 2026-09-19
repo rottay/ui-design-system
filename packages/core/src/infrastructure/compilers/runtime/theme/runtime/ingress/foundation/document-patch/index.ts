@@ -38,7 +38,11 @@ import {
   type TenantThemeOverrideToken,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { typePairingToTypography } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
-import { isSafeFontFamily } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
+import {
+  isSafeFontFamily,
+  tenantThemeTokenOverrideIssues,
+} from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
+import type { TenantThemeValidationIssue } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { isFirstPartyVerticalId } from "@/foundation/presets/verticals/roster";
 import {
@@ -50,10 +54,47 @@ import { assertExpressiveOverrides } from "@/foundation/tokens/ts/presentation/e
 const V1_SCHEMA_VERSION = "1";
 
 export class ThemePatchMigrationError extends Error {
-  constructor(message: string) {
+  /**
+   * The refusal, in the shape the write terminal reports it.
+   *
+   * A migration that refuses a value publication also refuses must be
+   * comparable to it, not merely similar: same code, same path, same message.
+   * Empty for the refusals this owner states in its own words (an unsupported
+   * key, a closed posture), which have no publication counterpart to match.
+   */
+  readonly issues: readonly TenantThemeValidationIssue[];
+
+  constructor(
+    message: string,
+    issues: readonly TenantThemeValidationIssue[] = []
+  ) {
     super(`ThemePatch migration: ${message}`);
     this.name = "ThemePatchMigrationError";
+    this.issues = issues;
   }
+}
+
+/** The path publication names for a raw override, and so does this door. */
+const TOKEN_OVERRIDES_PATH = "$.visualFoundation.advanced.tokenOverrides";
+
+/**
+ * Refuse a raw override value by the publication schema's own per-token rule.
+ *
+ * The key grammar above answers "is there a keypath for this token"; this
+ * answers "is this a value the token may carry", which is the question a v1
+ * preview and a persisted-intent compile never asked (S19-A01). Both questions
+ * are asked before a single token is lowered, so a document either migrates
+ * whole or is refused whole.
+ */
+function assertTokenOverrideValues(
+  overrides: Record<string, string | number>
+): void {
+  const issues = tenantThemeTokenOverrideIssues(overrides, TOKEN_OVERRIDES_PATH);
+  if (issues.length === 0) return;
+  throw new ThemePatchMigrationError(
+    issues.map((issue) => `${issue.path}: ${issue.message}`).join("; "),
+    issues
+  );
 }
 
 function assertExactKeys(
@@ -321,12 +362,15 @@ function migrateTokenOverrides(
   if (!overrides) return {};
   const patches: ThemeLayerPatch[] = [];
   const categoryColors: string[] = [];
-  for (const [key, value] of Object.entries(overrides)) {
+  for (const key of Object.keys(overrides)) {
     if (!OVERRIDE_TOKEN_SET.has(key)) {
       throw new ThemePatchMigrationError(
         `unsupported tokenOverride "${key}"; ThemeLayerPatch requires a typed keypath`
       );
     }
+  }
+  assertTokenOverrideValues(overrides);
+  for (const [key, value] of Object.entries(overrides)) {
     const category = /^--ds-chart-category-(10|[1-9])$/.exec(key);
     if (category) {
       categoryColors[Number(category[1]) - 1] = String(value);

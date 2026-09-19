@@ -247,18 +247,30 @@ describe("the repeating gradient class is admitted at emission", () => {
  * the table is imported from here and nowhere restated.
  */
 describe("admission and emission share one function table", () => {
+  // The admission grammar moved to the schema owner (S19-A01) so the v1
+  // producers below the facade could read it; the table it consumes did not.
+  const GRAMMAR_OWNER = resolve(
+    process.cwd(),
+    "src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts"
+  );
   const ADMISSION_OWNER = resolve(
     process.cwd(),
     "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts"
   );
 
-  it("admission imports the kernel table and declares none of its own", () => {
-    const source = readFileSync(ADMISSION_OWNER, "utf8");
-    expect(source).toMatch(
-      /import \{ ALLOWED_VALUE_FUNCTIONS \} from "@\/infrastructure\/compilers\/kernel\/foundation\/css\/value-safety";/
+  it("the grammar owner imports the kernel table and no door declares one of its own", () => {
+    const grammar = readFileSync(GRAMMAR_OWNER, "utf8");
+    expect(grammar).toMatch(
+      /import \{ ALLOWED_VALUE_FUNCTIONS \} from "\.\.\/\.\.\/css\/value-safety";/
     );
-    expect(source).not.toMatch(/ALLOWED_VALUE_FUNCTIONS\s*(?::[^=]+)?=\s*new Set\(/);
-    expect(source.match(/new Set\(\[\s*"(?:rgb|linear-gradient)"/g) ?? []).toEqual([]);
+    for (const source of [grammar, readFileSync(ADMISSION_OWNER, "utf8")]) {
+      expect(source).not.toMatch(
+        /ALLOWED_VALUE_FUNCTIONS\s*(?::[^=]+)?=\s*new Set\(/
+      );
+      expect(source.match(/new Set\(\[\s*"(?:rgb|linear-gradient)"/g) ?? []).toEqual(
+        []
+      );
+    }
   });
 
   it("carries exactly the two repeating names and nothing beyond the table", () => {

@@ -2,7 +2,8 @@
  * @fileoverview Admission: the value grammar and the payload ceilings, on
  * both sides of the compile.
  *
- * ONE grammar, two jurisdictions. `isSafeVisualValue` has always carried them:
+ * ONE grammar, two jurisdictions. `isSafeVisualValue` -- held by the schema
+ * owner below since S19-A01, and re-exported here -- has always carried them:
  * the AUTHORED one, with the tenant's radius/padding/gap/shadow/reference
  * ceilings, and the EMITTED one, which drops those ceilings because the
  * compiler produced the value from an authored leaf already checked upstream.
@@ -28,8 +29,6 @@ import {
 } from "@/foundation/contracts/composition/tenants/themes/provenance";
 import type { ThemeCompilation } from "@/foundation/contracts/composition/tenants/themes/compiled";
 import type { TenantThemeArtifactModeDelta } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { TENANT_THEME_REFERENCE_TOKENS } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { dimensionToPx } from "@/foundation/kernel/geometry/css-length";
 import {
   canonicalizeJsonValue,
   compareCodeUnits,
@@ -39,257 +38,24 @@ import {
   EXPRESSIVE_EDGE_WIDTH_CHANNELS,
   STRUCTURAL_WIDTH_CHANNELS,
 } from "@/foundation/tokens/ts/presentation/expressive-profiles";
-// The emitter's own function table. A copy here is how the two doors drifted
-// twice, each time dropping an admitted channel at emission without a trace.
-import { ALLOWED_VALUE_FUNCTIONS } from "@/infrastructure/compilers/kernel/foundation/css/value-safety";
 import {
   TENANT_THEME_CONFIG_SCHEMA,
+  isSafeVisualValue,
   type TenantThemeSchemaNode,
 } from "@/infrastructure/compilers/kernel/foundation/schemas/tenant-theme";
 import type { ThemeAdmissionIssue } from "../../foundation/issues";
 import { authoredSelfReference } from "../../foundation/references";
 
-function isBalancedVisualValue(value: string): boolean {
-  let quote: string | null = null;
-  let depth = 0;
-  for (let index = 0; index < value.length; index += 1) {
-    const character = value[index];
-    if (quote) {
-      if (character === quote) quote = null;
-      continue;
-    }
-    if (character === '"' || character === "'") {
-      quote = character;
-    } else if (character === "(") {
-      depth += 1;
-    } else if (character === ")") {
-      depth -= 1;
-      if (depth < 0) return false;
-    }
-  }
-  return quote === null && depth === 0;
-}
-
-function countCommasAtDepth(value: string, targetDepth: number): number {
-  let depth = 0;
-  let quote: string | null = null;
-  let count = 0;
-  for (const character of value) {
-    if (quote) {
-      if (character === quote) quote = null;
-      continue;
-    }
-    if (character === '"' || character === "'") quote = character;
-    else if (character === "(") depth += 1;
-    else if (character === ")") depth -= 1;
-    else if (character === "," && depth === targetDepth) count += 1;
-  }
-  return count;
-}
-
-function countGradientStops(value: string): number {
-  const open = value.search(
-    /(?:repeating-)?(?:linear|radial|conic)-gradient\s*\(/i
-  );
-  if (open < 0) return 0;
-  const bodyStart = value.indexOf("(", open) + 1;
-  let depth = 1;
-  let quote: string | null = null;
-  let current = "";
-  const args: string[] = [];
-  for (let index = bodyStart; index < value.length; index += 1) {
-    const character = value[index];
-    if (quote) {
-      current += character;
-      if (character === quote) quote = null;
-      continue;
-    }
-    if (character === '"' || character === "'") {
-      quote = character;
-      current += character;
-    } else if (character === "(") {
-      depth += 1;
-      current += character;
-    } else if (character === ")") {
-      depth -= 1;
-      if (depth === 0) {
-        args.push(current.trim());
-        break;
-      }
-      current += character;
-    } else if (character === "," && depth === 1) {
-      args.push(current.trim());
-      current = "";
-    } else {
-      current += character;
-    }
-  }
-  if (args.length === 0) return 0;
-  const first = args[0].toLowerCase();
-  const hasPreamble =
-    /^(?:to\s|[-+]?\d+(?:\.\d+)?(?:deg|rad|turn)|circle\b|ellipse\b|at\s|from\s|in\s)/.test(
-      first
-    );
-  return Math.max(0, args.length - (hasPreamble ? 1 : 0));
-}
-
-function respectsDimensionCap(value: string, capPx: number): boolean {
-  if (value.includes("var(")) return true;
-  if (/\b(?:calc|min|max|clamp)\s*\(/i.test(value)) return false;
-  const dimensions = [...value.matchAll(/(-?\d+(?:\.\d+)?)(px|rem|em|%)?/gi)];
-  if (dimensions.length === 0) return false;
-  return dimensions.every((match) => {
-    const numeric = Number(match[1]);
-    const unit = match[2] ?? "";
-    if (numeric < 0) return false;
-    if (unit === "%") return numeric <= 100;
-    const converted = dimensionToPx(numeric, unit);
-    return converted !== null && converted <= capPx;
-  });
-}
-
 /**
- * The nine G4 sidebar geometry channels are the only capped keypaths whose
- * mode overlay may author the CSS-wide keyword `initial`. Rottay's light mode
- * has no root-level floor for them, so the overlay has to *reset* the channel
- * instead of repainting it; `initial` carries no magnitude, so a dimension cap
- * has nothing to bound and the `dimensions.length === 0` early return in
- * `respectsDimensionCap` would otherwise reject the reset. The allowlist is
- * deliberately field- and path-scoped: every other capped field keeps
- * rejecting `initial`.
- */
-const SIDEBAR_GEOMETRY_RESET_FIELDS: ReadonlySet<string> = new Set([
-  "shellPaddingInline",
-  "shellPaddingCollapsed",
-  "itemHeight",
-  "itemChildHeight",
-  "itemFontSizeChild",
-  "itemPaddingInline",
-  "iconColumnSize",
-  "itemGap",
-  "childPaddingInline",
-]);
-
-function admitsSidebarGeometryReset(path: string, field: string): boolean {
-  return (
-    SIDEBAR_GEOMETRY_RESET_FIELDS.has(field) &&
-    /(?:^|\.)sidebar\.[^.]+$/.test(path)
-  );
-}
-
-/**
- * True when a value cannot terminate its declaration, open a comment, fetch,
- * or exceed an authored cap.
+ * The authored/emitted visual-value grammar, re-exported from the schema owner
+ * that now holds it.
  *
- * `enforceAuthoredCaps` separates an AUTHORED leaf (a document field, where the
- * tenant's own caps apply) from an EMITTED channel (what the compiler produced
- * from one, where the grammar still applies but the authored caps were already
- * enforced upstream).
+ * It moved DOWN, not away: the v1 ingress producers sit below this facade and
+ * could not read it here, so preview and persisted-intent compiles lowered raw
+ * override values with no grammar on them at all (S19-A01). The rule is
+ * unchanged and this door keeps naming it.
  */
-export function isSafeVisualValue(
-  value: string,
-  path: string,
-  enforceAuthoredCaps = true
-): boolean {
-  const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
-  if (
-    value.length === 0 ||
-    value.length > limits.maxStringLength ||
-    value !== value.trim()
-  )
-    return false;
-  const field = path.slice(path.lastIndexOf(".") + 1).replace(/[\]"']/g, "");
-  // `initial` is a cascade reset, not a paint: it blanks the channel instead of
-  // giving it a value. Only the nine G4 sidebar geometry mode resets may author
-  // it, so no other authored keypath can silently erase a governed channel.
-  const isSidebarGeometryReset =
-    value === "initial" && admitsSidebarGeometryReset(path, field);
-  if (enforceAuthoredCaps && value === "initial" && !isSidebarGeometryReset)
-    return false;
-  const forbiddenCharacters = enforceAuthoredCaps
-    ? /[\u0000-\u001f\u007f{};<>\[\]@\\]/
-    : /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f{};<>\[\]@\\]/;
-  if (forbiddenCharacters.test(value)) return false;
-  if (
-    /\/\*|\*\/|!\s*important|expression\s*\(|url\s*\(|javascript\s*:|data\s*:|-moz-binding/i.test(
-      value
-    )
-  )
-    return false;
-  if (!isBalancedVisualValue(value)) return false;
-
-  const functionNames = [...value.matchAll(/([a-z][a-z0-9-]*)\s*\(/gi)].map(
-    (match) => match[1].toLowerCase()
-  );
-  if (functionNames.some((name) => !ALLOWED_VALUE_FUNCTIONS.has(name)))
-    return false;
-
-  const varCount = functionNames.filter((name) => name === "var").length;
-  const varReferences = [...value.matchAll(/var\(\s*(--[a-z0-9-]+)/gi)];
-  if (varReferences.length !== varCount) return false;
-  if (enforceAuthoredCaps) {
-    const allowedReferences = new Set<string>(TENANT_THEME_REFERENCE_TOKENS);
-    if (varReferences.some((match) => !allowedReferences.has(match[1])))
-      return false;
-  } else if (varReferences.some((match) => !match[1].startsWith("--ds-"))) {
-    return false;
-  }
-
-  const lowerPath = path.toLowerCase();
-  if (
-    enforceAuthoredCaps &&
-    (lowerPath.includes("shadow") || lowerPath.includes("ring"))
-  ) {
-    if (countCommasAtDepth(value, 0) + 1 > limits.maxShadowLayers) return false;
-    const shadowDimensions = [
-      ...value.matchAll(/(-?\d+(?:\.\d+)?)(px|rem|em)/gi),
-    ];
-    if (
-      shadowDimensions.some((match) => {
-        const converted = dimensionToPx(
-          Math.abs(Number(match[1])),
-          match[2].toLowerCase()
-        );
-        return converted === null || converted > 128;
-      })
-    )
-      return false;
-  }
-  if (enforceAuthoredCaps && /gradient\s*\(/i.test(value)) {
-    if (countGradientStops(value) > limits.maxGradientStops) return false;
-  }
-
-  if (
-    enforceAuthoredCaps &&
-    /padding/i.test(field) &&
-    !isSidebarGeometryReset &&
-    !respectsDimensionCap(value, limits.maxPaddingPx)
-  )
-    return false;
-  if (
-    enforceAuthoredCaps &&
-    /radius/i.test(field) &&
-    !isSidebarGeometryReset &&
-    !respectsDimensionCap(value, limits.maxRadiusPx)
-  )
-    return false;
-  if (
-    enforceAuthoredCaps &&
-    /gap/i.test(field) &&
-    !isSidebarGeometryReset &&
-    !respectsDimensionCap(value, limits.maxGapPx)
-  )
-    return false;
-  if (
-    enforceAuthoredCaps &&
-    /gridSize/i.test(field) &&
-    !isSidebarGeometryReset &&
-    !respectsDimensionCap(value, limits.maxGridSizePx)
-  )
-    return false;
-
-  return true;
-}
+export { isSafeVisualValue };
 
 /* -------------------------------------------------------------------------- */
 /* The AUTHORED side of the same grammar (RT04)                               */

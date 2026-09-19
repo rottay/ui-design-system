@@ -479,7 +479,9 @@ describe("the same font grammar answers the token-override spelling", () => {
    * `advanced.tokenOverrides["--ds-font-family-display"]` compiled into the
    * emitted channel through both producers while the document schema declares
    * that very key `string("font-family")`. Both spellings answer to ONE
-   * grammar, so neither is the unguarded one.
+   * grammar, so neither is the unguarded one -- and since S19-A01 that grammar
+   * is the write door's own rule read from below, so the refusal carries the
+   * write door's name and path rather than a second wording for it.
    */
   const FAMILY_TOKENS = [
     "--ds-font-family-base",
@@ -525,7 +527,11 @@ describe("the same font grammar answers the token-override spelling", () => {
                 document: overrideDocument(token, value),
               }),
             name
-          ).toThrow(new RegExp(`unsupported tokenOverride "${token}"`));
+          ).toThrow(
+            new RegExp(
+              `tokenOverrides\\["${token}"\\]: Invalid or unsafe font-family`
+            )
+          );
         }
       });
     }
@@ -557,7 +563,7 @@ describe("the same font grammar answers the token-override spelling", () => {
           slug: SLUG,
           document: overrideDocument(token, 42),
         })
-      ).toThrow(new RegExp(`unsupported tokenOverride "${token}"`));
+      ).toThrow(new RegExp(`tokenOverrides\\["${token}"\\]: Expected a string`));
     }
   });
 

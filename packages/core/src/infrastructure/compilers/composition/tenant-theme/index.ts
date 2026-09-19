@@ -42,17 +42,16 @@ import {
   TENANT_THEME_SCHEMA_VERSION,
   TENANT_THEME_V1_COVERAGE,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import {
-  isHexColor,
-  isValidCssColor,
-} from "../../kernel/foundation/css/color-math";
+import { isHexColor } from "../../kernel/foundation/css/color-math";
 import {
   ON_TONE_ROLES,
   type OnToneRole,
 } from "../../kernel/foundation/css/color-math/readable-ink";
+// The node validator is the schema owner's, not this terminal's: held private
+// here, the v1 producers below this tier could not read it (S19-A01).
 import {
-  isSafeFontFamily,
   TENANT_THEME_CONFIG_SCHEMA,
+  validateTenantThemeNode as validateNode,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
 import {
@@ -89,7 +88,6 @@ import {
   DEFAULT_CHART_GROUNDS,
   ThemeAdmissionError,
   chartCategoryIssues,
-  isSafeVisualValue,
 } from "@/infrastructure/compilers/runtime/theme/facade/foundation/admission";
 import {
   getTenantThemeVerticalEnvelope,
@@ -157,12 +155,6 @@ export class TenantThemeValidationError extends Error {
   }
 }
 
-function childPath(path: string, key: string): string {
-  return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key)
-    ? `${path}.${key}`
-    : `${path}[${JSON.stringify(key)}]`;
-}
-
 function countValueShape(
   value: unknown,
   depth = 0
@@ -190,137 +182,6 @@ function countValueShape(
     },
     { maxDepth: depth, fields: Object.keys(value).length }
   );
-}
-
-function isTenantColor(value: string): boolean {
-  return (
-    isSafeVisualValue(value, "$.color") &&
-    isValidCssColor(value) &&
-    !/^(?:var|inherit|currentColor|unset|initial|none)\b/i.test(value)
-  );
-}
-
-function validateNode(
-  value: unknown,
-  rule: TenantThemeSchemaNode,
-  path: string,
-  issues: TenantThemeValidationIssue[]
-): void {
-  if (rule.type === "object") {
-    if (!isPlainObject(value)) {
-      issues.push({
-        code: "invalid_type",
-        path,
-        message: "Expected an object",
-      });
-      return;
-    }
-    for (const required of rule.required ?? []) {
-      if (!Object.prototype.hasOwnProperty.call(value, required)) {
-        issues.push({
-          code: "invalid_type",
-          path: childPath(path, required),
-          message: "Required field is missing",
-        });
-      }
-    }
-    for (const key of Object.keys(value).sort()) {
-      if (!Object.prototype.hasOwnProperty.call(rule.fields, key)) {
-        issues.push({
-          code: "unknown_key",
-          path: childPath(path, key),
-          message: "Field is not part of TenantThemeConfig v1",
-        });
-        continue;
-      }
-      validateNode(value[key], rule.fields[key], childPath(path, key), issues);
-    }
-    return;
-  }
-
-  if (rule.type === "literal") {
-    if (value !== rule.value)
-      issues.push({
-        code: "invalid_value",
-        path,
-        message: `Expected literal ${JSON.stringify(rule.value)}`,
-      });
-    return;
-  }
-
-  if (rule.type === "enum") {
-    if (!rule.values.includes(value as string | number)) {
-      issues.push({
-        code: "invalid_value",
-        path,
-        message: `Expected one of ${rule.values.join(", ")}`,
-      });
-    }
-    return;
-  }
-
-  if (rule.type === "number") {
-    if (typeof value !== "number" || !Number.isFinite(value)) {
-      issues.push({
-        code: "invalid_type",
-        path,
-        message: "Expected a finite number",
-      });
-      return;
-    }
-    if (rule.integer && !Number.isSafeInteger(value)) {
-      issues.push({
-        code: "invalid_value",
-        path,
-        message: "Expected a safe integer",
-      });
-    } else if (
-      (rule.min !== undefined && value < rule.min) ||
-      (rule.max !== undefined && value > rule.max)
-    ) {
-      issues.push({
-        code: "invalid_value",
-        path,
-        message: `Number must be between ${rule.min ?? "-∞"} and ${
-          rule.max ?? "∞"
-        }`,
-      });
-    }
-    return;
-  }
-
-  if (typeof value !== "string") {
-    issues.push({ code: "invalid_type", path, message: "Expected a string" });
-    return;
-  }
-
-  let valid = false;
-  switch (rule.format) {
-    case "identifier":
-      valid = /^[A-Za-z0-9][A-Za-z0-9:_-]{0,127}$/.test(value);
-      break;
-    case "slug":
-      valid = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/.test(value);
-      break;
-    case "color":
-      valid = isTenantColor(value);
-      break;
-    case "hex-color":
-      valid = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
-      break;
-    case "font-family":
-      valid = isSafeFontFamily(value);
-      break;
-    case "visual-value":
-      valid = isSafeVisualValue(value, path);
-      break;
-  }
-  if (!valid)
-    issues.push({
-      code: "unsafe_value",
-      path,
-      message: `Invalid or unsafe ${rule.format}`,
-    });
 }
 
 function validateEnvelopeShape(
