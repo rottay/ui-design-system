@@ -5382,7 +5382,7 @@
    "lane": "family-cuts",
    "order": 12,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5395,9 +5395,15 @@
     "audit-2026-09-05"
    ],
    "notes": "wave 4; closes F-56, F-40, F-105; supersedes: WO-ARC-20, WO-ARC-18",
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "daniel",
+   "claimedAt": "2026-09-19",
+   "progressLog": [
+    {
+     "at": "2026-09-19 06:57",
+     "by": "daniel",
+     "note": "2026-09-19: claimed by kimi-dt. The census lot dispatched (Opus, the owner's restored writer seat) — measured before any code moves, per the fam10-census precedent that caught S1/S2/S3. Sub-lots follow the census."
+    }
+   ]
   },
   {
    "id": "WO-INV-01",
