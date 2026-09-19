@@ -523,3 +523,35 @@ A dispatched writer lot (brief-instrument-repairs-1.md) covers the four
 mechanical instrument repairs: retired-vertical-identity comment word,
 physical-properties exception+band, wiring-coverage probe registration,
 baseline-discipline ledgers.
+
+## 2026-09-18 (eighteenth sitting) — the wave's residuals closed; what stayed red and why
+
+Afternoon session, all writers Kimi `kimi-for-coding`, every candidate DT-audited with independent
+reproduction. Landed: cascade-wiring `7a67243d8` (164 channels re-chained to roots; the audit's
+full-suite run caught a real pixel move — cockpit icon-size 40 -> 37.5px through a spacing rung —
+reverted to the honest literal by the repair round, which also PROVED at a clean-HEAD worktree that
+8 of the 10 failure groups I first attributed to the candidate were pre-existing wave residuals —
+audit-method lesson recorded: control at clean HEAD before attributing), sidebar restore + census
+fix `3b645f94b` (the integration-audit orphan census was blind to deriver-chain consumers; 8
+chained emissions restored, 4 zero-reader names stay retired, drill added), residuals R1
+`059b2b580` (documented zero-channel admission; the form-action-dock rename measured UNSAFE —
+tenant-facing since 2026-07 — carve-out instead at `5d2704701`), R2 `175690d52` (skeleton pins,
+motion guards, LongTail pins, the table deriver's second factor), layout middle links `fc59fce28`
+(30 chains' middle links now produced at exactly resting values; 14 measured decision-less and
+documented), the tenant-theme pins re-anchored with 27 measured provenance rows `bad0ad0df`, the
+minting census at 108 owners `6479c1808`, the two pin re-reads `86d7ccdd8`, the DnD arm's
+named-member attachment `2010ca2de`, and the re-pin/artifact sweep `4b82b2850`.
+
+theme-iso measured a REAL law collision the writer correctly refused to pin over: D2's 23
+`--ds-dashboard-header-*` channels trip the hard universal-name deny-list ("dashboard"). Routed to
+the owner (F2.10): rename the family namespace or amend the list.
+
+Still red by pending OWNER DECISION (each named in F2, evidence/owner-decisions-2026-09-18):
+cascade-wiring's +136 (85 measured rootless vs the decrease-only law — vocabulary widening or a
+named-constant amendment), engine-token-audit's error-boundary exemption floor, theme-channel-parity
+buckets, tenant-reachability's 338 literals, theme-lowering-single-door's `??` shape,
+engine-posture's cell reclassification, motion-contracts' sibling re-anchor, dead-writers' anchor,
+the channel-liveness STOP NO-GO 3, the D3 nested owners. Still routed to writer lots: the ~51
+other-family post-pin wireable channels, the RET-03 governance-manifest cohort, the customization
+surface/preservation regen cascade (blocked on the manifest question), the float-button two-pass
+residue. Full-suite + gates:ci --continue certification runs in the final pass.
