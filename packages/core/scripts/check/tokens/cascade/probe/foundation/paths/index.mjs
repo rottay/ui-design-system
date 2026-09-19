@@ -17,6 +17,19 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 /** `packages/core`. */
 export const CORE_ROOT = resolve(HERE, '../../../../../../..');
 
+/** The workspace root that owns the package (holds pnpm-workspace.yaml). */
+export const REPO_ROOT = resolve(CORE_ROOT, '..', '..');
+
+/**
+ * The customization manifest quarantined by WO-RET-03 (2026-09-19): sealed
+ * calibration evidence the harness reads, never authority (see the quarantine
+ * README). It lives at the workspace root, outside the package.
+ */
+export const QUARANTINE_MANIFEST_ROOT = resolve(
+  REPO_ROOT,
+  'docs/history/inventories/customization-manifest',
+);
+
 /** The authored CSS tree the `fresh` bundle is composed from. */
 export const SRC_CSS = resolve(CORE_ROOT, 'src/foundation/tokens/css');
 

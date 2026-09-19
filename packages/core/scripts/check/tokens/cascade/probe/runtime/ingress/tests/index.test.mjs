@@ -26,7 +26,7 @@ import {
   readManifestRecords,
 } from '../../../../../../../libraries/manifest/index.mjs';
 import { readManifest } from '../../../foundation/negative-controls/index.mjs';
-import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
+import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
 import { VERTICALS } from '../../../foundation/scope/index.mjs';
 import {
   assertArmProvenance,
@@ -69,7 +69,7 @@ import {
 const HERE = resolve(fileURLToPath(import.meta.url), '..');
 
 const CONTROL_MANIFEST = readManifest(
-  resolve(CORE_ROOT, 'governance/manifest/controls/spacing/rhythm/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, 'controls/spacing/rhythm/index.json'),
 );
 
 // Every manifest read goes through the arm's own key name.
@@ -785,7 +785,7 @@ test('manifest-ingress parity: both arms lower the SAME stop to the SAME channel
  * ------------------------------------------------------------------------ */
 
 const BOUNDED_CONTROL_MANIFEST = readManifest(
-  resolve(CORE_ROOT, 'governance/manifest/controls/surfaces/effect-intensity/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/surfaces/effect-intensity/index.json'),
 );
 
 test('a BOUNDED control lowers the stop VALUE at the ingress path, never the stop id', () => {
@@ -903,7 +903,7 @@ test('negative drill: a bounded stop with no finite numeric value is refused, no
  * ------------------------------------------------------------------------ */
 
 const PROFILE_ID_CONTROL_MANIFEST = readManifest(
-  resolve(CORE_ROOT, 'governance/manifest/controls/experience/profile/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/experience/profile/index.json'),
 );
 
 test('a PROFILE-ID control lowers the opaque registry id VERBATIM at both doors', () => {
@@ -1071,7 +1071,7 @@ test('negative drill: a closed-enum stop outside the declared domain values is r
  * artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/.
  */
 const RADIUS_MANIFEST = readManifest(
-  resolve(CORE_ROOT, 'governance/manifest/controls/shape/radius-scale/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/shape/radius-scale/index.json'),
 );
 
 test('regression fence: the radius-scale static door is a literal path, never a wildcard or prose', () => {
@@ -1154,7 +1154,7 @@ test('regression fence: every stop of radius-scale reaches the channel, and dist
  * door being literal and being the ENUM's.
  */
 const DENSITY_MANIFEST = readManifest(
-  resolve(CORE_ROOT, 'governance/manifest/controls/density/mode/index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, '/controls/density/mode/index.json'),
 );
 
 test('regression fence: the density.mode static door is a literal path, and it is the ENUM', () => {
@@ -1225,7 +1225,7 @@ test('regression fence: every stop of density.mode reaches the channel, and dist
  * therefore go red on a stale build, exactly like the arm drills above.
  * ===================================================================== */
 
-const DENSITY_MANIFEST_H1 = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/density/mode/index.json'));
+const DENSITY_MANIFEST_H1 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/density/mode/index.json'));
 const FIRST_PARTY = Object.keys(VERTICALS).filter((id) => id !== 'none');
 
 /** Structural scale each vertical AUTHORS. If these move, the drills below say so. */
@@ -1294,7 +1294,7 @@ test('H-1 drill 2 [needs dist]: no vertical collapses onto the rottay value any 
  * their under-declaration.
  */
 function dataTerminalControlIds() {
-  const dir = resolve(CORE_ROOT, 'governance/manifest/cascade/roots');
+  const dir = resolve(QUARANTINE_MANIFEST_ROOT, '/cascade/roots');
   const ids = new Set();
   for (const name of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
     const root = JSON.parse(readFileSync(resolve(dir, name), 'utf8'));
@@ -1334,7 +1334,7 @@ function dataTerminalControlIds() {
  * ===================================================================== */
 const WITHDRAWN_AFTER_TREE_FREEZE = /^RERUN_(?:DATA_)?CAUSAL_PROOF_AFTER_TREE_FREEZE/u;
 
-const CONTROLS_DIR = resolve(CORE_ROOT, 'governance/manifest/controls');
+const CONTROLS_DIR = resolve(QUARANTINE_MANIFEST_ROOT, '/controls');
 
 /**
  * Assert that an empty cohort is explained by the authority, not by an
@@ -1506,7 +1506,7 @@ test('H-1 drill 3 CONTROL [needs dist]: the cohort selector and the comparison l
 test('H-1 drill 4 [needs dist]: a tenant-selected profile reaches the channel, and OUTRANKS every baseline', async () => {
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
-  const manifest = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/experience/profile/index.json'));
+  const manifest = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/experience/profile/index.json'));
   const stops = manifest.calibration.normalizedStops;
   assert.ok(stops.length >= 1);
   for (const stop of stops) {
@@ -1673,8 +1673,8 @@ test('H-1 drill 8 (V1): a static arm with no named baseline fails arm verificati
  * density would start failing on its structural channel.
  * ===================================================================== */
 
-const RADIUS_H2 = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/shape/radius-scale/index.json'));
-const TYPO_H2 = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/typography/scale/index.json'));
+const RADIUS_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/shape/radius-scale/index.json'));
+const TYPO_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/typography/scale/index.json'));
 
 /** The guard, on the real compilers, with the arm's own baseline tuple. */
 const discriminate = async (manifest, armId, vertical, overrides = {}) => {
@@ -2001,7 +2001,7 @@ test('H-2 drill 9 (W-C): the guard stands on the ARM\'s baseline, and proves it'
   );
 });
 
-const EXPRESSIVE_H2 = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/profiles/expressive/index.json'));
+const EXPRESSIVE_H2 = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/profiles/expressive/index.json'));
 
 test('H-2 drill 10 (profiles.expressive): the flat enumValues union cannot catch a cross-axis value, and the compiler is the real gate', async () => {
   // The union check (`enumValues.includes(stop.id)`, runtime/ingress/index.mjs)
@@ -2217,7 +2217,7 @@ test('H3C drill 3: the inline plan still names what it introduced, so restore st
  * first time the ramp math changed.
  * ===================================================================== */
 
-const PALETTE_MANIFEST = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/palette/seeds/index.json'));
+const PALETTE_MANIFEST = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
 const STATIC_SET = 'palette.{primaryColor,secondaryColor,accentColor,backgroundColor}';
 const DB_SET = 'appearance.general.palette.{primary,secondary,accent,background}';
 
@@ -2476,7 +2476,7 @@ const STATIC_PROVENANCE_FIXTURE = Object.freeze({
   },
 });
 
-const M1_PALETTE = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/palette/seeds/index.json'));
+const M1_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
 const M1_CLOSED = [
   'density.mode',
   'spacing.rhythm',
@@ -2484,7 +2484,7 @@ const M1_CLOSED = [
   'surfaces.effect-intensity',
   'typography.scale',
 ].map((id) => readManifest(
-  resolve(CORE_ROOT, 'governance/manifest/controls', pathForManifestId(id), 'index.json'),
+  resolve(QUARANTINE_MANIFEST_ROOT, '/controls', pathForManifestId(id), 'index.json'),
 ));
 
 /** One real static lowering, arms and baselines loaded from dist. */
@@ -2672,7 +2672,7 @@ test('M-1 drill 7 [needs dist]: the mode block must carry the OVERLAY, never the
  * deltas into the base, and spelling the mode grammar in the harness.
  * ===================================================================== */
 
-const H3A2_PALETTE = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/palette/seeds/index.json'));
+const H3A2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
 
 /** Both arms, lowered for the same stop on the same vertical, from dist. */
 async function h3a2Arms(vertical, stopId = 'primary/crimson') {
@@ -2940,7 +2940,7 @@ test('H-3(a) drill 10 [needs dist]: no probe artifact carries a prefers-color-sc
  * it, and measures what would happen if it did not.
  * ===================================================================== */
 
-const B2_PALETTE = readManifest(resolve(CORE_ROOT, 'governance/manifest/controls/palette/seeds/index.json'));
+const B2_PALETTE = readManifest(resolve(QUARANTINE_MANIFEST_ROOT, '/controls/palette/seeds/index.json'));
 
 /** The three composed first-party baselines, through the door the arms bind. */
 async function b2Baselines() {
@@ -3126,7 +3126,7 @@ test('B-2 drill 6: the CLOSED consulted vocabulary is what bounds the blast radi
   assert.ok(consulted.size >= 12, `parsed only ${consulted.size} consulted fields`);
   assert.ok(consulted.has('palette.primaryColor'), 'the primary seed must be in the vocabulary');
 
-  const controlDir = resolve(CORE_ROOT, 'governance/manifest/controls');
+  const controlDir = resolve(QUARANTINE_MANIFEST_ROOT, '/controls');
   const intersections = [];
   let staticDoors = 0;
   for (const { document: manifest } of readManifestRecords(controlDir, 'controlId')) {
@@ -3211,7 +3211,7 @@ test('F4B-12 drill: the registry keypath is exactly SIDEBAR_TONE_FIELD, read fro
   assert.equal(sidebarToneField, 'chrome.sidebar.tone');
 
   const manifest = readManifest(
-    resolve(CORE_ROOT, 'governance/manifest/controls/navigation/sidebar-tone/index.json'),
+    resolve(QUARANTINE_MANIFEST_ROOT, '/controls/navigation/sidebar-tone/index.json'),
   );
   assert.equal(staticDoorPath(manifest), sidebarToneField);
 

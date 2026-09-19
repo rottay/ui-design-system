@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "rootId": "experience.profile",
+  "tier": "standard",
+  "rootChannel": {
+    "authority": "floor-arbitrated",
+    "channel": "--ds-experience-profile",
+    "emission": [
+      {
+        "kind": "compiler-emit",
+        "site": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/recipes/index.ts",
+        "note": "marcador de procedencia (cero lectores css POR DISEÑO); la realidad del control es el VECTOR: expansion.variables + fieldDefaults via appearancePostureToVariables (brand-theme:758-772)"
+      }
+    ]
+  },
+  "dependsOn": [],
+  "derivations": [],
+  "terminalReach": [],
+  "variantDisposition": "by-registry",
+  "variantsNote": "cerrado por REGISTRO first-party versionado (catalogo vigente en controls/experience.profile.json#calibration.catalog: rottay/bithire-technical@1, rottay/management-editorial@1); un perfil es una FILA sobre las otras raices, sin canales propios de valor",
+  "variants": [
+    {
+      "id": "rottay/bithire-technical@1",
+      "value": "rottay/bithire-technical@1",
+      "effects": {
+        "axes": "type technical, geometry sharp, edge hairline, material flat, elevation hairline-lift, motif none, density normal (expressive-profiles/index.ts:154-165)",
+        "intent": "postura de instrumento tecnico; identidad estatica del acid test C1b (docstring :144-147, description :152-153)"
+      },
+      "pinned": {}
+    },
+    {
+      "id": "rottay/management-editorial@1",
+      "value": "rottay/management-editorial@1",
+      "effects": {
+        "axes": "type editorial, geometry soft, edge ruled, material paper, elevation soft-depth, motif contour, density spacious, motion {intensity 0.7, durationScale 1.1, ambient subtle} (expressive-profiles/index.ts:172-186)",
+        "intent": "postura de documento editorial; identidad DB del acid test C1b (docstring :144-147, description :170-171)"
+      },
+      "pinned": {}
+    }
+  ],
+  "variantsLaw": "Vocabulario cerrado por el registro first-party versionado EXPERIENCE_PROFILES (foundation/tokens/ts/presentation/expressive-profiles/index.ts:148-188). DOS filas y no mas, contadas en fuente: los unicos ids del array son :150 y :168, y el indice de resolucion se construye desde ese mismo array (:333-334), asi que no existe una segunda puerta de entrada. Cierre fail-closed: validateExperienceProfileSelection (:352) devuelve malformed-id / unknown-id / unsupported-schema-version, y resolveExperienceProfile (:369) devuelve undefined ante cualquiera de los tres -- SIN PERFIL, nunca un perfil aproximado. Ninguna variante es un valor de canal: un perfil es una FILA DE COMPOSICION sobre otras raices (declaredOutputs del control), y su expansion PIERDE ante todo campo autorado; esa precedencia ya esta declarada en overlaps (brand-theme :760 perfil vs :770+ autorados). Agregar una fila es un cambio DS revisado: la composicion debe caber en todas las cotas globales y cada valor de eje referenciado debe tener filas de expansion vivas (docstring :140-143).",
+  "overlaps": [
+    {
+      "withRoot": "typography.pairing",
+      "withTier": "standard",
+      "landsOn": "--ds-letter-spacing-heading",
+      "mechanism": "el perfil aterriza su DEFAULT literal por fila de tipo (expansion/index.ts:144) y PIERDE ante el campo autorado",
+      "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
+      "mechanismLine": 144,
+      "precedence": "authored-field-wins",
+      "precedenceSite": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
+      "precedenceNote": "perfil :760, autorados :770+; comentario :752-756 verbatim",
+      "note": "ASIMETRIA DELIBERADA - NO HOMOGENEIZAR: display va envuelto en var(--ds-letter-spacing-display, literal) - el perfil CEDE por fallback css; heading va literal pelado - el perfil ESCRIBE y decide el orden del compilador. expansion:86-89 declara que esa divergencia es exactamente lo que mide el acid test. Ambos llegan a authored-wins por mecanismos distintos."
+    }
+  ],
+  "overlapsNote": "El composite aterriza ademas en --ds-edge-standard-width, --ds-material-canvas-texture y --ds-elevation-lift-strength (declaredOutputs); esos overlaps se declaran en las raices alcanzadas cuando sus root files existan (shape.edge no es control; material/elevation son de la orbita pro/otras raices). Registrado aqui para que el archivo no quede mudo: hogar decide quien OWNEA, no borra al otro escritor.",
+  "terminalReachLaw": "state = alcance en la cascada; deteccion de UN SALTO en sitio de lectura = COTA INFERIOR. El alcance transitivo es de la capa GENERADA (cascade-extract/materialized, ley R1); el diff con estas prescripciones ES el backlog de fase 3.",
+  "derivationsEmptyReason": "El composite NO tiene derivaciones propias de valor: sus aterrizajes (letter-spacing-heading, edge-standard-width, material-canvas-texture, elevation-lift-strength - declaredOutputs del control) PERTENECEN a las raices alcanzadas y se documentan como overlaps EN ellas (radius-scale y button-style ya lo hacen). Declararlos aqui seria darles dos hogares - exactamente lo que R6 prohibe y el gate acaba de cobrar."
+}

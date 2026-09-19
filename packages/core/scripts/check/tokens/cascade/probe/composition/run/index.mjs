@@ -338,7 +338,7 @@ function evaluateControlLiveness(perArm, armIds, controlIds, controlProperties =
  * @param {object} input
  * @param {string} input.controlId
  * @param {{id: string, value: number|string}} input.stop
- * @param {object} input.controlManifest    governance/manifest/controls/<control-id>.json
+ * @param {object} input.controlManifest    docs/history/inventories/customization-manifest/controls/<control-id>.json
  * @param {object|null} [input.familyManifest]
  * @param {Record<string, string[]>} [input.negativeControlBindings]
  * @param {object[]} input.arms             from runtime/ingress

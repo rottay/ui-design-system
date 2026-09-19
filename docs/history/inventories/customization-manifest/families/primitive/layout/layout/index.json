@@ -1,0 +1,1133 @@
+{
+  "schemaVersion": 1,
+  "familyId": "primitive/layout/layout",
+  "identity": {
+    "layer": "primitive",
+    "category": "layout",
+    "name": "Layout",
+    "components": [
+      "Layout"
+    ],
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/layout/system",
+    "publicComponents": [
+      "Layout"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "3141d5b1ee2932ba3bc48a453d7917ca8766c89f60a39d5ae5fd17fb9f4a7fc8"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/components/primitives/layout/system/index.ts",
+      "packages/core/src/components/primitives/layout/system/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/system/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/layout/system/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/layout/system/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
+    ],
+    "stableParts": [
+      "root",
+      "header",
+      "sider",
+      "trigger",
+      "trigger-icon",
+      "content",
+      "footer"
+    ],
+    "states": [
+      "collapsed",
+      "hover",
+      "focus-visible"
+    ],
+    "variantAxes": [
+      "data-has-sider",
+      "data-theme",
+      "data-icon-mirrored"
+    ],
+    "propertyGroups": [],
+    "invariants": [
+      "The sider trigger is a named control: aria-label swaps between the expand and collapse strings, aria-expanded tracks the state, and aria-controls names the sider's generated id. [at Layout/engines/modern/index.tsx:235-237]",
+      "aria-expanded is paired with aria-controls by explicit source policy, so the trigger never advertises expansion without naming its target. [at Layout/engines/modern/index.tsx:212-213]",
+      "The trigger glyph is aria-hidden; the control is named by its label, not its icon. [at Layout/engines/modern/index.tsx:247]",
+      "The trigger is floored at the touch-target minimum. [at modern/skin/layout.css:415]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "layout",
+        "scoutArtifact": "mr-anatomy-layout.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 7,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"root\"",
+          "at": [
+            "Layout/engines/modern/index.tsx:87"
+          ]
+        },
+        {
+          "part": "header",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"header\" + class rottay-layout-header",
+          "at": [
+            "Layout/engines/modern/index.tsx:112"
+          ]
+        },
+        {
+          "part": "sider",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"sider\"",
+          "at": [
+            "Layout/engines/modern/index.tsx:224"
+          ]
+        },
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"trigger\"",
+          "at": [
+            "Layout/engines/modern/index.tsx:233"
+          ]
+        },
+        {
+          "part": "trigger-icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"trigger-icon\", aria-hidden=\"true\"",
+          "at": [
+            "Layout/engines/modern/index.tsx:247"
+          ],
+          "note": "MODERN ONLY; the rustic engine has no trigger-icon."
+        },
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"content\" + class rottay-layout-content",
+          "at": [
+            "Layout/engines/modern/index.tsx:276"
+          ]
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "anchor": "data-part=\"footer\" + class rottay-layout-footer",
+          "at": [
+            "Layout/engines/modern/index.tsx:296"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "collapsed",
+          "at": [
+            "Layout/engines/modern/index.tsx:226"
+          ],
+          "state": "collapsed"
+        },
+        {
+          "token": "hover",
+          "at": [
+            "modern/skin/layout.css:219"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": "focus-visible",
+          "at": [
+            "modern/skin/layout.css:228-229"
+          ],
+          "state": "focus-visible"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-has-sider",
+          "at": [
+            "Layout/engines/modern/index.tsx:88"
+          ]
+        },
+        {
+          "token": "data-theme",
+          "values": "light / dark",
+          "at": [
+            "Layout/engines/modern/index.tsx:225"
+          ]
+        },
+        {
+          "token": "data-icon-mirrored",
+          "at": [
+            "Layout/engines/modern/index.tsx:242"
+          ]
+        }
+      ],
+      "partAddressingAttributes": [
+        {
+          "token": "data-anatomy-layout",
+          "values": "flat / floating",
+          "at": [
+            "rustic/skin/layout.css:149-161"
+          ]
+        }
+      ],
+      "engineDivergence": "Three engine siblings with the widest read divergence in the cohort. PARTS: modern 7, rustic 6 (no trigger-icon), classic 0 data-part (AntD .ant-layout* tree). READS: classic reads ten --ds-layout-* channels plus three --ds-sidebar-* (classic/theme.css:2130-2156); rustic reads seven (--ds-layout-{header-bg,header-color,sider-bg,sider-light-bg,sider-light-color,sider-light-border,content-bg,footer-bg} plus three padding channels in TS); modern reads only --ds-layout-sider-bg, -sider-color, -sider-light-bg and its own private geometry channels, and paints header/footer from a bare var(--ds-surface-inset) (Layout/engines/modern/index.tsx:14). CONSEQUENCE: a tenant that sets header background reaches the classic and rustic engines but NOT the modern one. See failureClasses.unreadEmission.",
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "dsVariableReads": [
+          {
+            "var": "--ds-layout-sider-bg",
+            "part": "sider",
+            "at": "modern/skin/layout.css:82; rustic/skin/layout.css:41",
+            "fallback": "var(--ds-material-panel-background) / var(--ds-color-primary-900)",
+            "lands": "background",
+            "occurrences": 3
+          },
+          {
+            "var": "--ds-layout-sider-color",
+            "part": "sider",
+            "at": "modern/skin/layout.css:83",
+            "fallback": "var(--ds-material-panel-foreground)",
+            "lands": "color",
+            "occurrences": 2,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-light-bg",
+            "part": "sider[data-theme='light']",
+            "at": "modern/skin/layout.css:86; rustic/skin/layout.css:49",
+            "fallback": "var(--ds-layout-sider-bg, var(--ds-material-card-background))",
+            "lands": "background",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-light-color",
+            "part": "sider[light]",
+            "at": "rustic/skin/layout.css:50",
+            "fallback": "var(--ds-color-text-primary)",
+            "lands": "color",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-light-border",
+            "part": "sider[light]",
+            "at": "rustic/skin/layout.css:51",
+            "fallback": "var(--ds-color-border-subtle)",
+            "lands": "border-color",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-root-min-block-size",
+            "part": "root",
+            "at": "modern/skin/layout.css:132",
+            "fallback": "100vh",
+            "lands": "min-block-size",
+            "occurrences": 2,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-content-min-basis",
+            "part": "content",
+            "at": "modern/skin/layout.css:159",
+            "fallback": "480px",
+            "lands": "flex-basis",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-header-padding-inline",
+            "part": "header",
+            "at": "modern/skin/layout.css:173",
+            "fallback": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
+            "lands": "padding-inline",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-collapse-duration",
+            "part": "sider",
+            "at": "modern/skin/layout.css:184",
+            "fallback": "var(--ds-motion-slow)",
+            "lands": "transition-duration",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-collapse-timing",
+            "part": "sider",
+            "at": "modern/skin/layout.css:185",
+            "fallback": "var(--ds-motion-ease-out)",
+            "lands": "transition-timing-function",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-trigger-block-size",
+            "part": "trigger",
+            "at": "modern/skin/layout.css:205",
+            "fallback": "32px",
+            "lands": "block-size",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-trigger-font-size",
+            "part": "trigger",
+            "at": "modern/skin/layout.css:208",
+            "fallback": "var(--ds-font-size-sm)",
+            "lands": "font-size",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-sider-trigger-bg-hover",
+            "part": "trigger:hover",
+            "at": "modern/skin/layout.css:219",
+            "fallback": "var(--ds-surface-highlight)",
+            "lands": "background",
+            "occurrences": 2,
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-focus-ring-width / -color / -offset",
+            "part": "trigger",
+            "at": "modern/skin/layout.css:228, 229",
+            "fallback": null,
+            "lands": "outline, outline-offset"
+          },
+          {
+            "var": "--ds-layout-footer-padding-inline / -padding-block",
+            "part": "footer",
+            "at": "modern/skin/layout.css:305, 306",
+            "fallback": "calc(var(--ds-spacing-4) * rhythm) / calc(var(--ds-spacing-2) * rhythm)",
+            "lands": "padding",
+            "note": "BOTH UNDECLARED READS."
+          },
+          {
+            "var": "--ds-sidebar-shell-padding-inline",
+            "part": "sider anatomy panel",
+            "at": "modern/skin/layout.css:381",
+            "fallback": "var(--ds-spacing-2)",
+            "lands": "padding-inline",
+            "occurrences": 2
+          },
+          {
+            "var": "--ds-sidebar-shell-padding-collapsed",
+            "part": "sider anatomy rail",
+            "at": "modern/skin/layout.css:390",
+            "fallback": "var(--ds-spacing-1)",
+            "lands": "padding-inline",
+            "occurrences": 2
+          },
+          {
+            "var": "--ds-sidebar-collapsed-width",
+            "part": "sider anatomy rail",
+            "at": "modern/skin/layout.css:391",
+            "fallback": "68px",
+            "lands": "inline-size",
+            "occurrences": 2
+          },
+          {
+            "var": "--ds-touch-target-min",
+            "part": "trigger",
+            "at": "modern/skin/layout.css:415",
+            "fallback": "44px",
+            "lands": "min-block-size"
+          },
+          {
+            "var": "--ds-surface-inset",
+            "part": "header, footer",
+            "at": "Layout/engines/modern/index.tsx:14",
+            "fallback": null,
+            "lands": "background",
+            "occurrences": 3,
+            "note": "The modern header and footer paint from this bare surface token; the tenant --ds-layout-header-bg channel never reaches them."
+          },
+          {
+            "var": "--ds-surface-panel / --ds-surface-card",
+            "part": "sider",
+            "at": "Layout/engines/modern/index.tsx:15",
+            "fallback": null,
+            "lands": "background"
+          },
+          {
+            "var": "--ds-layout-header-bg",
+            "part": "header (rustic)",
+            "at": "rustic/skin/layout.css:33",
+            "fallback": "var(--ds-color-primary-900)",
+            "lands": "background"
+          },
+          {
+            "var": "--ds-layout-header-color",
+            "part": "header (rustic)",
+            "at": "rustic/skin/layout.css:34",
+            "fallback": "var(--ds-color-text-on-primary)",
+            "lands": "color",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-content-bg",
+            "part": "content (rustic)",
+            "at": "rustic/skin/layout.css:65",
+            "fallback": "var(--ds-color-bg-primary)",
+            "lands": "background",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-footer-bg",
+            "part": "footer (rustic)",
+            "at": "rustic/skin/layout.css:70",
+            "fallback": "var(--ds-color-bg-secondary)",
+            "lands": "background",
+            "note": "UNDECLARED READ."
+          },
+          {
+            "var": "--ds-layout-header-padding / -content-padding / -footer-padding",
+            "part": "header / content / footer (rustic TS)",
+            "at": "Layout/engines/rustic/index.tsx:74, 88, 93",
+            "fallback": "0 16px / 16px / 16px",
+            "lands": "padding",
+            "note": "ALL THREE UNDECLARED READS."
+          },
+          {
+            "var": "--ds-layout-{bg,header-bg,header-color,header-height,header-padding,header-backdrop,header-border,sider-bg,sider-color,sider-border}",
+            "part": "classic .ant-layout tree",
+            "at": "runtime/engines/classic/theme.css:2130, 2139-2145, 2150-2152",
+            "fallback": "only --ds-layout-bg (var(--ds-color-bg-primary)), --ds-layout-header-backdrop (none) and the two border channels (transparent) carry fallbacks; the rest are bare",
+            "lands": "background, color, height, padding, line-height, backdrop-filter, border"
+          },
+          {
+            "var": "--ds-sidebar-shell-padding-inline / --ds-sidebar-width / --ds-sidebar-collapsed-width",
+            "part": "classic sider",
+            "at": "runtime/engines/classic/theme.css:2148, 2149, 2156",
+            "fallback": "0 / 200px / 80px",
+            "lands": "padding-inline, width",
+            "note": "The classic collapsed width defaults to 80px while the modern skin defaults to 68px (modern/skin/layout.css:391)."
+          }
+        ],
+        "censusTotals": {
+          "distinctDsNamesScoped": 51,
+          "readOccurrencesScoped": 87
+        },
+        "tenantConditionalDeclaration": {
+          "at": "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1371-1451",
+          "emits": [
+            "--ds-layout-bg",
+            "--ds-layout-header-bg",
+            "--ds-layout-header-height (plus --ds-shell-header-block-size and --ds-shell-topbar-height)",
+            "--ds-layout-header-backdrop",
+            "--ds-layout-header-border",
+            "--ds-layout-sider-bg",
+            "--ds-layout-sider-border"
+          ],
+          "note": "Seven channels, each behind an `if (l.<field>)` guard. The nineteen other --ds-layout-* names the engines read are emitted by nothing."
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-color-text-primary"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-surface-inset"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-layout-sider-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-sider-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-sider-trigger-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "gap-audit-independent",
+        "reasons": [
+          {
+            "root": "typography.pairing",
+            "why": "el peso/espaciado/transformacion tipografica pertenece a la tabla de pairing gobernada, no a sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "source": "gap-audit-independent",
+        "reasons": [
+          {
+            "root": "typography.families",
+            "why": "la familia tipografica autoral vive en los packs gobernados, no en sockets de familia"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-font-size-sm"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-layout-sider-trigger-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-radius-lg",
+            "--ds-radius-md"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "shape.radius-scale",
+            "why": "la anatomia de layout no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.button-style",
+            "why": "layout no es control de formulario: la silueta de boton no aplica"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-width"
+          ],
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-sidebar-collapsed-width",
+            "--ds-sidebar-shell-padding-collapsed",
+            "--ds-sidebar-shell-padding-inline"
+          ],
+          "Pisos de accesibilidad (touch-target-min): clase de exclusion propia, no brazo compartido - el piso no se negocia por tema": [
+            "--ds-touch-target-min"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-layout-content-min-basis",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-content-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-footer-padding-block",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-footer-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-header-padding-inline",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-root-min-block-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-sider-trigger-block-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "spacing.rhythm",
+            "why": "la anatomia de layout no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-3",
+            "--ds-spacing-4"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-motion-slow"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-layout-sider-collapse-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-layout-sider-collapse-timing",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/layout/layout"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surfaces.elevation-posture",
+            "why": "la anatomia de layout no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-elevation-2"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "Box/flex/Grid no tienen superficie propia que acabar",
+        "source": "gap-audit-primary",
+        "uncoveredByDesign": {
+          "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
+            "--ds-material-card-background",
+            "--ds-material-panel-background",
+            "--ds-material-panel-foreground",
+            "--ds-surface-highlight"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "surfaces.effect-intensity",
+            "why": "la anatomia de layout no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el layout no pinta chrome",
+        "source": "gap-audit-primary",
+        "reasons": [
+          {
+            "root": "navigation.sidebar-tone",
+            "why": "layout no es chrome de navegacion: el tono de sidebar gobierna la navegacion lateral, nunca una primitiva de layout"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "ningun componente lee --ds-experience-profile: marcador de :root, selecciona composicion en carga (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "chrome.families",
+            "why": "layout no crea capas propias: el orden z lo gobierna la escala derivada de layer.stack"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "uncoveredByDesign": {
+          "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "chrome.anatomy",
+            "why": "la anatomia de layout no lee ningun canal propio de este control: lo gobierna el canal compartido de la raiz (nivel 2 de la forma canonica), sin socket de familia"
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "recipe-profile",
+            "why": "ningun componente lee --ds-recipe-profile: la receta rebinds raices (L4)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reviewedFrom": "anatomy",
+        "reasons": [
+          {
+            "root": "palette.status-seeds",
+            "why": "la anatomia de layout no lee ningun canal de color de estado (success/warning/error/info): es un primitivo de layout que gobierna geometria/posicion/visibilidad, no expresa estado semantico; cero lecturas de --ds-color-(success|warning|error|info) en foundation/tokens/css/** (modern+rustic+presentation) ni en la anatomia TSX de primitive/layout/layout. Solo 5/20 familias de layout tienen skin propio (collapse, divider, layout, scroll-area, splitter) y las 5 dieron 0 hits."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "profiles.icon",
+            "why": "la anatomia no porta iconos de la libreria (flechas/grips son geometria propia, ver palette/chrome.anatomy)"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

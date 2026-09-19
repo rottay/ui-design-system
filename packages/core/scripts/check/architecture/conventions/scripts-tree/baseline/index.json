@@ -22,6 +22,11 @@
       "rule": "R8-single-child-subdomain",
       "path": "check/responsive",
       "reason": "domain slot with registered growth, not accidental nesting. `single-authority` is its first child, already registered in the gate manifest as the blocking `responsive-single-authority` plus its drill, and the pilot’s remaining responsive obligations (container, breakpoint) are registered for this same folder. Decrease-only applies: when the second child lands this entry goes STALE and the gate says so."
+    },
+    {
+      "rule": "M1-loose-manifest-file",
+      "path": "docs/history/inventories/customization-manifest/README.md",
+      "reason": "the WO-RET-03 quarantine marker itself: a one-line README stating that no gate reads the sealed corpus as authority. It is a deliberate loose file at the manifest root, adjudicated here rather than bent into an index.json. The M1 walk over the quarantine exists to keep certifying the corpus shape; the README is the one documented exception."
     }
   ]
 }

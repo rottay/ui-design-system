@@ -74,7 +74,7 @@ const TENANT_SEED_ROOTS = Object.freeze({
 export const SCRATCH_CHANNEL = /(-resolved-|-resolved$|-computed-|-computed$|-effective-|-effective$|-current-|-current$)/;
 
 /**
- * CASCADA: validate one authored root file (governance/manifest/cascade/roots/<id>.json).
+ * CASCADA: validate one authored root file (docs/history/inventories/customization-manifest/cascade/roots/<id>.json).
  * socketOwnership: Map<channelId, { owner: controlId, families: Set<familyId> }>
  * built from families internalChannels (semanticOwner edges).
  */
@@ -128,7 +128,7 @@ export function validateCascadeRoot(doc, {
    *
    * Los `declaredOutputs` del control (channels/rootAttributes vacios) NO se consultan aqui:
    * no viajan en el contexto explicito de esta funcion y este modulo es puro respecto de ese
-   * contexto — leer governance/manifest/controls por path clavaria el arbol real y un drill ya no podria
+   * contexto — leer docs/history/inventories/customization-manifest/controls por path clavaria el arbol real y un drill ya no podria
    * graduar un fixture temporal. La conjuncion de arriba es la prueba que el propio doc puede
    * dar; el cross-check inverso de socketOwnership (mas abajo) sigue delatando cualquier
    * arista de canal que esta raiz posea de verdad.
@@ -1017,7 +1017,7 @@ export function validateCell(cell, options) {
    * declaration is gated, cited and singular; re-deciding it here would create a
    * second authority for the same fact. The ids arrive through the explicit
    * context, like activeControlIds, because this module stays pure with respect
-   * to its context: reading governance/manifest/cascade by path would pin the real tree and
+   * to its context: reading docs/history/inventories/customization-manifest/cascade by path would pin the real tree and
    * a drill could no longer grade a temporary fixture.
    */
   const isDataTerminal =
@@ -1361,7 +1361,7 @@ export function validateControlAssessmentCeiling({ calibrationStateByControl, be
     const reachedRank = Math.max(rankOf(reached), 0);
     if (claimRank > reachedRank) {
       errors.push(
-        `governance/manifest/controls/${controlId}/index.json: calibration.assessmentState ${claimed} exceeds the ` +
+        `docs/history/inventories/customization-manifest/controls/${controlId}/index.json: calibration.assessmentState ${claimed} exceeds the ` +
           `strongest state any family cell reaches for it (${reached}); a control may not outrank ` +
           'its own evidence',
       );

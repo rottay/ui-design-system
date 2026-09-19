@@ -46,7 +46,7 @@ const CARRIED = [
   // does -- but so the inverse drill below can prove that editing it changes nothing.
   'packages/core/artifacts/quality/programs/modern-rescue/archive/ledgers/family-source-visitation/252-family-era/index.json',
   'packages/core/scripts/check/modern-rescue/family-inventory/index.json',
-  'packages/core/governance/manifest/index.json',
+  'docs/history/inventories/customization-manifest/index.json',
   'packages/core/scripts/check/orchestration/public/work-order/synthetic-ownership/index.json',
   'packages/core/scripts/check/orchestration/plans/examples/index.json',
 ];
@@ -220,7 +220,7 @@ export function runDrills() {
     // so the ledger is no longer a source a pinned figure can be false about.
     const manifestPath = join(
       dir,
-      'packages/core/governance/manifest/index.json',
+      'docs/history/inventories/customization-manifest/index.json',
     );
     const manifestBefore = readFileSync(manifestPath, 'utf8');
     const cellsIndex = JSON.parse(manifestBefore);

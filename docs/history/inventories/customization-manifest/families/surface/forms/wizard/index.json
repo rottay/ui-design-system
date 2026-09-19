@@ -1,0 +1,721 @@
+{
+  "schemaVersion": 1,
+  "familyId": "surface/forms/wizard",
+  "identity": {
+    "layer": "surface",
+    "category": "forms",
+    "name": "WizardSurface",
+    "components": [
+      "WizardSurface"
+    ],
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/forms",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/forms/wizard",
+    "publicComponents": [
+      "WizardSurface"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "6174b44dc763e5bc557485f93843d1117dc585402085f26e665392f9dd07b747"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/components/surfaces/presentation/pages/forms/wizard",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+    ],
+    "stableParts": [
+      "description",
+      "error-banner",
+      "root",
+      "aside-card",
+      "error-card"
+    ],
+    "states": [],
+    "variantAxes": [
+      "data-stacked"
+    ],
+    "propertyGroups": [],
+    "invariants": [],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "surface-full",
+        "scoutArtifact": "mr-anatomy-surface-full.json",
+        "scoutSelfGradedConfidence": null,
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 3,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "description",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "error-banner",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "tsxEmittedPartsWithoutCssRule"
+        },
+        {
+          "part": "aside-card",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-wizard__aside-card` bound by the root pair `.ds-surface.ds-wizard`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css:23",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css:53"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        },
+        {
+          "part": "error-card",
+          "anchorKind": "ds-class-pair",
+          "anchor": "`ds-wizard__error-card` bound by the root pair `.ds-surface.ds-wizard`",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css:16",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css:47"
+          ],
+          "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
+        }
+      ],
+      "partCensus": {
+        "rootAnchor": {
+          "class": "ds-wizard",
+          "tierClass": "ds-surface",
+          "note": null
+        }
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "data-stacked=false",
+          "occurrences": 1
+        }
+      ],
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelDeclarationsEmittedByThisFamily": [
+          {
+            "channel": "--ds-card-bordered-border-color",
+            "declarationSites": [
+              "foundation/tokens/css/presentation/components/skin/wizard-surface.css:48"
+            ]
+          }
+        ],
+        "dsVariableReadsInlineInTsx": [],
+        "dsVariableReadsViaCssSkin": [
+          {
+            "channel": "--ds-spacing-4",
+            "ownership": [
+              "DS_OWNED_FOUNDATION"
+            ],
+            "declaration": "DECLARED_IN_AUTHORED_SOURCE",
+            "declarationSites": [
+              "foundation/tokens/css/foundation/themes/default.css:687",
+              "foundation/tokens/css/foundation/base/density.css:81"
+            ],
+            "readSiteCount": 1,
+            "readSites": [
+              {
+                "at": "foundation/tokens/css/presentation/components/skin/wizard-surface.css:55",
+                "observableProperty": "inset-block-start",
+                "part": null,
+                "fallbackPresent": true,
+                "fallbackValue": "1rem",
+                "atRuleContext": null,
+                "selector": ".ds-surface.ds-wizard[data-stacked='false'] .ds-wizard__aside-card"
+              }
+            ],
+            "fallbackChain": "INERT_GLOBAL_DEFAULT_WINS",
+            "globalDefaultSite": "foundation/tokens/css/foundation/themes/default.css:687",
+            "judgedAgainst": {
+              "ruling": "R-3",
+              "frame": "tenant bundle = base.css + one compiled artifact",
+              "declaredInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "declaredInFullBundle": true,
+              "globalDefaultInTenantBundle": {
+                "rottay": true,
+                "bithire": true,
+                "evnto": true
+              },
+              "bundleDependent": false
+            }
+          }
+        ],
+        "hardcodedValues": {
+          "count": 0,
+          "colourBearing": [],
+          "sample": [],
+          "byProperty": {}
+        },
+        "atRuleContexts": {}
+      },
+      "surfaceSkinBinding": {
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+        "rootAnchor": ".ds-surface.ds-wizard",
+        "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
+        "partsAdmittedThisPass": [
+          "aside-card",
+          "error-card"
+        ]
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "color.mode",
+            "why": "PROHIBIDO el socket privado de modo (--_ds-<comp>-dark-*): un componente con su dark local queda en el modo equivocado cuando el tenant cambia backgroundMode. El modo es el UNICO eje sin sockets de familia: se refleja exclusivamente por los overlays de los canales compartidos."
+          }
+        ],
+        "uncoveredByDesign": {
+          "HALLAZGO FAM-18 (a-vs-b resuelto)": [
+            "Surface wizard: 0 canales propios, 0 consumo de familias compuestas, resto foundation - receta declarativa que compone, chrome propio minimo"
+          ],
+          "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
+            "--ds-color-error",
+            "--ds-spacing-4"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--ds-font-family-base",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-font-family-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-letter-spacing-heading",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--ds-line-height-display",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/index.ts"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ],
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "CONSUMO (migracion): ownedBy surface/forms/wizard#typography.families": [
+            "--_ds-wizard-heading-family"
+          ]
+        },
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-wizard-heading-family",
+          "semanticOwner": "typography.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-wizard-heading-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-wizard-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-wizard-control-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-wizard-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-wizard-section-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-wizard-section-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "surface/forms/wizard"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/wizard-surface/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "carrier": "shared-channel",
+            "ownedBy": "palette.status-seeds",
+            "channels": [
+              "--ds-color-error"
+            ],
+            "socketsResolved": true,
+            "prop": "consumo directo skin (nivel 1): error-card, wizard-surface.css:48"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

@@ -1,0 +1,2859 @@
+{
+  "schemaVersion": 1,
+  "familyId": "structure/workspace/selection-preview-rail",
+  "identity": {
+    "layer": "structure",
+    "category": "workspace",
+    "name": "SelectionPreviewRail",
+    "components": [
+      "SelectionPreviewRail"
+    ],
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/workspace/selection-preview-rail",
+    "publicComponents": [
+      "SelectionPreviewRail"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "3e7043907fd62f9c7c4cdf5c5dc0338204cdb1430e1467b2947de1dfb8c829d0"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/components/structures/workspace/selection-preview-rail",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+    ],
+    "stableParts": [
+      "fallback-empty",
+      "fallback-boolean",
+      "fallback-string",
+      "root",
+      "sticky",
+      "custom-sticky-card",
+      "custom-content",
+      "identity-card",
+      "identity-card-accent",
+      "identity-card-body",
+      "close",
+      "identity-title",
+      "identity-subtitle",
+      "match-reason-panel",
+      "match-reason-icon",
+      "match-reason-eyebrow",
+      "match-reason-body",
+      "snapshot-card",
+      "snapshot-header",
+      "snapshot-title",
+      "snapshot-subtitle",
+      "snapshot-body",
+      "snapshot-row",
+      "snapshot-row-label",
+      "snapshot-empty-frame",
+      "snapshot-empty"
+    ],
+    "states": [],
+    "variantAxes": [
+      "data-preview",
+      "data-size"
+    ],
+    "propertyGroups": [],
+    "invariants": [
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:329, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:333]",
+      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:123]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:306, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:307, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:310]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-a.json": "SOURCE_BOUND",
+          "mr-anatomy-structure-full.json": "PARTIAL"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 26,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "fallback-empty",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:141"
+        },
+        {
+          "part": "fallback-boolean",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:150"
+        },
+        {
+          "part": "fallback-string",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:159"
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:264"
+        },
+        {
+          "part": "sticky",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:268"
+        },
+        {
+          "part": "custom-sticky-card",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:270"
+        },
+        {
+          "part": "custom-content",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:297"
+        },
+        {
+          "part": "identity-card",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:316"
+        },
+        {
+          "part": "identity-card-accent",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:323"
+        },
+        {
+          "part": "identity-card-body",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:329"
+        },
+        {
+          "part": "close",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:339"
+        },
+        {
+          "part": "identity-title",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:350"
+        },
+        {
+          "part": "identity-subtitle",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:361"
+        },
+        {
+          "part": "match-reason-panel",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:374"
+        },
+        {
+          "part": "match-reason-icon",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:378"
+        },
+        {
+          "part": "match-reason-eyebrow",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:398"
+        },
+        {
+          "part": "match-reason-body",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:409"
+        },
+        {
+          "part": "snapshot-card",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:471"
+        },
+        {
+          "part": "snapshot-header",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:477"
+        },
+        {
+          "part": "snapshot-title",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:482"
+        },
+        {
+          "part": "snapshot-subtitle",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:492"
+        },
+        {
+          "part": "snapshot-body",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:502"
+        },
+        {
+          "part": "snapshot-row",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:512"
+        },
+        {
+          "part": "snapshot-row-label",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:518"
+        },
+        {
+          "part": "snapshot-empty-frame",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:532"
+        },
+        {
+          "part": "snapshot-empty",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:536"
+        }
+      ],
+      "partCensus": {
+        "partsSeenInSkinCssOnly": [
+          "(component-inline)"
+        ]
+      },
+      "variantAxisAnchors": [
+        {
+          "token": "preview=custom",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:96",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:97"
+          ]
+        },
+        {
+          "token": "preview=default",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:109",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:110",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:111"
+          ]
+        },
+        {
+          "token": "size",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:274",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:275",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:278"
+          ]
+        },
+        {
+          "token": "data-preview",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:265",
+            "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:311"
+          ]
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@container ds-rail (max-width: 340px) >> .ds-structure.ds-selection-preview-rail [data-part='identity-card-body']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:306",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:307"
+            ]
+          },
+          {
+            "token": "@container ds-rail (max-width: 340px) >> .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:310",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:311"
+            ]
+          },
+          {
+            "token": "@container ds-rail (max-width: 340px) >> .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:314",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:315"
+            ]
+          },
+          {
+            "token": "@media(forced-colors: active)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:329",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:333"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "accessibilityAttributes": {
+        "entries": [
+          {
+            "token": "aria-label",
+            "axis": "aria-attribute",
+            "at": [
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:266",
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:288",
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:312",
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:341"
+            ]
+          }
+        ],
+        "reason": "ARIA semantics. An accessibility contract of the family, not a customization axis and not an interaction state; a tenant control must never be allowed to change it."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": false,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css": {
+            "rows": 82,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "assessmentGaps": [
+          "1 inline-style reads whose landing CSS property is HEURISTIC_NOT_PROVEN"
+        ],
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupEvidence": {
+          "border": {
+            "declarationCount": 9,
+            "properties": [
+              "border",
+              "border-bottom",
+              "border-color",
+              "border-inline-start",
+              "border-top"
+            ]
+          },
+          "color": {
+            "declarationCount": 11,
+            "properties": [
+              "backdrop-filter",
+              "background",
+              "color"
+            ]
+          },
+          "elevation": {
+            "declarationCount": 3,
+            "properties": [
+              "box-shadow"
+            ]
+          },
+          "layout": {
+            "declarationCount": 9,
+            "properties": [
+              "container-name",
+              "container-type",
+              "display",
+              "flex",
+              "flex-direction",
+              "position"
+            ]
+          },
+          "radius": {
+            "declarationCount": 4,
+            "properties": [
+              "border-radius"
+            ]
+          },
+          "size": {
+            "declarationCount": 8,
+            "properties": [
+              "inline-size",
+              "min-inline-size"
+            ]
+          },
+          "spacing": {
+            "declarationCount": 26,
+            "properties": [
+              "gap",
+              "margin-block-start",
+              "padding",
+              "padding-block",
+              "padding-inline",
+              "top"
+            ]
+          },
+          "typography": {
+            "declarationCount": 12,
+            "properties": [
+              "font-style",
+              "letter-spacing",
+              "line-height",
+              "overflow-wrap",
+              "text-transform"
+            ]
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--ds-color-border-subtle",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:98",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom']",
+            "states": [
+              "preview=custom"
+            ],
+            "landsOn": "border-inline-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:112",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
+            "states": [
+              "preview=default"
+            ],
+            "landsOn": "border-inline-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-surface-card",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
+            "states": [
+              "preview=default"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
+            "states": [
+              "preview=default"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-surface-card",
+            "part": "root",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
+            "states": [
+              "preview=default"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "part": "sticky",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:124",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='sticky']",
+            "states": [],
+            "landsOn": "top",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "16px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-radius-xl",
+            "part": "custom-sticky-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:135",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
+            "states": [],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "16px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "part": "custom-sticky-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:335",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:264"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "custom-sticky-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-surface-card",
+            "part": "custom-sticky-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "part": "custom-sticky-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:137",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
+            "states": [],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "part": "custom-sticky-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:141",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card']",
+            "states": [],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-surface-card",
+            "part": "close",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:153",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] [data-part='custom-sticky-card'] .ds-selection-preview-rail__close",
+            "states": [
+              "preview=custom"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-selection-preview-rail-close-backdrop",
+            "part": "close",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:154",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] [data-part='custom-sticky-card'] .ds-selection-preview-rail__close",
+            "states": [
+              "preview=custom"
+            ],
+            "landsOn": "backdrop-filter",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "none",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "part": "custom-content",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:159",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-content']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "16px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-radius-xl",
+            "part": "identity-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:165",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
+            "states": [],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "16px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-surface-panel",
+            "part": "identity-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:335",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:264"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-bg-elevated",
+            "part": "identity-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-surface-card",
+            "part": "identity-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "part": "identity-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:167",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
+            "states": [],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "part": "identity-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:171",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card']",
+            "states": [],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-color-primary",
+            "part": "identity-card-accent",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card-accent']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-primary",
+            "part": "identity-card-accent",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card-accent']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "part": "match-reason-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:197",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
+            "states": [],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "12px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+            ],
+            "declarationSiteCount": 5
+          },
+          {
+            "variable": "--ds-color-primary",
+            "part": "match-reason-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-primary",
+            "part": "match-reason-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "part": "match-reason-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:200",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
+            "states": [],
+            "landsOn": "margin-block-start",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "16px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "part": "match-reason-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:202",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
+            "states": [],
+            "landsOn": "padding-inline",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "16px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-primary",
+            "part": "match-reason-panel",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:206",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel']",
+            "states": [],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-primary",
+            "part": "match-reason-icon",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:211",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-icon']",
+            "states": [],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-radius-xl",
+            "part": "snapshot-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:217",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='snapshot-card']",
+            "states": [],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "16px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-surface-card",
+            "part": "snapshot-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:218",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='snapshot-card']",
+            "states": [],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "part": "snapshot-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:219",
+            "selector": ".ds-structure.ds-selection-preview-rail [data-part='snapshot-card']",
+            "states": [],
+            "landsOn": "box-shadow",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "part": "snapshot-card",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:223",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card']",
+            "states": [],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "part": "snapshot-header",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:227",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header']",
+            "states": [],
+            "landsOn": "border-bottom",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "part": "snapshot-row",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:240",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row']",
+            "states": [],
+            "landsOn": "border-top",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-spacing-3",
+            "part": "snapshot-row",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:242",
+            "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row']",
+            "states": [],
+            "landsOn": "padding-block",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "12px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
+            ],
+            "declarationSiteCount": 2
+          }
+        ],
+        "readCensus": {
+          "distinctVariables": 12,
+          "totalReadSites": 38,
+          "variables": [
+            {
+              "variable": "--ds-color-border-subtle",
+              "totalReadSites": 7,
+              "parts": [
+                "custom-sticky-card",
+                "identity-card",
+                "root",
+                "snapshot-card",
+                "snapshot-header",
+                "snapshot-row"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:98",
+                  "part": "root",
+                  "landsOn": "border-inline-start",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:112",
+                  "part": "root",
+                  "landsOn": "border-inline-start",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:141",
+                  "part": "custom-sticky-card",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:171",
+                  "part": "identity-card",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:223",
+                  "part": "snapshot-card",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:227",
+                  "part": "snapshot-header",
+                  "landsOn": "border-bottom",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:240",
+                  "part": "snapshot-row",
+                  "landsOn": "border-top",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65"
+            },
+            {
+              "variable": "--ds-surface-card",
+              "totalReadSites": 6,
+              "parts": [
+                "custom-sticky-card",
+                "identity-card",
+                "root",
+                "snapshot-card"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
+                  "part": "root",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
+                  "part": "root",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
+                  "part": "custom-sticky-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:153",
+                  "part": "custom-sticky-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
+                  "part": "identity-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:218",
+                  "part": "snapshot-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            },
+            {
+              "variable": "--ds-color-bg-elevated",
+              "totalReadSites": 3,
+              "parts": [
+                "custom-sticky-card",
+                "identity-card",
+                "root"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
+                  "part": "root",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
+                  "part": "custom-sticky-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
+                  "part": "identity-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140"
+            },
+            {
+              "variable": "--ds-spacing-4",
+              "totalReadSites": 4,
+              "parts": [
+                "custom-content",
+                "match-reason-panel",
+                "sticky"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:124",
+                  "part": "sticky",
+                  "landsOn": "top",
+                  "fallbackPresent": true,
+                  "fallback": "16px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:159",
+                  "part": "custom-content",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "16px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:200",
+                  "part": "match-reason-panel",
+                  "landsOn": "margin-block-start",
+                  "fallbackPresent": true,
+                  "fallback": "16px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:202",
+                  "part": "match-reason-panel",
+                  "landsOn": "padding-inline",
+                  "fallbackPresent": true,
+                  "fallback": "16px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+            },
+            {
+              "variable": "--ds-radius-xl",
+              "totalReadSites": 3,
+              "parts": [
+                "custom-sticky-card",
+                "identity-card",
+                "snapshot-card"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:135",
+                  "part": "custom-sticky-card",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "16px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:165",
+                  "part": "identity-card",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "16px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:217",
+                  "part": "snapshot-card",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "16px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772"
+            },
+            {
+              "variable": "--ds-surface-panel",
+              "totalReadSites": 2,
+              "parts": [
+                "custom-sticky-card",
+                "identity-card"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
+                  "part": "custom-sticky-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
+                  "part": "identity-card",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:264"
+            },
+            {
+              "variable": "--ds-color-text-primary",
+              "totalReadSites": 3,
+              "parts": [
+                "custom-sticky-card",
+                "identity-card",
+                "snapshot-card"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:137",
+                  "part": "custom-sticky-card",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:167",
+                  "part": "identity-card",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:219",
+                  "part": "snapshot-card",
+                  "landsOn": "box-shadow",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:143"
+            },
+            {
+              "variable": "--ds-selection-preview-rail-close-backdrop",
+              "totalReadSites": 1,
+              "parts": [
+                "custom-sticky-card"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:154",
+                  "part": "custom-sticky-card",
+                  "landsOn": "backdrop-filter",
+                  "fallbackPresent": true,
+                  "fallback": "none",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-color-primary",
+              "totalReadSites": 6,
+              "parts": [
+                "identity-card-accent",
+                "match-reason-icon",
+                "match-reason-panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
+                  "part": "identity-card-accent",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
+                  "part": "identity-card-accent",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
+                  "part": "match-reason-panel",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
+                  "part": "match-reason-panel",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:206",
+                  "part": "match-reason-panel",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:211",
+                  "part": "match-reason-icon",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156"
+            },
+            {
+              "variable": "--ds-radius-lg",
+              "totalReadSites": 1,
+              "parts": [
+                "match-reason-panel"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:197",
+                  "part": "match-reason-panel",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "12px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771"
+            },
+            {
+              "variable": "--ds-spacing-3",
+              "totalReadSites": 1,
+              "parts": [
+                "snapshot-row"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:242",
+                  "part": "snapshot-row",
+                  "landsOn": "padding-block",
+                  "fallbackPresent": true,
+                  "fallback": "12px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
+            },
+            {
+              "variable": "--ds-z-index-relative-above",
+              "totalReadSites": 1,
+              "parts": [
+                "(component-inline)"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:281",
+                  "part": "(component-inline)",
+                  "landsOn": "(inline-style)",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "component-inline"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/z-index/index.css:55"
+            }
+          ]
+        },
+        "undeclaredReads": [
+          {
+            "variable": "--ds-selection-preview-rail-close-backdrop",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:154",
+            "fallbackPresent": true,
+            "fallback": "none",
+            "landsOn": "backdrop-filter"
+          }
+        ],
+        "inertFallbackChainSample": [
+          {
+            "name": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:124",
+            "fallback": "16px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+          },
+          {
+            "name": "--ds-radius-xl",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:135",
+            "fallback": "16px",
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:45"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:159",
+            "fallback": "16px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+          },
+          {
+            "name": "--ds-radius-xl",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:165",
+            "fallback": "16px",
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:45"
+          },
+          {
+            "name": "--ds-radius-lg",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:197",
+            "fallback": "12px",
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:44"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:200",
+            "fallback": "16px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+          },
+          {
+            "name": "--ds-spacing-4",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:202",
+            "fallback": "16px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
+          },
+          {
+            "name": "--ds-radius-xl",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:217",
+            "fallback": "16px",
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:45"
+          },
+          {
+            "name": "--ds-spacing-3",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:242",
+            "fallback": "12px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
+          },
+          {
+            "name": "--ds-z-index-relative-above",
+            "at": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:281",
+            "fallback": "1",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/z-index/index.css:55"
+          }
+        ],
+        "inertFallbackChainSites": 10,
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 95,
+            "property": "flex",
+            "literal": "320px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 95,
+            "property": "flex",
+            "literal": "29vw",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 95,
+            "property": "flex",
+            "literal": "380px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 96,
+            "property": "inline-size",
+            "literal": "380px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 97,
+            "property": "min-inline-size",
+            "literal": "320px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 98,
+            "property": "border-inline-start",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 104,
+            "property": "padding-block",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 105,
+            "property": "padding-inline",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 105,
+            "property": "padding-inline",
+            "literal": "16px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 109,
+            "property": "flex",
+            "literal": "320px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 109,
+            "property": "flex",
+            "literal": "29vw",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 109,
+            "property": "flex",
+            "literal": "380px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 110,
+            "property": "inline-size",
+            "literal": "380px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 111,
+            "property": "min-inline-size",
+            "literal": "320px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 112,
+            "property": "border-inline-start",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 117,
+            "property": "padding-block",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 118,
+            "property": "padding-inline",
+            "literal": "16px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 118,
+            "property": "padding-inline",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 129,
+            "property": "gap",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 137,
+            "property": "box-shadow",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 137,
+            "property": "box-shadow",
+            "literal": "44px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 141,
+            "property": "border",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 151,
+            "property": "inline-size",
+            "literal": "34px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 152,
+            "property": "min-inline-size",
+            "literal": "34px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 167,
+            "property": "box-shadow",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 167,
+            "property": "box-shadow",
+            "literal": "48px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 171,
+            "property": "border",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 178,
+            "property": "padding-block",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 178,
+            "property": "padding-block",
+            "literal": "16px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 179,
+            "property": "padding-inline",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 182,
+            "property": "inline-size",
+            "literal": "34px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 183,
+            "property": "min-inline-size",
+            "literal": "34px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 201,
+            "property": "padding-block",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 202,
+            "property": "padding-inline",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 206,
+            "property": "border",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 219,
+            "property": "box-shadow",
+            "literal": "10px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 219,
+            "property": "box-shadow",
+            "literal": "30px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 223,
+            "property": "border",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 227,
+            "property": "border-bottom",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 229,
+            "property": "padding-block",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 230,
+            "property": "padding-inline",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 235,
+            "property": "padding-block",
+            "literal": "6px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 240,
+            "property": "border-top",
+            "literal": "1px",
+            "classification": "STRUCTURAL_HAIRLINE",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 243,
+            "property": "padding-inline",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 250,
+            "property": "padding",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 281,
+            "property": "letter-spacing",
+            "literal": "0.06em",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 288,
+            "property": "letter-spacing",
+            "literal": "0.05em",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 306,
+            "property": "padding-block",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-rail (max-width: 340px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 306,
+            "property": "padding-block",
+            "literal": "12px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-rail (max-width: 340px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 307,
+            "property": "padding-inline",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-rail (max-width: 340px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 310,
+            "property": "padding-block",
+            "literal": "12px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-rail (max-width: 340px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 311,
+            "property": "padding-inline",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-rail (max-width: 340px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 314,
+            "property": "padding-block",
+            "literal": "10px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-rail (max-width: 340px)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+            "line": 315,
+            "property": "padding-inline",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-rail (max-width: 340px)"
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css": {
+              "rows": 82,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 82,
+            "viaUniqueDataPartInSharedClassScope": 0,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [
+            "ds-selection-preview-rail",
+            "ds-selection-preview-rail__close"
+          ],
+          "sharedClassTokens": [
+            "ds-structure"
+          ],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {},
+          "bareDsLiteralsPromotedToClass": [],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 82
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 3,
+            "dataPart": 28,
+            "styleAttribute": 21
+          },
+          "perFile": {
+            "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx": {
+              "classNameOccurrences": 3,
+              "dataPartOccurrences": 28,
+              "styleAttributeOccurrences": 21,
+              "lines": 559
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 82,
+          "customPropertyReadsAttributed": 37,
+          "inlineStyleCustomPropertyReads": 1,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-border-subtle",
+            "--ds-color-primary",
+            "--ds-color-text-primary",
+            "--ds-spacing-3",
+            "--ds-spacing-4"
+          ],
+          "SHARED multi-lector (ownedBy pendiente de grupo)": [
+            "--ds-surface-card",
+            "--ds-surface-panel"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-accent-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "toolbars y column-menus sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "sobre la rampa compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-radius-lg",
+            "--ds-radius-xl"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-control-radius",
+          "semanticOwner": "shape.button-style",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-grid-gap",
+          "semanticOwner": "spacing.rhythm",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "plano de trabajo plano; lo flotante usa sockets overlay",
+        "source": "gap-audit-primary",
+        "uncoveredByDesign": {
+          "Brazo compartido foundation (nivel 2/3)": [
+            "--ds-shadow-sm"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.finish",
+            "why": "El lienzo de trabajo no compite con el contenido: acabado cero en el plano de trabajo. CANDIDATOS (lector-unico bajo MUST_NOT de grupo): --ds-selection-preview-rail-close-backdrop"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de structures)."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-panel-header-bg",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem (y todos los demas grupos de structures)."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun sourceBinding de esta familia lee --ds-color-{success,warning,error,info}(-[0-9]+)? ni --ds-color-on-{success,warning,error,info}; barrido verificado sobre selection-preview-rail.css (0 coincidencias)",
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-selection-preview-rail-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/workspace/selection-preview-rail"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

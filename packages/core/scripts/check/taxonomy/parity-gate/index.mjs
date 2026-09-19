@@ -105,9 +105,10 @@ const PROGRAM_ROOT = path.join(
   CORE_ROOT,
   'scripts/check/modern-rescue',
 );
-/** The manifest lives at the package root, outside the programme folder, but the
- *  programme still owns it, so it is a binding of its own. */
-const MANIFEST_ROOT = path.join(CORE_ROOT, 'governance/manifest');
+/** The manifest was quarantined to docs/history by WO-RET-03 (2026-09-19):
+ *  sealed evidence the programme still cross-checks, never authority. It is a
+ *  binding of its own. */
+const MANIFEST_ROOT = path.join(REPOSITORY_ROOT, 'docs/history/inventories/customization-manifest');
 const UI_ROOT_RELATIVE = 'packages/core/src/components';
 const SHOWROOM_REGISTRY_ROOT = path.join(
   REPOSITORY_ROOT,

@@ -42,7 +42,7 @@
  *      por V2 si y solo si el conjunto de raices que lo guardan tiene
  *      EXACTAMENTE UN elemento; dos o mas es ambiguo y cae a null.
  *
- *   V3 `governed-owner-table` -- `governance/manifest/cascade/assignments/tiers/index.json`, autorada
+ *   V3 `governed-owner-table` -- `docs/history/inventories/customization-manifest/cascade/assignments/tiers/index.json`, autorada
  *      por el DT. Si el archivo no existe, V3 no atribuye nada y eso es
  *      LEGITIMO, no un fallo: un owner sin adjudicar es un resultado valido y
  *      jamas hay presion de cobertura sobre la tabla.
@@ -78,15 +78,20 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../../libraries/repo-root/index.mjs';
+import { QUARANTINE_MANIFEST_REL } from '../../../../../libraries/manifest/index.mjs';
 import { buildInventory } from '../../slots/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const CORE_ROOT = findPackageRoot(HERE);
+const REPO_ROOT = findRepoRoot(HERE);
+/** The authored cascade tables live in the quarantined manifest (WO-RET-03):
+ *  sealed evidence, resolved through the workspace root, never the package. */
+const QUARANTINE_ROOT = join(REPO_ROOT, QUARANTINE_MANIFEST_REL);
 export const OUT_PATH = join(CORE_ROOT, 'artifacts/generated/manifest/cascade/membership/index.json');
-export const CATALOG_PATH = join(CORE_ROOT, 'governance/manifest/cascade/catalog/index.json');
+export const CATALOG_PATH = join(QUARANTINE_ROOT, 'cascade/catalog/index.json');
 export const EDGES_PATH = join(CORE_ROOT, 'artifacts/generated/manifest/cascade/edges/index.json');
-export const OWNER_TIERS_PATH = join(CORE_ROOT, 'governance/manifest/cascade/assignments/tiers/index.json');
+export const OWNER_TIERS_PATH = join(QUARANTINE_ROOT, 'cascade/assignments/tiers/index.json');
 
 /** Vocabulario CERRADO de via. Una via nueva es un cambio de contrato. */
 export const VIAS = Object.freeze(['head-exact', 'declared-fallback', 'governed-owner-table']);
@@ -253,7 +258,7 @@ export function readOwnerTiers(path = OWNER_TIERS_PATH) {
   return { present: true, byOwner, formFailures };
 }
 
-export const OWNER_STEP_RULES_PATH = join(CORE_ROOT, 'governance/manifest/cascade/assignments/steps/index.json');
+export const OWNER_STEP_RULES_PATH = join(QUARANTINE_ROOT, 'cascade/assignments/steps/index.json');
 
 /**
  * EL TERCER INDICE: `step`. PREPARADO E INACTIVO hasta que el DT adjudique.
@@ -265,7 +270,7 @@ export const OWNER_STEP_RULES_PATH = join(CORE_ROOT, 'governance/manifest/cascad
  * su decision es de otro paso y la unica raiz disponible carga el primario.
  *
  * ESTE MECANISMO NO INVENTA NADA Y HOY NO HACE NADA. Sin
- * `governance/manifest/cascade/assignments/steps/index.json` -- la segunda tabla autorada, misma
+ * `docs/history/inventories/customization-manifest/cascade/assignments/steps/index.json` -- la segunda tabla autorada, misma
  * disciplina que `owner-tiers` -- `step` sale `null` y `rootId` no se toca. Y
  * cuando la tabla exista, el refinamiento SOLO ocurre si la raiz refinada
  * EXISTE en el catalogo: una regla que apunte a una raiz inexistente deja la
@@ -485,16 +490,20 @@ export async function buildMembership({
   ownerTiers: injectedOwnerTiers = null,
   stepRules: injectedStepRules = null,
 } = {}) {
+  // The authored cascade tables are quarantined evidence (WO-RET-03): resolve
+  // them through the workspace root that owns the package, so a sandboxed
+  // coreRoot still lands inside its own sandbox copy.
+  const quarantineRoot = join(findRepoRoot(coreRoot), QUARANTINE_MANIFEST_REL);
   const catalog = injectedCatalog
-    ?? JSON.parse(readFileSync(join(coreRoot, 'governance/manifest/cascade/catalog/index.json'), 'utf8'));
+    ?? JSON.parse(readFileSync(join(quarantineRoot, 'cascade/catalog/index.json'), 'utf8'));
   const edgesDoc = injectedEdges
     ?? JSON.parse(readFileSync(join(coreRoot, 'artifacts/generated/manifest/cascade/edges/index.json'), 'utf8'));
   /* El inventario se CALCULA, no se lee del artefacto: en la fase B el
    * inventario consulta esta membresia, y leer su JSON aca crearia un ciclo
    * entre dos artefactos generados. Llamar a su funcion pura no lo crea. */
   const inventory = injectedInventory ?? (await buildInventory({ coreRoot, membership: 'none' }));
-  const table = injectedOwnerTiers ?? readOwnerTiers(join(coreRoot, 'governance/manifest/cascade/assignments/tiers/index.json'));
-  const stepRules = injectedStepRules ?? readOwnerStepRules(join(coreRoot, 'governance/manifest/cascade/assignments/steps/index.json'));
+  const table = injectedOwnerTiers ?? readOwnerTiers(join(quarantineRoot, 'cascade/assignments/tiers/index.json'));
+  const stepRules = injectedStepRules ?? readOwnerStepRules(join(quarantineRoot, 'cascade/assignments/steps/index.json'));
 
   const { resolved, unresolved } = resolveHeads(catalog);
   const guarded = fallbackIndex(edgesDoc.edges ?? [], resolved);
@@ -719,13 +728,13 @@ export async function buildMembership({
       collapsesLegacy: 'este artefacto NO se reconcilia con roots[].collapsesLegacy.total: esa cifra es salida de un clasificador que no existe, no reproduce por ninguna via disponible, incluye `duplicado` (criterio prohibido) y esta medida sobre otro denominador y otro arbol.',
     },
     provenance: {
-      catalog: 'governance/manifest/cascade/catalog/index.json',
+      catalog: 'docs/history/inventories/customization-manifest/cascade/catalog/index.json',
       catalogRoots: (catalog.roots ?? []).length,
       edges: 'artifacts/generated/manifest/cascade/edges/index.json',
       inventory: 'scripts/check/tokens/cascade/slots/index.mjs (funcion pura, no el artefacto: leerlo crearia un ciclo)',
-      ownerTiers: table.present ? 'governance/manifest/cascade/assignments/tiers/index.json' : 'AUSENTE — V3 no atribuye nada, y es legitimo',
+      ownerTiers: table.present ? 'docs/history/inventories/customization-manifest/cascade/assignments/tiers/index.json' : 'AUSENTE — V3 no atribuye nada, y es legitimo',
       ownerTiersFormFailures: table.formFailures,
-      ownerStepRules: stepRules.present ? 'governance/manifest/cascade/assignments/steps/index.json' : 'AUSENTE',
+      ownerStepRules: stepRules.present ? 'docs/history/inventories/customization-manifest/cascade/assignments/steps/index.json' : 'AUSENTE',
       ownerStepRulesFormFailures: stepRules.formFailures,
       parentByDesignFailures,
     },

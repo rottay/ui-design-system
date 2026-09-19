@@ -1,0 +1,2608 @@
+{
+  "schemaVersion": 1,
+  "familyId": "primitive/display/tree",
+  "identity": {
+    "layer": "primitive",
+    "category": "display",
+    "name": "Tree",
+    "components": [
+      "Tree"
+    ],
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/tree",
+    "publicComponents": [
+      "Tree"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "b2ea0a7790542b571a1a6f8801554bf2f601231dc83a7473aa3696e853ae1452"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/components/primitives/display/tree/tree.stories.tsx",
+      "packages/core/src/components/primitives/display/tree/index.tsx",
+      "packages/core/src/components/primitives/display/tree/contracts/index.ts",
+      "packages/core/src/components/primitives/display/tree/runtime/tree-behavior/index.ts",
+      "packages/core/src/components/primitives/display/tree/tests/tree.filtered-keyboard-reach.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.modern-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.modern-paint-ownership.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.premium-ground.test.ts",
+      "packages/core/src/components/primitives/display/tree/tests/tree.rustic-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.set-semantics.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.typeahead.test.tsx",
+      "packages/core/src/components/primitives/display/tree/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/tree/compound/index.ts",
+      "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css"
+    ],
+    "stableParts": [
+      "tree-node-highlight",
+      "drop-indicator",
+      "node",
+      "connector",
+      "row",
+      "loading",
+      "tree-node-toggle",
+      "switcher-spacer",
+      "checkbox",
+      "icon",
+      "tree-node-label",
+      "root"
+    ],
+    "states": [
+      "disabled",
+      "selected",
+      "hover",
+      "active",
+      "focus-visible",
+      "expanded",
+      "loading",
+      "checked",
+      "hidden",
+      "indeterminate",
+      "focused",
+      "drop-target",
+      "drop-position",
+      "dragging",
+      "filtered-out"
+    ],
+    "variantAxes": [
+      "data-axis",
+      "data-draggable",
+      "data-custom-switcher",
+      "data-block-node"
+    ],
+    "propertyGroups": [],
+    "invariants": [
+      "The root is a declared tree widget: role=\"tree\" with aria-label, aria-multiselectable and a roving tabIndex at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:1059-1063.",
+      "Each row carries the complete treeitem state contract: role, aria-selected, aria-expanded, aria-disabled, aria-checked, aria-level, aria-posinset, aria-setsize, aria-busy and tabIndex at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:389-398.",
+      "Keyboard navigation is owned by the root: onKeyDown at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:1062.",
+      "The switcher spacer and connectors are decorative: aria-hidden at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:456.",
+      "Checkbox selection uses a real input with an accessible name and tri-state handling: type=\"checkbox\" at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:464 with aria-label at :473 and indeterminate at :459-460.",
+      "Reduced-motion and forced-colors floors exist in the modern skin: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:352 and :46, :264."
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "display-b",
+        "scoutArtifact": "mr-anatomy-display-b.json",
+        "scoutSelfGradedConfidence": "PARTIAL",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 12,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "tree-node-highlight",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:96",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:63"
+          ]
+        },
+        {
+          "part": "drop-indicator",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:138",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:384"
+          ]
+        },
+        {
+          "part": "node",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:322",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:373"
+          ]
+        },
+        {
+          "part": "connector",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:330",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:341",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:351",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:362",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:267",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:284"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "row",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:400",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:407"
+          ]
+        },
+        {
+          "part": "loading",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:431"
+          ]
+        },
+        {
+          "part": "tree-node-toggle",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:435",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:439"
+          ]
+        },
+        {
+          "part": "switcher-spacer",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:456"
+          ]
+        },
+        {
+          "part": "checkbox",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:465",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:459"
+          ]
+        },
+        {
+          "part": "icon",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:480",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:477"
+          ]
+        },
+        {
+          "part": "tree-node-label",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:488",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:484"
+          ]
+        },
+        {
+          "part": "root",
+          "anchorKind": "data-part",
+          "anchor": "data-part attribute",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:1056",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:944"
+          ]
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "disabled",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:153",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:173"
+          ],
+          "atSiteCount": 10,
+          "state": "disabled"
+        },
+        {
+          "token": "selected",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:157",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:162",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:173"
+          ],
+          "atSiteCount": 10,
+          "state": "selected"
+        },
+        {
+          "token": "hover",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:74",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:75",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:76"
+          ],
+          "atSiteCount": 9,
+          "state": "hover"
+        },
+        {
+          "token": "active",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:183"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "focus-visible",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:217",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:218"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": "expanded",
+          "at": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:248",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:250",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:86",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:88"
+          ],
+          "atSiteCount": 8,
+          "state": "expanded"
+        },
+        {
+          "token": "loading",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:55",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:429",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:431",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:434"
+          ],
+          "state": "loading",
+          "citationsUnverified": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:397"
+          ],
+          "anchorStatus": "verified"
+        },
+        {
+          "token": "checked",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:393",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:403"
+          ],
+          "state": "checked"
+        },
+        {
+          "token": "hidden",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:456"
+          ],
+          "state": "hidden"
+        },
+        {
+          "token": "indeterminate",
+          "at": [
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:459",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:460",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:468",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:454",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:455",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:464"
+          ],
+          "state": "indeterminate"
+        },
+        {
+          "token": "data-selected",
+          "state": "selected"
+        },
+        {
+          "token": "data-expanded",
+          "state": "expanded"
+        },
+        {
+          "token": "data-disabled",
+          "state": "disabled"
+        },
+        {
+          "token": "data-focused",
+          "state": "focused"
+        },
+        {
+          "token": "data-drop-target",
+          "state": "drop-target"
+        },
+        {
+          "token": "data-drop-position",
+          "state": "drop-position"
+        },
+        {
+          "token": "data-dragging",
+          "state": "dragging"
+        },
+        {
+          "token": "data-filtered-out",
+          "state": "filtered-out"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-axis"
+        },
+        {
+          "token": "data-draggable"
+        },
+        {
+          "token": "data-custom-switcher"
+        },
+        {
+          "token": "data-block-node"
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "rtl",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:258",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:259",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:260"
+            ]
+          },
+          {
+            "token": "prefers-reduced-motion",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:352",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:353",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:354",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:355",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:356",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:357"
+            ]
+          },
+          {
+            "token": "forced-colors",
+            "at": [
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:360",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:361",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:362",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:363",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:364",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:365"
+            ],
+            "atSiteCount": 10
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "instanceIdentifierAttributes": {
+        "entries": [
+          {
+            "token": "data-key"
+          },
+          {
+            "token": "data-tree-node-key"
+          }
+        ],
+        "reason": "Per-instance generated identifier. RULING R-8: not a part anchor and not a variant axis."
+      },
+      "engineDivergence": {
+        "engineDivergence": "Engine siblings exist for classic, modern and rustic. The classic engine emits no data-part and reads no --ds-* channel. Modern and rustic both implement the full treeitem ARIA contract, but rustic reads --ds-tree-font-family, --ds-tree-font-size and --ds-tree-line-height that nothing declares.",
+        "engineCensus": {
+          "classic": {
+            "productionLines": 104,
+            "dataPartSites": 0,
+            "variableReadSites": 0
+          },
+          "modern": {
+            "productionLines": 1121,
+            "dataPartSites": 15,
+            "variableReadSites": 2
+          },
+          "rustic": {
+            "productionLines": 1002,
+            "dataPartSites": 13,
+            "variableReadSites": 3
+          }
+        }
+      },
+      "scoutGaps": {
+        "assessmentConfidenceGaps": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:279 themes [data-part='indicator'], a part Tree never emits; it belongs to packages/core/src/components/primitives/foundation/loading-indicator/index.tsx composed at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:431. See unresolved CROSS-FAMILY-PART-REACH-INDICATOR.",
+          "A tenant-gated second paint owner reads a no-fallback namespace at packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:355-366, attributed to the root and node parts by class rather than by data-part. See unresolved TENANT-BRIDGE-IS-A-SECOND-PAINT-OWNER."
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "UNATTRIBUTED": {
+            "unattributed": 3,
+            "typography": 2,
+            "color": 1
+          },
+          "checkbox": {
+            "color": 3,
+            "size": 2,
+            "spacing": 1
+          },
+          "connector": {
+            "border": 6,
+            "color": 2
+          },
+          "drop-indicator": {
+            "color": 4,
+            "motion": 1
+          },
+          "icon": {
+            "size": 2,
+            "color": 1
+          },
+          "indicator": {
+            "size": 2
+          },
+          "loading": {
+            "size": 2
+          },
+          "node": {
+            "color": 2,
+            "spacing": 1,
+            "motion": 1
+          },
+          "root": {
+            "color": 2
+          },
+          "row": {
+            "color": 21,
+            "elevation": 11,
+            "motion": 6,
+            "spacing": 4,
+            "border": 4,
+            "radius": 3,
+            "typography": 2,
+            "size": 2
+          },
+          "switcher-spacer": {
+            "size": 1
+          },
+          "tree-node-highlight": {
+            "color": 4
+          },
+          "tree-node-label": {
+            "color": 1
+          },
+          "tree-node-toggle": {
+            "spacing": 6,
+            "motion": 4,
+            "size": 2,
+            "color": 2,
+            "typography": 1
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "variableCensus": [
+          {
+            "variable": "--ds-tree-indent",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:272",
+            "fallback": null,
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "indentStep"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:272",
+            "fallback": null,
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "indentStep"
+          },
+          {
+            "variable": "--ds-tree-font-family",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:934",
+            "fallback": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+            "landsOnProperty": null,
+            "propertyGroup": "unattributed",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontFamily"
+          },
+          {
+            "variable": "--ds-tree-font-size",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:935",
+            "fallback": "14px",
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "fontSize"
+          },
+          {
+            "variable": "--ds-tree-line-height",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:936",
+            "fallback": "1.5",
+            "landsOnProperty": "line-height",
+            "propertyGroup": "typography",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "lineHeight"
+          },
+          {
+            "variable": "--ds-tree-node-opacity",
+            "readAt": "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx:62",
+            "fallback": null,
+            "landsOnProperty": "opacity",
+            "propertyGroup": "color",
+            "part": null,
+            "selector": null,
+            "atRuleScope": null,
+            "readKind": "inline-style",
+            "enclosingBinding": "opacity"
+          },
+          {
+            "variable": "--ds-tree-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:73",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "root",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-line-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:79",
+            "fallback": "var(--ds-color-border)",
+            "landsOnProperty": "border-color",
+            "propertyGroup": "color",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:79",
+            "fallback": null,
+            "landsOnProperty": "border-color",
+            "propertyGroup": "color",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-line-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:82",
+            "fallback": null,
+            "landsOnProperty": "border-left-width",
+            "propertyGroup": "border",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-line-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:85",
+            "fallback": null,
+            "landsOnProperty": "border-top-width",
+            "propertyGroup": "border",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-drop-indicator-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:104",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "drop-indicator",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:104",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "drop-indicator",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-slow",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:105",
+            "fallback": null,
+            "landsOnProperty": "animation",
+            "propertyGroup": "motion",
+            "part": "drop-indicator",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-tree-row-padding-block",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:131",
+            "fallback": "4px",
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:131",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-tree-row-padding-inline",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:132",
+            "fallback": "8px",
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-density-effective-scale",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:132",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-radius",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:134",
+            "fallback": "var(--ds-radius-md)",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-radius-md",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:134",
+            "fallback": null,
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:135",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:136",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:140",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:140",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:141",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:141",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:142",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:142",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-color-disabled",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:151",
+            "fallback": "var(--ds-color-text-disabled)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-disabled]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-disabled",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:151",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-disabled]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-disabled-opacity",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:153",
+            "fallback": "0.5",
+            "landsOnProperty": "opacity",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-disabled]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-bg-selected",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:157",
+            "fallback": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:157",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-color-selected",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:158",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:158",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-font-weight-selected",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:161",
+            "fallback": "var(--ds-font-weight-medium)",
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-weight-medium",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:161",
+            "fallback": null,
+            "landsOnProperty": "font-weight",
+            "propertyGroup": "typography",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:165",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:166",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-bg-hover",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:174",
+            "fallback": "color-mix(in srgb, var(--ds-surface-inset) 50%, transparent)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled])",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:174",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled])",
+            "atRuleScope": "@media (hover: hover)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-tree-row-bg-active",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:182",
+            "fallback": "color-mix(in srgb, var(--ds-surface-inset) 75%, transparent)",
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:active:not([data-selected='true']):not([data-disabled])",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-surface-inset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:182",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:active:not([data-selected='true']):not([data-disabled])",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--_ds-tree-dragging-opacity",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:194",
+            "fallback": "0.55",
+            "landsOnProperty": "opacity",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-dragging]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:201",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-focused='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:202",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-focused='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:207",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'][data-focused='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:208",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'][data-focused='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
+            "fallback": null,
+            "landsOnProperty": "outline",
+            "propertyGroup": "border",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:217",
+            "fallback": null,
+            "landsOnProperty": "outline-offset",
+            "propertyGroup": "border",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-switcher-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:222",
+            "fallback": null,
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-switcher-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:223",
+            "fallback": null,
+            "landsOnProperty": "height",
+            "propertyGroup": "size",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:228",
+            "fallback": null,
+            "landsOnProperty": "font-size",
+            "propertyGroup": "typography",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-icon-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:233",
+            "fallback": "var(--ds-color-text-primary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:233",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:244",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] > span",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:244",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] > span",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:245",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] > span",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:245",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] > span",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-loading-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:271",
+            "fallback": "16px",
+            "landsOnProperty": "inline-size",
+            "propertyGroup": "size",
+            "part": "loading",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-loading-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:272",
+            "fallback": "16px",
+            "landsOnProperty": "block-size",
+            "propertyGroup": "size",
+            "part": "loading",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-loading-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:280",
+            "fallback": "16px",
+            "landsOnProperty": "inline-size",
+            "propertyGroup": "size",
+            "part": "indicator",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] > [data-part='indicator']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-loading-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:281",
+            "fallback": "16px",
+            "landsOnProperty": "block-size",
+            "propertyGroup": "size",
+            "part": "indicator",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] > [data-part='indicator']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-switcher-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:284",
+            "fallback": null,
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "switcher-spacer",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='switcher-spacer']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-checkbox-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:291",
+            "fallback": "16px",
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "checkbox",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-checkbox-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:292",
+            "fallback": "16px",
+            "landsOnProperty": "height",
+            "propertyGroup": "size",
+            "part": "checkbox",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-checkbox-margin",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:293",
+            "fallback": null,
+            "landsOnProperty": "margin-inline-end",
+            "propertyGroup": "spacing",
+            "part": "checkbox",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:296",
+            "fallback": null,
+            "landsOnProperty": "accent-color",
+            "propertyGroup": "color",
+            "part": "checkbox",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-icon-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:299",
+            "fallback": null,
+            "landsOnProperty": "width",
+            "propertyGroup": "size",
+            "part": "icon",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='icon']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-icon-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:300",
+            "fallback": null,
+            "landsOnProperty": "height",
+            "propertyGroup": "size",
+            "part": "icon",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='icon']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-icon-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:305",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "icon",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='icon']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-warning",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:310",
+            "fallback": null,
+            "landsOnProperty": "background",
+            "propertyGroup": "color",
+            "part": "tree-node-highlight",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:311",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "tree-node-highlight",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-filtered-out-opacity",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:324",
+            "fallback": "0.4",
+            "landsOnProperty": "opacity",
+            "propertyGroup": "color",
+            "part": "tree-node-label",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'][data-filtered-out='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:332",
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "landsOnProperty": "min-block-size",
+            "propertyGroup": "size",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:332",
+            "fallback": "44px",
+            "landsOnProperty": "min-block-size",
+            "propertyGroup": "size",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-switcher-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:344",
+            "fallback": null,
+            "landsOnProperty": "inset-block",
+            "propertyGroup": "spacing",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']::after",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:344",
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "landsOnProperty": "inset-block",
+            "propertyGroup": "spacing",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']::after",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:344",
+            "fallback": "44px",
+            "landsOnProperty": "inset-block",
+            "propertyGroup": "spacing",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']::after",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-switcher-size",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:345",
+            "fallback": null,
+            "landsOnProperty": "inset-inline-start",
+            "propertyGroup": "spacing",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']::after",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:345",
+            "fallback": "var(--ds-touch-target-min, 44px)",
+            "landsOnProperty": "inset-inline-start",
+            "propertyGroup": "spacing",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']::after",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:345",
+            "fallback": "44px",
+            "landsOnProperty": "inset-inline-start",
+            "propertyGroup": "spacing",
+            "part": "tree-node-toggle",
+            "selector": ".rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle']::after",
+            "atRuleScope": "@media (hover: none), (pointer: coarse)",
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-line-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:40",
+            "fallback": "var(--ds-color-border-primary)",
+            "landsOnProperty": "border-left",
+            "propertyGroup": "border",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:40",
+            "fallback": null,
+            "landsOnProperty": "border-left",
+            "propertyGroup": "border",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-line-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:43",
+            "fallback": "var(--ds-color-border-primary)",
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-border-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:43",
+            "fallback": null,
+            "landsOnProperty": "border-top",
+            "propertyGroup": "border",
+            "part": "connector",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-drop-indicator-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:49",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "drop-indicator",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:49",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "drop-indicator",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-radius",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:55",
+            "fallback": "4px",
+            "landsOnProperty": "border-radius",
+            "propertyGroup": "radius",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-selected-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:61",
+            "fallback": "var(--ds-color-alpha-primary-10)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-alpha-primary-10",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:61",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-selected-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:62",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:62",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:63",
+            "fallback": "var(--ds-tree-node-selected-color)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-selected-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:63",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-drop-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:66",
+            "fallback": "rgba(59, 130, 246, 0.05)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']:not([data-selected='true'])",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-drop-indicator-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:69",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']:not([data-focused])",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:69",
+            "fallback": null,
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']:not([data-focused])",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-focus-ring-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:72",
+            "fallback": "var(--ds-color-primary-200, rgba(59, 130, 246, 0.3))",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-focused]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary-200",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:72",
+            "fallback": "rgba(59, 130, 246, 0.3)",
+            "landsOnProperty": "box-shadow",
+            "propertyGroup": "elevation",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-focused]",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-hover-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:75",
+            "fallback": "rgba(0, 0, 0, 0.04)",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "row",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]):not([data-drop-position='inside'])",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-checkbox-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:90",
+            "fallback": "var(--ds-color-primary)",
+            "landsOnProperty": "accent-color",
+            "propertyGroup": "color",
+            "part": "checkbox",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-color-primary",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:90",
+            "fallback": null,
+            "landsOnProperty": "accent-color",
+            "propertyGroup": "color",
+            "part": "checkbox",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-highlight-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:93",
+            "fallback": "#fef3c7",
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "tree-node-highlight",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-highlight-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:94",
+            "fallback": "#92400e",
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "tree-node-highlight",
+            "selector": ".rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight']",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-bg",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:356",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "root",
+            "selector": "[data-tenant] .rottay-tree",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-padding",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:360",
+            "fallback": null,
+            "landsOnProperty": "padding",
+            "propertyGroup": "spacing",
+            "part": "node",
+            "selector": "[data-tenant] .rottay-tree .rottay-tree-node",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-color",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:361",
+            "fallback": null,
+            "landsOnProperty": "color",
+            "propertyGroup": "color",
+            "part": "node",
+            "selector": "[data-tenant] .rottay-tree .rottay-tree-node",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-transition-fast",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:362",
+            "fallback": null,
+            "landsOnProperty": "transition",
+            "propertyGroup": "motion",
+            "part": "node",
+            "selector": "[data-tenant] .rottay-tree .rottay-tree-node",
+            "atRuleScope": null,
+            "readKind": "css"
+          },
+          {
+            "variable": "--ds-tree-node-bg-hover",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:366",
+            "fallback": null,
+            "landsOnProperty": "background-color",
+            "propertyGroup": "color",
+            "part": "node",
+            "selector": "[data-tenant] .rottay-tree .rottay-tree-node:hover",
+            "atRuleScope": null,
+            "readKind": "css"
+          }
+        ],
+        "variableCensusDistinctCount": 60,
+        "variableCensusReadSiteCount": 112,
+        "hardcodedValues": [
+          {
+            "kind": "spacing",
+            "literal": "2px",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:65",
+            "declaration": "padding"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.8s",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:88",
+            "declaration": "animation"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.15s",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:102",
+            "declaration": "animation"
+          },
+          {
+            "kind": "spacing",
+            "literal": "4px",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:215",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:215",
+            "declaration": "padding"
+          },
+          {
+            "kind": "duration",
+            "literal": "0.3s",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:234",
+            "declaration": "transition"
+          },
+          {
+            "kind": "spacing",
+            "literal": "4px",
+            "at": "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx:61",
+            "declaration": "padding"
+          },
+          {
+            "kind": "spacing",
+            "literal": "8px",
+            "at": "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx:61",
+            "declaration": "padding"
+          },
+          {
+            "kind": "radius",
+            "literal": "9999px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:103",
+            "declaration": "border-radius"
+          },
+          {
+            "kind": "spacing",
+            "literal": "2px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:308",
+            "declaration": "padding-inline"
+          },
+          {
+            "kind": "radius",
+            "literal": "2px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:309",
+            "declaration": "border-radius"
+          },
+          {
+            "kind": "shadow",
+            "literal": "none",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:365",
+            "declaration": "box-shadow"
+          },
+          {
+            "kind": "shadow",
+            "literal": "inset 0 0 0 2px Highlight",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:376",
+            "declaration": "box-shadow"
+          },
+          {
+            "kind": "radius",
+            "literal": "1px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:50",
+            "declaration": "border-radius"
+          },
+          {
+            "kind": "color",
+            "literal": "rgba(59, 130, 246, 0.05))",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:66",
+            "declaration": "background-color"
+          },
+          {
+            "kind": "color",
+            "literal": "rgba(59, 130, 246, 0.3)))",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:72",
+            "declaration": "box-shadow"
+          },
+          {
+            "kind": "color",
+            "literal": "rgba(0, 0, 0, 0.04))",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:75",
+            "declaration": "background-color"
+          },
+          {
+            "kind": "color",
+            "literal": "#fef3c7",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:93",
+            "declaration": "background-color"
+          },
+          {
+            "kind": "color",
+            "literal": "#92400e",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:94",
+            "declaration": "color"
+          },
+          {
+            "kind": "radius",
+            "literal": "2px",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:95",
+            "declaration": "border-radius"
+          }
+        ],
+        "hardcodedValueCount": 20
+      },
+      "citationVerification": {
+        "method": "Every file:line written was reopened against live source and confirmed to carry the expected token, either on the cited line or within the CSS rule / JSX opening element the cited line belongs to. Multi-line selectors and multi-line opening tags are resolved to their owning construct, so a citation pointing at the first line of a wrapped selector counts as a reference to the right rule rather than as a miss.",
+        "sitesChecked": 86,
+        "sitesVerified": 85,
+        "sitesWithdrawn": 1,
+        "sitesNotProbed": 0,
+        "withdrawnCitationsRetainedAs": "citationsUnverified",
+        "namesRetained": "RULING: a failed coordinate costs the anchor, never the measured name. No part, state, axis or channel was removed by this pass."
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-tree-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-node-bg",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-node-bg-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-node-bg-selected",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-node-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-node-color-selected",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-node-color-disabled",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-icon-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-line-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-drop-indicator-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-tree-node-font-weight-selected",
+          "semanticOwner": "typography.pairing",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "--_ds-<comp>-heading-family / --_ds-<comp>-value-family",
+            "prop": "font-family de titulares y valores de display",
+            "tier": "standard",
+            "examples": [
+              "--_ds-typography-heading-family",
+              "--_ds-statistic-value-family",
+              "--_ds-kbd-family (mono)"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "lee la familia base compartida."
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "type.scale",
+            "socketPattern": "--_ds-<comp>-font-size (cayendo a los pasos de la rampa multiplicada, ej. var(--ds-text-sm))",
+            "prop": "font-size de todo texto de componente",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-title-size",
+              "--_ds-input-font-size",
+              "--_ds-menu-item-font-size"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "lee la rampa compartida (--ds-font-size-xs); sin canal propio."
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-tree-node-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-tree-checkbox-margin",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-checkbox-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-switcher-size",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
+        "source": "gap-audit-independent"
+      }
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "motion.character",
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Solo canales compartidos de motion; nada propio que cubrir. Opacidades NO cubiertas (effect): --ds-tree-disabled-opacity, --ds-tree-filtered-out-opacity"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "surface.elevation",
+            "socketPattern": "--_ds-<comp>-elevation",
+            "prop": "box-shadow",
+            "tier": "standard",
+            "examples": [
+              "--_ds-card-elevation"
+            ],
+            "sockets": [],
+            "socketsResolved": true,
+            "noSocketReason": "sin sombras propias."
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-tree-glass-bg",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "display no es chrome de navegacion",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem (todos los grupos de primitives)."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "layer.stack",
+            "why": "El contenido estatico apila por orden de documento."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-tree-line-width",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem: prohibido selector [data-recipe] dentro de CSS de componente; el efecto llega solo por raices rebindeadas."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "fondo de highlight de coincidencia de busqueda en el label del nodo (uso incondicional, no atado a data-tone)",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-warning"
+            ],
+            "noSocketReason": "background: color-mix(in srgb, var(--ds-color-warning) 30%, transparent) en [data-part='tree-node-highlight'], sin condicionar a data-tone; evidencia verificada en skin/tree.css:307-311.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-tree-icon-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-tree-loading-size",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/display/tree"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

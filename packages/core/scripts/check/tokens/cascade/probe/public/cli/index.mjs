@@ -92,9 +92,9 @@ Options
   --quiet                 suppress the human summary on stderr
 
 causal options
-  --control-manifest <p>  modern-rescue governance/manifest/controls/<control-id>/index.json. It OWNS which
+  --control-manifest <p>  quarantine docs/history/inventories/customization-manifest/controls/<control-id>/index.json. It OWNS which
                           negative controls apply and which channels the control declares.
-  --family-manifest <p>   optional governance/manifest/families/<layer>/<group>/<id>/index.json; narrows the negative controls
+  --family-manifest <p>   optional docs/history/inventories/customization-manifest/families/<layer>/<group>/<id>/index.json; narrows the negative controls
                           onto one family root.
   --stop <id>             a normalized stop id declared by the control manifest.
   --arm <id>              repeatable; which ingress door(s) to run: ${INGRESS_ARM_IDS.join(' | ')}

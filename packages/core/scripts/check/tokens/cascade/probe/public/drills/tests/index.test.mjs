@@ -290,7 +290,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve as resolvePath } from 'node:path';
 import { pathToFileURL as toFileUrl } from 'node:url';
 
-import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
+import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
 
 const DATA_CLI = 'scripts/check/tokens/cascade/probe/public/cli/index.mjs';
 
@@ -329,7 +329,7 @@ test('PACKET-1 drill 1: the descriptor reproduces the live artifact byte-identic
           DATA_CLI,
           'data-causal',
           '--control-manifest',
-          'governance/manifest/controls/responsive/posture/index.json',
+          resolvePath(QUARANTINE_MANIFEST_ROOT, 'controls/responsive/posture/index.json'),
           '--vertical',
           vertical,
           ...(bypassId === null ? [] : ['--bypass-id', bypassId]),
@@ -379,7 +379,7 @@ test('PACKET-1 drill 2: a control with no descriptor is refused, by name', () =>
         // A real manifest with real stops, but no DATA descriptor: the DATA
         // runner has no idea what document this control's tenant writes.
         '--control-manifest',
-        'governance/manifest/controls/density/mode/index.json',
+        resolvePath(QUARANTINE_MANIFEST_ROOT, 'controls/density/mode/index.json'),
         '--vertical',
         'bithire',
         '--quiet',
@@ -640,7 +640,7 @@ test('PACKET-K drill 1 [needs dist]: the declared entryCatalog agrees with the L
   const server = await import(pathToFileURL(resolve(CORE_ROOT, 'dist/server.js')).href);
 
   const manifest = JSON.parse(
-    readFileSync(resolve(CORE_ROOT, 'governance/manifest/controls/tokens/overrides/index.json'), 'utf8'),
+    readFileSync(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/tokens/overrides/index.json'), 'utf8'),
   );
   const catalog = manifest.calibration?.entryCatalog ?? [];
   assert.ok(catalog.length > 0, 'token-overrides declares an entryCatalog');
@@ -694,7 +694,7 @@ test('PACKET-K drill 8: the kinds that already existed still lower the SAME fiel
   const { buildIngressInput } = await import('../../../runtime/ingress/index.mjs');
 
   const read = (id) => JSON.parse(readFileSync(
-    resolve(CORE_ROOT, 'governance/manifest/controls', pathForManifestId(id), 'index.json'),
+    resolve(QUARANTINE_MANIFEST_ROOT, 'controls', pathForManifestId(id), 'index.json'),
     'utf8',
   ));
   const valueAt = (document, path) =>
@@ -794,7 +794,7 @@ test('C5 drill W-A: ONE resolver owns the calibration surface, and the harness h
    * calibrated surface is the 2 channels its stops write, while the declared
    * radius keeps the third the control genuinely moves. */
   const manifest = JSON.parse(
-    readFileSync(resolve(CORE_ROOT, 'governance/manifest/controls/tokens/overrides/index.json'), 'utf8'),
+    readFileSync(resolve(QUARANTINE_MANIFEST_ROOT, 'controls/tokens/overrides/index.json'), 'utf8'),
   );
   const calibrated = calibrationChannels(manifest);
   assert.equal(calibrated.length, 2, 'token-overrides calibrates 2 channels');
@@ -834,8 +834,8 @@ test('C5 drill W-B [needs dist]: calibrationChannels ⊆ derivedChannels, and th
      * hand-edit of the manifest must fail here rather than silently become a
      * second authority for the same fact. */
     const manifestPath = resolve(
-      CORE_ROOT,
-      'governance/manifest/controls',
+      QUARANTINE_MANIFEST_ROOT,
+      'controls',
       pathForManifestId(entry.id),
       'index.json',
     );

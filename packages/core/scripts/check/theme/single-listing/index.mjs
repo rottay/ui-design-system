@@ -10,9 +10,11 @@
  * cannot check by reading:
  *
  *   1. NO GATE READS THE RETIRED CONTROL DOCUMENTS. Every `scripts/check` and
- *      `scripts/generate` module is scanned for `governance/manifest/controls`.
- *      The manifest tree survives as sealed WO-CRA-23 evidence; what must not
- *      survive is a gate sourcing its truth from it.
+ *      `scripts/generate` module is scanned for the quarantined controls path
+ *      (`docs/history/inventories/customization-manifest/controls`, where
+ *      WO-RET-03 sealed the corpus). The manifest tree survives as sealed
+ *      WO-CRA-23 evidence; what must not survive is a gate sourcing its truth
+ *      from it.
  *   2. `customization-model` IS GONE, not kept "for reference".
  *   3. THE LEGACY REGISTRY INTRODUCES NO CONTROL THE CATALOG DOES NOT KNOW.
  *      `capabilities/index.ts` is the input the sealed governance manifest was
@@ -39,7 +41,7 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 
-export const RETIRED_CONTROL_PATH = 'governance/manifest/controls';
+export const RETIRED_CONTROL_PATH = 'docs/history/inventories/customization-manifest/controls';
 export const RETIRED_MODEL_PATH = 'scripts/check/modern-rescue/customization-model';
 
 /** The script roots a gate can live in. Fixtures and evidence are not scanned. */
@@ -63,12 +65,8 @@ export const NAMING_EXCEPTIONS = Object.freeze([
     reason: 'the drill plants the forbidden path, so it must be able to write it',
   },
   {
-    path: 'scripts/generate/tokens/manifest/generation/index.mjs',
-    reason: 'it WRITES the sealed WO-CRA-23 evidence tree; a writer of history is not a reader of truth',
-  },
-  {
     path: 'scripts/libraries/manifest/rules/index.mjs',
-    reason: 'the validation rules of that same generator, and only in prose',
+    reason: 'the validation rules of the sealed corpus, and only in prose',
   },
   {
     path: 'scripts/check/modern-rescue/check/index.mjs',

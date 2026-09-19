@@ -4,7 +4,7 @@
   "workOrderId": "WO-CRA-23",
   "humanEntry": "packages/core/scripts/check/modern-rescue/README.md",
   "checkpointIntent": "packages/core/scripts/check/modern-rescue/checkpoint/index.json",
-  "customizationManifest": "packages/core/governance/manifest/index.json",
+  "customizationManifest": "docs/history/inventories/customization-manifest/index.json",
   "statusAuthority": "roadmap/registry.json",
   "workOrderAuthority": "packages/core/scripts/check/modern-rescue/README.md",
   "qualityTooling": "packages/core/scripts/check/evidence",

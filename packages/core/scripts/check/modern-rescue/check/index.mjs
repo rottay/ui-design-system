@@ -6,9 +6,11 @@
  * (README.md), the programme contracts, and the segmented customization manifest.
  *
  * This checker is intentionally additive: it keeps the full historical contract
- * battery from the HEAD index.mjs, adds the T-1 constitutional fences
- * (exact roles, namespace lifecycle, double-accept, transport equality), and
- * integrates the deep manifest gate from validateCustomizationManifest().
+ * battery from the HEAD index.mjs and adds the T-1 constitutional fences
+ * (exact roles, namespace lifecycle, double-accept, transport equality).
+ * The deep manifest gate from the retired customization-manifest generator
+ * left with WO-RET-03: the corpus is sealed quarantine evidence, so nothing
+ * here may measure its freshness against live source.
  *
  * Run with: node index.mjs
  * Exit 0 on CONSTITUTION_READY, non-zero on BLOCKED.
@@ -19,7 +21,6 @@ import { createHash } from 'node:crypto';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadProgramContracts } from '../../evidence/framework/contracts/index.mjs';
-import { validateCustomizationManifest } from '../../../generate/tokens/manifest/generation/index.mjs';
 import {
   DOMAIN_KINDS,
   ROOT_CHANNEL_AUTHORITIES,
@@ -37,9 +38,10 @@ const repoRoot = findRepoRoot(__dirname);
 
 const PROGRAM_DIR = 'packages/core/scripts/check/modern-rescue';
 const PROGRAM_ROOT = join(repoRoot, PROGRAM_DIR);
-// The manifest graduated out of the programme folder to the package root; the
-// programme still owns it, so every manifest path is composed from here.
-const MANIFEST_DIR = 'packages/core/governance/manifest';
+// The manifest was quarantined out of the package by WO-RET-03
+// (2026-09-19): it is sealed evidence under docs/history, and every manifest
+// path is composed from here.
+const MANIFEST_DIR = 'docs/history/inventories/customization-manifest';
 
 const FILES = {
   agents: 'AGENTS.md',
@@ -492,7 +494,7 @@ function collectTextualFailures(contracts) {
   if (schema) {
     const prefixes = schema.vocabulary?.channelPrefixes;
     if (!Array.isArray(prefixes) || prefixes.length !== 3 || !prefixes.includes('--ds-') || !prefixes.includes('--_ds-') || !prefixes.includes('data-')) {
-      failures.push('governance/manifest/schema/index.json channelPrefixes must be exactly ["--ds-", "--_ds-", "data-"]');
+      failures.push('docs/history/inventories/customization-manifest/schema/index.json channelPrefixes must be exactly ["--ds-", "--_ds-", "data-"]');
     }
   }
   if (schema) {
@@ -502,7 +504,7 @@ function collectTextualFailures(contracts) {
       authorities.length !== ROOT_CHANNEL_AUTHORITIES.length ||
       ROOT_CHANNEL_AUTHORITIES.some((kind) => !authorities.includes(kind));
     if (mismatch) {
-      failures.push('governance/manifest/schema/index.json vocabulary.rootChannelAuthorities must match rules/index.mjs exactly');
+      failures.push('docs/history/inventories/customization-manifest/schema/index.json vocabulary.rootChannelAuthorities must match rules/index.mjs exactly');
     }
   }
 
@@ -522,10 +524,10 @@ function collectTextualFailures(contracts) {
       DOMAIN_KINDS.some((k) => !kinds.includes(k)) ||
       kinds.some((k) => !DOMAIN_KINDS.includes(k));
     if (mismatch) {
-      failures.push('governance/manifest/schema/index.json vocabulary.domainKinds must match rules/index.mjs DOMAIN_KINDS exactly');
+      failures.push('docs/history/inventories/customization-manifest/schema/index.json vocabulary.domainKinds must match rules/index.mjs DOMAIN_KINDS exactly');
     }
   }
-  // 6c. CASCADA (adjudicacion): validar governance/manifest/cascade/roots/* con diente
+  // 6c. CASCADA (adjudicacion): validar docs/history/inventories/customization-manifest/cascade/roots/* con diente
   const cascadeDir = join(repoRoot, MANIFEST_DIR, 'cascade/roots');
   if (existsSync(cascadeDir)) {
     const famDir = join(repoRoot, MANIFEST_DIR, 'families');
@@ -550,7 +552,7 @@ function collectTextualFailures(contracts) {
     const controlIdsForCascade = controlRecords.map(({ id }) => id);
     const docs = [];
     for (const { document: doc, relativePath } of readManifestRecords(cascadeDir, 'rootId')) {
-      const label = `governance/manifest/cascade/roots/${relativePath}`;
+      const label = `docs/history/inventories/customization-manifest/cascade/roots/${relativePath}`;
       docs.push(doc);
       const control = controlsById.get(doc.rootId);
       failures.push(
@@ -565,12 +567,12 @@ function collectTextualFailures(contracts) {
         }),
       );
     }
-    failures.push(...validateCascadeSet(docs, { label: 'governance/manifest/cascade/roots' }));
+    failures.push(...validateCascadeSet(docs, { label: 'docs/history/inventories/customization-manifest/cascade/roots' }));
     // completitud (orden del adjudicador): TODO control activo tiene su root file
     for (const cid of controlIdsForCascade) {
       const relativePath = `${pathForManifestId(cid)}/index.json`;
       if (!existsSync(join(cascadeDir, relativePath))) {
-        failures.push(`governance/manifest/cascade/roots/${relativePath} is missing for active control ${cid}`);
+        failures.push(`docs/history/inventories/customization-manifest/cascade/roots/${relativePath} is missing for active control ${cid}`);
       }
     }
   }
@@ -581,7 +583,7 @@ function collectTextualFailures(contracts) {
       const kind = control?.domain?.kind;
       if (!DOMAIN_KINDS.includes(kind)) {
         failures.push(
-          `governance/manifest/controls/${entry} domain.kind ${JSON.stringify(kind ?? null)} is not a governed domain kind`,
+          `docs/history/inventories/customization-manifest/controls/${entry} domain.kind ${JSON.stringify(kind ?? null)} is not a governed domain kind`,
         );
       }
       // FORMA. A control that calls itself an enum has to SAY which values it
@@ -609,7 +611,7 @@ function collectTextualFailures(contracts) {
           Object.values(catalog).some((axis) => Array.isArray(axis) && axis.length > 0);
         if (!hasEnum && !hasCatalog) {
           failures.push(
-            `governance/manifest/controls/${entry} declares domain.kind ${JSON.stringify(kind)} with an empty ` +
+            `docs/history/inventories/customization-manifest/controls/${entry} declares domain.kind ${JSON.stringify(kind)} with an empty ` +
               'domain.enumValues and no calibration.catalog: an enum must name its vocabulary in one ' +
               'of the two governed domiciles',
           );
@@ -660,7 +662,7 @@ function collectTextualFailures(contracts) {
    * de cascada con variantes cuyo control hermano sea enum/closed-enum entra.
    *
    * MAPEO RAIZ -> CONTROL: por id, medido. Los 17 rootId con variantes tienen
-   * hoy un control homonimo en governance/manifest/controls/. (El `type.pairing` que se
+   * hoy un control homonimo en docs/history/inventories/customization-manifest/controls/. (El `type.pairing` que se
    * parece a `typography.pairing` es el campo `bindings[].root` de las
    * familias, que nombra la RAIZ DE CANAL, no el archivo de cascada: son
    * espacios de nombres distintos y no se cruzan aqui.)
@@ -694,7 +696,7 @@ function collectTextualFailures(contracts) {
         // no es "fuera de alcance", es un hueco de gobierno.
         failures.push(
           `admission: ${rootId} emits ${rootDoc.variants.length} variants but has no sibling control in ` +
-            'governance/manifest/controls/ to admit them',
+            'docs/history/inventories/customization-manifest/controls/ to admit them',
         );
         continue;
       }
@@ -1920,7 +1922,6 @@ function collectHistoricalContractFailures(contracts) {
 
 export function validateModernRescueContracts(
   contracts,
-  { includeManifestGate = true } = {},
 ) {
   const failures = [];
 
@@ -2028,13 +2029,13 @@ export function validateModernRescueContracts(
     // desde el productor que vigila no es un piso.
     if (typeof declaredCells !== 'number') {
       failures.push(
-        'governed-cell: governance/manifest/index.json does not publish a numeric ' +
+        'governed-cell: docs/history/inventories/customization-manifest/index.json does not publish a numeric ' +
           `denominators.controlFamilyCells (got ${JSON.stringify(declaredCells ?? null)}); the walk floor ` +
           'cannot be checked and must not be skipped',
       );
     } else if (cellsSeen !== declaredCells) {
       failures.push(
-        `governed-cell: the walk saw ${cellsSeen} cells but governance/manifest/index.json declares ` +
+        `governed-cell: the walk saw ${cellsSeen} cells but docs/history/inventories/customization-manifest/index.json declares ` +
           `${declaredCells}: a walk that misses cells reports zero bare ones exactly like a clean tree`,
       );
     }
@@ -2047,16 +2048,6 @@ export function validateModernRescueContracts(
     }
     if (bare.length > 20) {
       failures.push(`governed-cell: ${bare.length - 20} more bare cells not listed`);
-    }
-  }
-
-
-  if (includeManifestGate) {
-    try {
-      const manifestErrors = validateCustomizationManifest();
-      failures.push(...manifestErrors);
-    } catch (error) {
-      failures.push(`manifest deep gate threw: ${error.message}`);
     }
   }
 

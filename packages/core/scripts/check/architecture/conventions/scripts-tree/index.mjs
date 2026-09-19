@@ -35,8 +35,9 @@
  *       underscores, agent labels and opaque wave labels are forbidden.
  *   A1  Modern Rescue lives under check/modern-rescue; no legacy program-path
  *       exception remains.
- *   M1  packages/core/governance/manifest/ contains folder/index data owners;
- *       nothing else is loose at that root.
+ *   M1  docs/history/inventories/customization-manifest/ (the manifest quarantined by
+ *       WO-RET-03) contains folder/index data owners; nothing else is loose at
+ *       that root.
  *
  * --check (default)  exit 1 listing every finding not in the baseline and
  *                    every stale baseline entry.
@@ -233,8 +234,10 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
     }
   }
 
-  // Authored manifest data follows folder/index without loose peer files.
-  const manifestRoot = join(scriptsRoot, '..', 'governance', 'manifest');
+  // Authored manifest data follows folder/index without loose peer files. The
+  // manifest was quarantined to docs/history by WO-RET-03 (2026-09-19); M1 now
+  // polices the shape of the sealed corpus, not a package location.
+  const manifestRoot = join(scriptsRoot, '..', '..', '..', 'docs', 'history', 'inventories', 'customization-manifest');
   if (existsSync(manifestRoot)) {
     const walkManifestData = (dir, rel, isRoot = false) => {
       const entries = readdirSync(dir, { withFileTypes: true });
@@ -248,7 +251,7 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
         walkManifestData(join(dir, child.name), `${rel}/${child.name}`);
       }
     };
-    walkManifestData(manifestRoot, 'governance/manifest', true);
+    walkManifestData(manifestRoot, 'docs/history/inventories/customization-manifest', true);
   }
 
   if (drill === 'R1') add('R1-loose-root-file', 'drill-loose-file.mjs');
@@ -260,7 +263,7 @@ export function collectFindings(scriptsRoot, { drill } = {}) {
   if (drill === 'R7' || drill === 'agent-wave') add('R7-opaque-capability-name', 'check/agent-wave-probe');
   if (drill === 'R8') add('R8-single-child-subdomain', 'check/only-one-child');
   if (drill === 'R9') add('R9-non-declarative-directory-name', 'check/OpaqueTask');
-  if (drill === 'M1') add('M1-loose-manifest-file', 'governance/manifest/drill.mjs');
+  if (drill === 'M1') add('M1-loose-manifest-file', 'docs/history/inventories/customization-manifest/drill.mjs');
   if (drill === 'stale-baseline') { /* handled by caller mutating findings */ }
   return findings;
 }

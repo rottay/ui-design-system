@@ -820,32 +820,16 @@ export const CI_GATES = Object.freeze([
   // `state !== 'VALUE' -> continue` was the opposite: it hid 21 exports whose
   // terminal file nobody could see, and printed OK.
   //
-  // Freshness is a PREREQUISITE, not a nicety, and it is listed here rather
-  // than left to the `validateCustomizationManifest()` side effect inside
-  // program-check. Taxonomy reads `governance/manifest/index.json` and the per-family
-  // cells as evidence; against a manifest nobody regenerated it can green on
-  // stale rows. The explicit entry below, and its position ahead of this
-  // chain, are the CI-level contract -- a hidden side effect is not one.
-  //
-  // Drill first: a generator that has quietly stopped detecting drift reports
-  // zero findings and looks identical to a clean tree.
-  {
-    id: 'manifest-generator-drill',
-    run: ['node', '--test', 'scripts/generate/tokens/manifest/generation/index.test.mjs'],
-    blocking: true,
-    phase: 'pre-build',
-    drillFor: ['modern-rescue-customization-manifest-freshness'],
-  },
-  {
-    id: 'modern-rescue-customization-manifest-freshness',
-    run: ['node', 'scripts/generate/tokens/manifest/generation/index.mjs', '--check'],
-    blocking: true,
-    phase: 'pre-build',
-    drillId: 'manifest-generator-drill',
-  },
-  // The drill runs on synthetic fixtures and fails if the gate stops detecting
-  // any planted category, wrong component name or wrong group -- which is what
-  // keeps the gate from decaying into a file nobody has run.
+  // The manifest it reads is the SEALED QUARANTINE corpus (WO-RET-03,
+  // 2026-09-19): `docs/history/inventories/customization-manifest`. Staleness
+  // is its permanent state -- it can never agree with live source again,
+  // because the corpus records 11 retired families whose source bindings no
+  // longer resolve. That is exactly why the freshness gate that used to run
+  // ahead of this chain is RETIRED (see RETIRED_GATES): enforcing freshness
+  // on a sealed archive is unmeetable by construction, and green-on-stale is
+  // what the quarantine README forbids a gate to claim. Taxonomy still reads
+  // the corpus, as evidence, and its parity question is against the family
+  // inventory, not against live source.
   {
     id: 'taxonomy-parity-drill',
     run: ['node', '--test', 'scripts/check/taxonomy/parity-gate/index.test.mjs'],
@@ -1298,11 +1282,12 @@ export const CI_GATES = Object.freeze([
  * answers the question instead.
  *
  * A gate that simply disappears from `CI_GATES` leaves no trace: the next
- * reader finds a generator nobody runs and re-registers it. Worse, the three
- * entries below were not merely unused -- they were measuring the wrong thing
- * and reporting green, which is the failure class this whole file exists
- * against. So a retirement is recorded, named and validated: an id may not be
- * in both lists, and every entry must say what replaced it.
+ * reader finds a generator nobody runs and re-registers it. Worse, the entries
+ * below were not merely unused -- they were measuring the wrong thing or the
+ * unmeetable thing and reporting green or permanent red, which is the failure
+ * class this whole file exists against. So a retirement is recorded, named
+ * and validated: an id may not be in both lists, and every entry must say
+ * what replaced it.
  *
  * The GENERATORS themselves live under `scripts/generate/tokens/manifest/**`
  * and are not deleted here; deleting them is a separate write set. What is
@@ -1353,6 +1338,29 @@ export const RETIRED_GATES = Object.freeze([
     replacedBy:
       'scripts/check/engine/read-without-producer (a read with no producer is the real defect the checklist '
       + 'gestured at) and scripts/check/theme/artifact-coverage.',
+  },
+  {
+    id: 'modern-rescue-customization-manifest-freshness',
+    drills: ['manifest-generator-drill'],
+    retiredOn: '2026-09-19',
+    reason:
+      'WO-RET-03 (D-05/D-08): the manifest corpus it kept fresh was quarantined to '
+      + 'docs/history/inventories/customization-manifest as sealed evidence, and 11 of its retired-family '
+      + 'bindings (callout, message, notification, toast, auto-complete, switch, collapse, modal, steps, '
+      + 'tooltip, button, plus the notifier inventory row) can never resolve again -- the gate was unmeetable '
+      + 'by construction and measured 361 permanent FAILs. A freshness gate over a sealed archive is a '
+      + 'contradiction, not a measurement.',
+    replacedBy:
+      'the typed catalog (src/contracts/theme/runtime/catalog, enforced by scripts/check/theme/single-listing) '
+      + 'is the live control listing; the quarantined corpus is read as evidence only, never as authority.',
+    producerRemoved:
+      'WO-RET-03 (2026-09-19): the producer itself is deleted with the lot. '
+      + 'scripts/generate/tokens/manifest/generation/ (the writer and its --check freshness, '
+      + 'validateCustomizationManifest and certifyCustomizationManifest) had no live productive consumer: its '
+      + 'corpus was retired-listing evidence, its deep gate was already failing on the same 11 bindings inside '
+      + 'the T-1 constitution check (which keeps its own direct schema/cascade/denominator measurements and '
+      + 'loses only the dead noise), and the two function importers were rewired '
+      + '(activePublicControls is three lines over parseRegistry in the superseded-ingress-key drill).',
   },
 ]);
 

@@ -40,7 +40,7 @@ The tree is deliberately small:
 | `README.md` | human entry, laws, resume algorithm and execution order |
 | `program/index.json` | programme identity, fences and source authorities |
 | `checkpoint/index.json` | machine-rendered current packet intent |
-| `governance/manifest/index.json` | generated index of the segmented control, recipe and per-family customization manifest |
+| `docs/history/inventories/customization-manifest/index.json` | generated index of the segmented control, recipe and per-family customization manifest |
 | `rounds/index.json` | R0–R6 execution boundaries; R7 is future and disabled |
 | `family-inventory/index.json` | canonical family identity and ownership; the active denominator |
 | `quality-rubric/index.json` | DONE, test-truth and acceptance vocabulary |
@@ -154,14 +154,21 @@ blocks certification.
 
 ## Segmented customization manifest
 
-`governance/manifest/index.json` is the generated pivot. It points to recursively
+QUARANTINED 2026-09-19 (WO-RET-03, D-05/D-08): the corpus below lives at
+`docs/history/inventories/customization-manifest/` as sealed historical evidence.
+Its generator and freshness gate are retired (recorded in
+`scripts/check/automation/gates/manifest/index.mjs` RETIRED_GATES); no gate may
+read the corpus as authority — the typed catalog is the live control listing.
+The sections that follow describe the corpus as generated, for the record.
+
+`docs/history/inventories/customization-manifest/index.json` is the generated pivot. It points to recursively
 discovered `index.json` records whose path mirrors the semantic identifier:
 
-- `governance/manifest/controls/<control-id-as-path>/index.json`, which exclusively owns public domain,
+- `docs/history/inventories/customization-manifest/controls/<control-id-as-path>/index.json`, which exclusively owns public domain,
   tier, static/DB ingress, declared outputs and calibration;
-- `governance/manifest/recipes/<recipe-id-as-path>/index.json`, which exclusively owns a finite recipe or
+- `docs/history/inventories/customization-manifest/recipes/<recipe-id-as-path>/index.json`, which exclusively owns a finite recipe or
   anatomy vocabulary and its invariants; and
-- `governance/manifest/families/<layer>/<category>/<family>/index.json`, which exclusively owns
+- `docs/history/inventories/customization-manifest/families/<layer>/<category>/<family>/index.json`, which exclusively owns
   control applicability, output-to-part bindings, public props/slots, host
   adaptation, states, invariants, evidence and premium proposals for one
   canonical family.
@@ -310,10 +317,10 @@ absent: pinning them here would make this document stale the moment it was commi
 | Fact | Value | Derivation |
 |---|---|---|
 | `inventory.families` | 255 | packages/core/scripts/check/modern-rescue/family-inventory/index.json rows.length |
-| `manifest.controlFamilyCells` | 5355 | packages/core/governance/manifest/index.json denominators.controlFamilyCells |
-| `adjudication.accepted` | 0 | packages/core/governance/manifest/index.json rollups.familyReviews.accepted |
-| `adjudication.assessedNotElevated` | 0 | packages/core/governance/manifest/index.json rollups.familyReviews.assessedNotElevated |
-| `adjudication.unreviewed` | 255 | packages/core/governance/manifest/index.json rollups.familyReviews.unreviewed |
+| `manifest.controlFamilyCells` | 5355 | docs/history/inventories/customization-manifest/index.json denominators.controlFamilyCells |
+| `adjudication.accepted` | 0 | docs/history/inventories/customization-manifest/index.json rollups.familyReviews.accepted |
+| `adjudication.assessedNotElevated` | 0 | docs/history/inventories/customization-manifest/index.json rollups.familyReviews.assessedNotElevated |
+| `adjudication.unreviewed` | 255 | docs/history/inventories/customization-manifest/index.json rollups.familyReviews.unreviewed |
 
 
 ## Active execution strategy

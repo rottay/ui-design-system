@@ -16,7 +16,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
 import { test } from 'node:test';
 
-import { CORE_ROOT } from '../../paths/index.mjs';
+import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../paths/index.mjs';
 import { assertKnownTargetKeys } from '../../roster/index.mjs';
 import {
   assertNegativeControlsHeld,
@@ -28,7 +28,7 @@ import {
   resolveNegativeControls,
 } from '../index.mjs';
 
-const MANIFEST_ROOT = resolve(CORE_ROOT, 'governance/manifest');
+const MANIFEST_ROOT = QUARANTINE_MANIFEST_ROOT;
 const CONTROL_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'controls/spacing/rhythm/index.json'));
 const FLEX_MANIFEST = readManifest(resolve(MANIFEST_ROOT, 'families/primitive/layout/flex/index.json'));
 

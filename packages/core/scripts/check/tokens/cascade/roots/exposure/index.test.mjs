@@ -7,7 +7,7 @@
  * catalog (or control), so the drill still runs against today's 64 roots and 21
  * controls. What it removes is the in-place write. `node --test` runs test FILES
  * in parallel processes against ONE working tree, so a drill that mutated
- * `governance/manifest/cascade/catalog/index.json` and restored it published a
+ * `docs/history/inventories/customization-manifest/cascade/catalog/index.json` and restored it published a
  * window in which every other suite reading that file saw the planted defect --
  * measured: `cascade-producers`' determinism drill compared two builds of the
  * same tree and got two different `inputsDigest.rootCatalog` values.

@@ -519,14 +519,16 @@ test('every phase is declared and every post-build gate says why it needs the bu
  * declaration this file validates, and the ledger is drilled like everything
  * else here.
  */
-test('the three gates F-54 retires are gone from the inventory and recorded', () => {
+test('every retired gate is gone from the inventory and recorded', () => {
   const registered = new Set(CI_GATES.map((gate) => gate.id));
   for (const id of ['variant-parity', 'variant-parity-drill', 'mirror-parity-freshness',
-    'cascade-coverage-ownership-drill', 'root-checklists-freshness', 'root-checklists-clean-checkout-drill']) {
+    'cascade-coverage-ownership-drill', 'root-checklists-freshness', 'root-checklists-clean-checkout-drill',
+    'modern-rescue-customization-manifest-freshness', 'manifest-generator-drill']) {
     assert.ok(!registered.has(id), `${id} is still a blocking gate`);
   }
   const retired = new Set(RETIRED_GATES.map((entry) => entry.id));
-  for (const id of ['variant-parity', 'mirror-parity-freshness', 'root-checklists-freshness']) {
+  for (const id of ['variant-parity', 'mirror-parity-freshness', 'root-checklists-freshness',
+    'modern-rescue-customization-manifest-freshness']) {
     assert.ok(retired.has(id), `${id} left the inventory without a ledger entry`);
   }
   for (const entry of RETIRED_GATES) {

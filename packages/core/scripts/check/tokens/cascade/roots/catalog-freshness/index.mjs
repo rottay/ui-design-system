@@ -2,7 +2,7 @@
  * root-catalog-freshness-gate — the 63-root cascade catalog must describe the
  * tree as it exists today.
  *
- * `governance/manifest/cascade/catalog/index.json` names every internal cascade root, its
+ * `docs/history/inventories/customization-manifest/cascade/catalog/index.json` names every internal cascade root, its
  * head channel and a channelStatus:
  *   - `existe`         — the channel has at least one `--ds-<channel>:`
  *                        declaration in authored CSS under `src/`.
@@ -22,13 +22,16 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../../libraries/repo-root/index.mjs';
+import { QUARANTINE_MANIFEST_REL } from '../../../../../libraries/manifest/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
+const REPO_ROOT = findRepoRoot(HERE);
 const CATALOG_PATH = join(
-  CORE_ROOT,
-  'governance/manifest/cascade/catalog/index.json',
+  REPO_ROOT,
+  QUARANTINE_MANIFEST_REL,
+  'cascade/catalog/index.json',
 );
 
 function* walkCss(dir) {

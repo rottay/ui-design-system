@@ -43,7 +43,7 @@ import { buildSingleOwnerSet } from '../../runtime/shared-files/index.mjs';
 import { conclude, createFindings, EXIT, parseArgs } from '../../foundation/report/index.mjs';
 
 export const DEFAULT_TARGET = 'packages/core/scripts/check/modern-rescue/README.md';
-export const MANIFEST_INDEX_PATH = 'packages/core/governance/manifest/index.json';
+export const MANIFEST_INDEX_PATH = 'docs/history/inventories/customization-manifest/index.json';
 export const FAMILY_INVENTORY_PATH = 'packages/core/scripts/check/modern-rescue/family-inventory/index.json';
 
 /**

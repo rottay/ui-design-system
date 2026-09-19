@@ -15,8 +15,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { activePublicControls } from '../../../../../../../../generate/tokens/manifest/generation/index.mjs';
+import { parseRegistry } from '../../../../../../../../generate/tokens/customization/surface/index.mjs';
 import { buildIngressInput, INGRESS_ARMS, registryIngressPath } from '../../index.mjs';
+
+const ACTIVE_PUBLIC_TIERS = new Set(['standard', 'pro']);
 
 const STATIC_ARM = 'static-brand-theme';
 const SPEC = INGRESS_ARMS[STATIC_ARM];
@@ -55,7 +57,9 @@ test('a capability row carrying neither registry key declares no door', () => {
 });
 
 test('the committed capability registry declares its door under the CURRENT registry key', () => {
-  const rows = activePublicControls();
+  const rows = parseRegistry().filter(
+    (entry) => entry.status === 'active' && ACTIVE_PUBLIC_TIERS.has(entry.tier),
+  );
   assert.ok(rows.length > 0, 'the registry produced no active public control');
   const missing = rows.filter((row) => registryIngressPath(row).path === undefined);
   assert.deepEqual(missing.map((row) => row.id), [], 'a capability row declares no static door');

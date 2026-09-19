@@ -1,0 +1,2102 @@
+{
+  "schemaVersion": 1,
+  "familyId": "primitive/overlay/popconfirm",
+  "identity": {
+    "layer": "primitive",
+    "category": "overlay",
+    "name": "Popconfirm",
+    "components": [
+      "Popconfirm"
+    ],
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/overlay/popconfirm",
+    "publicComponents": [
+      "Popconfirm"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "0e91066327028300d9d85a0cea4e8afd5461798ad7fbaabfe98431c09665574f"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/components/primitives/overlay/popconfirm/contracts/index.ts",
+      "packages/core/src/components/primitives/overlay/popconfirm/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/overlay/popconfirm/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/overlay/popconfirm/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+    ],
+    "stableParts": [
+      "trigger",
+      "trigger-content",
+      "surface",
+      "content",
+      "copy",
+      "icon",
+      "title",
+      "description",
+      "footer",
+      "action"
+    ],
+    "states": [
+      "open"
+    ],
+    "variantAxes": [
+      "data-ds-position-strategy",
+      "data-ok-type"
+    ],
+    "propertyGroups": [],
+    "invariants": [
+      "aria-modal [at src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:149]",
+      "role-attribute [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:294, src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:148]",
+      "aria-label-or-labelledby [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:295]",
+      "aria-describedby [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:296]",
+      "escape-key-dismiss [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:157]",
+      "body-scroll-lock [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:150]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:184]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:173, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:194]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "feedback-overlay",
+        "scoutArtifact": "mr-anatomy-feedback-overlay.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 10,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:277",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:232",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:68",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:69",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:70"
+          ]
+        },
+        {
+          "part": "trigger-content",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:283",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:78",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:79"
+          ]
+        },
+        {
+          "part": "surface",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:290",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:150",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:93",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:94",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:98",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:99"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "content",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:302",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:130",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:131",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:132"
+          ]
+        },
+        {
+          "part": "copy",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:304",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:135",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:136"
+          ]
+        },
+        {
+          "part": "icon",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:303",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:168",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:141",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:142",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:143",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:149"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "title",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:305",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:173",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:155",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:156",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:157",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:158"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "description",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:307",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:175",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:163",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:164",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:165",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:166"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "footer",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:317",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:178",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:179",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:180",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:181"
+          ]
+        },
+        {
+          "part": "action",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:321",
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:331",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:191",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:205"
+          ],
+          "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
+        }
+      ],
+      "partCensus": {
+        "measuredAbsence": [
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:53, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:55, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:58]"
+        ]
+      },
+      "stateAnchors": [
+        {
+          "token": "data-open",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:196",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:197",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:198"
+          ],
+          "state": "open"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-ds-position-strategy=anchor-css",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:124"
+          ]
+        },
+        {
+          "token": "data-ok-type=danger",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:149"
+          ]
+        },
+        {
+          "token": "data-ok-type=primary",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:152"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "enginesPresent": [
+          "classic",
+          "modern",
+          "rustic"
+        ],
+        "classic": {
+          "emitsDataParts": [],
+          "dataPartCount": 0,
+          "dsVariableReads": 0,
+          "importsAntd": true
+        },
+        "modern": {
+          "emitsDataParts": [
+            "action",
+            "content",
+            "copy",
+            "description",
+            "footer",
+            "icon",
+            "surface",
+            "title",
+            "trigger",
+            "trigger-content"
+          ],
+          "dataPartCount": 10,
+          "dsVariableReads": 1,
+          "importsAntd": false
+        },
+        "rustic": {
+          "emitsDataParts": [
+            "action",
+            "description",
+            "icon",
+            "surface",
+            "title",
+            "trigger"
+          ],
+          "dataPartCount": 6,
+          "dsVariableReads": 6,
+          "importsAntd": false
+        },
+        "summary": "DIVERGENT: the modern engine emits 10 data-part anchors and the classic engine emits none while importing antd. The modern skin CSS addresses parts exclusively through [data-part], so the anatomy bound here is NOT addressable in the classic engine."
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "(scope)": [
+            "opacity",
+            "transform"
+          ],
+          "trigger": [
+            "display",
+            "max-inline-size",
+            "position"
+          ],
+          "trigger-content": [
+            "display",
+            "max-inline-size"
+          ],
+          "surface": [
+            "animation",
+            "animation-duration",
+            "animation-timing-function",
+            "background",
+            "border",
+            "border-color",
+            "border-radius",
+            "box-shadow",
+            "color",
+            "font-family",
+            "max-inline-size",
+            "min-inline-size",
+            "overflow",
+            "padding",
+            "transform"
+          ],
+          "content": [
+            "align-items",
+            "display",
+            "gap"
+          ],
+          "copy": [
+            "flex",
+            "min-inline-size"
+          ],
+          "icon": [
+            "color",
+            "flex",
+            "margin-block-start"
+          ],
+          "title": [
+            "color",
+            "font-size",
+            "font-weight",
+            "line-height",
+            "overflow-wrap",
+            "text-wrap"
+          ],
+          "description": [
+            "color",
+            "font-size",
+            "line-height",
+            "margin-block-start",
+            "overflow-wrap"
+          ],
+          "footer": [
+            "display",
+            "gap",
+            "justify-content",
+            "margin-block-start"
+          ]
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelCensus": [
+          {
+            "variable": "--ds-popconfirm-motion-offset",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "(scope)"
+            ],
+            "landsOn": [
+              "transform"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:54",
+                "readIn": "modern-skin-css",
+                "part": "(scope)",
+                "landsOn": "transform",
+                "fallback": "0.25rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-motion-scale",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "(scope)"
+            ],
+            "landsOn": [
+              "transform"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:55",
+                "readIn": "modern-skin-css",
+                "part": "(scope)",
+                "landsOn": "transform",
+                "fallback": "0.975",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-texture",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:290",
+              "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:329"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "TENANT_FACING_CANDIDATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:91",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": "none",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-elevation-surface-3",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:92",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:92",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-background",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:600",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:93",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": "var(--ds-surface-card)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-surface-card",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "tests/fixtures/tenants/quality-evidence/index.ts:320",
+              "tests/fixtures/tenants/quality-evidence/index.ts:425",
+              "tests/fixtures/tenants/quality-evidence/index.ts:540"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:93",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-radius-lg",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border-radius"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "tests/fixtures/tenants/default/index.css:44",
+              "tests/fixtures/tenants/quality-evidence/index.ts:351",
+              "tests/fixtures/tenants/quality-evidence/index.ts:474"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:771"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:94",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-shadow",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "FROZEN_ENGINE_SCOPED",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:95",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": "var(--ds-material-overlay-shadow, var(--ds-elevation-3))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-shadow",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "TENANT_FACING_CANDIDATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:97",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": "var(--ds-elevation-3)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-elevation-3",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1082",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:351",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:97",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-padding",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "padding"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:99",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "padding",
+                "fallback": "var(--ds-spacing-4)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:157",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "padding",
+                "fallback": "16px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "namespace": "public",
+            "readCount": 6,
+            "partsRead": [
+              "footer",
+              "surface"
+            ],
+            "landsOn": [
+              "margin-block-start",
+              "max-inline-size",
+              "min-inline-size",
+              "padding"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687",
+              "src/foundation/tokens/css/foundation/base/density/index.css:81"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:99",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "padding",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:102",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "min-inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:102",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "min-inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:106",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "max-inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:106",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "max-inline-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:181",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "margin-block-start",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-min-width",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "min-inline-size",
+              "min-width"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:101",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "min-inline-size",
+                "fallback": "12.5rem",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:158",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "min-width",
+                "fallback": "220px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-max-width",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "max-inline-size",
+              "max-width"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:105",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "max-inline-size",
+                "fallback": "21.875rem",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:159",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "max-width",
+                "fallback": "350px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface",
+              "title"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/components/patterns/customization/brand-studio/index.tsx:143"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:108",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:157",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-family-base",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "font-family"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:109",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "font-family",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-normal",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "animation"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/personality/index.css:926",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:110",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "animation",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "animation"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:111",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "animation",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-border-color",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "FROZEN_ENGINE_SCOPED",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": "var(--ds-material-overlay-border, var(--ds-color-border-subtle))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-border",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:291"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "TENANT_FACING_CANDIDATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": "var(--ds-color-border-subtle)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:710",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:973",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1161"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2112"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "content",
+              "footer"
+            ],
+            "landsOn": [
+              "gap"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685",
+              "src/foundation/tokens/css/foundation/base/density/index.css:79"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:132",
+                "readIn": "modern-skin-css",
+                "part": "content",
+                "landsOn": "gap",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:180",
+                "readIn": "modern-skin-css",
+                "part": "footer",
+                "landsOn": "gap",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-icon-offset",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "icon"
+            ],
+            "landsOn": [
+              "margin-block-start"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:142",
+                "readIn": "modern-skin-css",
+                "part": "icon",
+                "landsOn": "margin-block-start",
+                "fallback": "0.125rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-warning",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "icon"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:45",
+              "src/components/patterns/customization/brand-studio/index.tsx:104",
+              "tests/integration/customization-fields/index.test.ts:133"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:176"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:143",
+                "readIn": "modern-skin-css",
+                "part": "icon",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-error",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "icon"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
+              "src/components/patterns/customization/brand-studio/index.tsx:106",
+              "tests/integration/capability-propagation/tests/index.test.ts:157"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:177"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:149",
+                "readIn": "modern-skin-css",
+                "part": "icon",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-primary",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "icon"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:156"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:152",
+                "readIn": "modern-skin-css",
+                "part": "icon",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "description",
+              "title"
+            ],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "tests/fixtures/tenants/default/index.css:30",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609",
+              "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:158",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "font-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:166",
+                "readIn": "modern-skin-css",
+                "part": "description",
+                "landsOn": "font-size",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-weight-medium",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "font-weight"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:623"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:623"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:159",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "font-weight",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-line-height-tight",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "title"
+            ],
+            "landsOn": [
+              "line-height"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:362",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:534",
+              "src/foundation/tokens/css/facade/artifacts/evnto/index.css:208"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:631"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:160",
+                "readIn": "modern-skin-css",
+                "part": "title",
+                "landsOn": "line-height",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "description"
+            ],
+            "landsOn": [
+              "margin-block-start"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684",
+              "src/foundation/tokens/css/foundation/base/density/index.css:78"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:163",
+                "readIn": "modern-skin-css",
+                "part": "description",
+                "landsOn": "margin-block-start",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "description"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:165",
+                "readIn": "modern-skin-css",
+                "part": "description",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-line-height-relaxed",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "description"
+            ],
+            "landsOn": [
+              "line-height"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:361",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:533",
+              "src/foundation/tokens/css/facade/artifacts/evnto/index.css:207"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:634"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:167",
+                "readIn": "modern-skin-css",
+                "part": "description",
+                "landsOn": "line-height",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-z-popover",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "z-index"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:232",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "z-index",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-button-padding",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [],
+            "landsOn": [
+              "padding"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "FROZEN_ENGINE_SCOPED",
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:137",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "padding",
+                "fallback": "6px 16px",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:195",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "padding",
+                "fallback": "6px 16px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-button-font-size",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "FROZEN_ENGINE_SCOPED",
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:140",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "font-size",
+                "fallback": "14px",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:198",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "font-size",
+                "fallback": "14px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-popconfirm-z-index",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "z-index"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "FROZEN_ENGINE_SCOPED",
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:156",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "z-index",
+                "fallback": "1050",
+                "hasFallback": true
+              }
+            ]
+          }
+        ],
+        "channelCensusCounts": {
+          "distinctVariables": 36,
+          "totalReads": 50,
+          "publicDs": 36,
+          "privateDs": 0,
+          "privateSocketsDeclaredInSkin": []
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazos foundation/familia-ajena compartidos": [
+            "--ds-color-border-subtle",
+            "--ds-color-error",
+            "--ds-color-primary",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-warning",
+            "--ds-elevation-3",
+            "--ds-elevation-surface-3",
+            "--ds-font-family-base",
+            "--ds-font-size-sm",
+            "--ds-font-weight-medium",
+            "--ds-line-height-relaxed",
+            "--ds-line-height-tight",
+            "--ds-material-overlay-background",
+            "--ds-material-overlay-border",
+            "--ds-material-overlay-shadow",
+            "--ds-material-overlay-texture",
+            "--ds-motion-ease-out",
+            "--ds-motion-normal",
+            "--ds-radius-lg",
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-4",
+            "--ds-surface-card"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-border-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de modal/drawer sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de modal/drawer sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "RESUELTO por fallo de grupo 2026-08-18. FALLO DE GRUPO 2026-08-18 (escalacion FAM-06): el ritmo INTERIOR del panel si densifica. Un dropdown cuyos items compactan dentro de un marco que no compacta se lee roto: el usuario percibe density como una sola sensacion, no como dos capas. Reach: padding y gap entre partes del panel. NO reach: geometria de anclaje (arrow/offset), sobre de colision (viewport-gap), topes de tamano (max/min-width, max-height) que son legibilidad y no confort, los topes de variante nombrada (minimal/rich/compact) que pertenecen al vocabulario de variantes, el area tactil del handle (minimo de accesibilidad, no confort) y el ancho de scrollbar (plataforma)."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Geometria de overlay NO cubierta por density (fallo de grupo 2026-08-18: anclaje, colision, topes de tamano, variantes nombradas, area tactil, plataforma)": [
+            "--ds-popconfirm-icon-offset",
+            "--ds-popconfirm-max-width",
+            "--ds-popconfirm-min-width",
+            "--ds-popconfirm-motion-offset"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "gap-audit-independent"
+      }
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-popconfirm-motion-scale",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-backdrop-filter",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-popconfirm-border-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-popconfirm-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/popconfirm"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color del icono, default warning, override a error bajo data-ok-type='danger'",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-warning",
+              "--ds-color-error"
+            ],
+            "noSocketReason": "color: var(--ds-color-warning) por defecto en [data-part='icon'] y var(--ds-color-error) bajo [data-ok-type='danger']; evidencia verificada en skin/popconfirm.css:140-149.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

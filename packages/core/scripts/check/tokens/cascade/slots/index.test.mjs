@@ -390,7 +390,7 @@ test('LEDGER — el arbol real esta en su ancla, contador por contador', async (
   const doc = JSON.parse(readFileSync(url('../../../../../artifacts/generated/manifest/cascade/slots/index.json'), 'utf8'));
   const pins = countLiteralPinsOnDeclaredHead({
     edges: JSON.parse(readFileSync(url('../../../../../artifacts/generated/manifest/cascade/edges/index.json'), 'utf8')),
-    catalog: JSON.parse(readFileSync(url('../../../../../governance/manifest/cascade/catalog/index.json'), 'utf8')),
+    catalog: JSON.parse(readFileSync(url('../../../../../../../docs/history/inventories/customization-manifest/cascade/catalog/index.json'), 'utf8')),
   });
   const baseline = JSON.parse(readFileSync(url('./baseline/index.json'), 'utf8'));
   assert.deepEqual(evaluateLedger(measureLedger(doc, pins), baseline), []);

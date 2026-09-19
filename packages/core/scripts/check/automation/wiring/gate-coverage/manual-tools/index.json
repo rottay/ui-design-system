@@ -43,6 +43,11 @@
       "owner": "WO-RET-03 -- moves the programme machinery out of the published package"
     },
     {
+      "path": "scripts/libraries/manifest/rules/index.mjs",
+      "reason": "The sealed corpus's cascade vocabulary validators (DOMAIN_KINDS, ROOT_CHANNEL_AUTHORITIES, validateCascadeRoot/Set), consumed by the T-1 constitution check and the cascade gates as a library. Its last wiring channel was the customization-manifest generator, deleted with the WO-RET-03 quarantine; the library survives because the constitution gate still validates the quarantined roots against it.",
+      "owner": "WO-RET-03 -- moves the programme machinery out of the published package"
+    },
+    {
       "path": "scripts/check/charts/scheme-scope-causality/probe/index.mjs",
       "reason": "The vitest harness for the FAM-09 scheme-scope causality probe. It landed deliberately unwired (a53bdc3da): it measures a divergence the product suites must not record, and it stays a hand-run tool until FAM-09 lot 1 makes the probe green, at which point WO-FAM-09 wires it as a real channel or deletes it. Registering it here is the written third state, NOT a blocking gate.",
       "owner": "WO-FAM-09 -- lot 1 makes the probe green, then wires it or deletes it"

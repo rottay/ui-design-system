@@ -4,7 +4,7 @@
  * tema <-> canal emitido <-> raiz del catalogo de cascada.
  *
  * POR QUE EXISTE. El frente de normalizacion tenia capas sin union. El catalogo
- * de cascada clasifica RAICES (`governance/manifest/cascade/catalog/index.json`)
+ * de cascada clasifica RAICES (`docs/history/inventories/customization-manifest/cascade/catalog/index.json`)
  * y entre el slot y la raiz vive el canal `--ds-*` que nadie ata a ninguna. Sin
  * esa union, "clasificar los candidatos de colapso" no es una tarea mecanica:
  * es una opinion.
@@ -62,7 +62,8 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
+import { QUARANTINE_MANIFEST_REL } from '../../../../libraries/manifest/index.mjs';
 import { readThemeCatalogRecords, CATALOG_SOURCE } from '../../../../libraries/theme-catalog/index.mjs';
 import { isRefinedRoot } from '../roots/exposure/index.mjs';
 import { assertDistFresh } from '../../../../package/artifacts/freshness/index.mjs';
@@ -74,10 +75,14 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const CORE_ROOT = findPackageRoot(HERE);
+const REPO_ROOT = findRepoRoot(HERE);
+/** The cascade catalog is quarantined evidence (WO-RET-03): sealed, and
+ *  resolved through the workspace root rather than the package. */
+const QUARANTINE_ROOT = join(REPO_ROOT, QUARANTINE_MANIFEST_REL);
 /** Generated slot inventory consumed by manifest checks. */
 export const OUT_PATH = join(CORE_ROOT, 'artifacts/generated/manifest/cascade/slots/index.json');
 export const BASELINE_PATH = join(HERE, 'baseline/index.json');
-export const CATALOG_PATH = join(CORE_ROOT, 'governance/manifest/cascade/catalog/index.json');
+export const CATALOG_PATH = join(QUARANTINE_ROOT, 'cascade/catalog/index.json');
 /* La unica lista de controles desde WO-CAT-02: el catalogo tipado. La vista de
  * manifest que reemplaza era una proyeccion generada de la misma poblacion y ya
  * no esta en la ruta de lectura de ningun gate. */
@@ -490,7 +495,7 @@ export async function buildInventory({
 } = {}) {
   const loaded = arm ?? (await loadCompiledArm({ coreRoot }));
   const catalog = injectedCatalog
-    ?? JSON.parse(readFileSync(join(coreRoot, 'governance/manifest/cascade/catalog/index.json'), 'utf8'));
+    ?? JSON.parse(readFileSync(join(findRepoRoot(coreRoot), QUARANTINE_MANIFEST_REL, 'cascade/catalog/index.json'), 'utf8'));
   const { index: headIndex, ambiguous } = headChannelIndex(catalog);
   const rootById = new Map((catalog.roots ?? []).map((root) => [root.rootId, root]));
   const controls = injectedControls ?? readControls();
@@ -629,7 +634,7 @@ export async function buildInventory({
     provenance: {
       ...loaded.provenance,
       membershipSource,
-      catalog: 'governance/manifest/cascade/catalog/index.json',
+      catalog: 'docs/history/inventories/customization-manifest/cascade/catalog/index.json',
       catalogRoots: (catalog.roots ?? []).length,
       metadataPrefixes: METADATA_PREFIXES,
     },
@@ -714,7 +719,7 @@ async function main(argv) {
    * ya divergio, el ledger no agrega informacion y el mensaje seria ruido. */
   const pins = countLiteralPinsOnDeclaredHead({
     edges: JSON.parse(readFileSync(join(CORE_ROOT, 'artifacts/generated/manifest/cascade/edges/index.json'), 'utf8')),
-    catalog: JSON.parse(readFileSync(join(CORE_ROOT, 'governance/manifest/cascade/catalog/index.json'), 'utf8')),
+    catalog: JSON.parse(readFileSync(join(QUARANTINE_ROOT, 'cascade/catalog/index.json'), 'utf8')),
   });
   const live = measureLedger(doc, pins);
   let baseline = null;

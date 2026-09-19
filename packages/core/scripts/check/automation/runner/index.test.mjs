@@ -23,7 +23,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-import { CI_GATES, blockingGates, validateManifest } from '../gates/manifest/index.mjs';
+import { CI_GATES, RETIRED_GATES, blockingGates, validateManifest } from '../gates/manifest/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
@@ -217,21 +217,18 @@ test('the runner --list plan matches the manifest and runs nothing', () => {
   }
 });
 
-test('the taxonomy chain is enforced, and freshness runs ahead of it', () => {
-  // Taxonomy reads the generated manifest as evidence, so a stale manifest
-  // makes it green on rows nobody regenerated. Enforcing taxonomy without
-  // proving freshness FIRST is therefore not a weaker version of this chain --
-  // it is the failure mode the chain exists to prevent.
+test('the taxonomy chain is enforced, and the retired freshness gate stays retired', () => {
+  // Taxonomy reads the quarantined manifest as sealed evidence (WO-RET-03).
+  // The freshness gate that used to run ahead of this chain measured the
+  // corpus against live source -- permanently unmeetable once 11 retired-
+  // family bindings stopped resolving -- so it is recorded in RETIRED_GATES
+  // instead of CI_GATES. What remains enforceable here is the chain itself:
+  // the drills that vouch for the detector run strictly before the gate.
   //
   // Order is asserted by index, not by substring position in the rendered
   // plan: two ids can share a prefix, and a comment mentioning an id would
   // move a substring match without moving a gate.
   const FRESHNESS = 'modern-rescue-customization-manifest-freshness';
-  const FRESHNESS_ARGV = [
-    'node',
-    'scripts/generate/tokens/manifest/generation/index.mjs',
-    '--check',
-  ];
 
   const indexOf = (id) => {
     const found = CI_GATES.map((gate, index) => (gate.id === id ? index : -1)).filter((i) => i >= 0);
@@ -239,11 +236,18 @@ test('the taxonomy chain is enforced, and freshness runs ahead of it', () => {
     return found[0];
   };
 
-  // Exact argv, not a loose match: `--check` is what makes the generator verify
-  // instead of write, and this manifest must never invoke the writer in CI.
-  const freshness = CI_GATES[indexOf(FRESHNESS)];
-  assert.deepEqual(freshness.run, FRESHNESS_ARGV, 'the freshness gate must verify, never regenerate');
-  assert.equal(freshness.blocking, true, 'a non-blocking freshness check proves nothing downstream');
+  // Retirement, not deletion: the ledger entry names the date, the reason and
+  // the successor, and validateManifest refuses to re-register the id.
+  assert.ok(
+    !CI_GATES.some((gate) => gate.id === FRESHNESS),
+    `${FRESHNESS} is retired and must not sit in CI_GATES`,
+  );
+  const ledger = RETIRED_GATES.find((entry) => entry.id === FRESHNESS);
+  assert.ok(ledger, `${FRESHNESS} left the inventory without a ledger entry`);
+  assert.equal(ledger.retiredOn, '2026-09-19');
+  assert.ok(ledger.reason.length > 40, 'the retirement reason is a placeholder');
+  assert.ok(ledger.replacedBy.length > 10, 'no successor named');
+  assert.deepEqual(ledger.drills, ['manifest-generator-drill']);
 
   const taxonomy = CI_GATES[indexOf('taxonomy-parity')];
   assert.equal(taxonomy.blocking, true, 'taxonomy-parity must be enforced, not merely reported');
@@ -253,7 +257,7 @@ test('the taxonomy chain is enforced, and freshness runs ahead of it', () => {
   );
 
   const taxonomyIndex = indexOf('taxonomy-parity');
-  for (const id of [FRESHNESS, 'taxonomy-parity-drill', 'taxonomy-owner-nesting-drill', 'taxonomy-public-root-drill']) {
+  for (const id of ['taxonomy-parity-drill', 'taxonomy-owner-nesting-drill', 'taxonomy-public-root-drill']) {
     assert.ok(
       indexOf(id) < taxonomyIndex,
       `${id} (index ${indexOf(id)}) must run strictly before taxonomy-parity (index ${taxonomyIndex})`,
@@ -261,16 +265,22 @@ test('the taxonomy chain is enforced, and freshness runs ahead of it', () => {
   }
 });
 
-test('the manifest-generator drill is reachable and enforced ahead of its gate, and the removed modern-rescue tooling cohort stays gone', () => {
-  // The drill guards the blocking freshness gate against a silently-dead
-  // generator, so it is wired standalone and must run strictly before it.
+test('the manifest-generator freshness gate is retired with its producer, and the removed modern-rescue tooling cohort stays gone', () => {
+  // The drill and its freshness gate guarded the manifest generator against
+  // silently decaying. WO-RET-03 (2026-09-19) quarantined the corpus the
+  // generator wrote -- sealed evidence can never be fresh against live source
+  // again -- so both left the inventory together and are recorded in
+  // RETIRED_GATES, with the producer itself deleted. A retirement is a named,
+  // dated ledger entry, never a quiet disappearance.
+  //
   // The removed modern-rescue tooling cohort must not resurface anywhere in
   // the manifest, not merely under its old ids.
   //
   // Every clause below is load-bearing, so state them separately rather than
   // as one loose "is it mentioned somewhere" check.
   const DRILL = 'manifest-generator-drill';
-  const DRILL_ARGV = ['node', '--test', 'scripts/generate/tokens/manifest/generation/index.test.mjs'];
+  const PRODUCER_TEST = 'scripts/generate/tokens/manifest/generation/index.test.mjs';
+  const PRODUCER_MODULE = 'scripts/generate/tokens/manifest/generation/index.mjs';
   const FRESHNESS = 'modern-rescue-customization-manifest-freshness';
   const REMOVED_IDS = [
     'modern-rescue-tooling-drills',
@@ -283,36 +293,32 @@ test('the manifest-generator drill is reachable and enforced ahead of its gate, 
     'scripts/check/modern-rescue/check/index.test.mjs',
   ];
 
-  const indexOf = (id) => {
-    const found = CI_GATES.map((gate, index) => (gate.id === id ? index : -1)).filter((i) => i >= 0);
-    assert.equal(found.length, 1, `${id} must appear exactly once in CI_GATES, found ${found.length}`);
-    return found[0];
-  };
+  // Neither the gate nor its drill may still be registered, and no other gate
+  // may carry the deleted producer's paths in its run array -- id absence
+  // alone would miss a leak through a different entry.
+  for (const id of [DRILL, FRESHNESS]) {
+    assert.equal(
+      CI_GATES.some((gate) => gate.id === id),
+      false,
+      `${id} is retired and must not sit in CI_GATES`,
+    );
+  }
+  for (const carrier of [PRODUCER_TEST, PRODUCER_MODULE]) {
+    assert.equal(
+      CI_GATES.some((gate) => gate.run.includes(carrier)),
+      false,
+      `${carrier} belongs to the deleted producer and must not appear in any gate's run array`,
+    );
+  }
 
-  // Exact argv, not a substring match: a gate that dropped `--test`, or that
-  // pointed at a differently-cased or differently-rooted path, would satisfy
-  // any looser check while leaving the drill unrun or unresolved.
-  const drill = CI_GATES[indexOf(DRILL)];
-  assert.deepEqual(drill.run, DRILL_ARGV, 'the manifest-generator drill must run exactly this suite under node --test');
-  assert.equal(drill.blocking, true, 'a non-blocking drill proves nothing about the gate it vouches for');
-
-  // Strict order. A drill that ran AFTER the gate it certifies would report on
-  // a detector whose verdict had already been trusted.
-  const drillIndex = indexOf(DRILL);
-  assert.ok(
-    drillIndex < indexOf(FRESHNESS),
-    `${DRILL} (index ${drillIndex}) must run strictly before ${FRESHNESS} (index ${indexOf(FRESHNESS)})`,
-  );
-
-  // Once only, across the WHOLE manifest and by path rather than by id: a
-  // second entry naming the same suite would pass the per-id uniqueness above
-  // while making the drill's cost and ordering ambiguous.
-  const carriers = CI_GATES.filter((gate) => gate.run.includes(DRILL_ARGV[2]));
-  assert.deepEqual(
-    carriers.map((gate) => gate.id),
-    [DRILL],
-    `${DRILL_ARGV[2]} must be carried exactly once, by ${DRILL}`,
-  );
+  // The ledger names the drill that used to prove the gate, the date, the
+  // reason and the successor -- validateManifest refuses a re-registration.
+  const ledger = RETIRED_GATES.find((entry) => entry.id === FRESHNESS);
+  assert.ok(ledger, `${FRESHNESS} left the inventory without a ledger entry`);
+  assert.deepEqual(ledger.drills, [DRILL]);
+  assert.equal(ledger.retiredOn, '2026-09-19');
+  assert.ok(ledger.reason.length > 40, 'the retirement reason is a placeholder');
+  assert.ok(ledger.replacedBy.length > 10, 'no successor named');
 
   // The removed cohort must be gone, not merely renamed or re-excluded.
   for (const id of REMOVED_IDS) {

@@ -282,12 +282,16 @@ test('sandbox R5-libraries: a root-prefixed capability is detected on disk', (t)
 
 test('sandbox M1: a loose file at the manifest root is detected on disk', (t) => {
   const root = buildSandbox(t);
-  const manifest = join(root, '..', 'governance', 'manifest');
+  // The SUT ascends from `scripts/` to the workspace root exactly as it does in
+  // production (packages/core/scripts -> repo root), so the quarantine stand-in
+  // lives three levels above the sandbox scripts root, beside the wrapper.
+  const manifest = join(root, '..', '..', '..', 'docs', 'history', 'inventories', 'customization-manifest');
   mkdirSync(manifest, { recursive: true });
+  t.after(() => rmSync(join(root, '..', '..', '..', 'docs'), { recursive: true, force: true }));
   writeFileSync(join(manifest, 'index.json'), '{}\n');
   mkdirSync(join(manifest, 'controls', 'probe'), { recursive: true });
   writeFileSync(join(manifest, 'controls', 'probe', 'index.json'), '{}\n');
   assert.deepEqual(collectFindings(root), []);
   writeFileSync(join(manifest, 'stray.mjs'), '// planted\n');
-  assert.ok(rules(collectFindings(root)).includes('M1-loose-manifest-file governance/manifest/stray.mjs'));
+  assert.ok(rules(collectFindings(root)).includes('M1-loose-manifest-file docs/history/inventories/customization-manifest/stray.mjs'));
 });

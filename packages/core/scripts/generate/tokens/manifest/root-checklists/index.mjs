@@ -68,15 +68,16 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 import { OUTPUT_PATH as FACTS_PATH, PAINT_PLANES, INLINE_EXPR } from '../fanout/index.mjs';
-import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
 import { readManifestRecords } from '../../../../libraries/manifest/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
 /** The programme folder stays under `scripts/`; only the manifest graduated. */
 export const PROGRAM_ROOT = path.resolve(PACKAGE_ROOT, 'scripts/check/modern-rescue');
-/** `generated/` and `cascade/` live at the manifest ROOT; only this producer moved. */
-export const MANIFEST_ROOT = path.join(PACKAGE_ROOT, 'governance/manifest');
+/** `generated/` and `cascade/` live at the quarantined manifest ROOT
+ *  (WO-RET-03, docs/history); only this producer stayed behind. */
+export const MANIFEST_ROOT = path.join(findRepoRoot(HERE), 'docs/history/inventories/customization-manifest');
 export const OUTPUT_PATH = path.join(PACKAGE_ROOT, 'artifacts/generated/manifest/cascade/coverage/index.json');
 
 const PAINT_SET = new Set(PAINT_PLANES);
@@ -88,7 +89,7 @@ export const UNATTRIBUTED_PREFIX = 'unattributed';
 
 /** Manifiestos de raiz de cascada: la segunda fuente de raices. */
 export const CASCADE_ROOTS_DIR = path.join(MANIFEST_ROOT, 'cascade', 'roots');
-export const CASCADE_ROOTS_REL = 'governance/manifest/cascade/roots';
+export const CASCADE_ROOTS_REL = 'docs/history/inventories/customization-manifest/cascade/roots';
 
 /** Snapshots generados que el corpus de hechos excluye (fanout-facts.mjs). */
 export const ARTIFACTS_REL = 'src/foundation/tokens/css/facade/artifacts';
@@ -174,8 +175,10 @@ export function loadCanon(programRoot = PROGRAM_ROOT, packageRoot = PACKAGE_ROOT
     .sort((a, b) => b.owner.length - a.owner.length || (a.id < b.id ? -1 : 1));
 
   const bindings = new Map();
+  // The families corpus is quarantined evidence (WO-RET-03): resolved through
+  // the workspace root that owns the package, never the package itself.
   const familyFiles = walk(
-    path.join(packageRoot, 'governance', 'manifest', 'families'),
+    path.join(findRepoRoot(packageRoot), 'docs', 'history', 'inventories', 'customization-manifest', 'families'),
     (p) => p.endsWith('.json'),
   );
   for (const abs of familyFiles) {

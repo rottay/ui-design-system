@@ -1,6 +1,14 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, sep } from 'node:path';
 
+/**
+ * Repo-relative location of the customization manifest quarantined by
+ * WO-RET-03 (2026-09-19, D-05/D-08). The corpus is sealed historical
+ * evidence: readers may certify it, no reader may treat it as authority
+ * (the quarantine README states the law; the typed catalog is the listing).
+ */
+export const QUARANTINE_MANIFEST_REL = 'docs/history/inventories/customization-manifest';
+
 const PATH_ALIASES = new Map([
   ['recipe-profile', 'recipes/profile'],
   ['token-overrides', 'tokens/overrides'],

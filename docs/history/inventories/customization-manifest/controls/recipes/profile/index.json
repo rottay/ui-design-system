@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "controlId": "recipe-profile",
+  "lifecycleState": "OPERATIONAL",
+  "tier": "pro",
+  "scope": "tenant",
+  "semanticOwner": {
+    "owner": "design-system",
+    "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "registryDigest": "bd0669d204209666fd6431fd9fb214369330e16c35d0d056f19bcffa927ef75e"
+  },
+  "title": "Family recipe profile",
+  "valueType": "profile-id",
+  "domain": {
+    "kind": "profile-id",
+    "enumValues": [],
+    "bounds": null,
+    "defaultBehavior": "no profile: family recipe defaults apply"
+  },
+  "ingress": {
+    "staticThemePath": "recipes.profile",
+    "dbTenantThemePath": "visualFoundation.recipeProfile"
+  },
+  "declaredOutputs": {
+    "channels": [],
+    "rootAttributes": [],
+    "representativeOnly": true
+  },
+  "dependsOn": [],
+  "compatibility": "closed registry of typed per-family axes (recipe-profiles); caller props always win",
+  "productiveConsumerWitness": {
+    "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
+    "symbol": "publishedEngineVisual?.runtime.recipeProfile"
+  },
+  "calibration": {
+    "assessmentState": "SOURCE_BOUND",
+    "normalizedStops": [
+      {
+        "id": "rottay/technical-sharp@1"
+      },
+      {
+        "id": "rottay/network-professional@1"
+      },
+      {
+        "id": "rottay/editorial-round@1"
+      },
+      {
+        "id": "rottay/identity",
+        "identity": true,
+        "law": "STATIC ARM ONLY, NOT RECEIPTED (F4B-8/W-A/W-B law: an identity stop is a claim about what the VERTICAL ships; the DB arm takes no baseline by law and a single-arm run structurally cannot pass this evidence kind -- ingressEquivalenceHeld requires 2 comparable arms, same structural limit F4B-13/F4B-14 already measured for their own identity stops). rottay authors `recipes: RECIPES` where `const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: 'rottay/technical-sharp@1' }` (rottay/index.ts:3289). Stated as a directly-compiled fact, not receipted evidence."
+      },
+      {
+        "id": "bithire/identity",
+        "identity": true,
+        "law": "STATIC ARM ONLY, NOT RECEIPTED (same law as rottay/identity above). bithire authors `recipes: RECIPES` where `const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: 'rottay/network-professional@1' }` (bithire/index.ts:3172) -- selecting an id namespaced 'rottay/...' is not a defect: the namespace names the REGISTRY's own provenance (foundation/tokens/ts/presentation/recipe-profiles), not which vertical may select it. evnto authors NO `recipes` field at all in its exported `evntoBrandTheme` (grep-confirmed: only a comment placeholder, `@governor none -- gap aceptado: capability recipes no autorada en evnto`) -- a genuine, explicit gap, not identity by absence-of-evidence, so evnto has no identity stop for this control."
+      }
+    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
+    "negativeControls": [
+      "control height remains fixed",
+      "color remains fixed",
+      "border remains fixed",
+      "motion remains fixed"
+    ],
+    "coincidentalIdentityExclusionNote": "Measured, not guessed: 2 of the 9 (stop x vertical) combinations are structurally excluded from the DB arm, not just non-movers. `rottay/technical-sharp@1` against rottay, and `rottay/network-professional@1` against bithire, are each that VERTICAL'S OWN authored identity -- writing the SAME value through the DB tenant document makes the compiler's own artifact-diff elide the channel entirely: the DB arm throws `StopExclusionError` (class COMPILER_ELIDES_VERTICAL_DEFAULT, a recognised, publishable exclusion) with 'emitted none of the declared channels ... in ANY scope -- not in the base map and not in any mode block'. The static arm does not crash but shows the same underlying fact differently: `moved=0`, byte-identical to the baseline (measured directly, both combinations). This is a STRONGER version of the same class typography.pairing already named for bithire/sober (F4B-11) -- there the DB arm still emitted the channel, unmoved; here it does not emit at all. Excluded from the receipted matrix for this reason (7 of 9 combinations receipted: technical-sharp x {bithire,evnto}, network-professional x {rottay,evnto}, editorial-round x all 3 -- editorial-round is nobody's identity, so it alone reaches all 3 verticals cleanly).",
+    "negativeControlsScopeNote": "`font metrics remain fixed` is deliberately NOT declared for this control: --ds-recipe-profile is pure selection provenance (a quoted id string, never consumed by any live CSS reader -- see witnessScopeNote), so asserting a font-metrics negative control here would assert against a property this control has no mechanism to move in the first place, not a meaningful boundary. The 4 declared negatives hold trivially for the same reason -- the channel this control writes shares no consume site with color/geometry/typography/motion because it has no consume site at all yet.",
+    "witnessScopeNote": "DT RULING (F4B-15), re-anchored after WO-EMI-02: the witness is documented by the TWO real surfaces, with their exact scopes. (a) --ds-recipe-profile (CSS): emitted by the recipes deriver (lowering/runtime/derivation/recipes/index.ts:65) into the compiled artifacts of rottay/bithire (facade/artifacts/rottay/index.css:865, facade/artifacts/bithire/index.css:855); no engine surface reads it (presentation/adapters/presentation/{modern,rustic}/index.ts:25 declare it provenance of the selection), so it is provenance, not paint. (b) RecipeProfileProvider (JS, provider/index.tsx): the functional reader, fed by ONE transport, the artifact, in three arms: `publishedEngineVisual?.runtime.recipeProfile` (the mounted artifact's compiled runtime block, read after `assertEngineVisualBelongs` has verified it against the tenant; this is the witness symbol), then `appearance?.recipeProfile` (the normalized appearance of an artifact compiled before that block existed), then `governedBehavior?.recipeProfile` (a code-owned vertical: `projectGovernedBehavior` fills it from `firstPartyArtifactRecipeProfile`, the generated runtime half of the vertical's own compile, tenant/foundation/configuration/registry/index.ts:176 -- rottay technical-sharp, bithire network-professional, evnto none). No arm re-derives the selection from an authored theme. The two surfaces are two projections of one compile: `mountTenantTheme` (theming/composition/mount/index.ts:234) refuses by name when the shipped runtime block disagrees with the artifact's compile, and the SSR root attributes stamp the same id as `data-recipe-profile` (foundation/root-attributes/ssr/index.ts:157). The CSS channel still has no reader, and no consumer was invented for it (D-1b law).",
+    "recipesFloorAsymmetryNote": "`tenantPostureFloors` does NOT project `recipes` (only typography/surfaces/motion, tenant-theme/index.ts:1830-1844) -- the DB arm's composition of `recipes` depends ENTIRELY on `resolveTheme`'s generic `mergeDeep` (tenant-theme/index.ts:2007), with no E-1/W-B-style floor re-applying it at the end of `compileTheme`. Measured as sufficient for this control's own shape (W-B's argument, reused): there is no vertical-authored 'ladder' for recipe selection that could out-rank a tenant's own choice post-merge the way surfaces.elevation or typography's pairing preset could -- a real asymmetry against the other floored fields, named here rather than silently matched to their pattern.",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
+    "sourceBindings": [
+      "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts",
+      "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
+      "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"
+    ],
+    "catalog": [
+      "rottay/technical-sharp@1",
+      "rottay/network-professional@1",
+      "rottay/editorial-round@1"
+    ],
+    "catalogLaw": "catalogo en calibration, NO en enumValues: cerrado por registro (recipe-profiles/index.ts:74-111)",
+    "channels": []
+  },
+  "retiredAliases": []
+}

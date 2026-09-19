@@ -17,13 +17,13 @@
     "collapsesLegacy": "este artefacto NO se reconcilia con roots[].collapsesLegacy.total: esa cifra es salida de un clasificador que no existe, no reproduce por ninguna via disponible, incluye `duplicado` (criterio prohibido) y esta medida sobre otro denominador y otro arbol."
   },
   "provenance": {
-    "catalog": "governance/manifest/cascade/catalog/index.json",
+    "catalog": "docs/history/inventories/customization-manifest/cascade/catalog/index.json",
     "catalogRoots": 100,
     "edges": "artifacts/generated/manifest/cascade/edges/index.json",
     "inventory": "scripts/check/tokens/cascade/slots/index.mjs (funcion pura, no el artefacto: leerlo crearia un ciclo)",
-    "ownerTiers": "governance/manifest/cascade/assignments/tiers/index.json",
+    "ownerTiers": "docs/history/inventories/customization-manifest/cascade/assignments/tiers/index.json",
     "ownerTiersFormFailures": [],
-    "ownerStepRules": "governance/manifest/cascade/assignments/steps/index.json",
+    "ownerStepRules": "docs/history/inventories/customization-manifest/cascade/assignments/steps/index.json",
     "ownerStepRulesFormFailures": [],
     "parentByDesignFailures": []
   },

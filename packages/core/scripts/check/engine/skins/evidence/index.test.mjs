@@ -12,8 +12,8 @@ const REPO_ROOT = findRepoRoot(HERE);
 const CSS_ROOT = path.join(CORE_ROOT, 'src/foundation/tokens/css');
 const ENTRYPOINTS = [path.join(CSS_ROOT, 'facade/entrypoints/base/index.css')];
 const FAMILIES = path.join(
-  CORE_ROOT,
-  'governance/manifest/families',
+  REPO_ROOT,
+  'docs/history/inventories/customization-manifest/families',
 );
 
 /** A family's skin is evidence. If the file it lives in stops shipping, the

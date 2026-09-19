@@ -15,7 +15,7 @@
     "themesModule": "dist/index.js#baselineFor + dist/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/intake/index.js#readGovernedTheme",
     "freshnessProven": true,
     "membershipSource": "artifacts/generated/manifest/cascade/membership/index.json",
-    "catalog": "governance/manifest/cascade/catalog/index.json",
+    "catalog": "docs/history/inventories/customization-manifest/cascade/catalog/index.json",
     "catalogRoots": 100,
     "metadataPrefixes": [
       "THEME.id",

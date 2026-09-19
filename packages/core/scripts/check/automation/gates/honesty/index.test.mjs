@@ -48,8 +48,17 @@ function runOnSyntheticTree(scriptRelativePath, files) {
   // The gates resolve their root through the shared helper, so the copy needs it too.
   mkdirSync(join(scriptsDir, 'libraries/repo-root'), { recursive: true });
   cpSync(join(SCRIPTS_ROOT, 'libraries/repo-root/index.mjs'), join(scriptsDir, 'libraries/repo-root/index.mjs'));
+  // Quarantined-manifest readers import the shared quarantine path constant.
+  mkdirSync(join(scriptsDir, 'libraries/manifest'), { recursive: true });
+  cpSync(join(SCRIPTS_ROOT, 'libraries/manifest/index.mjs'), join(scriptsDir, 'libraries/manifest/index.mjs'));
+  // Gates that resolve the workspace root (the quarantined manifest readers)
+  // need the repo marker; package-root resolution stops at packages/core first.
+  writeFileSync(join(root, 'pnpm-workspace.yaml'), 'packages:\n  - packages/*\n');
   for (const [path, content] of Object.entries(files)) {
-    const target = join(root, 'packages/core', path);
+    // Quarantined-manifest inputs live at the workspace root, outside the package.
+    const target = path.startsWith('docs/')
+      ? join(root, path)
+      : join(root, 'packages/core', path);
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, content);
   }
@@ -124,7 +133,7 @@ test('root-catalog-freshness-gate FAILS on an existe root with no declaration', 
     ],
   };
   const result = runOnSyntheticTree(ROOT_CATALOG_GATE, {
-    'governance/manifest/cascade/catalog/index.json':
+    'docs/history/inventories/customization-manifest/cascade/catalog/index.json':
       JSON.stringify(catalog),
     'src/skin/whatever.css': '.x { color: red; }\n',
     'package.json': JSON.stringify({ name: '@rottay/design-system' }),
@@ -140,7 +149,7 @@ test('root-catalog-freshness-gate FAILS on a por-crear root that gained a declar
     ],
   };
   const result = runOnSyntheticTree(ROOT_CATALOG_GATE, {
-    'governance/manifest/cascade/catalog/index.json':
+    'docs/history/inventories/customization-manifest/cascade/catalog/index.json':
       JSON.stringify(catalog),
     'src/skin/whatever.css': '.x { --ds-fake-head: 1px; }\n',
     'package.json': JSON.stringify({ name: '@rottay/design-system' }),

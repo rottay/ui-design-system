@@ -88,7 +88,8 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
+import { QUARANTINE_MANIFEST_REL } from '../../../../libraries/manifest/index.mjs';
 import { readThemeCatalogRecords } from '../../../../libraries/theme-catalog/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -205,9 +206,12 @@ export function analyse({ inventory, membership, catalog, literalPins, controlsW
 
 export function readTree(coreRoot = CORE_ROOT) {
   const read = (relative) => JSON.parse(readFileSync(join(coreRoot, relative), 'utf8'));
+  // The catalog is quarantined evidence (WO-RET-03): resolved through the
+  // workspace root, so a sandboxed coreRoot stays inside its own copy.
+  const quarantineRead = (relative) => JSON.parse(readFileSync(join(findRepoRoot(coreRoot), QUARANTINE_MANIFEST_REL, relative), 'utf8'));
   const inventory = read('artifacts/generated/manifest/cascade/slots/index.json');
   const membership = read('artifacts/generated/manifest/cascade/membership/index.json');
-  const catalog = read('governance/manifest/cascade/catalog/index.json');
+  const catalog = quarantineRead('cascade/catalog/index.json');
   const edges = read('artifacts/generated/manifest/cascade/edges/index.json');
   const contractSource = readFileSync(
     join(coreRoot, 'src/foundation/contracts/composition/tenants/themes/index.ts'), 'utf8');

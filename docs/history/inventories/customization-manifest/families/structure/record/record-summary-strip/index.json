@@ -1,0 +1,2839 @@
+{
+  "schemaVersion": 1,
+  "familyId": "structure/record/record-summary-strip",
+  "identity": {
+    "layer": "structure",
+    "category": "record",
+    "name": "RecordSummaryStrip",
+    "components": [
+      "RecordSummaryStrip"
+    ],
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/record/summary-strip",
+    "publicComponents": [
+      "RecordSummaryStrip"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "7deddec3ce19698aa1f659c79cdc71d5aa63f8e5740fecc6c2426d7cb8915bea"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/components/structures/record/summary-strip",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+    ],
+    "stableParts": [
+      "summary-strip",
+      "summary-grid",
+      "summary-item",
+      "summary-item-skeleton-label",
+      "summary-item-skeleton-value",
+      "summary-item-label",
+      "summary-item-value",
+      "summary-item-helper"
+    ],
+    "states": [
+      "empty",
+      "loading",
+      "aria-busy"
+    ],
+    "variantAxes": [
+      "data-mono",
+      "data-structure",
+      "data-variant"
+    ],
+    "propertyGroups": [],
+    "invariants": [
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:609, packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:612]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "structure-merged",
+        "scoutArtifact": [
+          "mr-anatomy-structure-a.json",
+          "mr-anatomy-structure-full.json"
+        ],
+        "scoutSelfGradedConfidence": {
+          "mr-anatomy-structure-a.json": "SOURCE_BOUND",
+          "mr-anatomy-structure-full.json": "SOURCE_BOUND"
+        },
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 8,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "summary-strip",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:63"
+        },
+        {
+          "part": "summary-grid",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:72"
+        },
+        {
+          "part": "summary-item",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:74"
+        },
+        {
+          "part": "summary-item-skeleton-label",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:81"
+        },
+        {
+          "part": "summary-item-skeleton-value",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:84"
+        },
+        {
+          "part": "summary-item-label",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:91"
+        },
+        {
+          "part": "summary-item-value",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:98"
+        },
+        {
+          "part": "summary-item-helper",
+          "anchorKind": "data-part",
+          "anchor": "packages/core/src/components/structures/record/summary-strip/index.tsx:106"
+        }
+      ],
+      "stateAnchors": [
+        {
+          "token": "empty=false",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:654"
+          ],
+          "state": "empty"
+        },
+        {
+          "token": "empty=true",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:660"
+          ],
+          "state": "empty"
+        },
+        {
+          "token": "data-loading",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/components/structures/record/summary-strip/index.tsx:66"
+          ],
+          "state": "loading"
+        },
+        {
+          "token": "aria-busy",
+          "axis": "aria-attribute",
+          "at": [
+            "packages/core/src/components/structures/record/summary-strip/index.tsx:67"
+          ],
+          "state": "aria-busy"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "mono=false",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:648"
+          ]
+        },
+        {
+          "token": "mono=true",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:226",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:647"
+          ]
+        },
+        {
+          "token": "structure=record",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:646",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:647",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:648"
+          ]
+        },
+        {
+          "token": "variant",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:200",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:201",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:205"
+          ]
+        },
+        {
+          "token": "variant=default",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:146",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:147",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:179"
+          ]
+        },
+        {
+          "token": "variant=editorial",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:151",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:183"
+          ]
+        },
+        {
+          "token": "variant=governance",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:187"
+          ]
+        },
+        {
+          "token": "variant=metrics",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:142",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:166"
+          ]
+        },
+        {
+          "token": "variant=technical",
+          "axis": "css-selector",
+          "at": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:138",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:156",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157"
+          ]
+        },
+        {
+          "token": "data-mono",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/components/structures/record/summary-strip/index.tsx:99"
+          ]
+        },
+        {
+          "token": "data-structure",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/components/structures/record/summary-strip/index.tsx:64"
+          ]
+        },
+        {
+          "token": "data-variant",
+          "axis": "stamped-data-attribute",
+          "at": [
+            "packages/core/src/components/structures/record/summary-strip/index.tsx:65"
+          ]
+        }
+      ],
+      "hostConditionAnchors": {
+        "entries": [
+          {
+            "token": "@container ds-record-summary (inline-size < 30rem) >> .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:612"
+            ]
+          },
+          {
+            "token": "@container ds-record-summary (inline-size < 30rem) >> .ds-structure.ds-record[data-part='summary-strip']",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:609"
+            ]
+          },
+          {
+            "token": "@media(forced-colors: active)",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:646",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:647",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:648"
+            ]
+          }
+        ],
+        "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
+      },
+      "structuralPositionAnchors": {
+        "entries": [
+          {
+            "token": "empty"
+          },
+          {
+            "token": "empty",
+            "axis": "css-selector",
+            "at": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:660"
+            ]
+          }
+        ],
+        "reason": "Position within a collection. Not a state and not a variant axis."
+      },
+      "engineDivergence": {
+        "hasEnginesDirectory": false,
+        "paintLayerBreakdown": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css": {
+            "rows": 46,
+            "layer": "engine-agnostic skin"
+          }
+        },
+        "engineQualifiedSelectorReads": {},
+        "nestedPrimitiveEngineVariantReads": {},
+        "nestedPrimitiveEngineVariantEvidence": {},
+        "enginesCoveredByVariantBranches": [],
+        "enginesMissingFromVariantBranches": [],
+        "finding": "MEASURED: no engine-qualified selector, no nested-primitive engine-variant class and no engine-scoped paint file participates in this family; its paint is engine-agnostic"
+      },
+      "scoutGaps": {
+        "scopeLimits": [
+          "CSS corpus indexed is packages/core/src/foundation/tokens/css/** excluding the generated facade/artifacts snapshot; a rule living outside that tree would not be seen",
+          "attribution is by stamped class token and by data-part inside a purely shared class scope; a rule reaching this family only through an element or descendant selector carrying no owned class token is not counted"
+        ]
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupEvidence": {
+          "border": {
+            "declarationCount": 6,
+            "properties": [
+              "border",
+              "border-color"
+            ]
+          },
+          "color": {
+            "declarationCount": 14,
+            "properties": [
+              "background",
+              "background-image",
+              "color"
+            ]
+          },
+          "internal-channel": {
+            "declarationCount": 1,
+            "properties": []
+          },
+          "layout": {
+            "declarationCount": 6,
+            "properties": [
+              "align-items",
+              "container",
+              "display",
+              "grid-template-columns"
+            ]
+          },
+          "radius": {
+            "declarationCount": 1,
+            "properties": [
+              "border-radius"
+            ]
+          },
+          "size": {
+            "declarationCount": 4,
+            "properties": [
+              "block-size",
+              "inline-size",
+              "min-inline-size"
+            ]
+          },
+          "spacing": {
+            "declarationCount": 5,
+            "properties": [
+              "gap",
+              "padding"
+            ]
+          },
+          "typography": {
+            "declarationCount": 9,
+            "properties": [
+              "font-family",
+              "font-size",
+              "font-variant-numeric",
+              "letter-spacing",
+              "line-height",
+              "text-transform",
+              "word-break"
+            ]
+          }
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "customPropertyCensus": [
+          {
+            "variable": "--_ds-record-summary-padding",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:121",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "calc(18px * var(--_ds-record-density, 1))",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:609"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-record-density",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:121",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip']",
+            "states": [],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-radius-xl",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:122",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip']",
+            "states": [],
+            "landsOn": "border-radius",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "18px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--_ds-record-density",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:126",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "padding",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-record-density",
+            "part": "summary-grid",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:134",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid']",
+            "states": [],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-record-density",
+            "part": "summary-grid",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:142",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-grid']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:146",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='default']",
+            "states": [
+              "variant=default"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2121",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-edge-standard-width",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:147",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='default']",
+            "states": [
+              "variant=default"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:217",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:222"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:147",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='default']",
+            "states": [
+              "variant=default"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:30"
+            ],
+            "declarationSiteCount": 7
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:151",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial']",
+            "states": [
+              "variant=editorial"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:151",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial']",
+            "states": [
+              "variant=editorial"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2121",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-edge-standard-width",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial']",
+            "states": [
+              "variant=editorial"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:217",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:222"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial']",
+            "states": [
+              "variant=editorial"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:30"
+            ],
+            "declarationSiteCount": 7
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial']",
+            "states": [
+              "variant=editorial"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:156",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='technical']",
+            "states": [
+              "variant=technical"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2121",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-edge-standard-width",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='technical']",
+            "states": [
+              "variant=technical"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:217",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:222"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='technical']",
+            "states": [
+              "variant=technical"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:30"
+            ],
+            "declarationSiteCount": 7
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='technical']",
+            "states": [
+              "variant=technical"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:161",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='governance']",
+            "states": [
+              "variant=governance"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:161",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='governance']",
+            "states": [
+              "variant=governance"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2121",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-edge-standard-width",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='governance']",
+            "states": [
+              "variant=governance"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:217",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:222"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-border",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='governance']",
+            "states": [
+              "variant=governance"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:28"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='governance']",
+            "states": [
+              "variant=governance"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-bg-primary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:166",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:147"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-bg-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:166",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "background",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "surface",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2121",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
+            ],
+            "declarationSiteCount": 4
+          },
+          {
+            "variable": "--ds-edge-standard-width",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:167",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1px",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:217",
+              "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:222"
+            ],
+            "declarationSiteCount": 6
+          },
+          {
+            "variable": "--ds-color-border-secondary",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:167",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "border",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "frame",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:30"
+            ],
+            "declarationSiteCount": 7
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "part": "summary-item-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:179",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] [data-part='summary-item-label'], .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] [data-part='summary-item-label'], .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-label']",
+            "states": [
+              "variant=default",
+              "variant=technical",
+              "variant=metrics"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "part": "summary-item-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:183",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] [data-part='summary-item-label']",
+            "states": [
+              "variant=editorial"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:57",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2129"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "part": "summary-item-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:187",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] [data-part='summary-item-label']",
+            "states": [
+              "variant=governance"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "part": "summary-item-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:187",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] [data-part='summary-item-label']",
+            "states": [
+              "variant=governance"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--ds-font-family-mono",
+            "part": "summary-item-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:191",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-label']",
+            "states": [],
+            "landsOn": "font-family",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "monospace",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:194"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-typography-label-transform",
+            "part": "summary-item-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:196",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-label']",
+            "states": [],
+            "landsOn": "text-transform",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "uppercase",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:105",
+              "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:285",
+              "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:407"
+            ],
+            "declarationSiteCount": 3
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "part": "summary-item-value",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:200",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-value']",
+            "states": [
+              "variant"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
+            ],
+            "declarationSiteCount": 8
+          },
+          {
+            "variable": "--ds-type-numeric-font-variant-numeric",
+            "part": "summary-item-value",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:205",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-value']",
+            "states": [
+              "variant"
+            ],
+            "landsOn": "font-variant-numeric",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "normal",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:210",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:575"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "part": "summary-item-skeleton-label",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:218",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-label']",
+            "states": [],
+            "landsOn": "block-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.75rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--ds-font-size-sm",
+            "part": "summary-item-skeleton-value",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:222",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-skeleton-value']",
+            "states": [],
+            "landsOn": "block-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "0.875rem",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:609",
+              "packages/core/tests/fixtures/tenants/default/index.css:30"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-font-family-mono",
+            "part": "summary-item-value",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:226",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-value'][data-mono='true']",
+            "states": [
+              "mono=true"
+            ],
+            "landsOn": "font-family",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "monospace",
+            "hasFallback": true,
+            "fallbackKind": "literal-other",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508",
+              "packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/document-patch/index.ts:194"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-record-heading-font-size",
+            "part": "summary-item-value",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:230",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-value']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "font-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "var(--ds-font-size-lg)",
+            "hasFallback": true,
+            "fallbackKind": "chained-custom-property",
+            "declarationStatus": "UNDECLARED",
+            "declarationSites": [],
+            "declarationSiteCount": 0
+          },
+          {
+            "variable": "--ds-font-size-lg",
+            "part": "summary-item-value",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:230",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-value']",
+            "states": [
+              "variant=metrics"
+            ],
+            "landsOn": "font-size",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "typography",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:611",
+              "packages/core/tests/fixtures/tenants/default/index.css:32"
+            ],
+            "declarationSiteCount": 2
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "part": "summary-item-helper",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:237",
+            "selector": ".ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-helper']",
+            "states": [
+              "variant"
+            ],
+            "landsOn": "color",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "ink",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": null,
+            "hasFallback": false,
+            "fallbackKind": "none",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:57",
+              "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2129"
+            ],
+            "declarationSiteCount": 9
+          },
+          {
+            "variable": "--_ds-record-density",
+            "part": "summary-strip",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:609",
+            "selector": "@container ds-record-summary (inline-size < 30rem) >> .ds-structure.ds-record[data-part='summary-strip']",
+            "states": [
+              "@container ds-record-summary (inline-size < 30rem) >> .ds-structure.ds-record[data-part='summary-strip']"
+            ],
+            "landsOn": "--_ds-record-summary-padding",
+            "landsOnKind": "css-custom-property-definition",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "resolved-through-downstream-observable-reads",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
+            ],
+            "declarationSiteCount": 1
+          },
+          {
+            "variable": "--_ds-record-density",
+            "part": "summary-grid",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:612",
+            "selector": "@container ds-record-summary (inline-size < 30rem) >> .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid']",
+            "states": [
+              "@container ds-record-summary (inline-size < 30rem) >> .ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-grid']"
+            ],
+            "landsOn": "gap",
+            "landsOnKind": "observable-css-property",
+            "landsOnConfidence": "SOURCE_BOUND",
+            "propertyGroup": "geometry",
+            "propertyGroupSource": "direct-observable-property",
+            "fallback": "1",
+            "hasFallback": true,
+            "fallbackKind": "literal-scalar",
+            "declarationStatus": "DECLARED",
+            "declarationSites": [
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
+            ],
+            "declarationSiteCount": 1
+          }
+        ],
+        "readCensus": {
+          "distinctVariables": 18,
+          "totalReadSites": 43,
+          "variables": [
+            {
+              "variable": "--_ds-record-summary-padding",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:121",
+                  "part": "summary-strip",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "calc(18px * var(--_ds-record-density, 1))",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            },
+            {
+              "variable": "--_ds-record-density",
+              "totalReadSites": 6,
+              "parts": [
+                "summary-grid",
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:121",
+                  "part": "summary-strip",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:126",
+                  "part": "summary-strip",
+                  "landsOn": "padding",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:134",
+                  "part": "summary-grid",
+                  "landsOn": "gap",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:142",
+                  "part": "summary-grid",
+                  "landsOn": "gap",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:609",
+                  "part": "summary-strip",
+                  "landsOn": "--_ds-record-summary-padding",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": "@container ds-record-summary (inline-size < 30rem)",
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:612",
+                  "part": "summary-grid",
+                  "landsOn": "gap",
+                  "fallbackPresent": true,
+                  "fallback": "1",
+                  "atRule": "@container ds-record-summary (inline-size < 30rem)",
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": null,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-radius-xl",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:122",
+                  "part": "summary-strip",
+                  "landsOn": "border-radius",
+                  "fallbackPresent": true,
+                  "fallback": "18px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772"
+            },
+            {
+              "variable": "--ds-color-bg-secondary",
+              "totalReadSites": 5,
+              "parts": [
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:146",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:151",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:156",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:161",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:166",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138"
+            },
+            {
+              "variable": "--ds-edge-standard-width",
+              "totalReadSites": 5,
+              "parts": [
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:147",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": true,
+                  "fallback": "1px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": true,
+                  "fallback": "1px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": true,
+                  "fallback": "1px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": true,
+                  "fallback": "1px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:167",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": true,
+                  "fallback": "1px",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
+            },
+            {
+              "variable": "--ds-color-border-secondary",
+              "totalReadSites": 4,
+              "parts": [
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:147",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:167",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:148"
+            },
+            {
+              "variable": "--ds-color-bg-primary",
+              "totalReadSites": 5,
+              "parts": [
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:151",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:161",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:166",
+                  "part": "summary-strip",
+                  "landsOn": "background",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:137"
+            },
+            {
+              "variable": "--ds-color-text-muted",
+              "totalReadSites": 3,
+              "parts": [
+                "summary-item-label",
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:179",
+                  "part": "summary-item-label",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:187",
+                  "part": "summary-item-label",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:145"
+            },
+            {
+              "variable": "--ds-color-border",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-strip"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+                  "part": "summary-strip",
+                  "landsOn": "border",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:147"
+            },
+            {
+              "variable": "--ds-color-text-secondary",
+              "totalReadSites": 2,
+              "parts": [
+                "summary-item-helper",
+                "summary-item-label"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:183",
+                  "part": "summary-item-label",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:237",
+                  "part": "summary-item-helper",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:144"
+            },
+            {
+              "variable": "--ds-color-text-primary",
+              "totalReadSites": 2,
+              "parts": [
+                "summary-item-label",
+                "summary-item-value"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:187",
+                  "part": "summary-item-label",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:200",
+                  "part": "summary-item-value",
+                  "landsOn": "color",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:143"
+            },
+            {
+              "variable": "--ds-font-family-mono",
+              "totalReadSites": 2,
+              "parts": [
+                "summary-item-label",
+                "summary-item-value"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:191",
+                  "part": "summary-item-label",
+                  "landsOn": "font-family",
+                  "fallbackPresent": true,
+                  "fallback": "monospace",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                },
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:226",
+                  "part": "summary-item-value",
+                  "landsOn": "font-family",
+                  "fallbackPresent": true,
+                  "fallback": "monospace",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508"
+            },
+            {
+              "variable": "--ds-typography-label-transform",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-item-label"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:196",
+                  "part": "summary-item-label",
+                  "landsOn": "text-transform",
+                  "fallbackPresent": true,
+                  "fallback": "uppercase",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:105"
+            },
+            {
+              "variable": "--ds-type-numeric-font-variant-numeric",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-item-value"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:205",
+                  "part": "summary-item-value",
+                  "landsOn": "font-variant-numeric",
+                  "fallbackPresent": true,
+                  "fallback": "normal",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:575"
+            },
+            {
+              "variable": "--ds-font-size-xs",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-item-skeleton-label"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:218",
+                  "part": "summary-item-skeleton-label",
+                  "landsOn": "block-size",
+                  "fallbackPresent": true,
+                  "fallback": "0.75rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
+            },
+            {
+              "variable": "--ds-font-size-sm",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-item-skeleton-value"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:222",
+                  "part": "summary-item-skeleton-value",
+                  "landsOn": "block-size",
+                  "fallbackPresent": true,
+                  "fallback": "0.875rem",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:609"
+            },
+            {
+              "variable": "--ds-record-heading-font-size",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-item-value"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:230",
+                  "part": "summary-item-value",
+                  "landsOn": "font-size",
+                  "fallbackPresent": true,
+                  "fallback": "var(--ds-font-size-lg)",
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": false,
+              "declarationSite": null
+            },
+            {
+              "variable": "--ds-font-size-lg",
+              "totalReadSites": 1,
+              "parts": [
+                "summary-item-value"
+              ],
+              "readSites": [
+                {
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:230",
+                  "part": "summary-item-value",
+                  "landsOn": "font-size",
+                  "fallbackPresent": false,
+                  "fallback": null,
+                  "atRule": null,
+                  "layer": "presentation-skin"
+                }
+              ],
+              "declaredInPackage": true,
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:611"
+            }
+          ]
+        },
+        "undeclaredReads": [
+          {
+            "variable": "--ds-record-heading-font-size",
+            "reads": 1,
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:230",
+            "fallbackPresent": true,
+            "fallback": "var(--ds-font-size-lg)",
+            "landsOn": "font-size"
+          }
+        ],
+        "inertFallbackChainSample": [
+          {
+            "name": "--ds-radius-xl",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:122",
+            "fallback": "18px",
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:45"
+          },
+          {
+            "name": "--ds-edge-standard-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:147",
+            "fallback": "1px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
+          },
+          {
+            "name": "--ds-edge-standard-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:152",
+            "fallback": "1px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
+          },
+          {
+            "name": "--ds-edge-standard-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:157",
+            "fallback": "1px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
+          },
+          {
+            "name": "--ds-edge-standard-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:162",
+            "fallback": "1px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
+          },
+          {
+            "name": "--ds-edge-standard-width",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:167",
+            "fallback": "1px",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:191",
+            "fallback": "monospace",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508"
+          },
+          {
+            "name": "--ds-typography-label-transform",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:196",
+            "fallback": "uppercase",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:105"
+          },
+          {
+            "name": "--ds-type-numeric-font-variant-numeric",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:205",
+            "fallback": "normal",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:575"
+          },
+          {
+            "name": "--ds-font-size-xs",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:218",
+            "fallback": "0.75rem",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
+          },
+          {
+            "name": "--ds-font-size-sm",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:222",
+            "fallback": "0.875rem",
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:30"
+          },
+          {
+            "name": "--ds-font-family-mono",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:226",
+            "fallback": "monospace",
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508"
+          }
+        ],
+        "inertFallbackChainSites": 12,
+        "hardcodedValues": [
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 126,
+            "property": "padding",
+            "literal": "20px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 133,
+            "property": "grid-template-columns",
+            "literal": "11.25rem",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 134,
+            "property": "gap",
+            "literal": "16px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 138,
+            "property": "grid-template-columns",
+            "literal": "13.75rem",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 142,
+            "property": "gap",
+            "literal": "18px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 192,
+            "property": "letter-spacing",
+            "literal": "0.12em",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": null
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 609,
+            "property": "--_ds-record-summary-padding",
+            "literal": "14px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-record-summary (inline-size < 30rem)"
+          },
+          {
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+            "line": 612,
+            "property": "gap",
+            "literal": "12px",
+            "classification": "UNGOVERNED_GEOMETRY",
+            "atRule": "@container ds-record-summary (inline-size < 30rem)"
+          }
+        ],
+        "paintOwnership": {
+          "owners": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css": {
+              "rows": 46,
+              "layer": "engine-agnostic skin"
+            }
+          },
+          "attribution": {
+            "viaPrefixedOwnedClassToken": 0,
+            "viaUniqueDataPartInSharedClassScope": 46,
+            "viaGenericTokenInsideEstablishedPaintOwner": 0
+          },
+          "ownedClassTokens": [],
+          "sharedClassTokens": [
+            "ds-record",
+            "ds-structure"
+          ],
+          "utilityClassTokensExcluded": [],
+          "foreignStampSitesOfOwnedTokens": {},
+          "bareDsLiteralsPromotedToClass": [],
+          "bareDsLiteralsNotUsedAsAnyClassSelector": [],
+          "matchedRuleRows": 46
+        },
+        "measuredAbsence": {
+          "rawSourceOccurrences": {
+            "className": 1,
+            "dataPart": 8,
+            "styleAttribute": 1
+          },
+          "perFile": {
+            "packages/core/src/components/structures/record/summary-strip/index.tsx": {
+              "classNameOccurrences": 1,
+              "dataPartOccurrences": 8,
+              "styleAttributeOccurrences": 1,
+              "lines": 118
+            }
+          },
+          "cssRuleRowsAttributedToThisFamily": 46,
+          "customPropertyReadsAttributed": 43,
+          "inlineStyleCustomPropertyReads": 0,
+          "verdict": "NOT_ABSENT: this family owns attributed paint (see customPropertyCensus)"
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS",
+    "sourceBindingsNote": "TAREA sourceBindings-incompletos: agregado tras verificacion POR SELECTOR - record.css scopeado a [data-part='summary-strip'] (24 reglas); los canales nuevos sin socket quedan SIN adjudicar en esta tarea por orden del DT"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "color.mode",
+            "socketPattern": null,
+            "prop": "idem",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "sin socket propio; mismo mecanismo",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "uncoveredByDesign": {
+          "VERIFICADO SIN PINTURA PROPIA (FAM-14 punto 3)": [
+            "el tsx pinta solo la clase base compartida .ds-structure (record.css); cero canales propios; el sustrato .ds-structure se decide a nivel grupo record"
+          ],
+          "DUPLICADO grupo B (marcado, sin resolver por orden del DT)": [
+            "--_ds-record-facts-section-gap declarado por 3 filas record/* a la vez"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-color-bg-elevated",
+            "--ds-color-bg-primary",
+            "--ds-color-bg-secondary",
+            "--ds-color-border",
+            "--ds-color-border-secondary",
+            "--ds-color-error",
+            "--ds-color-primary",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-color-text-secondary",
+            "--ds-color-text-tertiary",
+            "--ds-motion-fast"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason) [FAM-20c: transversales, 9-104 lectores]": [
+            "--ds-surface-canvas",
+            "--ds-surface-card"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels/valores del record sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-type-numeric-font-variant-numeric"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "labels/valores del record sobre la base compartida",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-font-family-mono"
+          ]
+        },
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-font-size-lg",
+            "--ds-font-size-sm",
+            "--ds-font-size-xs"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-record-heading-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-record-summary-strip-title-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-record-summary-strip-value-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-radius-lg",
+            "--ds-radius-sm",
+            "--ds-radius-xl"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-record-summary-strip-panel-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "las acciones del record son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
+        "source": "gap-audit-independent"
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-edge-standard-width"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-record-summary-strip-density-factor",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": null,
+            "socketPattern": null,
+            "prop": "consumo via cascada (nivel 2)",
+            "tier": "standard",
+            "examples": [],
+            "noSocketReason": "CONSUMO, no socket propio (dedup Grupo B): el dueno del namespace es pattern/data/record-facts (pinta ds-record-facts) por regla de pintor/lector; un socket, un dueno.",
+            "socketsResolved": true,
+            "carrier": "shared-channel",
+            "ownedBy": "pattern/data/record-facts",
+            "channels": [
+              "--ds-record-facts-section-gap"
+            ]
+          }
+        ],
+        "remediatedFrom": "dedup2-grupoB",
+        "reviewedFrom": "anatomy",
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "la ficha no anima por si misma; sus interactivos heredan sockets de inputs",
+        "source": "gap-audit-primary",
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-motion-ease-out"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason) [FAM-20c: transversales, 9-104 lectores]": [
+            "--ds-typography-label-transform"
+          ],
+          "SIN PRODUCTOR en ningun lado (lista conocida de sockets sin productor; no inventar productor aqui)": [
+            "--ds-typography-label-transform"
+          ]
+        },
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "surface.elevation",
+            "why": "Las fichas de registro componen cards; una segunda sombra anidada duplica el plano."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "contenido de trabajo: mate",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "navigation.tone",
+            "why": "Las fichas viven en el lienzo de contenido, no en el chrome."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-record-header-tint",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width"
+          ],
+          "Brazo compartido fundacion (nivel 2/3; noSocketReason) [FAM-20c: transversales, 9-104 lectores]": [
+            "--ds-divider-style",
+            "--ds-divider-width"
+          ],
+          "SIN PRODUCTOR en ningun lado (lista conocida de sockets sin productor; no inventar productor aqui)": [
+            "--ds-divider-style"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-record-summary-strip-rule-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-record-summary-strip-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus parts (summary-strip, summary-grid, summary-item, summary-item-label, summary-item-value, summary-item-helper, summary-item-skeleton-label, summary-item-skeleton-value) no intersectan las lecturas de estado de record.css:314-393, scopeadas a [data-part='field']/[data-part='field-grid'] -- parts de otra familia record; corrobora la celda hermana palette.seeds de este mismo archivo, que ya documenta 'VERIFICADO SIN PINTURA PROPIA... cero canales propios'",
+        "source": "adjudicacion-w-cells-fix",
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-record-summary-strip-icon-stroke-width",
+          "semanticOwner": "profiles.icon",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "structure/record/record-summary-strip"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

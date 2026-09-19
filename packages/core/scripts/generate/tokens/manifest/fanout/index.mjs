@@ -24,8 +24,6 @@ import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PACKAGE_ROOT = findPackageRoot(HERE);
-/** `generated/` lives at the manifest ROOT; only this producer moved. */
-export const MANIFEST_ROOT = path.join(PACKAGE_ROOT, 'governance/manifest');
 export const OUTPUT_PATH = path.join(PACKAGE_ROOT, 'artifacts/generated/manifest/cascade/fanout/index.json');
 
 /* ─────────────────────────────────────────────────────────────────────────

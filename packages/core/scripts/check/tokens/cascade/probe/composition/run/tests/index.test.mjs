@@ -22,7 +22,7 @@ import { resolve } from 'node:path';
 import { test } from 'node:test';
 
 import { readManifest } from '../../../foundation/negative-controls/index.mjs';
-import { CORE_ROOT } from '../../../foundation/paths/index.mjs';
+import { CORE_ROOT, QUARANTINE_MANIFEST_ROOT } from '../../../foundation/paths/index.mjs';
 import { assertKnownTargetKeys } from '../../../foundation/roster/index.mjs';
 import { composeDbArm, composeStaticArm, lowerStop } from '../../../runtime/ingress/index.mjs';
 import {
@@ -34,8 +34,8 @@ import {
 
 const CONTROL_MANIFEST = readManifest(
   resolve(
-    CORE_ROOT,
-    'governance/manifest/controls/spacing/rhythm/index.json',
+    QUARANTINE_MANIFEST_ROOT,
+    'controls/spacing/rhythm/index.json',
   ),
 );
 

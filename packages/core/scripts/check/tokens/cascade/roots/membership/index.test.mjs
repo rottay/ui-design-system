@@ -584,8 +584,11 @@ test('@parent — COBERTURA: toda regla de la tabla es EJERCIDA por al menos una
   const { readFileSync } = await import('node:fs');
   const { join } = await import('node:path');
   const { PARENT_BY_DESIGN, CORE_ROOT } = await import('./index.mjs');
+  const { repoRoot: findRepoRoot } = await import('../../../../../libraries/repo-root/index.mjs');
+  const { QUARANTINE_MANIFEST_REL } = await import('../../../../../libraries/manifest/index.mjs');
   const url = (relative) => join(CORE_ROOT, relative);
-  const table = JSON.parse(readFileSync(url('governance/manifest/cascade/assignments/steps/index.json'), 'utf8'));
+  const quarantineUrl = (relative) => join(findRepoRoot(CORE_ROOT), QUARANTINE_MANIFEST_REL, relative);
+  const table = JSON.parse(readFileSync(quarantineUrl('cascade/assignments/steps/index.json'), 'utf8'));
   const doc = JSON.parse(readFileSync(url('artifacts/generated/manifest/cascade/membership/index.json'), 'utf8'));
 
   const ownerOf = (slotPath) => slotPath.slice(0, slotPath.lastIndexOf('.'));

@@ -51,7 +51,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
+import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../../libraries/repo-root/index.mjs';
+import { QUARANTINE_MANIFEST_REL } from '../../../../../libraries/manifest/index.mjs';
 import { assertDistFresh } from '../../../../../package/artifacts/freshness/index.mjs';
 import { loadFlatThemeLowering } from '../../../../../libraries/theme-lowering/index.mjs';
 
@@ -141,7 +142,7 @@ export async function loadArm({ coreRoot = CORE_ROOT, importModule = (spec) => i
 export async function buildPurity({ coreRoot = CORE_ROOT, arm = null, inventory = null, catalog = null } = {}) {
   const loaded = arm ?? (await loadArm({ coreRoot }));
   const rows = (inventory ?? JSON.parse(readFileSync(join(coreRoot, 'artifacts/generated/manifest/cascade/slots/index.json'), 'utf8'))).rows;
-  const cat = catalog ?? JSON.parse(readFileSync(join(coreRoot, 'governance/manifest/cascade/catalog/index.json'), 'utf8'));
+  const cat = catalog ?? JSON.parse(readFileSync(join(findRepoRoot(coreRoot), QUARANTINE_MANIFEST_REL, 'cascade/catalog/index.json'), 'utf8'));
   const headOf = new Map((cat.roots ?? []).filter((root) => root.channel).map((root) => [root.rootId, root.channel]));
 
   const scopes = {};

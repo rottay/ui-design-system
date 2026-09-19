@@ -1,0 +1,3040 @@
+{
+  "schemaVersion": 1,
+  "familyId": "primitive/overlay/context-menu",
+  "identity": {
+    "layer": "primitive",
+    "category": "overlay",
+    "name": "ContextMenu",
+    "components": [
+      "ContextMenu"
+    ],
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/overlay/context-menu",
+    "publicComponents": [
+      "ContextMenu"
+    ],
+    "unresolvedPublicComponents": [],
+    "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
+    "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
+    "inventoryRowDigest": "5089693fb949ed6d4bbff5e27f6ef60ffb2064040ee1c3161a9e3621d71e81ed"
+  },
+  "maximumClaim": "SOURCE_BOUND",
+  "review": {
+    "verdict": null,
+    "acceptedSourceDigest": null,
+    "evidenceIds": [],
+    "decisionReason": null
+  },
+  "anatomy": {
+    "assessmentState": "SOURCE_BOUND",
+    "sourceBindings": [
+      "packages/core/src/components/primitives/overlay/context-menu/contracts/index.ts",
+      "packages/core/src/components/primitives/overlay/context-menu/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/overlay/context-menu/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/overlay/context-menu/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/overlay/context-menu/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+    ],
+    "stableParts": [
+      "trigger",
+      "surface",
+      "divider",
+      "group-label",
+      "item-shell",
+      "item",
+      "icon",
+      "label",
+      "shortcut",
+      "submenu-indicator",
+      "submenu",
+      "pointer-anchor"
+    ],
+    "states": [
+      "open",
+      "focus-visible",
+      "disabled",
+      "hover",
+      "active",
+      "submenu-open"
+    ],
+    "variantAxes": [
+      "data-ds-position-strategy",
+      "data-tone"
+    ],
+    "propertyGroups": [],
+    "invariants": [
+      "role-attribute [at src/components/primitives/overlay/context-menu/engines/modern/index.tsx:68, src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:50]",
+      "aria-hidden [at src/components/primitives/overlay/context-menu/engines/modern/index.tsx:227, src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:246]",
+      "tabindex-management [at src/components/primitives/overlay/context-menu/engines/modern/index.tsx:477]",
+      "escape-key-dismiss [at src/components/primitives/overlay/context-menu/engines/modern/index.tsx:215, src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:187]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:344]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:21, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:268, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:272]",
+      "focus-visible-outline [at src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:208, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:228, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:235]",
+      "rtl-logical-properties [at src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:162, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:333, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:339]"
+    ],
+    "sourceEvidence": {
+      "methodProvenance": {
+        "cohort": "feedback-overlay",
+        "scoutArtifact": "mr-anatomy-feedback-overlay.json",
+        "scoutSelfGradedConfidence": "SOURCE_BOUND",
+        "confidenceFieldIsNotLoadBearing": "Admission was decided structurally and from a source index of what the DS actually stamps, not from the scout grade. The double-census adjudication measured scout self-confidence at Cohen kappa 0.179 (REC-4).",
+        "partAnchoringRule": "R-8, decided from source: a part is admitted only where the DS stamps data-part with that name, or a DS component-identity class pair matches. Scout prose is corroboration, not authority.",
+        "sourcePartStampsFound": 12,
+        "dynamicPartExpressionsInSource": 0,
+        "openMethodAxesNotYetRuled": [
+          "part-ownership-across-component-boundaries",
+          "inherited-primitive-paint-attribution",
+          "family-private-channel-inclusion"
+        ]
+      },
+      "partAnchors": [
+        {
+          "part": "trigger",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:472",
+            "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:233",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:94",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:209",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:210",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:211"
+          ]
+        },
+        {
+          "part": "surface",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:494",
+            "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:217",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:99",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:100",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:101",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:102"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "divider",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:141",
+            "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:51",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:160",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:161",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:162",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:163"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "group-label",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:146",
+            "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:63",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:166",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:167",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:168",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:169"
+          ],
+          "atSiteCount": 8
+        },
+        {
+          "part": "item-shell",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:71",
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:108",
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:170",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:179",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:180"
+          ]
+        },
+        {
+          "part": "item",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:71",
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:78",
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:94",
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:108",
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:186",
+            "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:81"
+          ],
+          "atSiteCount": 12
+        },
+        {
+          "part": "icon",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:221",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:302",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:303",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:304",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:305",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:306"
+          ]
+        },
+        {
+          "part": "label",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:222",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:309",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:310",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:311"
+          ]
+        },
+        {
+          "part": "shortcut",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:224",
+            "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:110",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:314",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:315",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:316"
+          ]
+        },
+        {
+          "part": "submenu-indicator",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:227",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:322",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:323",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:324",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:325",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:326"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "submenu",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:237",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:335",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:336",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:337",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:338",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:339"
+          ],
+          "atSiteCount": 7
+        },
+        {
+          "part": "pointer-anchor",
+          "anchorKind": "data-part",
+          "at": [
+            "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:484",
+            "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:245"
+          ],
+          "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
+        }
+      ],
+      "partCensus": {
+        "measuredAbsence": [
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:74, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:75, src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:82]"
+        ]
+      },
+      "stateAnchors": [
+        {
+          "token": "data-open",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:133"
+          ],
+          "state": "open"
+        },
+        {
+          "token": ":focus-visible",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:209",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:210",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:211",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:229"
+          ],
+          "state": "focus-visible"
+        },
+        {
+          "token": ":disabled",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:221",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:225",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:229",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:233"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": ":hover",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:221",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:225",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:247",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:251"
+          ],
+          "state": "hover"
+        },
+        {
+          "token": ":active",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:243",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:265"
+          ],
+          "state": "active"
+        },
+        {
+          "token": "data-disabled=true",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:289",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:290"
+          ],
+          "state": "disabled"
+        },
+        {
+          "token": "data-submenu-open=true",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:329"
+          ],
+          "state": "submenu-open"
+        }
+      ],
+      "variantAxisAnchors": [
+        {
+          "token": "data-ds-position-strategy=anchor-css",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:143",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:144",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:145"
+          ]
+        },
+        {
+          "token": "data-tone=danger",
+          "at": [
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:247",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:251",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:255",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:259"
+          ]
+        }
+      ],
+      "engineDivergence": {
+        "enginesPresent": [
+          "classic",
+          "modern",
+          "rustic"
+        ],
+        "classic": {
+          "emitsDataParts": [],
+          "dataPartCount": 0,
+          "dsVariableReads": 1,
+          "importsAntd": true
+        },
+        "modern": {
+          "emitsDataParts": [
+            "divider",
+            "group-label",
+            "icon",
+            "item",
+            "item-shell",
+            "label",
+            "pointer-anchor",
+            "shortcut",
+            "submenu",
+            "submenu-indicator",
+            "surface",
+            "trigger"
+          ],
+          "dataPartCount": 12,
+          "dsVariableReads": 3,
+          "importsAntd": false
+        },
+        "rustic": {
+          "emitsDataParts": [
+            "divider",
+            "group-label",
+            "item",
+            "pointer-anchor",
+            "shortcut",
+            "surface",
+            "trigger"
+          ],
+          "dataPartCount": 7,
+          "dsVariableReads": 3,
+          "importsAntd": false
+        },
+        "summary": "DIVERGENT: the modern engine emits 12 data-part anchors and the classic engine emits none while importing antd. The modern skin CSS addresses parts exclusively through [data-part], so the anatomy bound here is NOT addressable in the classic engine."
+      },
+      "propertyGroupCensusNote": {
+        "propertyGroupsByPart": {
+          "(scope)": [
+            "opacity",
+            "transform"
+          ],
+          "trigger": [
+            "border-radius",
+            "outline",
+            "outline-offset",
+            "position"
+          ],
+          "surface": [
+            "background",
+            "border",
+            "border-radius",
+            "box-shadow",
+            "color",
+            "inline-size",
+            "list-style",
+            "margin",
+            "max-block-size",
+            "overflow-block",
+            "overflow-inline",
+            "padding",
+            "scrollbar-color",
+            "scrollbar-width"
+          ],
+          "divider": [
+            "background",
+            "background-color",
+            "block-size",
+            "margin-block",
+            "margin-inline"
+          ],
+          "group-label": [
+            "color",
+            "font-family",
+            "font-size",
+            "font-weight",
+            "letter-spacing",
+            "line-height",
+            "padding",
+            "text-transform"
+          ],
+          "item-shell": [
+            "list-style",
+            "min-inline-size"
+          ],
+          "item": [
+            "align-items",
+            "background",
+            "border",
+            "border-radius",
+            "box-shadow",
+            "color",
+            "cursor",
+            "display",
+            "font",
+            "gap",
+            "inline-size",
+            "justify-content",
+            "margin",
+            "min-block-size",
+            "opacity",
+            "outline",
+            "padding",
+            "text-align",
+            "transition"
+          ],
+          "icon": [
+            "block-size",
+            "display",
+            "flex",
+            "inline-size",
+            "place-items"
+          ],
+          "label": [
+            "flex",
+            "min-inline-size",
+            "overflow-wrap"
+          ],
+          "shortcut": [
+            "color",
+            "flex",
+            "font-size"
+          ],
+          "submenu-indicator": [
+            "animation",
+            "color",
+            "display",
+            "flex",
+            "place-items",
+            "transform",
+            "transition"
+          ],
+          "submenu": [
+            "animation",
+            "display",
+            "gap",
+            "list-style",
+            "margin",
+            "padding",
+            "padding-inline-start"
+          ]
+        },
+        "status": "UNRATIFIED OBSERVATION. anatomy.propertyGroups itself is untouched and stays blocked on the propertyGroup vocabulary ratification."
+      },
+      "variableReadCensus": {
+        "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
+        "channelCensus": [
+          {
+            "variable": "--ds-context-menu-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "inline-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:99",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "inline-size",
+                "fallback": "14rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-padding",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "padding"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:101",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "padding",
+                "fallback": "var(--ds-spacing-2)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-2",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "item",
+              "surface"
+            ],
+            "landsOn": [
+              "gap",
+              "padding"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685",
+              "src/foundation/tokens/css/foundation/base/density/index.css:79"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:101",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "padding",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:189",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "gap",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-radius",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border-radius"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:106",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": "var(--ds-radius-xl)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-radius-xl",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border-radius"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "tests/fixtures/tenants/default/index.css:45",
+              "tests/fixtures/tenants/quality-evidence/index.ts:352",
+              "tests/fixtures/tenants/quality-evidence/index.ts:475"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:772"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:106",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-texture",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:290",
+              "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:329"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "TENANT_FACING_CANDIDATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:115",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": "none",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-elevation-surface-3",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:116",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:116",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-background",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:600",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:117",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": "var(--ds-surface-card)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-surface-card",
+            "namespace": "public",
+            "readCount": 7,
+            "partsRead": [
+              "item",
+              "surface"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "tests/fixtures/tenants/quality-evidence/index.ts:320",
+              "tests/fixtures/tenants/quality-evidence/index.ts:425",
+              "tests/fixtures/tenants/quality-evidence/index.ts:540"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:265"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:117",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:224",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:232",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:242",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:250",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:258",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:264",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-shadow",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:121",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": "var(--ds-material-overlay-shadow, var(--ds-elevation-3))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-shadow",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "TENANT_FACING_CANDIDATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:123",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": "var(--ds-elevation-3)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-elevation-3",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1082",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:351",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:123",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "box-shadow",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-border-color",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:133",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": "var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-material-overlay-border",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:291"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "TENANT_FACING_CANDIDATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:133",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": "color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-border",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "border",
+              "scrollbar-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
+              "src/components/patterns/customization/brand-studio/index.tsx:147",
+              "src/components/patterns/customization/brand-studio/index.tsx:165"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2111"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:133",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:153",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "scrollbar-color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-primary",
+            "namespace": "public",
+            "readCount": 6,
+            "partsRead": [
+              "item",
+              "surface",
+              "trigger"
+            ],
+            "landsOn": [
+              "background",
+              "border",
+              "outline",
+              "scrollbar-color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:156"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:133",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "border",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:153",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "scrollbar-color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:209",
+                "readIn": "modern-skin-css",
+                "part": "trigger",
+                "landsOn": "outline",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:224",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:232",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:242",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-max-block-size",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "surface"
+            ],
+            "landsOn": [
+              "max-block-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:151",
+                "readIn": "modern-skin-css",
+                "part": "surface",
+                "landsOn": "max-block-size",
+                "fallback": "min(70vh, 32rem)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-divider-margin-block",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "divider"
+            ],
+            "landsOn": [
+              "margin-block"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:161",
+                "readIn": "modern-skin-css",
+                "part": "divider",
+                "landsOn": "margin-block",
+                "fallback": "4px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-border-subtle",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "divider"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:710",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:973",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1161"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2112"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:163",
+                "readIn": "modern-skin-css",
+                "part": "divider",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-group-padding",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "group-label"
+            ],
+            "landsOn": [
+              "padding"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:166",
+                "readIn": "modern-skin-css",
+                "part": "group-label",
+                "landsOn": "padding",
+                "fallback": "0.375rem 0.75rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-muted",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [
+              "group-label",
+              "shortcut",
+              "submenu-indicator"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/customization/brand-studio/index.tsx:145",
+              "src/components/patterns/customization/brand-studio/index.tsx:163",
+              "tests/fixtures/tenants/quality-evidence/index.ts:308"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2131"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:167",
+                "readIn": "modern-skin-css",
+                "part": "group-label",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:315",
+                "readIn": "modern-skin-css",
+                "part": "shortcut",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:325",
+                "readIn": "modern-skin-css",
+                "part": "submenu-indicator",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-family-heading",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "group-label"
+            ],
+            "landsOn": [
+              "font-family"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
+              "src/components/primitives/display/Typography/Typography.stories.tsx:458",
+              "src/components/primitives/display/Typography/Typography.stories.tsx:464"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:507"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:168",
+                "readIn": "modern-skin-css",
+                "part": "group-label",
+                "landsOn": "font-family",
+                "fallback": "var(--ds-font-family-base)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-family-base",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "group-label"
+            ],
+            "landsOn": [
+              "font-family"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:168",
+                "readIn": "modern-skin-css",
+                "part": "group-label",
+                "landsOn": "font-family",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:206",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "font-family",
+                "fallback": "inherit",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-size-xs",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "group-label",
+              "shortcut"
+            ],
+            "landsOn": [
+              "font-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:608",
+              "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:117"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:608"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:169",
+                "readIn": "modern-skin-css",
+                "part": "group-label",
+                "landsOn": "font-size",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:316",
+                "readIn": "modern-skin-css",
+                "part": "shortcut",
+                "landsOn": "font-size",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-font-weight-medium",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "group-label"
+            ],
+            "landsOn": [
+              "font-weight"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:623"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:623"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:170",
+                "readIn": "modern-skin-css",
+                "part": "group-label",
+                "landsOn": "font-weight",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-group-letter-spacing",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "group-label"
+            ],
+            "landsOn": [
+              "letter-spacing"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:171",
+                "readIn": "modern-skin-css",
+                "part": "group-label",
+                "landsOn": "letter-spacing",
+                "fallback": "0.05em",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-item-padding",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "padding"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:192",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "padding",
+                "fallback": "0.125rem 0.375rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-item-radius",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "border-radius"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:196",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "border-radius",
+                "fallback": "var(--ds-radius-md)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-radius-md",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "item",
+              "trigger"
+            ],
+            "landsOn": [
+              "border-radius"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "tests/integration/theming-precedence/index.test.ts:123",
+              "tests/fixtures/tenants/default/index.css:43",
+              "tests/fixtures/tenants/quality-evidence/index.ts:350"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:770"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:196",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:211",
+                "readIn": "modern-skin-css",
+                "part": "trigger",
+                "landsOn": "border-radius",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-fast",
+            "namespace": "public",
+            "readCount": 6,
+            "partsRead": [
+              "item",
+              "submenu",
+              "submenu-indicator"
+            ],
+            "landsOn": [
+              "(const-indirection:MOTION_DURATION)",
+              "animation",
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/runtime/personality/index.css:925",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:398"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:201",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:202",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:203",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:326",
+                "readIn": "modern-skin-css",
+                "part": "submenu-indicator",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:341",
+                "readIn": "modern-skin-css",
+                "part": "submenu",
+                "landsOn": "animation",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:50",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(const-indirection:MOTION_DURATION)",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-motion-ease-out",
+            "namespace": "public",
+            "readCount": 6,
+            "partsRead": [
+              "item",
+              "submenu",
+              "submenu-indicator"
+            ],
+            "landsOn": [
+              "(const-indirection:MOTION_EASING)",
+              "animation",
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:201",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:202",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:203",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:326",
+                "readIn": "modern-skin-css",
+                "part": "submenu-indicator",
+                "landsOn": "transition",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:341",
+                "readIn": "modern-skin-css",
+                "part": "submenu",
+                "landsOn": "animation",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:51",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "(const-indirection:MOTION_EASING)",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-focus-ring-width",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "trigger"
+            ],
+            "landsOn": [
+              "outline"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:872"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:872"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:209",
+                "readIn": "modern-skin-css",
+                "part": "trigger",
+                "landsOn": "outline",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-focus-ring-color",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "trigger"
+            ],
+            "landsOn": [
+              "outline"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1102",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2115",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1543"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:879",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2140"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:209",
+                "readIn": "modern-skin-css",
+                "part": "trigger",
+                "landsOn": "outline",
+                "fallback": "var(--ds-color-primary)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-focus-ring-offset",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "trigger"
+            ],
+            "landsOn": [
+              "outline-offset"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:873"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:873"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:210",
+                "readIn": "modern-skin-css",
+                "part": "trigger",
+                "landsOn": "outline-offset",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-item-color-hover",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:221",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": "var(--ds-color-text-primary)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:229",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": "var(--ds-color-text-primary)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-primary",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/components/patterns/customization/brand-studio/index.tsx:143"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:221",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:229",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-item-bg-hover",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:222",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:230",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-shadow-focus-ring",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "box-shadow"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "tests/fixtures/tenants/rottay/index.css:25",
+              "tests/fixtures/tenants/bithire/index.css:32",
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1097"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:850"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:237",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "box-shadow",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-item-bg-active",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:240",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": "color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-danger-color-hover",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:247",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": "var(--ds-color-error)",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:255",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": "var(--ds-color-error)",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-error",
+            "namespace": "public",
+            "readCount": 6,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "background",
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
+              "src/components/patterns/customization/brand-studio/index.tsx:106",
+              "tests/integration/capability-propagation/tests/index.test.ts:157"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:177"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:247",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:250",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:255",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:258",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:264",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": null,
+                "hasFallback": false
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:293",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "color",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-danger-bg-hover",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:248",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": "color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-surface-card))",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:256",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": "color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-surface-card))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-danger-bg-active",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "background"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:262",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "background",
+                "fallback": "color-mix(in srgb, var(--ds-color-error) 13%, var(--ds-surface-card))",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-touch-target-min",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "min-block-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "scripts/check/touch-targets/tests/touch-target-census.test.ts:161",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:921",
+              "src/foundation/tokens/css/foundation/base/tests/a11y-floors-contract.test.ts:23"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:921"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:285",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "min-block-size",
+                "fallback": "44px",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-context-menu-touch-target-min",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "min-block-size"
+            ],
+            "declaredInPackage": false,
+            "declarationSites": [],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "MODERN_PRIVATE",
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:285",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "min-block-size",
+                "fallback": "2rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-state-disabled-opacity",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "item"
+            ],
+            "landsOn": [
+              "opacity"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:870"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:870"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:290",
+                "readIn": "modern-skin-css",
+                "part": "item",
+                "landsOn": "opacity",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-icon-size-well",
+            "namespace": "public",
+            "readCount": 2,
+            "partsRead": [
+              "icon"
+            ],
+            "landsOn": [
+              "block-size",
+              "inline-size"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:489"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:489"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:305",
+                "readIn": "modern-skin-css",
+                "part": "icon",
+                "landsOn": "inline-size",
+                "fallback": "1.25rem",
+                "hasFallback": true
+              },
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:306",
+                "readIn": "modern-skin-css",
+                "part": "icon",
+                "landsOn": "block-size",
+                "fallback": "1.25rem",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-1",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "submenu"
+            ],
+            "landsOn": [
+              "gap"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684",
+              "src/foundation/tokens/css/foundation/base/density/index.css:78"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:336",
+                "readIn": "modern-skin-css",
+                "part": "submenu",
+                "landsOn": "gap",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-spacing-4",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [
+              "submenu"
+            ],
+            "landsOn": [
+              "padding-inline-start"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687",
+              "src/foundation/tokens/css/foundation/base/density/index.css:81"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css:339",
+                "readIn": "modern-skin-css",
+                "part": "submenu",
+                "landsOn": "padding-inline-start",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-color-text-secondary",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "color"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/classic/index.tsx:45",
+                "readIn": "classic",
+                "part": null,
+                "landsOn": "color",
+                "fallback": "#999",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-z-popover",
+            "namespace": "public",
+            "readCount": 1,
+            "partsRead": [],
+            "landsOn": [
+              "z-index"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/modern/index.tsx:460",
+                "readIn": "modern",
+                "part": null,
+                "landsOn": "z-index",
+                "fallback": null,
+                "hasFallback": false
+              }
+            ]
+          },
+          {
+            "variable": "--ds-personality-animation-entrance-duration",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [],
+            "landsOn": [
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/ts/runtime/personality/index.ts:200"
+            ],
+            "rootDefaultInBundledCss": null,
+            "adjudicationClass": "FOUNDATION_SHARED",
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:102",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "180ms",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:102",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "180ms",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:102",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "180ms",
+                "hasFallback": true
+              }
+            ]
+          },
+          {
+            "variable": "--ds-input-transition-timing",
+            "namespace": "public",
+            "readCount": 3,
+            "partsRead": [],
+            "landsOn": [
+              "transition"
+            ],
+            "declaredInPackage": true,
+            "declarationSites": [
+              "src/foundation/tokens/css/facade/artifacts/rottay/index.css:333",
+              "src/foundation/tokens/css/facade/artifacts/bithire/index.css:503",
+              "src/foundation/tokens/css/presentation/components/input/index.css:263"
+            ],
+            "rootDefaultInBundledCss": [
+              "src/foundation/tokens/css/presentation/components/input/index.css:263"
+            ],
+            "adjudicationClass": null,
+            "reads": [
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:102",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "ease",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:102",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "ease",
+                "hasFallback": true
+              },
+              {
+                "at": "src/components/primitives/overlay/context-menu/engines/rustic/index.tsx:102",
+                "readIn": "rustic",
+                "part": null,
+                "landsOn": "transition",
+                "fallback": "ease",
+                "hasFallback": true
+              }
+            ]
+          }
+        ],
+        "channelCensusCounts": {
+          "distinctVariables": 53,
+          "totalReads": 97,
+          "publicDs": 53,
+          "privateDs": 0,
+          "privateSocketsDeclaredInSkin": []
+        }
+      }
+    },
+    "evidenceIds": [],
+    "nextAction": "RATIFY_PROPERTY_GROUP_VOCABULARY_THEN_BIND_PROPERTY_GROUPS_COMPUTED_PROPERTIES_AND_CHANNELS"
+  },
+  "themeControls": [
+    {
+      "controlId": "palette.seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "uncoveredByDesign": {
+          "Peso/espaciado/decoracion tipografica NO cubiertos (tabla de pairing)": [
+            "--ds-context-menu-group-letter-spacing"
+          ],
+          "Margenes internos NO cubiertos (composicion, no ritmo de pagina)": [
+            "--ds-context-menu-divider-margin-block"
+          ],
+          "Brazos foundation/familia-ajena compartidos": [
+            "--ds-color-border",
+            "--ds-color-border-subtle",
+            "--ds-color-error",
+            "--ds-color-primary",
+            "--ds-color-text-muted",
+            "--ds-color-text-primary",
+            "--ds-context-menu-touch-target-min",
+            "--ds-elevation-3",
+            "--ds-elevation-surface-3",
+            "--ds-focus-ring-color",
+            "--ds-focus-ring-offset",
+            "--ds-focus-ring-width",
+            "--ds-font-family-base",
+            "--ds-font-family-heading",
+            "--ds-font-size-xs",
+            "--ds-font-weight-medium",
+            "--ds-icon-size-well",
+            "--ds-material-overlay-background",
+            "--ds-material-overlay-border",
+            "--ds-material-overlay-shadow",
+            "--ds-material-overlay-texture",
+            "--ds-motion-ease-out",
+            "--ds-motion-fast",
+            "--ds-radius-md",
+            "--ds-radius-xl",
+            "--ds-shadow-focus-ring",
+            "--ds-spacing-1",
+            "--ds-spacing-2",
+            "--ds-spacing-4",
+            "--ds-state-disabled-opacity",
+            "--ds-surface-card",
+            "--ds-touch-target-min"
+          ],
+          "EXCEPCION ARGUMENTADA - Piso de accesibilidad (touch-target): clase propia de exclusion, JAMAS socket - encoger el area tactil bajo el piso WCAG produce mis-taps; el propio mensaje del adjudicador la declara clase aparte y el archivo la contradecia": [
+            "--ds-context-menu-touch-target-min"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-border-color",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-context-menu-item-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-context-menu-danger-color-hover",
+          "semanticOwner": "palette.seeds",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "typography.pairing",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de modal/drawer sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "source": "gap-audit-independent",
+        "bindings": [
+          {
+            "root": "type.pairing",
+            "socketPattern": "(via canales compartidos, sin socket de familia)",
+            "prop": "titulos de modal/drawer sobre los canales heading compartidos",
+            "tier": "standard",
+            "sockets": [],
+            "socketsResolved": true,
+            "why": "debe reflejarse sin socket propio",
+            "noSocketReason": "via canales compartidos, sin socket de familia"
+          }
+        ],
+        "migratedToInternalChannels": true
+      }
+    },
+    {
+      "controlId": "typography.scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-font-size",
+          "semanticOwner": "typography.scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.radius-scale",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-context-menu-item-radius",
+          "semanticOwner": "shape.radius-scale",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "shape.button-style",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "shape.control-silhouette",
+            "why": "pastilla sobre un contenedor colisiona el texto con la curva y rompe el borde de alineacion multilinea: la silueta es una declaracion de CONTROL, los contenedores siguen corner."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "density.mode",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "reasons": [
+          {
+            "root": "density.mode",
+            "why": "RESUELTO por fallo de grupo 2026-08-18. FALLO DE GRUPO 2026-08-18 (escalacion FAM-06): el ritmo INTERIOR del panel si densifica. Un dropdown cuyos items compactan dentro de un marco que no compacta se lee roto: el usuario percibe density como una sola sensacion, no como dos capas. Reach: padding y gap entre partes del panel. NO reach: geometria de anclaje (arrow/offset), sobre de colision (viewport-gap), topes de tamano (max/min-width, max-height) que son legibilidad y no confort, los topes de variante nombrada (minimal/rich/compact) que pertenecen al vocabulario de variantes, el area tactil del handle (minimo de accesibilidad, no confort) y el ancho de scrollbar (plataforma)."
+          }
+        ],
+        "uncoveredByDesign": {
+          "Geometria de overlay NO cubierta por density (fallo de grupo 2026-08-18: anclaje, colision, topes de tamano, variantes nombradas, area tactil, plataforma)": [
+            "--ds-context-menu-max-block-size",
+            "--ds-context-menu-width"
+          ]
+        },
+        "migratedToInternalChannels": true
+      },
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-group-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-context-menu-item-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        },
+        {
+          "channelId": "--_ds-context-menu-padding",
+          "semanticOwner": "density.mode",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "LIVE"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "spacing.rhythm",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
+        "source": "gap-audit-independent",
+        "reasons": [],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "motion.dial",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-transition-duration",
+          "semanticOwner": "motion.dial",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.elevation-posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-elevation",
+          "semanticOwner": "surfaces.elevation-posture",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "surfaces.effect-intensity",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-backdrop-filter",
+          "semanticOwner": "surfaces.effect-intensity",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "navigation.sidebar-tone",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
+        "source": "gap-audit-primary"
+      }
+    },
+    {
+      "controlId": "experience.profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "experience.profile",
+            "why": "Idem."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "chrome.families",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-z-index",
+          "semanticOwner": "chrome.families",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "chrome.anatomy",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "internalChannels": [
+        {
+          "channelId": "--_ds-context-menu-border-style",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        },
+        {
+          "channelId": "--_ds-context-menu-focus-ring-color",
+          "semanticOwner": "chrome.anatomy",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css",
+          "fallbackAuthority": null,
+          "productiveConsumerFamilyIds": [
+            "primitive/overlay/context-menu"
+          ],
+          "sourceBindings": [
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+          ],
+          "replacementDisposition": {
+            "state": "REQUIRED_ADDITION",
+            "reason": "prescripcion fase 1; producer = sitio de produccion acordado (fase 3)"
+          }
+        }
+      ]
+    },
+    {
+      "controlId": "token-overrides",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "ESCAPE_HATCH",
+        "why": "es la valvula de escape, no el modelo -- textual del canon: \"escape hatch, not the model: every recurring override is a candidate for a real capability\". Alcanza cualquier canal por construccion (allowlist cerrada, max 200, falla cerrado) y por eso no declara nada por familia.",
+        "instrument": "un override recurrente sobre esta familia es EVIDENCIA de una capacidad faltante: convertilo en un control real, no lo normalices aqui",
+        "consumer": "src/infrastructure/compilers/composition/tenant-theme/index.ts :: tokenOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
+      }
+    },
+    {
+      "controlId": "recipe-profile",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "reasons": [
+          {
+            "root": "control.recipe",
+            "why": "Idem."
+          }
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.expressive",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "OVERLAY_OF_ROOTS",
+        "why": "no necesita raiz propia: dependsOn=[experience.profile] y sus seis ejes sobrescriben por eje los MISMOS canales que ya componen las raices existentes. Los sockets de esta celda son los sockets de las raices mapeadas, no unos nuevos.",
+        "axisToRoot": {
+          "type": [
+            "type.pairing",
+            "type.scale"
+          ],
+          "geometry": [
+            "shape.corner",
+            "shape.control-silhouette"
+          ],
+          "edge": [
+            "shape.edge"
+          ],
+          "material": [
+            "surface.finish"
+          ],
+          "elevation": [
+            "surface.elevation"
+          ],
+          "motif": [
+            "surface.finish"
+          ]
+        },
+        "consumer": "src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx :: sanitizeExpressiveOverrides",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
+      }
+    },
+    {
+      "controlId": "palette.status-seeds",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_REACH",
+        "bindings": [
+          {
+            "root": "palette.status-seeds",
+            "socketPattern": null,
+            "prop": "color/fondo del item en hover cuando data-tone='danger'",
+            "tier": "standard",
+            "examples": [
+              "--ds-color-error"
+            ],
+            "noSocketReason": "color: var(--ds-context-menu-danger-color-hover, var(--ds-color-error)) bajo [data-tone='danger']:hover; evidencia verificada en skin/context-menu.css:246-251.",
+            "socketsResolved": true,
+            "carrier": "shared-channel"
+          }
+        ],
+        "reviewedFrom": "anatomy",
+        "sourceBindings": [
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/context-menu/index.css"
+        ]
+      }
+    },
+    {
+      "controlId": "profiles.icon",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "MUST_NOT_REACH",
+        "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
+        "source": "gap-audit-primary",
+        "reasons": [
+          {
+            "root": "icon.posture",
+            "why": "CANDIDATOS (propiedad remediada, celda MUST_NOT de grupo): --ds-icon-size-well"
+          }
+        ],
+        "reviewedFrom": "anatomy"
+      }
+    },
+    {
+      "controlId": "responsive.posture",
+      "disposition": "UNKNOWN",
+      "verificationState": "UNKNOWN",
+      "unknownReason": "NOT_ASSESSED",
+      "evidenceIds": [],
+      "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+      "targetBinding": {
+        "status": "NO_CSS_CHANNEL",
+        "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
+        "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "socketsExpected": false,
+        "tier": "pro",
+        "source": "adjudicacion-controls-pro",
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
+      }
+    }
+  ],
+  "retiredThemeControls": [],
+  "recipeAnatomy": {
+    "assessmentState": "UNKNOWN",
+    "groupBindings": [],
+    "variants": [],
+    "deprecatedAliases": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_TYPED_RECIPE_AND_ANATOMY_VARIANTS"
+  },
+  "instanceApi": {
+    "assessmentState": "UNKNOWN",
+    "props": [],
+    "slots": [],
+    "callbacks": [],
+    "controlledState": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_PUBLIC_PROPS_SLOTS_CALLBACKS_AND_CONTROLLED_STATE"
+  },
+  "hostAdaptation": {
+    "assessmentState": "UNKNOWN",
+    "contexts": [],
+    "containerRules": [],
+    "invariants": [],
+    "evidenceIds": [],
+    "nextAction": "PROVE_PAGE_EMBED_CONTAINER_VIEWPORT_AND_HOST_POSTURES"
+  },
+  "statesMotion": {
+    "assessmentState": "UNKNOWN",
+    "states": [],
+    "transitions": [],
+    "inputModes": [],
+    "reducedMotion": [],
+    "evidenceIds": [],
+    "nextAction": "CENSUS_STATES_TRANSITIONS_INPUTS_AND_REDUCED_MOTION"
+  },
+  "invariants": {
+    "assessmentState": "UNKNOWN",
+    "entries": [],
+    "evidenceIds": [],
+    "nextAction": "AUTHOR_STRUCTURAL_BEHAVIORAL_ACCESSIBILITY_AND_RESTORE_INVARIANTS"
+  },
+  "premiumCandidates": []
+}

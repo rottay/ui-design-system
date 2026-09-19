@@ -49,14 +49,15 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
+import { repoRoot as findRepoRoot } from '../../../../../libraries/repo-root/index.mjs';
 import { readThemeCatalogRecords, CATALOG_SOURCE } from '../../../../../libraries/theme-catalog/index.mjs';
+import { QUARANTINE_MANIFEST_REL } from '../../../../../libraries/manifest/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CORE_ROOT = findPackageRoot(HERE);
+const REPO_ROOT = findRepoRoot(HERE);
 
 export const EXPOSURES = Object.freeze(['tenant-dial', 'internal-head', 'gap']);
-export const CATALOG_PATH = join(CORE_ROOT, 'governance/manifest/cascade/catalog/index.json');
+export const CATALOG_PATH = join(REPO_ROOT, QUARANTINE_MANIFEST_REL, 'cascade/catalog/index.json');
 /* La unica lista de controles desde WO-CAT-02. La vista de manifest que
  * reemplaza era una proyeccion generada de la misma poblacion y ya no esta en
  * la ruta de lectura de ningun gate; el nombre del parametro se conserva para

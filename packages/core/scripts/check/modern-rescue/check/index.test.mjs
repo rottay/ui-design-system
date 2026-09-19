@@ -40,11 +40,12 @@ const CLOSURE_MEMBERS = [
   "packages/core/tests/fixtures/tenants",
   "packages/core/governance/tokens/prototypes/index.json",
   "roadmap/registry.json",
-  "packages/core/governance/manifest",
+  "docs/history/inventories/customization-manifest",
   "packages/core/scripts/check/evidence",
   "packages/core/scripts/check/orchestration",
   "packages/core/scripts/libraries",
-  "packages/core/scripts/generate/tokens/manifest",
+  "packages/core/scripts/generate/tokens/manifest/fanout",
+  "packages/core/scripts/generate/tokens/manifest/root-checklists",
   "packages/core/scripts/generate/tokens/customization/surface",
   "packages/core/scripts/generate/tokens/customization/preservation",
   "packages/core/contracts/css/hooks/index.json",
@@ -142,8 +143,9 @@ const { readModernRescueContracts, validateModernRescueContracts } = await impor
 
 const repoRoot = SANDBOX;
 const programRoot = sandboxProgramDir;
-// The manifest graduated to the package root; the programme still owns it.
-const manifestRoot = join(repoRoot, "packages/core/governance/manifest");
+// The manifest was quarantined to docs/history by WO-RET-03; the programme
+// still validates it as sealed evidence.
+const manifestRoot = join(repoRoot, "docs/history/inventories/customization-manifest");
 
 // D-4: no write may escape the sandbox, including through either
 // node_modules symlink above (C-1, Fable preaudit). Every one of the 37
@@ -179,7 +181,7 @@ const baseline = readModernRescueContracts();
 function mutated(mutator) {
   const copy = structuredClone(baseline);
   mutator(copy);
-  return validateModernRescueContracts(copy, { includeManifestGate: false });
+  return validateModernRescueContracts(copy);
 }
 
 function expectError(errors, fragment, message) {
@@ -193,7 +195,7 @@ test("live modern-rescue program contracts are internally consistent", () => {
   // Constitution mutations are tested independently of live evidence freshness.
   // The current tree intentionally carries classified stale receipts and WIP;
   // rehashing those to make a role amendment green would falsify provenance.
-  assert.deepEqual(validateModernRescueContracts(baseline, { includeManifestGate: false }), []);
+  assert.deepEqual(validateModernRescueContracts(baseline), []);
 });
 
 test("role drift fails closed", () => {
@@ -607,14 +609,14 @@ test("a hand-pinned Standard count in the README fails closed", () => {
   try {
     writeFileSync(target, plant(count - 1));
     expectError(
-      validateModernRescueContracts(baseline, { includeManifestGate: false }),
+      validateModernRescueContracts(baseline),
       "the Standard count is derived, not typed",
       "re-pinning a wrong Standard count in prose must be rejected"
     );
     // CONTROL: the guard bites on DISAGREEMENT, not on the word "Standard" --
     // otherwise it would forbid the README from describing its own subject.
     writeFileSync(target, plant(count));
-    const agreeing = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const agreeing = validateModernRescueContracts(baseline);
     assert.ok(
       !agreeing.some((error) => error.includes("the Standard count is derived, not typed")),
       `a count that agrees with the registry is not a finding; got ${JSON.stringify(agreeing.filter((error) => error.includes("Standard")))}`
@@ -659,7 +661,7 @@ test("home law: pattern folds stay green, literal duplicates go red", () => {
     db.derivations[0].to = "--ds-*"; db.derivations[0].toIsPattern = true;
     writeFileSync(a, `${JSON.stringify(da, null, 2)}\n`);
     writeFileSync(b, `${JSON.stringify(db, null, 2)}\n`);
-    let errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    let errors = validateModernRescueContracts(baseline);
     assert.ok(!errors.some((e) => e.includes("has two homes")), `pattern folds must not conflict; got ${JSON.stringify(errors.filter((e) => e.includes("two homes")))}`);
     // ROJO: mismo canal LITERAL en dos raices
     da = JSON.parse(origA); db = JSON.parse(origB);
@@ -667,7 +669,7 @@ test("home law: pattern folds stay green, literal duplicates go red", () => {
     db.derivations[0].to = "--ds-canal-duplicado"; delete db.derivations[0].toIsPattern;
     writeFileSync(a, `${JSON.stringify(da, null, 2)}\n`);
     writeFileSync(b, `${JSON.stringify(db, null, 2)}\n`);
-    errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    errors = validateModernRescueContracts(baseline);
     expectError(errors, "has two homes", "literal duplicate channel must fail R6");
   } finally {
     writeFileSync(a, origA);
@@ -680,7 +682,7 @@ test("planted missing cascade root fails closed", () => {
   const backup = join(SANDBOX, "density-mode.index.json.t1-test-backup");
   try {
     renameSync(target, backup);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(errors, "is missing for active control", "missing cascade root must fail");
   } finally {
     renameSync(backup, target);
@@ -689,7 +691,7 @@ test("planted missing cascade root fails closed", () => {
 test("planted cascade defects fail closed (kind, site, orphan terminalReach)", () => {
   const target = join(manifestRoot, "cascade/roots/shape/radius-scale/index.json");
   const original = readFileSync(target, "utf8");
-  const run = () => validateModernRescueContracts(baseline, { includeManifestGate: false });
+  const run = () => validateModernRescueContracts(baseline);
   try {
     // 1) kind inventado
     let doc = JSON.parse(original);
@@ -714,7 +716,7 @@ test("planted cascade defects fail closed (kind, site, orphan terminalReach)", (
 test("cabeza nula: sin razon citada va rojo, bien declarada va verde", () => {
   const target = join(manifestRoot, "cascade/roots/responsive/posture/index.json");
   const original = readFileSync(target, "utf8");
-  const run = () => validateModernRescueContracts(baseline, { includeManifestGate: false });
+  const run = () => validateModernRescueContracts(baseline);
   try {
     // ROJO: cabeza nula SIN headEmptyReason -- la razon es obligatoria, como en la cola
     const doc = JSON.parse(original);
@@ -740,7 +742,7 @@ test("planted invented domain.kind fails closed", () => {
     const doc = JSON.parse(original);
     doc.domain.kind = "vibes-based";
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(errors, "is not a governed domain kind", "invented kind must fail the gate");
   } finally {
     writeFileSync(target, original);
@@ -829,7 +831,7 @@ test("raw-override source drift fails closed against the sandbox tenant-theme co
   assert.ok(original.includes(anchor), "the raw-override allowlist anchor must exist in the sandbox copy");
   const expectSourceFailure = (label) => {
     const contracts = readModernRescueContracts();
-    const errors = validateModernRescueContracts(contracts, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(contracts);
     assert.ok(
       errors.some((error) => error.includes("TENANT_THEME_OVERRIDE_TOKENS")),
       `${label}: expected a raw-override failure naming TENANT_THEME_OVERRIDE_TOKENS; got ${JSON.stringify(errors)}`
@@ -847,7 +849,7 @@ test("raw-override source drift fails closed against the sandbox tenant-theme co
     writeFileSync(sourcePath, swapped);
     const contracts = readModernRescueContracts();
     assert.equal(contracts.expertAllowlist.reach, baseline.expertAllowlist.reach, "the swap preserves the count");
-    const errors = validateModernRescueContracts(contracts, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(contracts);
     assert.ok(
       errors.some((error) => error.includes("membership digest")),
       `count-preserving swap: expected a digest failure; got ${JSON.stringify(errors)}`
@@ -914,7 +916,7 @@ test("the standing-authorization fence fails closed in README and AGENTS.md", ()
     [agentsPath, readFileSync(agentsPath, "utf8")],
   ]);
   const expectFenceFailure = (label) => {
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     assert.ok(
       errors.some((error) => error.includes("standing-authorization") || error.includes("push prohibition")),
       `${label}: expected a standing-authorization fence failure; got ${JSON.stringify(errors)}`
@@ -1181,7 +1183,7 @@ test("planted enum with neither enumValues nor calibration.catalog fails closed"
     const doc = JSON.parse(original);
     delete doc.calibration.catalog;
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       "an enum must name its vocabulary in one of the two governed domiciles",
@@ -1200,7 +1202,7 @@ test("planted closed-enum emptied of enumValues, with no catalog, fails closed",
     doc.domain.enumValues = [];
     delete doc.calibration?.catalog;
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       "an enum must name its vocabulary in one of the two governed domiciles",
@@ -1219,7 +1221,7 @@ test("CONTROL: a catalog is a real alternative domicile, not decoration", () => 
     doc.domain.enumValues = [];
     doc.calibration = { ...(doc.calibration ?? {}), catalog: { mode: ["compact", "normal", "spacious"] } };
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     assert.equal(
       errors.filter((error) => error.includes("two governed domiciles")).length,
       0,
@@ -1248,7 +1250,7 @@ test("planted emitted value with no admission fails closed", () => {
       pinned: {},
     });
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       'chrome.anatomy emits "card:invented"',
@@ -1269,7 +1271,7 @@ test("the card <-> cardComponent alias is the resolution path, not decoration", 
     const doc = JSON.parse(original);
     delete doc.calibration.catalog.cardComponent;
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       "calibration.catalog.cardComponent",
@@ -1287,7 +1289,7 @@ test("the density axis is admitted by density.mode, not by the sibling catalog",
     const doc = JSON.parse(original);
     doc.domain.enumValues = ["compact", "normal"];
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       'profiles.expressive emits "density:spacious" but controls/density/mode/index.json',
@@ -1310,7 +1312,7 @@ test("planted root axis with no mapped owner fails closed", () => {
       pinned: {},
     });
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       'emits axis "weather" but no governed owner admits it',
@@ -1334,7 +1336,7 @@ function withFamily(relPath, mutate, run) {
     const doc = JSON.parse(original);
     mutate(doc);
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    run(validateModernRescueContracts(baseline, { includeManifestGate: false }));
+    run(validateModernRescueContracts(baseline));
   } finally {
     writeFileSync(target, original);
   }
@@ -1454,7 +1456,7 @@ test("a walk that misses cells fails, instead of reporting zero bare ones", () =
     (errors) =>
       expectError(
         errors,
-        `the walk saw ${declared - 1} cells but governance/manifest/index.json declares ${declared}`,
+        `the walk saw ${declared - 1} cells but docs/history/inventories/customization-manifest/index.json declares ${declared}`,
         "un recorrido que pierde celdas no puede parecer un arbol limpio"
       )
   );
@@ -1477,7 +1479,7 @@ test("F1: an invented variant in a newly covered root fails closed", () => {
       pinned: {},
     });
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       'admission: density.mode emits "ultra"',
@@ -1493,7 +1495,7 @@ test("F1: a flat root reads its token from the id, not from the emitted value", 
   // `value` contra enumValues, el arbol vivo daria rojo sin que nadie tocara
   // nada. Este control lo fija: hoy pasa, y si alguien invierte el criterio
   // el arbol REAL se cae.
-  const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+  const errors = validateModernRescueContracts(baseline);
   assert.equal(
     errors.filter((e) => e.includes("admission: density.mode")).length,
     0,
@@ -1506,7 +1508,7 @@ test("F1: a root that emits variants with no sibling control fails closed", () =
   const backup = join(SANDBOX, "profiles-icon.index.json.f1-drill-backup");
   try {
     renameSync(target, backup);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       "profiles.icon emits 4 variants but has no sibling control",
@@ -1542,7 +1544,7 @@ test("F5: an empty catalog is not a domicile", () => {
     const doc = JSON.parse(original);
     doc.calibration.catalog = {};
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       "an enum must name its vocabulary in one of the two governed domiciles",
@@ -1560,7 +1562,7 @@ test("F6: a missing controlFamilyCells denominator fails closed", () => {
     const doc = JSON.parse(original);
     delete doc.denominators.controlFamilyCells;
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    const errors = validateModernRescueContracts(baseline, { includeManifestGate: false });
+    const errors = validateModernRescueContracts(baseline);
     expectError(
       errors,
       "does not publish a numeric denominators.controlFamilyCells",

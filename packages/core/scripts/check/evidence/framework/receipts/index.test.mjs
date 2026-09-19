@@ -42,7 +42,7 @@ test('an unresolved legacy path stays invalid', () => {
 
 // --- Receipt validation, the law the schema names ---------------------------
 //
-// `governance/manifest/schema/index.json` names `validateReceipt` as THE
+// `docs/history/inventories/customization-manifest/schema/index.json` names `validateReceipt` as THE
 // validator for an evidence receipt, and until now nothing exercised it. A
 // receipt whose artifact hash is stale, whose source digest is stale, whose
 // artifact is empty, or whose producer is also the sighted approver is not
