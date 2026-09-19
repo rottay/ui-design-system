@@ -639,3 +639,18 @@ open row is surface-lifecycle's measured failure-mode floor, pending the owner's
 (F2.1). The collapse-border-color thread measured and closed with NO action: its only readers are
 the frozen engines (the name dates to the July antd mapping, d609b519b); modern never reads it, so
 no gate is blind and the freeze forbids touching it.
+
+## 2026-09-19 (twenty-third sitting) — the canonical checkout restored
+
+The S19 handoff's transfer executed with writers quiescent: (1) ui-design-system's preserved
+detached state (25d245167; 1402 tracked entries + 764 untracked files) is double-preserved —
+stash@{0} `18dfebf6c` in the shared object store AND a content backup at
+~/.db-backups/ui-design-system-pre-transfer-2026-09-19/ (staged/unstaged patches + untracked
+content + HEAD note); (2) the r4-recon-opus linked worktree was retired (its tracked tree was
+fully committed; only reinstallable node_modules symlinks were lost); (3) ui-design-system checked
+out main at da6b06d41 normally (no force, no reset), pnpm install clean, population/family-cut/
+app-shell suites green, tsc clean. The S19-V01 symlink (self-loop, swept in by my own broad
+pathspec in f66b1bd45 — recorded) is untracked and gone (96d081f3d); the population pins follow the
+catalog revision (b1caad80c). Every dispatch brief now names the canonical path. The historical
+worktrees under ~/Developer/rottay-worktrees are untouched registrations, not evidence of new
+branches. Backup retirement waits on the owner's read of this note.
