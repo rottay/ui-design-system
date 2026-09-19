@@ -26,56 +26,22 @@
  * @package @rottay/design-system
  */
 
+import { ALLOWED_VALUE_FUNCTIONS } from '@/foundation/kernel/css/value-functions';
+
+/**
+ * The one value-function table, re-exported from the owner that holds it.
+ *
+ * It moved DOWN, not away: the publication schema is this owner's SIBLING and
+ * could not read it here, so the table now sits in `foundation/kernel/css` and
+ * both doors name the same set. The admission facade and the chrome
+ * derivations keep importing it through this door.
+ */
+export { ALLOWED_VALUE_FUNCTIONS };
+
 /** The canonical channel-name grammar. A name outside it is not a DS channel. */
 const CHANNEL_NAME = /^--ds-[a-z0-9-]+$/i;
 
 const MAX_VALUE_LENGTH = 512;
-
-/**
- * CSS value functions the theme pipeline may legitimately emit.
- *
- * ONE table for both doors: admission (`facade/foundation/admission/runtime/limits`)
- * imports this set rather than keeping a copy, because two copies drifted twice
- * and a name admitted upstream but refused here is a channel dropped in silence.
- * `repeating-conic-gradient` is left out on purpose: no emitter produces it.
- */
-export const ALLOWED_VALUE_FUNCTIONS: ReadonlySet<string> = new Set([
-  'rgb',
-  'rgba',
-  'hsl',
-  'hsla',
-  'oklch',
-  'lab',
-  'lch',
-  'light-dark',
-  'color-mix',
-  'linear-gradient',
-  'radial-gradient',
-  'conic-gradient',
-  'repeating-linear-gradient',
-  'repeating-radial-gradient',
-  'var',
-  'calc',
-  'min',
-  'max',
-  'clamp',
-  'blur',
-  'saturate',
-  'drop-shadow',
-  'cubic-bezier',
-  /** The CSS easing function, emitted by the governed spring recipes. */
-  'linear',
-  'translate',
-  'translatex',
-  'translatey',
-  'scale',
-  'scalex',
-  'scaley',
-  'rotate',
-  'repeat',
-  'minmax',
-  'fit-content',
-]);
 
 /**
  * Characters that end a declaration, close a rule, leave the `<style>` element

@@ -2,30 +2,20 @@
  * @fileoverview CSS-value hygiene and the surface-lightness question.
  *
  * The colorimetry itself is NOT here. `foundation/kernel/color` is the one
- * color owner: this module re-exports its hex predicate and parses through its
- * parser, so a compiler and an accessibility check can never disagree about
- * whether a string is a hex colour or about what its channels are.
+ * color owner: this module re-exports its notation predicates and parses
+ * through its parser, so a compiler and an accessibility check can never
+ * disagree about whether a string is a colour or about what its channels are.
+ * `isValidCssColor` moved DOWN to that owner rather than away -- the
+ * publication schema is this module's SIBLING and could not read it here.
  */
 
-import { isHexColor, parseHex } from '@/foundation/kernel/color/contrast';
+import {
+  isHexColor,
+  isValidCssColor,
+  parseHex,
+} from '@/foundation/kernel/color/contrast';
 
-export { isHexColor };
-
-/**
- * Validate that a value is a valid CSS color.
- * Accepts: hex (#fff, #ffffff), rgb(), rgba(), hsl(), hsla(), oklch(),
- * var(--ds-*), color-mix(), named colors (transparent, inherit, currentColor).
- */
-export function isValidCssColor(value: string): boolean {
-  if (!value || typeof value !== 'string') return false;
-  const v = value.trim();
-  if (isHexColor(v)) return true;
-  if (/^(rgb|rgba|hsl|hsla|oklch|lab|lch)\s*\(/.test(v)) return true;
-  if (/^var\(--/.test(v)) return true;
-  if (/^color-mix\(/.test(v)) return true;
-  if (/^(transparent|inherit|currentColor|none|unset|initial)$/i.test(v)) return true;
-  return false;
-}
+export { isHexColor, isValidCssColor };
 
 /**
  * Validate that a value is a valid CSS dimension (size).

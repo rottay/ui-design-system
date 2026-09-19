@@ -10,8 +10,8 @@ import { MOTION_DIAL_BOUNDS } from "@/foundation/contracts/runtime/motion";
 import { dimensionToPx } from "@/foundation/kernel/geometry/css-length";
 import { isCanonicalJsonObject as isPlainObject } from "@/foundation/kernel/serialization";
 import type { TenantThemeValidationIssue } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
-import { isValidCssColor } from "../../css/color-math";
-import { ALLOWED_VALUE_FUNCTIONS } from "../../css/value-safety";
+import { isValidCssColor } from "@/foundation/kernel/color/contrast";
+import { ALLOWED_VALUE_FUNCTIONS } from "@/foundation/kernel/css/value-functions";
 import {
   TENANT_THEME_ANATOMY_VARIANTS,
   TENANT_THEME_EFFECT_INTENSITY_BOUNDS,

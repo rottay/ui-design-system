@@ -2,11 +2,18 @@
  * @fileoverview WCAG 2.2 scalar colorimetry: relative luminance and contrast ratio.
  *
  * The single home of the WCAG 2.2 luminance transfer function and symmetric
- * contrast ratio, plus the hex parsing they require. Pure and
- * dependency-free. Accessibility modules (branding-contrast, APCA snapping)
- * and color-space modules (oklch chart-series) both consume this owner;
- * `accessibility/branding-contrast` additionally re-exports `contrastRatio`
- * for its established importers.
+ * contrast ratio, plus the CSS colour-notation predicates they and their
+ * callers triage with. Pure and dependency-free. Accessibility modules
+ * (branding-contrast, APCA snapping) and color-space modules (oklch
+ * chart-series) both consume this owner; `accessibility/branding-contrast`
+ * additionally re-exports `contrastRatio` for its established importers.
+ *
+ * `isHexColor` and `isValidCssColor` are one question asked twice -- is this
+ * string a colour, and is it one this code can measure -- so they answer from
+ * one owner. `isValidCssColor` joined them here because the compiler's
+ * publication schema and its colour math are SIBLING owners that may not read
+ * each other, and a second notation table is how a compiler and an
+ * accessibility check stop agreeing about what a colour is.
  *
  * @module Foundation/Kernel/Color/Contrast
  * @package @rottay/design-system
@@ -50,6 +57,25 @@ export function parseHex(hex: string): Rgb255 | null {
     g: parseInt(cleaned.slice(2, 4), 16),
     b: parseInt(cleaned.slice(4, 6), 16),
   };
+}
+
+/**
+ * True when the value is a CSS colour in any notation this pipeline admits.
+ *
+ * Accepts hex (#fff, #ffffff), the functional notations (rgb/rgba, hsl/hsla,
+ * oklch, lab, lch), `color-mix()`, a `var(--*)` reference, and the CSS-wide
+ * colour keywords. A caller that needs a MEASURABLE colour narrows further;
+ * this predicate only answers whether the notation is a colour at all.
+ */
+export function isValidCssColor(value: string): boolean {
+  if (!value || typeof value !== 'string') return false;
+  const v = value.trim();
+  if (isHexColor(v)) return true;
+  if (/^(rgb|rgba|hsl|hsla|oklch|lab|lch)\s*\(/.test(v)) return true;
+  if (/^var\(--/.test(v)) return true;
+  if (/^color-mix\(/.test(v)) return true;
+  if (/^(transparent|inherit|currentColor|none|unset|initial)$/i.test(v)) return true;
+  return false;
 }
 
 /**

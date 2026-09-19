@@ -248,22 +248,34 @@ describe("the repeating gradient class is admitted at emission", () => {
  */
 describe("admission and emission share one function table", () => {
   // The admission grammar moved to the schema owner (S19-A01) so the v1
-  // producers below the facade could read it; the table it consumes did not.
+  // producers below the facade could read it. That owner is this one's SIBLING
+  // under `compilers/kernel/foundation`, so the table it consumes moved down to
+  // `foundation/kernel/css` where both may read it downward (S19-A01 repair).
+  const TABLE_OWNER = resolve(
+    process.cwd(),
+    "src/foundation/kernel/css/value-functions/index.ts"
+  );
   const GRAMMAR_OWNER = resolve(
     process.cwd(),
     "src/infrastructure/compilers/kernel/foundation/schemas/tenant-theme/index.ts"
   );
+  const EMISSION_OWNER = resolve(process.cwd(), "src/infrastructure/compilers/kernel/foundation/css/value-safety/index.ts");
   const ADMISSION_OWNER = resolve(
     process.cwd(),
     "src/infrastructure/compilers/runtime/theme/facade/foundation/admission/runtime/limits/index.ts"
   );
+  const TABLE_IMPORT = /import \{ ALLOWED_VALUE_FUNCTIONS \} from ['"]@\/foundation\/kernel\/css\/value-functions['"];/;
 
-  it("the grammar owner imports the kernel table and no door declares one of its own", () => {
+  it("both doors read the kernel table and no door declares one of its own", () => {
     const grammar = readFileSync(GRAMMAR_OWNER, "utf8");
-    expect(grammar).toMatch(
-      /import \{ ALLOWED_VALUE_FUNCTIONS \} from "\.\.\/\.\.\/css\/value-safety";/
-    );
-    for (const source of [grammar, readFileSync(ADMISSION_OWNER, "utf8")]) {
+    const emission = readFileSync(EMISSION_OWNER, "utf8");
+    expect(grammar).toMatch(TABLE_IMPORT);
+    expect(emission).toMatch(TABLE_IMPORT);
+    for (const source of [
+      grammar,
+      emission,
+      readFileSync(ADMISSION_OWNER, "utf8"),
+    ]) {
       expect(source).not.toMatch(
         /ALLOWED_VALUE_FUNCTIONS\s*(?::[^=]+)?=\s*new Set\(/
       );
@@ -271,6 +283,9 @@ describe("admission and emission share one function table", () => {
         []
       );
     }
+    expect(readFileSync(TABLE_OWNER, "utf8")).toMatch(
+      /export const ALLOWED_VALUE_FUNCTIONS: ReadonlySet<string> = new Set\(\[/
+    );
   });
 
   it("carries exactly the two repeating names and nothing beyond the table", () => {
