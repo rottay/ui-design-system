@@ -56,7 +56,7 @@
   --ds-popover-texture-current: var(--ds-popover-bordered-texture, none);
   --ds-popover-padding-block-current: var(--ds-popover-bordered-padding-block, var(--ds-spacing-md));
   --ds-popover-padding-inline-current: var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-bordered-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-bordered-title-padding-inline);
   --ds-popover-title-gap-current: var(--ds-popover-bordered-title-gap, var(--ds-spacing-sm));
   --ds-popover-max-width-current: var(--ds-popover-bordered-max-width, var(--ds-popover-max-width));
   --ds-popover-body-max-height-current: var(--ds-popover-body-max-height);
@@ -156,7 +156,7 @@
   --ds-popover-texture-current: var(--ds-popover-minimal-texture, none);
   --ds-popover-padding-block-current: var(--ds-popover-minimal-padding-block, var(--ds-spacing-sm));
   --ds-popover-padding-inline-current: var(--ds-popover-minimal-padding-inline, var(--ds-spacing-sm));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-minimal-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-minimal-padding-inline, var(--ds-spacing-sm))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-minimal-title-padding-inline);
   --ds-popover-max-width-current: var(--ds-popover-minimal-max-width, var(--ds-popover-max-width));
 }
 
@@ -180,7 +180,7 @@
   --ds-popover-texture-current: var(--ds-popover-rich-texture, none);
   --ds-popover-padding-block-current: var(--ds-popover-rich-padding-block, var(--ds-spacing-lg));
   --ds-popover-padding-inline-current: var(--ds-popover-rich-padding-inline, var(--ds-spacing-lg));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-rich-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-rich-padding-inline, var(--ds-spacing-lg))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-rich-title-padding-inline);
   --ds-popover-max-width-current: var(--ds-popover-rich-max-width, var(--ds-popover-max-width));
 }
 
@@ -188,7 +188,7 @@
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='compact'] {
   --ds-popover-padding-block-current: var(--ds-popover-compact-padding-block, var(--ds-spacing-xs));
   --ds-popover-padding-inline-current: var(--ds-popover-compact-padding-inline, var(--ds-spacing-sm));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-compact-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-compact-padding-inline, var(--ds-spacing-sm))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-compact-title-padding-inline);
   --ds-popover-title-gap-current: var(--ds-popover-compact-title-gap, var(--ds-spacing-xs));
   --ds-popover-body-max-height-current: var(--ds-popover-compact-max-height, var(--ds-popover-body-max-height));
 }
@@ -196,13 +196,13 @@
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='comfortable'] {
   --ds-popover-padding-block-current: var(--ds-popover-comfortable-padding-block, var(--ds-spacing-md));
   --ds-popover-padding-inline-current: var(--ds-popover-comfortable-padding-inline, var(--ds-spacing-md));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-comfortable-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-comfortable-padding-inline, var(--ds-spacing-md))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-comfortable-title-padding-inline);
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='spacious'] {
   --ds-popover-padding-block-current: var(--ds-popover-spacious-padding-block, var(--ds-spacing-lg));
   --ds-popover-padding-inline-current: var(--ds-popover-spacious-padding-inline, var(--ds-spacing-lg));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-spacious-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-spacious-padding-inline, var(--ds-spacing-lg))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-spacious-title-padding-inline);
   --ds-popover-title-gap-current: var(--ds-popover-spacious-title-gap, var(--ds-spacing-md));
 }
 

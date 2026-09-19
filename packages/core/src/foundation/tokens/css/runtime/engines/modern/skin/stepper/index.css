@@ -121,9 +121,9 @@
 }
 
 .ds-stepper--modern[data-part='root'] [data-part='item'][data-status='finish']::after {
-  background: var(--ds-stepper-item-bg-finish, var(--ds-steps-finish-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))));
+  background: var(--ds-stepper-item-bg-finish);
   color: var(--ds-stepper-item-color-finish, var(--ds-color-primary));
-  border-color: var(--ds-stepper-item-border-finish, var(--ds-steps-finish-border, color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border))));
+  border-color: var(--ds-stepper-item-border-finish);
 }
 
 .ds-stepper--modern[data-part='root'] [data-part='item'][data-status='error']::after {

@@ -1,11 +1,10 @@
 /**
  * The `popover` vocabulary at rest: the six per-recipe title inline paddings
- * the Modern skin used to read bare now state the exact chain the deriver
- * produces for each — the tenant override surfaces, then the density spacing
- * step the recipe rests on — so producing the name cannot move a pixel, the
- * read reaches a produced root even where nothing states the channel, and any
- * higher-ranked statement still wins. Each chain's terminal step is itself a
- * produced root, so the cascade lands without a new relation being invented.
+ * stay read bare by the Modern skin — the deriver states each produced channel
+ * at the chain whose first step is the tenant override surface and whose
+ * terminal step is the produced density spacing, so the bare read resolves to
+ * the produced chain and cannot move a pixel; any higher-ranked statement
+ * still wins.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -76,8 +75,8 @@ function skinBareReads(channel: string): number {
 
 const context = () => buildLoweringContext({ theme: firstPartyFixture("bithire") });
 
-/** The chained fallback both the deriver and the skin must state byte-for-byte. */
-const WIRED: Record<string, string> = {
+/** The chained fallback the deriver produces for each recipe title padding. */
+const PRODUCED: Record<string, string> = {
   "--ds-popover-bordered-title-padding-inline":
     "var(--ds-popover-title-padding-inline, var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md)))",
   "--ds-popover-minimal-title-padding-inline":
@@ -98,12 +97,12 @@ describe("chrome/popover", () => {
     expect(Object.keys(derived).sort()).toEqual([...popoverChromeDeriver.produces].sort());
   });
 
-  it("produces each wired title padding as exactly the chained fallback the skin reads it with", () => {
+  it("produces each recipe title padding at the chain the bare skin read resolves to", () => {
     const derived = popoverChromeDeriver.derive(context(), {});
-    for (const [channel, chain] of Object.entries(WIRED)) {
+    for (const [channel, chain] of Object.entries(PRODUCED)) {
       expect({ channel, produced: derived[channel] }).toEqual({ channel, produced: chain });
-      expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({ channel, fallbacks: [chain] });
-      expect({ channel, bareReads: skinBareReads(channel) }).toEqual({ channel, bareReads: 0 });
+      expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({ channel, fallbacks: [] });
+      expect({ channel, bareReads: skinBareReads(channel) }).toEqual({ channel, bareReads: 1 });
     }
   });
 

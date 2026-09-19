@@ -2,9 +2,10 @@
  * The `stepper` vocabulary at rest: every channel the Modern skin reads bare
  * now falls back to the exact chain the deriver produces for it, so the
  * fallback cannot move a pixel, and any higher-ranked statement still wins.
- * The four ring/lift/press composites stay rootless: no produced root
- * reproduces their resting value (box-shadow rings, the motion-dial lift, the
- * press transform), so their reads keep no fallback by design.
+ * The finish paints and the four ring/lift/press composites stay read bare:
+ * the finish paints resolve to the produced legacy-rooted chain, while no
+ * produced root reproduces the composites' resting value (box-shadow rings,
+ * the motion-dial lift, the press transform).
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -69,7 +70,7 @@ function skinFallbacks(channel: string): string[] {
 
 const context = () => buildLoweringContext({ theme: firstPartyFixture("bithire") });
 
-/** Channels whose bare skin reads now chain to the produced root the deriver already lands on. */
+/** Channels whose bare skin reads chain to the produced root the deriver already lands on. */
 const WIRED: Record<string, string> = {
   "--ds-stepper-item-font-size-md": "var(--ds-type-supporting-font-size)",
   "--ds-stepper-label-font-size-md": "var(--ds-type-body-font-size)",
@@ -82,10 +83,6 @@ const WIRED: Record<string, string> = {
   "--ds-stepper-connector-clearance": "var(--ds-spacing-1)",
   "--ds-stepper-motion-duration": "var(--ds-motion-feedback)",
   "--ds-stepper-motion-easing": "var(--ds-motion-ease-standard)",
-  "--ds-stepper-item-bg-finish":
-    "var(--ds-steps-finish-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card))))",
-  "--ds-stepper-item-border-finish":
-    "var(--ds-steps-finish-border, color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border)))",
   "--ds-stepper-item-bg-error":
     "color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-card-bg, var(--ds-surface-card)))",
   "--ds-stepper-item-border-error":
@@ -94,6 +91,14 @@ const WIRED: Record<string, string> = {
   "--ds-stepper-label-line-height": "var(--ds-type-body-line-height)",
   "--ds-stepper-description-line-height": "var(--ds-type-supporting-line-height)",
   "--ds-stepper-hover-shadow": "var(--ds-elevation-1)",
+};
+
+/** Finish paints the deriver produces at a legacy-rooted chain; the skin reads the produced names bare. */
+const PRODUCED_BARE: Record<string, string> = {
+  "--ds-stepper-item-bg-finish":
+    "var(--ds-steps-finish-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card))))",
+  "--ds-stepper-item-border-finish":
+    "var(--ds-steps-finish-border, color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border)))",
 };
 
 /** Produced composites no produced root reproduces: the skin keeps reading them bare. */
@@ -112,6 +117,14 @@ describe("chrome/stepper", () => {
     for (const [channel, chain] of Object.entries(WIRED)) {
       expect(derived[channel], channel).toBe(chain);
       expect(skinFallbacks(channel), channel).toEqual([chain]);
+    }
+  });
+
+  it("produces the finish paints at their legacy-rooted chain while the skin reads the produced names bare", () => {
+    const derived = stepperChromeDeriver.derive(context(), {});
+    for (const [channel, chain] of Object.entries(PRODUCED_BARE)) {
+      expect(derived[channel], channel).toBe(chain);
+      expect(skinFallbacks(channel), channel).toEqual([]);
     }
   });
 
