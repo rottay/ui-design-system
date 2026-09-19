@@ -51,11 +51,11 @@ const WRITERS: Readonly<
       'Projects the anchor lineage snapshot onto portaled content. Reads an existing boundary, never declares one.',
   },
   'components/primitives/display/tooltip/engines/modern/index.tsx': {
-    sites: 3,
+    sites: 2,
     kind: 're-stamp',
     owner: 'engine:modern',
     reason:
-      'Portaled tooltip surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`).',
+      'Portaled tooltip surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`). The former third site — the private portal-scope builder that carried the anchor lineage — consolidated into the shared portal-scope reader at d03a82275 (WO-INV-01); the lineage still conducts through that module\'s own pinned site.',
   },
   'components/primitives/overlay/popover/engines/modern/index.tsx': {
     sites: 4,

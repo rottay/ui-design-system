@@ -77,8 +77,10 @@ describe('arabic document: shipped font stacks', () => {
   // subject moves from "every vertical emits all three" (an authored-theme
   // receipt) to "every stack a vertical SHIPS is Arabic-capable" -- which is
   // the engine property the evnto tofu regression actually broke. Measured:
-  // bithire authors base + heading (display absent), rottay and evnto author
-  // no family at all. An unemitted channel renders no text and cannot tofu.
+  // bithire authors base + heading; rottay and evnto author no family at all.
+  // An unemitted channel renders no text and cannot tofu. W14 (63aec5c5e,
+  // 2026-09-17) conducts bithire's authored display role through the v1 door,
+  // so the shipped list below carries all three roles.
   it.each(FIRST_PARTY_VIEWS)(
     'compiles %s with an Arabic-capable fallback on every text-bearing channel it ships',
     (slug, flatTheme) => {
@@ -107,7 +109,11 @@ describe('arabic document: shipped font stacks', () => {
       (channel) => cssVariables[channel] != null,
     );
 
-    expect(shipped).toEqual(['--ds-font-family-base', '--ds-font-family-heading']);
+    expect(shipped).toEqual([
+      '--ds-font-family-base',
+      '--ds-font-family-heading',
+      '--ds-font-family-display',
+    ]);
     for (const channel of shipped) {
       expect(cssVariables[channel]).toContain(MANDATORY_FONT_FALLBACK_FAMILY);
     }
