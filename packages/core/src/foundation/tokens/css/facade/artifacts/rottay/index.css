@@ -1299,7 +1299,7 @@
   --ds-menu-item-color-hover: var(--ds-color-text-primary);
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-item-font-family: var(--ds-type-body-font-family);
-  --ds-menu-item-font-size: var(--ds-type-body-font-size);
+  --ds-menu-item-font-size: var(--ds-sidebar-item-font-size, var(--ds-type-body-font-size));
   --ds-menu-item-font-size-child: var(--ds-sidebar-item-font-size-child, var(--ds-type-supporting-font-size));
   --ds-menu-item-font-weight: var(--ds-font-weight-medium);
   --ds-menu-item-font-weight-selected: var(--ds-font-weight-semibold);

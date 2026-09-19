@@ -42,13 +42,13 @@
   ],
   "summary": {
     "filesScanned": 2728,
-    "channels": 8978,
-    "channelsDs": 8330,
+    "channels": 8979,
+    "channelsDs": 8331,
     "channelsBridge": 648,
     "channelsWithoutReaders": 194,
-    "channelsPaintsFalse": 940,
-    "channelsPaintsInModernFalse": 2022,
-    "readers": 41036,
+    "channelsPaintsFalse": 941,
+    "channelsPaintsInModernFalse": 2023,
+    "readers": 41037,
     "readersByPlane": {
       "modern-skin-css": 15963,
       "presentation-css": 11750,
@@ -62,7 +62,7 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 4304
+      "ts-other": 4305
     },
     "channelsByPlane": {
       "modern-skin-css": 4841,
@@ -77,7 +77,7 @@
       "infrastructure-tsx": 4,
       "ts-token-mirror": 1410,
       "ts-token-utils": 16,
-      "ts-other": 1326
+      "ts-other": 1327
     },
     "unclassifiedReads": 0
   },
@@ -321860,6 +321860,25 @@
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.ts",
           "line": 155,
+          "prop": "inline-expr",
+          "scalars": []
+        }
+      ]
+    },
+    {
+      "channel": "--ds-sidebar-item-font-size",
+      "kind": "ds",
+      "declaredIn": [],
+      "planes": [
+        "ts-other"
+      ],
+      "paints": false,
+      "paintsInModern": false,
+      "readers": [
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/menu/index.ts",
+          "line": 174,
           "prop": "inline-expr",
           "scalars": []
         }

@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "9c0156051d22a93f37c04d8e05f9a34056786d43dab7f614d763141a7b194856",
+    "inputsDigest": "f16deb6116fa902fdb12808f1ec5098e274035f8d1e953a7d2239641556e3223",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 492,
@@ -20,10 +20,10 @@
     "tenantChannels": 4078,
     "publicHooks": 93,
     "unadjudicatedReads": 1414,
-    "deadWriters": 275,
+    "deadWriters": 274,
     "frontierReserved": 0,
     "modernConsumedUnique": 4727,
-    "tsReadNames": 2856,
+    "tsReadNames": 2857,
     "tsWriteNames": 3479,
     "tsMetadataNames": 3039,
     "unclassified": 0,
@@ -33,7 +33,7 @@
   "deadByClass": {
     "foundation": 125,
     "component": 0,
-    "tenantChannel": 204,
+    "tenantChannel": 203,
     "authoredCssLocal": 7
   },
   "controls": {
@@ -121,7 +121,7 @@
     {
       "id": "spacing.rhythm",
       "tier": "standard",
-      "verdict": "symbol-missing"
+      "verdict": "verified"
     },
     {
       "id": "motion.dial",
@@ -339,7 +339,6 @@
     "--ds-shell-shimmer-medium",
     "--ds-shell-shimmer-soft",
     "--ds-shell-shimmer-strong",
-    "--ds-sidebar-item-font-size",
     "--ds-signal-card-action-bg",
     "--ds-signal-card-action-border",
     "--ds-signal-card-action-color",
@@ -95026,14 +95025,14 @@
     "--ds-sidebar-item-font-size": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 0,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": false,
-        "artifact": false
+        "artifact": true
       },
       "tsWriteSites": 1,
       "tsMetadataMentions": 0

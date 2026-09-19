@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/preservation/index.mjs --write",
-  "basedOnReportDigest": "fa71b653a87e179682bf7b179818e80b42a6bd47a0e493339d6cbd3151fc2387",
+  "basedOnReportDigest": "515e700b1ff8b5720d14c8f71e9d5509d96d7f3ebbaad37398f49b36bfc1283e",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,11 +2153,11 @@
     ]
   },
   "deadWriters": {
-    "total": 275,
+    "total": 274,
     "byProvenance": {
       "E-reserved-frontier": 13,
       "B-modern-current": 60,
-      "D-compiler-generated": 19,
+      "D-compiler-generated": 18,
       "A-protected-premium": 183
     },
     "entries": [
@@ -3199,13 +3199,6 @@
       },
       {
         "name": "--ds-shell-shimmer-strong",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-sidebar-item-font-size",
         "provenance": "D-compiler-generated",
         "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
         "owner": "design-system/D1-compilers",
