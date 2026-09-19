@@ -598,8 +598,9 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *       +135     +135     +135  7e13ee2e0  FAM-10 sub-lot D2: collection, dashboard, detail and header-surface header cuts (WO-FAM-10)
      *        +10      +10      +10  97a4fb058  FAM-10 sub-lot F: record and the form surfaces on the ledger doctrine (WO-FAM-10)
      *        +32      +32      +32  7a67243d8  cascade-wiring re-chain: the wave's component channels wired to their roots (WO-FAM-10 close)
-     *   2454 / 2613 / 2454  measured 2026-09-18 on this tree (the 6479c1808 tree)
-     * Totals: rottay +2104/-957, bithire +2111/-781, evnto +2195/-325.
+     *         +30      +30      +30  fc59fce28  the layout derivers produce their chains' middle links: aspect-ratio 7, container 6, divider 11, space 2, stack 4, resting literals and dial-scaled references the skins already resolved to (WO-FAM-07 close). 4b82b2850 regenerates the artifacts the now-emitting channels move and 2010ca2de repairs a family-cut DnD check arm; neither touches this lowering -- measured at HEAD, the delta against the pre-lot facade artifact (fc59fce28^) is byte-exactly these 30 keys with zero removals on all three verticals, and the pre-lot facade key sets reproduce the 2454 / 2613 / 2454 pins above
+     *   2484 / 2643 / 2484  measured 2026-09-18 on this tree (the 2010ca2de tree)
+     * Totals: rottay +2134/-957, bithire +2141/-781, evnto +2225/-325.
      *
      * The D6-2c-ii row is the largest single move this table records and it is
      * measured, not inferred: both legs were compiled with the SAME
@@ -680,7 +681,14 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // added 877, removed 13, commit by commit in the table above; the removals
       // are the badge namespace cut (11, c2d5b929d), --ds-breakpoint-xs (1,
       // ba33315db) and the calendar-view accent rename (1, c7381099e).
-      rottay: 2454,
+      // Layout middle links (measured, 2026-09-18): rottay 2454 -> 2484,
+      // added 30, removed 0, row fc59fce28 in the table above: the
+      // aspect-ratio, container, divider, space and stack derivers now emit
+      // their chains' middle links at the resting value, so the same 30
+      // channels join every vertical's baseline. The added key set was
+      // verified name-by-name against the pre-lot facade artifact: byte-exactly
+      // these 30 and nothing else (zero removals).
+      rottay: 2484,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -721,7 +729,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // --ds-focus-ring-color (181817599, the seed-derived focus ring) and
       // --ds-font-family-display (63aec5c5e, the v1 display role) -- both are
       // its own preset's decisions arriving at the baseline.
-      bithire: 2613,
+      // Layout middle links (measured, 2026-09-18): bithire 2613 -> 2643,
+      // added 30, removed 0, row fc59fce28: the same 30 middle links the row
+      // names, on the shared neutral foundation; the added key set matches
+      // rottay's and evnto's byte-for-byte (verified name-by-name).
+      bithire: 2643,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -763,7 +775,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // with rottay on every row: its preset authors no channel the wave's
       // derivers state, and the rename row (c7381099e) is named for its noun
       // precisely because evnto is the vertical that owns it.
-      evnto: 2454,
+      // Layout middle links (measured, 2026-09-18): evnto 2454 -> 2484,
+      // added 30, removed 0, row fc59fce28: evnto moves with rottay here too,
+      // byte-for-byte the same 30 keys (verified name-by-name against the
+      // pre-lot facade artifact, zero removals).
+      evnto: 2484,
     };
     for (const vertical of VERTICALS) {
       expect(

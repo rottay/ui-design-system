@@ -1149,7 +1149,13 @@ describe("closed schema and hostile input rejection", () => {
       aspectRatioBorder: "1px solid #C9B89D",
       aspectRatioRadius: "8px",
       aspectRatioShadow: "inset 0 1px #FFFFFF",
-      aspectRatioOverflow: "hidden",
+      // The middle-links lot (fc59fce28) rests the baseline's
+      // --ds-aspect-ratio-overflow at exactly "hidden", so an authored
+      // "hidden" now equals the vertical's rest and the delta filter drops it
+      // (measured: the delta for this document went 219 -> 218 keys on exactly
+      // this channel). "clip" keeps the pin honest: a tenant statement that
+      // differs from the rest must still reach CSS through the closed schema.
+      aspectRatioOverflow: "clip",
       aspectRatioMotionDuration: "220ms",
       aspectRatioMotionEasing: "ease-out",
       dividerColor: "#9B8A73",
