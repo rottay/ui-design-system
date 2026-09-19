@@ -5,7 +5,7 @@
   "producer": "declarado en el CSS autorado (src/foundation/tokens/css, src/components) o emitido por el compilador -- el registro de derivacion, el kernel (src/infrastructure/compilers/kernel) o lowering/foundation -- libraries/tokens/producers, el mismo conjunto que usa el arma transitiva de cascade-wiring",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() filtrado a /engines/modern/ -- un solo walker, importado",
   "denominator": 4718,
-  "produced": 4130,
+  "produced": 4188,
   "debt": 530,
   "producers": 6424,
   "modernSkinFiles": 124,
