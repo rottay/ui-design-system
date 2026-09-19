@@ -567,6 +567,25 @@ function collectCss(dir, out = []) {
 }
 
 /**
+ * Every entrypoint under the CSS root: a `.css` file directly in the
+ * entrypoint directory, or a directory's `index.css`.
+ */
+export function entrypointRoots(cssRoot = CSS_ROOT) {
+  const entryDir = resolve(cssRoot, "facade/entrypoints");
+  if (!existsSync(entryDir)) return [];
+  return readdirSync(entryDir, { withFileTypes: true }).flatMap((entry) => {
+    if (entry.isFile() && entry.name.endsWith(".css")) {
+      return [resolve(entryDir, entry.name)];
+    }
+    if (entry.isDirectory()) {
+      const index = resolve(entryDir, entry.name, "index.css");
+      return existsSync(index) ? [index] : [];
+    }
+    return [];
+  });
+}
+
+/**
  * Both halves of every split must ship. A file this gate governs is only
  * allowed to be unreachable from every entrypoint if it says why.
  */
@@ -580,21 +599,7 @@ export function auditGovernedFilesAreReachable({
   if (!existsSync(cssRoot)) return [`css root does not exist: ${cssRoot}`];
 
   const entryDir = resolve(cssRoot, "facade/entrypoints");
-  const roots =
-    entries ??
-    (existsSync(entryDir)
-      ? readdirSync(entryDir, { withFileTypes: true })
-          .flatMap((entry) => {
-            if (entry.isFile() && entry.name.endsWith(".css")) {
-              return [resolve(entryDir, entry.name)];
-            }
-            if (entry.isDirectory()) {
-              const index = resolve(entryDir, entry.name, "index.css");
-              return existsSync(index) ? [index] : [];
-            }
-            return [];
-          })
-      : []);
+  const roots = entries ?? entrypointRoots(cssRoot);
   if (roots.length === 0) return [`no entrypoints found under ${entryDir}`];
 
   const reachable = new Set();
@@ -635,6 +640,62 @@ export function auditGovernedFilesAreReachable({
       failures.push(
         `governed file reaches no bundle: ${key} is imported by no entrypoint. Either import it from an entrypoint under its cascade owner, or declare it in UNREACHABLE_BY_DESIGN with the reason.`
       );
+    }
+  }
+  return failures;
+}
+
+/**
+ * The skin roots this gate holds to the stricter law below. A skin directory is
+ * a family's paint; it exists to be worn by a page, so "nobody imports it" is
+ * never an acceptable steady state for one.
+ */
+export const IMPORTED_SKIN_ROOTS = Object.freeze([
+  "presentation/components/skin",
+  "runtime/engines/modern/skin",
+]);
+
+/**
+ * ORPHAN SKIN. `auditGovernedFilesAreReachable` accepts a written reason for an
+ * unreachable file; a skin has none available to it. WO-FAM-11 sub-lot C moved
+ * the page-body view-transition out of a `style={{}}` object and into
+ * `skin/page-shell-surface/index.css`, and the entrypoint never imported the
+ * new directory: the inline paint was gone, the skin shipped nowhere, and the
+ * seam existed in the repository and in no bundle. This arm refuses that state
+ * by construction -- there is no allowlist parameter to silence it with.
+ */
+export function auditSkinsAreImported({
+  cssRoot = CSS_ROOT,
+  entrypoints: entries,
+  skinRoots = IMPORTED_SKIN_ROOTS,
+} = {}) {
+  const failures = [];
+  const roots = entries ?? entrypointRoots(cssRoot);
+  if (roots.length === 0) {
+    return [`no entrypoints found under ${resolve(cssRoot, "facade/entrypoints")}`];
+  }
+
+  const reachable = new Set();
+  for (const root of roots) collectReachable(root, cssRoot, reachable);
+
+  for (const skinRoot of skinRoots) {
+    const dir = resolve(cssRoot, skinRoot);
+    if (!existsSync(dir)) continue;
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const index = resolve(dir, entry.name, "index.css");
+      const key = `${skinRoot}/${entry.name}/index.css`;
+      if (!existsSync(index)) {
+        failures.push(
+          `skin directory ${skinRoot}/${entry.name} has no index.css; a skin folder without its sheet paints nothing`
+        );
+        continue;
+      }
+      if (!reachable.has(index)) {
+        failures.push(
+          `orphan skin: ${key} is imported by no entrypoint. A skin is paint for a family that ships; import it from an entrypoint under its cascade owner (there is no unreachable-by-design for a skin)`
+        );
+      }
     }
   }
   return failures;
@@ -1353,11 +1414,15 @@ export function auditHeaderLayerClaims({
 export const INLINE_STYLE_ESCAPE_CEILINGS = new Map([
   // 158 -> 157: the gate refuses a ceiling above its own measurement, so
   // the ratchet is lowered to the measured census instead of left slack.
-  ["structures", 157],
+  // 157 -> 116: the FAM-08/10/11 waves drained the tier's runtime inline
+  // paint onto measured channels; lowered at the measured census, never slack.
+  ["structures", 116],
   // 24 -> 23 (WO-CAN-04): the `oauth-transition` surface left the package with
   // its inline escape. Decrease-only, and the gate refuses a ceiling that sits
   // above the measurement, so this is lowered rather than left slack.
-  ["surfaces", 23],
+  // 23 -> 18: the same wave drained the surfaces tier; lowered at the
+  // measured census.
+  ["surfaces", 18],
 ]);
 
 const INLINE_STYLE_RE = /style=\{\{/g;
@@ -1429,6 +1494,9 @@ if (isCli) {
       ...auditGovernedFilesAreReachable().map(
         (failure) => `both-halves-ship: ${failure}`
       )
+    );
+    failures.push(
+      ...auditSkinsAreImported().map((failure) => `orphan-skin: ${failure}`)
     );
     failures.push(
       ...auditSingleEntrypoint().map((failure) => `single-entrypoint: ${failure}`)

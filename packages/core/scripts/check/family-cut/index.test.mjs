@@ -29,6 +29,7 @@ import {
   analyzeSkin,
   analyzeSource,
   blockingDebt,
+  collectDeclarationScopes,
   collectFindings,
   declaredFanOutFamilies,
   describeOpenDebt,
@@ -258,6 +259,157 @@ test('CONTROL: the same `--ds-button-x` WITH a producer does not grow the ratche
     );
   } finally {
     rmSync(sandbox, { recursive: true, force: true });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// The scoped-producer classifier
+// ---------------------------------------------------------------------------
+
+/**
+ * A channel written under another family's selector is not written for this
+ * one. The shape is measured, not hypothetical: `--ds-kbd-frame` is declared
+ * only inside `.ds-pattern-command-palette … [data-part='shortcut']`, and
+ * `collection-header`'s key cap reads it where that rule can never match. The
+ * flat producer set cleared the read anyway and the row's ratchet fell from 10
+ * to 9 with no paint changed.
+ */
+const scopeFixture = (css) => {
+  const dir = mkdtempSync(join(tmpdir(), 'family-cut-scope-'));
+  const file = join(dir, 'index.css');
+  writeFileSync(file, css);
+  return { dir, scopes: collectDeclarationScopes({ files: [file] }) };
+};
+
+test('a declaration on a root selector is package-wide; one under a component class is not', () => {
+  const { dir, scopes } = scopeFixture([
+    ':root { --ds-wide: 1px; }',
+    "[data-engine='modern'] { --ds-engine-wide: 2px; }",
+    "@media (min-width: 40rem) { :root { --ds-wide-in-media: 3px; } }",
+    ".ds-pattern-command-palette [data-part='shortcut'] { --ds-scoped-only: 4px; }",
+    '.ds-button { --ds-both: 5px; }',
+    ':root { --ds-both: 6px; }',
+  ].join('\n'));
+  try {
+    assert.equal(scopes.get('--ds-wide').packageWide, true);
+    assert.equal(scopes.get('--ds-engine-wide').packageWide, true);
+    assert.equal(scopes.get('--ds-wide-in-media').packageWide, true);
+    assert.equal(scopes.get('--ds-scoped-only').packageWide, false);
+    assert.deepEqual([...scopes.get('--ds-scoped-only').classTokens], ['ds-pattern-command-palette']);
+    // One package-wide declaration is enough: a channel is not demoted because
+    // a component ALSO re-states it.
+    assert.equal(scopes.get('--ds-both').packageWide, true);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('PLANT: a scoped-only declaration does NOT clear a read in another family', () => {
+  const planted = '--ds-planted-frame';
+  const scoped = scopeFixture(
+    `.ds-pattern-command-palette [data-part='shortcut'] { ${planted}: 1px solid red; }`,
+  );
+  const owned = scopeFixture(`.ds-button { ${planted}: 1px solid red; }`);
+  const wide = scopeFixture(`:root { ${planted}: 1px solid red; }`);
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-scope-family-'));
+  try {
+    for (const relativePath of SANDBOX_SOURCES) {
+      const target = join(sandbox, relativePath);
+      mkdirSync(dirname(target), { recursive: true });
+      cpSync(join(ROOT, relativePath), target, { recursive: true });
+    }
+    // The family reads the planted name, and something in the package declares
+    // it -- so the flat producer set calls it produced whatever the scope is.
+    patch(sandbox, MODERN_SKIN, (text) =>
+      `${text}\n.ds-button--planted { border: var(${planted}, 1px solid currentColor); }\n`);
+    const producers = new Set([...PRODUCERS, planted]);
+    const measure = (scopes) =>
+      judgeFamily(
+        measureFamily(resolveFamily(FAMILY, sandbox), { producers, compiled: new Set(), scopes }),
+        readBaseline().families[FAMILY],
+      );
+
+    expectFinding(
+      measure(scoped.scopes),
+      grew('readWithoutProducer'),
+      'a declaration living only inside another family\'s selector produces nothing here',
+    );
+    expectNoFinding(
+      measure(owned.scopes),
+      '`readWithoutProducer` GREW',
+      'a declaration scoped to a class THIS family owns does reach it',
+    );
+    expectNoFinding(
+      measure(wide.scopes),
+      '`readWithoutProducer` GREW',
+      'a package-wide declaration reaches every family',
+    );
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+    for (const fixture of [scoped, owned, wide]) rmSync(fixture.dir, { recursive: true, force: true });
+  }
+});
+
+test('a scoped declaration inside the family\'s OWN skin still produces for it', () => {
+  const planted = '--ds-planted-local';
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-scope-local-'));
+  try {
+    for (const relativePath of SANDBOX_SOURCES) {
+      const target = join(sandbox, relativePath);
+      mkdirSync(dirname(target), { recursive: true });
+      cpSync(join(ROOT, relativePath), target, { recursive: true });
+    }
+    // Declared under a non-family class, in the family's own skin file: the
+    // corpus route is what keeps it produced.
+    patch(sandbox, MODERN_SKIN, (text) =>
+      `${text}\n.ds-engine-modern [data-part='label'] { ${planted}: 1px; }\n`
+      + `.ds-button--planted { border-width: var(${planted}, 1px); }\n`);
+    const scopes = collectDeclarationScopes({ files: [join(sandbox, MODERN_SKIN)] });
+    assert.equal(scopes.get(planted).packageWide, false);
+    expectNoFinding(
+      judgeFamily(
+        measureFamily(resolveFamily(FAMILY, sandbox), {
+          producers: new Set([...PRODUCERS, planted]),
+          compiled: new Set(),
+          scopes,
+        }),
+        readBaseline().families[FAMILY],
+      ),
+      '`readWithoutProducer` GREW',
+      'the family declares it in its own paint',
+    );
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+});
+
+test('a compiler-emitted channel is never demoted by a scoped re-declaration', () => {
+  const planted = '--ds-planted-emitted';
+  const scoped = scopeFixture(`.ds-pattern-command-palette { ${planted}: 1px; }`);
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-scope-emitted-'));
+  try {
+    for (const relativePath of SANDBOX_SOURCES) {
+      const target = join(sandbox, relativePath);
+      mkdirSync(dirname(target), { recursive: true });
+      cpSync(join(ROOT, relativePath), target, { recursive: true });
+    }
+    patch(sandbox, MODERN_SKIN, (text) =>
+      `${text}\n.ds-button--planted { border-width: var(${planted}, 1px); }\n`);
+    expectNoFinding(
+      judgeFamily(
+        measureFamily(resolveFamily(FAMILY, sandbox), {
+          producers: new Set([...PRODUCERS, planted]),
+          compiled: new Set([planted]),
+          scopes: scoped.scopes,
+        }),
+        readBaseline().families[FAMILY],
+      ),
+      '`readWithoutProducer` GREW',
+      'the compiler writes it on the theme root, so no selector scopes it',
+    );
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+    rmSync(scoped.dir, { recursive: true, force: true });
   }
 });
 

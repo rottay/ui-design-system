@@ -603,3 +603,154 @@ function TestShortcutComponent({
   useGlobalShortcut({ key: shortcutKey, handler, description });
   return null;
 }
+
+// ---------------------------------------------------------------------------
+// firesWhileTyping -- the editable-element exemption, both halves
+// ---------------------------------------------------------------------------
+
+function TypingExemptShortcut({
+  handler,
+  shortcutKey,
+  firesWhileTyping,
+}: {
+  handler: () => void;
+  shortcutKey: string;
+  firesWhileTyping?: boolean;
+}) {
+  useGlobalShortcut({
+    key: shortcutKey,
+    handler,
+    description: 'Exemption probe',
+    firesWhileTyping,
+  });
+  return null;
+}
+
+describe('firesWhileTyping', () => {
+  it('a plain key is still suppressed inside an editable, flag or no flag', () => {
+    const plain = vi.fn();
+    const flagged = vi.fn();
+
+    const { container } = render(
+      <ShortcutProvider>
+        <TypingExemptShortcut handler={plain} shortcutKey="c" />
+        <TypingExemptShortcut handler={flagged} shortcutKey="e" firesWhileTyping />
+        <input type="text" />
+        <textarea />
+        <div contentEditable suppressContentEditableWarning data-testid="rich" />
+      </ShortcutProvider>
+    );
+
+    for (const target of [
+      container.querySelector('input')!,
+      container.querySelector('textarea')!,
+      container.querySelector('[data-testid="rich"]')!,
+    ]) {
+      act(() => {
+        fireEvent.keyDown(target, { key: 'c' });
+        fireEvent.keyDown(target, { key: 'e' });
+      });
+    }
+
+    expect(plain).not.toHaveBeenCalled();
+    // The flag is honoured for command chords only: `e` is typing.
+    expect(flagged).not.toHaveBeenCalled();
+  });
+
+  it('a flagged chord fires from inside an input, textarea and contenteditable', () => {
+    const chord = vi.fn();
+
+    const { container } = render(
+      <ShortcutProvider>
+        <TypingExemptShortcut handler={chord} shortcutKey="ctrl+k" firesWhileTyping />
+        <input type="text" />
+        <textarea />
+        <div contentEditable suppressContentEditableWarning data-testid="rich" />
+      </ShortcutProvider>
+    );
+
+    for (const target of [
+      container.querySelector('input')!,
+      container.querySelector('textarea')!,
+      container.querySelector('[data-testid="rich"]')!,
+    ]) {
+      act(() => {
+        fireEvent.keyDown(target, { key: 'k', ctrlKey: true });
+      });
+    }
+
+    expect(chord).toHaveBeenCalledTimes(3);
+  });
+
+  it('an unflagged chord stays suppressed inside an input', () => {
+    const chord = vi.fn();
+
+    const { container } = render(
+      <ShortcutProvider>
+        <TypingExemptShortcut handler={chord} shortcutKey="ctrl+k" />
+        <input type="text" />
+      </ShortcutProvider>
+    );
+
+    act(() => {
+      fireEvent.keyDown(container.querySelector('input')!, { key: 'k', ctrlKey: true });
+    });
+
+    expect(chord).not.toHaveBeenCalled();
+    // ...and the same chord still fires outside one.
+    act(() => {
+      fireEvent.keyDown(document, { key: 'k', ctrlKey: true });
+    });
+    expect(chord).toHaveBeenCalledTimes(1);
+  });
+
+  it('a sequence never accumulates inside an editable', () => {
+    const handler = vi.fn();
+
+    const { container } = render(
+      <ShortcutProvider>
+        <TypingExemptShortcut handler={handler} shortcutKey="g+i" firesWhileTyping />
+        <input type="text" />
+      </ShortcutProvider>
+    );
+
+    const input = container.querySelector('input')!;
+    act(() => {
+      fireEvent.keyDown(input, { key: 'g' });
+      fireEvent.keyDown(input, { key: 'i' });
+    });
+    expect(handler).not.toHaveBeenCalled();
+
+    // The buffer did not survive the typing either: the `i` typed above must
+    // not combine with a later `g` pressed outside the field.
+    act(() => {
+      fireEvent.keyDown(document, { key: 'i' });
+    });
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('auto-repeat fires a chord once, and does not throttle a plain key', () => {
+    const chord = vi.fn();
+    const plain = vi.fn();
+
+    render(
+      <ShortcutProvider>
+        <TypingExemptShortcut handler={chord} shortcutKey="ctrl+k" firesWhileTyping />
+        <TypingExemptShortcut handler={plain} shortcutKey="j" />
+      </ShortcutProvider>
+    );
+
+    act(() => {
+      fireEvent.keyDown(document, { key: 'k', ctrlKey: true });
+      fireEvent.keyDown(document, { key: 'k', ctrlKey: true, repeat: true });
+      fireEvent.keyDown(document, { key: 'k', ctrlKey: true, repeat: true });
+    });
+    expect(chord).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+      fireEvent.keyDown(document, { key: 'j', repeat: true });
+    });
+    expect(plain).toHaveBeenCalledTimes(2);
+  });
+});

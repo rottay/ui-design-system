@@ -10,7 +10,8 @@
  * - Single keys: `e`, `c`, `?`, `escape`
  * - Modifier combos: `ctrl+k`, `cmd+shift+p`, `alt+n`
  * - Key sequences: `g+i` (press g, then i within 1s)
- * - Auto-suppression when typing in inputs/textareas/contenteditable
+ * - Auto-suppression when typing in inputs/textareas/contenteditable, which a
+ *   command chord may opt out of with `firesWhileTyping`
  * - Conflict detection with console warnings
  * - Conditional activation via `when` callback
  * - Category grouping for overlay display
@@ -97,6 +98,16 @@ export interface ShortcutDefinition {
    * `when` and editable-element suppression) regardless of scope state.
    */
   scope?: string;
+  /**
+   * Opt out of editable-element suppression: the shortcut fires even while
+   * focus is in an input, textarea, select or contenteditable region. This is
+   * the VS Code / Linear law for a command chord (`mod+k` opens the palette
+   * from a search box), and the kernel honours it ONLY for a combo holding
+   * `ctrl`, `alt` or `meta` -- a plain or shift-only key is indistinguishable
+   * from typing, so the flag on one is ignored rather than turning every
+   * keystroke into a command.
+   */
+  firesWhileTyping?: boolean;
 }
 
 /**
@@ -333,6 +344,22 @@ function isEditableElement(target: EventTarget | null): boolean {
   return false;
 }
 
+/**
+ * Whether a parsed shortcut may fire from inside a text field. A command chord
+ * holds a real modifier; `firesWhileTyping` on a plain or shift-only key is
+ * ignored, because such a key IS typing.
+ */
+function holdsCommandModifier(parsed: ParsedShortcut): boolean {
+  const { ctrl, alt, meta } = parsed.modifiers;
+  return ctrl || alt || meta;
+}
+
+function firesWhileTyping(parsed: ParsedShortcut): boolean {
+  if (parsed.definition.firesWhileTyping !== true) return false;
+  if (parsed.isSequence) return false;
+  return holdsCommandModifier(parsed);
+}
+
 // ---------------------------------------------------------------------------
 // ShortcutProvider
 // ---------------------------------------------------------------------------
@@ -431,8 +458,11 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
   // global shortcuts first dibs on the event.
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      // Suppress shortcuts when typing in form fields / contentEditable.
-      if (isEditableElement(event.target)) return;
+      // Typing in a form field / contentEditable suppresses every shortcut
+      // except a command chord that declares `firesWhileTyping` -- the whole
+      // registry is filtered by it below rather than returning here, so the
+      // exemption is a property of the definition and never of the listener.
+      const inEditable = isEditableElement(event.target);
 
       // Ignore modifier-only keypresses (e.g. pressing Ctrl alone).
       if (['Control', 'Alt', 'Shift', 'Meta'].includes(event.key)) return;
@@ -443,7 +473,9 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
       // resolveActiveScopeId), so a scoped entry either matches it exactly
       // or is skipped -- it can never fire "a little bit".
       const activeScopeId = resolveActiveScopeId(scopeContainersRef.current, scopeStackRef.current);
-      const isEligible = (def: ShortcutDefinition) => !def.when || def.when();
+      const isEligible = (parsed: ParsedShortcut) =>
+        (!inEditable || firesWhileTyping(parsed))
+        && (!parsed.definition.when || parsed.definition.when());
 
       // --- Pass 1: combo shortcuts (modifier + key) ---
       // Combos are checked first because they are unambiguous: the modifier
@@ -455,13 +487,17 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
       for (const entry of registryRef.current.values()) {
         const { parsed } = entry;
         if (parsed.isSequence) continue;
+        // A held chord auto-repeats; a command is one press. Plain keys keep
+        // repeating -- holding `j` walks a list -- so only a real modifier
+        // combo is discrete.
+        if (event.repeat && holdsCommandModifier(parsed)) continue;
         if (matchesCombo(event, parsed)) comboMatches.push(parsed);
       }
 
       const scopedCombo = activeScopeId
-        ? comboMatches.find((p) => p.definition.scope === activeScopeId && isEligible(p.definition))
+        ? comboMatches.find((p) => p.definition.scope === activeScopeId && isEligible(p))
         : undefined;
-      const globalCombo = comboMatches.find((p) => !p.definition.scope && isEligible(p.definition));
+      const globalCombo = comboMatches.find((p) => !p.definition.scope && isEligible(p));
       const winningCombo = scopedCombo ?? globalCombo;
 
       if (winningCombo) {
@@ -478,6 +514,13 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
       }
 
       // --- Pass 2: key sequences (e.g. g then i) ---
+      // A sequence is plain keystrokes, so inside a text field it is typing,
+      // full stop: nothing fires and nothing accumulates in the buffer.
+      if (inEditable) {
+        sequenceBufferRef.current = [];
+        return;
+      }
+
       // Sequences only apply when no modifier keys are held, because
       // modifier combos are already handled above.
       if (event.ctrlKey || event.altKey || event.metaKey) {
@@ -511,9 +554,9 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
       }
 
       const scopedSequence = activeScopeId
-        ? sequenceMatches.find((p) => p.definition.scope === activeScopeId && isEligible(p.definition))
+        ? sequenceMatches.find((p) => p.definition.scope === activeScopeId && isEligible(p))
         : undefined;
-      const globalSequence = sequenceMatches.find((p) => !p.definition.scope && isEligible(p.definition));
+      const globalSequence = sequenceMatches.find((p) => !p.definition.scope && isEligible(p));
       const winningSequence = scopedSequence ?? globalSequence;
 
       if (winningSequence) {
@@ -601,6 +644,7 @@ export function useGlobalShortcut(shortcut: ShortcutDefinition): void {
       description: shortcutRef.current.description,
       category: shortcutRef.current.category,
       scope: shortcutRef.current.scope,
+      firesWhileTyping: shortcutRef.current.firesWhileTyping,
       handler: () => shortcutRef.current.handler(),
       when: shortcutRef.current.when ? () => shortcutRef.current.when!() : undefined,
     };
@@ -612,7 +656,7 @@ export function useGlobalShortcut(shortcut: ShortcutDefinition): void {
       ctx.unregister(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ctx, shortcut.key, shortcut.description, shortcut.category, shortcut.scope]);
+  }, [ctx, shortcut.key, shortcut.description, shortcut.category, shortcut.scope, shortcut.firesWhileTyping]);
 }
 
 /**
@@ -659,6 +703,7 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
         description: shortcut.description,
         category: shortcut.category,
         scope: shortcut.scope,
+        firesWhileTyping: shortcut.firesWhileTyping,
         handler: () => arrayValueAt(shortcutsRef.current, index)?.handler(),
         when: shortcut.when ? () => arrayValueAt(shortcutsRef.current, index)?.when?.() ?? false : undefined,
       };
@@ -676,7 +721,9 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
   }, [
     ctx,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    shortcuts.map((s) => `${s.key}::${s.description}::${s.category ?? ''}::${s.scope ?? ''}`).join('|'),
+    shortcuts
+      .map((s) => `${s.key}::${s.description}::${s.category ?? ''}::${s.scope ?? ''}::${s.firesWhileTyping ?? false}`)
+      .join('|'),
   ]);
 }
 

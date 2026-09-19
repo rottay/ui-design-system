@@ -807,7 +807,7 @@
         "partsStamped": 11,
         "partsConsumed": 11
       },
-      "readWithoutProducer": 0,
+      "readWithoutProducer": 1,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -818,7 +818,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-05 lot 1: surface, row, current-marker, icon, panel, group and divider relations by derivation/chrome/menu (92 --ds-menu-* channels on the spacing ramp, the type roles, the elevation scale and the produced --ds-sidebar-* roots); skin/menu paints the engine tree and skin/menu-compounds the compounds, both on one ds-menu vocabulary; rows, triggers and compounds decide state through the interaction kernel; keyboard and the RTL-aware disclosure axis from runtime/collection/roving-focus; the submenu compound is a menuitem row with a data-open track, no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 146 -> 151. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew."
+      "cutNote": "WO-FAM-05 lot 1: surface, row, current-marker, icon, panel, group and divider relations by derivation/chrome/menu (92 --ds-menu-* channels on the spacing ramp, the type roles, the elevation scale and the produced --ds-sidebar-* roots); skin/menu paints the engine tree and skin/menu-compounds the compounds, both on one ds-menu vocabulary; rows, triggers and compounds decide state through the interaction kernel; keyboard and the RTL-aware disclosure axis from runtime/collection/roving-focus; the submenu compound is a menuitem row with a data-open track, no inline paint; not layout-sensitive, so no adapt slot; every part carries a skeleton role. WO-EVI-02 instrument coverage (2026-09-17): the readWithoutProducer arm now measures the family's whole Modern-scope skin corpus -- engine skins AND presentation-tier skins, the same corpus every other arm already read -- instead of engines/modern only. channelsRead 146 -> 151. The move is newly visible debt the instrument never scanned, not debt paid and no ceiling raised for source that changed: the pin rises only because the corpus grew. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact."
     },
     "tabs": {
       "cut": "WO-FAM-05",
@@ -1844,7 +1844,7 @@
         "partsStamped": 16,
         "partsConsumed": 16
       },
-      "readWithoutProducer": 9,
+      "readWithoutProducer": 10,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -1855,7 +1855,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. It carries 104 of the cut's 155 inline paints and 22 of its unproduced reads, 7 of which are the `kbd` namespace read by the search hint and routed to the `kbd` owner rather than produced locally."
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. It carries 104 of the cut's 155 inline paints and 22 of its unproduced reads, 7 of which are the `kbd` namespace read by the search hint and routed to the `kbd` owner rather than produced locally. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact."
     },
     "dashboard-header": {
       "cut": "WO-FAM-10",
@@ -1894,7 +1894,7 @@
         "partsStamped": 32,
         "partsConsumed": 32
       },
-      "readWithoutProducer": 1,
+      "readWithoutProducer": 2,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -1905,7 +1905,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 31 of 79 channels have no producer -- the highest unproduced share in the cut."
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 31 of 79 channels have no producer -- the highest unproduced share in the cut. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact."
     },
     "header-surface": {
       "cut": "WO-FAM-10",
@@ -1995,7 +1995,7 @@
         "partsStamped": 8,
         "partsConsumed": 8
       },
-      "readWithoutProducer": 0,
+      "readWithoutProducer": 2,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 1,
       "partsStampedNotConsumed": 0,
@@ -2006,7 +2006,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt, and the cleanest family in the cut: every channel it reads has a producer. Its debt is 8 unpainted parts, 4 parts with no skeleton role, a skin that selects no `[data-part]`, and no a11y assertion at all (0 test files)."
+      "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt, and the cleanest family in the cut: every channel it reads has a producer. Its debt is 8 unpainted parts, 4 parts with no skeleton role, a skin that selects no `[data-part]`, and no a11y assertion at all (0 test files). RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact."
     },
     "cockpit-header": {
       "cut": "WO-FAM-10",
@@ -2492,7 +2492,7 @@
         "partsStamped": 1,
         "partsConsumed": 1
       },
-      "readWithoutProducer": 2,
+      "readWithoutProducer": 3,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 1,
       "partsStampedNotConsumed": 0,
@@ -2503,7 +2503,7 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": "WO-FAM-11 sub-lot A admission. The one row in this cut admitted with NO openCut: it holds every BLOCKING arm today. Its debt is entirely ratchets -- 13 unproduced `--ds-action-dock-*` names, which is the cut's one case of a family that already owns a correct folder-derived namespace and simply has no producer for it, plus `--ds-size-touch-target` and `--ds-virtual-keyboard-inset`, two roots the token lane owns and FAM-10 already routed the first of. Its 2 produced names (`--ds-action-dock-reserved-block-*`) are self-declared in its own skin as a reservation contract other surfaces consume. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-action-dock` vocabulary (5 distinct tokens, 21 occurrences), applied from `runtime/rendering/index.tsx`."
+      "cutNote": "WO-FAM-11 sub-lot A admission. The one row in this cut admitted with NO openCut: it holds every BLOCKING arm today. Its debt is entirely ratchets -- 13 unproduced `--ds-action-dock-*` names, which is the cut's one case of a family that already owns a correct folder-derived namespace and simply has no producer for it, plus `--ds-size-touch-target` and `--ds-virtual-keyboard-inset`, two roots the token lane owns and FAM-10 already routed the first of. Its 2 produced names (`--ds-action-dock-reserved-block-*`) are self-declared in its own skin as a reservation contract other surfaces consume. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-action-dock` vocabulary (5 distinct tokens, 21 occurrences), applied from `runtime/rendering/index.tsx`. RWP re-read 2026-09-19: the scoped-producer classifier fix (the kbd/palette-scoped declarations no longer clear other families) restored the true count; the lower pin was the artifact."
     },
     "scope-switcher": {
       "cut": "WO-FAM-11",

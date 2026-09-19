@@ -9,7 +9,7 @@
  * This is the canonical integrated entry point. Apps that want full control
  * over the items array can still use `PatternCommandPalette` directly.
  *
- * Includes a built-in Cmd+K / Ctrl+K shortcut to open -- registered with the
+ * Includes a built-in Cmd+K / Ctrl+K shortcut to toggle -- registered with the
  * package's single keyboard owner, `ShortcutProvider`, which
  * `DesignSystemProvider` mounts -- and a
  * built-in "Keyboard shortcuts" command (default `?`) that opens the
@@ -46,25 +46,25 @@ import { PatternShortcutsOverlay } from '@/components/patterns/navigation/shortc
 import type { ShortcutDisplayItem } from '@/components/patterns/navigation/shortcuts-overlay';
 
 /**
- * Registers the palette's open chord with the ONE keyboard owner.
+ * Registers the palette's chord with the ONE keyboard owner.
  *
  * It is a component rather than a call in the body because
  * `useGlobalShortcut` throws without a `<ShortcutProvider>` ancestor, and the
  * caller decides whether one is there -- the sanctioned opt-in shape
  * `useHasShortcutProvider` documents.
  */
-function PaletteOpenShortcut({
+function PaletteChordShortcut({
   chord,
   description,
   category,
-  onOpen,
+  onToggle,
 }: {
   chord: string;
   description: string;
   category: string;
-  onOpen: () => void;
+  onToggle: () => void;
 }) {
-  useGlobalShortcut({ key: chord, handler: onOpen, description, category });
+  useGlobalShortcut({ key: chord, handler: onToggle, description, category, firesWhileTyping: true });
   return null;
 }
 
@@ -140,15 +140,16 @@ export function ConnectedCommandPalette({
   // `DesignSystemProvider` mounts, so the chord also appears in the cheatsheet
   // it populates.
   //
-  // MEASURED CONSEQUENCE, stated rather than hidden: the registry suppresses
-  // every shortcut while focus is in a text field, and the open palette's own
-  // search box IS one. The chord therefore OPENS the palette and no longer
-  // toggles it shut; Escape, the backdrop and the close control dismiss it, as
-  // they already did. Restoring a typing-context exemption means a flag on
-  // `ShortcutDefinition`, which is the shortcut kernel's singleton contract and
-  // outside this lot.
+  // The chord toggles from inside a text field -- a search box on the page, and
+  // the open palette's own input -- through `firesWhileTyping`, the definition
+  // flag the kernel honours for modifier chords only. The registry still
+  // suppresses every plain key while typing, and the kernel drops auto-repeat
+  // for a chord, so a held Cmd+K cannot flap the palette.
   const hasShortcutProvider = useHasShortcutProvider();
-  const openPalette = useCallback(() => setOpen(true), []);
+  const togglePalette = useCallback(() => {
+    if (open) handleOpenChange(false);
+    else setOpen(true);
+  }, [open, handleOpenChange]);
 
   // Built-in "Keyboard shortcuts" command: palette-searchable (via
   // useCommandPaletteItems, above) AND fires on `shortcutsOverlayKey` via
@@ -203,11 +204,11 @@ export function ConnectedCommandPalette({
   return (
     <>
       {hasShortcutProvider && (
-        <PaletteOpenShortcut
+        <PaletteChordShortcut
           chord={openShortcut}
           description={tOr('connectedCommandPalette.openPalette', 'Open the command palette')}
           category={tOr('connectedCommandPalette.globalCategory', 'Global')}
-          onOpen={openPalette}
+          onToggle={togglePalette}
         />
       )}
       <PatternCommandPalette

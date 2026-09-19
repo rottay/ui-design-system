@@ -39,7 +39,9 @@
  * `check/engine/read-without-producer` and `libraries/tokens/producers`; the
  * skin corpus comes from `libraries/engine/skins/files`; the fan-out comes
  * from `libraries/theme-catalog`. A second measurement of any of them would be
- * a second truth about the same tree.
+ * a second truth about the same tree. What this gate adds on top is a FILTER,
+ * not a second count: `producersReaching` removes the producers whose selector
+ * scope cannot reach the family being measured (see its own note).
  *
  * SCOPE: MODERN ONLY. Classic and Rustic are frozen by owner decision
  * (2026-09-05); no work order adds content to them, so counting their paint
@@ -65,6 +67,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import postcss from 'postcss';
 import ts from 'typescript';
 
 import {
@@ -76,7 +79,10 @@ import { classifyReadWithoutProducer } from '../engine/read-without-producer/ind
 import { collectSkinFiles } from '../../libraries/engine/skins/files/index.mjs';
 import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.mjs';
 import { readThemeCatalog } from '../../libraries/theme-catalog/index.mjs';
-import { collectChannelProducers } from '../../libraries/tokens/producers/index.mjs';
+import {
+  collectAuthoredStylesheets,
+  collectChannelProducers,
+} from '../../libraries/tokens/producers/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = findPackageRoot(HERE);
@@ -985,6 +991,117 @@ function compoundClassTokensBefore(text, index) {
   return tokens;
 }
 
+// ---------------------------------------------------------------------------
+// Which producers a family can actually reach
+// ---------------------------------------------------------------------------
+
+/**
+ * A `--ds-x: …` written under a component selector is NOT a package-wide
+ * producer. `--ds-kbd-frame` is declared in exactly one place --
+ * `.ds-pattern-command-palette.ds-engine-modern [data-part='shortcut']` -- and
+ * `collection-header` reads it for its own key cap, where that rule can never
+ * match. Counting it cleared a real unproduced read and moved the row's ratchet
+ * from 10 to 9: the count fell without a line of paint changing, which is a
+ * classifier artifact and not progress.
+ *
+ * So: a declaration is PACKAGE-WIDE when at least one of its selectors names no
+ * component at all (`:root`, `html`, `[data-engine='modern']`, `*`), and SCOPED
+ * otherwise. A scoped declaration still produces for the family it is scoped to
+ * -- the family whose class the selector names, or whose corpus holds the file
+ * -- and for nobody else.
+ */
+const COMPONENT_SCOPE_RE = new RegExp(
+  `\\.(?:${CLASS_PREFIXES.join('|')})-[a-zA-Z0-9-]+|\\[data-(?:part|component)\\b`,
+  'u',
+);
+const SELECTOR_CLASS_RE = new RegExp(
+  `\\.((?:${CLASS_PREFIXES.join('|')})-[a-zA-Z0-9]+(?:-{1,2}[a-zA-Z0-9]+)*)`,
+  'gu',
+);
+
+/** The chain of selectors a declaration sits under, outermost first. */
+function selectorChain(decl) {
+  const chain = [];
+  for (let node = decl.parent; node; node = node.parent) {
+    if (node.type === 'rule' && typeof node.selector === 'string') chain.unshift(node.selector);
+  }
+  return chain;
+}
+
+/**
+ * Every authored `--ds-*` declaration, indexed by channel: whether any of its
+ * declarations is package-wide, which family classes scope the rest, and which
+ * files they live in.
+ */
+export function collectDeclarationScopes({ files } = {}) {
+  const corpus = files ?? collectAuthoredStylesheets(DEFAULT_ROOT);
+  const scopes = new Map();
+  for (const file of corpus) {
+    let root;
+    try {
+      root = postcss.parse(readFileSync(file, 'utf8'), { from: file });
+    } catch {
+      /* An unparseable sheet states no scope; the producer set still counts its
+       * text-level declarations, so this fails OPEN rather than inventing debt. */
+      continue;
+    }
+    root.walkDecls((decl) => {
+      if (!decl.prop.startsWith('--ds-')) return;
+      const entry = scopes.get(decl.prop) ?? { packageWide: false, classTokens: new Set(), files: new Set() };
+      const chain = selectorChain(decl);
+      if (chain.length === 0) {
+        entry.packageWide = true;
+      } else {
+        const parts = chain[chain.length - 1].split(',').map((part) => part.trim()).filter(Boolean);
+        if (parts.length === 0 || parts.some((part) => !COMPONENT_SCOPE_RE.test(part))) {
+          entry.packageWide = true;
+        }
+        for (const selector of chain) {
+          for (const match of selector.matchAll(SELECTOR_CLASS_RE)) entry.classTokens.add(match[1]);
+        }
+      }
+      entry.files.add(toPosix(file));
+      scopes.set(decl.prop, entry);
+    });
+  }
+  return scopes;
+}
+
+let defaultDeclarationScopes = null;
+function sharedDeclarationScopes() {
+  defaultDeclarationScopes ??= collectDeclarationScopes();
+  return defaultDeclarationScopes;
+}
+
+/* One walk of the producer corpus per process: every family asks the same
+ * question of the same tree, and two walks would be two truths about it. */
+let defaultChannelProducers = null;
+function sharedChannelProducers() {
+  defaultChannelProducers ??= collectChannelProducers();
+  return defaultChannelProducers;
+}
+
+/**
+ * The producer set as THIS family sees it: every package-wide producer, plus
+ * the scoped declarations whose scope can reach it. Compiler emissions are
+ * always package-wide -- the compiler writes on the theme root -- so only
+ * authored declarations are ever demoted.
+ */
+export function producersReaching({ producers, scopes, compiled, ownsClass, corpus }) {
+  const reaching = new Set(producers);
+  const owned = new Set(corpus.map((file) => toPosix(file)));
+  for (const [name, scope] of scopes) {
+    if (scope.packageWide) continue;
+    if (compiled?.has(name)) continue;
+    if (!reaching.has(name)) continue;
+    const reaches =
+      [...scope.classTokens].some((token) => ownsClass(token))
+      || [...scope.files].some((file) => owned.has(file));
+    if (!reaches) reaching.delete(name);
+  }
+  return reaching;
+}
+
 const composedVariantStampCache = new Map();
 
 /**
@@ -1708,9 +1825,12 @@ export function measureDragAndDropArm(resolved, parsed) {
   };
 }
 
-export function measureFamily(resolved, { producers } = {}) {
+export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
   const { family, root } = resolved;
-  const producerSet = producers ?? collectChannelProducers().producers;
+  const measured = producers && compiled ? null : sharedChannelProducers();
+  const producerSet = producers ?? measured.producers;
+  const compiledSet = compiled ?? measured?.compiled ?? new Set();
+  const declarationScopes = scopes ?? sharedDeclarationScopes();
 
   /* One parse per source: the anatomy reader and the DnD arm read the same
    * tree rather than building it twice. */
@@ -1783,7 +1903,16 @@ export function measureFamily(resolved, { producers } = {}) {
    * AND presentation-tier skins -- exactly the corpus every other arm reads. A
    * narrower filter here understated the debt of any family whose channels are
    * read from a presentation skin (data-table read 1 of its 4). */
-  const readWithoutProducer = classifyReadWithoutProducer(resolved.skins, producerSet);
+  /* Only the producers whose scope can reach THIS family: a channel declared
+   * solely under another family's selector is not written for this one. */
+  const reachableProducers = producersReaching({
+    producers: producerSet,
+    scopes: declarationScopes,
+    compiled: compiledSet,
+    ownsClass,
+    corpus: resolved.skins,
+  });
+  const readWithoutProducer = classifyReadWithoutProducer(resolved.skins, reachableProducers);
   const readNames = new Set(readWithoutProducer.denominator);
 
   const partsStampedNotConsumed = [...stampedParts].filter((part) => !consumedParts.has(part)).sort();
@@ -2164,13 +2293,19 @@ export function collectFindings({ baselinePath = BASELINE_PATH, root = DEFAULT_R
     };
   }
   const families = only ? [only] : roster;
-  const producerSet = producers ?? collectChannelProducers().producers;
+  const channelProducers = sharedChannelProducers();
+  const producerSet = producers ?? channelProducers.producers;
+  const scopes = sharedDeclarationScopes();
   const findings = [];
   const measurements = [];
   const open = [];
   for (const family of families) {
     const pinned = baseline.families?.[family];
-    const measured = measureFamily(resolveFamily(family, root, pinned ?? {}), { producers: producerSet });
+    const measured = measureFamily(resolveFamily(family, root, pinned ?? {}), {
+      producers: producerSet,
+      compiled: channelProducers.compiled,
+      scopes,
+    });
     measurements.push(measured);
     findings.push(...judgeFamily(measured, pinned));
     open.push(...describeOpenDebt(measured, pinned));

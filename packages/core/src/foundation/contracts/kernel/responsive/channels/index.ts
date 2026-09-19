@@ -103,6 +103,13 @@ export const RESPONSIVE_CUSTOM_CHANNELS = [
   '--ds-tabs-responsive-icon-size',
   '--ds-tabs-responsive-padding',
   '--ds-textarea-responsive-radius',
+  // The shell geometry the app-shell `geometry.*` props stamp (WO-FAM-11 B):
+  // responsive values reach these channels through the same prop path.
+  '--ds-shell-collapse-transition',
+  '--ds-shell-header-block-size',
+  '--ds-shell-sidebar-collapsed-width',
+  '--ds-shell-sidebar-header-block-size',
+  '--ds-shell-sidebar-width',
 ] as const;
 
 /**

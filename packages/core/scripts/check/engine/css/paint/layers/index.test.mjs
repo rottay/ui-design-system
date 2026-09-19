@@ -358,6 +358,87 @@ test("both-halves-ship: an orphaned governed file FAILS the gate", async () => {
   }
 });
 
+test("orphan-skin: every skin directory of the real tree is imported", async () => {
+  const { auditSkinsAreImported } = await import("./index.mjs");
+  assert.deepEqual(auditSkinsAreImported(), []);
+});
+
+test("orphan-skin: a skin no entrypoint imports FAILS, with no way to declare it away", async () => {
+  const { auditSkinsAreImported, auditGovernedFilesAreReachable } = await import(
+    "./index.mjs"
+  );
+  const root = mkdtempSync(join(tmpdir(), "css-orphan-skin-"));
+  try {
+    mkdirSync(join(root, "facade/entrypoints/base"), { recursive: true });
+    mkdirSync(join(root, "presentation/components/skin/worn"), { recursive: true });
+    // The planted defect: sub-lot C's exact shape -- a skin directory that
+    // exists, paints a real family, and reaches no bundle.
+    mkdirSync(join(root, "presentation/components/skin/orphan"), { recursive: true });
+    writeFileSync(
+      join(root, "facade/entrypoints/base/index.css"),
+      '@import "../../../presentation/components/skin/worn/index.css" layer(rottay-structures);'
+    );
+    writeFileSync(
+      join(root, "presentation/components/skin/worn/index.css"),
+      ".ds-worn{color:red}"
+    );
+    writeFileSync(
+      join(root, "presentation/components/skin/orphan/index.css"),
+      ".ds-orphan[data-part='body']{view-transition-name:ds-vt-page-body}"
+    );
+
+    const skinRoots = ["presentation/components/skin"];
+    const failures = auditSkinsAreImported({ cssRoot: root, skinRoots });
+    assert.equal(failures.length, 1, failures.join("\n"));
+    assert.match(failures[0], /orphan skin: presentation\/components\/skin\/orphan\/index\.css/);
+
+    // The reachability arm accepts a written reason; this one does not, which
+    // is the whole point of the arm.
+    assert.deepEqual(
+      auditGovernedFilesAreReachable({
+        cssRoot: root,
+        allowlist: new Map([
+          ["presentation/components/skin/orphan/index.css", "declared away"],
+        ]),
+        rosterPath: rosterFixture(root),
+      }),
+      []
+    );
+    assert.equal(auditSkinsAreImported({ cssRoot: root, skinRoots }).length, 1);
+
+    // Importing it is the only way out.
+    writeFileSync(
+      join(root, "facade/entrypoints/base/index.css"),
+      [
+        '@import "../../../presentation/components/skin/worn/index.css" layer(rottay-structures);',
+        '@import "../../../presentation/components/skin/orphan/index.css" layer(rottay-structures);',
+      ].join("\n")
+    );
+    assert.deepEqual(auditSkinsAreImported({ cssRoot: root, skinRoots }), []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("orphan-skin: a skin directory with no index.css FAILS", async () => {
+  const { auditSkinsAreImported } = await import("./index.mjs");
+  const root = mkdtempSync(join(tmpdir(), "css-empty-skin-"));
+  try {
+    mkdirSync(join(root, "facade/entrypoints/base"), { recursive: true });
+    mkdirSync(join(root, "presentation/components/skin/hollow"), { recursive: true });
+    writeFileSync(join(root, "facade/entrypoints/base/index.css"), "/* nothing yet */");
+
+    const failures = auditSkinsAreImported({
+      cssRoot: root,
+      skinRoots: ["presentation/components/skin"],
+    });
+    assert.equal(failures.length, 1, failures.join("\n"));
+    assert.match(failures[0], /skin directory presentation\/components\/skin\/hollow has no index\.css/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("both-halves-ship: a stale unreachable-by-design entry FAILS", async () => {
   const { auditGovernedFilesAreReachable } = await import(
     "./index.mjs"
@@ -706,7 +787,11 @@ test("every shared skin the entrypoint binds agrees with its owning family", () 
   // own `--rh-*` namespace. The count is a census floor, not a target: it must
   // move down with a real removal and must never be raised to absorb a new
   // shared skin that skipped tier review.
-  assert.equal(rows.length, 156);
+  // 156 -> 157 (FAM-11 C repair): `skin/page-shell-surface/index.css` already
+  // existed and was bound by nothing. Its tier was reviewed the same way as
+  // every other row -- `family-owner` -> `rottay-structures` -- and the
+  // `orphan-skin` arm is what now makes an unbound skin impossible.
+  assert.equal(rows.length, 157);
   const mismatched = rows.filter((row) => row.bound !== row.tier);
   assert.deepEqual(mismatched, [], JSON.stringify(mismatched, null, 2));
   // Nothing is classified by a route that reads no source at all.
@@ -717,7 +802,9 @@ test("every shared skin the entrypoint binds agrees with its owning family", () 
 test("the tier resolver, not the marker, is what places a structure above the engines", () => {
   // Five live sheets stamp `.ds-surface` because they paint INSIDE a surface
   // root while belonging to a structure family. The marker is reported beside
-  // the answer and never produces it.
+  // the answer and never produces it -- `page-shell-surface` is the plainest
+  // case: `.ds-surface.ds-page-shell-surface[data-part='body']`, painted by a
+  // structure owner.
   const rows = skinTierCensus();
   const disagreeing = rows
     .filter((row) => row.marker && row.marker !== row.tier)
@@ -725,6 +812,7 @@ test("the tier resolver, not the marker, is what places a structure above the en
   assert.deepEqual(disagreeing.sort(), [
     "collection-shell/index.css",
     "layout-header/index.css",
+    "page-shell-surface/index.css",
     "surface-section-card/index.css",
     "surface-states/index.css",
   ]);

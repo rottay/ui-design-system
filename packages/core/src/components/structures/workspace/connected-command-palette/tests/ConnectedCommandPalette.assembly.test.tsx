@@ -12,7 +12,7 @@
  * -- and the keyboard authority at its middle. That is what this suite pins.
  */
 import React from 'react';
-import { act, screen } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { ConnectedCommandPalette } from '..';
@@ -88,6 +88,53 @@ describe('connected-command-palette -- the keyboard owner', () => {
       dispatch('j', { ctrlKey: true });
     });
     expect(await screen.findByRole('combobox')).toBeInTheDocument();
+  });
+
+  it('toggles from a page text field, and shuts from its own search box', async () => {
+    renderWithEngine(
+      <>
+        <input data-testid="page-input" />
+        <ConnectedCommandPalette />
+      </>,
+      'modern',
+    );
+    await settle();
+
+    // The retired hand-rolled listener fired mod+k inside inputs on purpose;
+    // `firesWhileTyping` is how the registry keeps that law.
+    const pageInput = await screen.findByTestId('page-input');
+    act(() => {
+      pageInput.focus();
+      fireEvent.keyDown(pageInput, { key: 'k', ctrlKey: true });
+    });
+    const search = await screen.findByRole('combobox');
+
+    // The palette's own search box is a text field too: the chord closes it.
+    act(() => {
+      fireEvent.keyDown(search, { key: 'k', ctrlKey: true });
+    });
+    await waitFor(() => expect(screen.queryByRole('combobox')).toBeNull());
+  });
+
+  it('leaves a plain key suppressed in a text field: only the chord is exempt', async () => {
+    renderWithEngine(
+      <>
+        <input data-testid="page-input" />
+        <ConnectedCommandPalette />
+      </>,
+      'modern',
+    );
+    await settle();
+
+    const pageInput = await screen.findByTestId('page-input');
+    act(() => {
+      pageInput.focus();
+      fireEvent.keyDown(pageInput, { key: 'k' });
+      fireEvent.keyDown(pageInput, { key: '?' });
+    });
+
+    expect(screen.queryByRole('combobox')).toBeNull();
+    expect(screen.queryByRole('dialog')).toBeNull();
   });
 
   it('lists its own open chord in the cheatsheet it populates', async () => {
