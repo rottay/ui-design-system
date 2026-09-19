@@ -9,7 +9,7 @@
     "shape": 217,
     "typography": 181,
     "rhythm": 224,
-    "depth": 197,
+    "depth": 198,
     "states": 154,
     "motion": 204
   },
@@ -22,7 +22,7 @@
     "motion": 0
   },
   "provenance": {
-    "reconciles": "2026-09-18 wave: FAM-07 layout primitive skins enter the corpus; FAM-05 close physically removes the steps skin; the states axis is re-pinned BELOW its old floor with the two named, reviewed subtractions; the instrument gains the namespaced domain-state matcher (f8298d417) | follow-up (same day, after the FAM-10 sub-lot F landing): rhythm 221 -> 224 and depth 194 -> 197, each +3 with NO corpus move (276 families both sides, measured with one instrument over this tree and over an isolated archive of 9eebadbdf's parent window commit): detail-form-surface, form-surface and wizard-surface enter both axes — the rebuilt ruled-alert error banner pads on the rhythm plane (spacing.rhythm) and its wrapping emphasis border reads the edge roles (surfaces.border-style). All other axes and the N/A set unmoved.",
+    "reconciles": "2026-09-18 wave: FAM-07 layout primitive skins enter the corpus; FAM-05 close physically removes the steps skin; the states axis is re-pinned BELOW its old floor with the two named, reviewed subtractions; the instrument gains the namespaced domain-state matcher (f8298d417) | follow-up (same day, after the FAM-10 sub-lot F landing): rhythm 221 -> 224 and depth 194 -> 197, each +3 with NO corpus move (276 families both sides, measured with one instrument over this tree and over an isolated archive of 9eebadbdf's parent window commit): detail-form-surface, form-surface and wizard-surface enter both axes — the rebuilt ruled-alert error banner pads on the rhythm plane (spacing.rhythm) and its wrapping emphasis border reads the edge roles (surfaces.border-style). All other axes and the N/A set unmoved. | follow-up 2 (same day, cascade-wiring lot 7a67243d8): depth 197 -> 198, one entrant measured family-by-family against an isolated archive of the previous pin's tree: splitter (its skin now reads the edge/elevation channels the re-chain wired). No corpus move.",
     "sourceCommit": "9eebadbdf",
     "computedOn": "2026-09-18",
     "computedBy": "node scripts/check/theme/population/index.mjs (populationReport) over this tree, and the same instrument over an isolated archive of the previous pin's sourceCommit 7b35276d5; membership diffed family by family between the two measurements",

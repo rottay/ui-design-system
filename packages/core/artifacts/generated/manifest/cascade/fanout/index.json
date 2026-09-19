@@ -48,7 +48,7 @@
     "channelsWithoutReaders": 194,
     "channelsPaintsFalse": 945,
     "channelsPaintsInModernFalse": 2027,
-    "readers": 40691,
+    "readers": 40708,
     "readersByPlane": {
       "modern-skin-css": 15689,
       "presentation-css": 11726,
@@ -62,7 +62,7 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 4257
+      "ts-other": 4274
     },
     "channelsByPlane": {
       "modern-skin-css": 4826,
@@ -20500,7 +20500,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 49,
+          "line": 68,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -20527,7 +20527,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 50,
+          "line": 69,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -20707,7 +20707,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 57,
+          "line": 76,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -20769,7 +20769,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 59,
+          "line": 78,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -20848,7 +20848,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 53,
+          "line": 72,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -20875,7 +20875,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 51,
+          "line": 70,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -20902,7 +20902,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 52,
+          "line": 71,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -34095,7 +34095,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 65,
+          "line": 62,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
+          "line": 78,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -36097,7 +36104,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 64,
+          "line": 81,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -36126,7 +36133,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 62,
+          "line": 79,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -36155,7 +36162,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 61,
+          "line": 78,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -36184,7 +36191,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 60,
+          "line": 77,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -36213,7 +36220,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 63,
+          "line": 80,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -92855,7 +92862,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 88,
+          "line": 123,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -93310,7 +93317,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 67,
+          "line": 59,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
+          "line": 80,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -142053,7 +142067,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 154,
+          "line": 189,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -152639,7 +152653,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 71,
+          "line": 88,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -152666,7 +152680,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 72,
+          "line": 89,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -152764,7 +152778,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 65,
+          "line": 82,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -152874,7 +152888,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 76,
+          "line": 93,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -152936,7 +152950,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 78,
+          "line": 95,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -153016,7 +153030,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 70,
+          "line": 87,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -153084,7 +153098,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 73,
+          "line": 90,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -153111,7 +153125,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 74,
+          "line": 91,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -164553,7 +164567,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
-          "line": 42,
+          "line": 52,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -168312,7 +168326,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 88,
+          "line": 123,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -168356,7 +168370,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 93,
+          "line": 128,
           "prop": "inline-expr",
           "decl": "var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -168405,7 +168419,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 90,
+          "line": 125,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168521,7 +168535,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 101,
+          "line": 136,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168652,7 +168666,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 105,
+          "line": 140,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168679,7 +168693,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 107,
+          "line": 142,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168744,7 +168758,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 109,
+          "line": 144,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168771,7 +168785,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 113,
+          "line": 148,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168855,7 +168869,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 111,
+          "line": 146,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168882,7 +168896,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 112,
+          "line": 147,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -168993,7 +169007,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 91,
+          "line": 126,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -169048,7 +169062,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 116,
+          "line": 151,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -169103,7 +169117,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 118,
+          "line": 153,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -169483,14 +169497,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 146,
+          "line": 181,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 154,
+          "line": 189,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -169640,7 +169654,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 88,
+          "line": 123,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -260664,7 +260678,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 59,
+          "line": 65,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
+          "line": 78,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -260692,14 +260713,28 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 78,
+          "line": 76,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
+          "line": 95,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 118,
+          "line": 121,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 153,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -260707,6 +260742,13 @@
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
           "line": 50,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
+          "line": 60,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -266725,7 +266767,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 116,
+          "line": 120,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 151,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -266739,7 +266788,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
-          "line": 48,
+          "line": 49,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
+          "line": 58,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -269033,14 +269089,28 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
-          "line": 57,
+          "line": 64,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/aspect-ratio/index.ts",
+          "line": 76,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 76,
+          "line": 75,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
+          "line": 93,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -303815,7 +303885,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 67,
+          "line": 84,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -303825,7 +303895,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 68,
+          "line": 85,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -303835,7 +303905,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 69,
+          "line": 86,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -303955,14 +304025,24 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 85,
+          "line": 108,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 93,
+          "line": 111,
+          "prop": "inline-expr",
+          "decl": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
+          "scalars": [
+            "--ds-rhythm-effective-scale"
+          ]
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 128,
           "prop": "inline-expr",
           "decl": "var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -304142,14 +304222,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
-          "line": 42,
+          "line": 52,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 51,
+          "line": 64,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -324621,7 +324701,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
-          "line": 46,
+          "line": 56,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -324737,7 +324817,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
-          "line": 48,
+          "line": 58,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -324771,7 +324851,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/space/index.ts",
-          "line": 50,
+          "line": 60,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -324891,7 +324971,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 51,
+          "line": 64,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-$",
           "scalars": []
@@ -325177,14 +325257,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 66,
+          "line": 83,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 95,
+          "line": 130,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -325234,21 +325314,28 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 53,
+          "line": 60,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 62,
+          "line": 66,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 70,
+          "line": 75,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
+          "line": 83,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -333943,7 +334030,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 67,
+          "line": 84,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -340671,7 +340758,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 68,
+          "line": 85,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -340701,7 +340788,17 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 93,
+          "line": 111,
+          "prop": "inline-expr",
+          "decl": "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))",
+          "scalars": [
+            "--ds-rhythm-effective-scale"
+          ]
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 128,
           "prop": "inline-expr",
           "decl": "var(--ds-divider-content-gap, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)))",
           "scalars": [
@@ -343132,7 +343229,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/container/index.ts",
-          "line": 69,
+          "line": 86,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -346667,7 +346764,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 67,
+          "line": 80,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -346769,7 +346866,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 70,
+          "line": 83,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -346818,7 +346915,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 68,
+          "line": 81,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -346853,7 +346950,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 65,
+          "line": 78,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -396047,7 +396144,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stack/index.ts",
-          "line": 71,
+          "line": 84,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -402577,7 +402674,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 105,
+          "line": 114,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 140,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -402762,7 +402866,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 107,
+          "line": 115,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 142,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -402913,7 +403024,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 111,
+          "line": 118,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 146,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -403028,7 +403146,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
-          "line": 109,
+          "line": 116,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/divider/index.ts",
+          "line": 144,
           "prop": "inline-expr",
           "scalars": []
         },
