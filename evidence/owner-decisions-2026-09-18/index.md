@@ -92,7 +92,13 @@ Until then the class stays emitted and pinned.
    pre-wave families' post-pin debt, routable to writer lots.
 9. **channel-liveness STOP NO-GO tail** — `--ds-elevation-6`, `--ds-type-tier-{sm,xs}-letter-spacing`:
    the 748cdf85c packet's owner proposals still await a ruling.
-10. **csspaint `--radius-field` ownership** — the pre-existing projection finding (12866efbd) needs
+10. **theme-iso universal-name law vs the dashboard-header family** — D2's 23
+    `--ds-dashboard-header-*` channels trip THEME_NAME_DENY_LIST ("dashboard" is a
+    banned word in universal channel names). The family was cut under that name
+    (FAM-10 roster); the law predates it. Choose: rename the family namespace
+    (expensive, artifact-moving) or amend the deny-list with a scoped admission.
+    NOT pinned over — the writer refused and reported (correct).
+11. **csspaint `--radius-field` ownership** — the pre-existing projection finding (12866efbd) needs
     an owner; the ceilings re-pin (157->123, 23->18) is queued behind it.
 
 ## F. Quota (RESOLVED 2026-09-18 — superseded by the owner)
