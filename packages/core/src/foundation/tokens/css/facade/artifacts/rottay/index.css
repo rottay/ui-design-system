@@ -343,6 +343,7 @@
   --ds-calendar-view-entry-accent: var(--ds-color-primary);
   --ds-calendar-view-touch-target: 2.75rem;
   --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
+  --ds-card-border-accent-hover: var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)));
   --ds-card-error-title-color: var(--ds-color-error-900);
   --ds-card-footer-actions-inset: var(--ds-spacing-1);
   --ds-card-header-extra-min-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));

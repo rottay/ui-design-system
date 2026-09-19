@@ -56183,7 +56183,7 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   --ds-popover-texture-current: var(--ds-popover-bordered-texture, none);
   --ds-popover-padding-block-current: var(--ds-popover-bordered-padding-block, var(--ds-spacing-md));
   --ds-popover-padding-inline-current: var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-bordered-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-bordered-padding-inline, var(--ds-spacing-md))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-bordered-title-padding-inline);
   --ds-popover-title-gap-current: var(--ds-popover-bordered-title-gap, var(--ds-spacing-sm));
   --ds-popover-max-width-current: var(--ds-popover-bordered-max-width, var(--ds-popover-max-width));
   --ds-popover-body-max-height-current: var(--ds-popover-body-max-height);
@@ -56283,7 +56283,7 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   --ds-popover-texture-current: var(--ds-popover-minimal-texture, none);
   --ds-popover-padding-block-current: var(--ds-popover-minimal-padding-block, var(--ds-spacing-sm));
   --ds-popover-padding-inline-current: var(--ds-popover-minimal-padding-inline, var(--ds-spacing-sm));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-minimal-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-minimal-padding-inline, var(--ds-spacing-sm))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-minimal-title-padding-inline);
   --ds-popover-max-width-current: var(--ds-popover-minimal-max-width, var(--ds-popover-max-width));
 }
 
@@ -56307,7 +56307,7 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
   --ds-popover-texture-current: var(--ds-popover-rich-texture, none);
   --ds-popover-padding-block-current: var(--ds-popover-rich-padding-block, var(--ds-spacing-lg));
   --ds-popover-padding-inline-current: var(--ds-popover-rich-padding-inline, var(--ds-spacing-lg));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-rich-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-rich-padding-inline, var(--ds-spacing-lg))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-rich-title-padding-inline);
   --ds-popover-max-width-current: var(--ds-popover-rich-max-width, var(--ds-popover-max-width));
 }
 
@@ -56315,7 +56315,7 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='compact'] {
   --ds-popover-padding-block-current: var(--ds-popover-compact-padding-block, var(--ds-spacing-xs));
   --ds-popover-padding-inline-current: var(--ds-popover-compact-padding-inline, var(--ds-spacing-sm));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-compact-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-compact-padding-inline, var(--ds-spacing-sm))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-compact-title-padding-inline);
   --ds-popover-title-gap-current: var(--ds-popover-compact-title-gap, var(--ds-spacing-xs));
   --ds-popover-body-max-height-current: var(--ds-popover-compact-max-height, var(--ds-popover-body-max-height));
 }
@@ -56323,13 +56323,13 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='comfortable'] {
   --ds-popover-padding-block-current: var(--ds-popover-comfortable-padding-block, var(--ds-spacing-md));
   --ds-popover-padding-inline-current: var(--ds-popover-comfortable-padding-inline, var(--ds-spacing-md));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-comfortable-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-comfortable-padding-inline, var(--ds-spacing-md))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-comfortable-title-padding-inline);
 }
 
 .ds-popover.ds-popover--modern[data-part='trigger'] > [data-part='surface'][data-density='spacious'] {
   --ds-popover-padding-block-current: var(--ds-popover-spacious-padding-block, var(--ds-spacing-lg));
   --ds-popover-padding-inline-current: var(--ds-popover-spacious-padding-inline, var(--ds-spacing-lg));
-  --ds-popover-title-padding-inline-current: var(--ds-popover-spacious-title-padding-inline, var(--ds-popover-title-padding-inline, var(--ds-popover-spacious-padding-inline, var(--ds-spacing-lg))));
+  --ds-popover-title-padding-inline-current: var(--ds-popover-spacious-title-padding-inline);
   --ds-popover-title-gap-current: var(--ds-popover-spacious-title-gap, var(--ds-spacing-md));
 }
 
@@ -57991,9 +57991,9 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
 }
 
 .ds-stepper--modern[data-part='root'] [data-part='item'][data-status='finish']::after {
-  background: var(--ds-stepper-item-bg-finish, var(--ds-steps-finish-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))));
+  background: var(--ds-stepper-item-bg-finish);
   color: var(--ds-stepper-item-color-finish, var(--ds-color-primary));
-  border-color: var(--ds-stepper-item-border-finish, var(--ds-steps-finish-border, color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border))));
+  border-color: var(--ds-stepper-item-border-finish);
 }
 
 .ds-stepper--modern[data-part='root'] [data-part='item'][data-status='error']::after {
@@ -120212,6 +120212,7 @@ html[lang]:lang(ar) {
   --ds-calendar-view-touch-target: 2.75rem;
   --ds-card-bg: var(--ds-color-bg-elevated);
   --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
+  --ds-card-border-accent-hover: var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)));
   --ds-card-error-title-color: var(--ds-color-error-900);
   --ds-card-footer-actions-inset: var(--ds-spacing-1);
   --ds-card-header-extra-min-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));

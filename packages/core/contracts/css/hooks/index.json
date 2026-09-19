@@ -53,7 +53,7 @@
   },
   "counts": {
     "tenantChannel": 4078,
-    "compilerConcreteEmissions": 4608,
+    "compilerConcreteEmissions": 4609,
     "compilerEmissionPatterns": 11,
     "themeContractFiles": 59,
     "ambiguousThemeContractTypes": 0,
@@ -63,7 +63,7 @@
     "foundationTokens": 4135,
     "componentTokens": 690,
     "componentSuppliers": 352,
-    "reads": 7455,
+    "reads": 7452,
     "hooks": 93,
     "unadjudicatedReads": 1414,
     "promoted": 93,

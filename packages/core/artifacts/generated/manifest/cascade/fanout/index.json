@@ -46,11 +46,11 @@
     "channelsDs": 8330,
     "channelsBridge": 648,
     "channelsWithoutReaders": 194,
-    "channelsPaintsFalse": 937,
-    "channelsPaintsInModernFalse": 2019,
-    "readers": 41058,
+    "channelsPaintsFalse": 940,
+    "channelsPaintsInModernFalse": 2022,
+    "readers": 41036,
     "readersByPlane": {
-      "modern-skin-css": 15988,
+      "modern-skin-css": 15963,
       "presentation-css": 11750,
       "foundation-css": 1645,
       "runtime-css": 192,
@@ -62,10 +62,10 @@
       "infrastructure-tsx": 6,
       "ts-token-mirror": 1447,
       "ts-token-utils": 47,
-      "ts-other": 4301
+      "ts-other": 4304
     },
     "channelsByPlane": {
-      "modern-skin-css": 4844,
+      "modern-skin-css": 4841,
       "presentation-css": 2315,
       "foundation-css": 735,
       "runtime-css": 77,
@@ -49262,13 +49262,6 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
-          "line": 124,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
           "line": 130,
           "prop": "background",
           "scalars": []
@@ -50364,7 +50357,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 60,
+          "line": 63,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -50601,7 +50594,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 60,
+          "line": 61,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
+          "line": 63,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -50712,7 +50712,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 60,
+          "line": 61,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
+          "line": 63,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -53230,14 +53237,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 57,
+          "line": 58,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 58,
+          "line": 59,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -54111,7 +54118,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 78,
+          "line": 81,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -54291,7 +54298,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 82,
+          "line": 85,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -54312,7 +54319,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 83,
+          "line": 86,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -54862,7 +54869,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 63,
+          "line": 66,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -55189,7 +55196,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 63,
+          "line": 66,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -55239,7 +55246,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 65,
+          "line": 68,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -55347,7 +55354,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 65,
+          "line": 68,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -84539,13 +84546,6 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
-          "line": 126,
-          "prop": "border-color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
           "line": 132,
           "prop": "border-color",
           "scalars": []
@@ -90633,7 +90633,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 60,
+          "line": 61,
+          "prop": "inline-expr",
+          "scalars": []
+        },
+        {
+          "plane": "ts-other",
+          "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
+          "line": 63,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -98501,7 +98508,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 70,
+          "line": 73,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -100491,7 +100498,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 71,
+          "line": 74,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -110077,22 +110084,8 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
-          "line": 124,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
           "line": 125,
           "prop": "color",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
-          "line": 126,
-          "prop": "border-color",
           "scalars": []
         },
         {
@@ -121195,7 +121188,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 67,
+          "line": 70,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -125967,7 +125960,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 68,
+          "line": 71,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -130587,7 +130580,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 58,
+          "line": 59,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -138057,7 +138050,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 57,
+          "line": 58,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -143699,7 +143692,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 83,
+          "line": 86,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -146641,7 +146634,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 69,
+          "line": 72,
           "prop": "inline-expr",
           "scalars": []
         }
@@ -154923,7 +154916,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 75,
+          "line": 78,
           "prop": "inline-expr",
           "decl": "calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
           "scalars": [
@@ -165131,7 +165124,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 75,
+          "line": 78,
           "prop": "inline-expr",
           "decl": "calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))",
           "scalars": [
@@ -176801,14 +176794,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 61,
+          "line": 64,
           "prop": "inline-expr",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 74,
+          "line": 77,
           "prop": "inline-expr",
           "decl": "translateY(calc(-1 * var(--ds-edge-hairline-width))) scale(1.025)",
           "scalars": []
@@ -180116,7 +180109,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 72,
+          "line": 75,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -180710,7 +180703,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 73,
+          "line": 76,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -282417,13 +282410,6 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 59,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 242,
           "prop": "padding-inline",
           "scalars": []
@@ -282620,13 +282606,6 @@
           "scalars": []
         },
         {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 199,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/popover/index.ts",
           "line": 96,
@@ -282714,13 +282693,6 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 190,
           "prop": "--ds-popover-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 191,
-          "prop": "--ds-popover-title-padding-inline-current",
           "scalars": []
         },
         {
@@ -283490,13 +283462,6 @@
           "scalars": []
         },
         {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 159,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/popover/index.ts",
           "line": 93,
@@ -284001,13 +283966,6 @@
           "scalars": []
         },
         {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 183,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/popover/index.ts",
           "line": 94,
@@ -284206,13 +284164,6 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 204,
           "prop": "--ds-popover-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 205,
-          "prop": "--ds-popover-title-padding-inline-current",
           "scalars": []
         },
         {
@@ -284532,54 +284483,11 @@
       "kind": "ds",
       "declaredIn": [],
       "planes": [
-        "modern-skin-css",
         "ts-other"
       ],
-      "paints": true,
-      "paintsInModern": true,
+      "paints": false,
+      "paintsInModern": false,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 59,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 159,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 183,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 191,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 199,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 205,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/popover/index.ts",
@@ -295576,7 +295484,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 81,
+          "line": 84,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -298399,7 +298307,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 80,
+          "line": 83,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -300428,7 +300336,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 79,
+          "line": 82,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -305420,7 +305328,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 65,
+          "line": 68,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -305430,7 +305338,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 66,
+          "line": 69,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -330237,7 +330145,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 76,
+          "line": 79,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -330699,7 +330607,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 66,
+          "line": 69,
           "prop": "inline-expr",
           "decl": "calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1))",
           "scalars": [
@@ -347035,13 +346943,6 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 183,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 203,
           "prop": "--ds-popover-padding-block-current",
           "scalars": []
@@ -347051,13 +346952,6 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 204,
           "prop": "--ds-popover-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 205,
-          "prop": "--ds-popover-title-padding-inline-current",
           "scalars": []
         },
         {
@@ -347171,13 +347065,6 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 59,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 197,
           "prop": "--ds-popover-padding-block-current",
           "scalars": []
@@ -347187,13 +347074,6 @@
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 198,
           "prop": "--ds-popover-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 199,
-          "prop": "--ds-popover-title-padding-inline-current",
           "scalars": []
         },
         {
@@ -347485,22 +347365,8 @@
         {
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 159,
-          "prop": "--ds-popover-title-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "line": 190,
           "prop": "--ds-popover-padding-inline-current",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
-          "line": 191,
-          "prop": "--ds-popover-title-padding-inline-current",
           "scalars": []
         },
         {
@@ -355881,19 +355747,11 @@
       "kind": "ds",
       "declaredIn": [],
       "planes": [
-        "modern-skin-css",
         "ts-other"
       ],
-      "paints": true,
-      "paintsInModern": true,
+      "paints": false,
+      "paintsInModern": false,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
-          "line": 124,
-          "prop": "background",
-          "scalars": []
-        },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stepper/index.ts",
@@ -355908,19 +355766,11 @@
       "kind": "ds",
       "declaredIn": [],
       "planes": [
-        "modern-skin-css",
         "ts-other"
       ],
-      "paints": true,
-      "paintsInModern": true,
+      "paints": false,
+      "paintsInModern": false,
       "readers": [
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
-          "line": 126,
-          "prop": "border-color",
-          "scalars": []
-        },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/stepper/index.ts",
@@ -357455,13 +357305,6 @@
           "plane": "modern-skin-css",
           "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
           "line": 102,
-          "prop": "background",
-          "scalars": []
-        },
-        {
-          "plane": "modern-skin-css",
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper/index.css",
-          "line": 124,
           "prop": "background",
           "scalars": []
         },
@@ -362792,7 +362635,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 82,
+          "line": 85,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -402300,7 +402143,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 54,
+          "line": 55,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -407634,7 +407477,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 55,
+          "line": 56,
           "prop": "inline-expr",
           "scalars": []
         },
@@ -408609,7 +408452,7 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/card/index.ts",
-          "line": 56,
+          "line": 57,
           "prop": "inline-expr",
           "scalars": []
         },

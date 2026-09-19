@@ -802,7 +802,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 8,
-        "channelsRead": 151,
+        "channelsRead": 153,
         "classTokens": 7,
         "partsStamped": 11,
         "partsConsumed": 11
@@ -825,7 +825,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 170,
+        "channelsRead": 180,
         "classTokens": 2,
         "partsStamped": 13,
         "partsConsumed": 13
@@ -848,7 +848,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 5,
-        "channelsRead": 64,
+        "channelsRead": 75,
         "classTokens": 3,
         "partsStamped": 8,
         "partsConsumed": 8
@@ -871,7 +871,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 63,
+        "channelsRead": 71,
         "classTokens": 2,
         "partsStamped": 12,
         "partsConsumed": 12
@@ -894,7 +894,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 95,
+        "channelsRead": 106,
         "classTokens": 5,
         "partsStamped": 12,
         "partsConsumed": 12
@@ -917,7 +917,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 12,
+        "channelsRead": 23,
         "classTokens": 4,
         "partsStamped": 4,
         "partsConsumed": 4
@@ -940,7 +940,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 8,
-        "channelsRead": 235,
+        "channelsRead": 259,
         "classTokens": 16,
         "partsStamped": 25,
         "partsConsumed": 25
@@ -963,7 +963,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 57,
+        "channelsRead": 59,
         "classTokens": 2,
         "partsStamped": 30,
         "partsConsumed": 30
@@ -1030,7 +1030,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 7,
-        "channelsRead": 99,
+        "channelsRead": 103,
         "classTokens": 5,
         "partsStamped": 9,
         "partsConsumed": 9
@@ -1053,7 +1053,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 50,
+        "channelsRead": 51,
         "classTokens": 5,
         "partsStamped": 13,
         "partsConsumed": 14
@@ -1343,7 +1343,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 4,
-        "channelsRead": 69,
+        "channelsRead": 74,
         "classTokens": 16,
         "partsStamped": 9,
         "partsConsumed": 9
@@ -1457,7 +1457,7 @@
       "denominators": {
         "skinFiles": 4,
         "sourceFiles": 13,
-        "channelsRead": 245,
+        "channelsRead": 254,
         "classTokens": 3,
         "partsStamped": 88,
         "partsConsumed": 88
@@ -1480,7 +1480,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 27,
+        "channelsRead": 28,
         "classTokens": 0,
         "partsStamped": 20,
         "partsConsumed": 20
@@ -1618,7 +1618,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 9,
+        "channelsRead": 11,
         "classTokens": 0,
         "partsStamped": 5,
         "partsConsumed": 5
