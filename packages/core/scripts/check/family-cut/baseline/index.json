@@ -2258,6 +2258,335 @@
         "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot G (surface-lifecycle) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
       },
       "cutNote": "WO-FAM-10 sub-lot G. Admitted at its measured debt. All 20 inline paints and all 6 source colour literals live in one file, `surface-lifecycle/error-boundary/index.tsx`: an error boundary paints itself inline so it still renders when the stylesheet is the thing that failed. That is a product constraint the cut answers with a static fallback rule in the skin, not a sweep. classVocabularies 0 -> 1 (2026-09-18, sub-lot G): the family gained exactly its one governed namespace (ds-surface-lifecycle-error/loading) — the template target, not a split; the prefix set is [ds]."
+    },
+    "app-shell": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 103,
+        "classTokens": 1,
+        "partsStamped": 16,
+        "partsConsumed": 4
+      },
+      "readWithoutProducer": 62,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 1,
+      "partsStampedNotConsumed": 13,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 4,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot B (app-shell + the --ds-shell-* split)",
+        "debt": {
+          "adaptSlot": 2,
+          "skeletonPartsWithoutRole": 12
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot B owns it. The adaptSlot arm is 2 of 2 failing halves: `app-shell` is the cut's only family in LAYOUT_SENSITIVE_FAMILIES and it neither accepts `adapt` nor resolves `data-posture` through useAdaptation -- it stamps a private `ShellPosture` vocabulary declared in `structures/shell/contracts`, which coincides by value with the kernel's viewport postures, which is why nothing caught it. The reference implementation is one directory away in `structures/shell/navigation/sidebar-surface`."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission. The cut's centre of gravity: 62 of its 97 unproduced channels, all in the `--ds-shell-*` namespace this family reads and 4 other owners consume (`skin/action-dock`, `skin/page-shell`, `skin/chat-surface`, `skin/metrics-rows`, `skin/visual-excellence-preview`, plus two TypeScript readers). 20 `--ds-shell-*` names DO have a producer, all from the legacy `chrome-variables` kernel, and they are exactly the inset/geometry names the foreign readers consume -- so `readWithoutProducer=62` is not a rename away from zero: sub-lot B has to split a published geometry contract from a private chrome namespace first. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-app-shell` BEM vocabulary (19 distinct tokens, 21 occurrences in source and 70 in its skin), which the acceptance gate forbids by name."
+    },
+    "page-shell": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 121,
+        "classTokens": 0,
+        "partsStamped": 27,
+        "partsConsumed": 27
+      },
+      "readWithoutProducer": 17,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 9,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot C (page-shell + the paintless shells)",
+        "debt": {
+          "skeletonHandMade": 29,
+          "skeletonPartsWithoutRole": 2
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot C owns it. 29 of the cut's 43 hand-made skeleton constructs are this family's `[data-part='skeleton-*']` selectors in its own skin; the loading state is drawn by the family instead of derived by `AnatomySkeleton` from its anatomy."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission. The cut's cleanest large family: 121 channels read, anatomy-only (27 parts stamped, 27 consumed, zero classes -- classVocabularies=0 is the absence of a class vocabulary, not a missing one), 30 executable a11y assertions. Its 17 unproduced reads are 11 `--ds-page-header-*` (a sub-namespace not derived from the folder name -- a rename inside the family), 3 `--ds-page-shell-*` and 3 `--ds-workspace-card-*` that belong to the workspace/collection-workspace owner and that WO-FAM-10 already routed. Declared in the `surfaces.border-style` fan-out of the control catalog by this lot: it reads 2 of that row's 3 `--ds-edge-*-width` channels, so the claim is reached and fanOutUnreached stays 0."
+    },
+    "workspace-shell": {
+      "cut": "WO-FAM-11",
+      "skins": [
+        "collection-shell"
+      ],
+      "namingNote": "the owner is `structures/shell/workspace-shell` and its paint is `skin/collection-shell`, because the component emits the class root `ds-collection-shell`. With no pin the family resolved zero skins and reported classVocabularies=0 and BLOCKING skinReadsAnatomy=false for a naming difference instead of for its paint. Whether the class root is renamed to `ds-workspace-shell` is sub-lot C's call: `ds-collection-shell` is also selected by the collection-workspace surface's paint.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 17,
+        "classTokens": 0,
+        "partsStamped": 4,
+        "partsConsumed": 4
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot C (page-shell + the paintless shells)",
+        "debt": {
+          "inlineStyleViolations": 21,
+          "visualLiterals": 2,
+          "skeletonPartsWithoutRole": 1
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot C owns it. All 21 inline paints and both source colour literals are the particle-field overlay at `workspace-shell/index.tsx` (`position`/`inset`/`pointerEvents`/`zIndex`/`maskImage`, plus two `color-mix()` particle colours passed inline) -- one decorative feature, not a sweep."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission, S2 class. Measured through the `skins` pin above; every number here is the real skin's. `--ds-workspace-shell-*` has 4 producers in `chrome-variables` and no family skin reads any of them, and the family's own paint is also spread across the 3695-line monolith `presentation/components/patterns/index.css` -- whether draining that monolith is in scope is sub-lot C's ruling, not this row's. The family also carries the last `data-cra-*` attribute in the package (`data-cra-14-static-fallback`)."
+    },
+    "surface-chrome": {
+      "cut": "WO-FAM-11",
+      "skins": [
+        "surface-section-card"
+      ],
+      "namingNote": "the owner is `structures/shell/surface-chrome` and its paint is `skin/surface-section-card`, because the component emits the class root `ds-section-card` through the governed section-card recipe. With no pin the family resolved zero skins, reported BLOCKING skinReadsAnatomy=false and reported 0 unproduced channels where its real skin reads 6. `skin/surface-accent-bar` is NOT pinned here: it is a governed suppression rule with no owner emitting `ds-accent-bar`.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 39,
+        "classTokens": 0,
+        "partsStamped": 7,
+        "partsConsumed": 9
+      },
+      "readWithoutProducer": 6,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 2,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot C (page-shell + the paintless shells)",
+        "debt": {
+          "inlineStyleViolations": 3,
+          "skeletonPartsWithoutRole": 1
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot C owns it. The 3 inline paints and the roleless part are measured against the real skin, which the `skins` pin above admits; with no pin the gate reported this family's BLOCKING arms from an empty corpus."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission, S2 class. Measured through the `skins` pin above. 6 unproduced reads: 3 `--ds-section-card-*` (its own namespace, under the class root's name) and 3 `--ds-workspace-card-*` that belong to another owner and that WO-FAM-10 already routed. Declared in the `recipe-profile` fan-out of the control catalog by this lot: the family consumes that decision as runtime data through `useRecipeProfileDefaults('sectionCard')` and `SECTION_CARD_RECIPE_DEFINITION`. That row is `data-only`, so it is never counted as an unreached cascade claim."
+    },
+    "search-command-bar": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 22,
+        "classTokens": 1,
+        "partsStamped": 33,
+        "partsConsumed": 32
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 1,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot D (the command chain + the keyboard owner)",
+        "debt": {
+          "skeletonPartsWithoutRole": 27,
+          "a11yAssertions": 1
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot D owns it. a11yAssertions=1 means ZERO executable assertions: the owner has no `tests/` directory at all, so the arm has no partial credit to give. The 27 roleless parts are its voice-input sub-anatomy (`voice-badge`, `voice-help-*`, `suggestion-chip`, `top-rail`, ...), 27 of the cut's 61."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN and is recorded as such: the family reads no channel in its own namespace at all -- its 22 reads are root tokens, `--ds-search-command-bar-*` has 0 producers and 0 readers, and the namespace has to be created before it can be drained. The pin is the gate's measurement, and the work is larger than the number."
+    },
+    "command-palette": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 6,
+        "channelsRead": 25,
+        "classTokens": 0,
+        "partsStamped": 24,
+        "partsConsumed": 24
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 1,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot D (the command chain + the keyboard owner)",
+        "debt": {
+          "inlineStyleViolations": 1,
+          "skeletonHandMade": 14,
+          "skeletonPartsWithoutRole": 11
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot D owns it. Its 14 hand-made skeleton constructs and 11 roleless parts sit beside the cut's sharpest producer-without-reader defect: 8 `--ds-command-palette-*` channels are emitted by the legacy `chrome-variables` kernel and its Modern skin reads none of them -- 25 root-token reads instead."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 with 25 channels read is the inverse defect: every read is a root token, so the 8 `--ds-command-palette-*` channels a tenant can already move through `chrome-variables` land nowhere. A live tenant-facing cascade with no reader is not visible in any ratchet on this row; it is stated here so sub-lot D cannot read the 0 as done."
+    },
+    "shortcuts-overlay": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 3,
+        "channelsRead": 24,
+        "classTokens": 0,
+        "partsStamped": 17,
+        "partsConsumed": 17
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 0,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot D (the command chain + the keyboard owner)",
+        "debt": {
+          "skeletonPartsWithoutRole": 5
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot D owns it. Its only BLOCKING debt is 5 stamped parts the shared skeleton renderer has no role for; every channel its skin reads has a producer."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission. 24 channels read, every one produced; no class vocabulary, anatomy-only, 17 parts stamped and 17 consumed. Its cut is the skeleton vocabulary, a chrome deriver for the namespace it does not yet own, and one of the cut's 3 internal global `keydown` listeners (in `engines/modern`)."
+    },
+    "action-dock": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 4,
+        "channelsRead": 31,
+        "classTokens": 1,
+        "partsStamped": 1,
+        "partsConsumed": 1
+      },
+      "readWithoutProducer": 15,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 1,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "cutNote": "WO-FAM-11 sub-lot A admission. The one row in this cut admitted with NO openCut: it holds every BLOCKING arm today. Its debt is entirely ratchets -- 13 unproduced `--ds-action-dock-*` names, which is the cut's one case of a family that already owns a correct folder-derived namespace and simply has no producer for it, plus `--ds-size-touch-target` and `--ds-virtual-keyboard-inset`, two roots the token lane owns and FAM-10 already routed the first of. Its 2 produced names (`--ds-action-dock-reserved-block-*`) are self-declared in its own skin as a reservation contract other surfaces consume. classVocabularies=1 / legacyNamespaceClasses=1 is the `rottay-action-dock` vocabulary (5 distinct tokens, 21 occurrences), applied from `runtime/rendering/index.tsx`."
+    },
+    "scope-switcher": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 12,
+        "classTokens": 1,
+        "partsStamped": 3,
+        "partsConsumed": 2
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot E (the dock + the two switchers)",
+        "debt": {
+          "skeletonPartsWithoutRole": 1,
+          "a11yAssertions": 1
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot E owns it. a11yAssertions=1 means ZERO executable assertions: the owner has no `tests/` directory at all."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission. readWithoutProducer=0 is a FALSE GREEN, as for `search-command-bar`: all 12 reads are root tokens and `--ds-scope-switcher-*` has 0 producers and 0 readers. A thin wrapper over `primitives/navigation/segmented/engines/modern` with no test directory."
+    },
+    "view-mode-switcher": {
+      "cut": "WO-FAM-11",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 0,
+        "classTokens": 1,
+        "partsStamped": 2,
+        "partsConsumed": 1
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 1,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0,
+      "openCut": {
+        "workOrder": "WO-FAM-11",
+        "opened": "2026-09-19",
+        "lot": "sub-lot E (the dock + the two switchers)",
+        "debt": {
+          "skeletonPartsWithoutRole": 1,
+          "a11yAssertions": 1
+        },
+        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot E owns it. a11yAssertions=1 means ZERO executable assertions: the owner has no `tests/` directory at all."
+      },
+      "cutNote": "WO-FAM-11 sub-lot A admission. The cut's extreme case: an 80-line skin that reads ZERO `--ds-*` channels, so channelsRead=0 and readWithoutProducer=0 both say the same thing -- there is no cascade here to move. A thin wrapper over `primitives/navigation/segmented/engines/modern` with no test directory."
     }
   },
   "routed": [

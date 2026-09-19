@@ -675,7 +675,10 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     },
     minimumFamilies: {
       kind: "declared-fan-out",
-      families: ["card", "input", "table", "panel"],
+      // `page-shell` joins the floor under WO-FAM-11: its Modern skin reads two
+      // of these three roles, so the row already moves it and the claim is
+      // measured rather than declared.
+      families: ["card", "input", "table", "panel", "page-shell"],
     },
     envelope: "open",
     effect: "css-channels",
@@ -988,10 +991,14 @@ export const THEME_CONTROL_CATALOG = Object.freeze([
     produces: { channels: [], rootAttributes: [] },
     minimumFamilies: {
       kind: "declared-fan-out",
+      // `surface-chrome` is the family that consumes the `sectionCard` profile
+      // (`useRecipeProfileDefaults('sectionCard')`); `section-card` is the class
+      // root it emits and owns no component, so it stays registered as routed.
       families: [
         "button",
         "card",
         "section-card",
+        "surface-chrome",
         "tabs",
         "tag",
         "input",

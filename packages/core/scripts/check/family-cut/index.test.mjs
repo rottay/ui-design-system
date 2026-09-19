@@ -2488,6 +2488,117 @@ test('LIVE: every WO-FAM-10 row resolves to exactly one owner and at least one s
 });
 
 // ---------------------------------------------------------------------------
+// WO-FAM-11: the shells, the workspace chrome and the keyboard owner
+// ---------------------------------------------------------------------------
+
+/** The two families of this cut whose paint is named after another family. */
+const FAM11_SKIN_PINS = Object.freeze({
+  'workspace-shell': ['collection-shell'],
+  'surface-chrome': ['surface-section-card'],
+});
+
+test('LIVE: every WO-FAM-11 row resolves to exactly one owner and at least one skin', () => {
+  const baseline = readBaseline().families;
+  const cut = Object.entries(baseline).filter(([, row]) => row.cut === 'WO-FAM-11');
+  assert.equal(cut.length, 10, 'sub-lot A admitted the ten measurable families of the cut');
+  for (const [family, row] of cut) {
+    const resolved = resolveFamily(family, ROOT, row);
+    assert.equal(resolved.componentDirs.length, 1, family);
+    assert.ok(resolved.skins.length > 0, `${family}: a naming difference is not an empty corpus`);
+    assert.deepEqual(resolved.unmatchedPinnedSkins, [], family);
+  }
+  for (const [family, skins] of Object.entries(FAM11_SKIN_PINS)) {
+    assert.deepEqual(baseline[family].skins, skins, `${family}: the roster pins the skin that paints it`);
+  }
+});
+
+test('CONTROL: each S2 pin resolves the real paint, and the row holds at its declared debt', () => {
+  const baseline = readBaseline().families;
+  for (const [family, skins] of Object.entries(FAM11_SKIN_PINS)) {
+    const row = baseline[family];
+    const resolved = resolveFamily(family, ROOT, row);
+    assert.deepEqual(resolved.skins.map((file) => file.split(sep).slice(-2, -1)[0]), skins, family);
+    assert.equal(resolved.pinnedSkins.length, skins.length, family);
+    const measured = measureFamily(resolved, { producers: PRODUCERS });
+    // Without the pin both families resolve zero skins and report
+    // `skinReadsAnatomy` false for a naming difference instead of for paint.
+    assert.equal(measured.blocking.skinReadsAnatomy, true, family);
+    assert.deepEqual(judgeFamily(measured, row), [], family);
+  }
+});
+
+test("PLANT: a `skins` pin naming another family's real paint turns the row red", () => {
+  const baseline = readBaseline().families;
+  // The pin decides which paint IS the family, so a wrong one pins fiction at a
+  // number the gate then defends. Every swap below names a skin that really
+  // exists: the drill is the WRONG file, not a missing one, which is the case
+  // the `planted-nothing` drill above already owns.
+  for (const [family, skins] of [
+    ['workspace-shell', ['surface-section-card']],
+    ['surface-chrome', ['collection-shell']],
+    ['workspace-shell', ['app-shell']],
+    ['surface-chrome', ['page-shell']],
+  ]) {
+    const pin = { ...baseline[family], skins };
+    const resolved = resolveFamily(family, ROOT, pin);
+    const where = `${family} <- ${skins.join(',')}`;
+    assert.equal(resolved.skins.length, 1, where);
+    assert.deepEqual(resolved.unmatchedPinnedSkins, [], `${where}: the wrong skin is a real file`);
+    const findings = judgeFamily(measureFamily(resolved, { producers: PRODUCERS }), pin);
+    expectFinding(findings, 'denominator `channelsRead` moved', where);
+    assert.ok(
+      findings.some((finding) => /`readWithoutProducer` (?:GREW|SHRANK)/u.test(finding)),
+      `${where}: the cascade census moves with the paint, so a wrong pin cannot stay green -- got ${JSON.stringify(findings)}`,
+    );
+  }
+});
+
+test('SHAPE: the cut\'s two paintless owners are refused admission, openCut or not', () => {
+  // `page-shell-surface` and `connected-command-palette` emit no class and no
+  // `data-part`, and no skin anywhere paints them: they are composition-only
+  // structures. The gate refuses an empty corpus unwaivably -- an empty corpus
+  // is a broken measurement, not a declarable state -- so neither is a roster
+  // row of sub-lot A, and this is why.
+  const baseline = readBaseline().families;
+  for (const family of ['page-shell-surface', 'connected-command-palette']) {
+    assert.equal(baseline[family], undefined, `${family}: not admitted`);
+    const measured = measureFamily(resolveFamily(family, ROOT), { producers: PRODUCERS });
+    assert.equal(measured.denominators.skinFiles, 0, family);
+    const maximal = {
+      cut: 'WO-FAM-11',
+      denominators: measured.denominators,
+      ...measured.ratchets,
+      openCut: {
+        workOrder: 'WO-FAM-11',
+        opened: '2026-09-19',
+        debt: blockingDebt(measured),
+        note: 'drill: every BLOCKING arm declared at its measurement',
+      },
+    };
+    assert.deepEqual(judgeFamily(measured, maximal), [
+      `${family}: resolves to zero Modern skin files -- an empty corpus is never a pass`,
+    ], `${family}: the refusal survives a row that declares every arm`);
+  }
+});
+
+test('LIVE: the control catalog declares this cut where the cascade really reaches it', () => {
+  const declared = declaredFanOutFamilies();
+  // WO-FAM-11 sub-lot A added exactly these two, and both are measured claims:
+  // `page-shell` reads two of border-style's three edge roles, and
+  // `surface-chrome` consumes the recipe profile as runtime data.
+  assert.deepEqual(declared.get('page-shell')?.controls, ['surfaces.border-style']);
+  assert.deepEqual(declared.get('surface-chrome')?.controls, ['recipe-profile']);
+  const measured = measureFamily(
+    resolveFamily('page-shell', ROOT, readBaseline().families['page-shell']),
+    { producers: PRODUCERS },
+  );
+  const rows = fanOutFor('page-shell', new Set(measured.detail.readChannels));
+  assert.deepEqual(rows.map((row) => [row.control, row.unreached]), [['surfaces.border-style', false]]);
+  // The recipe-profile row is `data-only`, so it is never an unreached claim.
+  assert.deepEqual(fanOutFor('surface-chrome', new Set()), []);
+});
+
+// ---------------------------------------------------------------------------
 // An open cut is an admission at a measured debt, never a pass
 // ---------------------------------------------------------------------------
 
@@ -2619,7 +2730,7 @@ test('PLANT: an open cut with no work order and no reason is refused', () => {
 test('LIVE: every open row declares exactly the debt the gate measures, and the run says so', () => {
   const baseline = readBaseline().families;
   const open = Object.entries(baseline).filter(([, row]) => row.openCut);
-  assert.equal(open.length, 1, 'the one still-open WO-FAM-10 row (surface-lifecycle, the measured failure-mode floor) is the only admitted row');
+  assert.equal(open.length, 10, 'the still-open WO-FAM-10 row (surface-lifecycle) plus the nine WO-FAM-11 rows sub-lot A admitted with BLOCKING debt');
   for (const [family, row] of open) {
     const measured = measureFamily(resolveFamily(family, ROOT, row), { producers: PRODUCERS });
     const debt = Object.fromEntries(Object.entries(blockingDebt(measured)).filter(([, count]) => count > 0));
@@ -2631,8 +2742,11 @@ test('LIVE: every open row declares exactly the debt the gate measures, and the 
 
 test('LIVE: the run separates the families that hold the contract from the families admitted with debt', () => {
   const { measurements, open } = collectFindings();
-  assert.equal(open.length, 1);
-  assert.equal(measurements.length - open.length, 95, 'the pre-existing roster plus the graduated WO-FAM-10 rows still hold the contract');
+  assert.equal(open.length, 10);
+  // `action-dock` is the tenth WO-FAM-11 row and holds every BLOCKING arm
+  // today, so it is admitted WITHOUT an openCut and counts among the held rows:
+  // its debt is ratchets only.
+  assert.equal(measurements.length - open.length, 96, 'the pre-existing roster, the graduated WO-FAM-10 rows and action-dock hold the contract');
 });
 
 // ---------------------------------------------------------------------------
