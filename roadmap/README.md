@@ -316,6 +316,65 @@ registry; denominator definitions and authorities are unchanged.
   staging. No emojis or AI attribution; keep applicable product documentation
   current. The three-way agreement
   is NOT yet obtained merely because this policy is documented.
+## Owner continuation amendment — 2026-09-19: closure-first execution
+
+This owner instruction changes execution and publication policy, **not the 161-WO
+denominator, source authorities, dependencies, phases or acceptance thresholds**.
+It supersedes older role/account/worktree/no-push prose for the current continuation;
+it does not reopen the sealed Modern Rescue programme.
+
+- **Roles:** Kimi is the low-overhead DT/integrator; real Claude Opus is the product
+  writer using normal `claude` on Daniel.Avila, not `claude-admin`; real Fable is
+  the independent functional-lot auditor. Verify effective model receipts, not
+  terminal names. Writers never stage/commit; no self-audit or fabricated verdict.
+- **Checkpoint first:** preserve the already-landed FAM-11 A and any active B
+  writer. Stop new dispatches only for the bounded checkout transfer, not by
+  killing a writer or discarding its draft. Then resume autonomously.
+- **Canonical checkout:** restore `/Users/daniel/Developer/Rottay/ui-design-system`
+  on `main`. The current execution worktree `r4-recon-opus` is on main; the original
+  path is detached with preserved staged/unstaged/untracked work and holds the
+  shared `.git`. Follow the verified preservation/transfer protocol linked below;
+  no reset/clean/forced checkout, blind reintegration of old changes, or deletion
+  of a directory that still owns Git data, processes or unique work. Do not create
+  further branches/worktrees without an explicit owner instruction.
+- **Closure before WIP growth:** each active WO gets a finite checklist of its
+  existing acceptance, valid evidence/input hashes, remaining source/proof/owner
+  decisions and one responsible actor. Close immediately when earned; do not wait
+  for every active WO or invent additional scope. Debt-ratchet PASS is not final
+  acceptance. Superseded WOs close with their actual replacement receipt through
+  the existing phase/authority machinery, never by duplicate implementation.
+- **Parallel complete packets:** use as many Opus writers as safely useful on
+  disjoint complete family packets (component + deriver + skin + tests). Do not
+  split one capability across competing writers. Shared catalog/registration,
+  direction/keyboard/adaptation seams, generated artifacts, roadmap and Git index
+  have single owners. Serialize heavy host validation. Fable reviews coherent
+  lots; reuse unchanged valid evidence and run focused tests per lot, broader
+  build/suite/browser certification at important combined checkpoints.
+- **Publication:** after the independent audit and applicable checks, commit the
+  complete reviewed functional packet on main and publish to `origin/main` under
+  this newer owner instruction. Reconcile existing outgoing history and remote
+  ancestry before the first push; never force-push. Report local and remote SHAs
+  separately. This is not authority to publish an unreviewed or incoherent tree.
+- **Autonomy:** wait for writer/reviewer completion events, not repeated terminal
+  polling. Continue eligible work after each closed lot. A concrete owner decision
+  blocks only its affected packet. Notify meaningful closures, milestones, material
+  failures or required decisions; do not spend tokens on empty progress reports.
+
+The independent audit, corrections and exact reproduction limits live in
+`../docs-engineering/archive/audits/2026-09-19-ds-4267a2904-davila.md` and its companion
+directory. Read `closure-plan.md`, `git-topology.md` and `HANDOFF-KIMI.md`; technical
+agents read only the relevant `architecture-cascade.md`, `families-quality.md` or
+`instruments-and-integration.md` sections. The pin is `4267a2904`; preserve and compare
+later deltas before repeating a correction. This is an evidence packet, not a second
+roadmap. Existing in-progress WOs carry source-specific continuation entries so
+`show`/`delegate` expose the necessary next actions without this conversation.
+
+The product outcome remains: equal inherited quality across Standard/Pro, bounded
+authoring permissions, meaningful non-color tenant differentiation, one owner per
+capability, static/DB/preview/publication parity, accessibility, RTL/i18n and responsive
+mobile-web contracts. Final branding and native applications are not silently added
+to a family's closure. Milestone C still requires its WOs, findings and indicators.
+
 <!-- execution-policy:end -->
 
 ## DS-only parallel execution — owner amendment 2026-09-17
