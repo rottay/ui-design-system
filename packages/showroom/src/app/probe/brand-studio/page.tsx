@@ -7,8 +7,9 @@ import {
   PatternBrandStudio,
   Stack,
   getKnownTenantConfig,
-  type FlatTheme,
+  governedTenantTheme,
 } from '@rottay/design-system';
+import type { Theme } from '@rottay/design-system/server';
 
 import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
 
@@ -23,7 +24,9 @@ import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
 
 const STUDIO_SLUGS = FLAGSHIP_SPECS.map((spec) => spec.slug);
 
-const CAPTURE_BRAND_THEME: FlatTheme = {
+// Governed transport, exactly as the theme-builder page: the flat literal is
+// the lift's argument here and never the shape the draft travels as.
+const CAPTURE_BRAND_THEME: Theme = governedTenantTheme({
   id: 'capture-draft',
   name: 'Capture Draft',
   palette: {
@@ -57,7 +60,7 @@ const CAPTURE_BRAND_THEME: FlatTheme = {
     borderRadius: { sm: '6px', md: '10px', lg: '14px', xl: '20px' },
     effectIntensity: 1,
   },
-};
+});
 
 export default function BrandStudioProbePage() {
   const tenantConfig = getKnownTenantConfig('rottay') ?? undefined;

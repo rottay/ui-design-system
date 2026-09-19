@@ -11,7 +11,7 @@ import {
   PatternBrandStudio,
   Stack,
   Text,
-  type FlatTheme,
+  governedTenantTheme,
 } from '@rottay/design-system';
 import type { Theme } from '@rottay/design-system/server';
 
@@ -21,7 +21,9 @@ import { FLAGSHIP_SPECS, StateGallery } from '@/components/state-gallery';
 // the live evidence the preview renders under each ground.
 const STUDIO_SLUGS = FLAGSHIP_SPECS.map((spec) => spec.slug);
 
-const INITIAL_BRAND_THEME: FlatTheme = {
+// A studio draft travels as the governed `Theme`: the flat literal below is the
+// lift's argument inside this one expression and is never itself the transport.
+const INITIAL_BRAND_THEME: Theme = governedTenantTheme({
   id: 'studio-draft',
   name: 'Studio Draft',
   palette: {
@@ -62,10 +64,10 @@ const INITIAL_BRAND_THEME: FlatTheme = {
     entranceDuration: 200,
     hoverLift: 2,
   },
-};
+});
 
 export default function ThemeBuilderPage() {
-  const [theme, setTheme] = useState<Theme | FlatTheme>(INITIAL_BRAND_THEME);
+  const [theme, setTheme] = useState<Theme>(INITIAL_BRAND_THEME);
 
   return (
     <Stack spacing="lg">
