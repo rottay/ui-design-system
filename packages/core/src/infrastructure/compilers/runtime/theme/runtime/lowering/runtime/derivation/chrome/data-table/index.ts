@@ -258,9 +258,9 @@ export function deriveDataTableChannels(): Record<string, string> {
   /* Drained out of the `--ds-table-` spelling nobody produced: the skins now
      read the family's own name at the same byte-identical fallback. */
   vars["--ds-data-table-action-gap"] = "var(--ds-spacing-2, 0.5rem)";
-  /* Two rules state the grip's margin on the same selector; the later one
-     carries `0`, so `0` is what it paints produced or not. */
-  vars["--ds-data-table-drag-grip-offset"] = "0";
+  /* Two rules state the grip's margin on the same selector, and the later one
+     wins, so the resting margin is zero -- the ramp's own zero rung. */
+  vars["--ds-data-table-drag-grip-offset"] = "var(--ds-spacing-0, 0)";
   /* One rung per posture: the theme-root declaration substitutes its var()s
      where it is stated, so the split the skin's [data-density] rules draw has
      to exist as three channels, exactly as the leading-cell paddings do. */
@@ -271,24 +271,31 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-drag-grip-size-spacious"] =
     "calc(var(--ds-data-table-control-size-spacious, calc(var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)";
   vars["--ds-data-table-drop-indicator-radius"] = "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))";
-  vars["--ds-data-table-editorial-mobile-title-size"] = "1rem";
-  vars["--ds-data-table-mobile-actions-padding-block"] = "0.625rem";
-  vars["--ds-data-table-mobile-bulk-padding"] = "0.625rem 0.75rem";
+  vars["--ds-data-table-editorial-mobile-title-size"] = "var(--ds-font-size-lg, 1rem)";
+  vars["--ds-data-table-mobile-actions-padding-block"] =
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-data-table-mobile-bulk-padding"] =
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-mobile-card-focus-ring"] = "0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))";
   vars["--ds-data-table-mobile-card-hover-lift"] = "-1px";
-  vars["--ds-data-table-mobile-control-size"] = "2.25rem";
-  vars["--ds-data-table-mobile-pagination-padding"] = "0.625rem 0.75rem";
-  vars["--ds-data-table-mobile-selected-outline-offset"] = "2px";
-  vars["--ds-data-table-mobile-state-min-height"] = "8rem";
-  vars["--ds-data-table-mobile-state-padding"] = "2rem 1.25rem";
+  vars["--ds-data-table-mobile-control-size"] = "var(--ds-spacing-9, 2.25rem)";
+  vars["--ds-data-table-mobile-pagination-padding"] =
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-data-table-mobile-selected-outline-offset"] =
+    "var(--ds-focus-ring-offset, 2px)";
+  vars["--ds-data-table-mobile-state-min-height"] = "var(--ds-spacing-32, 8rem)";
+  vars["--ds-data-table-mobile-state-padding"] =
+    "var(--ds-spacing-8, 2rem) var(--ds-spacing-5, 1.25rem)";
   vars["--ds-data-table-mobile-state-radius"] = "var(--ds-table-radius, var(--ds-radius-lg))";
   vars["--ds-data-table-mobile-summary-divider"] = "color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)";
-  vars["--ds-data-table-mobile-summary-min-height"] = "2rem";
-  vars["--ds-data-table-mobile-summary-padding-block"] = "0.375rem";
-  vars["--ds-data-table-mobile-summary-padding-inline"] = "0.125rem";
+  vars["--ds-data-table-mobile-summary-min-height"] = "var(--ds-spacing-8, 2rem)";
+  vars["--ds-data-table-mobile-summary-padding-block"] =
+    "calc(0.375rem * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-data-table-mobile-summary-padding-inline"] =
+    "calc(0.125rem * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-resize-bar-height-active"] = "74%";
   vars["--ds-data-table-resize-bar-width-active"] = "0.1875rem";
   vars["--ds-data-table-ruled-mobile-radius"] = "var(--ds-radius-md, 0.5rem)";
-  vars["--ds-data-table-ruled-mobile-shadow"] = "none";
+  vars["--ds-data-table-ruled-mobile-shadow"] = "var(--ds-elevation-0, none)";
   return vars;
 }

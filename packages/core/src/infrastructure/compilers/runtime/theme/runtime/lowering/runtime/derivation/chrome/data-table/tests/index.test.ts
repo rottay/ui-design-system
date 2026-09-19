@@ -246,32 +246,40 @@ function densityPostures(alias: string): string[] {
  */
 const DRAINED: Record<string, string> = {
   "--ds-data-table-action-gap": "var(--ds-spacing-2, 0.5rem)",
+  "--ds-data-table-drag-grip-offset": "var(--ds-spacing-0, 0)",
   "--ds-data-table-drag-grip-size":
     "calc(var(--ds-data-table-control-size, calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)",
   "--ds-data-table-drop-indicator-radius":
     "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))",
-  "--ds-data-table-editorial-mobile-title-size": "1rem",
-  "--ds-data-table-mobile-actions-padding-block": "0.625rem",
-  "--ds-data-table-mobile-bulk-padding": "0.625rem 0.75rem",
+  "--ds-data-table-editorial-mobile-title-size": "var(--ds-font-size-lg, 1rem)",
+  "--ds-data-table-mobile-actions-padding-block":
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1))",
+  "--ds-data-table-mobile-bulk-padding":
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1))",
   "--ds-data-table-mobile-card-focus-ring":
     "0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))",
   "--ds-data-table-mobile-card-hover-lift": "-1px",
-  "--ds-data-table-mobile-control-size": "2.25rem",
-  "--ds-data-table-mobile-pagination-padding": "0.625rem 0.75rem",
-  "--ds-data-table-mobile-selected-outline-offset": "2px",
-  "--ds-data-table-mobile-state-min-height": "8rem",
-  "--ds-data-table-mobile-state-padding": "2rem 1.25rem",
+  "--ds-data-table-mobile-control-size": "var(--ds-spacing-9, 2.25rem)",
+  "--ds-data-table-mobile-pagination-padding":
+    "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1))",
+  "--ds-data-table-mobile-selected-outline-offset":
+    "var(--ds-focus-ring-offset, 2px)",
+  "--ds-data-table-mobile-state-min-height": "var(--ds-spacing-32, 8rem)",
+  "--ds-data-table-mobile-state-padding":
+    "var(--ds-spacing-8, 2rem) var(--ds-spacing-5, 1.25rem)",
   "--ds-data-table-mobile-state-radius":
     "var(--ds-table-radius, var(--ds-radius-lg))",
   "--ds-data-table-mobile-summary-divider":
     "color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)",
-  "--ds-data-table-mobile-summary-min-height": "2rem",
-  "--ds-data-table-mobile-summary-padding-block": "0.375rem",
-  "--ds-data-table-mobile-summary-padding-inline": "0.125rem",
+  "--ds-data-table-mobile-summary-min-height": "var(--ds-spacing-8, 2rem)",
+  "--ds-data-table-mobile-summary-padding-block":
+    "calc(0.375rem * var(--ds-rhythm-effective-scale, 1))",
+  "--ds-data-table-mobile-summary-padding-inline":
+    "calc(0.125rem * var(--ds-rhythm-effective-scale, 1))",
   "--ds-data-table-resize-bar-height-active": "74%",
   "--ds-data-table-resize-bar-width-active": "0.1875rem",
   "--ds-data-table-ruled-mobile-radius": "var(--ds-radius-md, 0.5rem)",
-  "--ds-data-table-ruled-mobile-shadow": "none",
+  "--ds-data-table-ruled-mobile-shadow": "var(--ds-elevation-0, none)",
 };
 
 /** The three names this family reads that no honest single value can produce. */
@@ -403,14 +411,15 @@ describe("chrome/data-table drained channels", () => {
     ).toBe(normalise(derived["--ds-data-table-drop-indicator-radius"]!));
   });
 
-  it("rests the drag grip's margin at the declaration that wins the cascade", () => {
+  it("rests the drag grip's margin on the zero rung at both declarations", () => {
     /* Two rules state `margin-inline-end` on the SAME selector; the later one
-       carries `0`, so `0` is what the grip paints whether or not the channel
-       is produced. */
+       wins, so the grip paints the resting `0` whether or not the channel is
+       produced. The earlier rule used to state a literal `0.125rem` that no
+       cascade could reach -- both now name the rung the produced value names. */
     const skin = FAMILY_SKINS[FAMILY_SKINS.length - 1]!;
     const sites = [
       ...skin.matchAll(
-        /([^}]*?)\{[^}]*?margin-inline-end:\s*var\(--ds-data-table-drag-grip-offset,\s*([^)]*)\)/g
+        /([^}]*?)\{[^}]*?margin-inline-end:\s*var\(--ds-data-table-drag-grip-offset,/g
       ),
     ];
     expect(sites).toHaveLength(2);
@@ -418,12 +427,14 @@ describe("chrome/data-table drained channels", () => {
       '.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]',
       '.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]',
     ]);
-    expect(sites.map((site) => site[2]!.trim())).toEqual(["0.125rem", "0"]);
+    expect(familyFallbacks("--ds-data-table-drag-grip-offset")).toEqual([
+      "var(--ds-spacing-0, 0)",
+    ]);
     expect(
       dataTableChromeDeriver.derive(context(), {})[
         "--ds-data-table-drag-grip-offset"
       ]
-    ).toBe("0");
+    ).toBe("var(--ds-spacing-0, 0)");
   });
 
   it("leaves the three divergent reads unproduced, with their divergence measured", () => {

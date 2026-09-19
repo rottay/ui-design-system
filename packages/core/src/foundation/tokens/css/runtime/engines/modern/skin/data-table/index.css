@@ -565,7 +565,7 @@
   justify-content: center;
   width: var(--ds-modern-table-control-size);
   height: var(--ds-modern-table-control-size);
-  margin-inline-end: var(--ds-data-table-drag-grip-offset, 0.125rem);
+  margin-inline-end: var(--ds-data-table-drag-grip-offset, var(--ds-spacing-0, 0));
   padding: 0;
   font-size: var(
     --ds-data-table-drag-handle-font-size,
@@ -1590,7 +1590,7 @@
 .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
   width: var(--ds-modern-table-drag-grip-size);
   height: var(--ds-modern-table-drag-grip-size);
-  margin-inline-end: var(--ds-data-table-drag-grip-offset, 0);
+  margin-inline-end: var(--ds-data-table-drag-grip-offset, var(--ds-spacing-0, 0));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"] {

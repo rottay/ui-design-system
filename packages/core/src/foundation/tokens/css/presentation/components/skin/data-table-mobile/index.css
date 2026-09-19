@@ -142,7 +142,7 @@
   );
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-collection-card-selected-border, var(--ds-color-primary));
-  outline-offset: var(--ds-data-table-mobile-selected-outline-offset, 2px);
+  outline-offset: var(--ds-data-table-mobile-selected-outline-offset, var(--ds-focus-ring-offset, 2px));
 }
 
 @media (hover: hover) {
@@ -233,9 +233,9 @@
     --ds-data-table-ruled-mobile-radius,
     var(--ds-radius-md, 0.5rem)
   );
-  --ds-card-shadow: var(--ds-data-table-ruled-mobile-shadow, none);
+  --ds-card-shadow: var(--ds-data-table-ruled-mobile-shadow, var(--ds-elevation-0, none));
   border-radius: var(--ds-data-table-ruled-mobile-radius, var(--ds-radius-md, 0.5rem));
-  box-shadow: var(--ds-data-table-ruled-mobile-shadow, none);
+  box-shadow: var(--ds-data-table-ruled-mobile-shadow, var(--ds-elevation-0, none));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile[data-recipe="grid"]
@@ -253,7 +253,7 @@
 .ds-pattern-data-table.ds-data-table--mobile[data-recipe="editorial"]
   [data-part="mobile-card-title"] {
   font-family: var(--ds-typography-display-family, var(--ds-font-family-heading));
-  font-size: var(--ds-data-table-editorial-mobile-title-size, 1rem);
+  font-size: var(--ds-data-table-editorial-mobile-title-size, var(--ds-font-size-lg, 1rem));
   letter-spacing: var(--ds-typography-display-tracking, -0.02em);
 }
 
@@ -284,9 +284,9 @@
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-card-summary-row"] {
   min-width: 0;
-  min-height: var(--ds-data-table-mobile-summary-min-height, 2rem);
-  padding-block: var(--ds-data-table-mobile-summary-padding-block, 0.375rem);
-  padding-inline: var(--ds-data-table-mobile-summary-padding-inline, 0.125rem);
+  min-height: var(--ds-data-table-mobile-summary-min-height, var(--ds-spacing-8, 2rem));
+  padding-block: var(--ds-data-table-mobile-summary-padding-block, calc(0.375rem * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-data-table-mobile-summary-padding-inline, calc(0.125rem * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
@@ -305,15 +305,15 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  min-width: var(--ds-data-table-mobile-control-size, 2.25rem);
-  min-height: var(--ds-data-table-mobile-control-size, 2.25rem);
+  min-width: var(--ds-data-table-mobile-control-size, var(--ds-spacing-9, 2.25rem));
+  min-height: var(--ds-data-table-mobile-control-size, var(--ds-spacing-9, 2.25rem));
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
   background: var(--ds-surface-inset, var(--ds-surface-panel));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-card-actions"][data-part="mobile-card-actions"] {
-  padding-block-start: var(--ds-data-table-mobile-actions-padding-block, 0.625rem);
+  padding-block-start: var(--ds-data-table-mobile-actions-padding-block, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)));
   border-block-start: 1px solid
     var(--ds-table-row-border, var(--ds-color-border-subtle));
 }
@@ -325,7 +325,7 @@
 
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-bulk-actions"] {
-  padding: var(--ds-data-table-mobile-bulk-padding, 0.625rem 0.75rem);
+  padding: var(--ds-data-table-mobile-bulk-padding, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1)));
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
   background: var(
     --ds-data-table-mobile-bulk-bar-bg,
@@ -345,7 +345,7 @@
 }
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-pagination"] {
-  padding: var(--ds-data-table-mobile-pagination-padding, 0.625rem 0.75rem);
+  padding: var(--ds-data-table-mobile-pagination-padding, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1)));
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
   background: var(
     --ds-data-table-mobile-pagination-bg,
@@ -381,8 +381,8 @@
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"] {
   display: grid;
   place-items: center;
-  min-height: var(--ds-data-table-mobile-state-min-height, 8rem);
-  padding: var(--ds-data-table-mobile-state-padding, 2rem 1.25rem);
+  min-height: var(--ds-data-table-mobile-state-min-height, var(--ds-spacing-32, 8rem));
+  padding: var(--ds-data-table-mobile-state-padding, var(--ds-spacing-8, 2rem) var(--ds-spacing-5, 1.25rem));
   text-align: center;
   border-radius: var(
     --ds-data-table-mobile-state-radius,
@@ -453,8 +453,8 @@
   min-inline-size: 0;
   /* The list row keeps the card summary's rhythm: same two channels, so a
      tenant retunes one padding and both record shapes follow. */
-  padding-block: var(--ds-data-table-mobile-summary-padding-block, 0.375rem);
-  padding-inline: var(--ds-data-table-mobile-summary-padding-inline, 0.125rem);
+  padding-block: var(--ds-data-table-mobile-summary-padding-block, calc(0.375rem * var(--ds-rhythm-effective-scale, 1)));
+  padding-inline: var(--ds-data-table-mobile-summary-padding-inline, calc(0.125rem * var(--ds-rhythm-effective-scale, 1)));
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
@@ -507,7 +507,7 @@
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="swipe-actions-bar"] {
   min-inline-size: 0;
-  padding-block-start: var(--ds-data-table-mobile-actions-padding-block, 0.625rem);
+  padding-block-start: var(--ds-data-table-mobile-actions-padding-block, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="swipe-actions"] {
