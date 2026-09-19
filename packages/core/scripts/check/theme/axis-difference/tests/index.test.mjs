@@ -58,6 +58,8 @@ import {
   NEGATIVE_CONTROLS,
   STATE_VARIANTS,
   effectiveMapDifference,
+  resolvedDifference,
+  inertReason,
   denominatorLine,
   evaluatePilot,
   partInvariantFailures,
@@ -108,6 +110,9 @@ const cell = (over = {}) => ({
   compiledB: 5,
   appliedA: 5,
   appliedB: 5,
+  channels: 5,
+  differing: 5,
+  resolvedDiffering: 5,
   evidential: true,
   denominator: 100,
   moved: 90,
@@ -285,6 +290,61 @@ describe('axis-difference — the artifact is applied AS IT SHIPS', () => {
   it('an artifact with no mode block is its base block, unchanged', () => {
     const flat = { variables: { '--ds-a': '1' }, modeDeltas: [] };
     assert.deepEqual(effectiveVariables(flat, 'light'), { '--ds-a': '1' });
+  });
+});
+
+describe('axis-difference — a pair is inert when its arms PAINT the same, not when a map is empty', () => {
+  const BASELINE = { '--ds-rhythm-scale': '0.85', '--ds-density-mode-factor': '0.85' };
+
+  it('a channel an arm does not carry resolves to the scene, so an empty arm still paints', () => {
+    // bithire's rhythm pair, exactly: arm A authors the vertical's own
+    // compact/tight values and subtracts to nothing; arm B compiles both.
+    const reading = resolvedDifference({}, { '--ds-rhythm-scale': '1.2', '--ds-density-mode-factor': '1.15' }, BASELINE);
+    assert.equal(reading.channels, 2);
+    assert.equal(reading.differing, 2);
+    assert.deepEqual(reading.differingChannels, ['--ds-density-mode-factor', '--ds-rhythm-scale']);
+  });
+
+  it('an arm that RESTATES the value the other arm omits is inert, and the map comparator misses it', () => {
+    // The honest direction the map difference cannot read: both arms paint
+    // 0.85, one by authoring it and one by leaving it to the bundle.
+    const explicit = { '--ds-rhythm-scale': '0.85' };
+    assert.equal(resolvedDifference(explicit, {}, BASELINE).differing, 0);
+    assert.equal(effectiveMapDifference(explicit, {}).differing, 1, 'which is why the map count is not the rule');
+  });
+
+  it('two arms that disagree on a shared channel are differing however the baseline reads', () => {
+    assert.equal(resolvedDifference({ '--ds-rhythm-scale': '0.8' }, { '--ds-rhythm-scale': '1.2' }, BASELINE).differing, 1);
+    assert.equal(resolvedDifference({ '--ds-rhythm-scale': '0.8' }, { '--ds-rhythm-scale': '0.8' }, BASELINE).differing, 0);
+  });
+
+  it('a channel the bundle never declares resolves to nothing, and an arm that sets it still moves', () => {
+    assert.equal(resolvedDifference({}, { '--ds-unknown': '4px' }, BASELINE).differing, 1);
+    assert.equal(resolvedDifference({}, {}, BASELINE).differing, 0);
+  });
+
+  it('the reason a cell publishes and the reason the verdict prints are ONE sentence', () => {
+    const inert = cell({ compiledA: 40, compiledB: 40, appliedA: 40, appliedB: 40,
+      channels: 40, differing: 0, resolvedDiffering: 0, evidential: false });
+    inert.nonEvidentialReason = inertReason(inert);
+    const failures = evaluate(result([inert]));
+    assert.ok(failures.some((line) => line.includes(inert.nonEvidentialReason)), failures.join(' | '));
+    assert.match(inert.nonEvidentialReason, /0 differing/);
+  });
+
+  it('a witnessed control that ALSO lost its witness is still accused with the PAINT measurement', () => {
+    // Two sentences, two subjects: the cell publishes why its control carries
+    // no witness, and the verdict accuses the pair of painting the same. The
+    // accusation must not borrow the first, or a reader is told the control is
+    // vacuous where the finding is that the pair is inert.
+    const inert = paletteControl({ compiledA: 40, compiledB: 40, channels: 40, differing: 0, resolvedDiffering: 0,
+      witness: mapWitness({ differing: 0 }) });
+    const failures = evaluate(result(markVacuousControls([inert])));
+    assert.match(inert.nonEvidentialReason, /IDENTICAL effective map/);
+    assert.ok(
+      failures.some((line) => line.includes('resolve to the SAME paint') && line.includes('INERT_PAIRS')),
+      failures.join(' | '),
+    );
   });
 });
 
@@ -590,10 +650,52 @@ describe('axis-difference drills — every verdict is reachable', () => {
 
   it('MUTANT: a pair the instrument lost is a different verdict from an inert pair', () => {
     const lost = evaluate(result([cell({ compiledA: 40, compiledB: 41, appliedA: 0, appliedB: 41 })]));
-    assert.ok(lost.some((line) => line.includes('the instrument lost them')), lost.join(' | '));
+    assert.ok(lost.some((line) => line.includes('arm A compiled 40 variables and the page applied 0')
+      && line.includes('the instrument lost them')), lost.join(' | '));
 
-    const inert = evaluate(result([cell({ vertical: 'evnto', scenario: 'palette-only', compiledA: 0, compiledB: 0, evidential: false })]));
-    assert.ok(inert.some((line) => line.includes('compiles to an EMPTY artifact delta')), inert.join(' | '));
+    const inert = evaluate(result([cell({ vertical: 'evnto', scenario: 'palette-only', kind: 'negative',
+      compiledA: 40, compiledB: 40, channels: 40, differing: 0, resolvedDiffering: 0, evidential: false })]));
+    assert.ok(inert.some((line) => line.includes('resolve to the SAME paint')), inert.join(' | '));
+  });
+
+  it('MUTANT: the instrument-loss guard is PER ARM, so one empty arm cannot hide the other', () => {
+    // The hole the ANDed precondition left: `compiledA > 0 && compiledB > 0`
+    // was false the moment either arm was empty, so an arm that compiled 2 and
+    // applied 0 beside a baseline-coincident one was never accused at all.
+    const failures = evaluate(result([
+      cell({ compiledA: 0, appliedA: 0, compiledB: 2, appliedB: 0, channels: 2, differing: 2, resolvedDiffering: 2 }),
+    ]));
+    assert.ok(
+      failures.some((line) => line.includes('arm B compiled 2 variables and the page applied 0')),
+      failures.join(' | '),
+    );
+    assert.deepEqual(failures.filter((line) => line.includes('arm A')), [], 'the empty arm applied nothing BY DESIGN');
+    // And a loss is still the ONLY verdict that cell gets: an accusation of
+    // inertness on top of it would be a reading of a page that never received
+    // the pair.
+    assert.deepEqual(failures.filter((line) => line.includes('SAME paint')), []);
+  });
+
+  it('an arm that COINCIDES with the vertical baseline is not an inert pair — the bithire rhythm case', () => {
+    // bithire's preset states `density.mode: compact` and `spacing.rhythm:
+    // tight`, so the arm that authors those values subtracts to an empty
+    // artifact delta while painting 0.85/0.85 off the bundle. The other arm
+    // compiles 1.15/1.2. The pair moves 45 of 209 families on the page, and the
+    // rule that read `compiledA === 0` called it inert.
+    const rhythm = cell({
+      vertical: 'bithire', scenario: 'rhythm', axis: 'rhythm',
+      compiledA: 0, compiledB: 2, appliedA: 0, appliedB: 2,
+      channels: 2, differing: 2, resolvedDiffering: 2,
+      moved: 45, denominator: 209, percent: 21.5,
+    });
+    assert.deepEqual(
+      evaluate(result([rhythm])).filter((line) => line.includes('SAME paint')),
+      [],
+      'an empty delta is not an empty paint',
+    );
+    // And the reading it publishes is evidence, which is the whole point: the
+    // old rule printed this exact 21.5 % beside [NON-EVIDENTIAL].
+    assert.equal(rhythm.evidential, true);
   });
 
   it('every shipped inert entry names a mode, a scenario and its measurement', () => {
@@ -610,16 +712,17 @@ describe('axis-difference drills — every verdict is reachable', () => {
 
   it('a mode-scoped entry excuses ONLY that mode', () => {
     const scoped = [{ vertical: 'rottay', theme: 'dark', scenario: 'palette-only', note: 'measured 0' }];
-    const empty = { scenario: 'palette-only', kind: 'negative', axis: 'depth', compiledA: 0, compiledB: 0, evidential: false, moved: 0, percent: 0 };
+    const empty = { scenario: 'palette-only', kind: 'negative', axis: 'depth', compiledA: 40, compiledB: 40,
+      channels: 40, differing: 0, resolvedDiffering: 0, evidential: false, moved: 0, percent: 0 };
     assert.deepEqual(
       evaluate(result([cell({ vertical: 'rottay', theme: 'dark', ...empty })]), { inertPairs: scoped })
-        .filter((line) => line.includes('EMPTY artifact delta')),
+        .filter((line) => line.includes('SAME paint')),
       [],
       'the declared mode must be excused',
     );
     assert.ok(
       evaluate(result([cell({ vertical: 'rottay', theme: 'light', ...empty })]), { inertPairs: scoped })
-        .some((line) => line.startsWith('rottay/light') && line.includes('EMPTY artifact delta')),
+        .some((line) => line.startsWith('rottay/light') && line.includes('SAME paint')),
       'the OTHER mode must still be accused — that is the whole point of scoping the entry',
     );
   });
@@ -628,7 +731,7 @@ describe('axis-difference drills — every verdict is reachable', () => {
     const declared = DECLARED_INERT[0];
     const failures = evaluate(result([
       cell({ vertical: declared.vertical, scenario: declared.scenario, kind: 'negative', axis: 'depth',
-        compiledA: 0, compiledB: 0, evidential: false, moved: 0, percent: 0 }),
+        channels: 40, differing: 0, resolvedDiffering: 0, evidential: false, moved: 0, percent: 0 }),
       // The control still has to STAND somewhere: a run whose only palette
       // cells are inert carries no palette control, which is its own verdict.
       paletteControl({ vertical: 'bithire', axis: 'depth' }),
@@ -641,7 +744,7 @@ describe('axis-difference drills — every verdict is reachable', () => {
     const declared = DECLARED_INERT[0];
     const failures = evaluate(result([
       cell({ vertical: declared.vertical, scenario: declared.scenario, kind: 'negative', axis: 'depth',
-        compiledA: 0, compiledB: 0, evidential: false, moved: 0, percent: 0 }),
+        channels: 40, differing: 0, resolvedDiffering: 0, evidential: false, moved: 0, percent: 0 }),
     ]), { inertPairs: DECLARED_INERT });
     assert.ok(failures.some((line) => line.includes('carries no negative control at all')), failures.join(' | '));
   });
@@ -990,6 +1093,53 @@ describe('axis-difference BROWSER drill — a document does not differ from itse
     assert.ok(
       failures.some((line) => line.startsWith('NEGATIVE CONTROL states-emphasis-only moved') && line.includes('on typography')),
       failures.join(' | '),
+    );
+  });
+
+  it('the bithire rhythm pair: one arm compiles NOTHING, the pair is not inert, end to end', async () => {
+    // The case that fails the emptiness rule, driven through the real compiler,
+    // the real bundle and the real browser. bithire's preset already states
+    // `density.mode: compact` and `spacing.rhythm: tight`, so the arm that
+    // authors them subtracts to an empty artifact delta against the vertical's
+    // own compile -- and paints 0.85/0.85 off the bundle underneath.
+    const rhythm = SCENARIOS.find((scenario) => scenario.id === 'rhythm');
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: FAMILIES,
+      scenarios: [rhythm],
+    });
+
+    const [rhythmCell] = measurement.cells.filter((entry) => entry.scenario === 'rhythm');
+    assert.ok(rhythmCell, JSON.stringify(measurement.refusals));
+    assert.equal(rhythmCell.compiledA, 0, 'the arm that restates the vertical must compile nothing — that is the case');
+    assert.ok(rhythmCell.compiledB > 0);
+    assert.equal(rhythmCell.appliedA, 0, 'and an empty arm applies nothing BY DESIGN, not an instrument loss');
+    assert.equal(rhythmCell.resolvedDiffering, rhythmCell.channels, 'every channel resolves to a different paint');
+    assert.equal(rhythmCell.evidential, true);
+    assert.equal(rhythmCell.nonEvidentialReason, undefined);
+    assert.deepEqual(
+      evaluate(measurement).filter((line) => line.includes('SAME paint') || line.includes('instrument lost')),
+      [],
+      'neither verdict may be reached by a baseline-coincident arm',
+    );
+
+    // The same vertical against ITSELF is still inert, so the drill above is
+    // not merely proving that nothing fails any more.
+    const nullPair = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: FAMILIES,
+      scenarios: [{ ...rhythm, b: rhythm.a }],
+    });
+    for (const entry of nullPair.cells) {
+      assert.equal(entry.resolvedDiffering, 0, JSON.stringify(entry.resolvedDifferingChannels));
+      assert.equal(entry.evidential, false);
+    }
+    assert.ok(
+      evaluate(nullPair).some((line) => line.startsWith('bithire/light rhythm') && line.includes('SAME paint')
+        && line.includes('INERT_PAIRS')),
+      evaluate(nullPair).join(' | '),
     );
   });
 

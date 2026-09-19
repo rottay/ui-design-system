@@ -270,9 +270,25 @@ export function familyElements(root = CORE_ROOT, only = null) {
 }
 
 /**
- * Pairs whose compiled artifact carries ZERO channels for the CELL being
- * measured: the door admits the document, the admission reports the decision
- * `lit: true`, and the published delta for that mode is empty.
+ * Pairs whose two arms reach the page as the SAME PAINT in the CELL being
+ * measured: every channel either arm compiles resolves -- against the
+ * vertical's own baseline, for a name the arm does not carry -- to the value
+ * the other arm resolves to.
+ *
+ * AN EMPTY ARM IS NOT THAT, and the emptiness test this replaces read one for
+ * the other. `applyVariables` clears every inline `--ds-*` before it sets an
+ * arm, so an arm that compiles nothing is not "nothing applied": it is the
+ * vertical bundle's own baseline, which is precisely the paint a tenant who
+ * re-states the vertical's own value receives. Measured 2026-09-19 on bithire
+ * (`evidence/bithire-inert-pairs/`): its preset states `density.mode: compact`,
+ * `spacing.rhythm: tight` and `states.emphasis: strong`, the artifact is by
+ * definition the delta against that preset's compile, and so the arm that
+ * authors those values compiles 0 channels while painting `0.85 / 0.85` and
+ * the six strong state values. The same run measured the rhythm cell at
+ * 45/209 = 21.5 %, byte-identical to rottay's and evnto's, while calling the
+ * pair inert. Recording those cells here would have pinned a false statement:
+ * the entry asserts the decision moves no channel, and the run measures 45
+ * families moving.
  *
  * AN ENTRY IS PER MODE, not per vertical. The list used to carry
  * rottay / `palette-only` with no mode at all, which hid twelve cells behind
@@ -300,9 +316,9 @@ export function familyElements(root = CORE_ROOT, only = null) {
  * negative control goes from 30 of 36 evidential cells to 36 of 36.
  *
  * The MECHANISM is the point of the list, and it stays:
- *  - an arm that compiles nothing is a PRODUCT fact and fails this gate unless
- *    the owner records it here WITH the measurement, so the first one is a
- *    finding and the next cannot hide behind it;
+ *  - a pair whose two arms resolve to ONE paint is a PRODUCT fact and fails
+ *    this gate unless the owner records it here WITH the measurement, so the
+ *    first one is a finding and the next cannot hide behind it;
  *  - a cell whose pair is inert proves NOTHING, so its 0 % is published with
  *    `evidential: false` and a negative control may not be credited from it.
  */
@@ -555,6 +571,21 @@ const applyVariables = (variables) => {
   }
   for (const [name, value] of Object.entries(variables)) root.style.setProperty(name, value);
   return [...root.style].filter((name) => name.startsWith('--ds-')).length;
+};
+
+/**
+ * The scene's OWN value for a set of channels, read with no arm applied.
+ *
+ * This is what an absent channel resolves to: the arm clears every inline
+ * `--ds-*` before it sets its own, so a name it does not carry is painted by
+ * the vertical bundle underneath. Read once per (vertical, mode), before the
+ * first arm, over every name any scenario of the run compiles.
+ */
+const readRootChannels = (names) => {
+  const style = getComputedStyle(document.documentElement);
+  const out = {};
+  for (const name of names) out[name] = style.getPropertyValue(name).trim();
+  return out;
 };
 
 const stampState = (state) => {
@@ -848,6 +879,45 @@ export function effectiveMapDifference(variablesA, variablesB) {
 }
 
 /**
+ * How far apart the two arms of a pair land ON THE PAGE, which is the only
+ * place the question can be answered.
+ *
+ * `effectiveMapDifference` above compares the two compiled maps and therefore
+ * reads an absent name as different from a present one. That is the safe
+ * direction for a witness and the WRONG one for a standing rule, because the
+ * reverse case is real: an arm that compiles nothing paints the vertical's
+ * baseline, and an arm that authors the vertical's own value compiles nothing.
+ * bithire's `rhythm` pair is that case in both directions -- 0/2 compiled
+ * channels, 45 of 209 families moving on the page.
+ *
+ * So a name each arm does not carry is resolved to the scene's own value, and
+ * the pair is inert exactly when nothing is left over. A pair whose two arms
+ * genuinely paint the same still reads 0 and still fails.
+ */
+export function resolvedDifference(variablesA, variablesB, baselineRoot = {}) {
+  const names = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
+  const resolve = (name, variables) =>
+    (Object.hasOwn(variables, name) ? String(variables[name]).trim() : baselineRoot[name] ?? '');
+  const differing = names.filter((name) => resolve(name, variablesA) !== resolve(name, variablesB));
+  return {
+    channels: names.length,
+    differing: differing.length,
+    differingChannels: differing.slice(0, 12),
+  };
+}
+
+/**
+ * Why a cell's pair proves nothing, stated once so the published cell and the
+ * failure that follows it cannot drift apart.
+ */
+export function inertReason({ vertical, theme, channels, compiledA, compiledB }) {
+  return `the two arms of the pair resolve to the SAME paint in ${vertical}/${theme} `
+    + `(${channels} channel(s), 0 differing once every channel an arm does not carry is resolved against the `
+    + `vertical's own baseline; the arms compiled ${compiledA}/${compiledB}) — the decision moves nothing this `
+    + 'cell can read';
+}
+
+/**
  * THE WITNESS IS BOUND TO THE CELL, and this is the whole of the rule.
  *
  * `states-emphasis-only` reads 0 % on shape and typography, which is exactly
@@ -942,7 +1012,7 @@ export function vacuousReasonsByCell(cells) {
   for (const cell of cells) {
     const where = `${cell.vertical}/${cell.theme}`;
     if (!byCell.has(where)) {
-      byCell.set(where, cell.nonEvidentialReason ?? 'its pair compiles to an empty delta');
+      byCell.set(where, cell.nonEvidentialReason ?? 'its two arms resolve to the same paint');
     }
   }
   return [...byCell];
@@ -1005,39 +1075,63 @@ export async function run({
     const context = await browser.newContext();
     for (const vertical of verticals) {
       const bundle = await resolveBundle({ vertical, mode: 'fresh' });
+      // Compiled once per vertical because the door does not read the mode: the
+      // two arms are the same two documents in both. Hoisting them is what lets
+      // the scene baseline be read for every channel the run will apply, before
+      // the first arm touches the root.
+      const compiled = new Map();
+      for (const scenario of scenarios) {
+        try {
+          compiled.set(scenario.id, {
+            a: await compileDocument({ compile, vertical, slug: `${scenario.id}-a`, decisions: scenario.a }),
+            b: await compileDocument({ compile, vertical, slug: `${scenario.id}-b`, decisions: scenario.b }),
+          });
+        } catch (error) {
+          compiled.set(scenario.id, { reason: error instanceof Error ? error.message : String(error) });
+        }
+      }
+      const channelNames = [...new Set(scenarios.flatMap((scenario) => {
+        const artifacts = compiled.get(scenario.id);
+        if (artifacts.reason !== undefined) return [];
+        return themes.flatMap((mode) => [
+          ...Object.keys(effectiveVariables(artifacts.a, mode)),
+          ...Object.keys(effectiveVariables(artifacts.b, mode)),
+        ]);
+      }))].sort();
       for (const theme of themes) {
         const page = await context.newPage();
         await page.setContent(sceneHtml({ css: bundle.css, vertical, theme, elements, mounts }), {
           waitUntil: 'load',
         });
+        // Before the first arm, so it is the bundle's own paint and not an
+        // arm's leftovers: the value every channel an arm does not carry
+        // resolves to in this cell.
+        const baselineRoot = await page.evaluate(readRootChannels, channelNames);
         for (const scenario of scenarios) {
+          const artifacts = compiled.get(scenario.id);
+          if (artifacts.reason !== undefined) {
+            refusals.push({ vertical, theme, scenario: scenario.id, reason: artifacts.reason });
+            continue;
+          }
           let before;
           let after;
-          let compiledA = 0;
-          let compiledB = 0;
-          let baseA = 0;
-          let baseB = 0;
-          let variablesA = {};
-          let variablesB = {};
           let partsA = null;
           let partsB = null;
+          // The cell is ONE mode of the artifact, so it carries that mode's
+          // block over the base one -- the same winner the shipped selector
+          // order produces. Reading `variables` alone measured the base block
+          // twice and called a routed palette inert.
+          const variablesA = effectiveVariables(artifacts.a, theme);
+          const variablesB = effectiveVariables(artifacts.b, theme);
+          const baseA = Object.keys(artifacts.a.variables).length;
+          const baseB = Object.keys(artifacts.b.variables).length;
+          const compiledA = Object.keys(variablesA).length;
+          const compiledB = Object.keys(variablesB).length;
+          // The two comparators, published side by side: the map difference the
+          // witness reads, and the paint difference the standing rule reads.
+          const mapDifference = effectiveMapDifference(variablesA, variablesB);
+          const paintDifference = resolvedDifference(variablesA, variablesB, baselineRoot);
           try {
-            const artifactA = await compileDocument({
-              compile, vertical, slug: `${scenario.id}-a`, decisions: scenario.a,
-            });
-            const artifactB = await compileDocument({
-              compile, vertical, slug: `${scenario.id}-b`, decisions: scenario.b,
-            });
-            // The cell is ONE mode of the artifact, so it carries that mode's
-            // block over the base one -- the same winner the shipped selector
-            // order produces. Reading `variables` alone measured the base block
-            // twice and called a routed palette inert.
-            variablesA = effectiveVariables(artifactA, theme);
-            variablesB = effectiveVariables(artifactB, theme);
-            baseA = Object.keys(artifactA.variables).length;
-            baseB = Object.keys(artifactB.variables).length;
-            compiledA = Object.keys(variablesA).length;
-            compiledB = Object.keys(variablesB).length;
             before = await measureCell({ page, variables: variablesA, properties });
             partsA = parts ? await page.evaluate(readParts, parts) : null;
             after = await measureCell({ page, variables: variablesB, properties });
@@ -1106,10 +1200,24 @@ export async function run({
               baseB,
               appliedA: before.applied,
               appliedB: after.applied,
-              // A pair that compiles to nothing cannot be evidence FOR anything,
-              // in either direction. Publishing the zero and refusing to credit
-              // it is the only honest handling.
-              evidential: compiledA > 0 && compiledB > 0,
+              // The union of both arms' channels, and how many of them the two
+              // arms DISAGREE on -- once as compiled maps (`differing`), once
+              // as the paint they resolve to against this scene's baseline
+              // (`resolvedDiffering`). The gap between the two names the arm
+              // that was baseline-coincident, which `compiledA`/`compiledB`
+              // beside them then identifies.
+              channels: paintDifference.channels,
+              differing: mapDifference.differing,
+              resolvedDiffering: paintDifference.differing,
+              resolvedDifferingChannels: paintDifference.differingChannels,
+              // A pair whose two arms paint the same cannot be evidence FOR
+              // anything, in either direction. Publishing the zero and refusing
+              // to credit it is the only honest handling. An EMPTY arm is not
+              // that case: it paints the vertical's baseline.
+              evidential: paintDifference.differing > 0,
+              nonEvidentialReason: paintDifference.differing > 0 ? undefined : inertReason({
+                vertical, theme, ...paintDifference, compiledA, compiledB,
+              }),
               // What this cell's control moved with its OWN decision, here.
               // `null` for a control whose standing needs no witness.
               witness,
@@ -1251,27 +1359,34 @@ export function evaluate(result, {
   // Two different verdicts that look alike, separated on purpose.
   //
   // An arm that COMPILED variables but applied none is an INSTRUMENT failure:
-  // the page never received the pair, and every reading in the cell is of the
-  // base bundle twice. It always fails.
+  // the page never received that arm, and its half of the cell is a reading of
+  // the base bundle. It always fails. The test is PER ARM: ANDing the
+  // precondition across both arms let a pair with one empty arm skip the guard
+  // entirely, so an arm that compiled 2 and applied 0 beside an empty one was
+  // never caught.
   //
-  // An arm that compiled NOTHING is a PRODUCT fact: the decision moves no
-  // channel on that vertical. It fails unless it is a declared, named entry of
-  // `INERT_PAIRS`, so the first one is a finding and the next one cannot hide
-  // behind it.
+  // A pair whose two arms resolve to ONE paint is a PRODUCT fact: the decision
+  // moves nothing this cell can read. It fails unless it is a declared, named
+  // entry of `INERT_PAIRS`, so the first one is a finding and the next one
+  // cannot hide behind it.
   for (const cell of result.cells) {
-    if (cell.compiledA > 0 && cell.compiledB > 0 && (cell.appliedA === 0 || cell.appliedB === 0)) {
+    const lost = [['A', cell.compiledA, cell.appliedA], ['B', cell.compiledB, cell.appliedB]]
+      .filter(([, compiled, applied]) => compiled > 0 && applied === 0);
+    for (const [arm, compiled] of lost) {
       failures.push(
-        `${cell.vertical}/${cell.theme} ${cell.scenario}: the pair compiled `
-        + `${cell.compiledA}/${cell.compiledB} variables and the page applied `
-        + `${cell.appliedA}/${cell.appliedB}; the instrument lost them`,
+        `${cell.vertical}/${cell.theme} ${cell.scenario}: arm ${arm} compiled ${compiled} variables and the page `
+        + `applied 0 (the pair compiled ${cell.compiledA}/${cell.compiledB}, applied `
+        + `${cell.appliedA}/${cell.appliedB}); the instrument lost them`,
       );
-      continue;
     }
-    if ((cell.compiledA === 0 || cell.compiledB === 0)
+    if (lost.length > 0) continue;
+    if (cell.resolvedDiffering === 0
       && !isDeclaredInert(inertPairs, cell.vertical, cell.theme, cell.scenario)) {
       failures.push(
-        `${cell.vertical}/${cell.theme} ${cell.scenario}: the pair compiles to an EMPTY artifact delta `
-        + `(${cell.compiledA}/${cell.compiledB} variables) — the decision moves no channel on this vertical. `
+        // The measurement, not the cell's published reason: a witnessed control
+        // that ALSO lost its witness carries that sentence instead, and this
+        // accusation is about the paint.
+        `${cell.vertical}/${cell.theme} ${cell.scenario}: ${inertReason(cell)}. `
         + 'Fix the derivation, or have the owner record it in INERT_PAIRS with the measurement',
       );
     }
@@ -1282,7 +1397,10 @@ export function evaluate(result, {
         && cell.scenario === entry.scenario
         && (entry.theme === undefined || entry.theme === cell.theme),
     );
-    if (cells.length > 0 && cells.every((cell) => cell.compiledA > 0 && cell.compiledB > 0)) {
+    // Against the PAINT, not against the compiled maps. `compiledA > 0 &&
+    // compiledB > 0` could never be satisfied by a baseline-coincident arm, so
+    // an entry recorded for one would have been permanent by construction.
+    if (cells.length > 0 && cells.every((cell) => cell.resolvedDiffering > 0)) {
       failures.push(
         `${entry.vertical}${entry.theme ? `/${entry.theme}` : ''} ${entry.scenario}: declared inert and is no `
         + 'longer; remove it from INERT_PAIRS',
@@ -1310,7 +1428,7 @@ export function evaluate(result, {
     failures.push(
       `NEGATIVE CONTROL ${control}: all ${own.length} of its cell(s) are NON-EVIDENTIAL, so this run carries no `
       + `${control} control at all — e.g. ${own[0].vertical}/${own[0].theme}: ${own[0].nonEvidentialReason
-        ?? 'its pair compiles to an empty delta'}`,
+        ?? 'its two arms resolve to the same paint'}`,
     );
   }
   for (const cell of negatives) {
@@ -1392,7 +1510,7 @@ export function evaluatePilot(result, pilot) {
     for (const cell of own.filter((entry) => !entry.evidential)) {
       failures.push(
         `NEGATIVE CONTROL ${control} ${cell.vertical}/${cell.theme} ${cell.axis}: NON-EVIDENTIAL — `
-        + `${cell.nonEvidentialReason ?? 'its pair compiles to an empty delta'}`,
+        + `${cell.nonEvidentialReason ?? 'its two arms resolve to the same paint'}`,
       );
     }
   }
@@ -1496,7 +1614,7 @@ if (isMain) {
         + `${cell.scenario.padEnd(22)} ${cell.axis.padEnd(11)} `
         + `${cell.moved}/${cell.denominator} = ${cell.percent.toFixed(1)}%`
         + (cell.evidential ? '' : `  [NON-EVIDENTIAL: ${cell.nonEvidentialReason
-          ?? 'the pair compiles to an empty delta'}]`),
+          ?? 'its two arms resolve to the same paint'}]`),
       );
     }
   }
@@ -1515,6 +1633,17 @@ if (isMain) {
       readings.push(`${where} ${cell.witness.differing}/${cell.witness.channels}`);
     }
     console.log(`  witness ${control} (effective-map, differing/channels): ${readings.join(', ')}`);
+  }
+  // The arms whose artifact delta is empty BECAUSE the arm authors the value
+  // the vertical's own preset already states. Printed because it is the one
+  // reading a compiled-map count cannot show: the delta is empty and the paint
+  // is not, and a reader who only saw `0/2` would call the pair inert.
+  const coincident = [...new Set(result.cells
+    .filter((cell) => cell.evidential && (cell.compiledA === 0 || cell.compiledB === 0))
+    .map((cell) => `${cell.vertical}/${cell.theme} ${cell.scenario} arm `
+      + `${cell.compiledA === 0 ? 'A' : 'B'} (${cell.resolvedDiffering}/${cell.channels} differing on the page)`))];
+  if (coincident.length > 0) {
+    console.log(`  baseline-coincident arms (empty delta, NOT empty paint): ${coincident.join(', ')}`);
   }
   for (const line of result.limits.states.unreachable) console.log(`  states axis limit: ${line}`);
   const failures = evaluate(result, {
@@ -1538,7 +1667,7 @@ if (isMain) {
       evidential.length === 0
         ? `  NEGATIVE CONTROL ${control}: NON-EVIDENTIAL on all ${own.length} cell(s) — e.g. `
           + `${own[0].vertical}/${own[0].theme}: ${own[0].nonEvidentialReason
-            ?? 'its pair compiles to an empty delta'}`
+            ?? 'its two arms resolve to the same paint'}`
         : `  NEGATIVE CONTROL ${control}: 0 % on ${evidential.length} evidential cell(s) of ${own.length}`
           + (vacuous.length === 0
             ? ''
