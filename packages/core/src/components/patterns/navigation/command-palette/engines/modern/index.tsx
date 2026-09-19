@@ -23,8 +23,8 @@
  * purpose: the family tests pin exact label text (`findByText('Open
  * report')` under an active query), which any segmented match markup would
  * break — pin documented, tests untouched. The contracted `loading` prop
- * (previously destructured but dead) now stamps data-loading and swaps the
- * result list for a skeleton footprint that mirrors the row anatomy.
+ * stamps the governed `data-state` token and swaps the result list for the
+ * SHARED anatomy skeleton, drawn from the row anatomy it is handed.
  *
  * Copy runs through the guarded i18n channel with documented English floors
  * (the defaults double as test pins: 'Type a command...', 'No results
@@ -41,8 +41,10 @@
 
 import React, { useState, useMemo, useRef, useEffect, useCallback, useId } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { CommandPaletteProps, CommandItem } from '../../contracts';
 import { useCommandArgumentMode } from '../../runtime/argument-mode';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
 import Modal from '../../../../../primitives/feedback/modal/engines/modern';
 import Input from '../../../../../primitives/inputs/input/engines/modern';
 import Empty from '../../../../../primitives/display/empty/engines/modern';
@@ -59,6 +61,53 @@ function useCommandPaletteTranslation() {
     return resolved;
   };
   return { tOr };
+}
+
+/**
+ * One option row. It is a component rather than a render helper because the
+ * hover/press/focus triad is per row, and the kernel that decides it is a hook.
+ */
+function CommandPaletteRow({
+  item,
+  id,
+  active,
+  onSelect,
+}: {
+  item: CommandItem;
+  id: string;
+  active: boolean;
+  onSelect: (item: CommandItem) => void;
+}) {
+  const { state, handlers } = useInteractionState({ disabled: Boolean(item.disabled) });
+  return (
+    <div
+      id={id}
+      role="option"
+      aria-selected={active}
+      aria-disabled={item.disabled || undefined}
+      data-active={active}
+      onClick={() => onSelect(item)}
+      {...handlers}
+      {...partAttributes('item', state)}
+    >
+      <div data-part="item-main">
+        {item.icon}
+        <div data-part="item-text">
+          <div data-part="label">{item.label}</div>
+          {item.description && (
+            <div data-part="description">{item.description}</div>
+          )}
+        </div>
+      </div>
+      {/* Shortcut hint: certified Kbd inside its anatomy wrapper (the Kbd
+          engine owns its key-cap paint and does not forward data-part). */}
+      {item.shortcut && (
+        <span data-part="shortcut">
+          <Kbd size="sm">{item.shortcut}</Kbd>
+        </span>
+      )}
+    </div>
+  );
 }
 
 /**
@@ -243,35 +292,19 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   // keyboard activeIndex always maps to the correct visual row.
   let itemIndex = -1;
 
+  // The caller's runtime measure, as the family's own channel. A bare number
+  // is pixels, exactly as the retired `style={{ maxHeight }}` read it.
+  const listMaxBlockSize = typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight;
+
   /** One option row (recent section and grouped sections share the anatomy). */
   const renderItem = (item: CommandItem, idx: number) => (
-    <div
+    <CommandPaletteRow
       key={item.id}
+      item={item}
       id={optionId(idx)}
-      role="option"
-      aria-selected={activeIndex === idx}
-      aria-disabled={item.disabled || undefined}
-      data-part="item"
-      data-active={activeIndex === idx}
-      onClick={() => handleSelect(item)}
-    >
-      <div data-part="item-main">
-        {item.icon}
-        <div data-part="item-text">
-          <div data-part="label">{item.label}</div>
-          {item.description && (
-            <div data-part="description">{item.description}</div>
-          )}
-        </div>
-      </div>
-      {/* Shortcut hint: certified Kbd inside its anatomy wrapper (the Kbd
-          engine owns its key-cap paint and does not forward data-part). */}
-      {item.shortcut && (
-        <span data-part="shortcut">
-          <Kbd size="sm">{item.shortcut}</Kbd>
-        </span>
-      )}
-    </div>
+      active={activeIndex === idx}
+      onSelect={handleSelect}
+    />
   );
 
   return (
@@ -300,11 +333,12 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       style={style}
     >
       {/* Palette content wrapper: carries the pattern's own state stamps
-          (data-mode / data-loading) and the chamber-wide key handler. */}
+          (data-mode plus the governed `data-state` token list) and the
+          chamber-wide key handler. */}
       <div
         data-part="content"
         data-mode={mode}
-        data-loading={loading}
+        data-state={loading ? 'loading' : undefined}
         onKeyDown={handleKeyDown}
       >
         {/* Search: argument mode adds the breadcrumb chip beside the input
@@ -372,24 +406,32 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
           </div>
         ) : (
         /* ScrollArea is NOT composed here: the listbox must keep role+id for
-           aria-controls and its viewport does not forward them. maxHeight
-           stays inline (runtime prop, the ScrollArea precedent). */
-        <div data-part="list" style={{ maxHeight }} role="listbox" id={listboxId}>
-          {/* Loading footprint: skeleton rows mirror the real row anatomy
-              (icon well + two text bars) so the panel never reflows when
-              async results land. */}
+           aria-controls and its viewport does not forward them. `maxHeight` is
+           a runtime prop, so it travels as the family's own custom property --
+           the one thing the anatomy contract lets a style object carry. */
+        <div
+          data-part="list"
+          style={{ '--ds-command-palette-list-max-block-size': listMaxBlockSize } as React.CSSProperties}
+          role="listbox"
+          id={listboxId}
+        >
+          {/* Loading footprint: the SHARED renderer draws the loading state
+              from the row anatomy it is handed, so the footprint cannot drift
+              from the row it stands in for. `busy` is off because the chamber
+              already announces the palette's own state. */}
           {loading && (
-            <div data-part="loading-list" aria-hidden="true">
+            <AnatomySkeleton busy={false}>
               {[0, 1, 2].map((row) => (
-                <div data-part="skeleton-row" key={row}>
-                  <span data-part="skeleton-icon" />
-                  <span data-part="skeleton-text">
-                    <span data-part="skeleton-line" />
-                    <span data-part="skeleton-line" data-width="short" />
-                  </span>
+                <div key={row} data-part="item">
+                  <div data-part="item-main">
+                    <div data-part="item-text">
+                      <div data-part="label">&nbsp;</div>
+                      <div data-part="description">&nbsp;</div>
+                    </div>
+                  </div>
                 </div>
               ))}
-            </div>
+            </AnatomySkeleton>
           )}
           {/* Show the "Recent" section only when there is no active query,
               giving users quick access to previously used commands. */}

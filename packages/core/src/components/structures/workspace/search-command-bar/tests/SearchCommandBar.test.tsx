@@ -103,7 +103,8 @@ describe('SearchCommandBar -- accessible anatomy', () => {
       'modern',
     );
     const group = await screen.findByRole('group', { name: 'Smart refine' });
-    expect(group).toContainElement(screen.getByRole('button', { name: 'Open only' }));
+    const chip = await screen.findByRole('button', { name: 'Open only' });
+    expect(group).toContainElement(chip);
   });
 
   it('hides the voice anatomy entirely when the browser cannot dictate', async () => {
@@ -115,8 +116,12 @@ describe('SearchCommandBar -- accessible anatomy', () => {
 
 describe('SearchCommandBar -- the microphone-permission drawer', () => {
   it('opens as a named dialog and closes through a named control', async () => {
+    // The blocked branch is the one that reaches the drawer and stays there:
+    // a grantable prompt resolves and the drawer closes itself again.
     voiceState.isSupported = true;
-    voiceState.permissionState = 'prompt';
+    voiceState.permissionState = 'denied';
+    voiceState.status = 'error';
+    voiceState.errorMessage = 'Microphone access is blocked for this site.';
     renderWithEngine(bar(), 'modern');
 
     const toggle = await screen.findByRole('button', { name: 'Start voice input' });

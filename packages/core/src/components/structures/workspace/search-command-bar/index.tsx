@@ -268,7 +268,6 @@ export function SearchCommandBar({
     }
 
     return null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [command.hint, errorMessage, voiceStatus, i18n?.t]);
 
   // Derived 5-way state for the skin's data-voice-status hook: raw `voiceStatus`
@@ -421,6 +420,11 @@ export function SearchCommandBar({
                 data-editorial-tech={editorialTech}
                 data-embedded={embedded}
                 placeholder={command.placeholder}
+                /* A placeholder is not an accessible name: without this the
+                   command input reaches AT as an unnamed textbox, which is the
+                   defect this family's first suite measured. The sibling
+                   shortcuts-overlay search box already carries it. */
+                aria-label={command.placeholder}
                 value={displayValue}
                 onChange={handleInputChange}
               />

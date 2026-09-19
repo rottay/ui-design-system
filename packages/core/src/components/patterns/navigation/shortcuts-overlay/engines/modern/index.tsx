@@ -8,7 +8,8 @@
  * framework modal) for control over backdrop click, auto-focus, focus
  * return and the focus trap: focus lands on the search input at open,
  * Tab/Shift+Tab cycle inside the dialog, and Escape or backdrop close
- * returns focus to the element that opened the overlay.
+ * returns focus to the element that opened the overlay. Escape is handled by
+ * the chamber's own key handler, never by a global listener.
  *
  * COMPOSITION LAW: the close control is the certified Button, the search
  * box the certified Input, each key cap the certified Kbd (inside its
@@ -106,15 +107,11 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
     }
   }, [open]);
 
-  /* Close overlay on Escape key */
-  useEffect(() => {
-    if (!open) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onOpenChange(false);
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [open, onOpenChange]);
+  /* Escape is a CHAMBER decision, not a global one. It used to be a document
+     `keydown` listener -- a third keyboard authority beside the shortcut
+     registry and the command registry, and one that fired for a dialog the
+     user was not focused in. The dialog traps focus and focuses its search box
+     on open, so the chamber's own handler sees every key the overlay owns. */
 
   /* Filter shortcuts by query matching description, key combo, or category */
   const filtered = useMemo(() => {
@@ -145,8 +142,15 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
     setQuery('');
   };
 
-  // Focus trap: cycle Tab/Shift+Tab within the dialog while open.
-  const handleFocusTrap = useCallback((e: React.KeyboardEvent) => {
+  // The chamber's own key handler: Escape dismisses, Tab/Shift+Tab cycle
+  // focus inside the dialog. One place decides both.
+  const handleChamberKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      onOpenChange(false);
+      return;
+    }
     if (e.key !== 'Tab' || !dialogRef.current) return;
     const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
       'input, button, [tabindex]:not([tabindex="-1"]), a[href]'
@@ -166,7 +170,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
         first.focus();
       }
     }
-  }, []);
+  }, [onOpenChange]);
 
   /* Early-return prevents DOM rendering when the overlay is closed */
   if (!open) return null;
@@ -177,7 +181,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
        reference panels (geometry is skin-owned). */
     <div
       ref={dialogRef}
-      onKeyDown={handleFocusTrap}
+      onKeyDown={handleChamberKeyDown}
       className="ds-pattern-shortcuts-overlay ds-engine-modern"
       data-part="root"
       style={style}
