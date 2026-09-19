@@ -555,3 +555,39 @@ the channel-liveness STOP NO-GO 3, the D3 nested owners. Still routed to writer 
 other-family post-pin wireable channels, the RET-03 governance-manifest cohort, the customization
 surface/preservation regen cascade (blocked on the manifest question), the float-button two-pass
 residue. Full-suite + gates:ci --continue certification runs in the final pass.
+
+## 2026-09-19 (nineteenth sitting) — the cascade saga closed; the remaining red is owned
+
+The other-families cascade lot (`0ca2eb294`): the mechanical census found the
+2026-09-14 pin never measured its own tree (R17-06's question, confirmed
+against a pristine worktree) — the post-pin debt was 253 names in 16 families,
+not the ~51 scalar arithmetic suggested. 150 wired with deriver/skin lockstep,
+64 rootless-with-reason, 43 frozen-engine. The repair round restored two
+reviewed contracts the re-chain had moved (tabs RTL twin's physical offset,
+data-table pinned-inset byte shape — both recorded as measured rootless).
+The writer re-pinned the baseline itself against the lot rules; the values were
+verified against the gate's own live measurement before landing and the
+discipline breach is on record. Gate green at 2056/2061/5546.
+
+Follow-through repairs: 3 dangling reads the lot introduced (popover,
+stepper — repaired with producers, RWP back to 530); the card middle link
+(`8e656c2aa`, produced at the resting value; the writer over-ran its slot and
+left its write set regenerating artifacts — stopped, the sound deriver edit
+kept and audited, the churn reverted). Final re-pin sweep `34cd3fae5`:
+artifact-coverage 10976 -> 11077 covered / uncovered holds 989, RWP
+denominator 4660 -> 4718, family-cut channelsRead re-reads for 14 families,
+population depth 198 -> 199 (sidebar-surface). All four gates green with their
+drill suites (37/37, 19/19, 176/176, RWP exit 0).
+
+**Where the programme stands after the whole wave:** family-cut, population,
+artifact-coverage, read-without-producer, cascade-wiring, state-material-arm,
+channel-liveness (minus the 3 NO-GO owner rows), decisions-lit, hooks,
+csssource, physical-properties, baseline-discipline, wiring-coverage,
+retired-vertical-identity, integration-audit, engine-token-audit (minus the
+owner's exemption question) are GREEN. The full vitest suite stands at
+~18170 passed with the remaining reds all classified: owner decisions (F2's
+twelve) or the two documented rare flakes (ChartTheme.root-scope race,
+recorded 2026-09-14; brand-studio fixture collision, unreproduced in 20+
+runs). Next dispatched front: WO-RET-03's governance-manifest quarantine,
+which unblocks the customization regen cascade (the 11 stale family bindings
+are retired-family residue the quarantine deletes rather than repairs).
