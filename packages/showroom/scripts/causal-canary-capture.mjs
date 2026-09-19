@@ -84,7 +84,7 @@
  *
  *  8. PROPAGACION PARCIAL POR LITERAL NO DERIVADO. `--ds-color-success-bg` /
  *     `-border` / `-ink` NO estan en `declaredOutputs.channels` del control
- *     (governance/manifest/controls/palette/status-seeds/index.json:24-94): son literales del
+ *     (docs/history/inventories/customization-manifest/controls/palette/status-seeds/index.json:24-94): son literales del
  *     FlatTheme. Badge soft (skin/badge.css:396) y el status-badge de
  *     RecordWorkbench (presentation/components/skin/record-workbench.css:95)
  *     los leen. REMEDIO: DECLARED_PARTIAL_PROPAGATION los nombra con cita; y la
@@ -203,7 +203,7 @@ const JUDGE_MODE_SELECTOR = '[data-testid="lab-judge-mode"]';
  * del disco en vez de transcribirlo evita que esta herramienta y el manifest
  * puedan divergir en silencio; el sha256 del manifest viaja en el receipt.
  */
-const CONTROL_MANIFEST_RELPATH = 'packages/core/governance/manifest/controls/palette/status-seeds/index.json';
+const CONTROL_MANIFEST_RELPATH = 'docs/history/inventories/customization-manifest/controls/palette/status-seeds/index.json';
 
 /**
  * Canales que los skins SI leen y que el control NO declara. Tras COH-1, los

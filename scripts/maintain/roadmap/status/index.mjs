@@ -3427,7 +3427,7 @@ export function programIndicatorLines(
  * work order owns family acceptance from here.
  */
 export function readFamilyAcceptance(
-  manifestPath = path.join(ROOT, "packages/core/governance/manifest/index.json"),
+  manifestPath = path.join(ROOT, "docs/history/inventories/customization-manifest/index.json"),
 ) {
   if (!fs.existsSync(manifestPath)) {
     return { measured: false, reason: "the governance manifest is not in this checkout" };
@@ -3465,7 +3465,7 @@ export function familyAcceptanceLines(acceptance) {
   lines.push(
     `**${acceptance.accepted}/${acceptance.families} families accepted** — ${acceptance.assessedNotElevated} assessed and not elevated, ` +
       `${acceptance.unreviewed} unreviewed, ${acceptance.blockedOwnerDecision} blocked on an owner decision. ` +
-      `Read live from \`packages/core/governance/manifest/index.json\` (${acceptance.controlFamilyCells} control x family cells).`,
+      `Read live from \`docs/history/inventories/customization-manifest/index.json\` (${acceptance.controlFamilyCells} control x family cells).`,
   );
   lines.push("");
   lines.push(
