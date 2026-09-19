@@ -75383,17 +75383,20 @@ html[data-ds-motion='reduced']
  *
  * Interaction paint that the removed React hover/focus state used to own now lives
  * here as `:hover` / `:focus` rules. Hovers ride the `@media (hover: hover)`
- * guard (house hover law) with unguarded `:active` twins where a press state
- * reads; keyboard focus keeps its unguarded `:focus` rules. The shell-grid
- * `background-image` is scoped to the non-loading root (the loading root never
- * painted it); it stays invisible until a tenant sets
- * `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks share one
- * `data-part` but differ in geometry, so each carries a `data-block` attribute
- * (skin-owned geometry, cockpit-header idiom) and, where it deviates from the
- * default, its radius on the sanctioned inline
- * `--ds-page-shell-skeleton-radius` custom-property data channel (uncounted).
- * The remaining inline styles in the engine are the caller's own `style`
- * prop and the `--ds-page-shell-max-width` channel on the root.
+ * guard (house hover law), each PAIRED with the kernel state the engine
+ * stamps: the header, the crumb links and the tabs run `useInteractionState`
+ * and stamp `partAttributes`, so `[data-state~='hovered']` and the platform
+ * pseudo-class are one decision with a platform fallback, not two authorities.
+ * The shell-grid `background-image` is scoped to the non-loading root (the
+ * loading root never painted it); it stays invisible until a tenant sets
+ * `--ds-shell-grid-size`/`--ds-shell-grid-line`.
+ *
+ * THE LOADING STATE IS NOT PAINTED HERE. `AnatomySkeleton` reads the header's
+ * own `data-part` tree and draws one bone per part, so the skeleton cannot
+ * drift from the header it stands in for; the twenty-nine hand-made
+ * `[data-part='skeleton-*']` constructs this file used to carry are gone.
+ * The only inline styles left in the engine are the caller's own `style` prop
+ * and the `--ds-page-shell-max-width` channel on the root.
  *
  * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
  * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
@@ -75418,7 +75421,7 @@ html[data-ds-motion='reduced']
  *   (expressive type profiles move transform/tracking only — B1.2 keeps
  *   metrics family-authored). `--_ds-page-hierarchy-eyebrow-family`
  *   (shared with CollectionHeader) opens it with the mono fallback intact.
- * - METADATA register line (`data-part='metadata'`): caption role channels,
+ * - METADATA register line (`data-part='caption'`): caption role channels,
  *   muted ink, tabular numerals and a hairline separator — editorial tenants
  *   read it as a register rule, technical tenants as a compact status line.
  * - STICKY: `sticky` prop → `data-sticky` (+ `data-stuck` once the window
@@ -75482,9 +75485,14 @@ html[data-ds-motion='reduced']
 }
 
 /* ---- root measure: the caller's maxWidth rides the channel (default none;
-        margin-inline: auto is a no-op without a measure) ---- */
+        margin-inline: auto is a no-op without a measure). The rest is
+        DECLARED here rather than hidden in a `var()` tail, so the channel has
+        a producer and the engine's per-instance write is the only statement
+        above it. ---- */
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
-  max-width: var(--ds-page-shell-max-width, none);
+  --ds-page-shell-max-width: none;
+
+  max-width: var(--ds-page-shell-max-width);
   margin-inline: auto;
 }
 
@@ -75601,7 +75609,7 @@ html[data-ds-motion='reduced']
 /* Header hover is decorative sheen-shift: it rides the hover guard (house
    hover law); there is no press state on a page panel. */
 @media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:is([data-state~='hovered'], :hover) {
     background-position: 100% 50%;
     border-color: color-mix(
       in srgb,
@@ -75611,7 +75619,7 @@ html[data-ds-motion='reduced']
     box-shadow: var(--ds-page-header-shadow-hover, var(--ds-elevation-2));
   }
 
-  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover [data-part='header-icon'] {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:is([data-state~='hovered'], :hover) [data-part='header-icon'] {
     transform: translateY(-1px) scale(1.025);
   }
 }
@@ -75734,16 +75742,16 @@ html[data-ds-motion='reduced']
 }
 /* Keyboard users get the governed ring on crumb links (the UA default was
    the only indicator before); hover/active keep their color-only cue. */
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible {
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 @media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='hovered'], :hover) {
     color: var(--ds-color-text-secondary);
   }
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:active {
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-text-primary);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
@@ -75808,7 +75816,7 @@ html[data-ds-motion='reduced']
   transform: translateY(-1px);
 }
 @media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='hovered'], :hover):not([data-active='true']) {
     color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
     background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
     border-color: color-mix(
@@ -75818,10 +75826,10 @@ html[data-ds-motion='reduced']
     );
   }
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:active:not([data-active='true']) {
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='pressed'], :active):not([data-active='true']) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:focus-visible {
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
 }
@@ -75880,7 +75888,7 @@ html[data-ds-motion='reduced']
         family/tracking governs); technical tenants as a compact status line.
         The hairline spans only the title column (the part lives inside
         `titles`), so it reads as structure, not as another box. ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='metadata'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='caption'] {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -75896,7 +75904,7 @@ html[data-ds-motion='reduced']
   text-transform: var(--ds-type-caption-text-transform, none);
   font-variant-numeric: var(--ds-type-caption-font-variant-numeric, tabular-nums);
 }
-.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='caption'] {
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
 }
 
@@ -75917,7 +75925,7 @@ html[data-ds-motion='reduced']
     0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 80%, transparent);
   scrollbar-width: none;
 }
-.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='divider'] {
   margin-top: var(--ds-page-shell-section-gap);
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
@@ -75965,87 +75973,6 @@ html[data-ds-motion='reduced']
   padding: var(--ds-page-shell-content-padding);
 }
 
-/* ---- loading skeleton: layout frame (drained) + per-block geometry keyed on
-        data-block (cockpit-header idiom) + the pulse cadence on the motion
-        channel (the retired inline `1.5s` literal) ---- */
-.ds-pattern-page-shell.ds-engine-modern[data-part='root'][data-loading='true'] {
-  padding: var(--ds-page-shell-header-padding);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-group'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-page-shell-item-gap);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-row'] {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ds-page-shell-section-gap);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-copy'] {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: var(--ds-spacing-2, 8px);
-  min-width: 0;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] {
-  display: flex;
-  gap: var(--ds-page-shell-action-gap);
-}
-/* C0-07: the tab-strip skeleton reserves the strip's final row so late
-   content lands without a vertical jump. */
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-tabs-row'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-tabs-gap, var(--ds-spacing-2, 8px));
-  margin-top: var(--ds-spacing-2, 8px);
-  padding: var(--ds-tabs-list-padding, 3px);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
-  border-radius: var(--ds-page-shell-skeleton-radius, var(--ds-radius-sm));
-  background: var(--ds-color-neutral-100);
-  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) ease-in-out infinite;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='breadcrumb'] {
-  inline-size: 180px;
-  block-size: 12px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='eyebrow'] {
-  inline-size: 120px;
-  max-inline-size: 40%;
-  block-size: 10px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='tab'] {
-  inline-size: 88px;
-  block-size: calc(var(--ds-tabs-md-height, 36px) - 6px);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='title'] {
-  inline-size: 100%;
-  max-inline-size: 280px;
-  block-size: 28px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='subtitle'] {
-  inline-size: 200px;
-  max-inline-size: 100%;
-  block-size: 14px;
-}
-/* C1: the register-line block mirrors the caption role footprint (12px bar
-   over a bounded measure), so the anatomy-matched skeleton covers metadata
-   exactly like the late content. */
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='metadata'] {
-  inline-size: min(240px, 70%);
-  block-size: 12px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='action-sm'] {
-  inline-size: 80px;
-  block-size: 32px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='action-md'] {
-  inline-size: 100px;
-  block-size: 32px;
-}
-
 @container ds-page (max-width: 640px) {
   /* C1 intelligent reorder (not a stack): the lead/titles wrappers dissolve
      into the header-row flex context, so every hierarchy unit orders
@@ -76081,7 +76008,7 @@ html[data-ds-motion='reduced']
     overflow-x: auto;
   }
 
-  .ds-pattern-page-shell.ds-engine-modern [data-part='metadata'] {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='caption'] {
     order: 5;
   }
 
@@ -76107,45 +76034,11 @@ html[data-ds-motion='reduced']
      the header uses for its own section seams (`header-content`, `rule`) — a
      second dominant boundary read against the wrong region. At this width the
      register keeps its separation through the header-row rhythm. */
-  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'] {
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='caption'] {
     padding-block-start: 0;
     border-block-start-width: 0;
   }
 
-  /* C2 skeleton parity: the loaded header reorders into one column here, so a
-     skeleton that keeps the desktop two-column row reserves the WRONG
-     footprint — the title bar shrinks to a stub beside the action blocks and
-     the reserved actions sit a row above the content that replaces them. The
-     copy wrapper dissolves exactly like `titles` does, so the blocks carry the
-     loaded order: title → supporting → actions → register. */
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-row'] {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-copy'] {
-    display: contents;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='title'] {
-    order: 1;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='subtitle'] {
-    order: 2;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] {
-    order: 3;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] > * {
-    flex: 1 0 auto;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='metadata'] {
-    order: 4;
-  }
 }
 
 /* C2c a11y floor (census-derived, cockpit-header idiom): coarse-pointer tap
@@ -76182,21 +76075,14 @@ html[data-ds-motion='reduced']
   .ds-pattern-page-shell.ds-engine-modern [data-part='header']::after {
     animation: none;
   }
-
-  /* C0-07: the skeleton pulse is ambient motion — under reduced motion the
-     reserved footprint stays, the cadence stops. */
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
-    animation: none;
-  }
 }
 
 /* forced-colors: the identity panel's gradients, sheen and shadows are forced
    away, so every frame re-asserts in system colors and the sheen layer is
    removed outright. The ACTIVE tab keeps the system Highlight pair (the tab
-   state never reads as colour alone -- aria-selected carries it too); the
-   skeleton bars re-assert as GrayText with the pulse stopped; hairlines
-   degrade to ButtonText. The back Button is a composed primitive with its
-   own forced-colors contract. */
+   state never reads as colour alone -- aria-selected carries it too);
+   hairlines degrade to ButtonText. The back Button is a composed primitive
+   with its own forced-colors contract. */
 @media (forced-colors: active) {
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'] {
     border-color: ButtonText;
@@ -76231,8 +76117,8 @@ html[data-ds-motion='reduced']
     color: ButtonText;
   }
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-content'],
-  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'],
-  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='caption'],
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='divider'] {
     border-color: ButtonText;
   }
   .ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-active='true'] {
@@ -76242,14 +76128,10 @@ html[data-ds-motion='reduced']
     box-shadow: none;
     transform: none;
   }
-  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:focus-visible {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
-  }
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
-    background: GrayText;
-    animation: none;
   }
 }
 
@@ -76724,107 +76606,73 @@ html[data-ds-motion='reduced']
  * component base and is in turn overridden by the structure and surface tiers;
  * the unlayered compiled tenant artifact wins over all of them.
  *
- * SCOPE ROOT: the pattern now composes the certified Modal, so the scope
- * classes `ds-pattern-command-palette ds-engine-modern` ride Modal's
- * `data-part='surface'` (two distinct classes + one attribute, (0,3,0);
- * repetition is prohibited — the old P-48 border-color floor is bought from
- * this scope + a single target part, never a repeated attribute). PORTALED:
- * the chamber is a native `<dialog>` under the shared portal root, and
- * `usePortalScope` re-stamps the tenant/locale/density lineage onto it, so
+ * SCOPE ROOT: the pattern composes the certified Modal, so the scope classes
+ * `ds-pattern-command-palette ds-engine-modern` ride Modal's surface node.
+ * PORTALED: the chamber is a native `<dialog>` under the shared portal root,
+ * and `usePortalScope` re-stamps the tenant/locale/density lineage onto it, so
  * descendant selectors and tenant `--ds-*` overrides still resolve.
  *
+ * CHANNELS: every paint decision below is a `--ds-command-palette-*` channel
+ * with the chained fallback to the cascade root it used to read directly, and
+ * `derivation/chrome/command-palette` produces each one at exactly that
+ * fallback. Three names the tenant could already author through
+ * `chrome.search.commandPalette` finally land here -- `-border` on the
+ * palette's own hairlines, `-group-color` on the section headings and
+ * `-shortcut-border` through the composed Kbd's own frame channel. The other
+ * five (`-bg`, `-shadow`, `-backdrop`, `-item-hover-bg`, `-empty-color`) name
+ * paint this pattern gave away when it adopted certified primitives, and their
+ * root rests disagree with the rest those primitives hold; adopting them here
+ * would repaint every tenant that never authored the field. They are routed,
+ * not invented -- see the lot's changeset.
+ *
+ * MEASURE: the palette's own `max-inline-size` used to be authored at (0,3,0)
+ * against Modal's own (0,4,0) surface rule and never applied. It now reaches
+ * the chamber through Modal's `--ds-modal-max-inline-size` channel, which is
+ * the sanctioned way one owner tunes a composed primitive.
+ *
  * COMPOSITION: the search box is the certified Input primitive, shortcut
- * hints are the certified Kbd, the argument chip wraps the certified Tag and
- * the empty state wraps the certified Empty — those primitives own their
- * paint (the pre-composition kbd/chip/empty color rules were deleted with
- * the raw elements). The overlay frame, backdrop, chamber fill, elevation,
- * border, entrance motion and z-index belong to Modal (overlay-modal.css);
- * the frame/backdrop/card blocks this file used to own were retired with the
- * hand-rolled overlay. What remains here is the palette's own content: the
- * card measure, the listbox scroll frame, row layout + keyboard/pointer
- * states, section labels, the argument panel and the footer hairline.
+ * hints are the certified Kbd, the argument chip wraps the certified Tag, the
+ * empty state wraps the certified Empty and the loading footprint is the
+ * SHARED `AnatomySkeleton` -- those owners paint themselves, and this file
+ * draws no skeleton of its own. The overlay frame, backdrop, chamber fill,
+ * elevation, border, entrance motion and z-index belong to Modal.
  *
- * CASCADE: `max-inline-size` on the surface ties overlay-modal.css's own
- * (0,3,0) surface rule and wins on source order — command-palette.css is
- * imported after it inside `layer(rottay-engines)`. The phone posture is
- * deliberately NOT contested: Modal's `[data-fullscreen='true']` rule is
- * (0,4,0) and correctly releases the measure. Modal's footer/body/header
- * rules all use a child combinator from the surface, so the palette's own
- * `[data-part='footer']` (a grandchild, inside Modal's body) never collides.
- *
- * INTERACTION: the keyboard-active row keys on `[data-active='true']`;
- * pointer hover is hover-capable-only (`@media (hover: hover)`) AND keyed on
- * `:not([data-active='true'])` so it never repaints the keyboard-selected
- * row — the exact `activeIndex !== idx` guard the removed onMouseEnter/Leave
- * writes had. In forced colors the active row re-expresses as
+ * INTERACTION: state is decided once. The row runs `useInteractionState` and
+ * stamps `partAttributes`, so the hover arm pairs the kernel's own
+ * `[data-state~='hovered']` with the platform `:hover`; the keyboard cursor
+ * stays a separate fact on `[data-active='true']`, and the hover arm never
+ * repaints it. In forced colors the active row re-expresses as
  * Highlight/HighlightText so the keyboard cursor stays visible.
  */
 
 /* ---- card measure: the ONE geometry the palette still owns on Modal's
-        chamber. Fill, elevation, border, radius (through Modal's `radius`
-        prop), entrance motion, z-index and the backdrop are all governed by
-        overlay-modal.css — the palette's former frame/backdrop/card blocks
-        were retired with the hand-rolled overlay they described. ---- */
-.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] {
-  max-inline-size: 32rem;
+        chamber, delivered through Modal's own channel. Fill, elevation,
+        border, radius, entrance motion, z-index and the backdrop are all
+        governed by the modal skin. ---- */
+.ds-pattern-command-palette.ds-engine-modern {
+  --ds-modal-max-inline-size: var(--ds-command-palette-max-inline-size, 32rem);
 }
 
-/* ---- loading footprint: skeleton rows mirror the real row anatomy (icon
-        well + label/hint bars) so the panel never reflows when async
-        results land; the wash rides the canonical shimmer keyframes ---- */
-.ds-pattern-command-palette.ds-engine-modern [data-part='loading-list'] {
-  padding-block: var(--ds-spacing-1, 4px);
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-row'] {
+/* ---- content wrapper: the palette's own column. `data-state~='loading'` is
+        stamped by the pattern and deliberately unpainted: the loading surface
+        is the shared anatomy skeleton's, not a second wash of this file's. ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='content'] {
   display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2, 8px);
-  margin-inline: var(--ds-spacing-1, 4px);
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-3, 12px);
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'],
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
-  border-radius: var(--ds-radius-md);
-  background: linear-gradient(
-    100deg,
-    var(--ds-surface-inset) 40%,
-    var(--ds-surface-highlight, var(--ds-surface-panel)) 50%,
-    var(--ds-surface-inset) 60%
-  );
-  background-size: 200% 100%;
-  animation: ds-foundation-shimmer var(--_ds-command-palette-shimmer-duration, calc(var(--ds-motion-glacial) * 4)) linear infinite;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'] {
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
-  flex-shrink: 0;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-text'] {
-  display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--ds-spacing-1, 4px);
-  min-inline-size: 0;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
-  display: block;
-  inline-size: 55%;
-  block-size: 0.625rem;
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'][data-width='short'] {
-  inline-size: 35%;
-  block-size: 0.5rem;
+  min-block-size: 0;
 }
 
 /* ---- search row: always a flex line so the argument chip can sit beside
         the composed Input (which owns its own paint). ---- */
-.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='search'] {
+.ds-pattern-command-palette.ds-engine-modern [data-part='search'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 8px);
-  padding: var(--ds-spacing-3, 12px);
-  border-bottom: 1px solid var(--ds-color-border);
+  gap: var(--ds-command-palette-search-gap, var(--ds-spacing-2, 8px));
+  padding: var(--ds-command-palette-search-padding, var(--ds-spacing-3, 12px));
+  border-block-end: var(
+    --ds-command-palette-search-rule,
+    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+  );
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='search'] > :last-child {
   flex: 1 1 auto;
@@ -76832,73 +76680,90 @@ html[data-ds-motion='reduced']
 }
 
 /* ---- listbox: internal scroll with the lane's thin, ink-derived bar
-        (ScrollArea is not composed — see the engine header). ---- */
+        (ScrollArea is not composed -- see the engine header). The measure is
+        the caller's runtime prop, written on the element as this family's
+        own channel. ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='list'] {
   overflow-y: auto;
-  padding-block: var(--ds-spacing-2, 8px);
-  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  max-block-size: var(--ds-command-palette-list-max-block-size, 25rem);
+  padding-block: var(--ds-command-palette-list-padding-block, var(--ds-spacing-2, 8px));
+  scrollbar-color: var(
+      --ds-command-palette-scrollbar-thumb,
+      color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border))
+    )
+    transparent;
   scrollbar-width: thin;
 }
 
-/* ---- sections: recent block + group labels (geometry transcribed from the
-        retired menuSectionTitleStyle spread) ---- */
+/* ---- sections: recent block + group labels ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] {
-  padding-inline: var(--ds-spacing-3, 12px);
-  padding-block-end: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-command-palette-recent-padding-inline, var(--ds-spacing-3, 12px));
+  padding-block-end: var(--ds-command-palette-recent-padding-block-end, var(--ds-spacing-2, 8px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='section-label'],
 .ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
-  padding-block: 6px 4px;
-  padding-inline: var(--ds-spacing-3, 12px);
-  margin-block-end: var(--ds-spacing-1, 4px);
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-xs, 12px);
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  padding-block: var(--ds-command-palette-section-label-padding-block, 6px 4px);
+  padding-inline: var(--ds-command-palette-section-label-padding-inline, var(--ds-spacing-3, 12px));
+  margin-block-end: var(--ds-command-palette-section-label-margin-block-end, var(--ds-spacing-1, 4px));
+  color: var(--ds-command-palette-section-label-color, var(--ds-color-text-muted));
+  font-size: var(--ds-command-palette-section-label-font-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(--ds-command-palette-section-label-font-weight, 500);
+  letter-spacing: var(--ds-command-palette-section-label-letter-spacing, 0.05em);
   text-transform: uppercase;
 }
+/* The group heading keeps the tenant's `chrome.search.categoryColor` ahead of
+   the family channel: it is the narrower statement, and it only exists when a
+   tenant authored it. */
 .ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
-  padding-block: var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px);
-  padding-inline: var(--ds-spacing-5, 20px);
+  padding-block: var(
+    --ds-command-palette-group-label-padding-block,
+    var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px)
+  );
+  padding-inline: var(--ds-command-palette-group-label-padding-inline, var(--ds-spacing-5, 20px));
   margin-block-end: 0;
-  /* a live per-tenant override channel (fallback: muted) */
-  color: var(--ds-search-category-color, var(--ds-color-text-muted));
+  color: var(
+    --ds-search-category-color,
+    var(--ds-command-palette-group-color, var(--ds-color-text-muted))
+  );
 }
 
-/* ---- option rows: keyboard-active and pointer-hover-while-not-active both
-        resolve to the inset surface; hover is hover-capable-only and the
+/* ---- option rows: the keyboard cursor is `[data-active='true']`; the
+        pointer arm is hover-capable-only and pairs the kernel state with the
+        platform pseudo, so one place decides when a row is hovered. The
         `:not([data-active='true'])` guard keeps a hovered pointer off the
-        keyboard-selected row (a plain :hover would light two rows at once).
-        The active row also carries a SHAPE indicator (inline-start accent
-        bar), never color alone; the inline margin lets the active pill and
-        the bar float clear of the dialog edge. ---- */
+        keyboard-selected row (a plain hover would light two rows at once). ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-2, 8px);
-  margin-inline: var(--ds-spacing-1, 4px);
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-3, 12px);
-  border-radius: var(--ds-radius-lg);
+  gap: var(--ds-command-palette-item-gap, var(--ds-spacing-2, 8px));
+  margin-inline: var(--ds-command-palette-item-margin-inline, var(--ds-spacing-1, 4px));
+  padding-block: var(--ds-command-palette-item-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-command-palette-item-padding-inline, var(--ds-spacing-3, 12px));
+  border-radius: var(--ds-command-palette-item-radius, var(--ds-radius-lg));
   cursor: pointer;
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: background-color
+    var(--ds-command-palette-item-transition, var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] [data-part='item'] {
-  padding-inline: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-command-palette-item-padding-inline, var(--ds-spacing-3, 12px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'][aria-disabled='true'] {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: var(--ds-command-palette-item-disabled-opacity, 0.5);
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
-  background: var(--ds-surface-inset);
-  box-shadow: inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary));
+  background: var(--ds-command-palette-item-active-bg, var(--ds-surface-inset));
+  box-shadow: var(
+    --ds-command-palette-item-active-ring,
+    inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary))
+  );
 }
 @media (hover: hover) {
-  .ds-pattern-command-palette.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
-    background: var(--ds-surface-inset);
+  .ds-pattern-command-palette.ds-engine-modern
+    [data-part='item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
+    background: var(--ds-command-palette-item-hover-surface, var(--ds-surface-inset));
   }
 }
 
@@ -76906,7 +76771,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-command-palette.ds-engine-modern [data-part='item-main'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 8px);
+  gap: var(--ds-command-palette-item-main-gap, var(--ds-spacing-2, 8px));
   min-inline-size: 0;
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item-text'] {
@@ -76914,92 +76779,90 @@ html[data-ds-motion='reduced']
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='label'] {
   overflow: hidden;
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-font-size-sm, 14px);
-  font-weight: 500;
+  color: var(--ds-command-palette-label-color, var(--ds-color-text-primary));
+  font-size: var(--ds-command-palette-label-font-size, var(--ds-font-size-sm, 14px));
+  font-weight: var(--ds-command-palette-label-font-weight, 500);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='description'] {
   overflow: hidden;
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
+  color: var(--ds-command-palette-description-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-command-palette-description-font-size, var(--ds-font-size-xs, 12px));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ---- shortcut hint: layout only — the composed Kbd owns the key-cap paint ---- */
+/* ---- shortcut hint: layout only -- the composed Kbd owns the key-cap paint,
+        and the tenant's own command-palette shortcut rule reaches it through
+        the primitive's frame channel rather than through a selector war. ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='shortcut'] {
   flex-shrink: 0;
-  margin-inline-start: var(--ds-spacing-2, 8px);
+  margin-inline-start: var(--ds-command-palette-shortcut-margin-inline-start, var(--ds-spacing-2, 8px));
+  --ds-kbd-frame: var(--ds-command-palette-shortcut-border, var(--ds-color-border));
 }
 
-/* ---- empty state: rhythm only — the composed Empty owns its paint ---- */
+/* ---- empty state: rhythm only -- the composed Empty owns its paint ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='empty'] {
-  padding-block: var(--ds-spacing-8, 32px);
+  padding-block: var(--ds-command-palette-empty-padding-block, var(--ds-spacing-8, 32px));
 }
 
 /* ---- per-section provider error row (kind='error': rendered, never
         selectable) ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='error'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-4, 16px);
-  color: var(--ds-color-error, var(--ds-color-text-secondary));
+  padding-block: var(--ds-command-palette-error-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-command-palette-error-padding-inline, var(--ds-spacing-4, 16px));
+  color: var(--ds-command-palette-error-color, var(--ds-color-error, var(--ds-color-text-secondary)));
 }
 
 /* ---- argument mode: panel, prompt, validation error. The chip is layout
-        only — the composed Tag inside owns the pill paint. ---- */
+        only -- the composed Tag inside owns the pill paint. ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-panel'] {
-  padding-block: var(--ds-spacing-3, 12px);
-  padding-inline: var(--ds-spacing-4, 16px);
+  padding-block: var(--ds-command-palette-argument-panel-padding-block, var(--ds-spacing-3, 12px));
+  padding-inline: var(--ds-command-palette-argument-panel-padding-inline, var(--ds-spacing-4, 16px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-chip'] {
   flex-shrink: 0;
   white-space: nowrap;
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-prompt'] {
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-sm, 14px);
+  color: var(--ds-command-palette-argument-prompt-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-command-palette-argument-prompt-font-size, var(--ds-font-size-sm, 14px));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-error'] {
-  margin-block-start: var(--ds-spacing-1, 4px);
-  color: var(--ds-color-error, var(--ds-color-text-primary));
-  font-size: var(--ds-font-size-xs, 12px);
+  margin-block-start: var(--ds-command-palette-argument-error-margin-block-start, var(--ds-spacing-1, 4px));
+  color: var(--ds-command-palette-argument-error-color, var(--ds-color-error, var(--ds-color-text-primary)));
+  font-size: var(--ds-command-palette-argument-error-font-size, var(--ds-font-size-xs, 12px));
 }
 
 /* ---- footer (caller slot; the pattern owns rhythm + hairline) ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='footer'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-4, 16px);
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
-}
-.ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border);
+  padding-block: var(--ds-command-palette-footer-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-command-palette-footer-padding-inline, var(--ds-spacing-4, 16px));
+  color: var(--ds-command-palette-footer-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-command-palette-footer-font-size, var(--ds-font-size-xs, 12px));
+  border-block-start: var(
+    --ds-command-palette-footer-rule,
+    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+  );
 }
 
 /* The narrow-viewport `@container` block that used to live here is RETIRED.
    It keyed on a `container-type` declared by the palette's own overlay frame,
    which no longer exists, and the top offset it retuned is now Modal's inline
-   `padding-top` on the dialog root — unreachable from a stylesheet. Modal's
+   `padding-top` on the dialog root -- unreachable from a stylesheet. Modal's
    `adaptiveFullscreen` posture (default on) is the governed phone answer:
    full-viewport chamber, radius flattened, safe-area insets. */
-
-/* ---- coarse pointers: option rows meet the physical 44px floor ---- */
-@media (pointer: coarse) {
-  .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
-    min-block-size: 44px;
-  }
-}
 
 /* ---- forced colors: system colors only. The keyboard cursor row MUST stay
         visible, so the active option re-expresses as Highlight; hairlines,
         labels and the dialog frame follow in system ink. No data-viz here,
         so no forced-color-adjust opt-out anywhere. ---- */
 @media (forced-colors: active) {
-  /* The chamber frame is NOT re-declared here: overlay-modal.css already
-     paints `border: 1px solid CanvasText` on the surface in forced colors, at
-     (0,4,0) — a (0,3,0) palette rule would be dead CSS, not a floor. */
+  /* The chamber frame is NOT re-declared here: the modal skin already paints
+     `border: 1px solid CanvasText` on the surface in forced colors, at a
+     specificity a palette rule cannot reach -- a rule here would be dead CSS,
+     not a floor. */
 
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
     background: Highlight;
@@ -77013,8 +76876,8 @@ html[data-ds-motion='reduced']
     color: HighlightText;
   }
 
-  .ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='search'],
-  .ds-pattern-command-palette.ds-engine-modern[data-part='surface'] [data-part='footer'] {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='search'],
+  .ds-pattern-command-palette.ds-engine-modern [data-part='footer'] {
     border-color: ButtonText;
   }
 
@@ -77031,22 +76894,19 @@ html[data-ds-motion='reduced']
 }
 
 /* C2c a11y floor (census-derived): coarse-pointer tap targets never render
-   below the canonical --ds-touch-target-min channel; fine pointers keep the
-   authored size untouched. */
+   below the canonical touch-target channel; fine pointers keep the authored
+   size untouched. */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
-    min-block-size: var(--ds-touch-target-min, 44px);
+    min-block-size: var(--ds-command-palette-item-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
 /* Reduced motion: durations collapse but the transition still fires, so nothing is hidden,
    relaid out, or left waiting on an event that never arrives. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-command-palette.ds-engine-modern [data-part='item'],
-  .ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'], .ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
     transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
   }
 }
 
@@ -77963,60 +77823,70 @@ html[data-ds-motion='reduced']
  * part, never a repeated attribute). NOT portaled: the dialog is a
  * `position:fixed` DOM descendant of the tenant-scoped root.
  *
+ * CHANNELS: every paint decision below is a `--ds-shortcuts-overlay-*` channel
+ * with the chained fallback to the cascade root it used to read directly, and
+ * `derivation/chrome/shortcuts-overlay` produces each one at exactly that
+ * fallback. Producing a name changes WHO can reach the value, never what it
+ * rests at.
+ *
  * COMPOSITION: the close control is the certified Button, the search box
  * the certified Input, key caps the certified Kbd, the scroll frame the
  * certified ScrollArea (its own skin owns the scrollbar), and the empty
- * state the certified Empty — those primitives own their paint (the
- * pre-composition kbd/close/input/empty color rules were deleted with the
- * raw elements). This file owns only the overlay chrome: root/backdrop/
- * dialog geometry, header/search/footer rhythm + hairlines, category
- * hierarchy and row layout.
+ * state the certified Empty — those primitives own their paint. This file
+ * owns only the overlay chrome: root/backdrop/dialog geometry,
+ * header/search/footer rhythm + hairlines, category hierarchy and row layout.
  *
  * Z-INDEX: the arbitrary Tailwind `z-50` is re-mapped to the sanctioned
  * `--ds-z-modal` rung — an overlay stacks with modal layers, not below them.
  */
 
-/* ---- root: fixed top-anchored overlay frame (was Tailwind
-        `fixed inset-0 z-50 flex items-start justify-center pt-[10vh]`) ---- */
+/* ---- root: fixed top-anchored overlay frame ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
   position: fixed;
   inset: 0;
-  z-index: var(--ds-z-modal, 1500);
+  z-index: var(--ds-shortcuts-overlay-z-index, var(--ds-z-modal, 1500));
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-block-start: 10vh;
-  padding-inline: var(--ds-spacing-3, 12px);
+  padding-block-start: var(--ds-shortcuts-overlay-inset-block-start, 10vh);
+  padding-inline: var(--ds-shortcuts-overlay-padding-inline, var(--ds-spacing-3, 12px));
   container: ds-shortcuts-overlay / inline-size;
 }
 
 /* backdrop: scrim + sanctioned glass layer, at parity with the command
    palette's overlay material (glass is sanctioned on overlay backdrops
-   only; tint + blur scale with --ds-effect-intensity, collapsing to a plain
-   scrim at 0). */
+   only; tint + blur scale with the effect-intensity dial, collapsing to a
+   plain scrim at 0). */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
   position: absolute;
   inset: 0;
-  background-color: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
-  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
-  backdrop-filter: var(--ds-glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+  background-color: var(
+    --ds-shortcuts-overlay-scrim,
+    var(--ds-overlay-scrim, var(--ds-color-bg-overlay))
+  );
+  background-image: linear-gradient(
+    var(--ds-shortcuts-overlay-scrim-tint, var(--ds-glass-scrim-tint)),
+    var(--ds-shortcuts-overlay-scrim-tint, var(--ds-glass-scrim-tint))
+  );
+  backdrop-filter: var(--ds-shortcuts-overlay-scrim-filter, var(--ds-glass-backdrop-filter));
+  -webkit-backdrop-filter: var(--ds-shortcuts-overlay-scrim-filter, var(--ds-glass-backdrop-filter));
 }
 
-/* ---- dialog card (was `relative rounded-xl w-full max-w-lg
-        overflow-hidden`). Widened to 40rem so the intrinsic two-column list
-        fits; the narrow container query below re-collapses it. Entrance
-        rides the canonical keyframes on the motion channel. ---- */
+/* ---- dialog card. 40rem so the intrinsic two-column list fits; the narrow
+        container query below re-collapses it. Entrance rides the canonical
+        keyframes on the motion channel. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
   position: relative;
   inline-size: 100%;
-  max-inline-size: 40rem;
+  max-inline-size: var(--ds-shortcuts-overlay-dialog-max-inline-size, 40rem);
   overflow: hidden;
-  border-radius: var(--ds-radius-xl);
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-3);
-  color: var(--ds-color-text-primary);
-  animation: ds-foundation-fade-in-down var(--ds-motion-normal) var(--ds-motion-ease-enter, ease-out);
+  border-radius: var(--ds-shortcuts-overlay-dialog-radius, var(--ds-radius-xl));
+  background: var(--ds-shortcuts-overlay-dialog-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-shortcuts-overlay-dialog-shadow, var(--ds-elevation-3));
+  color: var(--ds-shortcuts-overlay-dialog-color, var(--ds-color-text-primary));
+  animation: ds-foundation-fade-in-down
+    var(--ds-shortcuts-overlay-enter-duration, var(--ds-motion-normal))
+    var(--ds-shortcuts-overlay-enter-easing, var(--ds-motion-ease-enter, ease-out));
 }
 
 /* ---- header: title + composed close Button over a quiet hairline ---- */
@@ -78024,23 +77894,23 @@ html[data-ds-motion='reduced']
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-3, 12px);
-  padding-block: var(--ds-spacing-3, 12px);
-  padding-inline: var(--ds-spacing-5, 20px);
-  border-bottom: 1px solid var(--ds-color-border);
+  gap: var(--ds-shortcuts-overlay-header-gap, var(--ds-spacing-3, 12px));
+  padding-block: var(--ds-shortcuts-overlay-header-padding-block, var(--ds-spacing-3, 12px));
+  padding-inline: var(--ds-shortcuts-overlay-header-padding-inline, var(--ds-spacing-5, 20px));
+  border-block-end: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='title'] {
   margin: 0;
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-font-size-base, 16px);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  color: var(--ds-shortcuts-overlay-title-color, var(--ds-color-text-primary));
+  font-size: var(--ds-shortcuts-overlay-title-font-size, var(--ds-font-size-base, 16px));
+  font-weight: var(--ds-shortcuts-overlay-title-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
 /* ---- search row (the composed Input owns its paint + focus ring) ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='search'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-5, 20px);
-  border-bottom: 1px solid var(--ds-color-border);
+  padding-block: var(--ds-shortcuts-overlay-search-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-shortcuts-overlay-search-padding-inline, var(--ds-spacing-5, 20px));
+  border-block-end: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 
 /* ---- list rhythm (the certified ScrollArea owns the scroll frame). The
@@ -78049,25 +77919,28 @@ html[data-ds-motion='reduced']
         to a single column without a breakpoint fork; groups never split
         across columns. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='list'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  column-width: 16rem;
-  column-gap: var(--ds-spacing-4, 16px);
+  padding-block: var(--ds-shortcuts-overlay-list-padding-block, var(--ds-spacing-2, 8px));
+  column-width: var(--ds-shortcuts-overlay-list-column-width, 16rem);
+  column-gap: var(--ds-shortcuts-overlay-list-column-gap, var(--ds-spacing-4, 16px));
 }
 
 /* ---- category groups: quiet uppercase label, hairline-free ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='group'] {
-  padding-block: var(--ds-spacing-1, 4px);
+  padding-block: var(--ds-shortcuts-overlay-group-padding-block, var(--ds-spacing-1, 4px));
   break-inside: avoid;
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-row'] {
-  padding-block: var(--ds-spacing-1, 4px);
-  padding-inline: var(--ds-spacing-5, 20px);
+  padding-block: var(--ds-shortcuts-overlay-category-padding-block, var(--ds-spacing-1, 4px));
+  padding-inline: var(--ds-shortcuts-overlay-category-padding-inline, var(--ds-spacing-5, 20px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label'] {
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
-  font-weight: var(--ds-font-weight-semibold, 600);
-  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  color: var(--ds-shortcuts-overlay-category-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-shortcuts-overlay-category-font-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(--ds-shortcuts-overlay-category-font-weight, var(--ds-font-weight-semibold, 600));
+  letter-spacing: var(
+    --ds-shortcuts-overlay-category-letter-spacing,
+    var(--ds-letter-spacing-wide, 0.025em)
+  );
   text-transform: uppercase;
 }
 
@@ -78076,14 +77949,14 @@ html[data-ds-motion='reduced']
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-3, 12px);
-  padding-block: 6px;
-  padding-inline: var(--ds-spacing-5, 20px);
+  gap: var(--ds-shortcuts-overlay-item-gap, var(--ds-spacing-3, 12px));
+  padding-block: var(--ds-shortcuts-overlay-item-padding-block, 6px);
+  padding-inline: var(--ds-shortcuts-overlay-item-padding-inline, var(--ds-spacing-5, 20px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='description'] {
   min-inline-size: 0;
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-font-size-sm, 14px);
+  color: var(--ds-shortcuts-overlay-description-color, var(--ds-color-text-primary));
+  font-size: var(--ds-shortcuts-overlay-description-font-size, var(--ds-font-size-sm, 14px));
 }
 
 /* ---- chord: caps separated by a consistent gap (dir="ltr" is stamped by
@@ -78093,7 +77966,7 @@ html[data-ds-motion='reduced']
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: var(--ds-spacing-1, 4px);
+  gap: var(--ds-shortcuts-overlay-chord-gap, var(--ds-spacing-1, 4px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'] {
   display: inline-flex;
@@ -78101,24 +77974,27 @@ html[data-ds-motion='reduced']
 
 /* ---- empty state: rhythm only — the composed Empty owns its paint ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='empty'] {
-  padding-block: var(--ds-spacing-8, 32px);
+  padding-block: var(--ds-shortcuts-overlay-empty-padding-block, var(--ds-spacing-8, 32px));
 }
 
 /* ---- footer (caller slot; the pattern owns rhythm + hairline) ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-5, 20px);
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 12px);
+  padding-block: var(--ds-shortcuts-overlay-footer-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-shortcuts-overlay-footer-padding-inline, var(--ds-spacing-5, 20px));
+  color: var(--ds-shortcuts-overlay-footer-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-shortcuts-overlay-footer-font-size, var(--ds-font-size-xs, 12px));
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border);
+  border-block-start: var(--ds-shortcuts-overlay-rule, 1px solid var(--ds-color-border));
 }
 
 /* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
 @container ds-shortcuts-overlay (inline-size < 40rem) {
   .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
-    padding-block-start: var(--ds-spacing-8, 32px);
+    padding-block-start: var(
+      --ds-shortcuts-overlay-narrow-inset-block-start,
+      var(--ds-spacing-8, 32px)
+    );
   }
   .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
     max-inline-size: 100%;
@@ -78128,8 +78004,8 @@ html[data-ds-motion='reduced']
 /* ---- coarse pointers: the close control meets the physical 44px floor ---- */
 @media (pointer: coarse) {
   .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='close'] {
-    min-inline-size: 44px;
-    min-block-size: 44px;
+    min-inline-size: var(--ds-shortcuts-overlay-close-touch-target, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-shortcuts-overlay-close-touch-target, var(--ds-touch-target-min, 44px));
   }
 }
 
@@ -83699,7 +83575,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * value still wins through the style attribute. The field's runtime
  * `span` rides the `--ds-record-field-span` channel and ONE arm below reads
  * it, so the published numeric domain survives whole; `data-span` remains
- * the stamp, and 1 is the channel's authored fallback. Action-bar icons are
+ * the stamp, and the skin authors that channel's `1` default the same way —
+ * a channel written only by a style attribute has no producer at all on the
+ * fields that omit it. Action-bar icons are
  * NOT sized here: they ride the Button's own governed icon channel
  * (`--ds-button-sm-icon-size`).
  *
@@ -83745,9 +83623,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *    every pseudo below pairs with its `data-state` twin:
  *    `:is([data-state~='hovered'], :hover)` and so on — the platform
  *    pseudo stays the twin's fallback, not a second authority. The link's
- *    keyboard ring is the ONE unpaired rule, and that is a measurement:
- *    the focusable element is the anchor ABOVE that wrapper, so no state
- *    the wrapper can carry is ever reachable from it.
+ *    keyboard ring is no exception: the wrapper WRAPS the anchor, so the
+ *    focusable element is inside the element that carries the state and the
+ *    governed pair reaches it.
  *
  * C1 ELEVATION (record ledger + docked rail):
  *  - ONE DATA PLANE: the field grid stops reading as a wall of N identical
@@ -84048,11 +83926,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 /* Instance geometry that carries an arbitrary number cannot be a finite list
    of selectors: an arm per value drops every number past the last arm, and
    the next number always exists. The runtime `span` therefore rides the
-   `--ds-record-field-span` channel (the field's one legal inline write, the
-   grid's `columns` precedent) and this single arm reads it; `data-span` stays
-   the stamp, and the authored fallback keeps an unset channel on one track. */
+   `--ds-record-field-span` channel and this single arm reads it; `data-span`
+   stays the stamp. The DEFAULT is authored here rather than left as a `var()`
+   fallback, exactly as the field-grid's `columns` is: a name whose only
+   writer is a style attribute has no producer, so on every field that does
+   NOT carry the attribute the channel does not exist and the single track
+   comes from a literal no tenant can reach. The authored declaration is the
+   producer; the caller's style attribute still outranks it. */
 .ds-structure.ds-record[data-part='field'][data-span] {
-  grid-column: span var(--ds-record-field-span, 1);
+  --ds-record-field-span: 1;
+  grid-column: span var(--ds-record-field-span);
 }
 
 /* Per-field error frame: error ink mixed onto the family's border voice.
@@ -84139,8 +84022,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
    admits no `data-*` attributes or event handlers, and a consumer-supplied
    Link adapter is not this component's DOM, so the kernel's state is stamped
    on this surface-owned wrapper and the skin reads it paired with the
-   platform pseudo. The wrapper's box is the anchor's box (the anchor wraps
-   nothing else), so the ring geometry is unchanged. */
+   platform pseudo. The wrapper WRAPS the anchor and hugs it, so its box IS
+   the anchor's box: the hover region and the ring geometry are the anchor's,
+   and the anchor's focus reaches the state the ring reads. */
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
   inline-size: fit-content;
   transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
@@ -84160,11 +84044,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 /* The anchor keeps the field's own colour rather than the UA link colour and
-   gets no underline; its class is the only skin hook because the composed
-   Link's DOM is the app's. Hover and press paint on the wrapper above through
-   the kernel's `data-state`; the keyboard ring below cannot, so it stays on
-   this anchor. */
+   gets no underline, and it IS the cluster's row: value beside arrow, wrapping
+   together. That layout lives here rather than on a layout primitive inside
+   the anchor, which would stamp a second nameless `root` part in the field for
+   geometry the skin owns. Its class is the only skin hook because the composed
+   Link's DOM is the app's. Hover, press and the keyboard ring all paint on the
+   wrapper above through the kernel's `data-state`; the anchor carries no state
+   of its own. */
 .ds-structure.ds-record[data-part='field'] .ds-record__field-link {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   color: inherit;
   text-decoration: none;
 }
@@ -84179,15 +84070,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-primary);
 }
 
-/* Keyboard path into the linked value: the FOCUSABLE element is the anchor and
-   the wrapper above sits INSIDE it, so a ring declared on that wrapper can
-   never be reached — focus bubbles up, not down, and an ancestor's focus does
-   not match a descendant's `:focus-within`. The ring lands on the anchor.
-   It has no kernel twin, and that is a measurement rather than an omission:
-   `NavigationLinkProps` forwards neither handlers nor `data-*`, so
-   `:focus-visible` is the platform's own (and only) authority here — the same
-   ruling the detail header's back chip recorded. */
-.ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
+/* Keyboard path into the linked value: the FOCUSABLE element is the anchor, so
+   the ring's target has to CONTAIN it — focus bubbles up, not down, and a
+   descendant of the anchor is unreachable by construction. The wrapper above
+   is that container, which is why it wraps the anchor rather than sitting
+   inside it, and the kernel's decision therefore arrives on it like every
+   other state in this family: `data-state` first, `:focus-within` as the
+   platform twin (the wrapper is not itself focusable, so `:focus-within` is
+   the pseudo that stands for the anchor's `:focus-visible` here). */
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   border-radius: var(--ds-radius-sm, 4px);
@@ -84354,7 +84245,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     color: CanvasText;
   }
 
-  .ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
+  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
@@ -97810,17 +97701,26 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * narrow compositions, and the forced-colors contract for those owned
  * pieces.
  *
- * WHAT THE COMPOSITION IS STAKED ON, recorded because it was false in the
- * shipped tree. The component passes `data-part='switcher'` to the composed
- * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
- * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
- * all 29 of its selectors and 97 declarations — the track frame, the active fill,
- * the forced-colors contract — while this file had already retired its own
- * pill paint in exchange. `segmented.css` is now anchored on
- * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
- * props, so S22 holds by construction instead of by the call site's restraint.
- * The count-badge rules below are unaffected either way: they hang off THIS
- * file's own wrapper root, which the family stamps itself.
+ * WHAT THE COMPOSITION USED TO BE STAKED ON, and no longer is. The component
+ * passed `data-part='switcher'` to the composed Segmented and the engine
+ * writes `data-part={caller ?? 'root'}`, so while `segmented.css` was anchored
+ * on `[data-part='root']` that one prop deleted all 29 of its selectors and 97
+ * declarations — the track frame, the active fill, the forced-colors contract —
+ * while this file had already retired its own pill paint in exchange.
+ * `segmented.css` is now anchored on `role='radiogroup'`, and WO-FAM-11 sub-lot
+ * E retired the prop itself: the primitive stamps its own `data-part='root'`
+ * again, so the composition holds by construction AND the caller no longer
+ * overwrites an anatomy it does not own. The count-badge rules below were
+ * unaffected either way: they hang off THIS file's own wrapper root, which the
+ * family stamps itself.
+ *
+ * CHANNELS (WO-FAM-11 sub-lot E): every `--ds-scope-switcher-*` name below has
+ * a producer in `derivation/chrome/scope-switcher`, published at exactly the
+ * value this file was already painting. Before the cut the namespace did not
+ * exist at all — twelve root-token reads and nothing a tenant decision could
+ * reach without moving every other family that reads the same roots. The
+ * fallbacks are kept so the file still paints correctly on a ground that
+ * predates the deriver.
  *
  * SPECIFICITY (P-48): the root's hairline reaches the tenant floor from the
  * two scope classes + the root's own `data-part` + `data-inline` — two
@@ -97847,19 +97747,25 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         strip breathes per tenant density profile; scroll-padding keeps a
         keyboard-focused option off the scrollport edge. ---- */
 .ds-structure.ds-scope-switcher[data-part='root'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-4, 16px);
+  padding-block: var(--ds-scope-switcher-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-scope-switcher-padding-inline, var(--ds-spacing-4, 16px));
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-padding-inline: var(--ds-spacing-4, 16px);
+  scroll-padding-inline: var(--ds-scope-switcher-padding-inline, var(--ds-spacing-4, 16px));
   /* Family-private opt-in mask: fades the strip's inline edges when options
      overflow, signalling scrollability without a scrollbar. Suggested value:
      linear-gradient(90deg, transparent, black 24px, black calc(100% - 24px), transparent). */
   mask-image: var(--_ds-scope-switcher-overflow-fade, none);
 }
 .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+  border-bottom: var(
+    --ds-scope-switcher-border,
+    1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)
+  );
+  background: var(
+    --ds-scope-switcher-background,
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))
+  );
 }
 .ds-structure.ds-scope-switcher[data-part='root'][data-inline='true'] {
   padding-block: 0;
@@ -97874,27 +97780,38 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  min-inline-size: 18px;
-  block-size: 18px;
-  margin-inline-start: var(--ds-spacing-1, 4px);
+  min-inline-size: var(--ds-scope-switcher-count-block-size, 18px);
+  block-size: var(--ds-scope-switcher-count-block-size, 18px);
+  margin-inline-start: var(--ds-scope-switcher-count-gap, var(--ds-spacing-1, 4px));
   padding-block: 0;
-  padding-inline: 6px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+  padding-inline: var(--ds-scope-switcher-count-padding-inline, 6px);
+  border-radius: var(--ds-scope-switcher-count-radius, var(--ds-radius-full));
+  background: var(
+    --ds-scope-switcher-count-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent)
+  );
+  color: var(--ds-scope-switcher-count-color, var(--ds-color-text-muted));
+  font-size: var(
+    --ds-scope-switcher-count-font-size,
+    var(--ds-font-size-2xs, var(--ds-font-size-xs))
+  );
+  font-weight: var(--ds-scope-switcher-count-font-weight, var(--ds-font-weight-bold));
   line-height: 1;
   font-variant-numeric: tabular-nums;
   /* the active tint cross-fades on the shared fast channel instead of
      snapping when the scope changes */
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+      var(--ds-motion-ease-out, ease-out),
+    color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+      var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {
-  background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
-  color: var(--ds-color-primary);
+  background: var(
+    --ds-scope-switcher-count-bg-active,
+    color-mix(in srgb, var(--ds-color-primary) 18%, transparent)
+  );
+  color: var(--ds-scope-switcher-count-color-active, var(--ds-color-primary));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -97954,9 +97871,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  */
 
 @keyframes ds-search-command-bar-pulse {
-  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 22%, transparent); }
-  70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
-  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
+  0% { box-shadow: 0 0 0 0 var(--ds-search-command-bar-pulse-tint, color-mix(in srgb, var(--ds-color-primary) 22%, transparent)); }
+  70% { box-shadow: 0 0 0 10px var(--ds-search-command-bar-pulse-fade, color-mix(in srgb, var(--ds-color-primary) 0%, transparent)); }
+  100% { box-shadow: 0 0 0 0 var(--ds-search-command-bar-pulse-fade, color-mix(in srgb, var(--ds-color-primary) 0%, transparent)); }
 }
 
 @keyframes ds-search-command-bar-spin {
@@ -97982,20 +97899,20 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-search-command-bar[data-part='root'][data-embedded] {
   position: relative;
   overflow: visible;
-  z-index: 30;
-  padding-block: 10px 12px;
-  padding-inline: 16px;
-  border-bottom: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-card);
+  z-index: var(--ds-search-command-bar-z-index, 30);
+  padding-block: var(--ds-search-command-bar-root-padding-block, 10px 12px);
+  padding-inline: var(--ds-search-command-bar-root-padding-inline, 16px);
+  border-block-end: var(--ds-search-command-bar-root-rule, 1px solid var(--ds-color-border-subtle));
+  background: var(--ds-search-command-bar-root-bg, var(--ds-surface-card));
 }
 .ds-structure.ds-search-command-bar[data-part='root'][data-embedded='true'] {
-  padding-block: 8px;
-  border-bottom: none;
+  padding-block: var(--ds-search-command-bar-embedded-padding-block, 8px);
+  border-block-end: none;
   background: transparent;
 }
 .ds-structure.ds-search-command-bar[data-part='root'][data-embedded='true'][data-editorial-tech='true'] {
-  padding-block: 2px 10px;
-  padding-inline: 20px;
+  padding-block: var(--ds-search-command-bar-editorial-padding-block, 2px 10px);
+  padding-inline: var(--ds-search-command-bar-editorial-padding-inline, 20px);
 }
 .ds-structure.ds-search-command-bar[data-part='root'][data-embedded='true'][data-editorial-tech='true'][data-has-top-rail='true'] {
   padding-block-start: 0;
@@ -98010,57 +97927,57 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  min-block-size: 22px;
-  margin-block-end: 6px;
+  min-block-size: var(--ds-search-command-bar-top-rail-block-size, 22px);
+  margin-block-end: var(--ds-search-command-bar-top-rail-margin-block-end, 6px);
 }
 .ds-structure.ds-search-command-bar[data-editorial-tech='true'] [data-part='top-rail'] {
-  min-block-size: 24px;
-  margin-block-end: 8px;
+  min-block-size: var(--ds-search-command-bar-top-rail-editorial-block-size, 24px);
+  margin-block-end: var(--ds-search-command-bar-top-rail-editorial-margin-block-end, 8px);
 }
 .ds-structure.ds-search-command-bar [data-part='bar-row'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--ds-spacing-3, 12px);
+  gap: var(--ds-search-command-bar-bar-row-gap, var(--ds-spacing-3, 12px));
 }
 .ds-structure.ds-search-command-bar [data-part='input-column'] {
   min-inline-size: 0;
-  flex: 1 1 720px;
+  flex: 1 1 var(--ds-search-command-bar-input-column-basis, 720px);
 }
 
 /* ---- search shell: raised pill frame (padding drained from inline) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status] {
   position: relative;
-  padding: 6px;
-  border-radius: 15px;
-  border: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-panel);
-  box-shadow: var(--ds-elevation-1);
+  padding: var(--ds-search-command-bar-shell-padding, 6px);
+  border-radius: var(--ds-search-command-bar-shell-radius, 15px);
+  border: var(--ds-search-command-bar-shell-border, 1px solid var(--ds-color-border-subtle));
+  background: var(--ds-search-command-bar-shell-bg, var(--ds-surface-panel));
+  box-shadow: var(--ds-search-command-bar-shell-shadow, var(--ds-elevation-1));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true'] {
-  padding: 5px;
-  border-radius: 18px;
+  padding: var(--ds-search-command-bar-shell-editorial-padding, 5px);
+  border-radius: var(--ds-search-command-bar-shell-editorial-radius, 18px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'] {
-  background: color-mix(in srgb, var(--ds-surface-panel) 76%, transparent);
-  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent);
+  background: var(--ds-search-command-bar-shell-embedded-bg, color-mix(in srgb, var(--ds-surface-panel) 76%, transparent));
+  box-shadow: var(--ds-search-command-bar-shell-embedded-shadow, 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-panel) 68%, transparent) 100%);
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
+  border: var(--ds-search-command-bar-shell-editorial-border, 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent));
+  background: var(--ds-search-command-bar-shell-editorial-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-panel) 68%, transparent) 100%));
+  box-shadow: var(--ds-search-command-bar-shell-editorial-shadow, 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true'] {
-  border: 1px solid var(--ds-color-primary);
+  border: var(--ds-search-command-bar-active-border, 1px solid var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error'] {
-  border: 1px solid var(--ds-color-error);
+  border: var(--ds-search-command-bar-error-border, 1px solid var(--ds-color-error));
 }
 
 /* ---- search icon: overlay anchor (geometry drained from inline; logical
@@ -98069,13 +97986,13 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon'] {
   position: absolute;
-  inset-inline-start: 24px;
+  inset-inline-start: var(--ds-search-command-bar-icon-inset-inline-start, 24px);
   inset-block-start: 50%;
   display: flex;
   align-items: center;
   pointer-events: none;
   transform: translateY(-50%);
-  color: var(--ds-color-text-muted);
+  color: var(--ds-search-command-bar-icon-color, var(--ds-color-text-muted));
 }
 
 /* ---- command input: geometry ladder (drained from inline). The class
@@ -98086,35 +98003,35 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__input {
-  block-size: 42px;
-  padding-inline-start: 46px;
-  padding-inline-end: 14px;
+  block-size: var(--ds-search-command-bar-input-block-size, 42px);
+  padding-inline-start: var(--ds-search-command-bar-input-padding-inline-start, 46px);
+  padding-inline-end: var(--ds-search-command-bar-input-padding-base, 14px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__input[data-editorial-tech='true'] {
-  block-size: 44px;
+  block-size: var(--ds-search-command-bar-input-editorial-block-size, 44px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']:has(
     > .ds-search-command-bar__voice-controls
   )
   > .ds-search-command-bar__input {
-  padding-inline-end: 88px;
+  padding-inline-end: var(--ds-search-command-bar-input-padding-toggle, 88px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']:has(
     > .ds-search-command-bar__voice-controls > .ds-search-command-bar__clear
   )
   > .ds-search-command-bar__input {
-  padding-inline-end: 122px;
+  padding-inline-end: var(--ds-search-command-bar-input-padding-clear, 122px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']:has(
     > .ds-search-command-bar__voice-controls > .ds-search-command-bar__voice-badge
   )
   > .ds-search-command-bar__input {
-  padding-inline-end: 244px;
+  padding-inline-end: var(--ds-search-command-bar-input-padding-badge, 244px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']:has(
@@ -98123,7 +98040,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     > .ds-search-command-bar__voice-controls > .ds-search-command-bar__voice-badge
   )
   > .ds-search-command-bar__input {
-  padding-inline-end: 278px;
+  padding-inline-end: var(--ds-search-command-bar-input-padding-both, 278px);
 }
 
 /* ---- input paint per engine (P-88 rustic specificity ladder, unchanged).
@@ -98139,9 +98056,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
-  background: var(--ds-surface-panel);
-  border: 1px solid var(--ds-color-border-subtle);
-  border-radius: var(--ds-radius-xl, 16px);
+  background: var(--ds-search-command-bar-input-bg, var(--ds-surface-panel));
+  border: var(--ds-search-command-bar-input-border, 1px solid var(--ds-color-border-subtle));
+  border-radius: var(--ds-search-command-bar-input-radius, var(--ds-radius-xl, 16px));
   box-shadow: none;
 }
 .ds-structure.ds-search-command-bar
@@ -98153,7 +98070,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
-  background: color-mix(in srgb, var(--ds-surface-panel) 84%, transparent);
+  background: var(--ds-search-command-bar-input-embedded-bg, color-mix(in srgb, var(--ds-surface-panel) 84%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true']
@@ -98164,7 +98081,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
-  border-radius: 18px;
+  border-radius: var(--ds-search-command-bar-input-editorial-radius, 18px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true']
@@ -98175,8 +98092,8 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
-  background: color-mix(in srgb, var(--ds-surface-panel) 78%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent);
+  background: var(--ds-search-command-bar-input-editorial-bg, color-mix(in srgb, var(--ds-surface-panel) 78%, transparent));
+  border: var(--ds-search-command-bar-input-editorial-border, 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
@@ -98187,7 +98104,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-primary);
+  border: var(--ds-search-command-bar-active-border, 1px solid var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
@@ -98198,7 +98115,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-color-error);
+  border: var(--ds-search-command-bar-error-border, 1px solid var(--ds-color-error));
 }
 
 /* ---- voice cluster: overlay anchor (geometry drained from inline) ---- */
@@ -98206,12 +98123,12 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__voice-controls[data-part='voice-controls'] {
   position: absolute;
-  inset-inline-end: 18px;
+  inset-inline-end: var(--ds-search-command-bar-voice-inset-inline-end, 18px);
   inset-block-start: 50%;
   display: flex;
   align-items: center;
-  gap: 8px;
-  max-inline-size: min(48%, 304px);
+  gap: var(--ds-search-command-bar-voice-gap, 8px);
+  max-inline-size: var(--ds-search-command-bar-voice-max-inline-size, min(48%, 304px));
   transform: translateY(-50%);
 }
 
@@ -98221,52 +98138,53 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__clear[data-part='clear'] {
-  --ds-button-ghost-bg: var(--ds-surface-panel);
-  --ds-button-ghost-border: var(--ds-color-border-subtle);
-  --ds-button-ghost-color: var(--ds-color-text-secondary);
-  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
-  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+  --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
+  --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
+  --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
+  --ds-button-ghost-bg-hover: var(--ds-search-command-bar-clear-bg-hover, color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent));
+  --ds-button-ghost-color-hover: var(--ds-search-command-bar-clear-color-hover, var(--ds-color-text-primary));
 }
 
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'] {
-  --ds-button-ghost-bg: var(--ds-surface-panel);
-  --ds-button-ghost-border: var(--ds-color-border-subtle);
-  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
+  --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
+  --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:not([data-voice-active='true']) {
-  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel));
-  --ds-button-ghost-color-hover: var(--ds-color-primary);
+  --ds-button-ghost-bg-hover: var(--ds-search-command-bar-voice-toggle-bg-hover, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel)));
+  --ds-button-ghost-color-hover: var(--ds-search-command-bar-voice-toggle-color-hover, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-active='true'] {
-  --ds-button-ghost-bg: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card));
-  --ds-button-ghost-border: var(--ds-color-primary);
-  --ds-button-ghost-color: var(--ds-color-primary);
+  --ds-button-ghost-bg: var(--ds-search-command-bar-voice-toggle-active-bg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)));
+  --ds-button-ghost-border: var(--ds-search-command-bar-voice-toggle-active-border, var(--ds-color-primary));
+  --ds-button-ghost-color: var(--ds-search-command-bar-voice-toggle-active-color, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='error'] {
-  --ds-button-ghost-bg: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card));
-  --ds-button-ghost-border: var(--ds-color-error);
-  --ds-button-ghost-color: var(--ds-color-error);
+  --ds-button-ghost-bg: var(--ds-search-command-bar-voice-toggle-error-bg, color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card)));
+  --ds-button-ghost-border: var(--ds-search-command-bar-voice-toggle-error-border, var(--ds-color-error));
+  --ds-button-ghost-color: var(--ds-search-command-bar-voice-toggle-error-color, var(--ds-color-error));
 }
 
 /* the listening pulse: keyed on the stamped state, never inline */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
-  animation: ds-search-command-bar-pulse 1.6s ease-out infinite;
+  animation: ds-search-command-bar-pulse var(--ds-search-command-bar-pulse-duration, 1.6s)
+    var(--ds-search-command-bar-pulse-easing, ease-out) infinite;
 }
 
 /* the transcribing spin: the engine names the node, the skin owns the motion */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__spinning-icon {
-  animation: ds-search-command-bar-spin 1s linear infinite;
+  animation: ds-search-command-bar-spin var(--ds-search-command-bar-spin-duration, 1s) linear infinite;
 }
 
 /* ---- voice badge: pattern chrome (status lozenge, not a Button) ---- */
@@ -98275,46 +98193,46 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status] {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-block-size: 24px;
-  padding-inline: 8px;
+  gap: var(--ds-search-command-bar-badge-gap, 6px);
+  min-block-size: var(--ds-search-command-bar-badge-block-size, 24px);
+  padding-inline: var(--ds-search-command-bar-badge-padding-inline, 8px);
   flex-shrink: 1;
   min-inline-size: 0;
-  border-radius: 999px;
-  border: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-secondary);
+  border-radius: var(--ds-search-command-bar-badge-radius, var(--ds-radius-full, 999px));
+  border: var(--ds-search-command-bar-badge-border, 1px solid var(--ds-color-border-subtle));
+  background: var(--ds-search-command-bar-badge-bg, var(--ds-surface-panel));
+  color: var(--ds-search-command-bar-badge-color, var(--ds-color-text-secondary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status='error'] {
-  border: 1px solid var(--ds-color-error);
-  background: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
-  color: var(--ds-color-error);
+  border: var(--ds-search-command-bar-badge-error-border, 1px solid var(--ds-color-error));
+  background: var(--ds-search-command-bar-badge-error-bg, color-mix(in srgb, var(--ds-color-error) 8%, transparent));
+  color: var(--ds-search-command-bar-badge-error-color, var(--ds-color-error));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status='needs-permission'] {
-  border: 1px solid var(--ds-color-warning);
-  background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
-  color: var(--ds-color-warning);
+  border: var(--ds-search-command-bar-badge-warning-border, 1px solid var(--ds-color-warning));
+  background: var(--ds-search-command-bar-badge-warning-bg, color-mix(in srgb, var(--ds-color-warning) 8%, transparent));
+  color: var(--ds-search-command-bar-badge-warning-color, var(--ds-color-warning));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status='listening'] {
-  color: var(--ds-color-primary);
+  color: var(--ds-search-command-bar-badge-listening-color, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
   > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status='transcribing'] {
-  color: var(--ds-color-warning);
+  color: var(--ds-search-command-bar-badge-transcribing-color, var(--ds-color-warning));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-badge
   > .ds-search-command-bar__voice-badge-label[data-part='voice-badge-label'][data-part='voice-badge-label'][data-part='voice-badge-label'] {
   color: inherit;
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 600;
+  font-size: var(--ds-search-command-bar-badge-label-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
+  font-weight: var(--ds-search-command-bar-badge-label-font-weight, 600);
   white-space: nowrap;
 }
 
@@ -98325,25 +98243,22 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   > .ds-search-command-bar__voice-help[data-part='voice-help'][data-permission-blocked] {
   position: absolute;
   inset-inline-end: 0;
-  inset-block-start: calc(100% + 12px);
-  inline-size: min(
-    420px,
-    calc(100dvw - 32px)
-  );
-  z-index: 180;
-  padding: 18px;
-  border-radius: 18px;
-  border: 1px solid var(--ds-color-warning);
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
+  inset-block-start: var(--ds-search-command-bar-voice-help-offset, calc(100% + 12px));
+  inline-size: var(--ds-search-command-bar-voice-help-inline-size, min(420px, calc(100dvw - 32px)));
+  z-index: var(--ds-search-command-bar-voice-help-z-index, 180);
+  padding: var(--ds-search-command-bar-voice-help-padding, 18px);
+  border-radius: var(--ds-search-command-bar-voice-help-radius, 18px);
+  border: var(--ds-search-command-bar-voice-help-border, 1px solid var(--ds-color-warning));
+  background: var(--ds-search-command-bar-voice-help-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-search-command-bar-voice-help-shadow, var(--ds-elevation-2));
   animation: ds-search-command-bar-voice-help-enter
-    var(--ds-motion-normal, 200ms)
-    var(--ds-motion-ease-out, ease-out) both;
+    var(--ds-search-command-bar-voice-help-enter-duration, var(--ds-motion-normal, 200ms))
+    var(--ds-search-command-bar-voice-help-enter-easing, var(--ds-motion-ease-out, ease-out)) both;
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__voice-help[data-part='voice-help'][data-permission-blocked='true'] {
-  border: 1px solid var(--ds-color-error);
+  border: var(--ds-search-command-bar-voice-help-blocked-border, 1px solid var(--ds-color-error));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help [data-part='voice-help-copy'] {
@@ -98353,30 +98268,30 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-search-command-bar__voice-help
   [data-part='voice-help-title'][data-part='voice-help-title'][data-part='voice-help-title'] {
   display: block;
-  font-size: var(--ds-font-size-sm);
+  font-size: var(--ds-search-command-bar-voice-help-title-font-size, var(--ds-font-size-sm));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-description[data-part='voice-help-description'][data-part='voice-help-description'][data-part='voice-help-description'] {
   display: block;
-  margin-block-start: 4px;
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs);
-  line-height: 1.5;
+  margin-block-start: var(--ds-search-command-bar-voice-help-description-margin, 4px);
+  color: var(--ds-search-command-bar-voice-help-description-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-search-command-bar-voice-help-description-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-search-command-bar-voice-help-description-line-height, 1.5);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-list[data-part='voice-help-list'] {
-  margin-block: 12px 0;
+  margin-block: var(--ds-search-command-bar-voice-help-list-margin-block, 12px 0);
   margin-inline: 0;
-  padding-inline-start: 18px;
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs);
-  line-height: 1.55;
+  padding-inline-start: var(--ds-search-command-bar-voice-help-list-padding-inline-start, 18px);
+  color: var(--ds-search-command-bar-voice-help-list-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-search-command-bar-voice-help-list-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-search-command-bar-voice-help-list-line-height, 1.55);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help [data-part='voice-help-step'] {
-  margin-block-end: 6px;
+  margin-block-end: var(--ds-search-command-bar-voice-help-step-gap, 6px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help [data-part='voice-help-step']:last-child {
@@ -98384,15 +98299,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help [data-part='voice-help-footer'] {
-  margin-block-start: 16px;
+  margin-block-start: var(--ds-search-command-bar-voice-help-footer-margin, 16px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-hint[data-part='voice-help-hint'][data-part='voice-help-hint'][data-part='voice-help-hint'] {
   flex: 1 1 auto;
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  line-height: 1.45;
+  color: var(--ds-search-command-bar-voice-help-hint-color, var(--ds-color-text-muted));
+  font-size: var(--ds-search-command-bar-voice-help-hint-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
+  line-height: var(--ds-search-command-bar-voice-help-hint-line-height, 1.45);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help [data-part='voice-help-actions'] {
@@ -98407,42 +98322,42 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-close[data-part='close'] {
   --ds-button-ghost-bg: transparent;
-  --ds-button-ghost-border: var(--ds-color-border-subtle);
-  --ds-button-ghost-color: var(--ds-color-text-secondary);
-  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
-  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+  --ds-button-ghost-border: var(--ds-search-command-bar-quiet-border, var(--ds-color-border-subtle));
+  --ds-button-ghost-color: var(--ds-search-command-bar-quiet-color, var(--ds-color-text-secondary));
+  --ds-button-ghost-bg-hover: var(--ds-search-command-bar-quiet-bg-hover, color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent));
+  --ds-button-ghost-color-hover: var(--ds-search-command-bar-quiet-color-hover, var(--ds-color-text-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel'] {
   --ds-button-ghost-bg: transparent;
-  --ds-button-ghost-border: var(--ds-color-border-subtle);
-  --ds-button-ghost-color: var(--ds-color-text-secondary);
-  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
-  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+  --ds-button-ghost-border: var(--ds-search-command-bar-quiet-border, var(--ds-color-border-subtle));
+  --ds-button-ghost-color: var(--ds-search-command-bar-quiet-color, var(--ds-color-text-secondary));
+  --ds-button-ghost-bg-hover: var(--ds-search-command-bar-quiet-bg-hover, color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent));
+  --ds-button-ghost-color-hover: var(--ds-search-command-bar-quiet-color-hover, var(--ds-color-text-primary));
 }
 
 /* ---- status line (margin drained from inline) ---- */
 .ds-structure.ds-search-command-bar [data-part='status-row'] {
-  margin-block-start: 6px;
+  margin-block-start: var(--ds-search-command-bar-status-row-margin, 6px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'] {
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  line-height: 1.45;
+  color: var(--ds-search-command-bar-status-color, var(--ds-color-text-muted));
+  font-size: var(--ds-search-command-bar-status-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
+  line-height: var(--ds-search-command-bar-status-line-height, 1.45);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'][data-voice-status='error'] {
-  color: var(--ds-color-error);
+  color: var(--ds-search-command-bar-status-error-color, var(--ds-color-error));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'][data-voice-status='listening'] {
-  color: var(--ds-color-primary);
+  color: var(--ds-search-command-bar-status-listening-color, var(--ds-color-primary));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'][data-voice-status='transcribing'] {
-  color: var(--ds-color-warning);
+  color: var(--ds-search-command-bar-status-transcribing-color, var(--ds-color-warning));
 }
 
 /* ---- side cluster: suggestions + actions slot (geometry drained from
@@ -98450,14 +98365,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-search-command-bar [data-part='side-cluster'] {
   display: inline-flex;
   align-items: stretch;
-  gap: 18px;
-  row-gap: 8px;
+  gap: var(--ds-search-command-bar-side-cluster-gap, 18px);
+  row-gap: var(--ds-search-command-bar-side-cluster-row-gap, 8px);
   flex-wrap: wrap;
   justify-content: space-between;
   flex-shrink: 0;
   min-inline-size: 0;
   flex: 0 1 auto;
-  padding-block-start: 2px;
+  padding-block-start: var(--ds-search-command-bar-side-cluster-padding-block-start, 2px);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'],
@@ -98465,14 +98380,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'] {
   display: inline-flex;
   align-items: center;
-  min-block-size: 44px;
-  padding-block: 6px;
-  padding-inline-start: 18px;
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  min-block-size: var(--ds-search-command-bar-slot-touch-target, var(--ds-touch-target-min, 44px));
+  padding-block: var(--ds-search-command-bar-slot-padding-block, 6px);
+  padding-inline-start: var(--ds-search-command-bar-slot-padding-inline-start, 18px);
+  border-inline-start: var(--ds-search-command-bar-slot-rule, 1px solid var(--ds-color-border-subtle));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'] {
-  gap: 10px;
+  gap: var(--ds-search-command-bar-suggestions-gap, 10px);
   flex-wrap: wrap;
   justify-content: flex-end;
 }
@@ -98480,55 +98395,68 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'][data-editorial-tech='true'],
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'][data-editorial-tech='true'] {
-  padding-inline-start: 16px;
-  border-inline-start: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
+  padding-inline-start: var(--ds-search-command-bar-slot-editorial-padding-inline-start, 16px);
+  border-inline-start: var(--ds-search-command-bar-slot-editorial-rule, 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent));
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions
   > .ds-search-command-bar__suggestions-label[data-part='suggestions-label'][data-part='suggestions-label'][data-part='suggestions-label'] {
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  color: var(--ds-search-command-bar-suggestions-label-color, var(--ds-color-text-muted));
+  font-size: var(--ds-search-command-bar-suggestions-label-font-size, var(--ds-font-size-2xs, var(--ds-font-size-xs)));
+  font-weight: var(--ds-search-command-bar-suggestions-label-font-weight, 700);
+  letter-spacing: var(--ds-search-command-bar-suggestions-label-letter-spacing, 0.08em);
   text-transform: uppercase;
 }
 .ds-structure.ds-search-command-bar
   > .ds-search-command-bar__divider[data-part='divider'] {
-  margin-block-start: 10px;
-  block-size: 1px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%);
+  margin-block-start: var(--ds-search-command-bar-divider-margin, 10px);
+  block-size: var(--ds-search-command-bar-divider-block-size, 1px);
+  background: var(--ds-search-command-bar-divider-fill, linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%));
 }
 
 /* ---- suggestion chips: composed Buttons painted through ghost channels ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions[data-part='suggestions']
   .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip'] {
-  --ds-button-ghost-bg: var(--ds-surface-panel);
-  --ds-button-ghost-border: var(--ds-color-border-subtle);
-  --ds-button-ghost-color: var(--ds-color-text-secondary);
-  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel));
-  --ds-button-ghost-border-hover: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
-  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
-  --ds-button-ghost-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-panel));
+  --ds-button-ghost-bg: var(--ds-search-command-bar-control-bg, var(--ds-surface-panel));
+  --ds-button-ghost-border: var(--ds-search-command-bar-control-border, var(--ds-color-border-subtle));
+  --ds-button-ghost-color: var(--ds-search-command-bar-control-color, var(--ds-color-text-secondary));
+  --ds-button-ghost-bg-hover: var(--ds-search-command-bar-chip-bg-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel)));
+  --ds-button-ghost-border-hover: var(--ds-search-command-bar-chip-border-hover, color-mix(in srgb, var(--ds-color-primary) 30%, transparent));
+  --ds-button-ghost-color-hover: var(--ds-search-command-bar-chip-color-hover, var(--ds-color-text-primary));
+  --ds-button-ghost-bg-active: var(--ds-search-command-bar-chip-bg-active, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-panel)));
 }
 
-/* Keyboard focus: every interactive element here is a composed primitive
-   that owns its ring; the pattern's one :focus-visible decision is the ring
-   recipe itself, delivered through the button focus-ring channel (never a
-   duplicated paint). */
+/* Keyboard focus: every interactive element here is a composed Button that
+   owns its ring, and Button draws `--ds-button-focus-ring` only inside its own
+   `:is([data-state~='focus-visible'], :focus-visible)` arm. This rule used to
+   gate the CHANNEL behind a bare `:focus-visible` of its own -- a second
+   authority on when a control is keyboard-focused, and the family's one
+   unpaired state pseudo. The channel is a recipe, not paint, so it is simply
+   stated; the primitive still decides when to draw it. */
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestion-chip:focus-visible,
+  .ds-search-command-bar__suggestion-chip,
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__clear:focus-visible,
+  .ds-search-command-bar__clear,
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-toggle:focus-visible,
+  .ds-search-command-bar__voice-toggle,
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help-close:focus-visible,
+  .ds-search-command-bar__voice-help-close,
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help-cancel:focus-visible {
-  --ds-button-focus-ring: 0 0 0 var(--ds-focus-ring-width, 2px)
-    var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+  .ds-search-command-bar__voice-help-cancel {
+  --ds-button-focus-ring: var(
+    --ds-search-command-bar-focus-ring,
+    0 0 0 var(--ds-focus-ring-width, 2px)
+      var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent))
+  );
 }
+
+/* The drawer's forward action carries NO rule here, and stamps no part of its
+   own: it is the certified primary Button exactly as the primitive ships it.
+   The family used to stamp `data-part='voice-help-confirm'` and paint nothing
+   through it -- a name in the anatomy contract with no rule on the other side.
+   Overriding `--ds-button-primary-*` here instead would have re-pointed the
+   CTA's ink at a different root than the button family's own. */
 
 /* command input typography — the exact per-engine paint node (P-79):
  * modern wraps the native input, rustic IS the input root. Tracking is NOT
@@ -98538,7 +98466,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-input-shell,
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__input.rottay-input {
-  font-size: var(--ds-font-size-sm);
+  font-size: var(--ds-search-command-bar-input-font-size, var(--ds-font-size-sm));
 }
 
 /* Reduced motion: the pulse, the spin and the drawer entrance stop outright. */
@@ -99115,7 +99043,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * channel the wrapper carried exists on the primitive's root, governed.
  *
  * WHAT THE RETIREMENT IS STAKED ON, recorded because it was false in the
- * shipped tree. The component passes `data-part='switcher'` to the composed
+ * shipped tree. The component passed `data-part='switcher'` to the composed
  * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
  * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
  * all 29 of its selectors and 97 declarations — the track frame, the selected
@@ -99123,8 +99051,11 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * its own frame in exchange. `segmented.css` is now anchored on
  * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
  * props, so the composition above holds by construction instead of by the call
- * site's restraint. Naming the composed control is vocabulary and stays;
- * anchoring paint on a name the caller owns was the defect.
+ * site's restraint. WO-FAM-11 sub-lot E then retired the prop as well: it was
+ * a part this family stamped and no rule anywhere consumed, and the anatomy
+ * contract admits no such part. The primitive stamps its own
+ * `data-part='root'` again, and the cut closes the hazard instead of relying
+ * on the substitution that survived it.
  *
  * SPECIFICITY (P-48): no painting border remains in this file, so the
  * (0,3,1) tenant floor is moot here; the two scope classes + the root's own
@@ -102396,6 +102327,18 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  *   the icon well is a hairline tile with no bloom shadow.
  * - Logical properties throughout (RTL-safe); every literal that was baked in
  *   (icon size, header min-height, tracking) is now a tenant channel.
+ *
+ * The family id is `surface-chrome`; the class root is `ds-section-card` and
+ * STAYS so. It is not the component's name to change: the root, body, header
+ * and content classes are GENERATED by the governed section-card recipe
+ * (`recipes/contracts/families/section-card`), which is public API with a
+ * `--ds-section-card-` manifest prefix, and `SurfacesLongTailBatch` binds to
+ * the generated names. The family-cut roster carries the pin
+ * (`skins: ['surface-section-card']`) so the gate measures the real paint.
+ *
+ * WO-FAM-11 sub-lot C: the tab label's `display`/`align-items`/`gap` moved off
+ * the `SurfaceTabbedLabel` span and into the rule below, so the family states
+ * no visual value in TypeScript.
  */
 
 .ds-surface.ds-section-card[data-part='root'] {
@@ -102407,6 +102350,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
     var(--ds-card-shadow, var(--ds-elevation-1));
+}
+
+/* ---- the tabbed label: a label and its badge on one baseline. It is the one
+        piece of this family that renders outside the card, so it is scoped by
+        its own generated class rather than by the card root. ---- */
+.ds-section-card__tab-label[data-part='tab-label'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-section-card-tab-label-gap, var(--ds-spacing-2, 8px));
 }
 
 .ds-surface.ds-section-card > .ds-section-card__body[data-part='body'] {
@@ -103448,7 +103400,131 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * WorkspaceShell skin (long-tail skin ownership). Engine-agnostic and deliberately
  * unlayered so its extracted paint keeps precedence over resets while a caller
  * `style` prop continues to win inline.
+ *
+ * The family id is `workspace-shell`; the class root is `ds-collection-shell`
+ * and STAYS so. It is not the component's name to change: `skin/collection-workspace`
+ * compounds two of its own rules on it, `SurfacesLongTailBatch` binds to it, and
+ * `scripts/package/public-api/barrel` asserts `.ds-collection-shell__static-particle-field`
+ * survives into the published artifact. The family-cut roster carries the pin
+ * (`skins: ['collection-shell']`) so the gate measures the real paint under the
+ * real name.
+ *
+ * WO-FAM-11 sub-lot C moved the shell's whole geometry here. The structure used
+ * to state `position`/`overflow`/`isolation` on the root, `position`/`inset`/
+ * `pointer-events`/`z-index` on the overlay and both live fields, `position`/
+ * `z-index` on the content, and the two particle colours plus four mask ramps as
+ * TypeScript strings. Every value below is that paint verbatim; the structure
+ * now carries only anatomy, state and the caller's own `style`.
  */
+
+/* ---- the shell's own stacking context: the fields and the overlay are
+        absolutely positioned inside it, and the content rides above both. ---- */
+.ds-surface.ds-collection-shell[data-part="root"] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ds-surface.ds-collection-shell[data-part="root"]
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field,
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ds-surface.ds-collection-shell[data-part="root"]
+  > .ds-collection-shell__content[data-part="content"] {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- the atmospheric field: two particle colours and the vertical ramps that
+        fade each canvas out. The canvases read `--ds-workspace-shell-particle-*`
+        through the computed style of their own container, so the colour is a
+        tenant channel rather than a string the structure hard-codes.
+
+        Each is read with its own value as the terminal fallback and NOT
+        declared on this element: a `--ds-workspace-shell-*` declaration here
+        would outrank the inherited tenant artifact, which is the only way a
+        white label reaches these names, and a mask with no value at all is
+        invalid-at-computed-value-time — the canvas would then render
+        unmasked. The deriver states the same rests one rank above the
+        tenant's reach and below it. ---- */
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field {
+  -webkit-mask-image: var(
+    --ds-workspace-shell-orbital-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%
+    )
+  );
+  mask-image: var(
+    --ds-workspace-shell-orbital-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%
+    )
+  );
+}
+
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
+  -webkit-mask-image: var(
+    --ds-workspace-shell-ambient-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 36%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%
+    )
+  );
+  mask-image: var(
+    --ds-workspace-shell-ambient-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 36%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%
+    )
+  );
+}
+
+/* The canvas colour. The canvas is painted by script, not by CSS: it reads the
+   string the structure hands it off its own computed style. The structure
+   therefore names a RESOLUTION RELAY (`--_ds-…-resolved`) rather than a
+   decision — the public channel is resolved into it here, with the rest as the
+   terminal fallback, so a tenant statement of the public name reaches the
+   canvas and a canvas with no producer at all still paints. Same idiom as the
+   shell's own `--_ds-page-shell-stuck-progress`: a private name that carries a
+   value nobody decides. */
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field {
+  --_ds-workspace-shell-particle-primary-resolved: var(
+    --ds-workspace-shell-particle-primary,
+    color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)
+  );
+}
+
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
+  --_ds-workspace-shell-particle-secondary-resolved: var(
+    --ds-workspace-shell-particle-secondary,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 18%,
+      var(--ds-color-text-secondary) 24%,
+      transparent
+    )
+  );
+}
 
 .ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"] {
   border-radius: var(--ds-card-radius, var(--ds-radius-xl, 24px));
@@ -119837,6 +119913,17 @@ html[lang]:lang(ar) {
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])) {
   color-scheme: light;
   color: var(--ds-color-text-primary);
+  --ds-action-dock-backdrop-filter: blur(var(--ds-glass-blur, 8px));
+  --ds-action-dock-bg: color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent);
+  --ds-action-dock-edge-color: var(--ds-color-border-primary, transparent);
+  --ds-action-dock-edge-highlight: color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
+  --ds-action-dock-gap: var(--ds-spacing-3, 0.75rem);
+  --ds-action-dock-padding-block: var(--ds-spacing-3, 0.75rem);
+  --ds-action-dock-padding-inline: var(--ds-spacing-4, 1rem);
+  --ds-action-dock-shadow-bottom: 0 -2px 4px color-mix(in srgb, var(--ds-color-shadow) 30%, transparent), 0 -12px 28px -12px color-mix(in srgb, var(--ds-color-shadow) 60%, transparent);
+  --ds-action-dock-shadow-top: var(--ds-shadow-navbar);
+  --ds-action-dock-sticky-z-index: var(--ds-z-index-sticky, 1100);
+  --ds-action-dock-z-index: var(--ds-z-index-fixed, 1200);
   --ds-active-filters-bar-background: var(--ds-toolbar-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%)));
   --ds-active-filters-bar-border: 1px solid var(--ds-toolbar-border-bottom, color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent));
   --ds-active-filters-bar-chips-basis: 560px;
@@ -120434,6 +120521,60 @@ html[lang]:lang(ar) {
   --ds-column-settings-row-radius: var(--ds-radius-sm);
   --ds-column-settings-search-padding-block: 8px;
   --ds-column-settings-search-padding-inline: 12px;
+  --ds-command-palette-argument-error-color: var(--ds-color-error, var(--ds-color-text-primary));
+  --ds-command-palette-argument-error-font-size: var(--ds-font-size-xs, 12px);
+  --ds-command-palette-argument-error-margin-block-start: var(--ds-spacing-1, 4px);
+  --ds-command-palette-argument-panel-padding-block: var(--ds-spacing-3, 12px);
+  --ds-command-palette-argument-panel-padding-inline: var(--ds-spacing-4, 16px);
+  --ds-command-palette-argument-prompt-color: var(--ds-color-text-secondary);
+  --ds-command-palette-argument-prompt-font-size: var(--ds-font-size-sm, 14px);
+  --ds-command-palette-description-color: var(--ds-color-text-secondary);
+  --ds-command-palette-description-font-size: var(--ds-font-size-xs, 12px);
+  --ds-command-palette-empty-padding-block: var(--ds-spacing-8, 32px);
+  --ds-command-palette-error-color: var(--ds-color-error, var(--ds-color-text-secondary));
+  --ds-command-palette-error-padding-block: var(--ds-spacing-2, 8px);
+  --ds-command-palette-error-padding-inline: var(--ds-spacing-4, 16px);
+  --ds-command-palette-footer-color: var(--ds-color-text-secondary);
+  --ds-command-palette-footer-font-size: var(--ds-font-size-xs, 12px);
+  --ds-command-palette-footer-padding-block: var(--ds-spacing-2, 8px);
+  --ds-command-palette-footer-padding-inline: var(--ds-spacing-4, 16px);
+  --ds-command-palette-footer-rule: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+  --ds-command-palette-group-color: var(--ds-color-text-muted);
+  --ds-command-palette-group-label-padding-block: var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px);
+  --ds-command-palette-group-label-padding-inline: var(--ds-spacing-5, 20px);
+  --ds-command-palette-item-active-bg: var(--ds-surface-inset);
+  --ds-command-palette-item-active-ring: inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary));
+  --ds-command-palette-item-disabled-opacity: 0.5;
+  --ds-command-palette-item-gap: var(--ds-spacing-2, 8px);
+  --ds-command-palette-item-hover-surface: var(--ds-surface-inset);
+  --ds-command-palette-item-main-gap: var(--ds-spacing-2, 8px);
+  --ds-command-palette-item-margin-inline: var(--ds-spacing-1, 4px);
+  --ds-command-palette-item-padding-block: var(--ds-spacing-2, 8px);
+  --ds-command-palette-item-padding-inline: var(--ds-spacing-3, 12px);
+  --ds-command-palette-item-radius: var(--ds-radius-lg);
+  --ds-command-palette-item-touch-target: var(--ds-touch-target-min, 44px);
+  --ds-command-palette-item-transition: var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  --ds-command-palette-label-color: var(--ds-color-text-primary);
+  --ds-command-palette-label-font-size: var(--ds-font-size-sm, 14px);
+  --ds-command-palette-label-font-weight: 500;
+  --ds-command-palette-list-max-block-size: 25rem;
+  --ds-command-palette-list-padding-block: var(--ds-spacing-2, 8px);
+  --ds-command-palette-max-inline-size: 32rem;
+  --ds-command-palette-recent-padding-block-end: var(--ds-spacing-2, 8px);
+  --ds-command-palette-recent-padding-inline: var(--ds-spacing-3, 12px);
+  --ds-command-palette-scrollbar-thumb: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
+  --ds-command-palette-search-gap: var(--ds-spacing-2, 8px);
+  --ds-command-palette-search-padding: var(--ds-spacing-3, 12px);
+  --ds-command-palette-search-rule: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+  --ds-command-palette-section-label-color: var(--ds-color-text-muted);
+  --ds-command-palette-section-label-font-size: var(--ds-font-size-xs, 12px);
+  --ds-command-palette-section-label-font-weight: 500;
+  --ds-command-palette-section-label-letter-spacing: 0.05em;
+  --ds-command-palette-section-label-margin-block-end: var(--ds-spacing-1, 4px);
+  --ds-command-palette-section-label-padding-block: 6px 4px;
+  --ds-command-palette-section-label-padding-inline: var(--ds-spacing-3, 12px);
+  --ds-command-palette-shortcut-border: var(--ds-color-border);
+  --ds-command-palette-shortcut-margin-inline-start: var(--ds-spacing-2, 8px);
   --ds-confirm-dialog-bg: var(--ds-modal-bg, var(--ds-material-overlay-background));
   --ds-confirm-dialog-border-color: var(--ds-color-border-subtle);
   --ds-confirm-dialog-danger-icon-bg: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
@@ -121349,6 +121490,13 @@ html[lang]:lang(ar) {
   --ds-otp-input-slot-color: var(--ds-color-text-primary);
   --ds-otp-input-slot-shadow-focus: var(--ds-input-shadow-focus, var(--ds-focus-ring));
   --ds-otp-input-slot-shadow-focus-error: var(--ds-input-error-shadow-focus, var(--ds-focus-ring));
+  --ds-page-header-icon-radius: var(--ds-radius-lg);
+  --ds-page-header-radius: var(--ds-radius-xl);
+  --ds-page-header-shadow: var(--ds-toolbar-shadow, var(--ds-elevation-1));
+  --ds-page-header-shadow-hover: var(--ds-elevation-2);
+  --ds-page-header-sheen-duration: 14s;
+  --ds-page-header-sheen-opacity: 0.28;
+  --ds-page-shell-actions-backdrop: none;
   --ds-pagination-border: var(--ds-color-border);
   --ds-pagination-color: var(--ds-color-text-primary);
   --ds-pagination-controls-bleed: var(--ds-spacing-1);
@@ -121480,6 +121628,168 @@ html[lang]:lang(ar) {
   --ds-saved-views-pill-padding-inline: 12px;
   --ds-saved-views-touch-target-min: var(--ds-touch-target-min, 44px);
   --ds-saved-views-unsaved-dot-size: 7px;
+  --ds-scope-switcher-background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+  --ds-scope-switcher-border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
+  --ds-scope-switcher-count-bg: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
+  --ds-scope-switcher-count-bg-active: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+  --ds-scope-switcher-count-block-size: 18px;
+  --ds-scope-switcher-count-color: var(--ds-color-text-muted);
+  --ds-scope-switcher-count-color-active: var(--ds-color-primary);
+  --ds-scope-switcher-count-font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  --ds-scope-switcher-count-font-weight: var(--ds-font-weight-bold);
+  --ds-scope-switcher-count-gap: var(--ds-spacing-1, 4px);
+  --ds-scope-switcher-count-padding-inline: 6px;
+  --ds-scope-switcher-count-radius: var(--ds-radius-full);
+  --ds-scope-switcher-motion-duration: var(--ds-motion-fast);
+  --ds-scope-switcher-padding-block: var(--ds-spacing-2, 8px);
+  --ds-scope-switcher-padding-inline: var(--ds-spacing-4, 16px);
+  --ds-search-command-bar-active-border: 1px solid var(--ds-color-primary);
+  --ds-search-command-bar-badge-bg: var(--ds-surface-panel);
+  --ds-search-command-bar-badge-block-size: 24px;
+  --ds-search-command-bar-badge-border: 1px solid var(--ds-color-border-subtle);
+  --ds-search-command-bar-badge-color: var(--ds-color-text-secondary);
+  --ds-search-command-bar-badge-error-bg: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
+  --ds-search-command-bar-badge-error-border: 1px solid var(--ds-color-error);
+  --ds-search-command-bar-badge-error-color: var(--ds-color-error);
+  --ds-search-command-bar-badge-gap: 6px;
+  --ds-search-command-bar-badge-label-font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  --ds-search-command-bar-badge-label-font-weight: 600;
+  --ds-search-command-bar-badge-listening-color: var(--ds-color-primary);
+  --ds-search-command-bar-badge-padding-inline: 8px;
+  --ds-search-command-bar-badge-radius: var(--ds-radius-full, 999px);
+  --ds-search-command-bar-badge-transcribing-color: var(--ds-color-warning);
+  --ds-search-command-bar-badge-warning-bg: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
+  --ds-search-command-bar-badge-warning-border: 1px solid var(--ds-color-warning);
+  --ds-search-command-bar-badge-warning-color: var(--ds-color-warning);
+  --ds-search-command-bar-bar-row-gap: var(--ds-spacing-3, 12px);
+  --ds-search-command-bar-chip-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-panel));
+  --ds-search-command-bar-chip-bg-hover: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel));
+  --ds-search-command-bar-chip-border-hover: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-search-command-bar-chip-color-hover: var(--ds-color-text-primary);
+  --ds-search-command-bar-clear-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
+  --ds-search-command-bar-clear-color-hover: var(--ds-color-text-primary);
+  --ds-search-command-bar-control-bg: var(--ds-surface-panel);
+  --ds-search-command-bar-control-border: var(--ds-color-border-subtle);
+  --ds-search-command-bar-control-color: var(--ds-color-text-secondary);
+  --ds-search-command-bar-divider-block-size: 1px;
+  --ds-search-command-bar-divider-fill: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%);
+  --ds-search-command-bar-divider-margin: 10px;
+  --ds-search-command-bar-editorial-padding-block: 2px 10px;
+  --ds-search-command-bar-editorial-padding-inline: 20px;
+  --ds-search-command-bar-embedded-padding-block: 8px;
+  --ds-search-command-bar-error-border: 1px solid var(--ds-color-error);
+  --ds-search-command-bar-focus-ring: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+  --ds-search-command-bar-icon-color: var(--ds-color-text-muted);
+  --ds-search-command-bar-icon-inset-inline-start: 24px;
+  --ds-search-command-bar-input-bg: var(--ds-surface-panel);
+  --ds-search-command-bar-input-block-size: 42px;
+  --ds-search-command-bar-input-border: 1px solid var(--ds-color-border-subtle);
+  --ds-search-command-bar-input-column-basis: 720px;
+  --ds-search-command-bar-input-editorial-bg: color-mix(in srgb, var(--ds-surface-panel) 78%, transparent);
+  --ds-search-command-bar-input-editorial-block-size: 44px;
+  --ds-search-command-bar-input-editorial-border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent);
+  --ds-search-command-bar-input-editorial-radius: 18px;
+  --ds-search-command-bar-input-embedded-bg: color-mix(in srgb, var(--ds-surface-panel) 84%, transparent);
+  --ds-search-command-bar-input-font-size: var(--ds-font-size-sm);
+  --ds-search-command-bar-input-padding-badge: 244px;
+  --ds-search-command-bar-input-padding-base: 14px;
+  --ds-search-command-bar-input-padding-both: 278px;
+  --ds-search-command-bar-input-padding-clear: 122px;
+  --ds-search-command-bar-input-padding-inline-start: 46px;
+  --ds-search-command-bar-input-padding-toggle: 88px;
+  --ds-search-command-bar-input-radius: var(--ds-radius-xl, 16px);
+  --ds-search-command-bar-pulse-duration: 1.6s;
+  --ds-search-command-bar-pulse-easing: ease-out;
+  --ds-search-command-bar-pulse-fade: color-mix(in srgb, var(--ds-color-primary) 0%, transparent);
+  --ds-search-command-bar-pulse-tint: color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  --ds-search-command-bar-quiet-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
+  --ds-search-command-bar-quiet-border: var(--ds-color-border-subtle);
+  --ds-search-command-bar-quiet-color: var(--ds-color-text-secondary);
+  --ds-search-command-bar-quiet-color-hover: var(--ds-color-text-primary);
+  --ds-search-command-bar-root-bg: var(--ds-surface-card);
+  --ds-search-command-bar-root-padding-block: 10px 12px;
+  --ds-search-command-bar-root-padding-inline: 16px;
+  --ds-search-command-bar-root-rule: 1px solid var(--ds-color-border-subtle);
+  --ds-search-command-bar-shell-bg: var(--ds-surface-panel);
+  --ds-search-command-bar-shell-border: 1px solid var(--ds-color-border-subtle);
+  --ds-search-command-bar-shell-editorial-bg: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-panel) 68%, transparent) 100%);
+  --ds-search-command-bar-shell-editorial-border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+  --ds-search-command-bar-shell-editorial-padding: 5px;
+  --ds-search-command-bar-shell-editorial-radius: 18px;
+  --ds-search-command-bar-shell-editorial-shadow: 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
+  --ds-search-command-bar-shell-embedded-bg: color-mix(in srgb, var(--ds-surface-panel) 76%, transparent);
+  --ds-search-command-bar-shell-embedded-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent);
+  --ds-search-command-bar-shell-padding: 6px;
+  --ds-search-command-bar-shell-radius: 15px;
+  --ds-search-command-bar-shell-shadow: var(--ds-elevation-1);
+  --ds-search-command-bar-side-cluster-gap: 18px;
+  --ds-search-command-bar-side-cluster-padding-block-start: 2px;
+  --ds-search-command-bar-side-cluster-row-gap: 8px;
+  --ds-search-command-bar-slot-editorial-padding-inline-start: 16px;
+  --ds-search-command-bar-slot-editorial-rule: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
+  --ds-search-command-bar-slot-padding-block: 6px;
+  --ds-search-command-bar-slot-padding-inline-start: 18px;
+  --ds-search-command-bar-slot-rule: 1px solid var(--ds-color-border-subtle);
+  --ds-search-command-bar-slot-touch-target: var(--ds-touch-target-min, 44px);
+  --ds-search-command-bar-spin-duration: 1s;
+  --ds-search-command-bar-status-color: var(--ds-color-text-muted);
+  --ds-search-command-bar-status-error-color: var(--ds-color-error);
+  --ds-search-command-bar-status-font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  --ds-search-command-bar-status-line-height: 1.45;
+  --ds-search-command-bar-status-listening-color: var(--ds-color-primary);
+  --ds-search-command-bar-status-row-margin: 6px;
+  --ds-search-command-bar-status-transcribing-color: var(--ds-color-warning);
+  --ds-search-command-bar-suggestions-gap: 10px;
+  --ds-search-command-bar-suggestions-label-color: var(--ds-color-text-muted);
+  --ds-search-command-bar-suggestions-label-font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  --ds-search-command-bar-suggestions-label-font-weight: 700;
+  --ds-search-command-bar-suggestions-label-letter-spacing: 0.08em;
+  --ds-search-command-bar-top-rail-block-size: 22px;
+  --ds-search-command-bar-top-rail-editorial-block-size: 24px;
+  --ds-search-command-bar-top-rail-editorial-margin-block-end: 8px;
+  --ds-search-command-bar-top-rail-margin-block-end: 6px;
+  --ds-search-command-bar-voice-gap: 8px;
+  --ds-search-command-bar-voice-help-bg: var(--ds-surface-card);
+  --ds-search-command-bar-voice-help-blocked-border: 1px solid var(--ds-color-error);
+  --ds-search-command-bar-voice-help-border: 1px solid var(--ds-color-warning);
+  --ds-search-command-bar-voice-help-description-color: var(--ds-color-text-secondary);
+  --ds-search-command-bar-voice-help-description-font-size: var(--ds-font-size-xs);
+  --ds-search-command-bar-voice-help-description-line-height: 1.5;
+  --ds-search-command-bar-voice-help-description-margin: 4px;
+  --ds-search-command-bar-voice-help-enter-duration: var(--ds-motion-normal, 200ms);
+  --ds-search-command-bar-voice-help-enter-easing: var(--ds-motion-ease-out, ease-out);
+  --ds-search-command-bar-voice-help-footer-margin: 16px;
+  --ds-search-command-bar-voice-help-hint-color: var(--ds-color-text-muted);
+  --ds-search-command-bar-voice-help-hint-font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  --ds-search-command-bar-voice-help-hint-line-height: 1.45;
+  --ds-search-command-bar-voice-help-inline-size: min(420px, calc(100dvw - 32px));
+  --ds-search-command-bar-voice-help-list-color: var(--ds-color-text-secondary);
+  --ds-search-command-bar-voice-help-list-font-size: var(--ds-font-size-xs);
+  --ds-search-command-bar-voice-help-list-line-height: 1.55;
+  --ds-search-command-bar-voice-help-list-margin-block: 12px 0;
+  --ds-search-command-bar-voice-help-list-padding-inline-start: 18px;
+  --ds-search-command-bar-voice-help-offset: calc(100% + 12px);
+  --ds-search-command-bar-voice-help-padding: 18px;
+  --ds-search-command-bar-voice-help-radius: 18px;
+  --ds-search-command-bar-voice-help-shadow: var(--ds-elevation-2);
+  --ds-search-command-bar-voice-help-step-gap: 6px;
+  --ds-search-command-bar-voice-help-title-font-size: var(--ds-font-size-sm);
+  --ds-search-command-bar-voice-help-z-index: 180;
+  --ds-search-command-bar-voice-inset-inline-end: 18px;
+  --ds-search-command-bar-voice-max-inline-size: min(48%, 304px);
+  --ds-search-command-bar-voice-toggle-active-bg: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card));
+  --ds-search-command-bar-voice-toggle-active-border: var(--ds-color-primary);
+  --ds-search-command-bar-voice-toggle-active-color: var(--ds-color-primary);
+  --ds-search-command-bar-voice-toggle-bg-hover: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel));
+  --ds-search-command-bar-voice-toggle-color-hover: var(--ds-color-primary);
+  --ds-search-command-bar-voice-toggle-error-bg: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card));
+  --ds-search-command-bar-voice-toggle-error-border: var(--ds-color-error);
+  --ds-search-command-bar-voice-toggle-error-color: var(--ds-color-error);
+  --ds-search-command-bar-z-index: 30;
+  --ds-section-card-eyebrow-tracking: 0.11em;
+  --ds-section-card-header-min-height: 68px;
+  --ds-section-card-icon-size: 38px;
+  --ds-section-card-tab-label-gap: var(--ds-spacing-2, 8px);
   --ds-section-frame-label-column-gap: var(--ds-spacing-3, 0.75rem);
   --ds-section-frame-label-font-size: var(--ds-font-size-xs, 0.75rem);
   --ds-section-frame-label-font-weight: var(--ds-font-weight-medium, 500);
@@ -121637,6 +121947,51 @@ html[lang]:lang(ar) {
   --ds-shell-skip-link-radius: var(--ds-radius-md, 8px);
   --ds-shell-skip-link-shadow: var(--ds-elevation-2, none);
   --ds-shell-skip-link-z-index: var(--ds-z-index-skip-link, 9999);
+  --ds-shortcuts-overlay-category-color: var(--ds-color-text-secondary);
+  --ds-shortcuts-overlay-category-font-size: var(--ds-font-size-xs, 12px);
+  --ds-shortcuts-overlay-category-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-shortcuts-overlay-category-letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  --ds-shortcuts-overlay-category-padding-block: var(--ds-spacing-1, 4px);
+  --ds-shortcuts-overlay-category-padding-inline: var(--ds-spacing-5, 20px);
+  --ds-shortcuts-overlay-chord-gap: var(--ds-spacing-1, 4px);
+  --ds-shortcuts-overlay-close-touch-target: var(--ds-touch-target-min, 44px);
+  --ds-shortcuts-overlay-description-color: var(--ds-color-text-primary);
+  --ds-shortcuts-overlay-description-font-size: var(--ds-font-size-sm, 14px);
+  --ds-shortcuts-overlay-dialog-bg: var(--ds-surface-card);
+  --ds-shortcuts-overlay-dialog-color: var(--ds-color-text-primary);
+  --ds-shortcuts-overlay-dialog-max-inline-size: 40rem;
+  --ds-shortcuts-overlay-dialog-radius: var(--ds-radius-xl);
+  --ds-shortcuts-overlay-dialog-shadow: var(--ds-elevation-3);
+  --ds-shortcuts-overlay-empty-padding-block: var(--ds-spacing-8, 32px);
+  --ds-shortcuts-overlay-enter-duration: var(--ds-motion-normal);
+  --ds-shortcuts-overlay-enter-easing: var(--ds-motion-ease-enter, ease-out);
+  --ds-shortcuts-overlay-footer-color: var(--ds-color-text-secondary);
+  --ds-shortcuts-overlay-footer-font-size: var(--ds-font-size-xs, 12px);
+  --ds-shortcuts-overlay-footer-padding-block: var(--ds-spacing-2, 8px);
+  --ds-shortcuts-overlay-footer-padding-inline: var(--ds-spacing-5, 20px);
+  --ds-shortcuts-overlay-group-padding-block: var(--ds-spacing-1, 4px);
+  --ds-shortcuts-overlay-header-gap: var(--ds-spacing-3, 12px);
+  --ds-shortcuts-overlay-header-padding-block: var(--ds-spacing-3, 12px);
+  --ds-shortcuts-overlay-header-padding-inline: var(--ds-spacing-5, 20px);
+  --ds-shortcuts-overlay-inset-block-start: 10vh;
+  --ds-shortcuts-overlay-item-gap: var(--ds-spacing-3, 12px);
+  --ds-shortcuts-overlay-item-padding-block: 6px;
+  --ds-shortcuts-overlay-item-padding-inline: var(--ds-spacing-5, 20px);
+  --ds-shortcuts-overlay-list-column-gap: var(--ds-spacing-4, 16px);
+  --ds-shortcuts-overlay-list-column-width: 16rem;
+  --ds-shortcuts-overlay-list-padding-block: var(--ds-spacing-2, 8px);
+  --ds-shortcuts-overlay-narrow-inset-block-start: var(--ds-spacing-8, 32px);
+  --ds-shortcuts-overlay-padding-inline: var(--ds-spacing-3, 12px);
+  --ds-shortcuts-overlay-rule: 1px solid var(--ds-color-border);
+  --ds-shortcuts-overlay-scrim: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
+  --ds-shortcuts-overlay-scrim-filter: var(--ds-glass-backdrop-filter);
+  --ds-shortcuts-overlay-scrim-tint: var(--ds-glass-scrim-tint);
+  --ds-shortcuts-overlay-search-padding-block: var(--ds-spacing-2, 8px);
+  --ds-shortcuts-overlay-search-padding-inline: var(--ds-spacing-5, 20px);
+  --ds-shortcuts-overlay-title-color: var(--ds-color-text-primary);
+  --ds-shortcuts-overlay-title-font-size: var(--ds-font-size-base, 16px);
+  --ds-shortcuts-overlay-title-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-shortcuts-overlay-z-index: var(--ds-z-modal, 1500);
   --ds-sidebar-bg: var(--ds-color-bg-secondary);
   --ds-sidebar-item-bg-active: var(--ds-color-primary-100);
   --ds-sidebar-item-bg-hover: var(--ds-color-bg-hover);
@@ -122378,6 +122733,15 @@ html[lang]:lang(ar) {
   --ds-workbench-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   --ds-workbench-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
   --ds-workbench-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-workspace-shell-ambient-mask: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 36%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%
+    );
+  --ds-workspace-shell-mask-color: var(--ds-color-primary);
+  --ds-workspace-shell-particle-primary: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%);
+  --ds-workspace-shell-particle-secondary: color-mix( in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent );
   --ds-z-index-base: 0;
   --ds-z-index-drawer: 1400;
   --ds-z-index-dropdown: 1000;
