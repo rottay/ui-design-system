@@ -676,3 +676,24 @@ is now per-directory within shared parents); (2) D landed in two commits (the un
 dirs escaped the first stage) — the S19-D3 law says caller+skin+registration land in ONE commit;
 my staged-set check now lists untracked candidates too. Both are recorded so the next reader knows
 the commit boundaries, not because the content was wrong.
+
+## 2026-09-19 (twenty-fifth sitting) — the S19 handoff executed end to end
+
+Codex is out of the loop (the owner's 3aebd3f09). The writer seat is real Opus on the plain
+`claude` binary (daniel.avila profile; every receipt carries claude-opus-5); the independent
+reviewer is real Fable (claude-fable-5-1). Kimi stays DT/integrator. The S19 corrections all
+landed with per-finding red→green evidence (V02 1032f5a57, A01 d47c874aa + its Fable-driven
+structural repair d5a3e1a74, A02 6a3eae066, A03 d6d4e96ae, F04 7d23f7873, F01-03 ce0a2e0c2 +
+871575d9c). The canonical checkout is ui-design-system/main (the transfer at 050a4dc21, the old
+detached state double-preserved; the V01 symlink self-loop mine, fixed at 96d081f3d). DER-08
+CLOSED — 115/161. FAM-11: A (a0c300488), B (da6b06d41, Fable CHANGES→closed), C (b5eca0e4b),
+D (33e6e5f1f+9779cab05), E (e33a2c757) landed; the C/D/E wave review (Fable,
+docs-engineering/archive/audits/2026-09-19-fam11-sublots-cde-independent-review-davila.md):
+E ACCEPT; D CHANGES (the mod-k editable suppression wider than recorded — the kernel suppresses
+modifier chords in text fields where the retired listener fired; and my collection-header re-pin
+recorded a scoped-producer classifier artifact); C CHANGES (the page-shell-surface skin was never
+imported by the base entrypoint — the roster admitted paint that did not ship). The three repairs
+are one dispatched lot; my two integration misses (the swept D files, the missed import) are
+recorded with their repairs. The fleet stands honestly measured: typography 99.4%, shape 15.1%,
+rhythm 21.5%, depth 13.9%, motion 9.2%, states 2.1% — milestone B's gap is product work, measured,
+not a secret.
