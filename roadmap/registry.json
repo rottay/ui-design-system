@@ -5739,6 +5739,11 @@
      "at": "2026-09-19 02:37",
      "by": "daniel",
      "note": "2026-09-19: the governance-manifest quarantine slice dispatched (Kimi writer, brief-ret03-manifest.md) — the 11 stale retired-family bindings are quarantine-deleted, not repaired (F-04: the manifest simulates). 12 production readers measured; each gets re-source-or-drop. The customization regen cascade unblocks behind this."
+    },
+    {
+     "at": "2026-09-19 04:58",
+     "by": "daniel",
+     "note": "2026-09-19: manifest quarantine slice LANDED (f66b1bd45 + re-reads da968fcde). governance/manifest (39MB, 304 files) moved to docs/history/inventories/customization-manifest with the no-authority README; every production reader measured and re-sourced or dropped; the manifest generator + its 2 gates retired through the runner's RETIRED_GATES mechanism (not green-by-deletion); packages/core/governance 42MB -> 2.6MB. No new red in the runner diff. Surface report + preservation manifest regenerated green behind it. Remaining in the cluster: the 5 new dead writers + the rhythm witness (writer lot dispatched). The WO's other slices (evidence quarantine, package boundary, generator collapse, CLAUDE.md) remain open."
     }
    ]
   },
