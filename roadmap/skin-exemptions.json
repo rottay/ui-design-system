@@ -165,11 +165,15 @@
   },
   "$retired-SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT": "The embedded-CSS family held exactly one file: TableCheckboxStyles, an opt-in `<style>` injector whose seven paint declarations were exempted because globalizing them would have broadened selector reach. The 2026-08 taxonomy adjudication retired the component instead -- it had no consumer, its own source declared itself a merge/retire candidate, and its capabilities were already owned by the governed table and checkbox skins. Embedded CSS paint in packages/core is now zero, so this family has no members and the exemption is withdrawn rather than left standing over a deleted path.",
   "SKIN-EXEMPT-CRASH-SAFE-FALLBACK": {
-    "$why": "Paint that must render when the theming provider itself has crashed. It cannot depend on a token, a skin, or anything the failure might have taken down.",
+    "$why": "Paint that must render when the theming provider itself has crashed. It cannot depend on a skin or on anything the failure might have taken down. Owner resolution R4 (2026-09-19) replaced this family's former `floor: 8` threshold with the NAMED three-property allowance below: a floor could only say how MANY paint properties survived, so eight arbitrary ones satisfied it and a fourth unrelated one was invisible. The allowance is keyed to one file; no other component may copy it.",
     "files": {
       "structures/feedback/surface-lifecycle/error-boundary/index.tsx": {
-        "floor": 8,
-        "why": "Hardcoded hex values, deliberately. The component's own comment says it must render even when the theme provider crashes -- a token would resolve to nothing in exactly the situation this component exists for."
+        "crashSafeProperties": {
+          "backgroundColor": "--ds-surface-lifecycle-error-bg",
+          "color": "--ds-surface-lifecycle-error-color",
+          "border": "--ds-surface-lifecycle-error-border"
+        },
+        "why": "R4: exactly three properties -- background, foreground and a delineating edge -- each reading its governed --ds-surface-lifecycle-error-* channel FIRST, with the documented per-mode light-dark() literal behind it (a single light-only pair measured 1.7-2.5:1 in dark scopes). In a healthy tree the channels resolve and the literals never render; everything beyond the floor is governed paint in skin/surface-states. Extra, missing, ungoverned or duplicated properties fail, as does any disagreement with the inline-paint counter."
       }
     }
   },

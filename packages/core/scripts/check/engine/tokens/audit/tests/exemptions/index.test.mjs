@@ -315,7 +315,7 @@ test('invalid floors cannot silently disable comparison', async (t) => {
         assert.equal(failures.length, 1);
         assert.match(
           failures[0],
-          floor === undefined ? /must declare floor, runtimeSvgFloor, and\/or embeddedCssFloor/ : /invalid floor/
+          floor === undefined ? /must declare floor, runtimeSvgFloor, embeddedCssFloor and\/or crashSafeProperties/ : /invalid floor/
         );
       } finally {
         rmSync(f.dir, { recursive: true, force: true });

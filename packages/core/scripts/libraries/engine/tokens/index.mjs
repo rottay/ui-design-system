@@ -13,6 +13,16 @@ export const ENGINE_TOKEN_EXACT = Object.freeze({
   'embeddedCssPaint.parseFailures': 0,
   'embeddedCssPaint.dynamicProperties': 0,
   'embeddedCssPaint.unknownSinks': 0,
+  /*
+   * R4 (owner, 2026-09-19): the surface-lifecycle error boundary's crash-safe
+   * fallback is an EXACT three-property allowance -- background, foreground and
+   * border -- not a ceiling with slack. A decrease-only ceiling of 8 let five
+   * unnamed paint properties be added back without moving the gate; an exact
+   * invariant makes a fourth property red in the same run that
+   * `skins.exemptionsBreached` names it. The two pins are deliberately
+   * redundant: one counts, the other names.
+   */
+  'fleet.inlinePaint.structures/feedback/surface-lifecycle/error-boundary/index.tsx': 3,
 });
 
 export const ENGINE_TOKEN_MINIMUM = Object.freeze({

@@ -3,10 +3,15 @@ import { isAbsolute, relative, resolve, sep } from 'node:path';
 import { countArc09PaintInFile } from '../../../paint/inline/index.mjs';
 import { countRuntimeSvgPaintInFile } from '../../../paint/svg/index.mjs';
 import { countEmbeddedCssPaintInFile } from '../../../paint/embedded/index.mjs';
+import {
+  CRASH_SAFE_ENTRY_KEY,
+  CRASH_SAFE_FALLBACK_ALLOWANCE,
+  collectCrashSafeFailures,
+} from '../../../paint/crash-safe/index.mjs';
 
 const GLOB_MAGIC_RE = /[*?\[\]{}]/;
 const FAMILY_KEYS = new Set(['files']);
-const ENTRY_KEYS = new Set(['floor', 'runtimeSvgFloor', 'embeddedCssFloor', 'why']);
+const ENTRY_KEYS = new Set(['floor', 'runtimeSvgFloor', 'embeddedCssFloor', CRASH_SAFE_ENTRY_KEY, 'why']);
 
 function isRecord(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -134,9 +139,50 @@ export function collectSkinExemptionFailures({
       const hasInlineFloor = Object.hasOwn(entry, 'floor');
       const hasRuntimeSvgFloor = Object.hasOwn(entry, 'runtimeSvgFloor');
       const hasEmbeddedCssFloor = Object.hasOwn(entry, 'embeddedCssFloor');
-      if (!hasInlineFloor && !hasRuntimeSvgFloor && !hasEmbeddedCssFloor) {
-        fail(`exemption entry (${label}) must declare floor, runtimeSvgFloor, and/or embeddedCssFloor`);
+      const hasCrashSafe = Object.hasOwn(entry, CRASH_SAFE_ENTRY_KEY);
+      if (!hasInlineFloor && !hasRuntimeSvgFloor && !hasEmbeddedCssFloor && !hasCrashSafe) {
+        fail(
+          `exemption entry (${label}) must declare floor, runtimeSvgFloor, embeddedCssFloor and/or ${CRASH_SAFE_ENTRY_KEY}`
+        );
         continue;
+      }
+
+      /*
+       * R4 (owner, 2026-09-19): the crash-safe fallback is a NAMED allowance,
+       * not a threshold. A numeric floor beside it would re-admit the "any N
+       * paint properties" reading the resolution replaced, so the two spellings
+       * are mutually exclusive and the key is refused outside its one owner.
+       */
+      let crashSafeProperties = null;
+      if (hasCrashSafe) {
+        if (hasInlineFloor || hasRuntimeSvgFloor || hasEmbeddedCssFloor) {
+          fail(
+            `exemption entry (${label}) declares ${CRASH_SAFE_ENTRY_KEY} beside a numeric floor; the named allowance replaces the threshold, it does not add to one`
+          );
+          continue;
+        }
+        if (configuredPath !== CRASH_SAFE_FALLBACK_ALLOWANCE.file) {
+          fail(
+            `exemption entry (${label}) declares ${CRASH_SAFE_ENTRY_KEY}; R4 keys the crash-safe allowance to ${CRASH_SAFE_FALLBACK_ALLOWANCE.file} alone and no other component may copy it`
+          );
+          continue;
+        }
+        if (!isRecord(entry[CRASH_SAFE_ENTRY_KEY])) {
+          fail(`exemption entry (${label}) ${CRASH_SAFE_ENTRY_KEY} must be a property-name to channel map`);
+          continue;
+        }
+        crashSafeProperties = entry[CRASH_SAFE_ENTRY_KEY];
+        const malformed = Object.entries(crashSafeProperties).filter(
+          ([name, channel]) => typeof name !== 'string' || typeof channel !== 'string' || !channel.startsWith('--ds-')
+        );
+        if (malformed.length > 0) {
+          fail(
+            `exemption entry (${label}) ${CRASH_SAFE_ENTRY_KEY} must map each property name to a --ds-* channel; got ${JSON.stringify(
+              Object.fromEntries(malformed)
+            )}`
+          );
+          continue;
+        }
       }
 
       const floor = hasInlineFloor ? entry.floor : 0;
@@ -202,9 +248,14 @@ export function collectSkinExemptionFailures({
 
       const existing = targets.get(canonicalPath);
       if (existing) {
+        if (crashSafeProperties && existing.crashSafe) {
+          fail(`exemption entry (${label}) declares a second ${CRASH_SAFE_ENTRY_KEY} allowance for the same file`);
+          continue;
+        }
         existing.floor += floor;
         existing.runtimeSvgFloor += runtimeSvgFloor;
         existing.embeddedCssFloor += embeddedCssFloor;
+        existing.crashSafe = existing.crashSafe ?? (crashSafeProperties ? { family, properties: crashSafeProperties } : null);
         existing.contributions.push({
           family,
           configuredPath,
@@ -219,6 +270,7 @@ export function collectSkinExemptionFailures({
           floor,
           runtimeSvgFloor,
           embeddedCssFloor,
+          crashSafe: crashSafeProperties ? { family, properties: crashSafeProperties } : null,
           contributions: [
             {
               family,
@@ -237,12 +289,43 @@ export function collectSkinExemptionFailures({
     fail('skin exemption configuration must declare at least one exemption family');
   }
 
+  /*
+   * The crash-safe allowance cannot be retired by deletion: while the boundary
+   * still exists, the configuration has to name it, so silently dropping the
+   * entry is a gate failure rather than an unguarded file.
+   */
+  const pinnedCrashSafe = resolve(canonicalComponentsDir, CRASH_SAFE_FALLBACK_ALLOWANCE.file);
+  if (existsSync(pinnedCrashSafe) && ![...targets.values()].some((target) => target.crashSafe)) {
+    fail(
+      `${CRASH_SAFE_FALLBACK_ALLOWANCE.file} exists but declares no ${CRASH_SAFE_ENTRY_KEY} allowance; R4's named three-property floor must stay declared while the crash surface does`
+    );
+  }
+
   for (const target of targets.values()) {
     let source;
     try {
       source = readFileSync(target.canonicalPath, 'utf8');
     } catch (error) {
       fail(`exemption target ${target.displayPath} could not be read: ${error.message}`);
+      continue;
+    }
+
+    if (target.crashSafe) {
+      if (target.floor > 0 || target.runtimeSvgFloor > 0 || target.embeddedCssFloor > 0) {
+        fail(
+          `exemption target ${target.displayPath} carries both the named crash-safe allowance and a numeric floor from another family; the named allowance is exact and cannot be summed`
+        );
+      } else {
+        for (const failure of collectCrashSafeFailures({
+          displayPath: target.displayPath,
+          source,
+          fileName: target.canonicalPath,
+          declaredProperties: target.crashSafe.properties,
+          countPaint,
+        })) {
+          fail(failure);
+        }
+      }
       continue;
     }
 
