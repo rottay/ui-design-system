@@ -2045,7 +2045,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 84,
+        "channelsRead": 85,
         "classTokens": 0,
         "partsStamped": 15,
         "partsConsumed": 15
@@ -2139,7 +2139,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 10,
+        "channelsRead": 11,
         "classTokens": 2,
         "partsStamped": 4,
         "partsConsumed": 4
@@ -2164,7 +2164,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 8,
+        "channelsRead": 9,
         "classTokens": 0,
         "partsStamped": 3,
         "partsConsumed": 3

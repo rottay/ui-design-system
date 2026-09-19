@@ -2059,6 +2059,97 @@ export function Row({ nodeKey, onMine }) {
   assert.equal(measured.attachments[0].effective, false);
 });
 
+test('D24: a drop-zone bag attached BY NAME -- every contract member onX={bag.onX} -- IS wired', () => {
+  // The engine-token-audit fails closed on an opaque {...bag} spread onto an
+  // intrinsic element, so the drop-zone engines name the bag's members
+  // instead; the arm credits the naming, not the spread syntax.
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Zone({ onUpload }) {
+  const fileDrop = useFileDropZone({ onFiles: onUpload });
+  return (
+    <div
+      data-part="dropzone"
+      onDragOver={fileDrop.dropZoneProps.onDragOver}
+      onDragLeave={fileDrop.dropZoneProps.onDragLeave}
+      onDrop={fileDrop.dropZoneProps.onDrop}
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.declared, true);
+  assert.equal(measured.wired, true, 'naming every contract member attaches the kernel');
+  assert.deepEqual(measured.rows, []);
+});
+
+test('D25: a target bag detached by a conditional and named through ?. -- the kanban shape -- IS wired', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Column({ columnId, collapsed }) {
+  const drag = useDragSession({ onDrop: () => {} });
+  const columnDropTarget = collapsed ? null : drag.getTargetProps({ columnId, position: 0 });
+  return (
+    <div
+      data-part="column"
+      onDragOver={columnDropTarget?.onDragOver}
+      onDrop={columnDropTarget?.onDrop}
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.wired, true, 'the walk resolves the local through its conditional to the target bag');
+  assert.deepEqual(measured.rows, []);
+});
+
+test('D26: a named attachment that DROPS one contract handler fails closed', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Zone({ onUpload }) {
+  const fileDrop = useFileDropZone({ onFiles: onUpload });
+  return (
+    <div
+      onDragOver={fileDrop.dropZoneProps.onDragOver}
+      onDrop={fileDrop.dropZoneProps.onDrop}
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.wired, false, 'naming two of three members leaves the kernel off the third slot');
+  assert.equal(measured.rows.length, 1);
+  assert.match(measured.rows[0], /^OVERWRITTEN .*<div> onDragLeave$/u);
+});
+
+test('D27: a named attachment of an UNRELATED expression earns nothing and says nothing', () => {
+  const measured = plantDndFamily({
+    'index.tsx': `
+${KERNEL_IMPORT}
+export function Zone({ handlers }) {
+  const fileDrop = useFileDropZone({ onFiles: () => {} });
+  void fileDrop;
+  return (
+    <div
+      onDragOver={handlers.onDragOver}
+      onDragLeave={handlers.onDragLeave}
+      onDrop={handlers.onDrop}
+    />
+  );
+}
+`,
+  });
+
+  assert.equal(measured.wired, false, 'a receiver the walk cannot resolve to the kernel is not an attachment');
+  assert.deepEqual(measured.rows, [], 'an unrelated receiver is not a kernel claim, so it is not a row either');
+});
+
 test('the blocking arm fires only when the kernel was DECLARED and not attached', () => {
   const measured = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
   const pinned = readBaseline().families[FAMILY];

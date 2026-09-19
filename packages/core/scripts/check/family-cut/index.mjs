@@ -1173,6 +1173,19 @@ const KERNEL_OWNED_PROPS = new Set([
 const KERNEL_HOOKS = new Set(['useDragSession', 'useFileDropZone']);
 const KERNEL_BAG_CALL = /(?:^|\.)(?:getSourceProps|getTargetProps)$/u;
 const KERNEL_BAG_VALUE = /(?:^|\.)dropZoneProps$/u;
+
+/**
+ * The keys each kernel-bag contract REQUIRES on the DOM element. A bag whose
+ * members are attached BY NAME (`onX={bag.onX}`) is effectively attached only
+ * when every one of these names is bound to a member of that same bag --
+ * naming most of the bag and hand-writing one handler still discards what the
+ * kernel put on the slot the hand-written attribute took.
+ */
+const NAMED_BAG_CONTRACT = {
+  source: ['draggable', 'onDragStart', 'onDragEnd'],
+  target: ['onDragOver', 'onDrop'],
+  dropZone: ['onDragOver', 'onDragLeave', 'onDrop'],
+};
 const DRAG_HANDLER_ATTRIBUTES = new Set([
   'onDragStart',
   'onDragOver',
@@ -1212,6 +1225,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
 )) {
   const functionsByName = new Map();
   const objectsByName = new Map();
+  const initializersByName = new Map();
   const typeMembersByName = new Map();
   const statePairs = [];
   const refNames = new Set();
@@ -1237,6 +1251,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
         functionsByName.set(node.name.text, unwrapTransparent(initializer.arguments[0]));
       }
       if (initializer && ts.isObjectLiteralExpression(initializer)) objectsByName.set(node.name.text, initializer);
+      if (initializer) initializersByName.set(node.name.text, initializer);
       if (node.type && ts.isTypeLiteralNode(node.type)) {
         typeMembersByName.set(
           node.name.text,
@@ -1435,6 +1450,38 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     return false;
   };
 
+  /**
+   * The NAMED_BAG_CONTRACT kind a kernel-bag expression belongs to, or `null`.
+   * Resolves THROUGH one local (`const props = drag.getTargetProps(...)`) and
+   * through the conditional that detaches a surface (`collapsed ? null :
+   * drag.getTargetProps(...)`); every live branch must reach the SAME kind or
+   * the walk fails closed. An unrelated receiver resolves to `null` and earns
+   * nothing, which is what keeps `onDrop={handlers.onDrop}` a plain pass-through.
+   */
+  const bagKindOf = (expression, seen = new Set()) => {
+    const current = unwrapTransparent(expression);
+    if (!current) return null;
+    if (ts.isCallExpression(current) && KERNEL_BAG_CALL.test(text(current.expression))) {
+      return /getSourceProps$/u.test(text(current.expression)) ? 'source' : 'target';
+    }
+    if (ts.isPropertyAccessExpression(current) && KERNEL_BAG_VALUE.test(text(current))) {
+      return 'dropZone';
+    }
+    if (ts.isIdentifier(current) && !seen.has(current.text)) {
+      seen.add(current.text);
+      const initializer = initializersByName.get(current.text);
+      return initializer ? bagKindOf(initializer, seen) : null;
+    }
+    if (ts.isConditionalExpression(current)) {
+      const kinds = [current.whenTrue, current.whenFalse]
+        .filter((branch) => unwrapTransparent(branch)?.kind !== ts.SyntaxKind.NullKeyword)
+        .map((branch) => bagKindOf(branch, seen));
+      if (kinds.length === 0 || kinds.some((kind) => kind === null)) return null;
+      return kinds.every((kind) => kind === kinds[0]) ? kinds[0] : null;
+    }
+    return null;
+  };
+
   /** A local assembled FROM a kernel bag, with the keys it overrides. */
   const mergedKernelBag = (expression) => {
     const current = unwrapTransparent(expression);
@@ -1468,6 +1515,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
   };
 
   const attachments = [];
+  const namedAttachments = [];
   const delegations = [];
   for (const element of elements) {
     const properties = element.attributes.properties;
@@ -1497,6 +1545,34 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
       }
     }
     if (index === -1) {
+      /* Named-member attachment: `onX={bag.onX}` for every key the bag
+       * contract requires. The member must be read FROM a receiver the walk
+       * resolves to a kernel bag of that contract kind and the accessed name
+       * must BE the attribute name; anything else earns nothing, so a named
+       * attachment of an unrelated expression is not a kernel claim. */
+      const named = new Map();
+      for (const property of properties) {
+        if (!ts.isJsxAttribute(property)) continue;
+        const name = attributeName(property);
+        if (!KERNEL_OWNED_PROPS.has(name)) continue;
+        if (!property.initializer || !ts.isJsxExpression(property.initializer) || !property.initializer.expression) {
+          continue;
+        }
+        const access = unwrapTransparent(property.initializer.expression);
+        if (!ts.isPropertyAccessExpression(access) || access.name.text !== name) continue;
+        const kind = bagKindOf(access.expression);
+        if (!kind) continue;
+        if (!named.has(kind)) named.set(kind, new Set());
+        named.get(kind).add(name);
+      }
+      for (const [kind, keys] of named) {
+        namedAttachments.push({
+          element: text(element.tagName),
+          line: lineOf(element),
+          kind,
+          missing: NAMED_BAG_CONTRACT[kind].filter((key) => !keys.has(key)),
+        });
+      }
       for (const property of properties) {
         if (!ts.isJsxAttribute(property)) continue;
         if (!property.initializer || !ts.isJsxExpression(property.initializer)) continue;
@@ -1542,6 +1618,7 @@ export function analyzeDragAndDrop(file, source = ts.createSourceFile(
     declaresKernel,
     sessionState,
     attachments,
+    namedAttachments,
     delegations,
     declaredComponents,
     spreadsProp: (prop) => elements.some((element) => {
@@ -1581,9 +1658,17 @@ export function measureDragAndDropArm(resolved, parsed) {
   const analyses = parsed.map(({ file, source }) => analyzeDragAndDrop(file, source));
 
   const rows = [];
-  let wired = analyses.some((entry) => entry.attachments.some((element) => element.effective));
+  let wired = analyses.some((entry) => entry.attachments.some((element) => element.effective))
+    || analyses.some((entry) => entry.namedAttachments.some((attachment) => attachment.missing.length === 0));
 
   for (const entry of analyses) {
+    for (const attachment of entry.namedAttachments) {
+      if (attachment.missing.length > 0) {
+        rows.push(
+          `OVERWRITTEN ${rel(entry.file)}:${attachment.line} <${attachment.element}> ${attachment.missing.join(',')}`,
+        );
+      }
+    }
     for (const delegation of entry.delegations) {
       const owner = analyses.find((candidate) => candidate.declaredComponents.has(delegation.component));
       if (owner && owner.spreadsProp(delegation.prop)) {
