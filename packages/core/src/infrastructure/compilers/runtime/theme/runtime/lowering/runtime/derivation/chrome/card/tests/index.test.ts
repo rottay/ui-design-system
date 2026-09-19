@@ -73,6 +73,8 @@ function skinFallbacks(channel: string): string[] {
 
 /** Channels the deriver produces; the skin's fallback must equal the produced string. */
 const DERIVER_WIRED: Record<string, string> = {
+  "--ds-card-border-accent-hover":
+    "var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)))",
   "--ds-card-outlined-border-hover":
     "var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))))",
   "--ds-card-instance-padding":

@@ -22,6 +22,7 @@ export const cardChromeDeriver: FamilyDeriver = {
     "--ds-card-body-font-size-sm",
     "--ds-card-header-ink",
     "--ds-card-header-eyebrow-color",
+    "--ds-card-border-accent-hover",
     "--ds-card-outlined-border-hover",
     "--ds-card-underline-border-width",
     "--ds-card-nested-shadow",
@@ -56,6 +57,8 @@ export function deriveCardChannels(): Record<string, string> {
   vars["--ds-card-body-font-size-sm"] = "var(--ds-type-supporting-font-size)";
   vars["--ds-card-header-ink"] = "var(--ds-card-header-color, var(--ds-color-text-primary))";
   vars["--ds-card-header-eyebrow-color"] = "var(--ds-card-header-color, var(--ds-color-text-muted))";
+  vars["--ds-card-border-accent-hover"] =
+    "var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)))";
   vars["--ds-card-outlined-border-hover"] =
     "var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))))";
   vars["--ds-card-underline-border-width"] = "var(--ds-edge-hairline-width)";
