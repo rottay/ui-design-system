@@ -713,3 +713,173 @@ describe('the shimmer rides the motion vocabulary', () => {
     expect(existsSync(resolve(SRC, 'foundation/tokens/css/presentation/components/skin/skeleton-compounds'))).toBe(false);
   });
 });
+
+/**
+ * The shell, command and search vocabulary (WO-FAM-11 repair). The table below
+ * is the adjudication itself: one row per part the six open families stamp,
+ * measured from the family's anatomy and its Modern skin. The gate proves the
+ * names are ROLED; these prove each one is roled as what it IS.
+ */
+const FAM_11_ROLES: Readonly<Record<string, string>> = {
+  // app-shell
+  'header-center': 'pass',
+  'header-left': 'pass',
+  'header-right': 'pass',
+  'main-area': 'pass',
+  'navigation-body': 'pass',
+  'navigation-close': 'block',
+  'navigation-drawer-header': 'pass',
+  'navigation-footer': 'pass',
+  'navigation-logo': 'pass',
+  'navigation-sidebar': 'pass',
+  'navigation-trigger': 'block',
+  'skip-link': 'omit',
+  // workspace-shell
+  'particle-field-static-fallback': 'omit',
+  // surface-chrome
+  'header-actions': 'pass',
+  // search-command-bar
+  'actions-slot': 'pass',
+  'bar-row': 'pass',
+  clear: 'omit',
+  frame: 'pass',
+  'input-column': 'pass',
+  'search-shell': 'pass',
+  'side-cluster': 'pass',
+  'status-row': 'pass',
+  'suggestion-chip': 'block',
+  suggestions: 'pass',
+  'suggestions-label': 'line',
+  'top-rail': 'pass',
+  'voice-badge': 'pass',
+  'voice-badge-label': 'line',
+  'voice-controls': 'pass',
+  'voice-help': 'omit',
+  'voice-help-actions': 'omit',
+  'voice-help-cancel': 'omit',
+  'voice-help-copy': 'omit',
+  'voice-help-description': 'omit',
+  'voice-help-footer': 'omit',
+  'voice-help-hint': 'omit',
+  'voice-help-list': 'omit',
+  'voice-help-step': 'omit',
+  'voice-help-title': 'omit',
+  'voice-toggle': 'round',
+  // command-palette
+  'argument-chip': 'pass',
+  'argument-error': 'omit',
+  'argument-panel': 'pass',
+  'argument-prompt': 'line',
+  error: 'omit',
+  'item-main': 'pass',
+  'item-text': 'pass',
+  recent: 'pass',
+  'section-label': 'line',
+  shortcut: 'line',
+  // shortcuts-overlay
+  'category-label': 'line',
+  'category-row': 'pass',
+  chord: 'pass',
+  dialog: 'pass',
+  kbd: 'pass',
+};
+
+describe('the shell, command and search vocabulary (WO-FAM-11)', () => {
+  it('roles every part the six open families stamp, as the part it is', () => {
+    for (const [part, role] of Object.entries(FAM_11_ROLES)) {
+      expect(resolvePartRole(part), part).toBe(role);
+      expect(SKELETON_PART_ROLES[part], part).toBeDefined();
+    }
+    expect(Object.keys(FAM_11_ROLES)).toHaveLength(55);
+  });
+
+  it('draws the command row as its two lines of copy, not as a slab over them', () => {
+    // The palette's own loading footprint, verbatim. Before the roles landed,
+    // `item-main` and `item-text` fell through to the unknown-part `block`:
+    // two solid bones, the outer one over the whole row, and neither `label`
+    // nor `description` was ever reached.
+    const { container } = render(
+      <AnatomySkeleton busy={false}>
+        <FixtureFamily
+          anatomy={[
+            {
+              part: 'item',
+              rect: [0, 0, 320, 44],
+              children: [
+                {
+                  part: 'item-main',
+                  rect: [12, 6, 240, 32],
+                  children: [
+                    {
+                      part: 'item-text',
+                      rect: [12, 6, 240, 32],
+                      children: [
+                        { part: 'label', rect: [12, 6, 180, 18] },
+                        { part: 'description', rect: [12, 24, 140, 14] },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ]}
+        />
+      </AnatomySkeleton>,
+    );
+
+    expect(sourceParts(container)).toEqual(['label:line', 'description:line']);
+  });
+
+  it('keeps a decorative field, a hidden skip link and a transient drawer out of the bones', () => {
+    const { container } = render(
+      <AnatomySkeleton busy={false}>
+        <FixtureFamily
+          anatomy={[
+            { part: 'skip-link', rect: [0, 0, 1, 1] },
+            { part: 'particle-field-static-fallback', rect: [0, 0, 320, 200] },
+            {
+              part: 'search-shell',
+              rect: [0, 0, 320, 44],
+              children: [
+                { part: 'input', rect: [8, 8, 240, 28] },
+                {
+                  // The drawer floats BELOW the bar, so every bone it could
+                  // contribute lands outside the surface it stands in for.
+                  part: 'voice-help',
+                  rect: [0, 56, 320, 180],
+                  children: [{ part: 'voice-help-title', rect: [16, 72, 200, 20] }],
+                },
+              ],
+            },
+          ]}
+        />
+      </AnatomySkeleton>,
+    );
+
+    expect(sourceParts(container)).toEqual(['input:block']);
+  });
+
+  it('draws a wide pill as its own box and a circular control as a circle', () => {
+    const { container } = render(
+      <AnatomySkeleton busy={false}>
+        <FixtureFamily
+          anatomy={[
+            { part: 'suggestion-chip', rect: [0, 0, 132, 24] },
+            { part: 'voice-toggle', rect: [140, 0, 32, 32] },
+            { part: 'navigation-close', rect: [180, 0, 44, 44] },
+          ]}
+        />
+      </AnatomySkeleton>,
+    );
+
+    expect(sourceParts(container)).toEqual([
+      'suggestion-chip:block',
+      'voice-toggle:round',
+      'navigation-close:block',
+    ]);
+    // `block` keeps the measured box, so the chip stays 132px wide; `round`
+    // is the role that collapses to the shortest side, which is why a wide
+    // text chip is not one.
+    expect(boneWidth(container, 'suggestion-chip')).toBe('132px');
+  });
+});

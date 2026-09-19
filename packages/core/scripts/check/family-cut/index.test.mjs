@@ -2883,7 +2883,7 @@ test('PLANT: an open cut with no work order and no reason is refused', () => {
 test('LIVE: every open row declares exactly the debt the gate measures, and the run says so', () => {
   const baseline = readBaseline().families;
   const open = Object.entries(baseline).filter(([, row]) => row.openCut);
-  assert.equal(open.length, 7, 'surface-lifecycle plus the six FAM-11 rows whose open debt is the shared skeleton role vocabulary (SKELETON_PART_ROLES is singleton-owned)');
+  assert.equal(open.length, 1, 'only surface-lifecycle stays open — its measured failure-mode floor awaits the owner\'s exemption ruling; the six skeleton-vocabulary rows closed when the roles landed');
   for (const [family, row] of open) {
     const measured = measureFamily(resolveFamily(family, ROOT, row), { producers: PRODUCERS });
     const debt = Object.fromEntries(Object.entries(blockingDebt(measured)).filter(([, count]) => count > 0));
@@ -2895,11 +2895,11 @@ test('LIVE: every open row declares exactly the debt the gate measures, and the 
 
 test('LIVE: the run separates the families that hold the contract from the families admitted with debt', () => {
   const { measurements, open } = collectFindings();
-  assert.equal(open.length, 7);
+  assert.equal(open.length, 1);
   // The FAM-11 rows that hold every BLOCKING arm (page-shell, surface-chrome,
   // the switchers, action-dock, app-shell's adapt arm) count among the held
   // rows; the open seven carry exactly the measured skeleton-role debt.
-  assert.equal(measurements.length - open.length, 100, 'the pre-existing roster plus the graduated WO-FAM-10/11 rows hold the contract');
+  assert.equal(measurements.length - open.length, 106, 'the full roster minus the one open row holds the contract');
 });
 
 // ---------------------------------------------------------------------------

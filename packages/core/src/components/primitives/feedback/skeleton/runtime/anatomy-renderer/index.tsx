@@ -891,6 +891,111 @@ export const SKELETON_PART_ROLES: Readonly<Record<string, SkeletonPartRole>> = O
   'sticky-sentinel': 'omit',
   'submit-bar-progress-placeholder': 'omit',
   'subtitle-divider': 'omit',
+
+  // ---- the shell, command and search families (WO-FAM-11 repair) ----
+  // Adjudicated once per NAME, on the same evidence the two blocks above use:
+  // the stamped anatomy plus the Modern skin. An owner that holds stamped
+  // parts is a container; a leaf the skin gives its own control box is a
+  // block; a leaf the skin sizes as a circle is round; a leaf the skin gives
+  // only type is a line; an owner that is decoration, a transient overlay, or
+  // only exists once there is data has nothing to stand in for.
+  // Wrappers and slots: they draw nothing, and what they hold is drawn. A
+  // slot that holds a caller's node delegates to that node's own anatomy --
+  // the `kbd` and `shortcut` wrappers hold a ghost `Kbd`, `argument-chip`
+  // holds a `Tag`, and each of those stamps its own root.
+  'actions-slot': 'pass',
+  'argument-chip': 'pass',
+  'argument-panel': 'pass',
+  'bar-row': 'pass',
+  'category-row': 'pass',
+  chord: 'pass',
+  // The shortcuts-overlay card. A container by the rule above, as `stat-card`
+  // and `facts-card` already are: `frame` stays the outermost silhouette
+  // owners (`root`, `surface`, `bubble`), not every surface below them.
+  dialog: 'pass',
+  // The search bar's stacking wrapper: `position: relative; z-index: 1` and
+  // nothing else.
+  frame: 'pass',
+  'header-actions': 'pass',
+  'header-center': 'pass',
+  'header-left': 'pass',
+  'header-right': 'pass',
+  'input-column': 'pass',
+  // The command row's two layout owners. This is the pair the command-palette
+  // cut suite routed here: both resolved to the unknown-part `block`, so the
+  // palette's own loading footprint painted a slab over the row and a second
+  // one over its text column, and the `label`/`description` lines under them
+  // were never reached. NOTE the divergence: the unrostered insights activity
+  // lane stamps `item-text` on a `Text` leaf instead of a column. The live
+  // renderer consumer is the palette, and a container that paints nothing is
+  // the lesser error against a slab over two lines of copy.
+  'item-main': 'pass',
+  'item-text': 'pass',
+  kbd: 'pass',
+  'main-area': 'pass',
+  // The navigation column and the three regions inside it. Each one is the
+  // whole strip -- the logo header is 6.5rem tall and the full column wide,
+  // the body is everything left of the footer -- so the caller's mark, nav and
+  // footer inside them are what the bones draw, never the strip itself.
+  'navigation-body': 'pass',
+  'navigation-drawer-header': 'pass',
+  'navigation-footer': 'pass',
+  'navigation-logo': 'pass',
+  'navigation-sidebar': 'pass',
+  recent: 'pass',
+  'search-shell': 'pass',
+  'side-cluster': 'pass',
+  'status-row': 'pass',
+  suggestions: 'pass',
+  'top-rail': 'pass',
+  'voice-badge': 'pass',
+  'voice-controls': 'pass',
+  // Copy: one text-height bone across the part.
+  'category-label': 'line',
+  'section-label': 'line',
+  // The shortcut hint on a command row. Two of its three families stamp it on
+  // the hint text itself (`context-menu`, `collection-workspace`); the
+  // palette's wrapper boxes a ghost `Kbd` exactly, so a text-height bone lands
+  // on the hint either way.
+  shortcut: 'line',
+  'suggestions-label': 'line',
+  'voice-badge-label': 'line',
+  'argument-prompt': 'line',
+  // Controls with a box of their own, drawn at the corner the skin measures.
+  // The two shell actions are 44px squares at `--ds-radius-md`, so a circle
+  // would round a square plate; the suggestion chip is a `shape='round'`
+  // Button -- full radius, no `aspect-ratio`, so it is a wide pill and a
+  // circle the width of its shortest side would be a dot at its start edge.
+  'navigation-close': 'block',
+  'navigation-trigger': 'block',
+  'suggestion-chip': 'block',
+  // A circle by measurement, not by resemblance: `shape='circle'` resolves
+  // `aspect-ratio: 1` with `--ds-radius-full`.
+  'voice-toggle': 'round',
+  // Nothing to stand in for. The skip link is 1px and clipped until it takes
+  // focus; the static particle field is decoration (`inset: 0`,
+  // `pointer-events: none`, a masked ramp) that would paint over the whole
+  // shell; the voice-help drawer is a transient permission overlay on the
+  // `popup`/`dropdown` adjudication, floating below the bar -- its subtree
+  // goes with it, exactly as `empty-state-*` goes with `empty-state`; the
+  // clear control exists only once the query does, which is the reading
+  // `clear-button` already carries; and an error region only exists once
+  // there is an error, as `error-state` and `editor-error` already do.
+  clear: 'omit',
+  error: 'omit',
+  'argument-error': 'omit',
+  'particle-field-static-fallback': 'omit',
+  'skip-link': 'omit',
+  'voice-help': 'omit',
+  'voice-help-actions': 'omit',
+  'voice-help-cancel': 'omit',
+  'voice-help-copy': 'omit',
+  'voice-help-description': 'omit',
+  'voice-help-footer': 'omit',
+  'voice-help-hint': 'omit',
+  'voice-help-list': 'omit',
+  'voice-help-step': 'omit',
+  'voice-help-title': 'omit',
 });
 
 /** A part the renderer has no role for still shows as its own box. */

@@ -92,11 +92,10 @@ describe('command-palette cut -- the loading surface', () => {
     expect(screen.queryByText('Open report')).toBeNull();
   });
 
-  it('feeds the renderer the real row anatomy, and names the one part still owed a role', async () => {
+  it('feeds the renderer the real row anatomy, every part of it roled', async () => {
     renderWithEngine(<ModernCommandPalette {...props({ loading: true })} />, 'modern');
-    const source = (await screen.findByRole('listbox')).querySelector(
-      "[data-part='source']",
-    );
+    const list = await screen.findByRole('listbox');
+    const source = list.querySelector("[data-part='source']");
     const parts = [
       ...new Set(
         [...source!.querySelectorAll('[data-part]')].map((node) =>
@@ -106,12 +105,21 @@ describe('command-palette cut -- the loading surface', () => {
     ].sort();
     expect(parts).toEqual(['description', 'item', 'item-main', 'item-text', 'label']);
 
-    // `SKELETON_PART_ROLES` is the shared renderer's singleton vocabulary and
-    // outside this lot's write set, so the missing roles are ROUTED, not
-    // invented here. This assertion is the routing slip: it fails the day the
-    // DT adds them, and the family's pin comes off with it.
-    const unroled = parts.filter((part) => !(part in SKELETON_PART_ROLES));
-    expect(unroled).toEqual(['item-main', 'item-text']);
+    // The routing slip this assertion used to carry is retired: `item-main`
+    // and `item-text` were routed to the shared renderer's singleton
+    // vocabulary and came back as containers. Until then both fell through to
+    // the unknown-part `block`, so the footprint was a slab over the row and a
+    // second over its text column, and the copy under them never drew.
+    expect(parts.filter((part) => !(part in SKELETON_PART_ROLES))).toEqual([]);
+    expect(SKELETON_PART_ROLES['item-main']).toBe('pass');
+    expect(SKELETON_PART_ROLES['item-text']).toBe('pass');
+
+    const bones = [...list.querySelectorAll("[data-part='bone']")].map(
+      (bone) => `${bone.getAttribute('data-source-part')}:${bone.getAttribute('data-bone')}`,
+    );
+    expect(bones).toEqual(
+      Array.from({ length: 3 }, () => ['label:line', 'description:line']).flat(),
+    );
   });
 
   it('names its loading state in the governed `data-state` vocabulary', async () => {
