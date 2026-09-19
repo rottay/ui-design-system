@@ -663,15 +663,12 @@ export const UNMOUNTABLE_FAMILIES = Object.freeze([
   'command-center',
   'dashboard-activity-interactions',
   'dashboard-metrics-interactions',
-  'data-table-interactions',
   'data-terminal-card-keyframes',
   'decision-inbox',
-  'detail-form-surface',
   'empty-state-surface',
   'file-browser',
   'form-placeholders',
   'import-export',
-  'input-residual',
   'integration',
   'navigation-static',
   'primitive-motion',
@@ -682,7 +679,6 @@ export const UNMOUNTABLE_FAMILIES = Object.freeze([
   'stats-header-keyframes',
   'team',
   'toast-animation-keyframes',
-  'wizard-surface',
 ]);
 
 /**
