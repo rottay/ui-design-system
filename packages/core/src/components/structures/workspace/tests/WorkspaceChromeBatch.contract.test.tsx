@@ -988,18 +988,53 @@ describe("active-filters-bar -- data-part contract (workspace-chrome anatomy)", 
   );
 });
 
+// ---------------------------------------------------------------------------
+// The two switcher families ARE the certified Segmented primitive. Until
+// WO-FAM-11 sub-lot E they renamed its root by passing `data-part='switcher'`,
+// and the engine writes `data-part={caller ?? 'root'}` onto the very node that
+// carries the scope classes -- so that one prop deleted every `[data-part=
+// 'root']` selector `segmented.css` had. The cut retired the prop: the
+// primitive stamps its own `data-part='root'` again, and no `switcher` part
+// exists anywhere in the shipped tree.
+//
+// The composed control is therefore addressed the way its own skin addresses
+// it -- scope classes plus the `role='radiogroup'` the engine stamps
+// unconditionally -- never by a part name these families do not own. Nothing
+// was lost in the cut: the retired hand-rolled pills' `aria-pressed` became
+// APG radiogroup semantics (`role='radio'` + `aria-checked`) plus a roving tab
+// stop and RTL-mirrored arrows, all exercised in each family's own suite.
+// ---------------------------------------------------------------------------
+function composedSegmented(
+  container: HTMLElement,
+  familyRoot: Element
+): HTMLElement {
+  expect(container.querySelector('[data-part="switcher"]')).toBeNull();
+  const matches = q(
+    container,
+    '.ds-segmented.ds-segmented--modern[role="radiogroup"]'
+  );
+  expect(matches).toHaveLength(1);
+  const segmented = matches[0] as HTMLElement;
+  expect(segmented.getAttribute("data-part")).toBe("root");
+  // the family root stays the outer node; the primitive's root nests inside it
+  expect(segmented).not.toBe(familyRoot);
+  expect(familyRoot.contains(segmented)).toBe(true);
+  return segmented;
+}
+
 // ===========================================================================
 // scope-switcher
 // ===========================================================================
 describe("scope-switcher -- data-part contract (workspace-chrome anatomy)", () => {
   it.each(["modern"] as const)(
-    "stamps root/pill/pill-label/count-badge, both data-active branches (%s)",
+    "stamps root + composed option/label/count-badge, all three count branches (%s)",
     async (engine) => {
       const { container } = renderWithEngine(
         <ScopeSwitcher
           scopes={[
             { key: "all", label: "All", count: 12 },
             { key: "mine", label: "Mine", count: 3 },
+            { key: "shared", label: "Shared" },
           ]}
           activeScope="all"
           onScopeChange={() => undefined}
@@ -1012,22 +1047,43 @@ describe("scope-switcher -- data-part contract (workspace-chrome anatomy)", () =
       expect(root.className).toContain("ds-scope-switcher");
       expect(root.getAttribute("data-inline")).toBe("true");
 
-      expect(q(container, '[data-part="switcher"]')).toHaveLength(1);
+      const switcher = composedSegmented(container, root);
+      // the inline variant buys the primitive's compact track, not a frame of
+      // its own (the wrapper paints nothing when data-inline='true')
+      expect(switcher.getAttribute("data-size")).toBe("small");
+
       expect(
         q(container, '[data-part="option"][data-selected="true"]')
       ).toHaveLength(1);
       expect(
         q(container, '[data-part="option"][data-selected="false"]')
-      ).toHaveLength(1);
-      expect(q(container, '[data-part="label"]')).toHaveLength(2);
+      ).toHaveLength(2);
+      expect(q(container, '[data-part="label"]')).toHaveLength(3);
+
+      // The count badge is the family's ONLY owned part: it rides inside the
+      // composed option's label, which is what makes the skin's descendant
+      // rule (`.ds-scope-switcher[data-part='root'] [data-part='count-badge']`)
+      // reach across the composition boundary.
+      const badges = q(container, '[data-part="count-badge"]');
+      expect(badges).toHaveLength(2);
+      expect((badges[0] as HTMLElement).closest('[data-part="label"]')).not.toBeNull();
       expect(
         q(container, '[data-part="count-badge"][data-active="true"]')
+      ).toHaveLength(1);
+      expect(
+        q(container, '[data-part="count-badge"][data-active="false"]')
+      ).toHaveLength(1);
+      // third branch: a countless scope stamps no badge at all
+      expect(
+        Array.from(q(container, '[data-part="option"]')).filter(
+          (option) => option.querySelector('[data-part="count-badge"]') === null
+        )
       ).toHaveLength(1);
     }
   );
 
   it.each(["modern"] as const)(
-    "R2: root is a labelled group, pills carry aria-pressed, typography is skin-owned (%s)",
+    "R2: the composed control is a labelled radiogroup, options carry aria-checked, typography is skin-owned (%s)",
     async (engine) => {
       const { container } = renderWithEngine(
         <ScopeSwitcher
@@ -1042,9 +1098,16 @@ describe("scope-switcher -- data-part contract (workspace-chrome anatomy)", () =
         engine
       );
       const root = await waitForPart(container, "root");
-      const switcher = q(container, '[data-part="switcher"]')[0];
-      expect(switcher.getAttribute("role")).toBe("radiogroup");
+      const switcher = composedSegmented(container, root);
       expect(switcher.getAttribute("aria-label")).toBe("Scope");
+      // the English i18n floor: no provider mounted here, and the group name
+      // is still a word rather than an echoed catalog key
+      expect(switcher.getAttribute("aria-label")).not.toContain(
+        "scopeSwitcher."
+      );
+      // single-select semantics: one radio per scope, exactly one checked --
+      // the upgrade from the retired pills' aria-pressed, not a regression
+      expect(q(container, '[data-part="option"][role="radio"]')).toHaveLength(2);
       expect(
         q(container, '[data-part="option"][aria-checked="true"]')
       ).toHaveLength(1);
@@ -1055,8 +1118,11 @@ describe("scope-switcher -- data-part contract (workspace-chrome anatomy)", () =
       expect(option.style.fontSize).toBe("");
       expect(option.style.fontWeight).toBe("");
       expect(option.style.transition).toBe("");
+      const label = q(container, '[data-part="label"]')[0] as HTMLElement;
+      expect(label.style.fontSize).toBe("");
       const badge = q(container, '[data-part="count-badge"]')[0] as HTMLElement;
       expect(badge.style.fontSize).toBe("");
+      expect(badge.style.transition).toBe("");
     }
   );
 });
@@ -1128,18 +1194,26 @@ describe("view-mode-switcher -- data-part contract (workspace-chrome anatomy)", 
         engine
       );
       const root = await waitForPart(container, "root");
-      const switcher = q(container, '[data-part="switcher"]')[0];
+      const switcher = composedSegmented(container, root);
       expect(switcher.getAttribute("aria-label")).toBe("View mode");
+      // the English floor, not an echoed catalog key (no provider is mounted)
+      expect(switcher.getAttribute("aria-label")).not.toContain(
+        "viewModeSwitcher."
+      );
       const disabled = q(
         container,
         '[data-part="option"][data-disabled="true"]'
       )[0] as HTMLElement;
       expect(disabled.style.opacity).toBe("");
+      // the dim is keyed on stamped state the skin reads
+      // (`[data-part='option'][data-disabled='true']`), never on an inline value
+      expect(disabled.getAttribute("data-state")).toContain("disabled");
       const selected = q(
         container,
         '[data-part="option"][data-selected="true"]'
       )[0] as HTMLElement;
       expect(selected.style.transition).toBe("");
+      expect(selected.style.transform).toBe("");
     }
   );
 });
