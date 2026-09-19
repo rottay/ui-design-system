@@ -89,7 +89,7 @@ describe('density presets (design-language §3)', () => {
     for (const mode of modes) {
       const vars = resolveDensityStyleVars(mode) as unknown as Record<string, string>;
       expect(vars['--ds-density-cell-padding']).toBe(DENSITY_PRESETS[mode].cellPadding);
-      expect(vars['--ds-density-card-padding']).toBe(DENSITY_PRESETS[mode].cardPadding);
+      expect(vars['--ds-density-card-padding']).toBeUndefined();
       expect(vars[DENSITY_LOCAL_FACTOR_VARIABLE]).toBe(
         String(DENSITY_PRESETS[mode].modeFactor),
       );

@@ -151,8 +151,8 @@ export function resolveEffectiveDensityScale(
 /**
  * Builds the CSS custom properties that carry a mode's resolved density preset
  * on a container element. Descendants (tables, cards, embedded collections)
- * read `--ds-density-cell-padding` / `--ds-density-card-padding` /
- * `--ds-density-local-factor` from the cascade. The structural
+ * read `--ds-density-cell-padding` / `--ds-density-local-factor` from the
+ * cascade. The structural
  * `--ds-density-scale` and tenant appearance `--ds-density-mode-factor` remain
  * inherited inputs rather than being overwritten by a component posture.
  *
@@ -163,7 +163,6 @@ export function resolveDensityStyleVars(mode: DensityMode): CSSProperties {
   const preset = DENSITY_PRESETS[mode];
   return {
     '--ds-density-cell-padding': preset.cellPadding,
-    '--ds-density-card-padding': preset.cardPadding,
     [DENSITY_LOCAL_FACTOR_VARIABLE]: String(preset.modeFactor),
   } as unknown as CSSProperties;
 }

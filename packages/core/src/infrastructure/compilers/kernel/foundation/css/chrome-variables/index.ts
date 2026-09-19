@@ -334,7 +334,6 @@ const COLLAPSE_CHROME_VARIABLES = chromeVariableMap<BrandCollapseChrome>(
   "--ds-collapse-",
   [
     "bg",
-    "border",
     "contentBg",
     "headerBg",
     "headerBgHover",

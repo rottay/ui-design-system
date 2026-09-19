@@ -3,7 +3,7 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "f16deb6116fa902fdb12808f1ec5098e274035f8d1e953a7d2239641556e3223",
+    "inputsDigest": "30af5f39824a938346c2fe6825979b3b7d4d2d2451c9cd32b95a70389130fbf4",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 492,
@@ -13,28 +13,28 @@
     }
   },
   "counts": {
-    "universe": 8508,
-    "writers": 7065,
-    "foundationTokens": 4135,
+    "universe": 8505,
+    "writers": 7063,
+    "foundationTokens": 4134,
     "componentTokens": 690,
-    "tenantChannels": 4078,
+    "tenantChannels": 4077,
     "publicHooks": 93,
-    "unadjudicatedReads": 1414,
-    "deadWriters": 274,
+    "unadjudicatedReads": 1411,
+    "deadWriters": 272,
     "frontierReserved": 0,
     "modernConsumedUnique": 4727,
     "tsReadNames": 2857,
-    "tsWriteNames": 3479,
+    "tsWriteNames": 3478,
     "tsMetadataNames": 3039,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
   "frontierFamilies": [],
   "deadByClass": {
-    "foundation": 125,
+    "foundation": 124,
     "component": 0,
-    "tenantChannel": 203,
-    "authoredCssLocal": 7
+    "tenantChannel": 202,
+    "authoredCssLocal": 6
   },
   "controls": {
     "tenantBasic": [
@@ -204,7 +204,6 @@
     "--ds-cell-pill-dot-current",
     "--ds-cell-pill-shadow",
     "--ds-chart-card-bg",
-    "--ds-collapse-border",
     "--ds-collection-card-action-bg",
     "--ds-collection-card-action-border",
     "--ds-collection-card-action-color",
@@ -277,7 +276,6 @@
     "--ds-compact-card-transition",
     "--ds-compact-card-value-color",
     "--ds-compact-card-value-color-hover",
-    "--ds-density-card-padding",
     "--ds-duration-gentle",
     "--ds-duration-instant",
     "--ds-ease-in-out",
@@ -25598,21 +25596,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-collapse-border": {
-      "category": "compiler-derived-channel",
-      "tier": "tenant-bounded",
-      "status": "dead-writer",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": false,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-collapse-border-color": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -41948,28 +41931,13 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-density-card-padding": {
-      "category": "authored-css-local",
-      "tier": "internal",
-      "status": "dead-writer",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 2
-    },
     "--ds-density-card-padding-comfortable": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
+      "category": "consumed-external-origin",
+      "tier": "internal",
+      "status": "active",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 0,
         "ts": 1,
         "tests": true,
         "modern": false,
@@ -41979,29 +41947,14 @@
       "tsMetadataMentions": 0
     },
     "--ds-density-card-padding-compact": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
+      "category": "consumed-external-origin",
+      "tier": "internal",
+      "status": "active",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 0,
         "ts": 1,
         "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-density-card-padding-spacious": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
-        "ts": 0,
-        "tests": false,
         "modern": false,
         "artifact": false
       },
@@ -42119,7 +42072,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 6,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -42164,7 +42117,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 2,
         "ts": 1,
         "tests": true,
         "modern": false,

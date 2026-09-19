@@ -171,7 +171,7 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-child-padding-inline"] = "var(--ds-sidebar-item-indent, var(--ds-spacing-2))";
   vars["--ds-menu-inline-indent"] = "var(--ds-spacing-6)";
   vars["--ds-menu-item-font-family"] = "var(--ds-type-body-font-family)";
-  vars["--ds-menu-item-font-size"] = "var(--ds-type-body-font-size)";
+  vars["--ds-menu-item-font-size"] = "var(--ds-sidebar-item-font-size, var(--ds-type-body-font-size))";
   vars["--ds-menu-item-font-size-child"] = "var(--ds-sidebar-item-font-size-child, var(--ds-type-supporting-font-size))";
   vars["--ds-menu-item-font-weight"] = "var(--ds-font-weight-medium)";
   vars["--ds-menu-item-font-weight-selected"] = "var(--ds-font-weight-semibold)";

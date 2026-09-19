@@ -101,35 +101,14 @@
 
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="compact"] {
   --ds-density-local-factor: var(--ds-density-factor-compact, 0.85);
-  --ds-density-card-padding: var(
-    --ds-density-card-padding-compact,
-    calc(
-      0.75rem *
-        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
-    )
-  );
 }
 
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="comfortable"] {
   --ds-density-local-factor: var(--ds-density-factor-comfortable, 1);
-  --ds-density-card-padding: var(
-    --ds-density-card-padding-comfortable,
-    calc(
-      1rem *
-        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
-    )
-  );
 }
 
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="spacious"] {
   --ds-density-local-factor: var(--ds-density-factor-spacious, 1.15);
-  --ds-density-card-padding: var(
-    --ds-density-card-padding-spacious,
-    calc(
-      1.125rem *
-        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
-    )
-  );
 }
 
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card {
