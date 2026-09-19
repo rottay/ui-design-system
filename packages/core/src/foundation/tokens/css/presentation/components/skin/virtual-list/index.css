@@ -42,7 +42,7 @@
 }
 
 .ds-pattern-virtual-list[data-part='root'] {
-  block-size: var(--ds-virtual-list-block-size, 100%);
+  block-size: var(--ds-virtual-list-block-size, var(--ds-drawer-size-full, 100%));
   /* The windowed region is the scrollport: it scrolls on the block axis and is
      the positioning host every measured row anchors to. */
   overflow-y: auto;
@@ -68,7 +68,7 @@
    logical, so the window mirrors under `dir="rtl"` with zero overrides. */
 .ds-pattern-virtual-list[data-part='root'] > [data-part='spacer'] > [data-part='item'] {
   position: absolute;
-  inset-block-start: var(--ds-virtual-list-item-inset-block-start, 0);
+  inset-block-start: var(--ds-virtual-list-item-inset-block-start, var(--ds-select-virtual-offset, 0));
   inset-inline: 0;
 }
 
@@ -85,7 +85,7 @@
    viewport bound travels with it): the caller's empty composition stays
    centered in the viewport the populated list would have occupied. */
 .ds-pattern-virtual-list[data-part='empty'] {
-  block-size: var(--ds-virtual-list-block-size, 100%);
+  block-size: var(--ds-virtual-list-block-size, var(--ds-drawer-size-full, 100%));
   display: grid;
   place-items: center;
   min-block-size: 8rem;

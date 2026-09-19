@@ -26,6 +26,7 @@ export const cardChromeDeriver: FamilyDeriver = {
     "--ds-card-underline-border-width",
     "--ds-card-nested-shadow",
     "--ds-card-padding-base",
+    "--ds-card-instance-padding",
     "--ds-card-loading-min-height",
     "--ds-card-primary-title-color",
     "--ds-card-success-title-color",
@@ -60,6 +61,8 @@ export function deriveCardChannels(): Record<string, string> {
   vars["--ds-card-underline-border-width"] = "var(--ds-edge-hairline-width)";
   vars["--ds-card-nested-shadow"] = "none";
   vars["--ds-card-padding-base"] = "var(--ds-card-padding, var(--ds-card-md-padding))";
+  vars["--ds-card-instance-padding"] =
+    "calc(var(--ds-card-padding-md, var(--ds-card-padding-base)) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-card-loading-min-height"] = "calc(var(--ds-spacing-10) * 3 * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-card-primary-title-color"] = "var(--ds-color-primary-900)";
   vars["--ds-card-success-title-color"] = "var(--ds-color-success-900)";

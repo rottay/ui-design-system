@@ -20,7 +20,7 @@
   background: var(--ds-breadcrumb-bg);
   color: var(--ds-breadcrumb-color, var(--ds-color-text-secondary));
   font-family: var(--ds-breadcrumb-font-family, var(--ds-type-supporting-font-family));
-  box-shadow: var(--ds-breadcrumb-shadow);
+  box-shadow: var(--ds-breadcrumb-shadow, var(--ds-elevation-1));
   scrollbar-width: none;
 }
 
@@ -32,7 +32,7 @@
   display: flex;
   min-inline-size: max-content;
   align-items: center;
-  gap: var(--ds-breadcrumb-list-gap);
+  gap: var(--ds-breadcrumb-list-gap, var(--ds-spacing-0));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -68,11 +68,11 @@
   white-space: nowrap;
   cursor: default;
   transition:
-    color var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
-    background-color var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
-    border-color var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
-    box-shadow var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing),
-    transform var(--ds-breadcrumb-motion-duration) var(--ds-breadcrumb-motion-easing);
+    color var(--ds-breadcrumb-motion-duration, var(--ds-motion-feedback)) var(--ds-breadcrumb-motion-easing, var(--ds-motion-ease-standard)),
+    background-color var(--ds-breadcrumb-motion-duration, var(--ds-motion-feedback)) var(--ds-breadcrumb-motion-easing, var(--ds-motion-ease-standard)),
+    border-color var(--ds-breadcrumb-motion-duration, var(--ds-motion-feedback)) var(--ds-breadcrumb-motion-easing, var(--ds-motion-ease-standard)),
+    box-shadow var(--ds-breadcrumb-motion-duration, var(--ds-motion-feedback)) var(--ds-breadcrumb-motion-easing, var(--ds-motion-ease-standard)),
+    transform var(--ds-breadcrumb-motion-duration, var(--ds-motion-feedback)) var(--ds-breadcrumb-motion-easing, var(--ds-motion-ease-standard));
 }
 
 /* Crumbs are anchors, buttons or inert spans: UA button chrome never leaks through. */
@@ -103,11 +103,11 @@
 @media (hover: hover) {
   .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='hovered'], :hover),
   .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='hovered'], :hover) {
-    border-color: var(--ds-breadcrumb-hover-border);
-    background: var(--ds-breadcrumb-hover-bg);
+    border-color: var(--ds-breadcrumb-hover-border, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle)));
+    background: var(--ds-breadcrumb-hover-bg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
     color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
-    box-shadow: var(--ds-breadcrumb-hover-shadow);
-    transform: translateY(var(--ds-breadcrumb-hover-lift));
+    box-shadow: var(--ds-breadcrumb-hover-shadow, var(--ds-elevation-1));
+    transform: translateY(var(--ds-breadcrumb-hover-lift, calc(-1px * var(--ds-motion-intensity))));
   }
 
   .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='hovered'], :hover) [data-part='label'] {
@@ -122,8 +122,8 @@
 /* A held press keeps the wash and drops the lift back onto the surface. */
 .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='pressed'], :active),
 .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='pressed'], :active) {
-  border-color: var(--ds-breadcrumb-hover-border);
-  background: var(--ds-breadcrumb-hover-bg);
+  border-color: var(--ds-breadcrumb-hover-border, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle)));
+  background: var(--ds-breadcrumb-hover-bg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
   color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
   box-shadow: none;
   transform: translateY(0);
@@ -137,11 +137,11 @@
 }
 
 .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
-  border-color: var(--ds-breadcrumb-current-border);
-  background: var(--ds-breadcrumb-current-bg);
+  border-color: var(--ds-breadcrumb-current-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle)));
+  background: var(--ds-breadcrumb-current-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
   color: var(--ds-breadcrumb-active-color, var(--ds-color-text-primary));
   font-weight: var(--ds-breadcrumb-current-font-weight, var(--ds-font-weight-semibold));
-  box-shadow: var(--ds-breadcrumb-current-keyline);
+  box-shadow: var(--ds-breadcrumb-current-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(58% * var(--ds-effect-intensity)), transparent));
 }
 
 .ds-breadcrumb--modern[data-part='root'] [data-part='icon'] {
@@ -167,11 +167,11 @@
 
 .ds-breadcrumb--modern[data-part='root'] [data-ellipsis='true'] [data-part='crumb'],
 .ds-breadcrumb--modern[data-part='root'] [data-ellipsis='true'] [data-part='overflow-trigger'] {
-  min-inline-size: var(--ds-breadcrumb-ellipsis-min-width);
+  min-inline-size: var(--ds-breadcrumb-ellipsis-min-width, var(--ds-spacing-7));
   justify-content: center;
-  padding-inline: var(--ds-breadcrumb-ellipsis-padding-inline);
+  padding-inline: var(--ds-breadcrumb-ellipsis-padding-inline, var(--ds-spacing-2));
   color: var(--ds-breadcrumb-ellipsis-color, var(--ds-color-text-muted));
-  background: var(--ds-breadcrumb-ellipsis-bg);
+  background: var(--ds-breadcrumb-ellipsis-bg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
 }
 
 @media (hover: none), (pointer: coarse) {

@@ -89,7 +89,8 @@ export function derivePaginationChannels(): Record<string, string> {
   vars["--ds-pagination-lg-height"] = "var(--ds-spacing-11)";
   vars["--ds-pagination-lg-padding-x"] = "var(--ds-spacing-5)";
   vars["--ds-pagination-lg-font-size"] = "var(--ds-font-size-base)";
-  vars["--ds-pagination-nav-inline-size"] = "var(--ds-pagination-current-height)";
+  vars["--ds-pagination-nav-inline-size"] =
+    "var(--ds-pagination-md-height, var(--_ds-pagination-current-height))";
 
   // Cells: paired card material at rest, primary tint on hover and press, inverted current page.
   vars["--ds-pagination-item-bg"] = "var(--ds-card-bg, var(--ds-surface-card))";

@@ -118,15 +118,15 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-action-cell-padding-comfortable"] = "0 0.625rem";
   vars["--ds-data-table-action-cell-padding-compact"] = "0 0.5rem";
   vars["--ds-data-table-action-cell-padding-spacious"] = "0 0.75rem";
-  vars["--ds-data-table-action-shadow"] = "none";
+  vars["--ds-data-table-action-shadow"] = "var(--ds-elevation-0, none)";
   vars["--ds-data-table-bulk-bar-padding"] =
     "calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-caption-font-size"] = "var(--ds-font-size-xs)";
   vars["--ds-data-table-collapsed-min-inline-size"] = "34rem";
   vars["--ds-data-table-control-font-size"] = "var(--ds-button-sm-font-size, var(--ds-font-size-sm))";
-  vars["--ds-data-table-control-size"] = "calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
-  vars["--ds-data-table-control-size-compact"] = "calc(1.75rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
-  vars["--ds-data-table-control-size-spacious"] = "calc(2.25rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
+  vars["--ds-data-table-control-size"] = "calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
+  vars["--ds-data-table-control-size-compact"] = "calc(var(--ds-spacing-7, 1.75rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
+  vars["--ds-data-table-control-size-spacious"] = "calc(var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-data-table-drag-grip-bg"] = "color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)";
   vars["--ds-data-table-drag-grip-border"] = "color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)";
   vars["--ds-data-table-drag-grip-opacity"] = "0.58";
@@ -135,15 +135,15 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-drop-indicator-border"] = "color-mix(in srgb, var(--ds-color-primary) 52%, transparent)";
   vars["--ds-data-table-drop-indicator-inset"] = "0.1875rem";
   vars["--ds-data-table-drop-indicator-shadow"] = "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent)";
-  vars["--ds-data-table-editor-checkbox-size"] = "1rem";
+  vars["--ds-data-table-editor-checkbox-size"] = "var(--ds-spacing-4, 1rem)";
   vars["--ds-data-table-editor-error-font-size"] = "var(--ds-font-size-xs)";
   vars["--ds-data-table-editor-input-font-size"] = "var(--ds-font-size-sm, 0.875rem)";
-  vars["--ds-data-table-editor-input-line-height"] = "1.5";
+  vars["--ds-data-table-editor-input-line-height"] = "var(--ds-line-height-normal, 1.5)";
   vars["--ds-data-table-editor-input-padding"] = "0.25rem 0.5rem";
   vars["--ds-data-table-editorial-cell-padding-block"] = "1.125rem";
   vars["--ds-data-table-editorial-header-bg"] = "transparent";
-  vars["--ds-data-table-editorial-header-padding-block"] = "1rem";
-  vars["--ds-data-table-editorial-header-transform"] = "uppercase";
+  vars["--ds-data-table-editorial-header-padding-block"] = "var(--ds-spacing-4, 1rem)";
+  vars["--ds-data-table-editorial-header-transform"] = "var(--ds-text-eyebrow-transform, uppercase)";
   vars["--ds-data-table-editorial-lead-font-weight"] = "var(--ds-type-section-title-font-weight, 600)";
   vars["--ds-data-table-editorial-row-shadow"] = "var(--ds-elevation-1)";
   vars["--ds-data-table-empty-description-font-size"] = "var(--ds-button-sm-font-size, var(--ds-font-size-sm))";
@@ -163,7 +163,7 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-leading-cell-padding-compact"] = "0.375rem 0.75rem 0.375rem 0.125rem";
   vars["--ds-data-table-leading-cell-padding-spacious"] = "1rem 1rem 1rem 0.25rem";
   vars["--ds-data-table-min-inline-size"] = "42rem";
-  vars["--ds-data-table-minimal-shadow"] = "none";
+  vars["--ds-data-table-minimal-shadow"] = "var(--ds-elevation-0, none)";
   // Each phone chrome bar states its ground AND the quiet ink that sits on it,
   // so the ink flips with the mode instead of borrowing a page role graded for
   // the page ground. 72% of the reading ink is the floor's own answer: the
@@ -186,7 +186,7 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-pinned-cell-bg-striped"] = "var(--ds-table-row-bg-striped, var(--ds-surface-inset))";
   vars["--ds-data-table-resize-bar-height"] = "58%";
   vars["--ds-data-table-resize-bar-width"] = "0.125rem";
-  vars["--ds-data-table-resize-hit-size"] = "1rem";
+  vars["--ds-data-table-resize-hit-size"] = "var(--ds-spacing-4, 1rem)";
   vars["--ds-data-table-row-selected-shadow"] = "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent)";
   vars["--ds-data-table-rule-strong"] = "var(--ds-color-border-secondary)";
   vars["--ds-data-table-selection-cell-padding-comfortable"] = "0 0 0 0.4375rem";
@@ -208,6 +208,6 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-state-copy-max-inline-size"] = "32rem";
   vars["--ds-data-table-toolbar-gap"] = "calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-touch-hit-expansion"] = "0.5625rem";
-  vars["--ds-data-table-touch-target"] = "2.75rem";
+  vars["--ds-data-table-touch-target"] = "var(--ds-spacing-11, 2.75rem)";
   return vars;
 }

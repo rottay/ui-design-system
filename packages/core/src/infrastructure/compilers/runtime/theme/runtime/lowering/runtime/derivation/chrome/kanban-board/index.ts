@@ -63,6 +63,6 @@ export function deriveKanbanBoardChannels(): Record<string, string> {
   // A column scrolls only when the consumer caps it; uncapped it grows.
   vars["--ds-kanban-board-column-max-height"] = "none";
   vars["--ds-kanban-board-column-min-width"] = "280px";
-  vars["--ds-kanban-board-touch-target"] = "2.75rem";
+  vars["--ds-kanban-board-touch-target"] = "var(--ds-spacing-11, 2.75rem)";
   return vars;
 }

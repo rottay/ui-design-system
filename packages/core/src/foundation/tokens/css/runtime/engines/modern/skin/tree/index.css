@@ -458,7 +458,7 @@
 }
 
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'] {
-  inset-inline-start: var(--ds-tree-connector-inset);
+  inset-inline-start: var(--ds-tree-connector-inset, var(--ds-spacing-0, 0));
 }
 /* A full-span guide runs the whole row; a half-span stops at the elbow. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'][data-span='full'] {
@@ -474,7 +474,7 @@
 }
 
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] {
-  padding-inline-start: var(--ds-tree-row-indent);
+  padding-inline-start: var(--ds-tree-row-indent, var(--ds-spacing-0, 0));
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'][data-position='before'] {
   inset-block-start: calc(-1 * var(--ds-edge-hairline-width, 1px));
@@ -485,7 +485,7 @@
 
 /* The node row carries its own depth. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [role='treeitem'] {
-  padding-inline-start: var(--ds-tree-row-indent);
+  padding-inline-start: var(--ds-tree-row-indent, var(--ds-spacing-0, 0));
 }
 
 /* The node compound's own box: layout, rhythm, the disabled dial and the

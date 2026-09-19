@@ -781,11 +781,11 @@
 .ds-table.ds-table--modern [data-part='header-cell'],
 .ds-table.ds-table--modern [data-part='cell'] {
   inline-size: var(--ds-table-col-width);
-  min-inline-size: var(--ds-table-col-min-width);
+  min-inline-size: var(--ds-table-col-min-width, var(--ds-spacing-0, 0));
 }
 
 .ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'] {
-  inset-block-start: var(--ds-table-sticky-top);
+  inset-block-start: var(--ds-table-sticky-top, var(--ds-spacing-0, 0));
 }
 
 /* A truncating column: the cap rides its own channel, the rest is the rule. */
@@ -793,12 +793,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-inline-size: var(--ds-table-cell-ellipsis-max-width, 320px);
+  max-inline-size: var(--ds-table-cell-ellipsis-max-width, var(--ds-spacing-80, 320px));
 }
 
 /* Virtualization spacers hold the scroll height above and below the window. */
 .ds-table.ds-table--modern [data-part='virtual-spacer'] {
-  block-size: var(--ds-table-virtual-spacer, 0);
+  block-size: var(--ds-table-virtual-spacer, var(--ds-spacing-0, 0));
 }
 
 .ds-table.ds-table--modern [data-part='scroll-container'][data-scroll-y='true'] {

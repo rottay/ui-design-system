@@ -74,6 +74,7 @@ export const menuChromeDeriver: FamilyDeriver = {
     "--ds-menu-item-font-weight-selected",
     "--ds-menu-item-line-height",
     "--ds-menu-item-lift",
+    "--ds-menu-level",
     "--ds-menu-touch-target-min",
     "--ds-menu-disabled-opacity",
     "--ds-menu-item-danger-color",
@@ -176,6 +177,10 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-item-font-weight-selected"] = "var(--ds-font-weight-semibold)";
   vars["--ds-menu-item-line-height"] = "var(--ds-type-body-line-height)";
   vars["--ds-menu-item-lift"] = "calc(-1px * var(--ds-motion-intensity))";
+  /* The hierarchy multiplier the engine stamps per row: the skin declares the
+     name at the component root, so this derived statement rests underneath it
+     and the zero rung of the spacing ramp lands the read on a produced root. */
+  vars["--ds-menu-level"] = "var(--ds-spacing-0, 0)";
   vars["--ds-menu-touch-target-min"] = "var(--ds-touch-target-min)";
   vars["--ds-menu-disabled-opacity"] = "0.5";
 
@@ -210,7 +215,7 @@ export function deriveMenuChannels(): Record<string, string> {
   vars["--ds-menu-icon-opacity"] = "0.7";
   vars["--ds-menu-icon-scale"] = "calc(1 + 0.04 * var(--ds-motion-intensity))";
   vars["--ds-menu-arrow-size"] = "var(--ds-spacing-4)";
-  vars["--ds-menu-arrow-bg"] = "color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)";
+  vars["--ds-menu-arrow-bg"] = "var(--ds-type-code-inline-bg, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))";
   vars["--ds-menu-arrow-opacity"] = "0.4";
 
   // Disclosure panels and the nested thread that reads them as a tree.

@@ -14,12 +14,12 @@
 
 .ds-structure.ds-sidebar-surface[data-part='root'] {
   --ds-sidebar-surface-inline-size: var(--ds-sidebar-surface-width);
-  --ds-sidebar-surface-aside-inline-size: var(--ds-sidebar-surface-aside-width);
+  --ds-sidebar-surface-aside-inline-size: var(--ds-sidebar-surface-aside-width, var(--ds-spacing-80, 320px));
   display: grid;
   grid-template-columns: var(--ds-sidebar-surface-inline-size) minmax(0, 1fr);
-  gap: var(--ds-sidebar-surface-gap);
+  gap: var(--ds-sidebar-surface-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
   align-items: start;
-  transition: grid-template-columns var(--ds-sidebar-surface-motion-duration) var(--ds-sidebar-surface-motion-easing);
+  transition: grid-template-columns var(--ds-sidebar-surface-motion-duration, var(--ds-motion-rearrange, var(--ds-motion-normal))) var(--ds-sidebar-surface-motion-easing, var(--ds-motion-ease-move));
 }
 
 .ds-structure.ds-sidebar-surface[data-part='root'][data-collapsed='true'] {
@@ -27,7 +27,7 @@
 }
 
 .ds-structure.ds-sidebar-surface[data-part='root'][data-aside='true'] {
-  grid-template-columns: var(--ds-sidebar-surface-inline-size) minmax(0, 1fr) var(--ds-sidebar-surface-aside-inline-size);
+  grid-template-columns: var(--ds-sidebar-surface-inline-size) minmax(0, 1fr) var(--ds-sidebar-surface-aside-inline-size, var(--ds-sidebar-surface-aside-width));
 }
 
 /* The stacked posture is a column; `align-items: start` would collapse every child to content width here. */
@@ -35,7 +35,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--ds-sidebar-surface-stacked-gap);
+  gap: var(--ds-sidebar-surface-stacked-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-sidebar-surface[data-part='root'] > .ds-sidebar-surface-panel {
@@ -45,7 +45,7 @@
 .ds-sidebar-surface[data-part='root'] [data-part='panel-body'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-sidebar-surface-panel-gap);
+  gap: var(--ds-sidebar-surface-panel-gap, var(--ds-spacing-4, 16px));
 }
 
 .ds-sidebar-surface[data-part='root'] [data-part='navigation'] {
@@ -57,14 +57,14 @@
   display: flex;
   min-inline-size: 0;
   flex-direction: column;
-  gap: var(--ds-sidebar-surface-main-gap);
+  gap: var(--ds-sidebar-surface-main-gap, var(--ds-spacing-4, 16px));
 }
 
 /* The separator lives on the main region's inline-start edge so the Card keeps its own frame. */
 .ds-sidebar-surface[data-part='root'][data-bordered='true']:not([data-stacked='true']) [data-part='main'] {
-  border-inline-start: var(--ds-sidebar-surface-divider);
-  padding-inline-start: var(--ds-sidebar-surface-gap);
-  margin-inline-start: calc(-1 * var(--ds-sidebar-surface-gap));
+  border-inline-start: var(--ds-sidebar-surface-divider, var(--ds-edge-standard-width) var(--ds-edge-standard-style) var(--ds-sidebar-border, var(--ds-color-border-subtle)));
+  padding-inline-start: var(--ds-sidebar-surface-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1)));
+  margin-inline-start: calc(-1 * var(--ds-sidebar-surface-gap, calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1))));
 }
 
 @media (prefers-reduced-motion: reduce) {

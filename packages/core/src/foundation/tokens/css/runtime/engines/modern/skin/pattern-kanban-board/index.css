@@ -351,7 +351,7 @@
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'],
   .ds-pattern-kanban-board.ds-engine-modern [data-part='card-move-button'] {
-    min-block-size: var(--ds-kanban-board-touch-target, 2.75rem);
+    min-block-size: var(--ds-kanban-board-touch-target, var(--ds-spacing-11, 2.75rem));
   }
 }
 

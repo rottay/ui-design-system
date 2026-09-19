@@ -141,7 +141,7 @@
         card. The recipe keeps its declaration for its other readers. ---- */
 .rottay-collapse[data-part='root'] [data-part='panel'] {
   border-radius: var(--ds-collapse-root-default-idle-border-radius, var(--ds-radius-md));
-  background: var(--ds-collapse-panel-surface);
+  background: var(--ds-collapse-panel-surface, var(--ds-material-card-background, var(--ds-surface-card)));
   box-shadow: var(--ds-collapse-root-default-idle-shadow, none);
 }
 .rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='panel'] {
@@ -204,7 +204,7 @@
    step that the frozen bridge also reads, and on a dark ground it read
    1.05:1. */
 .rottay-collapse[data-part='root'] [data-part='header'][data-expanded='true']:not([data-disabled='true']) {
-  color: var(--ds-collapse-header-expanded-ink);
+  color: var(--ds-collapse-header-expanded-ink, color-mix(in srgb, var(--ds-color-primary) 35%, var(--ds-color-text-primary)));
 }
 .rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
   color: var(--ds-collapse-header-default-disabled-color, var(--ds-color-text-disabled));
@@ -330,8 +330,8 @@
 
 .rottay-collapse[data-part='root'] [data-part='header'] {
   transition:
-    background var(--ds-collapse-state-motion-duration) var(--ds-collapse-arrow-motion-easing),
-    color var(--ds-collapse-state-motion-duration) var(--ds-collapse-arrow-motion-easing);
+    background var(--ds-collapse-state-motion-duration, var(--ds-motion-feedback)) var(--ds-collapse-arrow-motion-easing, var(--ds-motion-ease-out)),
+    color var(--ds-collapse-state-motion-duration, var(--ds-motion-feedback)) var(--ds-collapse-arrow-motion-easing, var(--ds-motion-ease-out));
 }
 /* Hover is hover-capable-only (4th-wave law); the pressed rule below already
    gives touch and keyboard the equivalent deepened surface on :active. */
@@ -431,7 +431,7 @@
   min-inline-size: 0;
   display: flex;
   align-items: center;
-  gap: var(--ds-collapse-header-gap);
+  gap: var(--ds-collapse-header-gap, var(--ds-spacing-2));
 }
 
 .rottay-collapse[data-part='root'] [data-part='label'] {
@@ -447,8 +447,8 @@
 .rottay-collapse[data-part='root'] [data-part='content'] {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--ds-collapse-reveal-motion-duration)
-    var(--ds-collapse-reveal-motion-easing);
+  transition: grid-template-rows var(--ds-collapse-reveal-motion-duration, var(--ds-motion-reveal))
+    var(--ds-collapse-reveal-motion-easing, var(--ds-motion-ease-out));
 }
 
 .rottay-collapse[data-part='root'] [data-part='content'][data-expanded='true'] {
@@ -460,8 +460,8 @@
   overflow: hidden;
   opacity: 0;
   transition:
-    opacity var(--ds-collapse-reveal-motion-duration) var(--ds-collapse-reveal-motion-easing),
-    padding var(--ds-collapse-reveal-motion-duration) var(--ds-collapse-reveal-motion-easing);
+    opacity var(--ds-collapse-reveal-motion-duration, var(--ds-motion-reveal)) var(--ds-collapse-reveal-motion-easing, var(--ds-motion-ease-out)),
+    padding var(--ds-collapse-reveal-motion-duration, var(--ds-motion-reveal)) var(--ds-collapse-reveal-motion-easing, var(--ds-motion-ease-out));
 }
 
 .rottay-collapse[data-part='root'] [data-part='content-inner'][data-expanded='true'] {
@@ -470,6 +470,6 @@
 
 .rottay-collapse[data-part='root'] [data-part='arrow'] {
   display: inline-block;
-  transition: transform var(--ds-collapse-arrow-motion-duration)
-    var(--ds-collapse-arrow-motion-easing);
+  transition: transform var(--ds-collapse-arrow-motion-duration, var(--ds-motion-feedback))
+    var(--ds-collapse-arrow-motion-easing, var(--ds-motion-ease-out));
 }

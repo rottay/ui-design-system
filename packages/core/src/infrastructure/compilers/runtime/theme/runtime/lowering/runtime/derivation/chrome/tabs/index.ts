@@ -126,6 +126,7 @@ export const tabsChromeDeriver: FamilyDeriver = {
     "--ds-tabs-indicator-radius",
     "--ds-tabs-indicator-shadow",
     "--ds-tabs-indicator-motion-duration",
+    "--ds-tabs-indicator-offset",
     "--ds-tabs-overflow-control-size",
     "--ds-tabs-overflow-control-border",
     "--ds-tabs-overflow-control-bg",
@@ -164,7 +165,7 @@ export function deriveTabsChannels(): Record<string, string> {
   // by density and by the control-height factor once each, so the base is the
   // ramp step's own rem, not the ramp (which already carries density).
   vars["--ds-tabs-sm-height"] = "calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
-  vars["--ds-tabs-sm-padding"] = "0 var(--ds-spacing-3)";
+  vars["--ds-tabs-sm-padding"] = "0 var(--ds-spacing-3, 12px)";
   vars["--ds-tabs-sm-font-size"] = "var(--ds-type-supporting-font-size)";
   vars["--ds-tabs-sm-icon-size"] = "var(--ds-icon-sm-size)";
   vars["--ds-tabs-md-height"] = "calc(2.25rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
@@ -176,11 +177,11 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-responsive-font-size"] = "var(--ds-tabs-md-font-size)";
   vars["--ds-tabs-responsive-icon-size"] = "var(--ds-tabs-md-icon-size)";
   vars["--ds-tabs-lg-height"] = "calc(2.5rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
-  vars["--ds-tabs-lg-padding"] = "0 var(--ds-spacing-4)";
+  vars["--ds-tabs-lg-padding"] = "0 var(--ds-spacing-4, 16px)";
   vars["--ds-tabs-lg-font-size"] = "var(--ds-font-size-base)";
   vars["--ds-tabs-lg-icon-size"] = "var(--ds-icon-md-size)";
   vars["--ds-tabs-mobile-gap"] = "var(--ds-spacing-0)";
-  vars["--ds-tabs-mobile-padding"] = "0 var(--ds-spacing-2)";
+  vars["--ds-tabs-mobile-padding"] = "0 var(--ds-spacing-2, 8px)";
   vars["--ds-tabs-mobile-item-max-width"] = "12rem";
 
   // Trays: the recipe surfaces on the inset and card materials.
@@ -274,6 +275,10 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-indicator-radius"] = "var(--ds-radius-full) var(--ds-radius-full) 0 0";
   vars["--ds-tabs-indicator-shadow"] = "none";
   vars["--ds-tabs-indicator-motion-duration"] = "var(--ds-motion-rearrange, var(--ds-motion-normal))";
+  // The measured offset is runtime data: produced at the resting value the
+  // skin's root arm declares, so the read lands on a root while the element
+  // statement and the engine's measured overwrite still outrank this one.
+  vars["--ds-tabs-indicator-offset"] = "var(--ds-spacing-0, 0px)";
 
   // Overflow controls on the raised material and the elevation scale.
   vars["--ds-tabs-overflow-control-size"] = "var(--ds-spacing-8)";
@@ -285,8 +290,8 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-overflow-control-shadow-hover"] = "var(--ds-elevation-2)";
 
   // The panel, plain or contained.
-  vars["--ds-tabs-panel-padding"] = "var(--ds-spacing-4) 0 0";
-  vars["--ds-tabs-panel-gap"] = "var(--ds-spacing-3)";
+  vars["--ds-tabs-panel-padding"] = "var(--ds-spacing-4, 16px) 0 0";
+  vars["--ds-tabs-panel-gap"] = "var(--ds-spacing-3, 12px)";
   vars["--ds-tabs-panel-border"] = "var(--ds-color-border-subtle)";
   vars["--ds-tabs-panel-radius"] = "var(--ds-radius-lg)";
   vars["--ds-tabs-panel-bg"] = "var(--ds-surface-card)";

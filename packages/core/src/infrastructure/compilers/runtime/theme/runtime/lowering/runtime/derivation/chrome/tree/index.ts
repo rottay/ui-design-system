@@ -5,6 +5,13 @@
  * foundation minimum, its drop affordance on the primary seed, and the two
  * opacity dials that separate a disabled node from one filtered out.
  *
+ * The depth channels the engine stamps per node (the connector inset and the
+ * row indent) are produced at the spacing ramp's zero rung: the skin declares
+ * both at the family root and the TSX re-stamps them per node, so these
+ * derived statements rest underneath and a read whose channel is never stated
+ * still lands on a produced root. The node's base opacity is a full-opacity
+ * keyword no opacity rung shares, so it stays unproduced and literal.
+ *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/tree
  * @category Compilers
  * @package @rottay/design-system
@@ -29,6 +36,8 @@ export const treeChromeDeriver: FamilyDeriver = {
     "--ds-tree-drop-indicator-color",
     "--ds-tree-disabled-opacity",
     "--ds-tree-filtered-out-opacity",
+    "--ds-tree-connector-inset",
+    "--ds-tree-row-indent",
   ],
   derive: () => deriveTreeChannels(),
 };
@@ -54,6 +63,12 @@ export function deriveTreeChannels(): Record<string, string> {
   // filter excluded. They are separate dials so a tenant can tell them apart.
   vars["--ds-tree-disabled-opacity"] = "0.5";
   vars["--ds-tree-filtered-out-opacity"] = "0.4";
+
+  /* Depth geometry the skin declares at the family root and the TSX stamps per
+     node: produced underneath at the zero rung so an unstated channel still
+     lands on a produced root. */
+  vars["--ds-tree-connector-inset"] = "var(--ds-spacing-0, 0)";
+  vars["--ds-tree-row-indent"] = "var(--ds-spacing-0, 0)";
 
   return vars;
 }

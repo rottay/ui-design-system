@@ -4,6 +4,16 @@
  * the numeric postures its figures align on, and the coarse-pointer sizes its
  * selection control and hit areas take from the touch-target foundation.
  *
+ * The runtime geometry channels the Modern skin declares at the family root
+ * (the TSX stamps what only the runtime knows: a resized column, a sticky
+ * offset, a virtual spacer) are produced here at the same resting values, so a
+ * read whose channel is never stated still lands on a produced root: the zero
+ * offsets ride the spacing ramp's zero rung and the truncating cap rides the
+ * 20rem rung. The skin's family-root declarations and the per-element TSX
+ * stamps both outrank these derived statements. The remaining reads (the
+ * container's 100% inline size, the column's auto width, the uncapped scroll
+ * axis) are keyword values no governed root shares, so they stay literal.
+ *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/table
  * @category Compilers
  * @package @rottay/design-system
@@ -27,6 +37,10 @@ export const tableChromeDeriver: FamilyDeriver = {
     "--ds-table-pagination-margin-block-start",
     "--ds-table-selection-control-coarse-size",
     "--ds-table-touch-target-min",
+    "--ds-table-col-min-width",
+    "--ds-table-sticky-top",
+    "--ds-table-virtual-spacer",
+    "--ds-table-cell-ellipsis-max-width",
   ],
   derive: () => deriveTableChannels(),
 };
@@ -50,6 +64,15 @@ export function deriveTableChannels(): Record<string, string> {
   vars["--ds-table-selection-control-coarse-size"] =
     "calc(var(--ds-spacing-5) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))";
   vars["--ds-table-touch-target-min"] = "var(--ds-touch-target-min)";
+
+  /* Runtime geometry the skin declares at the family root: produced underneath
+     at the zero rung so a read whose channel is never stated still reaches a
+     produced root; the TSX stamp and the family-root declaration outrank this. */
+  vars["--ds-table-col-min-width"] = "var(--ds-spacing-0, 0)";
+  vars["--ds-table-sticky-top"] = "var(--ds-spacing-0, 0)";
+  vars["--ds-table-virtual-spacer"] = "var(--ds-spacing-0, 0)";
+  /* The truncating column's cap rests at the 20rem spacing rung (320px). */
+  vars["--ds-table-cell-ellipsis-max-width"] = "var(--ds-spacing-80, 320px)";
 
   return vars;
 }

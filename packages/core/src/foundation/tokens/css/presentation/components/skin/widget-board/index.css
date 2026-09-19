@@ -427,9 +427,9 @@
     translateY(var(--ds-widget-board-entry-offset))
     scale(var(--ds-widget-board-entry-scale))
     scale(var(--ds-widget-board-interaction-scale));
-  transition: transform var(--ds-motion-rearrange)
+  transition: transform var(--ds-motion-rearrange, var(--ds-motion-slow, 320ms))
       var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out)),
-    inline-size var(--ds-motion-rearrange, 320ms)
+    inline-size var(--ds-motion-rearrange, var(--ds-motion-slow, 320ms))
       var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out)),
     block-size var(--ds-motion-resize, 200ms)
       var(--ds-motion-ease-move, var(--ds-motion-ease-out, ease-out)),
