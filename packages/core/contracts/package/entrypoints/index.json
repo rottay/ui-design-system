@@ -669,7 +669,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 37,
-        "maxSourceBytes": 142601
+        "maxSourceBytes": 146057
       },
       "symbols": [
         {
@@ -726,7 +726,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 17,
-        "maxSourceBytes": 84662
+        "maxSourceBytes": 85747
       },
       "symbols": [
         {
@@ -783,7 +783,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 20,
-        "maxSourceBytes": 104741
+        "maxSourceBytes": 108197
       },
       "symbols": [
         {
@@ -840,7 +840,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 31,
-        "maxSourceBytes": 144027
+        "maxSourceBytes": 147391
       },
       "symbols": [
         {
@@ -1128,8 +1128,8 @@
       "output": "entrypoints/public/primitives/tooltip/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 20,
-        "maxSourceBytes": 100840
+        "maxReachableModules": 34,
+        "maxSourceBytes": 168733
       },
       "symbols": [
         {
@@ -1214,7 +1214,7 @@
       "budget": {
         "maxDirectSources": 1,
         "maxReachableModules": 44,
-        "maxSourceBytes": 170149
+        "maxSourceBytes": 170887
       },
       "symbols": [
         {
@@ -1707,8 +1707,8 @@
       "output": "entrypoints/public/structures/app-shell/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 69,
-        "maxSourceBytes": 264215
+        "maxReachableModules": 77,
+        "maxSourceBytes": 276007
       },
       "symbols": [
         {
