@@ -323,6 +323,53 @@ describe('axis-difference — a pair is inert when its arms PAINT the same, not 
     assert.equal(resolvedDifference({}, {}, BASELINE).differing, 0);
   });
 
+  it('THE ALIAS COUNTEREXAMPLE: a var() this reader cannot close is INDETERMINATE, never differing', () => {
+    // The audit's durable probe, as data:
+    // docs-engineering/archive/audits/2026-09-19-ds-4267a2904-davila/axis-alias-probe.json
+    // — chromium 149.0.7827.55, scene `--ds-state-disabled-opacity: 0.5`, arm B
+    // assigning `var(--ds-alias-opacity)` which is ALSO 0.5. The page painted
+    // `opacity: 0.5` in both arms; the instrument reported 1 differing channel
+    // and handed the pair its standing on a string.
+    const probe = resolvedDifference(
+      {},
+      { '--ds-state-disabled-opacity': 'var(--ds-alias-opacity)' },
+      { '--ds-state-disabled-opacity': '0.5' },
+    );
+    assert.equal(probe.differing, 0, 'a lexical alias is not evidence of a different paint');
+    assert.deepEqual(probe.differingChannels, []);
+    assert.equal(probe.unresolved, 1, 'and it is not silently equal either — it is unreadable, and says so');
+    assert.deepEqual(probe.unresolvedChannels, ['--ds-state-disabled-opacity']);
+    assert.equal(probe.source, 'offline');
+  });
+
+  it('an alias this reader CAN close reads as what it closes to — equal stays 0, POSITIVE CONTROL still moves', () => {
+    const alias = (value) => ({ '--ds-alias': value, '--ds-state-disabled-opacity': 'var(--ds-alias)' });
+    const scene = { '--ds-state-disabled-opacity': '0.5' };
+
+    // The same 0.5 the scene already paints, reached through an alias: the
+    // channel that CONSUMES it is not a difference, and only the alias the
+    // arm newly declares is.
+    const equal = resolvedDifference({}, alias('0.5'), scene);
+    assert.deepEqual(equal.differingChannels, ['--ds-alias']);
+    assert.equal(equal.unresolved, 0);
+
+    // POSITIVE CONTROL, same shape, different value: the consumer moves too,
+    // so the repair cannot be passing by refusing to see anything.
+    const different = resolvedDifference({}, alias('0.75'), scene);
+    assert.deepEqual(different.differingChannels, ['--ds-alias', '--ds-state-disabled-opacity']);
+    assert.equal(different.unresolved, 0);
+  });
+
+  it('a fallback closes the reference, and a cycle closes nothing', () => {
+    assert.equal(resolvedDifference({ '--ds-x': '4px' }, { '--ds-x': 'var(--ds-missing, 4px)' }, {}).differing, 0);
+    // A name declared EMPTY is guaranteed-invalid to the cascade, exactly like
+    // one nobody declares, so the fallback is what paints.
+    assert.equal(resolvedDifference({ '--ds-x': '4px' }, { '--ds-x': 'var(--ds-y, 4px)', '--ds-y': '' }, {}).differing, 0);
+    const cyclic = resolvedDifference({ '--ds-x': '4px' }, { '--ds-x': 'var(--ds-y)', '--ds-y': 'var(--ds-x)' }, {});
+    assert.equal(cyclic.differing, 0);
+    assert.equal(cyclic.unresolved, 2);
+  });
+
   it('the reason a cell publishes and the reason the verdict prints are ONE sentence', () => {
     const inert = cell({ compiledA: 40, compiledB: 40, appliedA: 40, appliedB: 40,
       channels: 40, differing: 0, resolvedDiffering: 0, evidential: false });
@@ -1140,6 +1187,84 @@ describe('axis-difference BROWSER drill — a document does not differ from itse
       evaluate(nullPair).some((line) => line.startsWith('bithire/light rhythm') && line.includes('SAME paint')
         && line.includes('INERT_PAIRS')),
       evaluate(nullPair).join(' | '),
+    );
+  });
+
+  it('ALIAS: an arm that reaches the other arm\'s value through var() is NOT a differing channel', async () => {
+    // The audit's counterexample driven through the REAL path -- the real
+    // bundle, the real scene, the real per-arm application -- rather than
+    // against the comparator on its own. `compile` is overridden because the
+    // point is the channel values the arms carry, not how a decision produced
+    // them; everything downstream of them is the shipped instrument.
+    const ARMS = {
+      // Both arms declare the alias, so the only channel in question is the
+      // one that CONSUMES it: literally in arm A, through var() in arm B.
+      'alias-equal-a': { '--ds-axis-alias': '0.5', '--ds-state-disabled-opacity': '0.5' },
+      'alias-equal-b': { '--ds-axis-alias': '0.5', '--ds-state-disabled-opacity': 'var(--ds-axis-alias)' },
+      // POSITIVE CONTROL: the same shape, a genuinely different value.
+      'alias-different-a': { '--ds-axis-alias': '0.5', '--ds-state-disabled-opacity': '0.5' },
+      'alias-different-b': { '--ds-axis-alias': '0.75', '--ds-state-disabled-opacity': 'var(--ds-axis-alias)' },
+    };
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: FAMILIES,
+      compile: ({ slug }) => ({ artifact: { variables: ARMS[slug], modeDeltas: [] } }),
+      scenarios: ['alias-equal', 'alias-different'].map((id) => ({ id, kind: 'positive', axis: 'shape', a: {}, b: {} })),
+    });
+    assert.deepEqual(measurement.refusals, [], JSON.stringify(measurement.refusals));
+
+    const equal = measurement.cells.find((entry) => entry.scenario === 'alias-equal');
+    assert.equal(equal.resolvedSource, 'browser', 'the reading must come from the page, not from the maps');
+    assert.equal(equal.channels, 2);
+    assert.equal(equal.differing, 1, 'the two maps DO differ as strings — that is the defect this refuses');
+    assert.equal(
+      equal.resolvedDiffering,
+      0,
+      `the alias computes to what the other arm writes: ${JSON.stringify(equal.resolvedDifferingChannels)}`,
+    );
+    assert.equal(equal.evidential, false, 'so the pair buys no standing');
+    assert.match(equal.nonEvidentialReason, /SAME paint in bithire\/light/);
+
+    const different = measurement.cells.find((entry) => entry.scenario === 'alias-different');
+    assert.equal(different.resolvedSource, 'browser');
+    assert.equal(different.resolvedDiffering, 2, 'the alias AND the channel that consumes it both move');
+    assert.deepEqual(different.resolvedDifferingChannels, ['--ds-axis-alias', '--ds-state-disabled-opacity']);
+    assert.equal(different.evidential, true, 'or the repair would be passing by seeing nothing at all');
+  });
+
+  it('the resolved reading is the PAGE: a reference only the bundle can close is still closed', async () => {
+    // The separation between the two readings, stated as a case: neither arm
+    // declares `--ds-rhythm-scale`, so the offline reader cannot close either
+    // arm's reference and says so, while the browser reads what the bundle
+    // paints and finds the consumer identical in both arms.
+    const ARMS = {
+      'bundle-alias-a': { '--ds-axis-probe': 'var(--ds-rhythm-scale)' },
+      'bundle-alias-b': {
+        '--ds-axis-probe-alias': 'var(--ds-rhythm-scale)',
+        '--ds-axis-probe': 'var(--ds-axis-probe-alias)',
+      },
+    };
+    const offline = resolvedDifference(ARMS['bundle-alias-a'], ARMS['bundle-alias-b'], {});
+    assert.equal(offline.source, 'offline');
+    assert.equal(offline.differing, 0);
+    assert.equal(offline.unresolved, 2, 'the map reader cannot see the bundle, and does not pretend to');
+
+    const measurement = await run({
+      verticals: ['bithire'],
+      themes: ['light'],
+      families: FAMILIES,
+      compile: ({ slug }) => ({ artifact: { variables: ARMS[slug], modeDeltas: [] } }),
+      scenarios: [{ id: 'bundle-alias', kind: 'positive', axis: 'shape', a: {}, b: {} }],
+    });
+    assert.deepEqual(measurement.refusals, [], JSON.stringify(measurement.refusals));
+    const [entry] = measurement.cells.filter((cell) => cell.scenario === 'bundle-alias');
+    assert.equal(entry.resolvedSource, 'browser');
+    assert.equal(entry.channels, 2);
+    assert.deepEqual(
+      entry.resolvedDifferingChannels,
+      ['--ds-axis-probe-alias'],
+      'only the name arm B newly declares differs — the channel both arms route through the bundle does not',
     );
   });
 

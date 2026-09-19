@@ -588,6 +588,18 @@ const readRootChannels = (names) => {
   return out;
 };
 
+/**
+ * The same read, one arm later: the root's channels AS THIS ARM COMPUTES THEM.
+ *
+ * `applyVariables` has already cleared the previous arm and set this one, so a
+ * name the arm does not carry reads the bundle underneath and a name it
+ * aliases reads what the alias computes to. This is what makes
+ * `resolvedDifference` a paint comparison rather than a string comparison, and
+ * it is deliberately the SAME evaluation as the scene baseline so the two
+ * halves of a channel cannot be measured by two different rules.
+ */
+export const readArmChannels = (page, names) => page.evaluate(readRootChannels, names);
+
 const stampState = (state) => {
   for (const node of document.querySelectorAll('[data-axis-family]')) {
     if (!node.hasAttribute('data-axis-mount')) {
@@ -893,17 +905,123 @@ export function effectiveMapDifference(variablesA, variablesB) {
  * So a name each arm does not carry is resolved to the scene's own value, and
  * the pair is inert exactly when nothing is left over. A pair whose two arms
  * genuinely paint the same still reads 0 and still fails.
+ *
+ * THAT WAS HALF THE REPAIR. Resolving the ABSENT name against the scene left
+ * the PRESENT name as the compiler's uncomputed string, so an arm that writes
+ * `var(--ds-alias)` where the alias carries the value the other arm writes
+ * literally read as a differing channel while Chromium painted the two arms
+ * the same. Measured against this function on 2026-09-19
+ * (`docs-engineering/archive/audits/2026-09-19-ds-4267a2904-davila/axis-alias-probe.json`,
+ * chromium 149.0.7827.55): scene `--ds-state-disabled-opacity: 0.5`, arm B
+ * assigning `var(--ds-alias-opacity)` which is also 0.5 -- instrument 1
+ * differing, page `opacity: 0.5` in BOTH arms. A lexical string is not paint.
+ *
+ * So the reading is taken from the arm's OWN browser context. `resolvedA` /
+ * `resolvedB` are the root's channels as that arm COMPUTES them, read by the
+ * same `readRootChannels` the scene baseline is read with, once per arm while
+ * that arm is on the root -- and a computed custom property has no `var()`
+ * left in it. That is the path `run` takes, and it is the only one entitled to
+ * the word "paint".
+ *
+ * Called WITHOUT them the function is OFFLINE: it closes each `var()` against
+ * the arm's own map over the scene baseline, and a reference it cannot close
+ * is INDETERMINATE -- counted in `unresolved`, never in `differing`.
+ * Under-counting is the fail-closed direction and over-counting is not:
+ * `differing > 0` is what grants a cell its standing, so a channel nobody
+ * resolved must not be allowed to buy one. A genuinely different value is
+ * still different, offline and on the page.
  */
-export function resolvedDifference(variablesA, variablesB, baselineRoot = {}) {
+export function resolvedDifference(variablesA, variablesB, baselineRoot = {}, { resolvedA = null, resolvedB = null } = {}) {
   const names = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
-  const resolve = (name, variables) =>
-    (Object.hasOwn(variables, name) ? String(variables[name]).trim() : baselineRoot[name] ?? '');
-  const differing = names.filter((name) => resolve(name, variablesA) !== resolve(name, variablesB));
+  const measured = resolvedA !== null && resolvedB !== null;
+  const reading = (name, variables, computed) => {
+    if (measured) return { value: String(computed[name] ?? '').trim(), resolved: true };
+    const own = Object.hasOwn(variables, name) ? variables[name] : baselineRoot[name] ?? '';
+    return substituteReferences(own, { ...baselineRoot, ...variables });
+  };
+  const differing = [];
+  const unresolved = [];
+  for (const name of names) {
+    const a = reading(name, variablesA, resolvedA);
+    const b = reading(name, variablesB, resolvedB);
+    if (!a.resolved || !b.resolved) unresolved.push(name);
+    else if (a.value !== b.value) differing.push(name);
+  }
   return {
     channels: names.length,
     differing: differing.length,
     differingChannels: differing.slice(0, 12),
+    unresolved: unresolved.length,
+    unresolvedChannels: unresolved.slice(0, 12),
+    source: measured ? 'browser' : 'offline',
   };
+}
+
+/** How deep a chain of `var()` the offline reading follows before it gives up. */
+const REFERENCE_DEPTH_LIMIT = 16;
+
+/** The `var(` opening at `from`, read as its name, its fallback and its closing paren. */
+function readReference(value, from) {
+  let depth = 0;
+  for (let index = from + 3; index < value.length; index += 1) {
+    if (value[index] === '(') depth += 1;
+    else if (value[index] === ')') {
+      depth -= 1;
+      if (depth > 0) continue;
+      const inner = value.slice(from + 4, index);
+      let nested = 0;
+      let comma = -1;
+      for (let at = 0; at < inner.length && comma === -1; at += 1) {
+        if (inner[at] === '(') nested += 1;
+        else if (inner[at] === ')') nested -= 1;
+        else if (inner[at] === ',' && nested === 0) comma = at;
+      }
+      return {
+        name: (comma === -1 ? inner : inner.slice(0, comma)).trim(),
+        fallback: comma === -1 ? null : inner.slice(comma + 1).trim(),
+        end: index,
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * One channel's value with every `var()` closed against `declarations`.
+ *
+ * `resolved: false` is the honest answer, not a value to guess at: a reference
+ * to a name this map does not carry, a cycle, or a chain deeper than the limit
+ * has no reading here, and the caller must not count it either way. The
+ * browser path never reaches this -- it is for a caller holding maps rather
+ * than a page, and for the probe that found the defect.
+ */
+export function substituteReferences(value, declarations, seen = new Set(), depth = 0) {
+  const text = String(value ?? '').trim();
+  const at = text.indexOf('var(');
+  if (at === -1) return { value: text, resolved: true };
+  if (depth >= REFERENCE_DEPTH_LIMIT) return { value: text, resolved: false };
+  const reference = readReference(text, at);
+  if (reference === null) return { value: text, resolved: false };
+  // A name nobody declares and a name declared empty are ONE case to the
+  // cascade -- guaranteed-invalid -- so both fall through to the fallback.
+  const declared = !seen.has(reference.name)
+    && Object.hasOwn(declarations, reference.name)
+    && String(declarations[reference.name]).trim() !== '';
+  const source = declared ? declarations[reference.name] : reference.fallback;
+  if (source === null || source === undefined) return { value: text, resolved: false };
+  const inner = substituteReferences(
+    source,
+    declarations,
+    declared ? new Set([...seen, reference.name]) : seen,
+    depth + 1,
+  );
+  if (!inner.resolved) return { value: text, resolved: false };
+  return substituteReferences(
+    `${text.slice(0, at)}${inner.value}${text.slice(reference.end + 1)}`,
+    declarations,
+    seen,
+    depth + 1,
+  );
 }
 
 /**
@@ -912,9 +1030,9 @@ export function resolvedDifference(variablesA, variablesB, baselineRoot = {}) {
  */
 export function inertReason({ vertical, theme, channels, compiledA, compiledB }) {
   return `the two arms of the pair resolve to the SAME paint in ${vertical}/${theme} `
-    + `(${channels} channel(s), 0 differing once every channel an arm does not carry is resolved against the `
-    + `vertical's own baseline; the arms compiled ${compiledA}/${compiledB}) — the decision moves nothing this `
-    + 'cell can read';
+    + `(${channels} channel(s), 0 differing once every channel is read as the value it COMPUTES to in that arm's `
+    + `own context, the vertical's own baseline included; the arms compiled ${compiledA}/${compiledB}) — the `
+    + 'decision moves nothing this cell can read';
 }
 
 /**
@@ -1129,13 +1247,25 @@ export async function run({
           const compiledB = Object.keys(variablesB).length;
           // The two comparators, published side by side: the map difference the
           // witness reads, and the paint difference the standing rule reads.
+          // The second one cannot be computed yet -- it is taken from each
+          // arm's own browser context, so it waits for the arms.
           const mapDifference = effectiveMapDifference(variablesA, variablesB);
-          const paintDifference = resolvedDifference(variablesA, variablesB, baselineRoot);
+          const pairChannels = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
+          let paintDifference;
           try {
             before = await measureCell({ page, variables: variablesA, properties });
             partsA = parts ? await page.evaluate(readParts, parts) : null;
+            // Arm A is still on the root here, and arm B there: each read is
+            // that arm's own computed value for every channel of the pair, so
+            // an alias is compared as what it paints and not as its string.
+            const paintA = await readArmChannels(page, pairChannels);
             after = await measureCell({ page, variables: variablesB, properties });
             partsB = parts ? await page.evaluate(readParts, parts) : null;
+            const paintB = await readArmChannels(page, pairChannels);
+            paintDifference = resolvedDifference(variablesA, variablesB, baselineRoot, {
+              resolvedA: paintA,
+              resolvedB: paintB,
+            });
           } catch (error) {
             refusals.push({
               vertical,
@@ -1202,14 +1332,19 @@ export async function run({
               appliedB: after.applied,
               // The union of both arms' channels, and how many of them the two
               // arms DISAGREE on -- once as compiled maps (`differing`), once
-              // as the paint they resolve to against this scene's baseline
-              // (`resolvedDiffering`). The gap between the two names the arm
-              // that was baseline-coincident, which `compiledA`/`compiledB`
-              // beside them then identifies.
+              // as the value each channel COMPUTES to with that arm on the
+              // root (`resolvedDiffering`). The gap between the two names
+              // either a baseline-coincident arm or an alias that paints what
+              // the other arm writes literally; `compiledA`/`compiledB` beside
+              // them tell those two apart.
               channels: paintDifference.channels,
               differing: mapDifference.differing,
               resolvedDiffering: paintDifference.differing,
               resolvedDifferingChannels: paintDifference.differingChannels,
+              // WHERE the resolved reading came from, published so a run that
+              // silently fell back to comparing strings cannot pass for one
+              // that measured the page. Every cell of a real run is `browser`.
+              resolvedSource: paintDifference.source,
               // A pair whose two arms paint the same cannot be evidence FOR
               // anything, in either direction. Publishing the zero and refusing
               // to credit it is the only honest handling. An EMPTY arm is not
