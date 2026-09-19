@@ -343,11 +343,29 @@ const dbOnlyAgainst = (staticSide: ReadonlySet<string>) =>
  * decision, not by drift. `--ds-badge-frame` stays: the deriver owns the
  * hover/pressed frames, not the resting one. The list stays decrease-only.
  *
+ * WO-FAM-11 sub-lot B (measured 2026-09-19): 18 -> 16. The app-shell family cut
+ * (da6b06d41) registered the chrome/app-shell deriver, which states the whole
+ * `--ds-shell-*` namespace -- 56 channels -- for every vertical, and two of the
+ * eighteen are inside it: `--ds-shell-sidebar-width` and
+ * `--ds-shell-header-block-size`. The shipped bithire identity authors both
+ * through the deriver now, as chained middle links
+ * (`var(--ds-sidebar-width, 18.5rem)` and `var(--ds-shell-topbar-height, 4rem)`),
+ * so they left this list the way the badge pair did -- by a measured decision.
+ * Attributed by bisecting the window commit by commit: the set measures 18 at
+ * every commit from the previous pin's tree (2010ca2de) through a0c300488, drops
+ * to 16 at da6b06d41, and holds 16 to HEAD. Exactly one commit moved it.
+ *
+ * `--ds-shell-topbar-height` deliberately STAYS. It is the compatibility leaf
+ * the DB path still writes from `chrome.layout.headerHeight`, and it is the
+ * fallback tail of the header chain rather than a link in it -- the deriver
+ * READS it and does not state it. That asymmetry is the shell channel split,
+ * not an authoring gap the cut missed.
+ *
  * The original warning still stands for its own case, and it is a DIFFERENT
  * case: a channel that reappears here because an identity started saying
  * something OUTSIDE the compiler (a hand-written `_source/extension.css`, as
  * the four shell/sidebar width entries once were) is a finding, not a re-pin.
- * These eighteen are authored nowhere -- the sibling assertion below proves
+ * These sixteen are authored nowhere -- the sibling assertion below proves
  * each is still expressible statically, so this is an authoring gap the
  * derivation and vertical lanes close, never a second authority.
  */
@@ -363,8 +381,6 @@ const KNOWN_UNAUTHORED_BY_BITHIRE: readonly string[] = [
   "--ds-metric-card-bg",
   "--ds-metric-card-icon-bg",
   "--ds-metric-card-value-color",
-  "--ds-shell-header-block-size",
-  "--ds-shell-sidebar-width",
   "--ds-shell-topbar-height",
   "--ds-sidebar-border",
   "--ds-sidebar-width",

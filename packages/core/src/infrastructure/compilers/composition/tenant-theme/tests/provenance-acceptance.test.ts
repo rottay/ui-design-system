@@ -600,7 +600,21 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      *        +32      +32      +32  7a67243d8  cascade-wiring re-chain: the wave's component channels wired to their roots (WO-FAM-10 close)
      *         +30      +30      +30  fc59fce28  the layout derivers produce their chains' middle links: aspect-ratio 7, container 6, divider 11, space 2, stack 4, resting literals and dial-scaled references the skins already resolved to (WO-FAM-07 close). 4b82b2850 regenerates the artifacts the now-emitting channels move and 2010ca2de repairs a family-cut DnD check arm; neither touches this lowering -- measured at HEAD, the delta against the pre-lot facade artifact (fc59fce28^) is byte-exactly these 30 keys with zero removals on all three verticals, and the pre-lot facade key sets reproduce the 2454 / 2613 / 2454 pins above
      *   2484 / 2643 / 2484  measured 2026-09-18 on this tree (the 2010ca2de tree)
-     * Totals: rottay +2134/-957, bithire +2141/-781, evnto +2225/-325.
+     * S19 wave and FAM-11 sub-lot B, measured commit by commit (2026-09-19) with
+     * the same `lowerTheme` call, on an isolated copy of the tree at every one of
+     * the 19 commits in 2010ca2de..HEAD that touch packages/core/src -- the only
+     * commits that can move this lowering. The measurement harness
+     * (`@tests/support/theme-lowering`) is untouched across the whole window, so
+     * every row below is the same call on a different tree. The anchor copy
+     * reproduced 2484 / 2643 / 2484 byte-exact and the parent of every row
+     * measures exactly the previous row, so the sums close with no residue. Four
+     * commits move a channel; the other fifteen move none.
+     *        +10      +10      +10  0ca2eb294  the other families' post-pin cascade debt wired to its roots: --ds-card-instance-padding, --ds-menu-level, --ds-sidebar-surface-aside-inline-size, four table geometry channels (cell-ellipsis-max-width, col-min-width, sticky-top, virtual-spacer), --ds-tabs-indicator-offset and the two tree indents (connector-inset, row-indent). a7be3816c regenerates the artifacts these channels move and 1e1b38320 re-points the lot's three dangling reads; neither moves a key
+     *         +1       +1       +1  8e656c2aa  --ds-card-border-accent-hover, the card deriver's missing middle link. 34cd3fae5 (re-pin sweep), f9a2da36e (customization cluster) and 0c2111e87 (two dead writers retired) measure the same
+     *         +1       +1       +1  31d04caa0  --ds-stats-header-spark-dot-opacity goes public and continuous (WO-FAM-10's last residual)
+     *        +56      +56      +56  da6b06d41  app-shell family cut: the chrome/app-shell deriver owns the whole --ds-shell-* namespace -- background, collapse-transition, content 3, footer 4, header 13, main 3, navigation 21, sidebar 3, skip-link 7 (WO-FAM-11 sub-lot B). a0c300488 is the sub-lot A gate that measures the cut and moves nothing
+     *   2552 / 2711 / 2552  measured 2026-09-19 on this tree (the d5a3e1a74 tree); the seven S19 lots between sub-lot B and HEAD -- 6a3eae066 (Stack gap rungs), d47c874aa and d5a3e1a74 (A01 value grammar and its structural repair), d6d4e96ae (A03 Tooltip refusal), 7d23f7873 (F04 DetailHeader direction), ce0a2e0c2 (F01/F02/F03) and 3c828086c (artifact regeneration) -- each measure the same
+     * Totals: rottay +2202/-957, bithire +2209/-781, evnto +2293/-325.
      *
      * The D6-2c-ii row is the largest single move this table records and it is
      * measured, not inferred: both legs were compiled with the SAME
@@ -630,7 +644,20 @@ describe("case C — no contested tenant authorship changes nothing", () => {
      * is why rottay and evnto move in lock-step and bithire only separates on
      * its own preset's two decisions. What it REMOVES is small and named per
      * row: the badge namespace cut, the unread breakpoint floor and the one
-     * rename the theme name law demanded. */
+     * rename the theme name law demanded.
+     *
+     * The S19 rows are the smallest run this table records and the cleanest:
+     * +68 on every vertical, zero removals anywhere, and the added key set is
+     * byte-identical across rottay, bithire and evnto on all four moving rows
+     * (verified name-by-name, not inferred from equal totals). That is the
+     * expected shape -- every one of the 68 is a chrome-deriver channel stated
+     * on the shared neutral foundation, and none of them states a palette seed
+     * or a typeface, which are the only two things a first-party preset
+     * authors differently. The S19 lots themselves are behavioral repairs, so
+     * their zero is the finding: A01's value grammar and its structural repair
+     * relocate owners without changing a single emitted channel, and neither
+     * the Stack gap re-base, the Tooltip refusal, the DetailHeader direction
+     * read nor the three FAM-10 regression fixes touch this lowering at all. */
     const counts: Record<Vertical, number> = {
       // COH-1 (2026-08-30): 1192 -> 1196. `deriveStatusTintFloor` now
       // explicitly emits `--ds-color-alpha-{success,warning,error,info}-10`
@@ -688,7 +715,14 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // channels join every vertical's baseline. The added key set was
       // verified name-by-name against the pre-lot facade artifact: byte-exactly
       // these 30 and nothing else (zero removals).
-      rottay: 2484,
+      // S19 wave + FAM-11 sub-lot B (measured, 2026-09-19): rottay 2484 -> 2552,
+      // added 68, removed 0, rows 0ca2eb294, 8e656c2aa, 31d04caa0 and da6b06d41
+      // in the table above. 56 of the 68 are sub-lot B's app-shell namespace;
+      // the other 12 are the cascade-wiring remainder (10), the card deriver's
+      // border-accent-hover middle link and stats-header's spark-dot opacity.
+      // The fifteen remaining commits in the window -- the whole S19 lot series
+      // included -- move no channel.
+      rottay: 2552,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -733,7 +767,14 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // added 30, removed 0, row fc59fce28: the same 30 middle links the row
       // names, on the shared neutral foundation; the added key set matches
       // rottay's and evnto's byte-for-byte (verified name-by-name).
-      bithire: 2643,
+      // S19 wave + FAM-11 sub-lot B (measured, 2026-09-19): bithire 2643 -> 2711,
+      // added 68, removed 0, the same four rows. bithire does NOT separate here:
+      // none of the 68 states a palette seed or a typeface family, which are the
+      // only decisions its preset authors beyond the shared foundation, so its
+      // added key set is byte-identical to rottay's and evnto's. Its constant
+      // +159 over them is still the two solitary preset moves plus the 157 the
+      // D6-2c-ii row records, untouched by this wave.
+      bithire: 2711,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -779,7 +820,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // added 30, removed 0, row fc59fce28: evnto moves with rottay here too,
       // byte-for-byte the same 30 keys (verified name-by-name against the
       // pre-lot facade artifact, zero removals).
-      evnto: 2484,
+      // S19 wave + FAM-11 sub-lot B (measured, 2026-09-19): evnto 2484 -> 2552,
+      // added 68, removed 0, the same four rows, the same 68 keys. evnto stays
+      // level with rottay through the whole window: its preset is structural
+      // only, and the app-shell cut states geometry and chrome, never a seed.
+      evnto: 2552,
     };
     for (const vertical of VERTICALS) {
       expect(
