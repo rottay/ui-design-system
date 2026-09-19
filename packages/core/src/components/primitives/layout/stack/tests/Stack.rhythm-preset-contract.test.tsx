@@ -426,8 +426,14 @@ describe("leg -- the SCALAR path is Modern-only too (Finding 3)", () => {
       expect(CSS, rung).toContain(
         `.rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='${rung}'] {`
       );
+      // The rung reads its channel through the density re-base, and the ramp
+      // arm BEHIND that read is still byte-equal to what the deriver derives:
+      // the sheet states where a rung resolves, never what it is worth.
       expect(CSS, rung).toContain(
-        `--_ds-stack-gap-current: var(--ds-stack-gap-${rung}, ${DERIVED[`--ds-stack-gap-${rung}`]});`
+        `--_ds-stack-gap-rebased: calc(var(--ds-stack-gap-${rung}) * var(--_ds-stack-density-rebase, 1));`
+      );
+      expect(CSS, rung).toContain(
+        `--_ds-stack-gap-current: var(--_ds-stack-gap-rebased, ${DERIVED[`--ds-stack-gap-${rung}`]});`
       );
     }
     expect(FROZEN_CSS).not.toContain("rottay-stack--modern");
@@ -437,6 +443,31 @@ describe("leg -- the SCALAR path is Modern-only too (Finding 3)", () => {
         ":where(.rottay-stack--classic, .rottay-stack--rustic)"
       );
     }
+  });
+
+  it("re-bases the tenant-root channel onto the local density boundary", () => {
+    // The alias is computed on the element that DECLARES it -- the tenant root
+    // -- so a nested `data-density` boundary can never move it. The factor is
+    // the ratio the density projection itself publishes, which is exactly 1
+    // where no boundary intervenes. Geometry is asserted in
+    // Stack.nested-density.integration.test.tsx; this leg guards the source.
+    expect(CSS).toContain(
+      "--_ds-stack-density-rebase: calc(var(--ds-density-effective-scale, 1) / var(--ds-density-global-effective-scale, 1));"
+    );
+    // NO FALLBACK on the channel read, deliberately: with no artifact mounted
+    // the re-based value is guaranteed-invalid, so the rung falls through to
+    // the ramp arm, which already resolves locally. One re-base, never two.
+    for (const rung of [...RUNGS]) {
+      expect(CSS, rung).not.toContain(`var(--ds-stack-gap-${rung},`);
+    }
+    // The two unscaled rungs are read straight: zero is zero on every density,
+    // and a caller's measurement is exact geometry.
+    expect(CSS).toContain(
+      "--_ds-stack-gap-current: var(--ds-stack-gap-none, var(--ds-spacing-0, 0));"
+    );
+    expect(CSS).toContain(
+      "--_ds-stack-gap-current: var(--ds-stack-gap, var(--ds-spacing-0, 0px));"
+    );
   });
 
   it("each rung still resolves to the ramp step it always did", () => {

@@ -23,6 +23,20 @@
  *
  * A RUNG SCALES, A MEASUREMENT DOES NOT: `data-spacing='custom'` reads
  * `--ds-stack-gap`, which the engine writes inline from the caller's number.
+ *
+ * A RUNG IS RE-BASED ONTO ITS OWN DENSITY. `--ds-stack-gap-<rung>` is computed
+ * once, on the tenant root that declares it, so it cannot see a `data-density`
+ * boundary further down -- the boundary the spacing ramp IS redeclared on
+ * (`foundation/base/density`). Each rung therefore reads the channel through
+ * `--_ds-stack-gap-rebased`, which multiplies it by the ratio the density
+ * projection itself publishes: this element's effective scale over the global
+ * one. The ratio is exactly 1 where no boundary intervenes, so a tenant root
+ * reading is unchanged, and an authored `--ds-stack-gap-<rung>` still outranks
+ * the ramp everywhere. The read carries NO fallback on purpose: with no channel
+ * declared, `--_ds-stack-gap-rebased` is guaranteed-invalid and the rung falls
+ * through to the ramp arm, which already resolves here and already carries the
+ * local boundary -- one re-base, never two. `none` is zero on every density and
+ * `custom` is the caller's exact measurement, so neither is re-based.
  */
 
 .rottay-stack.rottay-stack--modern[data-component='stack'] {
@@ -33,7 +47,9 @@
   justify-content: flex-start;
   /* Pinned by the quality contract so flexible content can shrink and ellipsize. */
   min-inline-size: 0;
-  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-density-rebase: calc(var(--ds-density-effective-scale, 1) / var(--ds-density-global-effective-scale, 1));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-md) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
   gap: var(--_ds-stack-gap-current);
   /*
    * The divider's axis flags live on the ROOT so a RESPONSIVE direction, which
@@ -100,40 +116,49 @@
 
 /* ---- the rungs ---- */
 
+/* Zero is zero on every density, so this rung is read straight. */
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='none'] {
   --_ds-stack-gap-current: var(--ds-stack-gap-none, var(--ds-spacing-0, 0));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xs'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-xs, calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-xs) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-1, 0.25rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='sm'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-sm, calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-sm) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='md'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-md, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-md) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-4, 1rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='lg'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-lg, calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-lg) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-6, 1.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-xl, calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-xl) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-8, 2rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='2xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-2xl, calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-2xl) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-10, 2.5rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='3xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-3xl, calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-3xl) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-12, 3rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .rottay-stack.rottay-stack--modern[data-component='stack'][data-spacing='4xl'] {
-  --_ds-stack-gap-current: var(--ds-stack-gap-4xl, calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1)));
+  --_ds-stack-gap-rebased: calc(var(--ds-stack-gap-4xl) * var(--_ds-stack-density-rebase, 1));
+  --_ds-stack-gap-current: var(--_ds-stack-gap-rebased, calc(var(--ds-spacing-16, 4rem) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never scaled. */
