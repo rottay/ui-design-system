@@ -697,3 +697,20 @@ are one dispatched lot; my two integration misses (the swept D files, the missed
 recorded with their repairs. The fleet stands honestly measured: typography 99.4%, shape 15.1%,
 rhythm 21.5%, depth 13.9%, motion 9.2%, states 2.1% — milestone B's gap is product work, measured,
 not a secret.
+
+## 2026-09-19 (twenty-sixth sitting) — DER-08 post-close dispositions (the owner asked for them on the record)
+
+WO-DER-08 closed at cb1bbe197 with the four arms measured green. The registry refuses notes on a
+done WO, so the disposition of the EARLIER verdicts' pending items lives here, nothing hidden:
+- The Codex A1 finding (the undeclared onChange signature move) was closed at e75874eb7 (the
+  MAJOR changeset with 9 contract-diff rows + the migration guide + the consumer test).
+- The 6 residual flat-authoring sites: measured as the deferred (b) retype — NOT this WO (the
+  Do-NOT fences it). createTenantFlatTheme no longer exists; preview-css's flat naming is confined
+  to the registered LegacyBrandThemeSource reader.
+- liftAuthoredTheme: 3 production callers, all inside the door that owns it — retirement is
+  unreachable within DER-08's fence. Measured, not assumed.
+- The cross-repo hazard stands until the apps take the regenerated suppliers snapshot (D21-class,
+  the owner's call).
+- The DER-08 wave's writers were Opus on the measured accounts; the reviews were real (Codex's
+  pre-exclusion rounds stand as static evidence; Fable's ACCEPTs on e75874eb7's predecessors were
+  measured at the time and are not re-claimed).

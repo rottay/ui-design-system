@@ -5432,6 +5432,11 @@
      "at": "2026-09-19 07:54",
      "by": "owner-2026-09-19-via-codex-audit",
      "note": "OWNER CONTINUATION 2026-09-19 / S19 audit: follow roadmap/README.md's closure-first amendment and ../docs-engineering/archive/audits/2026-09-19-ds-4267a2904-davila/{closure-plan,git-topology,HANDOFF-KIMI}.md. Kimi DT; normal claude/Daniel.Avila real Opus writer; real Fable independent lot audit. Preserve active writers and exact later deltas; safely restore ui-design-system/main at a quiescent checkpoint; no new execution branches/worktrees. Finite existing-acceptance checklist, complete disjoint family packets, single-owner shared seams, event-driven waiting; audited functional commit then verified origin/main publication under the new owner order. Reuse valid unchanged proof; no blanket re-audit, duplicate implementation, weakened threshold or status inflation. Preserve a0c300488/8bd3b3d48 sub-lot A and already-dispatched normal-Opus sub-lot B; do not kill or duplicate B to change roles/cwd. A is instrument admission, not family completion. Complete measured shell/workspace cuts and shared keyboard/adaptation ownership with one complete packet per disjoint family; DT owns catalog/deriver registration. Coordinate workspace overlap and actual dependencies before new downstream lots."
+    },
+    {
+     "at": "2026-09-19 15:45",
+     "by": "daniel",
+     "note": "2026-09-19: sub-lots B (da6b06d41, Fable-reviewed), D (33e6e5f1f+9779cab05), E (e33a2c757) and C (b5eca0e4b) landed. The C/D/E wave review (Fable): E ACCEPT; D/C CHANGES — the three findings repaired in d1d231d1b (mod+k editable exemption with both behaviors drilled; the page-shell-surface skin imported by the base entrypoint + the orphan-skin gate arm; the scoped-producer classifier honest). Re-review in flight. PENDING to close: the SKELETON_PART_ROLES vocabulary entries (42 roleless parts across app-shell/command-palette/search-command-bar — singleton, one writer), the mod+k toggle acceptance note, and the rename census decisions (measured unsafe: app consumers) — the owner's call."
     }
    ]
   },
