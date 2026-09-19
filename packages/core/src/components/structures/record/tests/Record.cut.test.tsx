@@ -101,6 +101,10 @@ describe('Record (WO-FAM-10 cut)', () => {
       expect(field.getAttribute('style') ?? '').not.toContain('grid-column');
       expect(field.getAttribute('style') ?? '').not.toContain('gridColumn');
     }
+    // A single-track field writes nothing at all: its resting geometry comes
+    // from the channel default the SKIN authors, not from a `var()` fallback
+    // that would leave the name with no producer on this field.
+    expect(fields[0].getAttribute('style') ?? '').not.toContain('--ds-record-field-span');
     unmount();
   });
 
@@ -130,7 +134,19 @@ describe('Record (WO-FAM-10 cut)', () => {
     style.remove();
   });
 
-  it('places the record link ring on the anchor keyboard focus actually reaches (S19-F03)', async () => {
+  it('authors the span channel default in the skin, so the name has a producer (S19-F02)', () => {
+    // A channel whose only writer is a style attribute has NO producer on
+    // every field that omits the attribute: the paint resolves to a literal
+    // no tenant can reach. The skin authors the default, exactly as the
+    // field-grid's `columns` does, and the caller's style attribute still
+    // outranks it. A deriver statement of the same name would be a second
+    // authority, which is why there is not one.
+    expect(SKIN).toContain('--ds-record-field-span: 1;');
+    expect(SKIN).toContain('grid-column: span var(--ds-record-field-span)');
+    expect(SKIN).not.toContain('var(--ds-record-field-span,');
+  });
+
+  it('puts the record link ring on the governed state keyboard focus actually reaches (S19-F03)', async () => {
     const style = loadLinkFocusRule();
     const { container, unmount } = renderWithEngine(
       <RecordField label="Profile" value="Ada Lovelace" href="/people/ada" />,
@@ -142,15 +158,20 @@ describe('Record (WO-FAM-10 cut)', () => {
     expect(anchor).not.toBeNull();
     // The ring's target must CONTAIN the focusable element: focus bubbles up,
     // never down, so a ring inside the anchor is unreachable by construction.
-    expect(anchor.contains(linkBody)).toBe(true);
+    expect(linkBody.contains(anchor)).toBe(true);
 
     anchor.focus();
     expect(document.activeElement).toBe(anchor);
-    // The ring's declarations resolve ON the focused anchor. The `outline`
-    // shorthand carries `var()`, which this runner does not expand into its
-    // longhands, so the two ring declarations it does resolve are the read:
-    // an unreached rule leaves both empty, as it did before this correction.
-    const ring = getComputedStyle(anchor);
+    // The anchor's focus arrives on the wrapper as the kernel's own decision,
+    // which is what keeps the rule paired rather than a second authority.
+    await waitFor(() => expect(linkBody.getAttribute('data-state')).toContain('focus-visible'), {
+      timeout: WAIT_TIMEOUT,
+    });
+    // The ring's declarations resolve ON the wrapper. The `outline` shorthand
+    // carries `var()`, which this runner does not expand into its longhands,
+    // so the two ring declarations it does resolve are the read: an unreached
+    // rule leaves both empty, as the pre-correction wrapper rule did.
+    const ring = getComputedStyle(linkBody);
     expect(ring.outlineOffset).toBe('2px');
     expect(ring.borderRadius).toBe('4px');
     unmount();

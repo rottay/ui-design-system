@@ -37,7 +37,9 @@
  * value still wins through the style attribute. The field's runtime
  * `span` rides the `--ds-record-field-span` channel and ONE arm below reads
  * it, so the published numeric domain survives whole; `data-span` remains
- * the stamp, and 1 is the channel's authored fallback. Action-bar icons are
+ * the stamp, and the skin authors that channel's `1` default the same way —
+ * a channel written only by a style attribute has no producer at all on the
+ * fields that omit it. Action-bar icons are
  * NOT sized here: they ride the Button's own governed icon channel
  * (`--ds-button-sm-icon-size`).
  *
@@ -83,9 +85,9 @@
  *    every pseudo below pairs with its `data-state` twin:
  *    `:is([data-state~='hovered'], :hover)` and so on — the platform
  *    pseudo stays the twin's fallback, not a second authority. The link's
- *    keyboard ring is the ONE unpaired rule, and that is a measurement:
- *    the focusable element is the anchor ABOVE that wrapper, so no state
- *    the wrapper can carry is ever reachable from it.
+ *    keyboard ring is no exception: the wrapper WRAPS the anchor, so the
+ *    focusable element is inside the element that carries the state and the
+ *    governed pair reaches it.
  *
  * C1 ELEVATION (record ledger + docked rail):
  *  - ONE DATA PLANE: the field grid stops reading as a wall of N identical
@@ -386,11 +388,16 @@
 /* Instance geometry that carries an arbitrary number cannot be a finite list
    of selectors: an arm per value drops every number past the last arm, and
    the next number always exists. The runtime `span` therefore rides the
-   `--ds-record-field-span` channel (the field's one legal inline write, the
-   grid's `columns` precedent) and this single arm reads it; `data-span` stays
-   the stamp, and the authored fallback keeps an unset channel on one track. */
+   `--ds-record-field-span` channel and this single arm reads it; `data-span`
+   stays the stamp. The DEFAULT is authored here rather than left as a `var()`
+   fallback, exactly as the field-grid's `columns` is: a name whose only
+   writer is a style attribute has no producer, so on every field that does
+   NOT carry the attribute the channel does not exist and the single track
+   comes from a literal no tenant can reach. The authored declaration is the
+   producer; the caller's style attribute still outranks it. */
 .ds-structure.ds-record[data-part='field'][data-span] {
-  grid-column: span var(--ds-record-field-span, 1);
+  --ds-record-field-span: 1;
+  grid-column: span var(--ds-record-field-span);
 }
 
 /* Per-field error frame: error ink mixed onto the family's border voice.
@@ -477,8 +484,9 @@
    admits no `data-*` attributes or event handlers, and a consumer-supplied
    Link adapter is not this component's DOM, so the kernel's state is stamped
    on this surface-owned wrapper and the skin reads it paired with the
-   platform pseudo. The wrapper's box is the anchor's box (the anchor wraps
-   nothing else), so the ring geometry is unchanged. */
+   platform pseudo. The wrapper WRAPS the anchor and hugs it, so its box IS
+   the anchor's box: the hover region and the ring geometry are the anchor's,
+   and the anchor's focus reaches the state the ring reads. */
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
   inline-size: fit-content;
   transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
@@ -498,11 +506,18 @@
 }
 
 /* The anchor keeps the field's own colour rather than the UA link colour and
-   gets no underline; its class is the only skin hook because the composed
-   Link's DOM is the app's. Hover and press paint on the wrapper above through
-   the kernel's `data-state`; the keyboard ring below cannot, so it stays on
-   this anchor. */
+   gets no underline, and it IS the cluster's row: value beside arrow, wrapping
+   together. That layout lives here rather than on a layout primitive inside
+   the anchor, which would stamp a second nameless `root` part in the field for
+   geometry the skin owns. Its class is the only skin hook because the composed
+   Link's DOM is the app's. Hover, press and the keyboard ring all paint on the
+   wrapper above through the kernel's `data-state`; the anchor carries no state
+   of its own. */
 .ds-structure.ds-record[data-part='field'] .ds-record__field-link {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   color: inherit;
   text-decoration: none;
 }
@@ -517,15 +532,15 @@
   color: var(--ds-color-primary);
 }
 
-/* Keyboard path into the linked value: the FOCUSABLE element is the anchor and
-   the wrapper above sits INSIDE it, so a ring declared on that wrapper can
-   never be reached — focus bubbles up, not down, and an ancestor's focus does
-   not match a descendant's `:focus-within`. The ring lands on the anchor.
-   It has no kernel twin, and that is a measurement rather than an omission:
-   `NavigationLinkProps` forwards neither handlers nor `data-*`, so
-   `:focus-visible` is the platform's own (and only) authority here — the same
-   ruling the detail header's back chip recorded. */
-.ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
+/* Keyboard path into the linked value: the FOCUSABLE element is the anchor, so
+   the ring's target has to CONTAIN it — focus bubbles up, not down, and a
+   descendant of the anchor is unreachable by construction. The wrapper above
+   is that container, which is why it wraps the anchor rather than sitting
+   inside it, and the kernel's decision therefore arrives on it like every
+   other state in this family: `data-state` first, `:focus-within` as the
+   platform twin (the wrapper is not itself focusable, so `:focus-within` is
+   the pseudo that stands for the anchor's `:focus-visible` here). */
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   border-radius: var(--ds-radius-sm, 4px);
@@ -692,7 +707,7 @@
     color: CanvasText;
   }
 
-  .ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
+  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }

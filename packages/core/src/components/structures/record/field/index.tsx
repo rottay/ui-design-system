@@ -34,12 +34,12 @@
  * automatically. With no provider mounted the field falls back to a native
  * `<a>`, which still navigates but loses client-side transitions and
  * prefetching. This keeps the DS package framework-agnostic. The injected
- * Link's contract admits no `data-*` attributes, so the link's hover and press
- * paint lives on the surface-owned `field-link-body` wrapper, stamped by its
- * own interaction state. The keyboard ring does NOT: the focusable element is
- * the anchor and that wrapper sits inside it, so focus can never reach it —
- * the ring is declared on the anchor with the platform's own `:focus-visible`,
- * the constraint the detail header's back chip already records.
+ * Link's contract admits no `data-*` attributes, so the link's hover, press
+ * and keyboard ring all paint on the surface-owned `field-link-body` wrapper,
+ * stamped by its own interaction state. The wrapper WRAPS the anchor instead
+ * of sitting inside it: focus bubbles up, so an ancestor is the only place
+ * that can hold the focusable element's state, and the skin's `fit-content`
+ * measure keeps that ancestor's box the anchor's box.
  *
  * @see `../index.ts` for the record family narrative and the pre-Checkpoint-D
  * `Surface*` compatibility aliases.
@@ -201,37 +201,45 @@ export function RecordField({
   // the DS framework-agnostic while preserving Next.js-style routing /
   // prefetching at all RecordField call sites where the provider is
   // mounted.
-  const linkInner = (
-    /* Geometry and interaction paint live in the skin on this surface-owned
-       wrapper: the cluster hugs its content (`inline-size: fit-content`), the
-       arrow takes its 13px frame from the `field-link-icon` rule, and the
-       hover/press/focus ring reads `data-state` — no inline anything. */
-    <Flex
-      {...linkInteraction.handlers}
-      {...partAttributes('field-link-body', linkInteraction.state)}
-      align="center"
-      gap={8}
-      wrap="wrap"
-    >
+  /* The cluster's row — value beside arrow — is the anchor's own content, so
+     the ANCHOR is the row: its class hook carries the skin's flex layout. A
+     layout `Flex` here would stamp a second nameless `data-part='root'` inside
+     the field for geometry the skin already owns. */
+  const linkCluster = (
+    <>
       {valueNode}
       <ArrowUpRight data-part="field-link-icon" />
-    </Flex>
+    </>
   );
 
   // `NavigationLinkProps` accepts `className` but not `data-part`, and a
   // consumer-supplied Link adapter is not this component's DOM: the anchor's
   // skin hook is therefore its class, not a part.
+  const renderAnchor = (target: string) =>
+    NavLink ? (
+      <NavLink className="ds-record__field-link" href={target}>
+        {linkCluster}
+      </NavLink>
+    ) : (
+      <a className="ds-record__field-link" href={target}>
+        {linkCluster}
+      </a>
+    );
+
   const maybeLinkedValue =
     href && !resolved.empty ? (
-      NavLink ? (
-        <NavLink className="ds-record__field-link" href={href}>
-          {linkInner}
-        </NavLink>
-      ) : (
-        <a className="ds-record__field-link" href={href}>
-          {linkInner}
-        </a>
-      )
+      /* Geometry and interaction paint live in the skin on this surface-owned
+         wrapper, which WRAPS the anchor rather than sitting inside it. That
+         containment is the whole point: focus bubbles up, so only an ancestor
+         of the focusable element can carry its `focus-visible` state, and the
+         cluster's `inline-size: fit-content` keeps the wrapper's box the
+         anchor's box, so hover and press keep the geometry they had. */
+      <Flex
+        {...linkInteraction.handlers}
+        {...partAttributes('field-link-body', linkInteraction.state)}
+      >
+        {renderAnchor(href)}
+      </Flex>
     ) : (
       valueNode
     );
