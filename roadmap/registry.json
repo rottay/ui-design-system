@@ -5437,6 +5437,11 @@
      "at": "2026-09-19 15:45",
      "by": "daniel",
      "note": "2026-09-19: sub-lots B (da6b06d41, Fable-reviewed), D (33e6e5f1f+9779cab05), E (e33a2c757) and C (b5eca0e4b) landed. The C/D/E wave review (Fable): E ACCEPT; D/C CHANGES — the three findings repaired in d1d231d1b (mod+k editable exemption with both behaviors drilled; the page-shell-surface skin imported by the base entrypoint + the orphan-skin gate arm; the scoped-producer classifier honest). Re-review in flight. PENDING to close: the SKELETON_PART_ROLES vocabulary entries (42 roleless parts across app-shell/command-palette/search-command-bar — singleton, one writer), the mod+k toggle acceptance note, and the rename census decisions (measured unsafe: app consumers) — the owner's call."
+    },
+    {
+     "at": "2026-09-19 16:19",
+     "by": "daniel",
+     "note": "2026-09-19 close audit (DT, measured): every instrument arm green — the 11 rostered rows clean (the skeleton vocabulary landed at 79c10abd8 closing the last six), the wave Fable-reviewed (E ACCEPT; C/D CHANGES repaired at d1d231d1b and re-reviewed ACCEPT — 2026-09-19-fam11-repairs-rereview-davila.md). NOT closed: the rottay-app-shell / rottay-action-dock classes still ship as stamped compatibility hooks (unpainted) because app-bithire reads both — measured by two independent writers. The WO's 'no rottay-* class emitted' arm can't pass while the hook ships, and the hook ships until the owner authorizes the app-side migration (D21-class decision). Everything else the WO's acceptance names is green."
     }
    ]
   },
