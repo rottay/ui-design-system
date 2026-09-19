@@ -38,7 +38,9 @@ import {
   isGovernedActive,
   mergeThemePatches,
   mirrorChromeSections,
+  buildThemeNameLawAdmissions,
   violatesThemeNameLaw,
+  SCOPED_ADMITTED_FAMILY_NAMESPACES,
 } from "@/foundation/contracts/composition/tenants/themes/iso";
 import { readGovernedTheme } from "../foundation/intake";
 import { DEFAULT_CHROME_SHAPE } from "@/foundation/contracts/composition/tenants/themes/iso/shape";
@@ -59,6 +61,10 @@ import {
   emitThemeCss,
 } from "@/infrastructure/compilers/runtime/theme/runtime/emission";
 import { FIRST_PARTY_BASELINES, firstPartyFixture, themeSourceOf } from "@tests/support/theme-lowering";
+import {
+  FAMILY_DERIVERS,
+  THEME_NAME_LAW_ADMISSIONS,
+} from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -950,9 +956,148 @@ describe("T0 hard universal-name law", () => {
   it("compileTheme emits no product/vertical/slug-derived channels", () => {
     for (const [slug, theme] of Object.entries(FIRST_PARTY_BASELINES)) {
       const compiled = lower(theme);
-      const bad = allChannels(compiled).filter(violatesThemeNameLaw);
+      const bad = allChannels(compiled).filter((channel) =>
+        violatesThemeNameLaw(channel, THEME_NAME_LAW_ADMISSIONS)
+      );
       expect(bad, `${slug} channels`).toEqual([]);
     }
+  });
+});
+
+/**
+ * The one scoped admission (owner resolution F2.10): `dashboard-header` names a
+ * reusable page-chrome family, not a business vertical, so its OWN namespace is
+ * admitted to a word the deny-list otherwise denies. The admission is read off
+ * the family's deriver, so it is exactly as wide as what that owner declares --
+ * which is what these drills hold it to.
+ */
+describe("T0 name law: the dashboard-header scoped admission", () => {
+  const DASHBOARD_NAMESPACE = "--ds-dashboard-header-";
+
+  const dashboardHeaderOwner = () => {
+    const owner = FAMILY_DERIVERS.find(
+      (deriver) => deriver.family === "dashboard-header"
+    );
+    expect(owner, "the dashboard-header family owner").toBeDefined();
+    return owner!;
+  };
+
+  it("admits exactly the family owner's declared namespace", () => {
+    expect(Object.keys(SCOPED_ADMITTED_FAMILY_NAMESPACES)).toEqual([
+      "dashboard-header",
+    ]);
+    const [admission, ...rest] = THEME_NAME_LAW_ADMISSIONS;
+    expect(rest).toEqual([]);
+    expect(admission!.family).toBe("dashboard-header");
+    expect(admission!.namespace).toBe(DASHBOARD_NAMESPACE);
+    expect([...admission!.channels].sort()).toEqual(
+      [...dashboardHeaderOwner().produces].sort()
+    );
+  });
+
+  it("DRILL 4: every real dashboard-header channel the compile emits passes", () => {
+    const admitted = allChannels(lower(FIRST_PARTY_BASELINES.rottay)).filter(
+      (channel) => channel.startsWith(DASHBOARD_NAMESPACE)
+    );
+    expect(admitted.length).toBe(23);
+    expect(admitted).toEqual([...dashboardHeaderOwner().produces].sort());
+    for (const channel of admitted) {
+      expect(
+        violatesThemeNameLaw(channel, THEME_NAME_LAW_ADMISSIONS),
+        channel
+      ).toBe(false);
+    }
+  });
+
+  it("DRILL 1: a planted dashboard-header channel no deriver produces FAILS", () => {
+    const planted = [
+      "--ds-dashboard-header-planted-bg",
+      "--ds-dashboard-header-metric-planted",
+      `${dashboardHeaderOwner().produces[0]}-planted`,
+    ];
+    for (const channel of planted) {
+      expect(dashboardHeaderOwner().produces).not.toContain(channel);
+      expect(
+        violatesThemeNameLaw(channel, THEME_NAME_LAW_ADMISSIONS),
+        channel
+      ).toBe(true);
+    }
+  });
+
+  it("DRILL 2: an unrelated `dashboard` name outside the family FAILS", () => {
+    for (const channel of [
+      "--ds-dashboard-foo",
+      "--ds-dashboard-bg",
+      "--ds-dashboard-metric-bg",
+      "--ds-dashboardheader-bg",
+      "--ds-card-dashboard-bg",
+    ]) {
+      expect(
+        violatesThemeNameLaw(channel, THEME_NAME_LAW_ADMISSIONS),
+        channel
+      ).toBe(true);
+    }
+  });
+
+  it("DRILL 3: a tenant/vertical-prefixed name FAILS, admission or not", () => {
+    for (const channel of [
+      "--ds-bithire-dashboard-header-bg",
+      "--ds-evnto-dashboard-header-bg",
+      "--ds-rottay-dashboard-header-bg",
+      "--ds-dashboard-header-bithire-bg",
+      "--ds-tenant-event-header-bg",
+      "--rt-dashboard-header-bg",
+    ]) {
+      expect(
+        violatesThemeNameLaw(channel, THEME_NAME_LAW_ADMISSIONS),
+        channel
+      ).toBe(true);
+    }
+  });
+
+  it("the admission requires a real family owner", () => {
+    const owner = dashboardHeaderOwner();
+    expect(() =>
+      buildThemeNameLawAdmissions(
+        FAMILY_DERIVERS.filter((deriver) => deriver !== owner)
+      )
+    ).toThrow(/requires exactly one family owner/);
+    expect(() => buildThemeNameLawAdmissions([owner, owner])).toThrow(
+      /requires exactly one family owner/
+    );
+  });
+
+  it("an owner may not widen its admission with a wildcard or a second denied word", () => {
+    const owner = dashboardHeaderOwner();
+    const others = FAMILY_DERIVERS.filter((deriver) => deriver !== owner);
+    expect(() =>
+      buildThemeNameLawAdmissions([
+        ...others,
+        { family: owner.family, produces: [`${DASHBOARD_NAMESPACE}*`] },
+      ])
+    ).toThrow(/wildcard/);
+    expect(() =>
+      buildThemeNameLawAdmissions([
+        ...others,
+        { family: owner.family, produces: [`${DASHBOARD_NAMESPACE}evnto-bg`] },
+      ])
+    ).toThrow(/beyond the/);
+  });
+
+  it("the deny-list itself is untouched for every other name", () => {
+    for (const name of [
+      "--ds-event-bg",
+      "--ds-ticket-bg",
+      "--ds-bithire-bg",
+      "--ds-evnto-bg",
+      "--ds-rottay-bg",
+      "--rt-anything",
+    ]) {
+      expect(violatesThemeNameLaw(name, THEME_NAME_LAW_ADMISSIONS), name).toBe(
+        true
+      );
+    }
+    expect(violatesThemeNameLaw("--ds-color-primary")).toBe(false);
   });
 });
 

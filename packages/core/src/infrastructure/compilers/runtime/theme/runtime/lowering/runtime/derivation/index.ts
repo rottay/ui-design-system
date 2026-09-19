@@ -6,6 +6,11 @@
  * @package @rottay/design-system
  */
 
+import {
+  buildThemeNameLawAdmissions,
+  type ThemeNameLawAdmission,
+} from "@/foundation/contracts/composition/tenants/themes/iso";
+
 import type { FamilyDeriver } from "../../foundation/contract";
 import { axesDeriver } from "./axes";
 import { chartsDeriver } from "./charts";
@@ -255,3 +260,15 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   splitterChromeDeriver,
   seedsDeriver,
 ]);
+
+/**
+ * The universal-name law's scoped admissions, resolved against the families
+ * that actually produce the channels.
+ *
+ * The law is a contract and cannot see the compiler: it names WHICH family is
+ * admitted to a word the deny-list otherwise denies, and this registry answers
+ * which channels that family declares. Delete or rename the owner and the
+ * build throws rather than leaving a namespace admitted with nobody behind it.
+ */
+export const THEME_NAME_LAW_ADMISSIONS: readonly ThemeNameLawAdmission[] =
+  buildThemeNameLawAdmissions(FAMILY_DERIVERS);

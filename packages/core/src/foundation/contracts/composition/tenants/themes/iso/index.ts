@@ -1127,9 +1127,113 @@ export function mergeThemePatches(base: Theme, ...patches: ThemeLayerPatch[]): T
 export const THEME_NAME_DENY_LIST =
   /event|ticket|dashboard|rottay|bithire|evnto|--rt-/i;
 
-/** True if a keypath or channel name violates the universal-name law. */
-export function violatesThemeNameLaw(name: string): boolean {
-  return THEME_NAME_DENY_LIST.test(name);
+/**
+ * The minimal view the name law needs of a family owner: its id and the
+ * channels it DECLARES it produces. Structural on purpose -- the law is a
+ * contract and may not import the compiler's deriver registry.
+ */
+export interface ThemeNameLawFamilyOwner {
+  readonly family: string;
+  readonly produces: readonly string[];
+}
+
+/**
+ * One family admitted to a denied word, scoped to the exact channels its own
+ * deriver declares.
+ */
+export interface ThemeNameLawAdmission {
+  readonly family: string;
+  /** The `--ds-<family>-` prefix this family owns. */
+  readonly namespace: string;
+  /** The declared channels under that namespace; nothing else is admitted. */
+  readonly channels: ReadonlySet<string>;
+}
+
+/**
+ * The families whose OWN namespace spells a denied word, and the namespace each
+ * one owns.
+ *
+ * `dashboard-header` is a reusable UI family -- a page-chrome structure any app
+ * can mount without knowing what a tenant, candidate or event is -- so the word
+ * here names a component, not a business vertical. The deny-list keeps `dashboard`
+ * for every OTHER name: this table admits a family, and the admitted SET is then
+ * read off that family's deriver rather than typed out here, so a channel in the
+ * namespace that no deriver produces stays denied and an unowned family id is
+ * refused outright.
+ */
+export const SCOPED_ADMITTED_FAMILY_NAMESPACES: Readonly<Record<string, string>> =
+  Object.freeze({
+    "dashboard-header": "--ds-dashboard-header-",
+  });
+
+/**
+ * Resolve the admitted channel sets from the family owners themselves.
+ *
+ * Fail-closed at every step: the admitted family must exist exactly once in the
+ * registry, must actually produce channels under its namespace, may not declare
+ * a wildcard there (a prefix pattern would admit names nobody wrote), and may
+ * not smuggle a SECOND denied word past its own namespace.
+ */
+export function buildThemeNameLawAdmissions(
+  owners: readonly ThemeNameLawFamilyOwner[]
+): readonly ThemeNameLawAdmission[] {
+  return Object.entries(SCOPED_ADMITTED_FAMILY_NAMESPACES).map(
+    ([family, namespace]) => {
+      if (!THEME_NAME_DENY_LIST.test(namespace)) {
+        throw new Error(
+          `theme name law: "${family}" claims namespace "${namespace}", which the deny-list does not deny; a scoped admission there admits nothing`
+        );
+      }
+      const matched = owners.filter((owner) => owner.family === family);
+      if (matched.length !== 1) {
+        throw new Error(
+          `theme name law: the "${family}" admission requires exactly one family owner declaring it; found ${matched.length}`
+        );
+      }
+      const declared = matched[0]!.produces.filter((channel) =>
+        channel.startsWith(namespace)
+      );
+      if (declared.length === 0) {
+        throw new Error(
+          `theme name law: the "${family}" owner declares no channel under "${namespace}"`
+        );
+      }
+      for (const channel of declared) {
+        if (channel.endsWith("*")) {
+          throw new Error(
+            `theme name law: "${family}" declares the wildcard "${channel}"; a scoped admission enumerates exact channels`
+          );
+        }
+        const residue = channel.slice(namespace.length);
+        if (THEME_NAME_DENY_LIST.test(residue)) {
+          throw new Error(
+            `theme name law: "${channel}" carries denied vocabulary ("${residue}") beyond the "${namespace}" namespace`
+          );
+        }
+      }
+      return { family, namespace, channels: new Set(declared) };
+    }
+  );
+}
+
+/**
+ * True if a keypath or channel name violates the universal-name law.
+ *
+ * With no `admissions` the law is the bare deny-list, which is what Theme
+ * KEYPATHS are held to -- no keypath has a family owner to be admitted by.
+ * Compiler OUTPUT is checked against the admissions resolved from the family
+ * registry, so a scoped family's declared channels pass and everything else
+ * carrying the same word does not.
+ */
+export function violatesThemeNameLaw(
+  name: string,
+  admissions: readonly ThemeNameLawAdmission[] = []
+): boolean {
+  if (!THEME_NAME_DENY_LIST.test(name)) return false;
+  return !admissions.some(
+    (admission) =>
+      name.startsWith(admission.namespace) && admission.channels.has(name)
+  );
 }
 
 const CANONICAL_THEME_KEY_ORDER: readonly (keyof Theme)[] = [
