@@ -299,12 +299,15 @@
 
   /* ──────────────────────────────────────────────────────────────────────────
      1a. MATERIAL ROOTS — DERIVED, NOT AUTHORED
-     The 71 roots below are the tenant-neutral fallback of the SAME table the
+     The 103 roots below are the tenant-neutral fallback of the SAME table the
      compiler emits per vertical (`compilers/.../derivation/materials`), and
      `tests/material-root-authority.test.ts` fails if the two ever disagree.
      Their state facets are expressed as `--ds-state-*` deltas, so the
      `states.emphasis` decision moves the whole stack through one number per
      state instead of through a per-component channel.
+     Four of them read `initial`, not a value: their reading families disagree
+     on the resting value, so each keeps its own fallback while the channel
+     stays authorable. The deriver's header carries the measured census.
      ────────────────────────────────────────────────────────────────────────── */
   --ds-material-canvas-background: var(--ds-surface-canvas);
   --ds-material-canvas-foreground: var(--ds-color-text-primary);
@@ -380,9 +383,41 @@
   --ds-material-control-shadow-selected: var(--ds-material-control-focus-ring);
 
   --ds-material-raised-background: var(--ds-surface-raised);
+  --ds-material-raised-background-hover: var(--ds-material-raised-background, var(--ds-surface-raised));
+  --ds-material-raised-background-active: var(--ds-material-raised-background, var(--ds-surface-raised));
+  --ds-material-raised-background-selected: var(--ds-material-raised-background, var(--ds-surface-raised));
+  --ds-material-raised-background-disabled: var(--ds-material-raised-background, var(--ds-surface-raised));
   --ds-material-raised-foreground: var(--ds-color-text-primary);
+  --ds-material-raised-foreground-muted: var(--ds-color-text-secondary);
+  --ds-material-raised-foreground-disabled: var(--ds-color-text-disabled);
+  --ds-material-raised-border: transparent;
+  --ds-material-raised-border-strong: var(--ds-material-raised-border, transparent);
+  --ds-material-raised-border-hover: var(--ds-material-raised-border, transparent);
+  --ds-material-raised-border-active: var(--ds-material-raised-border, transparent);
+  --ds-material-raised-border-selected: var(--ds-material-raised-border-strong, var(--ds-material-raised-border, transparent));
+  --ds-material-raised-border-disabled: var(--ds-material-raised-border, transparent);
+  --ds-material-raised-focus-ring: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
+  --ds-material-raised-shadow: none;
+  --ds-material-raised-shadow-hover: initial;
+  --ds-material-raised-shadow-active: var(--ds-material-raised-shadow, none);
+  --ds-material-raised-shadow-selected: initial;
 
   --ds-material-overlay-background: var(--ds-surface-overlay);
+  --ds-material-overlay-background-hover: var(--ds-material-overlay-background, var(--ds-surface-overlay));
+  --ds-material-overlay-background-active: var(--ds-material-overlay-background, var(--ds-surface-overlay));
+  --ds-material-overlay-background-selected: var(--ds-material-overlay-background, var(--ds-surface-overlay));
+  --ds-material-overlay-background-disabled: var(--ds-material-overlay-background, var(--ds-surface-overlay));
+  --ds-material-overlay-border: initial;
+  --ds-material-overlay-border-strong: var(--ds-material-overlay-border, transparent);
+  --ds-material-overlay-border-hover: var(--ds-material-overlay-border, transparent);
+  --ds-material-overlay-border-active: var(--ds-material-overlay-border, transparent);
+  --ds-material-overlay-border-selected: var(--ds-material-overlay-border-strong, var(--ds-material-overlay-border, transparent));
+  --ds-material-overlay-border-disabled: var(--ds-material-overlay-border, transparent);
+  --ds-material-overlay-focus-ring: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
+  --ds-material-overlay-shadow: initial;
+  --ds-material-overlay-shadow-hover: var(--ds-material-overlay-shadow, none);
+  --ds-material-overlay-shadow-active: var(--ds-material-overlay-shadow, none);
+  --ds-material-overlay-shadow-selected: var(--ds-material-overlay-shadow, none);
   --ds-material-overlay-opaque: var(--ds-surface-card);
 
   /* ──────────────────────────────────────────────────────────────────────────

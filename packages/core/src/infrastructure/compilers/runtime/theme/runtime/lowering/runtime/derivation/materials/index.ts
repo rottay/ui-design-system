@@ -110,8 +110,44 @@ export function deriveMaterialChannels(bt: FlatTheme): Record<string, string> {
   vars["--ds-material-control-shadow-active"] = "none";
   vars["--ds-material-control-shadow-selected"] = "var(--ds-material-control-focus-ring)";
   vars["--ds-material-raised-background"] = "var(--ds-surface-raised)";
+  // Expansions, not `var(--_surface-*)`: those privates do not exist at the
+  // theme root, so a root declaration naming one would silently drop.
+  // `initial` where readers disagree: guaranteed-invalid keeps each family
+  // on its own fallback while the channel stays authorable.
+  vars["--ds-material-raised-background-hover"] = "var(--ds-material-raised-background, var(--ds-surface-raised))";
+  vars["--ds-material-raised-background-active"] = "var(--ds-material-raised-background, var(--ds-surface-raised))";
+  vars["--ds-material-raised-background-selected"] = "var(--ds-material-raised-background, var(--ds-surface-raised))";
+  vars["--ds-material-raised-background-disabled"] = "var(--ds-material-raised-background, var(--ds-surface-raised))";
   vars["--ds-material-raised-foreground"] = "var(--ds-color-text-primary)";
+  vars["--ds-material-raised-foreground-muted"] = "var(--ds-color-text-secondary)";
+  vars["--ds-material-raised-foreground-disabled"] = "var(--ds-color-text-disabled)";
+  vars["--ds-material-raised-border"] = "transparent";
+  vars["--ds-material-raised-border-strong"] = "var(--ds-material-raised-border, transparent)";
+  vars["--ds-material-raised-border-hover"] = "var(--ds-material-raised-border, transparent)";
+  vars["--ds-material-raised-border-active"] = "var(--ds-material-raised-border, transparent)";
+  vars["--ds-material-raised-border-selected"] = "var(--ds-material-raised-border-strong, var(--ds-material-raised-border, transparent))";
+  vars["--ds-material-raised-border-disabled"] = "var(--ds-material-raised-border, transparent)";
+  vars["--ds-material-raised-focus-ring"] = "var(--ds-focus-ring, var(--ds-shadow-focus-ring))";
+  vars["--ds-material-raised-shadow"] = "none";
+  vars["--ds-material-raised-shadow-hover"] = "initial";
+  vars["--ds-material-raised-shadow-active"] = "var(--ds-material-raised-shadow, none)";
+  vars["--ds-material-raised-shadow-selected"] = "initial";
   vars["--ds-material-overlay-background"] = "var(--ds-surface-overlay)";
+  vars["--ds-material-overlay-background-hover"] = "var(--ds-material-overlay-background, var(--ds-surface-overlay))";
+  vars["--ds-material-overlay-background-active"] = "var(--ds-material-overlay-background, var(--ds-surface-overlay))";
+  vars["--ds-material-overlay-background-selected"] = "var(--ds-material-overlay-background, var(--ds-surface-overlay))";
+  vars["--ds-material-overlay-background-disabled"] = "var(--ds-material-overlay-background, var(--ds-surface-overlay))";
+  vars["--ds-material-overlay-border"] = "initial";
+  vars["--ds-material-overlay-border-strong"] = "var(--ds-material-overlay-border, transparent)";
+  vars["--ds-material-overlay-border-hover"] = "var(--ds-material-overlay-border, transparent)";
+  vars["--ds-material-overlay-border-active"] = "var(--ds-material-overlay-border, transparent)";
+  vars["--ds-material-overlay-border-selected"] = "var(--ds-material-overlay-border-strong, var(--ds-material-overlay-border, transparent))";
+  vars["--ds-material-overlay-border-disabled"] = "var(--ds-material-overlay-border, transparent)";
+  vars["--ds-material-overlay-focus-ring"] = "var(--ds-focus-ring, var(--ds-shadow-focus-ring))";
+  vars["--ds-material-overlay-shadow"] = "initial";
+  vars["--ds-material-overlay-shadow-hover"] = "var(--ds-material-overlay-shadow, none)";
+  vars["--ds-material-overlay-shadow-active"] = "var(--ds-material-overlay-shadow, none)";
+  vars["--ds-material-overlay-shadow-selected"] = "var(--ds-material-overlay-shadow, none)";
   vars["--ds-material-overlay-opaque"] = "var(--ds-surface-card)";
   // An authored surface role overrides this family's own default for the
   // facets it states, and only those: the theme is inside the family, not a
