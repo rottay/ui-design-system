@@ -301,8 +301,8 @@
       "maxSourceBytes": 294
     },
     "./runtime/visual-authority": {
-      "maxReachableModules": 9,
-      "maxSourceBytes": 73535
+      "maxReachableModules": 10,
+      "maxSourceBytes": 74751
     },
     "./structures/action-dock": {
       "maxReachableModules": 17,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "la ola FAM-08/10/11 + S19 agrego contenido revisado a los grafos alcanzables (derivers chrome, contratos de familia, tests de corte, los kernels submit-intent/positioning y el boundary de admission de tooltip); budgets del manifiesto re-stated a lo medido en la misma corrida; cada subpath medido",
-  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 2 subido(s), 0 sin ancla valida; maxSourceBytes: 7 subido(s), 0 sin ancla valida"
+  "lastMove": "la reparacion estructural de S19-A01 (Fable-accepted) agrego los dos owners de vocabulario al grafo de visual-authority; bytes y fan-out medidos en esta corrida",
+  "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

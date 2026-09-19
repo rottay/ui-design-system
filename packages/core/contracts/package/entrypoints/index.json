@@ -534,8 +534,8 @@
       "output": "entrypoints/public/runtime/visual-authority/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 9,
-        "maxSourceBytes": 73535
+        "maxReachableModules": 10,
+        "maxSourceBytes": 74751
       },
       "symbols": [
         {
