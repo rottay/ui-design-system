@@ -626,3 +626,16 @@ cluster: the dead-writers anchor's six lawful exits (the door runs when the
 type-tier pair's owner ruling lands) and the reported-but-unfixed
 --ds-collapse-border-color drifted read (collapse family reads a name nobody
 declares — a real small defect for a follow-up lot).
+
+## 2026-09-19 (twenty-second sitting) — the last FAM-10 residual; close audit recorded
+
+stats-header's openCut closed (`31d04caa0`): the spark dots' per-instance opacity went from a
+private inline channel to the public `--ds-stats-header-spark-dot-opacity` (deriver-produced,
+skin-ruled, engine-stamped per dot — the lawful runtime-computed inline shape). The repair also
+cured a latent defect: the committed data-level redraft was never stamped by the engine, so every
+dot rendered flat at the floor; the continuous channel restores the measured per-dot opacities.
+WO-FAM-10 close audit recorded (receipt entry 8): 18/19 families meet the acceptance gate; the one
+open row is surface-lifecycle's measured failure-mode floor, pending the owner's exemption ruling
+(F2.1). The collapse-border-color thread measured and closed with NO action: its only readers are
+the frozen engines (the name dates to the July antd mapping, d609b519b); modern never reads it, so
+no gate is blind and the freeze forbids touching it.
