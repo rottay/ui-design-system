@@ -6738,7 +6738,7 @@
    "lane": "derivation",
    "order": 8,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-06"
    ],
@@ -6795,7 +6795,9 @@
      "by": "owner-2026-09-19-via-codex-audit",
      "note": "OWNER CONTINUATION 2026-09-19 / S19 audit: follow roadmap/README.md's closure-first amendment and ../docs-engineering/archive/audits/2026-09-19-ds-4267a2904-davila/{closure-plan,git-topology,HANDOFF-KIMI}.md. Kimi DT; normal claude/Daniel.Avila real Opus writer; real Fable independent lot audit. Preserve active writers and exact later deltas; safely restore ui-design-system/main at a quiescent checkpoint; no new execution branches/worktrees. Finite existing-acceptance checklist, complete disjoint family packets, single-owner shared seams, event-driven waiting; audited functional commit then verified origin/main publication under the new owner order. Reuse valid unchanged proof; no blanket re-audit, duplicate implementation, weakened threshold or status inflation. Reconcile current governed Theme/draft transport source against the stale progress record first. Identify the finite remaining source versus acceptance-proof tasks, preserve already-landed constructor/manifest/transport changes, and run only the missing round-trip/door proof. Do not reimplement from old notes; close promptly if actual criteria are met, while routing shared admission corrections once through EVI-02/CAT-03."
     }
-   ]
+   ],
+   "doneAt": "2026-09-19",
+   "evidence": "evidence/der-08-close/index.md (the four-arm measurement) + packages/core/src/infrastructure/compilers/runtime/theme/runtime/ingress/tests/draft-round-trip-bytes.test.ts (15/15) + packages/showroom/e2e/diagnostics/studio-draft-transport.unit.test.mjs (11/11) + grep zero productive FlatTheme authors"
   }
  ],
  "traceability": {
