@@ -1,7 +1,7 @@
 {
   "purpose": "The per-axis denominator of the by-axis tenant-difference probe (kit-2026-09 section 5 rule 4), pinned so it cannot be shrunk to reach a threshold (WO-EVI-02 R4 amendment 3).",
   "direction": "A denominator BELOW its pin is a regression. A denominator ABOVE its pin is also refused, with the instruction to raise the pin in the same commit, so the published population and this file never name different sets. A reviewed semantic-identity exclusion is the one lawful subtraction: it is pinned beside the denominator it subtracts from (notApplicable per axis) and under the exclusion revision it was reviewed at, so neither can drift on its own.",
-  "catalogRevision": "49bc4572fa60d2e5",
+  "catalogRevision": "d9e1541e203de194",
   "exclusionsRevision": "ef3de957d72fda22",
   "pinnedOn": "2026-09-19",
   "skinFamilies": 276,
@@ -22,7 +22,7 @@
     "motion": 0
   },
   "provenance": {
-    "reconciles": "2026-09-18 wave: FAM-07 layout primitive skins enter the corpus; FAM-05 close physically removes the steps skin; the states axis is re-pinned BELOW its old floor with the two named, reviewed subtractions; the instrument gains the namespaced domain-state matcher (f8298d417) | follow-up (same day, after the FAM-10 sub-lot F landing): rhythm 221 -> 224 and depth 194 -> 197, each +3 with NO corpus move (276 families both sides, measured with one instrument over this tree and over an isolated archive of 9eebadbdf's parent window commit): detail-form-surface, form-surface and wizard-surface enter both axes — the rebuilt ruled-alert error banner pads on the rhythm plane (spacing.rhythm) and its wrapping emphasis border reads the edge roles (surfaces.border-style). All other axes and the N/A set unmoved. | follow-up 2 (same day, cascade-wiring lot 7a67243d8): depth 197 -> 198, one entrant measured family-by-family against an isolated archive of the previous pin's tree: splitter (its skin now reads the edge/elevation channels the re-chain wired). No corpus move. | follow-up 3 (2026-09-19, cascade-others lot 0ca2eb294): depth 198 -> 199, one entrant measured family-by-family against an isolated archive of the previous pin's tree: sidebar-surface (its skin now reads the depth channels the wiring chained). No corpus move.",
+    "reconciles": "2026-09-18 wave: FAM-07 layout primitive skins enter the corpus; FAM-05 close physically removes the steps skin; the states axis is re-pinned BELOW its old floor with the two named, reviewed subtractions; the instrument gains the namespaced domain-state matcher (f8298d417) | follow-up (same day, after the FAM-10 sub-lot F landing): rhythm 221 -> 224 and depth 194 -> 197, each +3 with NO corpus move (276 families both sides, measured with one instrument over this tree and over an isolated archive of 9eebadbdf's parent window commit): detail-form-surface, form-surface and wizard-surface enter both axes — the rebuilt ruled-alert error banner pads on the rhythm plane (spacing.rhythm) and its wrapping emphasis border reads the edge roles (surfaces.border-style). All other axes and the N/A set unmoved. | follow-up 2 (same day, cascade-wiring lot 7a67243d8): depth 197 -> 198, one entrant measured family-by-family against an isolated archive of the previous pin's tree: splitter (its skin now reads the edge/elevation channels the re-chain wired). No corpus move. | follow-up 3 (2026-09-19, cascade-others lot 0ca2eb294): depth 198 -> 199, one entrant measured family-by-family against an isolated archive of the previous pin's tree: sidebar-surface (its skin now reads the depth channels the wiring chained). No corpus move. | catalog revision 49bc4572fa60d2e5 -> d9e1541e203de194 (a0c300488, WO-FAM-11 sub-lot A: two fan-out declarations; zero row-id or membership moves, measured by the floor's own suite staying green on counts).",
     "sourceCommit": "9eebadbdf",
     "computedOn": "2026-09-18",
     "computedBy": "node scripts/check/theme/population/index.mjs (populationReport) over this tree, and the same instrument over an isolated archive of the previous pin's sourceCommit 7b35276d5; membership diffed family by family between the two measurements",
@@ -153,7 +153,7 @@
       },
       "catalogRevisionMove": {
         "from": "d50537e438bdbcfa",
-        "to": "49bc4572fa60d2e5",
+        "to": "d9e1541e203de194",
         "by": "63aec5c5e (WO-DER lane W14+W14b): catalog row 6's document keypath gains the display role; 29 decision rows / 4 annex / 2 retired with identical row ids on both sides, measured with catalogRevision() over the checked-out bytes. The digest moves, no row or family moves; population-neutral.",
         "intervening": "none -- 63aec5c5e is the only commit touching the catalog source between 7b35276d5 and this re-pin"
       },
