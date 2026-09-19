@@ -385,6 +385,20 @@ capability, static/DB/preview/publication parity, accessibility, RTL/i18n and re
 mobile-web contracts. Final branding and native applications are not silently added
 to a family's closure. Milestone C still requires its WOs, findings and indicators.
 
+### Owner-delegated decisions adopted — 2026-09-19
+
+The owner explicitly delegated resolution of the pending owner questions in this
+conversation. Execute the **Adopted resolutions** at the top of
+[`evidence/owner-decisions-2026-09-18/index.md`](../evidence/owner-decisions-2026-09-18/index.md)
+before treating its historical questions as blocked: app-side migrations and
+canonical hook retirement; measured public retirements; chart default de-aliasing,
+governed 12-slot categorical capacity and removal of the raw colors bypass; the
+exact crash-safe error-boundary exception; and the named A1/A2/F2 dispositions.
+These decisions authorize bounded implementation, not automatic WO completion
+or blanket baseline increases. Existing affected WOs carry a progress reference.
+Preserve active writers, respect app/source file reservations, and continue the
+remaining DAG autonomously. No Codex consultation or approval is part of execution.
+
 <!-- execution-policy:end -->
 
 ## DS-only parallel execution — owner amendment 2026-09-17

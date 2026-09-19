@@ -1,5 +1,152 @@
 # Owner decision package — 2026-09-18 (Kimi DT)
 
+## Adopted resolutions — 2026-09-19, owner-delegated adjudication
+
+The owner explicitly asked Codex in this conversation to review progress and
+**take these decisions**. The rulings below are adopted under that delegation,
+not attributed to a separate human vote. This is a one-off owner-requested
+decision: Codex stays outside the autonomous loop. Kimi and Claude implement,
+review and report between themselves; do not contact Codex for approval.
+
+Read this section before the historical questions below. A decision authorizes
+the bounded implementation; it is NOT a test PASS, an automatic WO close, or
+permission to widen unrelated acceptance. Base inspected: `85cc1085b` on
+`ui-design-system/main`. Foreign in-flight table/material edits are preserved.
+The original questions retain their historical measurements; remeasure only
+the affected current input closure, never reimplement a fix already landed.
+
+### R1 — Cross-repo migrations and canonical names: GO
+
+Authorize the bounded consumer migrations in **app-bithire, app-platform,
+app-evnto and the DS showroom** for the public changes in this decision package.
+Inventory each touched consumer first; preserve unrelated edits. This is not
+authority for other app features, deployment, database changes or an unreviewed
+release. Start app-bithire, then the other measured consumers. Record DS and app
+commit SHAs, package/contract versions and consumer checks together.
+
+- **FAM-11:** migrate actual consumers of `rottay-app-shell` and
+  `rottay-action-dock` to the existing canonical `ds-*` hooks, then stop emitting
+  the old hooks. Authorize the `ds-collection-shell` / surface-section-card
+  naming migration to the actual owning family namespace wherever the current
+  one-namespace acceptance still requires it; do not rename already compliant
+  owners or create a second implementation. All in-DS and app CSS/JS readers
+  move together. Preserve geometry, keyboard behavior and skin import coverage.
+- **D21 / FAM-08:** migrate `ds-table-density-*` app selectors/runtime reads to
+  the existing governed density attribute/contract, not another app-only knob;
+  prove density remains functional, then retire the class emission.
+- Reuse an existing migration mechanism only if deployment/package skew requires
+  it. Its end trigger is explicit: all named consumers migrated and validated.
+  Remove the compatibility arm when that trigger passes; no permanent aliases.
+  Declare public breaks with the proper major changeset and migration guide.
+  Do not publish a removal while the named consumers still require the old API.
+
+### R2 — Public retirements (C): GO
+
+Authorize retirement of **`useSortableList`, `useChartTheme`, `ChartFamilyFrame`**
+and the old categorical `colors` prop described in R3. Reconfirm productive
+callers on the candidate, migrate any remaining caller to the already-landed
+canonical kernel/resolver, then remove exports, obsolete implementations and
+retired API tests together. Keep replacement behavior tests and a negative
+consumer/type check proving the old API is gone. Major changesets and consumer
+migration records are mandatory even if the final caller census is zero.
+FAM-08 owns sortable retirement; FAM-09 owns chart retirements. No new kernel.
+
+### R3 — Charts Q1 / Q2 / slot cap: decided
+
+- **Q1: de-alias `default` from `accessible` (option a).** `default` uses its
+  own governed scheme chain; `accessible` remains an explicit supported scheme.
+  Isolate the visual change after the shared resolver is stable. Measure marks,
+  legend and export across schemes and light/dark, including app consumers.
+  `accessible` is not a paid-quality tier: every scheme still owes accessibility.
+- **Q2: retire the arbitrary per-component `colors` bypass** consistently for
+  categorical families. Migrate existing arrays to the governed palette/scheme
+  input at its canonical owner; preserve intended category identity, not two
+  competing paint authorities. User editing remains bounded by catalog choices
+  and permissions. Do not replace the prop with another raw-array escape hatch.
+- **B3: retain the existing 12-category capability through the governed chain.**
+  Adopt one **12-slot categorical vocabulary**, declared once and consumed by
+  the resolver, compiler, CSS, legends and exports. Extend the current 10-slot
+  authority in one singleton-owned kernel lot; do not silently truncate a live
+  12-color caller to 10, or leave a private 12-slot override beside it. This is
+  a bounded extension, not an unlimited palette feature. Preserve the first ten
+  slots where Q1 does not intentionally change them; slots 11/12 must be real
+  governed outputs, not accidental repeats of 1/2. The resolver alone owns the
+  deterministic mapping/cycling for series beyond 12. Semantic, sequential and
+  single-color models are not converted into categorical slots. Test boundary
+  indices 9/10/11/12 and invalid indices, all output paths and light/dark. Provide
+  non-color identification (labels/legend and applicable mark distinctions);
+  twelve colors alone do not prove accessible differentiation.
+
+Land R3's shared contract before parallel per-family adoption. Keep FAM-09's
+already-scoped geometry/RTL work; this approval does not declare all chart
+accessibility or fleet customization complete.
+
+### R4 — Error-boundary exception (F2.1): narrowly approved
+
+Approve the **three-property crash-safe floor** already implemented in
+`surface-lifecycle/error-boundary`: background, foreground and border, with
+governed channel first and the documented light/dark fallback. Replace the old
+eight-property allowance with this exact named three-property allowance, not a
+blanket threshold exemption for the family. No other component may copy it.
+The fallback must remain readable and keyboard-operable with stylesheet and/or
+providers absent; prove both modes, retry/focus and a healthy-tree channel
+override. Negative drill: adding a fourth unrelated paint property must fail.
+Normal spacing/radius/type/motion remain governed. This resolves this exemption,
+not FAM-10's other acceptance, ledger, adaptation, contrast or fan-out obligations.
+
+### R5 — Instrument decisions A1/A2 and F2: exact dispositions
+
+| Item | Adopted decision and implementation exit | Existing owner |
+| --- | --- | --- |
+| A1 false cascade pin | Authorize correction to a genuinely measured candidate, with source/artifact hashes, old/new named populations and provenance of the false historical number. If the correction already landed, link it; do not reset again to current debt. New regressions remain blocking. No unaudited scalar increase. | EVI-03 / EVI-02 |
+| A2 frozen-only debt | Separate an exact measured frozen-only population from the productive Modern ceiling. Continue publishing both populations; a new Modern reader re-enters the live gate. Do not count frozen exemptions as fixed or as customizable coverage, and do not thaw those engines. | EVI-03 / INV-01 |
+| F2.2 channel-parity buckets | No blanket adoption. Reuse landed sidebar repairs; wire remaining productive reads or retire unused emissions. Frozen-only collapse names use A2. Type-tier pair uses F2.9 below. Every residual gets a measured named disposition; no duplicate producer. | EVI-02 |
+| F2.3 resolved literals | A literal in compiled output is not itself a forbidden source hardcode. Classify the current named set by provenance: derived output with actual decision effect is lawful; expressive source literals must derive; immutable structural values need a named invariant. Reject blanket acceptance of the historical 338. | EVI-02 / EVI-03 |
+| F2.4 single-door coalescing | Admit the existing `target.baseline ?? baselineFor(...)` semantics if both arms enter the same governed compiler. Repair the instrument to measure the actual call/door, not a textual arity coincidence. Preserve source behavior; a planted second compiler/bypass must still fail. | EVI-02 |
+| F2.5 engine-posture cell | Reclassify from measured capability: zero gap means no unaccounted debt; it does NOT prove the frozen engine supports the feature. Use supported/unsupported/N/A honestly with evidence. Remove the contradictory positive-debt assertion, not the coverage check. | INV-01 / EVI-03 |
+| F2.6 motion pins | Measure only the canonical execution checkout and its declared inputs, never a detached historical sibling. Attribute any current increase by named keyframe/consumer and approved lot; repair actual duplication. Re-anchor only the explained set. | EVI-03 |
+| F2.7 dead writers | Retain lawful exits; wire or retire the remaining named dead writers before moving the anchor. Previously landed corrections are reused, not repeated. No generic dead-writer waiver. | RET-03 / EVI-03 |
+| F2.8 cascade vocabulary | Choose governed vocabulary extension for expressive spacing/tracking/motion/opacity/measure gaps, with one canonical owner and genuine decision-dependent family adoption. Add internal rungs only where a measured use needs them; no automatic new user knobs or entitlement change. Named structural constants are allowed only for invariant geometry/semantics independent of a brand choice, never as a blanket escape for the 85/136 historical counts. Preserve resting output unless an explicit visual change is reviewed. | EVI-02; singleton derivation owner |
+| F2.9 elevation-6 | Keep the useful highest elevation rung; the box `2xl` path already reads it. Prove the existing transitive productive route and depth causality, repair the classifier if blind, and discharge the stale pin. Do not invent a second reader solely to green the census or mark the rung structural when it changes paint. | EVI-02 / EVI-03 |
+| F2.9 xs/sm letter-spacing | Retire these two zero-only emissions if the current productive census confirms no reader: small headings already inherit the governed heading/role tracking. Prove that inherited route remains effective. If a real consumer is found, migrate it to the canonical role instead of adding an independent tracking authority. No permanent inert pin, no fake consumer to satisfy liveness. | EVI-02; typography owner |
+| F2.10 dashboard-header naming | Approve a scoped admission for the actual `dashboard-header` family and its enumerated declared namespace. Here dashboard names a reusable UI family, not a tenant/business vertical. Keep the universal deny-list for all other names; no global removal of `dashboard`, no costly cosmetic namespace migration. The admission must require this family owner and fail for a planted unrelated/tenant-prefixed name. | EVI-03 / FAM-10 |
+| F2.11 radius-field | The private framework adapter alone owns `--radius-field`, projected from the canonical field/input radius (not the button radius). Reuse the existing input/shape role; a required fallback belongs in that canonical owner so the adapter can read one governed reference. No extra user knob or new public legacy namespace. If census proves the adapter hook has no supported consumer, retire it instead of preserving an empty bridge. Verify input shape propagation and unrelated button stability; no blanket csspaint exemption. | EVI-02 / RET-03 |
+
+These are implementation decisions, not a demand to widen or bypass gates.
+Keep failed measurements visible until the relevant repair/proof lands. Never
+claim a structural/frozen disposition is successful decision-to-family fan-out.
+
+### Execution, finite closure and independence
+
+1. Preserve active writers. Apply these decisions at their next bounded packet;
+   do not interrupt the current data-table/material source edits.
+2. Run the **FAM-11 consumer/hook migration** and **FAM-08 sortable/table consumer
+   migration** in parallel only after checking their app file reservations.
+   FAM-10 crash-floor/invariant work may run alongside disjoint packets.
+3. The chart resolver/12-slot extension is one serial core owner; after its
+   contract stabilizes, parallelize complete per-chart packets. Token root and
+   instrument edits also have one owner where they share files. Keep a single
+   heavy build/browser window and one Git integrator.
+4. Record per-WO finite remaining criteria, source/app commits and focused
+   red-to-green evidence in the existing registry via its CLI. Close immediately
+   when the WO's own acceptance is satisfied. Do not require final tenant artwork
+   or whole-fleet completion to close an individual family. Do not treat this
+   decision package as blanket permission to close FAM-08/09/10/11.
+5. No new WOs, lowered product thresholds, fabricated GO/signatures or rewritten
+   history. Update the actual gates/contracts/acceptance notes needed to encode
+   these explicit decisions in the corresponding implementation lot. Keep the
+   161 denominator and DAG; if a real authority conflict remains, isolate that
+   specific packet, state the conflict to the user and continue eligible work.
+6. Kimi directs/integrates, normal `claude` on Daniel.Avila supplies real Opus
+   writers and real Fable independent reviews. Only the human user requests
+   independent Codex work; never message, invoke or wait for Codex. Continue
+   autonomously without micro-audits or polling. Publish reviewed coherent DS
+   checkpoints under the standing publication policy; do not deploy apps.
+
+---
+
+## Historical decision request — retained for provenance
+
 Consolidated after reconciling the stale D1–D21 package: completed actions are marked done
 (D1's backlog executed; D17's arithmetic corrected to 18), measured-stale entries dropped.
 Each open item names the exact edit that follows a decision. Nothing here blocks the running
