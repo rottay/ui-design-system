@@ -12,7 +12,27 @@
 
 import type { FamilyDeriver } from "../../../../foundation/contract";
 
-/** A vertical's own data-table chrome outranks every relation stated here. */
+/**
+ * A vertical's own data-table chrome outranks every relation stated here.
+ *
+ * The grip size and the drop indicator's corner rest on the EXPANSION of the
+ * skin's `--ds-modern-table-*` ladder, never on the alias: that ladder is
+ * declared on the component root, so a theme-root declaration naming it
+ * resolves against an undefined name, computes to the guaranteed-invalid value
+ * and leaves the channel inert while the read site silently keeps painting from
+ * its own fallback. Expanded, the root value is what the ladder resolves to on
+ * the element, and the decisions behind it stay live: control height and
+ * density move the grip, the radius scale moves the corner.
+ *
+ * A custom property substitutes its `var()`s where it is DECLARED, so one
+ * theme-root value cannot also carry the skin's `[data-density]` postures. The
+ * grip therefore gets one channel per posture -- `-compact` / `-spacious`
+ * beside the resting one -- which the skin's `[data-density]` rules pick, the
+ * shape the leading-cell paddings already have. The drop indicator's corner
+ * needs no such split: `--ds-modern-table-control-radius` is declared once, on
+ * the component root only, so the postures never move it and one channel
+ * carries all three. `tests/index.test.ts` fails if that stops being true.
+ */
 export const dataTableChromeDeriver: FamilyDeriver = {
   family: "data-table",
   rank: "derived",
@@ -44,6 +64,8 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-drag-grip-offset",
     "--ds-data-table-drag-grip-opacity",
     "--ds-data-table-drag-grip-size",
+    "--ds-data-table-drag-grip-size-compact",
+    "--ds-data-table-drag-grip-size-spacious",
     "--ds-data-table-drag-handle-font-size",
     "--ds-data-table-drop-indicator-bg",
     "--ds-data-table-drop-indicator-border",
@@ -239,8 +261,16 @@ export function deriveDataTableChannels(): Record<string, string> {
   /* Two rules state the grip's margin on the same selector; the later one
      carries `0`, so `0` is what it paints produced or not. */
   vars["--ds-data-table-drag-grip-offset"] = "0";
-  vars["--ds-data-table-drag-grip-size"] = "calc(var(--ds-modern-table-control-size) - 0.375rem)";
-  vars["--ds-data-table-drop-indicator-radius"] = "var(--ds-modern-table-control-radius)";
+  /* One rung per posture: the theme-root declaration substitutes its var()s
+     where it is stated, so the split the skin's [data-density] rules draw has
+     to exist as three channels, exactly as the leading-cell paddings do. */
+  vars["--ds-data-table-drag-grip-size"] =
+    "calc(var(--ds-data-table-control-size, calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)";
+  vars["--ds-data-table-drag-grip-size-compact"] =
+    "calc(var(--ds-data-table-control-size-compact, calc(var(--ds-spacing-7, 1.75rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)";
+  vars["--ds-data-table-drag-grip-size-spacious"] =
+    "calc(var(--ds-data-table-control-size-spacious, calc(var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)";
+  vars["--ds-data-table-drop-indicator-radius"] = "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))";
   vars["--ds-data-table-editorial-mobile-title-size"] = "1rem";
   vars["--ds-data-table-mobile-actions-padding-block"] = "0.625rem";
   vars["--ds-data-table-mobile-bulk-padding"] = "0.625rem 0.75rem";

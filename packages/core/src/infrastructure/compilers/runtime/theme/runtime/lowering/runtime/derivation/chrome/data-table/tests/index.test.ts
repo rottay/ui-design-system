@@ -161,6 +161,85 @@ function familyFallbacks(channel: string): string[] {
 }
 
 /**
+ * The skin's component-scoped ladder (`--ds-modern-table-*`), every declaration
+ * in source order.
+ *
+ * The aliases are declared on the data-table root, so they do not exist at the
+ * theme root this deriver writes to. A resting value that named one would
+ * resolve against an undefined name, compute to the guaranteed-invalid value
+ * and leave the channel inert -- the read site would keep painting from its own
+ * fallback and a tenant decision would reach nothing. The expansion below is
+ * what the ladder resolves to on the element, read from the skin so the two
+ * cannot drift.
+ */
+function skinLadder(): Map<string, string[]> {
+  const ladder = new Map<string, string[]>();
+  for (const match of SKIN.matchAll(/(--ds-modern-table-[a-z-]+)\s*:/g)) {
+    const start = (match.index ?? 0) + match[0].length;
+    let end = start;
+    for (let depth = 0; ; end += 1) {
+      if (SKIN[end] === "(") depth += 1;
+      else if (SKIN[end] === ")") depth -= 1;
+      else if (SKIN[end] === ";" && depth === 0) break;
+    }
+    const declarations = ladder.get(match[1]!) ?? [];
+    declarations.push(normalise(SKIN.slice(start, end)));
+    ladder.set(match[1]!, declarations);
+  }
+  return ladder;
+}
+
+const LADDER = skinLadder();
+
+/**
+ * The density postures the skin states, in declaration order, and the channel
+ * suffix each one reads. The resting posture carries no suffix, the way the
+ * control rung itself is spelled.
+ */
+const POSTURES = ["", "-compact", "-spacious"] as const;
+
+/**
+ * `value` with every ladder alias replaced by what it resolves to at `posture`,
+ * recursively.
+ *
+ * Declaration order IS posture order: a `[data-density]` rule restates the
+ * alias after the resting rule, and it wins on the matching root. An alias with
+ * one declaration is posture-blind, so it answers the same at every index.
+ */
+function atPosture(value: string, posture: number): string {
+  let out = value;
+  for (let pass = 0; pass < LADDER.size + 1; pass += 1) {
+    const next = out.replace(
+      /var\(\s*(--ds-modern-table-[a-z-]+)\s*(?:,[^()]*(?:\([^()]*\)[^()]*)*)?\)/g,
+      (whole, alias: string) => {
+        const declarations = LADDER.get(alias);
+        if (!declarations) return whole;
+        return declarations[Math.min(posture, declarations.length - 1)]!;
+      }
+    );
+    if (next === out) return normalise(out);
+    out = next;
+  }
+  throw new Error(`the ladder did not settle for ${value}`);
+}
+
+/** `value` as the resting root resolves it. */
+const atThemeRoot = (value: string) => atPosture(value, 0);
+
+/** The `data-density` posture of every rule that declares `alias`, in order. */
+function densityPostures(alias: string): string[] {
+  const postures: string[] = [];
+  for (const match of SKIN.matchAll(
+    new RegExp(`${alias}\\s*:`, "g")
+  )) {
+    const selector = SKIN.slice(0, match.index ?? 0).split("}").pop() ?? "";
+    const density = selector.match(/\[data-density="([a-z]+)"\]/);
+    if (density) postures.push(density[1]!);
+  }
+  return postures;
+}
+
+/**
  * The channels drained out of the `--ds-table-` spelling nobody produced: the
  * skins now read the family's own name and the deriver produces it at the same
  * byte-identical fallback, so the resting paint is unchanged.
@@ -168,9 +247,9 @@ function familyFallbacks(channel: string): string[] {
 const DRAINED: Record<string, string> = {
   "--ds-data-table-action-gap": "var(--ds-spacing-2, 0.5rem)",
   "--ds-data-table-drag-grip-size":
-    "calc(var(--ds-modern-table-control-size) - 0.375rem)",
+    "calc(var(--ds-data-table-control-size, calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1))) - 0.375rem)",
   "--ds-data-table-drop-indicator-radius":
-    "var(--ds-modern-table-control-radius)",
+    "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))",
   "--ds-data-table-editorial-mobile-title-size": "1rem",
   "--ds-data-table-mobile-actions-padding-block": "0.625rem",
   "--ds-data-table-mobile-bulk-padding": "0.625rem 0.75rem",
@@ -207,13 +286,121 @@ describe("chrome/data-table drained channels", () => {
     const derived = dataTableChromeDeriver.derive(context(), {});
     for (const [channel, rest] of Object.entries(DRAINED)) {
       expect(derived[channel], channel).toBe(rest);
-      expect({ channel, fallbacks: familyFallbacks(channel) }, channel).toEqual(
-        {
-          channel,
-          fallbacks: [normalise(rest)],
-        }
-      );
+      const resting = familyFallbacks(channel).map(atThemeRoot);
+      expect({ channel, resting }, channel).toEqual({
+        channel,
+        resting: [normalise(rest)],
+      });
     }
+  });
+
+  it("rests the two ladder channels on the expansion, never on the alias", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    /* The aliases really are component-scoped: the skin declares them under the
+       root's own selector, so nothing at the theme root can name them. */
+    for (const alias of [
+      "--ds-modern-table-control-size",
+      "--ds-modern-table-control-radius",
+    ]) {
+      expect(LADDER.has(alias), alias).toBe(true);
+      expect(SKIN, alias).toContain(
+        `.ds-pattern-data-table.ds-engine-modern[data-part="root"]`
+      );
+      for (const channel of Object.keys(DRAINED)) {
+        expect(derived[channel], `${channel} names ${alias}`).not.toContain(
+          alias
+        );
+      }
+    }
+    /* The control-size rung is declared three times: the resting one and the
+       two the `[data-density]` postures state. The expansion takes the
+       resting one -- a theme-root value cannot carry the other three, because a
+       custom property substitutes its `var()`s where it is DECLARED. */
+    expect(LADDER.get("--ds-modern-table-control-size")).toEqual([
+      "var(--ds-data-table-control-size, calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1)))",
+      "var(--ds-data-table-control-size-compact, calc(var(--ds-spacing-7, 1.75rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1)))",
+      "var(--ds-data-table-control-size-spacious, calc(var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1)))",
+    ]);
+    expect(LADDER.get("--ds-modern-table-control-radius")).toEqual([
+      "var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))",
+    ]);
+    /* Both expansions end on channels a decision moves: the grip on the
+       family's own control rung, the corner on the radius scale. */
+    expect(derived["--ds-data-table-drag-grip-size"]).toContain(
+      "var(--ds-data-table-control-size,"
+    );
+    expect(
+      dataTableChromeDeriver.produces.includes("--ds-data-table-control-size")
+    ).toBe(true);
+    expect(derived["--ds-data-table-drop-indicator-radius"]).toContain(
+      "var(--ds-radius-md, 0.5rem)"
+    );
+  });
+
+  it("splits the grip one channel per density posture", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    /* The skin restates the grip rung under each `[data-density]` posture, and
+       the deriver states the channel that rule reads. Without the split the
+       theme-root declaration would substitute its `var()`s once and carry the
+       resting rung to all three, which is the regression this pins. */
+    expect(densityPostures("--ds-modern-table-drag-grip-size")).toEqual([
+      "compact",
+      "spacious",
+    ]);
+    expect(LADDER.get("--ds-modern-table-drag-grip-size")).toHaveLength(
+      POSTURES.length
+    );
+    POSTURES.forEach((suffix, posture) => {
+      const channel = `--ds-data-table-drag-grip-size${suffix}`;
+      expect(dataTableChromeDeriver.produces, channel).toContain(channel);
+      expect(
+        LADDER.get("--ds-modern-table-drag-grip-size")?.[posture],
+        channel
+      ).toBe(
+        `var(${channel}, calc(var(--ds-modern-table-control-size) - 0.375rem))`
+      );
+      /* The produced value IS the expansion of that posture's own fallback:
+         the grip rung cut from the control rung the same posture states. */
+      expect(
+        familyFallbacks(channel).map((fallback) =>
+          atPosture(fallback, posture)
+        ),
+        channel
+      ).toEqual([normalise(derived[channel]!)]);
+    });
+    /* Three distinct rungs, so the postures cannot silently collapse. */
+    expect(
+      new Set(
+        POSTURES.map(
+          (suffix) => derived[`--ds-data-table-drag-grip-size${suffix}`]
+        )
+      ).size
+    ).toBe(POSTURES.length);
+  });
+
+  it("holds the drop indicator's corner at one channel, because no posture moves it", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    /* Why the corner gets no `-compact` / `-spacious` twin: unlike the control
+       size, its rung is declared exactly once, under the base root selector,
+       and no `[data-density]` rule restates it. The single theme-root channel
+       therefore already reaches all three postures, and a split would produce
+       channels no rule reads. */
+    expect(densityPostures("--ds-modern-table-control-radius")).toEqual([]);
+    expect(LADDER.get("--ds-modern-table-control-radius")).toHaveLength(1);
+    expect(densityPostures("--ds-modern-table-control-size")).toEqual([
+      "compact",
+      "spacious",
+    ]);
+    for (const suffix of POSTURES) {
+      const channel = `--ds-data-table-drop-indicator-radius${suffix}`;
+      if (suffix === "") continue;
+      expect(derived[channel], channel).toBeUndefined();
+      expect(dataTableChromeDeriver.produces, channel).not.toContain(channel);
+      expect(familyFallbacks(channel), channel).toEqual([]);
+    }
+    expect(
+      atThemeRoot(familyFallbacks("--ds-data-table-drop-indicator-radius")[0]!)
+    ).toBe(normalise(derived["--ds-data-table-drop-indicator-radius"]!));
   });
 
   it("rests the drag grip's margin at the declaration that wins the cascade", () => {

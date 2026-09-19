@@ -69,6 +69,14 @@
         var(--ds-control-height-scale, 1)
     )
   );
+  /* The grip is the control rung minus its inset, so it holds the posture the
+     rung holds. It is declared here rather than read at the part because the
+     produced channel is stated at the theme root, where a custom property
+     substitutes its var()s -- one root value cannot carry three postures. */
+  --ds-modern-table-drag-grip-size: var(
+    --ds-data-table-drag-grip-size,
+    calc(var(--ds-modern-table-control-size) - 0.375rem)
+  );
   --ds-modern-table-control-radius: var(
     --ds-table-control-radius,
     var(--ds-radius-md, 0.5rem)
@@ -133,6 +141,10 @@
         var(--ds-control-height-scale, 1)
     )
   );
+  --ds-modern-table-drag-grip-size: var(
+    --ds-data-table-drag-grip-size-compact,
+    calc(var(--ds-modern-table-control-size) - 0.375rem)
+  );
   /* Compact is a coordinated posture, not ±2px: chrome bars and the type
      step below all move together on the family's shared density factor
      channel. */
@@ -163,6 +175,10 @@
       var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) *
         var(--ds-control-height-scale, 1)
     )
+  );
+  --ds-modern-table-drag-grip-size: var(
+    --ds-data-table-drag-grip-size-spacious,
+    calc(var(--ds-modern-table-control-size) - 0.375rem)
   );
   --ds-table-pagination-min-height: 3.75rem;
   --ds-table-bulk-bar-min-height: 4rem;
@@ -1572,14 +1588,8 @@
 
 /* Column affordances are compact micro-surfaces, not floating glyphs. */
 .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
-  width: var(
-    --ds-data-table-drag-grip-size,
-    calc(var(--ds-modern-table-control-size) - 0.375rem)
-  );
-  height: var(
-    --ds-data-table-drag-grip-size,
-    calc(var(--ds-modern-table-control-size) - 0.375rem)
-  );
+  width: var(--ds-modern-table-drag-grip-size);
+  height: var(--ds-modern-table-drag-grip-size);
   margin-inline-end: var(--ds-data-table-drag-grip-offset, 0);
 }
 
