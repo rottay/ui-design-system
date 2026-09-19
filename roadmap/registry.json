@@ -5349,6 +5349,11 @@
      "at": "2026-09-19 18:03",
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (2): OWNER R2+R3 LANDED (a00a13224) — all three open questions decided: Q1 de-alias default from accessible (option a: default gets its own governed scheme chain; accessible stays explicit; every scheme still owes accessibility); Q2 retire the arbitrary per-component colors bypass (migrate arrays to the governed palette/scheme at its canonical owner); slot-cap: RETAIN 12 — one 12-slot categorical vocabulary declared once, the current 10-slot authority extended in ONE singleton-owned kernel lot, resolver owns the deterministic mapping beyond 12, boundary indices 9/10/11/12 + invalid tested, light/dark, non-color identification required. Also retired by R2: useChartTheme + ChartFamilyFrame (FAM-09 owns). Sequencing per the owner: the shared 12-slot contract lands first (serial core owner), then parallel per-chart packets. Major changesets + consumer migration records mandatory. The retirement/migration lots queue behind the in-flight wave."
+    },
+    {
+     "at": "2026-09-19 19:09",
+     "by": "kimi-dt",
+     "note": "2026-09-19 kimi-dt (3): R3 kernel lot WRITTEN (Opus, Fable review in flight): ONE 12-slot categorical vocabulary declared once in foundation/palettes (the fifth copy deleted; structure:check forced the lower owner); CHART_CATEGORICAL_SIZE derived; slots 1-10 byte-identical all five schemes; slots 11/12 DERIVED (max-min CIELAB within each scheme's own envelope, >=3:1 on the four representative surfaces, both modes); the resolver alone owns cycling beyond 12 (the hidden scatter modulus removed); boundary 9/10/11/12 + invalid + all output paths + light/dark tested; palette-table-parity PASS, scheme-scope-causality NON-BLOCKING unchanged (its findings ride the deferred Q1 alias). BOUNDARY STOP (scope rule 6): the tenant allowlist --ds-chart-category-1..10, the oklch kernel CHART_SERIES_SLOT_COUNT=10 + hue offsets, catalog/capabilities/base-properties/derivation-charts and one app-bithire hand-rolled chain stay UNTOUCHED — a branded tenant gets 10 branded + 2 DS slots until the adoption lot. DT owes: tokens:catalog:write + artifact regen in the window; the minor changeset with the migration note (data-series-index 10/11 now stamped; per-slot consumer CSS needs two more rules). NEXT LOTS: Q1 de-alias (after the resolver is stable), Q2 colors-prop retirement + useChartTheme/ChartFamilyFrame retirement (R2), the tenant-allowlist extension."
     }
    ]
   },
@@ -5433,6 +5438,11 @@
      "at": "2026-09-19 18:03",
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (2): OWNER R4 LANDED (a00a13224) — the three-property crash-safe floor is APPROVED (background/foreground/border, governed channel first + documented light/dark fallback; the old 8-property allowance is replaced by the exact named 3-property allowance for THIS component only; negative drill: a planted 4th paint property must fail). The implementation lot is dispatched (Opus): swap the allowance, add the drill, prove light/dark readability + keyboard operability with stylesheet/providers absent + healthy-tree channel override. That was the LAST open arm — after it lands and is Fable-reviewed, the close audit runs."
+    },
+    {
+     "at": "2026-09-19 18:33",
+     "by": "kimi-dt",
+     "note": "2026-09-19 kimi-dt (3): R4 LANDED (aa8d1e26e, Fable ACCEPT) — the crash-safe floor is now the named three-property allowance (background/foreground/border, governed channel first + documented light-dark() pair), the old floor:8 cardinality exemption retired; 17 drills refuse every widening shape; Chromium arms green (light 7.60:1, dark 9.44:1, keyboard retry with no providers; healthy-tree channel override reaches the boundary). That was the close audit's one open row (18/19 families measured green at 6da4c8706). Registered honest caveat (Fable, non-blocking): the light-mode border measures 1.74:1 against its own ground; acceptable as a delineating edge under WCAG 1.4.11 scope; a separate family-owner packet may raise it to 3:1. NEXT: the FAM-10 close re-audit runs after the in-flight wiring wave settles."
     }
    ]
   },
@@ -6262,6 +6272,16 @@
      "at": "2026-09-19 18:04",
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (2): OWNER R5 LANDED (a00a13224) — dispositions for this lane: F2.2 channel-parity buckets — no blanket adoption; wire remaining productive reads or retire unused emissions, every residual gets a measured named disposition. F2.3 resolved literals — a literal in compiled output is not itself a forbidden hardcode; classify by provenance (derived output lawful; expressive source literals must derive; immutable structural values need a named invariant); reject blanket acceptance of the historical 338. F2.4 single-door — admit the existing target.baseline ?? baselineFor(...) semantics if both arms enter the same governed compiler; repair the instrument to measure the actual call/door. F2.8 cascade vocabulary — governed vocabulary extension for the expressive gaps, one canonical owner, named structural constants only for invariant geometry; never a blanket escape for the 85/136 historical counts. F2.9 elevation-6 + xs/sm letter-spacing dispositions co-owned with EVI-03. These queue as bounded instrument lots after the in-flight wave; each lands with its drill."
+    },
+    {
+     "at": "2026-09-19 18:53",
+     "by": "kimi-dt",
+     "note": "2026-09-19 kimi-dt (3): cascade-wiring ratchet red ATTRIBUTED BY NAME (instrument measured on two scratch worktrees, pin commit da968fcde vs HEAD fa2a4fff9, both instruments agreeing with their own pins): debt 2064 -> 2155 = 111 entries / 20 exits. Entries by family: search-command-bar 61 (FAM-11 wave), data-table 16 (RWP lots' literal producers), shell 8 (app-shell, wires in the authorized R1 namespace migration), stack 8 (S19-A02 gap rungs), command-palette 7, shortcuts-overlay 4, scope-switcher 2, record-field/tabs/page-shell-surface/density 1 each. Repairs dispatched: data-table wiring (13 wired byte-equal, 3 adjudicated: hover-lift defers to the motion-intensity cohort lot, resize-bar actives admitted as named structural constants), shell-cluster wiring (77, incl. the search-command-bar 999px->9999px fallbackParity repair). Path to green measured: 2155 - 13 - ~76 - 8 (shell, with R1) ~= under the 2064 pin with zero baseline widening. The ratchet stays RED until the wiring lots land — by design."
+    },
+    {
+     "at": "2026-09-19 19:09",
+     "by": "kimi-dt",
+     "note": "2026-09-19 kimi-dt (4): the shell-cluster wiring lot surfaced the SYSTEMIC ramp finding, measured in Chromium A/B: the spacing ramp is rem over a fluid root that resolves 15px at probe width, while the four shell families author chrome geometry in physical px -- wiring them to var(--ds-spacing-N) repaints x0.9375 (36/50 sites moved; the writer reverted all 41 ramp-dependent wires honestly). 14/78 wired byte-equal (corners, weights, tracking, line-height, touch-target, divider) + the search-command-bar 999px->9999px fallbackParity repair (engine-audit red gone). The kept corner wires give bithire's radius-scale:0.8 reach it lacked: bithire resting corners 15->12px / 18->14.4px (rottay/evnto unchanged) -- DT ruled KEEP as the declared cascade direction, flagged for Fable's independent adjudication and the owner's visibility. NEW OWNER-LEVEL QUESTION (registered for the decision file): the ramp question gates the remaining ~40 physical-px channels AND milestone B's rhythm axis -- adopt the rem ramp in family chrome (fleet-wide -6.25% geometry shift) or keep physical px with named structural constants. Not answered by the DT."
     }
    ]
   },

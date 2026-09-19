@@ -87,9 +87,6 @@
  * - `useCommands` - Get all commands with search and execute capabilities
  * - `useExecuteCommand` - Execute a specific command by ID
  *
- * **Drag and Drop Hooks:**
- * - `useSortableList` - Generic sortable list via HTML5 DnD API (no deps)
- *
  * **Search Hooks:**
  * - `useGlobalSearch` - Multi-source search with debounce, grouping, and highlights
  *
@@ -344,17 +341,6 @@ export type {
   UseCrossTabSyncOptions,
   UseCrossTabSyncReturn,
 } from '../../application/state';
-
-// ============================================================================
-// Drag and Drop hooks -- HTML5 DnD sortable lists (zero dependencies)
-// ============================================================================
-export { useSortableList } from '../../application/interaction/drag-and-drop';
-export type {
-  UseSortableListOptions,
-  SortableContainerProps,
-  SortableItemProps,
-  UseSortableListReturn,
-} from '../../application/interaction/drag-and-drop';
 
 // ============================================================================
 // Search hooks -- multi-source search with debounce, grouping, highlights

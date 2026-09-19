@@ -248,6 +248,27 @@ Until then the class stays emitted and pinned.
 11. **csspaint `--radius-field` ownership** — the pre-existing projection finding (12866efbd) needs
     an owner; the ceilings re-pin (157->123, 23->18) is queued behind it.
 
+## G. New from the 2026-09-19 cascade-wiring attribution (post-R5 wave)
+
+**G1. The rem-ramp question (gates ~40 channels and milestone B's rhythm axis).** Measured by the
+shell-cluster wiring lot in a Chromium A/B: the spacing ramp is `rem` over a fluid root that
+resolves **15px** at the probe width, while the shell families author chrome geometry in physical
+`px`. Wiring `42px` to `var(--ds-spacing-…)` repaints ×0.9375 fleet-wide (36/50 measured sites
+moved; the writer reverted all 41 ramp-dependent wires honestly). Choose: (a) adopt the rem ramp in
+family chrome geometry — a one-time fleet-wide −6.25% chrome shift, after which rhythm/density
+reach every wired family; (b) keep physical px and admit the named structural constants into the
+pin (the FAM-04 precedent); (c) a per-family mix with the rule written down. F2.8 chose governed
+vocabulary extension as the route, but did not see this measurement: the missing rungs are not the
+blocker here, the rem/px mismatch is.
+
+**G2. Recorded, no decision needed — the bithire corner reach.** The same lot's four corner wires
+(`--ds-radius-lg`) give bithire's `shape.radius-scale: 0.8` reach it never had: bithire resting
+corners move 15px → 12px and 18px → 14.4px (rottay/evnto unchanged). DT ruled KEEP — a corner
+frozen against the tenant radius dial is exactly the debt the ratchet measures, and the change is
+the declared cascade direction; Fable adjudicated independently (see
+`2026-09-19-shell-wiring-review-davila.md`). Revert path if you disagree: `--ds-radius-lg` →
+`--ds-radius-lg-base` (12px, dial-free, identical in all three verticals).
+
 ## F. Quota (RESOLVED 2026-09-18 — superseded by the owner)
 
 RESOLVED: the owner moved the writer seat to the Kimi CLI (`kimi-code/kimi-for-coding`) on 2026-09-18;
