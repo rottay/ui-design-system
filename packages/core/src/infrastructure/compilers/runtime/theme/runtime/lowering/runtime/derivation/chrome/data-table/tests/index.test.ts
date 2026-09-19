@@ -123,10 +123,143 @@ describe("chrome/data-table cascade wiring", () => {
     expect(derived["--ds-data-table-pinned-inset-start"]).toBeUndefined();
     expect(derived["--ds-data-table-pinned-inset-end"]).toBeUndefined();
     expect(skinFallbacks("--ds-data-table-pinned-inset-start")).toEqual([
-      "var(--ds-spacing-0, 0px)",
+      "0px",
     ]);
-    expect(skinFallbacks("--ds-data-table-pinned-inset-end")).toEqual([
-      "var(--ds-spacing-0, 0px)",
+    expect(skinFallbacks("--ds-data-table-pinned-inset-end")).toEqual(["0px"]);
+  });
+});
+
+/** The four skins this family paints from, in the order the family declares them. */
+const FAMILY_SKINS = [
+  "src/foundation/tokens/css/presentation/components/skin/data-table-actions/index.css",
+  "src/foundation/tokens/css/presentation/components/skin/data-table-interactions/index.css",
+  "src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css",
+  "src/foundation/tokens/css/runtime/engines/modern/skin/data-table/index.css",
+].map((path) =>
+  readFileSync(resolve(process.cwd(), path), "utf8").replace(
+    /\/\*[\s\S]*?\*\//g,
+    ""
+  )
+);
+
+/** Every distinct fallback any of the family's skins states for `channel`. */
+function familyFallbacks(channel: string): string[] {
+  const found = new Set<string>();
+  for (const text of FAMILY_SKINS) {
+    for (const match of text.matchAll(/var\(\s*(--ds-[a-z0-9-]+)\s*,/g)) {
+      if (match[1] !== channel) continue;
+      const start = (match.index ?? 0) + match[0].length;
+      let end = start;
+      for (let depth = 1; depth > 0; end += 1) {
+        if (text[end] === "(") depth += 1;
+        else if (text[end] === ")") depth -= 1;
+      }
+      found.add(normalise(text.slice(start, end - 1)));
+    }
+  }
+  return [...found];
+}
+
+/**
+ * The channels drained out of the `--ds-table-` spelling nobody produced: the
+ * skins now read the family's own name and the deriver produces it at the same
+ * byte-identical fallback, so the resting paint is unchanged.
+ */
+const DRAINED: Record<string, string> = {
+  "--ds-data-table-action-gap": "var(--ds-spacing-2, 0.5rem)",
+  "--ds-data-table-drag-grip-size":
+    "calc(var(--ds-modern-table-control-size) - 0.375rem)",
+  "--ds-data-table-drop-indicator-radius":
+    "var(--ds-modern-table-control-radius)",
+  "--ds-data-table-editorial-mobile-title-size": "1rem",
+  "--ds-data-table-mobile-actions-padding-block": "0.625rem",
+  "--ds-data-table-mobile-bulk-padding": "0.625rem 0.75rem",
+  "--ds-data-table-mobile-card-focus-ring":
+    "0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))",
+  "--ds-data-table-mobile-card-hover-lift": "-1px",
+  "--ds-data-table-mobile-control-size": "2.25rem",
+  "--ds-data-table-mobile-pagination-padding": "0.625rem 0.75rem",
+  "--ds-data-table-mobile-selected-outline-offset": "2px",
+  "--ds-data-table-mobile-state-min-height": "8rem",
+  "--ds-data-table-mobile-state-padding": "2rem 1.25rem",
+  "--ds-data-table-mobile-state-radius":
+    "var(--ds-table-radius, var(--ds-radius-lg))",
+  "--ds-data-table-mobile-summary-divider":
+    "color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)",
+  "--ds-data-table-mobile-summary-min-height": "2rem",
+  "--ds-data-table-mobile-summary-padding-block": "0.375rem",
+  "--ds-data-table-mobile-summary-padding-inline": "0.125rem",
+  "--ds-data-table-resize-bar-height-active": "74%",
+  "--ds-data-table-resize-bar-width-active": "0.1875rem",
+  "--ds-data-table-ruled-mobile-radius": "var(--ds-radius-md, 0.5rem)",
+  "--ds-data-table-ruled-mobile-shadow": "none",
+};
+
+/** The three names this family reads that no honest single value can produce. */
+const DIVERGENT = [
+  "--ds-table-cell-line-height",
+  "--ds-table-control-radius",
+  "--ds-table-shadow",
+];
+
+describe("chrome/data-table drained channels", () => {
+  it("produces each one at the single fallback its skins state", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    for (const [channel, rest] of Object.entries(DRAINED)) {
+      expect(derived[channel], channel).toBe(rest);
+      expect({ channel, fallbacks: familyFallbacks(channel) }, channel).toEqual(
+        {
+          channel,
+          fallbacks: [normalise(rest)],
+        }
+      );
+    }
+  });
+
+  it("rests the drag grip's margin at the declaration that wins the cascade", () => {
+    /* Two rules state `margin-inline-end` on the SAME selector; the later one
+       carries `0`, so `0` is what the grip paints whether or not the channel
+       is produced. */
+    const skin = FAMILY_SKINS[FAMILY_SKINS.length - 1]!;
+    const sites = [
+      ...skin.matchAll(
+        /([^}]*?)\{[^}]*?margin-inline-end:\s*var\(--ds-data-table-drag-grip-offset,\s*([^)]*)\)/g
+      ),
+    ];
+    expect(sites).toHaveLength(2);
+    expect(sites.map((site) => normalise(site[1]!))).toEqual([
+      '.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]',
+      '.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]',
+    ]);
+    expect(sites.map((site) => site[2]!.trim())).toEqual(["0.125rem", "0"]);
+    expect(
+      dataTableChromeDeriver.derive(context(), {})[
+        "--ds-data-table-drag-grip-offset"
+      ]
+    ).toBe("0");
+  });
+
+  it("leaves the three divergent reads unproduced, with their divergence measured", () => {
+    const derived = dataTableChromeDeriver.derive(context(), {});
+    for (const channel of DIVERGENT) {
+      expect(derived[channel], channel).toBeUndefined();
+      expect(
+        familyFallbacks(channel).length,
+        `${channel}: one resting value would repaint the other read sites`
+      ).toBeGreaterThan(1);
+    }
+    expect(familyFallbacks("--ds-table-cell-line-height").sort()).toEqual([
+      "1.25",
+      "1.35",
+      "1.55",
+    ]);
+    expect(familyFallbacks("--ds-table-control-radius").sort()).toEqual([
+      "var(--ds-radius-full, 9999px)",
+      "var(--ds-radius-md, 0.5rem)",
+    ]);
+    expect(familyFallbacks("--ds-table-shadow").sort()).toEqual([
+      "var(--ds-elevation-1)",
+      "var(--ds-workspace-card-shadow, var(--ds-elevation-1))",
     ]);
   });
 });

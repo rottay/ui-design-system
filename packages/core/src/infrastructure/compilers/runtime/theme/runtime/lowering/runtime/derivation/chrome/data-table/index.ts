@@ -2,7 +2,8 @@
  * @fileoverview The data-table family: every channel its Modern skins read, at the
  * resting value the skins themselves stated, so a decision now has somewhere to
  * move it. Its namespace is `--ds-data-table-`, derived from the folder name;
- * `--ds-table-` belongs to the Table primitive's own deriver.
+ * `--ds-table-` belongs to the Table primitive's own deriver and to the
+ * `chrome.table` decision, and this family only consumes those.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/data-table
  * @category Compilers
@@ -29,6 +30,7 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-action-cell-padding-comfortable",
     "--ds-data-table-action-cell-padding-compact",
     "--ds-data-table-action-cell-padding-spacious",
+    "--ds-data-table-action-gap",
     "--ds-data-table-action-shadow",
     "--ds-data-table-bulk-bar-padding",
     "--ds-data-table-caption-font-size",
@@ -39,11 +41,14 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-control-size-spacious",
     "--ds-data-table-drag-grip-bg",
     "--ds-data-table-drag-grip-border",
+    "--ds-data-table-drag-grip-offset",
     "--ds-data-table-drag-grip-opacity",
+    "--ds-data-table-drag-grip-size",
     "--ds-data-table-drag-handle-font-size",
     "--ds-data-table-drop-indicator-bg",
     "--ds-data-table-drop-indicator-border",
     "--ds-data-table-drop-indicator-inset",
+    "--ds-data-table-drop-indicator-radius",
     "--ds-data-table-drop-indicator-shadow",
     "--ds-data-table-editor-checkbox-size",
     "--ds-data-table-editor-error-font-size",
@@ -55,6 +60,7 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-editorial-header-padding-block",
     "--ds-data-table-editorial-header-transform",
     "--ds-data-table-editorial-lead-font-weight",
+    "--ds-data-table-editorial-mobile-title-size",
     "--ds-data-table-editorial-row-shadow",
     "--ds-data-table-empty-description-font-size",
     "--ds-data-table-empty-title-font-size",
@@ -73,10 +79,24 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-leading-cell-padding-spacious",
     "--ds-data-table-min-inline-size",
     "--ds-data-table-minimal-shadow",
+    "--ds-data-table-mobile-actions-padding-block",
     "--ds-data-table-mobile-bulk-bar-bg",
     "--ds-data-table-mobile-bulk-bar-ink",
+    "--ds-data-table-mobile-bulk-padding",
+    "--ds-data-table-mobile-card-focus-ring",
+    "--ds-data-table-mobile-card-hover-lift",
+    "--ds-data-table-mobile-control-size",
     "--ds-data-table-mobile-pagination-bg",
     "--ds-data-table-mobile-pagination-ink",
+    "--ds-data-table-mobile-pagination-padding",
+    "--ds-data-table-mobile-selected-outline-offset",
+    "--ds-data-table-mobile-state-min-height",
+    "--ds-data-table-mobile-state-padding",
+    "--ds-data-table-mobile-state-radius",
+    "--ds-data-table-mobile-summary-divider",
+    "--ds-data-table-mobile-summary-min-height",
+    "--ds-data-table-mobile-summary-padding-block",
+    "--ds-data-table-mobile-summary-padding-inline",
     "--ds-data-table-open-cell-padding-block",
     "--ds-data-table-pagination-padding",
     "--ds-data-table-pinned-cell-bg",
@@ -85,10 +105,14 @@ export const dataTableChromeDeriver: FamilyDeriver = {
     "--ds-data-table-pinned-cell-bg-selected",
     "--ds-data-table-pinned-cell-bg-striped",
     "--ds-data-table-resize-bar-height",
+    "--ds-data-table-resize-bar-height-active",
     "--ds-data-table-resize-bar-width",
+    "--ds-data-table-resize-bar-width-active",
     "--ds-data-table-resize-hit-size",
     "--ds-data-table-row-selected-shadow",
     "--ds-data-table-rule-strong",
+    "--ds-data-table-ruled-mobile-radius",
+    "--ds-data-table-ruled-mobile-shadow",
     "--ds-data-table-selection-cell-padding-comfortable",
     "--ds-data-table-selection-cell-padding-compact",
     "--ds-data-table-selection-cell-padding-spacious",
@@ -209,5 +233,32 @@ export function deriveDataTableChannels(): Record<string, string> {
   vars["--ds-data-table-toolbar-gap"] = "calc(var(--ds-spacing-2, 0.5rem) * var(--ds-rhythm-effective-scale, 1))";
   vars["--ds-data-table-touch-hit-expansion"] = "0.5625rem";
   vars["--ds-data-table-touch-target"] = "var(--ds-spacing-11, 2.75rem)";
+  /* Drained out of the `--ds-table-` spelling nobody produced: the skins now
+     read the family's own name at the same byte-identical fallback. */
+  vars["--ds-data-table-action-gap"] = "var(--ds-spacing-2, 0.5rem)";
+  /* Two rules state the grip's margin on the same selector; the later one
+     carries `0`, so `0` is what it paints produced or not. */
+  vars["--ds-data-table-drag-grip-offset"] = "0";
+  vars["--ds-data-table-drag-grip-size"] = "calc(var(--ds-modern-table-control-size) - 0.375rem)";
+  vars["--ds-data-table-drop-indicator-radius"] = "var(--ds-modern-table-control-radius)";
+  vars["--ds-data-table-editorial-mobile-title-size"] = "1rem";
+  vars["--ds-data-table-mobile-actions-padding-block"] = "0.625rem";
+  vars["--ds-data-table-mobile-bulk-padding"] = "0.625rem 0.75rem";
+  vars["--ds-data-table-mobile-card-focus-ring"] = "0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 42%, transparent), var(--ds-collection-card-shadow-hover, var(--ds-premium-card-shadow-hover, var(--ds-elevation-2)))";
+  vars["--ds-data-table-mobile-card-hover-lift"] = "-1px";
+  vars["--ds-data-table-mobile-control-size"] = "2.25rem";
+  vars["--ds-data-table-mobile-pagination-padding"] = "0.625rem 0.75rem";
+  vars["--ds-data-table-mobile-selected-outline-offset"] = "2px";
+  vars["--ds-data-table-mobile-state-min-height"] = "8rem";
+  vars["--ds-data-table-mobile-state-padding"] = "2rem 1.25rem";
+  vars["--ds-data-table-mobile-state-radius"] = "var(--ds-table-radius, var(--ds-radius-lg))";
+  vars["--ds-data-table-mobile-summary-divider"] = "color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)";
+  vars["--ds-data-table-mobile-summary-min-height"] = "2rem";
+  vars["--ds-data-table-mobile-summary-padding-block"] = "0.375rem";
+  vars["--ds-data-table-mobile-summary-padding-inline"] = "0.125rem";
+  vars["--ds-data-table-resize-bar-height-active"] = "74%";
+  vars["--ds-data-table-resize-bar-width-active"] = "0.1875rem";
+  vars["--ds-data-table-ruled-mobile-radius"] = "var(--ds-radius-md, 0.5rem)";
+  vars["--ds-data-table-ruled-mobile-shadow"] = "none";
   return vars;
 }

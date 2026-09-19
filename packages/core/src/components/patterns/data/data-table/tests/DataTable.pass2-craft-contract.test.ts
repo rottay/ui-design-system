@@ -88,8 +88,8 @@ describe("DataTable pass 2 craft contract", () => {
   });
 
   it("segments mobile summaries and retains an all-around focus ring", () => {
-    expect(mobileSkin).toContain("--ds-table-mobile-summary-divider");
-    expect(mobileSkin).toContain("--ds-table-mobile-card-focus-ring");
+    expect(mobileSkin).toContain("--ds-data-table-mobile-summary-divider");
+    expect(mobileSkin).toContain("--ds-data-table-mobile-card-focus-ring");
     expect(mobileSkin).not.toMatch(
       /ds-data-table__mobile-card--selected[^{}]*\{[^}]*border-inline-start/
     );

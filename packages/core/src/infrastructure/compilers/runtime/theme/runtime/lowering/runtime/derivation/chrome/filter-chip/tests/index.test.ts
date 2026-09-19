@@ -37,6 +37,46 @@ function skinFallbacks(channel: string): string[] {
   return [...found];
 }
 
+/**
+ * The skin's component-scoped radius ladder (`--ds-list-toolbar-radius-*`).
+ *
+ * The aliases are declared on the toolbar root, so they do not exist at the
+ * theme root this deriver writes to. A resting value that named one would
+ * resolve against an undefined name and drop to the literal after the comma --
+ * a silent pixel move. The expansion below is what the ladder resolves to on
+ * the element, and it is read from the skin so the two cannot drift.
+ */
+function skinLadder(): Map<string, string> {
+  const ladder = new Map<string, string>();
+  for (const match of SKIN.matchAll(/(--ds-list-toolbar-radius-[a-z-]+)\s*:/g)) {
+    const start = (match.index ?? 0) + match[0].length;
+    let end = start;
+    for (let depth = 0; ; end += 1) {
+      if (SKIN[end] === "(") depth += 1;
+      else if (SKIN[end] === ")") depth -= 1;
+      else if (SKIN[end] === ";" && depth === 0) break;
+    }
+    ladder.set(match[1], normalise(SKIN.slice(start, end)));
+  }
+  return ladder;
+}
+
+const LADDER = skinLadder();
+
+/** `value` with every ladder alias replaced by what it resolves to, recursively. */
+function atThemeRoot(value: string): string {
+  let out = value;
+  for (let pass = 0; pass < LADDER.size + 1; pass += 1) {
+    const next = out.replace(
+      /var\(\s*(--ds-list-toolbar-radius-[a-z-]+)\s*(?:,[^()]*(?:\([^()]*\)[^()]*)*)?\)/g,
+      (whole, alias: string) => LADDER.get(alias) ?? whole
+    );
+    if (next === out) return normalise(out);
+    out = next;
+  }
+  throw new Error(`the ladder did not settle for ${value}`);
+}
+
 const context = () => buildLoweringContext({ theme: firstPartyFixture("bithire") });
 
 describe("chrome/filter-chip", () => {
@@ -50,7 +90,8 @@ describe("chrome/filter-chip", () => {
     const derived = filterChipChromeDeriver.derive(context(), {});
     expect(Object.keys(derived).sort()).toEqual([...filterChipChromeDeriver.produces].sort());
     for (const [channel, value] of Object.entries(derived)) {
-      expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({ channel, fallbacks: [value] });
+      const resting = skinFallbacks(channel).map(atThemeRoot);
+      expect({ channel, resting }).toEqual({ channel, resting: [value] });
     }
   });
 

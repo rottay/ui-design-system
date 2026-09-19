@@ -549,7 +549,7 @@
   justify-content: center;
   width: var(--ds-modern-table-control-size);
   height: var(--ds-modern-table-control-size);
-  margin-inline-end: var(--ds-table-drag-grip-offset, 0.125rem);
+  margin-inline-end: var(--ds-data-table-drag-grip-offset, 0.125rem);
   padding: 0;
   font-size: var(
     --ds-data-table-drag-handle-font-size,
@@ -1573,14 +1573,14 @@
 /* Column affordances are compact micro-surfaces, not floating glyphs. */
 .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
   width: var(
-    --ds-table-drag-grip-size,
+    --ds-data-table-drag-grip-size,
     calc(var(--ds-modern-table-control-size) - 0.375rem)
   );
   height: var(
-    --ds-table-drag-grip-size,
+    --ds-data-table-drag-grip-size,
     calc(var(--ds-modern-table-control-size) - 0.375rem)
   );
-  margin-inline-end: var(--ds-table-drag-grip-offset, 0);
+  margin-inline-end: var(--ds-data-table-drag-grip-offset, 0);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="sort-icon"] {
@@ -1687,7 +1687,7 @@
       color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
     );
   border-radius: var(
-    --ds-table-drop-indicator-radius,
+    --ds-data-table-drop-indicator-radius,
     var(--ds-modern-table-control-radius)
   );
   background: var(
