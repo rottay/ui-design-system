@@ -604,3 +604,25 @@ lot lands goes to Opus; the receipt's model metadata is verified on arrival
 only). The Kimi k2-code line stays the fallback seat if the Claude quota
 exhausts mid-flight — the briefs are model-agnostic and the audit discipline
 is unchanged.
+
+## 2026-09-19 (twenty-first sitting) — RET-03 manifest slice + the customization cluster
+
+RET-03 manifest slice landed (`f66b1bd45` + completion `b0b9e3c04` + `026c2ca5c`):
+39 MB quarantined to docs/history/inventories/customization-manifest (304 renames,
+content-preserved), every production reader measured and re-sourced or dropped, the
+generator and its two gates retired through the runner's RETIRED_GATES mechanism
+(drills assert the retirement). My integration pathspec missed the two readers
+outside packages/core — caught by the post-commit porcelain sweep and completed in
+the follow-ups; the staged-set rule now covers the repo root by default. SELF-REPORT:
+the menu-deriver chain fix from the customization lot (f9a2da36e) sat outside that
+commit's pathspec and landed inside 0c2111e87 instead; the content is the reviewed,
+validated chain fix — the placement is mine.
+
+Customization cluster: witness re-pointed to the live stack skin, fanout anchors
+follow their reads, one dead writer wired (sidebar item font-size through the menu
+chain), two retired with full reader censuses (0c2111e87). The surface drill's 5
+pre-existing fails measured identical on the unmodified tree. Remaining in the
+cluster: the dead-writers anchor's six lawful exits (the door runs when the
+type-tier pair's owner ruling lands) and the reported-but-unfixed
+--ds-collapse-border-color drifted read (collapse family reads a name nobody
+declares — a real small defect for a follow-up lot).
