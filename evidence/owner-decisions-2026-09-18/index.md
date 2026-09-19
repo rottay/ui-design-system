@@ -254,7 +254,8 @@ Until then the class stays emitted and pinned.
 shell-cluster wiring lot in a Chromium A/B: the spacing ramp is `rem` over a fluid root that
 resolves **15px** at the probe width, while the shell families author chrome geometry in physical
 `px`. Wiring `42px` to `var(--ds-spacing-…)` repaints ×0.9375 fleet-wide (36/50 measured sites
-moved; the writer reverted all 41 ramp-dependent wires honestly). Choose: (a) adopt the rem ramp in
+moved; the writer reverted all 41 ramp-dependent wires honestly) — and bithire compounds density on
+top (16px → 11.985px measured), so "adopt the ramp" is up to **−25%** there, not −6.25%. Choose:
 family chrome geometry — a one-time fleet-wide −6.25% chrome shift, after which rhythm/density
 reach every wired family; (b) keep physical px and admit the named structural constants into the
 pin (the FAM-04 precedent); (c) a per-family mix with the rule written down. F2.8 chose governed
