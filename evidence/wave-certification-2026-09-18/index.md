@@ -654,3 +654,25 @@ pathspec in f66b1bd45 — recorded) is untracked and gone (96d081f3d); the popul
 catalog revision (b1caad80c). Every dispatch brief now names the canonical path. The historical
 worktrees under ~/Developer/rottay-worktrees are untouched registrations, not evidence of new
 branches. Backup retirement waits on the owner's read of this note.
+
+## 2026-09-19 (twenty-fourth sitting) — the S19 wave + FAM-11 B/D/E; two DT assembly errors on record
+
+The S19 corrections all landed with real Opus writers and real Fable review: V02 (1032f5a57),
+A01 + its structure repair (d47c874aa + d5a3e1a74 — Fable's CHANGES was the sibling-owner imports;
+the vocabularies moved below both readers), A02 (6a3eae066), A03 (d6d4e96ae — refusal at the shared
+factory boundary), F04 (7d23f7873), F01-03 (ce0a2e0c2 + the record follow-up 871575d9c). Fable's
+wave verdict: 5 ACCEPT + 1 CHANGES (closed). DER-08 CLOSED (115/161) — the four arms measured, the
+showroom migrated (d2fd3b80f). The axis-difference instrument now measures resolved paint per arm;
+the fleet's honest state stands (typography 99.4%, others 2-21% — milestone B's gap is real product
+work ahead, not a measurement artifact). The entrypoint budgets restated through the named door
+(389d3121f). The canonical checkout is ui-design-system/main; the old detached state is
+double-preserved (stash 18dfebf6c + the content backup); S19-V01's self-loop symlink untracked
+(96d081f3d); the population pins follow the catalog (b1caad80c).
+
+FAM-11: A (a0c300488) + B (da6b06d41, Fable-reviewed with one blocking closed) + E (e33a2c757) +
+D (33e6e5f1f + 9779cab05) landed; C in flight. TWO DT assembly errors on record: (1) my E-commit's
+workspace pathspec swept three files of D's in-flight set (D verified its content intact; the rule
+is now per-directory within shared parents); (2) D landed in two commits (the untracked deriver
+dirs escaped the first stage) — the S19-D3 law says caller+skin+registration land in ONE commit;
+my staged-set check now lists untracked candidates too. Both are recorded so the next reader knows
+the commit boundaries, not because the content was wrong.
