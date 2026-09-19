@@ -635,6 +635,8 @@
   --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-default-8, #7d6140)));
   --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-default-9, #a04435)));
   --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-default-10, #5e5a52)));
+  --ds-chart-paint-11: var(--ds-chart-category-11, var(--ds-chart-series-11, var(--ds-chart-default-11, #366916)));
+  --ds-chart-paint-12: var(--ds-chart-category-12, var(--ds-chart-series-12, var(--ds-chart-default-12, #716901)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='accessible'],
@@ -649,6 +651,8 @@
   --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-accessible-8, #006d77)));
   --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-accessible-9, #9b4a5a)));
   --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-accessible-10, #4d6a00)));
+  --ds-chart-paint-11: var(--ds-chart-category-11, var(--ds-chart-series-11, var(--ds-chart-accessible-11, #a53426)));
+  --ds-chart-paint-12: var(--ds-chart-category-12, var(--ds-chart-series-12, var(--ds-chart-accessible-12, #6d5a24)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='monochrome'],
@@ -663,6 +667,8 @@
   --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-monochrome-8, #37699f)));
   --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-monochrome-9, #274b77)));
   --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-monochrome-10, #5a789a)));
+  --ds-chart-paint-11: var(--ds-chart-category-11, var(--ds-chart-series-11, var(--ds-chart-monochrome-11, #123b5b)));
+  --ds-chart-paint-12: var(--ds-chart-category-12, var(--ds-chart-series-12, var(--ds-chart-monochrome-12, #355c81)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='pastel'],
@@ -677,6 +683,8 @@
   --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-pastel-8, #3b777c)));
   --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-pastel-9, #95606a)));
   --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-pastel-10, #62752e)));
+  --ds-chart-paint-11: var(--ds-chart-category-11, var(--ds-chart-series-11, var(--ds-chart-pastel-11, #a64e41)));
+  --ds-chart-paint-12: var(--ds-chart-category-12, var(--ds-chart-series-12, var(--ds-chart-pastel-12, #857449)));
 }
 
 .ds-chart-frame.ds-chart-frame[data-part='chart-frame'][data-chart-color-scheme='vibrant'],
@@ -691,6 +699,8 @@
   --ds-chart-paint-8: var(--ds-chart-category-8, var(--ds-chart-series-8, var(--ds-chart-vibrant-8, #00727b)));
   --ds-chart-paint-9: var(--ds-chart-category-9, var(--ds-chart-series-9, var(--ds-chart-vibrant-9, #a3364f)));
   --ds-chart-paint-10: var(--ds-chart-category-10, var(--ds-chart-series-10, var(--ds-chart-vibrant-10, #486900)));
+  --ds-chart-paint-11: var(--ds-chart-category-11, var(--ds-chart-series-11, var(--ds-chart-vibrant-11, #006db3)));
+  --ds-chart-paint-12: var(--ds-chart-category-12, var(--ds-chart-series-12, var(--ds-chart-vibrant-12, #614805)));
 }
 
 /* VIZ-02 — React-owned SVG renderer anatomy. D3 computes geometry only; all
@@ -888,6 +898,20 @@
 .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
   [data-part='scatter-point-mark'][data-series-index='9'] {
   --ds-chart-mark-color: var(--ds-chart-paint-10, var(--ds-color-info));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='10'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='10'] {
+  --ds-chart-mark-color: var(--ds-chart-paint-11, var(--ds-color-primary));
+}
+
+.ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
+  [data-part='pie-slice-mark'][data-series-index='11'],
+.ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+  [data-part='scatter-point-mark'][data-series-index='11'] {
+  --ds-chart-mark-color: var(--ds-chart-paint-12, var(--ds-color-secondary));
 }
 
 .ds-chart-renderer-pie.ds-chart-renderer-pie[data-part='chart-renderer']
@@ -1276,7 +1300,9 @@
   .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
     [data-part='scatter-point-mark'][data-series-index='7'] [data-part='scatter-point'],
   .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
-    [data-part='scatter-point-mark'][data-series-index='9'] [data-part='scatter-point'] {
+    [data-part='scatter-point-mark'][data-series-index='9'] [data-part='scatter-point'],
+  .ds-chart-renderer-scatter.ds-chart-renderer-scatter[data-part='chart-renderer']
+    [data-part='scatter-point-mark'][data-series-index='11'] [data-part='scatter-point'] {
     fill: Canvas;
     stroke: CanvasText;
   }

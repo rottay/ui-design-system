@@ -8,7 +8,7 @@ import { renderSurface } from '../../../../../../surfaces/foundation/common/test
 
 const PALETTE = resolveChartSeriesPaint('accessible');
 
-const TASKS = Array.from({ length: 12 }, (_, index) => ({
+const TASKS = Array.from({ length: 13 }, (_, index) => ({
   id: `task-${index}`,
   name: `Task ${index}`,
   start: `2026-07-${String(index + 1).padStart(2, '0')}`,
@@ -16,7 +16,7 @@ const TASKS = Array.from({ length: 12 }, (_, index) => ({
 }));
 
 const LONG_OVERRIDE = Array.from(
-  { length: 12 },
+  { length: 13 },
   (_, index) => `#${String(index + 10).repeat(3)}`,
 );
 

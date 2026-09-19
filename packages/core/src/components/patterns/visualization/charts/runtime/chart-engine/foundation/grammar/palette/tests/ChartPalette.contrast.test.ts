@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
+import { hexToOklab } from '@/foundation/kernel/color/oklch';
 
 import type { ChartPersonalityTokens } from '@/foundation/contracts';
 import { themanagementmiamiFlatTheme } from '@tests/fixtures/brand-themes/themanagementmiami';
@@ -54,6 +55,25 @@ function readModeColors(scheme: typeof SCHEMES[number]): { light: string[]; dark
   return { light, dark };
 }
 
+/** The pre-extension vocabulary. Slots above it are the derived extension. */
+const PRE_EXTENSION_SIZE = 10;
+
+const distance = (a: string, b: string): number => {
+  const first = hexToOklab(a);
+  const second = hexToOklab(b);
+  return Math.hypot(first.l - second.l, first.a - second.a, first.b - second.b);
+};
+
+/** The tightest separation the scheme's own audited ten already accept. */
+function baselineSeparation(colors: readonly string[]): number {
+  const audited = colors.slice(0, PRE_EXTENSION_SIZE);
+  return Math.min(
+    ...audited.flatMap((color, index) =>
+      audited.filter((_, other) => other !== index).map((peer) => distance(color, peer)),
+    ),
+  );
+}
+
 describe('Chart grammar foundation palette non-text contrast', () => {
   it('preserves personality selection and tenant/DB category precedence', () => {
     // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset, and
@@ -72,6 +92,34 @@ describe('Chart grammar foundation palette non-text contrast', () => {
         expect(paint[index - 1]).toBe(
           `var(--ds-chart-category-${index}, var(--ds-chart-series-${index}, var(--ds-chart-${scheme}-${index}, ${colors.light[index - 1]})))`,
         );
+      }
+    }
+  });
+
+  it('derives slots 11 and 12 rather than repeating an existing slot', () => {
+    for (const scheme of SCHEMES) {
+      const colors = readModeColors(scheme);
+
+      for (const mode of ['light', 'dark'] as const) {
+        const palette = colors[mode];
+        expect(new Set(palette).size, `${scheme}/${mode} must declare twelve distinct values`)
+          .toBe(CHART_CATEGORICAL_SIZE);
+
+        // A derived slot is at least as separable as the tightest pair the
+        // audited ten already ship, so neither one is slot 1 or slot 2 warmed
+        // over. The floor is the scheme's own, because `monochrome` is a
+        // single-hue ladder and `accessible` is a wheel.
+        const floor = baselineSeparation(palette);
+        for (let slot = PRE_EXTENSION_SIZE + 1; slot <= CHART_CATEGORICAL_SIZE; slot += 1) {
+          const derived = palette[slot - 1]!;
+          const nearest = Math.min(
+            ...palette.filter((_, index) => index !== slot - 1).map((peer) => distance(derived, peer)),
+          );
+          expect(
+            nearest,
+            `${scheme}/${mode} slot ${slot} (${derived}) must separate at least as well as the audited ten (${floor.toFixed(4)})`,
+          ).toBeGreaterThanOrEqual(floor);
+        }
       }
     }
   });

@@ -67,21 +67,39 @@ describe('the categorical model', () => {
     }
   });
 
-  it('owns the modulus: paintFor cycles at ten for every family', () => {
+  it('owns the modulus: the cycle rule is seriesIndex % CHART_CATEGORICAL_SIZE', () => {
     const decision = resolveChartPaint({ family: 'radar-chart' });
     const categorical = decision.categorical;
     expect(categorical).not.toBeNull();
+    expect(CHART_CATEGORICAL_SIZE).toBe(12);
+
+    // Boundary indices across the extension seam: the tenth and eleventh
+    // series get their own slots instead of wrapping at the old ten.
     expect(categorical?.slotIndexFor(0)).toBe(0);
+    expect(categorical?.slotIndexFor(8)).toBe(8);
     expect(categorical?.slotIndexFor(9)).toBe(9);
-    expect(categorical?.slotIndexFor(10)).toBe(0);
-    expect(categorical?.slotIndexFor(23)).toBe(3);
-    expect(categorical?.paintFor(12)).toBe(categorical?.paintFor(2));
+    expect(categorical?.slotIndexFor(10)).toBe(10);
+    expect(categorical?.slotIndexFor(11)).toBe(11);
+    expect(categorical?.slotIndexFor(12)).toBe(0);
+    expect(categorical?.slotIndexFor(23)).toBe(11);
+    expect(categorical?.slotIndexFor(25)).toBe(1);
+
+    // Only the thirteenth series repeats the first slot's paint.
+    expect(categorical?.paintFor(10)).not.toBe(categorical?.paintFor(0));
+    expect(categorical?.paintFor(11)).not.toBe(categorical?.paintFor(1));
+    expect(categorical?.paintFor(12)).toBe(categorical?.paintFor(0));
+
+    for (let seriesIndex = 0; seriesIndex < 40; seriesIndex += 1) {
+      expect(categorical?.slotIndexFor(seriesIndex)).toBe(
+        seriesIndex % CHART_CATEGORICAL_SIZE,
+      );
+    }
   });
 
   it('keeps the cadence a separate quantity from the paint slot', () => {
     const line = resolveChartPaint({ family: 'line-chart' }).categorical;
     // line keys 1..4 in its skin: the cadence wraps at five while the slot
-    // wraps at ten, which is why they cannot share one attribute.
+    // wraps at twelve, which is why they cannot share one attribute.
     expect(line?.cadenceIndexFor(6)).toBe(1);
     expect(line?.slotIndexFor(6)).toBe(6);
 
@@ -113,10 +131,10 @@ describe('the colors override', () => {
     expect(scatter.categorical?.paintFor(0)).toBe(resolveChartSeriesPaint('default')[0]);
   });
 
-  it('still fills exactly ten slots when the override is shorter', () => {
+  it('still fills exactly CHART_CATEGORICAL_SIZE slots when the override is shorter', () => {
     const decision = resolveChartPaint({ family: 'pie-chart', override: ['#a', '#b', '#c'] });
     expect(decision.categorical?.slots).toEqual([
-      '#a', '#b', '#c', '#a', '#b', '#c', '#a', '#b', '#c', '#a',
+      '#a', '#b', '#c', '#a', '#b', '#c', '#a', '#b', '#c', '#a', '#b', '#c',
     ]);
   });
 

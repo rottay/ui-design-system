@@ -1875,7 +1875,7 @@ export function buildSvgScatterGeometry({
     const series = datum.series ?? 'default';
     let seriesIndex = seriesIndices.get(series);
     if (seriesIndex === undefined) {
-      seriesIndex = seriesIndices.size % 10;
+      seriesIndex = seriesIndices.size;
       seriesIndices.set(series, seriesIndex);
     }
     const magnitude = datum.size ?? 1;

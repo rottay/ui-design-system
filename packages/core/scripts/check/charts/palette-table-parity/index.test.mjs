@@ -2,7 +2,7 @@
  * Drill for chart-palette-table-parity.
  *
  * The gate reads two authorities from source -- the grammar module's
- * `LIGHT_FALLBACKS` through the TypeScript AST, the stylesheet's channel
+ * `CHART_SCHEME_LITERALS` through the TypeScript AST, the stylesheet's channel
  * declarations through PostCSS -- and compares them value by value. The plants
  * below are P2 from the acceptance table and its dark-scope siblings: change
  * one hex, drop one slot, copy the dark scope, and each must redden.
@@ -24,7 +24,7 @@ import {
 } from './index.mjs';
 
 const GRAMMAR = `
-const LIGHT_FALLBACKS = Object.freeze({
+const CHART_SCHEME_LITERALS = Object.freeze({
   accessible: Object.freeze(['#aa0001', '#aa0002']),
   default: Object.freeze(['#dd0001', '#dd0002']),
 });
@@ -137,7 +137,7 @@ test('an unchanged fixture is clean, so the plants above are the only difference
 /* Integration                                                         */
 /* ------------------------------------------------------------------ */
 
-test('the real tree compares all one hundred values and agrees', () => {
+test('the real tree compares every registered value and agrees', () => {
   const { findings, comparedLight, comparedDark } = runGate();
   assert.equal(comparedLight, SCHEMES.length * SLOTS);
   assert.equal(comparedDark, SCHEMES.length * SLOTS);

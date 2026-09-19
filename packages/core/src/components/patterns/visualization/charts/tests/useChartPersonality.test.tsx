@@ -5,7 +5,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { DesignSystemProvider } from '../../../../../infrastructure/runtime/bootstrap';
 import type { TenantConfig } from '../../../../../foundation/contracts';
 import { useChartPersonality } from '../runtime';
-import { resolveChartSeriesPaint } from '../runtime/chart-engine/foundation/grammar/palette';
+import {
+  CHART_CATEGORICAL_SIZE,
+  resolveChartSeriesPaint,
+} from '../runtime/chart-engine/foundation/grammar/palette';
 import { mockMatchMedia } from '@tests/support/browser/match-media';
 
 const CHART_TEST_TENANT: TenantConfig = {
@@ -79,9 +82,11 @@ describe('useChartPersonality', () => {
     // because DEFAULT_COLORS always aliased ACCESSIBLE_COLORS on this path;
     // the channel's light values equal those hexes, so standalone light
     // rendering is byte-stable while tenant palettes become visible.
-    const legacyAccessibleHexes = [
-      '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5',
-      '#7a4595', '#5f6368', '#006d77', '#9b4a5a', '#4d6a00',
+    // The first ten are the legacy hexes verbatim; slots 11-12 are the derived
+    // extension of the same vocabulary.
+    const accessibleHexes = [
+      '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5', '#7a4595',
+      '#5f6368', '#006d77', '#9b4a5a', '#4d6a00', '#a53426', '#6d5a24',
     ];
 
     for (const colorScheme of ['default', 'accessible'] as const) {
@@ -89,11 +94,11 @@ describe('useChartPersonality', () => {
         wrapper: buildWrapper('events.organizer'),
       });
 
-      expect(result.current.colors).toHaveLength(10);
+      expect(result.current.colors).toHaveLength(CHART_CATEGORICAL_SIZE);
       result.current.colors.forEach((color, index) => {
         const slot = index + 1;
         expect(color).toBe(
-          `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-accessible-${slot}, ${legacyAccessibleHexes[index]})))`,
+          `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-accessible-${slot}, ${accessibleHexes[index]})))`,
         );
       });
     }

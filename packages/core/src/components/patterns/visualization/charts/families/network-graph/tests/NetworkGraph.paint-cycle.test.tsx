@@ -8,7 +8,7 @@ import { renderSurface } from '../../../../../../surfaces/foundation/common/test
 
 const PALETTE = resolveChartSeriesPaint('accessible');
 
-const NODES = Array.from({ length: 12 }, (_, index) => ({
+const NODES = Array.from({ length: 13 }, (_, index) => ({
   id: `service-${index}`,
   label: `Service ${index}`,
   group: `group-${index}`,
@@ -20,7 +20,7 @@ const LINKS = NODES.slice(0, -1).map((node, index) => ({
 }));
 
 const LONG_OVERRIDE = Array.from(
-  { length: 12 },
+  { length: 13 },
   (_, index) => `#${String(index + 10).repeat(3)}`,
 );
 

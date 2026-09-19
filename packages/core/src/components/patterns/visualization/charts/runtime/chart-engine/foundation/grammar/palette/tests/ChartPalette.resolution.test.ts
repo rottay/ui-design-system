@@ -9,31 +9,34 @@ import {
 const SCHEMES = ['accessible', 'default', 'monochrome', 'pastel', 'vibrant'] as const satisfies readonly NonNullable<ChartPersonalityTokens['colorScheme']>[];
 
 /**
- * Audited light literals embedded as the stylesheet-free terminal tier. These
- * are the exact values the pre-seam runtime produced when no tenant token and
- * no scheme channel were present, so equality here is the standalone
- * byte-identity pin for the consumption-expression migration.
+ * Audited light literals embedded as the stylesheet-free terminal tier. Slots
+ * 1-10 are the exact values the pre-seam runtime produced when no tenant token
+ * and no scheme channel were present, so equality here is the standalone
+ * byte-identity pin for the consumption-expression migration -- and now also
+ * the pin proving the twelve-slot extension changed none of them. Slots 11 and
+ * 12 are the derived extension; their governed provenance is asserted in
+ * ChartPalette.contrast, which measures them against the ten.
  */
 const LIGHT_LITERALS: Record<typeof SCHEMES[number], readonly string[]> = {
   accessible: [
-    '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5',
-    '#7a4595', '#5f6368', '#006d77', '#9b4a5a', '#4d6a00',
+    '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5', '#7a4595',
+    '#5f6368', '#006d77', '#9b4a5a', '#4d6a00', '#a53426', '#6d5a24',
   ],
   default: [
-    '#0f766e', '#8c6d46', '#b24d3a', '#296f68', '#735838',
-    '#963f31', '#3d756f', '#7d6140', '#a04435', '#5e5a52',
+    '#0f766e', '#8c6d46', '#b24d3a', '#296f68', '#735838', '#963f31',
+    '#3d756f', '#7d6140', '#a04435', '#5e5a52', '#366916', '#716901',
   ],
   monochrome: [
-    '#2c5587', '#3a6fb0', '#21528b', '#4b78ad', '#315f97',
-    '#103968', '#526f91', '#37699f', '#274b77', '#5a789a',
+    '#2c5587', '#3a6fb0', '#21528b', '#4b78ad', '#315f97', '#103968',
+    '#526f91', '#37699f', '#274b77', '#5a789a', '#123b5b', '#355c81',
   ],
   pastel: [
-    '#527aa3', '#9b557a', '#3d8065', '#9a652b', '#5c6fb0',
-    '#80628f', '#686868', '#3b777c', '#95606a', '#62752e',
+    '#527aa3', '#9b557a', '#3d8065', '#9a652b', '#5c6fb0', '#80628f',
+    '#686868', '#3b777c', '#95606a', '#62752e', '#a64e41', '#857449',
   ],
   vibrant: [
-    '#006b63', '#a12b68', '#007a4d', '#a65000', '#244fc0',
-    '#702a91', '#4e545b', '#00727b', '#a3364f', '#486900',
+    '#006b63', '#a12b68', '#007a4d', '#a65000', '#244fc0', '#702a91',
+    '#4e545b', '#00727b', '#a3364f', '#486900', '#006db3', '#614805',
   ],
 };
 
@@ -110,6 +113,52 @@ describe('resolveChartSeriesPaint chain resolution', () => {
           expect(before).toBe('var(');
         }
       }
+    }
+  });
+
+
+  it('carries twelve slots, and the first ten are the byte-identical pre-extension values', () => {
+    const PRE_EXTENSION_SIZE = 10;
+    expect(CHART_CATEGORICAL_SIZE).toBe(12);
+    for (const scheme of SCHEMES) {
+      const paint = resolveChartSeriesPaint(scheme);
+      expect(paint).toHaveLength(12);
+      for (let index = 0; index < PRE_EXTENSION_SIZE; index += 1) {
+        expect(paint[index]).toBe(
+          `var(--ds-chart-category-${index + 1}, var(--ds-chart-series-${index + 1}, var(--ds-chart-${scheme}-${index + 1}, ${LIGHT_LITERALS[scheme][index]})))`,
+        );
+      }
+    }
+  });
+
+  it('gives slots 11 and 12 the same four-tier chain as slots 1-10', () => {
+    for (const scheme of SCHEMES) {
+      const paint = resolveChartSeriesPaint(scheme);
+      for (const slot of [11, 12]) {
+        expect(paint[slot - 1]).toBe(
+          `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-${scheme}-${slot}, ${LIGHT_LITERALS[scheme][slot - 1]})))`,
+        );
+        expect(
+          resolveExpression(paint[slot - 1] as string, { [`--ds-chart-${scheme}-${slot}`]: '#abcdef' }),
+        ).toBe('#abcdef');
+        expect(
+          resolveExpression(paint[slot - 1] as string, { [`--ds-chart-series-${slot}`]: '#123456' }),
+        ).toBe('#123456');
+        expect(
+          resolveExpression(paint[slot - 1] as string, { [`--ds-chart-category-${slot}`]: '#654321' }),
+        ).toBe('#654321');
+      }
+    }
+  });
+
+  it('never repeats slot 1 or slot 2 at the boundary indices 9, 10, 11 and 12', () => {
+    for (const scheme of SCHEMES) {
+      const paint = resolveChartSeriesPaint(scheme);
+      for (const slot of [9, 10, 11, 12]) {
+        expect(paint[slot - 1]).not.toBe(paint[0]);
+        expect(paint[slot - 1]).not.toBe(paint[1]);
+      }
+      expect(new Set(paint).size).toBe(CHART_CATEGORICAL_SIZE);
     }
   });
 

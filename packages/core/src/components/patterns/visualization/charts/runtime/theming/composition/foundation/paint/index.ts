@@ -11,7 +11,7 @@
  * only `categorical` is a slot machine: a gauge's error/warning/success arcs
  * and a heat map's two-stop ramp keep their own shapes and share only the
  * precedence chain, so a tenant palette reaches them without the design system
- * inventing ten gauge series.
+ * inventing twelve gauge series.
  *
  * The chain itself is untouched. `resolveChartSeriesPaint` remains the one
  * implementation of `category > series > scheme-channel > literal`, and this
@@ -61,7 +61,10 @@ export interface ChartPaintRequest {
 export interface ChartCategoricalPaint {
   /** Exactly CHART_CATEGORICAL_SIZE consumption expressions. */
   readonly slots: readonly string[];
-  /** THE modulus. The only place the paint slot is computed. */
+  /**
+   * THE modulus, and the only place the paint slot is computed. Series past the
+   * last slot repeat a colour, so a family must also carry non-colour identity.
+   */
   slotIndexFor(seriesIndex: number): number;
   /** slots[slotIndexFor(i)] -- never indexed by hand. */
   paintFor(seriesIndex: number): string;

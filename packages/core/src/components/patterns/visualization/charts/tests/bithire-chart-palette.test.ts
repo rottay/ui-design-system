@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import { ACCESSIBLE_COLORS } from '../foundation/palettes';
-import { resolveChartSeriesPaint } from '../runtime/chart-engine/foundation/grammar/palette';
+import {
+  CHART_CATEGORICAL_SIZE,
+  resolveChartSeriesPaint,
+} from '../runtime/chart-engine/foundation/grammar/palette';
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
@@ -65,7 +68,7 @@ describe('BitHire chart palette (WO-DES-12 one-blue law)', () => {
   it('resolves the monochrome scheme through the governed chain, not a local array', () => {
     const resolved = resolveChartSeriesPaint('monochrome');
 
-    expect(resolved).toHaveLength(10);
+    expect(resolved).toHaveLength(CHART_CATEGORICAL_SIZE);
     // A tenant palette reaches every slot: both tenant channels sit above the
     // scheme channel, which sits above the audited literal.
     for (const [index, expression] of resolved.entries()) {

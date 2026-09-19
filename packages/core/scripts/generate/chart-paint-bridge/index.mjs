@@ -4,7 +4,7 @@
  *
  * WHY THIS EXISTS
  * ---------------
- * The same fifty hexes live in `LIGHT_FALLBACKS` (the chain's terminal
+ * The same table lives in `CHART_SCHEME_LITERALS` (the chain's terminal
  * literals), in the `--ds-chart-{scheme}-N` channel of the patterns
  * stylesheet, and in the five bridge blocks of the chart-foundation skin. The
  * bridge is what lets a family paint from a class instead of an inline style,
@@ -14,8 +14,8 @@
  *
  * WHERE THE TRUTH LIVES
  * ---------------------
- * `runtime/chart-engine/foundation/grammar/palette/index.ts`. Its
- * `LIGHT_FALLBACKS` table and its `createSeriesPaint` shape are read through
+ * `foundation/palettes/index.ts`. Its `CHART_SCHEME_LITERALS`
+ * table and the chart grammar palette's `createSeriesPaint` shape are read through
  * the TypeScript AST rather than imported, so this runs on a clean checkout
  * with no build -- the same door `chart-palette-table-parity` uses.
  *
@@ -27,7 +27,7 @@
  * byte-identically; nothing else in the stylesheet is touched.
  *
  * It fails closed: an unknown scheme, a missing slot, a duplicated slot or a
- * grammar table that is not 5 x 10 is refused rather than emitted.
+ * grammar table that is not 5 x SLOTS is refused rather than emitted.
  *
  * Usage:
  *   node scripts/generate/chart-paint-bridge/index.mjs           # report
@@ -48,7 +48,7 @@ const root = findPackageRoot(here);
 
 export const GRAMMAR_SOURCE = join(
   root,
-  'src/components/patterns/visualization/charts/runtime/chart-engine/foundation/grammar/palette/index.ts',
+  'src/components/patterns/visualization/charts/foundation/palettes/index.ts',
 );
 export const SKIN_STYLESHEET = join(
   root,
@@ -56,7 +56,7 @@ export const SKIN_STYLESHEET = join(
 );
 
 export const SCHEMES = Object.freeze(['accessible', 'default', 'monochrome', 'pastel', 'vibrant']);
-export const SLOTS = 10;
+export const SLOTS = 12;
 
 const PAINT_DECL = /^--ds-chart-paint-(\d+)$/u;
 const SCOPE_SELECTOR = /\[data-chart-color-scheme=['"]([a-z-]+)['"]\]/u;
@@ -100,7 +100,7 @@ function collectObjectLiteral(node) {
   return entries;
 }
 
-/** Read `LIGHT_FALLBACKS` through the AST, preserving each literal verbatim. */
+/** Read `CHART_SCHEME_LITERALS` through the AST, preserving each literal verbatim. */
 export function readGrammarTable(source) {
   const sourceFile = ts.createSourceFile(
     'palette.ts',
@@ -114,7 +114,7 @@ export function readGrammarTable(source) {
     if (
       ts.isVariableDeclaration(node)
       && ts.isIdentifier(node.name)
-      && node.name.text === 'LIGHT_FALLBACKS'
+      && node.name.text === 'CHART_SCHEME_LITERALS'
       && node.initializer
     ) {
       for (const property of collectObjectLiteral(node.initializer)) {
@@ -226,7 +226,7 @@ function main() {
     console.log(`  WROTE ${stylesheet} (${before.length} -> ${css.length} bytes)`);
     return;
   }
-  console.log('\n  The bridge has drifted from LIGHT_FALLBACKS. Regenerate with --write;');
+  console.log('\n  The bridge has drifted from CHART_SCHEME_LITERALS. Regenerate with --write;');
   console.log('  a value that moves is a change to the palette, not to the bridge.');
   if (check) process.exit(1);
 }

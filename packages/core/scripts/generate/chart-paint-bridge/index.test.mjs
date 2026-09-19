@@ -1,7 +1,7 @@
 /**
  * Drill for chart-paint-bridge.
  *
- * The generator emits fifty declarations from one table. The plants below are
+ * The generator emits every declaration from one table. The plants below are
  * the two ways that can go wrong: a hex that moves in the grammar module must
  * be carried into the bridge, and a bridge block that is malformed -- an
  * unknown scheme, a missing slot, a duplicated slot -- must be refused rather
@@ -26,7 +26,7 @@ import {
 } from './index.mjs';
 
 const GRAMMAR = `
-const LIGHT_FALLBACKS = Object.freeze({
+const CHART_SCHEME_LITERALS = Object.freeze({
   accessible: Object.freeze(['#aa0001', '#aa0002']),
   default: Object.freeze(['#dd0001', '#dd0002']),
 });
@@ -126,7 +126,7 @@ test('a grammar table with the wrong slot count is refused', () => {
 /* Integration                                                         */
 /* ------------------------------------------------------------------ */
 
-test('the real tree emits all fifty declarations and moves no value', () => {
+test('the real tree emits every declaration and moves no value', () => {
   const { css, changes, declarations } = run();
   assert.equal(declarations, SCHEMES.length * SLOTS);
   assert.deepEqual(changes, []);

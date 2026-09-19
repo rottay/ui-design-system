@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
- * chart-palette-table-parity — the fifty hexes exist four times; bind the two
+ * chart-palette-table-parity — the same table exists four times; bind the two
  * copies nothing binds.
  *
- * The same 5 x 10 table lives in `LIGHT_FALLBACKS` (the chain's terminal
+ * The same 5 x 12 table lives in `CHART_SCHEME_LITERALS` (the chain's terminal
  * literals), in the `--ds-chart-paint-N` bridge tails of the chart-foundation
  * skin, and as `--ds-chart-{scheme}-N` in the patterns stylesheet -- twice
  * there, once light and once dark.
  *
  * The renderer suite already locks the TS module to the bridge, character for
- * character. Nothing locked the stylesheet: its hundred registered values
- * could drift from the module's promised tail and every test in the tree would
+ * character. Nothing locked the stylesheet: its registered values
+ * could drift from the table's promised tail and every test in the tree would
  * stay green, because no fixture reads the real declarations -- the fixtures
  * INJECT stub values to prove the chain reads the channel above the literal.
  *
@@ -47,7 +47,7 @@ const root = findPackageRoot(here);
 
 export const GRAMMAR_SOURCE = join(
   root,
-  'src/components/patterns/visualization/charts/runtime/chart-engine/foundation/grammar/palette/index.ts',
+  'src/components/patterns/visualization/charts/foundation/palettes/index.ts',
 );
 export const PATTERNS_STYLESHEET = join(
   root,
@@ -55,12 +55,12 @@ export const PATTERNS_STYLESHEET = join(
 );
 
 export const SCHEMES = Object.freeze(['accessible', 'default', 'monochrome', 'pastel', 'vibrant']);
-export const SLOTS = 10;
+export const SLOTS = 12;
 
 const CHANNEL = /^--ds-chart-(accessible|default|monochrome|pastel|vibrant)-(\d+)$/u;
 
 /**
- * Read `LIGHT_FALLBACKS` out of the grammar module through the TypeScript AST.
+ * Read `CHART_SCHEME_LITERALS` out of its declaring module through the TypeScript AST.
  * The module is the authority; parsing it rather than importing it keeps this
  * gate runnable on a clean checkout with no build.
  */
@@ -77,7 +77,7 @@ export function readGrammarTable(source) {
     if (
       ts.isVariableDeclaration(node)
       && ts.isIdentifier(node.name)
-      && node.name.text === 'LIGHT_FALLBACKS'
+      && node.name.text === 'CHART_SCHEME_LITERALS'
       && node.initializer
     ) {
       for (const property of collectObjectLiteral(node.initializer)) {

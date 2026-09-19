@@ -118,7 +118,7 @@ describe('SvgScatterRenderer', () => {
       .toHaveAttribute('data-empty', 'true');
   });
 
-  it('stamps the paint slot alone, cycling at ten and carrying no cadence', () => {
+  it('stamps the paint slot alone, cycling at twelve and carrying no cadence', () => {
     const html = renderToString(
       <SvgScatterRenderer
         ariaLabel="Opportunity landscape"
@@ -136,7 +136,7 @@ describe('SvgScatterRenderer', () => {
     const marks = html.match(/data-part="scatter-point-mark"[^>]*/gu) ?? [];
     expect(marks).toHaveLength(12);
     expect(marks.map((mark) => /data-series-index="(\d+)"/u.exec(mark)?.[1])).toEqual(
-      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1'],
+      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
     );
     // The family declares no cadence, so the second quantity is never invented;
     // the forced-colours hollow/solid decode keeps riding the slot's parity.
@@ -146,6 +146,8 @@ describe('SvgScatterRenderer', () => {
   it('owns palette, forced-colour and reduced-motion presentation in the skin', () => {
     expect(CHART_FOUNDATION_CSS).toContain('.ds-chart-renderer-scatter.ds-chart-renderer-scatter');
     expect(CHART_FOUNDATION_CSS).toContain("[data-part='scatter-point-mark'][data-series-index='9']");
+    // The vocabulary is twelve wide, so the last two slots must bind too.
+    expect(CHART_FOUNDATION_CSS).toContain("[data-part='scatter-point-mark'][data-series-index='11']");
     expect(CHART_FOUNDATION_CSS).toMatch(
       /@media \(prefers-reduced-motion: reduce\)[\s\S]*\[data-part='scatter-point-mark'\]/u,
     );

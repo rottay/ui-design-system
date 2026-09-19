@@ -139,7 +139,7 @@ describe('useChartTheme provider-root scoping', () => {
     expect(resolveCssColor('#123456', null, '#fedcba')).toBe('#123456');
 
     const chart = renderHook(() => useChartTheme(null));
-    expect(chart.result.current.palette).toEqual(['#2F6B9A', '#A23B72', '#123456']);
+    expect(chart.result.current.palette).toEqual(['#2f6b9a', '#a23b72', '#123456']);
     expect(new Set(chart.result.current.palette).size).toBe(3);
     chart.unmount();
   });

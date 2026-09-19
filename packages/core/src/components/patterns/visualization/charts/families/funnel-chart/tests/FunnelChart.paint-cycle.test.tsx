@@ -8,13 +8,13 @@ import { renderSurface } from '../../../../../../surfaces/foundation/common/test
 
 const PALETTE = resolveChartSeriesPaint('accessible');
 
-const STAGES = Array.from({ length: 12 }, (_, index) => ({
+const STAGES = Array.from({ length: 13 }, (_, index) => ({
   label: `Stage ${index}`,
   value: 120 - index * 8,
 }));
 
 const LONG_OVERRIDE = Array.from(
-  { length: 12 },
+  { length: 13 },
   (_, index) => `#${String(index + 10).repeat(3)}`,
 );
 

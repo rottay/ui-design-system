@@ -1,31 +1,14 @@
 import type { ChartPersonalityTokens } from '@/foundation/contracts/kernel/tokens/personality';
 
-export const CHART_CATEGORICAL_SIZE = 10;
+import { CHART_SCHEME_LITERALS } from '../../../../../foundation/palettes';
 
-const LIGHT_FALLBACKS = Object.freeze({
-  accessible: Object.freeze([
-    '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5',
-    '#7a4595', '#5f6368', '#006d77', '#9b4a5a', '#4d6a00',
-  ]),
-  default: Object.freeze([
-    '#0f766e', '#8c6d46', '#b24d3a', '#296f68', '#735838',
-    '#963f31', '#3d756f', '#7d6140', '#a04435', '#5e5a52',
-  ]),
-  monochrome: Object.freeze([
-    '#2c5587', '#3a6fb0', '#21528b', '#4b78ad', '#315f97',
-    '#103968', '#526f91', '#37699f', '#274b77', '#5a789a',
-  ]),
-  pastel: Object.freeze([
-    '#527aa3', '#9b557a', '#3d8065', '#9a652b', '#5c6fb0',
-    '#80628f', '#686868', '#3b777c', '#95606a', '#62752e',
-  ]),
-  vibrant: Object.freeze([
-    '#006b63', '#a12b68', '#007a4d', '#a65000', '#244fc0',
-    '#702a91', '#4e545b', '#00727b', '#a3364f', '#486900',
-  ]),
-});
+/**
+ * The bounded categorical vocabulary size. Series beyond the last slot cycle,
+ * and the resolver's `slotIndexFor` is the one owner of that rule.
+ */
+export const CHART_CATEGORICAL_SIZE = CHART_SCHEME_LITERALS.accessible.length;
 
-type BoundedChartScheme = keyof typeof LIGHT_FALLBACKS;
+type BoundedChartScheme = keyof typeof CHART_SCHEME_LITERALS;
 
 /**
  * Canonical categorical paint resolution, highest precedence first:
@@ -45,7 +28,7 @@ type BoundedChartScheme = keyof typeof LIGHT_FALLBACKS;
  */
 function createSeriesPaint(scheme: BoundedChartScheme): readonly string[] {
   return Object.freeze(
-    LIGHT_FALLBACKS[scheme].map((fallback, index) => {
+    CHART_SCHEME_LITERALS[scheme].map((fallback, index) => {
       const slot = index + 1;
       return `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-${scheme}-${slot}, ${fallback})))`;
     }),
@@ -61,9 +44,8 @@ const SERIES_PAINT = Object.freeze({
 });
 
 /**
- * Resolve a bounded chart scheme to its ten categorical paint expressions.
- * Status tokens are intentionally absent from every tier: arbitrary categories
- * may never borrow success, warning, error, or info meaning.
+ * Resolve a bounded chart scheme to its categorical paint expressions. Status
+ * tokens are absent from every tier: a category never borrows status meaning.
  */
 export function resolveChartSeriesPaint(
   scheme: ChartPersonalityTokens['colorScheme'] = 'default',

@@ -153,14 +153,14 @@ describe('SvgRadarRenderer presentation', () => {
       cadence: /data-series-cadence="(\d+)"/u.exec(group)?.[1],
     }));
     expect(stamped.map((entry) => entry.slot)).toEqual(
-      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1'],
+      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
     );
     expect(stamped.map((entry) => entry.cadence)).toEqual(
       ['0', '1', '2', '3', '4', '0', '1', '2', '3', '4', '0', '1'],
     );
 
     // The dash rhythm is keyed on the cadence, so unifying the paint slot to
-    // ten cannot silently retire it.
+    // twelve cannot silently retire it.
     expect(RADAR_SKIN_CSS).toContain(
       "[data-part='series'][data-series-cadence='1'] [data-part='series-area']",
     );
