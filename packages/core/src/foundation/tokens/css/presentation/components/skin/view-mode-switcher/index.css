@@ -21,7 +21,7 @@
  * channel the wrapper carried exists on the primitive's root, governed.
  *
  * WHAT THE RETIREMENT IS STAKED ON, recorded because it was false in the
- * shipped tree. The component passes `data-part='switcher'` to the composed
+ * shipped tree. The component passed `data-part='switcher'` to the composed
  * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
  * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
  * all 29 of its selectors and 97 declarations — the track frame, the selected
@@ -29,8 +29,11 @@
  * its own frame in exchange. `segmented.css` is now anchored on
  * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
  * props, so the composition above holds by construction instead of by the call
- * site's restraint. Naming the composed control is vocabulary and stays;
- * anchoring paint on a name the caller owns was the defect.
+ * site's restraint. WO-FAM-11 sub-lot E then retired the prop as well: it was
+ * a part this family stamped and no rule anywhere consumed, and the anatomy
+ * contract admits no such part. The primitive stamps its own
+ * `data-part='root'` again, and the cut closes the hazard instead of relying
+ * on the substitution that survived it.
  *
  * SPECIFICITY (P-48): no painting border remains in this file, so the
  * (0,3,1) tenant floor is moot here; the two scope classes + the root's own

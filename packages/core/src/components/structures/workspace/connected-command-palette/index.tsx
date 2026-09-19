@@ -9,7 +9,9 @@
  * This is the canonical integrated entry point. Apps that want full control
  * over the items array can still use `PatternCommandPalette` directly.
  *
- * Includes a built-in Cmd+K / Ctrl+K keyboard shortcut to open, and a
+ * Includes a built-in Cmd+K / Ctrl+K shortcut to open -- registered with the
+ * package's single keyboard owner, `ShortcutProvider`, which
+ * `DesignSystemProvider` mounts -- and a
  * built-in "Keyboard shortcuts" command (default `?`) that opens the
  * `PatternShortcutsOverlay` cheatsheet, populated from every command with a
  * `shortcut` field (via `useCommands`) plus, when the app has also mounted
@@ -30,14 +32,41 @@
  * ```
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useCommands, useRegisterCommands } from '@/infrastructure/runtime/application/commands';
-import { useRegisteredShortcuts } from '@/infrastructure/runtime/application/interaction/shortcuts';
+import {
+  useGlobalShortcut,
+  useHasShortcutProvider,
+  useRegisteredShortcuts,
+} from '@/infrastructure/runtime/application/interaction/shortcuts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { PatternCommandPalette } from '@/components/patterns/navigation/command-palette';
 import { useCommandPaletteItems } from '@/components/patterns/navigation/command-palette/runtime/application-commands';
 import { PatternShortcutsOverlay } from '@/components/patterns/navigation/shortcuts-overlay';
 import type { ShortcutDisplayItem } from '@/components/patterns/navigation/shortcuts-overlay';
+
+/**
+ * Registers the palette's open chord with the ONE keyboard owner.
+ *
+ * It is a component rather than a call in the body because
+ * `useGlobalShortcut` throws without a `<ShortcutProvider>` ancestor, and the
+ * caller decides whether one is there -- the sanctioned opt-in shape
+ * `useHasShortcutProvider` documents.
+ */
+function PaletteOpenShortcut({
+  chord,
+  description,
+  category,
+  onOpen,
+}: {
+  chord: string;
+  description: string;
+  category: string;
+  onOpen: () => void;
+}) {
+  useGlobalShortcut({ key: chord, handler: onOpen, description, category });
+  return null;
+}
 
 export interface ConnectedCommandPaletteProps {
   /** Placeholder text for the search input. */
@@ -60,9 +89,9 @@ export interface ConnectedCommandPaletteProps {
 
 /**
  * Registry-backed command palette that auto-populates from
- * `CommandRegistryProvider`. Mounts a Cmd+K listener by default, and a
- * built-in "Keyboard shortcuts" command/`?` listener that opens a cheatsheet
- * of every registered shortcut.
+ * `CommandRegistryProvider`. Registers its open chord with `ShortcutProvider`,
+ * and a built-in "Keyboard shortcuts" command/`?` listener that opens a
+ * cheatsheet of every registered shortcut.
  */
 export function ConnectedCommandPalette({
   placeholder,
@@ -103,57 +132,23 @@ export function ConnectedCommandPalette({
     }
   }, [onSearch]);
 
-  // Cmd+K / Ctrl+K to toggle
-  useEffect(() => {
-    const parts = openShortcut.split('+').map((p) => p.trim().toLowerCase());
-    const isMac = typeof navigator !== 'undefined' && /mac|iphone|ipad|ipod/i.test(navigator.userAgent);
-
-    function handleKeyDown(e: KeyboardEvent) {
-      // Typing-context law: mod+key chords fire even inside inputs (the VS
-      // Code / Linear standard), so no editable suppression happens here.
-      // Single-character shortcuts like the `?` cheatsheet key are a
-      // different story — those are suppressed by the command registry's
-      // own editable-aware listener (see useRegisterCommands above and the
-      // pinned "does not open the cheatsheet while typing" test).
-      let wantsMeta = false;
-      let wantsCtrl = false;
-      let mainKey = '';
-
-      for (const part of parts) {
-        switch (part) {
-          case 'mod':
-            if (isMac) wantsMeta = true;
-            else wantsCtrl = true;
-            break;
-          case 'meta':
-          case 'cmd':
-            wantsMeta = true;
-            break;
-          case 'ctrl':
-            wantsCtrl = true;
-            break;
-          default:
-            mainKey = part;
-        }
-      }
-
-      if (
-        e.key.toLowerCase() === mainKey &&
-        e.metaKey === wantsMeta &&
-        e.ctrlKey === wantsCtrl &&
-        !e.altKey &&
-        // Held-key auto-repeat must not flap the palette open/closed on
-        // every OS repeat tick — the toggle fires once per physical press.
-        !e.repeat
-      ) {
-        e.preventDefault();
-        setOpen((prev) => !prev);
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [openShortcut]);
+  // The open chord belongs to the ONE keyboard owner. This component used to
+  // parse `mod+k` itself and hold a document `keydown` listener -- a third
+  // keyboard authority beside the shortcut registry and the command registry,
+  // with its own platform detection, its own modifier table and its own
+  // editable-element policy. It now registers with `ShortcutProvider`, which
+  // `DesignSystemProvider` mounts, so the chord also appears in the cheatsheet
+  // it populates.
+  //
+  // MEASURED CONSEQUENCE, stated rather than hidden: the registry suppresses
+  // every shortcut while focus is in a text field, and the open palette's own
+  // search box IS one. The chord therefore OPENS the palette and no longer
+  // toggles it shut; Escape, the backdrop and the close control dismiss it, as
+  // they already did. Restoring a typing-context exemption means a flag on
+  // `ShortcutDefinition`, which is the shortcut kernel's singleton contract and
+  // outside this lot.
+  const hasShortcutProvider = useHasShortcutProvider();
+  const openPalette = useCallback(() => setOpen(true), []);
 
   // Built-in "Keyboard shortcuts" command: palette-searchable (via
   // useCommandPaletteItems, above) AND fires on `shortcutsOverlayKey` via
@@ -207,6 +202,14 @@ export function ConnectedCommandPalette({
 
   return (
     <>
+      {hasShortcutProvider && (
+        <PaletteOpenShortcut
+          chord={openShortcut}
+          description={tOr('connectedCommandPalette.openPalette', 'Open the command palette')}
+          category={tOr('connectedCommandPalette.globalCategory', 'Global')}
+          onOpen={openPalette}
+        />
+      )}
       <PatternCommandPalette
         open={open}
         onOpenChange={handleOpenChange}

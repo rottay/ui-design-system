@@ -12,17 +12,26 @@
  * narrow compositions, and the forced-colors contract for those owned
  * pieces.
  *
- * WHAT THE COMPOSITION IS STAKED ON, recorded because it was false in the
- * shipped tree. The component passes `data-part='switcher'` to the composed
- * Segmented and the engine writes `data-part={caller ?? 'root'}`, so while
- * `segmented.css` was anchored on `[data-part='root']` that one prop deleted
- * all 29 of its selectors and 97 declarations — the track frame, the active fill,
- * the forced-colors contract — while this file had already retired its own
- * pill paint in exchange. `segmented.css` is now anchored on
- * `role='radiogroup'`, stamped unconditionally by an engine that spreads no
- * props, so S22 holds by construction instead of by the call site's restraint.
- * The count-badge rules below are unaffected either way: they hang off THIS
- * file's own wrapper root, which the family stamps itself.
+ * WHAT THE COMPOSITION USED TO BE STAKED ON, and no longer is. The component
+ * passed `data-part='switcher'` to the composed Segmented and the engine
+ * writes `data-part={caller ?? 'root'}`, so while `segmented.css` was anchored
+ * on `[data-part='root']` that one prop deleted all 29 of its selectors and 97
+ * declarations — the track frame, the active fill, the forced-colors contract —
+ * while this file had already retired its own pill paint in exchange.
+ * `segmented.css` is now anchored on `role='radiogroup'`, and WO-FAM-11 sub-lot
+ * E retired the prop itself: the primitive stamps its own `data-part='root'`
+ * again, so the composition holds by construction AND the caller no longer
+ * overwrites an anatomy it does not own. The count-badge rules below were
+ * unaffected either way: they hang off THIS file's own wrapper root, which the
+ * family stamps itself.
+ *
+ * CHANNELS (WO-FAM-11 sub-lot E): every `--ds-scope-switcher-*` name below has
+ * a producer in `derivation/chrome/scope-switcher`, published at exactly the
+ * value this file was already painting. Before the cut the namespace did not
+ * exist at all — twelve root-token reads and nothing a tenant decision could
+ * reach without moving every other family that reads the same roots. The
+ * fallbacks are kept so the file still paints correctly on a ground that
+ * predates the deriver.
  *
  * SPECIFICITY (P-48): the root's hairline reaches the tenant floor from the
  * two scope classes + the root's own `data-part` + `data-inline` — two
@@ -49,19 +58,25 @@
         strip breathes per tenant density profile; scroll-padding keeps a
         keyboard-focused option off the scrollport edge. ---- */
 .ds-structure.ds-scope-switcher[data-part='root'] {
-  padding-block: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-spacing-4, 16px);
+  padding-block: var(--ds-scope-switcher-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-scope-switcher-padding-inline, var(--ds-spacing-4, 16px));
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-padding-inline: var(--ds-spacing-4, 16px);
+  scroll-padding-inline: var(--ds-scope-switcher-padding-inline, var(--ds-spacing-4, 16px));
   /* Family-private opt-in mask: fades the strip's inline edges when options
      overflow, signalling scrollability without a scrollbar. Suggested value:
      linear-gradient(90deg, transparent, black 24px, black calc(100% - 24px), transparent). */
   mask-image: var(--_ds-scope-switcher-overflow-fade, none);
 }
 .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+  border-bottom: var(
+    --ds-scope-switcher-border,
+    1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)
+  );
+  background: var(
+    --ds-scope-switcher-background,
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))
+  );
 }
 .ds-structure.ds-scope-switcher[data-part='root'][data-inline='true'] {
   padding-block: 0;
@@ -76,27 +91,38 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  min-inline-size: 18px;
-  block-size: 18px;
-  margin-inline-start: var(--ds-spacing-1, 4px);
+  min-inline-size: var(--ds-scope-switcher-count-block-size, 18px);
+  block-size: var(--ds-scope-switcher-count-block-size, 18px);
+  margin-inline-start: var(--ds-scope-switcher-count-gap, var(--ds-spacing-1, 4px));
   padding-block: 0;
-  padding-inline: 6px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
-  color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
+  padding-inline: var(--ds-scope-switcher-count-padding-inline, 6px);
+  border-radius: var(--ds-scope-switcher-count-radius, var(--ds-radius-full));
+  background: var(
+    --ds-scope-switcher-count-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent)
+  );
+  color: var(--ds-scope-switcher-count-color, var(--ds-color-text-muted));
+  font-size: var(
+    --ds-scope-switcher-count-font-size,
+    var(--ds-font-size-2xs, var(--ds-font-size-xs))
+  );
+  font-weight: var(--ds-scope-switcher-count-font-weight, var(--ds-font-weight-bold));
   line-height: 1;
   font-variant-numeric: tabular-nums;
   /* the active tint cross-fades on the shared fast channel instead of
      snapping when the scope changes */
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+      var(--ds-motion-ease-out, ease-out),
+    color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+      var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {
-  background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
-  color: var(--ds-color-primary);
+  background: var(
+    --ds-scope-switcher-count-bg-active,
+    color-mix(in srgb, var(--ds-color-primary) 18%, transparent)
+  );
+  color: var(--ds-scope-switcher-count-color-active, var(--ds-color-primary));
 }
 
 @media (prefers-reduced-motion: reduce) {

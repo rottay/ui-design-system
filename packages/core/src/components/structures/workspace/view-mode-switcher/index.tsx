@@ -121,9 +121,11 @@ export function ViewModeSwitcher({
           with focus movement, RTL-aware arrows and option chrome all belong
           to the primitive. Each option shows the governed mode icon plus
           the mode label; a disabled option's accessible name carries its
-          reason as ONE parametric message. */}
+          reason as ONE parametric message. The primitive's own
+          `data-part='root'` is left alone — naming the composed control from
+          here overwrote an anatomy this family does not own, and once cost
+          `segmented.css` every selector it had. */}
       <ModernSegmented
-        data-part="switcher"
         options={modes.map((mode) => ({
           value: mode.key,
           label: mode.label,

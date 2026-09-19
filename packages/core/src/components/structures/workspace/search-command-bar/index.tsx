@@ -20,8 +20,11 @@
  * `placeholder`, `value`, `onSearch`, optional `hint` and optional
  * `suggestions` -- nothing about tenants, users, or any specific entity.
  *
- * Keyboard shortcut: pressing `/` outside an input focuses the command
- * input (matches the original Rottay-app behavior).
+ * Keyboard shortcut: `/` focuses the command input. It is registered with the
+ * package's single keyboard owner (`ShortcutProvider`, mounted by
+ * `DesignSystemProvider`), not with a window `keydown` listener of its own, so
+ * it appears in the shortcuts cheatsheet and inherits the one editable-element
+ * policy every other shortcut obeys.
  *
  * COMPOSITION LAW (premium wave): every interactive element is the Button
  * primitive (engine resolved by the DesignSystemProvider; P-79 caller-part
@@ -46,6 +49,10 @@ import { StatusLoadingIcon } from '@/graphics/icons/semantic/generated/roles/sta
 
 import { useVoiceInput } from '@/infrastructure/runtime/application/automation/voice/composition/react/input';
 import { useRegisterCommands } from '@/infrastructure/runtime/application/commands';
+import {
+  useGlobalShortcut,
+  useHasShortcutProvider,
+} from '@/infrastructure/runtime/application/interaction/shortcuts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { ConnectedCommandPalette } from '../connected-command-palette';
@@ -121,6 +128,32 @@ function VoiceInputIcon({ status }: { status: 'idle' | 'listening' | 'transcribi
   }
 
   return <DeviceMicrophoneIcon decorative size={15} />;
+}
+
+/** The id the `/` shortcut focuses; also the input's own `id`. */
+const COMMAND_INPUT_ID = 'entity-workspace-command-input';
+
+/**
+ * Registers `/` with the ONE keyboard owner.
+ *
+ * A component rather than a call in the body because `useGlobalShortcut`
+ * throws without a `<ShortcutProvider>` ancestor; `useHasShortcutProvider` is
+ * the sanctioned opt-in shape for exactly that. The registry already suppresses
+ * every shortcut inside inputs, textareas, selects and contenteditable regions,
+ * which is precisely the guard this family used to re-implement.
+ */
+function CommandInputFocusShortcut({ description }: { description: string }) {
+  useGlobalShortcut({
+    key: '/',
+    description,
+    category: 'Search',
+    handler: () => {
+      const searchInput = document.getElementById(COMMAND_INPUT_ID) as HTMLInputElement | null;
+      searchInput?.focus();
+      searchInput?.select();
+    },
+  });
+  return null;
 }
 
 function CommandSuggestionChip({
@@ -215,27 +248,7 @@ export function SearchCommandBar({
     }
   }, [needsVoicePermission]);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      const tagName = target?.tagName?.toLowerCase();
-      const isTypingContext =
-        tagName === 'input' ||
-        tagName === 'textarea' ||
-        tagName === 'select' ||
-        Boolean(target?.isContentEditable);
-
-      if (!isTypingContext && event.key === '/') {
-        event.preventDefault();
-        const searchInput = document.getElementById('entity-workspace-command-input') as HTMLInputElement | null;
-        searchInput?.focus();
-        searchInput?.select();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  const hasShortcutProvider = useHasShortcutProvider();
 
   const statusMessage = useMemo(() => {
     if (voiceStatus === 'listening') {
@@ -364,6 +377,11 @@ export function SearchCommandBar({
 
   return (
     <>
+    {hasShortcutProvider && (
+      <CommandInputFocusShortcut
+        description={tOr('searchCommandBar.focusSearch', 'Focus the search input')}
+      />
+    )}
     {renderPalette && <ConnectedCommandPalette />}
     <Box
       data-part="root"
@@ -395,7 +413,7 @@ export function SearchCommandBar({
                 <ActionSearchIcon decorative size={16} />
               </Box>
               <Input
-                id="entity-workspace-command-input"
+                id={COMMAND_INPUT_ID}
                 data-part="input"
                 className="ds-search-command-bar__input"
                 data-voice-status={voiceStatusForSkin}
@@ -567,7 +585,6 @@ export function SearchCommandBar({
                       <Button
                         variant="primary"
                         size="sm"
-                        data-part="voice-help-confirm"
                         className="ds-search-command-bar__voice-help-confirm"
                         onClick={
                           isVoicePermissionBlocked

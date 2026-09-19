@@ -82,9 +82,11 @@ export function ScopeSwitcher({
     >
       {/* Composed Segmented (P81): radiogroup semantics, roving keyboard and
           option chrome belong to the primitive; the count badge is the
-          pattern's own content inside the option label. */}
+          pattern's own content inside the option label. The primitive's own
+          `data-part='root'` is left alone — naming the composed control from
+          here overwrote an anatomy this family does not own, and once cost
+          `segmented.css` every selector it had. */}
       <ModernSegmented
-        data-part="switcher"
         options={scopes.map((scope) => ({
           value: scope.key,
           label: (

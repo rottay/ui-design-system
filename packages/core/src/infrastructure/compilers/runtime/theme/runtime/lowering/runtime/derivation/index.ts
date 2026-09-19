@@ -53,6 +53,9 @@ import { mobileHeaderChromeDeriver } from "./chrome/mobile-header";
 import { statsHeaderChromeDeriver } from "./chrome/stats-header";
 import { surfaceLifecycleChromeDeriver } from "./chrome/surface-lifecycle";
 import { appShellChromeDeriver } from "./chrome/app-shell";
+import { actionDockChromeDeriver } from "./chrome/action-dock";
+import { scopeSwitcherChromeDeriver } from "./chrome/scope-switcher";
+import { viewModeSwitcherChromeDeriver } from "./chrome/view-mode-switcher";
 import { collectionHeaderChromeDeriver } from "./chrome/collection-header";
 import { dashboardHeaderChromeDeriver } from "./chrome/dashboard-header";
 import { detailHeaderChromeDeriver } from "./chrome/detail-header";
@@ -191,6 +194,9 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   statsHeaderChromeDeriver,
   surfaceLifecycleChromeDeriver,
   appShellChromeDeriver,
+  actionDockChromeDeriver,
+  scopeSwitcherChromeDeriver,
+  viewModeSwitcherChromeDeriver,
   collectionHeaderChromeDeriver,
   dashboardHeaderChromeDeriver,
   detailHeaderChromeDeriver,
