@@ -591,3 +591,16 @@ recorded 2026-09-14; brand-studio fixture collision, unreproduced in 20+
 runs). Next dispatched front: WO-RET-03's governance-manifest quarantine,
 which unblocks the customization regen cascade (the 11 stale family bindings
 are retired-family residue the quarantine deletes rather than repairs).
+
+## 2026-09-19 (twentieth sitting) — writer-seat change ordered by the owner
+
+Owner decision (2026-09-19): the writer seat returns to real Opus on the
+daniel.avila@rottay.com profile (plain `claude` binary, 2.1.278) — the weekly
+quota has its last points and expires in ~12h; use it. IN FLIGHT WORK IS NOT
+INTERRUPTED: the Kimi writers keep their lots to completion (the RET-03
+quarantine slice runs to its audit). The NEXT dispatch after the in-flight
+lot lands goes to Opus; the receipt's model metadata is verified on arrival
+(claude-opus-5 expected; an unexpected account/model stops that dispatch
+only). The Kimi k2-code line stays the fallback seat if the Claude quota
+exhausts mid-flight — the briefs are model-agnostic and the audit discipline
+is unchanged.
