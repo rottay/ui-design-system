@@ -6,7 +6,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { isComposingKey, resolveSubmitIntent } from '..';
+import { isComposingKey, resolveDelegatedSubmitIntent, resolveSubmitIntent } from '..';
 
 describe('resolveSubmitIntent', () => {
   it('commits a plain Enter and ignores every other key', () => {
@@ -47,5 +47,64 @@ describe('resolveSubmitIntent', () => {
     expect(onSubmit).not.toHaveBeenCalled();
     fireEvent.keyDown(field, { key: 'Enter', keyCode: 13 });
     expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('resolveDelegatedSubmitIntent', () => {
+  function rootOver(child: React.ReactElement, onIntent: (intent: string) => void) {
+    return (
+      <div
+        data-testid="root"
+        onKeyDown={(event) => onIntent(resolveDelegatedSubmitIntent(event))}
+      >
+        {child}
+      </div>
+    );
+  }
+
+  it('refuses a press a descendant already consumed', () => {
+    const intents: string[] = [];
+    const onActivate = vi.fn();
+    render(
+      rootOver(
+        <div
+          role="presentation"
+          data-testid="child"
+          onKeyDown={(event) => {
+            event.preventDefault();
+            onActivate();
+          }}
+        />,
+        (intent) => intents.push(intent),
+      ),
+    );
+    fireEvent.keyDown(screen.getByTestId('child'), { key: 'Enter' });
+    expect(onActivate).toHaveBeenCalledTimes(1);
+    expect(intents).toEqual(['none']);
+  });
+
+  it('leaves Enter with any interactive owner, native or ARIA-roled', () => {
+    for (const child of [
+      <button key="b" data-testid="child" type="button" />,
+      <div key="r" role="button" tabIndex={0} data-testid="child" />,
+      <div key="t" role="textbox" tabIndex={0} data-testid="child" />,
+      <div key="c" contentEditable suppressContentEditableWarning data-testid="child" />,
+    ]) {
+      const intents: string[] = [];
+      const view = render(rootOver(child, (intent) => intents.push(intent)));
+      fireEvent.keyDown(screen.getByTestId('child'), { key: 'Enter' });
+      expect(intents).toEqual(['none']);
+      view.unmount();
+    }
+  });
+
+  it('still commits an unclaimed press, and still defers to the IME', () => {
+    const intents: string[] = [];
+    render(rootOver(<span data-testid="child" />, (intent) => intents.push(intent)));
+    const child = screen.getByTestId('child');
+    fireEvent.keyDown(child, { key: 'Enter' });
+    fireEvent.keyDown(child, { key: 'Enter', keyCode: 229 });
+    fireEvent.keyDown(child, { key: 'a' });
+    expect(intents).toEqual(['submit', 'composing', 'none']);
   });
 });

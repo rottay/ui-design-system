@@ -35,9 +35,11 @@
  * private measure channel included) — an authored declaration IS the
  * producer, so an unset prop changes nothing and an explicit `columns`
  * value still wins through the style attribute. The field's runtime
- * `span` prop is a `data-span` stamp answered by the arms below; 1 is the
- * absence of an arm. Action-bar icons are NOT sized here: they ride the
- * Button's own governed icon channel (`--ds-button-sm-icon-size`).
+ * `span` rides the `--ds-record-field-span` channel and ONE arm below reads
+ * it, so the published numeric domain survives whole; `data-span` remains
+ * the stamp, and 1 is the channel's authored fallback. Action-bar icons are
+ * NOT sized here: they ride the Button's own governed icon channel
+ * (`--ds-button-sm-icon-size`).
  *
  * `RecordSummaryStrip`'s five variants and `form-sections`' four tones share two
  * byte-identical border formulas. They are NOT unified here: each file resolves
@@ -80,7 +82,10 @@
  *    semantics) and on the surface-owned `field-link-body` wrapper, and
  *    every pseudo below pairs with its `data-state` twin:
  *    `:is([data-state~='hovered'], :hover)` and so on — the platform
- *    pseudo stays the twin's fallback, not a second authority.
+ *    pseudo stays the twin's fallback, not a second authority. The link's
+ *    keyboard ring is the ONE unpaired rule, and that is a measurement:
+ *    the focusable element is the anchor ABOVE that wrapper, so no state
+ *    the wrapper can carry is ever reachable from it.
  *
  * C1 ELEVATION (record ledger + docked rail):
  *  - ONE DATA PLANE: the field grid stops reading as a wall of N identical
@@ -378,15 +383,14 @@
   border-color: var(--ds-focus-ring-color, var(--ds-color-primary));
 }
 
-/* The runtime `span` prop lands as a `data-span` stamp; the arms cover the
-   values the ledger domain admits (1 is the absence of an arm, values above
-   3 keep a single track — no caller spans wider today). */
-.ds-structure.ds-record[data-part='field'][data-span='2'] {
-  grid-column: span 2;
-}
-
-.ds-structure.ds-record[data-part='field'][data-span='3'] {
-  grid-column: span 3;
+/* Instance geometry that carries an arbitrary number cannot be a finite list
+   of selectors: an arm per value drops every number past the last arm, and
+   the next number always exists. The runtime `span` therefore rides the
+   `--ds-record-field-span` channel (the field's one legal inline write, the
+   grid's `columns` precedent) and this single arm reads it; `data-span` stays
+   the stamp, and the authored fallback keeps an unset channel on one track. */
+.ds-structure.ds-record[data-part='field'][data-span] {
+  grid-column: span var(--ds-record-field-span, 1);
 }
 
 /* Per-field error frame: error ink mixed onto the family's border voice.
@@ -495,8 +499,9 @@
 
 /* The anchor keeps the field's own colour rather than the UA link colour and
    gets no underline; its class is the only skin hook because the composed
-   Link's DOM is the app's. No pseudo state paints through it — the states
-   moved to the wrapper above with the kernel's `data-state`. */
+   Link's DOM is the app's. Hover and press paint on the wrapper above through
+   the kernel's `data-state`; the keyboard ring below cannot, so it stays on
+   this anchor. */
 .ds-structure.ds-record[data-part='field'] .ds-record__field-link {
   color: inherit;
   text-decoration: none;
@@ -512,10 +517,15 @@
   color: var(--ds-color-primary);
 }
 
-/* Keyboard path into the linked value: the wrapper is not focusable, so the
-   platform twin is `:focus-within` (the anchor's focus bubbles here, where
-   the kernel decides whether the ring belongs). */
-.ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
+/* Keyboard path into the linked value: the FOCUSABLE element is the anchor and
+   the wrapper above sits INSIDE it, so a ring declared on that wrapper can
+   never be reached — focus bubbles up, not down, and an ancestor's focus does
+   not match a descendant's `:focus-within`. The ring lands on the anchor.
+   It has no kernel twin, and that is a measurement rather than an omission:
+   `NavigationLinkProps` forwards neither handlers nor `data-*`, so
+   `:focus-visible` is the platform's own (and only) authority here — the same
+   ruling the detail header's back chip recorded. */
+.ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
   border-radius: var(--ds-radius-sm, 4px);
@@ -682,7 +692,7 @@
     color: CanvasText;
   }
 
-  .ds-structure.ds-record[data-part='field'] [data-part='field-link-body']:is([data-state~='focus-visible'], :focus-within) {
+  .ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }

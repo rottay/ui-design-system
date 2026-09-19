@@ -18,10 +18,14 @@
  * frame — a shape cue, not a tint. Hover and focus-within paint is the shared
  * kernel's decision, read off `data-state` on the field root.
  *
- * INLINE BOUNDARY: nothing. The runtime `span` prop is a `data-span` stamp the
- * skin arms answer, and the linked-value cluster's fit-content measure and the
- * link arrow's 13px frame live in the skin. The grid-columns default is
- * skin-authored on the grid.
+ * INLINE BOUNDARY: the caller's runtime `span` is the ONE legal inline write —
+ * the `--ds-record-field-span` channel the skin's single arm reads (the grid's
+ * `columns` precedent). Instance geometry that carries an arbitrary number
+ * cannot be a finite selector list: an arm per value silently drops every
+ * number past the last arm. `data-span` stays the stamp callers and tests read.
+ * The linked-value cluster's fit-content measure and the link arrow's 13px
+ * frame live in the skin. The grid-columns default is skin-authored on the
+ * grid.
  *
  * Framework note: `href` rendering resolves through the `useNavigationLink()`
  * hook from `runtime/adapters/navigation`. Apps mount a
@@ -30,15 +34,18 @@
  * automatically. With no provider mounted the field falls back to a native
  * `<a>`, which still navigates but loses client-side transitions and
  * prefetching. This keeps the DS package framework-agnostic. The injected
- * Link's contract admits no `data-*` attributes, so the link's hover/press/
- * focus paint lives on the surface-owned `field-link-body` wrapper, stamped by
- * its own interaction state, never through the composed anchor.
+ * Link's contract admits no `data-*` attributes, so the link's hover and press
+ * paint lives on the surface-owned `field-link-body` wrapper, stamped by its
+ * own interaction state. The keyboard ring does NOT: the focusable element is
+ * the anchor and that wrapper sits inside it, so focus can never reach it —
+ * the ring is declared on the anchor with the platform's own `:focus-visible`,
+ * the constraint the detail header's back chip already records.
  *
  * @see `../index.ts` for the record family narrative and the pre-Checkpoint-D
  * `Surface*` compatibility aliases.
  */
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 import {
   ArrowUpRightIcon as ArrowUpRight,
@@ -64,6 +71,12 @@ function useRecordTranslation() {
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? floor;
   return { tOr };
+}
+
+/** The published `span` domain is every positive integer; anything else is not
+    a geometry the grid can place, so it resolves to the single-track default. */
+function resolveFieldSpan(span: number): number {
+  return Number.isFinite(span) && span >= 1 ? Math.floor(span) : 1;
 }
 
 function renderFieldValue(value: ReactNode, emptyLabel: string) {
@@ -163,6 +176,10 @@ export function RecordField({
     if (copyRevertTimer.current) clearTimeout(copyRevertTimer.current);
     copyRevertTimer.current = setTimeout(() => setCopied(false), 1400);
   }, [copyValue]);
+
+  /* The span rides its own channel rather than an arm per value: a single
+     skin rule reads it, so no number falls off the end of a selector list. */
+  const resolvedSpan = resolveFieldSpan(span);
 
   const resolved = renderFieldValue(value, resolvedEmptyLabel);
   const primitiveValue = typeof resolved.content === 'string' || typeof resolved.content === 'number';
@@ -271,7 +288,12 @@ export function RecordField({
       {...partAttributes('field', fieldInteraction.state)}
       className="ds-structure ds-record"
       data-structure="record"
-      data-span={span}
+      data-span={resolvedSpan}
+      style={
+        resolvedSpan > 1
+          ? ({ '--ds-record-field-span': String(resolvedSpan) } as CSSProperties)
+          : undefined
+      }
       data-empty={resolved.empty}
       data-mono={mono}
       data-loading={loading ? 'true' : undefined}

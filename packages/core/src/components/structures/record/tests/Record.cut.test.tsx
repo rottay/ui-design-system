@@ -2,14 +2,18 @@
  * Record, WO-FAM-10 sub-lot F.
  *
  * What this suite owns, and the suites beside it do not: the DOM contract the
- * family cut changed. The runtime `span` prop is a `data-span` stamp answered
- * by skin arms instead of an inline `grid-column`, the caller's `columns`
+ * family cut changed. The runtime `span` prop is a `data-span` stamp whose
+ * geometry rides the `--ds-record-field-span` channel instead of an inline
+ * `grid-column` (one skin arm, so the published numeric domain survives whole
+ * — S19-F02), the caller's `columns`
  * prop rides the one legal `--ds-*` channel while the skin authors the
  * default, the loading states are built from the anatomy by the shared
  * renderer instead of hand-made Skeleton pairs, and the hover/press/focus
  * paint is the shared kernel's decision read off `data-state` — on the field
  * root and on the surface-owned linked-value wrapper, because the composed
- * app Link admits no `data-*` attributes.
+ * app Link admits no `data-*` attributes. The link's keyboard ring is the one
+ * exception: it belongs on the anchor, the element focus actually reaches
+ * (S19-F03).
  */
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -28,6 +32,41 @@ const SKIN = readFileSync(
   resolve(process.cwd(), 'src/foundation/tokens/css/presentation/components/skin/record/index.css'),
   'utf8'
 ).replace(/\/\*[\s\S]*?\*\//g, '');
+
+/**
+ * Loads the field's own grid-column rules, verbatim from the skin, so the
+ * resolved geometry can be READ BACK instead of inferred from the stamp the
+ * TSX wrote. Every rule the skin declares for the span is loaded, so a finite
+ * list of value-arms is measured exactly as a browser would apply it.
+ */
+function loadSpanRules(): HTMLStyleElement {
+  const rules = SKIN.match(
+    /\.ds-structure\.ds-record\[data-part='field'\]\[data-span[^{}]*\{[^{}]*grid-column:[^{}]*\}/g,
+  );
+  if (!rules?.length) throw new Error('missing the record field span rules in the skin');
+  const style = document.createElement('style');
+  style.textContent = rules.join('\n');
+  document.head.appendChild(style);
+  return style;
+}
+
+/**
+ * Loads the record link's keyboard-ring rule, verbatim from the skin. The
+ * forced-colors re-expression is excluded: injected bare it would sort last
+ * and answer for the token-controlled rule under test.
+ */
+function loadLinkFocusRule(): HTMLStyleElement {
+  const rules = (
+    SKIN.match(/\.ds-structure\.ds-record\[data-part='field'\][^{}]*field-link[^{}]*\{[^{}]*outline:[^{}]*\}/g) ?? []
+  ).filter((rule) => !rule.includes('Highlight'));
+  if (rules.length !== 1) {
+    throw new Error(`expected exactly 1 record-link focus ring rule, found ${rules.length}`);
+  }
+  const style = document.createElement('style');
+  style.textContent = rules[0];
+  document.head.appendChild(style);
+  return style;
+}
 
 async function waitForPart(container: HTMLElement, part: string): Promise<HTMLElement> {
   await waitFor(
@@ -63,6 +102,59 @@ describe('Record (WO-FAM-10 cut)', () => {
       expect(field.getAttribute('style') ?? '').not.toContain('gridColumn');
     }
     unmount();
+  });
+
+  it('keeps the published numeric span domain whole, past the old finite arms (S19-F02)', async () => {
+    const style = loadSpanRules();
+    const { container, unmount } = renderWithEngine(
+      <RecordFieldGrid columns="repeat(4, 1fr)">
+        <RecordField label="Ref" value="REC-1" span={3} />
+        <RecordField label="Summary" value="Four tracks wide" span={4} />
+        <RecordField label="Ledger" value="Seven tracks wide" span={7} />
+      </RecordFieldGrid>,
+      'modern',
+    );
+
+    await waitForPart(container, 'field-grid');
+    const fields = Array.from(container.querySelectorAll("[data-part='field']")) as HTMLElement[];
+    // Control: the value the retired arms did cover still resolves, so a
+    // stylesheet or runner failure cannot pass for the product defect.
+    expect(getComputedStyle(fields[0]).gridColumn).toBe('span 3');
+    // The defect: every value past the last arm silently lost its geometry.
+    expect(getComputedStyle(fields[1]).gridColumn).toBe('span 4');
+    expect(getComputedStyle(fields[2]).gridColumn).toBe('span 7');
+    // The span is instance geometry on the ONE legal channel, never paint.
+    expect(fields[1].style.getPropertyValue('--ds-record-field-span')).toBe('4');
+    expect(fields[1].getAttribute('style') ?? '').not.toContain('grid-column');
+    unmount();
+    style.remove();
+  });
+
+  it('places the record link ring on the anchor keyboard focus actually reaches (S19-F03)', async () => {
+    const style = loadLinkFocusRule();
+    const { container, unmount } = renderWithEngine(
+      <RecordField label="Profile" value="Ada Lovelace" href="/people/ada" />,
+      'modern',
+    );
+
+    const linkBody = await waitForPart(container, 'field-link-body');
+    const anchor = container.querySelector('a.ds-record__field-link') as HTMLAnchorElement;
+    expect(anchor).not.toBeNull();
+    // The ring's target must CONTAIN the focusable element: focus bubbles up,
+    // never down, so a ring inside the anchor is unreachable by construction.
+    expect(anchor.contains(linkBody)).toBe(true);
+
+    anchor.focus();
+    expect(document.activeElement).toBe(anchor);
+    // The ring's declarations resolve ON the focused anchor. The `outline`
+    // shorthand carries `var()`, which this runner does not expand into its
+    // longhands, so the two ring declarations it does resolve are the read:
+    // an unreached rule leaves both empty, as it did before this correction.
+    const ring = getComputedStyle(anchor);
+    expect(ring.outlineOffset).toBe('2px');
+    expect(ring.borderRadius).toBe('4px');
+    unmount();
+    style.remove();
   });
 
   it('writes the grid-columns channel only for a caller override and authors the default in the skin', async () => {

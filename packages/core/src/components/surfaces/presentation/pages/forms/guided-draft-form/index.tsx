@@ -22,9 +22,10 @@
  *   `--ds-guided-draft-form-heading-font-weight` channel and inherited by the
  *   skin's rules — one runtime value, no per-element inline paint.
  * - Keyboard submit: Enter anywhere on the surface commits the form through
- *   the shared submit-intent kernel, except while typing in editable elements
- *   (input/textarea/select/contenteditable), where the consumer field owns
- *   Enter, and except on buttons and links, which activate themselves.
+ *   the shared submit-intent kernel's delegated arm. A press the sections
+ *   below have already consumed, or one that started inside any interactive
+ *   owner — a field, a button, a link, a contenteditable host, or a composite
+ *   widget carrying an interactive ARIA role — stays with its owner.
  * - Loading renders the real body anatomy through the shared anatomy skeleton
  *   (the root keeps the single `aria-busy` announcement); the wait has the
  *   shape of the form it stands in for.
@@ -52,7 +53,7 @@ import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/sta
 import { WorkflowTemplateIcon } from '@/graphics/icons/semantic/generated/roles/workflow-template';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
-import { resolveSubmitIntent } from '@/foundation/behavior/runtime/submit-intent';
+import { resolveDelegatedSubmitIntent } from '@/foundation/behavior/runtime/submit-intent';
 import { resolveSurfacePosture } from '../../../../foundation/contracts/adaptive';
 import { useSurfaceProfileDefaults } from '../../../../../structures/foundation/chrome/runtime/profile-defaults';
 import {
@@ -646,18 +647,16 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     [sections],
   );
 
-  // Enter commits the form anywhere on the surface, decided by the shared
-  // submit-intent kernel. Editable elements keep their own Enter behaviour
-  // (consumer fields live inside sections), and buttons/links activate
-  // themselves, so both are left to their owners.
+  // Enter commits the form anywhere on the surface it is not already spoken
+  // for, decided by the shared submit-intent kernel's DELEGATED arm: a press a
+  // nested control has already handled keeps that control's meaning, and one
+  // that started inside any interactive owner — native or an ARIA-roled
+  // composite — belongs to that owner, never to the implicit submit.
   const handleRootKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.key !== 'Enter') return;
-      const target = event.target as HTMLElement | null;
-      if (!target || target.isContentEditable) return;
-      if (target.closest('input, textarea, select, button, a')) return;
       if (submitDisabled || submitLoading) return;
-      if (resolveSubmitIntent(event) !== 'submit') return;
+      if (resolveDelegatedSubmitIntent(event) !== 'submit') return;
       event.preventDefault();
       onSubmit();
     },

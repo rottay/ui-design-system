@@ -6,9 +6,10 @@
  * per-element inline paint and now inherit the one root channel; the loading
  * state is the shared anatomy renderer's bones over the surface's own DOM, not
  * a hand-made construct; Enter commits the form through the shared
- * submit-intent kernel everywhere except editable elements and
- * self-activating controls; and the section nav keeps its name and geometry
- * under a right-to-left reading.
+ * submit-intent kernel's delegated arm everywhere the press is not already
+ * spoken for — editable elements, self-activating controls and nested
+ * composite widgets keep their own Enter (S19-F01); and the section nav keeps
+ * its name and geometry under a right-to-left reading.
  */
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -102,6 +103,87 @@ describe('GuidedDraftFormSurface (WO-FAM-10 cut)', () => {
 
     fireEvent.keyDown(root, { key: 'Enter' });
     expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('leaves Enter with a nested composite widget that already handled it (S19-F01)', async () => {
+    const onSubmit = vi.fn();
+    const onActivate = vi.fn();
+    const { container } = renderWithEngine(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={[
+          {
+            key: 'info',
+            title: 'Basic Info',
+            render: () => (
+              <div
+                role="button"
+                tabIndex={0}
+                data-testid="composite"
+                onKeyDown={(event) => {
+                  if (event.key !== 'Enter') return;
+                  event.preventDefault();
+                  onActivate();
+                }}
+              >
+                Pick a venue
+              </div>
+            ),
+          },
+        ]}
+        onSubmit={onSubmit}
+      />,
+      'modern',
+    );
+
+    const widget = await waitFor(
+      () => {
+        const found = container.querySelector('[data-testid="composite"]');
+        if (!found) throw new Error('expected the consumer composite widget');
+        return found as HTMLElement;
+      },
+      { timeout: WAIT_TIMEOUT },
+    );
+
+    // The press reaches the widget, the widget consumes it, and the root —
+    // which sees the same bubbling event — does NOT re-read it as a commit.
+    fireEvent.keyDown(widget, { key: 'Enter' });
+    expect(onActivate).toHaveBeenCalledTimes(1);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('leaves Enter with a nested interactive role even when it consumes nothing', async () => {
+    const onSubmit = vi.fn();
+    const { container } = renderWithEngine(
+      <GuidedDraftFormSurface
+        title="Create Event"
+        sections={[
+          {
+            key: 'info',
+            title: 'Basic Info',
+            render: () => (
+              <div role="button" tabIndex={0} data-testid="composite">
+                Pick a venue
+              </div>
+            ),
+          },
+        ]}
+        onSubmit={onSubmit}
+      />,
+      'modern',
+    );
+
+    const widget = await waitFor(
+      () => {
+        const found = container.querySelector('[data-testid="composite"]');
+        if (!found) throw new Error('expected the consumer composite widget');
+        return found as HTMLElement;
+      },
+      { timeout: WAIT_TIMEOUT },
+    );
+
+    fireEvent.keyDown(widget, { key: 'Enter' });
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 
   it('lets an editable element keep its own Enter behaviour', async () => {
