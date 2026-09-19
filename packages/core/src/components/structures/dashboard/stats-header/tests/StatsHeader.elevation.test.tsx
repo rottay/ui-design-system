@@ -6,9 +6,10 @@
  *
  *  - THE DEFECT. `pulse-dot-ping` used to hold absolute `opacity: 1 / 0.4 / 1`
  *    frames. A spark dot encodes its series value in
- *    `--_ds-stats-header-spark-dot-opacity`, and an animation origin outranks
- *    a declared value, so hovering a card flattened the whole sparkline to one
- *    tone — and `animation-fill-mode: both` held it flat for the entire hover.
+ *    `--ds-stats-header-spark-dot-opacity`, stamped per instance by the engine,
+ *    and an animation origin outranks a declared value, so hovering a card
+ *    flattened the whole sparkline to one tone — and `animation-fill-mode:
+ *    both` held it flat for the entire hover.
  *    The frames are now RELATIVE to each dot's own opacity. Read with postcss,
  *    never grep, and with a positive control that plants the retired shape.
  *
@@ -55,7 +56,7 @@ function pingOpacities(root: Root): string[] {
 function isSeriesRelative(values: string[]): boolean {
   return (
     values.length > 0 &&
-    values.every((value) => value.includes('--_ds-stats-header-spark-dot-opacity'))
+    values.every((value) => value.includes('--ds-stats-header-spark-dot-opacity'))
   );
 }
 

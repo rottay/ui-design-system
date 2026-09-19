@@ -2619,7 +2619,7 @@ test('PLANT: an open cut with no work order and no reason is refused', () => {
 test('LIVE: every open row declares exactly the debt the gate measures, and the run says so', () => {
   const baseline = readBaseline().families;
   const open = Object.entries(baseline).filter(([, row]) => row.openCut);
-  assert.equal(open.length, 2, 'the two still-open WO-FAM-10 rows (stats-header, surface-lifecycle) are the only admitted rows');
+  assert.equal(open.length, 1, 'the one still-open WO-FAM-10 row (surface-lifecycle, the measured failure-mode floor) is the only admitted row');
   for (const [family, row] of open) {
     const measured = measureFamily(resolveFamily(family, ROOT, row), { producers: PRODUCERS });
     const debt = Object.fromEntries(Object.entries(blockingDebt(measured)).filter(([, count]) => count > 0));
@@ -2631,8 +2631,8 @@ test('LIVE: every open row declares exactly the debt the gate measures, and the 
 
 test('LIVE: the run separates the families that hold the contract from the families admitted with debt', () => {
   const { measurements, open } = collectFindings();
-  assert.equal(open.length, 2);
-  assert.equal(measurements.length - open.length, 94, 'the pre-existing roster plus the graduated WO-FAM-10 rows still hold the contract');
+  assert.equal(open.length, 1);
+  assert.equal(measurements.length - open.length, 95, 'the pre-existing roster plus the graduated WO-FAM-10 rows still hold the contract');
 });
 
 // ---------------------------------------------------------------------------

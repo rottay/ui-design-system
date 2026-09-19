@@ -3039,7 +3039,6 @@
   --ds-collapse-header-bg-hover: var(--ds-material-panel-background-hover);
   --ds-collapse-header-color: #171717;
   --ds-collapse-content-bg: #ffffff;
-  --ds-collapse-border: #e5e5e5;
   --ds-collapse-radius: var(--ds-radius-lg);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -33323,35 +33322,14 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="compact"] {
   --ds-density-local-factor: var(--ds-density-factor-compact, 0.85);
-  --ds-density-card-padding: var(
-    --ds-density-card-padding-compact,
-    calc(
-      0.75rem *
-        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
-    )
-  );
 }
 
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="comfortable"] {
   --ds-density-local-factor: var(--ds-density-factor-comfortable, 1);
-  --ds-density-card-padding: var(
-    --ds-density-card-padding-comfortable,
-    calc(
-      1rem *
-        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
-    )
-  );
 }
 
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="spacious"] {
   --ds-density-local-factor: var(--ds-density-factor-spacious, 1.15);
-  --ds-density-card-padding: var(
-    --ds-density-card-padding-spacious,
-    calc(
-      1.125rem *
-        var(--ds-density-global-effective-scale, var(--ds-density-scale, 1))
-    )
-  );
 }
 
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card {
@@ -91078,8 +91056,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * state triad and the forced-colors contract. The composed metric's value
  * scale is drained here from the retired inline `valueStyle` (identical
  * values, same `--ds-stats-header-value-*` channels), and each spark dot's
- * opacity is a private runtime instance channel (`--_ds-stats-header-spark-dot-opacity`)
- * published by the engine and declared here.
+ * opacity arrives per instance on the public `--ds-stats-header-spark-dot-opacity`
+ * channel (runtime data the engine stamps, the admitted inline shape) — the
+ * skin rules the part and the deriver owns the resting value.
  *
  * STATE:
  *  - `data-accent` (5-value AccentColor) selects the sparkline dot and the
@@ -91253,29 +91232,15 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   inline-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   block-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   border-radius: 50%;
-  /* The dot's share of the series maximum arrives as a closed `data-level`
-     domain (0-7) rather than as a computed opacity in the style attribute, and
-     the ramp from the floor to opaque is this file's. An unstamped dot reads
-     level 0 only if the series is flat at its own minimum; the component always
-     stamps, so the 0 here is the resting value, not a guess. */
-  opacity: calc(
-    var(--ds-stats-header-spark-dot-opacity-floor, 0.15) +
-      var(--_ds-stats-header-spark-dot-level, 0) *
-        (1 - var(--ds-stats-header-spark-dot-opacity-floor, 0.15)) / 7
-  );
+  /* Each dot's share of the series maximum arrives as its own opacity on the
+     public --ds-stats-header-spark-dot-opacity channel, stamped per instance
+     by the engine; the resting value is the ramp's floor, so a dot the engine
+     did not stamp reads the quietest rung. */
+  opacity: var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15));
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
     opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
 }
-/* The eight steps of the level domain. A level is a share of the series maximum,
-   so the ramp is linear and the top step is opaque. */
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='1'] { --_ds-stats-header-spark-dot-level: 1; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='2'] { --_ds-stats-header-spark-dot-level: 2; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='3'] { --_ds-stats-header-spark-dot-level: 3; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='4'] { --_ds-stats-header-spark-dot-level: 4; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='5'] { --_ds-stats-header-spark-dot-level: 5; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='6'] { --_ds-stats-header-spark-dot-level: 6; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='7'] { --_ds-stats-header-spark-dot-level: 7; }
 
 @media (hover: hover) {
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],
@@ -91402,26 +91367,28 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
  * staggered on the `--ds-stats-header-ping-duration` channel).
  *
  * The ping is RELATIVE to each dot's own opacity, never absolute. A spark dot
- * encodes its series value in `--_ds-stats-header-spark-dot-opacity`
- * (`0.15 + normalized * 0.85`); an animation origin outranks the declared
- * value, so absolute `opacity: 1` frames flattened the whole series to one
- * tone for as long as the card was hovered — and `both` held it there. The
- * dip multiplies the dot's own opacity instead, so the amplitude survives the
- * hover and the rest state is byte-identical at 0% and 100%.
+ * encodes its series value in `--ds-stats-header-spark-dot-opacity`, stamped
+ * per instance by the engine (`floor + normalized * (1 - floor)`); an
+ * animation origin outranks the declared value, so absolute `opacity: 1`
+ * frames flattened the whole series to one tone for as long as the card was
+ * hovered — and `both` held it there. The dip multiplies the dot's own
+ * opacity instead, so the amplitude survives the hover and the rest state is
+ * byte-identical at 0% and 100%. The fallback chain restates the skin's
+ * resting rule, so an unstamped dot pings from the same floor it rests at.
  */
 
 @keyframes pulse-dot-ping {
   0% {
     transform: scale(1);
-    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
+    opacity: var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15));
   }
   50% {
     transform: scale(1.8);
-    opacity: calc(var(--_ds-stats-header-spark-dot-opacity, 1) * 0.4);
+    opacity: calc(var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15)) * 0.4);
   }
   100% {
     transform: scale(1);
-    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
+    opacity: var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15));
   }
 }
 
@@ -121140,7 +121107,7 @@ html[lang]:lang(ar) {
   --ds-menu-item-color-hover: var(--ds-color-text-primary);
   --ds-menu-item-danger-color: var(--ds-color-error);
   --ds-menu-item-font-family: var(--ds-type-body-font-family);
-  --ds-menu-item-font-size: var(--ds-type-body-font-size);
+  --ds-menu-item-font-size: var(--ds-sidebar-item-font-size, var(--ds-type-body-font-size));
   --ds-menu-item-font-size-child: var(--ds-sidebar-item-font-size-child, var(--ds-type-supporting-font-size));
   --ds-menu-item-font-weight: var(--ds-font-weight-medium);
   --ds-menu-item-font-weight-selected: var(--ds-font-weight-semibold);
@@ -121688,6 +121655,7 @@ html[lang]:lang(ar) {
   --ds-stats-header-press-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
   --ds-stats-header-progress-margin-block-start: 10px;
   --ds-stats-header-spark-dot-gap: 6px;
+  --ds-stats-header-spark-dot-opacity: 0.15;
   --ds-stats-header-spark-dot-opacity-floor: 0.15;
   --ds-stats-header-spark-dot-size: var(--ds-spacing-1, 4px);
   --ds-stats-header-spark-margin-block-start: 14px;

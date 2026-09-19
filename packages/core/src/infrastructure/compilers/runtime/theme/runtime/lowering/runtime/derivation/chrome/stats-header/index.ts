@@ -14,10 +14,13 @@
  * -- so this family's whole visual vocabulary is reachable in one place now.
  *
  * Each value is the single fallback the skin reads it with, so producing the name
- * moves no pixel. The two names that stay PRIVATE are the two that are per-instance
- * rather than per-tenant: `--_ds-stats-header-track-count`, written by the container
- * cuts, and `--_ds-stats-header-spark-dot-level`, written by the dot's own
- * `data-level` stamp. Neither is a dial anybody turns from a theme.
+ * moves no pixel. The one name that stays PRIVATE is the one per-instance channel
+ * that is not a dot of data: `--_ds-stats-header-track-count`, written by the
+ * container cuts. A dot's opacity is different in kind: it is each dot's own
+ * series value, so it travels as the PUBLIC `--ds-stats-header-spark-dot-opacity`
+ * stamped per instance by the engine (the admitted runtime-data inline shape),
+ * with this resting value -- the ramp's floor, the quietest rung -- for a dot
+ * the engine did not stamp.
  */
 
 import type { FamilyDeriver } from "../../../../foundation/contract";
@@ -66,6 +69,7 @@ export const statsHeaderChromeDeriver: FamilyDeriver = {
     "--ds-stats-header-press-shadow",
     "--ds-stats-header-progress-margin-block-start",
     "--ds-stats-header-spark-dot-gap",
+    "--ds-stats-header-spark-dot-opacity",
     "--ds-stats-header-spark-dot-opacity-floor",
     "--ds-stats-header-spark-dot-size",
     "--ds-stats-header-spark-margin-block-start",
@@ -120,8 +124,12 @@ export function deriveStatsHeaderChannels(): Record<string, string> {
   vars["--ds-stats-header-spark-dot-gap"] = "6px";
   vars["--ds-stats-header-spark-dot-size"] = "var(--ds-spacing-1, 4px)";
   vars["--ds-stats-header-spark-margin-block-start"] = "14px";
-  /* The quietest dot of a series. The loudest is opaque, and the six steps in
-     between are the dot's `data-level` stamp read through the skin. */
+  /* The quietest dot of a series. The loudest is opaque and the ramp between
+     is each dot's own runtime value, stamped per instance on the public
+     --ds-stats-header-spark-dot-opacity channel; the resting value of a dot
+     the engine did not stamp is this floor, and the skin's fallback chain
+     says so. */
+  vars["--ds-stats-header-spark-dot-opacity"] = "0.15";
   vars["--ds-stats-header-spark-dot-opacity-floor"] = "0.15";
   vars["--ds-stats-header-ping-duration"] = "400ms";
 

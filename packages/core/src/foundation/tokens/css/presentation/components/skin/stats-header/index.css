@@ -21,8 +21,9 @@
  * state triad and the forced-colors contract. The composed metric's value
  * scale is drained here from the retired inline `valueStyle` (identical
  * values, same `--ds-stats-header-value-*` channels), and each spark dot's
- * opacity is a private runtime instance channel (`--_ds-stats-header-spark-dot-opacity`)
- * published by the engine and declared here.
+ * opacity arrives per instance on the public `--ds-stats-header-spark-dot-opacity`
+ * channel (runtime data the engine stamps, the admitted inline shape) — the
+ * skin rules the part and the deriver owns the resting value.
  *
  * STATE:
  *  - `data-accent` (5-value AccentColor) selects the sparkline dot and the
@@ -196,29 +197,15 @@
   inline-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   block-size: var(--ds-stats-header-spark-dot-size, var(--ds-spacing-1, 4px));
   border-radius: 50%;
-  /* The dot's share of the series maximum arrives as a closed `data-level`
-     domain (0-7) rather than as a computed opacity in the style attribute, and
-     the ramp from the floor to opaque is this file's. An unstamped dot reads
-     level 0 only if the series is flat at its own minimum; the component always
-     stamps, so the 0 here is the resting value, not a guess. */
-  opacity: calc(
-    var(--ds-stats-header-spark-dot-opacity-floor, 0.15) +
-      var(--_ds-stats-header-spark-dot-level, 0) *
-        (1 - var(--ds-stats-header-spark-dot-opacity-floor, 0.15)) / 7
-  );
+  /* Each dot's share of the series maximum arrives as its own opacity on the
+     public --ds-stats-header-spark-dot-opacity channel, stamped per instance
+     by the engine; the resting value is the ramp's floor, so a dot the engine
+     did not stamp reads the quietest rung. */
+  opacity: var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15));
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
     opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
 }
-/* The eight steps of the level domain. A level is a share of the series maximum,
-   so the ramp is linear and the top step is opaque. */
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='1'] { --_ds-stats-header-spark-dot-level: 1; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='2'] { --_ds-stats-header-spark-dot-level: 2; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='3'] { --_ds-stats-header-spark-dot-level: 3; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='4'] { --_ds-stats-header-spark-dot-level: 4; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='5'] { --_ds-stats-header-spark-dot-level: 5; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='6'] { --_ds-stats-header-spark-dot-level: 6; }
-.ds-stats-header[data-part='root'] [data-part='spark-dot'][data-level='7'] { --_ds-stats-header-spark-dot-level: 7; }
 
 @media (hover: hover) {
   .ds-stats-header[data-part='root'] [data-part='stat-card'][data-state~='hovered'] [data-part='spark-dot'],

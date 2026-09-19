@@ -1978,6 +1978,7 @@
   --ds-stats-header-press-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
   --ds-stats-header-progress-margin-block-start: 10px;
   --ds-stats-header-spark-dot-gap: 6px;
+  --ds-stats-header-spark-dot-opacity: 0.15;
   --ds-stats-header-spark-dot-opacity-floor: 0.15;
   --ds-stats-header-spark-dot-size: var(--ds-spacing-1, 4px);
   --ds-stats-header-spark-margin-block-start: 14px;

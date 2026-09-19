@@ -15,8 +15,8 @@
       "tier": "pro"
     },
     {
-      "channels": 26,
-      "channelsThroughAliases": 837,
+      "channels": 27,
+      "channelsThroughAliases": 866,
       "decision": "density.mode",
       "derivers": [
         "density",
@@ -43,6 +43,7 @@
         "assistant",
         "auth-surface",
         "auto-complete",
+        "avatar",
         "back-top",
         "badge",
         "billing",
@@ -205,6 +206,7 @@
         "stats-header",
         "status-filter-pills",
         "step-wizard",
+        "stepper",
         "surface-section-card",
         "surface-states",
         "table",
@@ -239,7 +241,7 @@
     },
     {
       "channels": 226,
-      "channelsThroughAliases": 1743,
+      "channelsThroughAliases": 1798,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -447,6 +449,7 @@
         "sheet",
         "shift-matrix",
         "shortcuts-overlay",
+        "sidebar-surface",
         "skeleton",
         "skeleton-anatomy",
         "slider",
@@ -499,8 +502,8 @@
       "tier": "standard"
     },
     {
-      "channels": 706,
-      "channelsThroughAliases": 929,
+      "channels": 736,
+      "channelsThroughAliases": 955,
       "decision": "motion.character",
       "derivers": [
         "active-filters-bar",
@@ -571,6 +574,7 @@
         "checkbox",
         "cockpit-header",
         "code-block",
+        "collapse",
         "collection-header",
         "collection-workspace",
         "collection-workspace-render-dispatch",
@@ -701,6 +705,7 @@
         "statistic",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",
@@ -733,8 +738,8 @@
       "tier": "pro"
     },
     {
-      "channels": 706,
-      "channelsThroughAliases": 929,
+      "channels": 736,
+      "channelsThroughAliases": 955,
       "decision": "motion.dial",
       "derivers": [
         "active-filters-bar",
@@ -805,6 +810,7 @@
         "checkbox",
         "cockpit-header",
         "code-block",
+        "collapse",
         "collection-header",
         "collection-workspace",
         "collection-workspace-render-dispatch",
@@ -935,6 +941,7 @@
         "statistic",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",
@@ -981,8 +988,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2104,
-      "channelsThroughAliases": 3656,
+      "channels": 2126,
+      "channelsThroughAliases": 3676,
       "decision": "palette.contrast-posture",
       "derivers": [
         "active-filters-bar",
@@ -1262,6 +1269,7 @@
         "sheet",
         "shift-matrix",
         "shortcuts-overlay",
+        "sidebar-surface",
         "skeleton",
         "skeleton-anatomy",
         "slider",
@@ -1272,6 +1280,7 @@
         "statistic-compounds",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",
@@ -1324,8 +1333,8 @@
       "tier": "pro"
     },
     {
-      "channels": 2104,
-      "channelsThroughAliases": 3656,
+      "channels": 2126,
+      "channelsThroughAliases": 3676,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "active-filters-bar",
@@ -1605,6 +1614,7 @@
         "sheet",
         "shift-matrix",
         "shortcuts-overlay",
+        "sidebar-surface",
         "skeleton",
         "skeleton-anatomy",
         "slider",
@@ -1615,6 +1625,7 @@
         "statistic-compounds",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",
@@ -1659,8 +1670,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2200,
-      "channelsThroughAliases": 3856,
+      "channels": 2222,
+      "channelsThroughAliases": 3876,
       "decision": "palette.seeds",
       "derivers": [
         "active-filters-bar",
@@ -1944,6 +1955,7 @@
         "sheet",
         "shift-matrix",
         "shortcuts-overlay",
+        "sidebar-surface",
         "skeleton",
         "skeleton-anatomy",
         "slider",
@@ -1954,6 +1966,7 @@
         "statistic-compounds",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",
@@ -1998,8 +2011,8 @@
       "tier": "standard"
     },
     {
-      "channels": 2190,
-      "channelsThroughAliases": 3836,
+      "channels": 2212,
+      "channelsThroughAliases": 3856,
       "decision": "palette.status-seeds",
       "derivers": [
         "active-filters-bar",
@@ -2282,6 +2295,7 @@
         "sheet",
         "shift-matrix",
         "shortcuts-overlay",
+        "sidebar-surface",
         "skeleton",
         "skeleton-anatomy",
         "slider",
@@ -2292,6 +2306,7 @@
         "statistic-compounds",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",
@@ -2337,7 +2352,7 @@
     },
     {
       "channels": 226,
-      "channelsThroughAliases": 1743,
+      "channelsThroughAliases": 1798,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2545,6 +2560,7 @@
         "sheet",
         "shift-matrix",
         "shortcuts-overlay",
+        "sidebar-surface",
         "skeleton",
         "skeleton-anatomy",
         "slider",
@@ -2605,8 +2621,8 @@
       "tier": "pro"
     },
     {
-      "channels": 26,
-      "channelsThroughAliases": 26,
+      "channels": 32,
+      "channelsThroughAliases": 32,
       "decision": "responsive.posture",
       "derivers": [
         "container",
@@ -2618,8 +2634,8 @@
       "tier": "pro"
     },
     {
-      "channels": 54,
-      "channelsThroughAliases": 675,
+      "channels": 55,
+      "channelsThroughAliases": 698,
       "decision": "shape.button-style",
       "derivers": [
         "axes",
@@ -2852,8 +2868,8 @@
       "tier": "standard"
     },
     {
-      "channels": 156,
-      "channelsThroughAliases": 244,
+      "channels": 161,
+      "channelsThroughAliases": 249,
       "decision": "shape.control-height",
       "derivers": [
         "data-table",
@@ -2873,6 +2889,7 @@
         "anchor",
         "assistant",
         "auto-complete",
+        "breadcrumb",
         "button",
         "button-icon",
         "card",
@@ -2924,8 +2941,8 @@
       "tier": "standard"
     },
     {
-      "channels": 33,
-      "channelsThroughAliases": 97,
+      "channels": 34,
+      "channelsThroughAliases": 103,
       "decision": "shape.nesting",
       "derivers": [
         "shape",
@@ -2942,6 +2959,7 @@
         "anchor",
         "assistant",
         "auto-complete",
+        "breadcrumb",
         "button",
         "button-icon",
         "card",
@@ -2949,6 +2967,7 @@
         "chart-foundation",
         "column-menu",
         "confirm-dialog",
+        "data-table",
         "date-picker",
         "drawer",
         "dropdown",
@@ -2981,8 +3000,8 @@
       "tier": "pro"
     },
     {
-      "channels": 903,
-      "channelsThroughAliases": 1500,
+      "channels": 910,
+      "channelsThroughAliases": 1504,
       "decision": "shape.radius-scale",
       "derivers": [
         "avatar",
@@ -3239,8 +3258,8 @@
       "tier": "standard"
     },
     {
-      "channels": 25,
-      "channelsThroughAliases": 181,
+      "channels": 26,
+      "channelsThroughAliases": 182,
       "decision": "spacing.rhythm",
       "derivers": [
         "rhythm",
@@ -3257,6 +3276,7 @@
         "alert-dialog",
         "anchor",
         "assistant",
+        "breadcrumb",
         "button",
         "card",
         "chart-foundation",
@@ -3306,8 +3326,8 @@
       "tier": "standard"
     },
     {
-      "channels": 82,
-      "channelsThroughAliases": 831,
+      "channels": 83,
+      "channelsThroughAliases": 847,
       "decision": "states.emphasis",
       "derivers": [
         "segmented",
@@ -3529,8 +3549,8 @@
       "tier": "standard"
     },
     {
-      "channels": 346,
-      "channelsThroughAliases": 1076,
+      "channels": 348,
+      "channelsThroughAliases": 1092,
       "decision": "states.focus-style",
       "derivers": [
         "avatar",
@@ -3723,6 +3743,7 @@
         "statistic",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",
@@ -3760,8 +3781,8 @@
       "tier": "standard"
     },
     {
-      "channels": 38,
-      "channelsThroughAliases": 173,
+      "channels": 39,
+      "channelsThroughAliases": 175,
       "decision": "surfaces.border-style",
       "derivers": [
         "elevation",
@@ -3857,8 +3878,8 @@
       "tier": "standard"
     },
     {
-      "channels": 24,
-      "channelsThroughAliases": 59,
+      "channels": 25,
+      "channelsThroughAliases": 60,
       "decision": "surfaces.effect-intensity",
       "derivers": [
         "sidebar-surface",
@@ -3873,6 +3894,7 @@
         "alert-dialog",
         "anchor",
         "assistant",
+        "breadcrumb",
         "button",
         "card",
         "chart-foundation",
@@ -3896,8 +3918,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1341,
-      "channelsThroughAliases": 1539,
+      "channels": 1346,
+      "channelsThroughAliases": 1542,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "alert",
@@ -4054,7 +4076,7 @@
     },
     {
       "channels": 130,
-      "channelsThroughAliases": 384,
+      "channelsThroughAliases": 401,
       "decision": "typography.families",
       "derivers": [
         "tenant",
@@ -4214,7 +4236,7 @@
     },
     {
       "channels": 243,
-      "channelsThroughAliases": 497,
+      "channelsThroughAliases": 504,
       "decision": "typography.numeric",
       "derivers": [
         "pagination",
@@ -4376,7 +4398,7 @@
     },
     {
       "channels": 132,
-      "channelsThroughAliases": 893,
+      "channelsThroughAliases": 913,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -4601,8 +4623,8 @@
       "tier": "standard"
     },
     {
-      "channels": 405,
-      "channelsThroughAliases": 654,
+      "channels": 422,
+      "channelsThroughAliases": 684,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
@@ -4770,8 +4792,8 @@
       "tier": "standard"
     },
     {
-      "channels": 373,
-      "channelsThroughAliases": 1090,
+      "channels": 374,
+      "channelsThroughAliases": 1111,
       "decision": "typography.scale",
       "derivers": [
         "axes",
@@ -4972,6 +4994,7 @@
         "statistic",
         "stats-grid",
         "stats-header",
+        "stats-header-keyframes",
         "status-filter-pills",
         "step-wizard",
         "stepper",

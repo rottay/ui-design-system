@@ -504,6 +504,7 @@
     },
     {
       "decisions": [
+        "density.mode",
         "experience.profile",
         "motion.character",
         "motion.dial",
@@ -693,10 +694,14 @@
         "palette.status-seeds",
         "profiles.expressive",
         "shape.button-style",
+        "shape.control-height",
+        "shape.nesting",
         "shape.radius-scale",
+        "spacing.rhythm",
         "states.emphasis",
         "states.focus-style",
         "surfaces.border-style",
+        "surfaces.effect-intensity",
         "surfaces.elevation-posture",
         "typography.families",
         "typography.numeric",
@@ -1261,6 +1266,8 @@
       "decisions": [
         "density.mode",
         "experience.profile",
+        "motion.character",
+        "motion.dial",
         "palette.contrast-posture",
         "palette.neutral-temperature",
         "palette.seeds",
@@ -1700,6 +1707,7 @@
         "profiles.expressive",
         "shape.button-style",
         "shape.control-height",
+        "shape.nesting",
         "shape.radius-scale",
         "states.emphasis",
         "states.focus-style",
@@ -4542,8 +4550,14 @@
     {
       "decisions": [
         "density.mode",
+        "experience.profile",
         "motion.character",
         "motion.dial",
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "profiles.expressive",
         "shape.button-style",
         "shape.control-height",
         "shape.nesting",
@@ -4784,7 +4798,16 @@
       "tier": "structure"
     },
     {
-      "decisions": [],
+      "decisions": [
+        "motion.character",
+        "motion.dial",
+        "palette.contrast-posture",
+        "palette.neutral-temperature",
+        "palette.seeds",
+        "palette.status-seeds",
+        "states.focus-style",
+        "typography.scale"
+      ],
       "family": "stats-header-keyframes"
     },
     {
@@ -4843,6 +4866,7 @@
     },
     {
       "decisions": [
+        "density.mode",
         "experience.profile",
         "motion.character",
         "motion.dial",

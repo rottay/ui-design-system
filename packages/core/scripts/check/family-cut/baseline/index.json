@@ -1457,12 +1457,12 @@
       "denominators": {
         "skinFiles": 4,
         "sourceFiles": 13,
-        "channelsRead": 254,
+        "channelsRead": 249,
         "classTokens": 3,
         "partsStamped": 88,
         "partsConsumed": 88
       },
-      "readWithoutProducer": 38,
+      "readWithoutProducer": 34,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -1967,7 +1967,7 @@
       "denominators": {
         "skinFiles": 2,
         "sourceFiles": 4,
-        "channelsRead": 56,
+        "channelsRead": 57,
         "classTokens": 1,
         "partsStamped": 15,
         "partsConsumed": 16
@@ -1983,15 +1983,6 @@
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-10",
-        "opened": "2026-09-18",
-        "lot": "sub-lot D (the remaining page headers)",
-        "debt": {
-          "inlineStyleViolations": 1
-        },
-        "note": "admitted by the WO-FAM-10 census at the debt the gate measures today; sub-lot D (the remaining page headers) owns it. The row is NOT a pass: every declared count is exact, growth is refused, and a shrink has to be written down here Skeleton vocabulary drained to zero by the sub-lot B role adjudication (2026-09-18): every part got its honest role in SKELETON_PART_ROLES."
-      },
       "cutNote": "WO-FAM-10 sub-lot D. Admitted at its measured debt. 12 unpaired state pseudo-selectors, the cut's second largest F-37 debt, and no executable a11y assertion of its own."
     },
     "section-frame": {

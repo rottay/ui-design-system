@@ -42,12 +42,15 @@ import type { StatItem, StatsHeaderProps, AccentColor } from '../../contracts';
 
 function SparklineDots({ dots, accent }: { dots: number[]; accent: AccentColor }) {
   const maxVal = Math.max(...dots, 1);
+  // The ramp's quiet end quotes the skin's --ds-stats-header-spark-dot-opacity-floor;
+  // each dot's own value is runtime data computed here, on no CSS plane.
+  const FLOOR = 0.15;
 
   return (
     <Flex align="center" gap={6} data-part="spark-dots" aria-hidden="true">
       {dots.slice(0, 7).map((val, i) => {
         const normalized = val / maxVal;
-        const opacity = 0.15 + normalized * 0.85;
+        const opacity = FLOOR + normalized * (1 - FLOOR);
 
         return (
           <Box
@@ -56,8 +59,9 @@ function SparklineDots({ dots, accent }: { dots: number[]; accent: AccentColor }
             data-accent={accent}
             data-dot-index={i}
             style={{
-              /* runtime instance channel — the skin owns the declaration */
-              '--_ds-stats-header-spark-dot-opacity': opacity,
+              /* per-instance runtime data on the PUBLIC channel: the skin
+                 rules the part, the deriver owns the resting value */
+              '--ds-stats-header-spark-dot-opacity': opacity,
             } as CSSProperties}
           />
         );

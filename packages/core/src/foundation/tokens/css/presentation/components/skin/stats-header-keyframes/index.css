@@ -7,25 +7,27 @@
  * staggered on the `--ds-stats-header-ping-duration` channel).
  *
  * The ping is RELATIVE to each dot's own opacity, never absolute. A spark dot
- * encodes its series value in `--_ds-stats-header-spark-dot-opacity`
- * (`0.15 + normalized * 0.85`); an animation origin outranks the declared
- * value, so absolute `opacity: 1` frames flattened the whole series to one
- * tone for as long as the card was hovered — and `both` held it there. The
- * dip multiplies the dot's own opacity instead, so the amplitude survives the
- * hover and the rest state is byte-identical at 0% and 100%.
+ * encodes its series value in `--ds-stats-header-spark-dot-opacity`, stamped
+ * per instance by the engine (`floor + normalized * (1 - floor)`); an
+ * animation origin outranks the declared value, so absolute `opacity: 1`
+ * frames flattened the whole series to one tone for as long as the card was
+ * hovered — and `both` held it there. The dip multiplies the dot's own
+ * opacity instead, so the amplitude survives the hover and the rest state is
+ * byte-identical at 0% and 100%. The fallback chain restates the skin's
+ * resting rule, so an unstamped dot pings from the same floor it rests at.
  */
 
 @keyframes pulse-dot-ping {
   0% {
     transform: scale(1);
-    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
+    opacity: var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15));
   }
   50% {
     transform: scale(1.8);
-    opacity: calc(var(--_ds-stats-header-spark-dot-opacity, 1) * 0.4);
+    opacity: calc(var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15)) * 0.4);
   }
   100% {
     transform: scale(1);
-    opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
+    opacity: var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15));
   }
 }

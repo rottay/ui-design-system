@@ -555,12 +555,18 @@ const KEYFRAME_FRAME_SEMANTICS = {
   // held the final frame. The transforms — the three declarations the paint
   // reconcile counts — are unchanged.
   'pulse-dot-ping': {
-    '0%': { transform: 'scale(1)', opacity: 'var(--_ds-stats-header-spark-dot-opacity, 1)' },
+    '0%': {
+      transform: 'scale(1)',
+      opacity: 'var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15))',
+    },
     '50%': {
       transform: 'scale(1.8)',
-      opacity: 'calc(var(--_ds-stats-header-spark-dot-opacity, 1) * 0.4)',
+      opacity: 'calc(var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15)) * 0.4)',
     },
-    '100%': { transform: 'scale(1)', opacity: 'var(--_ds-stats-header-spark-dot-opacity, 1)' },
+    '100%': {
+      transform: 'scale(1)',
+      opacity: 'var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15))',
+    },
   },
 } satisfies Record<(typeof EXPECTED_KEYFRAMES)[number], Record<string, Record<string, string>>>;
 
