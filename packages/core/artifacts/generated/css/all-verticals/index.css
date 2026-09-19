@@ -103826,6 +103826,42 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 }
+@layer rottay-structures {
+/**
+ * PageShellSurface skin (WO-FAM-11 sub-lot C). Engine-agnostic.
+ *
+ * This family had NO paint anywhere. It is the shared page-chrome foundation
+ * every other surface composes, and its one visual decision -- the coarse
+ * view-transition seam that lets a page body morph across surface-to-surface
+ * navigations -- was a `style={{ viewTransitionName }}` object in TypeScript,
+ * which is the BLOCKING inline-paint arm of the family-cut gate.
+ *
+ * It is stated here instead, on the part the structure stamps. The name is a
+ * CHANNEL, not a literal: an app that runs two page bodies side by side (a
+ * split view, a preview rail) needs two distinct groups, and a same-name morph
+ * between them is exactly the wrong animation. The rest is declared on this
+ * element rather than read through a `var()` tail, because a
+ * `view-transition-name` that resolves to nothing is invalid-at-computed-value-
+ * time -- the seam would simply disappear -- and because no tenant authors it:
+ * it is a composition fact of the page, not a brand decision.
+ */
+
+.ds-surface.ds-page-shell-surface[data-part='body'] {
+  --ds-page-shell-surface-transition-name: ds-vt-page-body;
+
+  min-inline-size: 0;
+  view-transition-name: var(--ds-page-shell-surface-transition-name);
+}
+
+/* A morph is motion. Under a reduced-motion preference the body keeps its
+   place in the flow and the named group stops being a transition target. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-page-shell-surface[data-part='body'] {
+    view-transition-name: none;
+  }
+}
+
+}
 @layer rottay-surfaces {
 /**
  * CollectionWorkspaceSurface skin (long-tail skin ownership, SU32 pass 2026-07-30).
