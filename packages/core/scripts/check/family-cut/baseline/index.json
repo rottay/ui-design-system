@@ -1439,7 +1439,7 @@
         "partsStamped": 37,
         "partsConsumed": 40
       },
-      "readWithoutProducer": 20,
+      "readWithoutProducer": 3,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
