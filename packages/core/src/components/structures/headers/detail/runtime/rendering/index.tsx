@@ -28,13 +28,17 @@ import { type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Badge, Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '@/components/primitives';
+import {
+  resolveNavigationIntent,
+  resolveNavigationTarget,
+} from '@/components/primitives/runtime/collection/roving-focus';
 import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
 import {
   resolveSharedHeaderActionIcon,
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
 } from '@/components/patterns/foundation/header-actions';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 
 import type { DetailHeaderProps, DetailHeaderTab } from '../../contracts';
 
@@ -84,10 +88,17 @@ function DetailTab({
   isActive: boolean;
   onSelect: (tabId: string) => void;
 }) {
-  // The APG tab keyboard contract: Enter/Space activates; the arrow keys
-  // (direction-aware under RTL), Home and End move focus between tabs without
-  // activating them.
+  // The APG tab keyboard contract: Enter/Space activates; the arrow keys, Home
+  // and End move focus between tabs without activating them.
+  //
+  // The key becomes a direction in the ONE place the design system allows
+  // (`resolveNavigationIntent`), and the reading direction is the locale's.
+  // A DOM probe answered the wrong question here: `closest('[dir="rtl"]')`
+  // walks past a nearer `dir="ltr"`, because that element does not match the
+  // selector, so locally left-to-right tabs under a right-to-left ancestor
+  // navigated backwards.
   const interaction = useInteractionState();
+  const rtl = useReadingDirectionIsRtl();
   const TabIcon = tab.icon;
 
   const handleTabKeyDown = (event: ReactKeyboardEvent) => {
@@ -96,8 +107,8 @@ function DetailTab({
       onSelect(tab.id);
       return;
     }
-    const navKeys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
-    if (!navKeys.includes(event.key)) {
+    const intent = resolveNavigationIntent(event.key, { orientation: 'horizontal', rtl });
+    if (intent === null) {
       return;
     }
     event.preventDefault();
@@ -110,18 +121,13 @@ function DetailTab({
     if (currentIndex < 0) {
       return;
     }
-    const rtl = Boolean(currentTab.closest('[dir="rtl"]'));
-    let nextIndex = currentIndex;
-    if (event.key === 'Home') {
-      nextIndex = 0;
-    } else if (event.key === 'End') {
-      nextIndex = stripTabs.length - 1;
-    } else {
-      const forward = event.key === 'ArrowRight' ? !rtl : rtl;
-      nextIndex =
-        (currentIndex + (forward ? 1 : -1) + stripTabs.length) % stripTabs.length;
-    }
-    stripTabs[nextIndex]?.focus();
+    stripTabs[
+      resolveNavigationTarget(intent, {
+        index: currentIndex,
+        length: stripTabs.length,
+        wrap: true,
+      })
+    ]?.focus();
   };
 
   return (

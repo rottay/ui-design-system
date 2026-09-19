@@ -17,6 +17,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, waitFor, within } from '@testing-library/react';
 
 import { DetailHeader } from '..';
+import { I18nProvider } from '@/infrastructure/runtime/i18n/runtime';
 import { renderWithEngine } from '@tests/support/engine';
 
 const WAIT_TIMEOUT = 2000;
@@ -325,11 +326,15 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
     expect(document.activeElement).toBe(tabs[2]);
   });
 
+  // A right-to-left reading arrives through the i18n authority, never through a
+  // bare `dir` wrapper: the tabs ask `useReadingDirectionIsRtl`, and the
+  // provider stamps `dir` itself, so the DOM still says what the locale says.
+  // A wrapper alone would assert a direction no component is entitled to read.
   it('flips the arrow-key direction under a right-to-left reading', async () => {
     const { container, getByRole } = renderWithEngine(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en" directionScope="element">
         <DetailHeader title="X" backHref="/x" tabs={TABS} activeTab="activity" onTabChange={vi.fn()} />
-      </div>,
+      </I18nProvider>,
       'modern',
     );
     await waitForPart(container, 'tab-strip');
@@ -365,7 +370,7 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
 
   it('keeps the tab contract and the named regions under a right-to-left reading', async () => {
     const { container, getByRole } = renderWithEngine(
-      <div dir="rtl">
+      <I18nProvider locale="ar" fallbackLocale="en" directionScope="element">
         <DetailHeader
           title="Acme Corp"
           backHref="/customers"
@@ -374,7 +379,7 @@ describe('DetailHeader (WO-FAM-10 cut)', () => {
           onTabChange={vi.fn()}
           metadata={[{ label: 'ID', value: '1' }]}
         />
-      </div>,
+      </I18nProvider>,
       'modern',
     );
     await waitForPart(container, 'root');
