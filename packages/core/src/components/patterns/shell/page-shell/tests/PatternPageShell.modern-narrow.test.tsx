@@ -25,31 +25,32 @@ function buildProps(overrides: Partial<PageShellProps> = {}): PageShellProps {
 }
 
 describe('PatternPageShell modern — narrow posture and composed back control', () => {
-  it('reflows the loading skeleton into the loaded narrow order instead of shrinking it', () => {
+  it('needs no second narrow posture for the wait, because the wait is the header', () => {
     const { container } = render(<ModernPageShell {...buildProps({ loading: true })} />);
 
-    // The skeleton mirrors the requested anatomy in both postures.
-    expect(container.querySelector('[data-part="skeleton-title-copy"]')).not.toBeNull();
-    expect(container.querySelector('[data-part="skeleton-action-row"]')).not.toBeNull();
-    expect(container.querySelector('[data-part="skeleton"][data-block="metadata"]')).not.toBeNull();
+    // The stand-in is the loaded header itself, under the shared renderer, so
+    // the ≤640px reorder below applies to it unchanged.
+    const source = container.querySelector('[data-part="source"]') as HTMLElement;
+    expect(source.querySelector('[data-part="title"]')).not.toBeNull();
+    expect(source.querySelector('[data-part="subtitle"]')).not.toBeNull();
+    expect(source.querySelector('[data-part="caption"]')).not.toBeNull();
+    expect(source.querySelector('[data-part="actions"]')).not.toBeNull();
 
-    // Before: the ≤640px block never mentioned the skeleton, so the desktop
-    // two-column row survived — the title bar shrank to a stub beside the
-    // action blocks and the reserved actions sat a row above the loaded ones.
-    expect(NARROW_BLOCK).toContain("[data-part='skeleton-title-row']");
-    expect(NARROW_BLOCK).toContain("[data-part='skeleton-title-copy'] {\n    display: contents;");
-    expect(NARROW_BLOCK).toContain("[data-part='skeleton-action-row'] {\n    order: 3;");
-    expect(NARROW_BLOCK).toContain("[data-part='skeleton'][data-block='metadata'] {\n    order: 4;");
+    // Before: a hand-made skeleton tree with its OWN ≤640px reorder rules,
+    // which is the drift the shared renderer exists to make impossible.
+    const rules = skinStyles.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(NARROW_BLOCK).not.toContain("[data-part='skeleton");
+    expect(rules).not.toContain("[data-part='skeleton");
   });
 
   it('retires the register seam once the title column dissolves', () => {
     // The seam is authored for the title column only...
     expect(skinStyles).toContain(
-      "[data-part='metadata'] {\n  border-top: var(--ds-edge-hairline-width, 1px) solid",
+      "[data-part='caption'] {\n  border-top: var(--ds-edge-hairline-width, 1px) solid",
     );
     // ...so at the width where `titles` becomes display: contents it must not
     // survive as a full-header rule beneath the actions cluster.
-    expect(NARROW_BLOCK).toContain("[data-part='metadata'] {\n    padding-block-start: 0;");
+    expect(NARROW_BLOCK).toContain("[data-part='caption'] {\n    padding-block-start: 0;");
     expect(NARROW_BLOCK).toContain('border-block-start-width: 0;');
   });
 

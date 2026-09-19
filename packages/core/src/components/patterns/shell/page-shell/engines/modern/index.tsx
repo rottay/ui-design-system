@@ -39,6 +39,8 @@
 import React from 'react';
 import type { PageShellProps } from '../../contracts';
 import Button from '../../../../../primitives/inputs/button/engines/modern';
+import { AnatomySkeleton } from '../../../../../primitives/feedback/skeleton';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -78,14 +80,21 @@ function BreadcrumbItem({
   isLast: boolean;
 }) {
   const isInteractive = !isLast && (href || onClick);
+  const crumb = useInteractionState();
 
   if (isInteractive) {
     return (
       <a
         href={href ?? '#'}
-        data-part="crumb"
+        {...partAttributes('crumb', crumb.state)}
         data-interactive="true"
         data-last="false"
+        onPointerEnter={crumb.handlers.onPointerEnter}
+        onPointerLeave={crumb.handlers.onPointerLeave}
+        onPointerDown={crumb.handlers.onPointerDown}
+        onPointerUp={crumb.handlers.onPointerUp}
+        onFocus={crumb.handlers.onFocus}
+        onBlur={crumb.handlers.onBlur}
         onClick={
           onClick
             ? (e: React.MouseEvent) => {
@@ -135,6 +144,8 @@ function TabButton({
   /** APG wiring: the tabpanel id this tab controls. */
   controls: string;
 }) {
+  const tab = useInteractionState();
+
   return (
     <button
       type="button"
@@ -144,7 +155,13 @@ function TabButton({
       aria-selected={isActive}
       tabIndex={isActive ? 0 : -1}
       onClick={onClick}
-      data-part="tab"
+      onPointerEnter={tab.handlers.onPointerEnter}
+      onPointerLeave={tab.handlers.onPointerLeave}
+      onPointerDown={tab.handlers.onPointerDown}
+      onPointerUp={tab.handlers.onPointerUp}
+      onFocus={tab.handlers.onFocus}
+      onBlur={tab.handlers.onBlur}
+      {...partAttributes('tab', tab.state)}
       data-active={isActive ? 'true' : 'false'}
     >
       {label}
@@ -302,90 +319,13 @@ export default function ModernPageShell(props: PageShellProps) {
 
   /* APG tab/tabpanel pairing: stable per-instance ids (useId), so concurrent
      shells never collide. The shell renders ONE tabpanel whose labelledby
-     follows the active tab (automatic activation). Hook order law: this hook
-     sits above the loading early-return. */
+     follows the active tab (automatic activation). */
   const shellId = React.useId();
 
-  /* ---- Loading skeleton: geometry lives in the skin keyed on data-block
-          (cockpit-header idiom); the pulse cadence rides the skin's motion
-          channel. The two action blocks keep their divergent radius on the
-          sanctioned inline custom-property channel. The skeleton mirrors the
-          anatomy the caller actually requested (breadcrumb / eyebrow / title
-          / subtitle / actions / tabs), so the late content lands on the
-          footprint the skeleton reserved instead of jumping. ---- */
-  if (loading) {
-    return (
-      <div
-        className={`ds-pattern-page-shell ds-pattern-page-shell--loading ds-engine-modern ${className ?? ''}`}
-        data-part="root"
-        data-loading="true"
-        aria-busy="true"
-        style={{
-          '--ds-page-shell-max-width': resolveMaxWidth(maxWidth),
-          ...style,
-        } as React.CSSProperties}
-      >
-        {/* The skeleton blocks are pure geometry; AT gets a spoken status
-            instead of a wander through decorative divs. */}
-        <span className="ds-sr-only" role="status">{loadingLabel}</span>
-        <div
-          className="ds-pattern-page-shell__loading-skeleton"
-          data-part="skeleton-group"
-          data-hide-header={hideHeader ? 'true' : 'false'}
-          aria-hidden="true"
-        >
-          {/* `hideHeader` means the loaded render has no header at all, so
-              painting header chrome here guarantees a jump on hydrate. */}
-          {hideHeader ? null : (
-          <>
-          {/* Breadcrumb skeleton */}
-          {breadcrumbs && breadcrumbs.length > 0 && (
-            <div data-part="skeleton" data-block="breadcrumb" />
-          )}
-          {/* Eyebrow skeleton */}
-          {eyebrow ? <div data-part="skeleton" data-block="eyebrow" /> : null}
-          {/* Title skeleton */}
-          <div data-part="skeleton-title-row">
-            <div data-part="skeleton-title-copy">
-              {/* In-flow skeleton: 280px exceeds the content box a 360px
-                  viewport offers, so it is bounded rather than pinned. */}
-              <div data-part="skeleton" data-block="title" />
-              {subtitle ? <div data-part="skeleton" data-block="subtitle" /> : null}
-              {/* C1: the metadata register line joins the mirrored anatomy —
-                  its block reserves the caption footprint so a late register
-                  never pushes the actions/tabs down on hydrate. */}
-              {metadata ? <div data-part="skeleton" data-block="metadata" /> : null}
-            </div>
-            {actions ? (
-              <div data-part="skeleton-action-row">
-                <div
-                  data-part="skeleton"
-                  data-block="action-sm"
-                  style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-                />
-                <div
-                  data-part="skeleton"
-                  data-block="action-md"
-                  style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
-                />
-              </div>
-            ) : null}
-          </div>
-          {/* Tab strip skeleton: one block per declared tab reserves the
-              strip's final width and row height. */}
-          {tabs && tabs.length > 0 && (
-            <div data-part="skeleton-tabs-row">
-              {tabs.map((tab) => (
-                <div key={`skeleton-tab-${tab.key}`} data-part="skeleton" data-block="tab" />
-              ))}
-            </div>
-          )}
-          </>
-          )}
-        </div>
-      </div>
-    );
-  }
+  /* The identity panel's sheen shift is the one hover treatment on the header,
+     and the tile lift rides the same decision, so the panel resolves it once
+     through the kernel instead of leaving two bare pseudo-classes to decide. */
+  const header = useInteractionState();
 
   /* Default to the first tab when no activeTab is explicitly set. An
      activeTab naming a tab that does not exist used to render an empty
@@ -431,11 +371,157 @@ export default function ModernPageShell(props: PageShellProps) {
     if (targetKey && targetKey !== activeTabKey) onTabChange?.(targetKey);
   };
 
+  /* The header chrome is built once. The loading state is BUILT FROM THAT
+     ANATOMY: the shared renderer reads the header's own `data-part` tree and
+     draws one bone per part, so the wait has the shape of the header the
+     caller asked for and cannot drift from it. `hideHeader` therefore draws
+     nothing, exactly as the loaded render shows nothing. */
+  const headerChrome = hideHeader ? null : (
+      <div
+        ref={headerRef}
+        onPointerEnter={header.handlers.onPointerEnter}
+        onPointerLeave={header.handlers.onPointerLeave}
+        onPointerDown={header.handlers.onPointerDown}
+        onPointerUp={header.handlers.onPointerUp}
+        {...partAttributes('header', header.state)}
+        data-has-actions={actions ? 'true' : 'false'}
+        data-has-tabs={tabs && tabs.length > 0 ? 'true' : 'false'}
+        data-has-rich-content={headerContent ? 'true' : 'false'}
+        data-sticky={sticky ? 'true' : 'false'}
+        data-stuck={sticky && isStuck ? 'true' : 'false'}
+      >
+      {/* ---- Breadcrumb trail (pattern-owned framed-pill grammar — see the
+              skin header; the Breadcrumb primitive was evaluated and the
+              cockpit-header framed-pill minimal contract applies) ---- */}
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <nav
+          aria-label={breadcrumbLabel}
+          data-part="breadcrumb"
+        >
+          {breadcrumbs.map((bc, idx) => {
+            const isLast = idx === breadcrumbs.length - 1;
+            return (
+              <React.Fragment key={`crumb-${idx}`}>
+                {idx > 0 && (
+                  <span
+                    data-part="separator"
+                    aria-hidden="true"
+                  >
+                    <NavigationForwardIcon size="xs" decorative />
+                  </span>
+                )}
+                <BreadcrumbItem
+                  label={bc.label}
+                  href={bc.href}
+                  onClick={bc.onClick}
+                  isLast={isLast}
+                />
+              </React.Fragment>
+            );
+          })}
+        </nav>
+      )}
+
+      {/* ---- Header row: back + title group | actions ---- */}
+      <div data-part="header-row">
+        {/* Left cluster: back button + title group */}
+        <div data-part="lead">
+          {back && (
+            <BackButton
+              label={back.label}
+              ariaLabel={back.ariaLabel}
+              fallbackLabel={backFallbackLabel}
+              onClick={back.onClick}
+            />
+          )}
+
+          {icon ? (
+            <span data-part="header-icon" aria-hidden="true">
+              {icon}
+            </span>
+          ) : null}
+
+          {/* Title + badge + subtitle */}
+          <div data-part="titles">
+            {eyebrow ? (
+              <div data-part="eyebrow">{eyebrow}</div>
+            ) : null}
+            <div data-part="title-row">
+              {/* String titles also advertise their full text on hover: the
+                  32ch measure + balanced wrap can still clip long names in
+                  narrow containers (cockpit-header idiom). */}
+              <h1
+                data-part="title"
+                title={typeof title === 'string' ? title : undefined}
+              >
+                {title}
+              </h1>
+              {badge}
+            </div>
+            {subtitle && (
+              <p
+                data-part="subtitle"
+              >
+                {subtitle}
+              </p>
+            )}
+            {metadata && (
+              /* Register line: counts, timestamps, owners. Deliberately
+                 subordinate — caption role and muted ink live in the skin. */
+              <div data-part="caption">
+                {metadata}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right: action buttons */}
+        {actions && (
+          <div data-part="actions">
+            {actions}
+          </div>
+        )}
+      </div>
+
+      {headerContent && (
+        <div data-part="header-content">
+          {headerContent}
+        </div>
+      )}
+
+      {/* ---- Bottom border separator ---- */}
+      {(tabs && tabs.length > 0) ? (
+        /* Tab strip acts as the separator */
+        <div
+          role="tablist"
+          aria-label={pageTabsLabel}
+          data-part="tabs"
+          onKeyDown={handleTabsKeyDown}
+        >
+          {tabs.map((tab) => (
+            <TabButton
+              key={tab.key}
+              label={tab.label}
+              isActive={activeTabKey === tab.key}
+              onClick={() => onTabChange?.(tab.key)}
+              id={tabDomId(tab.key)}
+              controls={panelDomId}
+            />
+          ))}
+        </div>
+      ) : (
+        /* Subtle separator when no tabs */
+        <div data-part="divider" />
+      )}
+      </div>
+  );
+
   return (
     <div
       className={`ds-pattern-page-shell ds-engine-modern ${className ?? ''}`}
       data-part="root"
-      data-loading="false"
+      data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading || undefined}
       style={{
         /* The caller's max-width rides a quoted custom-property channel; the
            skin applies it (with margin-inline: auto), so the engine carries
@@ -444,154 +530,29 @@ export default function ModernPageShell(props: PageShellProps) {
         ...style,
       } as React.CSSProperties}
     >
-      {/* ---- Page header area ---- */}
-      {!hideHeader && (
-        <div
-          ref={headerRef}
-          data-part="header"
-          data-has-actions={actions ? 'true' : 'false'}
-          data-has-tabs={tabs && tabs.length > 0 ? 'true' : 'false'}
-          data-has-rich-content={headerContent ? 'true' : 'false'}
-          data-sticky={sticky ? 'true' : 'false'}
-          data-stuck={sticky && isStuck ? 'true' : 'false'}
-        >
-        {/* ---- Breadcrumb trail (pattern-owned framed-pill grammar — see the
-                skin header; the Breadcrumb primitive was evaluated and the
-                cockpit-header framed-pill minimal contract applies) ---- */}
-        {breadcrumbs && breadcrumbs.length > 0 && (
-          <nav
-            aria-label={breadcrumbLabel}
-            data-part="breadcrumb"
-          >
-            {breadcrumbs.map((bc, idx) => {
-              const isLast = idx === breadcrumbs.length - 1;
-              return (
-                <React.Fragment key={`crumb-${idx}`}>
-                  {idx > 0 && (
-                    <span
-                      data-part="separator"
-                      aria-hidden="true"
-                    >
-                      <NavigationForwardIcon size="xs" decorative />
-                    </span>
-                  )}
-                  <BreadcrumbItem
-                    label={bc.label}
-                    href={bc.href}
-                    onClick={bc.onClick}
-                    isLast={isLast}
-                  />
-                </React.Fragment>
-              );
-            })}
-          </nav>
-        )}
-
-        {/* ---- Header row: back + title group | actions ---- */}
-        <div data-part="header-row">
-          {/* Left cluster: back button + title group */}
-          <div data-part="lead">
-            {back && (
-              <BackButton
-                label={back.label}
-                ariaLabel={back.ariaLabel}
-                fallbackLabel={backFallbackLabel}
-                onClick={back.onClick}
-              />
-            )}
-
-            {icon ? (
-              <span data-part="header-icon" aria-hidden="true">
-                {icon}
-              </span>
-            ) : null}
-
-            {/* Title + badge + subtitle */}
-            <div data-part="titles">
-              {eyebrow ? (
-                <div data-part="eyebrow">{eyebrow}</div>
-              ) : null}
-              <div data-part="title-row">
-                {/* String titles also advertise their full text on hover: the
-                    32ch measure + balanced wrap can still clip long names in
-                    narrow containers (cockpit-header idiom). */}
-                <h1
-                  data-part="title"
-                  title={typeof title === 'string' ? title : undefined}
-                >
-                  {title}
-                </h1>
-                {badge}
-              </div>
-              {subtitle && (
-                <p
-                  data-part="subtitle"
-                >
-                  {subtitle}
-                </p>
-              )}
-              {metadata && (
-                /* Register line: counts, timestamps, owners. Deliberately
-                   subordinate — caption role and muted ink live in the skin. */
-                <div data-part="metadata">
-                  {metadata}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right: action buttons */}
-          {actions && (
-            <div data-part="actions">
-              {actions}
-            </div>
-          )}
-        </div>
-
-        {headerContent && (
-          <div data-part="header-content">
-            {headerContent}
-          </div>
-        )}
-
-        {/* ---- Bottom border separator ---- */}
-        {(tabs && tabs.length > 0) ? (
-          /* Tab strip acts as the separator */
+      {loading ? (
+        <>
+          {/* The bones are decorative; AT gets one spoken status instead of a
+              wander through them, so the skeleton adds no second one. */}
+          <span className="ds-sr-only" role="status">{loadingLabel}</span>
+          <AnatomySkeleton busy={false}>{headerChrome}</AnatomySkeleton>
+        </>
+      ) : (
+        <>
+          {headerChrome}
+          {/* ---- Content area: the single APG tabpanel when tabs drive it ---- */}
           <div
-            role="tablist"
-            aria-label={pageTabsLabel}
-            data-part="tabs"
-            onKeyDown={handleTabsKeyDown}
+            data-part="content"
+            role={tabsRendered ? 'tabpanel' : undefined}
+            id={tabsRendered ? panelDomId : undefined}
+            aria-labelledby={tabsRendered && activeTabKey ? tabDomId(activeTabKey) : undefined}
           >
-            {tabs.map((tab) => (
-              <TabButton
-                key={tab.key}
-                label={tab.label}
-                isActive={activeTabKey === tab.key}
-                onClick={() => onTabChange?.(tab.key)}
-                id={tabDomId(tab.key)}
-                controls={panelDomId}
-              />
-            ))}
+            {tabs && tabs.length > 0
+              ? tabs.find((t) => t.key === activeTabKey)?.content
+              : children}
           </div>
-        ) : (
-          /* Subtle separator when no tabs */
-          <div data-part="rule" />
-        )}
-        </div>
+        </>
       )}
-
-      {/* ---- Content area: the single APG tabpanel when tabs drive it ---- */}
-      <div
-        data-part="content"
-        role={tabsRendered ? 'tabpanel' : undefined}
-        id={tabsRendered ? panelDomId : undefined}
-        aria-labelledby={tabsRendered && activeTabKey ? tabDomId(activeTabKey) : undefined}
-      >
-        {tabs && tabs.length > 0
-          ? tabs.find((t) => t.key === activeTabKey)?.content
-          : children}
-      </div>
     </div>
   );
 }

@@ -31,17 +31,20 @@
  *
  * Interaction paint that the removed React hover/focus state used to own now lives
  * here as `:hover` / `:focus` rules. Hovers ride the `@media (hover: hover)`
- * guard (house hover law) with unguarded `:active` twins where a press state
- * reads; keyboard focus keeps its unguarded `:focus` rules. The shell-grid
- * `background-image` is scoped to the non-loading root (the loading root never
- * painted it); it stays invisible until a tenant sets
- * `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks share one
- * `data-part` but differ in geometry, so each carries a `data-block` attribute
- * (skin-owned geometry, cockpit-header idiom) and, where it deviates from the
- * default, its radius on the sanctioned inline
- * `--ds-page-shell-skeleton-radius` custom-property data channel (uncounted).
- * The remaining inline styles in the engine are the caller's own `style`
- * prop and the `--ds-page-shell-max-width` channel on the root.
+ * guard (house hover law), each PAIRED with the kernel state the engine
+ * stamps: the header, the crumb links and the tabs run `useInteractionState`
+ * and stamp `partAttributes`, so `[data-state~='hovered']` and the platform
+ * pseudo-class are one decision with a platform fallback, not two authorities.
+ * The shell-grid `background-image` is scoped to the non-loading root (the
+ * loading root never painted it); it stays invisible until a tenant sets
+ * `--ds-shell-grid-size`/`--ds-shell-grid-line`.
+ *
+ * THE LOADING STATE IS NOT PAINTED HERE. `AnatomySkeleton` reads the header's
+ * own `data-part` tree and draws one bone per part, so the skeleton cannot
+ * drift from the header it stands in for; the twenty-nine hand-made
+ * `[data-part='skeleton-*']` constructs this file used to carry are gone.
+ * The only inline styles left in the engine are the caller's own `style` prop
+ * and the `--ds-page-shell-max-width` channel on the root.
  *
  * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
  * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
@@ -66,7 +69,7 @@
  *   (expressive type profiles move transform/tracking only — B1.2 keeps
  *   metrics family-authored). `--_ds-page-hierarchy-eyebrow-family`
  *   (shared with CollectionHeader) opens it with the mono fallback intact.
- * - METADATA register line (`data-part='metadata'`): caption role channels,
+ * - METADATA register line (`data-part='caption'`): caption role channels,
  *   muted ink, tabular numerals and a hairline separator — editorial tenants
  *   read it as a register rule, technical tenants as a compact status line.
  * - STICKY: `sticky` prop → `data-sticky` (+ `data-stuck` once the window
@@ -130,9 +133,14 @@
 }
 
 /* ---- root measure: the caller's maxWidth rides the channel (default none;
-        margin-inline: auto is a no-op without a measure) ---- */
+        margin-inline: auto is a no-op without a measure). The rest is
+        DECLARED here rather than hidden in a `var()` tail, so the channel has
+        a producer and the engine's per-instance write is the only statement
+        above it. ---- */
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
-  max-width: var(--ds-page-shell-max-width, none);
+  --ds-page-shell-max-width: none;
+
+  max-width: var(--ds-page-shell-max-width);
   margin-inline: auto;
 }
 
@@ -249,7 +257,7 @@
 /* Header hover is decorative sheen-shift: it rides the hover guard (house
    hover law); there is no press state on a page panel. */
 @media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:is([data-state~='hovered'], :hover) {
     background-position: 100% 50%;
     border-color: color-mix(
       in srgb,
@@ -259,7 +267,7 @@
     box-shadow: var(--ds-page-header-shadow-hover, var(--ds-elevation-2));
   }
 
-  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover [data-part='header-icon'] {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:is([data-state~='hovered'], :hover) [data-part='header-icon'] {
     transform: translateY(-1px) scale(1.025);
   }
 }
@@ -382,16 +390,16 @@
 }
 /* Keyboard users get the governed ring on crumb links (the UA default was
    the only indicator before); hover/active keep their color-only cue. */
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible {
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 @media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='hovered'], :hover) {
     color: var(--ds-color-text-secondary);
   }
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:active {
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-text-primary);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
@@ -456,7 +464,7 @@
   transform: translateY(-1px);
 }
 @media (hover: hover) {
-  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='hovered'], :hover):not([data-active='true']) {
     color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
     background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
     border-color: color-mix(
@@ -466,10 +474,10 @@
     );
   }
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:active:not([data-active='true']) {
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='pressed'], :active):not([data-active='true']) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:focus-visible {
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
 }
@@ -528,7 +536,7 @@
         family/tracking governs); technical tenants as a compact status line.
         The hairline spans only the title column (the part lives inside
         `titles`), so it reads as structure, not as another box. ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='metadata'] {
+.ds-pattern-page-shell.ds-engine-modern [data-part='caption'] {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -544,7 +552,7 @@
   text-transform: var(--ds-type-caption-text-transform, none);
   font-variant-numeric: var(--ds-type-caption-font-variant-numeric, tabular-nums);
 }
-.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='caption'] {
   border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
 }
 
@@ -565,7 +573,7 @@
     0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 80%, transparent);
   scrollbar-width: none;
 }
-.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='divider'] {
   margin-top: var(--ds-page-shell-section-gap);
   border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
@@ -613,87 +621,6 @@
   padding: var(--ds-page-shell-content-padding);
 }
 
-/* ---- loading skeleton: layout frame (drained) + per-block geometry keyed on
-        data-block (cockpit-header idiom) + the pulse cadence on the motion
-        channel (the retired inline `1.5s` literal) ---- */
-.ds-pattern-page-shell.ds-engine-modern[data-part='root'][data-loading='true'] {
-  padding: var(--ds-page-shell-header-padding);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-group'] {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-page-shell-item-gap);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-row'] {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ds-page-shell-section-gap);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-copy'] {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: var(--ds-spacing-2, 8px);
-  min-width: 0;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] {
-  display: flex;
-  gap: var(--ds-page-shell-action-gap);
-}
-/* C0-07: the tab-strip skeleton reserves the strip's final row so late
-   content lands without a vertical jump. */
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-tabs-row'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-tabs-gap, var(--ds-spacing-2, 8px));
-  margin-top: var(--ds-spacing-2, 8px);
-  padding: var(--ds-tabs-list-padding, 3px);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
-  border-radius: var(--ds-page-shell-skeleton-radius, var(--ds-radius-sm));
-  background: var(--ds-color-neutral-100);
-  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) ease-in-out infinite;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='breadcrumb'] {
-  inline-size: 180px;
-  block-size: 12px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='eyebrow'] {
-  inline-size: 120px;
-  max-inline-size: 40%;
-  block-size: 10px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='tab'] {
-  inline-size: 88px;
-  block-size: calc(var(--ds-tabs-md-height, 36px) - 6px);
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='title'] {
-  inline-size: 100%;
-  max-inline-size: 280px;
-  block-size: 28px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='subtitle'] {
-  inline-size: 200px;
-  max-inline-size: 100%;
-  block-size: 14px;
-}
-/* C1: the register-line block mirrors the caption role footprint (12px bar
-   over a bounded measure), so the anatomy-matched skeleton covers metadata
-   exactly like the late content. */
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='metadata'] {
-  inline-size: min(240px, 70%);
-  block-size: 12px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='action-sm'] {
-  inline-size: 80px;
-  block-size: 32px;
-}
-.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='action-md'] {
-  inline-size: 100px;
-  block-size: 32px;
-}
-
 @container ds-page (max-width: 640px) {
   /* C1 intelligent reorder (not a stack): the lead/titles wrappers dissolve
      into the header-row flex context, so every hierarchy unit orders
@@ -729,7 +656,7 @@
     overflow-x: auto;
   }
 
-  .ds-pattern-page-shell.ds-engine-modern [data-part='metadata'] {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='caption'] {
     order: 5;
   }
 
@@ -755,45 +682,11 @@
      the header uses for its own section seams (`header-content`, `rule`) — a
      second dominant boundary read against the wrong region. At this width the
      register keeps its separation through the header-row rhythm. */
-  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'] {
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='caption'] {
     padding-block-start: 0;
     border-block-start-width: 0;
   }
 
-  /* C2 skeleton parity: the loaded header reorders into one column here, so a
-     skeleton that keeps the desktop two-column row reserves the WRONG
-     footprint — the title bar shrinks to a stub beside the action blocks and
-     the reserved actions sit a row above the content that replaces them. The
-     copy wrapper dissolves exactly like `titles` does, so the blocks carry the
-     loaded order: title → supporting → actions → register. */
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-row'] {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-copy'] {
-    display: contents;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='title'] {
-    order: 1;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='subtitle'] {
-    order: 2;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] {
-    order: 3;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] > * {
-    flex: 1 0 auto;
-  }
-
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='metadata'] {
-    order: 4;
-  }
 }
 
 /* C2c a11y floor (census-derived, cockpit-header idiom): coarse-pointer tap
@@ -830,21 +723,14 @@
   .ds-pattern-page-shell.ds-engine-modern [data-part='header']::after {
     animation: none;
   }
-
-  /* C0-07: the skeleton pulse is ambient motion — under reduced motion the
-     reserved footprint stays, the cadence stops. */
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
-    animation: none;
-  }
 }
 
 /* forced-colors: the identity panel's gradients, sheen and shadows are forced
    away, so every frame re-asserts in system colors and the sheen layer is
    removed outright. The ACTIVE tab keeps the system Highlight pair (the tab
-   state never reads as colour alone -- aria-selected carries it too); the
-   skeleton bars re-assert as GrayText with the pulse stopped; hairlines
-   degrade to ButtonText. The back Button is a composed primitive with its
-   own forced-colors contract. */
+   state never reads as colour alone -- aria-selected carries it too);
+   hairlines degrade to ButtonText. The back Button is a composed primitive
+   with its own forced-colors contract. */
 @media (forced-colors: active) {
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'] {
     border-color: ButtonText;
@@ -879,8 +765,8 @@
     color: ButtonText;
   }
   .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-content'],
-  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='metadata'],
-  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='caption'],
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='divider'] {
     border-color: ButtonText;
   }
   .ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-active='true'] {
@@ -890,14 +776,10 @@
     box-shadow: none;
     transform: none;
   }
-  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:focus-visible {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:is([data-state~='focus-visible'], :focus-visible) {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
-  }
-  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
-    background: GrayText;
-    animation: none;
   }
 }
 

@@ -2500,7 +2500,7 @@ const FAM11_SKIN_PINS = Object.freeze({
 test('LIVE: every WO-FAM-11 row resolves to exactly one owner and at least one skin', () => {
   const baseline = readBaseline().families;
   const cut = Object.entries(baseline).filter(([, row]) => row.cut === 'WO-FAM-11');
-  assert.equal(cut.length, 10, 'sub-lot A admitted the ten measurable families of the cut');
+  assert.equal(cut.length, 11, 'sub-lot A admitted ten; page-shell-surface joined at sub-lot C, the moment its paint existed');
   for (const [family, row] of cut) {
     const resolved = resolveFamily(family, ROOT, row);
     assert.equal(resolved.componentDirs.length, 1, family);
@@ -2553,14 +2553,15 @@ test("PLANT: a `skins` pin naming another family's real paint turns the row red"
   }
 });
 
-test('SHAPE: the cut\'s two paintless owners are refused admission, openCut or not', () => {
-  // `page-shell-surface` and `connected-command-palette` emit no class and no
-  // `data-part`, and no skin anywhere paints them: they are composition-only
-  // structures. The gate refuses an empty corpus unwaivably -- an empty corpus
-  // is a broken measurement, not a declarable state -- so neither is a roster
-  // row of sub-lot A, and this is why.
+test('SHAPE: the cut\'s last paintless owner is refused admission, openCut or not', () => {
+  // `connected-command-palette` emits no class and no `data-part`, and no skin
+  // paints it: composition-only. The gate refuses an empty corpus unwaivably,
+  // so it is not a roster row. `page-shell-surface` WAS refused on the same
+  // grounds until sub-lot C gave it real paint (the view-transition seam) --
+  // it is admitted now, measured clean, which this drill also pins.
   const baseline = readBaseline().families;
-  for (const family of ['page-shell-surface', 'connected-command-palette']) {
+  assert.ok(baseline['page-shell-surface'], 'page-shell-surface: admitted once it has paint');
+  for (const family of ['connected-command-palette']) {
     assert.equal(baseline[family], undefined, `${family}: not admitted`);
     const measured = measureFamily(resolveFamily(family, ROOT), { producers: PRODUCERS });
     assert.equal(measured.denominators.skinFiles, 0, family);
@@ -2730,7 +2731,7 @@ test('PLANT: an open cut with no work order and no reason is refused', () => {
 test('LIVE: every open row declares exactly the debt the gate measures, and the run says so', () => {
   const baseline = readBaseline().families;
   const open = Object.entries(baseline).filter(([, row]) => row.openCut);
-  assert.equal(open.length, 10, 'the still-open WO-FAM-10 row (surface-lifecycle) plus the nine WO-FAM-11 rows sub-lot A admitted with BLOCKING debt');
+  assert.equal(open.length, 7, 'surface-lifecycle plus the six FAM-11 rows whose open debt is the shared skeleton role vocabulary (SKELETON_PART_ROLES is singleton-owned)');
   for (const [family, row] of open) {
     const measured = measureFamily(resolveFamily(family, ROOT, row), { producers: PRODUCERS });
     const debt = Object.fromEntries(Object.entries(blockingDebt(measured)).filter(([, count]) => count > 0));
@@ -2742,11 +2743,11 @@ test('LIVE: every open row declares exactly the debt the gate measures, and the 
 
 test('LIVE: the run separates the families that hold the contract from the families admitted with debt', () => {
   const { measurements, open } = collectFindings();
-  assert.equal(open.length, 10);
-  // `action-dock` is the tenth WO-FAM-11 row and holds every BLOCKING arm
-  // today, so it is admitted WITHOUT an openCut and counts among the held rows:
-  // its debt is ratchets only.
-  assert.equal(measurements.length - open.length, 96, 'the pre-existing roster, the graduated WO-FAM-10 rows and action-dock hold the contract');
+  assert.equal(open.length, 7);
+  // The FAM-11 rows that hold every BLOCKING arm (page-shell, surface-chrome,
+  // the switchers, action-dock, app-shell's adapt arm) count among the held
+  // rows; the open seven carry exactly the measured skeleton-role debt.
+  assert.equal(measurements.length - open.length, 100, 'the pre-existing roster plus the graduated WO-FAM-10/11 rows hold the contract');
 });
 
 // ---------------------------------------------------------------------------

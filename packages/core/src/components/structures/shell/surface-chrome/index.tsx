@@ -119,7 +119,7 @@ export function SurfaceTabbedLabel({ view }: SurfaceTabbedLabelProps): React.Rea
   }
 
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+    <span className="ds-section-card__tab-label" data-part="tab-label">
       <span>{view.label}</span>
       <span>{view.badge}</span>
     </span>
@@ -188,9 +188,10 @@ export function SurfaceSectionCard({
     <Card
       className={classes.root}
       variant={variant}
+      data-part="root"
       data-has-header={hasHeader ? 'true' : 'false'}
     >
-      <Card.Body className={classes.body} padding="none">
+      <Card.Body className={classes.body} data-part="body" padding="none">
         <Stack data-part="content" spacing="none">
           {/* The header chrome stays optional so the same wrapper can be used for plain sections. */}
           {hasHeader && (

@@ -92,14 +92,6 @@ const SHELL_OPACITY = {
   high: 0.74,
 } as const;
 
-const TOKENIZED_MASK_COLOR = 'var(--ds-workspace-shell-mask-color, var(--ds-color-primary))';
-const TOKENIZED_MASK_STRONG =
-  `color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 58%, transparent)`;
-const TOKENIZED_MASK_MID =
-  `color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 32%, transparent)`;
-const TOKENIZED_MASK_LOW =
-  `color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 8%, transparent)`;
-
 interface StaticParticleFieldProps {
   fallbackLabel: string;
   fieldPattern: NonNullable<WorkspaceShellPresentationConfig['fieldPattern']>;
@@ -120,7 +112,6 @@ function StaticParticleField({
     <Box
       aria-label={fallbackLabel}
       className="ds-collection-shell__static-particle-field"
-      data-cra-14-static-fallback="true"
       data-field-pattern={fieldPattern}
       data-intensity={intensity}
       data-mood={mood}
@@ -180,12 +171,7 @@ export function WorkspaceShell({
       data-focus-active={focusActive ? 'true' : 'false'}
       data-preview-active={previewActive ? 'true' : 'false'}
       data-particle-field-mode={isAtmospheric ? particleFieldMode : 'inactive'}
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        isolation: 'isolate',
-        ...style,
-      }}
+      style={style}
     >
       {isAtmospheric ? (
         particleFieldMode === 'live' ? (
@@ -211,20 +197,10 @@ export function WorkspaceShell({
                   pattern="orbital"
                   shape="square"
                   blendMode="normal"
-                  color="var(--ds-workspace-shell-particle-primary, color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%))"
+                  color="var(--_ds-workspace-shell-particle-primary-resolved)"
                   sizeRange={mood === 'active' ? [0.85, 2.1] : [0.75, 1.85]}
                   opacity={Math.min(0.92, SHELL_OPACITY[intensity] + 0.12)}
                   focalAreas={focalAreas}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    pointerEvents: 'none',
-                    zIndex: 0,
-                    WebkitMaskImage:
-                      `linear-gradient(180deg, ${TOKENIZED_MASK_STRONG} 0%, ${TOKENIZED_MASK_STRONG} 24%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 46%, transparent) 54%, ${TOKENIZED_MASK_MID} 80%, ${TOKENIZED_MASK_LOW} 100%)`,
-                    maskImage:
-                      `linear-gradient(180deg, ${TOKENIZED_MASK_STRONG} 0%, ${TOKENIZED_MASK_STRONG} 24%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 46%, transparent) 54%, ${TOKENIZED_MASK_MID} 80%, ${TOKENIZED_MASK_LOW} 100%)`,
-                  }}
                 />
               ) : null}
 
@@ -237,20 +213,10 @@ export function WorkspaceShell({
                   mood={mood}
                   pattern="ambient"
                   shape="square"
-                  color="var(--ds-workspace-shell-particle-secondary, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-text-secondary) 24%, transparent))"
+                  color="var(--_ds-workspace-shell-particle-secondary-resolved)"
                   sizeRange={[0.35, 0.95]}
                   opacity={Math.max(0.14, SHELL_OPACITY[intensity] * 0.24)}
                   focalAreas={focalAreas}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    pointerEvents: 'none',
-                    zIndex: 0,
-                    WebkitMaskImage:
-                      `linear-gradient(180deg, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 36%, transparent) 0%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 42%, transparent) 40%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 18%, transparent) 100%)`,
-                    maskImage:
-                      `linear-gradient(180deg, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 36%, transparent) 0%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 42%, transparent) 40%, color-mix(in srgb, ${TOKENIZED_MASK_COLOR} 18%, transparent) 100%)`,
-                  }}
                 />
               ) : null}
             </>
@@ -266,25 +232,9 @@ export function WorkspaceShell({
         )
       ) : null}
 
-      <Box
-        className="ds-collection-shell__overlay"
-        data-part="overlay"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
+      <Box className="ds-collection-shell__overlay" data-part="overlay" />
 
-      <Box
-        className="ds-collection-shell__content"
-        data-part="content"
-        style={{
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
+      <Box className="ds-collection-shell__content" data-part="content">
         {children}
       </Box>
     </Box>

@@ -1254,7 +1254,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 6,
-        "channelsRead": 32,
+        "channelsRead": 34,
         "classTokens": 3,
         "partsStamped": 2,
         "partsConsumed": 2
@@ -1844,7 +1844,7 @@
         "partsStamped": 16,
         "partsConsumed": 16
       },
-      "readWithoutProducer": 10,
+      "readWithoutProducer": 9,
       "classVocabularies": 1,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
@@ -2296,32 +2296,22 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 3,
-        "channelsRead": 121,
+        "channelsRead": 118,
         "classTokens": 0,
-        "partsStamped": 27,
-        "partsConsumed": 27
+        "partsStamped": 21,
+        "partsConsumed": 21
       },
-      "readWithoutProducer": 17,
+      "readWithoutProducer": 8,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 9,
+      "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "openCut": {
-        "workOrder": "WO-FAM-11",
-        "opened": "2026-09-19",
-        "lot": "sub-lot C (page-shell + the paintless shells)",
-        "debt": {
-          "skeletonHandMade": 29,
-          "skeletonPartsWithoutRole": 2
-        },
-        "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot C owns it. 29 of the cut's 43 hand-made skeleton constructs are this family's `[data-part='skeleton-*']` selectors in its own skin; the loading state is drawn by the family instead of derived by `AnatomySkeleton` from its anatomy."
-      },
       "cutNote": "WO-FAM-11 sub-lot A admission. The cut's cleanest large family: 121 channels read, anatomy-only (27 parts stamped, 27 consumed, zero classes -- classVocabularies=0 is the absence of a class vocabulary, not a missing one), 30 executable a11y assertions. Its 17 unproduced reads are 11 `--ds-page-header-*` (a sub-namespace not derived from the folder name -- a rename inside the family), 3 `--ds-page-shell-*` and 3 `--ds-workspace-card-*` that belong to the workspace/collection-workspace owner and that WO-FAM-10 already routed. Declared in the `surfaces.border-style` fan-out of the control catalog by this lot: it reads 2 of that row's 3 `--ds-edge-*-width` channels, so the claim is reached and fanOutUnreached stays 0."
     },
     "workspace-shell": {
@@ -2333,7 +2323,7 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 17,
+        "channelsRead": 23,
         "classTokens": 0,
         "partsStamped": 4,
         "partsConsumed": 4
@@ -2354,8 +2344,6 @@
         "opened": "2026-09-19",
         "lot": "sub-lot C (page-shell + the paintless shells)",
         "debt": {
-          "inlineStyleViolations": 21,
-          "visualLiterals": 2,
           "skeletonPartsWithoutRole": 1
         },
         "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot C owns it. All 21 inline paints and both source colour literals are the particle-field overlay at `workspace-shell/index.tsx` (`position`/`inset`/`pointerEvents`/`zIndex`/`maskImage`, plus two `color-mix()` particle colours passed inline) -- one decorative feature, not a sweep."
@@ -2371,16 +2359,16 @@
       "denominators": {
         "skinFiles": 1,
         "sourceFiles": 1,
-        "channelsRead": 39,
+        "channelsRead": 41,
         "classTokens": 0,
-        "partsStamped": 7,
-        "partsConsumed": 9
+        "partsStamped": 10,
+        "partsConsumed": 10
       },
-      "readWithoutProducer": 6,
+      "readWithoutProducer": 3,
       "classVocabularies": 0,
       "legacyNamespaceClasses": 0,
       "partsStampedNotConsumed": 0,
-      "partsConsumedNotStamped": 2,
+      "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
       "unpairedStatePseudoSelectors": 0,
       "colorLiteralsInSkin": 0,
@@ -2392,7 +2380,6 @@
         "opened": "2026-09-19",
         "lot": "sub-lot C (page-shell + the paintless shells)",
         "debt": {
-          "inlineStyleViolations": 3,
           "skeletonPartsWithoutRole": 1
         },
         "note": "admitted by the WO-FAM-11 census at the debt the gate measures today; sub-lot C owns it. The 3 inline paints and the roleless part are measured against the real skin, which the `skins` pin above admits; with no pin the gate reported this family's BLOCKING arms from an empty corpus."
@@ -2563,6 +2550,30 @@
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
       "cutNote": "WO-FAM-11 sub-lot A admission. The cut's extreme case: an 80-line skin that reads ZERO `--ds-*` channels, so channelsRead=0 and readWithoutProducer=0 both say the same thing -- there is no cascade here to move. A thin wrapper over `primitives/navigation/segmented/engines/modern` with no test directory."
+    },
+    "page-shell-surface": {
+      "cut": "WO-FAM-11",
+      "owner": "src/components/structures/shell/page-shell-surface",
+      "namingNote": "admitted 2026-09-19 once the family had real paint (sub-lot C created its skin): it owns exactly the page-body view-transition seam. Measured clean at admission: 1 skin, 1 class vocabulary, 0 unproduced reads, 12 a11y assertions, every BLOCKING arm green.",
+      "denominators": {
+        "skinFiles": 1,
+        "sourceFiles": 1,
+        "channelsRead": 1,
+        "classTokens": 1,
+        "partsStamped": 1,
+        "partsConsumed": 1
+      },
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0
     }
   },
   "routed": [

@@ -60,7 +60,10 @@ describe('WO-CRA-14 WorkspaceShell ParticleField quarantine', () => {
     });
 
     expect(shell).toHaveAttribute('data-particle-field-mode', 'quarantined');
-    expect(fallback).toHaveAttribute('data-cra-14-static-fallback', 'true');
+    // The quarantine is carried by the anatomy and the runtime/state pair, not
+    // by a programme-numbered attribute: `data-cra-14-static-fallback` named a
+    // sealed work order and retired with WO-FAM-11 sub-lot C.
+    expect(fallback).not.toHaveAttribute('data-cra-14-static-fallback');
     expect(fallback).toHaveAttribute('data-part', 'particle-field-static-fallback');
     expect(fallback).toHaveAttribute('data-particle-field-runtime', 'static');
     expect(fallback).toHaveAttribute('data-particle-field-state', 'quarantined');

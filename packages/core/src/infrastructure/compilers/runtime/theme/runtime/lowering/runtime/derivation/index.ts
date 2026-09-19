@@ -59,6 +59,9 @@ import { viewModeSwitcherChromeDeriver } from "./chrome/view-mode-switcher";
 import { commandPaletteChromeDeriver } from "./chrome/command-palette";
 import { shortcutsOverlayChromeDeriver } from "./chrome/shortcuts-overlay";
 import { searchCommandBarChromeDeriver } from "./chrome/search-command-bar";
+import { pageShellChromeDeriver } from "./chrome/page-shell";
+import { workspaceShellChromeDeriver } from "./chrome/workspace-shell";
+import { surfaceChromeChromeDeriver } from "./chrome/surface-chrome";
 import { collectionHeaderChromeDeriver } from "./chrome/collection-header";
 import { dashboardHeaderChromeDeriver } from "./chrome/dashboard-header";
 import { detailHeaderChromeDeriver } from "./chrome/detail-header";
@@ -203,6 +206,9 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   commandPaletteChromeDeriver,
   shortcutsOverlayChromeDeriver,
   searchCommandBarChromeDeriver,
+  pageShellChromeDeriver,
+  workspaceShellChromeDeriver,
+  surfaceChromeChromeDeriver,
   collectionHeaderChromeDeriver,
   dashboardHeaderChromeDeriver,
   detailHeaderChromeDeriver,

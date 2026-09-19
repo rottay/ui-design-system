@@ -83,8 +83,12 @@ export function PageShellSurface({
     >
       {/* Coarse view-transition seam: the page body is a single named group so
           a same-name morph runs across surface-to-surface navigations. The
-          name is inert outside an active view transition. */}
-      <Box style={{ viewTransitionName: 'ds-vt-page-body' }}>{children}</Box>
+          name is inert outside an active view transition, and it is PAINT --
+          `skin/page-shell-surface` states it on this part, so the surface
+          carries anatomy and no visual value of its own. */}
+      <Box className="ds-surface ds-page-shell-surface" data-part="body">
+        {children}
+      </Box>
     </PatternPageShell>
   );
 }

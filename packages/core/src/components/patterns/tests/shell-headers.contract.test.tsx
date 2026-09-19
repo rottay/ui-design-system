@@ -55,13 +55,12 @@ import { renderWithEngine } from '@tests/support/engine';
 //      preserved, not a defect to fix, and it is photographed (twice, at rest
 //      and on hover) in headers-patterns-batch.spec.ts.
 //
-//   4. THE LOADING BRANCH SPEAKS TWO SKELETON VOCABULARIES in this file.
-//      PageShell (modern) hand-stamps `data-part="skeleton"` blocks under a
-//      `skeleton-group`; CockpitHeader and WorkbenchHeader render the shared
-//      AnatomySkeleton over their own chrome, which reads the stamped
-//      `data-part` tree and draws one `data-part="bone"` per drawn part, named
-//      by `data-source-part`. The pins below assert each engine against the
-//      vocabulary its source actually stamps.
+//   4. THE LOADING BRANCH SPEAKS ONE SKELETON VOCABULARY. All three modern
+//      headers render the shared AnatomySkeleton over their own chrome, which
+//      reads the stamped `data-part` tree and draws one `data-part="bone"` per
+//      drawn part, named by `data-source-part`. PageShell (modern) hand-stamped
+//      `data-part="skeleton"` blocks under a `skeleton-group` until WO-FAM-11
+//      sub-lot C; the pins below assert that the second vocabulary is gone.
 // ---------------------------------------------------------------------------
 
 /**
@@ -240,9 +239,7 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
         'modern',
       );
       await partsOf(bare.container);
-      await waitFor(() => {
-        expect(partCount(bare.container, 'bone')).toBe(1);
-      });
+      expect(partCount(bare.container, 'bone')).toBe(1);
       expect(boneCountFor(bare.container, 'title')).toBe(1);
     });
   });
@@ -317,7 +314,7 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
       const { container } = renderFull({ tabs: undefined, activeTab: undefined });
       const parts = await partsOf(container);
 
-      expect(parts).toContain('rule');
+      expect(parts).toContain('divider');
       expect(parts).not.toContain('tabs');
     });
 
@@ -327,14 +324,35 @@ describe('patterns/shell header family -- data-part contract (skin ownership mig
 
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
       expect(root.getAttribute('data-loading')).toBe('true');
-      expect(root.className).toContain('ds-pattern-page-shell--loading');
-      expect(partCount(container, 'skeleton-group')).toBe(1);
-      expect(partCount(container, 'skeleton')).toBe(7);
 
-      // Same mirroring invariant as CockpitHeader.
+      // WO-FAM-11 sub-lot C retired this family's hand-made skeleton: the
+      // loading branch is now the shared AnatomySkeleton reading the header's
+      // own anatomy, exactly like CockpitHeader above. No `skeleton-group`,
+      // no `[data-part="skeleton"]` blocks, and the header itself is the
+      // stand-in the bones are measured from.
+      expect(partCount(container, 'skeleton-group')).toBe(0);
+      expect(partCount(container, 'skeleton')).toBe(0);
+      const stand = container.querySelector('[data-part="source"]') as HTMLElement;
+      expect(stand).not.toBeNull();
+      expect(stand.querySelectorAll('[data-part="crumb"]')).toHaveLength(3);
+      expect(stand.querySelectorAll('[data-part="tab"]')).toHaveLength(2);
+      // The bones ARE the header's own anatomy: three crumbs, the back
+      // button's trigger, the title and the subtitle.
+      expect(
+        Array.from(container.querySelectorAll('[data-part="bone"]')).map((bone) =>
+          bone.getAttribute('data-source-part'),
+        ),
+      ).toEqual(['crumb', 'crumb', 'crumb', 'trigger', 'title', 'subtitle']);
+
+      // Same mirroring invariant as CockpitHeader: a title-only shell reserves
+      // nothing the loaded render never shows.
       const bare = renderWithEngine(<PageShellChromeOnly title="Users" loading />, 'modern');
       await partsOf(bare.container);
-      expect(partCount(bare.container, 'skeleton')).toBe(1);
+      const bareStand = bare.container.querySelector('[data-part="source"]') as HTMLElement;
+      expect(bareStand.querySelectorAll('[data-part="crumb"]')).toHaveLength(0);
+      expect(bareStand.querySelectorAll('[data-part="tab"]')).toHaveLength(0);
+      expect(partCount(bare.container, 'bone')).toBe(1);
+      expect(boneCountFor(bare.container, 'title')).toBe(1);
     });
   });
 

@@ -126,7 +126,13 @@ describe('PageShellSurface', () => {
 
     expect(shellRoot).toHaveAttribute('aria-busy', 'true');
     expect(within(shellRoot).getByRole('status')).toHaveTextContent('Loading page');
-    expect(document.querySelector('[data-part="header"]')).not.toBeInTheDocument();
+    // The header IS in the DOM while loading: it is the anatomy the shared
+    // skeleton renderer measures (WO-FAM-11 sub-lot C). It is inert and hidden
+    // from the accessibility tree, so nothing in it is reachable or announced.
+    const stand = document.querySelector('[data-part="source"]') as HTMLElement;
+    expect(stand).toHaveAttribute('aria-hidden', 'true');
+    expect(stand).toHaveAttribute('inert');
+    expect(stand.querySelector('[data-part="header"]')).toBeInTheDocument();
     expect(screen.queryByText('Should not render while loading')).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
   });
@@ -144,8 +150,11 @@ describe('PageShellSurface', () => {
 
     // Anti-vacuity: this Box is the ONLY `[data-component="box"]` under a PageShellSurface render (PatternPageShell's modern engine never uses Box intern...
     expect(box).toBeInTheDocument();
-    // Direct camelCase property access (not getPropertyValue, which does not resolve this property under happy-dom) -- same technique the existing Tabs.v...
+    // The group is PAINT, not an inline style: the surface stamps the part and
+    // `skin/page-shell-surface` states the name on it (WO-FAM-11 sub-lot C).
+    expect(box).toHaveAttribute('data-part', 'body');
+    expect(box.className).toContain('ds-page-shell-surface');
     const boxStyle = box.style as CSSStyleDeclaration & { viewTransitionName?: string };
-    expect(boxStyle.viewTransitionName).toBe('ds-vt-page-body');
+    expect(boxStyle.viewTransitionName).toBeFalsy();
   });
 });

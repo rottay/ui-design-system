@@ -65,8 +65,11 @@ describe('PatternPageShell advanced engine coverage', () => {
       if (engine === 'classic') {
         expect(container.querySelector('.ant-spin')).toBeTruthy();
       } else if (engine === 'modern') {
-        expect(container.querySelector('.ds-pattern-page-shell--loading')).toBeTruthy();
-        expect(container.querySelector('.ds-pattern-page-shell__loading-skeleton')).toBeTruthy();
+        expect(container.querySelector('[data-part="root"]')).toHaveAttribute(
+          'data-loading',
+          'true',
+        );
+        expect(container.querySelector('.ds-skeleton-anatomy')).toBeTruthy();
       } else {
         expect(container.textContent?.toLowerCase()).toContain('loading');
       }

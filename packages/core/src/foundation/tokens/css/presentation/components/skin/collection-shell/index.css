@@ -2,7 +2,131 @@
  * WorkspaceShell skin (long-tail skin ownership). Engine-agnostic and deliberately
  * unlayered so its extracted paint keeps precedence over resets while a caller
  * `style` prop continues to win inline.
+ *
+ * The family id is `workspace-shell`; the class root is `ds-collection-shell`
+ * and STAYS so. It is not the component's name to change: `skin/collection-workspace`
+ * compounds two of its own rules on it, `SurfacesLongTailBatch` binds to it, and
+ * `scripts/package/public-api/barrel` asserts `.ds-collection-shell__static-particle-field`
+ * survives into the published artifact. The family-cut roster carries the pin
+ * (`skins: ['collection-shell']`) so the gate measures the real paint under the
+ * real name.
+ *
+ * WO-FAM-11 sub-lot C moved the shell's whole geometry here. The structure used
+ * to state `position`/`overflow`/`isolation` on the root, `position`/`inset`/
+ * `pointer-events`/`z-index` on the overlay and both live fields, `position`/
+ * `z-index` on the content, and the two particle colours plus four mask ramps as
+ * TypeScript strings. Every value below is that paint verbatim; the structure
+ * now carries only anatomy, state and the caller's own `style`.
  */
+
+/* ---- the shell's own stacking context: the fields and the overlay are
+        absolutely positioned inside it, and the content rides above both. ---- */
+.ds-surface.ds-collection-shell[data-part="root"] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ds-surface.ds-collection-shell[data-part="root"]
+  > .ds-collection-shell__overlay[data-part="overlay"],
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field,
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ds-surface.ds-collection-shell[data-part="root"]
+  > .ds-collection-shell__content[data-part="content"] {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- the atmospheric field: two particle colours and the vertical ramps that
+        fade each canvas out. The canvases read `--ds-workspace-shell-particle-*`
+        through the computed style of their own container, so the colour is a
+        tenant channel rather than a string the structure hard-codes.
+
+        Each is read with its own value as the terminal fallback and NOT
+        declared on this element: a `--ds-workspace-shell-*` declaration here
+        would outrank the inherited tenant artifact, which is the only way a
+        white label reaches these names, and a mask with no value at all is
+        invalid-at-computed-value-time — the canvas would then render
+        unmasked. The deriver states the same rests one rank above the
+        tenant's reach and below it. ---- */
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field {
+  -webkit-mask-image: var(
+    --ds-workspace-shell-orbital-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%
+    )
+  );
+  mask-image: var(
+    --ds-workspace-shell-orbital-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 58%, transparent) 24%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 46%, transparent) 54%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 32%, transparent) 80%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 8%, transparent) 100%
+    )
+  );
+}
+
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
+  -webkit-mask-image: var(
+    --ds-workspace-shell-ambient-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 36%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%
+    )
+  );
+  mask-image: var(
+    --ds-workspace-shell-ambient-mask,
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 36%, transparent) 0%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 42%, transparent) 40%,
+      color-mix(in srgb, var(--ds-workspace-shell-mask-color, var(--ds-color-primary)) 18%, transparent) 100%
+    )
+  );
+}
+
+/* The canvas colour. The canvas is painted by script, not by CSS: it reads the
+   string the structure hands it off its own computed style. The structure
+   therefore names a RESOLUTION RELAY (`--_ds-…-resolved`) rather than a
+   decision — the public channel is resolved into it here, with the rest as the
+   terminal fallback, so a tenant statement of the public name reaches the
+   canvas and a canvas with no producer at all still paints. Same idiom as the
+   shell's own `--_ds-page-shell-stuck-progress`: a private name that carries a
+   value nobody decides. */
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__orbital-field {
+  --_ds-workspace-shell-particle-primary-resolved: var(
+    --ds-workspace-shell-particle-primary,
+    color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-surface-card) 66%)
+  );
+}
+
+.ds-surface.ds-collection-shell[data-part="root"] > .ds-collection-shell__ambient-field {
+  --_ds-workspace-shell-particle-secondary-resolved: var(
+    --ds-workspace-shell-particle-secondary,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 18%,
+      var(--ds-color-text-secondary) 24%,
+      transparent
+    )
+  );
+}
 
 .ds-surface.ds-collection-shell[data-part="root"][data-continuity="seamless"] {
   border-radius: var(--ds-card-radius, var(--ds-radius-xl, 24px));

@@ -66,7 +66,7 @@ describe('PatternPageShell modern — elevation drills', () => {
     expect(screen.getByRole('tab', { name: 'Overview' }).id).toBe(labelledBy);
   });
 
-  it('does not paint header skeleton chrome the loaded render will never show', () => {
+  it('draws nothing while loading when the loaded render has no header', () => {
     const { container } = render(
       <ModernPageShell
         {...buildProps({
@@ -79,15 +79,13 @@ describe('PatternPageShell modern — elevation drills', () => {
       />,
     );
 
-    // Before: the skeleton painted breadcrumb/title/actions/tabs blocks even
-    // though `hideHeader` guarantees none of them arrive.
-    expect(container.querySelectorAll('[data-part="skeleton"]')).toHaveLength(0);
-    expect(
-      container.querySelector('[data-part="skeleton-group"]'),
-    ).toHaveAttribute('data-hide-header', 'true');
+    // `hideHeader` guarantees no header arrives, so the anatomy the renderer
+    // reads is empty and no bone is drawn.
+    expect(container.querySelectorAll('[data-part="bone"]')).toHaveLength(0);
+    expect(container.querySelector('[data-part="source"]')?.children).toHaveLength(0);
   });
 
-  it('reserves the whole tab strip, not the first four blocks', () => {
+  it('stands the wait on the same anatomy the loaded header renders', () => {
     const manyTabs = ['a', 'b', 'c', 'd', 'e', 'f'].map((key) => ({
       key,
       label: key.toUpperCase(),
@@ -97,19 +95,25 @@ describe('PatternPageShell modern — elevation drills', () => {
       <ModernPageShell {...buildProps({ tabs: manyTabs, loading: true })} />,
     );
 
-    expect(
-      container.querySelectorAll('[data-part="skeleton"][data-block="tab"]'),
-    ).toHaveLength(6);
+    // Before: six hand-written `[data-block='tab']` blocks the skin sized, in
+    // a tree the loaded render never shows. Now the skeleton IS the header,
+    // so the strip it reserves cannot disagree with the strip that arrives.
+    const source = container.querySelector('[data-part="source"]') as HTMLElement;
+    expect(source.querySelectorAll('[data-part="tab"]')).toHaveLength(6);
+    expect(source.querySelector('[data-part="title"]')).not.toBeNull();
+    expect(container.querySelectorAll('[data-part="skeleton"]')).toHaveLength(0);
   });
 
-  it('announces the loading state and hides the decorative skeleton from AT', () => {
+  it('announces the loading state once and hides the stand-in from AT', () => {
     const { container } = render(<ModernPageShell {...buildProps({ loading: true })} />);
 
+    expect(screen.getAllByRole('status')).toHaveLength(1);
     expect(screen.getByRole('status')).toHaveTextContent('Loading page');
-    expect(container.querySelector('[data-part="skeleton-group"]')).toHaveAttribute(
-      'aria-hidden',
-      'true',
-    );
+    expect(container.querySelector('[data-part="source"]')).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('[data-part="bones"]')).toHaveAttribute('aria-hidden', 'true');
+    // The header the bones stand on is inert: a crumb link or a tab inside it
+    // must not be reachable while it is a placeholder.
+    expect(container.querySelector('[data-part="source"]')).toHaveAttribute('inert');
   });
 
   it('sizes the back glyph on the governed icon channel, not a raw pixel literal', () => {
