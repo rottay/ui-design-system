@@ -11,7 +11,7 @@ const readme = fs.readFileSync(new URL("../../../../roadmap/README.md", import.m
 test("execution policy is sourced from README and excludes surrounding history", () => {
   assert.equal(executionPolicyText("old\n<!-- execution-policy:start -->\npolicy\n<!-- execution-policy:end -->\nold"), "policy");
   const policy = executionPolicyText(readme);
-  for (const phrase of ["independent code auditor", "Codex, Fable and Kimi", "focal tests", "important milestones", "WO-FAM-01", "never push"]) {
+  for (const phrase of ["independent code auditor", "Kimi", "focal tests", "important milestones", "WO-FAM-01", "Codex is completely outside the loop"]) {
     assert.ok(policy.includes(phrase), phrase);
   }
 });
