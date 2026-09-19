@@ -16,6 +16,11 @@
  *     else, so a logical row cannot be slipped in to make a coverage number
  *     move without this file going red.
  *
+ * This file measures the engines DIRECTLY, which is where the fallback lives
+ * and what production keeps. Whether a caller is TOLD is a different question,
+ * answered at the shared boundary and pinned by
+ * `Tooltip.frozen-placement-refusal.integration.test.tsx`.
+ *
  * A future lot that unfreezes these engines should delete these tests, not
  * widen them.
  */

@@ -82,6 +82,16 @@ import type { EngineAwareProps } from "../../../../../foundation/contracts/runti
  *   `tests/Tooltip.frozen-placement-reach.test.tsx` so it cannot quietly become
  *   a half-implementation.
  *
+ * And the refusal is AUDIBLE. In development the shared engine router refuses
+ * the request before a frozen engine renders it -- an error naming the engine,
+ * the spelling it cannot honor and the physical one that works -- so the
+ * degraded paint is never mistaken for the requested placement. Production is
+ * unchanged: the `top` fallback above is what ships, because a placement is not
+ * worth crashing a customer over. The disposition is
+ * `refuseFrozenPlacement`, stated by the owner of the placement vocabulary
+ * itself and declared by the Tooltip at the boundary both the frozen and the
+ * Modern paths cross.
+ *
  * So: target the frozen engines with a physical spelling. The logical spellings
  * are Modern-only until those engines are unfrozen.
  */
@@ -388,7 +398,8 @@ export interface TooltipPlacementOffsets {
  * The logical inline sides have no row here ON PURPOSE. This engine is frozen,
  * it has no direction authority and no mirroring machinery, and a row inventing
  * one would be new behaviour in a frozen engine. Its caller resolves a missing
- * key to the `top` row, which is a documented refusal -- see
+ * key to the `top` row, which is a documented refusal -- stated out loud in
+ * development by `refuseFrozenPlacement`, see
  * {@link TooltipPlacement}. Do not add logical rows to make a gate green.
  *
  * Placement naming convention:

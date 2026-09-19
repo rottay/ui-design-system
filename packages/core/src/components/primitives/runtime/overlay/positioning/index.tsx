@@ -88,6 +88,10 @@ import React, {
 
 import type { TextDirection } from '@/foundation/i18n/kernel/contracts';
 import { useOptionalDirection } from '@/infrastructure/runtime/i18n/composition/direction';
+import {
+  isFrozenEngineName,
+  type EngineName,
+} from '@/foundation/contracts/kernel/engine-identity';
 
 // ---------------------------------------------------------------------------
 // Public contract
@@ -192,6 +196,58 @@ export function normalizeOverlayPlacement(placement: OverlayPlacementInput): Ove
   return (
     (OVERLAY_PLACEMENT_ALIASES as Record<string, OverlayPlacement | undefined>)[placement]
     ?? (placement as OverlayPlacement)
+  );
+}
+
+/**
+ * The same table inverted: logical spelling -> the physical one a caller that
+ * does NOT implement the logical vocabulary can use instead. Derived rather
+ * than restated, so the six refusable spellings below are exactly the six
+ * deprecations above and the two cannot drift.
+ */
+const PHYSICAL_SPELLING: Readonly<Record<string, LegacyPhysicalOverlayPlacement>> = Object.freeze(
+  Object.fromEntries(
+    Object.entries(OVERLAY_PLACEMENT_ALIASES).map(([physical, logical]) => [
+      logical,
+      physical as LegacyPhysicalOverlayPlacement,
+    ])
+  )
+);
+
+/**
+ * PLACEMENT ADMISSION -- the disposition of a placement the SELECTED engine
+ * does not implement. Returns the refusal message, or `undefined` when the
+ * request is admitted.
+ *
+ * The logical inline sides are implemented by the Modern engine. A frozen
+ * engine that reads a PHYSICAL placement map directly -- the Classic and
+ * Rustic Tooltips -- has no row for them and resolves to `top`. That is a
+ * refusal, not partial support, and a refusal nobody hears is indistinguishable
+ * from support that happens to paint badly. So the shared engine router throws
+ * this message in development, beside its existing refusals for an undeclared
+ * engine and a declared implementation absence, while production keeps the
+ * documented `top` fallback: a placement is not worth crashing a customer over.
+ *
+ * A family declares this admission only when its frozen engines read a physical
+ * map DIRECTLY. The frozen Rustic HoverCard, Popover and Popconfirm do not --
+ * they reach this runtime, which accepts the whole logical vocabulary and
+ * resolves its inline sides physically by default -- so they are admitted.
+ */
+export function refuseFrozenPlacement(
+  engine: EngineName | undefined,
+  placement: string | undefined
+): string | undefined {
+  if (!placement || !isFrozenEngineName(engine)) return undefined;
+
+  const physical = PHYSICAL_SPELLING[placement];
+  if (!physical) return undefined;
+
+  return (
+    `the frozen "${engine}" engine reads a physical placement map, which has no row for ` +
+    `"${placement}" -- it would resolve to "top" without saying so. Pass "${physical}" ` +
+    '(the frozen engines resolve the inline sides physically, in both reading directions), ' +
+    'or select the modern engine, which implements the logical vocabulary. This refusal is ' +
+    'development-only: production keeps the documented "top" fallback.'
   );
 }
 

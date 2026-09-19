@@ -20,6 +20,7 @@
  */
 
 import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import { refuseFrozenPlacement } from "../../runtime/overlay/positioning";
 import type { TooltipProps } from "./contracts";
 import { TooltipTrigger, TooltipContent } from "./compound";
 
@@ -44,11 +45,21 @@ export { TooltipTrigger, TooltipContent };
  * is for advanced scenarios where trigger/content need separate wrappers.
  */
 export const Tooltip = Object.assign(
-  createEngineComponent<TooltipProps>("Tooltip", {
-    classic: () => import("./engines/classic"),
-    modern: () => import("./engines/modern"),
-    rustic: () => import("./engines/rustic"),
-  }),
+  createEngineComponent<TooltipProps>(
+    "Tooltip",
+    {
+      classic: () => import("./engines/classic"),
+      modern: () => import("./engines/modern"),
+      rustic: () => import("./engines/rustic"),
+    },
+    {
+      // The frozen engines read a physical placement map directly, so a
+      // logical spelling is refused at the boundary instead of painting `top`
+      // in silence. See `refuseFrozenPlacement`.
+      admitProps: ({ placement }, engine) =>
+        refuseFrozenPlacement(engine, placement),
+    }
+  ),
   {
     /** Wraps the element that activates the tooltip on hover/click/focus. */
     Trigger: TooltipTrigger,

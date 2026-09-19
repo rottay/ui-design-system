@@ -89,13 +89,24 @@ export type EngineLoaders<P> = Readonly<
 /**
  * Optional configuration for customizing engine component behavior.
  */
-export interface CreateEngineComponentOptions {
+export interface CreateEngineComponentOptions<P extends object = object> {
   /** Custom fallback UI displayed while the component is lazy loading */
   fallback?: React.ReactNode;
   /** Whether the custom engine may resolve a registered pack (default: true) */
   customEnabled?: boolean;
   /** Callback invoked when engine loading encounters an error */
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  /**
+   * Development-only admission of an input the SELECTED engine cannot honor.
+   *
+   * Returns the refusal message; this boundary throws it under the component's
+   * name, beside the refusals for an undeclared engine and a declared
+   * implementation absence. It is the one place both the Modern and the frozen
+   * paths cross, so a family states its reach here rather than in an engine
+   * file it may not edit. Production never calls it: an engine's documented
+   * fallback stands there unchanged.
+   */
+  admitProps?: (props: P, engine: EngineName) => string | undefined;
 }
 
 /**
@@ -114,11 +125,11 @@ export interface CreateEngineComponentOptions {
 export function createEngineComponent<P extends object>(
   displayName: string,
   loaders: EngineLoaders<P>,
-  options: CreateEngineComponentOptions = {}
+  options: CreateEngineComponentOptions<P> = {}
 ): ForwardRefExoticComponent<
   PropsWithoutRef<P> & { engine?: EngineName } & RefAttributes<any>
 > {
-  const { fallback = null, customEnabled = true, onError } = options;
+  const { fallback = null, customEnabled = true, onError, admitProps } = options;
 
   /** A declared absence resolves to a named refusal, never to another engine. */
   const implementation = (
@@ -203,6 +214,16 @@ export function createEngineComponent<P extends object>(
       }
       return resolved;
     }, [activeEngine, componentPack]);
+
+    // An input the selected engine cannot honor is refused HERE, by name,
+    // rather than silently degraded inside the engine. Development only: the
+    // engine's documented fallback is what production ships.
+    if (process.env.NODE_ENV !== 'production' && admitProps && activeEngine) {
+      const refusal = admitProps(props as unknown as P, activeEngine);
+      if (refusal) {
+        throw new Error(`${displayName}: ${refusal}`);
+      }
+    }
 
     // Remove engine prop before passing to implementation
     const { engine: _, ...componentProps } = props;
