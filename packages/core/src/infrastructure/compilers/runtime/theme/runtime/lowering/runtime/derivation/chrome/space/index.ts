@@ -19,6 +19,8 @@ export const spaceChromeDeriver: FamilyDeriver = {
     "--ds-space-gap-lg",
     "--ds-space-gap-md",
     "--ds-space-gap-sm",
+    "--ds-space-motion-duration",
+    "--ds-space-motion-easing",
     "--ds-space-transition-duration",
     "--ds-space-transition-timing",
   ],
@@ -32,12 +34,20 @@ export const spaceChromeDeriver: FamilyDeriver = {
  * where the ramp would already have carried it; rhythm then sizes the room once,
  * exactly as Stack states it.
  *
- * NOT produced here: `--ds-space-{motion-duration,motion-easing}`, which
- * `chrome.layout` authors, and the three size aliases, which the space token
- * sheet declares.
+ * NOT produced here: the three size aliases, which the space token sheet
+ * declares.
+ *
+ * The authorable motion channels (`--ds-space-{motion-duration,motion-easing}`)
+ * rest here at the exact fallback the skin chain names: the dial-scaled motion
+ * channels. An authored `chrome.layout` statement outranks the rest --
+ * `chrome` sits one rank above this family -- so the rest is what the chain
+ * resolved to when nobody authored the channel, never a second opinion about
+ * it.
  */
 export function deriveSpaceChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
+  vars["--ds-space-motion-duration"] = "var(--ds-motion-feedback)";
+  vars["--ds-space-motion-easing"] = "var(--ds-motion-ease-out)";
   const rung = (alias: string, ramp: string) =>
     `calc(var(${alias}, var(${ramp})) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1))`;
   vars["--ds-space-gap-sm"] = rung("--ds-space-small-size", "--ds-spacing-2");

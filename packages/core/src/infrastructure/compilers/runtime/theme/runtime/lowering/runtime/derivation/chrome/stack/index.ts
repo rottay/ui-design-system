@@ -15,8 +15,12 @@ export const stackChromeDeriver: FamilyDeriver = {
   rank: "derived",
   consumes: ["palette.*", "spacing.rhythm", "density"],
   produces: [
+    "--ds-stack-divider-color",
     "--ds-stack-divider-gutter",
     "--ds-stack-divider-ink",
+    "--ds-stack-divider-inset",
+    "--ds-stack-divider-opacity",
+    "--ds-stack-divider-size",
     "--ds-stack-divider-thickness",
     "--ds-stack-divider-veil",
     "--ds-stack-gap",
@@ -41,12 +45,21 @@ export const stackChromeDeriver: FamilyDeriver = {
  * measurement, exact geometry, never scaled -- so it rests at zero here and the
  * engine writes it inline when a number is asked for.
  *
- * NOT produced here: `--ds-stack-divider-{size,color,opacity,inset}`, which
- * `chrome.layout` authors. They are the inputs of the derived channels below,
- * never their output.
+ * The authorable hairline channels (`--ds-stack-divider-{color,inset,opacity,
+ * size}`) rest here at the exact fallback each skin chain names: the colour on
+ * the border ramp, the inset on the spacing zero rung, the size on the
+ * border-width ramp; only the veil's literal has no decision behind it (a hairline
+ * nobody tuned is simply quiet). An authored `chrome.layout` statement
+ * outranks the rest -- `chrome` sits one rank above this family -- so the rest
+ * is what the chain resolved to when nobody authored the channel, never a
+ * second opinion about it.
  */
 export function deriveStackChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
+  vars["--ds-stack-divider-color"] = "var(--ds-color-border-subtle)";
+  vars["--ds-stack-divider-inset"] = "var(--ds-spacing-0, 0px)";
+  vars["--ds-stack-divider-opacity"] = "0.72";
+  vars["--ds-stack-divider-size"] = "var(--ds-border-width-1, 1px)";
   const rung = (step: string, rest: string) =>
     `calc(var(--ds-spacing-${step}, ${rest}) * var(--ds-rhythm-effective-scale, 1))`;
 

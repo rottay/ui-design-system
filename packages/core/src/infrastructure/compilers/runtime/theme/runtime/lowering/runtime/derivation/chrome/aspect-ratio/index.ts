@@ -15,14 +15,21 @@ export const aspectRatioChromeDeriver: FamilyDeriver = {
   rank: "derived",
   consumes: ["motion.*"],
   produces: [
+    "--ds-aspect-ratio-background",
+    "--ds-aspect-ratio-border",
     "--ds-aspect-ratio-clip",
     "--ds-aspect-ratio-corner",
     "--ds-aspect-ratio-depth",
     "--ds-aspect-ratio-frame",
     "--ds-aspect-ratio-instance-max-width",
     "--ds-aspect-ratio-instance-ratio",
+    "--ds-aspect-ratio-motion-duration",
+    "--ds-aspect-ratio-motion-easing",
     "--ds-aspect-ratio-object-fit",
     "--ds-aspect-ratio-object-position",
+    "--ds-aspect-ratio-overflow",
+    "--ds-aspect-ratio-radius",
+    "--ds-aspect-ratio-shadow",
     "--ds-aspect-ratio-surface",
     "--ds-aspect-ratio-transition-duration",
     "--ds-aspect-ratio-transition-timing",
@@ -38,12 +45,24 @@ export const aspectRatioChromeDeriver: FamilyDeriver = {
  * geometry inline, so a frame with no caller ratio still resolves from the
  * cascade instead of from a literal in the skin.
  *
- * NOT produced here: `--ds-aspect-ratio-{background,border,radius,shadow,
- * overflow,motion-duration,motion-easing}`, which `chrome.layout` authors. They
- * are the inputs of the derived channels below, never their output.
+ * The authorable finish and motion channels (`--ds-aspect-ratio-{background,
+ * border,radius,shadow,overflow,motion-duration,motion-easing}`) rest here at
+ * the exact fallback each skin chain names: the finish links at the no-chrome
+ * literal (no decision governs a finish nobody authored), the motion links on
+ * the dial-scaled motion channels. An authored `chrome.layout` statement
+ * outranks the rest -- `chrome` sits one rank above this family -- so the
+ * rest is what the chain resolved to when nobody authored the channel, never
+ * a second opinion about it.
  */
 export function deriveAspectRatioChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
+  vars["--ds-aspect-ratio-background"] = "transparent";
+  vars["--ds-aspect-ratio-border"] = "0 solid transparent";
+  vars["--ds-aspect-ratio-radius"] = "0";
+  vars["--ds-aspect-ratio-shadow"] = "none";
+  vars["--ds-aspect-ratio-overflow"] = "hidden";
+  vars["--ds-aspect-ratio-motion-duration"] = "var(--ds-motion-resize)";
+  vars["--ds-aspect-ratio-motion-easing"] = "var(--ds-motion-ease-out)";
   vars["--ds-aspect-ratio-instance-ratio"] = "16 / 9";
   vars["--ds-aspect-ratio-instance-max-width"] = "none";
   vars["--ds-aspect-ratio-surface"] = "var(--ds-aspect-ratio-background, transparent)";

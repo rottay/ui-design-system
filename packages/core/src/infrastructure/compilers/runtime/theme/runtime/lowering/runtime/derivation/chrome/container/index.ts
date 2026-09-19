@@ -18,17 +18,23 @@ export const containerChromeDeriver: FamilyDeriver = {
   consumes: ["responsive.posture", "spacing.rhythm", "density", "motion.*"],
   produces: [
     "--ds-container-2xl",
+    "--ds-container-background",
+    "--ds-container-border",
     "--ds-container-corner",
     "--ds-container-depth",
     "--ds-container-frame",
     "--ds-container-lg",
     "--ds-container-md",
     "--ds-container-measure",
+    "--ds-container-motion-duration",
+    "--ds-container-motion-easing",
     "--ds-container-pad",
     "--ds-container-padding-lg",
     "--ds-container-padding-md",
     "--ds-container-padding-none",
     "--ds-container-padding-sm",
+    "--ds-container-radius",
+    "--ds-container-shadow",
     "--ds-container-sm",
     "--ds-container-surface",
     "--ds-container-transition-duration",
@@ -51,12 +57,23 @@ export const containerChromeDeriver: FamilyDeriver = {
  * layer) multiplied once by the rhythm scale: density sizes the control, rhythm
  * sizes the room the page frame leaves around it.
  *
- * NOT produced here: `--ds-container-{background,border,radius,shadow,
- * motion-duration,motion-easing}`, which `chrome.layout` authors. They are the
- * inputs of the derived channels below, never their output.
+ * The authorable canvas and motion channels (`--ds-container-{background,
+ * border,radius,shadow,motion-duration,motion-easing}`) rest here at the exact
+ * fallback each skin chain names: the canvas links at the no-chrome literal
+ * (no decision governs a finish nobody authored), the motion links on the
+ * dial-scaled motion channels. An authored `chrome.layout` statement
+ * outranks the rest -- `chrome` sits one rank above this family -- so the
+ * rest is what the chain resolved to when nobody authored the channel, never
+ * a second opinion about it.
  */
 export function deriveContainerChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
+  vars["--ds-container-background"] = "transparent";
+  vars["--ds-container-border"] = "0 solid transparent";
+  vars["--ds-container-radius"] = "0";
+  vars["--ds-container-shadow"] = "none";
+  vars["--ds-container-motion-duration"] = "var(--ds-motion-resize)";
+  vars["--ds-container-motion-easing"] = "var(--ds-motion-ease-out)";
   vars["--ds-container-sm"] = "var(--ds-breakpoint-sm)";
   vars["--ds-container-md"] = "var(--ds-breakpoint-md)";
   vars["--ds-container-lg"] = "var(--ds-breakpoint-lg)";

@@ -40,7 +40,9 @@ export const dividerChromeDeriver: FamilyDeriver = {
     "motion.*",
   ],
   produces: [
+    "--ds-divider-content-gap",
     "--ds-divider-edge-basis",
+    "--ds-divider-edge-segment",
     "--ds-divider-gap",
     "--ds-divider-inset",
     "--ds-divider-inset-lg",
@@ -50,13 +52,22 @@ export const dividerChromeDeriver: FamilyDeriver = {
     "--ds-divider-inset-xl",
     "--ds-divider-inset-xs",
     "--ds-divider-label-case",
+    "--ds-divider-label-font-size",
+    "--ds-divider-label-font-weight",
     "--ds-divider-label-ink",
     "--ds-divider-label-leading",
+    "--ds-divider-label-line-height",
+    "--ds-divider-label-max-width",
     "--ds-divider-label-measure",
     "--ds-divider-label-size",
     "--ds-divider-label-track",
+    "--ds-divider-label-tracking",
+    "--ds-divider-label-transform",
     "--ds-divider-label-weight",
     "--ds-divider-line",
+    "--ds-divider-min-segment",
+    "--ds-divider-motion-duration",
+    "--ds-divider-motion-easing",
     "--ds-divider-segment-min",
     "--ds-divider-transition-duration",
     "--ds-divider-transition-timing",
@@ -73,9 +84,21 @@ export const dividerChromeDeriver: FamilyDeriver = {
  * The overline label reads the `label` typographic role rather than a raw size
  * step, so `typography.scale` and `typography.role-weights` reach it.
  *
- * NOT produced here: `--ds-divider-{color,text-color,thickness-*,content-gap,
- * edge-segment,min-segment,label-*,motion-*}`, which `chrome.layout` authors.
- * They are the inputs of the derived channels below, never their output.
+ * NOT produced here: `--ds-divider-{color,text-color,thickness-*}`, which
+ * `chrome.layout` authors. They are the inputs of the derived channels below,
+ * never their output.
+ *
+ * The remaining authorable channels (`--ds-divider-{content-gap,edge-segment,
+ * min-segment,label-font-size,label-font-weight,label-line-height,
+ * label-max-width,label-tracking,label-transform,motion-duration,
+ * motion-easing}`) rest here at the exact fallback each skin chain names: the
+ * gap on the rhythm-scaled spacing ramp, the label metrics on the label
+ * typographic role, the motion links on the dial-scaled motion channels; the
+ * segment bases, the label measure and transform literals have no decision
+ * behind them (nobody tuned geometry or casing that was never asked for). An
+ * authored `chrome.layout` statement outranks the rest -- `chrome` sits one
+ * rank above this family -- so the rest is what the chain resolved to when
+ * nobody authored the channel, never a second opinion about it.
  */
 export function deriveDividerChannels(
   context?: Pick<LoweringContext, "theme" | "surface">
@@ -84,6 +107,18 @@ export function deriveDividerChannels(
   const inset = (rung: string) =>
     `calc(var(${rung}) * var(--ds-rhythm-effective-scale, 1))`;
 
+  vars["--ds-divider-content-gap"] =
+    "calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))";
+  vars["--ds-divider-edge-segment"] = "5%";
+  vars["--ds-divider-min-segment"] = "5%";
+  vars["--ds-divider-label-font-size"] = "var(--ds-type-label-font-size)";
+  vars["--ds-divider-label-font-weight"] = "var(--ds-type-label-font-weight)";
+  vars["--ds-divider-label-line-height"] = "var(--ds-type-label-line-height)";
+  vars["--ds-divider-label-max-width"] = "100%";
+  vars["--ds-divider-label-tracking"] = "var(--ds-type-label-letter-spacing)";
+  vars["--ds-divider-label-transform"] = "uppercase";
+  vars["--ds-divider-motion-duration"] = "var(--ds-motion-feedback)";
+  vars["--ds-divider-motion-easing"] = "var(--ds-motion-ease-out)";
   vars["--ds-divider-line"] =
     "var(--ds-divider-thickness-thin, 1px) solid var(--ds-divider-color, var(--ds-color-border-subtle))";
   vars["--ds-divider-vertical-min"] = "1em";
