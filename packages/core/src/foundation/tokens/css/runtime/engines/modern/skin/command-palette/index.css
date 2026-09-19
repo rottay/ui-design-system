@@ -108,7 +108,7 @@
   margin-block-end: var(--ds-command-palette-section-label-margin-block-end, var(--ds-spacing-1, 4px));
   color: var(--ds-command-palette-section-label-color, var(--ds-color-text-muted));
   font-size: var(--ds-command-palette-section-label-font-size, var(--ds-font-size-xs, 12px));
-  font-weight: var(--ds-command-palette-section-label-font-weight, 500);
+  font-weight: var(--ds-command-palette-section-label-font-weight, var(--ds-font-weight-medium, 500));
   letter-spacing: var(--ds-command-palette-section-label-letter-spacing, 0.05em);
   text-transform: uppercase;
 }
@@ -182,7 +182,7 @@
   overflow: hidden;
   color: var(--ds-command-palette-label-color, var(--ds-color-text-primary));
   font-size: var(--ds-command-palette-label-font-size, var(--ds-font-size-sm, 14px));
-  font-weight: var(--ds-command-palette-label-font-weight, 500);
+  font-weight: var(--ds-command-palette-label-font-weight, var(--ds-font-weight-medium, 500));
   text-overflow: ellipsis;
   white-space: nowrap;
 }

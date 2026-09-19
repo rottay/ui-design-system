@@ -105,7 +105,7 @@ describe("chrome/search-command-bar", () => {
   it("rests the two canonicalised literals on the cascade, not on a number", () => {
     const derived = searchCommandBarChromeDeriver.derive(context(), {});
     expect(derived["--ds-search-command-bar-badge-radius"]).toBe(
-      "var(--ds-radius-full, 999px)"
+      "var(--ds-radius-full, 9999px)"
     );
     expect(derived["--ds-search-command-bar-slot-touch-target"]).toBe(
       "var(--ds-touch-target-min, 44px)"

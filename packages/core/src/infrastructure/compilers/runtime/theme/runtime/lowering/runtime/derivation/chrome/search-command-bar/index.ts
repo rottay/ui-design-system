@@ -219,12 +219,12 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-shell-editorial-bg"] = "linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-panel) 68%, transparent) 100%)";
   vars["--ds-search-command-bar-shell-editorial-border"] = "1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)";
   vars["--ds-search-command-bar-shell-editorial-padding"] = "5px";
-  vars["--ds-search-command-bar-shell-editorial-radius"] = "18px";
+  vars["--ds-search-command-bar-shell-editorial-radius"] = "calc(var(--ds-radius-lg, 12px) * 1.5)";
   vars["--ds-search-command-bar-shell-editorial-shadow"] = "0 10px 28px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)";
   vars["--ds-search-command-bar-shell-embedded-bg"] = "color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)";
   vars["--ds-search-command-bar-shell-embedded-shadow"] = "0 12px 28px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)";
   vars["--ds-search-command-bar-shell-padding"] = "6px";
-  vars["--ds-search-command-bar-shell-radius"] = "15px";
+  vars["--ds-search-command-bar-shell-radius"] = "calc(var(--ds-radius-lg, 12px) * 1.25)";
   vars["--ds-search-command-bar-shell-shadow"] = "var(--ds-elevation-1)";
 
   // The search glyph and the command input, including the :has() padding ladder.
@@ -234,9 +234,9 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-input-block-size"] = "42px";
   vars["--ds-search-command-bar-input-border"] = "1px solid var(--ds-color-border-subtle)";
   vars["--ds-search-command-bar-input-editorial-bg"] = "color-mix(in srgb, var(--ds-surface-panel) 78%, transparent)";
-  vars["--ds-search-command-bar-input-editorial-block-size"] = "44px";
+  vars["--ds-search-command-bar-input-editorial-block-size"] = "var(--ds-touch-target-min, 44px)";
   vars["--ds-search-command-bar-input-editorial-border"] = "1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent)";
-  vars["--ds-search-command-bar-input-editorial-radius"] = "18px";
+  vars["--ds-search-command-bar-input-editorial-radius"] = "calc(var(--ds-radius-lg, 12px) * 1.5)";
   vars["--ds-search-command-bar-input-embedded-bg"] = "color-mix(in srgb, var(--ds-surface-panel) 84%, transparent)";
   vars["--ds-search-command-bar-input-font-size"] = "var(--ds-font-size-sm)";
   vars["--ds-search-command-bar-input-padding-badge"] = "244px";
@@ -284,10 +284,10 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-badge-error-color"] = "var(--ds-color-error)";
   vars["--ds-search-command-bar-badge-gap"] = "6px";
   vars["--ds-search-command-bar-badge-label-font-size"] = "var(--ds-font-size-2xs, var(--ds-font-size-xs))";
-  vars["--ds-search-command-bar-badge-label-font-weight"] = "600";
+  vars["--ds-search-command-bar-badge-label-font-weight"] = "var(--ds-font-weight-semibold, 600)";
   vars["--ds-search-command-bar-badge-listening-color"] = "var(--ds-color-primary)";
   vars["--ds-search-command-bar-badge-padding-inline"] = "8px";
-  vars["--ds-search-command-bar-badge-radius"] = "var(--ds-radius-full, 999px)";
+  vars["--ds-search-command-bar-badge-radius"] = "var(--ds-radius-full, 9999px)";
   vars["--ds-search-command-bar-badge-transcribing-color"] = "var(--ds-color-warning)";
   vars["--ds-search-command-bar-badge-warning-bg"] = "color-mix(in srgb, var(--ds-color-warning) 8%, transparent)";
   vars["--ds-search-command-bar-badge-warning-border"] = "1px solid var(--ds-color-warning)";
@@ -304,7 +304,7 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-voice-help-border"] = "1px solid var(--ds-color-warning)";
   vars["--ds-search-command-bar-voice-help-description-color"] = "var(--ds-color-text-secondary)";
   vars["--ds-search-command-bar-voice-help-description-font-size"] = "var(--ds-font-size-xs)";
-  vars["--ds-search-command-bar-voice-help-description-line-height"] = "1.5";
+  vars["--ds-search-command-bar-voice-help-description-line-height"] = "var(--ds-line-height-normal, 1.5)";
   vars["--ds-search-command-bar-voice-help-description-margin"] = "4px";
   vars["--ds-search-command-bar-voice-help-enter-duration"] = "var(--ds-motion-normal, 200ms)";
   vars["--ds-search-command-bar-voice-help-enter-easing"] = "var(--ds-motion-ease-out, ease-out)";
@@ -320,7 +320,7 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-voice-help-list-padding-inline-start"] = "18px";
   vars["--ds-search-command-bar-voice-help-offset"] = "calc(100% + 12px)";
   vars["--ds-search-command-bar-voice-help-padding"] = "18px";
-  vars["--ds-search-command-bar-voice-help-radius"] = "18px";
+  vars["--ds-search-command-bar-voice-help-radius"] = "calc(var(--ds-radius-lg, 12px) * 1.5)";
   vars["--ds-search-command-bar-voice-help-shadow"] = "var(--ds-elevation-2)";
   vars["--ds-search-command-bar-voice-help-step-gap"] = "6px";
   vars["--ds-search-command-bar-voice-help-title-font-size"] = "var(--ds-font-size-sm)";
@@ -336,7 +336,7 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-status-transcribing-color"] = "var(--ds-color-warning)";
 
   // The side cluster: the suggestion strip, the actions slot and the rule below.
-  vars["--ds-search-command-bar-divider-block-size"] = "1px";
+  vars["--ds-search-command-bar-divider-block-size"] = "var(--ds-border-width-1, 1px)";
   vars["--ds-search-command-bar-divider-fill"] = "linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%)";
   vars["--ds-search-command-bar-divider-margin"] = "10px";
   vars["--ds-search-command-bar-side-cluster-gap"] = "18px";
@@ -351,8 +351,8 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-suggestions-gap"] = "10px";
   vars["--ds-search-command-bar-suggestions-label-color"] = "var(--ds-color-text-muted)";
   vars["--ds-search-command-bar-suggestions-label-font-size"] = "var(--ds-font-size-2xs, var(--ds-font-size-xs))";
-  vars["--ds-search-command-bar-suggestions-label-font-weight"] = "700";
-  vars["--ds-search-command-bar-suggestions-label-letter-spacing"] = "0.08em";
+  vars["--ds-search-command-bar-suggestions-label-font-weight"] = "var(--ds-font-weight-bold, 700)";
+  vars["--ds-search-command-bar-suggestions-label-letter-spacing"] = "var(--ds-text-eyebrow-letter-spacing, 0.08em)";
 
   return vars;
 }

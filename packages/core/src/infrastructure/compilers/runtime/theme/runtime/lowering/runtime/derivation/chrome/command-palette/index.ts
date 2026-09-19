@@ -138,7 +138,7 @@ export function deriveCommandPaletteChannels(): Record<string, string> {
   vars["--ds-command-palette-section-label-margin-block-end"] = "var(--ds-spacing-1, 4px)";
   vars["--ds-command-palette-section-label-color"] = "var(--ds-color-text-muted)";
   vars["--ds-command-palette-section-label-font-size"] = "var(--ds-font-size-xs, 12px)";
-  vars["--ds-command-palette-section-label-font-weight"] = "500";
+  vars["--ds-command-palette-section-label-font-weight"] = "var(--ds-font-weight-medium, 500)";
   vars["--ds-command-palette-section-label-letter-spacing"] = "0.05em";
   vars["--ds-command-palette-group-label-padding-block"] =
     "var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px)";
@@ -164,7 +164,7 @@ export function deriveCommandPaletteChannels(): Record<string, string> {
   vars["--ds-command-palette-item-main-gap"] = "var(--ds-spacing-2, 8px)";
   vars["--ds-command-palette-label-color"] = "var(--ds-color-text-primary)";
   vars["--ds-command-palette-label-font-size"] = "var(--ds-font-size-sm, 14px)";
-  vars["--ds-command-palette-label-font-weight"] = "500";
+  vars["--ds-command-palette-label-font-weight"] = "var(--ds-font-weight-medium, 500)";
   vars["--ds-command-palette-description-color"] = "var(--ds-color-text-secondary)";
   vars["--ds-command-palette-description-font-size"] = "var(--ds-font-size-xs, 12px)";
   vars["--ds-command-palette-shortcut-margin-inline-start"] = "var(--ds-spacing-2, 8px)";

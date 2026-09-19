@@ -58,7 +58,7 @@
   min-inline-size: 0;
   flex: 0 1 auto;
   align-items: center;
-  gap: var(--ds-tabs-gap);
+  gap: var(--ds-tabs-gap, var(--ds-spacing-1));
   overflow-inline: auto;
   overflow-block: hidden;
   scrollbar-width: none;
