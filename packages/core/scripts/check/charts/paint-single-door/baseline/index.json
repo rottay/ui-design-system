@@ -34,10 +34,6 @@
     "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/chart-engine/foundation/renderers/geometry/index.ts": {
       "count": 4,
       "reason": "Pre-migration: the engine geometry builders cycle their own palette; drained as each family adopts paintFor (lots 4a-4c)."
-    },
-    "hand-written-paint-modulus:components/patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts": {
-      "count": 1,
-      "reason": "Pre-migration: the zero-consumer fourth palette authority; drained by the public retirement (lot 7)."
     }
   }
 }
