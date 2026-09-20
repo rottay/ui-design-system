@@ -453,6 +453,74 @@ test('LIVE: the shapes the old walk could not see are in the emitted universe, w
   }
 });
 
+/**
+ * The row a keyed emission publishes: `emitted` was never the whole answer.
+ *
+ * Before the repair, only the tint ramp and the direct literal reached
+ * `producerFor`, so a channel emitted through a named constant, a roster guard
+ * or a template over a table published `producer: null` / `emittedVia: null`
+ * while sitting in the emitted universe. The three assertions below are the
+ * drill: the direct literal keeps its own kind, the roster-guarded key gains
+ * one with its exact site, and the `null` answer stays reserved for a name
+ * nothing emits.
+ */
+test('a roster-guarded emission publishes its producer, and the direct literal keeps its own kind', () => {
+  const result = analyzeChannelLiveness(
+    baseAnalyzerArgs({
+      flatThemeSource: [
+        'const LADDER = ["--ds-elevation-5", "--ds-elevation-6"];',
+        'const RUNGS = new Set(LADDER);',
+        'export function derive(vars, table) {',
+        '  for (const [channel, value] of Object.entries(table)) {',
+        '    if (RUNGS.has(channel)) vars[channel] = value;',
+        '  }',
+        '  vars["--ds-color-primary"] = "#111111";',
+        '}',
+      ].join('\n'),
+      familyRows: [],
+    }),
+  );
+  const row = (name) => result.channels.find((entry) => entry.name === name);
+
+  assert.equal(row('--ds-elevation-6').emitted, true, 'fixture precondition: the roster key is in the universe');
+  assert.equal(row('--ds-elevation-6').emittedVia, 'keyed-resolved');
+  assert.equal(row('--ds-elevation-6').producer.kind, 'keyed-resolved');
+  assert.deepEqual(row('--ds-elevation-6').producer.sites, ['brand-theme/index.ts:5']);
+  assert.deepEqual(row('--ds-elevation-5').producer.sites, ['brand-theme/index.ts:5']);
+
+  assert.equal(row('--ds-color-primary').emittedVia, 'direct-literal');
+  assert.equal(row('--ds-color-primary').producer.kind, 'direct-literal');
+
+  // The declared-but-unemitted name keeps the `null` answer: the repair adds a
+  // third producing shape, it does not hand every row a producer.
+  assert.equal(row('--ds-surface-panel').emitted, false);
+  assert.equal(row('--ds-surface-panel').emittedVia, null);
+  assert.equal(row('--ds-surface-panel').producer, null);
+});
+
+/**
+ * `--ds-elevation-6` end to end, against the real tree: the highest rung is
+ * produced by the elevation ladder and painted by the box `2xl` depth. The
+ * owner decision (F2.9) keeps the rung because that route already exists, so
+ * the instrument has to be able to SHOW it -- a LIVE verdict whose producer
+ * reads `null` proves half of it.
+ */
+test('LIVE: the highest elevation rung publishes both ends of its route -- ladder producer, box 2xl terminal', () => {
+  const { result } = runGate({ requireArtifact: false });
+  const row = result.channels.find((entry) => entry.name === '--ds-elevation-6');
+
+  assert.equal(row.classification, LIVENESS.modernPainted);
+  assert.equal(row.emittedVia, 'keyed-resolved');
+  assert.ok(
+    row.producer.sites.every((site) => site.includes('derivation/elevation/ladder/index.ts')),
+    `the elevation ladder is the producer, got: ${JSON.stringify(row.producer)}`,
+  );
+  assert.ok(
+    row.consumerSites.some((site) => site.includes('modern/skin/box/index.css') && site.includes('(box-shadow)')),
+    `the box skin's depth ladder is the terminal, got: ${JSON.stringify(row.consumerSites)}`,
+  );
+});
+
 test('LIVE: no channel is produced twice at one rank across the derivation registry', () => {
   const directEmission = new Map();
   for (const source of collectFlatThemeCompilerSources()) {
