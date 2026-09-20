@@ -27223,7 +27223,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   position: absolute;
   inset: -1px;
   z-index: -1;
-  border: 1px solid currentColor;
+  border: var(--ds-edge-hairline-width, 1px) solid currentColor;
   border-radius: inherit;
   pointer-events: none;
   animation: ds-badge-pulse var(--ds-badge-pulse-duration)
@@ -27703,7 +27703,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
    bleed into the filter inputs */
 .ds-table.ds-table--modern [data-part='filter-cell'][data-hairline='true'],
 .ds-table.ds-table--modern [data-part='filter-spacer'][data-hairline='true'] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border));
 }
 
 /* ---- fields: filter input, and the editable text/number/date/select cells.
@@ -27716,7 +27716,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   width: 100%;
   padding: 2px 6px;
   font-size: var(--ds-font-size-xs);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
@@ -27824,7 +27824,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   overflow-wrap: break-word;
 }
 .ds-table.ds-table--modern [data-part='cell'][data-bordered='true'] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border));
 }
 .ds-table.ds-table--modern [data-part='cell'][data-editable='true'] {
   cursor: pointer;
@@ -28928,7 +28928,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 /* ---- root: sidebar layout rail (logical, mirrors under RTL) ---- */
 .ds-pattern-filter-panel.ds-engine-modern[data-part='root'][data-sidebar='true'] {
   padding-inline-end: var(--ds-spacing-4);
-  border-inline-end: 1px solid var(--ds-color-border);
+  border-inline-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- header: title row + rhythm; the bottom gap collapses with the panel ---- */
@@ -29153,22 +29153,22 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   border-radius: var(--ds-radius-md, 8px);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='neutral'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 64%, transparent);
   color: var(--ds-color-text-secondary);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='primary'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   color: var(--ds-color-primary);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='success'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-success) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-success) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
   color: var(--ds-color-success);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='warning'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
   background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
   color: var(--ds-color-warning);
 }
@@ -29178,7 +29178,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   color: var(--ds-color-error);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='info'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 10%, transparent);
   color: var(--ds-color-info, var(--ds-color-primary));
 }
@@ -29801,7 +29801,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'][data-pattern='detail-panel'] {
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
 
 /* ---- named container (W6-A): the panel root owns the width every descendant
@@ -29826,7 +29826,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   gap: var(--ds-detail-panel-content-gap);
   min-inline-size: 0;
   padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-detail-hero-border, var(--ds-card-header-border, var(--ds-color-border)));
   border-radius: var(--ds-card-radius, var(--ds-radius-lg));
   background: var(
@@ -29878,7 +29878,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   flex-shrink: 0;
   place-items: center;
   padding: 3px;
-  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-full);
   background: var(--ds-surface-card);
   box-shadow:
@@ -29905,7 +29905,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   gap: var(--ds-detail-panel-item-gap);
   min-block-size: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
-  border: 1px solid var(--ds-workspace-card-action-border, var(--ds-toolbar-border, var(--ds-color-border-primary)));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-action-border, var(--ds-toolbar-border, var(--ds-color-border-primary)));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: var(--ds-workspace-card-action-bg, color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
@@ -29931,7 +29931,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
-  border: 1px solid var(--ds-color-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-primary);
   box-shadow: var(--ds-elevation-1);
 }
 @media (hover: hover) {
@@ -30108,7 +30108,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   padding-block: 4px;
   padding-inline: 9px;
   overflow-inline: auto;
-  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-full);
   background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
@@ -30170,7 +30170,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   display: inline-flex;
   align-items: center;
   padding: 2px 10px;
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-full);
   /* The engine stamps the pair only when the consumer supplies status.color;
      the governed fallback keeps the untinted pill byte-identical. */
@@ -30203,7 +30203,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   margin-block-end: var(--ds-detail-panel-content-gap);
   padding: var(--ds-tabs-list-padding, 3px);
   background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
-  border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-tabs-list-border, var(--ds-color-border));
   border-radius: var(--ds-tabs-list-radius, var(--ds-radius-lg));
   box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
@@ -30217,7 +30217,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   min-inline-size: 0;
   min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
   background: var(
@@ -30269,7 +30269,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     --ds-detail-section-bg,
     var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)))
   );
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
   box-shadow: var(
@@ -30361,7 +30361,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='footer'] {
   margin-block-start: var(--ds-detail-panel-section-gap);
   padding-block-start: var(--ds-detail-panel-content-gap);
-  border-block-start: 1px solid var(--ds-workspace-card-footer-border, var(--ds-color-border));
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-footer-border, var(--ds-color-border));
 }
 
 /* ---- skeleton: the Skeleton PRIMITIVE owns shape, pulse and reduced-motion
@@ -31693,7 +31693,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
       var(--ds-motion-ease-move, ease-out);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="card"][data-part="card"] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
 }
 
 /* ---- empty/error state (container tint + default icon-tile/title/description) ---- */
@@ -31722,7 +31722,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="state-icon-tile"][data-part="state-icon-tile"] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
   box-shadow: inset 0 1px 0
       color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     0 10px 22px -18px color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent);
@@ -31822,7 +31822,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="header-cell"][data-part="header-cell"]:not(:first-child) {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     color-mix(
       in srgb,
       var(--ds-table-border, var(--ds-color-border-subtle)) 72%,
@@ -31965,7 +31965,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -31994,7 +31994,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="data-cell"][data-part="data-cell"]:not(:first-child) {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     color-mix(
       in srgb,
       var(--ds-modern-table-divider) 56%,
@@ -32020,7 +32020,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="expanded-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
@@ -32048,7 +32048,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
      row's divider — the wider edge wins the seam. */
   border-top: var(--ds-table-header-rule-width, 1px) solid
     var(--ds-table-border, var(--ds-color-border-subtle));
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
@@ -32075,7 +32075,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="group-header-count-pill"][data-part="group-header-count-pill"] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent);
 }
@@ -32107,7 +32107,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="pagination-bar"][data-part="pagination-bar"] {
-  border-top: 1px solid var(--ds-color-border-subtle);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="pagination-nav-button"] {
   background: transparent;
@@ -32158,7 +32158,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="bulk-bar"][data-part="bulk-bar"] {
-  border-top: 1px solid var(--ds-color-border-subtle);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
   /* The selection count is the band's fact: full ink, tabular figures. */
@@ -32638,13 +32638,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="ruled"]
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-data-table-rule-strong, var(--ds-color-border-secondary));
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -32652,7 +32652,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part="expand-cell"][data-part="expand-cell"]:not(:first-child),
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="actions-cell"][data-part="actions-cell"]:not(:first-child) {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -32755,7 +32755,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 [data-anatomy-table="ruled"]
   .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -32802,7 +32802,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 [data-anatomy-table="open"]
   .ds-pattern-data-table.ds-engine-modern
   [data-part="header-row"][data-part="header-row"] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
 }
 [data-anatomy-table="open"]
   .ds-pattern-data-table.ds-engine-modern
@@ -38598,7 +38598,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    and the stable `[data-part='item']` ancestor buys the 4th unit where the
    target carries only one attribute of its own. */
 .ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-form-item.ds-form-item--modern [data-part='tooltip-icon'] {
@@ -38621,7 +38621,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 .ds-form-item.ds-form-item--modern[data-part='item'] [data-part='tooltip-icon'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 @media (hover: hover) {
@@ -38667,7 +38667,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 .ds-form-item.ds-form-item--modern[data-part='item'] [data-part='feedback-icon'] {
-  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, currentColor 20%, transparent);
 }
 
 .ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='success'] {
@@ -41088,7 +41088,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: 50%;
 }
 .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button'] {
-  border: 1px dashed var(--ds-upload-add-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) dashed var(--ds-upload-add-border, var(--ds-color-border));
 }
 @media (hover: hover) {
   .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:where([data-state~='hovered'], :hover):not([data-disabled='true']) {
@@ -41129,7 +41129,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   transition:
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
     background var(--ds-motion-feedback) var(--ds-motion-ease-out);
@@ -45012,7 +45012,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'],
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] [data-part='loading-spinner'][data-part='loading-spinner'] {
-  border: var(--ds-select-loading-stroke, calc(var(--ds-input-loading-stroke) * 1px)) solid var(--ds-select-loading-track, var(--ds-color-border));
+  border: var(--ds-select-loading-stroke, calc(var(--ds-input-loading-stroke) * var(--ds-edge-hairline-width, 1px))) solid var(--ds-select-loading-track, var(--ds-color-border));
   border-top-color: var(--ds-select-loading-color, var(--ds-color-primary));
   border-radius: var(--ds-radius-full);
 }
@@ -50923,7 +50923,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
    only where the ramp is undeclared (a bundle with no tenant artifact), so the
    untenanted render is unchanged. */
 .rottay-result--modern[data-tone='success'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-success) 30%, var(--ds-color-border));
   background: var(--ds-tint-success-8, color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-color-surface)));
   /* Quiet grammar (Empty/StatePanel: "no bloom shadow"): the well keeps only
      its inset highlight; the 28px tone bloom read as glow makeup. */
@@ -50937,13 +50937,13 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
   color: var(--ds-color-error);
 }
 .rottay-result--modern[data-tone='info'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-info) 30%, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-info) 30%, var(--ds-color-border));
   background: var(--ds-tint-info-8, color-mix(in srgb, var(--ds-color-info) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-info);
 }
 .rottay-result--modern[data-tone='warning'][data-part='root'] > [data-part='icon'] > [data-part='status-icon'][data-part='status-icon'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-warning) 30%, var(--ds-color-border));
   background: var(--ds-tint-warning-8, color-mix(in srgb, var(--ds-color-warning) 9%, var(--ds-color-surface)));
   box-shadow: var(--ds-result-icon-well-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent));
   color: var(--ds-color-warning);
@@ -52718,7 +52718,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
      of the former repeated `[data-part='surface']`; FRAGILITY NOTE: if a
      future render ever drops the data-open stamp, restore it rather than
      re-doubling the part). */
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
 }
 
@@ -55970,7 +55970,7 @@ html[data-ds-motion='reduced'] .ds-pagination--modern[data-part='root'] [data-pa
     var(--ds-motion-ease-out) both;
 }
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-open] {
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-popconfirm-border-color, var(--ds-material-overlay-border, var(--ds-color-border-subtle)));
 }
 
@@ -62771,7 +62771,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   /* No ground: a display primitive sits ON a surface, it does not bring one.
      The date grid is a real region boundary, so it keeps a hairline edge and
      the tenant-scaled radius -- an edge, not a card. */
-  border: 1px solid var(--ds-calendar-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-calendar-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-calendar-radius, var(--ds-radius-lg));
   /* Drained layout (the former live `p-4` / `w-full` / `w-80` utilities):
      fullscreen fills its container; compact reads the family width channel,
@@ -62896,7 +62896,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
         The engine's `mb-4` keeps the air below the line. ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] {
   padding-block-end: 10px;
-  border-block-end: 1px solid var(--ds-calendar-header-border, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-calendar-header-border, var(--ds-color-border-subtle));
 }
 
 /* ---- header: the four nav arrows and the two mode toggles share one resting
@@ -63432,7 +63432,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   border-radius: 50%;
   /* Ground and edge stay: the arrow floats over arbitrary slide art and must
      stay legible. Elevation does not -- nothing rests raised except a tooltip. */
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   font-size: var(--ds-font-size-xs);
@@ -64349,7 +64349,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   min-block-size: var(--ds-descriptions-header-min-height, 3.5rem);
   margin: 0 0 var(--ds-descriptions-section-gap, 0.625rem);
   padding: var(--ds-descriptions-header-padding, 0.75rem 1rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-descriptions-header-border, var(--ds-color-border));
   border-radius: var(--ds-descriptions-header-radius, var(--ds-radius-lg));
   background: var(
@@ -64406,7 +64406,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   /* Keeps the action tray trailing when the header wraps (logical, RTL-safe). */
   margin-inline-start: auto;
   padding: var(--ds-descriptions-extra-padding, 0.1875rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-descriptions-extra-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-descriptions-extra-radius, var(--ds-radius-md));
   background: color-mix(in srgb, var(--ds-surface-card) 82%, transparent);
@@ -64417,7 +64417,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 /* ---- bordered container + bordered row separator (color only; see header) ---- */
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] {
   overflow: hidden;
-  border: 1px solid var(--ds-descriptions-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-descriptions-border, var(--ds-color-border));
   border-radius: var(--ds-descriptions-radius, var(--ds-radius-xl));
   background: var(
     --ds-descriptions-bg,
@@ -64432,7 +64432,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
     var(--ds-descriptions-shadow, var(--ds-elevation-1));
 }
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
-  border: 1px solid var(--ds-descriptions-row-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-descriptions-row-border, var(--ds-color-border-subtle));
 }
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] {
@@ -65651,7 +65651,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 }
 
 .rottay-image.rottay-image--modern[data-part='root'][data-bordered='true'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .rottay-image.rottay-image--modern[data-part='root'][data-shadow='true'] {
   box-shadow: var(--ds-elevation-2);
@@ -65982,7 +65982,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   line-height: 1;
   white-space: nowrap;
   vertical-align: var(--ds-kbd-vertical-align, middle);
-  border: 1px solid var(--ds-kbd-frame, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-kbd-frame, var(--ds-color-border));
   border-block-end-width: var(--ds-kbd-depth-width, 2px);
   border-block-end-color: var(
     --ds-kbd-depth,
@@ -66041,7 +66041,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 :where(a, button, [role='button'], summary, [data-part='trigger']):is([data-state~='pressed'], :active)
   .rottay-kbd.rottay-kbd--modern[data-part='root'][data-size] {
   transform: translateY(1px);
-  border-block-end-width: 1px;
+  border-block-end-width: var(--ds-edge-hairline-width, 1px);
   box-shadow: var(
     --_ds-kbd-pressed-shadow,
     inset 0 1px 0 color-mix(in srgb, var(--_ds-kbd-specular, var(--ds-color-bg-elevated)) 40%, transparent)
@@ -67236,7 +67236,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   background: var(--ds-qrcode-refresh-button-bg);
   color: var(--ds-qrcode-refresh-button-color, var(--ds-color-primary));
   border-radius: var(--ds-qrcode-refresh-button-radius, var(--ds-radius-md));
-  border: 1px solid var(--ds-color-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-primary);
   transition:
     background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
     color var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -68155,7 +68155,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
      follows the tenant density plane instead of staying a fixed 1.375rem. */
   min-height: calc(var(--ds-statistic-affix-height, 1.375rem) * var(--ds-density-effective-scale));
   padding-inline: var(--ds-statistic-affix-padding-x, 0.375rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-statistic-affix-border,
       color-mix(in srgb, currentColor 18%, var(--ds-color-border-subtle))
@@ -68508,7 +68508,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   justify-content: center;
   inline-size: var(--ds-tag-icon-size, 1em);
   block-size: var(--ds-tag-icon-size, 1em);
-  border: 1px solid color-mix(in srgb, currentColor 13%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, currentColor 13%, transparent);
   border-radius: var(--ds-tag-icon-radius, 9999px);
   background: color-mix(in srgb, currentColor 9%, transparent);
   box-shadow: inset 0 1px 0
@@ -68538,7 +68538,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   );
   margin-inline-start: var(--ds-tag-close-gap);
   padding: 0;
-  border: 1px solid color-mix(in srgb, currentColor 17%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, currentColor 17%, transparent);
   border-radius: var(--ds-tag-close-radius, 9999px);
   outline: 0;
   background: color-mix(in srgb, currentColor 8%, transparent);
@@ -71196,7 +71196,7 @@ html[data-ds-motion='reduced']
   box-shadow: var(--ds-elevation-1);
 }
 .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* Body rhythm (drained from the shared `cardBodyStyle` spread: padding 20). */
@@ -71208,7 +71208,7 @@ html[data-ds-motion='reduced']
 /* --- Header --------------------------------------------------------------- */
 
 .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   color: var(--ds-color-text-secondary);
 }
 
@@ -71328,7 +71328,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
   background: transparent;
   color: var(--ds-color-warning);
-  border: 1px solid var(--ds-color-warning);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-warning);
 }
 
 /* --- Skeleton -------------------------------------------------------------- */
@@ -71346,7 +71346,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer'] {
   margin-block-start: var(--ds-approval-footer-margin-block-start, 16px);
   padding-block-start: var(--ds-approval-footer-padding-block-start, 16px);
-  border-block-start: 1px solid var(--ds-color-border);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ============================================================================
@@ -71660,7 +71660,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Group header ------------------------------------------------------------ */
@@ -71674,7 +71674,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group-header'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern [data-part='group-title'] {
@@ -71705,7 +71705,7 @@ html[data-ds-motion='reduced']
 /* When there is no checkbox the leading auto track collapses harmlessly. */
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root']
   [data-part='item']:not(:last-child) {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 @media (hover: hover) {
@@ -71863,7 +71863,7 @@ html[data-ds-motion='reduced']
   padding-block: var(--ds-spacing-2, 10px);
   padding-inline: var(--ds-spacing-5, 20px);
   background: var(--ds-color-primary-subtle);
-  border: 1px solid var(--ds-color-border-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-primary);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -71879,7 +71879,7 @@ html[data-ds-motion='reduced']
   padding-block: var(--ds-spacing-10, 40px);
   padding-inline: var(--ds-spacing-6, 24px);
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -71924,7 +71924,7 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='skeleton-group'] {
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
 }
@@ -72051,7 +72051,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'] {
   position: relative;
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
   box-shadow: var(--ds-elevation-1);
@@ -72260,7 +72260,7 @@ html[data-ds-motion='reduced']
   padding-block: var(--ds-spacing-2, 10px);
   padding-inline: var(--ds-spacing-5, 20px);
   background: var(--ds-color-primary-subtle);
-  border: 1px solid var(--ds-color-border-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-primary);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -72276,7 +72276,7 @@ html[data-ds-motion='reduced']
   padding-block: var(--ds-spacing-10, 40px);
   padding-inline: var(--ds-spacing-6, 24px);
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -72293,7 +72293,7 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='skeleton-card'] {
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
 }
@@ -72408,7 +72408,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Filter bar ---------------------------------------------------------------- */
@@ -72419,7 +72419,7 @@ html[data-ds-motion='reduced']
   gap: var(--ds-spacing-3, 12px);
   padding-block: var(--ds-spacing-3, 12px);
   padding-inline: var(--ds-spacing-5, 20px);
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-operational-ledger.ds-engine-modern [data-part='filter-count'] {
@@ -72462,7 +72462,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='header-cell'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* --- Cells ----------------------------------------------------------------------------- */
@@ -72474,7 +72474,7 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-operational-ledger.ds-engine-modern[data-part='root']
   [data-part='table-body'] [data-part='entry']:not(:last-child) [data-part='cell'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* Zebra on surface tokens (never a hardcoded mix). */
@@ -72610,7 +72610,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='skeleton-header'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-row'] {
@@ -72683,7 +72683,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Scroll region ----------------------------------------------------------------
@@ -72756,11 +72756,11 @@ html[data-ds-motion='reduced']
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='corner-cell'],
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header'] {
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Role header ------------------------------------------------------------------------------ */
@@ -72778,12 +72778,12 @@ html[data-ds-motion='reduced']
   [data-part='role-row']:not(:last-child) [data-part='role-header'],
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root']
   [data-part='role-row']:not(:last-child) [data-part='cell'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Coverage cells: semantic bg/border/ink triplet per state ------------------------------------ */
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell'] {
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   text-align: center;
   vertical-align: middle;
   padding: 0;
@@ -72921,7 +72921,7 @@ html[data-ds-motion='reduced']
   gap: var(--ds-spacing-4, 16px);
   padding-block: var(--ds-spacing-2, 10px);
   padding-inline: var(--ds-spacing-4, 16px);
-  border-block-start: 1px solid var(--ds-color-border-subtle);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   background: var(--ds-surface-panel);
 }
 
@@ -72968,7 +72968,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='skeleton-header'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-row'] {
@@ -73434,7 +73434,7 @@ html[data-ds-motion='reduced']
   }
 }
 .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][role='listbox'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option'] {
@@ -73807,7 +73807,7 @@ html[data-ds-motion='reduced']
   inline-size: 20px;
   block-size: 20px;
   border-radius: var(--ds-radius-sm);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- upload trigger ---- */
@@ -73817,7 +73817,7 @@ html[data-ds-motion='reduced']
   padding-inline: var(--ds-spacing-4, 16px);
   color: var(--ds-color-text-primary);
   background: var(--ds-surface-canvas);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
   font-size: var(--ds-font-size-sm, 14px);
   cursor: pointer;
@@ -73893,7 +73893,7 @@ html[data-ds-motion='reduced']
   margin-block-end: 0;
 }
 .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='section-header'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-title'] {
@@ -73949,7 +73949,7 @@ html[data-ds-motion='reduced']
   padding-block-start: var(--ds-spacing-5, 20px);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav']:has(> div) {
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav-end'] {
   display: flex;
@@ -73976,7 +73976,7 @@ html[data-ds-motion='reduced']
   padding-block-start: var(--ds-spacing-5, 20px);
 }
 .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='action-bar'] {
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- responsive + coarse + reduced-motion ------------------------------- */
@@ -74428,12 +74428,12 @@ html[data-ds-motion='reduced']
   font-weight: var(--ds-font-weight-semibold, 600);
 }
 .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-header-row'] [data-part='items-header-cell'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 /* Row hairlines: amounts scan down long item lists; the subtle channel keeps
    them quieter than the header rule above. (0,6,0) clears the P-48 floor. */
 .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-table'] [data-part='items-row'] [data-part='items-cell'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'][data-col='index'] {
   inline-size: 2.5rem;
@@ -74476,7 +74476,7 @@ html[data-ds-motion='reduced']
 }
 .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='totals-divider'] {
   margin-block: var(--ds-spacing-1);
-  border-block-start: 1px solid var(--ds-color-border);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-invoice-template.ds-engine-modern [data-part='totals-row'][data-row='total'] {
   font-size: var(--ds-font-size-lg, 1.125rem);
@@ -74828,7 +74828,7 @@ html[data-ds-motion='reduced']
   padding-block-start: var(--ds-spacing-5, 20px);
 }
 .ds-pattern-step-wizard.ds-engine-modern[data-part='root'] [data-part='nav-bar'] {
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__action-dock [data-part='nav-bar'] {
   margin-block-start: 0;
@@ -75004,7 +75004,7 @@ html[data-ds-motion='reduced']
   z-index: var(--ds-cockpit-header-sticky-z, var(--ds-z-affix, 100));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active,
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='pressed'] {
@@ -75029,7 +75029,7 @@ html[data-ds-motion='reduced']
   max-width: 100%;
   padding: 4px 9px;
   overflow-x: auto;
-  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-full);
   background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
@@ -75062,7 +75062,7 @@ html[data-ds-motion='reduced']
   width: var(--ds-cockpit-header-icon-size, 40px);
   height: var(--ds-cockpit-header-icon-size, 40px);
   place-items: center;
-  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg);
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card));
   color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
@@ -75108,12 +75108,12 @@ html[data-ds-motion='reduced']
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='success'] {
   background: var(--ds-color-success-100);
   color: var(--ds-color-success-700);
-  border: 1px solid var(--ds-color-success-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-success-200);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='warning'] {
   background: var(--ds-color-warning-100);
   color: var(--ds-color-warning-700);
-  border: 1px solid var(--ds-color-warning-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-warning-200);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='error'] {
   background: var(--ds-color-error-100);
@@ -75123,12 +75123,12 @@ html[data-ds-motion='reduced']
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='info'] {
   background: var(--ds-color-info-100);
   color: var(--ds-color-info-700);
-  border: 1px solid var(--ds-color-info-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-info-200);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='default'] {
   background: var(--ds-color-neutral-100);
   color: var(--ds-color-neutral-700);
-  border: 1px solid var(--ds-color-neutral-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-neutral-200);
 }
 
 /* ---- title / subtitle ---- */
@@ -75147,7 +75147,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions'] {
   min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
-  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
@@ -76307,7 +76307,7 @@ html[data-ds-motion='reduced']
   padding: var(--ds-workbench-header-padding, calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
 }
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active,
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-state~='pressed'] {
@@ -76322,7 +76322,7 @@ html[data-ds-motion='reduced']
   width: var(--ds-workbench-header-icon-size, var(--ds-spacing-10, 40px));
   height: var(--ds-workbench-header-icon-size, var(--ds-spacing-10, 40px));
   place-items: center;
-  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg);
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card));
   color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
@@ -76413,7 +76413,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions'] {
   min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
-  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
@@ -76464,7 +76464,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs'] {
   padding: var(--ds-tabs-list-padding, 3px);
   background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
-  border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-tabs-list-border, var(--ds-color-border));
   border-radius: var(--ds-tabs-list-radius, var(--ds-radius-lg));
   overflow-x: auto;
   box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
@@ -76740,7 +76740,7 @@ html[data-ds-motion='reduced']
   padding: var(--ds-command-palette-search-padding, var(--ds-spacing-3, 12px));
   border-block-end: var(
     --ds-command-palette-search-rule,
-    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+    var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border))
   );
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='search'] > :last-child {
@@ -76912,7 +76912,7 @@ html[data-ds-motion='reduced']
   font-size: var(--ds-command-palette-footer-font-size, var(--ds-font-size-xs, 12px));
   border-block-start: var(
     --ds-command-palette-footer-rule,
-    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+    var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border))
   );
 }
 
@@ -77085,7 +77085,7 @@ html[data-ds-motion='reduced']
   animation: ds-foundation-fade-in-down var(--ds-motion-feedback) var(--ds-motion-ease-enter, ease-out);
 }
 .ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-part='panel'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* ---- dropdown options: full-width start-aligned rows (the composed Button
@@ -77134,7 +77134,7 @@ html[data-ds-motion='reduced']
         so the first/last segment mirrors under RTL ---- */
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
   background: var(--ds-envtoggle-accent);
@@ -77356,11 +77356,11 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='header'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* The active row reads as a QUIET TINT + full inset frame (menu.css's
@@ -77401,7 +77401,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='divider'] {
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
@@ -77411,7 +77411,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ============================================================================
@@ -77502,7 +77502,7 @@ html[data-ds-motion='reduced']
   padding-inline: 12px;
 }
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='search'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='empty'] {
   display: flex;
@@ -78186,7 +78186,7 @@ html[data-ds-motion='reduced']
   font-size: var(--ds-font-size-sm);
 }
 .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'] {
-  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle, var(--ds-color-border));
 }
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
@@ -78256,7 +78256,7 @@ html[data-ds-motion='reduced']
   margin-block-start: var(--ds-spacing-1, 4px);
   padding: var(--ds-spacing-1, 4px);
   overflow-y: auto;
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
@@ -78666,7 +78666,7 @@ html[data-ds-motion='reduced']
   box-shadow: var(--ds-elevation-3);
 }
 .ds-pattern-notification-center.ds-engine-modern [data-part='panel']:has(> [data-part='header']) {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* ---- placement flip: `data-placement='start'` outranks the base anchor rule
@@ -78687,7 +78687,7 @@ html[data-ds-motion='reduced']
   padding-inline: var(--ds-spacing-4);
 }
 .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='header'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-notification-center.ds-engine-modern [data-part='title'] {
   color: var(--ds-color-text-primary);
@@ -78732,7 +78732,7 @@ html[data-ds-motion='reduced']
 .ds-pattern-notification-center.ds-engine-modern [data-part='overflow-note'] {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-3);
-  border-block-start: 1px solid var(--ds-color-border-subtle);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-2xs, 0.6875rem);
   font-variant-numeric: tabular-nums;
@@ -78756,7 +78756,7 @@ html[data-ds-motion='reduced']
   cursor: pointer;
 }
 .ds-pattern-notification-center.ds-engine-modern[data-part='root'] [data-part='row'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-notification-center.ds-engine-modern [data-part='row'][data-unread='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
@@ -79235,7 +79235,7 @@ html[data-ds-motion='reduced']
 
 /* root: card frame transcribed from panelCardStyle + the local elevation */
 .ds-pattern-live-feed.ds-engine-modern[data-part='root'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
@@ -93657,7 +93657,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     )
   );
   background-size: 180% 180%;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-toolbar-border,
       var(--ds-material-panel-border, var(--ds-color-border))
@@ -93670,7 +93670,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      profile keeps the single hairline (BitHire direction). */
   border-bottom: var(
     --_ds-list-toolbar-keyline,
-    1px solid
+    var(--ds-edge-hairline-width, 1px) solid
       var(
         --ds-toolbar-border-bottom,
         var(--ds-toolbar-border, var(--ds-color-border))
@@ -93784,7 +93784,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-toolbar-control-border,
       var(--ds-toolbar-border, var(--ds-color-border))
@@ -93987,7 +93987,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      authored --ds-filter-pill-border/--ds-toolbar-control-border channels
      always win (both verticals author them), and the default theme gains a
      quiet hairline instead of naked text. */
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-filter-pill-border,
       var(--ds-toolbar-control-border, var(--ds-color-border))
@@ -94267,7 +94267,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-has-active-filters='true']
   > .ds-list-toolbar__main-row[data-part='main-row'] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
@@ -94287,7 +94287,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   justify-content: center;
   inline-size: var(--ds-toolbar-title-icon-size, 2rem);
   block-size: var(--ds-toolbar-title-icon-size, 2rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-icon-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   border-radius: var(
     --ds-toolbar-icon-radius,
@@ -94512,7 +94512,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     calc(0.5rem * var(--ds-density-effective-scale, 1))
       calc(1rem * var(--ds-density-effective-scale, 1))
   );
-  border-top: 1px solid
+  border-top: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-toolbar-border-bottom,
       var(--ds-toolbar-border, var(--ds-color-border))
@@ -94566,7 +94566,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'] {
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-filter-chip-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   border-radius: var(
     --ds-filter-chip-radius,
@@ -94660,7 +94660,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
     --ds-toolbar-control-radius,
@@ -94729,7 +94729,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
     .ds-list-toolbar__mobile-header[data-part='mobile-header'][data-part='mobile-header'] {
     gap: var(--ds-spacing-2, 0.5rem);
     padding-bottom: var(--ds-spacing-2, 0.5rem);
-    border-bottom: 1px solid
+    border-bottom: var(--ds-edge-hairline-width, 1px) solid
       var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
   }
 
@@ -95208,7 +95208,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__pill[data-part='pill'][data-active] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
@@ -95454,7 +95454,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-saved-views__input[data-part='field'] [data-part='rename-input'].ds-input-shell--modern,
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__create-input[data-part='field'] [data-part='create-input'].ds-input-shell--modern {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
@@ -95507,7 +95507,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__create-button[data-part='create-button'][type='button'] {
-  border: 1px dashed var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) dashed var(--ds-color-border);
 }
 
 @media (hover: hover) {
@@ -95663,7 +95663,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
         NOT here: they travel the engine's surfaceStyle/bodyStyle channels
         because the rustic Sheet stamps an inline 380px width. ---- */
 .ds-widget-board__catalog-surface[data-part='surface'][data-open='true'][data-placement='right'][role='dialog'] {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border-strong, var(--ds-color-border-primary));
   background: radial-gradient(
       circle at 100% 0%,
@@ -99558,7 +99558,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-2);
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   color: var(--ds-color-text-secondary);
   font-weight: var(--ds-font-weight-semibold);
   text-align: start;
@@ -99569,7 +99569,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   /* Hairline row separator: in a data-dense list the eye tracks a row across
      name → size → date → actions; the header hairline alone forced scanning
      on whitespace alone. */
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 /* Quantitative cells read as data: tabular numerals, nowrap, quiet ink; the
    size column aligns to the numeric edge (logical `end`, so RTL mirrors it)
@@ -100594,7 +100594,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   justify-items: center;
   gap: var(--ds-pricing-table-card-gap, var(--ds-spacing-2, 8px));
   padding: var(--ds-pricing-table-card-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-pricing-table-hairline, var(--ds-color-border));
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
 }
@@ -100655,7 +100655,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__category-header {
   padding-block: var(--ds-spacing-6, 24px) var(--ds-spacing-2, 8px);
   padding-inline: var(--ds-spacing-3, 12px);
-  border-block-start: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-pricing-table-hairline, var(--ds-color-border));
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-bold);
@@ -100669,7 +100669,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {
   padding-block: var(--ds-spacing-3, 12px);
   padding-inline: var(--ds-spacing-3, 12px);
-  border-block-end: 1px solid
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid
     color-mix(in srgb, var(--ds-pricing-table-hairline, var(--ds-color-border)) 60%, transparent);
   font-size: var(--ds-font-size-sm);
   overflow-wrap: anywhere;
@@ -100687,7 +100687,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* ---- feature label with tooltip: dotted help affordance + focus ring ---- */
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label {
-  border-block-end: 1px dotted var(--ds-color-text-muted);
+  border-block-end: var(--ds-edge-hairline-width, 1px) dotted var(--ds-color-text-muted);
   cursor: help;
   transition:
     color var(--ds-pricing-table-motion-duration, var(--ds-motion-feedback))
@@ -101436,7 +101436,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   .ds-stats-grid__card[data-variant="outlined"] {
   background-color: var(--ds-surface-card);
   background-image: var(--ds-gradient-surface);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -101457,7 +101457,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
      `--ds-glass-backdrop-filter` get the frost. */
   backdrop-filter: var(--ds-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
-  border: 1px solid color-mix(in srgb, var(--ds-color-border) 50%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border) 50%, transparent);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -102133,7 +102133,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-block: var(--ds-column-settings-header-padding-block, 10px)
     var(--ds-column-settings-header-padding-block-end, 8px);
   padding-inline: var(--ds-column-settings-header-padding-inline, 12px);
-  border-block-end: 1px solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='title'] {
   color: var(--ds-color-text-primary);
@@ -102281,7 +102281,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   justify-content: center;
   padding-block: var(--ds-column-settings-footer-padding-block, 8px);
   padding-inline: var(--ds-column-settings-footer-padding-inline, 12px);
-  border-block-start: 1px solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='footer'] .ds-button {
   inline-size: 100%;
@@ -108900,7 +108900,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
   [data-part="header"] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="logo"] {
@@ -109050,13 +109050,13 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 }
 .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
   [data-part="table-head"] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-tenant-preview.ds-engine-modern
   [data-part="sample-table"]
   tbody
   > tr:first-child {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-tenant-preview.ds-engine-modern
   [data-part="sample-table"]
@@ -114533,7 +114533,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
 }
@@ -114558,7 +114558,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='weekday'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- day cells ---- */
@@ -114571,8 +114571,8 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell'] {
-  border-inline-end: 1px solid var(--ds-color-border);
-  border-block-end: 1px solid var(--ds-color-border);
+  border-inline-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
@@ -115087,7 +115087,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   > [data-part='column-body']
   > [data-part='card-list']
   > [data-part='card'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
@@ -115376,7 +115376,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
 /* ---- marker list: framed, divided rows (the retired divide-y bridge) ---- */
 .ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list'] {
   overflow: hidden;
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
 }
 /* Long lists may scroll internally instead of stretching the page. The cap is
@@ -115386,7 +115386,7 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
   overflow-y: auto;
 }
 .ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true']) {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- marker row: composed Button, whole-row selection target,
