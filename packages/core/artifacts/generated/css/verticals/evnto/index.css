@@ -26925,7 +26925,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   block-size: var(--ds-badge-dot-size, 0.45rem);
   border: var(--ds-badge-dot-border-width, 1px) solid
     var(--ds-badge-dot-border, color-mix(in srgb, currentColor 18%, transparent));
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-badge-dot-bg, currentColor);
   box-shadow: var(--ds-badge-dot-shadow, 0 0 0 2px color-mix(in srgb, currentColor 8%, transparent));
 }
@@ -27283,7 +27283,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     content: '';
     position: absolute;
     inset: calc(50% - var(--ds-badge-remove-touch-size, 2.75rem) / 2);
-    border-radius: 9999px;
+    border-radius: var(--ds-radius-full);
   }
 }
 
@@ -28664,7 +28664,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   gap: 6px;
   min-block-size: 24px;
   padding-inline: 9px;
-  border-radius: 12px;
+  border-radius: var(--ds-radius-lg);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
 }
 
@@ -28751,7 +28751,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   inline-size: 30px;
   block-size: 30px;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: var(--ds-radius-lg);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
   color: var(--ds-color-text-secondary);
 }
@@ -28776,7 +28776,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-structure.ds-field-filters-panel .ds-field-filters-panel__control {
   inline-size: 100%;
   min-block-size: 40px;
-  border-radius: 12px;
+  border-radius: var(--ds-radius-lg);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
   box-shadow: var(
     --ds-material-control-highlight,
@@ -28797,7 +28797,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   [data-part='filter-card']
   [data-part='control-slot']
   .ds-field-filters-panel__control[data-part='root'] {
-  border-radius: 12px;
+  border-radius: var(--ds-radius-lg);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
   box-shadow: var(
@@ -53790,7 +53790,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   inset-inline-end: var(--ds-floatbutton-dot-offset-inline, -4px);
   inline-size: var(--ds-floatbutton-dot-size, 8px);
   block-size: var(--ds-floatbutton-dot-size, 8px);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
 }
 
 .rottay-float-button--modern [data-part='badge'][data-variant='count'] {
@@ -53805,7 +53805,7 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
   /* Counts are metrics: tabular glyphs keep the pill geometry stable as the
      count changes (B9 pass 2). */
   font-variant-numeric: tabular-nums;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   color: var(--ds-color-text-on-primary);
 }
 
@@ -63520,7 +63520,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
     content: '';
     position: absolute;
     inset: calc(50% - var(--ds-carousel-dot-touch-size, 44px) / 2);
-    border-radius: 9999px;
+    border-radius: var(--ds-radius-full);
   }
 }
 
@@ -63539,7 +63539,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   block-size: var(--ds-carousel-dot-size, 0.5rem);
   padding: 0;
   border: 0;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   cursor: pointer;
   transition:
     inline-size var(--ds-motion-feedback) var(--ds-motion-ease-out),
@@ -68648,7 +68648,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
     content: '';
     position: absolute;
     inset: calc(50% - var(--ds-tag-close-touch-size, 2.75rem) / 2);
-    border-radius: 9999px;
+    border-radius: var(--ds-radius-full);
   }
 }
 
@@ -69049,7 +69049,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:not([data-pending='true']) > [data-part='dot'] > [data-part='dot-marker'] {
   width: var(--ds-timeline-dot-size);
   height: var(--ds-timeline-dot-size);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-timeline-color-primary, var(--ds-color-primary));
   outline: var(--ds-timeline-dot-border-width) solid
     var(--_ds-timeline-dot-ring-color, var(--ds-surface-canvas));
@@ -69112,7 +69112,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
   width: var(--ds-timeline-dot-size);
   height: var(--ds-timeline-dot-size);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-timeline-line-color, var(--ds-surface-panel));
   /* Fallback parity: the pending-animation channel is declared in
      presentation/components/timeline.css (loaded by both facade entrypoints),
@@ -85628,7 +85628,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   inline-size: 100%;
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
-  border-radius: 20px;
+  border-radius: var(--ds-radius-2xl);
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
   animation: ds-header-enter var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out) both;
 }
@@ -86070,7 +86070,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   margin-block-end: var(--ds-form-header-root-margin, var(--ds-spacing-6, 24px));
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
-  border-radius: 20px;
+  border-radius: var(--ds-radius-2xl);
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
   /* keyframes live in header-hero-shared.css, with the archetype gradients,
      the icon-badge tone and the back-button microinteraction */
