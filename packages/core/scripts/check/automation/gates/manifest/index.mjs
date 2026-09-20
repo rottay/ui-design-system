@@ -224,9 +224,10 @@ export const CI_GATES = Object.freeze([
   { id: 'chart-palette-table-parity', run: ['node', 'scripts/check/charts/palette-table-parity/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'chart-palette-table-parity-drill', },
   { id: 'chart-family-registry-closure-drill', run: ['node', '--test', 'scripts/check/charts/family-registry-closure/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['chart-family-registry-closure'], },
   { id: 'chart-family-registry-closure', run: ['node', 'scripts/check/charts/family-registry-closure/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'chart-family-registry-closure-drill', },
-  // scheme-scope-causality stays OUT of the manifest until lot 1 makes it green;
-  // it is expected-red at base by design (the divergence it measures is the
-  // defect lot 1 fixes), and a red blocking gate would fail every build.
+  // scheme-scope-causality stays OUT of the manifest. Lot 1 (the Q1 de-alias)
+  // closed both paint classes, but 20 of 55 rows are still red because five
+  // families never plumb `colorScheme` to their root; the lot that plumbs them
+  // registers this gate blocking.
 
   // --- source-owned artifact freshness: this manifest runs before Build ---
   // These gates execute the authored TypeScript roster and compile CSS from

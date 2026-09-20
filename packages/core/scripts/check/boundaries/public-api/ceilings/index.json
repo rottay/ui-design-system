@@ -310,7 +310,7 @@
     },
     "./structures/app-shell": {
       "maxReachableModules": 77,
-      "maxSourceBytes": 276007
+      "maxSourceBytes": 277482
     },
     "./structures/column-menu": {
       "maxReachableModules": 643,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "la reparacion estructural de S19-A01 (Fable-accepted) agrego los dos owners de vocabulario al grafo de visual-authority; bytes y fan-out medidos en esta corrida",
+  "lastMove": "WO-FAM-11 R1 namespace migration (339a0a7a0): app-shell carries the superseded-window read arms until the rostered consumers migrate at their DS bump; +1475 bytes measured, Fable-reviewed",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }
