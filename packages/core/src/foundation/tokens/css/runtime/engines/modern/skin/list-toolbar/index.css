@@ -80,7 +80,7 @@
     )
   );
   background-size: 180% 180%;
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-toolbar-border,
       var(--ds-material-panel-border, var(--ds-color-border))
@@ -93,7 +93,7 @@
      profile keeps the single hairline (BitHire direction). */
   border-bottom: var(
     --_ds-list-toolbar-keyline,
-    1px solid
+    var(--ds-edge-hairline-width, 1px) solid
       var(
         --ds-toolbar-border-bottom,
         var(--ds-toolbar-border, var(--ds-color-border))
@@ -207,7 +207,7 @@
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-toolbar-control-border,
       var(--ds-toolbar-border, var(--ds-color-border))
@@ -410,7 +410,7 @@
      authored --ds-filter-pill-border/--ds-toolbar-control-border channels
      always win (both verticals author them), and the default theme gains a
      quiet hairline instead of naked text. */
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-filter-pill-border,
       var(--ds-toolbar-control-border, var(--ds-color-border))
@@ -690,7 +690,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-has-active-filters='true']
   > .ds-list-toolbar__main-row[data-part='main-row'] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
@@ -710,7 +710,7 @@
   justify-content: center;
   inline-size: var(--ds-toolbar-title-icon-size, 2rem);
   block-size: var(--ds-toolbar-title-icon-size, 2rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-icon-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   border-radius: var(
     --ds-toolbar-icon-radius,
@@ -935,7 +935,7 @@
     calc(0.5rem * var(--ds-density-effective-scale, 1))
       calc(1rem * var(--ds-density-effective-scale, 1))
   );
-  border-top: 1px solid
+  border-top: var(--ds-edge-hairline-width, 1px) solid
     var(
       --ds-toolbar-border-bottom,
       var(--ds-toolbar-border, var(--ds-color-border))
@@ -989,7 +989,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'] {
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-filter-chip-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   border-radius: var(
     --ds-filter-chip-radius,
@@ -1083,7 +1083,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant] {
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
     --ds-toolbar-control-radius,
@@ -1152,7 +1152,7 @@
     .ds-list-toolbar__mobile-header[data-part='mobile-header'][data-part='mobile-header'] {
     gap: var(--ds-spacing-2, 0.5rem);
     padding-bottom: var(--ds-spacing-2, 0.5rem);
-    border-bottom: 1px solid
+    border-bottom: var(--ds-edge-hairline-width, 1px) solid
       var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
   }
 

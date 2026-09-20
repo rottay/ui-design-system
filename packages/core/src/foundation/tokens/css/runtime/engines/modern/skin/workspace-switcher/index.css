@@ -80,11 +80,11 @@
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='header'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* The active row reads as a QUIET TINT + full inset frame (menu.css's
@@ -125,7 +125,7 @@
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='divider'] {
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
@@ -135,7 +135,7 @@
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ============================================================================
@@ -226,7 +226,7 @@
   padding-inline: 12px;
 }
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='search'] {
-  border-bottom: 1px solid var(--ds-color-border);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='empty'] {
   display: flex;

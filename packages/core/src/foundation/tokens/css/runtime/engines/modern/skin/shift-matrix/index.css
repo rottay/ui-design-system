@@ -33,7 +33,7 @@
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Scroll region ----------------------------------------------------------------
@@ -106,11 +106,11 @@
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='corner-cell'],
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header'] {
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Role header ------------------------------------------------------------------------------ */
@@ -128,12 +128,12 @@
   [data-part='role-row']:not(:last-child) [data-part='role-header'],
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root']
   [data-part='role-row']:not(:last-child) [data-part='cell'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Coverage cells: semantic bg/border/ink triplet per state ------------------------------------ */
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell'] {
-  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   text-align: center;
   vertical-align: middle;
   padding: 0;
@@ -271,7 +271,7 @@
   gap: var(--ds-spacing-4, 16px);
   padding-block: var(--ds-spacing-2, 10px);
   padding-inline: var(--ds-spacing-4, 16px);
-  border-block-start: 1px solid var(--ds-color-border-subtle);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   background: var(--ds-surface-panel);
 }
 
@@ -318,7 +318,7 @@
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='skeleton-header'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-row'] {

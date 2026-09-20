@@ -43,7 +43,7 @@
         NOT here: they travel the engine's surfaceStyle/bodyStyle channels
         because the rustic Sheet stamps an inline 380px width. ---- */
 .ds-widget-board__catalog-surface[data-part='surface'][data-open='true'][data-placement='right'][role='dialog'] {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-surface-card-border-strong, var(--ds-color-border-primary));
   background: radial-gradient(
       circle at 100% 0%,

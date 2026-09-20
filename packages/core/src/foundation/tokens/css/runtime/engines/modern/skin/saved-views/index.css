@@ -158,7 +158,7 @@
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__pill[data-part='pill'][data-active] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
@@ -404,7 +404,7 @@
   .ds-saved-views__input[data-part='field'] [data-part='rename-input'].ds-input-shell--modern,
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__create-input[data-part='field'] [data-part='create-input'].ds-input-shell--modern {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
@@ -457,7 +457,7 @@
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__create-button[data-part='create-button'][type='button'] {
-  border: 1px dashed var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) dashed var(--ds-color-border);
 }
 
 @media (hover: hover) {

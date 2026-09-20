@@ -30,7 +30,7 @@
   box-shadow: var(--ds-elevation-1);
 }
 .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'][data-loading] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* Body rhythm (drained from the shared `cardBodyStyle` spread: padding 20). */
@@ -42,7 +42,7 @@
 /* --- Header --------------------------------------------------------------- */
 
 .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   color: var(--ds-color-text-secondary);
 }
 
@@ -162,7 +162,7 @@
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
   background: transparent;
   color: var(--ds-color-warning);
-  border: 1px solid var(--ds-color-warning);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-warning);
 }
 
 /* --- Skeleton -------------------------------------------------------------- */
@@ -180,7 +180,7 @@
 .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer'] {
   margin-block-start: var(--ds-approval-footer-margin-block-start, 16px);
   padding-block-start: var(--ds-approval-footer-padding-block-start, 16px);
-  border-block-start: 1px solid var(--ds-color-border);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ============================================================================

@@ -1033,7 +1033,7 @@
       var(--ds-motion-ease-move, ease-out);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="card"][data-part="card"] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
 }
 
 /* ---- empty/error state (container tint + default icon-tile/title/description) ---- */
@@ -1062,7 +1062,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="state-icon-tile"][data-part="state-icon-tile"] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
   box-shadow: inset 0 1px 0
       color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     0 10px 22px -18px color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent);
@@ -1162,7 +1162,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="header-cell"][data-part="header-cell"]:not(:first-child) {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     color-mix(
       in srgb,
       var(--ds-table-border, var(--ds-color-border-subtle)) 72%,
@@ -1305,7 +1305,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -1334,7 +1334,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="data-cell"][data-part="data-cell"]:not(:first-child) {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     color-mix(
       in srgb,
       var(--ds-modern-table-divider) 56%,
@@ -1360,7 +1360,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="expanded-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
@@ -1388,7 +1388,7 @@
      row's divider — the wider edge wins the seam. */
   border-top: var(--ds-table-header-rule-width, 1px) solid
     var(--ds-table-border, var(--ds-color-border-subtle));
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
@@ -1415,7 +1415,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="group-header-count-pill"][data-part="group-header-count-pill"] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent);
 }
@@ -1447,7 +1447,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="pagination-bar"][data-part="pagination-bar"] {
-  border-top: 1px solid var(--ds-color-border-subtle);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="pagination-nav-button"] {
   background: transparent;
@@ -1498,7 +1498,7 @@
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="bulk-bar"][data-part="bulk-bar"] {
-  border-top: 1px solid var(--ds-color-border-subtle);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
   /* The selection count is the band's fact: full ink, tabular figures. */
@@ -1978,13 +1978,13 @@
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="ruled"]
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-data-table-rule-strong, var(--ds-color-border-secondary));
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -1992,7 +1992,7 @@
   [data-part="expand-cell"][data-part="expand-cell"]:not(:first-child),
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="actions-cell"][data-part="actions-cell"]:not(:first-child) {
-  border-inline-start: 1px solid
+  border-inline-start: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -2095,7 +2095,7 @@
 [data-anatomy-table="ruled"]
   .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-last="false"] {
-  border-bottom: 1px solid
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-modern-table-divider);
 }
 
@@ -2142,7 +2142,7 @@
 [data-anatomy-table="open"]
   .ds-pattern-data-table.ds-engine-modern
   [data-part="header-row"][data-part="header-row"] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border-subtle));
 }
 [data-anatomy-table="open"]
   .ds-pattern-data-table.ds-engine-modern

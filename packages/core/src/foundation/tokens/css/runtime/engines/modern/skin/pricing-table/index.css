@@ -168,7 +168,7 @@
   justify-items: center;
   gap: var(--ds-pricing-table-card-gap, var(--ds-spacing-2, 8px));
   padding: var(--ds-pricing-table-card-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-pricing-table-hairline, var(--ds-color-border));
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
 }
@@ -229,7 +229,7 @@
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__category-header {
   padding-block: var(--ds-spacing-6, 24px) var(--ds-spacing-2, 8px);
   padding-inline: var(--ds-spacing-3, 12px);
-  border-block-start: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-pricing-table-hairline, var(--ds-color-border));
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-bold);
@@ -243,7 +243,7 @@
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {
   padding-block: var(--ds-spacing-3, 12px);
   padding-inline: var(--ds-spacing-3, 12px);
-  border-block-end: 1px solid
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid
     color-mix(in srgb, var(--ds-pricing-table-hairline, var(--ds-color-border)) 60%, transparent);
   font-size: var(--ds-font-size-sm);
   overflow-wrap: anywhere;
@@ -261,7 +261,7 @@
 
 /* ---- feature label with tooltip: dotted help affordance + focus ring ---- */
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label {
-  border-block-end: 1px dotted var(--ds-color-text-muted);
+  border-block-end: var(--ds-edge-hairline-width, 1px) dotted var(--ds-color-text-muted);
   cursor: help;
   transition:
     color var(--ds-pricing-table-motion-duration, var(--ds-motion-feedback))

@@ -132,7 +132,7 @@
      of the former repeated `[data-part='surface']`; FRAGILITY NOTE: if a
      future render ever drops the data-open stamp, restore it rather than
      re-doubling the part). */
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-context-menu-border-color, var(--ds-material-overlay-border, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%)));
 }
 

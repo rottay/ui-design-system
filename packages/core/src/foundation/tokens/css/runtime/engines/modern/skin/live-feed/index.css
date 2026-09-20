@@ -36,7 +36,7 @@
 
 /* root: card frame transcribed from panelCardStyle + the local elevation */
 .ds-pattern-live-feed.ds-engine-modern[data-part='root'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);

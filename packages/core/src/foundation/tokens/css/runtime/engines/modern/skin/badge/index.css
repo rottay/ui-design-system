@@ -537,7 +537,7 @@
   position: absolute;
   inset: -1px;
   z-index: -1;
-  border: 1px solid currentColor;
+  border: var(--ds-edge-hairline-width, 1px) solid currentColor;
   border-radius: inherit;
   pointer-events: none;
   animation: ds-badge-pulse var(--ds-badge-pulse-duration)

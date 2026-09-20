@@ -102,7 +102,7 @@
   animation: ds-foundation-fade-in-down var(--ds-motion-feedback) var(--ds-motion-ease-enter, ease-out);
 }
 .ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-part='panel'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* ---- dropdown options: full-width start-aligned rows (the composed Button
@@ -151,7 +151,7 @@
         so the first/last segment mirrors under RTL ---- */
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
   background: var(--ds-envtoggle-accent);

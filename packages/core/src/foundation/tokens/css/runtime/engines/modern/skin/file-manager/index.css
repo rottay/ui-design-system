@@ -274,7 +274,7 @@
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-2);
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   color: var(--ds-color-text-secondary);
   font-weight: var(--ds-font-weight-semibold);
   text-align: start;
@@ -285,7 +285,7 @@
   /* Hairline row separator: in a data-dense list the eye tracks a row across
      name → size → date → actions; the header hairline alone forced scanning
      on whitespace alone. */
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 /* Quantitative cells read as data: tabular numerals, nowrap, quiet ink; the
    size column aligns to the numeric edge (logical `end`, so RTL mirrors it)

@@ -229,7 +229,7 @@
   justify-content: center;
   inline-size: var(--ds-tag-icon-size, 1em);
   block-size: var(--ds-tag-icon-size, 1em);
-  border: 1px solid color-mix(in srgb, currentColor 13%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, currentColor 13%, transparent);
   border-radius: var(--ds-tag-icon-radius, 9999px);
   background: color-mix(in srgb, currentColor 9%, transparent);
   box-shadow: inset 0 1px 0
@@ -259,7 +259,7 @@
   );
   margin-inline-start: var(--ds-tag-close-gap);
   padding: 0;
-  border: 1px solid color-mix(in srgb, currentColor 17%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, currentColor 17%, transparent);
   border-radius: var(--ds-tag-close-radius, 9999px);
   outline: 0;
   background: color-mix(in srgb, currentColor 8%, transparent);

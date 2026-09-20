@@ -91,7 +91,7 @@
   z-index: var(--ds-cockpit-header-sticky-z, var(--ds-z-affix, 100));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active,
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='pressed'] {
@@ -116,7 +116,7 @@
   max-width: 100%;
   padding: 4px 9px;
   overflow-x: auto;
-  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-full);
   background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
@@ -149,7 +149,7 @@
   width: var(--ds-cockpit-header-icon-size, 40px);
   height: var(--ds-cockpit-header-icon-size, 40px);
   place-items: center;
-  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg);
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card));
   color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
@@ -195,12 +195,12 @@
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='success'] {
   background: var(--ds-color-success-100);
   color: var(--ds-color-success-700);
-  border: 1px solid var(--ds-color-success-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-success-200);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='warning'] {
   background: var(--ds-color-warning-100);
   color: var(--ds-color-warning-700);
-  border: 1px solid var(--ds-color-warning-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-warning-200);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='error'] {
   background: var(--ds-color-error-100);
@@ -210,12 +210,12 @@
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='info'] {
   background: var(--ds-color-info-100);
   color: var(--ds-color-info-700);
-  border: 1px solid var(--ds-color-info-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-info-200);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='default'] {
   background: var(--ds-color-neutral-100);
   color: var(--ds-color-neutral-700);
-  border: 1px solid var(--ds-color-neutral-200);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-neutral-200);
 }
 
 /* ---- title / subtitle ---- */
@@ -234,7 +234,7 @@
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions'] {
   min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
-  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);

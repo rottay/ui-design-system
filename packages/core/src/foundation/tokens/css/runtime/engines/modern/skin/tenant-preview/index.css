@@ -47,7 +47,7 @@
 }
 .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
   [data-part="header"] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="logo"] {
@@ -197,13 +197,13 @@
 }
 .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
   [data-part="table-head"] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-tenant-preview.ds-engine-modern
   [data-part="sample-table"]
   tbody
   > tr:first-child {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-tenant-preview.ds-engine-modern
   [data-part="sample-table"]

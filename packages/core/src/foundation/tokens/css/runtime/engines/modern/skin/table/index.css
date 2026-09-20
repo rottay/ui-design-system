@@ -272,7 +272,7 @@
    bleed into the filter inputs */
 .ds-table.ds-table--modern [data-part='filter-cell'][data-hairline='true'],
 .ds-table.ds-table--modern [data-part='filter-spacer'][data-hairline='true'] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border));
 }
 
 /* ---- fields: filter input, and the editable text/number/date/select cells.
@@ -285,7 +285,7 @@
   width: 100%;
   padding: 2px 6px;
   font-size: var(--ds-font-size-xs);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
@@ -393,7 +393,7 @@
   overflow-wrap: break-word;
 }
 .ds-table.ds-table--modern [data-part='cell'][data-bordered='true'] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-table-border, var(--ds-color-border));
 }
 .ds-table.ds-table--modern [data-part='cell'][data-editable='true'] {
   cursor: pointer;

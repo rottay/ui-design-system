@@ -161,7 +161,7 @@
   background: var(--ds-qrcode-refresh-button-bg);
   color: var(--ds-qrcode-refresh-button-color, var(--ds-color-primary));
   border-radius: var(--ds-qrcode-refresh-button-radius, var(--ds-radius-md));
-  border: 1px solid var(--ds-color-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-primary);
   transition:
     background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
     color var(--ds-motion-feedback) var(--ds-motion-ease-out),

@@ -52,7 +52,7 @@
   min-block-size: var(--ds-descriptions-header-min-height, 3.5rem);
   margin: 0 0 var(--ds-descriptions-section-gap, 0.625rem);
   padding: var(--ds-descriptions-header-padding, 0.75rem 1rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-descriptions-header-border, var(--ds-color-border));
   border-radius: var(--ds-descriptions-header-radius, var(--ds-radius-lg));
   background: var(
@@ -109,7 +109,7 @@
   /* Keeps the action tray trailing when the header wraps (logical, RTL-safe). */
   margin-inline-start: auto;
   padding: var(--ds-descriptions-extra-padding, 0.1875rem);
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-descriptions-extra-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-descriptions-extra-radius, var(--ds-radius-md));
   background: color-mix(in srgb, var(--ds-surface-card) 82%, transparent);
@@ -120,7 +120,7 @@
 /* ---- bordered container + bordered row separator (color only; see header) ---- */
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] {
   overflow: hidden;
-  border: 1px solid var(--ds-descriptions-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-descriptions-border, var(--ds-color-border));
   border-radius: var(--ds-descriptions-radius, var(--ds-radius-xl));
   background: var(
     --ds-descriptions-bg,
@@ -135,7 +135,7 @@
     var(--ds-descriptions-shadow, var(--ds-elevation-1));
 }
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
-  border: 1px solid var(--ds-descriptions-row-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-descriptions-row-border, var(--ds-color-border-subtle));
 }
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] {

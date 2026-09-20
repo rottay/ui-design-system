@@ -44,7 +44,7 @@
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* --- Group header ------------------------------------------------------------ */
@@ -58,7 +58,7 @@
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group-header'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern [data-part='group-title'] {
@@ -89,7 +89,7 @@
 /* When there is no checkbox the leading auto track collapses harmlessly. */
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root']
   [data-part='item']:not(:last-child) {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 @media (hover: hover) {
@@ -247,7 +247,7 @@
   padding-block: var(--ds-spacing-2, 10px);
   padding-inline: var(--ds-spacing-5, 20px);
   background: var(--ds-color-primary-subtle);
-  border: 1px solid var(--ds-color-border-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-primary);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -263,7 +263,7 @@
   padding-block: var(--ds-spacing-10, 40px);
   padding-inline: var(--ds-spacing-6, 24px);
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -308,7 +308,7 @@
 
 .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='skeleton-group'] {
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
 }

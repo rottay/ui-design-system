@@ -43,7 +43,7 @@
   padding-block: var(--ds-column-settings-header-padding-block, 10px)
     var(--ds-column-settings-header-padding-block-end, 8px);
   padding-inline: var(--ds-column-settings-header-padding-inline, 12px);
-  border-block-end: 1px solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='title'] {
   color: var(--ds-color-text-primary);
@@ -191,7 +191,7 @@
   justify-content: center;
   padding-block: var(--ds-column-settings-footer-padding-block, 8px);
   padding-inline: var(--ds-column-settings-footer-padding-inline, 12px);
-  border-block-start: 1px solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='footer'] .ds-button {
   inline-size: 100%;

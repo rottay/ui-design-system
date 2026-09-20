@@ -196,12 +196,12 @@
   font-weight: var(--ds-font-weight-semibold, 600);
 }
 .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-header-row'] [data-part='items-header-cell'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 /* Row hairlines: amounts scan down long item lists; the subtle channel keeps
    them quieter than the header rule above. (0,6,0) clears the P-48 floor. */
 .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-table'] [data-part='items-row'] [data-part='items-cell'] {
-  border-block-end: 1px solid var(--ds-color-border-subtle);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'][data-col='index'] {
   inline-size: 2.5rem;
@@ -244,7 +244,7 @@
 }
 .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='totals-divider'] {
   margin-block: var(--ds-spacing-1);
-  border-block-start: 1px solid var(--ds-color-border);
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-invoice-template.ds-engine-modern [data-part='totals-row'][data-row='total'] {
   font-size: var(--ds-font-size-lg, 1.125rem);

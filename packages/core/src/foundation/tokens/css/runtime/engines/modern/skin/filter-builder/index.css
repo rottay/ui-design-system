@@ -209,7 +209,7 @@
   }
 }
 .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][role='listbox'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option'] {

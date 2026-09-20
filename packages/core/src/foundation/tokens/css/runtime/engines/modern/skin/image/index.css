@@ -53,7 +53,7 @@
 }
 
 .rottay-image.rottay-image--modern[data-part='root'][data-bordered='true'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .rottay-image.rottay-image--modern[data-part='root'][data-shadow='true'] {
   box-shadow: var(--ds-elevation-2);

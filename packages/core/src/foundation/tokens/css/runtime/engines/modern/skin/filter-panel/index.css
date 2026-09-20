@@ -59,7 +59,7 @@
 /* ---- root: sidebar layout rail (logical, mirrors under RTL) ---- */
 .ds-pattern-filter-panel.ds-engine-modern[data-part='root'][data-sidebar='true'] {
   padding-inline-end: var(--ds-spacing-4);
-  border-inline-end: 1px solid var(--ds-color-border);
+  border-inline-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- header: title row + rhythm; the bottom gap collapses with the panel ---- */
@@ -284,22 +284,22 @@
   border-radius: var(--ds-radius-md, 8px);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='neutral'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 64%, transparent);
   color: var(--ds-color-text-secondary);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='primary'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   color: var(--ds-color-primary);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='success'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-success) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-success) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
   color: var(--ds-color-success);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='warning'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
   background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
   color: var(--ds-color-warning);
 }
@@ -309,7 +309,7 @@
   color: var(--ds-color-error);
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='info'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 10%, transparent);
   color: var(--ds-color-info, var(--ds-color-primary));
 }

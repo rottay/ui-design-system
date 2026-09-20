@@ -72,7 +72,7 @@
   padding: var(--ds-command-palette-search-padding, var(--ds-spacing-3, 12px));
   border-block-end: var(
     --ds-command-palette-search-rule,
-    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+    var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border))
   );
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='search'] > :last-child {
@@ -244,7 +244,7 @@
   font-size: var(--ds-command-palette-footer-font-size, var(--ds-font-size-xs, 12px));
   border-block-start: var(
     --ds-command-palette-footer-rule,
-    1px solid var(--ds-command-palette-border, var(--ds-color-border))
+    var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border))
   );
 }
 

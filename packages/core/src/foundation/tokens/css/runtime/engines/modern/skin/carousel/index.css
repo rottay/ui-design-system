@@ -122,7 +122,7 @@
   border-radius: 50%;
   /* Ground and edge stay: the arrow floats over arbitrary slide art and must
      stay legible. Elevation does not -- nothing rests raised except a tooltip. */
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   font-size: var(--ds-font-size-xs);

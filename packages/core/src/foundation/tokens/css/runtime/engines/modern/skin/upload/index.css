@@ -533,7 +533,7 @@
   border-radius: 50%;
 }
 .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button'] {
-  border: 1px dashed var(--ds-upload-add-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) dashed var(--ds-upload-add-border, var(--ds-color-border));
 }
 @media (hover: hover) {
   .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:where([data-state~='hovered'], :hover):not([data-disabled='true']) {
@@ -574,7 +574,7 @@
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   transition:
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
     background var(--ds-motion-feedback) var(--ds-motion-ease-out);

@@ -245,7 +245,7 @@
    and the stable `[data-part='item']` ancestor buys the 4th unit where the
    target carries only one attribute of its own. */
 .ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 .ds-form-item.ds-form-item--modern [data-part='tooltip-icon'] {
@@ -268,7 +268,7 @@
 }
 
 .ds-form-item.ds-form-item--modern[data-part='item'] [data-part='tooltip-icon'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 @media (hover: hover) {
@@ -314,7 +314,7 @@
 }
 
 .ds-form-item.ds-form-item--modern[data-part='item'] [data-part='feedback-icon'] {
-  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border: var(--ds-edge-hairline-width, 1px) solid color-mix(in srgb, currentColor 20%, transparent);
 }
 
 .ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='success'] {

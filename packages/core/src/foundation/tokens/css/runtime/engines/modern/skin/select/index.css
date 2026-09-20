@@ -357,7 +357,7 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'],
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] [data-part='loading-spinner'][data-part='loading-spinner'] {
-  border: var(--ds-select-loading-stroke, calc(var(--ds-input-loading-stroke) * 1px)) solid var(--ds-select-loading-track, var(--ds-color-border));
+  border: var(--ds-select-loading-stroke, calc(var(--ds-input-loading-stroke) * var(--ds-edge-hairline-width, 1px))) solid var(--ds-select-loading-track, var(--ds-color-border));
   border-top-color: var(--ds-select-loading-color, var(--ds-color-primary));
   border-radius: var(--ds-radius-full);
 }

@@ -134,7 +134,7 @@
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
 }
@@ -159,7 +159,7 @@
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='weekday'] {
-  border-block-end: 1px solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 
 /* ---- day cells ---- */
@@ -172,8 +172,8 @@
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   [data-part='day-cell'] {
-  border-inline-end: 1px solid var(--ds-color-border);
-  border-block-end: 1px solid var(--ds-color-border);
+  border-inline-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']

@@ -123,7 +123,7 @@
 }
 
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'][data-pattern='detail-panel'] {
-  border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
 
 /* ---- named container (W6-A): the panel root owns the width every descendant
@@ -148,7 +148,7 @@
   gap: var(--ds-detail-panel-content-gap);
   min-inline-size: 0;
   padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-detail-hero-border, var(--ds-card-header-border, var(--ds-color-border)));
   border-radius: var(--ds-card-radius, var(--ds-radius-lg));
   background: var(
@@ -200,7 +200,7 @@
   flex-shrink: 0;
   place-items: center;
   padding: 3px;
-  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-full);
   background: var(--ds-surface-card);
   box-shadow:
@@ -227,7 +227,7 @@
   gap: var(--ds-detail-panel-item-gap);
   min-block-size: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
-  border: 1px solid var(--ds-workspace-card-action-border, var(--ds-toolbar-border, var(--ds-color-border-primary)));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-action-border, var(--ds-toolbar-border, var(--ds-color-border-primary)));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: var(--ds-workspace-card-action-bg, color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
@@ -253,7 +253,7 @@
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
-  border: 1px solid var(--ds-color-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-primary);
   box-shadow: var(--ds-elevation-1);
 }
 @media (hover: hover) {
@@ -430,7 +430,7 @@
   padding-block: 4px;
   padding-inline: 9px;
   overflow-inline: auto;
-  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-full);
   background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
@@ -492,7 +492,7 @@
   display: inline-flex;
   align-items: center;
   padding: 2px 10px;
-  border: 1px solid var(--ds-color-border-secondary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-full);
   /* The engine stamps the pair only when the consumer supplies status.color;
      the governed fallback keeps the untinted pill byte-identical. */
@@ -525,7 +525,7 @@
   margin-block-end: var(--ds-detail-panel-content-gap);
   padding: var(--ds-tabs-list-padding, 3px);
   background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
-  border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border));
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-tabs-list-border, var(--ds-color-border));
   border-radius: var(--ds-tabs-list-radius, var(--ds-radius-lg));
   box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
@@ -539,7 +539,7 @@
   min-inline-size: 0;
   min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding, var(--ds-spacing-4, 16px));
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
   background: var(
@@ -591,7 +591,7 @@
     --ds-detail-section-bg,
     var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)))
   );
-  border: 1px solid
+  border: var(--ds-edge-hairline-width, 1px) solid
     var(--ds-detail-section-border, var(--ds-workspace-card-border, var(--ds-color-border)));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
   box-shadow: var(
@@ -683,7 +683,7 @@
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='footer'] {
   margin-block-start: var(--ds-detail-panel-section-gap);
   padding-block-start: var(--ds-detail-panel-content-gap);
-  border-block-start: 1px solid var(--ds-workspace-card-footer-border, var(--ds-color-border));
+  border-block-start: var(--ds-edge-hairline-width, 1px) solid var(--ds-workspace-card-footer-border, var(--ds-color-border));
 }
 
 /* ---- skeleton: the Skeleton PRIMITIVE owns shape, pulse and reduced-motion

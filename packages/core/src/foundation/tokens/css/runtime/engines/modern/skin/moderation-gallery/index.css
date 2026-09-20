@@ -43,7 +43,7 @@
 .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'] {
   position: relative;
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
   box-shadow: var(--ds-elevation-1);
@@ -252,7 +252,7 @@
   padding-block: var(--ds-spacing-2, 10px);
   padding-inline: var(--ds-spacing-5, 20px);
   background: var(--ds-color-primary-subtle);
-  border: 1px solid var(--ds-color-border-primary);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-primary);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -268,7 +268,7 @@
   padding-block: var(--ds-spacing-10, 40px);
   padding-inline: var(--ds-spacing-6, 24px);
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
 }
 
@@ -285,7 +285,7 @@
 
 .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='skeleton-card'] {
   background: var(--ds-surface-card);
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
 }

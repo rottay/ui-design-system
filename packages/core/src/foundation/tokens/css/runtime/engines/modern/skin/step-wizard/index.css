@@ -168,7 +168,7 @@
   padding-block-start: var(--ds-spacing-5, 20px);
 }
 .ds-pattern-step-wizard.ds-engine-modern[data-part='root'] [data-part='nav-bar'] {
-  border-top: 1px solid var(--ds-color-border);
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
 }
 .ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__action-dock [data-part='nav-bar'] {
   margin-block-start: 0;

@@ -259,7 +259,7 @@
   > [data-part='column-body']
   > [data-part='card-list']
   > [data-part='card'] {
-  border: 1px solid var(--ds-color-border);
+  border: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
