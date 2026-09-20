@@ -9,7 +9,9 @@
  * one implementation, no per-engine siblings, because a separator's semantics
  * and keyboard operation do not vary by engine. Geometry, cursor, hit
  * expansion and paint stay with the owning skin via `className` and the
- * `anatomy` data attributes.
+ * `anatomy` data attributes. It does decide one thing for them: the
+ * hover/press/focus triad, stamped as `data-state` on the node it renders,
+ * because it is the only tier that holds the pointer and the tab stop.
  *
  * It lives under `primitives/foundation/` rather than beside Splitter in
  * `primitives/layout/`: peer component categories must not depend sideways on
@@ -40,8 +42,10 @@
  */
 'use client';
 
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { useOptionalDirection } from '@/infrastructure/runtime/i18n';
 
 import {
@@ -135,6 +139,70 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
       [arrows, direction, onAdjust, orientation]
     );
 
+    // F-37: the hover / press / focus triad every owner's skin paints through
+    // `:is([data-state~='x'], :x)` is decided HERE, once. The owners hand down
+    // `anatomy` and a class; this primitive is the one that holds the pointer
+    // and the tab stop, so it is the only place that can answer when the edge
+    // is hovered or pressed.
+    //
+    // The kernel is deliberately not gated on `operable`. That flag says
+    // "pointer-only hit area", not "inert": a widget-board corner is
+    // pointer-only and fully painted, while a locked splitter gutter is
+    // refused by its own skin through `:not([data-resizable='false'])`. The
+    // twin must see exactly what the pseudo-class arm sees, and the owner's
+    // own vocabulary keeps its authority.
+    const { state, handlers: kernel } = useInteractionState();
+
+    // React's focus events are `focusin`/`focusout`, so focus landing on a
+    // decoration inside the handle would otherwise light the handle's own
+    // ring -- something `:focus-visible`, the arm this mirrors, never does.
+    const handleFocus = useCallback(
+      (event: React.FocusEvent<HTMLDivElement>) => {
+        if (event.target !== event.currentTarget) return;
+        kernel.onFocus(event);
+      },
+      [kernel]
+    );
+
+    const handleBlur = useCallback(
+      (event: React.FocusEvent<HTMLDivElement>) => {
+        if (event.target !== event.currentTarget) return;
+        kernel.onBlur(event);
+      },
+      [kernel]
+    );
+
+    // The owner's pointerdown begins the drag and calls `preventDefault()` to
+    // stop text selection -- which is exactly the signal `composeHandlers`
+    // reads as "stop the chain". The kernel therefore runs FIRST: the press is
+    // decided before the drag starts, and the explicit `focus()` an owner does
+    // next arrives with the pointer already known to be down, so the separator
+    // takes no focus ring from a mouse drag.
+    const handlePointerDown = useMemo(
+      () =>
+        composeHandlers<React.PointerEvent<HTMLDivElement>>(
+          kernel.onPointerDown,
+          onPointerDown
+        ),
+      [kernel, onPointerDown]
+    );
+
+    // Spread BEFORE `anatomy`, never after: the contract is that anatomy
+    // attributes reach the DOM unchanged, so an owner that decides this edge's
+    // state itself keeps the last word on `data-state`.
+    const stateProps = {
+      ...partAttributes('resize-handle', state),
+      onPointerEnter: kernel.onPointerEnter,
+      onPointerLeave: kernel.onPointerLeave,
+      onPointerDown: handlePointerDown,
+      onPointerUp: kernel.onPointerUp,
+      // Pointer capture stops the boundary events, so a gesture the browser
+      // takes over mid-drag would otherwise latch the press with no leave.
+      onPointerCancel: kernel.onPointerUp,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
+    };
+
     // A pointer-only hit area carries no role and no tab stop: duplicating the
     // separator semantics behind `aria-hidden` would only add noise to the
     // accessibility tree.
@@ -147,7 +215,7 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
           style={style}
           aria-hidden
           tabIndex={-1}
-          onPointerDown={onPointerDown}
+          {...stateProps}
           {...anatomy}
         >
           {children}
@@ -170,7 +238,7 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
         aria-keyshortcuts={keyShortcuts}
         className={className}
         style={style}
-        onPointerDown={onPointerDown}
+        {...stateProps}
         onKeyDown={handleKeyDown}
         {...anatomy}
       >

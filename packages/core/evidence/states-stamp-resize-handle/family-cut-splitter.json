@@ -1,0 +1,228 @@
+{
+  "before": {
+    "denominators": {
+      "skinFiles": 1,
+      "sourceFiles": 3,
+      "channelsRead": 25,
+      "classTokens": 2,
+      "partsStamped": 3,
+      "partsConsumed": 3
+    },
+    "blocking": {
+      "inlineStyleViolations": [],
+      "visualLiterals": [],
+      "antReads": [],
+      "owners": 1,
+      "stampsAnatomy": true,
+      "skinReadsAnatomy": true,
+      "variantContract": true,
+      "stateContract": false,
+      "stateGoverned": false,
+      "a11yProbes": 3,
+      "a11yAssertions": 42,
+      "unmatchedPinnedSkins": [],
+      "dndKernelDeclared": false,
+      "dndKernelWired": false,
+      "adaptSlot": [],
+      "skeleton": {
+        "renderer": true,
+        "invalidRoles": [],
+        "handMade": [],
+        "partsWithoutRole": []
+      }
+    },
+    "ratchets": {
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 3,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0
+    },
+    "statesConsumedNotStamped": [
+      "focus-visible",
+      "hovered",
+      "pressed"
+    ],
+    "stateComposedFrom": [],
+    "sources": [
+      "src/components/primitives/layout/splitter/contracts/index.ts",
+      "src/components/primitives/layout/splitter/engines/modern/index.tsx",
+      "src/components/primitives/layout/splitter/index.ts"
+    ]
+  },
+  "after": {
+    "denominators": {
+      "skinFiles": 1,
+      "sourceFiles": 3,
+      "channelsRead": 25,
+      "classTokens": 2,
+      "partsStamped": 3,
+      "partsConsumed": 3
+    },
+    "blocking": {
+      "inlineStyleViolations": [],
+      "visualLiterals": [],
+      "antReads": [],
+      "owners": 1,
+      "stampsAnatomy": true,
+      "skinReadsAnatomy": true,
+      "variantContract": true,
+      "stateContract": false,
+      "stateGoverned": false,
+      "a11yProbes": 3,
+      "a11yAssertions": 42,
+      "unmatchedPinnedSkins": [],
+      "dndKernelDeclared": false,
+      "dndKernelWired": false,
+      "adaptSlot": [],
+      "skeleton": {
+        "renderer": true,
+        "invalidRoles": [],
+        "handMade": [],
+        "partsWithoutRole": []
+      }
+    },
+    "ratchets": {
+      "readWithoutProducer": 0,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 0,
+      "statesConsumedNotStamped": 3,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0
+    },
+    "statesConsumedNotStamped": [
+      "focus-visible",
+      "hovered",
+      "pressed"
+    ],
+    "stateComposedFrom": [],
+    "sources": [
+      "src/components/primitives/layout/splitter/contracts/index.ts",
+      "src/components/primitives/layout/splitter/engines/modern/index.tsx",
+      "src/components/primitives/layout/splitter/index.ts"
+    ]
+  },
+  "widgetBoardBefore": {
+    "denominators": {
+      "skinFiles": 2,
+      "sourceFiles": 6,
+      "channelsRead": 66,
+      "classTokens": 1,
+      "partsStamped": 30,
+      "partsConsumed": 31
+    },
+    "blocking": {
+      "inlineStyleViolations": [],
+      "visualLiterals": [],
+      "antReads": [],
+      "owners": 1,
+      "stampsAnatomy": true,
+      "skinReadsAnatomy": true,
+      "variantContract": true,
+      "stateContract": true,
+      "stateGoverned": true,
+      "a11yProbes": 2,
+      "a11yAssertions": 15,
+      "unmatchedPinnedSkins": [],
+      "dndKernelDeclared": false,
+      "dndKernelWired": false,
+      "adaptSlot": [],
+      "skeleton": {
+        "renderer": true,
+        "invalidRoles": [],
+        "handMade": [],
+        "partsWithoutRole": []
+      }
+    },
+    "ratchets": {
+      "readWithoutProducer": 5,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0
+    },
+    "statesConsumedNotStamped": [],
+    "stateComposedFrom": [],
+    "sources": [
+      "src/components/patterns/data/widget-board/contracts/index.ts",
+      "src/components/patterns/data/widget-board/engines/foundation/index.tsx",
+      "src/components/patterns/data/widget-board/engines/modern/index.tsx",
+      "src/components/patterns/data/widget-board/index.ts",
+      "src/components/patterns/data/widget-board/runtime/adaptive/policy/index.ts",
+      "src/components/patterns/data/widget-board/runtime/adaptive/react/index.ts"
+    ]
+  },
+  "widgetBoardAfter": {
+    "denominators": {
+      "skinFiles": 2,
+      "sourceFiles": 6,
+      "channelsRead": 66,
+      "classTokens": 1,
+      "partsStamped": 30,
+      "partsConsumed": 31
+    },
+    "blocking": {
+      "inlineStyleViolations": [],
+      "visualLiterals": [],
+      "antReads": [],
+      "owners": 1,
+      "stampsAnatomy": true,
+      "skinReadsAnatomy": true,
+      "variantContract": true,
+      "stateContract": true,
+      "stateGoverned": true,
+      "a11yProbes": 2,
+      "a11yAssertions": 15,
+      "unmatchedPinnedSkins": [],
+      "dndKernelDeclared": false,
+      "dndKernelWired": false,
+      "adaptSlot": [],
+      "skeleton": {
+        "renderer": true,
+        "invalidRoles": [],
+        "handMade": [],
+        "partsWithoutRole": []
+      }
+    },
+    "ratchets": {
+      "readWithoutProducer": 5,
+      "classVocabularies": 1,
+      "legacyNamespaceClasses": 0,
+      "partsStampedNotConsumed": 0,
+      "partsConsumedNotStamped": 1,
+      "statesConsumedNotStamped": 0,
+      "unpairedStatePseudoSelectors": 0,
+      "colorLiteralsInSkin": 0,
+      "fanOutUnreached": 0,
+      "dndTransportOwners": 0,
+      "dndDropZoneOwners": 0
+    },
+    "statesConsumedNotStamped": [],
+    "stateComposedFrom": [],
+    "sources": [
+      "src/components/patterns/data/widget-board/contracts/index.ts",
+      "src/components/patterns/data/widget-board/engines/foundation/index.tsx",
+      "src/components/patterns/data/widget-board/engines/modern/index.tsx",
+      "src/components/patterns/data/widget-board/index.ts",
+      "src/components/patterns/data/widget-board/runtime/adaptive/policy/index.ts",
+      "src/components/patterns/data/widget-board/runtime/adaptive/react/index.ts"
+    ]
+  }
+}

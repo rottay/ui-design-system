@@ -40,6 +40,10 @@ export type ResizeHandleArrowPolicy = 'position' | 'size';
  * Anatomy attributes stamped verbatim on the handle. The skin owns the
  * vocabulary (`data-part`, `data-edge`, `data-dragging`, …); the primitive
  * only guarantees they reach the DOM unchanged.
+ *
+ * `data-part` and `data-state` are the two keys the handle also stamps
+ * itself. Verbatim still wins: an owner that decides this edge's interaction
+ * state somewhere else keeps the last word on both.
  */
 export type ResizeHandleAnatomy = Readonly<
   Record<`data-${string}`, string | undefined>
