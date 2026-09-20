@@ -56,11 +56,20 @@ import {
   UNMOUNTABLE_FAMILIES,
   UNSETTLED_FAMILIES,
   WITNESSED_CONTROLS,
+  AS_RENDERED_ROOT_STAMPS,
+  asRenderedReport,
+  asRenderedRosterFailures,
   differsOnAxis,
   effectiveVariables,
   evaluate,
   familyElement,
+  familyElementPart,
   familyElements,
+  familyOwnsBlock,
+  hasOnlyStructuralHas,
+  logicalEdgeLonghands,
+  withAsRenderedStamps,
+  withoutStructuralHas,
   isSingleElement,
   VACUITY_PERMITTED_CONTROLS,
   NEGATIVE_CONTROLS,
@@ -1402,6 +1411,252 @@ describe('axis-difference — the root is the compound the skin requires, not th
  * BLIND and RED read the same 0 and mean opposite things, which is the whole
  * reason the mount map is published with the run.
  */
+/**
+ * THE REACH REPAIR, and the three ways the probe was reading a node the fleet
+ * does not render or refusing to read one it does.
+ *
+ * The rhythm census (`evidence/rhythm-wiring-census/`) enumerated a 35-family
+ * residual and found 18 of them were the INSTRUMENT, not the fleet: nine whose
+ * root is mounted without an attribute the default render always stamps, two
+ * whose moving paint sits on a node the scene builds and no axis is allowed to
+ * read, and seven whose reaching rule is written without an ancestor. These
+ * cases pin each of the three repairs from both ends -- the law, offline, and
+ * the BLIND/SEEING/RED reading in a browser, because only the last can tell a
+ * repair apart from a number that went up.
+ */
+describe('axis-difference — the root is mounted AS THE DEFAULT RENDER stamps it', () => {
+  const element = Object.freeze({
+    classes: ['ds-drill'],
+    attributes: { 'data-part': 'root', 'data-size': '' },
+    selector: ".ds-drill[data-part='root'][data-size='']",
+  });
+
+  it('replaces the value the mount law read off a bare attribute, which is the kbd case', () => {
+    const stamped = withAsRenderedStamps(element, [{ attribute: 'data-size', value: 'md' }]);
+    assert.equal(stamped.attributes['data-size'], 'md');
+    assert.equal(stamped.selector, ".ds-drill[data-part='root'][data-size='md']");
+  });
+
+  it('adds an attribute the mount law dropped, and leaves the classes alone', () => {
+    const stamped = withAsRenderedStamps(element, [{ attribute: 'data-structure', value: 'record' }]);
+    assert.deepEqual(stamped.classes, ['ds-drill']);
+    assert.equal(stamped.attributes['data-structure'], 'record');
+  });
+
+  it('a row that names a STATE is refused, because the scene stamps state and a root born in one measures the fabrication', () => {
+    const stamped = withAsRenderedStamps(element, [{ attribute: 'data-state', value: 'error' }]);
+    assert.equal(stamped.attributes['data-state'], undefined);
+  });
+
+  it('a family with no row is returned unchanged, and so is a null element', () => {
+    assert.equal(withAsRenderedStamps(element, []), element);
+    assert.equal(withAsRenderedStamps(null, [{ attribute: 'data-size', value: 'md' }]), null);
+  });
+
+  it('THE STALENESS DOOR: every shipped row still matches the tree it was read off', () => {
+    // A FLOOR, not a comment: a roster that silently shrinks is a numerator
+    // that silently shrinks, and this door is the only thing standing under it.
+    assert.ok(Object.keys(AS_RENDERED_ROOT_STAMPS).length >= 10, 'the roster is the mount source; an empty one proves nothing');
+    assert.deepEqual(asRenderedRosterFailures(ROOT), []);
+  });
+
+  it('MUTANT: a row whose stamp, default, attribute or file has moved is named, one failure each', () => {
+    const failures = asRenderedRosterFailures(ROOT, {
+      kbd: [{ attribute: 'data-size', value: 'md', source: 'src/nowhere/index.tsx', stamp: 'x', resolves: 'y' }],
+    });
+    assert.ok(failures.some((line) => line.includes('does not exist')), failures.join(' | '));
+    const moved = asRenderedRosterFailures(ROOT, {
+      kbd: [{
+        attribute: 'data-size',
+        value: 'md',
+        source: 'src/components/primitives/display/kbd/engines/modern/index.tsx',
+        stamp: 'data-size={THE_SIZE_THAT_IS_NOT_THERE}',
+        resolves: 'size = KBD_DEFAULTS.size,',
+      }],
+    });
+    assert.ok(moved.some((line) => line.includes('no longer carries the stamp')), moved.join(' | '));
+    const ungated = asRenderedRosterFailures(ROOT, {
+      kbd: [{
+        attribute: 'data-nobody-gates-on-this',
+        value: 'md',
+        source: 'src/components/primitives/display/kbd/engines/modern/index.tsx',
+        stamp: 'data-size={size}',
+        resolves: 'size = KBD_DEFAULTS.size,',
+      }],
+    });
+    assert.ok(ungated.some((line) => line.includes('no longer gates on this attribute')), ungated.join(' | '));
+  });
+
+  it('THE ROW THAT ADDS NO PAINT: the value is the DEFAULT, not the one that makes a number move', () => {
+    // `anchor` paints a rhythm `gap` only under `[data-direction='horizontal']`
+    // and its own default is `vertical`. A roster that chose the moving value
+    // would be mounting a configuration, which is the law this instrument
+    // refuses for a prop gate.
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS.anchor.map((row) => [row.attribute, row.value]), [['data-direction', 'vertical']]);
+    const anchor = familyElements(ROOT, ['anchor']).get('anchor');
+    assert.equal(anchor.attributes['data-direction'], 'vertical');
+  });
+
+  it('THE LINE LAW 1 DRAWS runs per FAMILY, not per attribute name: grid stamps the rung, flex does not', () => {
+    // Both families gate their dial-scaled `gap` on `[data-gap-preset]`. Grid's
+    // root writes `gridGapPresetSpelling(adaptation.gap ?? GRID_DEFAULTS.gap)`
+    // on every render, so the rung is the default render; Flex writes the same
+    // attribute only inside `if (props.gap !== undefined)`, so a row for it
+    // would mount a configuration. The roster carries exactly one of them.
+    assert.deepEqual(AS_RENDERED_ROOT_STAMPS.grid.map((row) => [row.attribute, row.value]), [['data-gap-preset', 'md']]);
+    assert.equal(AS_RENDERED_ROOT_STAMPS.flex, undefined);
+    const elements = familyElements(ROOT, ['grid', 'flex']);
+    assert.equal(elements.get('grid').attributes['data-gap-preset'], 'md');
+    assert.equal(elements.get('flex').attributes['data-gap-preset'], undefined);
+    // And the row is under the same door as every other: a moved stamp fails named.
+    const moved = asRenderedRosterFailures(ROOT, {
+      grid: [{
+        ...AS_RENDERED_ROOT_STAMPS.grid[0],
+        stamp: '"data-gap-preset": THE_SPELLING_THAT_IS_NOT_THERE(',
+      }],
+    });
+    assert.ok(moved.some((line) => line.includes('no longer carries the stamp')), moved.join(' | '));
+    const revalued = asRenderedRosterFailures(ROOT, {
+      grid: [{ ...AS_RENDERED_ROOT_STAMPS.grid[0], resolves: 'adaptation.gap ?? THE_DEFAULT_THAT_MOVED' }],
+    });
+    assert.ok(revalued.some((line) => line.includes('no longer carries the resolves')), revalued.join(' | '));
+  });
+
+  it('THE CORPUS: the stamps change the NODE and never the mountable set, so every denominator is the one the pre-roster run published', () => {
+    const before = familyElements(ROOT, null, { asRendered: false });
+    const after = familyElements(ROOT, null, { asRendered: true });
+    const nulls = (map) => [...map].filter(([, value]) => value === null).map(([family]) => family).sort();
+    assert.deepEqual(nulls(after), nulls(before));
+    assert.equal(after.size, before.size);
+    const changed = [...after].filter(([family, value]) => value?.selector !== before.get(family)?.selector).map(([family]) => family).sort();
+    assert.deepEqual(changed, Object.keys(AS_RENDERED_ROOT_STAMPS).sort());
+  });
+
+  it('the run publishes which families it mounted as rendered, and the opt-out says so', () => {
+    const elements = familyElements(ROOT, null, { asRendered: true });
+    const report = asRenderedReport(elements);
+    assert.equal(report.applied, true);
+    assert.equal(report.families, Object.keys(AS_RENDERED_ROOT_STAMPS).length);
+    assert.deepEqual(report.map.kbd, { 'data-size': 'md' });
+    assert.equal(asRenderedReport(elements, { applied: false }).applied, false);
+  });
+});
+
+describe('axis-difference — the part vocabulary reaches the LOGICAL edge longhands', () => {
+  it('expands the block/inline authored names into the edges a browser hands back as physical ones', () => {
+    assert.deepEqual(logicalEdgeLonghands(['margin-inline', 'padding-block', 'border-inline-width', 'gap']), [
+      'margin-inline-start', 'margin-inline-end',
+      'padding-block-start', 'padding-block-end',
+      'border-inline-start-width', 'border-inline-end-width',
+    ]);
+  });
+
+  it('THE DENOMINATOR IS NOT WIDENED: the population vocabulary is untouched by the expansion', () => {
+    for (const axis of AXIS_IDS) {
+      for (const property of logicalEdgeLonghands(AXES[axis].authored)) {
+        assert.ok(!AXES[axis].authored.includes(property), `${property} must not enter the population vocabulary`);
+      }
+    }
+  });
+
+  it('a rule that authors only a logical edge is a part source, and the same rule is not one under the opt-out', () => {
+    const element = Object.freeze({ classes: ['ds-drill'], attributes: { 'data-part': 'root' } });
+    const css = ".ds-drill[data-part='root'] [data-part='nested'] { margin-inline-start: var(--ds-spacing-4); }";
+    assert.deepEqual(familyParts(css, element, ['rhythm']).parts.map((part) => part.axes), [['rhythm']]);
+    assert.deepEqual(familyParts(css, element, ['rhythm'], { partReach: false }).parts, []);
+  });
+});
+
+describe('axis-difference — a `:has()` is a condition on the SCENE, and it stamps an axis without mounting a node', () => {
+  const element = Object.freeze({ classes: ['ds-drill'], attributes: { 'data-part': 'root' } });
+
+  it('reads a selector with its `:has()` removed, parentheses balanced', () => {
+    assert.equal(withoutStructuralHas(".ds-a:has(> [data-part='x']) [data-part='y']"), ".ds-a [data-part='y']");
+    assert.equal(withoutStructuralHas('.ds-a:has(:is(.b, .c)) .d'), '.ds-a .d');
+  });
+
+  it('is structural ONLY when no other pseudo rides with it, because this probe never enters an interaction', () => {
+    assert.equal(hasOnlyStructuralHas(".ds-a:has([data-part='x']) [data-part='y']"), true);
+    assert.equal(hasOnlyStructuralHas(".ds-a:has([data-part='x']):hover [data-part='y']"), false);
+    assert.equal(hasOnlyStructuralHas(".ds-a::after"), false);
+    assert.equal(hasOnlyStructuralHas(".ds-a [data-part='y']"), false);
+  });
+
+  it('adds the axis to a node the first pass BUILT, and mounts no node of its own', () => {
+    const css = `.ds-drill[data-part='root'] > [data-part='wrap'] > [data-part='button'] { padding: 2px; }
+      .ds-drill[data-part='root'] > [data-part='wrap']:has(> [data-part='button']) { gap: var(--ds-spacing-2); }`;
+    const record = familyParts(css, element, ['rhythm']);
+    const ids = record.parts.map((part) => part.id);
+    assert.equal(ids.length, 2, 'the `:has()` rule must reuse the chain the first pass built, never add a third node');
+    assert.ok(ids.some((id) => id.endsWith("|data-part=wrap")), ids.join(' / '));
+    assert.equal(record.rejected['has-node-not-in-scene'], undefined);
+    assert.ok(partTreeHtml(record.parts).includes('<div data-part="wrap" data-axis-part="rhythm">'));
+  });
+
+  it('FAIL-CLOSED: a `:has()` rule whose node the scene never built is refused and named, not mounted', () => {
+    const css = ".ds-drill[data-part='root'] > [data-part='ghost']:has(> [data-part='x']) { gap: var(--ds-spacing-2); }";
+    const record = familyParts(css, element, ['rhythm']);
+    assert.deepEqual(record.parts, []);
+    assert.equal(record.rejected['has-node-not-in-scene'], 1);
+  });
+
+  it('and the opt-out reproduces the refusal the pre-lot law published', () => {
+    const css = `.ds-drill[data-part='root'] > [data-part='wrap'] > [data-part='button'] { padding: 2px; }
+      .ds-drill[data-part='root'] > [data-part='wrap']:has(> [data-part='button']) { gap: var(--ds-spacing-2); }`;
+    const record = familyParts(css, element, ['rhythm'], { partReach: false });
+    assert.equal(record.parts.length, 1);
+    assert.equal(record.rejected['part-pseudo'], 1);
+  });
+});
+
+describe("axis-difference — a family's own BEM element is the descendant it is, not a root nobody mounts", () => {
+  const element = Object.freeze({ classes: ['rt-drill'], attributes: { 'data-part': 'root' } });
+
+  it('owns a block under every prefix the corpus writes it with', () => {
+    assert.equal(familyOwnsBlock('rt-terminal-block', 'terminal-block'), true);
+    assert.equal(familyOwnsBlock('rottay-bottom-tab-bar', 'bottom-tab-bar'), true);
+    assert.equal(familyOwnsBlock('ds-feature-workspace-frame', 'feature-workspace-frame'), true);
+    assert.equal(familyOwnsBlock('ds-pattern-feature-workspace-frame', 'feature-workspace-frame'), true);
+    assert.equal(familyOwnsBlock('ds-tooltip-bubble', 'tooltip'), false);
+    assert.equal(familyOwnsBlock('ds-drill', null), false);
+  });
+
+  it('admits the element class as a one-node chain under the root', () => {
+    const part = familyElementPart(".rt-drill__body[data-part='body']", 'drill', element);
+    assert.deepEqual(part.classes, ['rt-drill__body']);
+    assert.deepEqual(part.attributes, { 'data-part': 'body' });
+  });
+
+  it('refuses a foreign block, a variant gate and the node the family is already mounted as', () => {
+    // `.ds-auto-complete-panel`, `.ds-tooltip-bubble`, `.ds-saved-views-menu-panel`:
+    // a separate block, and in every measured case a portal the default render
+    // does not mount until an interaction opens it.
+    assert.equal(familyElementPart('.rt-drill-panel', 'drill', element), null);
+    assert.equal(familyElementPart(".rt-drill__body[data-variant='x']", 'drill', element), null);
+    assert.equal(familyElementPart(".rt-drill[data-part='root']", 'drill', element), null);
+    assert.equal(familyElementPart(".rt-drill__body[data-part='body']", null, element), null);
+  });
+
+  it('is mounted as a part with the axes its OWN rule wrote, and not at all under the opt-out', () => {
+    const css = ".rt-drill__body { gap: var(--ds-spacing-2); }\n.rt-drill__body { border-radius: 4px; }";
+    const record = familyParts(css, element, ['rhythm', 'shape'], { family: 'drill' });
+    assert.deepEqual(record.parts.map((part) => part.axes), [['rhythm', 'shape']]);
+    assert.deepEqual(familyParts(css, element, ['rhythm', 'shape'], { family: 'drill', partReach: false }).parts, []);
+  });
+
+  it('THE CORPUS: the reach repair leaves the unmountable pin and what it costs exactly where they were', () => {
+    const elements = familyElements(ROOT, null, { asRendered: true });
+    const before = familyAxisParts(ROOT, null, elements, { partReach: false });
+    const after = familyAxisParts(ROOT, null, elements, { partReach: true });
+    const partsOf = (map) => [...map].reduce((total, [, record]) => total + record.parts.length, 0);
+    assert.ok(partsOf(after) > partsOf(before), 'the repair must reach paint the pre-lot law did not');
+    assert.deepEqual(unmountablePartCandidates(ROOT), [...unmountablePartCandidates(ROOT)].sort());
+    for (const family of UNMOUNTABLE_FAMILIES) {
+      assert.equal(after.get(family)?.parts.length ?? 0, 0, `${family} is pinned unmountable and may not gain a part`);
+    }
+  });
+});
+
 describe('axis-difference BROWSER drill — a mounted part that STOPS differing is caught', { skip: browserReason }, () => {
   const ARM_A = { '--ds-radius-md': '4px', '--ds-state-press-scale': '0.9' };
   const ARM_B = { '--ds-radius-md': '16px', '--ds-state-press-scale': '0.7' };
@@ -1614,6 +1869,160 @@ describe('axis-difference BROWSER drill — a root that STOPS differing is caugh
       await close();
     }
     assert.equal(verdict, null);
+  }, 120_000);
+});
+
+/**
+ * THE RED ARMS OF THE REACH REPAIR, one per mechanism, each driven through one
+ * real browser over one page with one pair of arms.
+ *
+ * Proving the rhythm numerator went up proves nothing: an instrument that
+ * mounted more nodes would do exactly that. What has to be true is the
+ * opposite reading -- a node that is now mounted, now read, and STOPS
+ * consuming the dial must come back as a non-mover and fail the axis.
+ *
+ *   BLIND  the pre-repair reading        -> no difference (the defect)
+ *   SEEING the repaired reading          -> the difference, on the node
+ *   RED    the repaired reading, literal -> no difference, and the axis FAILS
+ *
+ * BLIND and RED read the same 0 and mean opposite things, which is why the
+ * root map, the as-rendered map and the part map are all published with a run.
+ */
+describe('axis-difference BROWSER drill — the reach repair, and every node it reaches that STOPS differing', { skip: browserReason }, () => {
+  const ARM_A = { '--ds-spacing-2': '4px' };
+  const ARM_B = { '--ds-spacing-2': '16px' };
+  const axisOf = axisByProperty();
+
+  /** One family measured on whichever reading is asked for, exactly as `run` measures a cell. */
+  const measure = async (page, css, { element, partMounts }) => {
+    await page.setContent(
+      sceneHtml({ css, vertical: 'bithire', theme: 'light', elements: new Map([['drill', element]]), partMounts }),
+      { waitUntil: 'load' },
+    );
+    const properties = AXES.rhythm.computed;
+    const before = await measureCell({ page, variables: ARM_A, properties, axisOf });
+    const after = await measureCell({ page, variables: ARM_B, properties, axisOf });
+    return differsOnAxis('rhythm', before, after, 'drill');
+  };
+
+  const axisFails = (property) => {
+    const only = cell({
+      axis: 'rhythm', scenario: 'rhythm', denominator: 1,
+      moved: property === null ? 0 : 1, percent: property === null ? 0 : 100,
+      movedFamilies: property === null ? [] : [{ family: 'drill', property }],
+      movedIds: property === null ? [] : ['drill'],
+    });
+    return evaluate(result([only]), { threshold: 80 }).some((line) => line.startsWith('rhythm: 0.0 % < 80 %'));
+  };
+
+  it('AS RENDERED: reads the size rung the default render carries, reads nothing on the bare root, and nothing again when the rung goes literal', async () => {
+    // `kbd` in miniature: every rhythm rule the family has is behind a
+    // `[data-size]` rung, and the mount law reads the bare attribute as `''`.
+    const live = ".rottay-drill[data-part='root'][data-size] { display: block; }\n"
+      + ".rottay-drill[data-part='root'][data-size='md'] { padding-inline: var(--ds-spacing-2); }";
+    const dead = ".rottay-drill[data-part='root'][data-size] { display: block; }\n"
+      + ".rottay-drill[data-part='root'][data-size='md'] { padding-inline: 7px; }";
+    const bare = (css) => familyElement(css);
+    const rendered = (css) => withAsRenderedStamps(bare(css), [{ attribute: 'data-size', value: 'md' }]);
+    const { browser, close } = await launchBrowser();
+    let blind;
+    let seeing;
+    let red;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      assert.equal(bare(live).attributes['data-size'], '', 'the defect: the mount law reads the bare rung as an empty value');
+      blind = await measure(page, live, { element: bare(live), partMounts: null });
+      seeing = await measure(page, live, { element: rendered(live), partMounts: null });
+      red = await measure(page, dead, { element: rendered(dead), partMounts: null });
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.equal(blind, null, 'the unstamped root must be blind — otherwise this drill proves nothing');
+    assert.equal(seeing, 'padding-right', 'the default-render stamp must carry the dial to the page');
+    assert.equal(red, null, 'a stamped root that stopped consuming the dial must NOT keep reporting a difference');
+    assert.ok(axisFails(red), 'the loss must be a verdict, not a quieter number');
+  }, 120_000);
+
+  it('BEM ELEMENT: reads the element the family renders inside its root, reads nothing when it is not mounted, and nothing again when it goes literal', async () => {
+    // `terminal-block` in miniature: the reaching rule is written WITHOUT an
+    // ancestor, so the pre-lot law never built the node at all.
+    const root = ".rt-drill[data-part='root'] { display: block; }";
+    const live = `${root}\n.rt-drill__body { gap: var(--ds-spacing-2); }`;
+    const dead = `${root}\n.rt-drill__body { gap: 7px; }`;
+    const element = familyElement(live);
+    const mounted = (css, reach) => new Map([['drill', familyParts(css, element, ['rhythm'], { family: 'drill', partReach: reach })]]);
+    const { browser, close } = await launchBrowser();
+    let blind;
+    let seeing;
+    let red;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      assert.equal(mounted(live, false).get('drill').parts.length, 0, 'the defect: the pre-lot law builds no node for this rule');
+      blind = await measure(page, live, { element, partMounts: mounted(live, false) });
+      seeing = await measure(page, live, { element, partMounts: mounted(live, true) });
+      red = await measure(page, dead, { element, partMounts: mounted(dead, true) });
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.equal(blind, null, 'the unmounted element must be blind');
+    assert.equal(seeing, 'row-gap', 'the grafted element must carry the dial to the page');
+    assert.equal(red, null, 'a mounted element that stopped consuming the dial must NOT keep reporting a difference');
+    assert.ok(axisFails(red), 'the loss must be a verdict, not a quieter number');
+  }, 120_000);
+
+  it('`:has()`: reads the node the scene already built, reads nothing without the stamp, and nothing again when the rule goes literal', async () => {
+    // `qrcode` in miniature: the moving `gap` is declared on an INTERMEDIATE
+    // node of a chain the scene builds, under a condition on the scene itself.
+    const root = ".ds-drill[data-part='root'] { display: block; }";
+    const chain = ".ds-drill[data-part='root'] > [data-part='wrap'] > [data-part='text'] { padding: 1px; }";
+    const live = `${root}\n${chain}\n.ds-drill[data-part='root'] > [data-part='wrap']:has(> [data-part='text']) { gap: var(--ds-spacing-2); }`;
+    const dead = `${root}\n${chain}\n.ds-drill[data-part='root'] > [data-part='wrap']:has(> [data-part='text']) { gap: 7px; }`;
+    const element = familyElement(live);
+    const mounted = (css, reach) => new Map([['drill', familyParts(css, element, ['rhythm'], { family: 'drill', partReach: reach })]]);
+    const { browser, close } = await launchBrowser();
+    let blind;
+    let seeing;
+    let red;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      assert.equal(mounted(live, false).get('drill').rejected['part-pseudo'], 1, 'the defect: the reaching rule is refused outright');
+      blind = await measure(page, live, { element, partMounts: mounted(live, false) });
+      seeing = await measure(page, live, { element, partMounts: mounted(live, true) });
+      red = await measure(page, dead, { element, partMounts: mounted(dead, true) });
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.equal(blind, null, 'an intermediate node no axis stamps must be blind');
+    assert.equal(seeing, 'row-gap', 'the stamped intermediate must carry the dial to the page');
+    assert.equal(red, null, 'a stamped node that stopped consuming the dial must NOT keep reporting a difference');
+    assert.ok(axisFails(red), 'the loss must be a verdict, not a quieter number');
+  }, 120_000);
+
+  it('FAIL-CLOSED: a family whose rhythm paint is a literal stays a NON-MOVER on every node the repair reaches', async () => {
+    // The negative control of the whole lot, and it is the reading two of the
+    // census families actually give once they are reached: `bottom-tab-bar`
+    // (6px/2px/10px private channels) and `terminal-block` (bare rem) are
+    // MOUNTED by this repair and still do not move, because their paint is a
+    // literal and not a dial.
+    const css = ".rt-drill[data-part='root'] { display: block; padding: 3px; }\n"
+      + '.rt-drill__body { gap: 0.375rem; padding: 1rem 1.25rem; }\n'
+      + ".rt-drill[data-part='root'][data-size='md'] { padding-inline: 6px; }";
+    const element = withAsRenderedStamps(familyElement(css), [{ attribute: 'data-size', value: 'md' }]);
+    const partMounts = new Map([['drill', familyParts(css, element, ['rhythm'], { family: 'drill' })]]);
+    assert.ok(partMounts.get('drill').parts.length > 0, 'the drill is vacuous unless the literal node is actually mounted');
+    const { browser, close } = await launchBrowser();
+    let reading;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      reading = await measure(page, css, { element, partMounts });
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.equal(reading, null, 'a literal must read 0 however many nodes the repair reaches');
   }, 120_000);
 });
 

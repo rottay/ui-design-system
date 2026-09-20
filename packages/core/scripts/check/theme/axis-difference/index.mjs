@@ -58,6 +58,21 @@
  * `familyAxisParts` below; the map is published with every run and
  * `--no-part-mounts` reproduces the older, narrower reading on the same tree.
  *
+ * AND THE REACH OF THAT SCENE WAS STILL SHORT IN THREE PLACES, each measured
+ * by the rhythm census (`evidence/rhythm-wiring-census/`) and each repaired
+ * here. The ROOT was mounted without the attributes the DEFAULT RENDER always
+ * stamps, so paint behind `[data-size='md']` or `[data-structure='record']`
+ * was unseen -- `AS_RENDERED_ROOT_STAMPS` is the mount source the root law
+ * below says this probe does not have, and it is a roster checked against the
+ * tree rather than a heuristic. The PART VOCABULARY listed no logical edge
+ * longhand, so a rule writing `margin-inline-start` was not a part source even
+ * though the probe reads the physical longhands the browser resolves it into.
+ * And a rule written WITHOUT an ancestor -- the family's own `block__element`
+ * -- built no node at all, while a `:has()` rule was refused as a pseudo
+ * although its condition is on the SCENE and not on an interaction this probe
+ * never enters. `--no-as-rendered` and `--no-part-reach` reproduce the two
+ * halves of the pre-repair reading on the same tree.
+ *
  * AND THE ROOT ITSELF WAS A FABRICATION for 113 of the 255 mounted families:
  * a descendant chain squashed onto ONE node carrying the union of its classes
  * and the LAST compound's attribute values, so `breadcrumb` -- which paints a
@@ -91,9 +106,11 @@
  *   node scripts/check/theme/axis-difference/index.mjs --no-write         no run may publish the pilot record
  *   AXIS_DIFFERENCE_NO_WRITE=1 vitest ...axis-difference-pilot              the same, from a vitest
  *   node scripts/check/theme/axis-difference/index.mjs --no-states-disabled  the pre-lot state set
+ *   node scripts/check/theme/axis-difference/index.mjs --no-as-rendered   the pre-roster root
+ *   node scripts/check/theme/axis-difference/index.mjs --no-part-reach    the pre-lot part law
  */
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -235,6 +252,9 @@ export const SCENARIOS = Object.freeze([
  * construction, and a family whose skin publishes no mountable selector is
  * reported as unmountable rather than counted as "no difference".
  */
+/** The kernel's state stamp, which the scene supplies rather than the selector. */
+const STATE_ATTRIBUTE = /(^|-)state$/u;
+
 const SELECTOR_RULE = /(^|\})([^{}@]+)\{/gu;
 const CLASS_TOKEN = /\.([A-Za-z][\w-]*)/gu;
 const ATTRIBUTE_TOKEN = /\[([\w-]+)(?:\s*=\s*['"]?([^\]'"]+)['"]?)?\]/gu;
@@ -383,7 +403,9 @@ export const rootCompound = (selector) => compoundPieces(selector)[0] ?? selecto
  * fail-closed direction and mounting one arbitrary value is not conservative in
  * either direction, so the reading stops here. Reaching that paint honestly
  * needs the DEFAULT the component renders, which is in the TSX and not in the
- * skin; it is a mount source this probe does not have.
+ * skin -- `AS_RENDERED_ROOT_STAMPS` below is that mount source, one checked
+ * row per family, and every prop gate without a row is still unseen exactly as
+ * this paragraph describes.
  */
 export function familyElement(css, { collapsedRoots = false } = {}) {
   const heads = selectorParts(css)
@@ -433,15 +455,248 @@ export function familyElement(css, { collapsedRoots = false } = {}) {
   return { selector: collapsedRoots ? best.text : selector, ...best.element };
 }
 
-/** family -> its element, or null when the skin publishes no mountable selector. */
-export function familyElements(root = CORE_ROOT, only = null, { collapsedRoots = false } = {}) {
+/**
+ * THE MOUNT SOURCE THE COMMENT ABOVE SAYS THIS PROBE DOES NOT HAVE.
+ *
+ * `familyElement` admits a root attribute only when it is STRUCTURAL -- one
+ * every root compound of the skin names -- and that is the right law for a
+ * reading taken off the stylesheet alone, because mounting one arbitrary value
+ * of `[data-size]` is a guess. But a component that stamps `data-size={size}`
+ * with `size = KBD_DEFAULTS.size` does not leave the value open: the DEFAULT
+ * RENDER carries `md` and nothing else, so paint behind `[data-size='md']` is
+ * paint the family always has and the probe was reading a node the component
+ * never renders. That is the `WHAT THIS UNDER-COUNTS` paragraph above, and the
+ * reason it stopped there was that the default lives in the TSX, not the skin.
+ *
+ * This roster IS that mount source, and it is deliberately not a heuristic
+ * over the TSX. Each row names the attribute, the value the DEFAULT render
+ * stamps, and the two source lines that make it so -- the stamp site and the
+ * default it resolves from -- so `asRenderedRosterFailures` can fail the run
+ * the day either line stops existing. Three rules bound it:
+ *
+ *  1. The attribute must be stamped UNCONDITIONALLY by the default render. An
+ *     attribute a component writes only when a prop is supplied -- `Flex`'s
+ *     `data-gap-preset`, written inside `if (props.gap !== undefined)` -- is
+ *     NOT part of the default render, and a row for it would be the
+ *     fabricated configuration law 1 refuses. Those families keep reading
+ *     whatever the bare root paints. `Grid` is the same attribute on the other
+ *     side of the line and the reason the law is read per family rather than
+ *     per attribute name: its root stamps
+ *     `gridGapPresetSpelling(adaptation.gap ?? GRID_DEFAULTS.gap)`
+ *     unconditionally, so the rung IS what a default `<Grid>` renders.
+ *  2. The value is the default the component resolves, not the value that
+ *     makes a number move. `anchor` is the row that proves it: its skin paints
+ *     a rhythm `gap` only under `[data-direction='horizontal']`, and
+ *     `ANCHOR_DEFAULTS.direction` is `vertical`, so the honest as-rendered
+ *     mount leaves anchor with no root rhythm paint at all.
+ *  3. `data-state` and any `*-state` attribute is refused outright, for the
+ *     reason the mount law strips it: the SCENE stamps state. A family whose
+ *     paint lives behind `[data-state='error']` is reached by a state
+ *     vocabulary, never by a root that was born in it.
+ *
+ * `--no-as-rendered` reproduces the pre-roster reading on the same tree, which
+ * is how the before/after of this repair is measured with one browser.
+ */
+export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
+  record: Object.freeze([Object.freeze({
+    attribute: 'data-structure',
+    value: 'record',
+    source: 'src/components/structures/record/summary-strip/index.tsx',
+    stamp: 'data-structure="record"',
+    // The summary strip IS the family's mounted root, and it stamps the
+    // family's private density hook on every render.
+    resolves: 'data-part="summary-strip"',
+  })]),
+  button: Object.freeze([
+    Object.freeze({
+      attribute: 'data-variant',
+      value: 'primary',
+      source: 'src/components/primitives/inputs/button/engines/modern/index.tsx',
+      stamp: "'data-variant': effectiveVariant,",
+      resolves: 'BUTTON_DEFAULTS.variant;',
+    }),
+    Object.freeze({
+      attribute: 'data-size',
+      value: 'md',
+      source: 'src/components/primitives/inputs/button/engines/modern/index.tsx',
+      stamp: "'data-size': size,",
+      resolves: 'BUTTON_DEFAULTS.size;',
+    }),
+  ]),
+  kbd: Object.freeze([Object.freeze({
+    attribute: 'data-size',
+    value: 'md',
+    source: 'src/components/primitives/display/kbd/engines/modern/index.tsx',
+    stamp: 'data-size={size}',
+    resolves: 'size = KBD_DEFAULTS.size,',
+  })]),
+  textarea: Object.freeze([Object.freeze({
+    attribute: 'data-size',
+    value: 'md',
+    source: 'src/components/primitives/inputs/textarea/engines/modern/index.tsx',
+    stamp: 'data-size={size}',
+    resolves: 'size = TEXTAREA_DEFAULTS.size,',
+  })]),
+  'action-dock': Object.freeze([
+    Object.freeze({
+      attribute: 'data-placement',
+      value: 'bottom',
+      source: 'src/components/structures/workspace/action-dock/runtime/rendering/index.tsx',
+      stamp: 'data-placement={position}',
+      resolves: "position = 'bottom',",
+    }),
+    Object.freeze({
+      attribute: 'data-mode',
+      value: 'fixed',
+      source: 'src/components/structures/workspace/action-dock/runtime/rendering/index.tsx',
+      stamp: 'data-mode={mode}',
+      resolves: "mode = 'fixed',",
+    }),
+  ]),
+  anchor: Object.freeze([Object.freeze({
+    attribute: 'data-direction',
+    value: 'vertical',
+    source: 'src/components/primitives/navigation/anchor/engines/modern/index.tsx',
+    stamp: 'data-direction={direction}',
+    resolves: 'direction = ANCHOR_DEFAULTS.direction,',
+  })]),
+  'grid-view': Object.freeze([Object.freeze({
+    attribute: 'data-empty',
+    value: 'false',
+    source: 'src/components/patterns/data/grid-view/presentation/grid/index.tsx',
+    // Every branch of this renderer stamps the attribute; `false` is the one
+    // the loaded grid carries, and it is the branch the family exists for.
+    stamp: 'data-empty="false"',
+    resolves: 'data-empty="true"',
+  })]),
+  'tag-compounds': Object.freeze([Object.freeze({
+    attribute: 'data-gap',
+    value: 'sm',
+    source: 'src/components/primitives/display/tag/compound/group/index.tsx',
+    stamp: 'data-gap={gap}',
+    resolves: "gap = 'sm',",
+  })]),
+  grid: Object.freeze([Object.freeze({
+    attribute: 'data-gap-preset',
+    value: 'md',
+    source: 'src/components/primitives/layout/grid/engines/modern/index.tsx',
+    // The rung is written on every root, from the family's own default, so the
+    // dial-scaled rule behind it is the DEFAULT render and not a
+    // configuration. `flex` is the sibling that fails law 1 on the same
+    // attribute: it stamps `data-gap-preset` only inside
+    // `if (props.gap !== undefined)`.
+    stamp: '"data-gap-preset": gridGapPresetSpelling(',
+    resolves: 'adaptation.gap ?? GRID_DEFAULTS.gap',
+  })]),
+  'auto-complete': Object.freeze([Object.freeze({
+    attribute: 'data-size',
+    value: 'md',
+    source: 'src/components/primitives/inputs/auto-complete/engines/modern/index.tsx',
+    // `AUTOCOMPLETE_DEFAULTS.size` is the legacy spelling `middle`, which
+    // `toCanonicalSize` resolves to the `md` the skin keys on.
+    stamp: 'data-size={size}',
+    resolves: 'const size = toCanonicalSize(sizeProp);',
+  })]),
+});
+
+/**
+ * One family's root with the attributes its default render stamps, or the same
+ * element unchanged when the roster has no row for it.
+ *
+ * A stamped attribute REPLACES the value the mount law read off the skin:
+ * `kbd`'s scored candidate carries a bare `[data-size]`, which mounts as
+ * `data-size=''` and matches none of the three size rules.
+ */
+export function withAsRenderedStamps(element, rows = []) {
+  if (element === null || rows.length === 0) return element;
+  const attributes = { ...element.attributes };
+  for (const row of rows) {
+    if (STATE_ATTRIBUTE.test(row.attribute)) continue;
+    attributes[row.attribute] = row.value;
+  }
+  const selector = element.classes.map((name) => `.${name}`).join('')
+    + Object.entries(attributes).map(([name, value]) => `[${name}='${value}']`).join('');
+  return { ...element, attributes, selector };
+}
+
+/**
+ * family -> its element, or null when the skin publishes no mountable selector.
+ *
+ * `asRendered` adds the roster's default-render stamps. It is off under
+ * `collapsedRoots`, which exists to reproduce a run that predates them.
+ */
+export function familyElements(root = CORE_ROOT, only = null, { collapsedRoots = false, asRendered = true } = {}) {
   const elements = new Map();
   for (const [family, files] of skinFamilies(root)) {
     if (only && !only.includes(family)) continue;
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    elements.set(family, familyElement(css, { collapsedRoots }));
+    const element = familyElement(css, { collapsedRoots });
+    elements.set(
+      family,
+      asRendered && !collapsedRoots
+        ? withAsRenderedStamps(element, AS_RENDERED_ROOT_STAMPS[family] ?? [])
+        : element,
+    );
   }
   return elements;
+}
+
+/**
+ * Every way a roster row can be wrong, read against the tree rather than
+ * trusted: a row whose source moved, whose default was re-spelled, whose
+ * attribute the skin does not gate on any more, or which names a state.
+ *
+ * This is the whole reason the roster is allowed to exist. A hand-written
+ * fixture that stops matching in silence is the defect this file opens by
+ * naming; a hand-written fixture that FAILS THE RUN when it stops matching is
+ * a pin like any other in this instrument.
+ */
+export function asRenderedRosterFailures(root = CORE_ROOT, roster = AS_RENDERED_ROOT_STAMPS) {
+  const failures = [];
+  const skins = skinFamilies(root);
+  for (const [family, rows] of Object.entries(roster)) {
+    const files = skins.get(family);
+    if (files === undefined) {
+      failures.push(`${family}: no Modern skin family`);
+      continue;
+    }
+    const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
+    if (familyElement(css) === null) {
+      failures.push(`${family}: no mountable root to stamp`);
+      continue;
+    }
+    const gated = new Set(selectorParts(css).flatMap((selector) =>
+      [...selector.matchAll(ATTRIBUTE_TOKEN)].map((match) => match[1])));
+    for (const row of rows) {
+      const where = `${family}/${row.attribute}`;
+      if (STATE_ATTRIBUTE.test(row.attribute)) {
+        failures.push(`${where}: a state is stamped by the scene, never by the root`);
+      }
+      if (!gated.has(row.attribute)) {
+        failures.push(`${where}: the skin no longer gates on this attribute`);
+      }
+      const file = resolve(root, row.source);
+      if (!existsSync(file)) {
+        failures.push(`${where}: ${row.source} does not exist`);
+        continue;
+      }
+      const source = readFileSync(file, 'utf8');
+      for (const [label, text] of [['stamp', row.stamp], ['resolves', row.resolves]]) {
+        if (!source.includes(text)) failures.push(`${where}: ${row.source} no longer carries the ${label} \`${text}\``);
+      }
+    }
+  }
+  return failures;
+}
+
+/** The roster as a run publishes it: which families were mounted as rendered, and with what. */
+export function asRenderedReport(elements, { applied = true, roster = AS_RENDERED_ROOT_STAMPS } = {}) {
+  const map = {};
+  for (const [family, rows] of Object.entries(roster)) {
+    if (!elements.has(family)) continue;
+    map[family] = Object.fromEntries(rows.map((row) => [row.attribute, row.value]));
+  }
+  return { applied, families: Object.keys(map).length, map };
 }
 
 /**
@@ -539,8 +794,43 @@ export const PART_STATE_AUTHORED = Object.freeze([
   'transform', 'opacity', 'outline', 'outline-width', 'outline-offset', 'outline-style',
 ]);
 
+/**
+ * The LOGICAL EDGE longhands of an authored property, which the population
+ * vocabulary does not list and the browser hands back as the physical ones.
+ *
+ * `tree-select` is the measured case: it paints `margin-inline-start:
+ * var(--ds-tree-select-clear-gap)` on its arrow icon, a value that moves
+ * 18.75px -> 21.56px between the rhythm arms in all three verticals. The
+ * reading side already sees it -- the probe reads `margin-left`/`margin-right`
+ * and the browser resolves the logical form into them -- but the PART side did
+ * not, because `margin-inline-start` is not in `AXES.rhythm.authored`, so the
+ * rule was never a part source and the node it paints was mounted for the
+ * `transition` beside it, carrying `axes: ['motion']` alone.
+ *
+ * This expansion is used for the part vocabulary ONLY. The denominator is
+ * `check/theme/population`'s and stays exactly the list that file publishes: a
+ * family enters an axis's population on the authored names that file names,
+ * and nothing here can add one.
+ */
+export function logicalEdgeLonghands(properties) {
+  const edges = [];
+  for (const property of properties) {
+    const border = /^border-(block|inline)-width$/u.exec(property);
+    if (border !== null) {
+      edges.push(`border-${border[1]}-start-width`, `border-${border[1]}-end-width`);
+      continue;
+    }
+    const box = /^(padding|margin)-(block|inline)$/u.exec(property);
+    if (box !== null) edges.push(`${box[1]}-${box[2]}-start`, `${box[1]}-${box[2]}-end`);
+  }
+  return edges;
+}
+
 /** The authored properties whose declaration makes a rule a part source for `axis`. */
-const partAuthored = (axis) => (AXES[axis].authored.length > 0 ? AXES[axis].authored : PART_STATE_AUTHORED);
+const partAuthored = (axis, { reach = true } = {}) => {
+  const authored = AXES[axis].authored.length > 0 ? AXES[axis].authored : PART_STATE_AUTHORED;
+  return reach ? [...authored, ...logicalEdgeLonghands(authored)] : [...authored];
+};
 
 /** property -> the axis that owns it. The six vocabularies are disjoint, so one owner each. */
 export function axisByProperty() {
@@ -606,8 +896,6 @@ export function expandAlternatives(selector, limit = ALTERNATIVE_LIMIT) {
 const PART_CLASS_TOKEN = /\.([A-Za-z][\w-]*)/gu;
 const PART_ATTRIBUTE_TOKEN = /\[([\w-]+)(?:\s*([~^|$*]?=)\s*['"]?([^\]'"]*)['"]?)?\]/gu;
 const PART_TAG = /^([a-z][a-z0-9]*)/u;
-/** The kernel's state stamp, which the scene supplies rather than the selector. */
-const STATE_ATTRIBUTE = /(^|-)state$/u;
 /** Elements with no content model: mounted as leaves, never as scaffolding. */
 const VOID_TAGS = Object.freeze(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
 
@@ -668,6 +956,111 @@ export function projectPartChain(selector, rootElement) {
 }
 
 /**
+ * The class prefixes a family's own block token may carry, longest first.
+ *
+ * Read off the corpus rather than invented: `rottay-bottom-tab-bar`,
+ * `rt-terminal-block`, `ds-feature-workspace-frame` and the tier-prefixed
+ * `ds-pattern-feature-workspace-frame` are all the same family's block.
+ */
+export const FAMILY_CLASS_PREFIXES = Object.freeze([
+  'ds-pattern-', 'ds-structure-', 'ds-surface-', 'rottay-', 'rt-', 'ds-',
+]);
+
+/** True when `block` is the class token of `family` itself, under any admitted prefix. */
+export function familyOwnsBlock(block, family) {
+  if (family === null) return false;
+  return FAMILY_CLASS_PREFIXES.some((prefix) => block === `${prefix}${family}`);
+}
+
+/**
+ * A ROOT-LEVEL selector that is really the family's own BEM ELEMENT, mounted
+ * as the descendant it is, or `null`.
+ *
+ * WHAT WAS UNREACHED. `terminal-block` paints every rhythm value it has on
+ * `.rt-terminal-block__title-bar` and `.rt-terminal-block__body`, written
+ * WITHOUT an ancestor: one compound, so `projectPartChain` returns `root-level`
+ * and the selector is not even counted as a refusal. The family root wins the
+ * mount on score, those nodes are never built, and a family whose body padding
+ * is `1rem 1.25rem` under a fluid root that the density mode moves reads as a
+ * rhythm non-mover. `bottom-tab-bar` (`__tab`, `__list`, `__icon-wrap`,
+ * `__badge`) and `feature-workspace-frame` (`__frame`) are the same shape.
+ *
+ * WHY THIS IS NOT A FABRICATION, and the law is narrow for the same reason law
+ * 1 is. `block__element` is a descendant of `block` by the convention that
+ * names it, and the three families above stamp exactly that in their own TSX --
+ * `<div className="rt-terminal-block__body" data-part="body">` inside
+ * `<div className="rt-terminal-block" data-part="root">`. The selector itself
+ * carries NO ancestor requirement, so hanging it under the root cannot make it
+ * match something it would not match standing alone; what the graft buys is
+ * the inheritance a private channel declared on the root needs
+ * (`--_ds-bottom-tab-bar-tab-lead` is declared there and read on the tab).
+ *
+ * REFUSED, for the reasons the rest of this law refuses things:
+ *  - a class that is not the family's own block element (`.ds-tooltip-bubble`,
+ *    `.ds-auto-complete-panel`, `.ds-saved-views-menu-panel`): a separate
+ *    block, and in every measured case a PORTAL the default render does not
+ *    mount until an interaction opens it;
+ *  - any attribute other than `data-part`, which is a variant gate;
+ *  - the node the family is already mounted as.
+ */
+export function familyElementPart(selector, family, rootElement) {
+  if (family === null) return null;
+  const compound = partCompound(selector);
+  if (compound.rejected !== undefined) return null;
+  if (Object.keys(compound.attributes).some((name) => name !== 'data-part')) return null;
+  const owned = compound.classes.filter((name) => {
+    const bem = /^(.+?)__/u.exec(name);
+    return bem !== null && familyOwnsBlock(bem[1], family);
+  });
+  if (owned.length === 0) return null;
+  if (!compound.classes.every((name) => owned.includes(name) || rootElement.classes.includes(name))) return null;
+  if (compoundKey(compound) === compoundKey({ tag: null, classes: rootElement.classes, attributes: rootElement.attributes })) {
+    return null;
+  }
+  return compound;
+}
+
+const STRUCTURAL_HAS = ':has(';
+
+/** The same selector with every `:has(...)` removed, parentheses balanced. */
+export function withoutStructuralHas(selector) {
+  let text = selector;
+  for (;;) {
+    const start = text.indexOf(STRUCTURAL_HAS);
+    if (start < 0) return text.replace(/\s+/gu, ' ').trim();
+    let depth = 0;
+    let end = start + STRUCTURAL_HAS.length - 1;
+    for (let index = start + STRUCTURAL_HAS.length - 1; index < text.length; index += 1) {
+      if (text[index] === '(') depth += 1;
+      else if (text[index] === ')') {
+        depth -= 1;
+        if (depth === 0) { end = index; break; }
+      }
+    }
+    text = text.slice(0, start) + text.slice(end + 1);
+  }
+}
+
+/**
+ * True when the ONLY pseudo-class in the selector is `:has()`.
+ *
+ * `:has()` is a condition on the SCENE — it asks whether an element the page
+ * already contains is there — so a node it gates is reachable at REST, which
+ * is the opposite of `:hover`, the pseudo law 4 refuses because this probe
+ * does not enter an interaction. So a `:has()` selector is not mounted; it is
+ * retried against the anatomy the first pass built, and the browser decides
+ * whether the condition holds. `tree-select` is the measured case: its moving
+ * `margin-inline-start` is declared under
+ * `[data-part='root']:has([data-part='clear-button'])`, and the clear button
+ * is a node the scene builds from the family's own rules.
+ */
+export function hasOnlyStructuralHas(selector) {
+  if (!selector.includes(STRUCTURAL_HAS)) return false;
+  if (selector.includes('::')) return false;
+  return !withoutStructuralHas(selector).includes(':');
+}
+
+/**
  * One family's parts, read off the rules of ONE stylesheet.
  *
  * `axes` is the set the family is in the population of: a part may only be
@@ -676,29 +1069,64 @@ export function projectPartChain(selector, rootElement) {
  * refusals, so a selector refused for four axes is counted four times -- the
  * unit is the reading that was refused, not the string.
  */
-export function familyParts(css, rootElement, axes) {
+export function familyParts(css, rootElement, axes, { family = null, partReach = true } = {}) {
   const rules = cssRules(css);
   const parts = new Map();
   const rejected = {};
+  const deferred = [];
+  const admit = (chain, selector, axis) => {
+    const id = chain.map(compoundKey).join(' > ');
+    if (!parts.has(id)) parts.set(id, { id, selector, chain, axes: new Set() });
+    parts.get(id).axes.add(axis);
+    return id;
+  };
   for (const axis of axes) {
-    const authored = new Set(partAuthored(axis));
+    const authored = new Set(partAuthored(axis, { reach: partReach }));
     for (const rule of rules) {
       if (!rule.declarations.some((declaration) => authored.has(declaration.property))) continue;
       for (const listed of selectorList(rule.selector)) {
         for (const selector of expandAlternatives(listed)) {
           const projection = projectPartChain(selector, rootElement);
           if (projection.rejected !== undefined) {
-            if (projection.rejected !== 'root-level') {
+            const element = partReach && projection.rejected === 'root-level'
+              ? familyElementPart(selector, family, rootElement)
+              : null;
+            if (element !== null) {
+              admit([element], selector, axis);
+              continue;
+            }
+            // A `:has()` is a condition on the SCENE, so it is retried below
+            // against the anatomy this pass actually built.
+            if (partReach && hasOnlyStructuralHas(selector)) deferred.push({ selector, axis });
+            else if (projection.rejected !== 'root-level') {
               rejected[projection.rejected] = (rejected[projection.rejected] ?? 0) + 1;
             }
             continue;
           }
-          const id = projection.chain.map(compoundKey).join(' > ');
-          if (!parts.has(id)) parts.set(id, { id, selector, chain: projection.chain, axes: new Set() });
-          parts.get(id).axes.add(axis);
+          admit(projection.chain, selector, axis);
         }
       }
     }
+  }
+  // THE SECOND PASS, and it MOUNTS NOTHING: it may only add an axis to a node
+  // the first pass already built.
+  const built = new Set();
+  for (const part of parts.values()) {
+    part.chain.forEach((_, index) => built.add(part.chain.slice(0, index + 1).map(compoundKey).join(' > ')));
+  }
+  for (const { selector, axis } of deferred) {
+    const projection = projectPartChain(withoutStructuralHas(selector), rootElement);
+    if (projection.rejected !== undefined) {
+      rejected[projection.rejected === 'root-level' ? 'has-root-level' : `has-${projection.rejected}`] =
+        (rejected[projection.rejected === 'root-level' ? 'has-root-level' : `has-${projection.rejected}`] ?? 0) + 1;
+      continue;
+    }
+    const id = projection.chain.map(compoundKey).join(' > ');
+    if (!built.has(id)) {
+      rejected['has-node-not-in-scene'] = (rejected['has-node-not-in-scene'] ?? 0) + 1;
+      continue;
+    }
+    admit(projection.chain, selector, axis);
   }
   return {
     parts: [...parts.values()].map((part) => ({ ...part, axes: [...part.axes].sort() })),
@@ -719,7 +1147,7 @@ export function familyParts(css, rootElement, axes) {
  * graft has nothing to hang on, and inventing a root for it would move a
  * denominator this lot is not entitled to move.
  */
-export function familyAxisParts(root = CORE_ROOT, only = null, elements = null) {
+export function familyAxisParts(root = CORE_ROOT, only = null, elements = null, { partReach = true } = {}) {
   const resolved = elements ?? familyElements(root, only);
   const populations = axisPopulations(root);
   const byFamily = new Map();
@@ -729,7 +1157,7 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null) 
     if (!rootElement) continue;
     const declared = AXIS_IDS.filter((axis) => populations.get(axis).includes(family));
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    const record = familyParts(css, rootElement, declared);
+    const record = familyParts(css, rootElement, declared, { family, partReach });
     if (record.parts.length === 0 && Object.keys(record.rejected).length === 0) continue;
     byFamily.set(family, record);
   }
@@ -745,9 +1173,13 @@ export function familyAxisParts(root = CORE_ROOT, only = null, elements = null) 
  * noise. `head-variant-gated` and `part-variant-gated` are the prop-gated
  * cluster the wiring lots own -- mounting them here would measure a
  * configuration the default render does not produce -- and `part-pseudo` is the
- * `:hover` half of the states rule this probe already names as unmeasured.
+ * `:hover` half of the states rule this probe already names as unmeasured. The
+ * `has-*` reasons are the second pass's own: a `:has()` selector that still
+ * does not project (`has-head-variant-gated`) or whose target node the scene
+ * never built (`has-node-not-in-scene`), which is the fail-closed direction --
+ * that pass may add an axis to a node, never a node to the scene.
  */
-export function partMountReport(byFamily, { applied = true, unmountableCandidates = [] } = {}) {
+export function partMountReport(byFamily, { applied = true, partReach = true, unmountableCandidates = [] } = {}) {
   const perAxis = Object.fromEntries(AXIS_IDS.map((axis) => [axis, { families: 0, parts: 0 }]));
   const refused = {};
   const map = {};
@@ -770,6 +1202,7 @@ export function partMountReport(byFamily, { applied = true, unmountableCandidate
   }
   return {
     applied,
+    partReach,
     families: Object.keys(map).length,
     parts: [...byFamily.values()].reduce((total, record) => total + record.parts.length, 0),
     maxChainNodes: nodes,
@@ -1932,6 +2365,14 @@ export async function run({
    * values. It is how the before/after of the root repair is measured on ONE
    * tree. */
   collapsedRoots = false,
+  /* `false` reproduces the pre-roster root: the mount law's structural
+   * attributes alone, without the values the DEFAULT RENDER stamps. Same tree,
+   * same catalog revision, same browser. */
+  asRendered = true,
+  /* `false` reproduces the pre-lot part law: no BEM element part, no `:has()`
+   * retry against the built anatomy, and no logical edge longhand in the part
+   * vocabulary. */
+  partReach = true,
   /* `false` reproduces the pre-lot state set -- the four runtime-only states --
    * on the SAME tree. `disabled` is the fifth, and it is the one a component
    * receives as a prop rather than acquires by being touched; before the EVI-02
@@ -1948,7 +2389,7 @@ export async function run({
     throw new Error(`axis-difference: ${COMPILER_MODULE} exports no callable ${COMPILER_EXPORT}`);
   }
 
-  const elements = familyElements(root, families, { collapsedRoots });
+  const elements = familyElements(root, families, { collapsedRoots, asRendered });
   for (const family of Object.keys(mounts ?? {})) {
     if (!elements.has(family)) {
       throw new Error(`axis-difference: a mount was supplied for ${family}, which has no Modern skin family`);
@@ -1968,7 +2409,7 @@ export async function run({
   // The pins are read first and honoured: a family with no mountable root
   // gains no parts, so `UNMOUNTABLE_FAMILIES` and every denominator below it
   // are exactly the ones the pre-lot run published.
-  const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements);
+  const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements, { partReach });
   // Read from the same skins the denominator is, so the reach of the disabled
   // stamp is republished every run rather than asserted once in a comment.
   const disabledCensus = disabledVocabularyCensus(root, families);
@@ -2192,11 +2633,16 @@ export async function run({
     // and the merge this repair removed was invisible in every artifact the
     // probe ever published.
     roots: rootReport(elements, { collapsedRoots }),
+    // THE DEFAULT-RENDER STAMPS this run mounted, published beside the roots
+    // for the same reason: an attribute the probe added is part of the node
+    // the numerator was read on, and a reader must be able to see it.
+    asRendered: asRenderedReport(elements, { applied: asRendered && !collapsedRoots }),
     // WHICH ELEMENT EACH FAMILY WAS MEASURED ON, per axis, published so the
     // numerator this run reports can be read against the element it was read
     // from. A mount map nobody can see is a numerator nobody can audit.
     partMounts: partMountReport(mountedParts, {
       applied: partMounts !== false,
+      partReach,
       unmountableCandidates: families === null ? unmountablePartCandidates(root, unmountable) : [],
     }),
     populations: Object.fromEntries(AXIS_IDS.map((axis) => [axis, effective(axis).length])),
@@ -2593,6 +3039,10 @@ if (isMain) {
     // acquires at runtime. It is how the before/after of the disabled stamp is
     // read on ONE tree at one catalog revision with one browser.
     statesDisabled: !process.argv.includes('--no-states-disabled'),
+    // The pre-roster root and the pre-lot part law, on demand: the two halves
+    // of the EVI-02 reach repair, each A/B-able on ONE tree.
+    asRendered: !process.argv.includes('--no-as-rendered'),
+    partReach: !process.argv.includes('--no-part-reach'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(result, null, 2));
 
