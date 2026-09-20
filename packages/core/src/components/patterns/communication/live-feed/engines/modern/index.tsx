@@ -35,6 +35,7 @@
 
 import React, { useCallback, useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { useInfiniteScroll } from '../../../../runtime/virtualization/infinite-scroll';
 import { Button } from '../../../../../primitives/inputs/button';
 import { Empty } from '../../../../../primitives/display/empty';
@@ -117,6 +118,10 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   // the internal scroll container when maxHeight bounds it, else the viewport.
   // The Load more button below stays as an explicit fallback.
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // A bounded viewport is a tab stop, so its keyboard ring is the kernel's
+  // decision and the skin's pseudo-class arm is the fallback of that decision.
+  const viewport = useInteractionState();
+
   const { sentinelRef } = useInfiniteScroll({
     hasMore: hasMore ?? false,
     onLoadMore: onLoadMore ?? NO_OP,
@@ -217,7 +222,8 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             never scroll it (WCAG 2.1.1); unbounded it stays programmatic-only. */}
         <div
           ref={scrollContainerRef}
-          data-part="viewport"
+          {...partAttributes('viewport', viewport.state)}
+          {...viewport.handlers}
           tabIndex={maxHeight ? 0 : -1}
           role={maxHeight ? 'region' : undefined}
           aria-label={maxHeight ? feedLabel : undefined}

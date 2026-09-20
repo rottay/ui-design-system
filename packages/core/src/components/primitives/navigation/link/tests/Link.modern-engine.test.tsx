@@ -78,8 +78,19 @@ describe('Link modern engine contract', () => {
 
 describe('Link modern skin resilience', () => {
   it('owns every interactive state with tone-derived fallbacks', () => {
-    for (const state of [':visited', ':hover', ':active', ':focus-visible']) {
-      expect(SKIN).toContain(`.rottay-link-shell.rottay-link-shell--modern[data-part='root']${state}`);
+    // `:visited` is a platform-only pseudo-class: it has no kernel token, so it
+    // stays bare. The interaction triad is decided once (F-37), so each of its
+    // arms pairs the kernel's token with the pseudo-class it stands for.
+    expect(SKIN).toContain(".rottay-link-shell.rottay-link-shell--modern[data-part='root']:visited");
+    for (const [token, pseudo] of [
+      ['hovered', ':hover'],
+      ['pressed', ':active'],
+      ['focus-visible', ':focus-visible'],
+    ] as const) {
+      expect(SKIN).toContain(
+        `.rottay-link-shell.rottay-link-shell--modern[data-part='root']`
+          + `:is([data-state~='${token}'], ${pseudo})`,
+      );
     }
     // States derive from the resolved tone channel along a monotonically
     // darkening ramp: base 16% -> hover 30% -> active 42% black mix.

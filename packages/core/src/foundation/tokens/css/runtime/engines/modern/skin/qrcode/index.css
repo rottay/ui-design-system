@@ -171,11 +171,11 @@
 /* Refresh hover is hover-capable-only (4th-wave law); a held press gets the
    same hover surface plus the canonical press scale. */
 @media (hover: hover) {
-  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:hover {
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:is([data-state~='hovered'], :hover) {
     background: var(--ds-qrcode-refresh-button-bg-hover, var(--ds-color-primary-hover));
   }
 }
-.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:active {
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:is([data-state~='pressed'], :active) {
   transform: scale(var(--ds-state-press-scale));
   background: var(--ds-qrcode-refresh-button-bg-hover, var(--ds-color-primary-hover));
 }
@@ -183,7 +183,7 @@
 /* Keyboard focus is independent from hover (B2.1/B2.6): without this rule the
    chip wore the UA default outline. The governed double ring (offset + colour)
    reads over every status scrim; forced colors re-express it below. */
-.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:focus-visible {
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(--ds-focus-ring);
 }
@@ -246,9 +246,9 @@
     border-color: ButtonText;
   }
 
-  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 
   .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-icon'],

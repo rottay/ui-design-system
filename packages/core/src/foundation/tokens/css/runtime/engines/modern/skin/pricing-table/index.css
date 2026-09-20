@@ -270,12 +270,12 @@
       var(--ds-pricing-table-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
-  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:hover {
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:is([data-state~='hovered'], :hover) {
     border-block-end-style: solid;
     color: var(--ds-color-primary);
   }
 }
-.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:focus-visible {
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:is([data-state~='focus-visible'], :focus-visible) {
   border-block-end-style: solid;
   color: var(--ds-color-primary);
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
@@ -380,7 +380,7 @@
   .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label {
     border-block-end-color: ButtonText;
   }
-  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:focus-visible {
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
 }

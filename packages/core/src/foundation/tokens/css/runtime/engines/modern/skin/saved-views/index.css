@@ -408,9 +408,9 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'] [data-part='rename-input']:focus,
+  .ds-saved-views__input[data-part='field'] [data-part='rename-input']:is([data-state~='focused'], :focus),
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'] [data-part='create-input']:focus {
+  .ds-saved-views__create-input[data-part='field'] [data-part='create-input']:is([data-state~='focused'], :focus) {
   border-color: var(--ds-focus-ring-color);
   box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
 }

@@ -29,14 +29,14 @@
    pointers; the press state stays available on every pointer. */
 @media (hover: hover) {
   .ds-pattern-stats-grid.ds-engine-modern
-    .ds-stats-grid__card[data-interactive="true"]:hover {
+    .ds-stats-grid__card[data-interactive="true"]:is([data-state~='hovered'], :hover) {
     transform: translateY(-2px);
     box-shadow: var(--ds-elevation-2);
   }
 }
 
 .ds-pattern-stats-grid.ds-engine-modern
-  .ds-stats-grid__card[data-interactive="true"]:active {
+  .ds-stats-grid__card[data-interactive="true"]:is([data-state~='pressed'], :active) {
   transform: translateY(0);
 }
 
@@ -228,9 +228,9 @@
 /* Interactive cards are focusable (role=button), so they need a visible
    focus channel -- the canonical DS focus ring token. */
 .ds-pattern-stats-grid.ds-engine-modern
-  .ds-stats-grid__card[data-interactive="true"]:focus-visible {
-  outline: 2px solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: 2px;
+  .ds-stats-grid__card[data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__description {
@@ -282,9 +282,9 @@
     transition: none;
   }
   .ds-pattern-stats-grid.ds-engine-modern
-    .ds-stats-grid__card[data-interactive="true"]:hover,
+    .ds-stats-grid__card[data-interactive="true"]:is([data-state~='hovered'], :hover),
   .ds-pattern-stats-grid.ds-engine-modern
-    .ds-stats-grid__card[data-interactive="true"]:active {
+    .ds-stats-grid__card[data-interactive="true"]:is([data-state~='pressed'], :active) {
     transform: none;
   }
   .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
@@ -316,7 +316,7 @@
     color: CanvasText;
   }
   .ds-pattern-stats-grid.ds-engine-modern
-    .ds-stats-grid__card[data-interactive="true"]:focus-visible {
+    .ds-stats-grid__card[data-interactive="true"]:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
   .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {

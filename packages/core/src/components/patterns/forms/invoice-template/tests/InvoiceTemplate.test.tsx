@@ -263,8 +263,12 @@ describe('PatternInvoiceTemplate modern document-table reachability', () => {
   });
 
   it('gives the new tab stop the canonical focus ring in the modern skin', () => {
+    // State is decided once (F-37): the engine runs the scroll group through
+    // the interaction kernel, so the arm pairs the kernel token with the
+    // platform pseudo-class it stands for rather than trusting the pseudo alone.
     expect(modernSkin).toContain(
-      ".ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']:focus-visible",
+      ".ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']"
+        + ":is([data-state~='focus-visible'], :focus-visible)",
     );
     expect(modernSkin).toContain('var(--ds-focus-ring-color, var(--ds-color-primary))');
   });

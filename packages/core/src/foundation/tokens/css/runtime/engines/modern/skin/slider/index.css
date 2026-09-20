@@ -226,7 +226,7 @@
   cursor: pointer;
   pointer-events: none;
 }
-.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:disabled {
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
 }
 .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb {
@@ -241,17 +241,17 @@
   block-size: var(--ds-slider-thumb-size, 16px);
   pointer-events: auto;
 }
-.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:focus-visible + [data-part='handle'] {
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:is([data-state~='focus-visible'], :focus-visible) + [data-part='handle'] {
   box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
 }
 /* Hover repaint is pointer-gated (12-axis law); :active below is the touch
    equivalent so coarse pointers still get press feedback. */
 @media (hover: hover) {
-  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):hover + [data-part='handle'] {
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) + [data-part='handle'] {
     background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   }
 }
-.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):active + [data-part='handle'] {
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) + [data-part='handle'] {
   background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   /* Scale only: Tailwind v4 centers the handle through the `translate`
      PROPERTY, which composes with `transform` -- re-applying translateX/Y
@@ -273,7 +273,7 @@
   cursor: pointer;
   outline: none;
 }
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):disabled {
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='disabled'], :disabled) {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -347,25 +347,25 @@
 /* Thumb interaction states (single mode). Hover is pointer-gated; :active is
    the touch equivalent. */
 @media (hover: hover) {
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-webkit-slider-thumb {
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover)::-webkit-slider-thumb {
     background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   }
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-moz-range-thumb {
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover)::-moz-range-thumb {
     background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   }
 }
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active::-webkit-slider-thumb {
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active)::-webkit-slider-thumb {
   background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   transform: scale(0.94);
 }
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active::-moz-range-thumb {
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active)::-moz-range-thumb {
   background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   transform: scale(0.94);
 }
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-webkit-slider-thumb {
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-webkit-slider-thumb {
   box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
 }
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-moz-range-thumb {
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-moz-range-thumb {
   box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
 }
 
@@ -434,11 +434,11 @@
     border-color: Canvas;
     box-shadow: none;
   }
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-webkit-slider-thumb,
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-moz-range-thumb,
-  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:focus-visible + [data-part='handle'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='focus-visible'], :focus-visible)::-moz-range-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:is([data-state~='focus-visible'], :focus-visible) + [data-part='handle'] {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
     box-shadow: none;
   }
 }
@@ -567,17 +567,17 @@
    is pointer-gated below (a sticky touch hover no longer pins the readout
    open -- press still shows it via :active). Disabled roots never show the
    readout. */
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):focus-visible + [data-part='tooltip'],
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active + [data-part='tooltip'],
-.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):focus-visible + [data-part='handle'] + [data-part='tooltip'],
-.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):active + [data-part='handle'] + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='focus-visible'], :focus-visible) + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='focus-visible'], :focus-visible) + [data-part='handle'] + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) + [data-part='handle'] + [data-part='tooltip'],
 .ds-slider.ds-slider--modern [data-part='tooltip'][data-open='true'] {
   opacity: 1;
   visibility: visible;
 }
 @media (hover: hover) {
-  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover + [data-part='tooltip'],
-  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):hover + [data-part='handle'] + [data-part='tooltip'] {
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) + [data-part='tooltip'],
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) + [data-part='handle'] + [data-part='tooltip'] {
     opacity: 1;
     visibility: visible;
   }

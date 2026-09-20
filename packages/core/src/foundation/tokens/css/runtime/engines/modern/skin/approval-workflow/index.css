@@ -326,12 +326,12 @@
 }
 
 /* --- Action states: focus ring, disabled, coarse floor ------------------------ */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:focus-visible {
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:disabled {
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='disabled'], :disabled) {
   opacity: var(--ds-approval-disabled-opacity, 0.6);
   cursor: not-allowed;
 }
@@ -339,24 +339,24 @@
 /* --- Action hover/press: the base rules carried no pointer treatment at
         all. Hover law: unguarded `:active` twins here (touch press feedback
         matches), pointer-fine hover inside the guard. ---- */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:active:not(:disabled) {
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:active:not(:disabled) {
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:active:not(:disabled) {
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
 }
 
 @media (hover: hover) {
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:hover:not(:disabled) {
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:hover:not(:disabled) {
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
-  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:hover:not(:disabled) {
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
   }
 }

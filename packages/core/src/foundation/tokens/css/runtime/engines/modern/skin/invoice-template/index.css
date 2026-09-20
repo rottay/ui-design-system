@@ -176,7 +176,7 @@
   overflow-x: auto;
 }
 /* The scroll wrapper is a real tab stop, so it carries the canonical ring. */
-.ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']:focus-visible {
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }

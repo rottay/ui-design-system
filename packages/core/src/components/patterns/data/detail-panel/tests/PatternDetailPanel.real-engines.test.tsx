@@ -81,15 +81,60 @@ function cssRules(css: string): Array<{ selector: string; body: string }> {
  * (comma-free) selector — what a rule must push to >= 4 to clear the (0,3,1) tenant
  * border floor.
  */
+/**
+ * A selector list split on its TOP-LEVEL commas, so `:is(a, b)` survives whole.
+ * The F-37 state pairing writes `:is([data-state~='hovered'], :hover)`, and a
+ * naive `split(',')` reads its two arms as two selectors of one unit each.
+ */
+function selectorList(selector: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const character of selector) {
+    if (character === '(') depth += 1;
+    else if (character === ')') depth -= 1;
+    if (character === ',' && depth === 0) {
+      parts.push(current);
+      current = '';
+      continue;
+    }
+    current += character;
+  }
+  parts.push(current);
+  return parts.map((part) => part.trim()).filter((part) => part.length > 0);
+}
+
 function bColumn(selector: string): number {
-  const classes = (selector.match(/\.[A-Za-z_-][\w-]*/g) || []).length;
-  const attrs = (selector.match(/\[[^\]]*\]/g) || []).length;
-  const pseudos = (selector.match(/(?<!:):[A-Za-z-]+/g) || []).length;
-  const notArgs = (selector.match(/:not\(([^)]*)\)/g) || []).reduce(
-    (n, frag) => n + bColumn(frag.slice(5, -1)),
-    0,
-  );
-  return classes + attrs + pseudos + notArgs;
+  // Functional pseudo-classes are weighed by their own rule, so they are cut
+  // out before the flat counters run: `:is()`/`:not()`/`:has()` take the
+  // HIGHEST weight among their arguments and `:where()` takes none, which is
+  // what makes `:is([data-state~='hovered'], :hover)` specificity-neutral
+  // against the bare `:hover` it pairs with.
+  let rest = selector;
+  let functional = 0;
+  for (;;) {
+    const match = /:(is|not|has|where)\(/u.exec(rest);
+    if (match === null) break;
+    const open = match.index + match[0].length - 1;
+    let depth = 0;
+    let close = open;
+    for (; close < rest.length; close += 1) {
+      if (rest[close] === '(') depth += 1;
+      else if (rest[close] === ')') {
+        depth -= 1;
+        if (depth === 0) break;
+      }
+    }
+    const args = rest.slice(open + 1, close);
+    if (match[1] !== 'where') {
+      functional += Math.max(0, ...selectorList(args).map((arg) => bColumn(arg)));
+    }
+    rest = rest.slice(0, match.index) + rest.slice(close + 1);
+  }
+  const classes = (rest.match(/\.[A-Za-z_-][\w-]*/g) || []).length;
+  const attrs = (rest.match(/\[[^\]]*\]/g) || []).length;
+  const pseudos = (rest.match(/(?<!:):[A-Za-z-]+/g) || []).length;
+  return classes + attrs + pseudos + functional;
 }
 
 /** True if the declaration block sets a border COLOR (paints), not a `none`/`0` reset. */
@@ -119,7 +164,7 @@ describe.each(['modern', 'rustic'] as const)(
       const offenders: string[] = [];
       for (const { selector, body } of rules) {
         if (!paintsBorder(body)) continue;
-        for (const part of selector.split(',')) {
+        for (const part of selectorList(selector)) {
           if (bColumn(part) < 4) offenders.push(part.trim());
         }
       }

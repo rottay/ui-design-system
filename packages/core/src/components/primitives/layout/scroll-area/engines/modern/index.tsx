@@ -25,6 +25,7 @@
 'use client';
 
 import React from 'react';
+import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
 import type { ScrollAreaProps } from '../../contracts';
 import { SCROLL_AREA_DEFAULTS } from '../../contracts';
 
@@ -74,6 +75,10 @@ export default function ModernScrollArea(props: ScrollAreaProps): React.ReactEle
     ...style,
   };
 
+  // The scroll region is a tab stop, and the skin paints its keyboard ring and
+  // its hover scrollbar reveal off the kernel stamp.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+
   // A blank/whitespace-only name is not meaningful: the root stays a plain
   // (non-landmark) scrollable div and the naming attribute is dropped.
   const hasRegionName = Boolean(ariaLabel?.trim()) || Boolean(ariaLabelledBy?.trim());
@@ -89,7 +94,8 @@ export default function ModernScrollArea(props: ScrollAreaProps): React.ReactEle
     <div
       className={`rottay-scroll-area rottay-scroll-area--modern rottay-scroll-area-modern ${className}`.trim()}
       style={containerStyle}
-      data-part="root"
+      {...partAttributes('root', interaction)}
+      {...interactionHandlers}
       data-orientation={orientation}
       data-scrollbar-size={scrollbarSize}
       data-hide-scrollbar={hideScrollbar ? 'true' : 'false'}

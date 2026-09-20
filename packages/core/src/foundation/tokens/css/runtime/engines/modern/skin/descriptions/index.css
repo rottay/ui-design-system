@@ -75,7 +75,7 @@
 }
 
 @media (hover: hover) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:is([data-state~='hovered'], :hover) {
     background-position: 100% 50%;
     border-color: var(
       --ds-descriptions-header-border-hover,
@@ -223,7 +223,7 @@
 }
 
 @media (hover: hover) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:is([data-state~='hovered'], :hover) {
     transform: translateY(-1px);
     border-color: var(
       --ds-descriptions-row-border-hover,
@@ -242,7 +242,7 @@
 /* Touch equivalent of the hover wash: coarse pointers never fire :hover, so
    the pressed row settles into the same tinted material with the lift
    removed (pressed = physically connected, no upward motion). */
-.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:active {
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:is([data-state~='pressed'], :active) {
   transform: none;
   background: var(
     --ds-descriptions-row-bg-hover,
@@ -416,8 +416,8 @@
    automatically; the row/header hover washes disappear, so hover keeps a
    plain outline and the empty-value dash stays visible as text. */
 @media (forced-colors: active) {
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover,
-  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:is([data-state~='hovered'], :hover),
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:is([data-state~='hovered'], :hover) {
     outline: 1px solid;
     outline-offset: -1px;
   }

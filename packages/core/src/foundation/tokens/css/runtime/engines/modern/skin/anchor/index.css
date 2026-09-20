@@ -159,20 +159,20 @@
         selected link keeps its own color; hover only lifts the idle link.
         Pointer-fine only (hover law); touch feedback is the press below. ---- */
 @media (hover: hover) {
-  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:hover {
+  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:is([data-state~='hovered'], :hover) {
     color: var(--ds-anchor-item-color-hover, var(--ds-color-text-primary));
   }
 }
 
-.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:active {
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:is([data-state~='pressed'], :active) {
   color: var(--ds-anchor-item-color-hover, var(--ds-color-text-primary));
   background: var(--ds-anchor-item-bg-active, var(--ds-surface-inset));
 }
 
 /* ---- link: keyboard focus ring (new in K3-C). ---- */
-.rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible {
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-anchor-focus-ring-offset, 2px);
+  outline-offset: var(--ds-anchor-focus-ring-offset, var(--ds-focus-ring-offset, 2px));
   border-radius: var(--ds-anchor-focus-ring-radius, var(--ds-radius-sm));
 }
 
@@ -208,8 +208,8 @@
   .rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
     border-block-end-color: ButtonText;
   }
-  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible {
-    outline: 2px solid Highlight;
+  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
   }
 }
 

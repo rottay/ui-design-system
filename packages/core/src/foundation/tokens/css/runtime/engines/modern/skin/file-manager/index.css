@@ -168,7 +168,7 @@
   }
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focused'], :focus) {
   outline-style: none;
 }
 
@@ -467,7 +467,7 @@
     .ds-file-manager__grid-card[data-part='grid-card']:is([data-state~='focus-visible'], :focus-visible),
   .ds-pattern-file-manager.ds-engine-modern
     .ds-file-manager__folder-link[data-part='folder-link']:is([data-state~='focus-visible'], :focus-visible) {
-    outline: 2px solid Highlight;
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: 1px;
     box-shadow: none;
   }

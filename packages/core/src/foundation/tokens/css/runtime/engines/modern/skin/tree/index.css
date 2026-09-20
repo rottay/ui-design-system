@@ -172,7 +172,7 @@
    on touch the wash would stick after the tap. Single-layer row hover (the
    old theme.css wrapper bridge is gone -- see the header). */
 @media (hover: hover) {
-  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]) {
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled]) {
     background: var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent));
   }
 }
@@ -180,7 +180,7 @@
 /* B4-04: press feedback -- one step deeper than the hover wash, ungated so
    touch gets the equivalent :active feedback the hover rule withholds. The
    selected row and disabled rows keep their own state paint. */
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:active:not([data-selected='true']):not([data-disabled]) {
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled]) {
   background: var(--_ds-tree-row-bg-active, color-mix(in srgb, var(--ds-surface-inset) 75%, transparent));
 }
 
@@ -214,8 +214,8 @@
    without setting the engine's focus state, so the visible indicator is a
    Rottay :focus-visible ring owned here (the state ring only exists once
    the engine's focusedKey is set). */
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible,
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle']:focus-visible {
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:is([data-state~='focus-visible'], :focus-visible),
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='drag-handle']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-offset));
 }

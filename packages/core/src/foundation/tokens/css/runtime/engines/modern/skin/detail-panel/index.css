@@ -176,13 +176,13 @@
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header']:hover {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header']:is([data-state~='hovered'], :hover) {
     background-position: 100% 50%;
     border-color: var(--ds-workspace-card-border-hover, var(--ds-card-header-border, var(--ds-color-border)));
     box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
   }
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header']:active {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header']:is([data-state~='pressed'], :active) {
   border-color: var(--ds-workspace-card-border-hover, var(--ds-card-header-border, var(--ds-color-border)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
 }
@@ -257,18 +257,18 @@
   box-shadow: var(--ds-elevation-1);
 }
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:hover:not(:disabled) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-primary-600);
     border-color: var(--ds-color-primary-600);
     box-shadow: var(--ds-elevation-2);
   }
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:is([data-state~='focused'], :focus):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
   box-shadow: var(--ds-elevation-2);
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:active:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .ds-button:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
 }
@@ -279,16 +279,16 @@
   border: 1px solid var(--ds-color-error-200);
 }
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:hover:not(:disabled) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-50);
     border-color: var(--ds-color-error-300);
   }
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:focus:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:is([data-state~='focused'], :focus):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:active:not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .ds-button:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }
@@ -354,18 +354,18 @@
   opacity: 0.5;
 }
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:hover:not([data-active='true']):not(:disabled) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:is([data-state~='hovered'], :hover):not([data-active='true']):not(:is([data-state~='disabled'], :disabled)) {
     color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
     background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
     border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
   }
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:focus:not([data-active='true']):not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:is([data-state~='focused'], :focus):not([data-active='true']):not(:is([data-state~='disabled'], :disabled)) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
   border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:active:not([data-active='true']):not(:disabled) {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:is([data-state~='pressed'], :active):not([data-active='true']):not(:is([data-state~='disabled'], :disabled)) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
 }
@@ -374,10 +374,13 @@
    tabindex parks Tab on the active tab, which the :focus hover-mirror above
    deliberately excludes — without this ring, focus on the only tabbable tab
    was invisible in normal mode. */
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:focus-visible {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(
-    --ds-shadow-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    --ds-focus-ring,
+    var(
+      --ds-shadow-focus-ring,
+      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    )
   );
 }
 
@@ -449,11 +452,11 @@
   transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:hover {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:is([data-state~='hovered'], :hover) {
     color: var(--ds-color-text-primary);
   }
 }
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:active {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-text-primary);
 }
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current'] {
@@ -633,11 +636,11 @@
         arm is each region's own rest paint) in every other vertical. Hover
         guard per house hover law; the reduced-motion twin lives below. ---- */
 @media (hover: hover) {
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:hover {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:is([data-state~='hovered'], :hover) {
     background: var(--ds-workspace-card-bg-hover, var(--ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)))));
     transform: var(--ds-workspace-card-hover-transform, none);
   }
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:hover {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:is([data-state~='hovered'], :hover) {
     background: var(--ds-workspace-card-bg-hover, var(--ds-detail-section-bg, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)))));
     transform: var(--ds-workspace-card-hover-transform, none);
   }
@@ -751,8 +754,8 @@
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar'] {
     transition: none;
   }
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:hover,
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:hover {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:is([data-state~='hovered'], :hover),
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:is([data-state~='hovered'], :hover) {
     transform: none;
   }
 }
@@ -778,9 +781,9 @@
     border-color: Highlight;
   }
 
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:focus-visible,
-  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 }

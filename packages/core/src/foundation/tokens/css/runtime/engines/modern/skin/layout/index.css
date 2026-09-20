@@ -216,16 +216,16 @@
 /* Hover only where hover exists; touch pointers get the same quiet feedback
    on press, so no pointer class loses the affordance (4th-wave hover law). */
 @media (hover: hover) {
-  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:hover {
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='hovered'], :hover) {
     background: var(--ds-layout-sider-trigger-bg-hover, var(--ds-surface-highlight));
   }
 }
 
-.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:active {
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='pressed'], :active) {
   background: var(--ds-layout-sider-trigger-bg-hover, var(--ds-surface-highlight));
 }
 
-.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:focus-visible {
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
   outline-offset: calc(-1 * var(--ds-focus-ring-offset));
 }
@@ -286,9 +286,9 @@
     border: 1px solid ButtonText;
   }
 
-  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 }
 

@@ -301,8 +301,8 @@
         `--ds-color-text-primary` (>= 12:1 on both hover surfaces). The
         transition lives in the shared geometry rule above (W10). ---- */
 @media (hover: hover) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover,
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover),
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) {
     background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
   }
 }
@@ -311,9 +311,9 @@
         double ring (WO-ENG-04: bg gap + tenant ring colour, >= 3:1 on any
         fill). Under forced colors box-shadows are dropped, so the
         forced-colors block below re-maps this to a Highlight outline. ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:focus-visible,
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:focus-visible,
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:focus-visible {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:is([data-state~='focus-visible'], :focus-visible),
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-calendar-focus-ring, var(--ds-focus-ring));
 }
 
@@ -322,8 +322,8 @@
         already owns `transform` on the nav buttons, and scaling a grid cell
         jitters its neighbours. Same gates as hover (the active mode toggle
         excluded). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):active,
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):active {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active),
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) {
   background: var(--ds-calendar-nav-bg-active, var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover)));
 }
 
@@ -400,11 +400,11 @@
   }
   /* W10: box-shadow focus rings are dropped under forced colors -- re-map the
      keyboard ring to a Highlight outline on every interactive part. */
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:focus-visible,
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:focus-visible,
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible),
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:is([data-state~='focus-visible'], :focus-visible),
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
@@ -427,7 +427,7 @@
    direct child, cells are direct children carrying data-selected/data-today
    and data-disabled only when disabled. */
 @media (hover: hover) {
-  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='hovered'], :hover):not([data-selected='true']):not([data-disabled]) {
     background: var(
       --ds-calendar-cell-hover,
       var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
@@ -438,7 +438,7 @@
 /* ---- W10: press feedback on cells -- the WO-ENG-04 active channel, one
         step deeper than hover (alpha-primary-10 vs the 6-8% hover tint), same
         gates. Background only, no transform (see the header press rule). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:active:not([data-selected='true']):not([data-disabled]) {
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:is([data-state~='pressed'], :active):not([data-selected='true']):not([data-disabled]) {
   background: var(
     --ds-calendar-cell-active,
     var(--ds-color-interactive-bg-active, color-mix(in srgb, var(--ds-color-primary) 14%, transparent))

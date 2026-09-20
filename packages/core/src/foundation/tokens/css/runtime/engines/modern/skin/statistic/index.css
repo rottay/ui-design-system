@@ -48,7 +48,7 @@
 /* Pointer-fine hover only (hover law): a passive metric has no touch press
    semantics, so no :active twin — touch simply skips the lift. */
 @media (hover: hover) {
-  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='false']:hover {
+  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='false']:is([data-state~='hovered'], :hover) {
     transform: translateY(-1px);
     filter: saturate(1.025);
   }
@@ -241,7 +241,7 @@
   /* The hover lift/saturate must not fire instantly either (calm frame law),
      and the loading pulse settles to a static bar (the global guard covers
      it too -- this rule keeps the family self-contained). */
-  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='false']:hover {
+  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='false']:is([data-state~='hovered'], :hover) {
     transform: none;
     filter: none;
   }

@@ -124,18 +124,21 @@
   cursor: pointer;
   transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:focus-visible {
+.ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(
-    --ds-shadow-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    --ds-focus-ring,
+    var(
+      --ds-shadow-focus-ring,
+      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    )
   );
 }
-.ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:active {
+.ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-highlight);
 }
 @media (hover: hover) {
-  .ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:hover:not([data-selected='true']) {
+  .ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:is([data-state~='hovered'], :hover):not([data-selected='true']) {
     background: var(--ds-surface-highlight);
   }
 }

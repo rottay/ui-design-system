@@ -63,7 +63,7 @@
   cursor: pointer;
 }
 
-.rottay-image.rottay-image--modern[data-part='root']:focus-visible {
+.rottay-image.rottay-image--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(--ds-image-focus-ring, var(--ds-focus-ring));
 }
@@ -213,9 +213,9 @@
     color: ButtonFace;
   }
 
-  .rottay-image.rottay-image--modern[data-part='root']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-image.rottay-image--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
     box-shadow: none;
   }
 }

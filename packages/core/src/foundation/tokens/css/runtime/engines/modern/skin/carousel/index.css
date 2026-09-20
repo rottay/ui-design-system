@@ -137,11 +137,11 @@
 /* Pointer-fine hover only (hover law); touch feedback is the press below. A
    disabled edge arrow keeps rest paint (no affordance on a dead control). */
 @media (hover: hover) {
-  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover:not(:disabled) {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
     color: var(--ds-color-primary);
   }
-  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover {
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
     box-shadow:
       0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20)),
@@ -149,25 +149,25 @@
   }
 }
 
-.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active {
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:is([data-state~='pressed'], :active) {
   border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
   color: var(--ds-color-primary);
   transform: scale(var(--ds-state-press-scale));
 }
-.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:active {
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:is([data-state~='pressed'], :active) {
   transform: scale(var(--ds-state-press-scale));
 }
 
 /* Disabled edge arrow (infinite=off at a boundary): readable but unmistakably
    inactive, riding the shared disabled-opacity channel — no new hook. */
-.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:disabled {
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:is([data-state~='disabled'], :disabled) {
   cursor: default;
   opacity: var(--ds-state-disabled-opacity);
   box-shadow: none;
 }
 
-.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible,
-.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible {
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:is([data-state~='focus-visible'], :focus-visible),
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
 }
@@ -238,8 +238,8 @@
   .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'] {
     transition: none;
   }
-  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active,
-  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:active {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:is([data-state~='pressed'], :active),
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:is([data-state~='pressed'], :active) {
     transform: none;
   }
 }
@@ -256,7 +256,7 @@
   }
   /* Opacity is stripped in forced-colors, so the disabled edge arrow
      re-expresses through the system disabled ink instead. */
-  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:disabled {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:is([data-state~='disabled'], :disabled) {
     border-color: GrayText;
     color: GrayText;
   }
@@ -269,8 +269,8 @@
     box-shadow: none;
     outline: 1px solid ButtonText;
   }
-  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible,
-  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:is([data-state~='focus-visible'], :focus-visible),
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
 }

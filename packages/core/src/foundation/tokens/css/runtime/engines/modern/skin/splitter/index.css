@@ -83,17 +83,17 @@
         persistent grip below is the touch affordance (4th-wave hover law).
         Dragging reads as a primary TINT, never a loud full-strength bar. ---- */
 @media (hover: hover) {
-  .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:hover:not([data-resizable='false']) {
+  .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:is([data-state~='hovered'], :hover):not([data-resizable='false']) {
     background: var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel))));
   }
 }
 
-.ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:active:not([data-resizable='false']) {
+.ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:is([data-state~='pressed'], :active):not([data-resizable='false']) {
   background: var(--ds-splitter-gutter-bg-hover, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-material-panel-background, var(--ds-surface-panel))));
 }
 
 .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true'],
-.ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:hover {
+.ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:is([data-state~='hovered'], :hover) {
   background: var(--ds-splitter-gutter-bg-dragging, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-material-panel-background, var(--ds-surface-panel))));
 }
 
@@ -138,7 +138,7 @@
 
 /* ---- gutter: keyboard focus ring (the K3-C engine made gutters real
         `role="separator"` tab stops). ---- */
-.ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
+.ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
   outline-offset: var(--ds-splitter-gutter-focus-ring-offset, var(--ds-edge-hairline-width, 1px));
 }
@@ -172,13 +172,13 @@
     background: ButtonFace;
   }
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true'],
-  .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:hover {
+  .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:is([data-state~='hovered'], :hover) {
     background: Highlight;
   }
   .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']::after {
     background: ButtonText;
   }
-  .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
-    outline: 2px solid Highlight;
+  .ds-splitter.ds-splitter--modern[data-part='root'] [data-part='gutter']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
   }
 }

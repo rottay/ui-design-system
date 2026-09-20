@@ -208,7 +208,7 @@
 
 /* The trigger itself is now a keyboard target (Shift+F10 / Menu key opens
    the menu), so it needs a visible focus ring. */
-.rottay-context-menu--modern[data-part='trigger']:focus-visible {
+.rottay-context-menu--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-radius-md);
@@ -220,7 +220,7 @@
         because keyboard focus is pointer-agnostic, and :active gives touch
         the equivalent pressed surface. ---- */
 @media (hover: hover) {
-  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):hover {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) {
     color: var(--ds-context-menu-item-color-hover, var(--ds-color-text-primary));
     background: var(
       --ds-context-menu-item-bg-hover,
@@ -228,25 +228,25 @@
     );
   }
 }
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='focus-visible'], :focus-visible) {
   color: var(--ds-context-menu-item-color-hover, var(--ds-color-text-primary));
   background: var(
     --ds-context-menu-item-bg-hover,
     color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
   );
 }
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
-  box-shadow: var(--ds-shadow-focus-ring);
+  box-shadow: var(--ds-focus-ring, var(--ds-shadow-focus-ring));
 }
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):active {
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) {
   background: var(
     --ds-context-menu-item-bg-active,
     color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card))
   );
 }
 @media (hover: hover) {
-  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):hover {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) {
     color: var(--ds-context-menu-danger-color-hover, var(--ds-color-error));
     background: var(
       --ds-context-menu-danger-bg-hover,
@@ -254,14 +254,14 @@
     );
   }
 }
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):focus-visible {
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='focus-visible'], :focus-visible) {
   color: var(--ds-context-menu-danger-color-hover, var(--ds-color-error));
   background: var(
     --ds-context-menu-danger-bg-hover,
     color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-surface-card))
   );
 }
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):active {
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='pressed'], :active) {
   background: var(
     --ds-context-menu-danger-bg-active,
     color-mix(in srgb, var(--ds-color-error) 13%, var(--ds-surface-card))
@@ -273,8 +273,8 @@
    a 1px background-painted strip: with backgrounds forced to Canvas it
    vanishes, so it re-asserts in a system color. */
 @media (forced-colors: active) {
-  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):hover,
-  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover),
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:is([data-state~='disabled'], :disabled)):is([data-state~='focus-visible'], :focus-visible) {
     outline: 1px solid;
   }
   .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='divider'] {

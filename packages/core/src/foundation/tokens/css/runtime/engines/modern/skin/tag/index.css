@@ -277,14 +277,14 @@
 /* Hover lift only where hover exists (4th-wave law); the touch answer is the
    :active state below -- same tint and full opacity, no grow on press. */
 @media (hover: hover) {
-  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:hover {
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:is([data-state~='hovered'], :hover) {
     opacity: 1;
     transform: scale(1.06);
     background: color-mix(in srgb, currentColor 14%, transparent);
   }
 }
 
-.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:active {
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:is([data-state~='pressed'], :active) {
   opacity: 1;
   background: color-mix(in srgb, currentColor 14%, transparent);
 }
@@ -301,17 +301,17 @@
 }
 
 @media (hover: hover) {
-  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover {
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='hovered'], :hover) {
     transform: translateY(-1px);
     filter: saturate(1.06);
   }
 
-  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover > [data-part='icon'] {
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='hovered'], :hover) > [data-part='icon'] {
     transform: translateY(-1px);
   }
 }
 
-.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:focus-visible {
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible) {
   /* Tenant tag channel -> governed global focus ring -> crafted literal
      (Callout `--ds-focus-ring` precedent; the literal guards standalone use). */
   box-shadow: var(
@@ -320,12 +320,12 @@
   );
 }
 
-.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:active {
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='pressed'], :active) {
   transform: var(--ds-tag-press-transform, translateY(0) scale(0.98));
   filter: none;
 }
 
-.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:focus-visible {
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(
     --ds-tag-close-focus-ring,
     0 0 0 2px color-mix(in srgb, currentColor 26%, transparent)
@@ -356,10 +356,10 @@
   .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'] {
     transition: none;
   }
-  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover,
-  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:active,
-  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:hover > [data-part='icon'],
-  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:hover {
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='hovered'], :hover),
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='pressed'], :active),
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='hovered'], :hover) > [data-part='icon'],
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:is([data-state~='hovered'], :hover) {
     transform: none;
   }
 }
@@ -372,10 +372,10 @@
     box-shadow: none;
     forced-color-adjust: auto;
   }
-  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:focus-visible,
-  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-clickable='true']:is([data-state~='focus-visible'], :focus-visible),
+  .rottay-tag-shell.rottay-tag-shell--modern > [data-part='close']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
     box-shadow: none;
   }
   .rottay-tag-shell.rottay-tag-shell--modern > [data-part='icon'],

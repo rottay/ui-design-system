@@ -67,16 +67,16 @@
   cursor: pointer;
 }
 @media (hover: hover) {
-  .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:hover {
+  .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:active {
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-inset);
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:focus-visible {
-  outline: 2px solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: 2px;
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 /* ---- item header: geometry drained (flex row, wrapping) ---- */
@@ -247,7 +247,7 @@
     border: 1px solid ButtonText;
     background: Canvas;
   }
-  .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:focus-visible {
+  .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
     outline-color: Highlight;
   }
 }

@@ -41,6 +41,7 @@
 
 import React, { useId } from 'react';
 import type { InvoiceTemplateProps } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { panelCardStyle } from '../../../../foundation/engine-styles/modern';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
@@ -83,6 +84,10 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
   const i18n = useOptionalTranslation('components');
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? floor;
+
+  // The scroll group is the family's own tab stop: the kernel decides its
+  // keyboard ring, and the skin's pseudo-class arm is that decision's fallback.
+  const itemsScroll = useInteractionState();
 
   // The table caption names BOTH the table and the scroll group that owns it,
   // so the new tab stop reuses existing localized copy instead of new keys.
@@ -232,7 +237,8 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
         {/* The wrapper holds no focusable descendant, so the scroll container
             must itself be a named tab stop to stay keyboard-operable. */}
         <div
-          data-part="items-table-wrapper"
+          {...partAttributes('items-table-wrapper', itemsScroll.state)}
+          {...itemsScroll.handlers}
           role="group"
           tabIndex={0}
           aria-labelledby={captionId}

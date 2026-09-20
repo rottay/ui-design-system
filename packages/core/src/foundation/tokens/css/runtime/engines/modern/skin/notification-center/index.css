@@ -193,7 +193,7 @@
    real input mode (hover law). Unread stays readable through the title
    weight + the dot shape, so the hover wash may cover the tint. */
 @media (hover: hover) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:hover {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-highlight);
   }
 }
@@ -277,15 +277,15 @@
 }
 .ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='mark-read'],
 .ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='dismiss'],
-.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:focus-visible,
-.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:focus-visible {
+.ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 @media (hover: hover) {
-  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:hover [data-part='mark-read'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:hover [data-part='dismiss'],
-  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:hover,
-  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:hover {
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) [data-part='mark-read'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='row']:is([data-state~='hovered'], :hover) [data-part='dismiss'],
+  .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read']:is([data-state~='hovered'], :hover),
+  .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:is([data-state~='hovered'], :hover) {
     opacity: 1;
   }
 }

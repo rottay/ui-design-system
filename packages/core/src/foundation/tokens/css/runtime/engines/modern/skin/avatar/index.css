@@ -278,7 +278,7 @@
         Hover paint is hover-capable-only (4th-wave law): on touch the :active
         press below is the tactile equivalent, with no ghost hover sticking. ---- */
 @media (hover: hover) {
-  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:hover > [data-part='mask'] {
+  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:is([data-state~='hovered'], :hover) > [data-part='mask'] {
     transform: var(--ds-avatar-hover-transform, scale(var(--ds-avatar-hover-scale)));
     box-shadow:
       0 0 0 1px var(--ds-avatar-ring-color, var(--ds-avatar-hover-border-color, var(--ds-color-primary-300, var(--ds-color-primary)))),
@@ -286,15 +286,15 @@
   }
 }
 
-.rottay-avatar.rottay-avatar--modern[data-interactive='true']:active > [data-part='mask'] {
+.rottay-avatar.rottay-avatar--modern[data-interactive='true']:is([data-state~='pressed'], :active) > [data-part='mask'] {
   transform: var(--ds-avatar-press-transform, scale(var(--ds-avatar-active-scale)));
 }
 
-.rottay-avatar.rottay-avatar--modern[data-interactive='true']:focus-visible {
+.rottay-avatar.rottay-avatar--modern[data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
 }
 
-.rottay-avatar.rottay-avatar--modern[data-interactive='true']:focus-visible > [data-part='mask'] {
+.rottay-avatar.rottay-avatar--modern[data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) > [data-part='mask'] {
   box-shadow: var(
     --ds-avatar-focus-ring,
     0 0 0 var(--ds-avatar-focus-ring-offset) var(--ds-surface-card-bg, var(--ds-color-bg-elevated)),
@@ -335,8 +335,8 @@
   .rottay-avatar.rottay-avatar--modern > [data-part='status-dot'] {
     transition: none;
   }
-  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:hover > [data-part='mask'],
-  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:active > [data-part='mask'] {
+  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:is([data-state~='hovered'], :hover) > [data-part='mask'],
+  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:is([data-state~='pressed'], :active) > [data-part='mask'] {
     transform: none;
   }
 }
@@ -352,9 +352,9 @@
 
   /* The interactive focus ring is a box-shadow, which forced colors strips;
      the outline keeps keyboard focus visible. */
-  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:focus-visible > [data-part='mask'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) > [data-part='mask'] {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 }
 

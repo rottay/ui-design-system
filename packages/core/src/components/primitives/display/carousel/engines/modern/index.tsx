@@ -77,6 +77,7 @@ import React, {
   useCallback,
 } from 'react';
 import type { CarouselProps, CarouselRef } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { VisuallyHidden } from '../../../../foundation';
 import { CAROUSEL_DEFAULTS } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -92,6 +93,39 @@ import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/na
  * behavior constant, so it stays a module literal (no token).
  */
 const SWIPE_THRESHOLD_PX = 40;
+
+/**
+ * One navigation dot. It is its own component because the press feedback the
+ * skin paints is the kernel's decision, and a hook cannot run inside a map.
+ */
+function CarouselDot(props: {
+  selected: boolean;
+  label: string;
+  controls: string;
+  onSelect: () => void;
+}): React.ReactElement {
+  const { selected, label, controls, onSelect } = props;
+  const interaction = useInteractionState();
+  return (
+    <button
+      {...partAttributes('dot', interaction.state)}
+      {...interaction.handlers}
+      data-selected={selected ? 'true' : 'false'}
+      onClick={onSelect}
+      aria-label={label}
+      aria-selected={selected}
+      // A `tab` must name the thing it switches to; the slides now
+      // carry the ids that close that relation.
+      aria-controls={controls}
+      // Roving stop (APG tablist): one dot in the tab order, arrows
+      // move between them. Ten slides used to mean ten tab stops
+      // between the carousel and the rest of the page.
+      tabIndex={selected ? 0 : -1}
+      role="tab"
+      type="button"
+    />
+  );
+}
 
 /**
  * Modern Carousel - Token-driven Tailwind Implementation
@@ -427,6 +461,10 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     // live, so the keyboard user can still walk back out.
     const prevArrowRef = useRef<HTMLButtonElement>(null);
     const nextArrowRef = useRef<HTMLButtonElement>(null);
+    // Arrow press feedback is the kernel's decision; the skin's `:active` arm
+    // is that decision's platform fallback.
+    const prevArrowState = useInteractionState({ disabled: prevDisabled });
+    const nextArrowState = useInteractionState({ disabled: nextDisabled });
     useEffect(() => {
       const active = document.activeElement;
       if (active === nextArrowRef.current && nextDisabled && !prevDisabled) {
@@ -544,7 +582,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             <button
               ref={prevArrowRef}
               className="absolute start-2 top-1/2 -translate-y-1/2 z-10"
-              data-part="arrow"
+              {...partAttributes('arrow', prevArrowState.state)}
+              {...prevArrowState.handlers}
               data-direction="prev"
               onClick={prev}
               disabled={prevDisabled}
@@ -563,7 +602,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             <button
               ref={nextArrowRef}
               className="absolute end-2 top-1/2 -translate-y-1/2 z-10"
-              data-part="arrow"
+              {...partAttributes('arrow', nextArrowState.state)}
+              {...nextArrowState.handlers}
               data-direction="next"
               onClick={next}
               disabled={nextDisabled}
@@ -600,22 +640,12 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             onMouseLeave={handleDotsMouseLeave}
           >
             {slides.map((_, index) => (
-              <button
+              <CarouselDot
                 key={index}
-                data-part="dot"
-                data-selected={index === activeSlide ? 'true' : 'false'}
-                onClick={() => goTo(index)}
-                aria-label={carouselLabel('carousel.goToSlide', `Go to slide ${index + 1}`, { index: index + 1 })}
-                aria-selected={index === activeSlide}
-                // A `tab` must name the thing it switches to; the slides now
-                // carry the ids that close that relation.
-                aria-controls={`${slideIdPrefix}-${index}`}
-                // Roving stop (APG tablist): one dot in the tab order, arrows
-                // move between them. Ten slides used to mean ten tab stops
-                // between the carousel and the rest of the page.
-                tabIndex={index === activeSlide ? 0 : -1}
-                role="tab"
-                type="button"
+                selected={index === activeSlide}
+                label={carouselLabel('carousel.goToSlide', `Go to slide ${index + 1}`, { index: index + 1 })}
+                controls={`${slideIdPrefix}-${index}`}
+                onSelect={() => goTo(index)}
               />
             ))}
           </div>

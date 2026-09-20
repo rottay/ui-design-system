@@ -17,7 +17,11 @@ function ruleBlock(css: string, selectorPart: string): string {
 }
 
 const ARROW_REST = "> [data-part='arrow'][data-direction] {";
-const ARROW_HOVER = "> [data-part='arrow'][data-direction]:hover:not(:disabled) {";
+// State is decided once (F-37): the arrow's hover arm pairs the kernel token
+// with the platform pseudo-class it stands for.
+const ARROW_HOVER =
+  "> [data-part='arrow'][data-direction]:is([data-state~='hovered'], :hover)"
+  + ":not(:is([data-state~='disabled'], :disabled)) {";
 
 describe('Carousel modern premium ground', () => {
   it('rests the arrows without elevation', () => {

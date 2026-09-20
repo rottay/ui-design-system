@@ -102,7 +102,7 @@
         `hover:scale-110` docblock) + deepened elevation, gated to devices
         with real hover (4th-tanda law). ---- */
 @media (hover: hover) {
-  .rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover {
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='hovered'], :hover) {
     transform: var(--ds-backtop-hover-transform, translateY(-2px));
     /* P2-20 fallback parity: `--ds-elevation-3` is a DECLARED channel — bare
        reference resolves the tenant default (the drained literal was a P0
@@ -114,15 +114,15 @@
 /* ---- pressed: the touch/active equivalent -- a small dip below rest, so a
         coarse-pointer tap gets the same cause-and-effect feedback the hover
         lift gives on fine pointers. ---- */
-.rottay-backtop.rottay-backtop--modern[data-part='trigger']:active {
+.rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='pressed'], :active) {
   transform: var(--ds-backtop-pressed-transform, translateY(1px));
   box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
 }
 
 /* ---- keyboard focus ring. ---- */
-.rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible {
+.rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-backtop-focus-ring-offset, 2px);
+  outline-offset: var(--ds-backtop-focus-ring-offset, var(--ds-focus-ring-offset, 2px));
 }
 
 @media (forced-colors: active) {
@@ -131,8 +131,8 @@
     border: 1px solid ButtonText;
     forced-color-adjust: auto;
   }
-  .rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible {
-    outline: 2px solid Highlight;
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
   }
 }
 

@@ -19,6 +19,7 @@ import { QRCODE_DEFAULTS } from '../../contracts';
 import { EncodedQRCodeSymbol } from '../../runtime/encoded-symbol';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 
 /** Codeword recovery capacity per error-correction level (ISO/IEC 18004). */
 const RECOVERY_BUDGET: Record<QRCodeErrorLevel, number> = {
@@ -36,6 +37,31 @@ function clampIconSize(iconSize: number, size: number, errorLevel: QRCodeErrorLe
   if (!Number.isFinite(iconSize) || iconSize <= 0) return 0;
   const budget = RECOVERY_BUDGET[errorLevel] ?? RECOVERY_BUDGET.M;
   return Math.min(iconSize, Math.floor(size * Math.sqrt(budget)));
+}
+
+/**
+ * The expired-overlay refresh action. It is its own component because the
+ * overlay is rendered from a switch, and the kernel state the skin's press and
+ * focus arms read must not be created conditionally.
+ */
+function QrCodeRefreshButton(props: {
+  label: string;
+  text: string;
+  onRefresh: () => void;
+}): React.ReactElement {
+  const { label, text, onRefresh } = props;
+  const interaction = useInteractionState();
+  return (
+    <button
+      {...partAttributes('refresh-button', interaction.state)}
+      {...interaction.handlers}
+      type="button"
+      aria-label={label}
+      onClick={onRefresh}
+    >
+      {text}
+    </button>
+  );
 }
 
 /**
@@ -99,14 +125,11 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
           <div data-part="overlay" role="alert">
             <span data-part="status-text">{qrcodeLabel('qrcode.expired', 'QR Code expired')}</span>
             {onRefresh && (
-              <button
-                data-part="refresh-button"
-                type="button"
-                aria-label={qrcodeLabel('qrcode.refreshLabel', 'Refresh QR code')}
-                onClick={onRefresh}
-              >
-                {qrcodeLabel('qrcode.refresh', 'Refresh')}
-              </button>
+              <QrCodeRefreshButton
+                label={qrcodeLabel('qrcode.refreshLabel', 'Refresh QR code')}
+                text={qrcodeLabel('qrcode.refresh', 'Refresh')}
+                onRefresh={onRefresh}
+              />
             )}
           </div>
         );

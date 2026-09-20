@@ -40,27 +40,30 @@
     background-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
-  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:hover {
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:is([data-state~='hovered'], :hover) {
     box-shadow: var(--ds-elevation-2);
   }
-  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:hover {
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
-.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:focus-visible {
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(
-    --ds-shadow-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    --ds-focus-ring,
+    var(
+      --ds-shadow-focus-ring,
+      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    )
   );
 }
 
 /* ---- pressed: hover-only feedback left the press unanswered on touch and
    on keyboard activation. The full card settles back one elevation rung; */
-.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:active {
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:is([data-state~='pressed'], :active) {
   box-shadow: var(--ds-elevation-1);
 }
-.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:active {
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-inset));
 }
 
@@ -320,11 +323,14 @@
   padding-inline: var(--ds-spacing-4, 16px);
   font-size: var(--ds-font-size-sm, 14px);
 }
-.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:focus-visible {
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(
-    --ds-shadow-focus-ring,
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    --ds-focus-ring,
+    var(
+      --ds-shadow-focus-ring,
+      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    )
   );
 }
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-disabled='true'] {
@@ -352,13 +358,13 @@
 }
 
 @media (hover: hover) {
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']:not([data-disabled='true']):hover {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 88%, var(--ds-color-text-primary));
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']:not([data-disabled='true']):hover {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-error) 88%, var(--ds-color-text-primary));
   }
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default']:not([data-disabled='true']):hover {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default']:not([data-disabled='true']):is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
@@ -381,10 +387,10 @@
 
   /* Both focus rings above are box-shadows, which the OS drops here: without
      these the card and its actions focus invisibly in high contrast. */
-  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:focus-visible,
-  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
 
   .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'] {

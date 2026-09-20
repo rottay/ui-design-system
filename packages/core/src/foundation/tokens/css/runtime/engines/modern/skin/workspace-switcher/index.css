@@ -50,9 +50,9 @@
 /* Trigger/create/settings had NO hover or press state (the pattern skin is
    their single paint owner, P-79). Hover rides the (hover: hover) guard with
    an unguarded :active twin (house hover law). */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:active,
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:active,
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:active {
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='pressed'], :active),
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:is([data-state~='pressed'], :active),
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='pressed'], :active) {
   background: var(--ds-surface-inset);
 }
 
@@ -321,7 +321,7 @@
    gets the persistent gear via the (hover: none) block below. The keyboard
    reveals (virtual focus + own focus ring) are NEVER hover-gated. */
 @media (hover: hover) {
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover:not([data-active='true']) {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:is([data-state~='hovered'], :hover):not([data-active='true']) {
     /* Same hazard as the trigger: the tenant hook stays, its FALLBACK stops
        resolving to the near-black `--ds-surface-highlight` under dark ink. */
     background: var(
@@ -330,12 +330,12 @@
     );
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:hover [data-part='settings'] {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-row']:is([data-state~='hovered'], :hover) [data-part='settings'] {
     opacity: 1;
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover,
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='hovered'], :hover),
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:is([data-state~='hovered'], :hover) {
     /* `--ds-surface-highlight` is #18181C under BOTH first-party themes, so the
        bare token painted near-black under dark ink (measured 1.18:1). */
     background: color-mix(
@@ -346,7 +346,7 @@
     color: var(--ds-color-text-primary);
   }
 
-  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:hover {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='hovered'], :hover) {
     background: var(--ds-surface-inset);
   }
 }
@@ -425,7 +425,7 @@
 
 /* Keyboard reveals (virtual focus + own focus ring) -- never hover-gated. */
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'][data-focused='true'],
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focus-visible {
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='focus-visible'], :focus-visible) {
   opacity: 1;
 }
 
@@ -495,16 +495,16 @@
 }
 
 /* ---- focus rings for the three composed buttons ---- */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:focus-visible,
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focus-visible,
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:focus-visible {
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 /* The row control now takes REAL focus. Its ring draws INSIDE the box: the
    list scrolls and the panel clips, so an outset ring would be shaved off. */
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:focus-visible {
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
 }

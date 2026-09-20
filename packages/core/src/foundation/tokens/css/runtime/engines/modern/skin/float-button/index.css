@@ -101,14 +101,14 @@
         hover/press/focus rules (K4-C). Hover is hover-capable-only (4th-wave
         law); the press rule below is the real :active equivalent. ---- */
 @media (hover: hover) {
-  .rottay-float-button.rottay-float-button--modern[data-part='trigger']:hover:not(:disabled) {
+  .rottay-float-button.rottay-float-button--modern[data-part='trigger']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     transform: var(--ds-button-hover-transform, translateY(0) scale(1));
   }
 }
-.rottay-float-button.rottay-float-button--modern[data-part='trigger']:active:not(:disabled) {
+.rottay-float-button.rottay-float-button--modern[data-part='trigger']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   transform: var(--ds-button-active-transform, scale(0.98));
 }
-.rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible {
+.rottay-float-button.rottay-float-button--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-button-focus-ring);
   outline: none;
 }
@@ -279,9 +279,9 @@
     forced-color-adjust: auto;
   }
 
-  .rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-float-button.rottay-float-button--modern[data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
     box-shadow: none;
   }
 

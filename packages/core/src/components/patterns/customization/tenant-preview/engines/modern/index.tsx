@@ -26,6 +26,7 @@
 
 import React, { useMemo, useEffect, useId, useRef, useState } from 'react';
 import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
 import { buildPreviewCss, draftPreviewSource } from '../../runtime/preview-css';
@@ -114,6 +115,9 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
   // Optional channel with an English floor: the preview renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // The fixture's scroll region is the family's own tab stop, so its keyboard
+  // ring is decided by the kernel rather than by the pseudo-class alone.
+  const tableScroll = useInteractionState();
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string => {
     const resolvedFloor = applyFloorParams(floor, params);
     return i18n?.tOr(key, resolvedFloor, params) ?? resolvedFloor;
@@ -438,7 +442,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   <div data-part="sub-label">{copy.table}</div>
                   {/* The fixture overflows on narrow previews; a scroll
                       region with no tab stop is unreachable by keyboard. */}
-                  <div data-part="table-scroll" role="group" aria-label={copy.table} tabIndex={0}>
+                  <div
+                    {...partAttributes('table-scroll', tableScroll.state)}
+                    {...tableScroll.handlers}
+                    role="group"
+                    aria-label={copy.table}
+                    tabIndex={0}
+                  >
                     <table data-part="sample-table">
                       <thead>
                         <tr data-part="table-head">

@@ -303,23 +303,23 @@
 /* Remove affordance: hover lift only where hover exists; touch gets the same
    tint through :active, without the grow (a press does not scale up). */
 @media (hover: hover) {
-  .rottay-badge.rottay-badge--modern > [data-part='close']:hover {
+  .rottay-badge.rottay-badge--modern > [data-part='close']:is([data-state~='hovered'], :hover) {
     transform: var(--ds-badge-remove-hover-transform, scale(1.06));
     background: var(--ds-badge-remove-hover-bg, color-mix(in srgb, currentColor 12%, transparent));
     opacity: 1;
   }
 }
 
-.rottay-badge.rottay-badge--modern > [data-part='close']:active {
+.rottay-badge.rottay-badge--modern > [data-part='close']:is([data-state~='pressed'], :active) {
   background: var(--ds-badge-remove-hover-bg, color-mix(in srgb, currentColor 12%, transparent));
   opacity: 1;
 }
 
-.rottay-badge.rottay-badge--modern > [data-part='close']:focus-visible {
+.rottay-badge.rottay-badge--modern > [data-part='close']:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(--ds-badge-remove-focus-ring, 0 0 0 2px color-mix(in srgb, currentColor 24%, transparent));
 }
 
-.rottay-badge.rottay-badge--modern > [data-part='close']:disabled {
+.rottay-badge.rottay-badge--modern > [data-part='close']:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
   opacity: 0.42;
 }
@@ -589,7 +589,7 @@
   }
   .rottay-badge.rottay-badge--modern[data-state~='hovered'],
   .rottay-badge.rottay-badge--modern[data-state~='pressed'],
-  .rottay-badge.rottay-badge--modern > [data-part='close']:hover {
+  .rottay-badge.rottay-badge--modern > [data-part='close']:is([data-state~='hovered'], :hover) {
     transform: var(--ds-badge-position-transform, translateY(0));
   }
 }
@@ -618,17 +618,17 @@
     color: HighlightText;
   }
   .rottay-badge.rottay-badge--modern[data-state~='focus-visible'] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
   .rottay-badge.rottay-badge--modern > [data-part='close'] {
     border: 1px solid ButtonText;
     background: Canvas;
     color: CanvasText;
   }
-  .rottay-badge.rottay-badge--modern > [data-part='close']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  .rottay-badge.rottay-badge--modern > [data-part='close']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
     box-shadow: none;
   }
 }

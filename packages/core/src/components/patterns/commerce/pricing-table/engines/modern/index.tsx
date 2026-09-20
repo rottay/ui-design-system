@@ -37,6 +37,8 @@ import { CheckIcon, XIcon } from '../../../../../../graphics/icons';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 import type { PricingTableProps } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 
 /** Footprint the skeleton falls back to before any plan or feature arrives. */
 const SKELETON_PLAN_KEYS = ['skeleton-plan-1', 'skeleton-plan-2', 'skeleton-plan-3'];
@@ -93,6 +95,36 @@ function FeatureValue({
       className="ds-pricing-table__feature-value"
     >
       {value}
+    </span>
+  );
+}
+
+/**
+ * A described feature label: a tab stop inside a map, so the kernel's ring
+ * lives here, and Tooltip's cloned `aria-describedby` must reach the span.
+ */
+function PricingFeatureLabel({
+  label,
+  ...rest
+}: { label: React.ReactNode } & React.ComponentPropsWithoutRef<'span'>): React.ReactElement {
+  const interaction = useInteractionState();
+  const interactionProps = {
+    onPointerEnter: composeHandlers(interaction.handlers.onPointerEnter, rest.onPointerEnter),
+    onPointerLeave: composeHandlers(interaction.handlers.onPointerLeave, rest.onPointerLeave),
+    onPointerDown: composeHandlers(interaction.handlers.onPointerDown, rest.onPointerDown),
+    onPointerUp: composeHandlers(interaction.handlers.onPointerUp, rest.onPointerUp),
+    onFocus: composeHandlers(interaction.handlers.onFocus, rest.onFocus),
+    onBlur: composeHandlers(interaction.handlers.onBlur, rest.onBlur),
+  };
+  return (
+    <span
+      tabIndex={0}
+      {...rest}
+      {...partAttributes('feature-label', interaction.state)}
+      className="ds-pricing-table__feature-label"
+      {...interactionProps}
+    >
+      {label}
     </span>
   );
 }
@@ -431,13 +463,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
                           trigger so keyboard users reach it. */}
                       {feature.description ? (
                         <Tooltip content={feature.description}>
-                          <span
-                            data-part="feature-label"
-                            className="ds-pricing-table__feature-label"
-                            tabIndex={0}
-                          >
-                            {feature.label}
-                          </span>
+                          <PricingFeatureLabel label={feature.label} />
                         </Tooltip>
                       ) : (
                         feature.label

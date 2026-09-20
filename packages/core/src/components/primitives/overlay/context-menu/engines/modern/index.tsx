@@ -43,6 +43,7 @@
 import React, { useState, useRef, useEffect, useCallback, useId, isValidElement, cloneElement } from 'react';
 import { useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useFieldOverlay } from '../../../../runtime/overlay/field-overlay';
 import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
@@ -308,6 +309,9 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const [menuEl, setMenuEl] = useState<HTMLUListElement | null>(null);
   const menuRef = useRef<HTMLUListElement | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
+  // The trigger is a tab stop, so the kernel decides its keyboard ring and
+  // the skin's pseudo-class arm is the fallback of that one decision.
+  const triggerInteraction = useInteractionState({ disabled });
   // An empty item list never renders a panel (Dropdown's `isOpen && hasItems`
   // posture): right-clicking still suppresses the native menu, but no blank
   // surface mounts.
@@ -476,7 +480,8 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   return (
     <div
       ref={triggerRef}
-      data-part="trigger"
+      {...partAttributes('trigger', triggerInteraction.state)}
+      {...triggerInteraction.handlers}
       data-open={isOpen ? 'true' : 'false'}
       className={`rottay-context-menu--modern ${className || ''}`}
       onContextMenu={handleContextMenu}

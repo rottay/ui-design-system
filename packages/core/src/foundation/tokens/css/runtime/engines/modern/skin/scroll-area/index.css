@@ -49,9 +49,9 @@
  */
 
 /* ---- keyboard focus ring (the root is a focusable scroll region). ---- */
-.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:focus-visible {
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-scroll-area-focus-ring-offset, 2px);
+  outline-offset: var(--ds-scroll-area-focus-ring-offset, var(--ds-focus-ring-offset, 2px));
   border-radius: var(--ds-scroll-area-focus-ring-radius, var(--ds-radius-sm));
 }
 
@@ -125,7 +125,7 @@
   scrollbar-color: transparent transparent;
 }
 @media (hover: hover) {
-  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:is([data-state~='hovered'], :hover) {
     scrollbar-color: var(
         --ds-scroll-area-thumb-bg,
         color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
@@ -194,7 +194,7 @@
   background: transparent;
 }
 @media (hover: hover) {
-  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:is([data-state~='hovered'], :hover)::-webkit-scrollbar-thumb {
     background: var(
       --ds-scroll-area-thumb-bg,
       color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
@@ -215,14 +215,14 @@
         (scrollable-region-focusable), and `:focus-within` keeps the thumb
         visible while an inner control holds focus. No media gating: focus
         modality is not hover. ---- */
-.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-visible::-webkit-scrollbar-thumb,
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:is([data-state~='focus-visible'], :focus-visible)::-webkit-scrollbar-thumb,
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-within::-webkit-scrollbar-thumb {
   background: var(
     --ds-scroll-area-thumb-bg,
     color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
   );
 }
-.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-visible,
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:is([data-state~='focus-visible'], :focus-visible),
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-within {
   scrollbar-color: var(
       --ds-scroll-area-thumb-bg,
@@ -232,8 +232,8 @@
 }
 
 @media (forced-colors: active) {
-  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:focus-visible {
-    outline: 2px solid Highlight;
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
   }
 
   /* The custom bar re-expresses in system colors when authored color is

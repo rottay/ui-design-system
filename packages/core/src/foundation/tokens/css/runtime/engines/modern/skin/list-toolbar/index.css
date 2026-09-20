@@ -234,7 +234,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button:hover {
+    .ds-list-toolbar__icon-button[data-part='icon-button'].ds-button.ds-button:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -279,7 +279,7 @@
     .ds-list-toolbar__clear-all[data-part='clear-all'],
     .ds-list-toolbar__primary-action[data-part='primary-action'],
     .ds-list-toolbar__primary-action-mobile
-  ).ds-button[data-variant]:focus-visible {
+  ).ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;
   box-shadow: var(
     --ds-toolbar-control-focus-ring,
@@ -300,7 +300,7 @@
     .ds-list-toolbar__clear-all[data-part='clear-all'],
     .ds-list-toolbar__primary-action[data-part='primary-action'],
     .ds-list-toolbar__primary-action-mobile
-  ).ds-button[data-variant]:active:not(:disabled) {
+  ).ds-button[data-variant]:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   transform: scale(var(--ds-toolbar-control-pressed-scale, 0.975));
 }
 
@@ -476,7 +476,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
     [data-active='true']
   ) {
     border-color: var(
@@ -495,7 +495,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:focus-visible {
+  .ds-list-toolbar__filter-trigger[data-part='filter-trigger'].ds-button[data-variant]:is([data-state~='focus-visible'], :focus-visible) {
   box-shadow: var(
     --ds-filter-pill-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
@@ -556,7 +556,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'].ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
     [data-selected='true']
   ) {
     background: var(
@@ -600,7 +600,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant]:hover:not(
+    .ds-list-toolbar__density-option[data-part='density-option'].ds-button[data-variant]:is([data-state~='hovered'], :hover):not(
     [data-active='true']
   ) {
     border-color: var(
@@ -654,7 +654,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant]:hover {
+    .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'].ds-button[data-variant]:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-filter-pill-hover-bg,
       var(
@@ -1007,7 +1007,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part='filter-chip']:hover {
+    .ds-list-toolbar__filter-chip[data-part='filter-chip']:is([data-state~='hovered'], :hover) {
     transform: translateY(-1px);
     border-color: var(
       --ds-filter-pill-hover-border,
@@ -1107,7 +1107,7 @@
 
 @media (hover: hover) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant]:hover {
+    .ds-list-toolbar__clear-all[data-part='clear-all'].ds-button[data-variant]:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-filter-pill-hover-bg,
       var(

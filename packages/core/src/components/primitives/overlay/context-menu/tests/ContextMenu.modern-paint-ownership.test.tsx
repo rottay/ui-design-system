@@ -222,12 +222,19 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
   });
 
   it('pins the leveled Pass-2 interaction contract (hover/focus/pressed, not the retired zero-hover)', () => {
-    // The P2b zero-hover contract was retired in Pass 2 (premium bar).
-    expect(SKIN).toContain("[data-part='item']:not(:disabled):hover");
-    expect(SKIN).toContain("[data-part='item']:not(:disabled):focus-visible");
-    expect(SKIN).toContain("[data-part='item']:not(:disabled):active");
+    // The P2b zero-hover contract was retired in Pass 2 (premium bar). Each arm
+    // pairs the kernel's state token with the platform pseudo-class it stands
+    // for (F-37), so the pseudo-class is a fallback rather than a second
+    // authority on the same question.
+    const ITEM = "[data-part='item']:not(:is([data-state~='disabled'], :disabled))";
+    expect(SKIN).toContain(`${ITEM}:is([data-state~='hovered'], :hover)`);
+    expect(SKIN).toContain(`${ITEM}:is([data-state~='focus-visible'], :focus-visible)`);
+    expect(SKIN).toContain(`${ITEM}:is([data-state~='pressed'], :active)`);
     expect(SKIN).toContain('color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))');
-    expect(SKIN).toContain("[data-tone='danger']:not(:disabled):hover");
+    expect(SKIN).toContain(
+      "[data-tone='danger']:not(:is([data-state~='disabled'], :disabled))"
+        + ":is([data-state~='hovered'], :hover)",
+    );
     // ...with the forced-colors and coarse-pointer contracts beside it.
     expect(SKIN).toContain('@media (forced-colors: active)');
     expect(SKIN).toContain('@media (pointer: coarse)');

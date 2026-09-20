@@ -102,7 +102,7 @@
    `:where()` keeps the ancestor vocabulary specificity-free; the complex
    selector reaches (0,5,0) and wins over the base rule. Geometry stays
    inside `box-sizing: border-box`, so the press never reflows the line. ---- */
-:where(a, button, [role='button'], summary, [data-part='trigger']):active
+:where(a, button, [role='button'], summary, [data-part='trigger']):is([data-state~='pressed'], :active)
   .rottay-kbd.rottay-kbd--modern[data-part='root'][data-size] {
   transform: translateY(1px);
   border-block-end-width: 1px;

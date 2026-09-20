@@ -177,23 +177,23 @@
     color var(--ds-motion-feedback),
     background-color var(--ds-motion-feedback);
 }
-.ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible {
+.ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: calc(-1 * var(--ds-focus-ring-offset));
 }
 @media (hover: hover) {
-  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover {
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:is([data-state~='hovered'], :hover) {
     background: var(
       --ds-table-header-bg-hover,
       color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-table-header-bg, var(--ds-surface-inset)))
     );
     color: var(--ds-color-primary);
   }
-  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover [data-part='sort-indicator'] {
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:is([data-state~='hovered'], :hover) [data-part='sort-indicator'] {
     opacity: 1;
   }
 }
-.ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:active {
+.ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:is([data-state~='pressed'], :active) {
   background: var(
     --ds-table-header-bg-hover,
     color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-table-header-bg, var(--ds-surface-inset)))
@@ -251,7 +251,7 @@
   background: color-mix(in srgb, var(--ds-color-primary) 60%, transparent);
 }
 @media (hover: hover) {
-  .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
+  .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 40%, transparent);
   }
 }
@@ -300,7 +300,7 @@
 /* keyboard focus: the base rule zeroes the UA outline, so the governed focus
    ring must be re-asserted or the filter/edit fields leave keyboard users
    blind (B2.5) */
-.ds-table.ds-table--modern [data-part='field'][data-field]:focus-visible {
+.ds-table.ds-table--modern [data-part='field'][data-field]:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: 1px;
 }
@@ -313,13 +313,13 @@
   cursor: pointer;
   accent-color: var(--ds-color-primary);
 }
-.ds-table.ds-table--modern [data-part='selection-control']:focus-visible {
+.ds-table.ds-table--modern [data-part='selection-control']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: 1px;
 }
 /* getCheckboxProps({ disabled: true }) rows: readable but unmistakably
    inactive, and never swept up by select-all (the hook skips them) */
-.ds-table.ds-table--modern [data-part='selection-control']:disabled {
+.ds-table.ds-table--modern [data-part='selection-control']:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -381,7 +381,7 @@
   box-shadow: inset 0 -1px 0 0 color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 @media (hover: hover) {
-  .ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
+  .ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):is([data-state~='hovered'], :hover) {
     background: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
   }
 }
@@ -402,7 +402,7 @@
     background-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
+  .ds-table.ds-table--modern [data-part='cell'][data-editable='true']:is([data-state~='hovered'], :hover) {
     outline: 1px dashed color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
     outline-offset: -1px;
     background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
@@ -478,7 +478,7 @@
    swallow the row's hover/selected wash, making a selected row's pinned
    columns read unselected. The mixes stay opaque (no bleed-through). */
 @media (hover: hover) {
-  .ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover > [data-part='cell'][data-fixed] {
+  .ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):is([data-state~='hovered'], :hover) > [data-part='cell'][data-fixed] {
     background: var(
       --ds-table-row-bg-hover,
       color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-table-bg, var(--ds-surface-card)))
@@ -529,12 +529,12 @@
 /* hover wash (fine pointers) + pressed state (the touch equivalent): the
    button already carried the transitions but no states were painted */
 @media (hover: hover) {
-  .ds-table.ds-table--modern [data-part='expand-button']:hover {
+  .ds-table.ds-table--modern [data-part='expand-button']:is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
     color: var(--ds-color-primary);
   }
 }
-.ds-table.ds-table--modern [data-part='expand-button']:active {
+.ds-table.ds-table--modern [data-part='expand-button']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
 }
 
@@ -631,22 +631,22 @@
 /* hover wash (fine pointers) + pressed state (the touch equivalent); the
    current page and disabled controls are excluded from both */
 @media (hover: hover) {
-  .ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):not(:disabled):hover {
+  .ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):not(:is([data-state~='disabled'], :disabled)):is([data-state~='hovered'], :hover) {
     background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
     color: var(--ds-color-primary);
   }
 }
-.ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):active {
+.ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
 }
 /* disabled prev/next: readable but unmistakably inactive (B2.1) */
-.ds-table.ds-table--modern [data-part='pagination-button']:disabled {
+.ds-table.ds-table--modern [data-part='pagination-button']:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
   opacity: 0.45;
 }
 
-.ds-table.ds-table--modern [data-part='pagination-button']:focus-visible,
-.ds-table.ds-table--modern [data-part='expand-button']:focus-visible {
+.ds-table.ds-table--modern [data-part='pagination-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-table.ds-table--modern [data-part='expand-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
 }
@@ -729,10 +729,10 @@
   .ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'] {
     border-bottom-color: CanvasText;
   }
-  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible,
-  .ds-table.ds-table--modern [data-part='pagination-button']:focus-visible,
-  .ds-table.ds-table--modern [data-part='expand-button']:focus-visible {
-    outline: 2px solid Highlight;
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-table.ds-table--modern [data-part='pagination-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-table.ds-table--modern [data-part='expand-button']:is([data-state~='focus-visible'], :focus-visible) {
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
     outline-offset: 1px;
   }
   .ds-table.ds-table--modern [data-part='spinner'][role='status'] {
@@ -740,7 +740,7 @@
     border-top-color: Highlight;
   }
   .ds-table.ds-table--modern [data-part='resize-handle'][data-resizing='true'],
-  .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
+  .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):is([data-state~='hovered'], :hover) {
     background: ButtonText;
   }
 }

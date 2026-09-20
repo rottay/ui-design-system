@@ -45,6 +45,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import type { BackTopProps } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { BACKTOP_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationUpIcon } from '@/graphics/icons/semantic/generated/roles/navigation-up';
@@ -179,6 +180,10 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
      * Returns the scroll target element.
      * Defaults to window if no target is specified.
      */
+    // The trigger's lift, press and keyboard ring are one decision: the
+    // kernel stamps it and the skin's pseudo-class arms are its fallback.
+    const trigger = useInteractionState();
+
     const getTarget = useCallback(() => target?.() ?? window, [target]);
 
     /** Bound scroll source. A memoized `target` reading a ref that is still
@@ -296,7 +301,8 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         style={style}
         onClick={handleClick}
         aria-label={ariaLabel}
-        data-part="trigger"
+        {...partAttributes('trigger', trigger.state)}
+        {...trigger.handlers}
       >
         {/* Default governed semantic glyph; consumers can override with
             children for brand-specific content */}

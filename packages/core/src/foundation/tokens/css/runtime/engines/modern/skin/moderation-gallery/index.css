@@ -68,7 +68,7 @@
    entrance offset would make an animation-direction choice move cards the
    wrong way. */
 @media (hover: hover) {
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:is([data-state~='hovered'], :hover) {
     box-shadow: var(--ds-elevation-2);
     transform: translateY(calc(-1 * var(--_ds-moderation-gallery-card-lift, 2px)));
   }
@@ -153,7 +153,7 @@
     transform: translateY(var(--ds-spacing-1, 4px));
   }
 
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover [data-part='card-actions'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:is([data-state~='hovered'], :hover) [data-part='card-actions'],
   .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:focus-within [data-part='card-actions'] {
     opacity: 1;
     transform: none;
@@ -181,27 +181,27 @@
   border: none;
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:active:not(:disabled) {
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-success-600);
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:active:not(:disabled) {
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   background: var(--ds-color-error-600);
 }
 
 @media (hover: hover) {
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:hover:not(:disabled) {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-success-600);
   }
-  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:hover:not(:disabled) {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:is([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     background: var(--ds-color-error-600);
   }
 }
 
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:focus-visible,
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button']:focus-visible,
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button']:focus-visible,
-.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button']:focus-visible {
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -359,7 +359,7 @@
   }
 
   @media (hover: hover) {
-    .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover {
+    .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:is([data-state~='hovered'], :hover) {
       transform: none;
     }
   }

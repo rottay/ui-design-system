@@ -194,8 +194,8 @@
   pointer-events: none;
   transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
-.ds-upload.ds-upload--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
+.ds-upload.ds-upload--modern [data-part='file-item']:is([data-state~='hovered'], :hover) [data-part='file-item-overlay'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item']:is([data-state~='hovered'], :hover) [data-part='file-item-overlay'],
 .ds-upload.ds-upload--modern [data-part='file-item']:focus-within [data-part='file-item-overlay'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item']:focus-within [data-part='file-item-overlay'] {
   opacity: 1;
@@ -536,13 +536,13 @@
   border: 1px dashed var(--ds-upload-add-border, var(--ds-color-border));
 }
 @media (hover: hover) {
-  .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:where(:hover):not([data-disabled='true']) {
+  .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:where([data-state~='hovered'], :hover):not([data-disabled='true']) {
     background: var(--ds-upload-add-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
     border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
   }
 }
 /* Touch/active equivalent of the hover treatment. */
-.ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:active:not([data-disabled='true']) {
+.ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:is([data-state~='pressed'], :active):not([data-disabled='true']) {
   background: var(--ds-upload-add-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
   border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
 }
@@ -580,50 +580,50 @@
     background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
-  .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:where(:hover):not(:disabled) {
+  .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:where([data-state~='hovered'], :hover):not(:is([data-state~='disabled'], :disabled)) {
     border-color: var(--ds-upload-trigger-border-hover, var(--ds-material-control-border-hover));
     background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
   }
 }
 /* Touch/active equivalent of the hover treatment. */
-.ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:active:not(:disabled) {
+.ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:is([data-state~='pressed'], :active):not(:is([data-state~='disabled'], :disabled)) {
   border-color: var(--ds-upload-trigger-border-hover, var(--ds-material-control-border-hover));
   background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
 }
-.ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:disabled {
+.ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
   opacity: var(--ds-disabled-opacity, 0.5);
 }
 
 /* Keyboard rings on every Upload-owned action surface. */
-.ds-upload.ds-upload--modern [data-part='trigger'] button:focus-visible,
-.ds-upload.ds-upload--modern [data-part='add-button']:focus-visible,
-.ds-upload.ds-upload--modern [data-part='file-item-action']:focus-visible,
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:focus-visible,
+.ds-upload.ds-upload--modern [data-part='trigger'] button:is([data-state~='focus-visible'], :focus-visible),
+.ds-upload.ds-upload--modern [data-part='add-button']:is([data-state~='focus-visible'], :focus-visible),
+.ds-upload.ds-upload--modern [data-part='file-item-action']:is([data-state~='focus-visible'], :focus-visible),
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:is([data-state~='focus-visible'], :focus-visible),
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-color-primary);
-  outline-offset: 2px;
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 /* Remove-action states: hover wash gated by pointer capability, with the
    touch/active equivalent (4th-tanda law). Destructive ink is scoped to the
    remove action -- retry is recovery and hovers PRIMARY instead. */
 @media (hover: hover) {
-  .ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='remove']:where(:hover),
-  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='remove']:where(:hover) {
+  .ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='remove']:where([data-state~='hovered'], :hover),
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='remove']:where([data-state~='hovered'], :hover) {
     color: var(--ds-color-error);
   }
-  .ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='retry']:where(:hover),
-  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='retry']:where(:hover) {
+  .ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='retry']:where([data-state~='hovered'], :hover),
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='retry']:where([data-state~='hovered'], :hover) {
     color: var(--ds-color-primary);
   }
 }
-.ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='remove']:active,
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='remove']:active {
+.ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='remove']:is([data-state~='pressed'], :active),
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='remove']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-error);
 }
-.ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='retry']:active,
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='retry']:active {
+.ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='retry']:is([data-state~='pressed'], :active),
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='retry']:is([data-state~='pressed'], :active) {
   color: var(--ds-color-primary);
 }
 
@@ -730,8 +730,8 @@
     opacity: 0;
     transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
   }
-  .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],
-  .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],
+  .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item']:is([data-state~='hovered'], :hover) [data-part='file-item-action'],
+  .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item']:is([data-state~='hovered'], :hover) [data-part='file-item-action'],
   .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item']:focus-within [data-part='file-item-action'],
   .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item']:focus-within [data-part='file-item-action'] {
     opacity: 1;
@@ -779,13 +779,13 @@
   .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'][data-status='error'] {
     border-color: ButtonText;
   }
-  .ds-upload.ds-upload--modern [data-part='trigger'] button:focus-visible,
-  .ds-upload.ds-upload--modern [data-part='add-button']:focus-visible,
-  .ds-upload.ds-upload--modern [data-part='file-item-action']:focus-visible,
-  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:focus-visible,
+  .ds-upload.ds-upload--modern [data-part='trigger'] button:is([data-state~='focus-visible'], :focus-visible),
+  .ds-upload.ds-upload--modern [data-part='add-button']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-upload.ds-upload--modern [data-part='file-item-action']:is([data-state~='focus-visible'], :focus-visible),
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:is([data-state~='focus-visible'], :focus-visible),
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:focus-visible {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+    outline: var(--ds-focus-ring-width, 2px) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset, 2px);
   }
   .ds-upload.ds-upload--modern [data-part='preview-close-button'],
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {

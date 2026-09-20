@@ -33,6 +33,8 @@ import { VisuallyHidden } from '../../../../foundation';
 import { ActionOpenExternalIcon } from '@/graphics/icons/semantic/generated/roles/action-open-external';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { LinkProps } from '../../contracts';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { LINK_DEFAULTS } from '../../contracts';
 
 const OUTBOUND_REL_TOKENS = ['noopener', 'noreferrer'] as const;
@@ -102,6 +104,20 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
   const opensNewContext = resolvedTarget?.toLowerCase() === '_blank';
   const resolvedRel = opensNewContext ? hardenOutboundRel(rel) : rel;
 
+  // Hover grade, press and the keyboard ring are one decision: the kernel
+  // stamps it and the skin's pseudo-class arms are that decision's fallback.
+  // The consumer's own pointer handlers keep running -- `rest` spreads after
+  // these, so they are chained rather than replaced.
+  const link = useInteractionState({ disabled });
+  const interactionProps = {
+    onPointerEnter: composeHandlers(link.handlers.onPointerEnter, rest.onPointerEnter),
+    onPointerLeave: composeHandlers(link.handlers.onPointerLeave, rest.onPointerLeave),
+    onPointerDown: composeHandlers(link.handlers.onPointerDown, rest.onPointerDown),
+    onPointerUp: composeHandlers(link.handlers.onPointerUp, rest.onPointerUp),
+    onFocus: composeHandlers(link.handlers.onFocus, rest.onFocus),
+    onBlur: composeHandlers(link.handlers.onBlur, rest.onBlur),
+  };
+
   /**
    * External announcements: the icon is a visual affordance, so screen-reader
    * users get the same information as text. Catalog-first with the documented
@@ -122,7 +138,7 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
       // props; the skin paints that state (weight + underline grade, never
       // color alone).
       aria-disabled={disabled || undefined}
-      data-part="root"
+      {...partAttributes('root', link.state)}
       data-variant={type}
       data-underline={underline ? 'true' : 'false'}
       data-disabled={disabled || undefined}
@@ -131,6 +147,7 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
       target={resolvedTarget}
       rel={resolvedRel}
       {...rest}
+      {...interactionProps}
     >
       {children}
       {external && externalIcon && (
