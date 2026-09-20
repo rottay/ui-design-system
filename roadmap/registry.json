@@ -5368,7 +5368,7 @@
    "lane": "family-cuts",
    "order": 11,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5449,7 +5449,9 @@
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (3): R4 LANDED (aa8d1e26e, Fable ACCEPT) — the crash-safe floor is now the named three-property allowance (background/foreground/border, governed channel first + documented light-dark() pair), the old floor:8 cardinality exemption retired; 17 drills refuse every widening shape; Chromium arms green (light 7.60:1, dark 9.44:1, keyboard retry with no providers; healthy-tree channel override reaches the boundary). That was the close audit's one open row (18/19 families measured green at 6da4c8706). Registered honest caveat (Fable, non-blocking): the light-mode border measures 1.74:1 against its own ground; acceptable as a delineating edge under WCAG 1.4.11 scope; a separate family-owner packet may raise it to 3:1. NEXT: the FAM-10 close re-audit runs after the in-flight wiring wave settles."
     }
-   ]
+   ],
+   "doneAt": "2026-09-19",
+   "evidence": "2026-09-19 close (kimi-dt): 19/19 family-cut rows OK re-measured today on the integrated tree (the 06:21 audit measured 18/19 with exactly one open row: surface-lifecycle's error-boundary exemption). That row is CLOSED by owner resolution R4 (a00a13224) as implemented in aa8d1e26e (Fable ACCEPT): the crash-safe floor is the named three-property allowance with 17 refusal drills and Chromium behavior arms; engine-audit reports exemptionsBreached=0 with the EXACT 3 pin. The acceptance arms stand from the close audit (6da4c8706): causality suites green per family, axe debt pinned by identity with none new, no rottay-* class emitted, contract census exact. Findings F-55/F-41/F-64 close per the audit pack criteria cited there. Honest carryover, registered not hidden: the light-mode crash-surface border measures 1.74:1 against its own ground (delineating edge, WCAG 1.4.11 scope per Fable; a family-owner packet may raise it to 3:1) and record's partsConsumedNotStamped=63 stays pinned at its measured value."
   },
   {
    "id": "WO-FAM-11",
