@@ -60,6 +60,7 @@
 
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { TreeProps, TreeDataNode } from '../../contracts';
 import { TREE_DEFAULTS } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -293,6 +294,39 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   const indentStep = 'var(--ds-tree-indent) * var(--ds-density-effective-scale)';
   const paddingInlineStart = level === 0 ? 0 : `calc(${level} * ${indentStep})`;
 
+  // F-37: the hover/press/focus triad the skin decides through
+  // `:is([data-state~='x'], :x)` is produced once, here; the pseudo-class arm
+  // stays as the platform fallback. The row is the roving tab stop and carries
+  // the click, so it is interactive whenever it is not disabled; the Move
+  // control is its own part and owns its own triad.
+  const rowInteraction = useInteractionState({ disabled: Boolean(disabled) });
+  const dragHandleInteraction = useInteractionState();
+
+  // `data-disabled`, `data-selected` and `data-focused` stay the family's own
+  // vocabulary: the kernel's disabled flag only SUPPRESSES the triad and is
+  // never restated in `data-state`, because every state rule in the skin guards
+  // on `:not([data-disabled])`.
+  const rowState = {
+    hovered: rowInteraction.state.hovered,
+    pressed: rowInteraction.state.pressed,
+    focused: rowInteraction.state.focused,
+    focusVisible: rowInteraction.state.focusVisible,
+  };
+
+  // React focus events are `focusin`/`focusout`, so a focus landing on the
+  // switcher, the checkbox or the Move control would otherwise light the ROW's
+  // focus ring -- something `:focus-visible` never does. Only the row itself
+  // speaks for the row's focus.
+  const handleRowFocus = (event: React.FocusEvent<HTMLDivElement>): void => {
+    if (event.target !== event.currentTarget) return;
+    rowInteraction.handlers.onFocus(event);
+  };
+
+  const handleRowBlur = (event: React.FocusEvent<HTMLDivElement>): void => {
+    if (event.target !== event.currentTarget) return;
+    rowInteraction.handlers.onBlur(event);
+  };
+
   const isDraggable = propDraggable && !disabled;
   // The row is both the drag source and the drop target, so it carries both
   // kernel bags -- their keys are disjoint and neither overrides the other.
@@ -412,7 +446,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         aria-busy={isLoading || undefined}
         tabIndex={nodeKey === tabbableKey ? 0 : -1}
         data-tree-node-key={nodeKey}
-        data-part="row"
+        {...partAttributes('row', rowState)}
         data-selected={isSelected ? 'true' : 'false'}
         data-expanded={showExpander ? (isExpanded ? 'true' : 'false') : undefined}
         data-disabled={disabled || undefined}
@@ -421,6 +455,12 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         data-drop-position={isDropTarget ? dropPosition : undefined}
         data-draggable={isDraggable || undefined}
         data-dragging={isDragging || undefined}
+        onPointerEnter={rowInteraction.handlers.onPointerEnter}
+        onPointerLeave={rowInteraction.handlers.onPointerLeave}
+        onPointerDown={rowInteraction.handlers.onPointerDown}
+        onPointerUp={rowInteraction.handlers.onPointerUp}
+        onFocus={handleRowFocus}
+        onBlur={handleRowBlur}
         {...dragProps}
       >
         {/* Expand/collapse affordance or the governed loading Spinner */}
@@ -494,7 +534,8 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         {isDraggable && move && (
           <button
             type="button"
-            data-part="drag-handle"
+            {...partAttributes('drag-handle', dragHandleInteraction.state)}
+            {...dragHandleInteraction.handlers}
             data-move-mode={move.mode(nodeKey)}
             aria-label={move.label(nodeKey, nodeTitle)}
             aria-pressed={move.mode(nodeKey) === 'origin' ? true : undefined}
