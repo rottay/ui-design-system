@@ -1,0 +1,458 @@
+{
+  "rottay dark": {
+    "channels": {
+      "--ds-card-bg": "#ffffff",
+      "--ds-surface-card": "#182235",
+      "--ds-color-primary": "rgb(23, 23, 23) => #171717",
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-error": "#f87171",
+      "--ds-button-error-border": "#dc2626",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-color-bg-primary": "#0b1220",
+      "--ds-breadcrumb-current-bg": "color-mix(in srgb, rgb(23, 23, 23) 8%, #ffffff) => #ececec",
+      "--ds-breadcrumb-current-color": "",
+      "--ds-breadcrumb-active-color": "#f3f4f6",
+      "--ds-breadcrumb-bg": "linear-gradient(180deg, color-mix(in srgb, #ffffff 97%, rgb(23, 23, 23) 3%), #ffffff) => #000000",
+      "--ds-color-link": "#a3a3a3",
+      "--ds-file-manager-link-color": "#a3a3a3"
+    },
+    "pairings": {
+      "crumbLabel": {
+        "ink": "#f3f4f6",
+        "ground": "#ececec",
+        "ratio": 1.07,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbChip": {
+        "ink": "#f3f4f6",
+        "ground": "#ececec",
+        "ratio": 1.07,
+        "ownBg": "color(srgb 0.927216 0.927216 0.927216)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbLink": {
+        "ink": "#cbd5e1",
+        "ground": "#182235",
+        "ratio": 10.72,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "deleteA1": {
+        "ink": "#f87171",
+        "ground": "#282839",
+        "ratio": 5.24,
+        "ownBg": "color(srgb 0.972549 0.443137 0.443137 / 0.07)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "deleteA1Label": {
+        "ink": "#f87171",
+        "ground": "#282839",
+        "ratio": 5.24,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "renameA1": {
+        "ink": "#f3f4f6",
+        "ground": "#273142",
+        "ratio": 11.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderName": {
+        "ink": "#a3a3a3",
+        "ground": "#182235",
+        "ratio": 6.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      }
+    }
+  },
+  "rottay light": {
+    "channels": {
+      "--ds-card-bg": "#ffffff",
+      "--ds-surface-card": "#ffffff",
+      "--ds-color-primary": "rgb(23, 23, 23) => #171717",
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-error": "#f87171",
+      "--ds-button-error-border": "#dc2626",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-color-bg-primary": "#fafafa",
+      "--ds-breadcrumb-current-bg": "color-mix(in srgb, rgb(23, 23, 23) 8%, #ffffff) => #ececec",
+      "--ds-breadcrumb-current-color": "",
+      "--ds-breadcrumb-active-color": "#171717",
+      "--ds-breadcrumb-bg": "linear-gradient(180deg, color-mix(in srgb, #ffffff 97%, rgb(23, 23, 23) 3%), #ffffff) => #000000",
+      "--ds-color-link": "rgb(23, 23, 23) => #171717",
+      "--ds-file-manager-link-color": "rgb(23, 23, 23) => #171717"
+    },
+    "pairings": {
+      "crumbLabel": {
+        "ink": "#171717",
+        "ground": "#ececec",
+        "ratio": 15.18,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbChip": {
+        "ink": "#171717",
+        "ground": "#ececec",
+        "ratio": 15.18,
+        "ownBg": "color(srgb 0.927216 0.927216 0.927216)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbLink": {
+        "ink": "#a0a0a5",
+        "ground": "#ffffff",
+        "ratio": 2.6,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "deleteA1": {
+        "ink": "#f87171",
+        "ground": "#fff5f5",
+        "ratio": 2.59,
+        "ownBg": "color(srgb 0.972549 0.443137 0.443137 / 0.07)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "deleteA1Label": {
+        "ink": "#f87171",
+        "ground": "#fff5f5",
+        "ratio": 2.59,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "renameA1": {
+        "ink": "#171717",
+        "ground": "#efefef",
+        "ratio": 15.59,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderName": {
+        "ink": "#171717",
+        "ground": "#ffffff",
+        "ratio": 17.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      }
+    }
+  },
+  "bithire light": {
+    "channels": {
+      "--ds-card-bg": "#ffffff",
+      "--ds-surface-card": "#ffffff",
+      "--ds-color-primary": "rgb(47, 91, 232) => #2f5be8",
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-error": "#C62828",
+      "--ds-button-error-border": "#9C000F",
+      "--ds-button-error-bg": "#C22526",
+      "--ds-color-bg-primary": "#FFFFFF",
+      "--ds-breadcrumb-current-bg": "color-mix(in srgb, rgb(47, 91, 232) 8%, #ffffff) => #eef2fd",
+      "--ds-breadcrumb-current-color": "",
+      "--ds-breadcrumb-active-color": "#171717",
+      "--ds-breadcrumb-bg": "linear-gradient(180deg, color-mix(in srgb, #ffffff 97%, rgb(47, 91, 232) 3%), #ffffff) => #000000",
+      "--ds-color-link": "#2F5BE8",
+      "--ds-file-manager-link-color": "#2F5BE8"
+    },
+    "pairings": {
+      "crumbLabel": {
+        "ink": "#171717",
+        "ground": "#eef2fd",
+        "ratio": 16.01,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbChip": {
+        "ink": "#171717",
+        "ground": "#eef2fd",
+        "ratio": 16.01,
+        "ownBg": "color(srgb 0.934745 0.948549 0.992784)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbLink": {
+        "ink": "#a0a0a5",
+        "ground": "#ffffff",
+        "ratio": 2.6,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "deleteA1": {
+        "ink": "#c62828",
+        "ground": "#fbf0f0",
+        "ratio": 5.04,
+        "ownBg": "color(srgb 0.776471 0.156863 0.156863 / 0.07)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "deleteA1Label": {
+        "ink": "#c62828",
+        "ground": "#fbf0f0",
+        "ratio": 5.04,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "renameA1": {
+        "ink": "#171717",
+        "ground": "#efefef",
+        "ratio": 15.59,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderName": {
+        "ink": "#2f5be8",
+        "ground": "#ffffff",
+        "ratio": 5.55,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      }
+    }
+  },
+  "bithire dark": {
+    "channels": {
+      "--ds-card-bg": "#182235",
+      "--ds-surface-card": "#182235",
+      "--ds-color-primary": "rgb(47, 91, 232) => #2f5be8",
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-error": "#C62828",
+      "--ds-button-error-border": "#F8675D",
+      "--ds-button-error-bg": "#DD423D",
+      "--ds-color-bg-primary": "#0A0A0A",
+      "--ds-breadcrumb-current-bg": "color-mix(in srgb, rgb(47, 91, 232) 8%, #182235) => #1a2743",
+      "--ds-breadcrumb-current-color": "",
+      "--ds-breadcrumb-active-color": "#f3f4f6",
+      "--ds-breadcrumb-bg": "linear-gradient(180deg, color-mix(in srgb, #182235 97%, rgb(47, 91, 232) 3%), #182235) => #000000",
+      "--ds-color-link": "#3F6FFD",
+      "--ds-file-manager-link-color": "#3F6FFD"
+    },
+    "pairings": {
+      "crumbLabel": {
+        "ink": "#f3f4f6",
+        "ground": "#1a2743",
+        "ratio": 13.48,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbChip": {
+        "ink": "#f3f4f6",
+        "ground": "#1a2743",
+        "ratio": 13.48,
+        "ownBg": "color(srgb 0.101333 0.151216 0.264)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbLink": {
+        "ink": "#cbd5e1",
+        "ground": "#182235",
+        "ratio": 10.72,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "deleteA1": {
+        "ink": "#c62828",
+        "ground": "#242334",
+        "ratio": 2.74,
+        "ownBg": "color(srgb 0.776471 0.156863 0.156863 / 0.07)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "deleteA1Label": {
+        "ink": "#c62828",
+        "ground": "#242334",
+        "ratio": 2.74,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "renameA1": {
+        "ink": "#f3f4f6",
+        "ground": "#273142",
+        "ratio": 11.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderName": {
+        "ink": "#3f6ffd",
+        "ground": "#182235",
+        "ratio": 3.72,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      }
+    }
+  },
+  "evnto light": {
+    "channels": {
+      "--ds-card-bg": "#ffffff",
+      "--ds-surface-card": "#ffffff",
+      "--ds-color-primary": "rgb(23, 23, 23) => #171717",
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-error": "#f87171",
+      "--ds-button-error-border": "#dc2626",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-color-bg-primary": "#fafafa",
+      "--ds-breadcrumb-current-bg": "color-mix(in srgb, rgb(23, 23, 23) 8%, #ffffff) => #ececec",
+      "--ds-breadcrumb-current-color": "",
+      "--ds-breadcrumb-active-color": "#171717",
+      "--ds-breadcrumb-bg": "linear-gradient(180deg, color-mix(in srgb, #ffffff 97%, rgb(23, 23, 23) 3%), #ffffff) => #000000",
+      "--ds-color-link": "rgb(23, 23, 23) => #171717",
+      "--ds-file-manager-link-color": "rgb(23, 23, 23) => #171717"
+    },
+    "pairings": {
+      "crumbLabel": {
+        "ink": "#171717",
+        "ground": "#ececec",
+        "ratio": 15.18,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbChip": {
+        "ink": "#171717",
+        "ground": "#ececec",
+        "ratio": 15.18,
+        "ownBg": "color(srgb 0.927216 0.927216 0.927216)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbLink": {
+        "ink": "#a0a0a5",
+        "ground": "#ffffff",
+        "ratio": 2.6,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "deleteA1": {
+        "ink": "#f87171",
+        "ground": "#fff5f5",
+        "ratio": 2.59,
+        "ownBg": "color(srgb 0.972549 0.443137 0.443137 / 0.07)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "deleteA1Label": {
+        "ink": "#f87171",
+        "ground": "#fff5f5",
+        "ratio": 2.59,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "renameA1": {
+        "ink": "#171717",
+        "ground": "#efefef",
+        "ratio": 15.59,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderName": {
+        "ink": "#171717",
+        "ground": "#ffffff",
+        "ratio": 17.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      }
+    }
+  },
+  "evnto dark": {
+    "channels": {
+      "--ds-card-bg": "#ffffff",
+      "--ds-surface-card": "#182235",
+      "--ds-color-primary": "rgb(23, 23, 23) => #171717",
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-error": "#f87171",
+      "--ds-button-error-border": "#dc2626",
+      "--ds-button-error-bg": "#ef4444",
+      "--ds-color-bg-primary": "#0b1220",
+      "--ds-breadcrumb-current-bg": "color-mix(in srgb, rgb(23, 23, 23) 8%, #ffffff) => #ececec",
+      "--ds-breadcrumb-current-color": "",
+      "--ds-breadcrumb-active-color": "#f3f4f6",
+      "--ds-breadcrumb-bg": "linear-gradient(180deg, color-mix(in srgb, #ffffff 97%, rgb(23, 23, 23) 3%), #ffffff) => #000000",
+      "--ds-color-link": "#a3a3a3",
+      "--ds-file-manager-link-color": "#a3a3a3"
+    },
+    "pairings": {
+      "crumbLabel": {
+        "ink": "#f3f4f6",
+        "ground": "#ececec",
+        "ratio": 1.07,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbChip": {
+        "ink": "#f3f4f6",
+        "ground": "#ececec",
+        "ratio": 1.07,
+        "ownBg": "color(srgb 0.927216 0.927216 0.927216)",
+        "tone": null,
+        "variant": null
+      },
+      "crumbLink": {
+        "ink": "#cbd5e1",
+        "ground": "#182235",
+        "ratio": 10.72,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": null
+      },
+      "deleteA1": {
+        "ink": "#f87171",
+        "ground": "#282839",
+        "ratio": 5.24,
+        "ownBg": "color(srgb 0.972549 0.443137 0.443137 / 0.07)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "deleteA1Label": {
+        "ink": "#f87171",
+        "ground": "#282839",
+        "ratio": 5.24,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "renameA1": {
+        "ink": "#f3f4f6",
+        "ground": "#273142",
+        "ratio": 11.93,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "ghost"
+      },
+      "folderName": {
+        "ink": "#a3a3a3",
+        "ground": "#182235",
+        "ratio": 6.31,
+        "ownBg": "rgba(0, 0, 0, 0)",
+        "tone": null,
+        "variant": "link"
+      }
+    }
+  }
+}

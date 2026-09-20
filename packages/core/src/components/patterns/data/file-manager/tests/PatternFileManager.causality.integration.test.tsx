@@ -212,30 +212,44 @@ describeCausality({
  * still far above the floor, and now produced by one mode-following formula
  * instead of a role that only happened to work in dark.
  *
- * STANDING, and NOT family-local. Every surviving row is a composed
- * primitive's own ink, measured to a root cause outside this family:
- *  - the ghost/danger Button labels (`*-delete` in `bithire dark` and
- *    `evnto light`, plus the folder-link Button `f1-name` in `bithire dark`).
- *    The ink is `--ds-color-error` in both, and it carries no mode leg -- for
- *    two DIFFERENT reasons, so "each vertical authors a danger literal" would
- *    be wrong. Bithire authors `palette.status-seeds.error` `#C62828` with no
- *    dark leg, so a light-graded red lands on a dark ground: 4.52:1 light ->
- *    2.58:1 dark. Evnto authors NO error seed at all; its `#f87171` is the DS
- *    default resolving to error-400 at the light root -- a value graded for a
- *    dark ground, which reads 5.29:1 on rottay dark and 2.22:1 on evnto light.
- *    (`--ds-button-error-border` DOES mirror for bithire, `#9C000F` ->
- *    `#F8675D`: the mode leg exists on some danger channels and is missing on
- *    the ink one.) The Button also paints its own ~7% danger-tinted ghost
- *    ground under that ink, so both legs of the pair are the Button's and the
- *    palette's -- the same class of defect the divider's overline ink was
- *    routed for;
- *  - the composed Breadcrumb's current crumb in `rottay dark`. The crumb
- *    paints `--ds-breadcrumb-current-bg`, which resolves through
- *    `--ds-card-bg` to a near-white `#ececec` chip in that scope, under the
- *    dark mode's near-white ink: 1.07:1.
- * The family relays no colour into either, and stating another owner's
- * channel at this scope would hide a fleet defect behind one pattern. Routed
- * with their debriefs.
+ * STANDING. Re-measured node by node through the productive door (six
+ * vertical/mode scopes, colours read through a 1x1 canvas); the two rows have
+ * DIFFERENT owners and the earlier reading of them was wrong on both counts.
+ *
+ *  - the `*-delete` labels in `bithire dark` (2.74:1) and `evnto light`
+ *    (2.59:1) are FAMILY-LOCAL, not the Button's. The ink came from this
+ *    family's own skin, `color: var(--ds-color-error)` on
+ *    `[data-part='item-action'][data-action='delete']` -- the FILL role used
+ *    as an ink -- and the ghost rest wash is `color-mix(currentColor 7%,
+ *    transparent)`, so the same statement also tinted the ground it is
+ *    measured against. `data-tone` measured null on every delete button in
+ *    every scope, which is the proof the Button's governed quiet-destructive
+ *    recipe never ran. The family half of the repair (ask the Button for
+ *    `danger`, drop the statement) is measured and does NOT land alone: the
+ *    governed ink `--ds-button-error-border` is `--ds-color-error-600`
+ *    `#dc2626` in BOTH modes of the DS default, so the stamp drains bithire
+ *    dark (2.74 -> 4.94, bithire authors a seed that grades per mode, `#9C000F`
+ *    light / `#F8675D` dark), leaves evnto light failing at 4.35 and pushes
+ *    rottay dark and evnto dark from 5.24 to 3.18. No single value can clear
+ *    4.5:1 on both a `#262334` and an `#fdf0f0` ghost ground, so the mode leg
+ *    is a precondition, not a follow-up: the danger-ink regrade lands first
+ *    and the family stamp with it;
+ *  - the `data-current` crumb in `rottay dark` (1.07:1) is the Card component
+ *    base, not the Breadcrumb. `presentation/components/card/index.css` states
+ *    `--ds-card-bg: var(--ds-color-white)` mode-blind in the `rottay-components`
+ *    layer, which outranks the theme's own `--ds-card-bg:
+ *    var(--ds-color-bg-elevated)` by layer ORDER -- byte for byte the defect
+ *    the input ground was repaired for, with bithire escaping again because its
+ *    unlayered artifact re-aliases the name. The crumb is only the tip axe can
+ *    see: the whole trail paints a white gradient in rottay and evnto dark, and
+ *    the Modern Card's own elevated/bordered grounds resolve white there too.
+ *    Grounding the chip on the mode-following elevated role measures 14.63:1 in
+ *    both broken scopes and is byte-identical in the other four; both candidate
+ *    paired inks were drilled and refuted (primary 72% into the ground takes
+ *    bithire dark to 2.00, text-primary 72% leaves rottay dark at 1.05 and
+ *    moves every light scope off 15.18).
+ * `f1-name` stays registered on its own channel (`--ds-color-link` `#3f6ffd`,
+ * 3.72:1) and belongs to neither arm.
  *
  * DROPPED EARLIER BY IDENTITY: `rottay dark`'s folder-link label. That link
  * resolves `--ds-color-link`, which took the raw primary seed in every mode --
