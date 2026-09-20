@@ -58,6 +58,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
+import { serializeState } from '@/foundation/behavior';
 import type { SliderProps } from '../../contracts';
 import { SLIDER_DEFAULTS } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -491,6 +492,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           ref={ref}
           className={`ds-slider ds-slider--modern ${className || ''}`}
           data-part="root"
+          data-state={serializeState({ disabled })}
           data-range="true"
           data-disabled={disabled ? 'true' : 'false'}
           data-orientation={vertical ? 'vertical' : 'horizontal'}
@@ -615,6 +617,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         ref={ref}
         className={`ds-slider ds-slider--modern ${className || ''}`}
         data-part="root"
+        data-state={serializeState({ disabled })}
         data-disabled={disabled ? 'true' : 'false'}
         data-orientation={vertical ? 'vertical' : 'horizontal'}
         style={style}

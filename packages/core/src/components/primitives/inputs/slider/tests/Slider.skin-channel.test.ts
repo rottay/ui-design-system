@@ -49,9 +49,11 @@ describe('Slider modern skin rail + fill channels (K2-V sweep)', () => {
 
 describe('Slider modern skin state postures (K2-V sweep)', () => {
   it('mutes the range-mode custom parts when the root is disabled', () => {
-    expect(skin).toContain("[data-disabled='true'] [data-part='rail']");
-    expect(skin).toContain("[data-disabled='true'] [data-part='track']");
-    expect(skin).toContain("[data-disabled='true'] [data-part='handle']");
+    // The head pairs the kernel's disabled token with the component's prop echo
+    // (`Slider.disabled-stamp` owns that pairing); this pin stays on the parts.
+    expect(skin).toContain("[data-disabled='true']) [data-part='rail']");
+    expect(skin).toContain("[data-disabled='true']) [data-part='track']");
+    expect(skin).toContain("[data-disabled='true']) [data-part='handle']");
     expect(skin).toContain('opacity: var(--ds-state-disabled-opacity, 0.5);');
   });
 

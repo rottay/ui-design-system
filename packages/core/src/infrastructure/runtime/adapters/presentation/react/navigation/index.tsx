@@ -47,7 +47,15 @@
  * transitions, prefetching, scroll restoration, etc.).
  */
 
-import { createContext, useContext, type ComponentType, type CSSProperties, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  type ComponentType,
+  type CSSProperties,
+  type FocusEventHandler,
+  type PointerEventHandler,
+  type ReactNode,
+} from 'react';
 
 /**
  * Props that any consumer-supplied Link component must accept. Designed
@@ -67,7 +75,36 @@ export interface NavigationLinkProps {
   'aria-label'?: string;
   /** Optional title attribute. */
   title?: string;
+  /**
+   * The anatomy kernel's interaction stamp, when the pattern rendering this
+   * link owns the anchor's hover/press/focus state. Skins pair the token with
+   * the platform pseudo-class, so a host Link that drops these renders the
+   * pseudo-class arm and nothing is lost.
+   */
+  'data-state'?: string;
+  onPointerEnter?: PointerEventHandler;
+  onPointerLeave?: PointerEventHandler;
+  onPointerDown?: PointerEventHandler;
+  onPointerUp?: PointerEventHandler;
+  onFocus?: FocusEventHandler;
+  onBlur?: FocusEventHandler;
 }
+
+/**
+ * The interaction half of {@link NavigationLinkProps}, as a pattern hands it to
+ * a link it does not own: the kernel's serialized `data-state` plus the
+ * handlers that keep it current.
+ */
+export type NavigationLinkInteractionStamp = Pick<
+  NavigationLinkProps,
+  | 'data-state'
+  | 'onPointerEnter'
+  | 'onPointerLeave'
+  | 'onPointerDown'
+  | 'onPointerUp'
+  | 'onFocus'
+  | 'onBlur'
+>;
 
 /**
  * The shape of an injected Link component. Apps pass their framework's

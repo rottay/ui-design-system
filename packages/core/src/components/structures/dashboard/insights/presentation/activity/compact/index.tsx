@@ -1,8 +1,7 @@
 'use client';
 
-import { type ReactNode } from 'react';
 import { Box, Text, Stack, Flex } from '@/components/primitives';
-import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
+import { NavLinkAnchor } from '../../../runtime/nav-link-anchor';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   AlertCircleIcon as AlertCircle,
@@ -20,22 +19,6 @@ import {
   ZapIcon as Zap,
 } from '../../../../../../../graphics/icons';
 import type { ActivityProps, ActivityItem } from '../../../foundation/contracts';
-
-function NavLinkAnchor({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
-  const NavLink = useNavigationLink();
-  if (NavLink) {
-    return (
-      <NavLink href={href} className={className}>
-        {children}
-      </NavLink>
-    );
-  }
-  return (
-    <a href={href} className={className}>
-      {children}
-    </a>
-  );
-}
 
 /** Hook-local `tOr`: catalogue value with an English floor, never a raw key.
  *  Floors that interpolate are pre-composed at the call site (AppShell idiom),

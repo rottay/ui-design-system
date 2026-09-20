@@ -11427,8 +11427,13 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
       color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
     inset 0 0 0 1px
       color-mix(in srgb, var(--ds-surface-card-bg) 50%, transparent);
-  --ds-filter-pill-focus-ring: 0 0 0 3px
-    color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  /* The pill ring reads the tenant's focus decision (`states.focus-style`), so
+     a tenant that asks for a glow gets one here too; the literal stays as the
+     fallback and `chrome.filterPill.focusRing` still outranks both. */
+  --ds-filter-pill-focus-ring: var(
+    --ds-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
+  );
   /* The pill's active and count states. Declared at :root, beside the three
      above, because `chrome.filterPill` is a kernel-lowered door: a tenant's
      own value lands on this same element unlayered and outranks these. */
@@ -37599,9 +37604,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    parts carried no muting and read fully enabled while the single-mode input
    and every other lane family dimmed. The single mode mutes natively via the
    input's :disabled rule below. */
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='rail'],
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='track'],
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='handle'] {
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='rail'],
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='track'],
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='handle'] {
   opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
@@ -37904,7 +37909,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-color: var(--ds-color-primary);
   background: var(--ds-color-primary);
 }
-.ds-slider.ds-slider--modern[data-part='root'][data-disabled='true'] [data-part='dot'] {
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='dot'] {
   opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
@@ -38001,7 +38006,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     visibility: visible;
   }
 }
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='tooltip'] {
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='tooltip'] {
   opacity: 0;
   visibility: hidden;
   transition: none;
@@ -85454,13 +85459,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
 }
-/* The keyboard ring has NO kernel twin, and that is a measurement rather than an
-   omission: the focusable element is the app-injected anchor above the chip, and
-   `NavigationLinkProps` (the DS navigation adapter's contract) admits no event
-   handlers, so the kernel cannot observe focus there. `:focus-visible` is therefore
-   the platform's own authority here and not a second one. A `[data-state~='focus-visible']`
-   arm would be paint for a token nothing can stamp. Closing it means widening that
-   adapter contract, which is not this file's to widen. */
+/* The keyboard ring's kernel twin sits on the CHIP while the platform arm sits
+   on the anchor, because those are two different nodes: the focusable element
+   is the app-injected anchor above the chip, and `NavigationLinkProps` now
+   admits the kernel's stamp, so each header reads that anchor's focus and
+   forwards it to the chip's own `data-state`. A host Link that drops the stamp
+   renders the `a:focus-visible` arm unchanged. */
+.ds-structure.ds-edit-header [data-part='back-button'][data-state~='focus-visible'],
+.ds-structure.ds-form-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
 .ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
@@ -87870,7 +87876,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-decoration: none;
   border-radius: var(--ds-radius-md, 8px);
 }
-.ds-activity-ticker.ds-activity-ticker .view-all-anchor:focus-visible {
+.ds-activity-ticker.ds-activity-ticker .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -88007,7 +88013,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'][data-part='nav-button'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:focus-visible {
+.ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -88034,7 +88040,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border: none;
   border-radius: 999px;
 }
-.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:focus-visible {
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -88269,7 +88275,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-decoration: none;
   border-radius: var(--ds-radius-md, 8px);
 }
-.ds-activity-timeline.ds-activity-timeline .view-all-anchor:focus-visible {
+.ds-activity-timeline.ds-activity-timeline .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -88608,7 +88614,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-decoration: none;
   border-radius: var(--ds-radius-md, 8px);
 }
-.ds-activity-compact.ds-activity-compact .view-all-anchor:focus-visible {
+.ds-activity-compact.ds-activity-compact .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -88895,7 +88901,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   text-decoration: none;
   border-radius: var(--ds-radius-md, 8px);
 }
-.ds-activity-cards.ds-activity-cards .view-all-anchor:focus-visible {
+.ds-activity-cards.ds-activity-cards .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
@@ -105268,7 +105274,10 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:focus-visible {
+  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+    [data-state~="focus-visible"],
+    :focus-visible
+  ) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
@@ -122672,7 +122681,7 @@ html[lang]:lang(ar) {
   --ds-tabs-underline-list-width: 100%;
   --ds-tag-border: color-mix(in srgb, currentColor 16%, transparent);
   --ds-tag-border-width: var(--ds-edge-hairline-width);
-  --ds-tag-close-focus-ring: 0 0 0 2px color-mix(in srgb, currentColor 26%, transparent);
+  --ds-tag-close-focus-ring: var(--ds-focus-ring, 0 0 0 2px color-mix(in srgb, currentColor 26%, transparent));
   --ds-tag-close-radius: var(--ds-radius-full);
   --ds-tag-close-size: var(--ds-spacing-4);
   --ds-tag-close-touch-size: var(--ds-touch-target-min);

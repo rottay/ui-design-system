@@ -180,9 +180,9 @@
    parts carried no muting and read fully enabled while the single-mode input
    and every other lane family dimmed. The single mode mutes natively via the
    input's :disabled rule below. */
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='rail'],
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='track'],
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='handle'] {
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='rail'],
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='track'],
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='handle'] {
   opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
@@ -485,7 +485,7 @@
   border-color: var(--ds-color-primary);
   background: var(--ds-color-primary);
 }
-.ds-slider.ds-slider--modern[data-part='root'][data-disabled='true'] [data-part='dot'] {
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='dot'] {
   opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
@@ -582,7 +582,7 @@
     visibility: visible;
   }
 }
-.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='tooltip'] {
+.ds-slider.ds-slider--modern[data-part='root']:is([data-state~='disabled'], [data-disabled='true']) [data-part='tooltip'] {
   opacity: 0;
   visibility: hidden;
   transition: none;

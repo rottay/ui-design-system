@@ -186,3 +186,61 @@ describe("chrome/tag depth keyline", () => {
     expect(tagChromeDeriver.consumes).toContain("surfaces.borderStyle");
   });
 });
+
+/* ---- the states causality arm: `surfaces.focusStyle` reaches the close ring ---- */
+
+const CLOSE_RING = "--ds-tag-close-focus-ring";
+const SHELL_RING = "--ds-tag-focus-ring";
+const CLOSE_LITERAL = "0 0 0 2px color-mix(in srgb, currentColor 26%, transparent)";
+
+/** The ring each posture lands on the close button, resolved through the root. */
+function closeRingFor(focusStyle: "ring" | "underline" | "glow"): string {
+  const theme: FlatTheme = { ...MINIMAL_THEME, surfaces: { focusStyle } };
+  const { channels } = runDerivation(context(theme), [statesDeriver, tagChromeDeriver]);
+  const chain = channels[CLOSE_RING];
+  expect(chain, `${focusStyle}: the close ring reads the governed root`).toBe(
+    `var(--ds-focus-ring, ${CLOSE_LITERAL})`
+  );
+  return channels["--ds-focus-ring"];
+}
+
+describe("chrome/tag close focus ring", () => {
+  it("reads the governed ring first and keeps the literal as the floor", () => {
+    const derived = tagChromeDeriver.derive(context(MINIMAL_THEME), {});
+    expect(derived[CLOSE_RING]).toBe(`var(--ds-focus-ring, ${CLOSE_LITERAL})`);
+  });
+
+  it("states both of its rings the same way, shell and close", () => {
+    const derived = tagChromeDeriver.derive(context(MINIMAL_THEME), {});
+    for (const channel of [SHELL_RING, CLOSE_RING]) {
+      expect(derived[channel], channel).toContain("var(--ds-focus-ring,");
+    }
+  });
+
+  it("CAUSALITY: the three focus postures resolve to three distinct rings", () => {
+    const ring = closeRingFor("ring");
+    const underline = closeRingFor("underline");
+    const glow = closeRingFor("glow");
+    expect(new Set([ring, underline, glow]).size).toBe(3);
+    expect(glow).toContain("0 0 12px 2px");
+    expect(underline).toContain("inset");
+  });
+
+  it("MUTATION DRILL: unwiring the close ring stops the posture reaching it", () => {
+    const unwired: FamilyDeriver = {
+      ...tagChromeDeriver,
+      family: "tag-unwired",
+      derive: (ctx, input) => ({ ...tagChromeDeriver.derive(ctx, input), [CLOSE_RING]: CLOSE_LITERAL }),
+    };
+    const reading = (focusStyle: "ring" | "glow") => {
+      const theme: FlatTheme = { ...MINIMAL_THEME, surfaces: { focusStyle } };
+      return runDerivation(context(theme), [statesDeriver, unwired]).channels[CLOSE_RING];
+    };
+    expect(reading("ring")).toBe(CLOSE_LITERAL);
+    expect(reading("glow")).toBe(reading("ring"));
+  });
+
+  it("declares the focus decision it now consumes", () => {
+    expect(tagChromeDeriver.consumes).toContain("surfaces.focusStyle");
+  });
+});

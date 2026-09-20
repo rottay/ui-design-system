@@ -125,7 +125,7 @@
   text-decoration: none;
   border-radius: var(--ds-radius-md, 8px);
 }
-.ds-activity-timeline.ds-activity-timeline .view-all-anchor:focus-visible {
+.ds-activity-timeline.ds-activity-timeline .view-all-anchor:is([data-state~='focus-visible'], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);

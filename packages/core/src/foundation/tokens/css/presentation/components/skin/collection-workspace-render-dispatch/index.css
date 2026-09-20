@@ -249,7 +249,10 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:focus-visible {
+  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:is(
+    [data-state~="focus-visible"],
+    :focus-visible
+  ) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }

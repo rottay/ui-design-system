@@ -2615,7 +2615,7 @@
   --ds-tabs-underline-list-width: 100%;
   --ds-tag-border: color-mix(in srgb, currentColor 16%, transparent);
   --ds-tag-border-width: var(--ds-edge-hairline-width);
-  --ds-tag-close-focus-ring: 0 0 0 2px color-mix(in srgb, currentColor 26%, transparent);
+  --ds-tag-close-focus-ring: var(--ds-focus-ring, 0 0 0 2px color-mix(in srgb, currentColor 26%, transparent));
   --ds-tag-close-radius: var(--ds-radius-full);
   --ds-tag-close-size: var(--ds-spacing-4);
   --ds-tag-close-touch-size: var(--ds-touch-target-min);

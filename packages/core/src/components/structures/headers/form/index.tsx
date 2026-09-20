@@ -61,10 +61,13 @@ import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/na
 import type { ComponentType } from 'react';
 type FormHeaderIcon = ComponentType<any>;
 
-import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';
 
 import { Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
-import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
+import {
+  useNavigationLink,
+  type NavigationLinkInteractionStamp,
+} from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { resolveHeaderTone } from '../../foundation/chrome/runtime/header-tone';
 import {
@@ -144,18 +147,18 @@ export function FormHeader({
   const resolvedBackLabel = backLabel ?? i18n?.tOr('back', 'Back') ?? 'Back';
   const actionsLabel = i18n?.tOr('actions', 'Actions') ?? 'Actions';
   // Hover and press on the back chip are decided once, by the shared kernel, and
-  // read off `data-state`. The KEYBOARD ring is not: the focusable element is the
-  // app-injected anchor above the chip, and `NavigationLinkProps` admits no event
-  // handlers, so `a:focus-visible` remains the platform's own (and only) authority
-  // there rather than a second one.
+  // read off `data-state`. The KEYBOARD ring is decided on the anchor ABOVE the
+  // chip, because that is the focusable element; the skin pairs that stamp with
+  // `:focus-visible`, so a host Link that drops it loses nothing.
   const backInteraction = useInteractionState();
+  const backAnchor = useInteractionState();
   // The underline reset lives in the skin (`a:has(> [data-part='back-button'])`),
   // so the anchor carries no inline style of its own.
-  const renderHrefAnchor = (href: string, content: ReactNode) => {
+  const renderHrefAnchor = (href: string, content: ReactNode, stamp?: NavigationLinkInteractionStamp) => {
     if (NavLink) {
-      return <NavLink href={href}>{content}</NavLink>;
+      return <NavLink href={href} {...stamp}>{content}</NavLink>;
     }
-    return <a href={href}>{content}</a>;
+    return <a href={href} {...stamp}>{content}</a>;
   };
   const breadcrumbItems = breadcrumb?.map((item, index) => ({
     key: String(index),
@@ -176,7 +179,10 @@ export function FormHeader({
             backHref,
             <Flex
               {...backInteraction.handlers}
-              {...partAttributes('back-button', backInteraction.state)}
+              {...partAttributes('back-button', {
+                ...backInteraction.state,
+                focusVisible: backAnchor.state.focusVisible,
+              })}
               align="center"
               gap={8}
             >
@@ -188,6 +194,7 @@ export function FormHeader({
                 {resolvedBackLabel}
               </Text>
             </Flex>,
+            { 'data-state': serializeState(backAnchor.state), ...backAnchor.handlers },
           )}
 
           {breadcrumbItems && breadcrumbItems.length > 0 ? (

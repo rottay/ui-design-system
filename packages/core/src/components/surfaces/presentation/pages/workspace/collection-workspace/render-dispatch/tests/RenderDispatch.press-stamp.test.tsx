@@ -45,6 +45,20 @@ function renderCards(onRowClick?: (row: (typeof rows)[number], index: number) =>
   );
 }
 
+function renderLinkedCards() {
+  return renderSurface(
+    <CollectionRenderDispatch
+      viewMode="cards"
+      data={rows}
+      columns={columns as any}
+      rowKey="id"
+      rowHref={((row: (typeof rows)[number]) => `/records/${row.id}`) as any}
+      rowActivationLabel={(() => 'Open record') as any}
+    />,
+    { engine: 'modern' },
+  );
+}
+
 describe('CollectionRenderDispatch card press stamp', () => {
   it('pairs the card press rule with the stamped state', () => {
     expect(skin).toContain('[data-activatable="true"]:is([data-state~="pressed"], :active)');
@@ -80,6 +94,47 @@ describe('CollectionRenderDispatch card press stamp', () => {
     expect(onRowClick).toHaveBeenCalledTimes(1);
     expect(onRowClick.mock.calls[0][0]).toEqual(rows[0]);
     expect(onRowClick.mock.calls[0][1]).toBe(0);
+  });
+
+  /* ---- the fallback card's own open link: its keyboard ring ---- */
+
+  it('pairs the open-link ring with the stamped state', () => {
+    expect(skin).toContain('[data-part="fallback-open-link"]:is(');
+    expect(skin).toContain('[data-state~="focus-visible"]');
+    expect(skin).toContain('outline: var(--ds-focus-ring-width, 2px) solid');
+    expect(skin).toContain('outline-offset: var(--ds-focus-ring-offset, 2px);');
+    expect(skin).not.toMatch(/\[data-part="fallback-open-link"\]:focus-visible\s*\{/u);
+  });
+
+  it('leaves the open link silent at rest and stamps focus-visible for a keyboard focus', async () => {
+    const { container } = renderLinkedCards();
+    await waitFor(() =>
+      expect(container.querySelectorAll('[data-part="fallback-open-link"]')).toHaveLength(rows.length),
+    );
+
+    const link = container.querySelector<HTMLAnchorElement>('[data-part="fallback-open-link"]')!;
+    expect(link.tagName).toBe('A');
+    expect(link.getAttribute('href')).toBe('/records/1');
+    expect(link.getAttribute('aria-label')).toBe('Open record');
+    expect(link.hasAttribute('data-state')).toBe(false);
+
+    fireEvent.focus(link);
+    expect(link.getAttribute('data-state')?.split(' ')).toContain('focus-visible');
+
+    fireEvent.blur(link);
+    expect(link.hasAttribute('data-state')).toBe(false);
+  });
+
+  it('withholds the open-link ring from a pointer-driven focus', async () => {
+    const { container } = renderLinkedCards();
+    await waitFor(() =>
+      expect(container.querySelector('[data-part="fallback-open-link"]')).not.toBeNull(),
+    );
+
+    const link = container.querySelector<HTMLElement>('[data-part="fallback-open-link"]')!;
+    fireEvent.pointerDown(link);
+    fireEvent.focus(link);
+    expect(link.getAttribute('data-state')?.split(' ') ?? []).not.toContain('focus-visible');
   });
 
   it('marks the lone-final card and leaves non-activatable rows unstamped as activatable', async () => {

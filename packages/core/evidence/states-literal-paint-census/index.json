@@ -1,0 +1,313 @@
+{
+  "lot": "states literal-state-paint (milestone B)",
+  "measuredOn": "2026-09-20",
+  "instrument": {
+    "command": "node scripts/check/theme/axis-difference/index.mjs --json --no-write",
+    "catalog": "d9e1541e203de194",
+    "chromium": "149.0.7827.55",
+    "partMounts": "191 families / 1544 parts / 1748 nodes"
+  },
+  "arms": {
+    "a": {
+      "states.emphasis": "subtle",
+      "states.focus-style": "ring"
+    },
+    "b": {
+      "states.emphasis": "strong",
+      "states.focus-style": "glow"
+    },
+    "nonChromaticLevers": [
+      "--ds-focus-ring",
+      "--ds-focus-ring-width",
+      "--ds-focus-ring-offset",
+      "--ds-state-press-scale",
+      "--ds-state-disabled-opacity"
+    ],
+    "restingValues": {
+      "--ds-focus-ring-width": {
+        "bithire": "2px",
+        "evnto": "2px",
+        "rottay": "2px"
+      },
+      "--ds-focus-ring-offset": {
+        "bithire": "2px",
+        "evnto": "2px",
+        "rottay": "2px"
+      },
+      "--ds-state-press-scale": {
+        "bithire": "0.965",
+        "evnto": "0.98",
+        "rottay": "0.98"
+      },
+      "--ds-state-disabled-opacity": {
+        "bithire": "0.5",
+        "evnto": "0.6",
+        "rottay": "0.6"
+      }
+    }
+  },
+  "premise": {
+    "stated": "26 literal state-paint sites wire to the governed states channels, byte-equal at rest in all three verticals",
+    "measured": "FALSE as stated, and the correction runs in the lot's favour. Of the 26, SIX paint the governed channels already and were blocked by REACH (a pseudo on a part compound, a prop echo the part law refuses, an adapter contract with no stamp) \u2014 those wire byte-equal. TWO carry a flat family ring channel and wire with a declared change. The other EIGHTEEN carry no governed non-chromatic lever on a measured node at all: giving them one is new paint, a reviewed visual decision, not wiring. A seventh byte-equal wire comes from the pseudo-only list (collection-workspace-render-dispatch), whose nine siblings stay residual."
+  },
+  "fleet": {
+    "before": {
+      "states": "77/147 = 52.4%"
+    },
+    "after": {
+      "states": "88/147 = 59.9%"
+    },
+    "gained": [
+      "activity-cards",
+      "activity-compact",
+      "activity-ticker",
+      "activity-timeline",
+      "badge",
+      "collection-workspace-render-dispatch",
+      "edit-header",
+      "header-hero-shared",
+      "slider",
+      "status-filter-pills",
+      "tag"
+    ],
+    "lost": [],
+    "otherAxes": "byte-identical movedIds on shape/typography/rhythm/depth/motion; all negative-control cells 0",
+    "note": "badge and edit-header are gains this lot did not target: badge reads --ds-filter-pill-focus-ring, and edit-header shares the back chip that header-hero-shared declares."
+  },
+  "restAB": {
+    "method": "the composed bundle, and the same bundle with exactly this lot's declarations textually restored, mounted in one page per vertical/mode",
+    "cells": 4176,
+    "differing": 66,
+    "allDifferencesUnder": "the focus-visible stamp only \u2014 zero at rest, zero under hovered/pressed/selected/disabled"
+  },
+  "declaredChanges": [
+    {
+      "channel": "--ds-tag-close-focus-ring",
+      "families": [
+        "tag"
+      ],
+      "before": "0 0 0 2px color-mix(in srgb, currentColor 26%, transparent)",
+      "after": "var(--ds-focus-ring, <the same literal>)",
+      "paint": "the tag close button's keyboard ring becomes the tenant's ring (two layers: bg offset + colour) instead of a 2px currentColor halo, in all three verticals and both modes",
+      "precedent": "--ds-tag-focus-ring and --ds-header-back-focus-ring already state their rings this way"
+    },
+    {
+      "channel": "--ds-filter-pill-focus-ring",
+      "families": [
+        "status-filter-pills",
+        "badge",
+        "list-toolbar"
+      ],
+      "before": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)",
+      "after": "var(--ds-focus-ring, <the same literal>)",
+      "paint": "the pill's and the badge's keyboard rings become the tenant's ring; measured on badge in all three verticals and both modes. list-toolbar reads the same channel and follows.",
+      "precedent": "as above; a tenant's chrome.filterPill.focusRing still outranks it"
+    }
+  ],
+  "rows": {
+    "activity-cards": {
+      "verdict": "WIRED",
+      "mechanism": "twin+stamp",
+      "detail": "the view-all ring already read --ds-focus-ring-width/-offset; the rule was `:focus-visible` alone and the shared NavLinkAnchor now stamps the kernel token",
+      "byteEqual": "at rest and under hovered/pressed/selected/disabled; under a keyboard focus the same declaration at the same specificity"
+    },
+    "activity-compact": {
+      "verdict": "WIRED",
+      "mechanism": "twin+stamp",
+      "detail": "as activity-cards",
+      "byteEqual": "as activity-cards"
+    },
+    "activity-ticker": {
+      "verdict": "WIRED",
+      "mechanism": "twin+stamp",
+      "detail": "the view-all anchor plus its own nav-button and ticker-dot controls, all three already governed",
+      "byteEqual": "as activity-cards"
+    },
+    "activity-timeline": {
+      "verdict": "WIRED",
+      "mechanism": "twin+stamp",
+      "detail": "as activity-cards",
+      "byteEqual": "as activity-cards"
+    },
+    "collection-workspace-render-dispatch": {
+      "verdict": "WIRED",
+      "mechanism": "twin+stamp",
+      "detail": "the fallback card's open link: the ring already read the governed channels, the bare anchor stamped nothing",
+      "byteEqual": "as activity-cards"
+    },
+    "header-hero-shared": {
+      "verdict": "WIRED",
+      "mechanism": "twin+stamp+contract",
+      "detail": "the back chip's ring rides --ds-header-back-focus-ring, already a var(--ds-focus-ring, ...) product; the focusable node is the app-injected anchor and NavigationLinkProps admitted no stamp. The contract now carries one, both headers forward the anchor's focus onto the chip's own data-state, and `a:focus-visible` stays as the platform arm",
+      "byteEqual": "as activity-cards"
+    },
+    "slider": {
+      "verdict": "WIRED",
+      "mechanism": "head-pairing+stamp",
+      "detail": "rail/track/handle/dot/tooltip already read --ds-state-disabled-opacity; every rule was headed by [data-disabled='true'] alone, which the part law refuses, so the parts were never mounted for the states axis. The head pairs the kernel token with the prop echo and the root stamps both",
+      "byteEqual": "every measured cell, in every state: neither attribute was removed and no value changed"
+    },
+    "tag": {
+      "verdict": "WIRED (declared change)",
+      "mechanism": "deriver",
+      "detail": "--ds-tag-close-focus-ring was the one flat ring in a file whose sibling --ds-tag-focus-ring is already a var(--ds-focus-ring, ...) product; it now states its ring the same way",
+      "byteEqual": "NO \u2014 see declaredChanges"
+    },
+    "status-filter-pills": {
+      "verdict": "WIRED (declared change)",
+      "mechanism": "root default",
+      "detail": "--ds-filter-pill-focus-ring's :root default was a flat 3px halo; it now reads var(--ds-focus-ring, <the literal>). chrome.filterPill.focusRing still outranks both",
+      "byteEqual": "NO \u2014 see declaredChanges"
+    },
+    "active-filters-bar": {
+      "verdict": "RESIDUAL",
+      "reason": "no-non-chromatic-state-paint",
+      "detail": "no state rule of this family writes transform/opacity/outline/box-shadow/border-width at all"
+    },
+    "card-compounds": {
+      "verdict": "RESIDUAL",
+      "reason": "foreign-root",
+      "detail": "its only state rule is headed by `.ds-card[data-interactive]`, another family's root; refused as head-not-the-family-root. Its values (--ds-card-header-icon-lift/-shadow-hover) are not states channels either"
+    },
+    "collection-header": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "quick-actions paints translateY(-1px) under BOTH hover and press (the press arm is a copy of the hover arm). There is no press scale to wire; giving it one is new paint, a reviewed visual decision"
+    },
+    "collection-workspace": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "the page-size-control hover/focus-within box-shadows are bespoke literals; wiring the focus-within shadow to --ds-focus-ring is a geometry change on a surface with no ring vocabulary of its own"
+    },
+    "decision-comparison": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "the fact row's hover inset shadow is a colour-mix literal on no states channel"
+    },
+    "descriptions": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "the row hover/press transforms and inset shadows are literals; the family declares no focus ring and no press scale on a measured node"
+    },
+    "field-filters-panel": {
+      "verdict": "RESIDUAL",
+      "reason": "channel-not-paint",
+      "detail": "it DECLARES --ds-button-focus-ring from --ds-focus-ring-width, but the ring is painted inside a composed Button, which is not a measured node of this family"
+    },
+    "float-button": {
+      "verdict": "RESIDUAL",
+      "reason": "foreign-root",
+      "detail": "its state rules are headed by [data-part='trigger'], not the mounted [data-part='root']; the values ride --ds-button-* channels, not the states roots"
+    },
+    "input-compounds": {
+      "verdict": "RESIDUAL",
+      "reason": "foreign-root",
+      "detail": "every state rule is headed by `.ds-input-textarea`, a different root from the mounted `.ds-input-addon`"
+    },
+    "metrics-minimal": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "hover scale(1.05) and chevron reveal are literals; there is no governed hover-scale channel (--ds-state-hover-shift is colour)"
+    },
+    "notification-center": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "mark-read/dismiss opacity:1 is a reveal, not a disabled muting; nothing on this family reads a states root"
+    },
+    "operational-ledger": {
+      "verdict": "RESIDUAL",
+      "reason": "no-non-chromatic-state-paint",
+      "detail": "no state rule writes a non-chromatic longhand"
+    },
+    "presence": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "the avatar hover lift reads --ds-motion-offset-in, a motion channel; the states arms do not move it"
+    },
+    "record-facts": {
+      "verdict": "RESIDUAL",
+      "reason": "no-non-chromatic-state-paint",
+      "detail": "no state rule writes a non-chromatic longhand"
+    },
+    "scope-switcher": {
+      "verdict": "RESIDUAL",
+      "reason": "no-non-chromatic-state-paint",
+      "detail": "no state rule writes a non-chromatic longhand"
+    },
+    "search-command-bar": {
+      "verdict": "RESIDUAL",
+      "reason": "channel-not-paint",
+      "detail": "as field-filters-panel: it declares --ds-button-focus-ring from the governed roots, and the composed Button paints it"
+    },
+    "stats-grid": {
+      "verdict": "RESIDUAL",
+      "reason": "prop-gated-part",
+      "detail": "the card's focus ring IS governed but its rule is `.ds-stats-grid__card[data-interactive=\"true\"]`; the part law refuses any part attribute but data-part. Dropping the gate would be a selector generalisation, not a wire"
+    },
+    "visual-excellence-preview": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "showcase-only chrome; its focus/hover shadows are bespoke literals on no channel"
+    },
+    "activity-log": {
+      "verdict": "RESIDUAL",
+      "reason": "prop-gated-part",
+      "detail": "as stats-grid: the item-body ring is governed but gated on [data-interactive='true']"
+    },
+    "anchor": {
+      "verdict": "RESIDUAL",
+      "reason": "nothing-reaches-a-measured-node",
+      "detail": "twinning every pseudo still lands no state rule on the mounted node"
+    },
+    "ascii-diagram": {
+      "verdict": "RESIDUAL",
+      "reason": "nothing-reaches-a-measured-node",
+      "detail": "as anchor"
+    },
+    "data-terminal-card": {
+      "verdict": "RESIDUAL",
+      "reason": "nothing-reaches-a-measured-node",
+      "detail": "as anchor"
+    },
+    "drawer-compounds": {
+      "verdict": "RESIDUAL",
+      "reason": "nothing-reaches-a-measured-node",
+      "detail": "as anchor"
+    },
+    "grid-view": {
+      "verdict": "RESIDUAL",
+      "reason": "nothing-reaches-a-measured-node",
+      "detail": "as anchor"
+    },
+    "scheduler-surface": {
+      "verdict": "RESIDUAL",
+      "reason": "nothing-reaches-a-measured-node",
+      "detail": "as anchor"
+    },
+    "search": {
+      "verdict": "RESIDUAL",
+      "reason": "no-governed-lever",
+      "detail": "its one reachable state rule paints border-radius on [data-state], a shape read, not a states one"
+    },
+    "tooltip": {
+      "verdict": "RESIDUAL",
+      "reason": "portal",
+      "detail": "its bubble is headed by its own root class; refused as head-not-the-family-root (the standing portal limit)"
+    },
+    "tree-view-connector": {
+      "verdict": "RESIDUAL",
+      "reason": "nothing-reaches-a-measured-node",
+      "detail": "as anchor"
+    }
+  },
+  "alsoEnumerated": [
+    "activity-log"
+  ],
+  "counts": {
+    "briefLiteral26": 26,
+    "briefPseudo10": 10,
+    "wiredByteEqual": 7,
+    "wiredDeclaredChange": 2,
+    "residual": 28
+  }
+}

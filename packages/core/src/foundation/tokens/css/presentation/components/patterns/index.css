@@ -511,8 +511,13 @@
       color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
     inset 0 0 0 1px
       color-mix(in srgb, var(--ds-surface-card-bg) 50%, transparent);
-  --ds-filter-pill-focus-ring: 0 0 0 3px
-    color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  /* The pill ring reads the tenant's focus decision (`states.focus-style`), so
+     a tenant that asks for a glow gets one here too; the literal stays as the
+     fallback and `chrome.filterPill.focusRing` still outranks both. */
+  --ds-filter-pill-focus-ring: var(
+    --ds-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
+  );
   /* The pill's active and count states. Declared at :root, beside the three
      above, because `chrome.filterPill` is a kernel-lowered door: a tenant's
      own value lands on this same element unlayered and outranks these. */

@@ -99,7 +99,11 @@ export function deriveTagChannels(): Record<string, string> {
   vars["--ds-tag-border"] = "color-mix(in srgb, currentColor 16%, transparent)";
   vars["--ds-tag-focus-ring"] =
     "var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent))";
-  vars["--ds-tag-close-focus-ring"] = "0 0 0 2px color-mix(in srgb, currentColor 26%, transparent)";
+  // The close button's ring reads the tenant's focus decision, like the shell's
+  // own ring above it; the literal stays as the fallback for a page with no
+  // `--ds-focus-ring` on the root.
+  vars["--ds-tag-close-focus-ring"] =
+    "var(--ds-focus-ring, 0 0 0 2px color-mix(in srgb, currentColor 26%, transparent))";
 
   vars["--ds-tag-close-radius"] = "var(--ds-radius-full)";
   vars["--ds-tag-icon-radius"] = "var(--ds-radius-full)";

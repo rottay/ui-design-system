@@ -78,13 +78,26 @@ async function serverMarkup(): Promise<string> {
 }
 
 const pills = await serverMarkup();
-const markup = `<div id="pills" style="inline-size:64rem">${pills}</div>`;
+/**
+ * The keyboard arm, stamped rather than simulated: the ring rule is
+ * `:is([data-state~='focus-visible'], :focus-visible)` and a static probe can
+ * only enter it through the kernel token. The component's own stamp is drilled
+ * in `StatusFilterPills.caller-handler-composition`; this twin is what lets the
+ * ring's PAINT be read at all.
+ */
+const focusedPills = pills
+  .replace(/id="[^"]*"/gu, '')
+  .replace(/data-part="pill"/gu, 'data-part="pill" data-state="focus-visible"');
+const markup =
+  `<div id="pills" style="inline-size:64rem">${pills}</div>`
+  + `<div id="focused-pills" style="inline-size:64rem">${focusedPills}</div>`;
 
 const PILL = "#pills [data-part='pill']";
 const SELECTED = "#pills [data-part='pill'][data-selected='true']";
 const UNSELECTED = "#pills [data-part='pill'][data-selected='false']";
 const LABEL = "#pills [data-part='pill-label']";
 const BADGE = "#pills [data-part='count-badge']";
+const FOCUSED = "#focused-pills [data-part='pill'][data-state~='focus-visible']";
 
 describeCausality({
   family: 'status-filter-pills',
@@ -94,6 +107,9 @@ describeCausality({
     { id: 'selectedBorder', selector: SELECTED, property: 'border-top-color' },
     { id: 'labelFont', selector: LABEL, property: 'font-size' },
     { id: 'pillGap', selector: PILL, property: 'column-gap' },
+    // The pill's keyboard ring, as the channel and as the paint it lands.
+    { id: 'ringChannel', selector: PILL, property: '--ds-filter-pill-focus-ring' },
+    { id: 'ringPaint', selector: FOCUSED, property: 'box-shadow' },
     // The count badge's measure is a stated number, so it is the control every
     // arm holds.
     { id: 'badgeBlock', selector: BADGE, property: 'block-size' },
@@ -119,6 +135,14 @@ describeCausality({
     'density.mode': {
       value: 'spacious',
       moves: ['pillGap'],
+      holds: 'badgeBlock',
+      in: VERTICALS,
+    },
+    // The pill ring reads the tenant's focus decision, so a glow reaches the
+    // pill's own keyboard affordance instead of its retired 3px literal.
+    'states.focus-style': {
+      value: 'glow',
+      moves: ['ringChannel', 'ringPaint'],
       holds: 'badgeBlock',
       in: VERTICALS,
     },

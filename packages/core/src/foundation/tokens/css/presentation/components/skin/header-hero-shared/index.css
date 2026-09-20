@@ -197,13 +197,14 @@
 .ds-structure.ds-form-header [data-part='back-button']:is([data-state~='pressed'], :active) {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
 }
-/* The keyboard ring has NO kernel twin, and that is a measurement rather than an
-   omission: the focusable element is the app-injected anchor above the chip, and
-   `NavigationLinkProps` (the DS navigation adapter's contract) admits no event
-   handlers, so the kernel cannot observe focus there. `:focus-visible` is therefore
-   the platform's own authority here and not a second one. A `[data-state~='focus-visible']`
-   arm would be paint for a token nothing can stamp. Closing it means widening that
-   adapter contract, which is not this file's to widen. */
+/* The keyboard ring's kernel twin sits on the CHIP while the platform arm sits
+   on the anchor, because those are two different nodes: the focusable element
+   is the app-injected anchor above the chip, and `NavigationLinkProps` now
+   admits the kernel's stamp, so each header reads that anchor's focus and
+   forwards it to the chip's own `data-state`. A host Link that drops the stamp
+   renders the `a:focus-visible` arm unchanged. */
+.ds-structure.ds-edit-header [data-part='back-button'][data-state~='focus-visible'],
+.ds-structure.ds-form-header [data-part='back-button'][data-state~='focus-visible'],
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
 .ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));

@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, type FocusEvent, type ReactNode } from 'react';
 import { Box, Text, Stack, Flex } from '@/components/primitives';
-import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { NavLinkAnchor } from '../../../runtime/nav-link-anchor';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useReducedMotion } from '@/graphics/motion/react/runtime';
 import {
@@ -23,22 +24,6 @@ import {
 } from '../../../../../../../graphics/icons';
 import type { ActivityProps, ActivityItem } from '../../../foundation/contracts';
 
-function NavLinkAnchor({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
-  const NavLink = useNavigationLink();
-  if (NavLink) {
-    return (
-      <NavLink href={href} className={className}>
-        {children}
-      </NavLink>
-    );
-  }
-  return (
-    <a href={href} className={className}>
-      {children}
-    </a>
-  );
-}
-
 /** Hook-local `tOr`: catalogue value with an English floor, never a raw key.
  *  Floors that interpolate are pre-composed at the call site (AppShell idiom),
  *  so a missing provider renders the documented English string byte-exact. */
@@ -47,6 +32,67 @@ function useActivityTranslation() {
   const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
     i18n?.tOr(key, floor, params) ?? floor;
   return { tOr };
+}
+
+/** The rotation controls carry the kernel's stamp so the skin's focus ring is
+ *  drawn from the tenant's focus decision and not only from `:focus-visible`. */
+function TickerNavButton({
+  onClick,
+  label,
+  children,
+}: {
+  onClick: () => void;
+  label: string;
+  children: ReactNode;
+}) {
+  const control = useInteractionState();
+  return (
+    <Box
+      as="button"
+      {...({ type: 'button' } as any)}
+      onClick={onClick}
+      className="nav-button"
+      {...partAttributes('nav-button', control.state)}
+      {...control.handlers}
+      aria-label={label}
+    >
+      {children}
+    </Box>
+  );
+}
+
+function TickerDot({
+  onClick,
+  label,
+  active,
+  type,
+}: {
+  onClick: () => void;
+  label: string;
+  active: boolean;
+  type: string;
+}) {
+  const control = useInteractionState();
+  return (
+    <Box
+      as="button"
+      {...({ type: 'button' } as any)}
+      onClick={onClick}
+      className="ticker-dot"
+      {...partAttributes('ticker-dot', control.state)}
+      {...control.handlers}
+      data-active={active}
+      data-type={type}
+      aria-label={label}
+      aria-current={active ? 'true' : undefined}
+      style={{
+        // Runtime state geometry (the active dot stretches): the width is
+        // state-driven, so it stays inline by design.
+        width: active ? 24 : 10,
+        position: 'relative',
+      }}
+    />
+  );
 }
 
 const SUCCESS_ICONS = [Check, Briefcase, Star, Zap];
@@ -253,51 +299,32 @@ export function ActivityTicker({
 
           {items.length > 1 && (
             <Flex align="center" justify="center" gap={16} data-part="controls">
-              <Box
-                as="button"
-                {...({ type: 'button' } as any)}
+              <TickerNavButton
                 onClick={goToPrev}
-                className="nav-button"
-                data-part="nav-button"
-                aria-label={tOr('activity.tickerPrevious', 'Previous update')}
+                label={tOr('activity.tickerPrevious', 'Previous update')}
               >
                 <ChevronLeft style={{ width: 16, height: 16 }} />
-              </Box>
+              </TickerNavButton>
               <Flex align="center" gap={8}>
                 {items.map((item: ActivityItem, i: number) => (
-                  <Box
-                    as="button"
-                    {...({ type: 'button' } as any)}
+                  <TickerDot
                     key={i}
                     onClick={() => goToIndex(i)}
-                    className="ticker-dot"
-                    data-part="ticker-dot"
-                    data-active={i === currentIndex}
-                    data-type={item.type}
-                    aria-label={tOr('activity.tickerGoTo', `Go to update ${i + 1}`, { index: i + 1 })}
-                    aria-current={i === currentIndex ? 'true' : undefined}
-                    style={{
-                      // Runtime state geometry (the active dot stretches): the
-                      // width is state-driven, so it stays inline by design.
-                      width: i === currentIndex ? 24 : 10,
-                      position: 'relative',
-                    }}
+                    label={tOr('activity.tickerGoTo', `Go to update ${i + 1}`, { index: i + 1 })}
+                    active={i === currentIndex}
+                    type={item.type}
                   />
                 ))}
               </Flex>
               <Text size="xs" data-part="ticker-counter">
                 {currentIndex + 1}/{items.length}
               </Text>
-              <Box
-                as="button"
-                {...({ type: 'button' } as any)}
+              <TickerNavButton
                 onClick={goToNext}
-                className="nav-button"
-                data-part="nav-button"
-                aria-label={tOr('activity.tickerNext', 'Next update')}
+                label={tOr('activity.tickerNext', 'Next update')}
               >
                 <ChevronRight style={{ width: 16, height: 16 }} />
-              </Box>
+              </TickerNavButton>
             </Flex>
           )}
 

@@ -318,6 +318,31 @@ function CardItem({
   );
 }
 
+/** The fallback card's own open link: a bare anchor, so its keyboard ring has
+ *  to be stamped here for the skin's governed focus channels to reach it. */
+function FallbackOpenLink({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: ReactNode;
+}) {
+  const link = useInteractionState();
+  return (
+    <a
+      className="ds-collection-render-dispatch__fallback-open-link"
+      {...partAttributes('fallback-open-link', link.state)}
+      {...link.handlers}
+      href={href}
+      aria-label={label}
+    >
+      {children}
+    </a>
+  );
+}
+
 function renderFallbackCard<T extends object>({
   row,
   index,
@@ -404,14 +429,9 @@ function renderFallbackCard<T extends object>({
         >
           {actionContent}
           {href ? (
-            <a
-              className="ds-collection-render-dispatch__fallback-open-link"
-              data-part="fallback-open-link"
-              href={href}
-              aria-label={activationLabel}
-            >
+            <FallbackOpenLink href={href} label={activationLabel}>
               {t('collection_workspace.open_details', 'Open details')}
-            </a>
+            </FallbackOpenLink>
           ) : onActivate ? (
             <Button
               variant="ghost"
