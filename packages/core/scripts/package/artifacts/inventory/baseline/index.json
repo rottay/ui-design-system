@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7780,
-  "unpackedSize": 43108500,
+  "unpackedSize": 43169858,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -12,7 +12,7 @@
     },
     {
       "path": "contracts/css/hooks/index.json",
-      "size": 482963
+      "size": 482883
     },
     {
       "path": "contracts/package/entrypoints/index.json",
@@ -32,7 +32,7 @@
     },
     {
       "path": "dist/bithire.css",
-      "size": 5439114
+      "size": 5452586
     },
     {
       "path": "dist/chart-access.cjs",
@@ -108,7 +108,7 @@
     },
     {
       "path": "dist/components/patterns/commerce/pricing-table/engines/modern/index.cjs",
-      "size": 6886
+      "size": 7656
     },
     {
       "path": "dist/components/patterns/commerce/pricing-table/engines/modern/index.d.ts",
@@ -116,7 +116,7 @@
     },
     {
       "path": "dist/components/patterns/commerce/pricing-table/engines/modern/index.js",
-      "size": 13976
+      "size": 14618
     },
     {
       "path": "dist/components/patterns/commerce/pricing-table/engines/rustic/index.cjs",
@@ -284,7 +284,7 @@
     },
     {
       "path": "dist/components/patterns/communication/live-feed/engines/modern/index.cjs",
-      "size": 3694
+      "size": 3914
     },
     {
       "path": "dist/components/patterns/communication/live-feed/engines/modern/index.d.ts",
@@ -292,7 +292,7 @@
     },
     {
       "path": "dist/components/patterns/communication/live-feed/engines/modern/index.js",
-      "size": 5469
+      "size": 5727
     },
     {
       "path": "dist/components/patterns/communication/live-feed/engines/rustic/index.cjs",
@@ -504,7 +504,7 @@
     },
     {
       "path": "dist/components/patterns/customization/tenant-preview/engines/modern/index.cjs",
-      "size": 10736
+      "size": 10956
     },
     {
       "path": "dist/components/patterns/customization/tenant-preview/engines/modern/index.d.ts",
@@ -512,7 +512,7 @@
     },
     {
       "path": "dist/components/patterns/customization/tenant-preview/engines/modern/index.js",
-      "size": 15674
+      "size": 16186
     },
     {
       "path": "dist/components/patterns/customization/tenant-preview/engines/rustic/index.cjs",
@@ -1784,7 +1784,7 @@
     },
     {
       "path": "dist/components/patterns/forms/invoice-template/engines/modern/index.cjs",
-      "size": 7424
+      "size": 7644
     },
     {
       "path": "dist/components/patterns/forms/invoice-template/engines/modern/index.d.ts",
@@ -1792,7 +1792,7 @@
     },
     {
       "path": "dist/components/patterns/forms/invoice-template/engines/modern/index.js",
-      "size": 10952
+      "size": 11208
     },
     {
       "path": "dist/components/patterns/forms/invoice-template/engines/rustic/index.cjs",
@@ -4528,7 +4528,7 @@
     },
     {
       "path": "dist/components/primitives/display/carousel/engines/modern/index.cjs",
-      "size": 6975
+      "size": 7465
     },
     {
       "path": "dist/components/primitives/display/carousel/engines/modern/index.d.ts",
@@ -4536,7 +4536,7 @@
     },
     {
       "path": "dist/components/primitives/display/carousel/engines/modern/index.js",
-      "size": 11221
+      "size": 11741
     },
     {
       "path": "dist/components/primitives/display/carousel/engines/rustic/index.cjs",
@@ -5028,7 +5028,7 @@
     },
     {
       "path": "dist/components/primitives/display/qr-code/engines/modern/index.cjs",
-      "size": 2358
+      "size": 2673
     },
     {
       "path": "dist/components/primitives/display/qr-code/engines/modern/index.d.ts",
@@ -5036,7 +5036,7 @@
     },
     {
       "path": "dist/components/primitives/display/qr-code/engines/modern/index.js",
-      "size": 3644
+      "size": 4047
     },
     {
       "path": "dist/components/primitives/display/qr-code/engines/rustic/index.cjs",
@@ -9120,7 +9120,7 @@
     },
     {
       "path": "dist/components/primitives/layout/scroll-area/engines/modern/index.cjs",
-      "size": 863
+      "size": 1087
     },
     {
       "path": "dist/components/primitives/layout/scroll-area/engines/modern/index.d.ts",
@@ -9128,7 +9128,7 @@
     },
     {
       "path": "dist/components/primitives/layout/scroll-area/engines/modern/index.js",
-      "size": 1111
+      "size": 1370
     },
     {
       "path": "dist/components/primitives/layout/scroll-area/engines/rustic/index.cjs",
@@ -9600,7 +9600,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/back-top/engines/modern/index.cjs",
-      "size": 2649
+      "size": 2869
     },
     {
       "path": "dist/components/primitives/navigation/back-top/engines/modern/index.d.ts",
@@ -9608,7 +9608,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/back-top/engines/modern/index.js",
-      "size": 3374
+      "size": 3626
     },
     {
       "path": "dist/components/primitives/navigation/back-top/engines/rustic/index.cjs",
@@ -9808,7 +9808,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/link/engines/modern/index.cjs",
-      "size": 1545
+      "size": 2263
     },
     {
       "path": "dist/components/primitives/navigation/link/engines/modern/index.d.ts",
@@ -9816,7 +9816,7 @@
     },
     {
       "path": "dist/components/primitives/navigation/link/engines/modern/index.js",
-      "size": 2020
+      "size": 2749
     },
     {
       "path": "dist/components/primitives/navigation/link/engines/rustic/index.cjs",
@@ -10424,7 +10424,7 @@
     },
     {
       "path": "dist/components/primitives/overlay/context-menu/engines/modern/index.cjs",
-      "size": 6065
+      "size": 6303
     },
     {
       "path": "dist/components/primitives/overlay/context-menu/engines/modern/index.d.ts",
@@ -10432,7 +10432,7 @@
     },
     {
       "path": "dist/components/primitives/overlay/context-menu/engines/modern/index.js",
-      "size": 9844
+      "size": 10115
     },
     {
       "path": "dist/components/primitives/overlay/context-menu/engines/rustic/index.cjs",
@@ -13936,7 +13936,7 @@
     },
     {
       "path": "dist/evnto.css",
-      "size": 5427705
+      "size": 5441177
     },
     {
       "path": "dist/fonts/editorial-display.css",
@@ -22640,15 +22640,15 @@
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/tier/index.cjs",
-      "size": 767
+      "size": 683
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/tier/index.d.ts",
-      "size": 743
+      "size": 886
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/tier/index.js",
-      "size": 749
+      "size": 659
     },
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/typography/weights/index.cjs",
@@ -31060,7 +31060,7 @@
     },
     {
       "path": "dist/rottay.css",
-      "size": 5426963
+      "size": 5440435
     },
     {
       "path": "dist/server.cjs",
@@ -31100,7 +31100,7 @@
     },
     {
       "path": "dist/styles.css",
-      "size": 5872850
+      "size": 5886166
     },
     {
       "path": "governance/graphics/licenses/phosphor-icons-react/index.md",
