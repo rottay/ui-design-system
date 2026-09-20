@@ -47,6 +47,12 @@ import {
   SCENARIOS,
   STATES_AXIS_LIMITS,
   STATES_DEPENDENT_CONTROL,
+  STATE_STAMP_ATTRIBUTES,
+  STATE_STAMP_ATTRIBUTE_NAMES,
+  NO_WRITE_FLAG,
+  NO_WRITE_ENV,
+  disabledVocabularyCensus,
+  publicationRefusal,
   UNMOUNTABLE_FAMILIES,
   UNSETTLED_FAMILIES,
   WITNESSED_CONTROLS,
@@ -1071,7 +1077,7 @@ describe('axis-difference — a family can be measured on its own anatomy', () =
   });
 
   it('the states axis reads the non-chromatic longhands a state paints, under every stamped state', () => {
-    assert.deepEqual([...STATE_VARIANTS], ['hovered', 'pressed', 'selected', 'focus-visible']);
+    assert.deepEqual([...STATE_VARIANTS], ['hovered', 'pressed', 'selected', 'focus-visible', 'disabled']);
     for (const property of ['transform', 'opacity', 'outline-width', 'outline-offset']) {
       assert.ok(AXES.states.computed.includes(property), property);
     }
@@ -1880,4 +1886,213 @@ describe('axis-difference — computed invariants over mounted parts, and the N/
     assert.equal(denominatorLine(result, 'declaredPopulations'), 'shape 216 (1 N/A), typography 181 (0 N/A)');
     assert.equal(denominatorLine({ populations: { shape: 4 } }), 'shape 4 (0 N/A)');
   });
+});
+
+/**
+ * THE DISABLED STAMP, which exists because the axis could not see the state at
+ * all.
+ *
+ *   `STATE_VARIANTS` was `['hovered','pressed','selected','focus-visible']`.
+ *
+ * Nothing in the scene ever became disabled, so every declaration the fleet
+ * gates on being disabled -- the press-scale pair, the disabled opacity, the
+ * disabled shadow -- sat outside the instrument BY CONSTRUCTION and its 0 was
+ * arithmetic rather than a reading. These cases pin the repair from both ends:
+ * what the stamp is (the two attributes a disabled component writes, measured
+ * over the corpus rather than assumed), and -- in a real browser -- the four
+ * readings that tell a repair apart from a number that merely went up.
+ */
+describe('axis-difference — disabled is a stamped state, and the stamp is the contract a component writes', () => {
+  it('stamps the fifth state, and it is the one a component receives as a PROP', () => {
+    assert.ok(STATE_VARIANTS.includes('disabled'));
+    assert.deepEqual(STATES_AXIS_LIMITS.stampedStates, [...STATE_VARIANTS]);
+  });
+
+  it('carries the second attribute for disabled ALONE, because it is the only state a component also spells out', () => {
+    // The kernel's `serializeState` gives every state its `data-state` token.
+    // `data-disabled='true'` is what the component writes beside it when the
+    // prop arrives, and the corpus gates on the two in comparable measure.
+    assert.deepEqual(Object.keys(STATE_STAMP_ATTRIBUTES), ['disabled']);
+    assert.deepEqual(STATE_STAMP_ATTRIBUTES.disabled, { 'data-disabled': 'true' });
+    assert.deepEqual([...STATE_STAMP_ATTRIBUTE_NAMES], ['data-disabled']);
+    for (const state of STATE_VARIANTS) {
+      if (state !== 'disabled') assert.equal(STATE_STAMP_ATTRIBUTES[state], undefined, state);
+    }
+  });
+
+  it('counts the reach of the stamp per vocabulary, and names what no attribute stamp can reach', () => {
+    const census = disabledVocabularyCensus(ROOT);
+    // Both vocabularies are live and NEITHER covers the other: stamping only
+    // the kernel token would have reached under half of what the corpus gates.
+    assert.ok(census.families.dataState > 20, JSON.stringify(census.families));
+    assert.ok(census.families.dataDisabled > 20, JSON.stringify(census.families));
+    assert.ok(census.reachedFamilies > census.families.dataState, JSON.stringify(census));
+    assert.ok(census.reachedFamilies > census.families.dataDisabled, JSON.stringify(census));
+    assert.equal(
+      census.reachedFamilies + census.unreachedFamilies.length,
+      census.gatedFamilies,
+      'every family that gates disabled paint is either reached or named as unreached',
+    );
+    // The honest residual: a pseudo-class and an aria mirror this scene cannot
+    // produce, named rather than folded into the percentage. Each named family
+    // is re-read on its own, so "unreached" is a measurement and not a label.
+    for (const family of census.unreachedFamilies) {
+      const own = disabledVocabularyCensus(ROOT, [family]);
+      assert.equal(own.rules.dataState, 0, family);
+      assert.equal(own.rules.dataDisabled, 0, family);
+      assert.ok(own.rules.nativePseudo + own.rules.ariaDisabled > 0, family);
+    }
+    assert.ok(
+      STATES_AXIS_LIMITS.unreachable.some((line) => line.includes(':disabled')),
+      'the residual must be published with the run',
+    );
+  });
+
+  it('reads a fixture family by the vocabulary it actually gates on', () => {
+    const census = disabledVocabularyCensus(ROOT, ['button']);
+    assert.ok(census.rules.dataDisabled > 0, JSON.stringify(census));
+    assert.equal(census.gatedFamilies, 1);
+    assert.equal(census.reachedFamilies, 1);
+    assert.deepEqual(census.unreachedFamilies, []);
+  });
+});
+
+/**
+ * THE PUBLICATION REFUSAL, which is the friction the press/disabled lot
+ * registered: every run rewrote the published pilot artifact, including the
+ * ad-hoc one a reviewer takes to answer a single question about a single
+ * family. The record then carried a reading nobody reviewed.
+ */
+describe('axis-difference — a measurement that is not the published one may not publish', () => {
+  it('permits an unflagged run', () => {
+    assert.equal(publicationRefusal({ argv: ['node', 'index.mjs'], env: {} }), null);
+    assert.equal(publicationRefusal(), null);
+  });
+
+  it('refuses on the flag and on the environment opt-out, which is the one a vitest can reach', () => {
+    assert.match(publicationRefusal({ argv: [NO_WRITE_FLAG] }), /--no-write was passed/u);
+    assert.match(publicationRefusal({ env: { [NO_WRITE_ENV]: '1' } }), /AXIS_DIFFERENCE_NO_WRITE=1 is set/u);
+  });
+
+  it('does NOT refuse a filtered run by itself: the pilot always filters, to its own declared roster', () => {
+    assert.equal(publicationRefusal({ argv: ['node', 'index.mjs', '--families=button'], env: {} }), null);
+  });
+
+  it('treats an empty, zero or false opt-out as absent, so an exported blank does not silently stop publishing', () => {
+    for (const value of ['', '0', 'false']) {
+      assert.equal(publicationRefusal({ env: { [NO_WRITE_ENV]: value } }), null, value);
+    }
+  });
+});
+
+/**
+ * THE RED ARM OF THE DISABLED STAMP, driven through one real browser over one
+ * page, because the defect and the repair are both about whether a rule enters
+ * the cascade at all and no offline reading can answer that.
+ *
+ * Three fixtures, each a family in miniature, and the arms are the two values
+ * `states.emphasis` actually compiles for the disabled channels (0.68/0.99
+ * subtle against 0.5/0.965 strong):
+ *
+ *   state-gated  `[data-state~='disabled']`  -> opacity moves
+ *   attr-gated   `[data-disabled='true']`    -> transform moves
+ *   literal      `[data-state~='disabled']`  -> a literal, so it must NOT move
+ *
+ * Read twice on the SAME tree: with the stamp, and with `statesDisabled: false`
+ * -- the four-state set the probe shipped before this lot. The second reading is
+ * the defect, measured rather than recalled, and the `literal` fixture is what
+ * separates "the instrument reaches the paint" from "the number went up".
+ */
+describe('axis-difference BROWSER drill — the scene becomes disabled, and a literal still does not move', { skip: browserReason }, () => {
+  const ARM_A = { '--ds-state-disabled-opacity': '0.68', '--ds-state-press-scale': '0.99' };
+  const ARM_B = { '--ds-state-disabled-opacity': '0.5', '--ds-state-press-scale': '0.965' };
+  const axisOf = axisByProperty();
+  const FIXTURES = {
+    'state-gated': ".ds-sg.ds-sg--modern[data-part='root'] { opacity: 1; }\n"
+      + ".ds-sg.ds-sg--modern[data-part='root'][data-state~='disabled'] { opacity: var(--ds-state-disabled-opacity); }",
+    'attr-gated': ".ds-ag.ds-ag--modern[data-part='root'] { transform: none; }\n"
+      + ".ds-ag.ds-ag--modern[data-part='root'][data-disabled='true'] { transform: scale(var(--ds-state-press-scale)); }",
+    literal: ".ds-lit.ds-lit--modern[data-part='root'] { opacity: 1; }\n"
+      + ".ds-lit.ds-lit--modern[data-part='root'][data-state~='disabled'] { opacity: 0.5; }",
+  };
+  const CSS = Object.values(FIXTURES).join('\n');
+  const elements = () => new Map(Object.entries(FIXTURES).map(([family, own]) => [family, familyElement(own)]));
+
+  const open = async (page) => {
+    await page.setContent(
+      sceneHtml({ css: CSS, vertical: 'bithire', theme: 'light', elements: elements() }),
+      { waitUntil: 'load' },
+    );
+  };
+
+  const measure = async (page, { states }) => {
+    const properties = allProperties();
+    const before = await measureCell({ page, variables: ARM_A, properties, axisOf, states });
+    const after = await measureCell({ page, variables: ARM_B, properties, axisOf, states });
+    return {
+      before,
+      after,
+      differs: (family) => differsOnAxis('states', before, after, family),
+    };
+  };
+
+  it('the root is NOT born disabled: the stamp supplies the state, exactly as it does for the other four', () => {
+    // A gate the mount baked in would measure a configuration the default
+    // render never produces, and the drill below would then pass for the
+    // wrong reason.
+    for (const [family, css] of Object.entries(FIXTURES)) {
+      const element = familyElement(css);
+      assert.deepEqual(element.attributes, { 'data-part': 'root' }, family);
+    }
+  });
+
+  it('reads the disabled paint of BOTH vocabularies, read nothing before the stamp, and still reads nothing on a literal', async () => {
+    const { browser, close } = await launchBrowser();
+    let stamped;
+    let preLot;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      await open(page);
+      stamped = await measure(page, { states: undefined });
+      preLot = await measure(page, { states: STATE_VARIANTS.filter((state) => state !== 'disabled') });
+      await page.close();
+    } finally {
+      await close();
+    }
+    // THE DEFECT, measured: four states stamped, and the paint is unreachable.
+    assert.equal(preLot.differs('state-gated'), null, 'the pre-lot state set must be blind — otherwise this drill proves nothing');
+    assert.equal(preLot.differs('attr-gated'), null, 'the pre-lot state set must be blind on the attribute vocabulary too');
+    // THE REPAIR: measurable AND measured, on each vocabulary separately.
+    assert.equal(stamped.differs('state-gated'), 'opacity');
+    assert.equal(stamped.differs('attr-gated'), 'transform');
+    // THE NEGATIVE ARM: mounted, stamped, matched and read -- and its value is
+    // a literal, so the honest verdict is the same 0 the blind reading gave,
+    // for the opposite reason.
+    assert.equal(stamped.differs('literal'), null, 'a literal disabled value must NOT be reported as a tenant difference');
+  }, 120_000);
+
+  it('clears the disabled attribute for the next state and again at rest, so no later reading inherits it', async () => {
+    const { browser, close } = await launchBrowser();
+    let sweep;
+    let settled;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      await open(page);
+      const properties = allProperties();
+      // `disabled` FIRST on purpose: the shipped order stamps it last, so a
+      // leak into the following state would never be read by the real run.
+      sweep = await measureCell({ page, variables: ARM_A, properties, axisOf, states: ['disabled', 'hovered'] });
+      settled = await measureCell({ page, variables: ARM_A, properties, axisOf, states: [] });
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.notEqual(sweep.states.disabled['attr-gated'].transform, sweep.base['attr-gated'].transform,
+      'the disabled stamp must reach the attribute-gated rule at all');
+    assert.equal(sweep.states.hovered['attr-gated'].transform, sweep.base['attr-gated'].transform,
+      'the hovered reading inherited the disabled attribute from the state before it');
+    assert.equal(sweep.states.hovered['state-gated'].opacity, sweep.base['state-gated'].opacity,
+      'the hovered reading inherited the disabled token from the state before it');
+    assert.deepEqual(settled.base, sweep.base, 'the scene did not return to rest after a disabled sweep');
+  }, 120_000);
 });

@@ -34,7 +34,10 @@ import {
   pairScenarios,
   partInvariantFailures,
   pilotReadings,
+  publicationRefusal,
   run,
+  STATE_STAMP_ATTRIBUTES,
+  STATE_VARIANTS,
 } from '@checks/theme/axis-difference/index.mjs';
 import { AXES, checkPilotPopulation, readExclusions, withNotApplicable } from '@checks/theme/population/index.mjs';
 
@@ -216,7 +219,25 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
     .flatMap(([family, axes]) => Object.keys(axes).map((axis) => `${family}/${axis}`))
     .sort();
 
+  /**
+   * The published record is written by a run that IS the published run.
+   *
+   * Every run used to rewrite it, including the ad-hoc one taken during a
+   * review to answer one question about one family: the artifact then carried a
+   * reading nobody had reviewed and the diff carried a file nobody had meant to
+   * change. `AXIS_DIFFERENCE_NO_WRITE=1` is the opt-out -- a vitest run has no
+   * argv of its own to pass `--no-write` through. The refusal is the probe's,
+   * so the gate and this test cannot drift on what "the published run" means.
+   */
+  let announced = false;
   const writeRecord = () => {
+    const refusal = publicationRefusal({ argv: process.argv, env: process.env });
+    if (refusal !== null) {
+      // Once, not once per run: a refusal a reader cannot see is a silent skip.
+      if (!announced) console.log(`axis-difference-pilot: record NOT published — ${refusal}`);
+      announced = true;
+      return refusal;
+    }
     mkdirSync(resolve(RECORD, '..'), { recursive: true });
     writeFileSync(RECORD, `${JSON.stringify({
       workOrder: 'WO-EVI-05',
@@ -228,7 +249,35 @@ describe('WO-EVI-05 pilot — the causal chain on the WO-FAM-01 population', () 
       exclusionsRevision: pilot.exclusionsRevision,
       runs: record,
     }, null, 2)}\n`);
+    return null;
   };
+
+  /**
+   * The scene's disabled stamp IS the DOM a disabled component renders.
+   *
+   * The probe stamps `disabled` on a synthesized node, which is honest only
+   * while the two attributes it writes are the two a component that received
+   * the prop writes. Asserted against the real server render rather than
+   * against the component's source, because what the skin matches is the DOM.
+   */
+  it('the disabled stamp is the contract a real component renders: both attributes, on the node that carries the part', () => {
+    expect(STATE_VARIANTS).toContain('disabled');
+    const markup = render(<ModernButton variant="primary" disabled>Save changes</ModernButton>);
+    const container = document.createElement('div');
+    container.innerHTML = markup;
+    const trigger = container.querySelector('[data-part="trigger"]')!;
+    expect(trigger.getAttribute('data-state')!.split(' ')).toContain('disabled');
+    for (const [attribute, value] of Object.entries(STATE_STAMP_ATTRIBUTES.disabled)) {
+      expect(trigger.getAttribute(attribute)).toBe(value);
+    }
+    // And the enabled render carries neither, so the stamp is the state and
+    // not a decoration the node wears anyway.
+    const enabled = document.createElement('div');
+    enabled.innerHTML = render(<ModernButton variant="primary">Save changes</ModernButton>);
+    const rested = enabled.querySelector('[data-part="trigger"]')!;
+    expect(rested.getAttribute('data-state') ?? '').not.toContain('disabled');
+    expect(rested.getAttribute('data-disabled')).toBeNull();
+  });
 
   it('measures exactly the published pilot population, with its N/A read from the live derivation and equal to the pin', () => {
     expect(populationFailures).toEqual([]);

@@ -88,6 +88,9 @@
  *   node scripts/check/theme/axis-difference/index.mjs --families=button,card
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-mounts   the pre-lot reading
  *   node scripts/check/theme/axis-difference/index.mjs --collapsed-roots  the pre-repair root
+ *   node scripts/check/theme/axis-difference/index.mjs --no-write         no run may publish the pilot record
+ *   AXIS_DIFFERENCE_NO_WRITE=1 vitest ...axis-difference-pilot              the same, from a vitest
+ *   node scripts/check/theme/axis-difference/index.mjs --no-states-disabled  the pre-lot state set
  */
 
 import { readFileSync } from 'node:fs';
@@ -995,7 +998,7 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null, partM
 }
 
 /**
- * States are measured under `[data-state]`, per the rule.
+ * States are measured under the attributes a component stamps, per the rule.
  *
  * `:hover` is deliberately not simulated by writing a class, because a
  * fabricated hover measures the fabrication. Playwright's real hover moves one
@@ -1004,8 +1007,128 @@ export function sceneHtml({ css, vertical, theme, elements, mounts = null, partM
  * the same skin rules, so it is the half of the rule a whole-page read can
  * answer honestly. The `:hover` half is NAMED in the artifact as unmeasured
  * rather than implied.
+ *
+ * `disabled` is the fifth and the odd one: the other four are acquired by
+ * being touched, and this one arrives as a PROP. `STATE_STAMP_ATTRIBUTES`
+ * below is what a component that received it writes, and why the stamp is two
+ * attributes rather than one.
  */
-export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected', 'focus-visible']);
+export const STATE_VARIANTS = Object.freeze(['hovered', 'pressed', 'selected', 'focus-visible', 'disabled']);
+
+/**
+ * THE DOM CONTRACT OF A STAMPED STATE, which for `disabled` is wider than one
+ * attribute — and that is why `disabled` was unmeasurable rather than inert.
+ *
+ * `disabled` joined the list above in the EVI-02 instrument lot. Until then the
+ * probe stamped four states and never stamped this one, so every declaration
+ * the fleet gates on being disabled — the press-scale pair, the disabled
+ * opacity, the disabled shadow — was outside the instrument BY CONSTRUCTION.
+ * A zero on those channels was not a fleet reading; nothing had asked.
+ *
+ * WHY IT NEEDS A SECOND ATTRIBUTE, measured rather than assumed. The other
+ * four states exist only at runtime, so the only thing a component can say
+ * about them is the kernel's `data-state` token list
+ * (`foundation/behavior/kernel/anatomy`, `serializeState`). `disabled` is a
+ * PROP, and a component that receives it stamps BOTH: `partAttributes(part,
+ * interaction)` writes `data-state~='disabled'`, and the component's own root
+ * props write `data-disabled='true'` beside it. The modern Button is the
+ * reference — `useInteractionState({ disabled })` feeds the first and
+ * `'data-disabled': disabled ? 'true' : undefined` writes the second on the
+ * same node — and the skins consume both vocabularies. Measured over the
+ * Modern + agnostic skin corpus on 2026-09-20 and republished by
+ * `disabledVocabularyCensus` on every run, so this comment cannot go stale
+ * silently.
+ *
+ * Stamping only the kernel token would therefore have reached under half the
+ * corpus and reported the rest as a fleet non-mover, which is the exact
+ * confusion between "the decision moves nothing" and "the instrument cannot
+ * see what it moved" this file exists to keep apart. Both attributes are the
+ * state; neither is a fabricated configuration, because a disabled component
+ * carries both and carries them together.
+ *
+ * WHAT IS STILL NOT REACHED, named rather than implied: `:disabled` (the
+ * native pseudo-class — the synthesized scene builds `div`s, which no
+ * `disabled` content attribute can make match) and `[aria-disabled]`. They are
+ * counted by the census and published with the run exactly as the `:hover`
+ * half of this axis is.
+ */
+export const STATE_STAMP_ATTRIBUTES = Object.freeze({
+  disabled: Object.freeze({ 'data-disabled': 'true' }),
+});
+
+/** Every attribute name any stamped state writes beside `data-state`. */
+export const STATE_STAMP_ATTRIBUTE_NAMES = Object.freeze([
+  ...new Set(Object.values(STATE_STAMP_ATTRIBUTES).flatMap((attributes) => Object.keys(attributes))),
+]);
+
+/** The four vocabularies a Modern skin gates disabled paint on, as selector probes. */
+const DISABLED_VOCABULARIES = Object.freeze({
+  dataState: /\[data-state\s*[~*^$|]?=\s*['"]?[^\]'"]*\bdisabled\b/u,
+  dataDisabled: /\[data-disabled(?:\s*[~*^$|]?=\s*['"]?true['"]?)?\]/u,
+  nativePseudo: /:disabled\b/u,
+  ariaDisabled: /\[aria-disabled/u,
+});
+
+/**
+ * The selector with every `:not(...)` removed, because the census counts rules
+ * that paint WHEN disabled and `:not([data-disabled='true'])` paints when NOT.
+ *
+ * Not a nicety: the Modern corpus writes 123 of those exclusions -- a hover
+ * rule that declines to fire on a dead control -- and counting them would have
+ * credited the stamp with reaching families whose only mention of the word is a
+ * refusal. Applied repeatedly so a nested `:not(:is(...))` is removed whole.
+ */
+const withoutNegations = (selector) => {
+  let text = selector;
+  for (let pass = 0; pass < 4; pass += 1) {
+    const next = text.replace(/:not\([^()]*\)/gu, '');
+    if (next === text) return text;
+    text = next;
+  }
+  return text;
+};
+
+/**
+ * How much of the disabled corpus this scene's stamp can reach, read out of the
+ * same skins the denominator is read from.
+ *
+ * Counted per FAMILY and per DECLARING RULE, because the two answer different
+ * questions: how many families would notice the stamp at all, and how much of
+ * what they wrote it enters. `reached` is the union of the two vocabularies the
+ * stamp writes; `unreached` is the set of families that gate disabled paint
+ * ONLY through a pseudo-class or `aria-disabled`, which no attribute stamp can
+ * produce.
+ */
+export function disabledVocabularyCensus(root = CORE_ROOT, only = null) {
+  const families = { dataState: [], dataDisabled: [], nativePseudo: [], ariaDisabled: [] };
+  const rules = { dataState: 0, dataDisabled: 0, nativePseudo: 0, ariaDisabled: 0 };
+  const reached = new Set();
+  const gated = new Set();
+  for (const [family, files] of skinFamilies(root)) {
+    if (only && !only.includes(family)) continue;
+    const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
+    const seen = new Set();
+    for (const rule of cssRules(css)) {
+      const selector = withoutNegations(rule.selector);
+      for (const [vocabulary, pattern] of Object.entries(DISABLED_VOCABULARIES)) {
+        if (!pattern.test(selector)) continue;
+        rules[vocabulary] += 1;
+        seen.add(vocabulary);
+        gated.add(family);
+        if (vocabulary === 'dataState' || vocabulary === 'dataDisabled') reached.add(family);
+      }
+    }
+    for (const vocabulary of seen) families[vocabulary].push(family);
+  }
+  const unreached = [...gated].filter((family) => !reached.has(family)).sort();
+  return {
+    families: Object.fromEntries(Object.entries(families).map(([key, list]) => [key, list.length])),
+    rules,
+    gatedFamilies: gated.size,
+    reachedFamilies: reached.size,
+    unreachedFamilies: unreached,
+  };
+}
 
 /**
  * WHAT THIS PROBE CANNOT SEE ON THE STATES AXIS, measured rather than asserted.
@@ -1050,6 +1173,8 @@ export const STATES_AXIS_LIMITS = Object.freeze({
     '7 states channels paint only background colour, which the six non-chromatic axes exclude',
     ':hover and :focus-visible are not simulated, so 133 of the 156 states families declare the axis in a way '
     + 'this scene never enters',
+    'disabled is stamped as the two attributes a disabled component writes; a family that gates its disabled '
+    + 'paint on :disabled or [aria-disabled] alone is still outside the scene (counted per run at limits.disabled)',
   ],
 });
 
@@ -1217,29 +1342,42 @@ const readRootChannels = (names) => {
  */
 export const readArmChannels = (page, names) => page.evaluate(readRootChannels, names);
 
-const stampState = (state) => {
+const stampState = ({ state, stampAttributes }) => {
+  // Every attribute ANY state writes, not just this one's: a state that carries
+  // `data-disabled` must have it cleared again when the next state is stamped,
+  // and the only way to clear what a previous call wrote is to know its name.
+  const names = [...new Set(Object.values(stampAttributes).flatMap((entry) => Object.keys(entry)))];
+  const extras = state === null ? {} : stampAttributes[state] ?? {};
+  // A node's RESTING value, recorded on first stamp and restored on every state
+  // that does not carry it. Real anatomy arrives with its own resting tokens
+  // and a synthesized node arrives with none; both are read the same way, so
+  // neither can keep a leftover from the state before it.
+  const rest = (target, attribute) => {
+    const key = `data-axis-rest-${attribute}`;
+    if (!target.hasAttribute(key)) target.setAttribute(key, target.getAttribute(attribute) ?? '');
+    return target.getAttribute(key);
+  };
+  const write = (target, attribute, value) => {
+    if (value === '') target.removeAttribute(attribute);
+    else target.setAttribute(attribute, value);
+  };
   for (const node of document.querySelectorAll('[data-axis-family]')) {
-    if (!node.hasAttribute('data-axis-mount')) {
-      // The root AND its mounted parts. A part is mounted at rest with its
-      // `data-state` stripped precisely so the scene, not the selector,
-      // supplies the state -- and a part nobody stamped could never move on an
-      // axis whose rules are state-gated.
-      for (const target of [node, ...node.querySelectorAll('[data-axis-part]')]) {
-        if (state === null) target.removeAttribute('data-state');
-        else target.setAttribute('data-state', state);
+    // A synthesized family is stamped on its root AND its mounted parts. A part
+    // is mounted at rest with its `data-state` stripped precisely so the scene,
+    // not the selector, supplies the state -- and a part nobody stamped could
+    // never move on an axis whose rules are state-gated. Real anatomy already
+    // carries its resting state tokens, and the skins match with `~=`, so the
+    // probed state is ADDED to them and later restored.
+    const targets = node.hasAttribute('data-axis-mount')
+      ? [...node.querySelectorAll(':scope > *, [data-part]')]
+      : [node, ...node.querySelectorAll('[data-axis-part]')];
+    for (const target of targets) {
+      const resting = rest(target, 'data-state');
+      write(target, 'data-state', state === null ? resting : `${resting} ${state}`.trim());
+      for (const name of names) {
+        const resatt = rest(target, name);
+        write(target, name, Object.hasOwn(extras, name) ? extras[name] : resatt);
       }
-      continue;
-    }
-    // Real anatomy already carries its resting state tokens, and the skins
-    // match with `~=`, so the probed state is ADDED to them and later restored.
-    for (const target of node.querySelectorAll(':scope > *, [data-part]')) {
-      if (!target.hasAttribute('data-axis-rest-state')) {
-        target.setAttribute('data-axis-rest-state', target.getAttribute('data-state') ?? '');
-      }
-      const rest = target.getAttribute('data-axis-rest-state');
-      const next = state === null ? rest : `${rest} ${state}`.trim();
-      if (next === '') target.removeAttribute('data-state');
-      else target.setAttribute('data-state', next);
     }
   }
 };
@@ -1391,7 +1529,13 @@ export async function readSettled(page, plan) {
 }
 
 /** One document's readings: the resting paint plus one per stamped state. */
-export async function measureCell({ page, variables, properties, axisOf = axisByProperty() }) {
+export async function measureCell({
+  page,
+  variables,
+  properties,
+  axisOf = axisByProperty(),
+  states: variants = STATE_VARIANTS,
+}) {
   const applied = await page.evaluate(applyVariables, variables);
   const unsettled = new Set();
   const collect = async () => {
@@ -1401,11 +1545,12 @@ export async function measureCell({ page, variables, properties, axisOf = axisBy
   };
   const base = await collect();
   const states = {};
-  for (const state of STATE_VARIANTS) {
-    await page.evaluate(stampState, state);
+  const stampAttributes = STATE_STAMP_ATTRIBUTES;
+  for (const state of variants) {
+    await page.evaluate(stampState, { state, stampAttributes });
     states[state] = await collect();
   }
-  await page.evaluate(stampState, null);
+  await page.evaluate(stampState, { state: null, stampAttributes });
   return { applied, base, states, unsettled: [...unsettled].sort() };
 }
 
@@ -1787,6 +1932,12 @@ export async function run({
    * values. It is how the before/after of the root repair is measured on ONE
    * tree. */
   collapsedRoots = false,
+  /* `false` reproduces the pre-lot state set -- the four runtime-only states --
+   * on the SAME tree. `disabled` is the fifth, and it is the one a component
+   * receives as a prop rather than acquires by being touched; before the EVI-02
+   * instrument lot the scene never stamped it, so disabled paint was outside
+   * the instrument by construction and its zero was arithmetic. */
+  statesDisabled = true,
   /* The same export of the same compiler, handed in by a runner that reads the
    * source tree instead of `dist/`; absent, the published door is imported. */
   compile: compileOverride = null,
@@ -1818,6 +1969,12 @@ export async function run({
   // gains no parts, so `UNMOUNTABLE_FAMILIES` and every denominator below it
   // are exactly the ones the pre-lot run published.
   const mountedParts = partMounts === false ? new Map() : familyAxisParts(root, families, elements);
+  // Read from the same skins the denominator is, so the reach of the disabled
+  // stamp is republished every run rather than asserted once in a comment.
+  const disabledCensus = disabledVocabularyCensus(root, families);
+  const stampedStates = statesDisabled
+    ? [...STATE_VARIANTS]
+    : STATE_VARIANTS.filter((state) => state !== 'disabled');
   const effective = (axis) => populations
     .get(axis)
     .filter((family) => mountable.includes(family) && !UNSETTLED_FAMILIES.includes(family));
@@ -1893,13 +2050,13 @@ export async function run({
           const pairChannels = [...new Set([...Object.keys(variablesA), ...Object.keys(variablesB)])].sort();
           let paintDifference;
           try {
-            before = await measureCell({ page, variables: variablesA, properties, axisOf });
+            before = await measureCell({ page, variables: variablesA, properties, axisOf, states: stampedStates });
             partsA = parts ? await page.evaluate(readParts, parts) : null;
             // Arm A is still on the root here, and arm B there: each read is
             // that arm's own computed value for every channel of the pair, so
             // an alias is compared as what it paints and not as its string.
             const paintA = await readArmChannels(page, pairChannels);
-            after = await measureCell({ page, variables: variablesB, properties, axisOf });
+            after = await measureCell({ page, variables: variablesB, properties, axisOf, states: stampedStates });
             partsB = parts ? await page.evaluate(readParts, parts) : null;
             const paintB = await readArmChannels(page, pairChannels);
             paintDifference = resolvedDifference(variablesA, variablesB, baselineRoot, {
@@ -2067,11 +2224,16 @@ export async function run({
     refusals,
     cells,
     partReadings,
-    limits: { states: STATES_AXIS_LIMITS },
+    limits: {
+      states: { ...STATES_AXIS_LIMITS, stampedStates },
+      disabled: { ...disabledCensus, stamped: statesDisabled },
+    },
     statesNote:
-      'The states axis is measured under [data-state] only. The :hover half of the rule needs one real '
-      + 'pointer move per element and is NOT measured here; it is named rather than implied. What else this '
-      + 'probe cannot see on that axis is enumerated with its measurements in limits.states.',
+      'The states axis is measured under the attributes a component stamps: [data-state] for all five states '
+      + 'and [data-disabled] beside it for the one that comes from a prop. The :hover, :focus-visible and '
+      + ':disabled halves of the rule need a real pointer, keyboard or native control and are NOT measured '
+      + 'here; they are named rather than implied. What else this probe cannot see on that axis is '
+      + 'enumerated with its measurements in limits.states and limits.disabled.',
     unsettledNote:
       'A family whose computed values converge asymptotically under repeated style invalidation (a container '
       + 'query over its own box) is excluded from every denominator of the run it was unsettled in, and named '
@@ -2098,6 +2260,44 @@ export async function run({
  * FAILURE for a control nobody adjudicated, not a quieter verdict.
  */
 export const VACUITY_PERMITTED_CONTROLS = Object.freeze([STATES_DEPENDENT_CONTROL]);
+
+/** The opt-out a measurement takes when it must not touch a published artifact. */
+export const NO_WRITE_FLAG = '--no-write';
+export const NO_WRITE_ENV = 'AXIS_DIFFERENCE_NO_WRITE';
+
+/**
+ * MAY THIS RUN REPUBLISH THE ARTIFACT, and the answer is no more often than it
+ * used to be.
+ *
+ * The friction the press/disabled lot registered: every run of the pilot
+ * rewrote `test-artifacts/gates/axis-difference-pilot/index.json`, including a
+ * run taken to answer one question about one family during a review. The
+ * published record then carried a reading nobody had reviewed and the diff
+ * carried a file nobody had meant to change — and the reviewer could no longer
+ * tell an artifact the lot MOVED from one an ad-hoc measurement had brushed.
+ *
+ * The opt-out is `--no-write` on the command line, or
+ * `AXIS_DIFFERENCE_NO_WRITE=1` in the environment -- the second because a
+ * vitest run has no argv of its own to pass a flag through, and the pilot
+ * record is written from a vitest.
+ *
+ * WHAT IT DELIBERATELY DOES NOT DO: refuse a `--families=` run on its own.
+ * `evaluate` may skip the pinned-denominator check on a filtered run, but the
+ * pilot ALWAYS filters -- to its own declared roster -- so "filtered" does not
+ * separate the published run from an ad-hoc one. The reader says which it is;
+ * the probe does not guess.
+ *
+ * Returns the reason a run may not publish, or `null` when it may.
+ *
+ * @param {{ argv?: readonly string[], env?: Record<string, string | undefined> }} [options]
+ * @returns {string | null}
+ */
+export function publicationRefusal({ argv = [], env = {} } = {}) {
+  if (argv.includes(NO_WRITE_FLAG)) return `${NO_WRITE_FLAG} was passed`;
+  const opt = env[NO_WRITE_ENV];
+  if (opt !== undefined && opt !== '' && opt !== '0' && opt !== 'false') return `${NO_WRITE_ENV}=${opt} is set`;
+  return null;
+}
 
 export function evaluate(result, {
   threshold = null,
@@ -2389,6 +2589,10 @@ if (isMain) {
     // before/after of a mount repair is a measurement and not a comparison
     // across two trees.
     collapsedRoots: process.argv.includes('--collapsed-roots'),
+    // The pre-lot state set, on demand: the four states a component only ever
+    // acquires at runtime. It is how the before/after of the disabled stamp is
+    // read on ONE tree at one catalog revision with one browser.
+    statesDisabled: !process.argv.includes('--no-states-disabled'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(result, null, 2));
 
@@ -2474,7 +2678,24 @@ if (isMain) {
   if (coincident.length > 0) {
     console.log(`  baseline-coincident arms (empty delta, NOT empty paint): ${coincident.join(', ')}`);
   }
+  console.log(
+    `  states stamped: ${result.limits.states.stampedStates.join(', ')}`
+    + ` — disabled reaches ${result.limits.disabled.reachedFamilies}/${result.limits.disabled.gatedFamilies}`
+    + ' famil(ies) that gate disabled paint (rules by vocabulary: '
+    + `${Object.entries(result.limits.disabled.rules).map(([name, count]) => `${name} ${count}`).join(', ')})`,
+  );
+  console.log(
+    `    gating disabled paint on :disabled or [aria-disabled] ALONE (unreached): `
+    + `${result.limits.disabled.unreachedFamilies.length} — `
+    + `${result.limits.disabled.unreachedFamilies.join(', ') || 'none'}`,
+  );
   for (const line of result.limits.states.unreachable) console.log(`  states axis limit: ${line}`);
+  const refusal = publicationRefusal({ argv: process.argv, env: process.env });
+  console.log(
+    '  publication of the pilot record (test-artifacts/gates/axis-difference-pilot): '
+    + `${refusal === null ? 'permitted under this invocation' : `REFUSED — ${refusal}`}`
+    + ' — this CLI writes no artifact of its own',
+  );
   const failures = evaluate(result, {
     threshold: thresholdArgument === undefined ? null : Number(thresholdArgument),
   });
