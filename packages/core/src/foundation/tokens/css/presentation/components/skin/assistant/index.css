@@ -112,7 +112,7 @@
   color: var(--ds-color-primary-500);
 }
 .ds-assistant-streaming-text [data-part='caret'][data-motion='live'] {
-  animation: ds-assistant-caret var(--_ds-assistant-caret-duration, calc(var(--ds-motion-glacial) * 2))
+  animation: ds-assistant-caret var(--_ds-assistant-caret-duration, calc(var(--ds-motion-glacial) * 2 * var(--ds-motion-duration-scale, 1)))
     steps(2, jump-none) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -146,14 +146,14 @@
   block-size: calc(var(--ds-spacing-1) * 1.5);
   border-radius: 50%;
   background: var(--ds-color-primary-500);
-  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2))
+  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out) infinite;
 }
 .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2) {
-  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2)) * 0.11);
+  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1))) * 0.11);
 }
 .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3) {
-  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2)) * 0.22);
+  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1))) * 0.22);
 }
 @media (prefers-reduced-motion: reduce) {
   .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
@@ -206,7 +206,7 @@
   border-radius: 50%;
 }
 .ds-assistant-status-indicator [data-part='dot'][data-part='dot'][data-motion='live'] {
-  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2))
+  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out) infinite;
 }
 @media (prefers-reduced-motion: reduce) {

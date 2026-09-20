@@ -174,7 +174,7 @@
   );
   background-size: 240% 100%;
   animation: ds-feature-workspace-skeleton-shimmer
-    var(--ds-feature-workspace-skeleton-duration, calc(var(--ds-motion-glacial, 500ms) * 2.4))
+    var(--ds-feature-workspace-skeleton-duration, calc(var(--ds-motion-glacial, 500ms) * 2.4 * var(--ds-motion-duration-scale, 1)))
     linear infinite;
 }
 

@@ -355,7 +355,7 @@
   /* The sweep cadence derives from the slowest motion rung (glacial × 2.8 ≈
      1.4s) so tenant motion scaling governs it; no raw durations. */
   animation: ds-record-facts-shimmer
-    calc(var(--ds-motion-glacial, 500ms) * 2.8)
+    calc(var(--ds-motion-glacial, 500ms) * 2.8 * var(--ds-motion-duration-scale, 1))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 

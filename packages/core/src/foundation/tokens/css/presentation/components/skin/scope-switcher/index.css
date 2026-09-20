@@ -112,9 +112,9 @@
   /* the active tint cross-fades on the shared fast channel instead of
      snapping when the scope changes */
   transition:
-    background-color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-scope-switcher-motion-duration, var(--ds-motion-feedback))
       var(--ds-motion-ease-out, ease-out),
-    color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+    color var(--ds-scope-switcher-motion-duration, var(--ds-motion-feedback))
       var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {

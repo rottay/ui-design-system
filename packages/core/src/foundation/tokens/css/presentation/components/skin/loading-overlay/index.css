@@ -147,19 +147,19 @@
    the private channels and the test re-pin contract). */
 .ds-loading-overlay[data-part='root'] [data-part='logo'] {
   animation: ds-loading-overlay-pulse
-    var(--_ds-loading-overlay-pulse-duration, calc(var(--ds-motion-glacial) * 3.6))
+    var(--_ds-loading-overlay-pulse-duration, calc(var(--ds-motion-glacial) * 3.6 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-loading-overlay[data-part='root'] [data-part='dot'] {
   animation: ds-loading-overlay-dots
-    var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8))
+    var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='1'] {
-  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8)) / 7);
+  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1))) / 7);
 }
 .ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='2'] {
-  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8)) / 7 * 2);
+  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1))) / 7 * 2);
 }
 
 .ds-loading-overlay[data-part='root'] [data-part='message'],

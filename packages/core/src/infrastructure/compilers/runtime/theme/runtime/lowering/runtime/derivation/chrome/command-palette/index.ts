@@ -154,7 +154,7 @@ export function deriveCommandPaletteChannels(): Record<string, string> {
   vars["--ds-command-palette-item-padding-inline"] = "var(--ds-spacing-3, 12px)";
   vars["--ds-command-palette-item-radius"] = "var(--ds-radius-lg)";
   vars["--ds-command-palette-item-transition"] =
-    "var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out)";
+    "var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out)";
   vars["--ds-command-palette-item-disabled-opacity"] = "0.5";
   vars["--ds-command-palette-item-active-bg"] = "var(--ds-surface-inset)";
   vars["--ds-command-palette-item-active-ring"] =

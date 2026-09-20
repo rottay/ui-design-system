@@ -306,7 +306,7 @@ export function deriveSearchCommandBarChannels(): Record<string, string> {
   vars["--ds-search-command-bar-voice-help-description-font-size"] = "var(--ds-font-size-xs)";
   vars["--ds-search-command-bar-voice-help-description-line-height"] = "var(--ds-line-height-normal, 1.5)";
   vars["--ds-search-command-bar-voice-help-description-margin"] = "4px";
-  vars["--ds-search-command-bar-voice-help-enter-duration"] = "var(--ds-motion-normal, 200ms)";
+  vars["--ds-search-command-bar-voice-help-enter-duration"] = "var(--ds-motion-reveal, 200ms)";
   vars["--ds-search-command-bar-voice-help-enter-easing"] = "var(--ds-motion-ease-out, ease-out)";
   vars["--ds-search-command-bar-voice-help-footer-margin"] = "16px";
   vars["--ds-search-command-bar-voice-help-hint-color"] = "var(--ds-color-text-muted)";

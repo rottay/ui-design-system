@@ -217,7 +217,7 @@
     0 0 0 7px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
     0 20px 44px -16px color-mix(in srgb, var(--ds-color-primary) 32%, transparent);
   animation: ds-decision-panorama-breathe
-    var(--ds-decision-panorama-aura-duration, calc(var(--ds-motion-glacial, 500ms) * 10))
+    var(--ds-decision-panorama-aura-duration, calc(var(--ds-motion-glacial, 500ms) * 10 * var(--ds-motion-duration-scale, 1)))
     var(--ds-decision-panorama-aura-timing, var(--ds-motion-ease-in-out)) infinite;
 }
 

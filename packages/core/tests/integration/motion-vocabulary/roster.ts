@@ -1,10 +1,13 @@
 /**
  * The rewired motion sites, read from the skin sources rather than pinned.
  *
- * A site is one `transition`/`animation` layer whose DURATION slot binds an
- * intent name. The probe element is the axis instrument's own scene: the rule's
- * whole descendant chain collapsed onto one bare node, carrying every class and
- * attribute the chain names, with pseudo-classes dropped.
+ * A site is one `transition`/`animation` layer whose DURATION slot reaches the
+ * `motion.dial`: either through an intent name, or -- for an ambient loop built
+ * on `glacial`, the one rung with no intent twin -- through a direct
+ * `--ds-motion-duration-scale` factor. The probe element is the axis
+ * instrument's own scene: the rule's whole descendant chain collapsed onto one
+ * bare node, carrying every class and attribute the chain names, with
+ * pseudo-classes dropped.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -16,7 +19,12 @@ export const SKIN_ROOTS = [
 ] as const;
 
 const INTENTS = ['feedback', 'reveal', 'disclosure', 'resize', 'rearrange', 'attention'];
-const INTENT_READ = new RegExp(`var\\(\\s*--ds-motion-(${INTENTS.join('|')})\\b`);
+/**
+ * The two dial-reaching spellings. `duration-scale` is the glacial escape
+ * hatch: `calc(glacial * N * var(--ds-motion-duration-scale, 1))` bends with
+ * the dial and is byte-equal to the bare `calc(glacial * N)` at scale 1.
+ */
+const DIAL_READ = new RegExp(`var\\(\\s*--ds-motion-(${[...INTENTS, 'duration-scale'].join('|')})\\b`);
 
 export interface MotionSite {
   /** `family#n`: unique per probed rule, so one family contributes many sites. */
@@ -73,13 +81,14 @@ function topLevelRules(css: string): Array<{ selector: string; body: string }> {
 }
 
 /** A compound selector reduced to the classes and attributes a bare node can carry. */
-function stampsOf(compound: string): { type: string; classes: string[]; attributes: Map<string, string> } | null {
+function stampsOf(compound: string): { type: string; typed: boolean; classes: string[]; attributes: Map<string, string> } | null {
   // A pseudo-element or an interaction pseudo-class cannot be stamped: the
   // scene has no ::after box and the harness simulates no pointer.
   if (/::|:(?:hover|active|focus|focus-visible|focus-within|target|has)\b/.test(compound)) return null;
   const stripped = compound.replace(/:(?:not|where|is)\([^()]*\)/g, '').replace(/:[\w-]+(\([^()]*\))?/g, '');
   // A type selector must be honoured: `td[data-editable]` never matches a div.
-  const type = /^([a-z][a-z0-9]*)/.exec(stripped)?.[1] ?? 'div';
+  const named = /^([a-z][a-z0-9]*)/.exec(stripped)?.[1];
+  const type = named ?? 'div';
   // A table part cannot be parsed inside a plain `<div>` scene, so a rule that
   // names one is left to the family's next candidate rather than mounted wrong.
   if (/^(td|th|tr|tbody|thead|tfoot|caption|col|colgroup)$/.test(type)) return null;
@@ -92,7 +101,7 @@ function stampsOf(compound: string): { type: string; classes: string[]; attribut
     // the exact value, so stamping the token itself is always legal.
     attributes.set(name, operator ? (value ?? '') : '');
   }
-  return { type, classes, attributes };
+  return { type, typed: named !== undefined, classes, attributes };
 }
 
 /** The nested scene a selector's chain describes, with the subject marked. */
@@ -119,8 +128,11 @@ export function sceneFor(selector: string): string | null {
   if (stamped.some((entry) => entry === null)) return null;
   let markup = '';
   for (let index = stamped.length - 1; index >= 0; index -= 1) {
-    const { type, classes, attributes } = stamped[index]!;
-    if (!classes.length && !attributes.size) return null;
+    const { type, typed, classes, attributes } = stamped[index]!;
+    // A compound that names an element type IS stamped by that type: `> span`
+    // mounts a real `<span>`. Only a compound with nothing at all -- no type,
+    // no class, no attribute -- describes a node the scene cannot reproduce.
+    if (!classes.length && !attributes.size && !typed) return null;
     const attributeText = [...attributes].map(([name, value]) => ` ${name}="${value}"`).join('');
     const subject = index === stamped.length - 1 ? ' data-probe-subject="true"' : '';
     markup = `<${type}${subject} class="${classes.join(' ')}"${attributeText}>${markup}</${type}>`;
@@ -145,12 +157,12 @@ export function motionSites(): MotionSite[] {
             const name = property?.trim();
             if (name !== 'transition' && name !== 'animation') continue;
             const value = rest.join(':');
-            // The intent name must sit in a DURATION slot: the first time-like
+            // The dial read must sit in a DURATION slot: the first time-like
             // token of its layer, never the easing or the delay.
-            const layer = splitTop(value, ',').find((part) => INTENT_READ.test(part));
+            const layer = splitTop(value, ',').find((part) => DIAL_READ.test(part));
             if (!layer) continue;
             const durationSlot = splitTop(layer, ' ').find((token) => /[0-9.]+m?s|var\(|calc\(/.test(token));
-            if (!durationSlot || !INTENT_READ.test(durationSlot)) continue;
+            if (!durationSlot || !DIAL_READ.test(durationSlot)) continue;
             const markup = sceneFor(rule.selector);
             if (!markup) continue;
             const key = `${markup}|${name}`;

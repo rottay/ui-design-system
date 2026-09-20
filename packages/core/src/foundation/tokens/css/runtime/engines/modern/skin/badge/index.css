@@ -62,17 +62,17 @@
   transform: var(--ds-badge-position-transform, translateY(0));
   transform-origin: center;
   transition:
-    transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    transform var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    border-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    border-color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    box-shadow var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    opacity var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out));
 }
 
@@ -292,11 +292,11 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    transform var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    opacity var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out));
 }
 
@@ -329,7 +329,7 @@
      two-`--ds-motion-slow`-rungs idiom), never a raw literal, so the motion
      authority's reduced-motion zeroing still propagates through the channel. */
   animation: ds-badge-spin
-    var(--ds-badge-spinner-duration, calc(var(--ds-motion-slow) * 2))
+    var(--ds-badge-spinner-duration, calc(var(--ds-motion-attention) * 2))
     linear infinite;
 }
 

@@ -76,7 +76,7 @@
   box-shadow: var(--ds-shortcuts-overlay-dialog-shadow, var(--ds-elevation-3));
   color: var(--ds-shortcuts-overlay-dialog-color, var(--ds-color-text-primary));
   animation: ds-foundation-fade-in-down
-    var(--ds-shortcuts-overlay-enter-duration, var(--ds-motion-normal))
+    var(--ds-shortcuts-overlay-enter-duration, var(--ds-motion-reveal))
     var(--ds-shortcuts-overlay-enter-easing, var(--ds-motion-ease-enter, ease-out));
 }
 

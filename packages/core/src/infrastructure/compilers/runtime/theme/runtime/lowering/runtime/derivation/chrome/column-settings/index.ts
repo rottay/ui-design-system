@@ -59,7 +59,7 @@ export function deriveColumnSettingsChannels(): Record<string, string> {
   vars["--ds-column-settings-label-font-size"] = "var(--ds-font-size-sm)";
   vars["--ds-column-settings-list-max-block-size"] = "320px";
   vars["--ds-column-settings-list-padding-block"] = "4px";
-  vars["--ds-column-settings-motion-duration"] = "var(--ds-motion-fast)";
+  vars["--ds-column-settings-motion-duration"] = "var(--ds-motion-feedback)";
   vars["--ds-column-settings-motion-timing"] = "var(--ds-motion-ease-out)";
   vars["--ds-column-settings-pin-side-font-size"] = "10px";
   vars["--ds-column-settings-row-bg-hover"] = "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)";

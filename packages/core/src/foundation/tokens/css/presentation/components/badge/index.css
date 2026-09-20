@@ -173,7 +173,7 @@
   --ds-badge-remove-bleed: 0.1875rem;
   --ds-badge-disabled-opacity: 0.48;
   --ds-badge-loading-opacity: 0.76;
-  --ds-badge-motion-duration: var(--ds-motion-fast);
+  --ds-badge-motion-duration: var(--ds-motion-feedback);
   --ds-badge-motion-easing: var(--ds-motion-ease-out, ease-out);
   --ds-badge-touch-target: var(--ds-touch-target-min, 2.75rem);
 

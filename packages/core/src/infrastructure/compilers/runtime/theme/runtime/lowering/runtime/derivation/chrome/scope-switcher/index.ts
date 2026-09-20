@@ -90,6 +90,6 @@ export function deriveScopeSwitcherChannels(): Record<string, string> {
     "var(--ds-font-size-2xs, var(--ds-font-size-xs))";
   vars["--ds-scope-switcher-count-font-weight"] = "var(--ds-font-weight-bold)";
   // The active tint cross-fades rather than snapping when the scope changes.
-  vars["--ds-scope-switcher-motion-duration"] = "var(--ds-motion-fast)";
+  vars["--ds-scope-switcher-motion-duration"] = "var(--ds-motion-feedback)";
   return vars;
 }

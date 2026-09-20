@@ -81,9 +81,9 @@
   padding-inline: var(--ds-column-settings-row-padding-inline, 12px);
   border-radius: var(--ds-column-settings-row-radius, var(--ds-radius-sm));
   transition:
-    background-color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out)),
-    color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
@@ -117,9 +117,9 @@
   cursor: pointer;
   opacity: 0.5;
   transition:
-    color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out)),
-    opacity var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    opacity var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
@@ -151,7 +151,7 @@
   font-size: var(--ds-column-settings-label-font-size, var(--ds-font-size-sm));
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+  transition: color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
     var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-visible='false'] [data-part='label'] {

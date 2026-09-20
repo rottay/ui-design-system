@@ -412,7 +412,7 @@
   background: var(--ds-search-command-bar-voice-help-bg, var(--ds-surface-card));
   box-shadow: var(--ds-search-command-bar-voice-help-shadow, var(--ds-elevation-2));
   animation: ds-search-command-bar-voice-help-enter
-    var(--ds-search-command-bar-voice-help-enter-duration, var(--ds-motion-normal, 200ms))
+    var(--ds-search-command-bar-voice-help-enter-duration, var(--ds-motion-reveal, 200ms))
     var(--ds-search-command-bar-voice-help-enter-easing, var(--ds-motion-ease-out, ease-out)) both;
 }
 .ds-structure.ds-search-command-bar

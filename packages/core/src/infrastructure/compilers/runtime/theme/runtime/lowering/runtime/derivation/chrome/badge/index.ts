@@ -201,7 +201,7 @@ export function deriveBadgeChannels(): Record<string, string> {
   vars["--ds-badge-solid-bg"] = "var(--ds-badge-tone-solid-bg)";
   vars["--ds-badge-solid-border"] = "transparent";
   vars["--ds-badge-solid-color"] = "var(--ds-badge-tone-solid-color)";
-  vars["--ds-badge-spinner-duration"] = "calc(var(--ds-motion-slow) * 2)";
+  vars["--ds-badge-spinner-duration"] = "calc(var(--ds-motion-attention) * 2)";
   vars["--ds-badge-surface"] = "var(--ds-color-neutral-200)";
   vars["--ds-badge-surface-pressed"] = "var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback))";
   return vars;

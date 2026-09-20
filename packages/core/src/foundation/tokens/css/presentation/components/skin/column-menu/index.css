@@ -218,16 +218,16 @@
   /* One duration, one channel: the row's state changes are feedback, and the
      family channel rests on the dial-bent feedback role. */
   transition: background-color
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out),
     border-color
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out),
     box-shadow
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out),
     opacity
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out);
 }
 

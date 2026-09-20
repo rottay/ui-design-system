@@ -112,7 +112,7 @@
   padding-block: var(--ds-active-filters-bar-padding-block, 10px 12px);
   padding-inline: var(--ds-active-filters-bar-padding-inline, 16px);
   animation: ds-active-filters-bar-enter
-    var(--ds-active-filters-bar-motion-duration, var(--ds-motion-normal))
+    var(--ds-active-filters-bar-motion-duration, var(--ds-motion-reveal))
     var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {

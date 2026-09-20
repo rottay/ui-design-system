@@ -145,7 +145,7 @@
   border-radius: var(--ds-command-palette-item-radius, var(--ds-radius-lg));
   cursor: pointer;
   transition: background-color
-    var(--ds-command-palette-item-transition, var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out));
+    var(--ds-command-palette-item-transition, var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] [data-part='item'] {
   padding-inline: var(--ds-command-palette-item-padding-inline, var(--ds-spacing-3, 12px));

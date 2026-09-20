@@ -119,6 +119,6 @@
      TRANSITIONS
      ======================================================================== */
 
-  --ds-list-transition-duration: 0.2s;
+  --ds-list-transition-duration: var(--ds-motion-reveal);
   --ds-list-transition-timing: ease-in-out;
 }

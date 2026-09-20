@@ -206,7 +206,7 @@
   padding: var(--ds-list-default-padding-vertical) var(--ds-list-default-padding-horizontal);
   background: var(--ds-list-item-background-color);
   color: var(--ds-list-text-color);
-  transition: background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing);
+  transition: background var(--ds-list-transition-duration, var(--ds-motion-reveal)) var(--ds-list-transition-timing);
 }
 
 /* Row states. The hover wash consumes the long-declared

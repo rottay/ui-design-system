@@ -107,7 +107,7 @@ export function deriveShortcutsOverlayChannels(): Record<string, string> {
   vars["--ds-shortcuts-overlay-dialog-bg"] = "var(--ds-surface-card)";
   vars["--ds-shortcuts-overlay-dialog-shadow"] = "var(--ds-elevation-3)";
   vars["--ds-shortcuts-overlay-dialog-color"] = "var(--ds-color-text-primary)";
-  vars["--ds-shortcuts-overlay-enter-duration"] = "var(--ds-motion-normal)";
+  vars["--ds-shortcuts-overlay-enter-duration"] = "var(--ds-motion-reveal)";
   vars["--ds-shortcuts-overlay-enter-easing"] = "var(--ds-motion-ease-enter, ease-out)";
 
   // Header, search and the close control's physical floor.
