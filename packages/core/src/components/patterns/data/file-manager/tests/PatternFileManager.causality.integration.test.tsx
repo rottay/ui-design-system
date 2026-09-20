@@ -247,7 +247,9 @@ describeCausality({
  *    both broken scopes and is byte-identical in the other four; both candidate
  *    paired inks were drilled and refuted (primary 72% into the ground takes
  *    bithire dark to 2.00, text-primary 72% leaves rottay dark at 1.05 and
- *    moves every light scope off 15.18).
+ *    moves every light scope off 15.18). That repair LANDED at the Card base,
+ *    so this row DRAINED: `rottay dark` is gone from the map below and must
+ *    now measure clean, and a relapse reddens here.
  * `f1-name` stays registered on its own channel (`--ds-color-link` `#3f6ffd`,
  * 3.72:1) and belongs to neither arm.
  *
@@ -271,12 +273,6 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
       '#_R_2_-a1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '#_R_2_-a2-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '#_R_2_-f1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-    ],
-  },
-  'rottay dark': {
-    'color-contrast': [
-      '#fm-grid > .ds-pattern-file-manager.ds-engine-modern[data-loading="false"] > div[data-part="body"] > div[data-part="toolbar"] > div[data-part="breadcrumb"] > nav > ol > li[data-part="item"]:nth-child(3) > span[data-current="true"][aria-current="page"][data-part="crumb"] > span[title="Workspace"][data-part="label"]',
-      '#fm-list > .ds-pattern-file-manager.ds-engine-modern[data-loading="false"] > div[data-part="body"] > div[data-part="toolbar"] > div[data-part="breadcrumb"] > nav > ol > li[data-part="item"]:nth-child(3) > span[data-current="true"][aria-current="page"][data-part="crumb"] > span[title="Workspace"][data-part="label"]',
     ],
   },
 };

@@ -21,7 +21,9 @@
      BACKGROUND & COLORS
      Base appearance for cards
      ======================================================================== */
-  --ds-card-bg: var(--ds-color-white);
+  /* The card ground is the mode-aware elevated role, never a literal: a fixed
+     white here would stand the dark mode's near-white ink on a white card. */
+  --ds-card-bg: var(--ds-color-bg-elevated);
   --ds-card-bg-hover: var(--ds-material-card-background-hover);
   --ds-card-bg-active: var(--ds-material-card-background-active);
   --ds-card-bg-selected: var(--ds-material-card-background-selected);

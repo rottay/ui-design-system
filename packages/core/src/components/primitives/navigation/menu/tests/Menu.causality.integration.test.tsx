@@ -94,15 +94,17 @@ describeCausality({
  * rule id AND the identity of every failing node: another rule, one more node,
  * a repaired node or a same-count swap reddens the scope, and a scope absent
  * from this map must still audit clean (EVI-02, 2026-09-15).
+ *
+ * `rottay dark` DRAINED, and its cause was the Card component base rather than
+ * this family: `presentation/components/card/index.css` stated `--ds-card-bg:
+ * var(--ds-color-white)` mode-lessly in the `rottay-components` layer, which
+ * outranks the theme's own `--ds-card-bg: var(--ds-color-bg-elevated)` by layer
+ * ORDER, so every ground derived from the card role resolved white under the
+ * dark mode's near-white ink. That base now states the mode-aware role and the
+ * ground resolves `#182235`. Dropped by identity, not waived: with no entry the
+ * scope must measure clean, and a relapse reddens here.
  */
 const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'rottay dark': {
-    'color-contrast': [
-      'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
-      'ul[aria-orientation="vertical"] > li[data-part="group"][role="presentation"] > div[data-part="group-label"]',
-      'ul[aria-orientation="vertical"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',
-    ],
-  },
   'bithire light': {
     'color-contrast': [
       'ul[aria-orientation="horizontal"] > li[data-part="row"][role="none"]:nth-child(1) > a[data-level="top"][data-selected="false"] > span[data-part="label"]',

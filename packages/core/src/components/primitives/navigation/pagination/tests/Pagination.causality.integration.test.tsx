@@ -76,15 +76,17 @@ describeCausality({
  * the page-item chrome is read against the ground it was designed for.
  * Dropped by identity, not waived -- with no entry the scope must measure
  * clean, and a relapse reddens here.
+ *
+ * `rottay dark` DRAINED, and its cause was the Card component base rather than
+ * this family: `presentation/components/card/index.css` stated `--ds-card-bg:
+ * var(--ds-color-white)` mode-lessly in the `rottay-components` layer, which
+ * outranks the theme's own `--ds-card-bg: var(--ds-color-bg-elevated)` by layer
+ * ORDER, so every ground derived from the card role resolved white under the
+ * dark mode's near-white ink. That base now states the mode-aware role and the
+ * ground resolves `#182235`. Dropped by identity, not waived: with no entry the
+ * scope must measure clean, and a relapse reddens here.
  */
 const CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'rottay dark': {
-    'color-contrast': [
-      'button[data-current="false"][data-part="pagination-page-button"]:nth-child(7)',
-      'input',
-      'select',
-    ],
-  },
   'bithire light': {
     'color-contrast': [
       'div[data-part="pagination-range"]',
