@@ -69,7 +69,7 @@ const SCAN_EXTENSIONS = new Set([".ts", ".tsx", ".css"]);
 // own retirement, confirmed against the tree: zero occurrences anywhere
 // else in `.ts`/`.tsx`/`.css` production source). The name itself is real
 // retired debt, not a false positive to paper over -- see
-// `governance/tokens/decisions/writers/unused/system/index.json`'s SEV-DEAD-21 entry, and
+// `src/foundation/tokens/data/decisions/writers/unused/system/index.json`'s SEV-DEAD-21 entry, and
 // `brand-authored-residue-retirement.test.ts` (green today) proves the
 // retirement from bithire's authored source already landed.
 const EXCLUDED_DIR_NAMES = new Set(["tests", "__tests__"]);

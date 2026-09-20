@@ -33,7 +33,7 @@ import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
 const CSS_ROOT = join(ROOT, 'src/foundation/tokens/css');
-const REGISTRY = join(ROOT, 'governance/tokens/decisions/writers/unused/system/index.json');
+const REGISTRY = join(ROOT, 'src/foundation/tokens/data/decisions/writers/unused/system/index.json');
 const BASELINE = join(ROOT, 'scripts/check/engine/tokens/audit/baseline/index.json');
 
 const LEGIT = new Set(['SUB_RUNG_DELIBERATE', 'BESPOKE_CLAMP']);

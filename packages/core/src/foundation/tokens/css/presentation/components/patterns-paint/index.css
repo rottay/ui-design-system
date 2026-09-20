@@ -16,7 +16,7 @@
  * Whole-file RETIRE_PROPOSED: every rule below is now duplicated by its
  * migrated twin or deliberately superseded, nothing imports this file, and
  * the gate forbids importing it. Death-proof and the rule-by-rule table are
- * in governance/tokens/decisions/writers/unused/system/index.json (`itemZero`). Deletion
+ * in src/foundation/tokens/data/decisions/writers/unused/system/index.json (`itemZero`). Deletion
  * is blocked only on whether the source maps this header cites still matter.
  */
 

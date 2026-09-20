@@ -648,7 +648,7 @@ export const CI_GATES = Object.freeze([
   { id: 'portal-substrate-drill', run: ['node', '--test', 'scripts/check/boundaries/surfaces/portals/index.test.mjs'], blocking: true, phase: 'pre-build', drillFor: ['portal-substrate-gate'], },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/check/boundaries/surfaces/portals/index.mjs', '--check'], blocking: true, phase: 'pre-build', drillId: 'portal-substrate-drill', },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
-  // row in `governance/tokens/prototypes/index.json`. It ships with NO
+  // row in `src/foundation/tokens/data/prototypes/index.json`. It ships with NO
   // baseline, so the drill carries the whole burden of proving the scan can
   // fail -- including that a name quoted in prose is not a declaration, and
   // that a governed prototoken compiled into a shipped bundle is legal while an
