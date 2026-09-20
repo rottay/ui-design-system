@@ -18,6 +18,7 @@ import {
   type FamilyFixture,
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { SHELL_PUBLISHED_CHANNELS } from "@/components/structures/shell/contracts";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -57,10 +58,27 @@ const INHERITED_PREWAVE_CHANNELS: ReadonlySet<string> = new Set([
   "--ds-form-action-dock-reserved-space",
 ]);
 
+/**
+ * Bands a family produces under a name it does not own, because the name is a
+ * cross-owner contract that owner declares and other owners read.
+ *
+ * An entry is the DECLARED constant, never a copied list: the exemption is
+ * whatever the owner publishes today, so a channel silently added to the
+ * family's private chrome is still a stray. `app-shell` keeps the five
+ * track/cadence names of `SHELL_PUBLISHED_CHANNELS` it produces — four shell
+ * skins, the responsive channel contract, `chrome-variables` and three
+ * applications read them, and `static-db-channel-vocabulary` pins two as the
+ * static/DB parity vocabulary. Its own chrome is `--ds-app-shell-*`.
+ */
+const DECLARED_PUBLISHED_BANDS: ReadonlyMap<string, ReadonlySet<string>> = new Map([
+  ["app-shell", new Set<string>(SHELL_PUBLISHED_CHANNELS)],
+]);
+
 const isNamespaceStray = (family: string, channel: string): boolean =>
   channel !== `--ds-${family}` &&
   !channel.startsWith(`--ds-${family}-`) &&
-  !INHERITED_PREWAVE_CHANNELS.has(channel);
+  !INHERITED_PREWAVE_CHANNELS.has(channel) &&
+  !DECLARED_PUBLISHED_BANDS.get(family)?.has(channel);
 
 const collectNamespaceStrays = (
   derivers: readonly FamilyDeriver[],
@@ -145,6 +163,11 @@ describe("the family registry", () => {
     expect(
       isNamespaceStray("form-surface", "--ds-form-action-dock-reserved-space"),
     ).toBe(false);
+    // The published band admits the names its owner declares and nothing else:
+    // a private chrome name in the same prefix is still a stray.
+    expect(isNamespaceStray("app-shell", "--ds-shell-sidebar-width")).toBe(false);
+    expect(isNamespaceStray("app-shell", "--ds-shell-header-radius")).toBe(true);
+    expect(isNamespaceStray("page-shell", "--ds-shell-sidebar-width")).toBe(true);
   });
 
   it("has no deriver that imports another deriver", () => {

@@ -182,7 +182,7 @@ describeCausality({
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   // The navigation region paints a tone-aware SURFACE and no ink to go with
-  // it: `--ds-shell-navigation-background` rests on `--ds-sidebar-bg`, which
+  // it: `--ds-app-shell-navigation-background` rests on `--ds-sidebar-bg`, which
   // an inverse sidebar tone darkens, while slot content inherits the canvas
   // ink. Every node below is the fixture's own raw slot content, not chrome
   // this family renders — a consumer that passes `Text` inherits the sidebar

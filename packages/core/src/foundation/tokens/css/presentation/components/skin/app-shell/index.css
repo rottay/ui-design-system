@@ -45,7 +45,7 @@
   );
   min-height: 100dvh;
   display: flex;
-  background: var(--ds-shell-background, var(--ds-surface-canvas));
+  background: var(--ds-app-shell-background, var(--ds-surface-canvas));
 }
 
 /* Skip link: first tab stop, hidden until focused, revealed above all chrome. */
@@ -53,17 +53,17 @@
   position: fixed;
   inset-block-start: calc(var(--ds-shell-safe-area-top) + var(--ds-spacing-3, 12px));
   inset-inline-start: calc(var(--ds-shell-safe-area-left) + var(--ds-spacing-3, 12px));
-  z-index: var(--ds-shell-skip-link-z-index, var(--ds-z-index-skip-link, 9999));
+  z-index: var(--ds-app-shell-skip-link-z-index, var(--ds-z-index-skip-link, 9999));
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   box-sizing: border-box;
-  padding: var(--ds-shell-skip-link-padding, 0 var(--ds-spacing-4, 16px));
-  border-radius: var(--ds-shell-skip-link-radius, var(--ds-radius-md, 8px));
-  background: var(--ds-shell-skip-link-background, var(--ds-color-bg-elevated));
-  color: var(--ds-shell-skip-link-color, var(--ds-color-text-primary));
-  border: var(--ds-shell-skip-link-border, 1px solid var(--ds-color-border-subtle));
-  box-shadow: var(--ds-shell-skip-link-shadow, var(--ds-elevation-2, none));
+  padding: var(--ds-app-shell-skip-link-padding, 0 var(--ds-spacing-4, 16px));
+  border-radius: var(--ds-app-shell-skip-link-radius, var(--ds-radius-md, 8px));
+  background: var(--ds-app-shell-skip-link-background, var(--ds-color-bg-elevated));
+  color: var(--ds-app-shell-skip-link-color, var(--ds-color-text-primary));
+  border: var(--ds-app-shell-skip-link-border, 1px solid var(--ds-color-border-subtle));
+  box-shadow: var(--ds-app-shell-skip-link-shadow, var(--ds-elevation-2, none));
   text-decoration: none;
 }
 .rottay-app-shell [data-part="skip-link"]:not(:focus) {
@@ -91,7 +91,7 @@
   inset-block: 0;
   inset-inline-start: 0;
   width: var(--ds-shell-inline-start-inset);
-  z-index: var(--ds-shell-navigation-z-index, var(--ds-z-index-fixed, 1200));
+  z-index: var(--ds-app-shell-navigation-z-index, var(--ds-z-index-fixed, 1200));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -100,10 +100,10 @@
   padding-block-start: var(--ds-shell-safe-area-top);
   padding-block-end: var(--ds-shell-safe-area-bottom);
   transition: width var(--ds-shell-collapse-transition, var(--ds-motion-rearrange, var(--ds-motion-normal)) var(--ds-motion-ease-move));
-  background: var(--ds-shell-navigation-background, var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated))));
-  border: var(--ds-shell-navigation-border, 0);
-  border-inline-end: var(--ds-shell-navigation-border-inline-end, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
-  border-radius: var(--ds-shell-navigation-radius, 0);
+  background: var(--ds-app-shell-navigation-background, var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated))));
+  border: var(--ds-shell-navigation-border, var(--ds-app-shell-navigation-border, 0));
+  border-inline-end: var(--ds-shell-navigation-border-inline-end, var(--ds-app-shell-navigation-border-inline-end, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))));
+  border-radius: var(--ds-shell-navigation-radius, var(--ds-app-shell-navigation-radius, 0));
   box-shadow: var(--ds-shell-navigation-shadow, none);
 }
 
@@ -120,10 +120,10 @@
   padding-block-start: env(safe-area-inset-top, 0px);
   padding-block-end: env(safe-area-inset-bottom, 0px);
   padding-inline-start: env(safe-area-inset-left, 0px);
-  background: var(--ds-shell-navigation-background, var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated))));
-  border: var(--ds-shell-navigation-border, 0);
-  border-inline-end: var(--ds-shell-navigation-border-inline-end, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
-  border-radius: var(--ds-shell-navigation-radius, 0);
+  background: var(--ds-app-shell-navigation-background, var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated))));
+  border: var(--ds-shell-navigation-border, var(--ds-app-shell-navigation-border, 0));
+  border-inline-end: var(--ds-shell-navigation-border-inline-end, var(--ds-app-shell-navigation-border-inline-end, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))));
+  border-radius: var(--ds-shell-navigation-radius, var(--ds-app-shell-navigation-radius, 0));
   box-shadow: var(--ds-shell-navigation-shadow, var(--ds-elevation-3));
 }
 
@@ -144,10 +144,10 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--ds-spacing-3, 12px);
-  padding: var(--ds-shell-navigation-drawer-header-padding, 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px));
+  padding: var(--ds-app-shell-navigation-drawer-header-padding, 0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px));
   overflow: hidden;
-  background: var(--ds-shell-navigation-header-background, transparent);
-  border-block-end: var(--ds-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
+  background: var(--ds-app-shell-navigation-header-background, transparent);
+  border-block-end: var(--ds-app-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
 .rottay-app-shell__navigation-drawer-logo {
@@ -181,15 +181,15 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: var(--ds-shell-navigation-logo-padding, 0 var(--ds-spacing-5, 20px));
+  padding: var(--ds-shell-navigation-logo-padding, var(--ds-app-shell-navigation-logo-padding, 0 var(--ds-spacing-5, 20px)));
   overflow: hidden;
-  background: var(--ds-shell-navigation-header-background, transparent);
-  border-block-end: var(--ds-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
+  background: var(--ds-app-shell-navigation-header-background, transparent);
+  border-block-end: var(--ds-app-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
 .rottay-app-shell [data-part="navigation-logo"][data-collapsed="true"] {
   justify-content: center;
-  padding: var(--ds-shell-navigation-logo-padding-collapsed, 0);
+  padding: var(--ds-app-shell-navigation-logo-padding-collapsed, 0);
 }
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
@@ -203,33 +203,36 @@
   padding: var(
     --ds-shell-navigation-body-padding,
     var(
-      --ds-sidebar-shell-padding-inline,
-      var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px)
-        calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px)
+      --ds-app-shell-navigation-body-padding,
+      var(
+        --ds-sidebar-shell-padding-inline,
+        var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px)
+          calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px)
+      )
     )
   );
   scroll-padding-block-end: var(
-    --ds-shell-navigation-body-scroll-padding-block-end,
+    --ds-app-shell-navigation-body-scroll-padding-block-end,
     calc(var(--ds-spacing-6, 24px) + 76px)
   );
 }
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-body"][data-collapsed="true"] {
-  padding: var(--ds-shell-navigation-body-padding-collapsed, var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)));
+  padding: var(--ds-app-shell-navigation-body-padding-collapsed, var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)));
 }
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-footer"] {
   flex-shrink: 0;
-  padding: var(--ds-shell-navigation-footer-padding, var(--ds-spacing-3, 12px));
-  background: var(--ds-shell-navigation-footer-background, var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg)));
-  border-block-start: var(--ds-shell-navigation-footer-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
+  padding: var(--ds-shell-navigation-footer-padding, var(--ds-app-shell-navigation-footer-padding, var(--ds-spacing-3, 12px)));
+  background: var(--ds-app-shell-navigation-footer-background, var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg)));
+  border-block-start: var(--ds-app-shell-navigation-footer-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-footer"][data-collapsed="true"] {
-  padding: var(--ds-shell-navigation-footer-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px));
+  padding: var(--ds-app-shell-navigation-footer-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px));
 }
 
 .rottay-app-shell [data-part="main-area"] {
@@ -254,9 +257,9 @@
   );
   padding-inline-start: var(--ds-shell-main-padding-inline-start);
   padding-inline-end: var(--ds-shell-main-padding-inline-end);
-  background: var(--ds-shell-main-background, transparent);
-  border: var(--ds-shell-main-border, 0);
-  box-shadow: var(--ds-shell-main-shadow, none);
+  background: var(--ds-app-shell-main-background, transparent);
+  border: var(--ds-app-shell-main-border, 0);
+  box-shadow: var(--ds-app-shell-main-shadow, none);
 }
 
 .rottay-app-shell [data-part="main-area"][data-has-header="false"] {
@@ -270,27 +273,27 @@
 
 .rottay-app-shell [data-part="header"] {
   position: sticky;
-  inset-block-start: var(--ds-shell-header-inset-block-start, 0);
-  inset-inline: var(--ds-shell-header-inset-inline, 0);
-  z-index: var(--ds-shell-header-z-index, var(--ds-z-index-sticky, 1100));
+  inset-block-start: var(--ds-shell-header-inset-block-start, var(--ds-app-shell-header-inset-block-start, 0));
+  inset-inline: var(--ds-shell-header-inset-inline, var(--ds-app-shell-header-inset-inline, 0));
+  z-index: var(--ds-app-shell-header-z-index, var(--ds-z-index-sticky, 1100));
   height: var(--ds-shell-top-inset);
   box-sizing: border-box;
-  padding-block-start: var(--ds-shell-header-padding-block-start, var(--ds-shell-safe-area-top));
-  padding-inline: var(--ds-shell-header-padding-inline, var(--ds-spacing-6, 24px));
+  padding-block-start: var(--ds-app-shell-header-padding-block-start, var(--ds-shell-safe-area-top));
+  padding-inline: var(--ds-shell-header-padding-inline, var(--ds-app-shell-header-padding-inline, var(--ds-spacing-6, 24px)));
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  background: var(--ds-shell-header-background, var(--ds-layout-header-bg, var(--ds-surface-canvas)));
-  border: var(--ds-shell-header-border, 0);
-  border-block-end: var(--ds-shell-header-border-block-end, 1px solid var(--ds-layout-header-border, var(--ds-color-border-subtle)));
-  border-radius: var(--ds-shell-header-radius, 0);
-  box-shadow: var(--ds-shell-header-shadow, none);
-  backdrop-filter: var(--ds-shell-header-backdrop, var(--ds-layout-header-backdrop, blur(12px)));
-  -webkit-backdrop-filter: var(--ds-shell-header-backdrop, var(--ds-layout-header-backdrop, blur(12px)));
+  background: var(--ds-shell-header-background, var(--ds-app-shell-header-background, var(--ds-layout-header-bg, var(--ds-surface-canvas))));
+  border: var(--ds-shell-header-border, var(--ds-app-shell-header-border, 0));
+  border-block-end: var(--ds-shell-header-border-block-end, var(--ds-app-shell-header-border-block-end, 1px solid var(--ds-layout-header-border, var(--ds-color-border-subtle))));
+  border-radius: var(--ds-shell-header-radius, var(--ds-app-shell-header-radius, 0));
+  box-shadow: var(--ds-shell-header-shadow, var(--ds-app-shell-header-shadow, none));
+  backdrop-filter: var(--ds-app-shell-header-backdrop, var(--ds-layout-header-backdrop, blur(12px)));
+  -webkit-backdrop-filter: var(--ds-app-shell-header-backdrop, var(--ds-layout-header-backdrop, blur(12px)));
 }
 
 .rottay-app-shell [data-part="navigation-trigger"] {
-  margin-inline-end: var(--ds-shell-navigation-trigger-margin-inline-end, var(--ds-spacing-3, 12px));
+  margin-inline-end: var(--ds-app-shell-navigation-trigger-margin-inline-end, var(--ds-spacing-3, 12px));
   background: transparent;
   border: 0;
 }
@@ -309,23 +312,23 @@
 .rottay-app-shell [data-part="header-right"] {
   display: flex;
   justify-content: flex-end;
-  gap: var(--ds-shell-header-slot-gap, var(--ds-spacing-1, 4px));
+  gap: var(--ds-app-shell-header-slot-gap, var(--ds-spacing-1, 4px));
 }
 
 .rottay-app-shell [data-part="content"] {
   flex: 1;
   min-width: 0;
-  padding: var(--ds-shell-content-padding, 0);
-  background: var(--ds-shell-content-background, transparent);
-  border: var(--ds-shell-content-border, 0);
+  padding: var(--ds-app-shell-content-padding, 0);
+  background: var(--ds-app-shell-content-background, transparent);
+  border: var(--ds-app-shell-content-border, 0);
 }
 
 .rottay-app-shell [data-part="footer"] {
   flex-shrink: 0;
-  padding: var(--ds-shell-footer-padding, 0);
-  background: var(--ds-shell-footer-background, transparent);
-  border: var(--ds-shell-footer-border, 0);
-  box-shadow: var(--ds-shell-footer-shadow, none);
+  padding: var(--ds-app-shell-footer-padding, 0);
+  background: var(--ds-app-shell-footer-background, transparent);
+  border: var(--ds-app-shell-footer-border, 0);
+  box-shadow: var(--ds-app-shell-footer-shadow, none);
 }
 
 /* ---------------------------------------------------------------------------
@@ -455,7 +458,7 @@
     [data-state~="hovered"],
     :hover
   ) {
-  background: var(--ds-shell-navigation-action-hover-bg, var(--ds-color-neutral-100));
+  background: var(--ds-app-shell-navigation-action-hover-bg, var(--ds-color-neutral-100));
 }
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
@@ -463,7 +466,7 @@
     [data-state~="pressed"],
     :active
   ) {
-  background: var(--ds-shell-navigation-action-active-bg, var(--ds-color-neutral-200, var(--ds-color-neutral-100)));
+  background: var(--ds-app-shell-navigation-action-active-bg, var(--ds-color-neutral-200, var(--ds-color-neutral-100)));
 }
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
@@ -492,7 +495,7 @@
   .rottay-app-shell [data-part="header"] {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: var(--ds-shell-header-background, var(--ds-layout-header-bg, var(--ds-surface-canvas)));
+    background: var(--ds-shell-header-background, var(--ds-app-shell-header-background, var(--ds-layout-header-bg, var(--ds-surface-canvas))));
   }
 }
 

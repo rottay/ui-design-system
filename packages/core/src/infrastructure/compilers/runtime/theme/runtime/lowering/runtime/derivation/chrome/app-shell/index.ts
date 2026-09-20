@@ -25,6 +25,18 @@
  * app-bithire authors the name on both elements. Producing either rest
  * silently repaints the other.
  *
+ * THE TWO SPELLINGS. The family's private chrome is `--ds-app-shell-*`, its
+ * own namespace. The five track/cadence names keep `--ds-shell-*` because
+ * they are the shell group's PUBLISHED band
+ * (`structures/shell/contracts` -> `SHELL_PUBLISHED_CHANNELS`): four shell
+ * skins, the responsive channel contract, `chrome-variables` and three
+ * applications read them, and `static-db-channel-vocabulary` pins two of them
+ * as the static/DB parity vocabulary. The namespace law admits that band by
+ * reading the contract, not by name. The fourteen private names an
+ * application may still author through the `application-shell-composition`
+ * public hook are read old-spelling-first for the length of the declared
+ * supersession window — see `SHELL_SUPERSEDED_HOOK_CHANNELS`.
+ *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/app-shell
  * @category Compilers
  * @package @rottay/design-system
@@ -52,61 +64,61 @@ export const appShellChromeDeriver: FamilyDeriver = {
     "--ds-shell-sidebar-header-block-size",
     "--ds-shell-collapse-transition",
     // Root
-    "--ds-shell-background",
+    "--ds-app-shell-background",
     // Skip link
-    "--ds-shell-skip-link-z-index",
-    "--ds-shell-skip-link-padding",
-    "--ds-shell-skip-link-radius",
-    "--ds-shell-skip-link-background",
-    "--ds-shell-skip-link-color",
-    "--ds-shell-skip-link-border",
-    "--ds-shell-skip-link-shadow",
+    "--ds-app-shell-skip-link-z-index",
+    "--ds-app-shell-skip-link-padding",
+    "--ds-app-shell-skip-link-radius",
+    "--ds-app-shell-skip-link-background",
+    "--ds-app-shell-skip-link-color",
+    "--ds-app-shell-skip-link-border",
+    "--ds-app-shell-skip-link-shadow",
     // Navigation track and drawer
-    "--ds-shell-navigation-z-index",
-    "--ds-shell-navigation-background",
-    "--ds-shell-navigation-border",
-    "--ds-shell-navigation-border-inline-end",
-    "--ds-shell-navigation-radius",
-    "--ds-shell-navigation-header-background",
-    "--ds-shell-navigation-header-border",
-    "--ds-shell-navigation-drawer-header-padding",
-    "--ds-shell-navigation-drawer-body-padding",
-    "--ds-shell-navigation-logo-padding",
-    "--ds-shell-navigation-logo-padding-collapsed",
-    "--ds-shell-navigation-body-padding",
-    "--ds-shell-navigation-body-padding-collapsed",
-    "--ds-shell-navigation-body-scroll-padding-block-end",
-    "--ds-shell-navigation-footer-background",
-    "--ds-shell-navigation-footer-border",
-    "--ds-shell-navigation-footer-padding",
-    "--ds-shell-navigation-footer-padding-collapsed",
-    "--ds-shell-navigation-trigger-margin-inline-end",
-    "--ds-shell-navigation-action-hover-bg",
-    "--ds-shell-navigation-action-active-bg",
+    "--ds-app-shell-navigation-z-index",
+    "--ds-app-shell-navigation-background",
+    "--ds-app-shell-navigation-border",
+    "--ds-app-shell-navigation-border-inline-end",
+    "--ds-app-shell-navigation-radius",
+    "--ds-app-shell-navigation-header-background",
+    "--ds-app-shell-navigation-header-border",
+    "--ds-app-shell-navigation-drawer-header-padding",
+    "--ds-app-shell-navigation-drawer-body-padding",
+    "--ds-app-shell-navigation-logo-padding",
+    "--ds-app-shell-navigation-logo-padding-collapsed",
+    "--ds-app-shell-navigation-body-padding",
+    "--ds-app-shell-navigation-body-padding-collapsed",
+    "--ds-app-shell-navigation-body-scroll-padding-block-end",
+    "--ds-app-shell-navigation-footer-background",
+    "--ds-app-shell-navigation-footer-border",
+    "--ds-app-shell-navigation-footer-padding",
+    "--ds-app-shell-navigation-footer-padding-collapsed",
+    "--ds-app-shell-navigation-trigger-margin-inline-end",
+    "--ds-app-shell-navigation-action-hover-bg",
+    "--ds-app-shell-navigation-action-active-bg",
     // Header
-    "--ds-shell-header-z-index",
-    "--ds-shell-header-inset-block-start",
-    "--ds-shell-header-inset-inline",
-    "--ds-shell-header-padding-block-start",
-    "--ds-shell-header-padding-inline",
-    "--ds-shell-header-background",
-    "--ds-shell-header-border",
-    "--ds-shell-header-border-block-end",
-    "--ds-shell-header-radius",
-    "--ds-shell-header-shadow",
-    "--ds-shell-header-backdrop",
-    "--ds-shell-header-slot-gap",
+    "--ds-app-shell-header-z-index",
+    "--ds-app-shell-header-inset-block-start",
+    "--ds-app-shell-header-inset-inline",
+    "--ds-app-shell-header-padding-block-start",
+    "--ds-app-shell-header-padding-inline",
+    "--ds-app-shell-header-background",
+    "--ds-app-shell-header-border",
+    "--ds-app-shell-header-border-block-end",
+    "--ds-app-shell-header-radius",
+    "--ds-app-shell-header-shadow",
+    "--ds-app-shell-header-backdrop",
+    "--ds-app-shell-header-slot-gap",
     // Main, content, footer
-    "--ds-shell-main-background",
-    "--ds-shell-main-border",
-    "--ds-shell-main-shadow",
-    "--ds-shell-content-padding",
-    "--ds-shell-content-background",
-    "--ds-shell-content-border",
-    "--ds-shell-footer-padding",
-    "--ds-shell-footer-background",
-    "--ds-shell-footer-border",
-    "--ds-shell-footer-shadow",
+    "--ds-app-shell-main-background",
+    "--ds-app-shell-main-border",
+    "--ds-app-shell-main-shadow",
+    "--ds-app-shell-content-padding",
+    "--ds-app-shell-content-background",
+    "--ds-app-shell-content-border",
+    "--ds-app-shell-footer-padding",
+    "--ds-app-shell-footer-background",
+    "--ds-app-shell-footer-border",
+    "--ds-app-shell-footer-shadow",
   ],
   derive: () => deriveAppShellChannels(),
 };
@@ -129,80 +141,80 @@ export function deriveAppShellChannels(): Record<string, string> {
     "var(--ds-motion-rearrange, var(--ds-motion-normal)) var(--ds-motion-ease-move)";
 
   // The shell ground is the canvas.
-  vars["--ds-shell-background"] = "var(--ds-surface-canvas)";
+  vars["--ds-app-shell-background"] = "var(--ds-surface-canvas)";
 
   // The skip link is a floating control on the elevated surface.
-  vars["--ds-shell-skip-link-z-index"] = "var(--ds-z-index-skip-link, 9999)";
-  vars["--ds-shell-skip-link-padding"] = "0 var(--ds-spacing-4, 16px)";
-  vars["--ds-shell-skip-link-radius"] = "var(--ds-radius-md, 8px)";
-  vars["--ds-shell-skip-link-background"] = "var(--ds-color-bg-elevated)";
-  vars["--ds-shell-skip-link-color"] = "var(--ds-color-text-primary)";
-  vars["--ds-shell-skip-link-border"] = "1px solid var(--ds-color-border-subtle)";
-  vars["--ds-shell-skip-link-shadow"] = "var(--ds-elevation-2, none)";
+  vars["--ds-app-shell-skip-link-z-index"] = "var(--ds-z-index-skip-link, 9999)";
+  vars["--ds-app-shell-skip-link-padding"] = "0 var(--ds-spacing-4, 16px)";
+  vars["--ds-app-shell-skip-link-radius"] = "var(--ds-radius-md, 8px)";
+  vars["--ds-app-shell-skip-link-background"] = "var(--ds-color-bg-elevated)";
+  vars["--ds-app-shell-skip-link-color"] = "var(--ds-color-text-primary)";
+  vars["--ds-app-shell-skip-link-border"] = "1px solid var(--ds-color-border-subtle)";
+  vars["--ds-app-shell-skip-link-shadow"] = "var(--ds-elevation-2, none)";
 
   // The navigation region: the sidebar tone's surface, the sidebar rule, and
   // the spacing ramp for its interior rhythm.
-  vars["--ds-shell-navigation-z-index"] = "var(--ds-z-index-fixed, 1200)";
-  vars["--ds-shell-navigation-background"] =
+  vars["--ds-app-shell-navigation-z-index"] = "var(--ds-z-index-fixed, 1200)";
+  vars["--ds-app-shell-navigation-background"] =
     "var(--ds-sidebar-bg, var(--ds-surface-shell, var(--ds-color-bg-elevated)))";
-  vars["--ds-shell-navigation-border"] = "0";
-  vars["--ds-shell-navigation-border-inline-end"] = SIDEBAR_RULE;
-  vars["--ds-shell-navigation-radius"] = "0";
-  vars["--ds-shell-navigation-header-background"] = "transparent";
-  vars["--ds-shell-navigation-header-border"] = SIDEBAR_RULE;
-  vars["--ds-shell-navigation-drawer-header-padding"] =
+  vars["--ds-app-shell-navigation-border"] = "0";
+  vars["--ds-app-shell-navigation-border-inline-end"] = SIDEBAR_RULE;
+  vars["--ds-app-shell-navigation-radius"] = "0";
+  vars["--ds-app-shell-navigation-header-background"] = "transparent";
+  vars["--ds-app-shell-navigation-header-border"] = SIDEBAR_RULE;
+  vars["--ds-app-shell-navigation-drawer-header-padding"] =
     "0 var(--ds-spacing-3, 12px) 0 var(--ds-spacing-5, 20px)";
-  vars["--ds-shell-navigation-drawer-body-padding"] = "0";
-  vars["--ds-shell-navigation-logo-padding"] = "0 var(--ds-spacing-5, 20px)";
-  vars["--ds-shell-navigation-logo-padding-collapsed"] = "0";
-  vars["--ds-shell-navigation-body-padding"] =
+  vars["--ds-app-shell-navigation-drawer-body-padding"] = "0";
+  vars["--ds-app-shell-navigation-logo-padding"] = "0 var(--ds-spacing-5, 20px)";
+  vars["--ds-app-shell-navigation-logo-padding-collapsed"] = "0";
+  vars["--ds-app-shell-navigation-body-padding"] =
     "var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px))";
-  vars["--ds-shell-navigation-body-padding-collapsed"] =
+  vars["--ds-app-shell-navigation-body-padding-collapsed"] =
     "var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px))";
-  vars["--ds-shell-navigation-body-scroll-padding-block-end"] =
+  vars["--ds-app-shell-navigation-body-scroll-padding-block-end"] =
     "calc(var(--ds-spacing-6, 24px) + 76px)";
-  vars["--ds-shell-navigation-footer-background"] =
+  vars["--ds-app-shell-navigation-footer-background"] =
     "var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))";
-  vars["--ds-shell-navigation-footer-border"] = SIDEBAR_RULE;
-  vars["--ds-shell-navigation-footer-padding"] = "var(--ds-spacing-3, 12px)";
-  vars["--ds-shell-navigation-footer-padding-collapsed"] =
+  vars["--ds-app-shell-navigation-footer-border"] = SIDEBAR_RULE;
+  vars["--ds-app-shell-navigation-footer-padding"] = "var(--ds-spacing-3, 12px)";
+  vars["--ds-app-shell-navigation-footer-padding-collapsed"] =
     "var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)";
-  vars["--ds-shell-navigation-trigger-margin-inline-end"] = "var(--ds-spacing-3, 12px)";
+  vars["--ds-app-shell-navigation-trigger-margin-inline-end"] = "var(--ds-spacing-3, 12px)";
 
   // The chrome actions wash quietly: the neutral ramp, never the accent.
-  vars["--ds-shell-navigation-action-hover-bg"] = "var(--ds-color-neutral-100)";
-  vars["--ds-shell-navigation-action-active-bg"] =
+  vars["--ds-app-shell-navigation-action-hover-bg"] = "var(--ds-color-neutral-100)";
+  vars["--ds-app-shell-navigation-action-active-bg"] =
     "var(--ds-color-neutral-200, var(--ds-color-neutral-100))";
 
   // The sticky header: the layout header roots, flush by default.
-  vars["--ds-shell-header-z-index"] = "var(--ds-z-index-sticky, 1100)";
-  vars["--ds-shell-header-inset-block-start"] = "0";
-  vars["--ds-shell-header-inset-inline"] = "0";
-  vars["--ds-shell-header-padding-block-start"] = "var(--ds-shell-safe-area-top)";
-  vars["--ds-shell-header-padding-inline"] = "var(--ds-spacing-6, 24px)";
-  vars["--ds-shell-header-background"] =
+  vars["--ds-app-shell-header-z-index"] = "var(--ds-z-index-sticky, 1100)";
+  vars["--ds-app-shell-header-inset-block-start"] = "0";
+  vars["--ds-app-shell-header-inset-inline"] = "0";
+  vars["--ds-app-shell-header-padding-block-start"] = "var(--ds-shell-safe-area-top)";
+  vars["--ds-app-shell-header-padding-inline"] = "var(--ds-spacing-6, 24px)";
+  vars["--ds-app-shell-header-background"] =
     "var(--ds-layout-header-bg, var(--ds-surface-canvas))";
-  vars["--ds-shell-header-border"] = "0";
-  vars["--ds-shell-header-border-block-end"] =
+  vars["--ds-app-shell-header-border"] = "0";
+  vars["--ds-app-shell-header-border-block-end"] =
     "1px solid var(--ds-layout-header-border, var(--ds-color-border-subtle))";
-  vars["--ds-shell-header-radius"] = "0";
-  vars["--ds-shell-header-shadow"] = "none";
-  vars["--ds-shell-header-backdrop"] =
+  vars["--ds-app-shell-header-radius"] = "0";
+  vars["--ds-app-shell-header-shadow"] = "none";
+  vars["--ds-app-shell-header-backdrop"] =
     "var(--ds-layout-header-backdrop, blur(12px))";
-  vars["--ds-shell-header-slot-gap"] = "var(--ds-spacing-1, 4px)";
+  vars["--ds-app-shell-header-slot-gap"] = "var(--ds-spacing-1, 4px)";
 
   // The main column, the content well and the footer are unpainted grounds:
   // the shell frames a page, it does not decorate one.
-  vars["--ds-shell-main-background"] = "transparent";
-  vars["--ds-shell-main-border"] = "0";
-  vars["--ds-shell-main-shadow"] = "none";
-  vars["--ds-shell-content-padding"] = "0";
-  vars["--ds-shell-content-background"] = "transparent";
-  vars["--ds-shell-content-border"] = "0";
-  vars["--ds-shell-footer-padding"] = "0";
-  vars["--ds-shell-footer-background"] = "transparent";
-  vars["--ds-shell-footer-border"] = "0";
-  vars["--ds-shell-footer-shadow"] = "none";
+  vars["--ds-app-shell-main-background"] = "transparent";
+  vars["--ds-app-shell-main-border"] = "0";
+  vars["--ds-app-shell-main-shadow"] = "none";
+  vars["--ds-app-shell-content-padding"] = "0";
+  vars["--ds-app-shell-content-background"] = "transparent";
+  vars["--ds-app-shell-content-border"] = "0";
+  vars["--ds-app-shell-footer-padding"] = "0";
+  vars["--ds-app-shell-footer-background"] = "transparent";
+  vars["--ds-app-shell-footer-border"] = "0";
+  vars["--ds-app-shell-footer-shadow"] = "none";
 
   return vars;
 }

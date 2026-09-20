@@ -1127,10 +1127,37 @@ export const PROMOTIONS = Object.freeze([
   Object.freeze({
     id: 'application-shell-composition',
     properties: Object.freeze([
+      // The canonical spelling: the app-shell family's own chrome namespace.
+      '--ds-app-shell-navigation-border',
+      '--ds-app-shell-navigation-border-inline-end',
+      '--ds-app-shell-navigation-radius',
+      '--ds-app-shell-navigation-body-padding',
+      '--ds-app-shell-navigation-logo-padding',
+      '--ds-app-shell-navigation-footer-padding',
+      '--ds-app-shell-header-inset-block-start',
+      '--ds-app-shell-header-inset-inline',
+      '--ds-app-shell-header-padding-inline',
+      '--ds-app-shell-header-background',
+      '--ds-app-shell-header-border',
+      '--ds-app-shell-header-border-block-end',
+      '--ds-app-shell-header-radius',
+      '--ds-app-shell-header-shadow',
+      // Named for the shell group, not for this family, and unchanged:
+      // `--ds-shell-navigation-shadow` has two correct rests the DS never
+      // produces, and `--ds-shell-bottom-inset` is the published inset band.
+      '--ds-shell-navigation-shadow',
+      '--ds-shell-bottom-inset',
+      // SUPERSEDED, open window. The fourteen rows above were published under
+      // these spellings in 2.19.36, so they stay assignable until every named
+      // consumer authors the canonical name; the skin reads the superseded arm
+      // first so a consumer that has not migrated still outranks the compiled
+      // rest. Roster and end trigger: `structures/shell/contracts` ->
+      // `SHELL_SUPERSEDED_HOOK_CHANNELS`, measured by
+      // `shell-superseded-window.test.ts`. Remove these fourteen rows, and the
+      // skin's first arm, in the same change.
       '--ds-shell-navigation-border',
       '--ds-shell-navigation-border-inline-end',
       '--ds-shell-navigation-radius',
-      '--ds-shell-navigation-shadow',
       '--ds-shell-navigation-body-padding',
       '--ds-shell-navigation-logo-padding',
       '--ds-shell-navigation-footer-padding',
@@ -1142,7 +1169,6 @@ export const PROMOTIONS = Object.freeze([
       '--ds-shell-header-border-block-end',
       '--ds-shell-header-radius',
       '--ds-shell-header-shadow',
-      '--ds-shell-bottom-inset',
     ]),
     owner: 'the application shell, navigation and header structures',
     slot: 'one vertical application-shell scope',

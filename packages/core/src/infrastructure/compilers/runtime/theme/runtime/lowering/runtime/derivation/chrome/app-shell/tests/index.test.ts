@@ -14,7 +14,10 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
-import { SHELL_GEOMETRY_READS } from "@/components/structures/shell/contracts";
+import {
+  SHELL_GEOMETRY_READS,
+  SHELL_PUBLISHED_CHANNELS,
+} from "@/components/structures/shell/contracts";
 import {
   describeFamilyContract,
   FIXTURE_TENANT_FACTS,
@@ -84,7 +87,7 @@ function skinFallbacks(channel: string): string[] {
  * `SHELL_GEOMETRY_READS` and the structure's own suite instead.
  */
 const READ_OUTSIDE_THE_SKIN = new Set([
-  "--ds-shell-navigation-drawer-body-padding",
+  "--ds-app-shell-navigation-drawer-body-padding",
   "--ds-shell-sidebar-collapsed-width",
 ]);
 
@@ -131,10 +134,17 @@ describe("chrome/app-shell", () => {
     );
   });
 
-  it("names only its own family namespace", () => {
+  it("names its own namespace, or the shell group's declared published band", () => {
+    const publishedBand = new Set<string>(SHELL_PUBLISHED_CHANNELS);
     for (const channel of appShellChromeDeriver.produces) {
-      expect(channel.startsWith("--ds-shell-")).toBe(true);
+      expect({
+        channel,
+        admitted: channel.startsWith("--ds-app-shell-") || publishedBand.has(channel),
+      }).toEqual({ channel, admitted: true });
     }
+    // The band is the contract's, not a prefix: a private chrome name spelled
+    // for the group is not admitted by having the same prefix.
+    expect(publishedBand.has("--ds-shell-header-radius")).toBe(false);
   });
 
   it("leaves the navigation shadow to the two rests its consumers already author", () => {

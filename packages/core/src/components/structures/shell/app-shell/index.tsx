@@ -434,7 +434,7 @@ export function AppShell({
               // navigation body scrolls), so the shell restates the contract
               // through the sanctioned `bodyStyle` channel instead of CSS
               // `!important`. `bodyStyle` spreads last inside the engine.
-              padding: 'var(--ds-shell-navigation-drawer-body-padding, 0)',
+              padding: 'var(--ds-app-shell-navigation-drawer-body-padding, 0)',
               overflow: 'hidden',
             }}
             surfaceStyle={

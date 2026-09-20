@@ -2,9 +2,10 @@
  * AppShell, WO-FAM-11 sub-lot B.
  *
  * What this suite owns, and the responsive suite beside it does not: the
- * contract the family cut changed. The `--ds-shell-*` namespace splits into a
- * resolved band the structure stamps and a derived band the chrome deriver
- * produces, and the two together must cover every channel the skin reads.
+ * contract the family cut changed. The shell channels split into a resolved
+ * band the structure stamps, a published band the shell group shares under
+ * `--ds-shell-*`, and the family's own `--ds-app-shell-*` chrome band the
+ * deriver produces; together they must cover every channel the skin reads.
  * The navigation presentation is the shared adaptation kernel's answer, the
  * chrome actions' state is the interaction kernel's, and every part the skin
  * selects is a part the structure stamps.
@@ -23,7 +24,11 @@ import {
 } from '@/infrastructure/runtime/responsive';
 import { appShellChromeDeriver } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell';
 import { AppShell } from '..';
-import { SHELL_PUBLISHED_CHANNELS, SHELL_RESOLVED_CHANNELS } from '../../contracts';
+import {
+  SHELL_PUBLISHED_CHANNELS,
+  SHELL_RESOLVED_CHANNELS,
+  SHELL_SUPERSEDED_HOOK_CHANNELS,
+} from '../../contracts';
 
 const SKIN = readFileSync(
   resolve(
@@ -59,7 +64,10 @@ const OWNED_PARTS = [
  * and app-bithire authors the name on both elements, so producing either rest
  * silently repaints the other.
  */
-const DECLARED_UNPRODUCED = ['--ds-shell-navigation-shadow'] as const;
+const DECLARED_UNPRODUCED = [
+  '--ds-shell-navigation-shadow',
+  ...Object.keys(SHELL_SUPERSEDED_HOOK_CHANNELS).sort(),
+] as const;
 
 /**
  * The one `--ds-shell-*` name in the skin that belongs to a different owner:
@@ -114,17 +122,19 @@ function renderShell(
   );
 }
 
-/** Every `--ds-shell-*` name the skin reads through `var()`. */
+/** Every shell channel — either spelling — the skin reads through `var()`. */
 function skinReads(): Set<string> {
   const names = new Set<string>();
-  for (const match of SKIN.matchAll(/var\(\s*(--ds-shell-[a-z0-9-]+)/g)) names.add(match[1]!);
+  for (const match of SKIN.matchAll(/var\(\s*(--ds-(?:app-)?shell-[a-z0-9-]+)/g)) {
+    names.add(match[1]!);
+  }
   return names;
 }
 
-/** Every `--ds-shell-*` name the skin DECLARES. */
+/** Every shell channel — either spelling — the skin DECLARES. */
 function skinDeclares(): Set<string> {
   const names = new Set<string>();
-  for (const match of SKIN.matchAll(/(--ds-shell-[a-z0-9-]+)\s*:/g)) names.add(match[1]!);
+  for (const match of SKIN.matchAll(/(--ds-(?:app-)?shell-[a-z0-9-]+)\s*:/g)) names.add(match[1]!);
   return names;
 }
 
@@ -145,7 +155,7 @@ describe('AppShell (WO-FAM-11 cut) — the --ds-shell-* split', () => {
       ...FOREIGN_READS,
     ]);
     const uncovered = [...skinReads()].filter((name) => !covered.has(name)).sort();
-    expect(uncovered).toEqual([...DECLARED_UNPRODUCED]);
+    expect(uncovered).toEqual([...DECLARED_UNPRODUCED].sort());
   });
 
   it('publishes every cross-owner channel from one band or the other', () => {
@@ -158,9 +168,13 @@ describe('AppShell (WO-FAM-11 cut) — the --ds-shell-* split', () => {
     }
   });
 
-  it('names only its own namespace, and never a resolved name, in the deriver', () => {
+  it('names only its own namespace, or the declared published band, in the deriver', () => {
+    const publishedBand = new Set<string>(SHELL_PUBLISHED_CHANNELS);
     for (const channel of appShellChromeDeriver.produces) {
-      expect(channel.startsWith('--ds-shell-')).toBe(true);
+      expect({
+        channel,
+        admitted: channel.startsWith('--ds-app-shell-') || publishedBand.has(channel),
+      }).toEqual({ channel, admitted: true });
     }
   });
 });
@@ -190,7 +204,7 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
     }
   });
 
-  it('paints nothing inline: only runtime-resolved --ds-shell-* channels travel', () => {
+  it('paints nothing inline: only runtime-resolved shell channels travel', () => {
     const { container } = renderShell(DESKTOP_CONTEXT);
     const resolved = new Set<string>(SHELL_RESOLVED_CHANNELS);
     const published = new Set<string>(SHELL_PUBLISHED_CHANNELS);

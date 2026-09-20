@@ -19,10 +19,11 @@
  *   skin floors them on the shell root so a server render is correct before
  *   hydration; nothing outside this family reads them.
  *
- * The third band is the family's chrome paint, and it belongs to the chrome
- * deriver (`derivation/chrome/app-shell`) and to nothing else. Resolved and
- * derived are disjoint, and together they cover every `--ds-shell-*` channel
- * the skin reads; `AppShell.cut.test.tsx` proves both halves.
+ * The third band is the family's chrome paint, it belongs to the chrome
+ * deriver (`derivation/chrome/app-shell`) and to nothing else, and it is
+ * spelled `--ds-app-shell-*` — the family's own namespace. Resolved and
+ * derived are disjoint, and together they cover every shell channel the skin
+ * reads; `AppShell.cut.test.tsx` proves both halves.
  *
  * @module Components/Structures/Shell/Contracts
  */
@@ -93,6 +94,29 @@ export const SHELL_RESOLVED_CHANNELS = [
 ] as const;
 
 export type ShellResolvedChannel = (typeof SHELL_RESOLVED_CHANNELS)[number];
+
+/**
+ * Superseded public hook name -> canonical spelling: read as `var(<old>, var(<new>))`,
+ * never emitted; `shell-superseded-window.test.ts` is the trigger that closes it.
+ */
+export const SHELL_SUPERSEDED_HOOK_CHANNELS = {
+  '--ds-shell-navigation-border': '--ds-app-shell-navigation-border',
+  '--ds-shell-navigation-border-inline-end': '--ds-app-shell-navigation-border-inline-end',
+  '--ds-shell-navigation-radius': '--ds-app-shell-navigation-radius',
+  '--ds-shell-navigation-body-padding': '--ds-app-shell-navigation-body-padding',
+  '--ds-shell-navigation-logo-padding': '--ds-app-shell-navigation-logo-padding',
+  '--ds-shell-navigation-footer-padding': '--ds-app-shell-navigation-footer-padding',
+  '--ds-shell-header-inset-block-start': '--ds-app-shell-header-inset-block-start',
+  '--ds-shell-header-inset-inline': '--ds-app-shell-header-inset-inline',
+  '--ds-shell-header-padding-inline': '--ds-app-shell-header-padding-inline',
+  '--ds-shell-header-background': '--ds-app-shell-header-background',
+  '--ds-shell-header-border': '--ds-app-shell-header-border',
+  '--ds-shell-header-border-block-end': '--ds-app-shell-header-border-block-end',
+  '--ds-shell-header-radius': '--ds-app-shell-header-radius',
+  '--ds-shell-header-shadow': '--ds-app-shell-header-shadow',
+} as const satisfies Record<string, string>;
+
+export type ShellSupersededChannel = keyof typeof SHELL_SUPERSEDED_HOOK_CHANNELS;
 
 /**
  * The four geometry reads the structure resolves with, each stating the same
