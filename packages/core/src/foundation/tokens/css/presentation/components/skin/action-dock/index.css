@@ -12,10 +12,19 @@
  * specificity. The composed Button therefore keeps its own paint by design,
  * and the grammar below is layout the engine skins do not claim.
  *
- * SCOPE ROOT carries `rottay-action-dock` + `data-part='root'` +
- * `data-placement` + `data-mode`. Component variables deliberately fall back
- * to semantic spacing, elevation, and stacking tokens so tenants can tune the
- * dock without application-owned CSS.
+ * SCOPE ROOT carries the dock class + `data-part='root'` + `data-placement` +
+ * `data-mode`. Component variables deliberately fall back to semantic spacing,
+ * elevation, and stacking tokens so tenants can tune the dock without
+ * application-owned CSS.
+ *
+ * CLASS WINDOW (`components/structures/foundation/class-window`): the dock
+ * stamps the canonical `ds-action-dock*` spelling beside the superseded
+ * `rottay-action-dock*` one, and every selector below names the pair through a
+ * single `:is()` — specificity is that of its most specific argument, so each
+ * rule keeps the exact (a,b,c) it had as one class and the z-index arithmetic
+ * below is unchanged. The superseded arm also keeps `step-wizard`'s
+ * sticky-actions owner and `collection-workspace`'s sticky action bar, which
+ * both author the old spelling, on these rules.
  *
  * SPECIFICITY (P-48): `background` and `box-shadow` are non-border paint;
  * selectors remain rooted in the component class plus explicit state data.
@@ -117,7 +126,7 @@
  * gap), so the row, the safe areas, and the priority grammar all mirror.
  */
 
-.rottay-action-dock[data-part='root'][data-placement][data-mode] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode] {
   box-sizing: border-box;
   width: 100%;
   padding-inline: var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem));
@@ -137,7 +146,7 @@
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-.rottay-action-dock[data-part='root'][data-mode='fixed'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-mode='fixed'] {
   position: fixed;
   inset-inline: 0;
 }
@@ -148,12 +157,12 @@
    `--ds-action-dock-sticky-z-index` never resolved. Tie on specificity, win on
    source order. The family test pins that every mode rule outranks the root
    rule for each property both declare. */
-.rottay-action-dock[data-part='root'][data-placement][data-mode='sticky'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode='sticky'] {
   position: sticky;
   z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'] {
   /* Public reservation hook (the S02 `--ds-bottom-tab-bar-reserved-block-end`
      precedent): pages keep their content clear of the fixed dock with
      `padding-block-end: var(--ds-action-dock-reserved-block-end)`. The 60px
@@ -182,19 +191,19 @@
     );
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
   inset-block-end: calc(var(--ds-shell-bottom-inset, 0px) + var(--ds-virtual-keyboard-inset, 0px));
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
   inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
   inset-block-end: 0;
 }
 
-.rottay-action-dock[data-part='root'][data-placement='top'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='top'] {
   /* Top-placement mirror of the bottom reservation hook. */
   --ds-action-dock-reserved-block-start: calc(
     60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
@@ -217,25 +226,25 @@
     var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
 }
 
-.rottay-action-dock__actions {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) {
   width: 100%;
   gap: var(--ds-action-dock-gap, var(--ds-spacing-3, 0.75rem));
 }
 
 /* Shrink guard: row children may shrink below content width so labels
  * ellipsize (Button label contract) instead of overflowing the dock. */
-.rottay-action-dock__actions > * {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > * {
   min-inline-size: 0;
 }
 
 /* Priority grammar (layout only — Button owns its paint):
  * primary grows into the freed space; danger hugs the start edge and the auto
  * margin separates it from the action cluster at the end edge. */
-.rottay-action-dock__actions > .rottay-action-dock__action[data-priority='primary'] {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__action, .rottay-action-dock__action)[data-priority='primary'] {
   flex: 1 1 auto;
 }
 
-.rottay-action-dock__actions > .rottay-action-dock__action[data-priority='danger'] {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__action, .rottay-action-dock__action)[data-priority='danger'] {
   margin-inline-end: auto;
 }
 
@@ -244,7 +253,7 @@
  * rule matched nothing, and the more-actions control could be squeezed by the
  * growing primary — `__overflow` names the item, `__overflow-trigger` stays on
  * the Button for the coarse-pointer floor below. */
-.rottay-action-dock__actions > .rottay-action-dock__overflow {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__overflow, .rottay-action-dock__overflow) {
   flex: 0 0 auto;
 }
 
@@ -252,8 +261,8 @@
  * floor. min-block-size composes with Button's own height instead of
  * fighting its specificity. */
 @media (pointer: coarse) {
-  .rottay-action-dock__actions > :where(button, a),
-  .rottay-action-dock__overflow-trigger {
+  :is(.ds-action-dock__actions, .rottay-action-dock__actions) > :where(button, a),
+  :is(.ds-action-dock__overflow-trigger, .rottay-action-dock__overflow-trigger) {
     min-block-size: max(44px, var(--ds-size-touch-target, 44px));
   }
 }
@@ -274,7 +283,7 @@
 /* Reduced motion: the surface transition (theme/density channel switches)
  * and the entrance are silenced; layout and the coarse floor are unaffected. */
 @media (prefers-reduced-motion: reduce) {
-  .rottay-action-dock[data-part='root'][data-placement][data-mode] {
+  :is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode] {
     transition: none;
     animation: none;
   }

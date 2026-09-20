@@ -94,8 +94,13 @@ async function renderEveryPosture() {
   return rendered;
 }
 
-/** `a,b,c` specificity of a compound/descendant selector, ids/classes/types. */
-function specificity(selector: string): [number, number, number] {
+function compare(a: [number, number, number], b: [number, number, number]): number {
+  for (let i = 0; i < 3; i += 1) if (a[i] !== b[i]) return a[i] - b[i];
+  return 0;
+}
+
+/** `a,b,c` of a selector with no functional pseudo left in it. */
+function countPlain(selector: string): [number, number, number] {
   const stripped = selector.replace(/::?[a-z-]+(\([^)]*\))?/g, ' ');
   const ids = stripped.match(/#[\w-]+/g)?.length ?? 0;
   const classes =
@@ -104,9 +109,30 @@ function specificity(selector: string): [number, number, number] {
   return [ids, classes, types];
 }
 
-function compare(a: [number, number, number], b: [number, number, number]): number {
-  for (let i = 0; i < 3; i += 1) if (a[i] !== b[i]) return a[i] - b[i];
-  return 0;
+/**
+ * `a,b,c` specificity. `:is()`, `:not()` and `:has()` contribute their MOST
+ * SPECIFIC argument and `:where()` contributes nothing, so each is resolved to
+ * that argument — innermost first, to a fixed point — before counting. Without
+ * this the open class window's `:is(.ds-…, .rottay-…)` pairs would read as
+ * zero classes and the z-index arithmetic below would compare two blanks.
+ */
+function specificity(selector: string): [number, number, number] {
+  let resolved = selector;
+  for (;;) {
+    const next = resolved.replace(
+      /:(is|not|has|where)\(([^()]*)\)/g,
+      (whole, name: string, args: string) => {
+        if (name === 'where') return '';
+        const candidates = args.split(',').map((value) => value.trim()).filter(Boolean);
+        if (candidates.length === 0) return whole;
+        return candidates.reduce((winner, candidate) =>
+          compare(countPlain(candidate), countPlain(winner)) > 0 ? candidate : winner
+        );
+      }
+    );
+    if (next === resolved) return countPlain(resolved);
+    resolved = next;
+  }
 }
 
 describe('ActionDock skin reachability', () => {
@@ -124,6 +150,9 @@ describe('ActionDock skin reachability', () => {
     // The dock's z-index is authored twice: once unconditionally and once for
     // the sticky mode. A sticky dock that loses the second declaration stacks
     // in the fixed band, and `--ds-action-dock-sticky-z-index` never resolves.
+    // Both sides read (0,4,0) — one class pair plus three attributes — so the
+    // mode rule wins on source order, exactly as it did before the window.
+    expect(specificity(":is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode]")).toEqual([0, 4, 0]);
     const rules = readSkinRules('action-dock');
     const base = rules.filter((rule) => /\[data-placement\]\[data-mode\]$/.test(rule.selector));
     const modes = rules.filter((rule) => /\[data-mode='(fixed|sticky)'\]/.test(rule.selector));

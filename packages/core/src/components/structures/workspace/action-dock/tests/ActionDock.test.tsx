@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { renderWithEngine, STABLE_ENGINES } from '@tests/support/engine';
 import { ResponsiveContext, type ResponsiveContextValue } from '../../../../../infrastructure/runtime/responsive';
 import { ActionDock } from '..';
+import { CLASS_MIGRATION_WINDOWS } from '@/components/structures/foundation/class-window';
 
 const ACTION_DOCK_SKIN = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/presentation/components/skin/action-dock/index.css'),
@@ -37,6 +38,34 @@ describe('ActionDock', () => {
     expect(dock).toHaveAttribute('data-placement', 'bottom');
     expect(dock).toHaveAttribute('data-mode', 'fixed');
     expect(dock).toHaveTextContent('Save');
+  });
+
+  it('carries both spellings of every windowed class in the rendered DOM', async () => {
+    const { findByTestId } = renderWithEngine(
+      <ActionDock
+        actions={[{ key: 'save', label: 'Save', priority: 'primary', 'data-testid': 'dock-save' }]}
+      />,
+      'modern'
+    );
+    // The composed Button resolves its engine implementation asynchronously,
+    // so the sweep waits for the ACTION, not just the dock root, or it would
+    // measure an empty row and pass for the wrong reason.
+    await findByTestId('dock-save');
+    const pairs = CLASS_MIGRATION_WINDOWS.find((entry) => entry.family === 'action-dock')!.pairs as
+      Readonly<Record<string, string>>;
+
+    // Whatever this render reaches, it reaches under BOTH names. The window is
+    // class addition: a consumer pinned to a version that never emitted the
+    // canonical spelling keeps every selector it authored.
+    for (const [superseded, canonical] of Object.entries(pairs)) {
+      const bySuperseded = [...document.querySelectorAll(`.${superseded}`)];
+      const byCanonical = [...document.querySelectorAll(`.${canonical}`)];
+      expect({ superseded, nodes: byCanonical }).toEqual({ superseded, nodes: bySuperseded });
+    }
+    // Not vacuous: this fixture renders the root, the row and one action.
+    expect(document.querySelectorAll('.ds-action-dock').length).toBe(1);
+    expect(document.querySelectorAll('.ds-action-dock__actions').length).toBe(1);
+    expect(document.querySelectorAll('.rottay-action-dock__action').length).toBe(1);
   });
 
   it('supports a sticky top dock without stamping global horizontal offsets inline', async () => {

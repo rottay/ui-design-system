@@ -189,18 +189,23 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   // role instead. The family owes a navigation ink channel beside the
   // background; that is a paint decision with a cross-tenant consequence and
   // it is routed rather than taken here.
+  //
+  // The selectors name the CANONICAL class because axe builds a selector from
+  // the element's first class and the open class window stamps that one first.
+  // These are the same three nodes the debt has always been; only the spelling
+  // moved.
   'bithire dark': {
     'color-contrast': [
-      '.rottay-app-shell__navigation-footer > span',
-      '.rottay-app-shell__navigation-logo > span',
+      '.ds-app-shell__navigation-footer > span',
+      '.ds-app-shell__navigation-logo > span',
       'a[href$="inbox"]',
     ],
   },
   'bithire light': {
-    'color-contrast': ['.rottay-app-shell__navigation-footer > span'],
+    'color-contrast': ['.ds-app-shell__navigation-footer > span'],
   },
   'evnto light': {
-    'color-contrast': ['.rottay-app-shell__navigation-footer > span'],
+    'color-contrast': ['.ds-app-shell__navigation-footer > span'],
   },
 };
 

@@ -42,7 +42,18 @@ const SKIN_HASHES = {
   // consequence is re-pinned below: paintCount, the paired selector contracts,
   // the keyframe roster and the animation-name roster. Verified with
   // `shasum -a 256` against the tree today.
-  'data-table-interactions': '0964c43860b077c8cbf49834446814f7814c9d7fb9eb17cf4721de309e4f2321',
+  // WO-FAM-08 residual re-pin: the family-private `--ds-table-control-radius`
+  // was drained to `--ds-data-table-control-radius` at both focus-ring rules
+  // here (the deriver now produces it at the same `var(--ds-radius-md, 0.5rem)`
+  // rest, so the paint is byte-identical). Superseded hash, kept as the record
+  // of the pre-drain state:
+  // 0964c43860b077c8cbf49834446814f7814c9d7fb9eb17cf4721de309e4f2321. The two
+  // `border-radius` contracts below are re-pinned with it, and so are the two
+  // resize-bar rows the B4-4 rename left stale (this file pinned
+  // `--ds-table-resize-bar-*-active` while the skin has read
+  // `--ds-data-table-resize-bar-*-active` since that cut). Verified with
+  // `shasum -a 256` against the tree today.
+  'data-table-interactions': '575b5c832dac85e1c050fb3b93f058db7463680923cb92edbb9f1d414f46fa19',
   // CI-1 re-pin: same commit as the paint-count and rule-content re-pins
   // below (4afa74b353, 2026-08-11) -- the file's whole content changed when
   // the Input placeholder rule and its header comment moved out. Verified
@@ -296,8 +307,8 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
         '(hover: hover)',
       )
     ).toEqual({
-      width: 'var(--ds-table-resize-bar-width-active, 0.1875rem)',
-      height: 'var(--ds-table-resize-bar-height-active, 74%)',
+      width: 'var(--ds-data-table-resize-bar-width-active, 0.1875rem)',
+      height: 'var(--ds-data-table-resize-bar-height-active, 74%)',
       background: 'var(--ds-table-resize-bg-hover, var(--ds-color-primary))',
       'box-shadow': '0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 9%, transparent)',
     });
@@ -309,7 +320,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     ).toEqual({
       outline: '2px solid var(--ds-color-primary)',
       'outline-offset': '-2px',
-      'border-radius': 'var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))',
+      'border-radius': 'var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))',
     });
     expect(
       ruleContractInMedia(
@@ -329,7 +340,7 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
     ).toEqual({
       outline: '2px solid var(--ds-color-primary)',
       'outline-offset': '-2px',
-      'border-radius': 'var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))',
+      'border-radius': 'var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem))',
     });
     // CI-1 re-pin: 6c9f6ccf1e (2026-08-05) dropped the `box-shadow` from this
     // rule -- it is dead paint under `border-collapse`: a box-shadow on a

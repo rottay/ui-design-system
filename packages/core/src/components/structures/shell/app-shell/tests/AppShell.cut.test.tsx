@@ -24,6 +24,7 @@ import {
 } from '@/infrastructure/runtime/responsive';
 import { appShellChromeDeriver } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/app-shell';
 import { AppShell } from '..';
+import { CLASS_MIGRATION_WINDOWS } from '../../../foundation/class-window';
 import {
   SHELL_PUBLISHED_CHANNELS,
   SHELL_RESOLVED_CHANNELS,
@@ -197,7 +198,9 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
       expect(SKIN, `skin rule for ${part}`).toContain(`[data-part="${part}"]`);
     }
     expect(stamped.has('root')).toBe(true);
-    expect(SKIN).toContain('.rottay-app-shell {');
+    // The root is selected through the open class window's pair, which is
+    // (0,1,0) exactly like the single class it replaced.
+    expect(SKIN).toContain(':is(.ds-app-shell, .rottay-app-shell) {');
     // And the converse: no skin rule hangs on a part this structure never stamps.
     for (const match of SKIN.matchAll(/\[data-part="([a-z-]+)"\]/g)) {
       expect(OWNED_PARTS, match[1]).toContain(match[1]);
@@ -220,6 +223,28 @@ describe('AppShell (WO-FAM-11 cut) — the anatomy contract', () => {
         });
       }
     }
+  });
+});
+
+describe('AppShell (WO-FAM-11 cut) — the open class window', () => {
+  it('carries both spellings of every rendered windowed class', () => {
+    // Two renders, because the drawer-only classes live in the Sheet's portal
+    // and the desktop-only ones do not exist in the compact arm.
+    const desktop = renderShell(DESKTOP_CONTEXT);
+    const pairs = CLASS_MIGRATION_WINDOWS.find((entry) => entry.family === 'app-shell')!.pairs as
+      Readonly<Record<string, string>>;
+
+    let reached = 0;
+    for (const [superseded, canonical] of Object.entries(pairs)) {
+      const bySuperseded = [...desktop.container.querySelectorAll(`.${superseded}`)];
+      const byCanonical = [...desktop.container.querySelectorAll(`.${canonical}`)];
+      // Every node one spelling reaches, the other reaches — including none.
+      expect({ superseded, nodes: byCanonical }).toEqual({ superseded, nodes: bySuperseded });
+      reached += bySuperseded.length;
+    }
+    // Not vacuous: the desktop arm renders root, skip link, sidebar, logo,
+    // body, footer, main, header, three header slots, content and footer.
+    expect(reached).toBeGreaterThanOrEqual(13);
   });
 });
 

@@ -17,6 +17,7 @@ import { ResponsiveContext, type ResponsiveContextValue } from '../../../../../i
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
 import { ActionDock } from '..';
 import type { ActionDockAction } from '..';
+import { CLASS_MIGRATION_WINDOWS } from '@/components/structures/foundation/class-window';
 
 const ACTION_DOCK_SKIN = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/presentation/components/skin/action-dock/index.css'),
@@ -282,24 +283,33 @@ describe('ActionDock structured actions', () => {
   });
 });
 
+/**
+ * The paired selector the open class window authors for one superseded class.
+ * Built from the declaration so these assertions cannot drift from it, and so
+ * they collapse to a single class the day the window closes.
+ */
+const DOCK_WINDOW = CLASS_MIGRATION_WINDOWS.find((entry) => entry.family === 'action-dock')!.pairs as Readonly<Record<string, string>>;
+const sel = (superseded: keyof typeof DOCK_WINDOW): string =>
+  `:is(.${DOCK_WINDOW[superseded]}, .${String(superseded)})`;
+
 describe('ActionDock skin ownership (structured grammar)', () => {
   it('paints the priority grammar as dock-owned layout, not inline or cross-component paint', () => {
-    expect(NORMALIZED_ACTION_DOCK_SKIN).toMatch(
-      /\.rottay-action-dock__actions > \* \{\s*min-inline-size: 0/
+    expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
+      `${sel('rottay-action-dock__actions')} > * { min-inline-size: 0; }`
     );
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      ".rottay-action-dock__actions > .rottay-action-dock__action[data-priority='primary'] { flex: 1 1 auto; }"
+      `${sel('rottay-action-dock__actions')} > ${sel('rottay-action-dock__action')}[data-priority='primary'] { flex: 1 1 auto; }`
     );
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      ".rottay-action-dock__actions > .rottay-action-dock__action[data-priority='danger'] { margin-inline-end: auto; }"
+      `${sel('rottay-action-dock__actions')} > ${sel('rottay-action-dock__action')}[data-priority='danger'] { margin-inline-end: auto; }`
     );
     // The shrink guard names the Dropdown root (`__overflow`), which is the
     // row's flex item; keyed on the Button class it matched nothing.
     expect(NORMALIZED_ACTION_DOCK_SKIN).toContain(
-      ".rottay-action-dock__actions > .rottay-action-dock__overflow { flex: 0 0 auto; }"
+      `${sel('rottay-action-dock__actions')} > ${sel('rottay-action-dock__overflow')} { flex: 0 0 auto; }`
     );
     // No physical-properties leak in the grammar (RTL mirrors for free).
-    const grammarRules = ACTION_DOCK_SKIN.match(/\.rottay-action-dock__action[^{]*\{[^}]*\}/g) ?? [];
+    const grammarRules = ACTION_DOCK_SKIN.match(/\.ds-action-dock__action[^{]*\{[^}]*\}/g) ?? [];
     for (const rule of grammarRules) {
       expect(rule).not.toMatch(/\b(margin-left|margin-right|left:|right:|float)\b/);
     }
@@ -307,8 +317,8 @@ describe('ActionDock skin ownership (structured grammar)', () => {
 
   it('levels the 44px physical floor on coarse pointers', () => {
     const coarseBlock = ACTION_DOCK_SKIN.match(/@media \(pointer: coarse\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? '';
-    expect(coarseBlock).toContain('.rottay-action-dock__actions > :where(button, a)');
-    expect(coarseBlock).toContain('.rottay-action-dock__overflow-trigger');
+    expect(coarseBlock).toContain(`${sel('rottay-action-dock__actions')} > :where(button, a)`);
+    expect(coarseBlock).toContain(sel('rottay-action-dock__overflow-trigger'));
     expect(coarseBlock).toContain('min-block-size: max(44px, var(--ds-size-touch-target, 44px))');
   });
 
@@ -336,7 +346,7 @@ describe('ActionDock skin ownership (structured grammar)', () => {
 
   it('reads as a frosted chrome sheet with placement-aware elevation (W10)', () => {
     const rootRule = ACTION_DOCK_SKIN.match(
-      /\.rottay-action-dock\[data-part=["']root["']\]\[data-placement\]\[data-mode\]\s*\{([^}]*)\}/
+      /:is\(\.ds-action-dock, \.rottay-action-dock\)\[data-part=["']root["']\]\[data-placement\]\[data-mode\]\s*\{([^}]*)\}/
     )?.[1];
     const bottomRule = ACTION_DOCK_SKIN.match(
       /\[data-placement=["']bottom["']\]\s*\{([^}]*)\}/
