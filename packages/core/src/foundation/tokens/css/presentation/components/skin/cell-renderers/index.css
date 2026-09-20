@@ -154,7 +154,7 @@
 
 .ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'] {
   border-radius: var(--ds-cell-renderers-score-radius);
-  transition: width var(--ds-motion-normal)
+  transition: width var(--ds-motion-resize)
     var(--ds-motion-ease-move, ease-out);
 }
 

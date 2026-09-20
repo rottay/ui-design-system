@@ -45,9 +45,9 @@
     var(--ds-z-affix, var(--ds-z-index-affix, 100))
   );
   transition:
-    background-color var(--ds-affix-transition-duration, var(--ds-motion-normal))
+    background-color var(--ds-affix-transition-duration, var(--ds-motion-reveal))
       var(--ds-affix-transition-timing, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-affix-transition-duration, var(--ds-motion-normal))
+    box-shadow var(--ds-affix-transition-duration, var(--ds-motion-reveal))
       var(--ds-affix-transition-timing, var(--ds-motion-ease-out));
 }
 

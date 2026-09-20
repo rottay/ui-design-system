@@ -188,10 +188,10 @@
 .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'] {
   border-radius: var(--ds-radius-md);
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve'] {
@@ -297,7 +297,7 @@
 .ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton'] {
   display: grid;
   gap: var(--ds-spacing-4, 16px);
-  animation: ds-approval-inbox-skeleton-pulse var(--ds-motion-deliberate)
+  animation: ds-approval-inbox-skeleton-pulse var(--ds-motion-attention)
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 

@@ -75,7 +75,7 @@
   block-size: 100%;
   opacity: 0;
   transition: opacity
-    var(--ds-image-reveal-duration, var(--ds-motion-normal))
+    var(--ds-image-reveal-duration, var(--ds-motion-reveal))
     var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
 }
 .rottay-image.rottay-image--modern[data-status='loaded'] [data-part='img'] {
@@ -124,8 +124,8 @@
      once hidden, and flips discretely at the right end of the fade. The
      reveal hooks are reused for the cadence -- one fade law per family. */
   transition:
-    opacity var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out)),
-    visibility var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
+    opacity var(--ds-image-reveal-duration, var(--ds-motion-reveal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out)),
+    visibility var(--ds-image-reveal-duration, var(--ds-motion-reveal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
 }
 .rottay-image.rottay-image--modern[data-status='loaded'] > [data-part='placeholder'] {
   opacity: 0;
@@ -165,8 +165,8 @@
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out)),
-    visibility var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
+    opacity var(--ds-image-reveal-duration, var(--ds-motion-reveal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out)),
+    visibility var(--ds-image-reveal-duration, var(--ds-motion-reveal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
 }
 .rottay-image.rottay-image--modern[data-state~='hovered'] > [data-part='hover-overlay'],
 .rottay-image.rottay-image--modern[data-state~='focus-visible'] > [data-part='hover-overlay'],

@@ -243,9 +243,9 @@
   opacity: 1;
   transform: translateY(0);
   transition:
-    opacity var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+    opacity var(--ds-floatbutton-panel-duration, var(--ds-motion-reveal))
       var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
-    transform var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+    transform var(--ds-floatbutton-panel-duration, var(--ds-motion-reveal))
       var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
     visibility 0s linear 0s;
 }
@@ -256,12 +256,12 @@
   transform: translateY(var(--_ds-float-button-panel-closed-offset, 1rem));
   pointer-events: none;
   transition:
-    opacity var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+    opacity var(--ds-floatbutton-panel-duration, var(--ds-motion-reveal))
       var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
-    transform var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+    transform var(--ds-floatbutton-panel-duration, var(--ds-motion-reveal))
       var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
     visibility 0s linear
-      var(--ds-floatbutton-panel-duration, var(--ds-motion-normal));
+      var(--ds-floatbutton-panel-duration, var(--ds-motion-reveal));
 }
 
 /* ---- reduced motion: panel opens instantly. ---- */

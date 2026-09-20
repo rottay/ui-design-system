@@ -149,7 +149,7 @@
   justify-content: center;
   background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
   transform: scale(1);
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-icon-box'] {
@@ -204,7 +204,7 @@
 
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
@@ -233,7 +233,7 @@
   inset-inline-start: 0;
   block-size: 100%;
   border-radius: 999px;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'] {
   background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));
@@ -250,8 +250,8 @@
   opacity: 0;
   transform: translateX(-8px);
   transition:
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-metrics-minimal.ds-metrics-minimal [data-part='metric-row']:hover [data-part='metric-chevron'] {

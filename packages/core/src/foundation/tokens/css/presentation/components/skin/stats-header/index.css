@@ -85,8 +85,8 @@
   border-radius: var(--ds-stats-header-card-radius, var(--ds-radius-lg, 12px));
   background: var(--ds-stats-header-card-bg, var(--ds-color-bg-primary));
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] {
   border: 1px solid var(--ds-stats-header-card-frame, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
@@ -203,8 +203,8 @@
      did not stamp reads the quietest rung. */
   opacity: var(--ds-stats-header-spark-dot-opacity, var(--ds-stats-header-spark-dot-opacity-floor, 0.15));
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease),
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
 
 @media (hover: hover) {

@@ -11,8 +11,8 @@
 
 :where(.ds-activity-ticker) .ticker-content-v3 {
   transition:
-    opacity calc(var(--ds-motion-normal) * 2) var(--ds-motion-ease-out, ease-out),
-    transform calc(var(--ds-motion-normal) * 2) var(--ds-motion-ease-out, ease-out);
+    opacity calc(var(--ds-motion-reveal) * 2) var(--ds-motion-ease-out, ease-out),
+    transform calc(var(--ds-motion-reveal) * 2) var(--ds-motion-ease-out, ease-out);
 }
 
 :where(.ds-activity-ticker) .ticker-in {
@@ -46,10 +46,10 @@
 
 :where(.ds-activity-ticker) .nav-button {
   transition:
-    background-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Hover law: hover-capable pointers only. */
@@ -78,8 +78,8 @@
 
 :where(.ds-activity-ticker) .ticker-dot {
   transition:
-    background-color var(--ds-motion-slow) var(--ds-motion-spring),
-    transform var(--ds-motion-slow) var(--ds-motion-spring);
+    background-color var(--ds-motion-attention) var(--ds-motion-spring),
+    transform var(--ds-motion-attention) var(--ds-motion-spring);
 }
 
 :where(.ds-activity-ticker) .ticker-progress {
@@ -109,7 +109,7 @@
 /* timeline ---------------------------------------------------------------- */
 
 :where(.ds-activity-timeline) .activity-item-v3 {
-  animation: ds-activity-timeline-item-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: ds-activity-timeline-item-slide-in 0.5s var(--ds-motion-spring) both;
 }
 
 :where(.ds-activity-timeline) .live-indicator {
@@ -172,12 +172,12 @@
 /* compact ----------------------------------------------------------------- */
 
 :where(.ds-activity-compact) .activity-compact-item-v3 {
-  animation: ds-activity-compact-slide-in-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: ds-activity-compact-slide-in-right 0.5s var(--ds-motion-spring) both;
   transition:
-    background-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Hover law: hover-capable pointers only. */
@@ -239,9 +239,9 @@
 :where(.ds-activity-cards) .activity-card-item-v3 {
   animation: ds-activity-cards-card-slide-in 0.4s ease-out both;
   transition:
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Hover law: hover-capable pointers only. */

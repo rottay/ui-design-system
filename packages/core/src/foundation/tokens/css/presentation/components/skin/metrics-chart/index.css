@@ -148,7 +148,7 @@
 
 .ds-metrics-chart.ds-metrics-chart [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
+  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
 @media (hover: hover) {
   .ds-metrics-chart.ds-metrics-chart [data-part='metric-row']:hover [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
@@ -177,7 +177,7 @@
   inset-inline-start: 0;
   block-size: 100%;
   border-radius: 999px;
-  transition: background var(--ds-motion-normal) var(--ds-motion-ease-out, ease);
+  transition: background var(--ds-motion-reveal) var(--ds-motion-ease-out, ease);
 }
 .ds-metrics-chart.ds-metrics-chart [data-part='metric-row'][data-positive='true'] [data-part='meter-fill'] {
   background: var(--ds-metric-card-meter-fill-success, var(--ds-metric-card-meter-fill, linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success))));

@@ -87,8 +87,8 @@
   cursor: default;
   color: var(--ds-rate-star-fill);
   transition:
-    color var(--ds-motion-fast) var(--ds-motion-ease-in-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-in-out);
+    color var(--ds-motion-feedback) var(--ds-motion-ease-in-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-in-out);
 }
 
 /* Star glyphs fill the star box (drained from the `w-full h-full` utilities). */

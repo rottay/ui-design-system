@@ -103,7 +103,7 @@
      foundation it exists solely as the reduced-motion `0s !important`. Read
      bare it is the guaranteed-invalid value on an untenanted page, which kills
      the whole shorthand; `--ds-motion-slow` is the declared `:root` floor. */
-  animation: ds-dashboard-header-enter var(--ds-motion-calm, var(--ds-motion-slow))
+  animation: ds-dashboard-header-enter var(--ds-motion-reveal, var(--ds-motion-slow))
     var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-dashboard-header;

@@ -198,9 +198,9 @@
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'][data-open='true'] {
@@ -215,8 +215,8 @@
   background: var(--ds-form-sections-muted-surface, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%));
   box-shadow: none;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] {
@@ -540,14 +540,14 @@
   grid-template-rows: 1fr;
 }
 .ds-structure.ds-form-sections [data-part='section-grid'][data-collapsible='true'] {
-  transition: grid-template-rows var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  transition: grid-template-rows var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'] {
   opacity: 0;
   transition:
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'][data-open='true'] {
   opacity: 1;
@@ -555,8 +555,8 @@
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 /* --- Section header pointer treatment ---------------------------------------

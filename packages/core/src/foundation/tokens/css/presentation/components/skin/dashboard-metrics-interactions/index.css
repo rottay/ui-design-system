@@ -15,10 +15,10 @@
      duration it replaces). C-08: cards/chart scopes were retuned to the same
      rungs by their owner; directional slide-ins mirror under RTL (below). */
   transition:
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Hover law: hover-capable pointers only. */
@@ -107,7 +107,7 @@
   animation: ds-metrics-cards-card-enter var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both;
   transition: var(
     --ds-metric-card-transition,
-    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
     color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out)
@@ -176,10 +176,10 @@
 :where(.ds-metrics-chart) .metric-chart-row-v3 {
   animation: ds-metrics-chart-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both;
   transition:
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Hover law: hover-capable pointers only. */
@@ -260,9 +260,9 @@
 :where(.ds-metrics-rows) .metric-row-v3 {
   animation: ds-metrics-rows-row-slide-in var(--ds-motion-reveal) var(--ds-motion-ease-enter, ease-out) both;
   transition:
-    border-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-attention) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Hover law: hover-capable pointers only. */

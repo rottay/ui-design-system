@@ -191,7 +191,7 @@
   background-size: 42% 100%;
   background-repeat: no-repeat;
   animation: ds-list-toolbar-busy
-    calc(var(--ds-motion-deliberate, 320ms) * 3)
+    calc(var(--ds-motion-attention, 320ms) * 3)
     linear infinite;
 }
 

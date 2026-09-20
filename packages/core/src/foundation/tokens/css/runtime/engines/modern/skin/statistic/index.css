@@ -41,8 +41,8 @@
   min-width: 0;
   color: var(--ds-statistic-color, var(--ds-color-text-primary));
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
-    filter var(--ds-motion-fast) var(--ds-motion-ease-out);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    filter var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Pointer-fine hover only (hover law): a passive metric has no touch press

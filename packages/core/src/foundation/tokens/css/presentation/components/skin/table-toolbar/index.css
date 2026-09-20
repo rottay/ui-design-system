@@ -180,7 +180,7 @@
   inline-size: var(--ds-icon-sm-size, 1rem);
   block-size: var(--ds-icon-sm-size, 1rem);
   color: var(--ds-search-icon-color, var(--ds-color-text-muted));
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field[data-part='search-field']:focus-within

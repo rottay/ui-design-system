@@ -303,7 +303,7 @@
 .ds-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:is(:has(> [data-part='trigger'][data-state~='pressed']), :active)::after {
   box-shadow: none;
   transform: var(--ds-stepper-pressed-transform);
-  transition-duration: var(--ds-motion-instant);
+  transition-duration: var(--ds-motion-feedback);
 }
 
 .ds-stepper--modern[data-part='root'] [data-part='trigger']:is([data-state~='focus-visible'], :focus-visible) {

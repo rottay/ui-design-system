@@ -120,7 +120,7 @@
 .ds-pattern-step-wizard.ds-engine-modern [data-part='content'] {
   min-block-size: var(--ds-step-wizard-content-min-height, 200px);
   padding-block: var(--ds-spacing-6, 24px);
-  animation: ds-step-wizard-modern-content-enter var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out) both;
+  animation: ds-step-wizard-modern-content-enter var(--ds-motion-reveal, 200ms) var(--ds-motion-ease-out, ease-out) both;
 }
 
 /* Per-step enter cadence: a quiet rise, never a layout shift (the slot's

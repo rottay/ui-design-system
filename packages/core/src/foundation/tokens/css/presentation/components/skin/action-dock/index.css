@@ -138,11 +138,11 @@
   backdrop-filter: var(--ds-action-dock-backdrop-filter, blur(var(--ds-glass-blur, 8px)));
   -webkit-backdrop-filter: var(--ds-action-dock-backdrop-filter, blur(var(--ds-glass-blur, 8px)));
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
   animation: ds-action-dock-enter
-    var(--ds-motion-normal, 200ms)
+    var(--ds-motion-reveal, 200ms)
     var(--ds-motion-ease-out, ease-out) both;
 }
 

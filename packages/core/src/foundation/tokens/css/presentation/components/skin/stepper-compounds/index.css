@@ -55,7 +55,7 @@
 .ds-stepper-step[data-clickable='true']:is([data-state~='pressed'], :active) [data-part='icon'] {
   box-shadow: none;
   transform: var(--ds-stepper-pressed-transform);
-  transition-duration: var(--ds-motion-instant);
+  transition-duration: var(--ds-motion-feedback);
 }
 
 /* Disabled: activation is refused in the TSX; the row keeps AA-legible ink and only the badge dims. */

@@ -127,7 +127,7 @@
   color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
   box-shadow: none;
   transform: translateY(0);
-  transition-duration: var(--ds-motion-instant);
+  transition-duration: var(--ds-motion-feedback);
 }
 
 .ds-breadcrumb--modern[data-part='root'] [data-part='crumb']:is([data-state~='focus-visible'], :focus-visible),

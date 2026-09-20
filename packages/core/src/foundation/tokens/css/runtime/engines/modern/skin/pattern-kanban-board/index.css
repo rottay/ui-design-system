@@ -194,8 +194,8 @@
   padding: var(--ds-spacing-2);
   border-radius: var(--ds-radius-xl);
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
@@ -264,8 +264,8 @@
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
   transition:
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-clickable='true'] {
   cursor: pointer;

@@ -245,7 +245,7 @@
   inline-size: var(--ds-checkbox-checkmark-size, var(--ds-icon-xs-size));
   block-size: var(--ds-checkbox-checkmark-size, var(--ds-icon-xs-size));
   transform: scale(1);
-  animation: ds-checkbox-settle var(--ds-motion-normal) var(--ds-motion-ease-out);
+  animation: ds-checkbox-settle var(--ds-motion-reveal) var(--ds-motion-ease-out);
 }
 @media (prefers-reduced-motion: reduce) {
   .ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {

@@ -121,7 +121,7 @@
   animation: dtc-fade-in
     var(--ds-dtc-duration-entrance, calc(var(--ds-motion-glacial, 500ms) * 0.8))
     var(--ds-motion-ease-out, ease-out);
-  transition: border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-data-terminal-card[data-part='root'][data-variant] {
   border: 1px solid var(--ds-color-border);
@@ -271,8 +271,8 @@
   background: transparent;
   border: 1px solid var(--ds-color-border);
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-data-terminal-card[data-part='root'] [data-part='quick-action']:hover {

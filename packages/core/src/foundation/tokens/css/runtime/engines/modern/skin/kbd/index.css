@@ -65,9 +65,9 @@
     0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900) 8%, transparent)
   );
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-block-end-width var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-block-end-width var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm'] {

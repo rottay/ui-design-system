@@ -195,11 +195,9 @@
     )
   );
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
-  /* --ds-motion-calm has no base-token definition today (only the reduced-motion
-     override), so the enter animation binds to the reveal intent instead. */
-  animation: ds-detail-header-enter var(--ds-motion-calm, var(--ds-motion-reveal, 200ms)) var(--ds-motion-ease-out, ease-out) both;
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-reveal, 200ms) var(--ds-motion-ease-out, ease-out);
+  animation: ds-detail-header-enter var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-detail-header;
 }
@@ -250,9 +248,9 @@
   background: var(--_ds-detail-header-control-bg);
   box-shadow: var(--_ds-detail-header-control-shadow);
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-detail-header [data-part='back-button'][data-part='back-button'] {
   border: var(--ds-divider-width, 1px) var(--ds-divider-style, solid)
@@ -564,8 +562,8 @@
   border-top-right-radius: var(--ds-radius-md, 10px);
   background: transparent;
   transition:
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 /* the box model stays identical between states so selection never nudges the
    lane; only the rail below changes */
@@ -588,7 +586,7 @@
   border-start-start-radius: var(--ds-radius-full, 9999px);
   border-start-end-radius: var(--ds-radius-full, 9999px);
   background: transparent;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-detail-header [data-part='tab-rail'][data-active='true'] {
   background: var(--_ds-detail-header-spine);

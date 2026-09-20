@@ -21,10 +21,10 @@
 .ds-pattern-bulk-select-toggle .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
   gap: var(--ds-spacing-2, 6px);
   transition:
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-move, ease),
-    border-color var(--ds-motion-normal) var(--ds-motion-ease-move, ease),
-    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-move, ease),
-    color var(--ds-motion-normal) var(--ds-motion-ease-move, ease);
+    background-color var(--ds-motion-reveal) var(--ds-motion-ease-move, ease),
+    border-color var(--ds-motion-reveal) var(--ds-motion-ease-move, ease),
+    box-shadow var(--ds-motion-reveal) var(--ds-motion-ease-move, ease),
+    color var(--ds-motion-reveal) var(--ds-motion-ease-move, ease);
 }
 
 /* The count reads as data: tabular numerals keep the badge width stable as the
@@ -44,12 +44,12 @@
 }
 
 .ds-pattern-bulk-select-toggle[data-active='true'] [data-part='icon'] {
-  animation: ds-bulk-select-toggle-enter var(--ds-motion-normal)
+  animation: ds-bulk-select-toggle-enter var(--ds-motion-reveal)
     var(--ds-motion-ease-enter, ease-out);
 }
 
 .ds-pattern-bulk-select-toggle[data-has-selection='true'] .ds-bulk-select-toggle__count.ds-bulk-select-toggle__count {
-  animation: ds-bulk-select-toggle-enter var(--ds-motion-normal)
+  animation: ds-bulk-select-toggle-enter var(--ds-motion-reveal)
     var(--ds-motion-ease-enter, ease-out);
 }
 

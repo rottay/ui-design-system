@@ -174,8 +174,8 @@
   cursor: pointer;
   user-select: none;
   transition:
-    color var(--ds-motion-fast),
-    background-color var(--ds-motion-fast);
+    color var(--ds-motion-feedback),
+    background-color var(--ds-motion-feedback);
 }
 .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
@@ -224,8 +224,8 @@
   opacity: 0.6;
   display: inline-block;
   transition:
-    transform var(--ds-motion-normal),
-    opacity var(--ds-motion-fast);
+    transform var(--ds-motion-reveal),
+    opacity var(--ds-motion-feedback);
   transform: rotate(0deg);
 }
 .ds-table.ds-table--modern [data-part='sort-indicator'][data-order='ascend'],
@@ -259,7 +259,7 @@
 /* ---- filter row + its inputs ---- */
 .ds-table.ds-table--modern [data-part='filter-row'] {
   background: var(--ds-table-header-bg, var(--ds-surface-inset));
-  transition: background-color var(--ds-motion-normal);
+  transition: background-color var(--ds-motion-reveal);
 }
 .ds-table.ds-table--modern [data-part='filter-spacer'] {
   width: calc(var(--_ds-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
@@ -295,7 +295,7 @@
   appearance: auto;
 }
 .ds-table.ds-table--modern [data-part='field'][data-field='filter'] {
-  transition: border-color var(--ds-motion-normal);
+  transition: border-color var(--ds-motion-reveal);
 }
 /* keyboard focus: the base rule zeroes the UA outline, so the governed focus
    ring must be re-asserted or the filter/edit fields leave keyboard users
@@ -369,7 +369,7 @@
         takes. Hover paints only where hover exists (button.css idiom): on
         touch columns the wash would stick after the tap. ---- */
 .ds-table.ds-table--modern [data-part='row'][data-hoverable='true'] {
-  transition: background-color var(--ds-motion-normal);
+  transition: background-color var(--ds-motion-reveal);
 }
 .ds-table.ds-table--modern [data-part='row'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
@@ -398,8 +398,8 @@
 .ds-table.ds-table--modern [data-part='cell'][data-editable='true'] {
   cursor: pointer;
   transition:
-    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+    outline-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
@@ -424,7 +424,7 @@
   background: var(--ds-table-bg, var(--ds-surface-card));
   /* the pinned state fills (hover/selected, below) track the row's wash on
      the same motion channel instead of snapping a frame behind it */
-  transition: background-color var(--ds-motion-normal);
+  transition: background-color var(--ds-motion-reveal);
 }
 /* a pinned HEADER-band cell (header cell or filter cell) takes the header
    fill, not the body fill, or the corner tiles read lighter/darker than
@@ -503,8 +503,8 @@
   font-size: var(--ds-font-size-xs);
   cursor: pointer;
   transition:
-    color var(--ds-motion-normal) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-out);
+    color var(--ds-motion-reveal) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-reveal) var(--ds-motion-ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
@@ -512,7 +512,7 @@
 }
 .ds-table.ds-table--modern [data-part='expand-indicator'] {
   display: inline-block;
-  transition: transform var(--ds-motion-normal);
+  transition: transform var(--ds-motion-disclosure);
   transform: rotate(0deg);
 }
 .ds-table.ds-table--modern [data-part='expand-indicator'][data-expanded='true'] {
@@ -544,7 +544,7 @@
 }
 .ds-table.ds-table--modern [data-part='expanded-row'] > td {
   padding: 16px;
-  animation: ds-table-expand-modern var(--ds-motion-slow) ease-out;
+  animation: ds-table-expand-modern var(--ds-motion-rearrange) ease-out;
 }
 
 /* ---- loading overlay + spinner. The spinner needs (0,4,0): its
@@ -617,8 +617,8 @@
   font-variant-numeric: var(--ds-table-pagination-numeric, tabular-nums);
   cursor: pointer;
   transition:
-    color var(--ds-motion-normal) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-out);
+    color var(--ds-motion-reveal) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-reveal) var(--ds-motion-ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;

@@ -372,7 +372,7 @@
 /* Press feedback wins over recipe lift for both selected and idle tabs. */
 .ds-tabs--modern[data-part='root'] [data-part='tab-button'][data-selected]:not([data-state~='disabled']):not([data-loading]):is([data-state~='pressed'], :active) {
   transform: var(--ds-tabs-pressed-transform);
-  transition-duration: var(--ds-motion-instant);
+  transition-duration: var(--ds-motion-feedback);
 }
 
 /* Explicit badge channel prevents product code from rebuilding tab anatomy. */

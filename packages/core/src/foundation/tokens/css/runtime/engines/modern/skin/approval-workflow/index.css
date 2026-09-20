@@ -139,10 +139,10 @@
   font-size: var(--ds-approval-action-font-size, 13px);
   cursor: pointer;
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
@@ -219,7 +219,7 @@
 
 /* The current pending dot pulses for attention (was `animate-pulse`). */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending'] {
-  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 320ms))
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-attention, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 
@@ -387,7 +387,7 @@
 
 /* --- Skeleton (geometry was Tailwind; the pulse was `animate-pulse`) ----------- */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 320ms))
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-attention, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 

@@ -156,7 +156,7 @@
   text-decoration-line: none;
   text-decoration-thickness: var(--ds-link-underline-thickness, 1px);
   text-underline-offset: var(--ds-link-underline-offset, 2px);
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Underline reveals only where hovering is a real input mode. */
@@ -245,8 +245,8 @@
   min-block-size: var(--ds-file-manager-content-min-height, 12.5rem);
   border-radius: var(--ds-radius-md);
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-file-manager.ds-engine-modern [data-part='content'][data-drag-over='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
@@ -305,8 +305,8 @@
         `active` class is gone — the per-row Checkbox already announces the
         same state, so the fill+keyline is reinforcement, never the cue) ---- */
 .ds-pattern-file-manager.ds-engine-modern [data-part='row'] {
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-file-manager.ds-engine-modern [data-part='row'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
@@ -356,9 +356,9 @@
   cursor: pointer;
   border-radius: var(--ds-radius-lg);
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']:is([data-state~='focus-visible'], :focus-visible) {
   outline: none;

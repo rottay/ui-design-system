@@ -16,7 +16,7 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
     var(--ds-shadow-lg, 0 26px 70px color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
   container: ds-visual-excellence / inline-size;
-  animation: ds-visual-excellence-arrive var(--ds-motion-slow, 320ms)
+  animation: ds-visual-excellence-arrive var(--ds-motion-attention, 320ms)
     var(--ds-motion-ease-out, ease-out) both;
 }
 
@@ -87,8 +87,8 @@
   font: inherit;
   text-align: start;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-visual-excellence__command-search:hover,
@@ -490,9 +490,9 @@
     var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 34%,
     var(--ds-surface-card-bg, var(--ds-color-bg-elevated))
   );
-  transition: background-color var(--ds-motion-fast, 120ms)
+  transition: background-color var(--ds-motion-feedback, 120ms)
       var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    transform var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-visual-excellence__action-icon {
@@ -505,8 +505,8 @@
   background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg));
   color: var(--ds-color-primary);
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-visual-excellence__action-row:hover {

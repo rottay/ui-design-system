@@ -218,7 +218,7 @@
 
 /* --- Skeleton (table footprint) ------------------------------------------------------------------ */
 .ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-operational-ledger-skeleton-pulse var(--ds-motion-deliberate)
+  animation: ds-operational-ledger-skeleton-pulse var(--ds-motion-attention)
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 

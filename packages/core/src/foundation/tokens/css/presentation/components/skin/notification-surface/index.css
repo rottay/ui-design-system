@@ -51,7 +51,7 @@
    `data-read` state (the Card root's own `data-part` is engine-stamped). */
 .ds-surface.ds-notification .ds-notification__item {
   transition: opacity
-    var(--ds-motion-fast, 120ms)
+    var(--ds-motion-feedback, 120ms)
     var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 

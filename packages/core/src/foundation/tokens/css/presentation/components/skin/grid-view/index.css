@@ -79,7 +79,7 @@
   border-radius: var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
   background: var(--ds-collection-card-glass-bg, transparent);
   min-block-size: var(--ds-collection-card-min-height, auto);
-  transition: var(--ds-collection-card-transition, box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)));
+  transition: var(--ds-collection-card-transition, box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)));
 }
 
 /* checkbox overlay: logical insets — mirrors to the inline-start corner under

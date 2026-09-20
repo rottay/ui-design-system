@@ -77,7 +77,7 @@
   box-shadow: var(--ds-elevation-2);
   translate: -100% 0;
   animation: ds-export-button-panel-enter
-    var(--ds-motion-normal, 200ms)
+    var(--ds-motion-reveal, 200ms)
     var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-export-button-panel[data-part='panel']:dir(rtl) {

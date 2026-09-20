@@ -128,7 +128,7 @@
 .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button']:not([data-state~='disabled']):not([data-current='true']):is([data-state~='pressed'], :active),
 .ds-pagination--modern[data-part='root'] [data-part='pagination-size-select']:not([data-state~='disabled']):is([data-state~='pressed'], :active) {
   background: var(--ds-pagination-item-bg-active, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card))));
-  transition-duration: var(--ds-motion-instant);
+  transition-duration: var(--ds-motion-feedback);
 }
 
 .ds-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {

@@ -48,9 +48,9 @@
   font-weight: 500;
   cursor: pointer;
   transition:
-    background var(--ds-code-block-motion-duration, var(--ds-motion-fast)) ease,
-    color var(--ds-code-block-motion-duration, var(--ds-motion-fast)) ease,
-    border-color var(--ds-code-block-motion-duration, var(--ds-motion-fast)) ease;
+    background var(--ds-code-block-motion-duration, var(--ds-motion-feedback)) ease,
+    color var(--ds-code-block-motion-duration, var(--ds-motion-feedback)) ease,
+    border-color var(--ds-code-block-motion-duration, var(--ds-motion-feedback)) ease;
 }
 
 /* The idle/copied glyph sits on the button's text baseline: inline-flex with a

@@ -79,9 +79,9 @@
   white-space: nowrap;
   color: var(--ds-color-text-muted);
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+    color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 .ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'][data-variant='success'] {
@@ -132,7 +132,7 @@
   block-size: 2px;
   background: transparent;
   border-radius: var(--ds-radius-full, 9999px);
-  transition: background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  transition: background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 .ds-surface.ds-record-workbench .ds-record-workbench__tab[data-active='true'] .ds-record-workbench__tab-underline[data-part='tab-underline'] {
@@ -149,8 +149,8 @@
   background: var(--ds-color-bg-tertiary);
   color: var(--ds-color-text-muted);
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+    color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 /* -------------------------------------------------------------------------- */

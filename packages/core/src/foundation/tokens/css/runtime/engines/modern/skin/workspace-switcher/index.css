@@ -44,7 +44,7 @@
   color: var(--ds-color-text-primary);
   border: none;
   border-radius: var(--ds-radius-md);
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Trigger/create/settings had NO hover or press state (the pattern skin is
@@ -57,7 +57,7 @@
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron'] {
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-open='true'] [data-part='chevron'] {
@@ -70,7 +70,7 @@
   box-shadow: var(--ds-elevation-3);
   /* Governed dropdown entry: short rise+fade on the family's own keyframes,
      stilled under prefers-reduced-motion below. */
-  animation: ds-workspace-switcher-panel-in var(--ds-motion-normal)
+  animation: ds-workspace-switcher-panel-in var(--ds-motion-reveal)
     var(--ds-motion-ease-out, ease-out) both;
 }
 
@@ -304,7 +304,7 @@
   align-items: center;
   gap: 6px;
   padding-inline: 12px;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'] {
@@ -419,8 +419,8 @@
   cursor: pointer;
   opacity: 0;
   transition:
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Keyboard reveals (virtual focus + own focus ring) -- never hover-gated. */
@@ -443,7 +443,7 @@
   padding-inline: 12px;
   font-size: var(--ds-font-size-sm);
   cursor: pointer;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* ---- loading skeleton: the trigger's exact footprint (height + per-position

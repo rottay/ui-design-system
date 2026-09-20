@@ -39,11 +39,11 @@
   align-items: center;
   gap: var(--ds-spacing-2, 6px);
   cursor: pointer;
-  transition: background var(--ds-motion-fast)
+  transition: background var(--ds-motion-feedback)
       var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 /* Size-rung geometry is family-internal: the literals below are the shipped
    measures, preserved byte-exact (no public sizing channel). */

@@ -154,8 +154,8 @@
   background: var(--ds-color-primary-100);
   color: var(--ds-color-primary);
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease);
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);

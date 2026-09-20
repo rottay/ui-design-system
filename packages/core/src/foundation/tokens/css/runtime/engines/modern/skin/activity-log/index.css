@@ -61,7 +61,7 @@
 .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'] {
   min-inline-size: 0;
   border-radius: var(--ds-radius-md);
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true'] {
   cursor: pointer;

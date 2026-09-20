@@ -273,7 +273,7 @@
 .ds-pattern-notification-center.ds-engine-modern [data-part='mark-read'],
 .ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
   opacity: 0.3;
-  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='mark-read'],
 .ds-pattern-notification-center.ds-engine-modern [data-part='row']:focus-within [data-part='dismiss'],

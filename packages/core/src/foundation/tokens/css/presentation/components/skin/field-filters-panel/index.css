@@ -74,7 +74,7 @@
   padding-inline: 16px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, var(--ds-color-bg-elevated) 3%), color-mix(in srgb, var(--ds-surface-card) 93%, var(--ds-color-bg-primary) 7%));
   animation: ds-field-filters-panel-enter
-    var(--ds-motion-normal, 200ms)
+    var(--ds-motion-reveal, 200ms)
     var(--ds-motion-ease-out, ease-out) both;
 }
 

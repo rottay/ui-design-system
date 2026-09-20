@@ -56,7 +56,7 @@
    fallback-parity). */
 .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list'] {
   animation: ds-live-feed-skeleton-pulse
-    var(--ds-live-feed-skeleton-duration, var(--ds-motion-slow))
+    var(--ds-live-feed-skeleton-duration, var(--ds-motion-attention))
     var(--ds-motion-ease-in-out) infinite alternate;
 }
 

@@ -55,6 +55,7 @@ const markup = await panelMarkup();
 const ROOT = '.ds-pattern-filter-panel';
 const FIELDS = `${ROOT} [data-part='fields']`;
 const LABEL = `${ROOT} [data-part='field-label']`;
+const CONTENT = `${ROOT} [data-part='content']`;
 
 describeCausality({
   family: 'filter-panel',
@@ -63,12 +64,16 @@ describeCausality({
     { id: 'fieldsGap', selector: FIELDS, property: 'row-gap' },
     { id: 'labelSize', selector: LABEL, property: 'font-size' },
     { id: 'labelInk', selector: LABEL, property: 'color' },
+    { id: 'collapseDuration', selector: CONTENT, property: 'transition-duration' },
   ],
   decisions: {
     // `consumes: density` -- the field rhythm rides the density-scaled spacing ramp.
     'density.mode': { value: 'spacious', moves: ['fieldsGap'], holds: 'labelInk', in: VERTICALS },
     // `consumes: typography.roles` -- the field label is the family's own type step.
     'typography.scale': { value: 1.08, moves: ['labelSize'], holds: 'labelInk', in: VERTICALS },
+    // The collapse cadence binds `--ds-motion-disclosure`, which is the calm rung
+    // multiplied by the dial, so the tenant's durationScale reaches it.
+    'motion.dial': { value: { durationScale: 1.35 }, moves: ['collapseDuration'], holds: 'fieldsGap', in: VERTICALS },
     // `consumes: palette.*` and `consumes: surfaces.radiusScale` are reached by
     // paint no static, resting mount can show; both are measured below.
   },

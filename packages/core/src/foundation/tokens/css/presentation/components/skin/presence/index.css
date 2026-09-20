@@ -179,8 +179,8 @@
     var(--ds-presence-cursor-x, 0),
     var(--ds-presence-cursor-y, 0)
   );
-  transition: transform var(--ds-motion-fast) linear,
-    opacity var(--ds-motion-normal) var(--ds-motion-ease-out);
+  transition: transform var(--ds-motion-feedback) linear,
+    opacity var(--ds-motion-reveal) var(--ds-motion-ease-out);
   will-change: transform;
 }
 .ds-presence-live-cursor[data-part='root'] svg {

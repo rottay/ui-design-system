@@ -110,7 +110,7 @@
   );
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-base);
-  animation: ds-popconfirm-enter-modern var(--ds-motion-normal)
+  animation: ds-popconfirm-enter-modern var(--ds-motion-reveal)
     var(--ds-motion-ease-out) both;
 }
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-open] {

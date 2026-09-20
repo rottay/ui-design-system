@@ -25,7 +25,7 @@
 
 .ds-skeleton-anatomy[data-part='root'] > [data-part='source'],
 .ds-skeleton-anatomy[data-part='root'] > [data-part='bones'] {
-  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out, var(--ds-motion-ease-standard));
+  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out, var(--ds-motion-ease-standard));
 }
 
 .ds-skeleton-anatomy[data-part='root'][data-loading='true'] > [data-part='source'],

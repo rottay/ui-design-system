@@ -69,7 +69,7 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     var(--ds-workspace-card-shadow, var(--ds-elevation-1));
-  animation: ds-cockpit-header-arrive var(--ds-motion-calm)
+  animation: ds-cockpit-header-arrive var(--ds-motion-reveal)
     var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-cockpit-header;
@@ -77,10 +77,10 @@
      and sticky variants keyed on the engine's data hooks below. */
   padding: var(--ds-cockpit-header-padding, calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
   transition:
-    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    padding var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+    background-position var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    padding var(--ds-motion-resize) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] {
   padding: var(--ds-cockpit-header-padding-compact, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)) calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1)));
@@ -156,7 +156,7 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
     0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'],
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-state~='pressed'] [data-part='header-icon'] {
@@ -287,7 +287,7 @@
   cursor: pointer;
   text-decoration: none;
   border-radius: var(--ds-radius-sm);
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Keyboard users get the governed ring on crumb links (the UA default was
@@ -367,7 +367,7 @@
   letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-heading);
   text-wrap: balance;
-  transition: font-size var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+  transition: font-size var(--ds-motion-resize) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] [data-part='title'] {

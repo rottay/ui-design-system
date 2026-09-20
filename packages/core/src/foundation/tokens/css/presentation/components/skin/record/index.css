@@ -367,8 +367,8 @@
    always stamped, so these buy their floor from it. */
 .ds-structure.ds-record[data-part='field'][data-mono] {
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 @media (hover: hover) {
@@ -489,7 +489,7 @@
    and the anchor's focus reaches the state the ring reads. */
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
   inline-size: fit-content;
-  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {

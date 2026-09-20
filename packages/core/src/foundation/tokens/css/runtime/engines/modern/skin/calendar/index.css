@@ -246,7 +246,7 @@
   /* W10: the skin owns motion on the repainted channels only (the engine
      carries no transition utility -- a utilities-layer transition would sort
      above this unlayered rule and could not be governed). */
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-motion-feedback) var(--ds-motion-ease-out), box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* ---- W10: typographic hierarchy -- the viewed period ("July 2026") is the
@@ -356,7 +356,7 @@
      ring appears). Transparent at rest; the today rule below owns the color. */
   border: 1px solid transparent;
   font-variant-numeric: tabular-nums;
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-motion-feedback) var(--ds-motion-ease-out), border-color var(--ds-motion-feedback) var(--ds-motion-ease-out), box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* ---- cells (one rule set serves the month grid and the year grid: their paint

@@ -36,8 +36,8 @@
 
 .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
   cursor: pointer;
-  transition: box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:hover {
@@ -306,9 +306,9 @@
   border: none;
   font-size: calc(var(--ds-font-size-xs) * 1.083333);
   cursor: pointer;
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: background-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] .ds-user-profile-card__action-button[data-part='action-button'] {
   block-size: 24px;

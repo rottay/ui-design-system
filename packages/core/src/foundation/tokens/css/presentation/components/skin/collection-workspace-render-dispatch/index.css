@@ -208,9 +208,9 @@
 .ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]
   .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
-  transition: transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 @media (hover: hover) {

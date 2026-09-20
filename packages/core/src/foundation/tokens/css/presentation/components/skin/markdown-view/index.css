@@ -35,8 +35,8 @@
   text-underline-offset: 0.15em;
   text-decoration-skip-ink: auto;
   transition:
-    color var(--ds-motion-instant) var(--ds-ease-standard),
-    text-decoration-thickness var(--ds-motion-instant) var(--ds-ease-standard);
+    color var(--ds-motion-feedback) var(--ds-ease-standard),
+    text-decoration-thickness var(--ds-motion-feedback) var(--ds-ease-standard);
 }
 
 @media (hover: hover) {

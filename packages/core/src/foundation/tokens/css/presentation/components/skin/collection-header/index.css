@@ -69,17 +69,10 @@
   padding-inline: var(--ds-collection-header-padding-inline, calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1)));
   padding-block-end: var(--ds-collection-header-padding-block-end, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   transition:
-    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
-  /* `--ds-motion-calm` has no positive declaration in foundation — it exists
-     there only as the reduced-motion `0s !important` (transitions.css:396) and
-     is otherwise emitted by the tenant artifacts alone. Read bare, the token is
-     invalid at computed-value time on an untenanted page and takes the WHOLE
-     shorthand with it, so the enter never runs. `--ds-motion-slow` is declared
-     (transitions.css:96) and carries the calm cadence. */
-  animation: ds-collection-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))
-    var(--ds-motion-ease-out, ease-out) both;
+    background-position var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-reveal, 200ms) var(--ds-motion-ease-out, ease-out);
+  animation: ds-collection-header-enter var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-collection-header;
 }
@@ -560,8 +553,8 @@
   /* Glass is opt-in (default none): PT29/PT32 fix, Sheet glass precedent. */
   backdrop-filter: var(--ds-collection-header-actions-backdrop, var(--ds-dashboard-header-actions-backdrop, none));
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-collection-header [data-part='quick-actions'][data-editorial-tech='true'] {
   gap: var(--ds-collection-header-quick-actions-gap-editorial, 6px);

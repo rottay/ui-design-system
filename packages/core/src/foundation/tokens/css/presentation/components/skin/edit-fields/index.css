@@ -271,7 +271,7 @@
 .ds-structure.ds-edit-fields[data-part='grid'] > .ds-structure.ds-edit-fields[data-part='field'] {
   padding: calc(12px * var(--_ds-edit-fields-density, 1)) calc(14px * var(--_ds-edit-fields-density, 1));
   border-radius: var(--ds-radius-lg, 14px);
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Active-field wash: the focus-within label ink shift already names the
@@ -338,7 +338,7 @@
 
 .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'] {
   color: var(--ds-color-text-secondary);
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 /* Focus cue: while any control inside the field holds focus, its label steps
@@ -470,7 +470,7 @@
   padding-block-start: calc(14px * var(--_ds-edit-fields-density, 1));
   margin-block-start: calc(14px * var(--_ds-edit-fields-density, 1));
   border-top: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-secondary);
-  transition: border-color var(--ds-motion-normal) var(--ds-motion-ease-out);
+  transition: border-color var(--ds-motion-reveal) var(--ds-motion-ease-out);
 }
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] {

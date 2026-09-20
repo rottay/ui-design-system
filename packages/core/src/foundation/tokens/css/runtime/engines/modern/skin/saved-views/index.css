@@ -149,11 +149,11 @@
   box-shadow: none;
   user-select: none;
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
@@ -322,8 +322,8 @@
   cursor: pointer;
   opacity: 0;
   transition:
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 @media (hover: hover) {
@@ -396,8 +396,8 @@
   outline: none;
   box-shadow: none;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
@@ -450,9 +450,9 @@
   font-weight: var(--ds-saved-views-create-button-font-weight, var(--ds-font-weight-medium, 500));
   cursor: pointer;
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-saved-views.ds-engine-modern

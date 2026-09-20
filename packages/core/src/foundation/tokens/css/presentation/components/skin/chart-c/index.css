@@ -195,7 +195,7 @@
  * the skin only owns how that state change moves. Reduced motion zeroes the
  * duration through the foundation --ds-motion-fast override. */
 .ds-chart-gauge [data-part='segment'] {
-  transition: opacity var(--ds-motion-fast) ease;
+  transition: opacity var(--ds-motion-feedback) ease;
 }
 
 .ds-chart-gauge [data-part='value-label'] {
@@ -260,7 +260,7 @@
 
 .ds-chart-sankey [data-part='node-mark'],
 .ds-chart-sankey [data-part='link'] {
-  transition: stroke-opacity var(--ds-motion-fast) ease;
+  transition: stroke-opacity var(--ds-motion-feedback) ease;
 }
 
 /* Sparkline ---------------------------------------------------------------- */
@@ -343,7 +343,7 @@
  * generic mark list does not cover taper polygons, so the family owns the same
  * 0.82 emphasis + fast motion recipe here. */
 .ds-chart-funnel [data-part='funnel-segment-mark'] {
-  transition: opacity var(--ds-motion-fast) ease;
+  transition: opacity var(--ds-motion-feedback) ease;
 }
 
 .ds-chart-funnel [data-part='funnel-segment-mark'][data-hovered='true'] [data-part='segment'],

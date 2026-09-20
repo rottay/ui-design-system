@@ -44,11 +44,11 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    color var(--ds-link-motion-duration, var(--ds-motion-fast))
+    color var(--ds-link-motion-duration, var(--ds-motion-feedback))
       var(--ds-link-motion-easing, var(--ds-motion-ease-out)),
-    text-underline-offset var(--ds-link-motion-duration, var(--ds-motion-fast))
+    text-underline-offset var(--ds-link-motion-duration, var(--ds-motion-feedback))
       var(--ds-link-motion-easing, var(--ds-motion-ease-out)),
-    text-decoration-thickness var(--ds-link-motion-duration, var(--ds-motion-fast))
+    text-decoration-thickness var(--ds-link-motion-duration, var(--ds-motion-feedback))
       var(--ds-link-motion-easing, var(--ds-motion-ease-out));
 }
 

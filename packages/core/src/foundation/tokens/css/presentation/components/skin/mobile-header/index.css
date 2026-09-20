@@ -131,7 +131,7 @@
   backdrop-filter: var(--ds-mobile-header-sticky-backdrop, none);
   inset-block-start: 0;
   z-index: var(--ds-mobile-header-sticky-z, 40);
-  transition: box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+  transition: box-shadow var(--ds-motion-reveal) var(--ds-motion-ease-out, ease-out);
 }
 
 /* The stuck shadow rides the governed elevation ramp through the family channel. */
@@ -225,9 +225,9 @@
   border-radius: var(--ds-mobile-header-trigger-radius, var(--ds-radius-md, 8px));
   color: var(--ds-color-text-primary);
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-mobile-header__back[data-part='trigger'][data-state~='pressed'],

@@ -192,7 +192,7 @@
   background: var(--ds-upload-preview-overlay);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-upload.ds-upload--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
@@ -233,8 +233,8 @@
   background: var(--ds-surface-inset);
   border-radius: var(--ds-upload-file-radius);
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 /* Per-file error state (product law): semantic error hairline + error ink on
    the name -- the engine no longer carries the `border border-error`
@@ -342,8 +342,8 @@
   background: var(--ds-color-bg-secondary);
   border-radius: var(--ds-upload-file-radius);
   transition:
-    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out),
-    transform var(--ds-motion-normal) var(--ds-motion-ease-out);
+    box-shadow var(--ds-motion-reveal) var(--ds-motion-ease-out),
+    transform var(--ds-motion-reveal) var(--ds-motion-ease-out);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-card .ds-upload__file-item[data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card .ds-upload__file-item[data-part='file-item'] {
@@ -473,7 +473,7 @@
   color: var(--ds-upload-overlay-action-color);
   border-radius: 50%;
   border: none;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item-action'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item-action'] {
@@ -526,8 +526,8 @@
   background: transparent;
   border-radius: var(--ds-upload-file-radius);
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='add-button'] {
   border-radius: 50%;
@@ -576,8 +576,8 @@
   border-radius: var(--ds-radius-md);
   border: 1px solid var(--ds-color-border);
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:where(:hover):not(:disabled) {
@@ -653,8 +653,8 @@
   box-shadow: none;
   transform: none;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='idle'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
@@ -728,7 +728,7 @@
   .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item'] [data-part='file-item-action'],
   .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item'] [data-part='file-item-action'] {
     opacity: 0;
-    transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+    transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
   }
   .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],
   .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],

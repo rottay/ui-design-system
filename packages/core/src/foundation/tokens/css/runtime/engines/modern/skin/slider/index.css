@@ -154,9 +154,9 @@
   box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
   pointer-events: none;
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='handle'][data-part='handle'] {
   border: 2px solid var(--ds-color-bg-primary);
@@ -308,9 +308,9 @@
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
   box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
   border: 2px solid var(--ds-color-bg-primary);
@@ -336,9 +336,9 @@
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
   box-shadow: var(--ds-slider-thumb-shadow, var(--ds-material-control-shadow, var(--ds-elevation-1)));
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
   border: 2px solid var(--ds-color-bg-primary);
@@ -466,8 +466,8 @@
   background: var(--ds-color-bg-primary);
   pointer-events: none;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-slider.ds-slider--modern[data-part='root'][data-orientation='horizontal'] [data-part='dot'] {
   transform: translate(-50%, -50%);
@@ -520,8 +520,8 @@
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    visibility var(--ds-motion-fast) var(--ds-motion-ease-out);
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    visibility var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 /* Horizontal placements: the anchor is the thumb center (top: 50% + logical
    inline offset). The Y shift composes the bubble's own half, half the thumb

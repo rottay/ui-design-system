@@ -114,8 +114,8 @@
   background: var(--ds-color-primary-100);
   color: var(--ds-color-primary);
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease);
 }
 .ds-activity-cards.ds-activity-cards [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);
@@ -145,7 +145,7 @@
   justify-content: center;
   flex-shrink: 0;
   transform: scale(1);
-  transition: transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease);
+  transition: transform var(--ds-motion-reveal) var(--ds-motion-ease-out, ease);
 }
 @media (hover: hover) {
   .ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-icon-box'] {
@@ -204,8 +204,8 @@
   opacity: 0;
   transform: translateX(-6px);
   transition:
-    opacity var(--ds-motion-normal) var(--ds-motion-ease-out, ease),
-    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease);
+    opacity var(--ds-motion-reveal) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-reveal) var(--ds-motion-ease-out, ease);
 }
 @media (hover: hover) {
   .ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-chevron'] {

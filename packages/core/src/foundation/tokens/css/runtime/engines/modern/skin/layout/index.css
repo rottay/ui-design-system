@@ -182,7 +182,7 @@
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
   flex-shrink: 0;
   overflow-block: auto;
-  transition: width var(--ds-layout-sider-collapse-duration, var(--ds-motion-slow))
+  transition: width var(--ds-layout-sider-collapse-duration, var(--ds-motion-rearrange))
     var(--ds-layout-sider-collapse-timing, var(--ds-motion-ease-out));
 }
 /* Collapsed rail: wide nav content must not bleed past the narrowed inline
@@ -209,8 +209,8 @@
   font-size: var(--ds-layout-sider-trigger-font-size, var(--ds-font-size-sm));
   cursor: pointer;
   transition:
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Hover only where hover exists; touch pointers get the same quiet feedback

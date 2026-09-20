@@ -100,7 +100,7 @@
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
   /* keyframes live in header-hero-shared.css, with the archetype gradients,
      the icon-badge tone and the back-button microinteraction */
-  animation: ds-header-enter var(--ds-motion-calm, var(--ds-motion-slow, 320ms))
+  animation: ds-header-enter var(--ds-motion-reveal, var(--ds-motion-slow, 320ms))
     var(--ds-motion-ease-out, ease-out) both;
 }
 /* The root's own border reaches (0,4,0) from the two classes + two DISTINCT

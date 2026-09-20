@@ -54,10 +54,10 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-elevated) 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%));
   color: var(--ds-color-text-primary);
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open] {
@@ -413,10 +413,10 @@
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary'] {
   font-weight: 700;
@@ -451,9 +451,9 @@
    inset focus ring it already owns */
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:is([data-state~='hovered'], :hover):not([data-active='true']) {
@@ -471,9 +471,9 @@
 /* delete affordance: quiet until asked, then a measured danger whisper */
 .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-structure.ds-saved-views-menu-panel [data-part='delete']:is([data-state~='hovered'], :hover) {

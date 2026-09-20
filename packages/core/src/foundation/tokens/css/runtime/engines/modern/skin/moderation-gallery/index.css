@@ -48,9 +48,9 @@
   overflow: hidden;
   box-shadow: var(--ds-elevation-1);
   transition:
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'][data-selected] {
@@ -142,8 +142,8 @@
     transparent
   );
   transition:
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    opacity var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Fine pointers: hidden until hover or keyboard focus lands inside the card. */
@@ -164,9 +164,9 @@
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'] {
   border-radius: var(--ds-radius-md);
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve'] {
@@ -274,7 +274,7 @@
 
 /* --- Skeleton (grid footprint) ------------------------------------------------------------ */
 .ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-grid'] {
-  animation: ds-moderation-gallery-skeleton-pulse var(--ds-motion-deliberate)
+  animation: ds-moderation-gallery-skeleton-pulse var(--ds-motion-attention)
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 

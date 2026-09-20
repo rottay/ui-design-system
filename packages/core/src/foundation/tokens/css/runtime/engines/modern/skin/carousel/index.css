@@ -127,11 +127,11 @@
   block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
   font-size: var(--ds-font-size-xs);
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Pointer-fine hover only (hover law); touch feedback is the press below. A
@@ -209,10 +209,10 @@
   border-radius: 9999px;
   cursor: pointer;
   transition:
-    inline-size var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    inline-size var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {

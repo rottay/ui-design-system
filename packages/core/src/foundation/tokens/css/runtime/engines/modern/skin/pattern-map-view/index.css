@@ -122,7 +122,7 @@
   font: inherit;
   text-align: start;
   cursor: pointer;
-  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:focus-visible {
   outline: none;

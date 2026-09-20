@@ -173,10 +173,10 @@
   padding-inline: 12px;
   cursor: pointer;
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 /* `:is(<kernel token>, <bare pseudo>)` is ONE decision with its native
    fallback, and it carries the same specificity the bare pseudo did (both arms are

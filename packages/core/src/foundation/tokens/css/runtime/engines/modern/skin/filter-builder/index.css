@@ -195,7 +195,7 @@
   /* Entrance on the dropdown family's cadence (dropdown.css's popover-enter
      pair): the surface opens BELOW the trigger, so it settles travelling
      down. Reduced motion silences it below. */
-  animation: ds-filter-builder-dropdown-enter-modern var(--ds-motion-fast)
+  animation: ds-filter-builder-dropdown-enter-modern var(--ds-motion-feedback)
     var(--ds-motion-ease-out, ease-out) both;
 }
 @keyframes ds-filter-builder-dropdown-enter-modern {

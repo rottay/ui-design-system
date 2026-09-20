@@ -232,7 +232,7 @@
   padding-block-end: var(--ds-form-builder-section-header-padding, 14px);
   margin-block-end: var(--ds-form-builder-section-header-gap, var(--ds-spacing-5, 20px));
   text-align: start;
-  transition: margin-block-end var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  transition: margin-block-end var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] {
   margin-block-end: 0;
@@ -262,7 +262,7 @@
   flex-shrink: 0;
   color: var(--ds-color-text-muted);
   transform: rotate(0deg);
-  transition: transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] [data-part='section-chevron'] {
   transform: rotate(-90deg);
@@ -279,8 +279,8 @@
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-content'] {
   overflow: hidden;
   transition:
-    max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
-    opacity var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+    max-height var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
+    opacity var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
 /* ---- wizard navigation (layout only; Buttons paint themselves) ---- */

@@ -93,7 +93,7 @@
      (same shape, zero layout shift); the image fades in once the engine
      stamps data-loaded after `load` (or a pre-hydration `complete`). */
   opacity: 0;
-  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .rottay-avatar.rottay-avatar--modern[data-loaded='true'] > [data-part='mask'] > [data-part='img'] {
   opacity: 1;

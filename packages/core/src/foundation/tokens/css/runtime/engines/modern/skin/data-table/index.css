@@ -1086,7 +1086,7 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="table-head"][data-sticky="true"] {
   box-shadow: var(--_ds-data-table-header-sticky-shadow, none);
-  transition: box-shadow var(--ds-motion-normal)
+  transition: box-shadow var(--ds-motion-reveal)
     var(--ds-motion-ease-move, ease-out);
 }
 .ds-pattern-data-table.ds-engine-modern

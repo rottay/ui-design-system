@@ -20,9 +20,9 @@
  */
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
-  transition: box-shadow var(--ds-motion-normal)
+  transition: box-shadow var(--ds-motion-reveal)
       var(--ds-motion-ease-move, ease),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-move, ease);
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-move, ease);
 }
 
 /* Interactive cards (role=button) earn a governed lift on hover-capable

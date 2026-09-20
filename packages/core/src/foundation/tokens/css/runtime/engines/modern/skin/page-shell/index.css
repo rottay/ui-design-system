@@ -173,10 +173,10 @@
     var(--ds-toolbar-shadow, var(--ds-elevation-1))
   );
   transition:
-    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-  animation: ds-page-header-arrive var(--ds-motion-calm)
+    background-position var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
+  animation: ds-page-header-arrive var(--ds-motion-reveal)
     var(--ds-motion-ease-out, ease-out) both;
 }
 
@@ -285,7 +285,7 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     0 8px 18px -13px color-mix(in srgb, var(--ds-color-primary) 58%, transparent);
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-pattern-page-shell.ds-engine-modern [data-part='eyebrow'] {
@@ -386,7 +386,7 @@
   cursor: pointer;
   text-decoration: none;
   border-radius: var(--ds-radius-sm);
-  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 /* Keyboard users get the governed ring on crumb links (the UA default was
    the only indicator before); hover/active keep their color-only cue. */
@@ -449,11 +449,11 @@
   border: 1px solid transparent;
   border-radius: var(--ds-tabs-item-radius, var(--ds-radius-md));
   transition:
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-active='true'] {
   color: var(--ds-tab-color-active, var(--ds-color-primary));

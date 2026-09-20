@@ -86,8 +86,8 @@
     var(--ds-color-primary) 5%,
     transparent
   ) !important;
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out) !important;
+  transition: background var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out) !important;
 }
 .ds-collection-enhanced tr[data-row-key]:hover {
   box-shadow: inset 0 1px 0
@@ -106,8 +106,8 @@
   .ds-collection-enhanced tr[data-row-key]:hover a:hover {
     transform: translateY(-1px);
     color: var(--ds-color-primary);
-    transition: transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-      color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    transition: transform var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+      color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
   }
 }
 .ds-collection-enhanced thead th {
@@ -117,8 +117,8 @@
 .ds-collection-enhanced tbody td {
   vertical-align: middle;
   line-height: 1.3;
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-collection-enhanced .ds-resize-handle:hover .ds-resize-handle__bar,
 .ds-collection-enhanced .ds-resize-handle:focus-visible .ds-resize-handle__bar {
@@ -155,9 +155,9 @@
    the OS-native popup on mobile while the pill paints the presentation.
    ------------------------------------------------------------------------- */
 .ds-collection-page-size-control {
-  transition: border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-collection-page-size-control:hover {
@@ -181,14 +181,14 @@
     0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 .ds-collection-page-size-control__picker {
-  transition: border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-collection-page-size-control__value,
 .ds-collection-page-size-control__chevron {
-  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-collection-page-size-control:hover .ds-collection-page-size-control__picker {
@@ -448,13 +448,13 @@
 
 .ds-surface.ds-collection-workspace
   .ds-collection-preview-rail[data-part="preview-rail"][data-resizable="true"] {
-  transition: width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+  transition: width var(--ds-list-preview-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
-    min-width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+    min-width var(--ds-list-preview-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
-    max-width var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+    max-width var(--ds-list-preview-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out)),
-    flex-basis var(--ds-list-preview-motion-duration, var(--ds-motion-fast, 120ms))
+    flex-basis var(--ds-list-preview-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-list-preview-motion-ease, var(--ds-motion-ease-out, ease-out));
 }
 
@@ -483,9 +483,9 @@
   background: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
   box-shadow: 0 0 0 1px
     color-mix(in srgb, var(--ds-surface-card) 70%, transparent);
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    inline-size var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    inset-inline-start var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    inline-size var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    inset-inline-start var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 /* RTL mirror: the handle hugs the rail's inline-start edge, so in RTL its
@@ -504,8 +504,8 @@
   box-shadow: inset 0 0 0 1px
     color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
   border-radius: var(--ds-radius-xs, 3px);
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 /* -------------------------------------------------------------------------
@@ -563,9 +563,9 @@
      profile and an editorial ruled page separate the same regions
      differently, on one DOM. */
   border-bottom: var(--ds-divider-width, 1px) var(--ds-divider-style, solid) var(--ds-color-border-subtle);
-  transition: max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
-    opacity var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
-    padding var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  transition: max-height var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
+    opacity var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
+    padding var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-surface.ds-collection-workspace.ds-collection-shell
@@ -603,9 +603,9 @@
 
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__stats-slot[data-part="stats-slot"] {
-  transition: max-height var(--ds-motion-slow, 320ms) var(--ds-motion-ease-in-out, ease-in-out),
-    opacity var(--ds-motion-slow, 320ms) var(--ds-motion-ease-in-out, ease-in-out),
-    padding var(--ds-motion-slow, 320ms) var(--ds-motion-ease-in-out, ease-in-out);
+  transition: max-height var(--ds-motion-rearrange, 320ms) var(--ds-motion-ease-in-out, ease-in-out),
+    opacity var(--ds-motion-rearrange, 320ms) var(--ds-motion-ease-in-out, ease-in-out),
+    padding var(--ds-motion-rearrange, 320ms) var(--ds-motion-ease-in-out, ease-in-out);
 }
 
 .ds-surface.ds-collection-workspace
@@ -689,9 +689,9 @@
 .ds-surface.ds-collection-workspace
   .ds-collection-workspace__views-strip[data-part="views-strip"] {
   overflow: hidden;
-  transition: max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
-    opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  transition: max-height var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
+    opacity var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-surface.ds-collection-workspace
@@ -756,9 +756,9 @@
   position: relative;
   z-index: 1;
   overflow: hidden;
-  transition: max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
-    opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  transition: max-height var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out),
+    opacity var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-disclosure, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-surface.ds-collection-workspace
@@ -933,7 +933,7 @@
 
 .ds-surface.ds-collection-workspace [data-part="preview-accordion-icon"] {
   flex: 0 0 auto;
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .ds-surface.ds-collection-workspace

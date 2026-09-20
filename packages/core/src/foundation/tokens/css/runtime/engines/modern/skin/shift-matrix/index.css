@@ -173,8 +173,8 @@
   --ds-button-hover-filter: none;
   --ds-button-active-filter: none;
   transition:
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 /* Ghost state paint (bg/color/border on hovered/pressed) stays off too: the
@@ -304,7 +304,7 @@
 
 /* --- Skeleton (matrix footprint) ----------------------------------------------------------------------------- */
 .ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-shift-matrix-skeleton-pulse var(--ds-motion-deliberate)
+  animation: ds-shift-matrix-skeleton-pulse var(--ds-motion-attention)
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 

@@ -185,7 +185,7 @@
   [data-part='day-cell'][data-empty='false'] {
   background: var(--ds-surface-card);
   cursor: pointer;
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: background-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
@@ -257,7 +257,7 @@
   background: var(--ds-calendar-view-entry-accent, var(--ds-color-primary));
   color: var(--ds-color-text-on-primary);
   font-size: var(--ds-font-size-xs, 0.75rem);
-  transition: filter var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: filter var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']

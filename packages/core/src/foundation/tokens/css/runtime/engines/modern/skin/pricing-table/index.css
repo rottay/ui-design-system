@@ -115,7 +115,7 @@
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__toggle-label {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-sm);
-  transition: color var(--ds-pricing-table-motion-duration, var(--ds-motion-fast))
+  transition: color var(--ds-pricing-table-motion-duration, var(--ds-motion-feedback))
     var(--ds-pricing-table-motion-timing, var(--ds-motion-ease-out));
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root']
@@ -264,9 +264,9 @@
   border-block-end: 1px dotted var(--ds-color-text-muted);
   cursor: help;
   transition:
-    color var(--ds-pricing-table-motion-duration, var(--ds-motion-fast))
+    color var(--ds-pricing-table-motion-duration, var(--ds-motion-feedback))
       var(--ds-pricing-table-motion-timing, var(--ds-motion-ease-out)),
-    border-color var(--ds-pricing-table-motion-duration, var(--ds-motion-fast))
+    border-color var(--ds-pricing-table-motion-duration, var(--ds-motion-feedback))
       var(--ds-pricing-table-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {

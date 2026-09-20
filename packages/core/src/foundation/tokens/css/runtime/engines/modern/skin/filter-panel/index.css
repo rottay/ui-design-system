@@ -94,7 +94,7 @@
         governed NavigationDownIcon — a disclosure chevron, not the old
         expand-arrows glyph that read as "fullscreen". ---- */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
-  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] [data-part='icon'] {
   transform: rotate(-90deg);
@@ -216,8 +216,8 @@
   opacity: 1;
   visibility: visible;
   transition:
-    max-block-size var(--ds-motion-normal) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
+    max-block-size var(--ds-motion-disclosure) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-out),
     visibility 0s linear 0s;
 }
 /* `visibility` is delayed to the end of the collapse so the region leaves the
@@ -227,9 +227,9 @@
   opacity: 0;
   visibility: hidden;
   transition:
-    max-block-size var(--ds-motion-normal) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
-    visibility 0s linear var(--ds-motion-normal);
+    max-block-size var(--ds-motion-disclosure) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-out),
+    visibility 0s linear var(--ds-motion-disclosure);
 }
 
 /* ---- actions row (Apply) ---- */

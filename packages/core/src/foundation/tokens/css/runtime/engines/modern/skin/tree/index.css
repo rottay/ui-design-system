@@ -104,7 +104,7 @@
   height: 2px;
   border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
-  animation: rottay-drop-indicator var(--ds-motion-slow) ease-out;
+  animation: rottay-drop-indicator var(--ds-motion-rearrange) ease-out;
 }
 
 /* ---- row: rest, disabled, selected, drop-inside, hover. Ordered as the style
@@ -139,9 +139,9 @@
   cursor: pointer;
   user-select: none;
   transition:
-    color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    background var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .rottay-tree.rottay-tree--modern[data-part='root'][data-block-node='true'] [data-part='node'] > [data-part='row'] {
@@ -244,8 +244,8 @@
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] > span {
   display: inline-block;
   transition:
-    rotate var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+    rotate var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
 }
 
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-expanded='true'] > [data-part='tree-node-toggle'] > span:not([data-custom-switcher]) {

@@ -238,8 +238,8 @@
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true'] {
   cursor: pointer;
   transition:
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    box-shadow var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 @media (hover: hover) {

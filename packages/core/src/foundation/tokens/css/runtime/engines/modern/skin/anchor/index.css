@@ -107,9 +107,9 @@
   font-size: var(--ds-anchor-item-font-size, 14px);
   line-height: var(--ds-anchor-item-line-height, 1.5715);
   transition:
-    color var(--ds-anchor-transition-duration, var(--ds-motion-fast))
+    color var(--ds-anchor-transition-duration, var(--ds-motion-feedback))
       var(--ds-anchor-transition-timing, var(--ds-motion-ease-out)),
-    border-color var(--ds-anchor-transition-duration, var(--ds-motion-fast))
+    border-color var(--ds-anchor-transition-duration, var(--ds-motion-feedback))
       var(--ds-anchor-transition-timing, var(--ds-motion-ease-out));
 }
 
