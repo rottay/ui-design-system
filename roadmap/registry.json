@@ -5907,6 +5907,11 @@
      "at": "2026-09-19 17:44",
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt: manifest quarantine landed (f66b1bd45 + the completions lots): the old manifest is historical/inventory material, no longer a competing source of truth; agent orchestration moved out of the package. PENDING to close: the close audit measures the acceptance arms on the current tree — du -sh packages/core/governance < 1 MB; evidence/code ratio < 0.5; CLAUDE.md brand-theme grep = 0 and wc -l < 200; no gate reads a receipt as authority. Proof to close: those four measurements green, with the sealed modern-rescue evidence tree left untouched under the owner seal."
+    },
+    {
+     "at": "2026-09-19 22:34",
+     "by": "kimi-dt",
+     "note": "2026-09-19 kimi-dt (2): the two failing arms measured and dispatched. governance/: 2.6MB -> 48K after the relocation lot (governance/tokens was LIVE compiler input data, not history — moved to src/foundation/tokens/data/ per its own schema's declared $id; 16 readers updated; graphics/effects license records stay). CLAUDE.md: 688 -> 198 lines, Fable ACCEPT; its follow-up is registered here: the six WO-RET-04 audit proofs lost their last binding mention in the slim — the lane entry owes their disposition. Remaining arms: evidence/code ratio < 0.5 and 'no gate reads a receipt as authority' — measured at close."
     }
    ]
   },
