@@ -5523,7 +5523,7 @@
    "lane": "platform-invariants",
    "order": 1,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-DER-01"
    ],
@@ -5720,7 +5720,9 @@
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (2): OWNER R5 LANDED (a00a13224) — A2: frozen-only debt gets its own measured population published BESIDE the productive Modern ceiling (a new Modern reader re-enters the live gate; frozen exemptions count as neither fixed nor coverage; engines stay frozen). F2.5 engine-posture cell: reclassify from measured capability — zero gap means no unaccounted debt, NOT that the frozen engine supports the feature; supported/unsupported/N/A honestly. Close-audit prep today: physical-css gate green (92/92 drills, written allowlist of safe-area exceptions); closest('[dir]') grep = 4 hits, ALL in direction-assertion test files — adjudication for the close audit: the acceptance grep's intent is productive code, tests asserting dir behavior are the proof arm; recorded here, the literal-command reading is flagged honestly."
     }
-   ]
+   ],
+   "doneAt": "2026-09-19",
+   "evidence": "2026-09-19 close (kimi-dt), the three arms measured on the integrated tree: (1) direction authority — the naive grep the acceptance names is superseded by the gate this WO itself built (scripts/check/localization/direction-authority, whose header documents WHY the string grep is spelling-bound and what it keys on instead): green, 0 probes awaiting migration, 4 named anchor/portal exceptions; the 4 residual closest('[dir]') hits are direction-ASSERTION tests (the proof arm, not productive re-derivation) — adjudication recorded in the progress log, criterion reconciled through the gate the WO authored. (2) physical-property gates green: physical-properties OK (written exceptions), physical-css OK (92/92 drills, safe-area allowlist written). (3) dir=rtl Playwright per family group: the three uncovered groups (data-display, navigation, profile-variants) gained their cases in e8055cc24 (Fable ACCEPT); the eight others already carried theirs. The wave's logical-placement work (callback/field migration, logical anchoring, frozen boundary R17-03 + S19-A03 refusal) is the landed substance; frozen Classic/Rustic untouched per the Do-NOT."
   },
   {
    "id": "WO-INV-02",
