@@ -12,6 +12,7 @@ import type { FlatTheme } from "@/foundation/contracts/composition/tenants/theme
 import { MERGE_RANK, type FamilyDeriver } from "../foundation/contract";
 import { FAMILY_DERIVERS } from "../runtime/derivation";
 import { buildLoweringContext } from "../runtime/pipeline";
+import { buildRecipeManifest } from "@/infrastructure/runtime/foundation/recipes/manifest";
 import {
   describeFamilyContract,
   FIXTURE_TENANT_FACTS,
@@ -19,6 +20,10 @@ import {
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { SHELL_PUBLISHED_CHANNELS } from "@/components/structures/shell/contracts";
+import {
+  SECTION_CARD_CHANNEL_PREFIX,
+  SECTION_CARD_PUBLISHED_CHANNELS,
+} from "@/infrastructure/runtime/foundation/recipes/contracts/families";
 
 const bithireFlatTheme = firstPartyFixture('bithire');
 const evntoFlatTheme = firstPartyFixture('evnto');
@@ -69,9 +74,19 @@ const INHERITED_PREWAVE_CHANNELS: ReadonlySet<string> = new Set([
  * skins, the responsive channel contract, `chrome-variables` and three
  * applications read them, and `static-db-channel-vocabulary` pins two as the
  * static/DB parity vocabulary. Its own chrome is `--ds-app-shell-*`.
+ *
+ * `surface-chrome` keeps all four of `SECTION_CARD_PUBLISHED_CHANNELS`. The
+ * declaring owner is the governed section-card recipe, and the declaration
+ * ships: `buildRecipeManifest()` is exported from the package root and states
+ * `--ds-section-card-` as the namespace a tenant may own for that family,
+ * alongside the generated `ds-section-card` class root the same recipe emits.
+ * The band is the one place the two registries meet — a recipe family and a
+ * deriver family that do not share a name — so renaming the channels would
+ * not tidy an owner, it would make a published prefix govern nothing.
  */
 const DECLARED_PUBLISHED_BANDS: ReadonlyMap<string, ReadonlySet<string>> = new Map([
   ["app-shell", new Set<string>(SHELL_PUBLISHED_CHANNELS)],
+  ["surface-chrome", new Set<string>(SECTION_CARD_PUBLISHED_CHANNELS)],
 ]);
 
 const isNamespaceStray = (family: string, channel: string): boolean =>
@@ -168,6 +183,34 @@ describe("the family registry", () => {
     expect(isNamespaceStray("app-shell", "--ds-shell-sidebar-width")).toBe(false);
     expect(isNamespaceStray("app-shell", "--ds-shell-header-radius")).toBe(true);
     expect(isNamespaceStray("page-shell", "--ds-shell-sidebar-width")).toBe(true);
+    // The same three readings for the recipe-declared band: admitted for its
+    // owner, refused for a name inside the published prefix that no owner
+    // declared, refused for a family the prefix was never published to.
+    expect(isNamespaceStray("surface-chrome", "--ds-section-card-icon-size")).toBe(false);
+    expect(isNamespaceStray("surface-chrome", "--ds-section-card-header-bg")).toBe(true);
+    expect(isNamespaceStray("page-shell", "--ds-section-card-icon-size")).toBe(true);
+  });
+
+  it("binds each published band to the owner that declares it", () => {
+    // The band is only an exemption because someone else publishes the name.
+    // Every admitted section-card channel has to sit inside the prefix the
+    // public recipe manifest states, or the exemption has no author.
+    for (const channel of SECTION_CARD_PUBLISHED_CHANNELS) {
+      expect(channel.startsWith(SECTION_CARD_CHANNEL_PREFIX)).toBe(true);
+    }
+    const section = buildRecipeManifest().families.find(
+      (entry) => entry.name === "sectionCard",
+    );
+    expect(section?.customPropertyPrefix).toBe(SECTION_CARD_CHANNEL_PREFIX);
+
+    // And the band is exactly what its family produces: a channel dropped from
+    // the deriver may not linger as a standing exemption.
+    const surfaceChrome = FAMILY_DERIVERS.find(
+      (deriver) => deriver.family === "surface-chrome",
+    );
+    expect([...(surfaceChrome?.produces ?? [])].sort()).toEqual(
+      [...SECTION_CARD_PUBLISHED_CHANNELS].sort(),
+    );
   });
 
   it("has no deriver that imports another deriver", () => {

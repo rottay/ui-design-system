@@ -11,6 +11,10 @@ import { describe, expect, it } from "vitest";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { buildRecipeManifest } from "@/infrastructure/runtime/foundation/recipes/manifest";
 import {
+  SECTION_CARD_CHANNEL_PREFIX,
+  SECTION_CARD_PUBLISHED_CHANNELS,
+} from "@/infrastructure/runtime/foundation/recipes/contracts/families";
+import {
   describeFamilyContract,
   FIXTURE_TENANT_FACTS,
   type FamilyFixture,
@@ -80,10 +84,22 @@ describe("chrome/surface-chrome", () => {
     const section = buildRecipeManifest().families.find(
       (entry) => entry.name === "sectionCard"
     );
-    expect(section?.customPropertyPrefix).toBe("--ds-section-card-");
+    expect(section?.customPropertyPrefix).toBe(SECTION_CARD_CHANNEL_PREFIX);
     for (const channel of surfaceChromeChromeDeriver.produces) {
-      expect(channel.startsWith("--ds-section-card-")).toBe(true);
+      expect(channel.startsWith(SECTION_CARD_CHANNEL_PREFIX)).toBe(true);
     }
+  });
+
+  it("produces exactly the band the recipe owner declares", () => {
+    // The family-namespace law admits `SECTION_CARD_PUBLISHED_CHANNELS`, not
+    // the prefix. If this family states a fifth name under it, the law has to
+    // see a stray rather than an exemption nobody wrote down.
+    expect([...surfaceChromeChromeDeriver.produces].sort()).toEqual(
+      [...SECTION_CARD_PUBLISHED_CHANNELS].sort()
+    );
+    expect(
+      Object.keys(surfaceChromeChromeDeriver.derive(context(), {})).sort()
+    ).toEqual([...SECTION_CARD_PUBLISHED_CHANNELS].sort());
   });
 
   it("leaves the shared workspace-card tile group to its own owner", () => {

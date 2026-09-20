@@ -7,10 +7,13 @@
  * so producing the name changes WHO can reach the value, not what it rests at.
  *
  * The family id is `surface-chrome` and the namespace is `--ds-section-card-*`.
- * That is not drift: `--ds-section-card-` is the GENERATED manifest prefix of
- * the governed section-card recipe (`recipes/manifest`), which is public API,
- * and the class root the component emits comes from the same recipe. Renaming
- * either would be a breaking change to a published contract, so the family-cut
+ * That is not drift, and since WO-FAM-11 sub-lot C it is not silent either:
+ * the four names are `SECTION_CARD_PUBLISHED_CHANNELS`, declared by the
+ * governed section-card recipe next to the prefix `buildRecipeManifest()`
+ * publishes as the tenant-ownable namespace for that family, and the
+ * family-namespace law admits exactly that list. The class root the component
+ * emits comes from the same recipe, so renaming either would break a published
+ * contract and leave the published prefix governing nothing; the family-cut
  * roster carries a `skins` pin instead and the spelling stays.
  *
  * `--ds-workspace-card-icon-bg` / `-border` / `-color` are NOT produced here.

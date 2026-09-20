@@ -16,6 +16,7 @@ import { describeRecipeDefinition } from '../contracts';
 import {
   BUTTON_RECIPE_DEFINITION,
   CARD_RECIPE_DEFINITION,
+  SECTION_CARD_CHANNEL_PREFIX,
   SECTION_CARD_RECIPE_DEFINITION,
   TABS_RECIPE_DEFINITION,
   TAG_RECIPE_DEFINITION,
@@ -77,7 +78,7 @@ const FACADE_FAMILIES: readonly FacadeFamily[] = [
   },
   {
     shape: describeRecipeDefinition(SECTION_CARD_RECIPE_DEFINITION),
-    prefix: '--ds-section-card-',
+    prefix: SECTION_CARD_CHANNEL_PREFIX,
   },
 ];
 

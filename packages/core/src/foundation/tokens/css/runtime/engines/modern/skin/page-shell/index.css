@@ -153,7 +153,7 @@
   overflow: hidden;
   padding: var(--ds-page-shell-header-padding);
   border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-toolbar-border, var(--ds-color-border-primary));
-  border-radius: var(--ds-page-header-radius, var(--ds-radius-xl));
+  border-radius: var(--ds-page-shell-header-radius, var(--ds-radius-xl));
   background: var(
     --ds-page-header-bg,
     var(
@@ -169,7 +169,7 @@
   background-position: 0% 50%;
   background-size: 180% 180%;
   box-shadow: var(
-    --ds-page-header-shadow,
+    --ds-page-shell-header-shadow,
     var(--ds-toolbar-shadow, var(--ds-elevation-1))
   );
   transition:
@@ -186,7 +186,7 @@
   inset: 0;
   pointer-events: none;
   content: '';
-  opacity: var(--ds-page-header-sheen-opacity, 0.28);
+  opacity: var(--ds-page-shell-header-sheen-opacity, 0.28);
   background: linear-gradient(
     112deg,
     transparent 20%,
@@ -195,7 +195,7 @@
   );
   background-position: 120% 50%;
   background-size: 240% 100%;
-  animation: ds-page-header-sheen var(--ds-page-header-sheen-duration, 14s)
+  animation: ds-page-header-sheen var(--ds-page-shell-header-sheen-duration, 14s)
     ease-in-out infinite;
 }
 
@@ -264,7 +264,7 @@
       var(--ds-color-primary) 24%,
       var(--ds-toolbar-border, var(--ds-color-border-primary))
     );
-    box-shadow: var(--ds-page-header-shadow-hover, var(--ds-elevation-2));
+    box-shadow: var(--ds-page-shell-header-shadow-hover, var(--ds-elevation-2));
   }
 
   .ds-pattern-page-shell.ds-engine-modern [data-part='header']:is([data-state~='hovered'], :hover) [data-part='header-icon'] {
@@ -279,7 +279,7 @@
   height: var(--_ds-page-header-icon-size, 40px);
   place-items: center;
   border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
-  border-radius: var(--ds-page-header-icon-radius, var(--ds-radius-lg));
+  border-radius: var(--ds-page-shell-header-icon-radius, var(--ds-radius-lg));
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card));
   color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
   box-shadow:

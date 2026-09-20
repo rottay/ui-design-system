@@ -87,11 +87,11 @@ describeCausality({
   family: 'page-shell',
   markup,
   targets: [
-    // `--ds-page-header-radius` rests on the shape ramp's largest corner.
+    // `--ds-page-shell-header-radius` rests on the shape ramp's largest corner.
     { id: 'panelRadius', selector: HEADER, property: 'border-top-left-radius' },
-    // `--ds-page-header-icon-radius` rests one rung below it.
+    // `--ds-page-shell-header-icon-radius` rests one rung below it.
     { id: 'tileRadius', selector: TILE, property: 'border-top-left-radius' },
-    // `--ds-page-header-shadow` rests on the toolbar elevation.
+    // `--ds-page-shell-header-shadow` rests on the toolbar elevation.
     { id: 'panelShadow', selector: HEADER, property: 'box-shadow' },
     // The panel's inline room is the spacing ramp under the density dial.
     // Skin-owned, not deriver-owned: the arm proves the family is alive on a

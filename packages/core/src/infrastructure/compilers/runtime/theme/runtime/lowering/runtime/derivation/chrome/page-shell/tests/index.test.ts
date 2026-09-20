@@ -81,11 +81,13 @@ describe("chrome/page-shell", () => {
     }
   });
 
-  it("names only the family's own two spellings", () => {
+  it("names only the family's own namespace", () => {
+    // Sub-lot C closed the second spelling: the six panel channels the family
+    // used to state as `--ds-page-header-*` had one reader, its own skin, so
+    // they moved. The prefix is still READ here, and it still belongs to the
+    // cross-owner group `collection-header` and three sibling skins share.
     for (const channel of pageShellChromeDeriver.produces) {
-      expect(
-        channel.startsWith("--ds-page-shell-") || channel.startsWith("--ds-page-header-")
-      ).toBe(true);
+      expect(channel.startsWith("--ds-page-shell-")).toBe(true);
     }
   });
 

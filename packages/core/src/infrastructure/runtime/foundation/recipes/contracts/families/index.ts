@@ -14,6 +14,10 @@ export {
 } from './button';
 export type { ButtonRecipeSizeValue } from './button';
 export { CARD_RECIPE_DEFINITION } from './card';
-export { SECTION_CARD_RECIPE_DEFINITION } from './section-card';
+export {
+  SECTION_CARD_CHANNEL_PREFIX,
+  SECTION_CARD_PUBLISHED_CHANNELS,
+  SECTION_CARD_RECIPE_DEFINITION,
+} from './section-card';
 export { TABS_RECIPE_DEFINITION } from './tabs';
 export { TAG_RECIPE_DEFINITION } from './tag';

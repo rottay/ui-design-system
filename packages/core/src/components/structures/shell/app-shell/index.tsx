@@ -130,12 +130,10 @@ function resolveBottomInset(
   return postureValue === undefined ? SHELL_DEFAULTS.bottomInset : toCssLength(postureValue);
 }
 
-/** A stated geometry number travels on its own channel; an omission does not. */
-function statedChannel(
-  channel: `--ds-shell-${string}`,
-  value: number | string | undefined,
-): ShellCustomProperties {
-  return value === undefined ? {} : { [channel]: toCssLength(value) };
+/** A stated number travels on its channel; an omission is `undefined`, which
+ *  React never writes, so the channel keeps the theme's. */
+function statedLength(value: ShellInset | undefined): string | undefined {
+  return value === undefined ? undefined : toCssLength(value);
 }
 
 // ---------------------------------------------------------------------------
@@ -351,11 +349,11 @@ export function AppShell({
     '--ds-shell-safe-area-right': 'env(safe-area-inset-right, 0px)',
     '--ds-shell-safe-area-bottom': 'env(safe-area-inset-bottom, 0px)',
     '--ds-shell-safe-area-left': 'env(safe-area-inset-left, 0px)',
-    ...statedChannel('--ds-shell-sidebar-width', geometry?.sidebarWidth),
-    ...statedChannel('--ds-shell-sidebar-collapsed-width', geometry?.sidebarCollapsedWidth),
-    ...statedChannel('--ds-shell-header-block-size', geometry?.headerHeight),
-    ...statedChannel('--ds-shell-sidebar-header-block-size', geometry?.sidebarHeaderHeight),
-    ...statedChannel('--ds-shell-collapse-transition', geometry?.collapseTransition),
+    '--ds-shell-sidebar-width': statedLength(geometry?.sidebarWidth),
+    '--ds-shell-sidebar-collapsed-width': statedLength(geometry?.sidebarCollapsedWidth),
+    '--ds-shell-header-block-size': statedLength(geometry?.headerHeight),
+    '--ds-shell-sidebar-header-block-size': statedLength(geometry?.sidebarHeaderHeight),
+    '--ds-shell-collapse-transition': statedLength(geometry?.collapseTransition),
     '--ds-shell-header-height': headerBlockSize,
     '--ds-shell-top-inset': hasHeader
       ? `calc(${headerBlockSize} + var(--ds-shell-safe-area-top))`
