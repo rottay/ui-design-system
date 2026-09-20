@@ -11,7 +11,13 @@
 
 import { memo, useMemo, useRef } from 'react';
 
-import type { ChartBaseProps, ChartColorsProps, ChartMarginProps, ChartStateProps } from '../../contracts';
+import type {
+  ChartBaseProps,
+  ChartColorSchemeProps,
+  ChartColorsProps,
+  ChartMarginProps,
+  ChartStateProps,
+} from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
@@ -31,7 +37,11 @@ export interface GanttTask {
 }
 
 /** Own props for the {@link GanttChart} component (state copy is composed below). */
-interface GanttChartOwnProps extends ChartBaseProps, ChartColorsProps, ChartMarginProps {
+interface GanttChartOwnProps
+  extends ChartBaseProps,
+    ChartColorsProps,
+    ChartColorSchemeProps,
+    ChartMarginProps {
   tasks: GanttTask[];
   showProgress?: boolean;
   showToday?: boolean;
@@ -73,13 +83,14 @@ export const GanttChart = memo(function GanttChart({
   animate = true,
   responsive = true,
   colors,
+  colorScheme,
   tooltip = true,
   margin = DEFAULT_GANTT_MARGIN,
 }: GanttChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
-  const paint = useChartPaint({ family: 'gantt-chart', override: colors });
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const paint = useChartPaint({ family: 'gantt-chart', scheme: colorScheme, override: colors });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const parsedTasks = useMemo<SvgGanttTask[]>(() => {
     const seenIds = new Set<string>();

@@ -12,6 +12,7 @@ import { memo, useMemo, useRef } from 'react';
 
 import type {
   ChartBaseProps,
+  ChartColorSchemeProps,
   ChartColorsProps,
   ChartLegendProps,
   ChartMarginProps,
@@ -32,7 +33,11 @@ import { SvgFunnelRenderer } from '../../runtime/chart-engine/presentation/react
 
 /** Own props for the {@link FunnelChart} component (state copy is composed below). */
 interface FunnelChartOwnProps
-  extends ChartBaseProps, ChartLegendProps, ChartColorsProps, ChartMarginProps {
+  extends ChartBaseProps,
+    ChartLegendProps,
+    ChartColorsProps,
+    ChartColorSchemeProps,
+    ChartMarginProps {
   data: DataPoint[];
   showPercentage?: boolean;
   showConversion?: boolean;
@@ -71,14 +76,15 @@ export const FunnelChart = memo(function FunnelChart({
   animate,
   responsive = true,
   colors,
+  colorScheme,
   tooltip,
   margin = DEFAULT_MARGIN,
   skeleton,
 }: FunnelChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
-  const paint = useChartPaint({ family: 'funnel-chart', override: colors });
-  const chartPersonality = useChartPersonality({ animate, tooltip });
+  const paint = useChartPaint({ family: 'funnel-chart', scheme: colorScheme, override: colors });
+  const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   // Validation and legend colors are resolved from the same pure engine as
   // the visible renderer. This fixed layout does not own responsive sizing;
