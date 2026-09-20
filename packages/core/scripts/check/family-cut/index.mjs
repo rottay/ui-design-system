@@ -894,8 +894,17 @@ export function analyzeSkin(file) {
   let selectsVariant = false;
 
   for (const match of text.matchAll(/\[data-part\s*[~^*$|]?=\s*['"]([^'"]+)['"]/gu)) parts.add(match[1]);
+  /* Every state occurrence keeps the simple-selector-sequence that owns it:
+   * whether a state is stamped is a question about the ELEMENT the rule lands
+   * on, and only the owning compound names that element. */
+  const stateCompounds = [];
   for (const match of text.matchAll(/\[data-state\s*[~^*$|]?=\s*['"]([^'"]+)['"]/gu)) {
-    for (const token of match[1].split(/\s+/u).filter(Boolean)) states.add(token);
+    const tokens = owningCompoundClassTokens(text, match.index);
+    const line = text.slice(0, match.index).split('\n').length;
+    for (const token of match[1].split(/\s+/u).filter(Boolean)) {
+      states.add(token);
+      stateCompounds.push({ state: token, tokens, line, file });
+    }
   }
   for (const match of text.matchAll(/\[data-component\s*=\s*['"]([^'"]+)['"]/gu)) components.add(match[1]);
   if (/\[data-variant/u.test(text)) selectsVariant = true;
@@ -965,7 +974,79 @@ export function analyzeSkin(file) {
     skeletonSigns.push({ what: `selector \`${match[0]}\``, line: lineAt(match.index), file });
   }
 
-  return { file, parts, states, classTokens, components, selectsVariant, variantCompounds, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
+  return { file, parts, states, stateCompounds, classTokens, components, selectsVariant, variantCompounds, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
+}
+
+/**
+ * The prefixed classes of the simple-selector-sequence that owns the attribute
+ * at `index` -- the compound that decides WHICH element the rule paints.
+ *
+ * `compoundClassTokensBefore` cannot answer this for a state: the governed
+ * F-37 idiom nests the attribute inside `:is([data-state~='x'], :hover)`, so
+ * the character to its left is `(` and a plain walk-back returns nothing on
+ * every family in the tree. Stepping out of the functional pseudo and
+ * continuing through its host is what recovers the compound -- and it must be
+ * the compound, not the selector: in `.ds-button .ds-x[data-state~='x']` the
+ * `.ds-button` is an ancestor, and an ancestor stamps nothing on `.ds-x`.
+ */
+function owningCompoundClassTokens(text, index) {
+  let at = index;
+  let depth = 0;
+  let brackets = 0;
+  let compound = '';
+  /* The local compound is closed once a boundary is crossed; everything left
+   * of it belongs to another element or another selector. */
+  let closed = false;
+  /* Whitespace is a descendant combinator only when a simple selector really
+   * sits to its left -- beside a `,`, a `>` or a `(` it is only formatting. */
+  let pendingDescendant = false;
+  let descendant = false;
+  let listComma = false;
+  while (at > 0) {
+    const char = text[at - 1];
+    const keep = () => { if (!closed) compound = char + compound; at -= 1; };
+    if (brackets > 0) {
+      if (char === '[') brackets -= 1;
+      keep();
+      continue;
+    }
+    if (char === ']') { brackets += 1; keep(); continue; }
+    if (char === ')') { depth += 1; keep(); continue; }
+    if (char === '(' && depth > 0) { depth -= 1; keep(); continue; }
+    if (char === '(') {
+      /* An unmatched `(` is the functional pseudo this occurrence sits inside
+       * -- `:is([data-state~='x'], :hover)`. Its host compound is the element
+       * the rule paints, so drop the pseudo's name and measure the host. */
+      at -= 1;
+      while (at > 0 && /[\w-]/u.test(text[at - 1])) at -= 1;
+      while (at > 0 && text[at - 1] === ':') at -= 1;
+      const host = descendant ? [] : owningCompoundClassTokens(text, at);
+      return [...host, ...prefixedClassesIn(compound)];
+    }
+    if (depth === 0) {
+      if (/[{};]/u.test(char)) break;
+      if (char === ',') { closed = true; listComma = true; pendingDescendant = false; at -= 1; continue; }
+      if (/[>+~]/u.test(char)) { closed = true; descendant = true; pendingDescendant = false; at -= 1; continue; }
+      if (/\s/u.test(char)) { closed = true; pendingDescendant = true; at -= 1; continue; }
+      if (pendingDescendant) { descendant = true; pendingDescendant = false; }
+    }
+    keep();
+  }
+  if (listComma && compound === '') return [];
+  return prefixedClassesIn(compound);
+}
+
+/** The prefixed class tokens of one compound, ignoring anything inside parens. */
+function prefixedClassesIn(text) {
+  let compound = text;
+  while (/\([^()]*\)/u.test(compound)) compound = compound.replace(/\([^()]*\)/gu, '');
+  const tokens = [];
+  for (const prefix of CLASS_PREFIXES) {
+    for (const match of compound.matchAll(new RegExp(`\\.(${prefix}-[a-zA-Z0-9]+(?:-{1,2}[a-zA-Z0-9]+)*)`, 'gu'))) {
+      tokens.push(match[1]);
+    }
+  }
+  return tokens;
 }
 
 /** The prefixed classes of the compound selector that ends at `index`, outside any parentheses. */
@@ -981,15 +1062,7 @@ function compoundClassTokensBefore(text, index) {
     } else if (depth === 0 && /[\s,>+~{};]/u.test(char)) break;
     start -= 1;
   }
-  let compound = text.slice(start, index);
-  while (/\([^()]*\)/u.test(compound)) compound = compound.replace(/\([^()]*\)/gu, '');
-  const tokens = [];
-  for (const prefix of CLASS_PREFIXES) {
-    for (const match of compound.matchAll(new RegExp(`\\.(${prefix}-[a-zA-Z0-9]+(?:-{1,2}[a-zA-Z0-9]+)*)`, 'gu'))) {
-      tokens.push(match[1]);
-    }
-  }
-  return tokens;
+  return prefixedClassesIn(text.slice(start, index));
 }
 
 // ---------------------------------------------------------------------------
@@ -1122,6 +1195,34 @@ function composedPrimitiveStampsVariant(token, root) {
       : undefined);
   }
   return composedVariantStampCache.get(key);
+}
+
+const composedStateStampCache = new Map();
+
+/**
+ * The states a composed primitive stamps on the element a family reaches
+ * through the primitive's class. The Button kernel writes the part attribute
+ * and the state attribute in the SAME `partAttributes` call, so a rule whose
+ * owning compound carries `.ds-button` paints a state the composed primitive
+ * really serializes -- the twin of the `data-variant` credit above.
+ */
+function composedPrimitiveStampsState(token, root) {
+  const name = withoutTier(token.slice(token.indexOf('-') + 1)).replace(/--.*$/u, '');
+  const key = `${root}\0${name}`;
+  if (!composedStateStampCache.has(key)) {
+    const owners = findComponentDirs(root, name);
+    const frozenOnly = collectFrozenOnlyModules(owners);
+    const sources = owners.length === 1
+      ? walkFiles(owners[0], isFamilySource)
+        .filter((file) => !frozenOnly.has(file))
+        .map((file) => analyzeSource(file))
+        .filter((entry) => entry.stampsStateAttribute)
+      : [];
+    composedStateStampCache.set(key, sources.length > 0
+      ? { name, states: new Set(sources.flatMap((entry) => [...entry.states])) }
+      : undefined);
+  }
+  return composedStateStampCache.get(key);
 }
 
 /**
@@ -1885,6 +1986,30 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
     if (backer) variantComposedFrom.add(backer);
     else familyVariantSelections += 1;
   }
+  /* A state painted on a compound that carries a composed primitive's class is
+   * stamped by that primitive, not by this family: the class and the state land
+   * on the same element (P-79). The occurrences that reach no such primitive are
+   * kept, because they name the parts this family still owes a stamp. */
+  const stateComposedFrom = new Set();
+  const composedStampedStates = new Set();
+  const statesNotComposed = [];
+  for (const occurrence of skins.flatMap((skin) => skin.stateCompounds)) {
+    const backer = occurrence.tokens
+      .filter((token) => !ownsClass(token))
+      .map((token) => composedPrimitiveStampsState(token, root))
+      .find((entry) => entry?.states.has(occurrence.state));
+    if (backer) {
+      stateComposedFrom.add(backer.name);
+      composedStampedStates.add(occurrence.state);
+    } else {
+      statesNotComposed.push({
+        state: occurrence.state,
+        compound: occurrence.tokens.join(' '),
+        line: occurrence.line,
+        file: occurrence.file,
+      });
+    }
+  }
   const usesPartAttributes = sources.some((entry) => entry.usesPartAttributes);
   const dynamicParts = sources.reduce((total, entry) => total + entry.dynamicParts, 0);
   const skinUsesStateAttribute = consumedStates.size > 0;
@@ -1927,7 +2052,7 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
     ? []
     : [...consumedParts].filter((part) => !stampedParts.has(part)).sort();
   const statesConsumedNotStamped = [...consumedStates]
-    .filter((state) => !stampedStates.has(state))
+    .filter((state) => !stampedStates.has(state) && !composedStampedStates.has(state))
     .sort();
 
   const unpairedStatePseudo = skins.flatMap((skin) => skin.unpairedPseudo);
@@ -2002,6 +2127,8 @@ export function measureFamily(resolved, { producers, compiled, scopes } = {}) {
       colorLiteralsInSkin,
       maskAlphaStops,
       variantComposedFrom: [...variantComposedFrom].sort(),
+      stateComposedFrom: [...stateComposedFrom].sort(),
+      statesNotComposed,
       partsReadThroughComponent: [...anchoredParts].sort(),
       readWithoutProducer: readWithoutProducer.debt,
       readChannels: [...readNames].sort(),

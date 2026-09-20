@@ -2959,3 +2959,118 @@ test('LIVE: every catalog fan-out id is a roster row or a registered route', () 
   assert.ok(record.detail.readChannels.includes('--ds-edge-standard-width'));
   assert.deepEqual(record.detail.fanOut, [], 'and the catalog row reaches `record` under no declaration at all');
 });
+
+// ---------------------------------------------------------------------------
+// A composed primitive's STATE: the twin of the variant credit above
+// ---------------------------------------------------------------------------
+
+/** The governed F-37 shape: the attribute nests inside `:is(…, :pseudo)`. */
+const governedHover = (compound) =>
+  `${compound}:is([data-state~='hovered'], :hover) { color: inherit; }\n`;
+
+test("CONTROL: the owning compound of a state nested in `:is()` is the compound that HOSTS the pseudo, not what sits left of the bracket", () => {
+  const compoundsOf = (css) => {
+    const file = join(mkdtempSync(join(tmpdir(), 'family-cut-compound-')), 'index.css');
+    writeFileSync(file, css);
+    return analyzeSkin(file).stateCompounds.map((row) => row.tokens);
+  };
+  /* Walking back from `[data-state` alone finds `(` and returns nothing: that
+   * is the measured reason the states arm could not see a composed stamp. */
+  assert.deepEqual(
+    compoundsOf(governedHover(".ds-planted-bar__trigger[data-part='trigger'].ds-button[data-variant]")),
+    [['ds-planted-bar', 'ds-button']],
+  );
+  /* An ancestor is not the owner -- whole-selector matching would credit these. */
+  assert.deepEqual(compoundsOf(governedHover('.ds-button .ds-planted-bar__trigger')), [['ds-planted-bar']]);
+  assert.deepEqual(compoundsOf(governedHover('.ds-button > .ds-planted-bar__trigger')), [['ds-planted-bar']]);
+  /* Nor is a sibling selector of the same list. */
+  assert.deepEqual(compoundsOf(`.ds-button,\n${governedHover('.ds-planted-bar__trigger')}`), [['ds-planted-bar']]);
+  /* Inside the pseudo's argument list the host compound still owns it. */
+  assert.deepEqual(
+    compoundsOf(".ds-planted-bar__trigger.ds-button:is(:hover, [data-state~='hovered']) { color: inherit; }\n"),
+    [['ds-planted-bar', 'ds-button']],
+  );
+  /* And a bare attribute in a selector list owns no class at all. */
+  assert.deepEqual(compoundsOf(".ds-button,[data-state~='hovered'] { color: inherit; }\n"), [[]]);
+});
+
+test("CONTROL: a state painted on the composed `.ds-button` compound is stamped by Button's own kernel", () => {
+  for (const compound of [
+    ".ds-planted-bar__trigger[data-part='trigger'].ds-button[data-variant]",
+    '.ds-planted-bar__trigger.ds-button.ds-button',
+    '.ds-planted-bar .ds-planted-bar__trigger.ds-button',
+  ]) {
+    const measured = measureComposer({ skin: `${BAR_RULE}${governedHover(compound)}` });
+    assert.deepEqual(measured.detail.statesConsumedNotStamped, [], compound);
+    assert.deepEqual(measured.detail.stateComposedFrom, ['button'], compound);
+    assert.deepEqual(measured.detail.statesNotComposed, [], compound);
+  }
+});
+
+test('PLANT: the same rule on a compound that carries no composed primitive is still debt', () => {
+  const measured = measureComposer({ skin: `${BAR_RULE}${governedHover('.ds-planted-bar__trigger')}` });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
+  assert.deepEqual(measured.detail.statesNotComposed.map((row) => row.state), ['hovered']);
+});
+
+test('PLANT: a state painted on a DESCENDANT of the composed primitive is still debt -- an ancestor stamps nothing on its child', () => {
+  for (const compound of [
+    '.ds-button .ds-planted-bar__trigger',
+    '.ds-button > .ds-planted-bar__trigger',
+    '.ds-button + .ds-planted-bar__trigger',
+  ]) {
+    const measured = measureComposer({ skin: `${BAR_RULE}${governedHover(compound)}` });
+    assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered'], compound);
+    assert.deepEqual(measured.detail.stateComposedFrom, [], compound);
+  }
+});
+
+test('PLANT: a state painted through a class no owner in the tree answers is still debt', () => {
+  const measured = measureComposer({
+    skin: `${BAR_RULE}${governedHover('.ds-planted-bar__trigger.ds-ghost-widget')}`,
+  });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+});
+
+test('PLANT: the composed primitive must really stamp -- Button without its `partAttributes` call does not discharge the state', () => {
+  const measured = measureComposer({
+    skin: `${BAR_RULE}${governedHover('.ds-planted-bar__trigger.ds-button')}`,
+    edit: (sandbox) => patch(sandbox, MODERN_TSX, (text) =>
+      text.replace("    ...partAttributes(dataPart ?? 'trigger', interaction),", '')),
+  });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['hovered']);
+  assert.deepEqual(measured.detail.stateComposedFrom, []);
+});
+
+test('PLANT: a credited state beside an uncredited one keeps the uncredited part on the record and in the arm', () => {
+  const measured = measureComposer({
+    skin: `${BAR_RULE}${governedHover('.ds-planted-bar__trigger.ds-button')}`
+      + ".ds-planted-bar__chip:is([data-state~='pressed'], :active) { color: inherit; }\n",
+  });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, ['pressed']);
+  assert.deepEqual(measured.detail.stateComposedFrom, ['button']);
+  assert.deepEqual(measured.detail.statesNotComposed.map((row) => `${row.state} ${row.compound}`), ['pressed ds-planted-bar']);
+});
+
+test('LIVE: list-toolbar holds the states arm only through the composed Button, and filter-chip stays on the record', () => {
+  const measured = measureFamily(resolveFamily('list-toolbar', ROOT), { producers: PRODUCERS });
+  assert.deepEqual(measured.detail.statesConsumedNotStamped, []);
+  assert.deepEqual(measured.detail.stateComposedFrom, ['button']);
+  /* The one part the runtime probe measured as NOT stamped: its fix is a
+   * product packet, so the arm must not be the place that forgets it. */
+  assert.deepEqual(
+    measured.detail.statesNotComposed.map((row) => `${row.state} ${row.compound}`),
+    ['hovered ds-list-toolbar'],
+  );
+});
+
+/* How much these six still owe is the product packets' number and moves while
+ * they land; that no composed primitive answers for them is the invariant this
+ * credit must not break, and it is the only thing asserted here. */
+test('LIVE: the families whose parts are NOT backed by a composed primitive receive no composed-state credit', () => {
+  for (const family of ['table', 'tag', 'avatar', 'descriptions', 'splitter', 'tree']) {
+    const measured = measureFamily(resolveFamily(family, ROOT), { producers: PRODUCERS });
+    assert.deepEqual(measured.detail.stateComposedFrom, [], family);
+  }
+});
