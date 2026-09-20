@@ -121,7 +121,8 @@ const bitHireTableTokens: TableTokenPreviewStyle = {
   "--ds-table-row-bg-selected": "#e5f1ff",
   "--ds-table-action-bg": "#fbfdff",
   "--ds-table-padding-comfortable": "0.75rem 0.875rem",
-  "--ds-table-control-radius": "0.5rem",
+  "--ds-data-table-control-radius": "0.5rem",
+  "--ds-data-table-control-pill-radius": "0.5rem",
 };
 
 const managementTableTokens: TableTokenPreviewStyle = {
@@ -145,7 +146,8 @@ const managementTableTokens: TableTokenPreviewStyle = {
   "--ds-table-row-border": "#dfd6c9",
   "--ds-table-action-bg": "#fbf7ef",
   "--ds-table-padding-comfortable": "0.875rem 1rem",
-  "--ds-table-control-radius": "0.1875rem",
+  "--ds-data-table-control-radius": "0.1875rem",
+  "--ds-data-table-control-pill-radius": "0.1875rem",
 };
 
 const managementColumns = columns.map((column) => ({

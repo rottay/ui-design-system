@@ -36,7 +36,7 @@
   .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 @media (hover: hover) {
@@ -56,7 +56,7 @@
   ) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
