@@ -75,7 +75,7 @@
   --ds-collapse-header-default-disabled-bg: var(--ds-material-panel-background-disabled);
   --ds-collapse-header-default-disabled-color: var(--ds-material-panel-foreground-disabled);
   --ds-collapse-header-default-disabled-cursor: not-allowed;
-  --ds-collapse-header-default-disabled-opacity: 0.6;
+  --ds-collapse-header-default-disabled-opacity: var(--ds-state-disabled-opacity);
 
   /* Header - Default Variant - Expanded State */
   --ds-collapse-header-default-expanded-bg: var(--ds-color-neutral-50);

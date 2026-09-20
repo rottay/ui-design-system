@@ -224,7 +224,7 @@
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]:active
+  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]:is([data-state~="pressed"], :active)
   .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
   transform: translateY(0);
 }

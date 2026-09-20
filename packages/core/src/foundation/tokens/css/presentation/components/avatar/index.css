@@ -148,7 +148,7 @@
   --ds-avatar-focus-ring-color: var(--ds-color-primary-500);
   --ds-avatar-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
 
-  --ds-avatar-active-scale: 0.98;
+  --ds-avatar-active-scale: var(--ds-state-press-scale);
 
   /* ========================================================================
      BADGE/NOTIFICATION

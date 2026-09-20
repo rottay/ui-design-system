@@ -150,7 +150,7 @@
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] [data-part='item'] {
   padding-inline: var(--ds-command-palette-item-padding-inline, var(--ds-spacing-3, 12px));
 }
-.ds-pattern-command-palette.ds-engine-modern [data-part='item'][aria-disabled='true'] {
+.ds-pattern-command-palette.ds-engine-modern [data-part='item']:is([data-state~='disabled'], [aria-disabled='true']) {
   cursor: not-allowed;
   opacity: var(--ds-command-palette-item-disabled-opacity, 0.5);
 }

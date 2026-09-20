@@ -74,7 +74,7 @@
     );
   }
 }
-.ds-voice-input-button[data-part='root']:active {
+.ds-voice-input-button[data-part='root']:is([data-state~='pressed'], :active) {
   transform: scale(var(--ds-state-press-scale));
 }
 

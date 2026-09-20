@@ -332,7 +332,7 @@
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='disabled'], :disabled) {
-  opacity: var(--ds-approval-disabled-opacity, 0.6);
+  opacity: var(--ds-approval-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
 

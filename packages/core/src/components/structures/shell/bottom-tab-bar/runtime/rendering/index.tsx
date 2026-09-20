@@ -45,6 +45,7 @@
  */
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Box } from '@/components/primitives/layout/box';
 import { Flex } from '@/components/primitives/layout/flex';
 
@@ -72,6 +73,9 @@ interface TabItemRendererProps {
 
 function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
   const i18n = useOptionalTranslation('components');
+  // The icon pill's press dip is one decision: the kernel stamps it and the
+  // skin's `:active` arm is that decision's fallback.
+  const tab = useInteractionState();
   const handleClick = () => {
     item.onClick?.();
     onSelect();
@@ -103,7 +107,8 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
       aria-current={isActive ? 'page' : undefined}
       aria-label={accessibleName}
       data-testid={`tab-item-${item.key}`}
-      data-part="tab-button"
+      {...partAttributes('tab-button', tab.state)}
+      {...tab.handlers}
       data-selected={isActive}
     >
       {/* Icon container with optional badge; the active pill paints in the skin */}

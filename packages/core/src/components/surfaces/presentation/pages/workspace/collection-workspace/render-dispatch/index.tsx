@@ -50,6 +50,7 @@ import { PatternGalleryView } from '../../../../../../patterns/data/gallery-view
 import { PatternKanbanBoard } from '../../../../../../patterns/visualization/kanban-board';
 import { PatternCalendarView } from '../../../../../../patterns/visualization/calendar-view';
 import { Box } from '../../../../../../primitives/layout/box';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { Text } from '../../../../../../primitives/display/typography';
 import { Button } from '../../../../../../primitives/inputs/button';
 import { Select } from '../../../../../../primitives/inputs/select';
@@ -280,6 +281,40 @@ function isNestedInteractiveCardTarget(
     interactiveTarget
     && interactiveTarget !== currentTarget
     && currentTarget.contains(interactiveTarget),
+  );
+}
+
+/**
+ * A card row in cards mode. The press dip the skin paints on the fallback card
+ * is one decision, so the kernel stamps it here and the skin's `:active` arm is
+ * that decision's fallback; a hook cannot live in the render loop itself.
+ */
+function CardItem({
+  isLoneFinalCard,
+  hasActivation,
+  href,
+  onActivate,
+  children,
+}: {
+  isLoneFinalCard: boolean;
+  hasActivation: boolean;
+  href: string | undefined;
+  onActivate: (event: React.MouseEvent<HTMLElement>) => void;
+  children: ReactNode;
+}) {
+  const card = useInteractionState();
+  return (
+    <Box
+      className="ds-collection-render-dispatch__card-item"
+      {...partAttributes('card-item', card.state)}
+      {...card.handlers}
+      data-lone-final={isLoneFinalCard ? 'true' : 'false'}
+      data-activatable={hasActivation ? 'true' : 'false'}
+      data-href={href}
+      onClick={onActivate}
+    >
+      {children}
+    </Box>
   );
 }
 
@@ -909,14 +944,12 @@ export function CollectionRenderDispatch<T extends object>(
             const activationLabel = rowActivationLabel?.(item, i) ?? `Open item ${i + 1}`;
             const hasActivation = Boolean(onRowClick);
             return (
-            <Box
-              className="ds-collection-render-dispatch__card-item"
-              data-part="card-item"
-              data-lone-final={isLoneFinalCard ? 'true' : 'false'}
-              data-activatable={hasActivation ? 'true' : 'false'}
-              data-href={href}
+            <CardItem
+              isLoneFinalCard={isLoneFinalCard}
+              hasActivation={hasActivation}
+              href={href}
               key={resolveKey(item, rowKey)}
-              onClick={(event) => {
+              onActivate={(event) => {
                 if (isNestedInteractiveCardTarget(event.target, event.currentTarget)) return;
                 onRowClick?.(item, i);
               }}
@@ -960,7 +993,7 @@ export function CollectionRenderDispatch<T extends object>(
                     t: tSurfaceOr,
                     locale,
                   })}
-            </Box>
+            </CardItem>
             );
           })}
         </Box>

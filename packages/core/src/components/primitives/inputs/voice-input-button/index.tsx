@@ -36,6 +36,7 @@
 
 import { useId } from 'react';
 
+import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';
 import { Box } from '../../layout/box';
 import { Tooltip } from '../../display/tooltip';
 import { VisuallyHidden } from '../../foundation/visually-hidden';
@@ -101,6 +102,9 @@ export function VoiceInputButton({
   // `useVoiceInput` (keys `voiceInput.error.*`). NOTE: this hook call must
   // stay above the `isSupported` early return — hooks are unconditional.
   const reactId = useId();
+  // The press scale the skin paints is one decision: the kernel stamps it and
+  // the skin's `:active` arm is that decision's fallback.
+  const trigger = useInteractionState();
   const i18n = useOptionalTranslation('components');
   const voiceLabel = (key: string, fallback: string): string => {
     const translated = i18n?.t(key);
@@ -168,13 +172,17 @@ export function VoiceInputButton({
             toggle inside a form would submit it (Box's own contract flags this
             exact hazard for `as='button'`). The passthrough spreads first so
             every engine-owned hook below wins the tie — the pinned law of the
-            layout sisters. */}
+            layout sisters. `data-state` is restated after `partAttributes`
+            because that helper OMITS the key at rest, which would otherwise
+            let a caller `data-state` survive and pin the skin's press paint. */}
         <Box
           as="button"
           type="button"
           {...passthrough}
           className={['ds-voice-input-button', className].filter(Boolean).join(' ')}
-          data-part="root"
+          {...partAttributes('root', trigger.state)}
+          data-state={serializeState(trigger.state)}
+          {...trigger.handlers}
           data-size={size}
           data-status={status}
           data-active={isActive ? 'true' : 'false'}

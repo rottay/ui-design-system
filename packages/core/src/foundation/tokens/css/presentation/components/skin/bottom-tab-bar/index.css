@@ -235,12 +235,12 @@
 }
 
 @media (hover: hover) {
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:active):hover .rottay-bottom-tab-bar__icon-wrap {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:is([data-state~='pressed'], :active)):hover .rottay-bottom-tab-bar__icon-wrap {
     background: color-mix(in srgb, var(--ds-color-text-muted) 8%, transparent);
   }
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:active .rottay-bottom-tab-bar__icon-wrap {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap {
   transform: scale(0.94);
 }
 
