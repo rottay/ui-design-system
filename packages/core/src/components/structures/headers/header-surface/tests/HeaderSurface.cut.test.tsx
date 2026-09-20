@@ -109,7 +109,16 @@ describe('HeaderSurface (WO-FAM-10 cut)', () => {
     expect(shellRoot).toHaveAttribute('aria-busy', 'true');
     // The shell announces the state instead of wandering AT through the skeleton.
     expect(within(shellRoot).getByRole('status')).toHaveTextContent('Loading page');
-    expect(shellRoot.querySelector("[data-part='skeleton-group']")).toBeTruthy();
+    // The shell's wait is drawn from the chrome this surface hands it: one bone
+    // per stamped part, so the bone set is the delegated header's shape.
+    const skeleton = shellRoot.querySelector('.ds-skeleton-anatomy') as HTMLElement;
+    expect(skeleton).toBeTruthy();
+    expect(skeleton.querySelector("[data-part='source']")).toBeTruthy();
+    expect(
+      Array.from(skeleton.querySelectorAll("[data-part='bone']")).map((bone) =>
+        bone.getAttribute('data-source-part'),
+      ),
+    ).toEqual(['title']);
     // The early return is the passthrough: the family's own root and body
     // content do not render alongside the shell's loading state.
     expect(document.querySelector('.ds-surface.ds-header')).toBeNull();
