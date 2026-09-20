@@ -169,6 +169,8 @@ export const TENANT_THEME_OVERRIDE_TOKENS = [
   "--ds-chart-category-8",
   "--ds-chart-category-9",
   "--ds-chart-category-10",
+  "--ds-chart-category-11",
+  "--ds-chart-category-12",
   "--ds-color-success",
   "--ds-color-warning",
   "--ds-color-error",

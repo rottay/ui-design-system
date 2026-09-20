@@ -50,7 +50,7 @@ const FIXTURE_DIR = resolve(
 const readFixture = (name: string): TenantThemeArtifact =>
   JSON.parse(readFileSync(resolve(FIXTURE_DIR, name), "utf8"));
 
-const CHART_SERIES_TOKEN = /^--ds-chart-series-(?:[1-9]|10)$/;
+const CHART_SERIES_TOKEN = /^--ds-chart-series-(?:[1-9]|1[0-2])$/;
 const DENSITY_MODE_FACTOR_TOKEN = "--ds-density-mode-factor";
 const ON_PRIMARY_INK_TOKEN = "--ds-color-text-on-primary";
 const BEHAVIOR_ONLY_AMBIENT_TOKEN = "--ds-motion-ambient";
@@ -693,7 +693,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
         "--ds-sidebar-item-bg-hover": "var(--ds-color-primary-800)",
       },
     });
-    expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(10);
+    expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(12);
     expect([...additions].sort()).toEqual([
       // The five per-size button radii the CHOSEN silhouette now reaches.
       // `shape.button-style` used to expand into a `chrome.controls`
@@ -712,6 +712,8 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-button-xs-radius",
       "--ds-chart-series-1",
       "--ds-chart-series-10",
+      "--ds-chart-series-11",
+      "--ds-chart-series-12",
       "--ds-chart-series-2",
       "--ds-chart-series-3",
       "--ds-chart-series-4",

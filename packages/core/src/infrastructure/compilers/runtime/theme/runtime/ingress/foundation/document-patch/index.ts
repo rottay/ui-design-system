@@ -371,7 +371,7 @@ function migrateTokenOverrides(
   }
   assertTokenOverrideValues(overrides);
   for (const [key, value] of Object.entries(overrides)) {
-    const category = /^--ds-chart-category-(10|[1-9])$/.exec(key);
+    const category = /^--ds-chart-category-(1[0-2]|[1-9])$/.exec(key);
     if (category) {
       categoryColors[Number(category[1]) - 1] = String(value);
       continue;

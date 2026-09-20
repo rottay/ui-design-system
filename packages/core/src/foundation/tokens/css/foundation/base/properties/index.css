@@ -18,7 +18,7 @@
  * tests/property-registration-drift.test.ts parses this file against the shipped
  * sources and fails on any drift.
  *
- * --ds-chart-series-1..10 are deliberately NOT registered here. Their paint
+ * --ds-chart-series-1..12 are deliberately NOT registered here. Their paint
  * chain in presentation/components/skin/chart-foundation.css is
  * var(--ds-chart-category-N, var(--ds-chart-series-N, var(--ds-chart-<scheme>-N, <literal>)))
  * and the tenant appearance compiler emits --ds-chart-series-N only when a tenant

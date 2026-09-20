@@ -18,8 +18,8 @@ import {
 } from "../../../foundation/ground";
 
 /**
- * The ten reserved series slots and the ten authored category slots, each
- * assigned under its own literal name.
+ * The twelve reserved series slots and the twelve authored category slots,
+ * each assigned under its own literal name.
  *
  * Written as explicit per-slot assignments, not a loop over an interpolated
  * key: the reserved-name gate and the channel-liveness producer both read the
@@ -52,6 +52,8 @@ export function deriveChartChannels(
     if (series[7]) vars["--ds-chart-series-8"] = series[7];
     if (series[8]) vars["--ds-chart-series-9"] = series[8];
     if (series[9]) vars["--ds-chart-series-10"] = series[9];
+    if (series[10]) vars["--ds-chart-series-11"] = series[10];
+    if (series[11]) vars["--ds-chart-series-12"] = series[11];
   }
   const categories = bt.charts?.categoryColors;
   if (categories) {
@@ -65,13 +67,16 @@ export function deriveChartChannels(
     if (categories[7]) vars["--ds-chart-category-8"] = categories[7];
     if (categories[8]) vars["--ds-chart-category-9"] = categories[8];
     if (categories[9]) vars["--ds-chart-category-10"] = categories[9];
+    if (categories[10]) vars["--ds-chart-category-11"] = categories[10];
+    if (categories[11]) vars["--ds-chart-category-12"] = categories[11];
   }
   return vars;
 }
 
 /**
  * The series palette derived from the theme's own seed against the grounds it
- * actually paints on, plus the ten category slots a theme may state outright.
+ * actually paints on, plus the twelve category slots a theme may state
+ * outright.
  */
 export const chartsDeriver: FamilyDeriver = {
   family: "charts",

@@ -1,7 +1,7 @@
 /**
  * Chart-series palette generation proof (W4-C3).
  *
- * Proves the generator emits exactly ten unique, gamut-valid hex slots whose
+ * Proves the generator emits exactly twelve unique, gamut-valid hex slots whose
  * hues track the seed's offsets, whose chroma stays in the calm band, and
  * (property, 200 seeded random brand seeds across light/dark/auto ground
  * sets) whose every slot clears the compiled chart-category validator's 3:1
@@ -57,7 +57,7 @@ function randomHex(next: () => number): string {
 }
 
 describe('deriveChartSeriesPalette', () => {
-  it('emits exactly ten unique 6-digit uppercase hex slots', () => {
+  it('emits exactly twelve unique 6-digit uppercase hex slots', () => {
     const palette = deriveChartSeriesPalette('#2F6B9A', validatorGrounds('light'), 'light');
     expect(palette).toHaveLength(CHART_SERIES_SLOT_COUNT);
     for (const hex of palette) {
@@ -87,7 +87,7 @@ describe('deriveChartSeriesPalette', () => {
     }
   });
 
-  it('yields ten distinguishable slots from a gray seed (chroma floor)', () => {
+  it('yields twelve distinguishable slots from a gray seed (chroma floor)', () => {
     const palette = deriveChartSeriesPalette('#808080', validatorGrounds('light'), 'light');
     expect(new Set(palette).size).toBe(CHART_SERIES_SLOT_COUNT);
     for (const hex of palette) {

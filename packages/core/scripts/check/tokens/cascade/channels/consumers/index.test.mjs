@@ -208,10 +208,10 @@ test('the retired --ds-color-dark-* family has no reason bucket and no inventory
   }
 });
 
-test('CHART_SERIES_CHANNELS enumerates ten slots', () => {
-  assert.equal(CHART_SERIES_CHANNELS.length, 10);
+test('CHART_SERIES_CHANNELS enumerates twelve slots', () => {
+  assert.equal(CHART_SERIES_CHANNELS.length, 12);
   assert.equal(CHART_SERIES_CHANNELS[0], '--ds-chart-series-1');
-  assert.equal(CHART_SERIES_CHANNELS[9], '--ds-chart-series-10');
+  assert.equal(CHART_SERIES_CHANNELS[11], '--ds-chart-series-12');
 });
 
 /* ========================================================================== */

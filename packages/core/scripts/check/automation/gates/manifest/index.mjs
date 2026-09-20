@@ -674,7 +674,7 @@ export const CI_GATES = Object.freeze([
   // Build: the five committed `styles/*.css` mirrors are required and the
   // `dist/*` copies are audited only when present, so a clean clone certifies
   // the same law without a build step.
-  // The palette seam: `--ds-chart-series-1..10` may be DEFINED only by a
+  // The palette seam: `--ds-chart-series-1..12` may be DEFINED only by a
   // tenant-scope compiler, never by anything closer to the marks. It was
   // orphaned and red on 2026-08-19 -- not because a component had defined the
   // channel, but because the palette authority moved into the brand-theme

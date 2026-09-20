@@ -93,7 +93,7 @@ export const ANATOMY_ATTRIBUTE_BY_FAMILY = {
 };
 
 export const CHART_SERIES_CHANNELS = Array.from(
-  { length: 10 },
+  { length: 12 },
   (_unused, index) => `--ds-chart-series-${index + 1}`,
 );
 

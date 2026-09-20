@@ -284,7 +284,7 @@ export function contrastIssues(
   return issues;
 }
 
-const CHART_CATEGORY_TOKEN = /^--ds-chart-category-(?:[1-9]|10)$/;
+const CHART_CATEGORY_TOKEN = /^--ds-chart-category-(?:[1-9]|1[0-2])$/;
 const CHART_CATEGORY_MIN_CONTRAST = 3;
 export const DEFAULT_CHART_GROUNDS = {
   light: "#FFFFFF",

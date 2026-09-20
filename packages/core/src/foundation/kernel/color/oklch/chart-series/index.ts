@@ -1,7 +1,7 @@
 /**
  * @fileoverview Tenant chart-series palette generation (W4-C3).
  *
- * Derives ten categorical chart mark colors from a single brand seed: hue
+ * Derives twelve categorical chart mark colors from a single brand seed: hue
  * offsets spread the wheel from the seed's own hue, chroma is clamped into a
  * band that keeps even a gray-ish brand distinguishable without turning
  * radioactive, and lightness alternates between two surface-keyed bands so
@@ -10,7 +10,7 @@
  * 3:1 floor the compiled chart-category validator enforces, against every
  * supplied ground.
  *
- * Pure and deterministic: same inputs always produce the same ten hex
+ * Pure and deterministic: same inputs always produce the same twelve hex
  * strings. This module knows hex colors and a surface key only -- it must not
  * import the tenant-theme schema, contract, or compiler.
  */
@@ -24,10 +24,22 @@ import { hexToOklch, oklchToHex } from '..';
  */
 export type ChartSeriesSurface = 'light' | 'dark';
 
-export const CHART_SERIES_SLOT_COUNT = 10;
+export const CHART_SERIES_SLOT_COUNT = 12;
 
-/** Hue offsets (degrees) from the seed hue, one per slot. */
-export const CHART_SERIES_HUE_OFFSETS = [0, 40, 80, 135, 170, 205, 240, 275, 305, 340] as const;
+/**
+ * Hue offsets (degrees) from the seed hue, one per slot.
+ *
+ * Slots 11 and 12 extend the ten without moving them: each takes the exact
+ * midpoint of the widest hue gap inside its OWN lightness band -- the band
+ * alternates by index, so slot 11 joins {0, 80, 170, 240, 305} and slot 12
+ * joins {40, 135, 205, 275, 340}. Same-band separation is what binds: the
+ * tightest pair a twelve-slot palette produces is a same-band one, so
+ * splitting the widest same-band gap is what maximizes the minimum OKLab
+ * distance across the whole set.
+ */
+export const CHART_SERIES_HUE_OFFSETS = [
+  0, 40, 80, 135, 170, 205, 240, 275, 305, 340, 125, 87.5,
+] as const;
 
 /** Chroma band: floor keeps gray seeds distinguishable, ceiling keeps marks calm. */
 export const CHART_SERIES_CHROMA_MIN = 0.09;
@@ -85,7 +97,7 @@ function worstFailingGround(hex: string, failing: readonly string[]): string {
 }
 
 /**
- * Derive the ten `--ds-chart-series-*` slot colors for a tenant.
+ * Derive the twelve `--ds-chart-series-*` slot colors for a tenant.
  *
  * @param seedHex - brand seed (3- or 6-digit hex; anything else throws)
  * @param grounds - every ground the chart validator would check the palette
@@ -94,7 +106,7 @@ function worstFailingGround(hex: string, failing: readonly string[]): string {
  *   effective set skips the contrast nudge entirely.
  * @param surface - the tenant's own rendering surface, keying the lightness
  *   bands (same semantics as the ramp module's RampSurface)
- * @returns exactly ten uppercase 6-digit hex strings
+ * @returns exactly twelve uppercase 6-digit hex strings
  */
 export function deriveChartSeriesPalette(
   seedHex: string,

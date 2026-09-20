@@ -632,6 +632,8 @@ describe("the same font grammar answers the token-override spelling", () => {
       "--ds-chart-category-8",
       "--ds-chart-category-9",
       "--ds-chart-category-10",
+      "--ds-chart-category-11",
+      "--ds-chart-category-12",
     ]);
     expect([
       ...movedLeaves(

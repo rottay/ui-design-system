@@ -487,11 +487,25 @@ describe("digest identity across the canonicalization extraction", () => {
       "sha256-d6bfe52ac06d67a8515649aa4f3cb09f5bc9291454ab10d428ac33270355ae18";
     const POST_DISPLAY_FAMILY_ROUTE_CONFIG_DIGEST =
       "sha256-c4d24a1b7651f6d03a793d523eb0d386c8f66da511115340d4de476f954dd861";
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_DISPLAY_FAMILY_ROUTE_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_DISPLAY_FAMILY_ROUTE_CONFIG_DIGEST
+    );
+    // R3 adoption (2026-09-19): the tenant override allowlist reached the
+    // twelve-slot categorical vocabulary -- `--ds-chart-category-11` and `-12`
+    // joined the ten. A WIDENING under the same CC-01 law, so the superseded
+    // pins drop to `not.toBe` and the two new values are re-derived here.
+    const POST_TWELVE_SLOT_CATEGORY_DOCUMENT_DIGEST =
+      "sha256-5e5ce26a923789b4889ea56fddc54b044672d010ba7a4711999c3af7d947b518";
+    const POST_TWELVE_SLOT_CATEGORY_CONFIG_DIGEST =
+      "sha256-f6554523f70d1897322c239093b2f20e33f85dfd5eb6d25ba6c90a902de2ddef";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_TWELVE_SLOT_CATEGORY_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_TWELVE_SLOT_CATEGORY_CONFIG_DIGEST
     );
   });
 
@@ -832,7 +846,15 @@ describe("digest identity across the canonicalization extraction", () => {
     // refreshed baseline.
     const POST_FOCUS_RING_DERIVATION_DIGEST =
       "sha256-eccce2985d0189ae2b8580394989518f65dc0d052a6ca85c97c2b7346f2f72c8";
-    expect(artifact.digest).toBe(POST_FOCUS_RING_DERIVATION_DIGEST);
+    expect(artifact.digest).not.toBe(POST_FOCUS_RING_DERIVATION_DIGEST);
+    // Sixteenth declared move (R3 adoption, measured 2026-09-19): the tenant
+    // series authority reached twelve slots, so this seeded document derives
+    // `--ds-chart-series-11` and `-12` on top of the ten. The channel census
+    // below moves 64 -> 66 for exactly those two and nothing else, and the
+    // digest moves with them. Every prior pin stays asserted.
+    const POST_TWELVE_SLOT_SERIES_DIGEST =
+      "sha256-68c9edfe07b222c4364854715ad40793a8930f1ca854e30f9f03b380cdc7a55e";
+    expect(artifact.digest).toBe(POST_TWELVE_SLOT_SERIES_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
     expect(dark?.variables["--ds-color-primary"]).toBeUndefined();
     expect(
@@ -886,6 +908,10 @@ describe("digest identity across the canonicalization extraction", () => {
     // 63 -> 64 (the FAM-10 wave, measured 2026-09-18): added 1, removed 0 --
     // `--ds-focus-ring-color`, the fifteenth declared move above, pinned by
     // value two-sided below.
+    // 64 -> 66 (the twelve-slot adoption, measured 2026-09-19): added 2,
+    // removed 0 -- `--ds-chart-series-11` and `--ds-chart-series-12`, the two
+    // slots the tenant authority gained so a branded tenant no longer gets ten
+    // branded slots and two DS ones.
     expect(Object.keys(artifact.variables).sort()).toEqual([
       "--ds-button-lg-radius",
       "--ds-button-md-radius",
@@ -895,6 +921,8 @@ describe("digest identity across the canonicalization extraction", () => {
       "--ds-button-xs-radius",
       "--ds-chart-series-1",
       "--ds-chart-series-10",
+      "--ds-chart-series-11",
+      "--ds-chart-series-12",
       "--ds-chart-series-2",
       "--ds-chart-series-3",
       "--ds-chart-series-4",

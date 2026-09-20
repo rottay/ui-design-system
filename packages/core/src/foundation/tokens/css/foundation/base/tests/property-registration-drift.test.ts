@@ -180,12 +180,12 @@ const LITERAL_DEFAULTS: Record<string, string> = {
 };
 
 /**
- * --ds-chart-series-1..10 are intentionally NOT registered: any valid <color>
+ * --ds-chart-series-1..12 are intentionally NOT registered: any valid <color>
  * initial defeats the guaranteed-invalid var() fallback in chart-foundation.css
  * for uncompiled renders. This set locks that deferral.
  */
 const DEFERRED_UNREGISTERED = Array.from(
-  { length: 10 },
+  { length: 12 },
   (_, i) => `--ds-chart-series-${i + 1}`,
 );
 

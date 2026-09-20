@@ -2,7 +2,7 @@
 /**
  * chart-series-reserved-name-gate — W5 palette-seam law (design section 1.8).
  *
- * `--ds-chart-series-1..10` is the generated tenant palette channel: the
+ * `--ds-chart-series-1..12` is the generated tenant palette channel: the
  * tenant appearance compiler is its ONLY definer. Any other definition inside
  * the design-system runtime (a CSS declaration, an inline style key, an
  * emitted variable map) sits closer to the marks than the tenant scope and
@@ -58,9 +58,9 @@ const srcDir = join(root, 'src');
 
 export const RESERVED_NAME = '--ds-chart-series-';
 
-/** The reserved channel has exactly ten slots. */
+/** The reserved channel has exactly twelve slots. */
 const FIRST_SLOT = 1;
-const LAST_SLOT = 10;
+const LAST_SLOT = 12;
 
 /** Sanctioned definers of the reserved channel, relative to src/. */
 export const DEFINER_ALLOWLIST = [
@@ -73,7 +73,7 @@ export const DEFINER_ALLOWLIST = [
   // assembly, so that owner is the definer now — and since the compatibility
   // appearance projection was deleted at source, it is the only one.
   'infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/charts/index.ts',
-  // Derives the ten emitted slot colors for the compiler; names the channel
+  // Derives the twelve emitted slot colors for the compiler; names the channel
   // in its documentation and derivation API.
   'foundation/kernel/color/oklch/chart-series/index.ts',
 ];

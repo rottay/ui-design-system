@@ -491,11 +491,22 @@ describe("TenantThemeConfig v1 server contract", () => {
     // pairing expands into. A WIDENING with the law of CC-01 above -- nothing
     // withdrawn, no field changed type or format -- so the superseded pins stay
     // asserted and the ratchet keeps its history.
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-d6bfe52ac06d67a8515649aa4f3cb09f5bc9291454ab10d428ac33270355ae18"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-c4d24a1b7651f6d03a793d523eb0d386c8f66da511115340d4de476f954dd861"
+    );
+    // R3 adoption (2026-09-19): the tenant override allowlist reached the
+    // twelve-slot categorical vocabulary -- `--ds-chart-category-11` and `-12`
+    // joined the ten. A WIDENING with the law of CC-01 above -- nothing
+    // withdrawn, no field changed type or format -- so the superseded pins stay
+    // asserted and the ratchet keeps its history.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-5e5ce26a923789b4889ea56fddc54b044672d010ba7a4711999c3af7d947b518"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-f6554523f70d1897322c239093b2f20e33f85dfd5eb6d25ba6c90a902de2ddef"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(
@@ -1315,6 +1326,8 @@ describe("closed schema and hostile input rejection", () => {
       "#7D6140",
       "#A04435",
       "#5E5A52",
+      "#366916",
+      "#716901",
     ];
     const categories = Object.fromEntries(
       palette.map((color, index) => [`--ds-chart-category-${index + 1}`, color])
@@ -1330,6 +1343,7 @@ describe("closed schema and hostile input rejection", () => {
     });
     expect(artifact.variables["--ds-chart-category-1"]).toBe("#0F766E");
     expect(artifact.variables["--ds-chart-category-10"]).toBe("#5E5A52");
+    expect(artifact.variables["--ds-chart-category-12"]).toBe("#716901");
 
     expect(
       validateTenantThemeDocument({

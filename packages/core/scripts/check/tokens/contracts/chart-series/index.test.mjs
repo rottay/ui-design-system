@@ -29,11 +29,11 @@ const gate = join(scriptDir, 'index.mjs');
 /* Name classification                                                 */
 /* ------------------------------------------------------------------ */
 
-test('only canonical slots 1..10 are reserved names', () => {
-  for (let slot = 1; slot <= 10; slot += 1) {
+test('only canonical slots 1..12 are reserved names', () => {
+  for (let slot = 1; slot <= 12; slot += 1) {
     assert.equal(isStaticReservedName(`${RESERVED_NAME}${slot}`), true, `slot ${slot}`);
   }
-  for (const suffix of ['', '0', '11', '01', '1.0', '+1', '1e1', ' 1', '1 ', 'x', '*', '1a']) {
+  for (const suffix of ['', '0', '13', '01', '1.0', '+1', '1e1', ' 1', '1 ', 'x', '*', '1a']) {
     assert.equal(
       isStaticReservedName(`${RESERVED_NAME}${suffix}`),
       false,
@@ -236,29 +236,30 @@ test('each definition is reported exactly once', () => {
 /* Integration against the real tree                                   */
 /* ------------------------------------------------------------------ */
 
-test('the real tree has zero violations and exactly ten allowlisted definer hits', () => {
+test('the real tree has zero violations and exactly twelve allowlisted definer hits', () => {
   const { findings, scanned, allowlistedHits } = runGate();
   assert.deepEqual(findings, []);
   assert.ok(scanned > 100, `expected a real scan, saw ${scanned} files`);
-  // The sanctioned emissions are the chart family's ten reserved slots, in the
-  // one deriver that owns them. They emit at the tenant root scope, so they are
+  // The sanctioned emissions are the chart family's twelve reserved slots, in
+  // the one deriver that owns them. They emit at the tenant root scope, so they are
   // not the CHT-03 hazard, which is a definition BELOW that scope.
   //
   // Pinned at 2 while the appearance compiler carried a second, compatibility
   // derivation; at 1 once that projection was deleted and the single template
   // assignment `vars[\`--ds-chart-series-${index + 1}\`]` was the only emission;
-  // at 10 now that the slots are assigned under their own literal names. The
-  // count moved because the NAMES became readable, not because a definer was
-  // added: this gate resolves an assignment KEY, and a name assembled behind an
-  // interpolation is a name it cannot resolve. Zero would mean the emitter moved
-  // and the allowlist is stale; eleven would mean a definer slipped into an
-  // allowlisted path. The oklch derivation file names the channel only in prose,
+  // at 10 once the slots were assigned under their own literal names; at 12
+  // when the tenant authority was extended to the twelve-slot vocabulary. The
+  // move from 1 to 10 happened because the NAMES became readable, not because a
+  // definer was added: this gate resolves an assignment KEY, and a name
+  // assembled behind an interpolation is a name it cannot resolve. Zero would
+  // mean the emitter moved and the allowlist is stale; thirteen would mean a
+  // definer slipped into an allowlisted path. The oklch derivation file names the channel only in prose,
   // so it is not a hit under syntactic adjudication — it stays allowlisted so a
   // future emission there is a reviewed change, not a silent one.
   assert.equal(
     allowlistedHits,
-    10,
-    `expected exactly the ten reserved slot emissions, saw ${allowlistedHits}`,
+    12,
+    `expected exactly the twelve reserved slot emissions, saw ${allowlistedHits}`,
   );
 });
 
