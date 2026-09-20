@@ -196,11 +196,22 @@
 }
 
 /* The label is the only channel the variant re-tints; value and helper are the
-   same two tokens in all five. */
+   same two tokens in all five.
+
+   QUIET RUNG: the three variants whose well is a flat blend of the secondary
+   background role read the family's own graded ink instead of a page role. The
+   roles are fixed for a light canvas (the muted rung measured 2.7:1 on this
+   well) and they do not even keep their RANK across modes: `text-secondary` is
+   lighter than `text-muted` in both modes, which makes it the QUIETER of the two
+   on a light ground (2.43:1 vs 2.74:1 here) and the LOUDER on a dark one
+   (12.0:1 vs 7.0:1) -- so the family states ONE quiet rung, a weighted mix of the reading ink into the well it
+   sits on, whose sign follows the mode by construction. The value keeps the
+   full reading ink, so the label stays subordinate. The editorial and
+   governance wells are gradients and keep their own authored tints. */
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] [data-part='summary-item-label'],
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] [data-part='summary-item-label'],
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-label'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] [data-part='summary-item-label'] {
@@ -241,7 +252,7 @@
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-helper'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-record-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-color-bg-secondary)));
   line-height: 1.5;
 }
 
@@ -427,8 +438,11 @@
   line-height: 1.4;
 }
 
+/* The ledger's field labels are the canvas-side arm of the same quiet rung:
+   the cells paint no well, so their ink is graded against the canvas the grid
+   rests on rather than against a page role fixed for a light one. */
 .ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-label'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 .ds-structure.ds-record[data-part='field'] [data-part='field-label'] {
@@ -589,7 +603,7 @@
 /* The meta label/text pair renders only when `meta` is a string, so no consumer
    node can sit on this path. */
 .ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-label'] {
-  color: var(--ds-color-text-tertiary);
+  color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta-label'] {
@@ -599,7 +613,7 @@
 }
 
 .ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-text'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-record-canvas-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 .ds-structure.ds-record[data-part='action-bar'] [data-part='action-bar-meta-text'] {

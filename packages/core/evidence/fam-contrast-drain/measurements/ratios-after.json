@@ -1,0 +1,634 @@
+{
+  "column-settings :: rottay dark": {
+    "channels": {
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-text-secondary": "#cbd5e1",
+      "--ds-color-text-muted": "#94a3b8",
+      "--ds-color-text-tertiary": "#94a3b8",
+      "--ds-color-bg-primary": "#0b1220",
+      "--ds-color-bg-secondary": "#111827",
+      "--ds-surface-card": "#182235",
+      "--ds-surface-canvas": "#0b1220",
+      "--ds-surface-panel": "#172033",
+      "--ds-color-primary": "rgb(23, 23, 23)"
+    },
+    "counter": {
+      "ink": "#b2b5ba",
+      "ground": "#0b1220",
+      "ratio": 9.1
+    },
+    "hiddenLabel": {
+      "ink": "#b2b5ba",
+      "ground": "#0b1220",
+      "ratio": 9.1
+    },
+    "visibleLabel": {
+      "ink": "#f3f4f6",
+      "ground": "#0b1220",
+      "ratio": 17.01
+    },
+    "title": {
+      "ink": "#f3f4f6",
+      "ground": "#0b1220",
+      "ratio": 17.01
+    },
+    "searchInput": {
+      "ink": "#f8fafc",
+      "ground": "#ffffff",
+      "ratio": 1.05
+    },
+    "footerButton": "<no match>"
+  },
+  "file-manager :: rottay dark": {
+    "channels": {
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-text-secondary": "#cbd5e1",
+      "--ds-color-text-muted": "#94a3b8",
+      "--ds-color-text-tertiary": "#94a3b8",
+      "--ds-color-bg-primary": "#0b1220",
+      "--ds-color-bg-secondary": "#111827",
+      "--ds-surface-card": "#182235",
+      "--ds-surface-canvas": "#0b1220",
+      "--ds-surface-panel": "#172033",
+      "--ds-color-primary": "rgb(23, 23, 23)"
+    },
+    "th": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "thPlain": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "sizeCell": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "dateCell": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "sizeCellSelected": {
+      "ink": "#b6b9c0",
+      "ground": "#182133",
+      "ratio": 8.17
+    },
+    "dateCellSelected": {
+      "ink": "#b6b9c0",
+      "ground": "#182133",
+      "ratio": 8.17
+    },
+    "nameCellInk": {
+      "ink": "#f3f4f6",
+      "ground": "#182235",
+      "ratio": 14.47
+    },
+    "crumb": {
+      "ink": "#f3f4f6",
+      "ground": "#ececec",
+      "ratio": 1.07
+    },
+    "deleteLabel": {
+      "ink": "#f87171",
+      "ground": "#272737",
+      "ratio": 5.29
+    },
+    "folderLinkLabel": {
+      "ink": "#a3a3a3",
+      "ground": "#182235",
+      "ratio": 6.31
+    }
+  },
+  "record :: rottay dark": {
+    "channels": {
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-text-secondary": "#cbd5e1",
+      "--ds-color-text-muted": "#94a3b8",
+      "--ds-color-text-tertiary": "#94a3b8",
+      "--ds-color-bg-primary": "#0b1220",
+      "--ds-color-bg-secondary": "#111827",
+      "--ds-surface-card": "#182235",
+      "--ds-surface-canvas": "#0b1220",
+      "--ds-surface-panel": "#172033",
+      "--ds-color-primary": "rgb(23, 23, 23)"
+    },
+    "summaryLabelDefault": {
+      "ink": "#b4b6bc",
+      "ground": "#101726",
+      "ratio": 8.81
+    },
+    "summaryLabelMetrics": {
+      "ink": "#b4b6bc",
+      "ground": "#101726",
+      "ratio": 8.83
+    },
+    "summaryHelper": {
+      "ink": "#b4b6bc",
+      "ground": "#101726",
+      "ratio": 8.81
+    },
+    "summaryValue": {
+      "ink": "#f3f4f6",
+      "ground": "#101726",
+      "ratio": 16.23
+    },
+    "fieldLabel": {
+      "ink": "#b2b5ba",
+      "ground": "#182235",
+      "ratio": 7.74
+    },
+    "fieldValue": {
+      "ink": "#f3f4f6",
+      "ground": "#182235",
+      "ratio": 14.47
+    },
+    "metaLabel": {
+      "ink": "#b2b5ba",
+      "ground": "#0b1220",
+      "ratio": 9.1
+    },
+    "metaText": {
+      "ink": "#b2b5ba",
+      "ground": "#0b1220",
+      "ratio": 9.1
+    }
+  },
+  "column-settings :: bithire light": {
+    "channels": {
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-text-secondary": "#A0A0A5",
+      "--ds-color-text-muted": "#96969E",
+      "--ds-color-text-tertiary": "#9A9AA2",
+      "--ds-color-bg-primary": "#FFFFFF",
+      "--ds-color-bg-secondary": "#f5f5f5",
+      "--ds-surface-card": "#ffffff",
+      "--ds-surface-canvas": "#FFFFFF",
+      "--ds-surface-panel": "#e5e5e5",
+      "--ds-color-primary": "rgb(47, 91, 232)"
+    },
+    "counter": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "hiddenLabel": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "visibleLabel": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "title": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "searchInput": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "footerButton": "<no match>"
+  },
+  "file-manager :: bithire light": {
+    "channels": {
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-text-secondary": "#A0A0A5",
+      "--ds-color-text-muted": "#96969E",
+      "--ds-color-text-tertiary": "#9A9AA2",
+      "--ds-color-bg-primary": "#FFFFFF",
+      "--ds-color-bg-secondary": "#f5f5f5",
+      "--ds-surface-card": "#ffffff",
+      "--ds-surface-canvas": "#FFFFFF",
+      "--ds-surface-panel": "#e5e5e5",
+      "--ds-color-primary": "rgb(47, 91, 232)"
+    },
+    "th": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "thPlain": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "sizeCell": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "dateCell": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "sizeCellSelected": {
+      "ink": "#585858",
+      "ground": "#eff2fe",
+      "ratio": 6.37
+    },
+    "dateCellSelected": {
+      "ink": "#585858",
+      "ground": "#eff2fe",
+      "ratio": 6.37
+    },
+    "nameCellInk": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "crumb": {
+      "ink": "#171717",
+      "ground": "#eef2fd",
+      "ratio": 16.01
+    },
+    "deleteLabel": {
+      "ink": "#c62828",
+      "ground": "#ece4ef",
+      "ratio": 4.52
+    },
+    "folderLinkLabel": {
+      "ink": "#2f5be8",
+      "ground": "#ffffff",
+      "ratio": 5.55
+    }
+  },
+  "record :: bithire light": {
+    "channels": {
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-text-secondary": "#A0A0A5",
+      "--ds-color-text-muted": "#96969E",
+      "--ds-color-text-tertiary": "#9A9AA2",
+      "--ds-color-bg-primary": "#FFFFFF",
+      "--ds-color-bg-secondary": "#f5f5f5",
+      "--ds-surface-card": "#ffffff",
+      "--ds-surface-canvas": "#FFFFFF",
+      "--ds-surface-panel": "#e5e5e5",
+      "--ds-color-primary": "rgb(47, 91, 232)"
+    },
+    "summaryLabelDefault": {
+      "ink": "#555555",
+      "ground": "#f7f7f7",
+      "ratio": 6.96
+    },
+    "summaryLabelMetrics": {
+      "ink": "#555555",
+      "ground": "#f7f7f7",
+      "ratio": 6.96
+    },
+    "summaryHelper": {
+      "ink": "#555555",
+      "ground": "#f7f7f7",
+      "ratio": 6.96
+    },
+    "summaryValue": {
+      "ink": "#171717",
+      "ground": "#f7f7f7",
+      "ratio": 16.75
+    },
+    "fieldLabel": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "fieldValue": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "metaLabel": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "metaText": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    }
+  },
+  "column-settings :: bithire dark": {
+    "channels": {
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-text-secondary": "#cbd5e1",
+      "--ds-color-text-muted": "#94a3b8",
+      "--ds-color-text-tertiary": "#94a3b8",
+      "--ds-color-bg-primary": "#0A0A0A",
+      "--ds-color-bg-secondary": "#111827",
+      "--ds-surface-card": "#182235",
+      "--ds-surface-canvas": "#0A0A0A",
+      "--ds-surface-panel": "#172033",
+      "--ds-color-primary": "rgb(47, 91, 232)"
+    },
+    "counter": {
+      "ink": "#b2b2b4",
+      "ground": "#0a0a0a",
+      "ratio": 9.35
+    },
+    "hiddenLabel": {
+      "ink": "#b2b2b4",
+      "ground": "#0a0a0a",
+      "ratio": 9.35
+    },
+    "visibleLabel": {
+      "ink": "#f3f4f6",
+      "ground": "#0a0a0a",
+      "ratio": 17.99
+    },
+    "title": {
+      "ink": "#f3f4f6",
+      "ground": "#0a0a0a",
+      "ratio": 17.99
+    },
+    "searchInput": {
+      "ink": "#f8fafc",
+      "ground": "#0c0c0c",
+      "ratio": 18.7
+    },
+    "footerButton": "<no match>"
+  },
+  "file-manager :: bithire dark": {
+    "channels": {
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-text-secondary": "#cbd5e1",
+      "--ds-color-text-muted": "#94a3b8",
+      "--ds-color-text-tertiary": "#94a3b8",
+      "--ds-color-bg-primary": "#0A0A0A",
+      "--ds-color-bg-secondary": "#111827",
+      "--ds-surface-card": "#182235",
+      "--ds-surface-canvas": "#0A0A0A",
+      "--ds-surface-panel": "#172033",
+      "--ds-color-primary": "rgb(47, 91, 232)"
+    },
+    "th": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "thPlain": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "sizeCell": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "dateCell": {
+      "ink": "#b6b9c0",
+      "ground": "#182235",
+      "ratio": 8.1
+    },
+    "sizeCellSelected": {
+      "ink": "#b6b9c0",
+      "ground": "#1a2644",
+      "ratio": 7.59
+    },
+    "dateCellSelected": {
+      "ink": "#b6b9c0",
+      "ground": "#1a2644",
+      "ratio": 7.59
+    },
+    "nameCellInk": {
+      "ink": "#f3f4f6",
+      "ground": "#182235",
+      "ratio": 14.47
+    },
+    "crumb": {
+      "ink": "#f3f4f6",
+      "ground": "#1a2743",
+      "ratio": 13.48
+    },
+    "deleteLabel": {
+      "ink": "#c62828",
+      "ground": "#262742",
+      "ratio": 2.58
+    },
+    "folderLinkLabel": {
+      "ink": "#3f6ffd",
+      "ground": "#182235",
+      "ratio": 3.72
+    }
+  },
+  "record :: bithire dark": {
+    "channels": {
+      "--ds-color-text-primary": "#f3f4f6",
+      "--ds-color-text-secondary": "#cbd5e1",
+      "--ds-color-text-muted": "#94a3b8",
+      "--ds-color-text-tertiary": "#94a3b8",
+      "--ds-color-bg-primary": "#0A0A0A",
+      "--ds-color-bg-secondary": "#111827",
+      "--ds-surface-card": "#182235",
+      "--ds-surface-canvas": "#0A0A0A",
+      "--ds-surface-panel": "#172033",
+      "--ds-color-primary": "rgb(47, 91, 232)"
+    },
+    "summaryLabelDefault": {
+      "ink": "#b4b6bc",
+      "ground": "#101623",
+      "ratio": 8.9
+    },
+    "summaryLabelMetrics": {
+      "ink": "#b4b6bc",
+      "ground": "#101522",
+      "ratio": 8.99
+    },
+    "summaryHelper": {
+      "ink": "#b4b6bc",
+      "ground": "#101623",
+      "ratio": 8.9
+    },
+    "summaryValue": {
+      "ink": "#f3f4f6",
+      "ground": "#101623",
+      "ratio": 16.39
+    },
+    "fieldLabel": {
+      "ink": "#b2b2b4",
+      "ground": "#182235",
+      "ratio": 7.52
+    },
+    "fieldValue": {
+      "ink": "#f3f4f6",
+      "ground": "#182235",
+      "ratio": 14.47
+    },
+    "metaLabel": {
+      "ink": "#b2b2b4",
+      "ground": "#0a0a0a",
+      "ratio": 9.35
+    },
+    "metaText": {
+      "ink": "#b2b2b4",
+      "ground": "#0a0a0a",
+      "ratio": 9.35
+    }
+  },
+  "column-settings :: evnto light": {
+    "channels": {
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-text-secondary": "#A0A0A5",
+      "--ds-color-text-muted": "#96969E",
+      "--ds-color-text-tertiary": "#9A9AA2",
+      "--ds-color-bg-primary": "#fafafa",
+      "--ds-color-bg-secondary": "#f5f5f5",
+      "--ds-surface-card": "#ffffff",
+      "--ds-surface-canvas": "#fafafa",
+      "--ds-surface-panel": "#e5e5e5",
+      "--ds-color-primary": "rgb(23, 23, 23)"
+    },
+    "counter": {
+      "ink": "#575757",
+      "ground": "#fafafa",
+      "ratio": 6.92
+    },
+    "hiddenLabel": {
+      "ink": "#575757",
+      "ground": "#fafafa",
+      "ratio": 6.92
+    },
+    "visibleLabel": {
+      "ink": "#171717",
+      "ground": "#fafafa",
+      "ratio": 17.18
+    },
+    "title": {
+      "ink": "#171717",
+      "ground": "#fafafa",
+      "ratio": 17.18
+    },
+    "searchInput": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "footerButton": "<no match>"
+  },
+  "file-manager :: evnto light": {
+    "channels": {
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-text-secondary": "#A0A0A5",
+      "--ds-color-text-muted": "#96969E",
+      "--ds-color-text-tertiary": "#9A9AA2",
+      "--ds-color-bg-primary": "#fafafa",
+      "--ds-color-bg-secondary": "#f5f5f5",
+      "--ds-surface-card": "#ffffff",
+      "--ds-surface-canvas": "#fafafa",
+      "--ds-surface-panel": "#e5e5e5",
+      "--ds-color-primary": "rgb(23, 23, 23)"
+    },
+    "th": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "thPlain": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "sizeCell": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "dateCell": {
+      "ink": "#585858",
+      "ground": "#ffffff",
+      "ratio": 7.11
+    },
+    "sizeCellSelected": {
+      "ink": "#585858",
+      "ground": "#ededed",
+      "ratio": 6.08
+    },
+    "dateCellSelected": {
+      "ink": "#585858",
+      "ground": "#ededed",
+      "ratio": 6.08
+    },
+    "nameCellInk": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "crumb": {
+      "ink": "#171717",
+      "ground": "#ececec",
+      "ratio": 15.18
+    },
+    "deleteLabel": {
+      "ink": "#f87171",
+      "ground": "#ede4e4",
+      "ratio": 2.22
+    },
+    "folderLinkLabel": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    }
+  },
+  "record :: evnto light": {
+    "channels": {
+      "--ds-color-text-primary": "#171717",
+      "--ds-color-text-secondary": "#A0A0A5",
+      "--ds-color-text-muted": "#96969E",
+      "--ds-color-text-tertiary": "#9A9AA2",
+      "--ds-color-bg-primary": "#fafafa",
+      "--ds-color-bg-secondary": "#f5f5f5",
+      "--ds-surface-card": "#ffffff",
+      "--ds-surface-canvas": "#fafafa",
+      "--ds-surface-panel": "#e5e5e5",
+      "--ds-color-primary": "rgb(23, 23, 23)"
+    },
+    "summaryLabelDefault": {
+      "ink": "#555555",
+      "ground": "#f6f6f6",
+      "ratio": 6.93
+    },
+    "summaryLabelMetrics": {
+      "ink": "#555555",
+      "ground": "#f6f6f6",
+      "ratio": 6.9
+    },
+    "summaryHelper": {
+      "ink": "#555555",
+      "ground": "#f6f6f6",
+      "ratio": 6.93
+    },
+    "summaryValue": {
+      "ink": "#171717",
+      "ground": "#f6f6f6",
+      "ratio": 16.66
+    },
+    "fieldLabel": {
+      "ink": "#575757",
+      "ground": "#ffffff",
+      "ratio": 7.23
+    },
+    "fieldValue": {
+      "ink": "#171717",
+      "ground": "#ffffff",
+      "ratio": 17.93
+    },
+    "metaLabel": {
+      "ink": "#575757",
+      "ground": "#fafafa",
+      "ratio": 6.92
+    },
+    "metaText": {
+      "ink": "#575757",
+      "ground": "#fafafa",
+      "ratio": 6.92
+    }
+  }
+}

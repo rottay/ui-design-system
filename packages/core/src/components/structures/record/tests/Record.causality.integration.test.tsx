@@ -165,38 +165,41 @@ describeCausality({
  * Measured debt, pinned by node IDENTITY rather than by count: a repaired node, a
  * new node and a same-count swap all go red and must be re-adjudicated.
  *
- * The record family's quiet inks (data labels at the muted rung, the meta
- * pair, the summary helper) fail 4.5:1 against their recessed grounds on
- * bithire/evnto light. The pairings are the family's resting paint — this cut
- * moved none of them — so the debt is pinned, not smuggled: a contrast repair
- * is an ink/ground ladder decision, not a cut side effect.
+ * The map is EMPTY, and it emptied by repair. The family's quiet inks -- the
+ * summary-item labels and helper on the strip's well, the ledger's field
+ * labels, the docked rail's meta pair -- read three page roles graded for a
+ * light canvas (`text-muted`, `text-secondary`, `text-tertiary`) and measured
+ * 2.42:1 to 2.94:1 against their own grounds on `bithire light` and
+ * `evnto light`: eight rows per scope.
+ *
+ * The three roles were not a hierarchy this family could keep. They span 0.5
+ * of a contrast point in light, and they do not hold their RANK across modes.
+ * `text-secondary` is lighter than `text-muted` in BOTH modes, which makes it
+ * the QUIETER of the two on a light ground (helper 2.43:1 vs label 2.74:1) and
+ * the LOUDER on a dark one (12.0:1 vs 7.0:1); `text-tertiary` and `text-muted`
+ * are the same colour in dark. So the
+ * family now states ONE quiet rung, graded twice because it sits on two
+ * grounds -- `--ds-record-quiet-ink` against the strip's recessed well and
+ * `--ds-record-canvas-quiet-ink` against the canvas the ledger and the rail
+ * rest on. Each is a weighted mix of the reading ink INTO its own ground, so
+ * the sign follows the mode by construction instead of being a literal graded
+ * for one of them.
+ *
+ * Measured after: 6.90:1 to 7.23:1 on both light scopes (floor 4.5), with the
+ * summary and field VALUES untouched at 16.7:1 and 17.9:1 -- the quiet rung is
+ * still unmistakably subordinate, which is the hierarchy that was deliberate.
+ * The dark scopes move too, and that is declared: the labels rise (6.2:1 to
+ * 7.5-9.4:1) and the strip helper falls from 12.0:1 to 8.8:1 as it joins the
+ * rung it belongs to. Nothing is excluded and no threshold moved: with no entry
+ * every scope must measure clean, and a relapse reddens here.
+ *
+ * NAMED RESIDUE, measured and NOT repaired: the `editorial` and `governance`
+ * strip variants keep their own authored label tints (`text-secondary` and a
+ * 26/74 primary-muted mix) over gradient wells. Neither variant is mounted by
+ * this suite, so no pin would hold a change to them -- a repair without an
+ * alarm is how debt comes back. They are the next record lot's arm.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': {
-    'color-contrast': [
-      '.rottay-stack.rottay-stack--modern[data-part="summary-item"]:nth-child(2) > .font-bold[data-part="summary-item-label"][data-size="xs"]',
-      'div[data-mono="false"] > .rottay-stack.rottay-stack--modern[data-part="root"] > .font-bold[data-part="field-label"][data-size="xs"]',
-      'div[data-part="field"][data-span="1"][data-empty="false"]:nth-child(2) > .rottay-stack.rottay-stack--modern[data-part="root"] > .font-bold[data-part="field-label"][data-size="xs"]',
-      'div[data-variant="default"] > .rottay-box.rottay-box--modern[data-part="summary-grid"] > .rottay-stack.rottay-stack--modern[data-part="summary-item"] > .font-bold[data-part="summary-item-label"][data-size="xs"]',
-      'div[data-variant="metrics"] > .rottay-box.rottay-box--modern[data-part="summary-grid"] > .rottay-stack.rottay-stack--modern[data-part="summary-item"]:nth-child(1) > .font-bold[data-part="summary-item-label"][data-size="xs"]',
-      'span[data-part="action-bar-meta-label"]',
-      'span[data-part="action-bar-meta-text"]',
-      'span[data-part="summary-item-helper"]',
-    ],
-  },
-  'evnto light': {
-    'color-contrast': [
-      '.rottay-stack.rottay-stack--modern[data-part="summary-item"]:nth-child(2) > .font-bold[data-part="summary-item-label"][data-size="xs"]',
-      'div[data-mono="false"] > .rottay-stack.rottay-stack--modern[data-part="root"] > .font-bold[data-part="field-label"][data-size="xs"]',
-      'div[data-part="field"][data-span="1"][data-empty="false"]:nth-child(2) > .rottay-stack.rottay-stack--modern[data-part="root"] > .font-bold[data-part="field-label"][data-size="xs"]',
-      'div[data-variant="default"] > .rottay-box.rottay-box--modern[data-part="summary-grid"] > .rottay-stack.rottay-stack--modern[data-part="summary-item"] > .font-bold[data-part="summary-item-label"][data-size="xs"]',
-      'div[data-variant="metrics"] > .rottay-box.rottay-box--modern[data-part="summary-grid"] > .rottay-stack.rottay-stack--modern[data-part="summary-item"]:nth-child(1) > .font-bold[data-part="summary-item-label"][data-size="xs"]',
-      'span[data-part="action-bar-meta-label"]',
-      'span[data-part="action-bar-meta-text"]',
-      'span[data-part="summary-item-helper"]',
-    ],
-  },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('record causality surface', () => {
   it('serves the anatomy every probe reads', () => {

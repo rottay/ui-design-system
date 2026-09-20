@@ -80,13 +80,33 @@ describeCausality({
  * `bithire dark` had six rows -- the search input, the counter, the panel title
  * and the three column titles -- and they DRAINED: that scope's dark block now
  * re-derives its own canvas ground instead of inheriting the light body's, so
- * none of those nodes sits on a near-white ground any more. Dropped by
- * identity, not waived: with no entry the scope must measure clean, and a
+ * none of those nodes sits on a near-white ground any more.
+ *
+ * `bithire light` and `evnto light` DRAINED with them. Their two rows were the
+ * panel's own quiet rung -- the counter and a hidden column's label -- painted
+ * with `--ds-color-text-muted`, a page role graded for a light canvas that
+ * measured 2.94:1 (bithire) and 2.81:1 (evnto) on it. The skin now reads
+ * `--ds-column-settings-quiet-ink`, the family's own weighted mix of the
+ * reading ink INTO the ground the panel sits on: 7.11:1 and 6.92:1, with the
+ * visible label still at 17.9:1 so the rung stays subordinate. Dropped by
+ * identity, not waived: with no entry those scopes must measure clean, and a
  * relapse reddens here.
+ *
+ * `rottay dark` STANDS, and its root cause is measured and NOT family-local.
+ * The composed Input reads `var(--ds-input-bg, var(--ds-material-control-background,
+ * var(--ds-surface-control)))`, and the mode chain behind those fallbacks is
+ * intact: `--ds-surface-control` and `--ds-color-bg-input` both resolve
+ * `#0F0F12` in that scope. What fails is the FIRST leg -- the Input component
+ * base states `--ds-input-bg: var(--ds-color-white)` mode-lessly, which shadows
+ * the rest, so the control paints `#ffffff` under an ink that mirrored to
+ * `#f8fafc`: 1.04:1. Bithire escapes it only because its artifact re-aliases
+ * `--ds-input-bg` back to `--ds-color-bg-input`; rottay's never states the name.
+ * The panel relays no colour into the Input, so the repair belongs to the Input
+ * base (or to the emitter), not to this family. Routed with its debrief; a
+ * family-scoped override of another owner's channel would hide a fleet defect
+ * behind one pattern.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'bithire light': { 'color-contrast': ['span[data-part="counter"]', 'span[title="Owner"]'] },
-  'evnto light': { 'color-contrast': ['span[data-part="counter"]', 'span[title="Owner"]'] },
   'rottay dark': { 'color-contrast': ['#input-_R_3_'] },
 };
 

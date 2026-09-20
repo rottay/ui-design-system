@@ -271,11 +271,15 @@
   border-collapse: collapse;
   font-size: var(--ds-font-size-sm);
 }
+/* The column headers are the list's quiet rung. They read the family's own
+   graded ink rather than a page role: the role is fixed for a light canvas and
+   measured 2.6:1 on the card, while this channel mixes the reading ink INTO the
+   card ground the family itself paints, so it flips with the mode. */
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-2);
   border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-file-manager-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card)));
   font-weight: var(--ds-font-weight-semibold);
   text-align: start;
 }
@@ -292,7 +296,7 @@
    and its header follows. */
 .ds-pattern-file-manager.ds-engine-modern [data-part='size-cell'],
 .ds-pattern-file-manager.ds-engine-modern [data-part='date-cell'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-file-manager-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card)));
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }

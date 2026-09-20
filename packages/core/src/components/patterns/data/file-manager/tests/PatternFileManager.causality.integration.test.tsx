@@ -197,23 +197,51 @@ describeCausality({
  * re-adjudicated. Registered, never excluded; a scope with no entry is a
  * scope that must stay clean.
  *
- * Every finding is contrast, in two groups:
- *  - composed primitives the family does not paint: the ghost/link Buttons'
- *    own `label` part (rename/delete actions and the folder link) and the
- *    composed Breadcrumb's current crumb. Each primitive owns its own ink,
- *    and the family relays no colour into either;
- *  - the family's OWN quiet quantitative cells and column headers, which read
- *    `--ds-color-text-secondary` on the card ground by design (the size/date
- *    columns are deliberately subordinate to the name). That is this cut's
- *    named residue: a tone decision for the owner, not a skin literal a cut
- *    may invent.
+ * DRAINED, by repair: the family's OWN quiet quantitative cells and column
+ * headers -- four `th` and five `td` per light scope, nine rows in
+ * `bithire light` and nine of `evnto light`'s twelve. They painted
+ * `--ds-color-text-secondary`, a page role graded for a light canvas, and
+ * measured 2.6:1 on the card ground (2.33:1 / 2.22:1 under the selected row's
+ * tint). The skin now reads `--ds-file-manager-quiet-ink`, the family's own
+ * weighted mix of the reading ink INTO the card ground the family itself
+ * paints: 7.11:1 at rest and 6.37:1 / 6.08:1 under the selection tint, with
+ * the name cell still at 17.9:1 so the quantitative columns stay deliberately
+ * subordinate to the name. `bithire light` is therefore gone from this map
+ * entirely. The same channel carries the dark scopes by construction -- the
+ * cells move from 10.72:1 to 8.1:1 there, a declared paint change: quieter,
+ * still far above the floor, and now produced by one mode-following formula
+ * instead of a role that only happened to work in dark.
  *
- * DROPPED BY IDENTITY: `rottay dark`'s folder-link label. That link resolves
- * `--ds-color-link`, which took the raw primary seed in every mode -- the DS's
- * own near-black on a dark canvas. The sheet's dark scope now states the ink
- * that canvas can carry, so the node is measured clean; a relapse reddens this
- * pin. The SAME node stays pinned in `bithire dark`, where its ink is the ghost
- * Button's own, not the link channel's.
+ * STANDING, and NOT family-local. Every surviving row is a composed
+ * primitive's own ink, measured to a root cause outside this family:
+ *  - the ghost/danger Button labels (`*-delete` in `bithire dark` and
+ *    `evnto light`, plus the folder-link Button `f1-name` in `bithire dark`).
+ *    The ink is `--ds-color-error` in both, and it carries no mode leg -- for
+ *    two DIFFERENT reasons, so "each vertical authors a danger literal" would
+ *    be wrong. Bithire authors `palette.status-seeds.error` `#C62828` with no
+ *    dark leg, so a light-graded red lands on a dark ground: 4.52:1 light ->
+ *    2.58:1 dark. Evnto authors NO error seed at all; its `#f87171` is the DS
+ *    default resolving to error-400 at the light root -- a value graded for a
+ *    dark ground, which reads 5.29:1 on rottay dark and 2.22:1 on evnto light.
+ *    (`--ds-button-error-border` DOES mirror for bithire, `#9C000F` ->
+ *    `#F8675D`: the mode leg exists on some danger channels and is missing on
+ *    the ink one.) The Button also paints its own ~7% danger-tinted ghost
+ *    ground under that ink, so both legs of the pair are the Button's and the
+ *    palette's -- the same class of defect the divider's overline ink was
+ *    routed for;
+ *  - the composed Breadcrumb's current crumb in `rottay dark`. The crumb
+ *    paints `--ds-breadcrumb-current-bg`, which resolves through
+ *    `--ds-card-bg` to a near-white `#ececec` chip in that scope, under the
+ *    dark mode's near-white ink: 1.07:1.
+ * The family relays no colour into either, and stating another owner's
+ * channel at this scope would hide a fleet defect behind one pattern. Routed
+ * with their debriefs.
+ *
+ * DROPPED EARLIER BY IDENTITY: `rottay dark`'s folder-link label. That link
+ * resolves `--ds-color-link`, which took the raw primary seed in every mode --
+ * the DS's own near-black on a dark canvas. The sheet's dark scope now states
+ * the ink that canvas can carry, so the node is measured clean; a relapse
+ * reddens this pin.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire dark': {
@@ -224,33 +252,11 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
       '#_R_2_-f1-name > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
     ],
   },
-  'bithire light': {
-    'color-contrast': [
-      'th:nth-child(2)',
-      'th:nth-child(4)',
-      'th:nth-child(5)',
-      'th[data-part="column-size"]',
-      'tr[data-part="row"]:nth-child(1) > td[data-part="date-cell"]',
-      'tr[data-part="row"]:nth-child(3) > td[data-part="date-cell"]',
-      'tr[data-part="row"]:nth-child(3) > td[data-part="size-cell"]',
-      'tr[data-selected="true"][data-part="row"] > td[data-part="date-cell"]',
-      'tr[data-selected="true"][data-part="row"] > td[data-part="size-cell"]',
-    ],
-  },
   'evnto light': {
     'color-contrast': [
       '#_R_2_-a1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '#_R_2_-a2-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
       '#_R_2_-f1-delete > span[data-state="visible"][data-part="content"] > span[data-part="label"]',
-      'th:nth-child(2)',
-      'th:nth-child(4)',
-      'th:nth-child(5)',
-      'th[data-part="column-size"]',
-      'tr[data-part="row"]:nth-child(1) > td[data-part="date-cell"]',
-      'tr[data-part="row"]:nth-child(3) > td[data-part="date-cell"]',
-      'tr[data-part="row"]:nth-child(3) > td[data-part="size-cell"]',
-      'tr[data-selected="true"][data-part="row"] > td[data-part="date-cell"]',
-      'tr[data-selected="true"][data-part="row"] > td[data-part="size-cell"]',
     ],
   },
   'rottay dark': {

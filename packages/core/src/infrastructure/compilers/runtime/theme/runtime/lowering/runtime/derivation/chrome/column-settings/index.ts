@@ -35,6 +35,7 @@ export const columnSettingsChromeDeriver: FamilyDeriver = {
     "--ds-column-settings-motion-duration",
     "--ds-column-settings-motion-timing",
     "--ds-column-settings-pin-side-font-size",
+    "--ds-column-settings-quiet-ink",
     "--ds-column-settings-row-bg-hover",
     "--ds-column-settings-row-gap",
     "--ds-column-settings-row-padding-block",
@@ -62,6 +63,15 @@ export function deriveColumnSettingsChannels(): Record<string, string> {
   vars["--ds-column-settings-motion-duration"] = "var(--ds-motion-feedback)";
   vars["--ds-column-settings-motion-timing"] = "var(--ds-motion-ease-out)";
   vars["--ds-column-settings-pin-side-font-size"] = "10px";
+  // The panel's quiet rung (the counter, a hidden column's label) graded
+  // against the ground the panel actually sits on, so its sign follows the mode
+  // instead of borrowing a page role fixed for a light canvas. 72% is the
+  // fleet's governed quiet weight, taken from the data-table repair rather than
+  // from this family's own minimum: measured here, WCAG 4.5 binds at 64% across
+  // the gated scopes, and one weight for the whole quiet tier is worth more than
+  // three families each sitting on their own floor.
+  vars["--ds-column-settings-quiet-ink"] =
+    "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary)))";
   vars["--ds-column-settings-row-bg-hover"] = "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)";
   vars["--ds-column-settings-row-gap"] = "var(--ds-spacing-2, 8px)";
   vars["--ds-column-settings-row-padding-block"] = "6px";

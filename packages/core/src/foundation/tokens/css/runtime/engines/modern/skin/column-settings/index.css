@@ -50,8 +50,13 @@
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-font-weight-semibold);
 }
+/* The counter and a hidden column's label are the panel's quiet rung. They read
+   the family's own graded ink rather than a page role: the role is fixed for a
+   light canvas and measured 2.9:1 here, while this channel is a weighted mix of
+   the reading ink INTO the ground the panel sits on, so it flips with the mode
+   and stays quieter than the visible label by construction. */
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='counter'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-column-settings-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
   font-size: var(--ds-font-size-xs);
   font-variant-numeric: tabular-nums;
 }
@@ -155,7 +160,7 @@
     var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-visible='false'] [data-part='label'] {
-  color: var(--ds-color-text-muted);
+  color: var(--ds-column-settings-quiet-ink, color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-canvas, var(--ds-color-bg-primary))));
 }
 
 /* ---- pin toggle: small ghost target by default, 44px under coarse ---- */

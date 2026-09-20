@@ -43,6 +43,7 @@ export const fileManagerChromeDeriver: FamilyDeriver = {
     "--ds-file-manager-content-min-height",
     "--ds-file-manager-link-color",
     "--ds-file-manager-link-hover-color",
+    "--ds-file-manager-quiet-ink",
     "--ds-file-manager-touch-target",
   ],
   derive: () => deriveFileManagerChannels(),
@@ -57,6 +58,13 @@ export function deriveFileManagerChannels(): Record<string, string> {
   // link ink the rest of the system uses rather than a private blue.
   vars["--ds-file-manager-link-color"] = "var(--ds-color-link, var(--ds-color-primary))";
   vars["--ds-file-manager-link-hover-color"] = "var(--ds-color-link-hover, var(--ds-color-primary-hover))";
+  // The list's quiet rung -- the column headers and the quantitative size/date
+  // cells -- graded against the card ground the family itself paints, so the ink
+  // flips with the mode instead of borrowing a page role fixed for a light
+  // canvas. 72% is the fleet's governed quiet weight (data-table repair), not
+  // this family's minimum: WCAG 4.5 binds at 64% in the gated scopes.
+  vars["--ds-file-manager-quiet-ink"] =
+    "color-mix(in srgb, var(--ds-color-text-primary) 72%, var(--ds-surface-card))";
   vars["--ds-file-manager-touch-target"] = "2.75rem";
   return vars;
 }
