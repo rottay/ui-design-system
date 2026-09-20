@@ -5140,7 +5140,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-avatar-focus-ring-color: var(--ds-color-primary-500);
   --ds-avatar-focus-ring-offset: var(--ds-focus-ring-offset, 2px);
 
-  --ds-avatar-active-scale: 0.98;
+  --ds-avatar-active-scale: var(--ds-state-press-scale);
 
   /* ========================================================================
      BADGE/NOTIFICATION
@@ -6021,7 +6021,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-badge-remove-bleed: 0.1875rem;
   --ds-badge-disabled-opacity: 0.48;
   --ds-badge-loading-opacity: 0.76;
-  --ds-badge-motion-duration: var(--ds-motion-fast);
+  --ds-badge-motion-duration: var(--ds-motion-feedback);
   --ds-badge-motion-easing: var(--ds-motion-ease-out, ease-out);
   --ds-badge-touch-target: var(--ds-touch-target-min, 2.75rem);
 
@@ -10736,7 +10736,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
      TRANSITIONS
      ======================================================================== */
 
-  --ds-list-transition-duration: 0.2s;
+  --ds-list-transition-duration: var(--ds-motion-reveal);
   --ds-list-transition-timing: ease-in-out;
 }
 
@@ -15720,7 +15720,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     0 0 0 7px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
     0 20px 44px -16px color-mix(in srgb, var(--ds-color-primary) 32%, transparent);
   animation: ds-decision-panorama-breathe
-    var(--ds-decision-panorama-aura-duration, calc(var(--ds-motion-glacial, 500ms) * 10))
+    var(--ds-decision-panorama-aura-duration, calc(var(--ds-motion-glacial, 500ms) * 10 * var(--ds-motion-duration-scale, 1)))
     var(--ds-decision-panorama-aura-timing, var(--ds-motion-ease-in-out)) infinite;
 }
 
@@ -16138,7 +16138,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   );
   background-size: 240% 100%;
   animation: ds-feature-workspace-skeleton-shimmer
-    var(--ds-feature-workspace-skeleton-duration, calc(var(--ds-motion-glacial, 500ms) * 2.4))
+    var(--ds-feature-workspace-skeleton-duration, calc(var(--ds-motion-glacial, 500ms) * 2.4 * var(--ds-motion-duration-scale, 1)))
     linear infinite;
 }
 
@@ -16566,7 +16566,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   /* The sweep cadence derives from the slowest motion rung (glacial × 2.8 ≈
      1.4s) so tenant motion scaling governs it; no raw durations. */
   animation: ds-record-facts-shimmer
-    calc(var(--ds-motion-glacial, 500ms) * 2.8)
+    calc(var(--ds-motion-glacial, 500ms) * 2.8 * var(--ds-motion-duration-scale, 1))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
@@ -18299,7 +18299,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-collapse-header-default-disabled-bg: var(--ds-material-panel-background-disabled);
   --ds-collapse-header-default-disabled-color: var(--ds-material-panel-foreground-disabled);
   --ds-collapse-header-default-disabled-cursor: not-allowed;
-  --ds-collapse-header-default-disabled-opacity: 0.6;
+  --ds-collapse-header-default-disabled-opacity: var(--ds-state-disabled-opacity);
 
   /* Header - Default Variant - Expanded State */
   --ds-collapse-header-default-expanded-bg: var(--ds-color-neutral-50);
@@ -26748,17 +26748,17 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   transform: var(--ds-badge-position-transform, translateY(0));
   transform-origin: center;
   transition:
-    transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    transform var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    border-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    border-color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    box-shadow var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    opacity var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out));
 }
 
@@ -26978,11 +26978,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    transform var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
-    opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
+    opacity var(--ds-badge-motion-duration, var(--ds-motion-feedback))
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out));
 }
 
@@ -27015,7 +27015,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
      two-`--ds-motion-slow`-rungs idiom), never a raw literal, so the motion
      authority's reduced-motion zeroing still propagates through the channel. */
   animation: ds-badge-spin
-    var(--ds-badge-spinner-duration, calc(var(--ds-motion-slow) * 2))
+    var(--ds-badge-spinner-duration, calc(var(--ds-motion-attention) * 2))
     linear infinite;
 }
 
@@ -37579,7 +37579,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='rail'],
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='track'],
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='handle'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
 .ds-slider.ds-slider--modern [data-part='mark-label'] {
@@ -37670,7 +37670,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   outline: none;
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='disabled'], :disabled) {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
 
@@ -37882,7 +37882,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-color-primary);
 }
 .ds-slider.ds-slider--modern[data-part='root'][data-disabled='true'] [data-part='dot'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
 /* Mark labels inside the filled span: ink + weight, never color alone (the
@@ -39467,7 +39467,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     );
   }
 }
-.ds-voice-input-button[data-part='root']:active {
+.ds-voice-input-button[data-part='root']:is([data-state~='pressed'], :active) {
   transform: scale(var(--ds-state-press-scale));
 }
 
@@ -41102,7 +41102,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
 }
 .ds-upload.ds-upload--modern [data-part='add-button'][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
 .ds-upload.ds-upload--modern [data-part='add-button'] svg {
@@ -41115,7 +41115,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-upload.ds-upload--modern [data-part='trigger'][data-disabled='true'] {
   cursor: not-allowed;
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 /* The trigger span carries no role of its own, so the border/chrome rules
    buy the (0,4,0) floor with the stable `[data-part='root']` ancestor
@@ -41147,7 +41147,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:is([data-state~='disabled'], :disabled) {
   cursor: not-allowed;
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
 /* Keyboard rings on every Upload-owned action surface. */
@@ -41241,7 +41241,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-primary);
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] svg {
@@ -48134,7 +48134,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-rate.ds-rate--modern[data-part='root'][data-disabled='true'] [data-part='star'] {
   cursor: not-allowed;
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
 /* Half-star foreground: clips the active fill to the leading half. */
@@ -60309,12 +60309,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 @media (hover: hover) {
-  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:active):hover .rottay-bottom-tab-bar__icon-wrap {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:is([data-state~='pressed'], :active)):hover .rottay-bottom-tab-bar__icon-wrap {
     background: color-mix(in srgb, var(--ds-color-text-muted) 8%, transparent);
   }
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button']:active .rottay-bottom-tab-bar__icon-wrap {
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:is([data-state~='pressed'], :active) .rottay-bottom-tab-bar__icon-wrap {
   transform: scale(0.94);
 }
 
@@ -66848,7 +66848,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   padding: var(--ds-list-default-padding-vertical) var(--ds-list-default-padding-horizontal);
   background: var(--ds-list-item-background-color);
   color: var(--ds-list-text-color);
-  transition: background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing);
+  transition: background var(--ds-list-transition-duration, var(--ds-motion-reveal)) var(--ds-list-transition-timing);
 }
 
 /* Row states. The hover wash consumes the long-declared
@@ -71498,7 +71498,7 @@ html[data-ds-motion='reduced']
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:is([data-state~='disabled'], :disabled) {
-  opacity: var(--ds-approval-disabled-opacity, 0.6);
+  opacity: var(--ds-approval-disabled-opacity, var(--ds-state-disabled-opacity));
   cursor: not-allowed;
 }
 
@@ -76813,12 +76813,12 @@ html[data-ds-motion='reduced']
   border-radius: var(--ds-command-palette-item-radius, var(--ds-radius-lg));
   cursor: pointer;
   transition: background-color
-    var(--ds-command-palette-item-transition, var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out));
+    var(--ds-command-palette-item-transition, var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out));
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] [data-part='item'] {
   padding-inline: var(--ds-command-palette-item-padding-inline, var(--ds-spacing-3, 12px));
 }
-.ds-pattern-command-palette.ds-engine-modern [data-part='item'][aria-disabled='true'] {
+.ds-pattern-command-palette.ds-engine-modern [data-part='item']:is([data-state~='disabled'], [aria-disabled='true']) {
   cursor: not-allowed;
   opacity: var(--ds-command-palette-item-disabled-opacity, 0.5);
 }
@@ -77954,7 +77954,7 @@ html[data-ds-motion='reduced']
   box-shadow: var(--ds-shortcuts-overlay-dialog-shadow, var(--ds-elevation-3));
   color: var(--ds-shortcuts-overlay-dialog-color, var(--ds-color-text-primary));
   animation: ds-foundation-fade-in-down
-    var(--ds-shortcuts-overlay-enter-duration, var(--ds-motion-normal))
+    var(--ds-shortcuts-overlay-enter-duration, var(--ds-motion-reveal))
     var(--ds-shortcuts-overlay-enter-easing, var(--ds-motion-ease-enter, ease-out));
 }
 
@@ -87200,7 +87200,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact] {
-  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -87276,7 +87276,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'] {
-  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(
       --ds-dashboard-header-icon-border,
       color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-subtle))
@@ -87427,7 +87427,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'] {
-  border-top: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border-top: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -87466,7 +87466,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 
 /* One rule between cells — the readout is a rhythm, not a row of boxes. */
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] + [data-part='metric-chip'] {
-  border-inline-start: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border-inline-start: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(
       --ds-dashboard-header-metric-rule,
       var(--ds-dashboard-header-border, var(--ds-color-border-subtle))
@@ -93064,7 +93064,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   color: var(--ds-color-primary-500);
 }
 .ds-assistant-streaming-text [data-part='caret'][data-motion='live'] {
-  animation: ds-assistant-caret var(--_ds-assistant-caret-duration, calc(var(--ds-motion-glacial) * 2))
+  animation: ds-assistant-caret var(--_ds-assistant-caret-duration, calc(var(--ds-motion-glacial) * 2 * var(--ds-motion-duration-scale, 1)))
     steps(2, jump-none) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -93098,14 +93098,14 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   block-size: calc(var(--ds-spacing-1) * 1.5);
   border-radius: 50%;
   background: var(--ds-color-primary-500);
-  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2))
+  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out) infinite;
 }
 .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2) {
-  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2)) * 0.11);
+  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1))) * 0.11);
 }
 .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3) {
-  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2)) * 0.22);
+  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1))) * 0.22);
 }
 @media (prefers-reduced-motion: reduce) {
   .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
@@ -93158,7 +93158,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   border-radius: 50%;
 }
 .ds-assistant-status-indicator [data-part='dot'][data-part='dot'][data-motion='live'] {
-  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2))
+  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -96106,7 +96106,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-block: var(--ds-active-filters-bar-padding-block, 10px 12px);
   padding-inline: var(--ds-active-filters-bar-padding-inline, 16px);
   animation: ds-active-filters-bar-enter
-    var(--ds-active-filters-bar-motion-duration, var(--ds-motion-normal))
+    var(--ds-active-filters-bar-motion-duration, var(--ds-motion-reveal))
     var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {
@@ -96606,16 +96606,16 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   /* One duration, one channel: the row's state changes are feedback, and the
      family channel rests on the dial-bent feedback role. */
   transition: background-color
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out),
     border-color
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out),
     box-shadow
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out),
     opacity
-      var(--ds-column-menu-row-motion-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-column-menu-row-motion-duration, var(--ds-motion-feedback, 120ms))
       var(--ds-motion-ease-out, ease-out);
 }
 
@@ -97864,9 +97864,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   /* the active tint cross-fades on the shared fast channel instead of
      snapping when the scope changes */
   transition:
-    background-color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-scope-switcher-motion-duration, var(--ds-motion-feedback))
       var(--ds-motion-ease-out, ease-out),
-    color var(--ds-scope-switcher-motion-duration, var(--ds-motion-fast))
+    color var(--ds-scope-switcher-motion-duration, var(--ds-motion-feedback))
       var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {
@@ -98315,7 +98315,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   background: var(--ds-search-command-bar-voice-help-bg, var(--ds-surface-card));
   box-shadow: var(--ds-search-command-bar-voice-help-shadow, var(--ds-elevation-2));
   animation: ds-search-command-bar-voice-help-enter
-    var(--ds-search-command-bar-voice-help-enter-duration, var(--ds-motion-normal, 200ms))
+    var(--ds-search-command-bar-voice-help-enter-duration, var(--ds-motion-reveal, 200ms))
     var(--ds-search-command-bar-voice-help-enter-easing, var(--ds-motion-ease-out, ease-out)) both;
 }
 .ds-structure.ds-search-command-bar
@@ -102171,9 +102171,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   padding-inline: var(--ds-column-settings-row-padding-inline, 12px);
   border-radius: var(--ds-column-settings-row-radius, var(--ds-radius-sm));
   transition:
-    background-color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    background-color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out)),
-    color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
@@ -102207,9 +102207,9 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   cursor: pointer;
   opacity: 0.5;
   transition:
-    color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out)),
-    opacity var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    opacity var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
       var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 @media (hover: hover) {
@@ -102241,7 +102241,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
   font-size: var(--ds-column-settings-label-font-size, var(--ds-font-size-sm));
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+  transition: color var(--ds-column-settings-motion-duration, var(--ds-motion-feedback))
     var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
 }
 .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-visible='false'] [data-part='label'] {
@@ -105220,7 +105220,7 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card
 }
 
 .ds-surface.ds-collection-render-dispatch
-  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]:active
+  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]:is([data-state~="pressed"], :active)
   .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
   transform: translateY(0);
 }
@@ -108790,19 +108790,19 @@ html[data-ds-motion='reduced'] .ds-structure.ds-sidebar-surface[data-part='root'
    the private channels and the test re-pin contract). */
 .ds-loading-overlay[data-part='root'] [data-part='logo'] {
   animation: ds-loading-overlay-pulse
-    var(--_ds-loading-overlay-pulse-duration, calc(var(--ds-motion-glacial) * 3.6))
+    var(--_ds-loading-overlay-pulse-duration, calc(var(--ds-motion-glacial) * 3.6 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-loading-overlay[data-part='root'] [data-part='dot'] {
   animation: ds-loading-overlay-dots
-    var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8))
+    var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1)))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='1'] {
-  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8)) / 7);
+  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1))) / 7);
 }
 .ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='2'] {
-  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8)) / 7 * 2);
+  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8 * var(--ds-motion-duration-scale, 1))) / 7 * 2);
 }
 
 .ds-loading-overlay[data-part='root'] [data-part='message'],
@@ -120327,7 +120327,7 @@ html[lang]:lang(ar) {
   --ds-badge-solid-bg: var(--ds-badge-tone-solid-bg);
   --ds-badge-solid-border: transparent;
   --ds-badge-solid-color: var(--ds-badge-tone-solid-color);
-  --ds-badge-spinner-duration: calc(var(--ds-motion-slow) * 2);
+  --ds-badge-spinner-duration: calc(var(--ds-motion-attention) * 2);
   --ds-badge-surface: var(--ds-color-neutral-200);
   --ds-badge-surface-pressed: var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback));
   --ds-box-corner-2xl: var(--ds-radius-2xl);
@@ -120440,6 +120440,7 @@ html[lang]:lang(ar) {
   --ds-calendar-view-touch-target: 2.75rem;
   --ds-card-body-font-size-sm: var(--ds-type-supporting-font-size);
   --ds-card-border-accent-hover: var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary)));
+  --ds-card-border-width: var(--ds-edge-hairline-width);
   --ds-card-error-title-color: var(--ds-color-error-900);
   --ds-card-footer-actions-inset: var(--ds-spacing-1);
   --ds-card-header-extra-min-height: calc(2rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
@@ -120529,6 +120530,7 @@ html[lang]:lang(ar) {
   --ds-collapse-panel-surface: var(--ds-material-card-background, var(--ds-surface-card));
   --ds-collapse-reveal-motion-duration: var(--ds-motion-reveal);
   --ds-collapse-reveal-motion-easing: var(--ds-motion-ease-out);
+  --ds-collapse-root-default-idle-border-width: var(--ds-edge-hairline-width);
   --ds-collapse-state-motion-duration: var(--ds-motion-feedback);
   --ds-collapse-touch-target-min: var(--ds-touch-target-min);
   --ds-collection-header-accent: var(--ds-collection-header-display-color, var(--ds-color-primary));
@@ -120696,7 +120698,7 @@ html[lang]:lang(ar) {
   --ds-column-settings-label-font-size: var(--ds-font-size-sm);
   --ds-column-settings-list-max-block-size: 320px;
   --ds-column-settings-list-padding-block: 4px;
-  --ds-column-settings-motion-duration: var(--ds-motion-fast);
+  --ds-column-settings-motion-duration: var(--ds-motion-feedback);
   --ds-column-settings-motion-timing: var(--ds-motion-ease-out);
   --ds-column-settings-pin-side-font-size: 10px;
   --ds-column-settings-row-bg-hover: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
@@ -120738,7 +120740,7 @@ html[lang]:lang(ar) {
   --ds-command-palette-item-padding-inline: var(--ds-spacing-3, 12px);
   --ds-command-palette-item-radius: var(--ds-radius-lg);
   --ds-command-palette-item-touch-target: var(--ds-touch-target-min, 44px);
-  --ds-command-palette-item-transition: var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  --ds-command-palette-item-transition: var(--ds-motion-feedback) var(--ds-motion-ease-out, ease-out);
   --ds-command-palette-label-color: var(--ds-color-text-primary);
   --ds-command-palette-label-font-size: var(--ds-font-size-sm, 14px);
   --ds-command-palette-label-font-weight: var(--ds-font-weight-medium, 500);
@@ -120824,7 +120826,7 @@ html[lang]:lang(ar) {
   --ds-dashboard-header-radius: var(--ds-radius-xl);
   --ds-dashboard-header-room: calc(clamp(var(--ds-spacing-4, 16px), 2.2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
   --ds-dashboard-header-room-tight: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
-  --ds-dashboard-header-rule: var(--ds-border-width-1, 1px);
+  --ds-dashboard-header-rule: var(--ds-edge-hairline-width);
   --ds-dashboard-header-shadow: var(--ds-elevation-1);
   --ds-dashboard-header-sheen-duration: var(--ds-motion-calm, var(--ds-motion-slow));
   --ds-dashboard-header-sheen-opacity: 0.2;
@@ -121320,6 +121322,7 @@ html[lang]:lang(ar) {
   --ds-kanban-board-column-max-height: none;
   --ds-kanban-board-column-min-width: 280px;
   --ds-kanban-board-touch-target: var(--ds-spacing-11, 2.75rem);
+  --ds-list-border-width: var(--ds-edge-hairline-width);
   --ds-list-meta-description-ink: color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%, var(--ds-color-text-primary) 30%);
   --ds-material-canvas-background: var(--ds-surface-canvas);
   --ds-material-canvas-foreground: var(--ds-color-text-primary);
@@ -121890,7 +121893,7 @@ html[lang]:lang(ar) {
   --ds-scope-switcher-count-gap: var(--ds-spacing-1, 4px);
   --ds-scope-switcher-count-padding-inline: 6px;
   --ds-scope-switcher-count-radius: var(--ds-radius-full);
-  --ds-scope-switcher-motion-duration: var(--ds-motion-fast);
+  --ds-scope-switcher-motion-duration: var(--ds-motion-feedback);
   --ds-scope-switcher-padding-block: var(--ds-spacing-2, 8px);
   --ds-scope-switcher-padding-inline: var(--ds-spacing-4, 16px);
   --ds-search-command-bar-active-border: 1px solid var(--ds-color-primary);
@@ -122006,7 +122009,7 @@ html[lang]:lang(ar) {
   --ds-search-command-bar-voice-help-description-font-size: var(--ds-font-size-xs);
   --ds-search-command-bar-voice-help-description-line-height: var(--ds-line-height-normal, 1.5);
   --ds-search-command-bar-voice-help-description-margin: 4px;
-  --ds-search-command-bar-voice-help-enter-duration: var(--ds-motion-normal, 200ms);
+  --ds-search-command-bar-voice-help-enter-duration: var(--ds-motion-reveal, 200ms);
   --ds-search-command-bar-voice-help-enter-easing: var(--ds-motion-ease-out, ease-out);
   --ds-search-command-bar-voice-help-footer-margin: 16px;
   --ds-search-command-bar-voice-help-hint-color: var(--ds-color-text-muted);
@@ -122162,7 +122165,7 @@ html[lang]:lang(ar) {
   --ds-shortcuts-overlay-dialog-radius: var(--ds-radius-xl);
   --ds-shortcuts-overlay-dialog-shadow: var(--ds-elevation-3);
   --ds-shortcuts-overlay-empty-padding-block: var(--ds-spacing-8, 32px);
-  --ds-shortcuts-overlay-enter-duration: var(--ds-motion-normal);
+  --ds-shortcuts-overlay-enter-duration: var(--ds-motion-reveal);
   --ds-shortcuts-overlay-enter-easing: var(--ds-motion-ease-enter, ease-out);
   --ds-shortcuts-overlay-footer-color: var(--ds-color-text-secondary);
   --ds-shortcuts-overlay-footer-font-size: var(--ds-font-size-xs, 12px);
@@ -122277,7 +122280,7 @@ html[lang]:lang(ar) {
   --ds-stats-header-label-font-size: var(--ds-font-size-sm);
   --ds-stats-header-meta-font-size: var(--ds-font-size-2xs);
   --ds-stats-header-ping-duration: 400ms;
-  --ds-stats-header-press-scale: scale(0.98);
+  --ds-stats-header-press-scale: scale(var(--ds-state-press-scale));
   --ds-stats-header-press-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
   --ds-stats-header-progress-margin-block-start: 10px;
   --ds-stats-header-spark-dot-gap: 6px;
@@ -122509,6 +122512,7 @@ html[lang]:lang(ar) {
   --ds-tabs-underline-list-shadow: inset 0 -1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
   --ds-tabs-underline-list-width: 100%;
   --ds-tag-border: color-mix(in srgb, currentColor 16%, transparent);
+  --ds-tag-border-width: var(--ds-edge-hairline-width);
   --ds-tag-close-focus-ring: 0 0 0 2px color-mix(in srgb, currentColor 26%, transparent);
   --ds-tag-close-radius: var(--ds-radius-full);
   --ds-tag-close-size: var(--ds-spacing-4);
@@ -122544,7 +122548,7 @@ html[lang]:lang(ar) {
   --ds-tag-max-inline-size: calc(var(--ds-spacing-4) * 16);
   --ds-tag-md-padding-inline: calc(var(--ds-spacing-2) * 1.25);
   --ds-tag-outlined-ink: var(--ds-color-text-primary);
-  --ds-tag-press-transform: translateY(0) scale(0.98);
+  --ds-tag-press-transform: translateY(0) scale(var(--ds-state-press-scale));
   --ds-tag-primary-outlined-ink: var(--ds-color-primary);
   --ds-tag-primary-solid-bg: var(--ds-color-primary);
   --ds-tag-secondary-ink: var(--ds-color-white);
@@ -122814,6 +122818,7 @@ html[lang]:lang(ar) {
   --ds-tree-disabled-opacity: 0.5;
   --ds-tree-drop-indicator-color: var(--ds-color-primary);
   --ds-tree-filtered-out-opacity: 0.4;
+  --ds-tree-line-width: var(--ds-edge-hairline-width);
   --ds-tree-loading-size: var(--ds-spacing-4);
   --ds-tree-node-font-weight-selected: var(--ds-font-weight-medium);
   --ds-tree-node-padding-block: var(--ds-spacing-1);
