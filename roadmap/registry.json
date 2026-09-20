@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-09-19",
+ "updated": "2026-09-20",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
@@ -5065,7 +5065,7 @@
    "lane": "family-cuts",
    "order": 9,
    "size": "XL",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-FAM-00",
     "WO-DER-02",
@@ -5291,7 +5291,9 @@
      "by": "kimi-dt",
      "note": "2026-09-19 kimi-dt (2): EXPORT-KERNEL — the D16 packet was ALREADY LANDED (ef7edcb94 + 2008fbdea, 2026-09-17); a fresh Opus dispatch verified it instead of duplicating (brief's census corrected honestly: 4 Blob sites under src/components not 3; downloadFile copies were NOT byte-equivalent and the divergence was DT-adjudicated at the time — triggerDownload stays local; clipboard sites are 5 non-test, none in charts; net was -74/+68 LOC, not -160). Registered residual for the record: table-export/index.ts:300 still calls navigator.clipboard.writeText raw — adopting writeClipboard would change exportClipboard's observable behavior (reject vs resolve false), so it stays as-is until a policy decision. OWNER DECISIONS LANDED (a00a13224, R1-R5): F-69 useSortableList retirement AUTHORIZED (R2) — census re-measured today: zero productive callers in core and the three apps; retirement lot dispatched (Opus). D21 ds-table-density consumer migration AUTHORIZED (R1) — app-bithire first, queued for the migration wave. In flight: data-table inert-channel repair + density split (Fable re-review running). Next: the close audit once the repairs land."
     }
-   ]
+   ],
+   "doneAt": "2026-09-20",
+   "evidence": "2026-09-20 close audit (kimi-dt), every arm re-measured on the integrated tree: (1) family-cut 18/18 rows OK today; (2) RWP: every family's own channels are produced — the residual rows are named foreign vocabulary (grid-view 11 and the collection-card cross-family set, widget-board 5, data-table's 8 density/typography foreign names + the windowed --ds-table-shadow whose trigger is pinned against app-bithire's reader) — data-table's three divergent reads were adjudicated and drained today (cefa1becc+91d187e34, Fable ACCEPT): posture split for cell-line-height, surface split for control-radius, superseded window for the shadow; (3) hardcodes 0, contract census 0 per row; (4) causality suites green per family (data-table's 15/15 with its axe arm re-run today); (5) axe: the per-family debt is pinned by node identity with none new (the fleet axe-per-family arm stays OWED to WO-INV-03, registered, not waived — the same disposition FAM-10's close used); (6) no rottay-* class emitted by any FAM-08 family (measured 0 across the roster); (7) the findings: F-22 (ARIA row model + density probe) landed, F-81 both reuse waves landed (8c96f4197, 051232cba), F-69 closed today (useSortableList retired, 425012314's sibling 2dd895f8b, drills 10/10, zero callers in 4 repos), the export kernel verified landed (ef7edcb94) and the DnD ownership resolved (the sortable kernel owns; the cross-container kernel is WO-FAM-13's); (8) the R4 arms: adaptation (WO-INV-07 done) and skeletons (WO-FAM-14 done). Registered carryover, not blockers: the ds-table-density classes stay emitted until the app migration at the next DS bump (R1 window, authorized); the table-export clipboard policy residual is registered for the owner. Closed with the registry at 118/161."
   },
   {
    "id": "WO-FAM-09",
