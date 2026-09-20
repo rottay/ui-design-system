@@ -1707,8 +1707,8 @@
       "output": "entrypoints/public/structures/app-shell/index",
       "budget": {
         "maxDirectSources": 1,
-        "maxReachableModules": 77,
-        "maxSourceBytes": 277482
+        "maxReachableModules": 78,
+        "maxSourceBytes": 283584
       },
       "symbols": [
         {

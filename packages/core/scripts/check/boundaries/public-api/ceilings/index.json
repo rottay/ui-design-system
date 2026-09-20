@@ -309,8 +309,8 @@
       "maxSourceBytes": 86804
     },
     "./structures/app-shell": {
-      "maxReachableModules": 77,
-      "maxSourceBytes": 277482
+      "maxReachableModules": 78,
+      "maxSourceBytes": 283584
     },
     "./structures/column-menu": {
       "maxReachableModules": 643,
@@ -329,6 +329,6 @@
       "maxSourceBytes": 3592350
     }
   },
-  "lastMove": "WO-FAM-11 R1 namespace migration (339a0a7a0): app-shell carries the superseded-window read arms until the rostered consumers migrate at their DS bump; +1475 bytes measured, Fable-reviewed",
+  "lastMove": "WO-FAM-11 class window (f32287e2c): dual-class stamping + the registry; +6102 bytes measured, Fable-reviewed",
   "lastMoveKind": "ampliacion autorizada por nombre (--widen) — maxReachableModules: 0 subido(s), 0 sin ancla valida; maxSourceBytes: 1 subido(s), 0 sin ancla valida"
 }

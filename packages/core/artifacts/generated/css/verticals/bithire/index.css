@@ -30758,7 +30758,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     calc(var(--ds-modern-table-control-size) - 0.375rem)
   );
   --ds-modern-table-control-radius: var(
-    --ds-table-control-radius,
+    --ds-data-table-control-radius,
     var(--ds-radius-md, 0.5rem)
   );
   --ds-modern-table-divider: var(
@@ -30875,9 +30875,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-table-cell-font-size, var(--ds-font-size-sm)) *
       var(--ds-density-factor-compact, 0.85)
   );
-  /* The shared line-height channel stays the tenant override; only the
-     posture floor changes (1.25 here, 1.35 base, 1.55 spacious). */
-  line-height: var(--ds-table-cell-line-height, 1.25);
+  /* One channel per posture: a theme-root value substitutes its var()s where
+     it is declared, so the three rules (1.25 here, 1.35 base, 1.55 spacious)
+     read three rungs. */
+  line-height: var(--ds-data-table-cell-line-height-compact, 1.25);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="spacious"]
@@ -30886,7 +30887,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-table-cell-font-size, var(--ds-font-size-sm)) *
       var(--ds-density-factor-spacious, 1.15)
   );
-  line-height: var(--ds-table-cell-line-height, 1.55);
+  line-height: var(--ds-data-table-cell-line-height-spacious, 1.55);
 }
 
 /* The header label joins the SAME ladder (height + type + chrome move
@@ -31421,7 +31422,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   padding: var(--ds-modern-table-cell-padding);
   overflow: hidden;
   font-size: var(--ds-table-cell-font-size, var(--ds-font-size-sm));
-  line-height: var(--ds-table-cell-line-height, 1.35);
+  line-height: var(--ds-data-table-cell-line-height, 1.35);
   text-overflow: ellipsis;
   unicode-bidi: plaintext;
   white-space: nowrap;
@@ -31701,7 +31702,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
       color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     var(
       --ds-table-shadow,
-      var(--ds-workspace-card-shadow, var(--ds-elevation-1))
+      var(
+        --ds-data-table-card-shadow,
+        var(--ds-workspace-card-shadow, var(--ds-elevation-1))
+      )
     );
   transition: border-color var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out),
@@ -32079,10 +32083,13 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   transform: rotate(-90deg);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-count-pill"] {
-  /* The count chip follows the family's control-radius channel: a squarer
-     edge profile reads as a framed figure, a soft one as a pill. The
-     fallback keeps the historic full-pill render byte-exact. */
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-full, 9999px));
+  /* The chip has its own radius rung, not the box controls': a squarer edge
+     profile reads as a framed figure, a soft one as a pill, and the two
+     surfaces rest at opposite ends of the scale. */
+  border-radius: var(
+    --ds-data-table-control-pill-radius,
+    var(--ds-radius-full, 9999px)
+  );
   background: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
   color: var(--ds-color-text-secondary);
 }
@@ -33616,7 +33623,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   justify-content: center;
   min-width: var(--ds-data-table-mobile-control-size, var(--ds-spacing-9, 2.25rem));
   min-height: var(--ds-data-table-mobile-control-size, var(--ds-spacing-9, 2.25rem));
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
   background: var(--ds-surface-inset, var(--ds-surface-panel));
 }
 
@@ -33635,7 +33642,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 .ds-pattern-data-table.ds-data-table--mobile
   [data-part="mobile-bulk-actions"] {
   padding: var(--ds-data-table-mobile-bulk-padding, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1)));
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
   background: var(
     --ds-data-table-mobile-bulk-bar-bg,
     color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
@@ -33655,7 +33662,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-pagination"] {
   padding: var(--ds-data-table-mobile-pagination-padding, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(0.75rem * var(--ds-rhythm-effective-scale, 1)));
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
   background: var(
     --ds-data-table-mobile-pagination-bg,
     var(--ds-surface-inset, var(--ds-surface-panel))
@@ -33698,7 +33705,10 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
     var(--ds-table-radius, var(--ds-radius-lg))
   );
   background: var(--ds-table-bg, var(--ds-color-bg-primary));
-  box-shadow: var(--ds-table-shadow, var(--ds-elevation-1));
+  box-shadow: var(
+    --ds-table-shadow,
+    var(--ds-data-table-mobile-state-shadow, var(--ds-elevation-1))
+  );
 }
 .ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-state-panel"][data-part="mobile-state-panel"] {
   border: 1px solid
@@ -33723,7 +33733,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
   background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
   color: var(--ds-color-primary);
 }
@@ -33764,7 +33774,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
      tenant retunes one padding and both record shapes follow. */
   padding-block: var(--ds-data-table-mobile-summary-padding-block, calc(0.375rem * var(--ds-rhythm-effective-scale, 1)));
   padding-inline: var(--ds-data-table-mobile-summary-padding-inline, calc(0.125rem * var(--ds-rhythm-effective-scale, 1)));
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile
@@ -33781,7 +33791,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="record-list-open"] {
   min-inline-size: 0;
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-pattern-data-table.ds-data-table--mobile [data-part="record-meta"] {
@@ -33918,7 +33928,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   .ds-resize-handle:is([data-state~="focus-visible"], :focus-visible) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 @media (hover: hover) {
@@ -33938,7 +33948,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   ) {
   outline: 2px solid var(--ds-color-primary);
   outline-offset: -2px;
-  border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  border-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
@@ -59777,10 +59787,19 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * specificity. The composed Button therefore keeps its own paint by design,
  * and the grammar below is layout the engine skins do not claim.
  *
- * SCOPE ROOT carries `rottay-action-dock` + `data-part='root'` +
- * `data-placement` + `data-mode`. Component variables deliberately fall back
- * to semantic spacing, elevation, and stacking tokens so tenants can tune the
- * dock without application-owned CSS.
+ * SCOPE ROOT carries the dock class + `data-part='root'` + `data-placement` +
+ * `data-mode`. Component variables deliberately fall back to semantic spacing,
+ * elevation, and stacking tokens so tenants can tune the dock without
+ * application-owned CSS.
+ *
+ * CLASS WINDOW (`components/structures/foundation/class-window`): the dock
+ * stamps the canonical `ds-action-dock*` spelling beside the superseded
+ * `rottay-action-dock*` one, and every selector below names the pair through a
+ * single `:is()` — specificity is that of its most specific argument, so each
+ * rule keeps the exact (a,b,c) it had as one class and the z-index arithmetic
+ * below is unchanged. The superseded arm also keeps `step-wizard`'s
+ * sticky-actions owner and `collection-workspace`'s sticky action bar, which
+ * both author the old spelling, on these rules.
  *
  * SPECIFICITY (P-48): `background` and `box-shadow` are non-border paint;
  * selectors remain rooted in the component class plus explicit state data.
@@ -59882,7 +59901,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * gap), so the row, the safe areas, and the priority grammar all mirror.
  */
 
-.rottay-action-dock[data-part='root'][data-placement][data-mode] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode] {
   box-sizing: border-box;
   width: 100%;
   padding-inline: var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem));
@@ -59902,7 +59921,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-.rottay-action-dock[data-part='root'][data-mode='fixed'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-mode='fixed'] {
   position: fixed;
   inset-inline: 0;
 }
@@ -59913,12 +59932,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    `--ds-action-dock-sticky-z-index` never resolved. Tie on specificity, win on
    source order. The family test pins that every mode rule outranks the root
    rule for each property both declare. */
-.rottay-action-dock[data-part='root'][data-placement][data-mode='sticky'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode='sticky'] {
   position: sticky;
   z-index: var(--ds-action-dock-sticky-z-index, var(--ds-z-index-sticky, 1100));
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'] {
   /* Public reservation hook (the S02 `--ds-bottom-tab-bar-reserved-block-end`
      precedent): pages keep their content clear of the fixed dock with
      `padding-block-end: var(--ds-action-dock-reserved-block-end)`. The 60px
@@ -59947,19 +59966,19 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     );
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
   inset-block-end: calc(var(--ds-shell-bottom-inset, 0px) + var(--ds-virtual-keyboard-inset, 0px));
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true'] {
   inset-block-end: var(--ds-virtual-keyboard-inset, 0px);
 }
 
-.rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='bottom'][data-mode='sticky'] {
   inset-block-end: 0;
 }
 
-.rottay-action-dock[data-part='root'][data-placement='top'] {
+:is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement='top'] {
   /* Top-placement mirror of the bottom reservation hook. */
   --ds-action-dock-reserved-block-start: calc(
     60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
@@ -59982,25 +60001,25 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
     var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
 }
 
-.rottay-action-dock__actions {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) {
   width: 100%;
   gap: var(--ds-action-dock-gap, var(--ds-spacing-3, 0.75rem));
 }
 
 /* Shrink guard: row children may shrink below content width so labels
  * ellipsize (Button label contract) instead of overflowing the dock. */
-.rottay-action-dock__actions > * {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > * {
   min-inline-size: 0;
 }
 
 /* Priority grammar (layout only — Button owns its paint):
  * primary grows into the freed space; danger hugs the start edge and the auto
  * margin separates it from the action cluster at the end edge. */
-.rottay-action-dock__actions > .rottay-action-dock__action[data-priority='primary'] {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__action, .rottay-action-dock__action)[data-priority='primary'] {
   flex: 1 1 auto;
 }
 
-.rottay-action-dock__actions > .rottay-action-dock__action[data-priority='danger'] {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__action, .rottay-action-dock__action)[data-priority='danger'] {
   margin-inline-end: auto;
 }
 
@@ -60009,7 +60028,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * rule matched nothing, and the more-actions control could be squeezed by the
  * growing primary — `__overflow` names the item, `__overflow-trigger` stays on
  * the Button for the coarse-pointer floor below. */
-.rottay-action-dock__actions > .rottay-action-dock__overflow {
+:is(.ds-action-dock__actions, .rottay-action-dock__actions) > :is(.ds-action-dock__overflow, .rottay-action-dock__overflow) {
   flex: 0 0 auto;
 }
 
@@ -60017,8 +60036,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * floor. min-block-size composes with Button's own height instead of
  * fighting its specificity. */
 @media (pointer: coarse) {
-  .rottay-action-dock__actions > :where(button, a),
-  .rottay-action-dock__overflow-trigger {
+  :is(.ds-action-dock__actions, .rottay-action-dock__actions) > :where(button, a),
+  :is(.ds-action-dock__overflow-trigger, .rottay-action-dock__overflow-trigger) {
     min-block-size: max(44px, var(--ds-size-touch-target, 44px));
   }
 }
@@ -60039,7 +60058,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* Reduced motion: the surface transition (theme/density channel switches)
  * and the entrance are silenced; layout and the coarse floor are unaffected. */
 @media (prefers-reduced-motion: reduce) {
-  .rottay-action-dock[data-part='root'][data-placement][data-mode] {
+  :is(.ds-action-dock, .rottay-action-dock)[data-part='root'][data-placement][data-mode] {
     transition: none;
     animation: none;
   }
@@ -61092,12 +61111,21 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * This file is deliberately unlayered with the rest of the component skins.
  *
  * Selection is on the anatomy the structure stamps (`data-part`,
- * `data-state`). The `rottay-app-shell__*` class vocabulary is still STAMPED —
- * app-bithire selects two of those classes and app-evnto's tests query the
- * root — but nothing here paints through it.
+ * `data-state`); the class vocabulary is a SCOPE, not a paint surface.
+ *
+ * That scope is inside an open class migration window (see
+ * `components/structures/foundation/class-window`): the structure stamps the
+ * canonical `ds-app-shell*` spelling beside the superseded `rottay-app-shell*`
+ * one, and every rule below selects the pair through a single `:is()`, whose
+ * specificity is that of its most specific argument — so each selector keeps
+ * the exact (a,b,c) it carried as one class. Both arms stay while the window
+ * is open: a consumer pinned to a DS version that never emitted the canonical
+ * class, and the in-DS `step-wizard` sticky-actions owner that borrows the
+ * dock's chrome, still reach these rules. Drop the superseded argument only
+ * when the window's own drill says so.
  */
 
-.rottay-app-shell {
+:is(.ds-app-shell, .rottay-app-shell) {
   /* Resting values for the channels the React root re-stamps per instance:
      the physical inset bridges, the resolved insets a server render needs
      before hydration, and the default-geometry main transition. */
@@ -61134,7 +61162,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 /* Skip link: first tab stop, hidden until focused, revealed above all chrome. */
-.rottay-app-shell [data-part="skip-link"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"] {
   position: fixed;
   inset-block-start: calc(var(--ds-shell-safe-area-top) + var(--ds-spacing-3, 12px));
   inset-inline-start: calc(var(--ds-shell-safe-area-left) + var(--ds-spacing-3, 12px));
@@ -61151,7 +61179,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: var(--ds-app-shell-skip-link-shadow, var(--ds-elevation-2, none));
   text-decoration: none;
 }
-.rottay-app-shell [data-part="skip-link"]:not(:focus) {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"]:not(:focus) {
   width: 1px;
   height: 1px;
   min-height: 0;
@@ -61165,13 +61193,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 /* The ring is the kernel's decision, with the platform pseudo as the same
    rule's fallback arm. */
-.rottay-app-shell [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"]:is([data-state~="focus-visible"], :focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
-.rottay-app-shell [data-part="navigation-sidebar"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
   position: fixed;
   inset-block: 0;
   inset-inline-start: 0;
@@ -61195,8 +61223,8 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 /* The drawer surface is the Sheet's own part in the Sheet's own portal. The
    shell selects it by its own class, tripled to hold the specificity the
    `[data-part='surface']` qualifier used to carry, without consuming a part
-   this family never stamps. */
-.rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer {
+   this family never stamps. Three `:is()` pairs are still (0,3,0). */
+:is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer) {
   width: var(--ds-shell-resolved-drawer-inline-size);
   max-width: 100dvw;
   height: 100dvh;
@@ -61212,7 +61240,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: var(--ds-shell-navigation-shadow, var(--ds-elevation-3));
 }
 
-.rottay-app-shell__navigation-drawer-body {
+:is(.ds-app-shell__navigation-drawer-body, .rottay-app-shell__navigation-drawer-body) {
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -61221,7 +61249,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
      `!important` is needed here. Layout-only declarations stay in the skin. */
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-drawer-header"] {
   min-height: var(--ds-shell-resolved-sidebar-header-min-block-size);
   flex-shrink: 0;
@@ -61235,12 +61263,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border-block-end: var(--ds-app-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
-.rottay-app-shell__navigation-drawer-logo {
+:is(.ds-app-shell__navigation-drawer-logo, .rottay-app-shell__navigation-drawer-logo) {
   min-width: 0;
   overflow: hidden;
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
   width: 44px;
   min-width: 44px;
@@ -61254,13 +61282,13 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   cursor: pointer;
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-close"] {
   background: transparent;
   border: 0;
 }
 
-.rottay-app-shell [data-part="navigation-logo"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-logo"] {
   height: var(--ds-shell-resolved-sidebar-header-block-size);
   flex-shrink: 0;
   display: flex;
@@ -61272,12 +61300,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border-block-end: var(--ds-app-shell-navigation-header-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
-.rottay-app-shell [data-part="navigation-logo"][data-collapsed="true"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-logo"][data-collapsed="true"] {
   justify-content: center;
   padding: var(--ds-app-shell-navigation-logo-padding-collapsed, 0);
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-body"] {
   flex: 1;
   overflow-y: auto;
@@ -61302,12 +61330,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   );
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-body"][data-collapsed="true"] {
   padding: var(--ds-app-shell-navigation-body-padding-collapsed, var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)));
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-footer"] {
   flex-shrink: 0;
   padding: var(--ds-shell-navigation-footer-padding, var(--ds-app-shell-navigation-footer-padding, var(--ds-spacing-3, 12px)));
@@ -61315,12 +61343,12 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border-block-start: var(--ds-app-shell-navigation-footer-border, 1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle)));
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-footer"][data-collapsed="true"] {
   padding: var(--ds-app-shell-navigation-footer-padding-collapsed, var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px));
 }
 
-.rottay-app-shell [data-part="main-area"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"] {
   /* The structural padding defaults are declared per arm rather than read
      with a different fallback in each rule: one channel, one value, and the
      arm that needs the notch says so where the arm is. */
@@ -61347,16 +61375,16 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   box-shadow: var(--ds-app-shell-main-shadow, none);
 }
 
-.rottay-app-shell [data-part="main-area"][data-has-header="false"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"][data-has-header="false"] {
   --ds-shell-main-padding-block-start: var(--ds-shell-safe-area-top);
 }
 
-.rottay-app-shell [data-part="main-area"][data-compact="true"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"][data-compact="true"] {
   --ds-shell-main-padding-inline-start: var(--ds-shell-safe-area-left);
   margin-inline-start: 0;
 }
 
-.rottay-app-shell [data-part="header"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
   position: sticky;
   inset-block-start: var(--ds-shell-header-inset-block-start, var(--ds-app-shell-header-inset-block-start, 0));
   inset-inline: var(--ds-shell-header-inset-inline, var(--ds-app-shell-header-inset-inline, 0));
@@ -61377,30 +61405,30 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   -webkit-backdrop-filter: var(--ds-app-shell-header-backdrop, var(--ds-layout-header-backdrop, blur(12px)));
 }
 
-.rottay-app-shell [data-part="navigation-trigger"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-trigger"] {
   margin-inline-end: var(--ds-app-shell-navigation-trigger-margin-inline-end, var(--ds-spacing-3, 12px));
   background: transparent;
   border: 0;
 }
 
-.rottay-app-shell
+:is(.ds-app-shell, .rottay-app-shell)
   :is([data-part="header-left"], [data-part="header-center"], [data-part="header-right"]) {
   flex: 1;
   min-width: 0;
 }
 
-.rottay-app-shell [data-part="header-center"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="header-center"] {
   display: flex;
   justify-content: center;
 }
 
-.rottay-app-shell [data-part="header-right"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="header-right"] {
   display: flex;
   justify-content: flex-end;
   gap: var(--ds-app-shell-header-slot-gap, var(--ds-spacing-1, 4px));
 }
 
-.rottay-app-shell [data-part="content"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="content"] {
   flex: 1;
   min-width: 0;
   padding: var(--ds-app-shell-content-padding, 0);
@@ -61408,7 +61436,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   border: var(--ds-app-shell-content-border, 0);
 }
 
-.rottay-app-shell [data-part="footer"] {
+:is(.ds-app-shell, .rottay-app-shell) [data-part="footer"] {
   flex-shrink: 0;
   padding: var(--ds-app-shell-footer-padding, 0);
   background: var(--ds-app-shell-footer-background, transparent);
@@ -61430,7 +61458,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * ------------------------------------------------------------------------- */
 
 /* sidebar panel: roomy, reading-first rhythm (the comfortable default). */
-[data-anatomy-sidebar='panel'] .rottay-app-shell [data-part="navigation-sidebar"] {
+[data-anatomy-sidebar='panel'] :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
   --ds-sidebar-item-padding-inline: var(--ds-spacing-3);
   --ds-sidebar-item-gap: var(--ds-spacing-2);
   --ds-sidebar-shell-padding-inline:
@@ -61439,7 +61467,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 /* sidebar rail: narrow, scan-first; tight rhythm and compact padding. */
-[data-anatomy-sidebar='rail'] .rottay-app-shell [data-part="navigation-sidebar"] {
+[data-anatomy-sidebar='rail'] :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
   --ds-sidebar-item-gap: var(--ds-spacing-1);
   --ds-sidebar-shell-padding-inline:
     var(--ds-spacing-2) var(--ds-spacing-2)
@@ -61448,7 +61476,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* layout flat: the shell header merges with the canvas — no rule, radius,
    elevation or backdrop tint. */
-[data-anatomy-layout='flat'] .rottay-app-shell [data-part="header"] {
+[data-anatomy-layout='flat'] :is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
   border-block-end: 0;
   border-radius: 0;
   box-shadow: none;
@@ -61458,7 +61486,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* layout floating: the shell header lifts into an inset, rounded, elevated
    card (mirrors the modern Layout.Header floating anatomy). */
-[data-anatomy-layout='floating'] .rottay-app-shell [data-part="header"] {
+[data-anatomy-layout='floating'] :is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
   border-block-end: 0;
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-2);
@@ -61480,7 +61508,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * `:has()` skip the rule: the app's explicit `geometry.bottomInset` contract
  * keeps working as before (graceful degradation, not a new requirement).
  * ------------------------------------------------------------------------- */
-.rottay-app-shell:has(.rottay-bottom-tab-bar[data-part='root']) [data-part="main-area"] {
+:is(.ds-app-shell, .rottay-app-shell):has(.rottay-bottom-tab-bar[data-part='root']) [data-part="main-area"] {
   --ds-shell-main-padding-block-end: max(
     var(--ds-shell-bottom-inset),
     calc(50px + env(safe-area-inset-bottom, 0px))
@@ -61499,7 +61527,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
  * shell geometry — this channel only tells the menu to follow it, including
  * through the collapse width transition.
  * ------------------------------------------------------------------------- */
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-body"][data-collapsed='true'] {
   --_ds-menu-collapsed-inline-size: 100%;
 }
@@ -61511,16 +61539,16 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    consumption flips. The published `--ds-shell-inline-start-inset` calc keeps
    its LTR reading on desktop (safe-area insets are 0px there in practice);
    the residual desktop-RTL notch asymmetry in that calc is registered debt. */
-[dir='rtl'] .rottay-app-shell [data-part="navigation-sidebar"] {
+[dir='rtl'] :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"] {
   padding-inline-start: var(--ds-shell-safe-area-right);
 }
-[dir='rtl'] .rottay-app-shell [data-part="main-area"] {
+[dir='rtl'] :is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"] {
   --ds-shell-main-padding-inline-end: var(--ds-shell-safe-area-left);
 }
-[dir='rtl'] .rottay-app-shell [data-part="main-area"][data-compact='true'] {
+[dir='rtl'] :is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"][data-compact='true'] {
   --ds-shell-main-padding-inline-start: var(--ds-shell-safe-area-right);
 }
-[dir='rtl'] .rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer {
+[dir='rtl'] :is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer) {
   padding-inline-start: env(safe-area-inset-right, 0px);
 }
 
@@ -61528,7 +61556,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    the keyboard ring once and serializes it into `data-state`; the platform
    pseudo is the fallback arm of the same rule, never a second decision. */
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
   border-radius: var(--ds-radius-md, 8px);
   transition:
@@ -61538,7 +61566,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 
 /* Hover microinteraction: quiet wash, no accent — the shell chrome stays
    neutral so the single blue accent keeps its scarcity. */
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]):is(
     [data-state~="hovered"],
     :hover
@@ -61546,7 +61574,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   background: var(--ds-app-shell-navigation-action-hover-bg, var(--ds-color-neutral-100));
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]):is(
     [data-state~="pressed"],
     :active
@@ -61554,7 +61582,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   background: var(--ds-app-shell-navigation-action-active-bg, var(--ds-color-neutral-200, var(--ds-color-neutral-100)));
 }
 
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+:is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
   :is([data-part="navigation-close"], [data-part="navigation-trigger"]):is(
     [data-state~="focus-visible"],
     :focus-visible
@@ -61565,9 +61593,9 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-app-shell [data-part="navigation-sidebar"],
-  .rottay-app-shell [data-part="main-area"],
-  :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"],
+  :is(.ds-app-shell, .rottay-app-shell) [data-part="main-area"],
+  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
     :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
     transition: none;
   }
@@ -61577,7 +61605,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
    affordance only — drop it (and the translucent wash it softens) so the
    header reads as a solid surface (sheet.css precedent). */
 @media (prefers-reduced-transparency: reduce) {
-  .rottay-app-shell [data-part="header"] {
+  :is(.ds-app-shell, .rottay-app-shell) [data-part="header"] {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: var(--ds-shell-header-background, var(--ds-app-shell-header-background, var(--ds-layout-header-bg, var(--ds-surface-canvas))));
@@ -61585,7 +61613,7 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
 }
 
 @media (forced-colors: active) {
-  :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
     :is([data-part="navigation-close"], [data-part="navigation-trigger"]) {
     border: 1px solid ButtonText;
     color: ButtonText;
@@ -61595,19 +61623,19 @@ html[data-ds-motion='reduced'] .ds-tabs--modern[data-part='root'] [data-part='ta
   /* The chrome hairlines (sidebar edge, header rule, drawer edge, footer
      frame) re-key to a system color so the region separation survives when
      the tenant palette is forced away. */
-  .rottay-app-shell [data-part="navigation-sidebar"],
-  .rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer,
-  .rottay-app-shell [data-part="header"],
-  .rottay-app-shell [data-part="navigation-logo"],
-  :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-sidebar"],
+  :is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer):is(.ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer),
+  :is(.ds-app-shell, .rottay-app-shell) [data-part="header"],
+  :is(.ds-app-shell, .rottay-app-shell) [data-part="navigation-logo"],
+  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
     [data-part="navigation-drawer-header"],
-  :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  :is(.ds-app-shell, .rottay-app-shell, .ds-app-shell__navigation-drawer, .rottay-app-shell__navigation-drawer)
     [data-part="navigation-footer"] {
     border-color: CanvasText;
   }
 
   /* The skip link keeps a real frame and readable system ink. */
-  .rottay-app-shell [data-part="skip-link"]:focus {
+  :is(.ds-app-shell, .rottay-app-shell) [data-part="skip-link"]:focus {
     border: 1px solid ButtonText;
     background: Canvas;
     color: ButtonText;
@@ -75573,7 +75601,7 @@ html[data-ds-motion='reduced']
   overflow: hidden;
   padding: var(--ds-page-shell-header-padding);
   border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-toolbar-border, var(--ds-color-border-primary));
-  border-radius: var(--ds-page-header-radius, var(--ds-radius-xl));
+  border-radius: var(--ds-page-shell-header-radius, var(--ds-radius-xl));
   background: var(
     --ds-page-header-bg,
     var(
@@ -75589,7 +75617,7 @@ html[data-ds-motion='reduced']
   background-position: 0% 50%;
   background-size: 180% 180%;
   box-shadow: var(
-    --ds-page-header-shadow,
+    --ds-page-shell-header-shadow,
     var(--ds-toolbar-shadow, var(--ds-elevation-1))
   );
   transition:
@@ -75606,7 +75634,7 @@ html[data-ds-motion='reduced']
   inset: 0;
   pointer-events: none;
   content: '';
-  opacity: var(--ds-page-header-sheen-opacity, 0.28);
+  opacity: var(--ds-page-shell-header-sheen-opacity, 0.28);
   background: linear-gradient(
     112deg,
     transparent 20%,
@@ -75615,7 +75643,7 @@ html[data-ds-motion='reduced']
   );
   background-position: 120% 50%;
   background-size: 240% 100%;
-  animation: ds-page-header-sheen var(--ds-page-header-sheen-duration, 14s)
+  animation: ds-page-header-sheen var(--ds-page-shell-header-sheen-duration, 14s)
     ease-in-out infinite;
 }
 
@@ -75684,7 +75712,7 @@ html[data-ds-motion='reduced']
       var(--ds-color-primary) 24%,
       var(--ds-toolbar-border, var(--ds-color-border-primary))
     );
-    box-shadow: var(--ds-page-header-shadow-hover, var(--ds-elevation-2));
+    box-shadow: var(--ds-page-shell-header-shadow-hover, var(--ds-elevation-2));
   }
 
   .ds-pattern-page-shell.ds-engine-modern [data-part='header']:is([data-state~='hovered'], :hover) [data-part='header-icon'] {
@@ -75699,7 +75727,7 @@ html[data-ds-motion='reduced']
   height: var(--_ds-page-header-icon-size, 40px);
   place-items: center;
   border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
-  border-radius: var(--ds-page-header-icon-radius, var(--ds-radius-lg));
+  border-radius: var(--ds-page-shell-header-icon-radius, var(--ds-radius-lg));
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card));
   color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
   box-shadow:
@@ -120946,8 +120974,14 @@ html[lang]:lang(ar) {
   --ds-data-table-action-shadow: var(--ds-elevation-0, none);
   --ds-data-table-bulk-bar-padding: calc(0.625rem * var(--ds-rhythm-effective-scale, 1)) calc(1rem * var(--ds-rhythm-effective-scale, 1));
   --ds-data-table-caption-font-size: var(--ds-font-size-xs);
+  --ds-data-table-card-shadow: var(--ds-workspace-card-shadow, var(--ds-elevation-1));
+  --ds-data-table-cell-line-height: 1.35;
+  --ds-data-table-cell-line-height-compact: 1.25;
+  --ds-data-table-cell-line-height-spacious: 1.55;
   --ds-data-table-collapsed-min-inline-size: 34rem;
   --ds-data-table-control-font-size: var(--ds-button-sm-font-size, var(--ds-font-size-sm));
+  --ds-data-table-control-pill-radius: var(--ds-radius-full, 9999px);
+  --ds-data-table-control-radius: var(--ds-radius-md, 0.5rem);
   --ds-data-table-control-size: calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-data-table-control-size-compact: calc(var(--ds-spacing-7, 1.75rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-data-table-control-size-spacious: calc(var(--ds-spacing-9, 2.25rem) * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
@@ -120962,7 +120996,7 @@ html[lang]:lang(ar) {
   --ds-data-table-drop-indicator-bg: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
   --ds-data-table-drop-indicator-border: color-mix(in srgb, var(--ds-color-primary) 52%, transparent);
   --ds-data-table-drop-indicator-inset: 0.1875rem;
-  --ds-data-table-drop-indicator-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
+  --ds-data-table-drop-indicator-radius: var(--ds-data-table-control-radius, var(--ds-radius-md, 0.5rem));
   --ds-data-table-drop-indicator-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
   --ds-data-table-editor-checkbox-size: var(--ds-spacing-4, 1rem);
   --ds-data-table-editor-error-font-size: var(--ds-font-size-xs);
@@ -121007,6 +121041,7 @@ html[lang]:lang(ar) {
   --ds-data-table-mobile-state-min-height: var(--ds-spacing-32, 8rem);
   --ds-data-table-mobile-state-padding: var(--ds-spacing-8, 2rem) var(--ds-spacing-5, 1.25rem);
   --ds-data-table-mobile-state-radius: var(--ds-table-radius, var(--ds-radius-lg));
+  --ds-data-table-mobile-state-shadow: var(--ds-elevation-1);
   --ds-data-table-mobile-summary-divider: color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
   --ds-data-table-mobile-summary-min-height: var(--ds-spacing-8, 2rem);
   --ds-data-table-mobile-summary-padding-block: calc(0.375rem * var(--ds-rhythm-effective-scale, 1));
@@ -121859,13 +121894,13 @@ html[lang]:lang(ar) {
   --ds-otp-input-slot-shadow-focus: var(--ds-input-shadow-focus, var(--ds-focus-ring));
   --ds-otp-input-slot-shadow-focus-error: var(--ds-input-error-shadow-focus, var(--ds-focus-ring));
   --ds-page-header-eyebrow-text-transform: uppercase;
-  --ds-page-header-icon-radius: var(--ds-radius-lg);
-  --ds-page-header-radius: var(--ds-radius-xl);
-  --ds-page-header-shadow: var(--ds-toolbar-shadow, var(--ds-elevation-1));
-  --ds-page-header-shadow-hover: var(--ds-elevation-2);
-  --ds-page-header-sheen-duration: 14s;
-  --ds-page-header-sheen-opacity: 0.28;
   --ds-page-shell-actions-backdrop: none;
+  --ds-page-shell-header-icon-radius: var(--ds-radius-lg);
+  --ds-page-shell-header-radius: var(--ds-radius-xl);
+  --ds-page-shell-header-shadow: var(--ds-toolbar-shadow, var(--ds-elevation-1));
+  --ds-page-shell-header-shadow-hover: var(--ds-elevation-2);
+  --ds-page-shell-header-sheen-duration: 14s;
+  --ds-page-shell-header-sheen-opacity: 0.28;
   --ds-pagination-border: var(--ds-color-border);
   --ds-pagination-color: var(--ds-color-text-primary);
   --ds-pagination-controls-bleed: var(--ds-spacing-1);
