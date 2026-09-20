@@ -62,9 +62,12 @@ describeCausality({
 });
 
 /**
- * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the chrome
- * pair this family paints on loses its authored half under neutral+preset, so
- * ink and ground come from opposite ends of the ramp. Measured against a
+ * WO-DER-06 derivation-lane registry (D6-2c-ii-RED, 2026-09-15): the DER-06
+ * compile corrected this family's chrome ink to the dark ramp, which exposed a
+ * pre-existing mode-blind GROUND underneath it in
+ * `presentation/components/card` (the card base stated `--ds-card-bg:
+ * var(--ds-color-white)` in the `rottay-components` layer; repaired in
+ * 51fd557fc). Measured against a
  * pristine HEAD archive, every scope below audited CLEAN there, so each entry
  * is lot-caused and none is a pre-existing finding. The gap is pinned by axe
  * rule id AND the identity of every failing node: another rule, one more node,
