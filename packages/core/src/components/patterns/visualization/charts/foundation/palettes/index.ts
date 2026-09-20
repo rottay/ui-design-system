@@ -37,4 +37,4 @@ export const ACCESSIBLE_COLORS = CHART_SCHEME_LITERALS.accessible;
  * Default palette for a no-config legacy chart. Status tokens are never reused
  * as arbitrary categories.
  */
-export const DEFAULT_COLORS = ACCESSIBLE_COLORS;
+export const DEFAULT_COLORS = CHART_SCHEME_LITERALS.default;

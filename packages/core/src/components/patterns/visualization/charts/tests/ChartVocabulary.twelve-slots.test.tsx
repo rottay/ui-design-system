@@ -33,7 +33,7 @@ const SKIN_CSS = readFileSync(
 
 describe('the twelve-slot categorical vocabulary reaches every output path', () => {
   it('paints inline-fill marks from slots 1..12 and wraps only after the twelfth', () => {
-    const palette = resolveChartSeriesPaint('accessible');
+    const palette = resolveChartSeriesPaint('default');
     const { container } = renderSurface(
       <FunnelChart data={DATA} width={480} height={460} responsive={false} animate={false} />,
     );

@@ -73,21 +73,24 @@ function createReducedMotionController(initial: boolean) {
 }
 
 describe('useChartPersonality', () => {
-  it('resolves default and accessible schemes to the canonical consumption chain', () => {
+  it('resolves default and accessible to their OWN channels, not one shared table', () => {
     mockMatchMedia(1440, false);
 
-    // The legacy raw-hex arrays are replaced by consumption expressions:
-    // authored category > generated tenant series > mode-aware channel >
-    // audited literal. Both legacy schemes ride the accessible channel
-    // because DEFAULT_COLORS always aliased ACCESSIBLE_COLORS on this path;
-    // the channel's light values equal those hexes, so standalone light
-    // rendering is byte-stable while tenant palettes become visible.
-    // The first ten are the legacy hexes verbatim; slots 11-12 are the derived
-    // extension of the same vocabulary.
-    const accessibleHexes = [
-      '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5', '#7a4595',
-      '#5f6368', '#006d77', '#9b4a5a', '#4d6a00', '#a53426', '#6d5a24',
-    ];
+    // Consumption expressions, not raw hexes: authored category > generated
+    // tenant series > mode-aware channel > audited literal. `default` reads
+    // `--ds-chart-default-*` and `accessible` reads `--ds-chart-accessible-*`;
+    // the two tables are different decisions and this hook must not collapse
+    // them, which it did while DEFAULT_COLORS aliased ACCESSIBLE_COLORS.
+    const literals = {
+      default: [
+        '#0f766e', '#8c6d46', '#b24d3a', '#296f68', '#735838', '#963f31',
+        '#3d756f', '#7d6140', '#a04435', '#5e5a52', '#366916', '#716901',
+      ],
+      accessible: [
+        '#2f6b9a', '#a23b72', '#1f7a55', '#9a5700', '#355cb5', '#7a4595',
+        '#5f6368', '#006d77', '#9b4a5a', '#4d6a00', '#a53426', '#6d5a24',
+      ],
+    } as const;
 
     for (const colorScheme of ['default', 'accessible'] as const) {
       const { result } = renderHook(() => useChartPersonality({ colorScheme }), {
@@ -98,7 +101,7 @@ describe('useChartPersonality', () => {
       result.current.colors.forEach((color, index) => {
         const slot = index + 1;
         expect(color).toBe(
-          `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-accessible-${slot}, ${accessibleHexes[index]})))`,
+          `var(--ds-chart-category-${slot}, var(--ds-chart-series-${slot}, var(--ds-chart-${colorScheme}-${slot}, ${literals[colorScheme][index]})))`,
         );
       });
     }

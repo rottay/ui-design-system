@@ -103,7 +103,7 @@ describe('chart personality palette fallback', () => {
       expect(container.querySelectorAll('[data-part="node-mark"]')).toHaveLength(3);
     });
 
-    const expected = resolveChartSeriesPaint('accessible')[0];
+    const expected = resolveChartSeriesPaint('default')[0];
     const marks = [
       container.querySelector('[data-testid="funnel-palette"] [data-part="segment"]'),
       container.querySelector('[data-testid="gantt-palette"] [data-part="task-duration"]'),

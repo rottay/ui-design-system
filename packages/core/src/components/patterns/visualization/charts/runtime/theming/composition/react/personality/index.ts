@@ -18,12 +18,12 @@ import { resolveChartSeriesPaint } from '@ui/patterns/visualization/charts/runti
  * Every bounded scheme resolves through the canonical consumption chain
  * (category > generated series > mode-aware channel > literal), so a
  * compiler-generated tenant palette reaches every family without a local
- * definition shadowing it. `default` still resolves the `accessible` table:
- * its light values equal the legacy hexes byte-for-byte, so standalone light
- * rendering stays byte-stable, and de-aliasing the two is its own decision.
+ * definition shadowing it. Each scheme resolves its OWN table: `default` is a
+ * scheme like any other, and `accessible` is an explicit choice rather than
+ * the table everything silently landed on.
  */
 const SERIES_PAINT: Readonly<Record<ChartColorScheme, string[]>> = Object.freeze({
-  default: [...resolveChartSeriesPaint('accessible')],
+  default: [...resolveChartSeriesPaint('default')],
   accessible: [...resolveChartSeriesPaint('accessible')],
   monochrome: [...resolveChartSeriesPaint('monochrome')],
   pastel: [...resolveChartSeriesPaint('pastel')],

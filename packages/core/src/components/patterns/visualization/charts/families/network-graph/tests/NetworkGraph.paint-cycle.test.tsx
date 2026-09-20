@@ -6,7 +6,7 @@ import { resolveChartSeriesPaint } from '../../../runtime/chart-engine/foundatio
 import { CHART_CATEGORICAL_SIZE } from '../../../runtime/theming/composition/foundation/paint';
 import { renderSurface } from '../../../../../../surfaces/foundation/common/test-utils';
 
-const PALETTE = resolveChartSeriesPaint('accessible');
+const PALETTE = resolveChartSeriesPaint('default');
 
 const NODES = Array.from({ length: 13 }, (_, index) => ({
   id: `service-${index}`,

@@ -1,18 +1,19 @@
 /**
  * Drill for chart-scheme-scope-causality.
  *
- * This instrument is RED at its own base by design, so its drill cannot be
- * "run it and expect green". It proves two things instead:
+ * This instrument is still RED at its base, so its drill cannot be "run it and
+ * expect green". It proves two things instead:
  *
  *   1. the adjudicator has teeth AND can go green. A synthetic census where
  *      every scope matches its family's decision passes; each of the four
  *      divergence classes reddens it, one class per plant. This is the lot-0
  *      form of P5 -- reverting the renderer to the token hook is the mutation
- *      that produces exactly the `scope-ignores-request` census below, and it
- *      cannot be planted in the tree yet because the tree has not been wired.
- *   2. the real probe still measures the divergence the debrief recorded.
- *      A run that stopped finding it would mean the probe silently stopped
- *      rendering, not that the tree was repaired.
+ *      that produces exactly the `scope-ignores-request` census below.
+ *   2. the real probe still measures the ONE divergence that is left. After
+ *      the Q1 de-alias both paint classes read zero, so the live leg pins
+ *      that: a paint divergence coming back means the alias came back, and a
+ *      scope divergence disappearing means the probe stopped rendering rather
+ *      than that the five unplumbed families were repaired.
  *
  * The live leg is opt-in through CHART_CAUSALITY_DRILL_LIVE=1: it renders 55
  * charts and belongs in the instrument's own window, not in a unit drill.
@@ -95,13 +96,18 @@ test('an empty census is not a pass by vacuity', () => {
   assert.deepEqual(report.divergences, []);
 });
 
-test('the live probe still measures the divergence the debrief recorded', { skip: process.env.CHART_CAUSALITY_DRILL_LIVE !== '1' }, () => {
+test('the live probe measures scope divergence only, and no paint divergence at all', { skip: process.env.CHART_CAUSALITY_DRILL_LIVE !== '1' }, () => {
   const report = adjudicate(measure());
   assert.equal(report.total, 55, 'eleven categorical families times five schemes');
-  assert.equal(
-    report.divergences.length > 0,
-    true,
-    'the tree reports no divergence: either lot 1 landed (re-pin this drill) or the probe stopped rendering',
-  );
-  assert.equal(report.byKind[DIVERGENCES.SCOPE] > 0, true);
+
+  // The Q1 de-alias closed both paint classes. Either one coming back is a
+  // regression of the governed chain, not an unfinished lot.
+  assert.equal(report.byKind[DIVERGENCES.PAINT_WRONG_TABLE] ?? 0, 0);
+  assert.equal(report.byKind[DIVERGENCES.PAINT_UNGOVERNED] ?? 0, 0);
+  assert.equal(report.byKind[DIVERGENCES.UNRENDERED] ?? 0, 0);
+
+  // And the one open defect is still measured: five families do not plumb
+  // `colorScheme`, so four of their five requests stamp `default`.
+  assert.equal(report.byKind[DIVERGENCES.SCOPE], 20);
+  assert.equal(report.agreeing, 35);
 });

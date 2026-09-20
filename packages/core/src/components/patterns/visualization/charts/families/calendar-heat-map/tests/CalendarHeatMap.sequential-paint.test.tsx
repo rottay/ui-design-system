@@ -75,13 +75,11 @@ describe('CalendarHeatMap sequential paint', () => {
     }
   });
 
-  // WALL (WO-FAM-09 lot 3 / debrief Q1). `useChartPersonality` still aliases
-  // `default` onto the `accessible` table, so an unauthored chart stamps the
-  // scope `default` while its ramp paints from `accessible`: the scheme the
-  // root declares and the table the ramp reads are two different answers.
-  // Adopting the decision here closes that divergence and REPAINTS every
-  // unauthored call site, which is the owner-gated de-alias, not this lot.
-  it('diverges from the decision at the default scheme, and only there', () => {
+  // The wall this test used to pin is down (WO-FAM-09 lot 3 / debrief Q1). An
+  // unauthored chart stamped the scope `default` while its ramp read the
+  // `accessible` table, because the personality hook aliased the two. The
+  // scope and the ramp are now one answer, and it is the default table's.
+  it('agrees with the decision at the unauthored default scheme too', () => {
     const decision = resolveChartPaint({ family: 'calendar-heat-map', scheme: 'default' });
     const { container } = renderCalendar();
     const { low, high } = rampOf(container);
@@ -89,9 +87,9 @@ describe('CalendarHeatMap sequential paint', () => {
 
     expect(root?.getAttribute('data-chart-color-scheme')).toBe('default');
     expect(low).toBe(decision.sequential?.stops[0]);
-    expect(high).toBe(resolveChartSeriesPaint('accessible')[0]);
-    expect(high).not.toBe(decision.sequential?.stops[1]);
-    expect(decision.sequential?.stops[1]).toBe(resolveChartSeriesPaint('default')[0]);
+    expect(high).toBe(decision.sequential?.stops[1]);
+    expect(high).toBe(resolveChartSeriesPaint('default')[0]);
+    expect(high).not.toBe(resolveChartSeriesPaint('accessible')[0]);
   });
 
   it('quantizes into the decision step count, reserving the first step for empty days', () => {

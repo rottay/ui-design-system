@@ -293,7 +293,7 @@ describe('React-owned chart geometry', () => {
 
     expect(geometry.cells).toHaveLength(1);
     expect(geometry.cells[0]?.id).toBe('inside');
-    expect(geometry.cells[0]?.cellColor).toBe('rgb(47, 107, 154)');
+    expect(geometry.cells[0]?.cellColor).toBe('rgb(15, 118, 110)');
   });
 
   it('honors explicit empty domains and rejects duplicate semantic coordinates', () => {

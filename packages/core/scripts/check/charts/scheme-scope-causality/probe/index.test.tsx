@@ -12,8 +12,8 @@
  * lot 0) and "the probe broke". Here a red run means only the second.
  */
 import { createElement } from 'react';
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { dirname } from 'node:path';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 
 import { cleanup, waitFor } from '@testing-library/react';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -90,8 +90,64 @@ const FIXTURES: Record<string, { component: string; props: Record<string, unknow
 
 const GOVERNED = /var\(--ds-chart-[a-z]+-\d+[^)]*(?:\([^)]*\)[^)]*)*\)?/u;
 
-/** The first governed paint expression carried by any element in the tree. */
-function firstGovernedPaint(container: HTMLElement): string | null {
+/**
+ * A categorical mark reaches the chain by one of TWO routes, and measuring
+ * only the first reports the second as ungoverned. `pie-chart` and `scatter`
+ * carry no inline expression on purpose: the skin routes their
+ * `data-part`/`data-series-index` pair to `--ds-chart-mark-color`, which reads
+ * the scope-keyed `--ds-chart-paint-N` bridge. Both routes end at the same
+ * chain, so both are read here and each keeps its own failure mode: an
+ * unrouted part, an unbridged slot or a scope with no block is still null.
+ */
+const SKIN_CSS = readFileSync(
+  join(
+    __dirname,
+    '../../../../../src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css',
+  ),
+  'utf8',
+);
+
+/** `--ds-chart-paint-N` as the skin declares it inside each scope's block. */
+function readBridge(): Record<string, Record<number, string>> {
+  const bridge: Record<string, Record<number, string>> = {};
+  for (const scheme of SCHEMES) {
+    const block = new RegExp(
+      `\\[data-chart-color-scheme='${scheme}'\\]\\s*\\{([^}]*)\\}`,
+      'u',
+    ).exec(SKIN_CSS);
+    if (!block) continue;
+    const slots: Record<number, string> = {};
+    for (const declaration of block[1]!.matchAll(/--ds-chart-paint-(\d+):\s*([^;]+);/gu)) {
+      slots[Number(declaration[1])] = declaration[2]!.trim();
+    }
+    bridge[scheme] = slots;
+  }
+  return bridge;
+}
+
+const BRIDGE = readBridge();
+
+/**
+ * The `part|index` pairs the skin actually routes to the bridge. Read rule by
+ * rule, because one rule lists several marks and a selector-first scan would
+ * let the first pair swallow its siblings.
+ */
+function readRoutedMarks(): Set<string> {
+  const routed = new Set<string>();
+  const pair = /\[data-part='([a-z-]+)'\]\[data-series-index='(\d+)'\]/gu;
+  for (const rule of SKIN_CSS.matchAll(/([^{}]+)\{([^{}]*)\}/gu)) {
+    if (!rule[2]!.includes('var(--ds-chart-paint-')) continue;
+    for (const match of rule[1]!.matchAll(pair)) {
+      routed.add(`${match[1]}|${match[2]}`);
+    }
+  }
+  return routed;
+}
+
+const ROUTED_MARKS = readRoutedMarks();
+
+/** Route 1: an expression the mark carries itself. */
+function inlineGovernedPaint(container: HTMLElement): string | null {
   for (const element of Array.from(container.querySelectorAll('*'))) {
     for (const attribute of ['style', 'fill', 'stroke']) {
       const value = element.getAttribute(attribute);
@@ -102,6 +158,32 @@ function firstGovernedPaint(container: HTMLElement): string | null {
     }
   }
   return null;
+}
+
+/** Route 2: the scope-keyed bridge the skin routes this mark's slot through. */
+function bridgeGovernedPaint(container: HTMLElement, stampedScheme: string | null): string | null {
+  if (stampedScheme === null) return null;
+  for (const element of Array.from(container.querySelectorAll('[data-series-index]'))) {
+    const part = element.getAttribute('data-part');
+    const index = element.getAttribute('data-series-index');
+    if (part === null || index === null) continue;
+    if (!ROUTED_MARKS.has(`${part}|${index}`)) continue;
+    return BRIDGE[stampedScheme]?.[Number(index) + 1] ?? null;
+  }
+  return null;
+}
+
+type PaintRoute = 'inline' | 'bridge' | null;
+
+function governedPaintOf(
+  container: HTMLElement,
+  stampedScheme: string | null,
+): { paint: string | null; route: PaintRoute } {
+  const inline = inlineGovernedPaint(container);
+  if (inline !== null) return { paint: inline, route: 'inline' };
+  const bridged = bridgeGovernedPaint(container, stampedScheme);
+  if (bridged !== null) return { paint: bridged, route: 'bridge' };
+  return { paint: null, route: null };
 }
 
 /** Read one complete `var(...)` expression starting at `start`. */
@@ -149,6 +231,8 @@ interface CensusRow {
   scopeAgrees: boolean;
   paintAgrees: boolean;
   rendered: boolean;
+  /** Which of the two governed routes carried the paint, if either did. */
+  paintRoute: PaintRoute;
 }
 
 const rows: CensusRow[] = [];
@@ -190,7 +274,7 @@ describe('chart scheme-scope causality census', () => {
 
         const scope = container.querySelector('[data-chart-color-scheme]');
         const stampedScheme = scope?.getAttribute('data-chart-color-scheme') ?? null;
-        const governedPaint = firstGovernedPaint(container);
+        const { paint: governedPaint, route: paintRoute } = governedPaintOf(container, stampedScheme);
         const anyPaint = firstAnyPaint(container);
 
         rows.push({
@@ -204,6 +288,7 @@ describe('chart scheme-scope causality census', () => {
           scopeAgrees: stampedScheme === decision.scheme,
           paintAgrees: governedPaint !== null && governedPaint === expectedPaint,
           rendered,
+          paintRoute,
         });
 
         cleanup();

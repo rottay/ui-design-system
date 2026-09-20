@@ -2,16 +2,26 @@
 /**
  * chart-scheme-scope-causality — the requested scheme IS the stamped scope.
  *
- * ================== THIS INSTRUMENT IS RED AT ITS OWN BASE ==================
- * It lands measuring honestly and wired NON-BLOCKING, and it is deliberately
- * absent from the CI gate manifest, because the divergence it reports is real
- * and is the defect lot 1 exists to fix. At the commit that introduces it the
- * census reads 11 of 55 scopes agreeing and 9 of 55 paints agreeing: every
- * chart stamps `default` whatever the caller asked for, and `default` paints
- * the `accessible` table. Registering it as blocking before lot 1 would make
- * CI red for a defect no lot in flight repairs, which teaches a reader to
- * ignore a red gate. Lot 1 flips it to blocking in the same commit that makes
- * it green.
+ * ============ STILL RED, BUT NO LONGER FOR THE REASON IT LANDED ============
+ * It landed NON-BLOCKING and absent from the CI gate manifest with 11 of 55
+ * scopes agreeing, deferred "until lot 1". Lot 1 -- the owner's Q1 de-alias --
+ * has landed, and the deferral is discharged: `default` now resolves its own
+ * governed table, so BOTH paint classes measure zero. `paint-from-another-
+ * table` went 9 -> 0 because the alias is gone; `paint-outside-the-chain` went
+ * 6 -> 0 because the probe learned the second governed route -- the class-
+ * painted families reach the chain through the scope-keyed
+ * `--ds-chart-paint-N` skin bridge, which the inline-only reader could not see
+ * and reported as ungoverned. That was an instrument blindness, never a tree
+ * defect, and the bridge keeps its own failure modes.
+ *
+ * What remains is ONE class and a different defect: 20 of 55 rows are
+ * `scope-ignores-request`. Five families -- funnel-chart, gantt-chart,
+ * network-graph, sankey and scatter -- never carry `colorScheme` to the root,
+ * so they stamp `default` for all five requests and four of every five
+ * requests paint the wrong table. That is prop plumbing in those five
+ * families, not palette governance, and it is not this lot's write set. The
+ * instrument therefore stays NON-BLOCKING with a named owner rather than a
+ * deferral; the lot that plumbs those five flips it to blocking and green.
  * ===========================================================================
  *
  * The law, in one line: for every categorical family and every scheme,
@@ -123,7 +133,7 @@ function main() {
     return;
   }
 
-  console.log('chart-scheme-scope-causality  [NON-BLOCKING until lot 1]');
+  console.log('chart-scheme-scope-causality  [NON-BLOCKING: 5 families do not plumb colorScheme]');
   console.log(`  rows measured: ${report.total}`);
   console.log(`  agreeing:      ${report.agreeing}`);
   for (const [kind, count] of Object.entries(report.byKind)) {
@@ -133,6 +143,7 @@ function main() {
     console.log(
       `  ${divergence.kind.toUpperCase()} ${divergence.family} @ ${divergence.requested}`
         + `  stamped=${divergence.stampedScheme ?? 'none'}`
+        + `  via=${divergence.paintRoute ?? 'none'}`
         + `  paint=${divergence.governedPaint ?? divergence.anyPaint ?? 'none'}`,
     );
   }
