@@ -103,7 +103,7 @@ export function deriveStatsHeaderChannels(): Record<string, string> {
 
   vars["--ds-stats-header-hover-lift"] = "translateY(-2px)";
   vars["--ds-stats-header-hover-shadow"] = `0 8px 24px ${tint("6%")}`;
-  vars["--ds-stats-header-press-scale"] = "scale(0.98)";
+  vars["--ds-stats-header-press-scale"] = "scale(var(--ds-state-press-scale))";
   vars["--ds-stats-header-press-shadow"] = `0 1px 3px ${tint("2%")}`;
   vars["--ds-stats-header-focus-ring-color"] =
     "var(--ds-focus-ring-color, var(--ds-color-primary))";

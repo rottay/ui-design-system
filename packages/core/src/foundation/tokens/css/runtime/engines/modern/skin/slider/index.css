@@ -183,7 +183,7 @@
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='rail'],
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='track'],
 .ds-slider.ds-slider--modern[data-disabled='true'] [data-part='handle'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
 .ds-slider.ds-slider--modern [data-part='mark-label'] {
@@ -274,7 +274,7 @@
   outline: none;
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):is([data-state~='disabled'], :disabled) {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
 
@@ -486,7 +486,7 @@
   background: var(--ds-color-primary);
 }
 .ds-slider.ds-slider--modern[data-part='root'][data-disabled='true'] [data-part='dot'] {
-  opacity: var(--ds-disabled-opacity, 0.5);
+  opacity: var(--ds-state-disabled-opacity, 0.5);
 }
 
 /* Mark labels inside the filled span: ink + weight, never color alone (the

@@ -2376,7 +2376,7 @@
   --ds-stats-header-label-font-size: var(--ds-font-size-sm);
   --ds-stats-header-meta-font-size: var(--ds-font-size-2xs);
   --ds-stats-header-ping-duration: 400ms;
-  --ds-stats-header-press-scale: scale(0.98);
+  --ds-stats-header-press-scale: scale(var(--ds-state-press-scale));
   --ds-stats-header-press-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
   --ds-stats-header-progress-margin-block-start: 10px;
   --ds-stats-header-spark-dot-gap: 6px;
@@ -2646,7 +2646,7 @@
   --ds-tag-max-inline-size: calc(var(--ds-spacing-4) * 16);
   --ds-tag-md-padding-inline: calc(var(--ds-spacing-2) * 1.25);
   --ds-tag-outlined-ink: var(--ds-color-text-primary);
-  --ds-tag-press-transform: translateY(0) scale(0.98);
+  --ds-tag-press-transform: translateY(0) scale(var(--ds-state-press-scale));
   --ds-tag-primary-outlined-ink: var(--ds-color-primary);
   --ds-tag-primary-solid-bg: var(--ds-color-primary);
   --ds-tag-secondary-ink: var(--ds-color-white);

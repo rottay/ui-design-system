@@ -20,6 +20,7 @@ export const tagChromeDeriver: FamilyDeriver = {
     "palette.*",
     "surfaces.radiusScale",
     "surfaces.focusStyle",
+    "states.press",
     "typography.roles",
     "typography.roleWeights",
     "density",
@@ -115,7 +116,7 @@ export function deriveTagChannels(): Record<string, string> {
   vars["--ds-tag-xl-padding-inline"] = "var(--ds-spacing-4)";
 
   vars["--ds-tag-max-inline-size"] = "calc(var(--ds-spacing-4) * 16)";
-  vars["--ds-tag-press-transform"] = "translateY(0) scale(0.98)";
+  vars["--ds-tag-press-transform"] = "translateY(0) scale(var(--ds-state-press-scale))";
   vars["--ds-tag-shadow"] = "0 2px 7px color-mix(in srgb, currentColor 8%, transparent)";
 
   return vars;
