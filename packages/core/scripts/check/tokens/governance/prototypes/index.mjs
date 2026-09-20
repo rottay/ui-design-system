@@ -17,7 +17,7 @@
  *      skin bundle without an active row, becoming an accidental contract.
  *
  * So this gate holds a bidirectional identity between the CSS/TSX sources and
- * `governance/tokens/prototypes/index.json`: every prototype in the source has an
+ * `src/foundation/tokens/data/prototypes/index.json`: every prototype in the source has an
  * `active` row, every `active` row exists in the source, and every consumer
  * site a row claims is re-verified against the file on disk.
  *
@@ -48,7 +48,7 @@ import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 
-export const LEDGER_PATH = join(CORE_ROOT, 'governance/tokens/prototypes/index.json');
+export const LEDGER_PATH = join(CORE_ROOT, 'src/foundation/tokens/data/prototypes/index.json');
 
 /** The private prototoken prefix. */
 const PROTO_PREFIX = '--_ds-proto-';

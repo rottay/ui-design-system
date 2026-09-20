@@ -4,7 +4,7 @@
  *
  * FASE K law (independent code audit update 2026-08-02): a --ds-* read the hook contract fences
  * as "unadjudicated" may not ship without an ownership classification. This
- * gate pins the projection `governance/tokens/decisions/reads/index.json` to the CURRENT
+ * gate pins the projection `src/foundation/tokens/data/decisions/reads/index.json` to the CURRENT
  * hooks-manifest by digest and enforces:
  *   - set-equality: rows == manifest.unadjudicatedReads (no missing, no extra);
  *   - closed vocabulary (7 classes) — a future class cannot be silently added;
@@ -22,7 +22,7 @@ import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
-const LEDGER_PATH = join(ROOT, 'governance/tokens/decisions/reads/index.json');
+const LEDGER_PATH = join(ROOT, 'src/foundation/tokens/data/decisions/reads/index.json');
 const MANIFEST_PATH = join(ROOT, 'contracts/css/hooks/index.json');
 
 const CLASSES = new Set([
@@ -72,7 +72,7 @@ export function checkLedger({ ledger, manifestRaw, drillCase }) {
 
 function main() {
   if (!existsSync(LEDGER_PATH)) {
-    console.error('reads-adjudication FAIL — ledger missing (governance/tokens/decisions/reads/index.json)');
+    console.error('reads-adjudication FAIL — ledger missing (src/foundation/tokens/data/decisions/reads/index.json)');
     process.exit(1);
   }
   const ledger = JSON.parse(readFileSync(LEDGER_PATH, 'utf8'));

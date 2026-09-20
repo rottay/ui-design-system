@@ -12,7 +12,7 @@
  *                                         SETS used for static-vs-DB)
  *   - expressive-profiles (TS AST)       (profiles, envelopes, floors,
  *                                         emphasis families)
- *   - governance/tokens/prototypes/index.json              (governed prototokens)
+ *   - src/foundation/tokens/data/prototypes/index.json              (governed prototokens)
  *   - authored theme CSS (PostCSS)       (var() fallback chains → the
  *                                         upstream/downstream derivation
  *                                         graph, with cycle detection)
@@ -61,7 +61,7 @@ const DOCS_TOKENS_DIR = resolve(ROOT, '../../../docs-engineering/engineering/des
 const REPORT_PATH = join(HERE, '..', 'surface', 'report', 'index.json');
 const RECONCILIATION_PATH = join(HERE, 'reconciliation', 'index.json');
 const MANIFEST_PATH = join(ROOT, 'contracts/css/hooks/index.json');
-const LEDGER_PATH = join(ROOT, 'governance/tokens/prototypes/index.json');
+const LEDGER_PATH = join(ROOT, 'src/foundation/tokens/data/prototypes/index.json');
 const EXPRESSIVE_PATH = join(ROOT, 'src/foundation/tokens/ts/presentation/expressive-profiles/index.ts');
 const THEME_DIR = join(ROOT, 'src/foundation/tokens/css/foundation/themes');
 const NO_LOSS_MODULE = join(ROOT, 'scripts/check/tokens/cascade/preservation/index.ts');
@@ -783,7 +783,7 @@ name inside the operational tree fails the check.
 | What changes when a control moves | registry \`derivedChannels\` + theme var() chains | [impact-map.md](./impact-map.md) |
 | Profiles, axes, dials, family emphasis | \`expressive-profiles\` module | [profiles-and-dials.md](./profiles-and-dials.md) |
 | App hooks vs fenced reads | \`contracts/css/hooks/index.json\` (v${manifest.schemaVersion}) | [exposure-tiers.md](./exposure-tiers.md), [app-customization.md](./app-customization.md) |
-| Prototokens, retirement batches | \`governance/tokens/prototypes/index.json\` + its gate | [governance/lifecycle-and-deprecations.md](./governance/lifecycle-and-deprecations.md) |
+| Prototokens, retirement batches | \`src/foundation/tokens/data/prototypes/index.json\` + its gate | [governance/lifecycle-and-deprecations.md](./governance/lifecycle-and-deprecations.md) |
 | The resolved DEFAULT value of a name | \`artifacts/generated/css/verticals/bithire/index.css\` through \`scripts/check/tokens/cascade/preservation\` | the \`Default (bithire)\` column of every family page |
 
 ## Current numbers (generated, with denominators)

@@ -26,7 +26,7 @@ const run = (name) => spawnSync('node', [SCRIPT, `--drill=${name}`], { encoding:
 
 const CORE_ROOT = findPackageRoot(HERE);
 const WORKLIST = join(HERE, 'index.json');
-const UPSTREAM = join(CORE_ROOT, 'governance/tokens/decisions/writers/unused/cards/index.json');
+const UPSTREAM = join(CORE_ROOT, 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json');
 const WORKFLOW = resolve(CORE_ROOT, '../../.github/workflows/ci.yml');
 const SIBLING_APP_BITHIRE = resolve(CORE_ROOT, '../../..', 'app-bithire');
 
@@ -83,7 +83,7 @@ test('metadata: autoridad, provenance histórica y clases de rol declaradas', ()
   const doc = loadDoc();
   // The false claim is gone and cannot come back unnoticed.
   assert.equal('sourceOfTruth' in doc, false);
-  assert.equal(doc.authority.worklistAuthority.source, 'governance/tokens/decisions/writers/unused/cards/index.json');
+  assert.equal(doc.authority.worklistAuthority.source, 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json');
   assert.equal(doc.authority.worklistAuthority.sourceKind, 'tracked');
   assert.equal(doc.authority.worklistAuthority.role, 'BINDING_DISPOSITION_UPSTREAM');
   assert.equal(doc.authority.consumerEvidenceAuthority.repository, 'app-bithire');
@@ -226,7 +226,7 @@ test('lo histórico no puede ascender a autoridad', () => {
   // (d) an "unretained" input that actually exists is a lie in the other
   //     direction: re-readable means it could have been authority.
   assert.ok(matches(
-    red(mutated((d) => { d.historicalProvenance.missingInputs[0].path = 'governance/tokens/decisions/writers/unused/cards/index.json'; })),
+    red(mutated((d) => { d.historicalProvenance.missingInputs[0].path = 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json'; })),
     /declarado UNRETAINED pero EXISTE/,
   ));
   // (e) measuredAgainst reverting to the historical commit

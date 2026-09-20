@@ -7,7 +7,7 @@ import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
-const LEDGER = join(ROOT, 'governance/tokens/prototypes/index.json');
+const LEDGER = join(ROOT, 'src/foundation/tokens/data/prototypes/index.json');
 const REPORT = join(HERE, '..', 'surface', 'report', 'index.json');
 const OUT = join(HERE, 'manifest', 'index.json');
 
@@ -60,7 +60,7 @@ export function buildManifest() {
       expressiveAxis: entry.axis,
       visualPurpose: entry.purpose,
       cssType: entry.cssType,
-      source: 'governance/tokens/prototypes/index.json (C1 governed census)',
+      source: 'src/foundation/tokens/data/prototypes/index.json (C1 governed census)',
       consumers: entry.consumers,
       currentFallback: entry.fallback,
       currentStatus: entry.status ?? row?.status ?? 'ledger-only',

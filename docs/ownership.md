@@ -42,7 +42,7 @@ stateDiagram-v2
 | `scripts/` | Build, check, generate, maintenance and packaging commands |
 | `tests/` | Cross-unit integration, system and architecture suites |
 | `contracts/` | Machine-readable contracts published alongside the package |
-| `governance/` | The capability manifest, vendored-supplier license records, token decisions |
+| `governance/` | The capability manifest and vendored-supplier license records |
 | `artifacts/` | Committed quality evidence and generated reports |
 | `docs/` | Package-level documentation |
 
@@ -56,10 +56,13 @@ Two of those roots carry named sub-owners worth knowing before you go looking:
 |---|---|
 | `governance/manifest/` | The capability manifest: `families/<layer>/<group>/<slug>/`, `controls/<group>/<control>/`, plus `cascade/`, `recipes/` and `schema/` |
 | `governance/graphics/`, `governance/effects/` | License records and provenance for vendored suppliers |
-| `governance/tokens/` | Token decisions and prototypes |
 | `artifacts/quality/` | Committed quality evidence: audits, certification records, programme reports |
 | `artifacts/generated/` | Reports and CSS written by the checks and generators that own them |
 | `artifacts/local/` | Developer previews — convenience output, never authority |
+
+The token decision and prototoken ledgers are not in that list because they are not
+evidence: `src/foundation/tokens/data/` holds live input that the derivers, the
+customization generators and their blocking gates read on every run.
 
 One evidence tree still sits outside the package roots: the repository-root
 `test-artifacts/` holds craft evidence and is live, read by a blocking packaging gate.

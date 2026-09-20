@@ -104,7 +104,7 @@ export const CONSUMER_EVIDENCE_COMMIT_PIN = '8abd05578d04cd3cf1c82ca8d777f0ca1ef
 /** Superseded. Kept so a document that silently reverts to it is red. */
 const HISTORICAL_MEASUREMENT_COMMIT = 'bd1142d3a5895eb24a21c64f43849bedb24999c0';
 const APP_BITHIRE_ROOT_ENV = 'APP_BITHIRE_ROOT';
-const WORKLIST_UPSTREAM = 'governance/tokens/decisions/writers/unused/cards/index.json';
+const WORKLIST_UPSTREAM = 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json';
 
 const siblingRoots = () => new Map([
   ['app-bithire', join(SIBLINGS_ROOT, 'app-bithire')],

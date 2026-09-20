@@ -37,7 +37,7 @@ export interface TintStrengths {
  * under an amber well in bithire's warning tone.
  *
  * `--ds-color-alpha-info-20` is never emitted: it is a RETIRED channel
- * (`governance/tokens/decisions/writers/unused/system/index.json`,
+ * (`src/foundation/tokens/data/decisions/writers/unused/system/index.json`,
  * `"decision": "RETIRE_PROPOSED", "executed": true`), and reviving it from this
  * floor would resurrect a name the programme already closed.
  *

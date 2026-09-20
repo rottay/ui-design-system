@@ -905,7 +905,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
         '--ds-color-info-bg',
         '--ds-color-info-border',
         // 6. alpha wells per tone (7, not 8: `--ds-color-alpha-info-20` is a
-        //    RETIRED channel -- `governance/tokens/decisions/writers/unused/system/index.json`, "executed":
+        //    RETIRED channel -- `src/foundation/tokens/data/decisions/writers/unused/system/index.json`, "executed":
         //    true -- and is never re-emitted from the floor)
         '--ds-color-alpha-success-10',
         '--ds-color-alpha-success-20',

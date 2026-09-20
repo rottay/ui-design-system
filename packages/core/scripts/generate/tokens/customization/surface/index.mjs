@@ -10,7 +10,7 @@
  *   - TENANT_THEME_OVERRIDE_TOKENS   (raw tenant allowlist)
  *   - expressive-profiles            (edge width classification, frontier
  *                                     status-seed family)
- *   - governance/tokens/prototypes/index.json          (governed prototokens)
+ *   - src/foundation/tokens/data/prototypes/index.json          (governed prototokens)
  *
  * — and the only thing computed here is what no authority owns yet:
  * name-level CONSUMPTION (who reads each name, split productive vs test vs
@@ -60,7 +60,7 @@ const MANIFEST_PATH = join(ROOT, 'contracts/css/hooks/index.json');
 const REGISTRY_PATH = join(ROOT, 'src/foundation/contracts/composition/tenants/capabilities/index.ts');
 const ALLOWLIST_PATH = join(ROOT, 'src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts');
 const EXPRESSIVE_PATH = join(ROOT, 'src/foundation/tokens/ts/presentation/expressive-profiles/index.ts');
-const LEDGER_PATH = join(ROOT, 'governance/tokens/prototypes/index.json');
+const LEDGER_PATH = join(ROOT, 'src/foundation/tokens/data/prototypes/index.json');
 const ARTIFACTS_DIR = join(ROOT, 'src/foundation/tokens/css/facade/artifacts');
 
 const args = process.argv.slice(2);
@@ -454,8 +454,8 @@ function computeInputsDigest(corpus) {
   }
   for (const authority of [
     MANIFEST_PATH, REGISTRY_PATH, ALLOWLIST_PATH, EXPRESSIVE_PATH, LEDGER_PATH,
-    join(ROOT, 'governance/tokens/decisions/writers/unused/system/index.json'),
-    join(ROOT, 'governance/tokens/decisions/writers/unused/cards/index.json'),
+    join(ROOT, 'src/foundation/tokens/data/decisions/writers/unused/system/index.json'),
+    join(ROOT, 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json'),
   ]) {
     if (existsSync(authority)) add(authority);
   }
@@ -512,7 +512,7 @@ function buildReport({ drill } = {}) {
   // (the Toast pair reads through a ternary→variable flow no call-site AST
   // match can see; the adjudication carries the human-verified evidence).
   const adjudicatedAlive = new Set();
-  for (const registryPath of ['governance/tokens/decisions/writers/unused/system/index.json', 'governance/tokens/decisions/writers/unused/cards/index.json']) {
+  for (const registryPath of ['src/foundation/tokens/data/decisions/writers/unused/system/index.json', 'src/foundation/tokens/data/decisions/writers/unused/cards/index.json']) {
     const full = join(ROOT, registryPath);
     if (!existsSync(full)) continue;
     try {

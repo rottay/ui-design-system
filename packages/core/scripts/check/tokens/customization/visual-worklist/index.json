@@ -5,7 +5,7 @@
   "authority": {
     "note": "This file is NOT a source of truth. It is a derived worklist. The previous `sourceOfTruth` key claimed authority this document does not hold, and listed two scratchpad inputs that were never retained -- an unverifiable claim. Authority is split below into the binding upstream, the consumer-evidence pin, and the row identity.",
     "worklistAuthority": {
-      "source": "governance/tokens/decisions/writers/unused/cards/index.json",
+      "source": "src/foundation/tokens/data/decisions/writers/unused/cards/index.json",
       "sourceKind": "tracked",
       "role": "BINDING_DISPOSITION_UPSTREAM",
       "meaning": "The adjudication file is the binding disposition upstream. Every row here derives its disposition from it and may never contradict it. It is tracked in this repository, so the claim is verifiable at any commit."

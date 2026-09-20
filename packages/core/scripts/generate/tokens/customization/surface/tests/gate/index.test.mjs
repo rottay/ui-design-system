@@ -122,7 +122,7 @@ test('the real registries: the key reading strictly dominates the name-only read
   };
   for (const registry of ['system', 'cards']) {
     const document = JSON.parse(
-      readFileSync(join(ROOT, `governance/tokens/decisions/writers/unused/${registry}/index.json`), 'utf8'),
+      readFileSync(join(ROOT, `src/foundation/tokens/data/decisions/writers/unused/${registry}/index.json`), 'utf8'),
     );
     walkNameOnly(document);
     for (const name of adjudicatedAliveNames(document)) keyed.add(name);

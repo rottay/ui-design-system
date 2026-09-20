@@ -18,7 +18,7 @@
  * test names, helpers and red/green partition are unchanged.
  *
  * `--ds-color-alpha-info-20` is never emitted: it is a RETIRED channel
- * (`governance/tokens/decisions/writers/unused/system/index.json`, `"decision": "RETIRE_PROPOSED", "executed":
+ * (`src/foundation/tokens/data/decisions/writers/unused/system/index.json`, `"decision": "RETIRE_PROPOSED", "executed":
  * true`), so the alpha family is seven channels, not eight.
  *
  * Precedence under test mirrors the existing `deriveExtendedPaletteFloor`
