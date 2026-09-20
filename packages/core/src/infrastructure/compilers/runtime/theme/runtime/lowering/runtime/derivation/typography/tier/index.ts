@@ -13,6 +13,9 @@
  * The ramp the modern engine has always painted, one channel per tier and
  * facet. Written out rather than looped: a computed key is invisible to the
  * producer census, which would report every name here as read-without-producer.
+ *
+ * Tracking is declared only from `md` up: `xs`/`sm` inherit the governed
+ * heading role, so a tier channel of `0` could only override it.
  */
 export function deriveTypeTierChannels(): Record<string, string> {
   const vars: Record<string, string> = {};
@@ -23,8 +26,6 @@ export function deriveTypeTierChannels(): Record<string, string> {
   vars["--ds-type-tier-xl-line-height"] = "1.15";
   vars["--ds-type-tier-2xl-line-height"] = "1.1";
   vars["--ds-type-tier-3xl-line-height"] = "1.1";
-  vars["--ds-type-tier-xs-letter-spacing"] = "0";
-  vars["--ds-type-tier-sm-letter-spacing"] = "0";
   vars["--ds-type-tier-md-letter-spacing"] = "-0.01em";
   vars["--ds-type-tier-lg-letter-spacing"] = "-0.015em";
   vars["--ds-type-tier-xl-letter-spacing"] = "-0.02em";
