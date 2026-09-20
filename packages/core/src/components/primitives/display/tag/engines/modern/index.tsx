@@ -29,6 +29,8 @@
 'use client';
 
 import React, { useCallback } from 'react';
+import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { composeHandlers } from '@/foundation/behavior/runtime/compose-handlers';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
 import { TAG_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
@@ -150,6 +152,99 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     [clickable, onClick]
   );
 
+  // F-37: the clickable root and the close control are two parts, so each owns
+  // its own hover/press/focus triad and the skin reads the result off
+  // `data-state`. The skin's `:hover`/`:active` arm stays as the platform
+  // fallback; it is not a second source of truth.
+  const rootInteraction = useInteractionState();
+  const closeInteraction = useInteractionState();
+
+  // A role="button" span never receives `:active` from the keyboard, so the
+  // stamped press is the only way a keyboard activation feels like the pointer
+  // one. The target guard is the same one `handleKeyDown` uses: a close-button
+  // activation bubbling through must not press the tag underneath it.
+  const handleRootKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (
+        clickable &&
+        (event.key === 'Enter' || event.key === ' ') &&
+        event.target === event.currentTarget
+      ) {
+        rootInteraction.handlers.onPointerDown(event as unknown as React.PointerEvent);
+      }
+      handleKeyDown(event);
+    },
+    [clickable, rootInteraction.handlers, handleKeyDown]
+  );
+
+  const handleRootKeyUp = useCallback(
+    (event: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        rootInteraction.handlers.onPointerUp(event as unknown as React.PointerEvent);
+      }
+    },
+    [rootInteraction.handlers]
+  );
+
+  // React's focus events are `focusin`/`focusout`, so a keyboard focus landing
+  // on the close BUTTON would otherwise stamp the root focused and light the
+  // root's ring -- something the `:focus-visible` arm never does. Only the root
+  // itself speaks for the root's focus, exactly as its key handler does.
+  const handleRootFocus = useCallback(
+    (event: React.FocusEvent<HTMLSpanElement>) => {
+      if (event.target !== event.currentTarget) return;
+      rootInteraction.handlers.onFocus(event);
+    },
+    [rootInteraction.handlers]
+  );
+
+  const handleRootBlur = useCallback(
+    (event: React.FocusEvent<HTMLSpanElement>) => {
+      if (event.target !== event.currentTarget) return;
+      rootInteraction.handlers.onBlur(event);
+    },
+    [rootInteraction.handlers]
+  );
+
+  // `TagProps` declares no DOM event handlers, but a caller may still forward
+  // them through the passthrough -- and a spread REPLACES a colliding prop. The
+  // kernel goes first and never prevents default, so the caller's handler always
+  // runs after it (P-79).
+  const callerDomProps = restProps as React.DOMAttributes<HTMLSpanElement>;
+
+  // Hover and press ride the same bubbling the `:hover`/`:active` arm already
+  // has: a pointer inside the close control is a pointer inside the tag.
+  const rootInteractionProps = clickable
+    ? {
+        onPointerEnter: composeHandlers(rootInteraction.handlers.onPointerEnter, callerDomProps.onPointerEnter),
+        onPointerLeave: composeHandlers(rootInteraction.handlers.onPointerLeave, callerDomProps.onPointerLeave),
+        onPointerDown: composeHandlers(rootInteraction.handlers.onPointerDown, callerDomProps.onPointerDown),
+        onPointerUp: composeHandlers(rootInteraction.handlers.onPointerUp, callerDomProps.onPointerUp),
+        onFocus: composeHandlers(handleRootFocus, callerDomProps.onFocus),
+        onBlur: composeHandlers(handleRootBlur, callerDomProps.onBlur),
+        onKeyUp: composeHandlers(handleRootKeyUp, callerDomProps.onKeyUp),
+        onKeyDown: composeHandlers(handleRootKeyDown, callerDomProps.onKeyDown),
+      }
+    : {};
+
+  const handleCloseKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        closeInteraction.handlers.onPointerDown(event as unknown as React.PointerEvent);
+      }
+    },
+    [closeInteraction.handlers]
+  );
+
+  const handleCloseKeyUp = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        closeInteraction.handlers.onPointerUp(event as unknown as React.PointerEvent);
+      }
+    },
+    [closeInteraction.handlers]
+  );
+
   // The `color` prop is an arbitrary caller string, so it cannot be enumerated as a
   // CSS rule; it rides a custom property that every resting-fill rule in tag.css
   // reads with the variant's own token as the fallback. Every other paint and
@@ -168,7 +263,7 @@ export default function ModernTag(props: TagProps): React.ReactElement {
   return (
     <span
       className={modernTagRecipe.resolve(undefined, { root: className }).root}
-      data-part="root"
+      {...partAttributes('root', clickable ? rootInteraction.state : {})}
       data-variant={variant}
       data-size={size}
       data-radius={radius}
@@ -179,10 +274,10 @@ export default function ModernTag(props: TagProps): React.ReactElement {
       data-closable={closable}
       style={tagStyle}
       onClick={handleClick}
-      onKeyDown={handleKeyDown}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       {...restProps}
+      {...rootInteractionProps}
     >
       {icon && <span data-part="icon">{icon}</span>}
 
@@ -198,7 +293,10 @@ export default function ModernTag(props: TagProps): React.ReactElement {
       {closable && (
         <button
           type="button"
-          data-part="close"
+          {...partAttributes('close', closeInteraction.state)}
+          {...closeInteraction.handlers}
+          onKeyDown={handleCloseKeyDown}
+          onKeyUp={handleCloseKeyUp}
           onClick={handleClose}
           aria-label={removeAriaLabel}
         >

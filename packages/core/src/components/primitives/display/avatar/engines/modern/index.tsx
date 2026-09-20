@@ -16,6 +16,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { partAttributes, useInteractionState } from "@/foundation/behavior";
 import type { AvatarProps } from "../../contracts";
 import { AVATAR_DEFAULTS, TONE_TO_AVATAR_VARIANT } from "../../contracts";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
@@ -160,14 +161,33 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   // An interactive avatar is a button for keyboard and assistive-technology users;
   // the focus ring itself is painted by the skin on :focus-visible.
   const isInteractive = Boolean(clickable || onClick);
+
+  // F-37: the hover/press/focus triad is decided once, here, and the skin reads
+  // it off `data-state` on the ROOT -- which is where its rules are keyed, even
+  // though the lift and the ring land on the mask child. The `:hover`/`:active`
+  // /`:focus-visible` arm remains the platform fallback.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!isInteractive || !onClick) return;
+      if (!isInteractive) return;
       if (event.key !== "Enter" && event.key !== " ") return;
+      // A role="button" div is never `:active` from the keyboard, so the stamp
+      // is the only press feedback a keyboard user gets.
+      interactionHandlers.onPointerDown(event as unknown as React.PointerEvent);
+      if (!onClick) return;
       event.preventDefault();
       onClick();
     },
-    [isInteractive, onClick]
+    [isInteractive, onClick, interactionHandlers]
+  );
+
+  const handleKeyUp = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      interactionHandlers.onPointerUp(event as unknown as React.PointerEvent);
+    },
+    [interactionHandlers]
   );
 
   // An interactive avatar is exposed as a button, and a button must be named.
@@ -195,7 +215,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   return (
     <div
       className={containerClass}
-      data-part={dataPart ?? "root"}
+      {...partAttributes(dataPart ?? "root", isInteractive ? interaction : {})}
       data-variant={variant}
       data-shape={shape}
       data-size={size}
@@ -209,6 +229,8 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
       tabIndex={isInteractive ? 0 : undefined}
       onClick={onClick}
       onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
+      {...(isInteractive ? interactionHandlers : {})}
       style={{
         ...sizeStyle,
         ...style,

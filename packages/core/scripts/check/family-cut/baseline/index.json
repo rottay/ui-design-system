@@ -1089,12 +1089,12 @@
       "partsStampedNotConsumed": 0,
       "partsConsumedNotStamped": 0,
       "statesConsumedNotStamped": 0,
-      "unpairedStatePseudoSelectors": 0,
+      "unpairedStatePseudoSelectors": 4,
       "colorLiteralsInSkin": 0,
       "fanOutUnreached": 0,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": " Re-pin 2026-09-20 (DT, wave window): channelsRead 76 -> 75 = four rungs collapsing onto two intents (8e6b7e57b, -2) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 4 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down."
+      "cutNote": " Re-pin 2026-09-20 (DT, wave window): channelsRead 76 -> 75 = four rungs collapsing onto two intents (8e6b7e57b, -2) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 4 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-20 (DT, state-stamp lot, Fable ACCEPT): unpairedStatePseudoSelectors 0 -> 4 — the data-state arm was adjudicated DROPPED on this family's non-interactive parts (header title block + read-only key-value rows: no activation API in the contracts, every engine renders role=listitem with no tabIndex/handler, consumers read-only; stamping would install an interaction producer to feed a selector arm with no producer). The pseudo arm stays (paint byte-identical, measured at rest/hover/press), so its four selectors (header :hover, row :hover, row :active, the forced-colors pair) are now unpaired BY DESIGN, pinned here with the reason; the Descriptions.state-stamp suite pins both halves of the drop so it cannot drift back. If a later design call removes the hover wash itself, this pin follows down."
     },
     "list": {
       "cut": "WO-FAM-06",
