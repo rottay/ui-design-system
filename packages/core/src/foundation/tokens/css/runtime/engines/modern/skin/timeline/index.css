@@ -212,7 +212,7 @@
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:not([data-pending='true']) > [data-part='dot'] > [data-part='dot-marker'] {
   width: var(--ds-timeline-dot-size);
   height: var(--ds-timeline-dot-size);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-timeline-color-primary, var(--ds-color-primary));
   outline: var(--ds-timeline-dot-border-width) solid
     var(--_ds-timeline-dot-ring-color, var(--ds-surface-canvas));
@@ -275,7 +275,7 @@
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
   width: var(--ds-timeline-dot-size);
   height: var(--ds-timeline-dot-size);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-timeline-line-color, var(--ds-surface-panel));
   /* Fallback parity: the pending-animation channel is declared in
      presentation/components/timeline.css (loaded by both facade entrypoints),

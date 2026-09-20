@@ -96,7 +96,7 @@
   margin-block-end: var(--ds-form-header-root-margin, var(--ds-spacing-6, 24px));
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
-  border-radius: 20px;
+  border-radius: var(--ds-radius-2xl);
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
   /* keyframes live in header-hero-shared.css, with the archetype gradients,
      the icon-badge tone and the back-button microinteraction */

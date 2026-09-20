@@ -346,7 +346,7 @@
     content: '';
     position: absolute;
     inset: calc(50% - var(--ds-tag-close-touch-size, 2.75rem) / 2);
-    border-radius: 9999px;
+    border-radius: var(--ds-radius-full);
   }
 }
 

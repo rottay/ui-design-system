@@ -159,7 +159,7 @@
   inset-inline-end: var(--ds-floatbutton-dot-offset-inline, -4px);
   inline-size: var(--ds-floatbutton-dot-size, 8px);
   block-size: var(--ds-floatbutton-dot-size, 8px);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
 }
 
 .rottay-float-button--modern [data-part='badge'][data-variant='count'] {
@@ -174,7 +174,7 @@
   /* Counts are metrics: tabular glyphs keep the pill geometry stable as the
      count changes (B9 pass 2). */
   font-variant-numeric: tabular-nums;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   color: var(--ds-color-text-on-primary);
 }
 

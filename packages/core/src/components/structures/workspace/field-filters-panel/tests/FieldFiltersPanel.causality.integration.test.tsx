@@ -82,9 +82,11 @@ describeCausality({
     // LAND -- on the composed Button -- rather than where they are written.
     { id: 'chipFont', selector: CHIP, property: 'font-size' },
     { id: 'chipPad', selector: CHIP, property: 'padding-left' },
-    // The control: the card's corner is a px constant this family owns
-    // outright, so no decision in the catalog may move it.
+    // The card's corner is a px constant this family owns outright (18, off
+    // the ramp), so it is the shape control every arm holds; the control
+    // landing rides the `lg` rung and is the family's dial-driven corner.
     { id: 'cardCorner', selector: CARD, property: 'border-top-left-radius' },
+    { id: 'controlCorner', selector: CONTROL, property: 'border-top-left-radius' },
   ],
   decisions: {
     'palette.seeds': {
@@ -102,6 +104,12 @@ describeCausality({
     'density.mode': {
       value: 'spacious',
       moves: ['chipPad'],
+      holds: 'cardCorner',
+      in: VERTICALS,
+    },
+    'shape.radius-scale': {
+      value: 1.2,
+      moves: ['controlCorner'],
       holds: 'cardCorner',
       in: VERTICALS,
     },
@@ -158,15 +166,14 @@ describe('field-filters-panel causality surface', () => {
    * case goes red and the inventory is re-adjudicated rather than silently
    * outgrown.
    *
-   *  - `shape.radius-scale`: every corner this family owns is a px literal
-   *    (card 18, control 12, pills 999) and the composed chip is a `round`
-   *    Button, which closes on the full rung the ramp does not bend.
-   *  - `motion.dial`: the panel entrance reads `--ds-motion-normal`, an alias of
-   *    the cadence's `calm` step, which the theme's own entrance duration sets
-   *    and the dial does not bend.
    *  - `states.focus-style`: the family's one focus decision is delivered
    *    through `--ds-button-focus-ring` under `:focus-visible`, a platform state
    *    no static probe can enter -- see the residue note in the roster row.
+   *
+   * `motion.dial` left this list when the fleet motion lot repointed the panel
+   * entrance onto a dial-driven intent: it now bends `rootMotion` and nothing
+   * else, so it is adjudicated below rather than pinned as inert. The corner
+   * and shadow targets stay its controls.
    */
   it('pins the decisions that reach none of its paint', async () => {
     const readings = await measureArms({
@@ -174,7 +181,6 @@ describe('field-filters-panel causality surface', () => {
       markup,
       arms: {
         base: {},
-        'shape.radius-scale': { 'shape.radius-scale': 1.2 },
         'motion.dial': { 'motion.dial': { durationScale: 1.3 } },
         'states.focus-style': { 'states.focus-style': 'glow' },
       },
@@ -187,10 +193,15 @@ describe('field-filters-panel causality surface', () => {
       ],
     });
     const base = readings.base!;
-    for (const arm of ['shape.radius-scale', 'motion.dial', 'states.focus-style']) {
-      expect(readings[arm], `${arm} is inert for this family`).toEqual(base);
-    }
+    expect(readings['states.focus-style'], 'states.focus-style is inert for this family').toEqual(base);
+    // The dial reaches the entrance and stops there.
+    const dialled = readings['motion.dial']!;
+    expect(dialled.rootMotion, 'motion.dial bends the entrance').not.toBe(base.rootMotion);
+    expect({ ...dialled, rootMotion: base.rootMotion }, 'motion.dial bends nothing else').toEqual(base);
     // And the values the inventory is about, so a repaint is visible here too.
+    // `controlCorner` is the byte-equality floor of the `lg` rewire: rottay
+    // sits at radius-scale 1, so the rung must still paint the 12px the
+    // literal painted before it moved onto the ramp.
     expect(base.cardCorner).toBe('18px');
     expect(base.controlCorner).toBe('12px');
     expect(base.chipCorner).toBe('9999px');

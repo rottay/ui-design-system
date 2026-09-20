@@ -123,7 +123,7 @@
   inline-size: 100%;
   overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
-  border-radius: 20px;
+  border-radius: var(--ds-radius-2xl);
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
   animation: ds-header-enter var(--ds-motion-attention, 320ms) var(--ds-motion-ease-out, ease-out) both;
 }

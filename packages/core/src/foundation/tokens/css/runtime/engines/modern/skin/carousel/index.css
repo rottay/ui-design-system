@@ -187,7 +187,7 @@
     content: '';
     position: absolute;
     inset: calc(50% - var(--ds-carousel-dot-touch-size, 44px) / 2);
-    border-radius: 9999px;
+    border-radius: var(--ds-radius-full);
   }
 }
 
@@ -206,7 +206,7 @@
   block-size: var(--ds-carousel-dot-size, 0.5rem);
   padding: 0;
   border: 0;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   cursor: pointer;
   transition:
     inline-size var(--ds-motion-feedback) var(--ds-motion-ease-out),
