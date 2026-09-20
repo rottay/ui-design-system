@@ -46,17 +46,27 @@
  * positive that moved in another cell.
  *
  * WHAT THE SCENE MOUNTS, because the percentage means nothing without it. Each
- * family is mounted as the most-decorated single-element selector its Modern
- * skin publishes, AND -- since the EVI-02 instrument lot -- as the descendant
- * parts that skin paints each axis on, grafted onto that same element. The
- * probe used to mount the bare element alone, so a family whose radius lives on
+ * family is mounted as the most-decorated ROOT COMPOUND its Modern skin
+ * requires, AND -- since the EVI-02 instrument lot -- as the descendant parts
+ * that skin paints each axis on, grafted onto that same element. The probe used
+ * to mount the bare element alone, so a family whose radius lives on
  * `activity-log`'s `[data-part='item-body']` and whose elevation lives on
  * `popover`'s `[data-part='surface']` read as a NON-MOVER on an axis its parts
- * genuinely resolve differently for two tenants. That was the instrument failing to reach the paint, not the
- * fleet failing to be reachable. The law for what may be grafted, and every
- * reason a selector is refused, is at `familyAxisParts` below; the map is
- * published with every run and `--no-part-mounts` reproduces the older,
- * narrower reading on the same tree.
+ * genuinely resolve differently for two tenants. That was the instrument
+ * failing to reach the paint, not the fleet failing to be reachable. The law
+ * for what may be grafted, and every reason a selector is refused, is at
+ * `familyAxisParts` below; the map is published with every run and
+ * `--no-part-mounts` reproduces the older, narrower reading on the same tree.
+ *
+ * AND THE ROOT ITSELF WAS A FABRICATION for 113 of the 255 mounted families:
+ * a descendant chain squashed onto ONE node carrying the union of its classes
+ * and the LAST compound's attribute values, so `breadcrumb` -- which paints a
+ * dial-fed `border-radius` on its own root -- was measured on a node called
+ * `data-part="label"` that its root rule cannot match, and read as a shape
+ * non-mover. The root is now the chain's HEAD, the tail is grafted as the parts
+ * it always was, and `--collapsed-roots` reproduces the merge on the same tree.
+ * The candidate set, the mountable set, the pins and every denominator are
+ * unchanged by that repair: only the node a candidate becomes changed.
  *
  * THE DENOMINATOR IS NOT THIS FILE'S. It comes from `check/theme/population`,
  * read at a recorded catalog revision and published with every run, because
@@ -77,6 +87,7 @@
  *   node scripts/check/theme/axis-difference/index.mjs --threshold=80   fail below 80 % per axis
  *   node scripts/check/theme/axis-difference/index.mjs --families=button,card
  *   node scripts/check/theme/axis-difference/index.mjs --no-part-mounts   the pre-lot reading
+ *   node scripts/check/theme/axis-difference/index.mjs --collapsed-roots  the pre-repair root
  */
 
 import { readFileSync } from 'node:fs';
@@ -248,38 +259,184 @@ export function isSingleElement(selector) {
 }
 
 /**
- * The element a family is measured on: its most-decorated single-element
- * selector, preferring a `data-part="root"` when the skin publishes one.
+ * One selector cut into the compounds a combinator separates, with brackets,
+ * parentheses and quotes respected.
+ *
+ * `split(/\s*>\s*|\s+/u)` is the reading this replaces, and it cuts INSIDE an
+ * attribute value: `[data-state~='is open']` becomes two pieces and the chain
+ * after it is projected against a compound that does not exist. No Modern skin
+ * writes a spaced attribute value today (measured over the corpus, 0
+ * selectors), so this changes no number on this tree — it is the reason the
+ * reading cannot start lying the day a skin writes one.
  */
-export function familyElement(css) {
-  const candidates = selectorParts(css)
+export function compoundPieces(selector) {
+  const pieces = [];
+  let current = '';
+  let brackets = 0;
+  let parens = 0;
+  let quote = null;
+  for (const character of selector) {
+    if (quote !== null) {
+      current += character;
+      if (character === quote) quote = null;
+      continue;
+    }
+    if (character === '"' || character === "'") {
+      quote = character;
+      current += character;
+      continue;
+    }
+    if (character === '[') brackets += 1;
+    else if (character === ']') brackets -= 1;
+    else if (character === '(') parens += 1;
+    else if (character === ')') parens -= 1;
+    if (brackets === 0 && parens === 0 && (/\s/u.test(character) || character === '>')) {
+      if (current.trim().length > 0) pieces.push(current.trim());
+      current = '';
+      continue;
+    }
+    current += character;
+  }
+  if (current.trim().length > 0) pieces.push(current.trim());
+  return pieces;
+}
+
+/**
+ * THE ROOT IS THE SELECTOR'S HEAD, never the chain merged into one node.
+ *
+ * WHAT WAS BROKEN, measured rather than asserted. `isSingleElement` strips
+ * every `[...]` BEFORE it looks for whitespace, so a descendant chain whose
+ * compounds after the head are attribute-only survives
+ * as "single" and the reader below used to build ONE node carrying the union of
+ * the chain's classes and the LAST compound's attribute values. Measured on
+ * this tree: 113 of the 255 mounted roots were such a merge.
+ *
+ * That node is a fabrication, and `breadcrumb` is the clean case. Its skin
+ * paints `border-radius: var(--ds-breadcrumb-radius, var(--ds-radius-lg))` at
+ * ROOT level, on `.ds-breadcrumb.ds-breadcrumb--modern[data-part='root']` — a
+ * dial-fed declaration on the family's own root — and the family still measured
+ * as a shape NON-MOVER. The merged node was
+ * `class="ds-breadcrumb--modern" data-part="label" data-clickable="true"`: it
+ * carries the LAST compound's `data-part`, so the root rule does not match it,
+ * the `.ds-breadcrumb` class is not on it either, and all 59 of the family's
+ * part chains were refused as `head-variant-gated` against attributes its real
+ * root never carried. The family was mounted as a node its own skin paints
+ * nothing on.
+ *
+ * So a candidate is read as the compound a selector requires of the family's
+ * OWN root node — its head — and the tail is left to `familyAxisParts`, which
+ * grafts it as the descendant parts it always was. The CANDIDATE SET does not
+ * change: the same selectors `isSingleElement` admits are the same selectors
+ * scored here, so a family that mounted still mounts, a family that did not
+ * still does not, `UNMOUNTABLE_FAMILIES` is the same pin and every denominator
+ * is the one the pre-lot run published. What changes is the NODE a candidate
+ * becomes.
+ *
+ * `collapsedRoots` reproduces the merge, so the before/after of this repair is
+ * read on ONE tree at one catalog revision with one browser.
+ */
+export const rootCompound = (selector) => compoundPieces(selector)[0] ?? selector.trim();
+
+/**
+ * THE ROOT IS AN IDENTITY, NOT A CONFIGURATION — the same law law 1 applies to
+ * a part, applied to the node those parts hang off.
+ *
+ * A root compound may gate on a prop the family only SOMETIMES carries, and
+ * the most-decorated candidate is then a configuration the default render does
+ * not produce. `checkbox` is the measured case and it is not conservative in
+ * either direction: mounted as
+ * `.ds-checkbox.ds-checkbox--modern[data-part='root'][data-standalone='true']`
+ * its box is painted by the standalone rule, `border-radius:
+ * var(--ds-radius-full)` — a deliberate non-dial rung — so the family reads as
+ * a shape NON-MOVER while the checkbox a tenant actually renders reads
+ * `var(--ds-checkbox-radius-sm, var(--ds-radius-sm))` and moves. A fabricated
+ * prop can suppress paint as easily as it can invent it.
+ *
+ * So a root attribute is admitted only when it is STRUCTURAL: `data-part`,
+ * which names the anatomy rather than a configuration, plus every attribute
+ * name the family's own skin declares on EVERY one of its root compounds — a
+ * skin that never writes a rule for this family without `[data-component]` or
+ * `[role]` is a skin whose root always carries it. `flex`'s
+ * `[data-component='flex']` and `segmented`'s `[role='radiogroup']` survive
+ * that reading; `[data-standalone='true']`, `[data-loading='true']`,
+ * `[data-variant]` and 127 other per-family gates do not, and the rules behind
+ * them stay unseen exactly as a prop-gated part does.
+ *
+ * `data-state` is stripped here for the reason `partCompound` strips it: the
+ * SCENE stamps the state, and a root that baked one in would be measured in a
+ * state the probe never asked for.
+ *
+ * A candidate whose selector IS that compound wins a tie against one that only
+ * heads a chain: a rule whose whole selector is the compound paints the root
+ * directly, and an inferred head is the weaker claim.
+ *
+ * WHAT THIS UNDER-COUNTS, named rather than left in the percentage. A family
+ * whose real root always carries SOME value of a prop -- `[data-size]`,
+ * `[data-layout]`, `[data-animation]` -- is mounted here without it, so paint
+ * that lives only behind that gate is unseen: measured on this tree, 18
+ * (family, axis) readings that the fabricated root happened to reach stop being
+ * reached, among them `textarea`/rhythm behind `[data-size='sm']` and
+ * `skeleton`/motion behind `[data-animation='pulse']`. Under-counting is the
+ * fail-closed direction and mounting one arbitrary value is not conservative in
+ * either direction, so the reading stops here. Reaching that paint honestly
+ * needs the DEFAULT the component renders, which is in the TSX and not in the
+ * skin; it is a mount source this probe does not have.
+ */
+export function familyElement(css, { collapsedRoots = false } = {}) {
+  const heads = selectorParts(css)
     .map((selector) =>
       selector
         .replace(/:where\(([^()]*)\)/gu, '$1')
         .replace(/:is\(([^()]*)\)/gu, '$1')
         .trim())
-    .filter((selector) => isSingleElement(selector));
-  if (candidates.length === 0) return null;
-  const score = (selector) => {
-    const classes = [...selector.matchAll(CLASS_TOKEN)].length;
-    const attributes = [...selector.matchAll(ATTRIBUTE_TOKEN)].length;
-    const isRoot = /data-part\s*=\s*['"]?root/u.test(selector) ? 10 : 0;
-    return classes + attributes * 2 + isRoot;
+    .filter((selector) => isSingleElement(selector))
+    .map((selector) => ({
+      text: collapsedRoots ? selector : rootCompound(selector),
+      whole: compoundPieces(selector).length === 1,
+    }));
+  if (heads.length === 0) return null;
+  const names = (text) => [...text.matchAll(ATTRIBUTE_TOKEN)]
+    .map((match) => match[1])
+    .filter((name) => !STATE_ATTRIBUTE.test(name));
+  const structural = new Set(
+    names(heads[0].text).filter((name) => heads.every((head) => names(head.text).includes(name))),
+  );
+  const read = (text) => {
+    const attributes = {};
+    for (const match of text.matchAll(ATTRIBUTE_TOKEN)) {
+      if (!collapsedRoots && match[1] !== 'data-part' && !structural.has(match[1])) continue;
+      if (!collapsedRoots && STATE_ATTRIBUTE.test(match[1])) continue;
+      attributes[match[1]] = match[2] ?? '';
+    }
+    return { classes: [...text.matchAll(CLASS_TOKEN)].map((match) => match[1]), attributes };
   };
-  const best = [...candidates].sort((a, b) => score(b) - score(a))[0];
-  const classes = [...best.matchAll(CLASS_TOKEN)].map((match) => match[1]);
-  const attributes = {};
-  for (const match of best.matchAll(ATTRIBUTE_TOKEN)) attributes[match[1]] = match[2] ?? '';
-  return { selector: best, classes, attributes };
+  // Scored on the compound as ADMITTED, so a gate that will be dropped cannot
+  // win the mount for a variant and then vanish from the node. The merged
+  // reading keeps the pre-repair scoring to the letter -- it exists to
+  // reproduce that run, not to improve on it.
+  const score = (candidate) => (collapsedRoots
+    ? [...candidate.text.matchAll(CLASS_TOKEN)].length
+      + [...candidate.text.matchAll(ATTRIBUTE_TOKEN)].length * 2
+      + (/data-part\s*=\s*['"]?root/u.test(candidate.text) ? 10 : 0)
+    : candidate.element.classes.length
+      + Object.keys(candidate.element.attributes).length * 2
+      + (candidate.element.attributes['data-part'] === 'root' ? 10 : 0));
+  const candidates = heads.map((head) => ({ ...head, element: read(head.text) }));
+  const best = [...candidates].sort((a, b) =>
+    score(b) - score(a)
+    || (collapsedRoots ? 0 : Number(b.whole) - Number(a.whole)))[0];
+  const selector = best.element.classes.map((name) => `.${name}`).join('')
+    + Object.entries(best.element.attributes).map(([name, value]) => `[${name}='${value}']`).join('');
+  return { selector: collapsedRoots ? best.text : selector, ...best.element };
 }
 
 /** family -> its element, or null when the skin publishes no mountable selector. */
-export function familyElements(root = CORE_ROOT, only = null) {
+export function familyElements(root = CORE_ROOT, only = null, { collapsedRoots = false } = {}) {
   const elements = new Map();
   for (const [family, files] of skinFamilies(root)) {
     if (only && !only.includes(family)) continue;
     const css = files.map((file) => readFileSync(file, 'utf8')).join('\n');
-    elements.set(family, familyElement(css));
+    elements.set(family, familyElement(css, { collapsedRoots }));
   }
   return elements;
 }
@@ -296,10 +453,11 @@ export function familyElements(root = CORE_ROOT, only = null) {
  * `[...]` from the selector FIRST, then refuses `>`, `~`, `+`, whitespace that
  * SURVIVED the strip, `:` and `*`. A descendant chain whose compounds after the
  * head are attribute-only is therefore erased down to its head and passes as
- * "single", and `familyElement` collapses the whole chain onto one node
- * carrying the union of its classes and the LAST compound's attribute values.
- * Measured on today's tree: 113 of the 255 mounted roots are such collapses.
- * Only a chain that keeps a class or a tag after its head is actually refused.
+ * "single"; `familyElement` USED TO collapse the whole chain onto one node
+ * carrying the union of its classes and the LAST compound's attribute values --
+ * 113 of the 255 mounted roots were such a merge -- and now reads the chain's
+ * HEAD instead, leaving the tail to the parts below. Only a chain that keeps a
+ * class or a tag after its head is actually refused as a candidate.
  *
  * Either way the paint is unreached: a skin that paints its radius on
  * `activity-log`'s `[data-part='item-body']`, its elevation on `popover`'s
@@ -333,18 +491,23 @@ export function familyElements(root = CORE_ROOT, only = null) {
  *     probe does not simulate `:hover`, and a mount that dropped `:hover` from
  *     a selector would read a hover rule as resting paint.
  *
- * TWO LIMITS THIS LOT DOES NOT LIFT, named rather than left inside the refusal
- * counts. First, a collapsed root carries its LAST compound's attribute values,
- * so a genuinely root-headed part rule can be refused by law 1 as
- * `head-variant-gated` against attributes the family's real root never carried;
- * the published `head-variant-gated` count therefore overstates the prop-gated
- * cluster the wiring lots own. Repairing the root is the NEXT instrument lot --
- * doing it here would change the pre-lot element and break the one-tree A/B
- * these numbers are read from. Second, a family whose part rules are headed by
- * a root class of their OWN is out of reach of law 1: `tooltip`'s bubble is
- * headed by `.ds-tooltip-bubble`, not by a compound under the mounted
- * `.ds-tooltip.ds-tooltip--modern[data-part='root']`, so all 10 of its part
- * rules are refused as `head-not-the-family-root` and tooltip gains no parts.
+ * THE FIRST OF THE TWO LIMITS THAT LOT NAMED IS LIFTED at `rootCompound`
+ * above: a merged root carried its LAST compound's attribute values, so a
+ * genuinely root-headed part rule was refused by law 1 as `head-variant-gated`
+ * against attributes the family's real root never carried, and the published
+ * count overstated the prop-gated cluster the wiring lots own. The root is now
+ * the head compound, and those chains pass law 1 because the head IS the
+ * mounted node.
+ *
+ * THE SECOND LIMIT STANDS, and it stands on the law rather than on effort: a
+ * family whose part rules are headed by a root class of their OWN is out of
+ * reach of law 1. `tooltip`'s bubble is headed by `.ds-tooltip-bubble`, not by
+ * a compound under the mounted
+ * `.ds-tooltip.ds-tooltip--modern[data-part='root']`, so its part rules are
+ * refused as `head-not-the-family-root` and tooltip gains no parts. That bubble
+ * is a portal the default render does not mount until the tooltip opens;
+ * building a second root for it would measure an interaction state this probe
+ * does not enter, which is the same refusal law 1 applies to a prop gate.
  *
  * The chain is then GRAFTED onto the family's existing root node, one nested
  * element per compound, so the scene holds the anatomy the skin describes
@@ -479,7 +642,7 @@ export const compoundKey = (compound) =>
 export function projectPartChain(selector, rootElement) {
   if (/[~+]/u.test(selector.replace(/\[[^\]]*\]/gu, ''))) return { rejected: 'sibling-combinator' };
   if (selector.includes('::')) return { rejected: 'pseudo-element' };
-  const pieces = selector.split(/\s*>\s*|\s+/u).filter((piece) => piece.length > 0);
+  const pieces = compoundPieces(selector);
   if (pieces.length < 2) return { rejected: 'root-level' };
   const head = partCompound(pieces[0]);
   if (head.rejected !== undefined) return { rejected: `head-${head.rejected}` };
@@ -618,6 +781,27 @@ export function partMountReport(byFamily, { applied = true, unmountableCandidate
 }
 
 /**
+ * The root each family was measured on, and how many of them the merge used to
+ * fabricate.
+ *
+ * `merged` is the count a reader needs to tell the two readings apart: under
+ * `collapsedRoots` it is the number of roots that are a whole chain squashed
+ * onto one node, and under the repaired law it is 0 by construction because a
+ * root IS a single compound. Publishing it makes the A/B legible from the
+ * artifact alone.
+ */
+export function rootReport(elements, { collapsedRoots = false } = {}) {
+  const map = {};
+  let merged = 0;
+  for (const [family, element] of elements) {
+    if (element === null) continue;
+    map[family] = element.selector;
+    if (compoundPieces(element.selector).length > 1) merged += 1;
+  }
+  return { collapsedRoots, families: Object.keys(map).length, merged, map };
+}
+
+/**
  * The families a pin now costs something, named rather than left implicit.
  *
  * A family with no mountable root gains no parts, by law -- the graft has
@@ -639,8 +823,7 @@ export function unmountablePartCandidates(root = CORE_ROOT, unmountable = UNMOUN
         const authored = new Set(partAuthored(axis));
         return rule.declarations.some((declaration) => authored.has(declaration.property));
       })) return false;
-      return selectorList(rule.selector)
-        .some((selector) => selector.split(/\s*>\s*|\s+/u).filter((piece) => piece.length > 0).length > 1);
+      return selectorList(rule.selector).some((selector) => compoundPieces(selector).length > 1);
     });
     if (paints) candidates.push(family);
   }
@@ -1599,6 +1782,11 @@ export async function run({
    * which is how the before/after of this instrument repair is measured on one
    * tree rather than compared across two. */
   partMounts = true,
+  /* `true` reproduces the pre-repair root: a descendant chain merged onto one
+   * node carrying the union of its classes and the LAST compound's attribute
+   * values. It is how the before/after of the root repair is measured on ONE
+   * tree. */
+  collapsedRoots = false,
   /* The same export of the same compiler, handed in by a runner that reads the
    * source tree instead of `dist/`; absent, the published door is imported. */
   compile: compileOverride = null,
@@ -1609,7 +1797,7 @@ export async function run({
     throw new Error(`axis-difference: ${COMPILER_MODULE} exports no callable ${COMPILER_EXPORT}`);
   }
 
-  const elements = familyElements(root, families);
+  const elements = familyElements(root, families, { collapsedRoots });
   for (const family of Object.keys(mounts ?? {})) {
     if (!elements.has(family)) {
       throw new Error(`axis-difference: a mount was supplied for ${family}, which has no Modern skin family`);
@@ -1842,6 +2030,11 @@ export async function run({
       observedUnsettled: [...observedUnsettled].sort(),
       newlyUnsettled: [...newlyUnsettled].sort(),
     },
+    // THE NODE EACH FAMILY'S ROOT ACTUALLY IS, published for the same reason
+    // the part map is: a root nobody can see is a numerator nobody can audit,
+    // and the merge this repair removed was invisible in every artifact the
+    // probe ever published.
+    roots: rootReport(elements, { collapsedRoots }),
     // WHICH ELEMENT EACH FAMILY WAS MEASURED ON, per axis, published so the
     // numerator this run reports can be read against the element it was read
     // from. A mount map nobody can see is a numerator nobody can audit.
@@ -1936,6 +2129,16 @@ export function evaluate(result, {
         failures.push(`${family}: pinned as unmountable and now mounts; remove it from UNMOUNTABLE_FAMILIES in this commit`);
       }
     }
+  }
+  // A ROOT THAT IS A CHAIN IS A FABRICATION, and the run that published 113 of
+  // them read a family's own root rule against a node called `data-part=label`.
+  // The `--collapsed-roots` reading is allowed to carry them -- reproducing
+  // that run is what it is for -- and nothing else is.
+  if (result.roots !== undefined && result.roots.collapsedRoots !== true && result.roots.merged > 0) {
+    failures.push(
+      `${result.roots.merged} famil(ies) were measured on a descendant chain MERGED onto one node, which is a node `
+      + 'no rule of their skin selects; the root must be the compound the skin requires, not the chain',
+    );
   }
   for (const family of result.families.newlyUnsettled ?? []) {
     failures.push(
@@ -2181,6 +2384,11 @@ if (isMain) {
     // how the before/after of the mount repair is measured on ONE tree, at one
     // catalog revision, with one browser.
     partMounts: !process.argv.includes('--no-part-mounts'),
+    // The pre-repair root, on demand: the descendant chain merged onto one
+    // node. Same tree, same catalog revision, same browser — the only way the
+    // before/after of a mount repair is a measurement and not a comparison
+    // across two trees.
+    collapsedRoots: process.argv.includes('--collapsed-roots'),
   });
   if (process.argv.includes('--json')) console.log(JSON.stringify(result, null, 2));
 
@@ -2200,6 +2408,11 @@ if (isMain) {
   console.log(
     `  excluded as unmountable (pinned, named): ${result.families.unmountable.length} famil(ies)`
     + ` — exactly the pin: ${result.familiesFiltered ? 'not checked (--families run)' : 'yes'}`,
+  );
+  console.log(
+    `  roots: ${result.roots.families} famil(ies) measured on `
+    + `${result.roots.collapsedRoots ? 'the MERGED chain (the pre-repair reading)' : 'the head compound their own skin requires'}`
+    + ` — ${result.roots.merged} of them a chain squashed onto one node`,
   );
   console.log(
     `  part mounts: ${result.partMounts.applied ? 'ON' : 'OFF (root element only — the pre-lot reading)'}`

@@ -61,9 +61,11 @@ import {
   STATE_VARIANTS,
   effectiveMapDifference,
   resolvedDifference,
+  rootReport,
   inertReason,
   axisByProperty,
   compoundKey,
+  compoundPieces,
   denominatorLine,
   evaluatePilot,
   expandAlternatives,
@@ -619,12 +621,24 @@ describe('axis-difference — a negative control is only evidence if its decisio
 });
 
 describe('axis-difference — the fixture is read off the skin, never invented', () => {
-  it('prefers the data-part root and materialises its classes and attributes', () => {
+  it('prefers the data-part root and materialises its classes and its STRUCTURAL attributes', () => {
     const element = familyElement(
-      ".ds-card { color: red; }\n.ds-card.ds-card--modern[data-part='root'][data-radius='md'] { padding: 1px; }",
+      ".ds-card[data-component='card'] { color: red; }\n"
+      + ".ds-card.ds-card--modern[data-component='card'][data-part='root'][data-radius='md'] { padding: 1px; }",
     );
     assert.deepEqual(element.classes, ['ds-card', 'ds-card--modern']);
-    assert.deepEqual(element.attributes, { 'data-part': 'root', 'data-radius': 'md' });
+    // `data-component` is on every root compound this skin writes, so the root
+    // it renders always carries it. `data-radius` is not: mounting it would
+    // measure one configuration of the family and call it the family.
+    assert.deepEqual(element.attributes, { 'data-component': 'card', 'data-part': 'root' });
+  });
+
+  it('a variant only SOME rules gate on is not admitted, and a state is never baked in', () => {
+    const element = familyElement(
+      ".ds-card.ds-card--modern[data-part='root'] { padding: 1px; }\n"
+      + ".ds-card.ds-card--modern[data-part='root'][data-standalone='true'][data-state~='hovered'] { padding: 2px; }",
+    );
+    assert.deepEqual(element.attributes, { 'data-part': 'root' });
   });
 
   it('refuses a descendant, a pseudo-class and a foreign namespace', () => {
@@ -1233,6 +1247,139 @@ describe('axis-difference — the part mounts honour the pins they were told to 
 });
 
 /**
+ * THE ROOT IS THE HEAD, and the breadcrumb anomaly is why.
+ *
+ * `breadcrumb` paints `border-radius: var(--ds-breadcrumb-radius,
+ * var(--ds-radius-lg))` on its own ROOT rule -- dial-fed, root level, nothing
+ * gated -- and measured as a shape NON-MOVER. The reason was not the skin: the
+ * probe mounted it as the merge of
+ * `.ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] [data-part='label']`,
+ * one node carrying `data-part="label"`, which its root rule cannot match and
+ * which its 59 part chains were then refused against as `head-variant-gated`.
+ * The fixtures below are that shape in miniature.
+ */
+describe('axis-difference — the root is the compound the skin requires, not the chain merged', () => {
+  const MERGED_CSS = `${DRILL_ROOT_CSS}
+    .ds-drill.ds-drill--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] [data-part='label']
+      { border-radius: 2px; }`;
+
+  it('THE DEFECT: the merged reading fabricates a node the family root rule cannot match', () => {
+    const merged = familyElement(MERGED_CSS, { collapsedRoots: true });
+    assert.deepEqual(merged.attributes, { 'data-part': 'label', 'data-clickable': 'true' });
+    assert.equal(merged.selector.includes(' '), true, 'the pre-repair root IS a whole chain on one node');
+  });
+
+  it('the repaired reading mounts the head, so the root rule matches the node again', () => {
+    const element = familyElement(MERGED_CSS);
+    assert.deepEqual(element.classes, ['ds-drill', 'ds-drill--modern']);
+    assert.deepEqual(element.attributes, { 'data-part': 'root' });
+    assert.equal(compoundPieces(element.selector).length, 1);
+  });
+
+  it('and the chain the merge ate comes back as the parts it always was', () => {
+    const css = `${MERGED_CSS}
+      .ds-drill.ds-drill--modern[data-part='root'] [data-part='icon'] { border-radius: var(--ds-radius-sm); }`;
+    const merged = familyParts(css, familyElement(css, { collapsedRoots: true }), ['shape']);
+    assert.deepEqual(merged.parts, [], 'the fabricated root refused every chain the family writes');
+    const repaired = familyParts(css, familyElement(css), ['shape']);
+    assert.deepEqual(repaired.parts.map((part) => part.chain.map(compoundKey)), [['div||data-part=icon']]);
+  });
+
+  it('and the refusals stop being charged to the prop-gated cluster they were never about', () => {
+    // Both readings refuse the `[data-clickable='true']` chain, and only one of
+    // them refuses it for the reason it is actually refused: the merge blamed
+    // the HEAD against attributes the family root never carried, which is what
+    // made the published `head-variant-gated` count overstate the wiring lots'
+    // backlog. The repaired reading blames the PART, where the gate is.
+    const merged = familyParts(MERGED_CSS, familyElement(MERGED_CSS, { collapsedRoots: true }), ['shape']);
+    assert.deepEqual(merged.rejected, { 'head-variant-gated': 1 });
+    const repaired = familyParts(MERGED_CSS, familyElement(MERGED_CSS), ['shape']);
+    assert.deepEqual(repaired.rejected, { 'part-variant-gated': 1 });
+  });
+
+  it('a rule whose WHOLE selector is the compound wins a tie against one that only heads a chain', () => {
+    // Same score either way -- two classes, two attributes, a root part. The
+    // whole-selector candidate is the stronger claim (it paints the root
+    // directly), and preferring it is what keeps every family that already
+    // mounted a single compound on exactly the element it was measured on.
+    const css = `.ds-drill.ds-drill--modern[data-part='root'][data-tone='warn'] [data-part='x'] { padding: 1px; }
+      .ds-drill.ds-drill--modern[data-part='root'][data-tone='calm'] { padding: 2px; }`;
+    assert.deepEqual(familyElement(css).attributes, { 'data-part': 'root', 'data-tone': 'calm' });
+  });
+
+  it('a compound is cut on combinators OUTSIDE brackets, so a spaced attribute value stays one piece', () => {
+    assert.deepEqual(compoundPieces(".ds-x[data-state~='is open'] > [data-part='y']"), [
+      ".ds-x[data-state~='is open']",
+      "[data-part='y']",
+    ]);
+    assert.deepEqual(
+      projectPartChain(".ds-drill.ds-drill--modern[data-part='root'] [data-part='y'][data-state~='is open']", DRILL_ELEMENT)
+        .chain.map(compoundKey),
+      ['div||data-part=y'],
+    );
+  });
+
+  it('THE CORPUS: the repair changes the NODE and not the mountable set, so every pin and denominator is the one the pre-repair run published', () => {
+    const repaired = familyElements(ROOT);
+    const merged = familyElements(ROOT, null, { collapsedRoots: true });
+    const mountable = (elements) => [...elements].filter(([, element]) => element !== null).map(([family]) => family);
+    assert.deepEqual(mountable(repaired), mountable(merged), 'the root repair moved a family in or out of the denominator');
+    const stillMerged = mountable(repaired).filter((family) => compoundPieces(repaired.get(family).selector).length > 1);
+    assert.deepEqual(stillMerged, [], `roots still merged: ${stillMerged.join(', ')}`);
+    const wasMerged = mountable(merged).filter((family) => compoundPieces(merged.get(family).selector).length > 1);
+    assert.ok(wasMerged.length > 100, `only ${wasMerged.length} merged roots in the pre-repair reading`);
+    assert.ok(wasMerged.includes('breadcrumb'));
+  });
+
+  it('THE CORPUS: repairing the root un-refuses the head-gated chains it was refusing against a fabricated node', () => {
+    const repaired = partMountReport(familyAxisParts(ROOT, null, familyElements(ROOT)));
+    const merged = partMountReport(familyAxisParts(ROOT, null, familyElements(ROOT, null, { collapsedRoots: true })));
+    assert.ok(
+      repaired.refused['head-variant-gated'] < merged.refused['head-variant-gated'],
+      `head-variant-gated ${merged.refused['head-variant-gated']} -> ${repaired.refused['head-variant-gated']}`,
+    );
+    assert.equal(merged.map.breadcrumb, undefined, 'breadcrumb gained a part under the fabricated root');
+    assert.ok(repaired.map.breadcrumb.shape.length > 0, 'breadcrumb gained no shape part under its real root');
+  });
+
+  it('THE CORPUS: the root a family is mounted on is its identity, not one of its configurations', () => {
+    const elements = familyElements(ROOT);
+    // The measured case, named: mounted with `[data-standalone='true']` the
+    // checkbox box is painted by the standalone rule's deliberate non-dial
+    // `var(--ds-radius-full)`, and the family reads as a shape non-mover while
+    // the checkbox a tenant renders moves.
+    assert.deepEqual(elements.get('checkbox').attributes, { 'data-part': 'root' });
+    // A structural attribute is kept: this skin writes no root rule without it.
+    assert.deepEqual(elements.get('flex').attributes, { 'data-component': 'flex' });
+    const stateful = [...elements].filter(([, element]) => element !== null
+      && Object.keys(element.attributes).some((name) => /(^|-)state$/u.test(name)));
+    assert.deepEqual(stateful.map(([family]) => family), [], 'a root baked a state in; the scene stamps states');
+  });
+
+  it('MUTANT: a run that publishes a merged root is refused, and the pre-repair reading is not', () => {
+    const merged = result([cell()], { roots: { collapsedRoots: false, merged: 113 } });
+    assert.ok(evaluate(merged).some((line) => line.includes('MERGED onto one node')), 'a fabricated root passed');
+    assert.deepEqual(
+      evaluate({ ...merged, roots: { collapsedRoots: true, merged: 113 } }).filter((line) => line.includes('MERGED onto one node')),
+      [],
+    );
+  });
+
+  it('the run publishes the root each family was measured on, and how many of them were a merge', () => {
+    const elements = new Map([['drill', familyElement(MERGED_CSS)]]);
+    assert.deepEqual(rootReport(elements), {
+      collapsedRoots: false,
+      families: 1,
+      merged: 0,
+      map: { drill: ".ds-drill.ds-drill--modern[data-part='root']" },
+    });
+    const before = rootReport(new Map([['drill', familyElement(MERGED_CSS, { collapsedRoots: true })]]), { collapsedRoots: true });
+    assert.equal(before.merged, 1);
+    assert.equal(before.collapsedRoots, true);
+  });
+});
+
+/**
  * THE RED ARM, and it is the case this lot exists to make reachable.
  *
  * Proving the numbers went up proves nothing: a mount that reported a
@@ -1356,6 +1503,111 @@ describe('axis-difference BROWSER drill — a mounted part that STOPS differing 
     assert.deepEqual(evaluate(result([axisCell(moved)]), { threshold: 80 }).filter((line) => line.startsWith('shape:')), []);
     const failures = evaluate(result([axisCell(lost)]), { threshold: 80 });
     assert.ok(failures.some((line) => line.startsWith('shape: 0.0 % < 80 %')), failures.join(' | '));
+  }, 120_000);
+});
+
+/**
+ * THE RED ARM OF THE ROOT REPAIR, driven through one real browser over one
+ * page, because the defect and the repair are both about whether a selector
+ * MATCHES and no offline reading can answer that.
+ *
+ * The fixture is `breadcrumb` in miniature: a dial-fed `border-radius` on the
+ * family's own root rule, and a more-decorated descendant chain that used to
+ * win the mount and fabricate a `data-part="label"` node out of it.
+ *
+ *   BLIND  the merged root        -> no difference (the defect, measured)
+ *   SEEING the head compound      -> the difference, on the root's own rule
+ *   RED    the head, rule literal -> no difference, and the axis FAILS
+ *
+ * BLIND and RED read the same 0 and mean opposite things, which is why the
+ * root map is published with every run.
+ */
+describe('axis-difference BROWSER drill — a root that STOPS differing is caught', { skip: browserReason }, () => {
+  const ARM_A = { '--ds-radius-md': '4px' };
+  const ARM_B = { '--ds-radius-md': '16px' };
+  const axisOf = axisByProperty();
+  const CHAIN = ".ds-drill.ds-drill--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] [data-part='label']"
+    + ' { padding: 2px; }';
+  const LIVE_ROOT = `.ds-drill.ds-drill--modern[data-part='root'] { border-radius: var(--ds-radius-md); }\n${CHAIN}`;
+  const DEAD_ROOT = `.ds-drill.ds-drill--modern[data-part='root'] { border-radius: 6px; }\n${CHAIN}`;
+
+  /** The family measured exactly as `run` measures it, on whichever root reading is asked for. */
+  const measure = async (page, css, { collapsedRoots }) => {
+    const element = familyElement(css, { collapsedRoots });
+    const elements = new Map([['drill', element]]);
+    const partMounts = new Map([['drill', familyParts(css, element, ['shape'])]]);
+    await page.setContent(
+      sceneHtml({ css, vertical: 'bithire', theme: 'light', elements, partMounts }),
+      { waitUntil: 'load' },
+    );
+    const properties = AXES.shape.computed;
+    const before = await measureCell({ page, variables: ARM_A, properties, axisOf });
+    const after = await measureCell({ page, variables: ARM_B, properties, axisOf });
+    return differsOnAxis('shape', before, after, 'drill');
+  };
+
+  it('reads the dial on the real root, reads nothing on the merged one, and reads nothing again when the root rule goes literal', async () => {
+    const { browser, close } = await launchBrowser();
+    let blind;
+    let seeing;
+    let red;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      blind = await measure(page, LIVE_ROOT, { collapsedRoots: true });
+      seeing = await measure(page, LIVE_ROOT, { collapsedRoots: false });
+      red = await measure(page, DEAD_ROOT, { collapsedRoots: false });
+      await page.close();
+    } finally {
+      await close();
+    }
+    // The defect this lot repairs, planted: the paint is live, root-level and
+    // dial-fed, and the instrument cannot see it because the node it mounted is
+    // not the node the rule selects.
+    assert.equal(blind, null, 'the merged root must be blind to its own root rule — otherwise this drill proves nothing');
+    assert.equal(seeing, 'border-top-left-radius', 'the repaired root must carry the dial to the page');
+    // THE RED ARM. The root is still mounted and still read; its rule stopped
+    // consuming the dial, and that must read as a non-mover.
+    assert.equal(red, null, 'a mounted root whose rule stopped consuming the dial must NOT keep reporting a difference');
+  }, 120_000);
+
+  it('the axis FAILS when the repaired root goes literal, so the loss is a verdict and not a quieter number', async () => {
+    const { browser, close } = await launchBrowser();
+    let moved;
+    let lost;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      moved = await measure(page, LIVE_ROOT, { collapsedRoots: false });
+      lost = await measure(page, DEAD_ROOT, { collapsedRoots: false });
+      await page.close();
+    } finally {
+      await close();
+    }
+    const axisCell = (property) => cell({
+      axis: 'shape', scenario: 'shape', denominator: 1,
+      moved: property === null ? 0 : 1, percent: property === null ? 0 : 100,
+      movedFamilies: property === null ? [] : [{ family: 'drill', property }],
+      movedIds: property === null ? [] : ['drill'],
+    });
+    assert.deepEqual(evaluate(result([axisCell(moved)]), { threshold: 80 }).filter((line) => line.startsWith('shape:')), []);
+    assert.ok(
+      evaluate(result([axisCell(lost)]), { threshold: 80 }).some((line) => line.startsWith('shape: 0.0 % < 80 %')),
+    );
+  }, 120_000);
+
+  it('a family whose paint genuinely does not differ still reads as a NON-MOVER on its repaired root', async () => {
+    // The mount reaches more paint; it must not invent any. This root is
+    // mounted, matched and read -- and its radius is a literal, so the honest
+    // verdict is the same 0 the merged reading gave, for the opposite reason.
+    const { browser, close } = await launchBrowser();
+    let verdict;
+    try {
+      const page = await (await browser.newContext()).newPage();
+      verdict = await measure(page, DEAD_ROOT, { collapsedRoots: false });
+      await page.close();
+    } finally {
+      await close();
+    }
+    assert.equal(verdict, null);
   }, 120_000);
 });
 
