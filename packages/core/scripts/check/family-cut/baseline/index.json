@@ -962,7 +962,7 @@
       "cut": "WO-FAM-06",
       "denominators": {
         "skinFiles": 1,
-        "sourceFiles": 4,
+        "sourceFiles": 14,
         "channelsRead": 61,
         "classTokens": 2,
         "partsStamped": 30,
@@ -979,7 +979,7 @@
       "fanOutUnreached": 1,
       "dndTransportOwners": 0,
       "dndDropZoneOwners": 0,
-      "cutNote": " Re-pin 2026-09-20 (DT, wave window): channelsRead 59 -> 61 = three rungs swapped for four intents (8e6b7e57b, +1) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 20 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down."
+      "cutNote": " Re-pin 2026-09-20 (DT, wave window): channelsRead 59 -> 61 = three rungs swapped for four intents (8e6b7e57b, +1) and +--ds-edge-hairline-width (7ef3c96b7, +1)., measured by the gate; every move named with its lot. Re-pin 2026-09-20 (DT, wave window): unpairedStatePseudoSelectors 20 -> 0 — every bare pseudo now pairs with its kernel-token twin via 6a42d6595 states fleet lot 2 (the kernel-token twins); decrease-only, the pin follows the tree down. Re-pin 2026-09-20 (DT, table state-stamp lot, Fable ACCEPT): sourceFiles 4 -> 14 — the stamp lives in one small component per painted part under engines/modern/parts/ (kernel + presentation), because the gate reads the literal first argument of partAttributes and a polymorphic helper would have dropped partsStamped 30 -> 22 with zero DOM change; structure:check findings=0 with parts/kernel at rank 0 and parts/presentation/<part> at rank 3. stateContract/stateGoverned flip true; statesConsumedNotStamped 4 -> 0 measured by the gate (no pin moved — it was already 0); a11yProbes 6 -> 7, a11yAssertions 26 -> 27 from the new stamp suite."
     },
     "badge": {
       "cut": "WO-FAM-06",

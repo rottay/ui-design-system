@@ -44,6 +44,17 @@ import { NavigationUpIcon } from '@/graphics/icons/semantic/generated/roles/navi
 import { NavigationBackIcon } from '@/graphics/icons/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/semantic/generated/roles/navigation-forward';
 import { resolveSubmitIntent } from "@/foundation/behavior";
+import {
+  TableBodyCell,
+  TableBodyRow,
+  TableExpandButton,
+  TableFieldInput,
+  TableFieldSelect,
+  TableHeaderCell,
+  TablePaginationButton,
+  TableResizeHandle,
+  TableSelectionControl,
+} from './parts';
 
 
 
@@ -231,10 +242,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
     if (fieldType === 'checkbox') {
       return (
-        <input
+        <TableSelectionControl
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
-          data-part="selection-control"
           checked={!!cellValue}
           onChange={(e) => {
             setCellValue(e.target.checked);
@@ -249,9 +259,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
     if (fieldType === 'select') {
       return (
-        <select
+        <TableFieldSelect
           ref={inputRef as React.RefObject<HTMLSelectElement>}
-          data-part="field"
           data-field="edit"
           value={String(cellValue ?? '')}
           onChange={(e) => {
@@ -267,16 +276,15 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               {opt.label}
             </option>
           ))}
-        </select>
+        </TableFieldSelect>
       );
     }
 
     if (fieldType === 'date') {
       return (
-        <input
+        <TableFieldInput
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="date"
-          data-part="field"
           data-field="edit"
           value={String(cellValue ?? '')}
           onChange={(e) => setCellValue(e.target.value)}
@@ -289,10 +297,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
     // text or number
     return (
-      <input
+      <TableFieldInput
         ref={inputRef as React.RefObject<HTMLInputElement>}
         type={fieldType === 'number' ? 'number' : 'text'}
-        data-part="field"
         data-field="edit"
         value={cellValue == null ? '' : String(cellValue)}
         onChange={(e) =>
@@ -327,12 +334,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       }
 
       return (
-        <th
+        <TableHeaderCell
           key={column.key || field || `${rowIndex}-${cellIndex}`}
+          sortable={isSortable}
           colSpan={colSpan > 1 ? colSpan : undefined}
           rowSpan={rowSpan > 1 ? rowSpan : undefined}
           className={column.className || undefined}
-          data-part="header-cell"
           data-sortable={isSortable ? 'true' : undefined}
           data-sticky={stickyConfig.enabled ? 'true' : undefined}
           data-hairline={showHeaderHairline ? 'true' : undefined}
@@ -389,8 +396,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 dragging a group header's edge is ambiguous about which child
                 column should resize. */}
             {colSpan <= 1 && (
-              <span
-                data-part="resize-handle"
+              <TableResizeHandle
                 data-resizing={resizingColumn === field ? 'true' : undefined}
                 onMouseDown={(e) => {
                   e.stopPropagation();
@@ -405,7 +411,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               />
             )}
           </div>
-        </th>
+        </TableHeaderCell>
       );
     });
   };
@@ -445,9 +451,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               // splitting the header band during horizontal scroll.
               data-fixed={col.fixed === true ? 'true' : (col.fixed || undefined)}
             >
-              <input
+              <TableFieldInput
                 type="text"
-                data-part="field"
                 data-field="filter"
                 placeholder={t('table.filter_column', { column: String(col.title || '') })}
                 value={columnFilters[field || ''] || ''}
@@ -511,10 +516,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       return (
         <Fragment key={key}>
-          <tr
+          <TableBodyRow
             className={rowClass || undefined}
+            hoverable={rowHoverable}
             aria-rowindex={gridRowIndex(actualIndex)}
-            data-part="row"
             data-selected={isSelected ? 'true' : undefined}
             data-hoverable={rowHoverable ? 'true' : undefined}
             // Only a row that CAN expand reports the state: a flat row
@@ -533,11 +538,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                       record,
                     })
                   ) : (
-                    <button
+                    <TableExpandButton
                       // Every table control is `type="button"`: the default is
                       // `submit`, so expanding a row inside a form submitted it.
                       type="button"
-                      data-part="expand-button"
                       onClick={() => handleToggleExpand(record, actualIndex)}
                       aria-expanded={isExpanded}
                       aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
@@ -545,7 +549,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                       <span data-part="expand-indicator" data-expanded={isExpanded ? 'true' : undefined} aria-hidden="true">
                         <NavigationForwardIcon decorative size={12} />
                       </span>
-                    </button>
+                    </TableExpandButton>
                   )
                 ) : null}
               </td>
@@ -560,9 +564,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     stays capped by the dense row -- same law the header resize
                     handle documents). A disabled input's label does not toggle. */}
                 <label data-part="selection-hit">
-                  <input
+                  <TableSelectionControl
                     type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
-                    data-part="selection-control"
                     checked={isSelected}
                     disabled={selectionProps.disabled || undefined}
                     onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
@@ -609,10 +612,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   : undefined;
 
               return (
-                <td
+                <TableBodyCell
                   key={column.key || field || colIndex}
                   className={column.className || undefined}
-                  data-part="cell"
+                  editable={!!cellEditable && !cellIsEditing}
                   data-editable={cellEditable && !cellIsEditing ? 'true' : undefined}
                   data-bordered={bordered ? 'true' : undefined}
                   data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
@@ -633,10 +636,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   {...(column.onCell?.(record, actualIndex) || {})}
                 >
                   {content}
-                </td>
+                </TableBodyCell>
               );
             })}
-          </tr>
+          </TableBodyRow>
 
           {/* Expanded row content */}
           {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
@@ -743,9 +746,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 >
                   {rowSelection.type !== 'radio' && !rowSelection.hideSelectAll && (
                     <label data-part="selection-hit">
-                      <input
+                      <TableSelectionControl
                         type="checkbox"
-                        data-part="selection-control"
                         checked={isAllSelected}
                         // Native indeterminate is a property, not an attribute --
                         // it has to be assigned through the element ref.
@@ -866,39 +868,36 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <div data-part="pagination">
           <span data-part="pagination-range">{paginationRange}</span>
           <div data-part="pagination-controls">
-            <button
+            <TablePaginationButton
               type="button"
-              data-part="pagination-button"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
               aria-label={t('table.previous_page')}
             >
               <NavigationBackIcon decorative size={12} />
-            </button>
+            </TablePaginationButton>
             {/* The current-page marker is a READOUT: the skin already gives it
                 `pointer-events: none`, so its tab stop offered a keyboard
                 activation that could never do anything. It keeps the button box
                 (the skin sizes every control off one rule) and drops out of the
                 tab order instead. */}
-            <button
+            <TablePaginationButton
               type="button"
-              data-part="pagination-button"
               data-current="true"
               aria-current="page"
               aria-disabled="true"
               tabIndex={-1}
             >
               {t('table.page', { current: currentPage })}
-            </button>
-            <button
+            </TablePaginationButton>
+            <TablePaginationButton
               type="button"
-              data-part="pagination-button"
               disabled={currentPage * pageSize >= totalItems}
               onClick={() => setCurrentPage(currentPage + 1)}
               aria-label={t('table.next_page')}
             >
               <NavigationForwardIcon decorative size={12} />
-            </button>
+            </TablePaginationButton>
           </div>
         </div>
       )}
