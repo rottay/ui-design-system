@@ -14,9 +14,12 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
+import { elevationDeriver } from "../../../elevation";
+import { expressiveDeriver } from "../../../expressive";
 import { dashboardHeaderChromeDeriver } from "..";
 
 const SKIN = readFileSync(
@@ -92,5 +95,58 @@ describe("chrome/dashboard-header", () => {
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
     }
+  });
+});
+
+/* ---- the depth causality arm: `surfaces.borderStyle` reaches the rule ---- */
+
+const BORDER_ROLE = "--ds-edge-hairline-width";
+const RULE = "--ds-dashboard-header-rule";
+const ROLE_CHAIN = `var(${BORDER_ROLE})`;
+const BARE_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
+
+const ruleContext = (theme: FlatTheme) => buildLoweringContext({ theme });
+
+function roleWidth(theme: FlatTheme): string | undefined {
+  const { channels } = runDerivation(ruleContext(theme), [
+    expressiveDeriver,
+    elevationDeriver,
+    dashboardHeaderChromeDeriver,
+  ]);
+  expect(channels[RULE], "the rule reads the role, not a width").toBe(ROLE_CHAIN);
+  return channels[BORDER_ROLE];
+}
+
+const posture = (borderStyle: "none" | "hairline" | "strong"): FlatTheme => ({
+  ...BARE_THEME,
+  surfaces: { borderStyle },
+});
+
+describe("chrome/dashboard-header depth rule", () => {
+  it("states the rule through the governed edge role, never a width of its own", () => {
+    const derived = dashboardHeaderChromeDeriver.derive(ruleContext(BARE_THEME), {});
+    expect(derived[RULE]).toBe(ROLE_CHAIN);
+    expect(derived[RULE]).not.toMatch(/\d/u);
+  });
+
+  it("CAUSALITY: a border posture moves the width the rule paints", () => {
+    expect(roleWidth(posture("none"))).toBe("0px");
+    expect(roleWidth(posture("hairline"))).toBe("1px");
+    expect(roleWidth(posture("strong"))).toBe("1px");
+    expect(roleWidth(posture("none"))).not.toBe(roleWidth(posture("strong")));
+  });
+
+  it("rests byte-identical to the scale step it replaces, in every vertical", () => {
+    // The retired value was `var(--ds-border-width-1, 1px)`. The hairline role
+    // rests at that same 1px everywhere, which `--ds-edge-standard-width` does
+    // not: bithire rests it at 1.5px.
+    for (const vertical of ["rottay", "bithire", "evnto"] as const) {
+      expect(roleWidth(firstPartyFixture(vertical)), vertical).toBe("1px");
+    }
+    expect(SKIN).toContain(`var(${RULE}, ${ROLE_CHAIN})`);
+  });
+
+  it("declares the border decision it now consumes", () => {
+    expect(dashboardHeaderChromeDeriver.consumes).toContain("surfaces.borderStyle");
   });
 });

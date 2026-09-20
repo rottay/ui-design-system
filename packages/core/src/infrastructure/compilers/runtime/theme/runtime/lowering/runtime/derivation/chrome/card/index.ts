@@ -15,7 +15,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const cardChromeDeriver: FamilyDeriver = {
   family: "card",
   rank: "derived",
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.radiusScale", "typography.roles", "density"],
+  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.borderStyle", "surfaces.radiusScale", "typography.roles", "density"],
   produces: [
     "--ds-card-title-font-size-sm",
     "--ds-card-title-font-size-lg",
@@ -25,6 +25,7 @@ export const cardChromeDeriver: FamilyDeriver = {
     "--ds-card-border-accent-hover",
     "--ds-card-outlined-border-hover",
     "--ds-card-underline-border-width",
+    "--ds-card-border-width",
     "--ds-card-nested-shadow",
     "--ds-card-padding-base",
     "--ds-card-instance-padding",
@@ -62,6 +63,9 @@ export function deriveCardChannels(): Record<string, string> {
   vars["--ds-card-outlined-border-hover"] =
     "var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))))";
   vars["--ds-card-underline-border-width"] = "var(--ds-edge-hairline-width)";
+  // The frame's own weight, hairline rather than standard: hairline is the one
+  // edge role resting at the component default's 1px in every vertical.
+  vars["--ds-card-border-width"] = "var(--ds-edge-hairline-width)";
   vars["--ds-card-nested-shadow"] = "none";
   vars["--ds-card-padding-base"] = "var(--ds-card-padding, var(--ds-card-md-padding))";
   vars["--ds-card-instance-padding"] =

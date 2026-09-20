@@ -20,6 +20,7 @@ export const tagChromeDeriver: FamilyDeriver = {
     "palette.*",
     "surfaces.radiusScale",
     "surfaces.focusStyle",
+    "surfaces.borderStyle",
     "states.press",
     "typography.roles",
     "typography.roleWeights",
@@ -59,6 +60,7 @@ export const tagChromeDeriver: FamilyDeriver = {
     "--ds-tag-max-inline-size",
     "--ds-tag-press-transform",
     "--ds-tag-shadow",
+    "--ds-tag-border-width",
   ],
   derive: () => deriveTagChannels(),
 };
@@ -118,6 +120,10 @@ export function deriveTagChannels(): Record<string, string> {
   vars["--ds-tag-max-inline-size"] = "calc(var(--ds-spacing-4) * 16)";
   vars["--ds-tag-press-transform"] = "translateY(0) scale(var(--ds-state-press-scale))";
   vars["--ds-tag-shadow"] = "0 2px 7px color-mix(in srgb, currentColor 8%, transparent)";
+
+  // The chip keyline reads the hairline role its skin fallback already names;
+  // hairline rests at the component default's 1px in every vertical.
+  vars["--ds-tag-border-width"] = "var(--ds-edge-hairline-width)";
 
   return vars;
 }

@@ -21,6 +21,8 @@ import {
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
+import { elevationDeriver } from "../../../elevation";
+import { expressiveDeriver } from "../../../expressive";
 import { collapseChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
@@ -126,5 +128,78 @@ describe("chrome/collapse", () => {
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
     }
+  });
+});
+
+/* ---- the depth causality arm: `surfaces.borderStyle` reaches collapse's keyline ---- */
+
+const BORDER_ROLE = "--ds-edge-hairline-width";
+const KEYLINE = "--ds-collapse-root-default-idle-border-width";
+const ROLE_CHAIN = `var(${BORDER_ROLE})`;
+const COMPONENT_CSS = readFileSync(
+  resolve(process.cwd(), "src/foundation/tokens/css/presentation/components/collapse/index.css"),
+  "utf8"
+);
+
+const keylineContext = (theme: FlatTheme) => buildLoweringContext({ theme });
+
+/** The width the role lands on the root, with one posture authored or none. */
+function roleWidth(theme: FlatTheme): string | undefined {
+  const { channels } = runDerivation(keylineContext(theme), [
+    expressiveDeriver,
+    elevationDeriver,
+    collapseChromeDeriver,
+  ]);
+  expect(channels[KEYLINE], "the keyline reads the role, not a width").toBe(ROLE_CHAIN);
+  return channels[BORDER_ROLE];
+}
+
+const posture = (borderStyle: "none" | "hairline" | "strong"): FlatTheme => ({
+  ...MINIMAL_THEME,
+  surfaces: { borderStyle },
+});
+
+describe("chrome/collapse depth keyline", () => {
+  it("states the keyline through the governed edge role, never a width of its own", () => {
+    const derived = collapseChromeDeriver.derive(keylineContext(MINIMAL_THEME), {});
+    expect(derived[KEYLINE]).toBe(ROLE_CHAIN);
+    expect(derived[KEYLINE]).not.toMatch(/\d/u);
+  });
+
+  it("CAUSALITY: a border posture moves the width this family paints", () => {
+    // The hairline role is the thinnest of the three, so `none` retracts it and
+    // both stated postures draw it. `none` against `strong` is exactly the pair
+    // the depth axis measures.
+    expect(roleWidth(posture("none"))).toBe("0px");
+    expect(roleWidth(posture("hairline"))).toBe("1px");
+    expect(roleWidth(posture("strong"))).toBe("1px");
+    expect(roleWidth(posture("none"))).not.toBe(roleWidth(posture("strong")));
+  });
+
+  it("rests byte-identical to the component default it replaces, in every vertical", () => {
+    // The claim this wire has to earn: with no posture authored, the role the
+    // keyline now reads resolves to the SAME width the component declaration
+    // stated -- in each first-party vertical, not just the default theme.
+    // `--ds-edge-standard-width` would fail this: bithire rests it at 1.5px.
+    expect(COMPONENT_CSS).toContain(`${KEYLINE}: var(--ds-border-width-1, 1px);`);
+    for (const vertical of ["rottay", "bithire", "evnto"] as const) {
+      expect(roleWidth(firstPartyFixture(vertical)), vertical).toBe("1px");
+    }
+    // A theme with no expressive profile states no role at all, so the
+    // foundation default is what paints -- and it is the same 1px.
+    expect(roleWidth(MINIMAL_THEME)).toBeUndefined();
+    expect(
+      readFileSync(
+        resolve(
+          process.cwd(),
+          "src/foundation/tokens/css/foundation/themes/default/index.css"
+        ),
+        "utf8"
+      )
+    ).toContain(`${BORDER_ROLE}: 1px;`);
+  });
+
+  it("declares the border decision it now consumes", () => {
+    expect(collapseChromeDeriver.consumes).toContain("surfaces.borderStyle");
   });
 });

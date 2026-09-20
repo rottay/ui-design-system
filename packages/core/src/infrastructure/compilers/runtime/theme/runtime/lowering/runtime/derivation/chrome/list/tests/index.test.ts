@@ -1,6 +1,7 @@
 /**
- * The `tag` press transform rides the governed press dial: three authored
- * `surfaces.stateEmphasis` postures resolve to three different scales.
+ * The `list` family contract, and the one relation it states: a bordered
+ * list's frame reads the governed hairline edge role, so `surfaces.borderStyle`
+ * reaches it.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -14,12 +15,10 @@ import {
   type FamilyFixture,
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
-import { statesDeriver } from "../../../states";
 import { elevationDeriver } from "../../../elevation";
 import { expressiveDeriver } from "../../../expressive";
-import { tagChromeDeriver } from "..";
+import { listChromeDeriver } from "..";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
@@ -40,87 +39,15 @@ const FIXTURES: readonly FamilyFixture[] = [
   },
 ];
 
-describeFamilyContract(tagChromeDeriver, FIXTURES);
+describeFamilyContract(listChromeDeriver, FIXTURES);
 
-const SKIN = readFileSync(
-  resolve(process.cwd(), "src/foundation/tokens/css/runtime/engines/modern/skin/tag/index.css"),
-  "utf8"
-).replace(/\/\*[\s\S]*?\*\//g, "");
-
-const PRESS = "--ds-tag-press-transform";
-const WIRED_CHAIN = "translateY(0) scale(var(--ds-state-press-scale))";
-
-const context = (theme: FlatTheme) => buildLoweringContext({ theme });
-
-/** The press scale each posture lands on the governed root, end to end. */
-function pressScaleFor(emphasis: "subtle" | "medium" | "strong"): string {
-  const theme: FlatTheme = { ...MINIMAL_THEME, surfaces: { stateEmphasis: emphasis } };
-  const { channels } = runDerivation(context(theme), [statesDeriver, tagChromeDeriver]);
-  const transform = channels[PRESS];
-  const root = channels["--ds-state-press-scale"];
-  expect(transform, `${emphasis}: the press transform reads the governed root`).toBe(WIRED_CHAIN);
-  return transform.replace("var(--ds-state-press-scale)", root);
-}
-
-describe("chrome/tag press dial", () => {
-  it("states the press transform through the governed press root, not a literal", () => {
-    const derived = tagChromeDeriver.derive(context(MINIMAL_THEME), {});
-    expect(derived[PRESS]).toBe(WIRED_CHAIN);
-    expect(derived[PRESS]).not.toContain("0.98");
-  });
-
-  it("CAUSALITY: the three emphasis postures resolve to three distinct press scales", () => {
-    const subtle = pressScaleFor("subtle");
-    const medium = pressScaleFor("medium");
-    const strong = pressScaleFor("strong");
-
-    expect(subtle).toBe("translateY(0) scale(0.99)");
-    expect(medium).toBe("translateY(0) scale(0.98)");
-    expect(strong).toBe("translateY(0) scale(0.965)");
-    expect(new Set([subtle, medium, strong]).size).toBe(3);
-  });
-
-  it("keeps the unauthored posture byte-identical to the retired literal", () => {
-    expect(pressScaleFor("medium")).toBe("translateY(0) scale(0.98)");
-  });
-
-  it("leaves the skin fallback as the literal floor for a render with no artifact", () => {
-    expect(SKIN).toContain(`transform: var(${PRESS}, translateY(0) scale(0.98));`);
-  });
-
-  it("declares the press decision it now consumes", () => {
-    expect(tagChromeDeriver.consumes).toContain("states.press");
-  });
-
-  it("names only its own family namespace", () => {
-    for (const channel of tagChromeDeriver.produces) {
-      expect(channel.startsWith("--ds-tag-")).toBe(true);
-    }
-  });
-
-  it("yields the press channel to a vertical or tenant statement of it", () => {
-    for (const rank of ["verticalOverride", "tenant"] as const) {
-      const stated: FamilyDeriver = {
-        family: `stated-${rank}`,
-        rank,
-        consumes: ["chrome.*"],
-        produces: [PRESS],
-        derive: () => ({ [PRESS]: rank }),
-      };
-      const result = runDerivation(context(MINIMAL_THEME), [tagChromeDeriver, stated]);
-      expect(result.channels[PRESS]).toBe(rank);
-      expect(result.provenance.get(PRESS)?.rank).toBe(rank);
-    }
-  });
-});
-
-/* ---- the depth causality arm: `surfaces.borderStyle` reaches tag's keyline ---- */
+/* ---- the depth causality arm: `surfaces.borderStyle` reaches list's keyline ---- */
 
 const BORDER_ROLE = "--ds-edge-hairline-width";
-const KEYLINE = "--ds-tag-border-width";
+const KEYLINE = "--ds-list-border-width";
 const ROLE_CHAIN = `var(${BORDER_ROLE})`;
 const COMPONENT_CSS = readFileSync(
-  resolve(process.cwd(), "src/foundation/tokens/css/presentation/components/tag/index.css"),
+  resolve(process.cwd(), "src/foundation/tokens/css/presentation/components/list/index.css"),
   "utf8"
 );
 
@@ -131,7 +58,7 @@ function roleWidth(theme: FlatTheme): string | undefined {
   const { channels } = runDerivation(keylineContext(theme), [
     expressiveDeriver,
     elevationDeriver,
-    tagChromeDeriver,
+    listChromeDeriver,
   ]);
   expect(channels[KEYLINE], "the keyline reads the role, not a width").toBe(ROLE_CHAIN);
   return channels[BORDER_ROLE];
@@ -142,9 +69,9 @@ const posture = (borderStyle: "none" | "hairline" | "strong"): FlatTheme => ({
   surfaces: { borderStyle },
 });
 
-describe("chrome/tag depth keyline", () => {
+describe("chrome/list depth keyline", () => {
   it("states the keyline through the governed edge role, never a width of its own", () => {
-    const derived = tagChromeDeriver.derive(keylineContext(MINIMAL_THEME), {});
+    const derived = listChromeDeriver.derive(keylineContext(MINIMAL_THEME), {});
     expect(derived[KEYLINE]).toBe(ROLE_CHAIN);
     expect(derived[KEYLINE]).not.toMatch(/\d/u);
   });
@@ -183,6 +110,6 @@ describe("chrome/tag depth keyline", () => {
   });
 
   it("declares the border decision it now consumes", () => {
-    expect(tagChromeDeriver.consumes).toContain("surfaces.borderStyle");
+    expect(listChromeDeriver.consumes).toContain("surfaces.borderStyle");
   });
 });

@@ -45,6 +45,7 @@ export const dashboardHeaderChromeDeriver: FamilyDeriver = {
     "density",
     "shape.*",
     "surfaces.elevation-posture",
+    "surfaces.borderStyle",
     "surfaces.focusStyle",
     "states.*",
     "motion.*",
@@ -96,7 +97,9 @@ export function deriveDashboardHeaderChannels(): Record<string, string> {
   /* The one hairline the header draws: its weight and its ink. The ink is the
      border channel over the neutral ramp -- the alias the skin used to mount
      privately is gone. */
-  vars["--ds-dashboard-header-rule"] = "var(--ds-border-width-1, 1px)";
+  // A rule is a keyline, so it reads the hairline role rather than a step of
+  // the structural scale; hairline alone rests at 1px in every vertical.
+  vars["--ds-dashboard-header-rule"] = "var(--ds-edge-hairline-width)";
   vars["--ds-dashboard-header-border"] = "var(--ds-color-border-subtle)";
 
   /* The quiet top-down wash: the card material with the primary's faintest

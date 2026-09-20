@@ -23,7 +23,13 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const treeChromeDeriver: FamilyDeriver = {
   family: "tree",
   rank: "derived",
-  consumes: ["palette.*", "surfaces.radiusScale", "typography.roleWeights", "density"],
+  consumes: [
+    "palette.*",
+    "surfaces.radiusScale",
+    "surfaces.borderStyle",
+    "typography.roleWeights",
+    "density",
+  ],
   produces: [
     "--ds-tree-node-padding-block",
     "--ds-tree-node-padding-inline",
@@ -32,6 +38,7 @@ export const treeChromeDeriver: FamilyDeriver = {
     "--ds-tree-checkbox-size",
     "--ds-tree-loading-size",
     "--ds-tree-connector-elbow",
+    "--ds-tree-line-width",
     "--ds-tree-touch-target-min",
     "--ds-tree-drop-indicator-color",
     "--ds-tree-disabled-opacity",
@@ -53,6 +60,9 @@ export function deriveTreeChannels(): Record<string, string> {
   vars["--ds-tree-checkbox-size"] = "var(--ds-spacing-4)";
   vars["--ds-tree-loading-size"] = "var(--ds-spacing-4)";
   vars["--ds-tree-connector-elbow"] = "var(--ds-spacing-3)";
+  // A hierarchy line is the hairline role, not the component frame; the
+  // component default rests at the same 1px, so no connector repaints.
+  vars["--ds-tree-line-width"] = "var(--ds-edge-hairline-width)";
   vars["--ds-tree-touch-target-min"] = "var(--ds-touch-target-min)";
 
   // A drag affordance is NOT a connector: it wears the primary seed so it never

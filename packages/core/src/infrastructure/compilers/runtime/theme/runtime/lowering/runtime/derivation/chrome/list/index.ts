@@ -19,8 +19,8 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const listChromeDeriver: FamilyDeriver = {
   family: "list",
   rank: "derived",
-  consumes: ["palette.*", "typography.roles"],
-  produces: ["--ds-list-meta-description-ink"],
+  consumes: ["palette.*", "surfaces.borderStyle", "typography.roles"],
+  produces: ["--ds-list-meta-description-ink", "--ds-list-border-width"],
   derive: () => deriveListChannels(),
 };
 
@@ -29,5 +29,8 @@ export function deriveListChannels(): Record<string, string> {
   vars["--ds-list-meta-description-ink"] =
     "color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%,"
     + " var(--ds-color-text-primary) 30%)";
+  // The bordered list's frame is a keyline: hairline is the one edge role
+  // resting at the component default's 1px in every vertical.
+  vars["--ds-list-border-width"] = "var(--ds-edge-hairline-width)";
   return vars;
 }

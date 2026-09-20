@@ -18,6 +18,7 @@ export const collapseChromeDeriver: FamilyDeriver = {
     "palette.*",
     "surfaces.radiusScale",
     "surfaces.focusStyle",
+    "surfaces.borderStyle",
     "spacing.rhythm",
     "density",
     "motion.dial",
@@ -42,6 +43,7 @@ export const collapseChromeDeriver: FamilyDeriver = {
     "--ds-collapse-header-sm-idle-padding-x",
     "--ds-collapse-header-sm-idle-padding-y",
     "--ds-collapse-panel-surface",
+    "--ds-collapse-root-default-idle-border-width",
     "--ds-collapse-reveal-motion-duration",
     "--ds-collapse-reveal-motion-easing",
     "--ds-collapse-state-motion-duration",
@@ -127,5 +129,10 @@ export function deriveCollapseChannels(): Record<string, string> {
   // nothing writes.
   vars["--ds-collapse-header-default-pressed-bg"] =
     "color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))";
+
+  // A bordered panel wears a keyline, so it reads hairline: the one edge role
+  // resting at the component default's 1px in every vertical.
+  vars["--ds-collapse-root-default-idle-border-width"] =
+    "var(--ds-edge-hairline-width)";
   return vars;
 }
