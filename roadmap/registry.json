@@ -5305,6 +5305,21 @@
      "at": "2026-09-20 14:50",
      "by": "kimi-admin",
      "note": "2026-09-20 kimi-admin (2): RESERVA DE PATHS — paquete drenaje de contraste FAM-08+FAM-10 despachado a Opus (receipt-fam-contrast-drain-opus.json): write set exclusivo = skins/presentation CSS y derivers chrome de column-settings, file-manager y record + los AXE_DEBT maps de sus 3 tests de causalidad. Reparar re-derivando tinta/fondo de canales gobernados (precedente data-table AXE_DEBT={}); pins caen POR IDENTIDAD; prohibido exclusiones axe/literales/umbrales; si una pareja exige cambio de ladder de derivacion, STOP con debrief. Posee el slot vitest focal + evidencia sighted (bithire/evnto light, bithire/rottay dark). Comparte causa con FAM-10 (record); INV-03 informado via este trail."
+    },
+    {
+     "at": "2026-09-20 16:43",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (3): ventana serial integrada y PUBLICADA (origin/main=da9611fce): instrumento axis-difference 4f175f034 (Fable ACCEPT), drenaje contraste 34929b2b7 (Fable ACCEPT; AXE_DEBT record={}, 26/36 drenados por identidad), re-pin family-cut de ola 450f66592 (30/30 atribuidos; app-shell ventana declarada), re-pin population b59e7c6ea (37/37), piloto EVI-05 60a192a36 (shape 4/4, rhythm 5/5, depth 5/5). OLA EN VUELO con reservas: (a) mode-mirroring brazos 1+3 (input base --ds-input-bg:79/:81, status-seed derivation, Button deriver/skin, presets bithire/evnto, filas AXE_DEBT bithire-dark+evnto-light de file-manager y rottay-dark de column-settings); (b) adjudicacion stamp-truth de statesConsumedNotStamped (table/tag/avatar/descriptions/list-toolbar/splitter/tree — medicion runtime, sin escrituras de producto). SERIALIZADO: breadcrumb (brazo 2) espera a mode-mirroring porque ambos tocan el AXE_DEBT map de file-manager. Pendiente FAM-08 tras la ola: cierre de brazos ruteados y re-cierre contra aceptacion."
+    },
+    {
+     "at": "2026-09-20 17:51",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (4): brazo 1 mode-mirroring INTEGRADO 0d4e4da81 (Fable ACCEPT): --ds-input-bg sigue el modo (literal :root en capa components ganaba por ORDEN de capa, no especificidad; bithire escapaba por su artefacto unlayered; themes/default:2102 era codigo muerto, nombrado). rottay/evnto dark #fff->#0F0F12, bithire dark focus reparado, luz byte-identica. 14 suites siguen sus pins rottay-dark hacia abajo por identidad (Input/InputNumber cierran en su propia condicion). Brazo 3 STOP confirmado por Fable con medicion que REFUTA el debrief: la tinta danger es propia de file-manager (skin:209 usa el rol FILL --ds-color-error como tinta + ghost currentColor 7%) — re-ruteado: (3a) reparacion file-manager (stamp danger + borrar la declaracion, en vuelo con el brazo 2 breadcrumb como paquete unico dueno del AXE_DEBT map), (3b) --ds-color-error mode-leg al lane theme (blast radius flota: tooltip/radio/alert-dialog/alphas). stamps: tag+avatar INTEGRADOS ff71efc8c (Fable ACCEPT; descriptions DROP adjudicado en partes no-interactivas, pin 0->4 con razon). En vuelo: table, tree, file-manager final."
+    },
+    {
+     "at": "2026-09-20 19:07",
+     "by": "kimi-admin",
+     "note": "2026-09-20 kimi-admin (5): ADJUDICACION DE DISENO (filter-chip de list-toolbar, quedaba abierta tras ff71efc8c): la regla consistente con descriptions es — partes no-activables no llevan productor de interaccion. El chip root no activa (sin clickable/onClick medido en engines/modern:1173), asi que NO se estampa data-state; su lavado hover queda por el brazo pseudo (ayuda de lectura, pintura sin cambios, :is() misma especificidad) y la ocurrencia queda literal en statesNotComposed como registro permanente de la decision. El close del chip SI es interactivo y ya sella via Tag close (ff71efc8c). No hay deuda nueva ni pin que mover: el contador de list-toolbar lee 0 con el credito de ace98c15d. Cierro la pregunta de diseno con esta nota: interactivo sella, no-interactivo no; el lavado hover en partes no-activables es lectura, no affordance, y se revisita solo si un consumidor real le da activacion al chip."
     }
    ],
    "doneAt": null,
@@ -5386,6 +5401,16 @@
      "at": "2026-09-20 14:55",
      "by": "kimi-dt",
      "note": "2026-09-20 kimi-admin (reconciliacion S20-04): funnel/gantt scheme input YA LANDO — 6feb6a315 (Fable ACCEPT, 2026-09-19-fam09-scheme-input-review-davila.md): contrato espejo de bar-chart, precedencia real pineada, slots 9-12 + wrap + invalid + light/dark. El hallazgo monochrome==vibrant bajo tenant brandeado quedo medido y registrado ahi (5/5 vs 1/5 via materializeChartPaint). Estado real: 3 callers app RESTANTES (bithire support-widgets funnel, evnto event-detail funnel+gantt) desbloqueados en DS pero gated por el BUMP de version DS en las apps; colors-prop se mantiene hasta validacion de consumidores (R2). Siguiente paso ejecutable: (a) lote Q1 de-alias default/accessible (DS-side, resolver ya estable — despachable); (b) ventana de release/bump + migracion de los 3 callers + consumer check; (c) retiro colors-prop tras validacion. La decision de release queda registrada, no improvisada."
+    },
+    {
+     "at": "2026-09-20 16:43",
+     "by": "kimi-dt",
+     "note": "2026-09-20 kimi-admin (2): lote Q1 de-alias default/accessible DESPACHADO a Opus (receipt-fam09-q1-opus.json): write set = owners de scheme/palette + resolver + tests + changeset; deja fuera charts TSX/skins, apps, axis-difference, baselines y regeneracion de catalogo (ventana DT). Aceptacion: default con cadena gobernada propia, accessible explicito con sus pisos, boundary 9-12 preservado, scheme-scope-causality resuelto o re-registrado, medicion de distintividad antes/despues (el hallazgo monochrome==vibrant brandeado queda registrado, no cerrado en falso)."
+    },
+    {
+     "at": "2026-09-20 16:58",
+     "by": "kimi-dt",
+     "note": "2026-09-20 kimi-admin (3) CORRECCION DEL DT: mi nota (2) despacho Q1 como pendiente y ERA YA LANDADO — 39041218d (2026-09-19 21:23, Fable ACCEPT, 2026-09-19-chart-q1-dealias-review-davila.md): default con su cadena gobernada propia (CHART_SCHEME_LITERALS.default declaracion unica, aliased=false medido), accessible explicito, boundary 9-12 por esquema. El writer despachado verifico en vez de duplicar (conducta correcta) y encontro un residual real: el hallazgo registrado del gate scheme-scope-causality estaba stale (live pin 20 vs 12 medido — 6feb6a315 plumbo funnel/gantt sin seguir el pin hacia abajo). Reparado: banner COMPUTA su roster (3 familias: network-graph, sankey, scatter), pin sigue a 12/43 con set pineado, drills 10/10 ambas direcciones. En auditoria Fable. paint-single-door re-pineado aparte (1556ef3ee, causa 425012314). Siguiente para que el gate sea blocking: plumb colorScheme en network-graph/sankey/scatter. La doble lectura stale del trail (6feb6a315 y 39041218d) queda registrada como fallo de frescura del DT, no del registro."
     }
    ]
   },
@@ -6368,6 +6393,16 @@
      "at": "2026-09-20 14:50",
      "by": "Kimi K3",
      "note": "2026-09-20 kimi-admin (3): RESERVA DE PATHS — paquete instrumento rhythm despachado a Opus (receipt destino receipt-rhythm-instrument-opus.json): write set exclusivo scripts/check/theme/axis-difference/**; prohibido vitest/build/browser (su slot es node --test del instrumento). Objetivo: 18 casos residuales del censo (9 mount law + 2 part-axis + 7 compuestos) leyendo su pintura real; fail-closed conservado; sin tocar denominadores/pins. Ganancia esperada: eje rhythm mas honesto — se reportara como mejora de INSTRUMENTO, separada de producto."
+    },
+    {
+     "at": "2026-09-20 16:51",
+     "by": "Kimi K3",
+     "note": "2026-09-20 kimi-admin (4): adjudicacion statesConsumedNotStamped MEDIDA (receipt-stamp-truth-opus.json, probe live-mount preservado): el gate tiene razon fuente-side (31/31 archivos sin partAttributes), pero el runtime parte por familia. RUTAS: (a) instrumento — list-toolbar: 8/9 parts STAMPED via Button compuesto (kernel :541, P-79); el brazo states nunca recibio el credito gemelo de variantComposedFrom; discriminador exacto medido: la secuencia dueña con .ds-button (rechaza filter-chip, medido no-stamped); implementacion: stateCompounds hermano de variantCompounds + compuesto por combinadores depth-0 (el walk-back F-37 no sirve con :is anidado). (b) producto por familia: table (8 parts, las rows/cells en .map necesitan child components), tag (2, barato; cubre filter-chip de list-toolbar), avatar (1), descriptions (2 + flag de diseno en header hover no-interactivo), tree (2 — NO colapsar data-disabled en data-state), splitter via ResizeHandle compartido (tras el credito (a)). RECHAZADA (c) en todas: bajar el brazo re-enrojece el ratchet opuesto (PSEUDO_STATE_TWIN en 0 por 450f66592). AVISO DE ACEPTACION registrado: el brazo acredita los 5 estados con UN solo partAttributes (test de un bit) — los paquetes (b) exigen verificacion POR PART con el probe, no el verde del brazo."
+    },
+    {
+     "at": "2026-09-20 17:51",
+     "by": "Kimi K3",
+     "note": "2026-09-20 kimi-admin (5): ruta (a) INTEGRADA ace98c15d (Fable CHANGES->correccion->ACCEPT): el brazo states de family-cut acredita el sello del primitivo compuesto (stateCompounds + composedPrimitiveStampsState granular por valor de estado; discriminador .ds-button en la secuencia dueña medido contra runtime; list-toolbar 4->0, las 6 medidas NOT-STAMPED quedan rojas con stateComposedFrom:[] — fail-closed). Ruta (b) primer lote INTEGRADO ff71efc8c: tag+avatar sellan (2 adiciones de comportamiento revisadas: Enter/Space estampa pressed en roots role=button; guardia target===currentTarget); descriptions DROP adjudicado con pintura byte-identica. Pendientes de la ruta (b): table (8 parts), tree (2), splitter via ResizeHandle (tras el credito), y la pregunta de diseno abierta (hover en partes no-activables: descriptions ya cayo por no-interaccion; filter-chip de list-toolbar queda literal en statesNotComposed esperando la misma llamada de diseno). El aviso de aceptacion de un bit queda registrado: los paquetes (b) prueban POR PART, no por el verde del brazo."
     }
    ]
   },
