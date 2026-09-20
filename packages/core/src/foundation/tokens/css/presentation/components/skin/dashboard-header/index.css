@@ -110,7 +110,7 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'][data-compact] {
-  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -186,7 +186,7 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'] {
-  border: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(
       --ds-dashboard-header-icon-border,
       color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-subtle))
@@ -337,7 +337,7 @@
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'] {
-  border-top: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border-top: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(--ds-dashboard-header-border, var(--ds-color-border-subtle));
 }
 
@@ -376,7 +376,7 @@
 
 /* One rule between cells — the readout is a rhythm, not a row of boxes. */
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] + [data-part='metric-chip'] {
-  border-inline-start: var(--ds-dashboard-header-rule, var(--ds-border-width-1, 1px)) solid
+  border-inline-start: var(--ds-dashboard-header-rule, var(--ds-edge-hairline-width)) solid
     var(
       --ds-dashboard-header-metric-rule,
       var(--ds-dashboard-header-border, var(--ds-color-border-subtle))
