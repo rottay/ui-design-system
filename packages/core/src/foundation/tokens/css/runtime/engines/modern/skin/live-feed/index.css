@@ -141,7 +141,7 @@
   justify-content: center;
   padding-block: 1px;
   padding-inline: 6px;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-surface-panel);
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-2xs);

@@ -99,6 +99,14 @@ backlog of missing wires; they are a backlog of missing *channels*, and closing
 them is a skin edit, not a derivation edit. Unchanged by this lot: 73 at HEAD,
 73 in the candidate.
 
+> **Closed by the follow-up skin lot** (2026-09-20):
+> `evidence/depth-skin-edge-census/index.md`. It cut the bare-literal pool at
+> 246 `1px` declarations, wired the 159 that are keylines to
+> `var(--ds-edge-hairline-width, 1px)` and recorded the 87 it refused in four
+> named classes. The depth axis over the 47 touched families moved 21/46 ->
+> 34/46. That lot also enumerated the shadow side this census predicted: 0 of
+> 138 bespoke shadow literals is byte-equal to an elevation rung.
+
 ## 4. The byte-equal targets this lot enumerated
 
 Eight channels rest at exactly `1px` in rottay, bithire and evnto, each via

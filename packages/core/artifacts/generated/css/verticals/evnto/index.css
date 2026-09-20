@@ -77077,7 +77077,7 @@ html[data-ds-motion='reduced']
   align-items: center;
   justify-content: center;
   padding: 1px 6px;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-envtoggle-accent);
   color: var(--ds-color-text-on-primary);
   font-size: var(--ds-font-size-2xs, 0.6875rem);
@@ -79363,7 +79363,7 @@ html[data-ds-motion='reduced']
   justify-content: center;
   padding-block: 1px;
   padding-inline: 6px;
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-surface-panel);
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-2xs);
@@ -120748,7 +120748,7 @@ html[lang]:lang(ar) {
   --ds-command-palette-footer-font-size: var(--ds-font-size-xs, 12px);
   --ds-command-palette-footer-padding-block: var(--ds-spacing-2, 8px);
   --ds-command-palette-footer-padding-inline: var(--ds-spacing-4, 16px);
-  --ds-command-palette-footer-rule: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+  --ds-command-palette-footer-rule: var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border));
   --ds-command-palette-group-color: var(--ds-color-text-muted);
   --ds-command-palette-group-label-padding-block: var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px);
   --ds-command-palette-group-label-padding-inline: var(--ds-spacing-5, 20px);
@@ -120775,7 +120775,7 @@ html[lang]:lang(ar) {
   --ds-command-palette-scrollbar-thumb: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
   --ds-command-palette-search-gap: var(--ds-spacing-2, 8px);
   --ds-command-palette-search-padding: var(--ds-spacing-3, 12px);
-  --ds-command-palette-search-rule: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+  --ds-command-palette-search-rule: var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border));
   --ds-command-palette-section-label-color: var(--ds-color-text-muted);
   --ds-command-palette-section-label-font-size: var(--ds-font-size-xs, 12px);
   --ds-command-palette-section-label-font-weight: var(--ds-font-weight-medium, 500);

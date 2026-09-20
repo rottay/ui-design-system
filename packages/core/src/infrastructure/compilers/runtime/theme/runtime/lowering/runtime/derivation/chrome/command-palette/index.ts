@@ -39,7 +39,8 @@
 import type { FamilyDeriver } from "../../../../foundation/contract";
 
 /** The hairline the search row and the footer share. */
-const PALETTE_RULE = "1px solid var(--ds-command-palette-border, var(--ds-color-border))";
+const PALETTE_RULE =
+  "var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border))";
 
 export const commandPaletteChromeDeriver: FamilyDeriver = {
   family: "command-palette",

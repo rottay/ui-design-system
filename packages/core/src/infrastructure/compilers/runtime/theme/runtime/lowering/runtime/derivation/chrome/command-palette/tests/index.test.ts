@@ -112,7 +112,7 @@ describe("chrome/command-palette", () => {
       expect(SKIN.includes(channel)).toBe(true);
     }
     expect(derived["--ds-command-palette-search-rule"]).toBe(
-      "1px solid var(--ds-command-palette-border, var(--ds-color-border))"
+      "var(--ds-edge-hairline-width, 1px) solid var(--ds-command-palette-border, var(--ds-color-border))"
     );
     expect(derived["--ds-command-palette-footer-rule"]).toBe(
       derived["--ds-command-palette-search-rule"]
