@@ -137,21 +137,11 @@ describe('input-number geometry, direction, language and accessibility in a real
     );
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
-      // WO-DER-06 derivation-lane registry (D6-2c-ii, 2026-09-15): both dark
-      // scopes (pending DT registration); pinned to the measured state until the
-      // lane lands. A dark mode block paints the dark near-white ink (#f8fafc)
-      // while the ground falls back to white (#ffffff). Pinned rather than
-      // filtered so the finding stays visible and any change reddens this gate.
-      // bithire dark is DRAINED (the mode-canvas repair re-grounds its dark
-      // block; measured clean 2026-09-18). rottay dark is NOT: the field ground
-      // stays #ffffff while the ink follows the dark ramp — a real residual
-      // defect in the input surface's mode derivation. Pinned until the
-      // ground derives with the mode. A change in either direction reddens.
-      if (scope.theme === 'dark' && scope.vertical === 'rottay') {
-        expect(findings.map((finding) => finding.id), `${scope.vertical} dark`).toEqual(['color-contrast']);
-        expect(findings[0]?.sample, `${scope.vertical} dark`).toContain('background color: #ffffff');
-        continue;
-      }
+      // Both dark scopes are DRAINED. bithire dark went first (the mode-canvas
+      // repair re-grounds its dark block); rottay dark was pinned until the
+      // field's ground derived with the mode, and now it does -- the Input
+      // component base states the mode-aware role instead of a mode-blind
+      // white, and `--ds-input-number-bg` reads `--ds-input-bg`.
       expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
     }
   }, 180_000);

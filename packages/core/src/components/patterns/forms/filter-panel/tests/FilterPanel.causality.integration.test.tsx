@@ -89,7 +89,13 @@ describeCausality({
  * inheriting the light body's, so the quiet inks and the transparent control
  * chrome are read against the ground they were designed for. Dropped by
  * identity, not waived: with no entry the scope must measure clean, and a
- * relapse reddens here. The light scopes keep their own rows.
+ * relapse reddens here.
+ *
+ * `rottay dark` DRAINED too, at the Input base rather than in this family: its
+ * three rows were all control grounds (the search field and both range fields),
+ * and the Input base stated `--ds-input-bg: var(--ds-color-white)` mode-lessly,
+ * so each one painted white under the dark mode's ink. That base now states the
+ * mode-aware role. The light scopes keep their own rows.
  */
 const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
   'bithire light': {
@@ -110,7 +116,6 @@ const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
       'span[data-part="range-separator"]',
     ],
   },
-  'rottay dark': { 'color-contrast': ['#input-_R_9d_', 'input[placeholder="Max"]', 'input[placeholder="Min"]'] },
 };
 
 describe('filter-panel accessibility', () => {

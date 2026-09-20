@@ -82,18 +82,16 @@ describeCausality({
  * `bithire dark` DRAINED: that scope's dark block now re-derives its own canvas
  * ground instead of inheriting the light body's, so the placeholder tone is
  * legible there. Dropped by identity, not waived -- with no entry the scope
- * must measure clean, and a relapse reddens here. The light scopes and rottay
- * keep the same four placeholders.
+ * must measure clean, and a relapse reddens here.
+ *
+ * `rottay dark` DRAINED for a different reason, and not by this family: the
+ * trigger grounds on `--ds-cascader-bg: var(--ds-input-bg, ...)`, and the Input
+ * base used to state `--ds-input-bg: var(--ds-color-white)` mode-lessly, so the
+ * trigger painted white under the dark mode's quiet ink. That base now states
+ * the mode-aware role, the trigger grounds at `#0F0F12`, and all four
+ * placeholders measure clean. The light scopes keep the same four.
  */
 const AXE_CONTRAST_GAP: Readonly<Record<string, AxeDebt>> = {
-  'rottay dark': {
-    'color-contrast': [
-      '.ds-cascader.ds-cascader--modern[data-part="root"]:nth-child(1) > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-      '.ds-cascader.ds-cascader--modern[data-part="root"]:nth-child(2) > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-      'div[data-loading="true"] > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-      'div[data-status="error"] > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',
-    ],
-  },
   'bithire light': {
     'color-contrast': [
       '.ds-cascader.ds-cascader--modern[data-part="root"]:nth-child(1) > div[data-part="trigger"][role="combobox"][aria-haspopup="listbox"] > span[data-part="placeholder"]',

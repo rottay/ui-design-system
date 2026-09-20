@@ -70,14 +70,17 @@ describeCausality({
  * the control chrome is read against the ground it was designed for.
  * Dropped by identity, not waived -- with no entry the scope must measure
  * clean, and a relapse reddens here.
+ *
+ * `rottay dark` DRAINED at the Input base, not in this family: every node in
+ * that row was a control ground, and the Input component base stated
+ * `--ds-input-bg: var(--ds-color-white)` mode-lessly, which shadowed the
+ * mode-aware chain beneath it (the component tokens sit in a LATER cascade
+ * layer than the theme). The base now states
+ * `var(--ds-color-bg-input, var(--ds-surface-control))`, so the control grounds
+ * at `#0F0F12` there. Dropped by identity, not waived: with no entry the scope
+ * must measure clean, and a relapse reddens here.
  */
 const CONTRAST_DEBT: Readonly<Record<string, AxeDebt>> = {
-  'rottay dark': {
-    'color-contrast': [
-      '#password-modern-_R_1_',
-      '#password-modern-_R_2_',
-    ],
-  },
   'bithire light': {
     'color-contrast': [
       'span[data-part="strength-label"]',

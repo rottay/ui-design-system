@@ -76,9 +76,11 @@
      DEFAULT STATE - Base Appearance
      Default input styling
      ======================================================================== */
-  --ds-input-bg: var(--ds-color-white);
+  /* The control ground is the mode-aware role, never a literal: a fixed white
+     here would stand the dark mode's near-white ink on a white field. */
+  --ds-input-bg: var(--ds-color-bg-input, var(--ds-surface-control));
   --ds-input-bg-hover: var(--ds-material-control-background-hover);
-  --ds-input-bg-focus: var(--ds-color-white);
+  --ds-input-bg-focus: var(--ds-color-bg-input, var(--ds-surface-control));
   --ds-input-bg-disabled: var(--ds-material-control-background-disabled);
 
   --ds-input-color: var(--ds-color-neutral-900);

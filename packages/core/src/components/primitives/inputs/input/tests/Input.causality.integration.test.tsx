@@ -166,18 +166,12 @@ describe('input geometry, direction, language and accessibility in a real browse
     );
     for (const scope of AXE_SCOPES) {
       const findings = seriousFindings(await auditAxe({ ...scope, markup: gallery }));
-      // bithire dark is DRAINED (the mode-canvas repair re-grounds its dark
-      // block; measured clean 2026-09-18). rottay dark is NOT: the input's
-      // field ground stays #ffffff while the ink follows the dark ramp
-      // (#f8fafc on white, 1.04:1) — a real residual defect: the mode-canvas
-      // repair covers the page canvas, not the input's own surface channel.
-      // Pinned until the input's ground derives with the mode. A change in
-      // either direction reddens this gate.
-      if (scope.theme === 'dark' && scope.vertical === 'rottay') {
-        expect(findings.map((finding) => finding.id), `${scope.vertical} dark`).toEqual(['color-contrast']);
-        expect(findings[0]?.sample, `${scope.vertical} dark`).toContain('background color: #ffffff');
-        continue;
-      }
+      // Both dark scopes are DRAINED. bithire dark went first (the mode-canvas
+      // repair re-grounds its dark block); rottay dark was pinned until the
+      // input's ground derived with the mode, and now it does -- the component
+      // base states `--ds-input-bg: var(--ds-color-bg-input, ...)` instead of a
+      // mode-blind white, so the field grounds at #0F0F12 under the dark ramp's
+      // ink for 18.3:1 rather than #f8fafc on white for 1.04:1.
       expect(findings, `${scope.vertical} ${scope.theme}`).toEqual([]);
     }
   }, 180_000);

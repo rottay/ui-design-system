@@ -92,23 +92,18 @@ describeCausality({
  * identity, not waived: with no entry those scopes must measure clean, and a
  * relapse reddens here.
  *
- * `rottay dark` STANDS, and its root cause is measured and NOT family-local.
+ * `rottay dark` DRAINED at the Input base, where the measurement placed it.
  * The composed Input reads `var(--ds-input-bg, var(--ds-material-control-background,
- * var(--ds-surface-control)))`, and the mode chain behind those fallbacks is
- * intact: `--ds-surface-control` and `--ds-color-bg-input` both resolve
- * `#0F0F12` in that scope. What fails is the FIRST leg -- the Input component
- * base states `--ds-input-bg: var(--ds-color-white)` mode-lessly, which shadows
- * the rest, so the control paints `#ffffff` under an ink that mirrored to
- * `#f8fafc`: 1.04:1. Bithire escapes it only because its artifact re-aliases
- * `--ds-input-bg` back to `--ds-color-bg-input`; rottay's never states the name.
- * The panel relays no colour into the Input, so the repair belongs to the Input
- * base (or to the emitter), not to this family. Routed with its debrief; a
- * family-scoped override of another owner's channel would hide a fleet defect
- * behind one pattern.
+ * var(--ds-surface-control)))` and the mode chain behind those fallbacks was
+ * always intact -- `--ds-surface-control` and `--ds-color-bg-input` both resolve
+ * `#0F0F12` in that scope. The FIRST leg was the defect: the Input component
+ * base stated `--ds-input-bg: var(--ds-color-white)` mode-lessly, so the search
+ * control painted `#ffffff` under an ink that mirrored to `#f8fafc`, 1.04:1.
+ * That base now states the mode-aware role, and the control grounds at
+ * `#0F0F12` for 18.3:1. Repaired at the fleet owner rather than overridden
+ * here, so every other consumer of the channel drained with it.
  */
-const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {
-  'rottay dark': { 'color-contrast': ['#input-_R_3_'] },
-};
+const AXE_DEBT: Record<string, Readonly<Record<string, readonly string[]>>> = {};
 
 describe('column-settings accessibility', () => {
   it('carries no serious axe finding beyond the pinned debt', async () => {
