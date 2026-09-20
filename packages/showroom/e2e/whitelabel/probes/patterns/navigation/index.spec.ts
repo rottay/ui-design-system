@@ -60,6 +60,7 @@ import { test, expect, type Page } from '@playwright/test';
 // ---------------------------------------------------------------------------
 
 type Source = 'bithire-static' | 'themanagement-db';
+type Locale = 'en' | 'es' | 'ar';
 
 const ROUTE = '/probe/patterns/navigation';
 const WITNESS = 'k3b-menu';
@@ -87,13 +88,13 @@ const capturesDir = (): string =>
 
 const reportPath = (): string => join(axeDir(), 'index.json');
 
-function cellUrl(source: Source): string {
-  return `${ROUTE}?source=${source}&locale=en&density=comfortable&state=rest`;
+function cellUrl(source: Source, locale: Locale = 'en'): string {
+  return `${ROUTE}?source=${source}&locale=${locale}&density=comfortable&state=rest`;
 }
 
 /** The deterministic render witness for one cell. */
-async function gotoCell(page: Page, source: Source): Promise<void> {
-  await page.goto(cellUrl(source), { waitUntil: 'networkidle' });
+async function gotoCell(page: Page, source: Source, locale: Locale = 'en'): Promise<void> {
+  await page.goto(cellUrl(source, locale), { waitUntil: 'networkidle' });
   await page.getByTestId(WITNESS).waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>
@@ -879,4 +880,160 @@ test('k3-lane-b controls meet the 44px coarse-pointer floor', async ({ browser, 
   } finally {
     await context.close();
   }
+});
+
+// ---------------------------------------------------------------------------
+// RTL evidence.
+// ---------------------------------------------------------------------------
+
+/**
+ * The three direction-dependent facts the lane's flagship families own, read
+ * as PHYSICAL values out of a real browser so a logical rule that silently
+ * regressed to a physical one is visible:
+ *
+ *   pagination  `prev` is an inline-START control and `next` an inline-END
+ *               one. Physically prev must sit LEFT of next in LTR and RIGHT of
+ *               it in RTL. A nav row pinned with `left`/`float` — or a
+ *               `direction: ltr` reset on the control bar — keeps LTR green
+ *               and strands the RTL reader on a back button that reads as
+ *               forward; this case fails on it.
+ *   menu        a child item spends its hierarchy level as
+ *               `padding-inline-start`, so the indent gutter must resolve to
+ *               the LEFT in LTR and the RIGHT in RTL. A rewrite to
+ *               `padding-left` indents the RTL submenu away from its own
+ *               reading edge and fails here.
+ *   breadcrumb  the trail is ordered by the inherited direction: the first
+ *               crumb is the leftmost in LTR and the rightmost in RTL. A
+ *               direction reset leaking into the trail fails.
+ *
+ * Measured on both locale cells of the same source so every assertion is a
+ * SIGN FLIP, not a one-sided reading that a direction-blind layout passes.
+ */
+interface LaneBRtlRead {
+  frameDir: string | null;
+  menuDir: string;
+  prevLeft: number;
+  prevRight: number;
+  nextLeft: number;
+  nextRight: number;
+  topPaddingLeft: number;
+  topPaddingRight: number;
+  childPaddingLeft: number;
+  childPaddingRight: number;
+  firstCrumbLeft: number;
+  lastCrumbLeft: number;
+}
+
+const NAV_PREV = '[data-testid="k3b-pagination"] [data-part="pagination-nav-button"][data-direction="prev"]';
+const NAV_NEXT = '[data-testid="k3b-pagination"] [data-part="pagination-nav-button"][data-direction="next"]';
+const MENU_TOP = '[data-testid="k3b-menu"] [data-part="item"][data-level="top"]';
+const MENU_CHILD = '[data-testid="k3b-menu"] [data-part="item"][data-level="child"]';
+
+async function readLaneBDirection(page: Page): Promise<LaneBRtlRead> {
+  return page.evaluate(
+    ({ prevSel, nextSel, topSel, childSel }) => {
+      const need = (selector: string): HTMLElement => {
+        const el = document.querySelector<HTMLElement>(selector);
+        if (!el) throw new Error(`RTL evidence target is missing: ${selector}`);
+        return el;
+      };
+
+      const prev = need(prevSel).getBoundingClientRect();
+      const next = need(nextSel).getBoundingClientRect();
+      const top = need(topSel);
+      const child = need(childSel);
+      const topStyle = getComputedStyle(top);
+      const childStyle = getComputedStyle(child);
+      const crumbs = document.querySelectorAll<HTMLElement>(
+        '[data-testid="k3b-breadcrumb"] a[data-part="crumb"]',
+      );
+      if (crumbs.length < 2) throw new Error('RTL evidence needs at least two breadcrumb links');
+
+      return {
+        frameDir: document.querySelector('[data-testid="k3b-frame"]')?.getAttribute('dir') ?? null,
+        menuDir: topStyle.direction,
+        prevLeft: prev.left,
+        prevRight: prev.right,
+        nextLeft: next.left,
+        nextRight: next.right,
+        topPaddingLeft: Number.parseFloat(topStyle.paddingLeft) || 0,
+        topPaddingRight: Number.parseFloat(topStyle.paddingRight) || 0,
+        childPaddingLeft: Number.parseFloat(childStyle.paddingLeft) || 0,
+        childPaddingRight: Number.parseFloat(childStyle.paddingRight) || 0,
+        firstCrumbLeft: crumbs[0].getBoundingClientRect().left,
+        lastCrumbLeft: crumbs[crumbs.length - 1].getBoundingClientRect().left,
+      };
+    },
+    { prevSel: NAV_PREV, nextSel: NAV_NEXT, topSel: MENU_TOP, childSel: MENU_CHILD },
+  );
+}
+
+test('k3-lane-b RTL: pagination controls, menu indent and breadcrumb order all flip under dir=rtl', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  await gotoCell(page, 'bithire-static', 'en');
+  const ltr = await readLaneBDirection(page);
+
+  await gotoCell(page, 'bithire-static', 'ar');
+  const rtl = await readLaneBDirection(page);
+
+  await test.step('the Arabic cell actually renders under dir=rtl', async () => {
+    expect(ltr.frameDir).toBe('ltr');
+    expect(rtl.frameDir).toBe('rtl');
+    // The direction has to REACH the lane's controls, not just sit on the frame.
+    expect(ltr.menuDir).toBe('ltr');
+    expect(rtl.menuDir, 'dir=rtl on the probe frame never reached the menu item').toBe('rtl');
+  });
+
+  await test.step('the previous control stays on the inline start', async () => {
+    expect(
+      ltr.prevLeft < ltr.nextLeft,
+      `LTR: prev is not left of next (prev=${ltr.prevLeft}, next=${ltr.nextLeft})`,
+    ).toBe(true);
+    expect(
+      rtl.prevRight > rtl.nextRight,
+      `RTL: prev did not move to the inline start — the pagination control row ` +
+        `is pinned to a physical edge (prev=${rtl.prevRight}, next=${rtl.nextRight})`,
+    ).toBe(true);
+  });
+
+  await test.step('the submenu indent gutter resolves to the reading side', async () => {
+    expect(
+      ltr.childPaddingLeft > ltr.topPaddingLeft,
+      `LTR: the child item did not indent from the left ` +
+        `(child=${ltr.childPaddingLeft}, top=${ltr.topPaddingLeft})`,
+    ).toBe(true);
+    expect(
+      ltr.childPaddingLeft > ltr.childPaddingRight,
+      `LTR: the child item's indent is on the wrong side ` +
+        `(left=${ltr.childPaddingLeft}, right=${ltr.childPaddingRight})`,
+    ).toBe(true);
+    expect(
+      rtl.childPaddingRight > rtl.topPaddingRight,
+      `RTL: the child item did not indent from the right ` +
+        `(child=${rtl.childPaddingRight}, top=${rtl.topPaddingRight})`,
+    ).toBe(true);
+    expect(
+      rtl.childPaddingRight > rtl.childPaddingLeft,
+      `RTL: the submenu indent stayed on the physical left — the logical ` +
+        `padding-inline-start regressed to a padding-left ` +
+        `(left=${rtl.childPaddingLeft}, right=${rtl.childPaddingRight})`,
+    ).toBe(true);
+  });
+
+  await test.step('the breadcrumb trail follows the inherited direction', async () => {
+    expect(
+      ltr.firstCrumbLeft < ltr.lastCrumbLeft,
+      `LTR: the first crumb is not the leftmost ` +
+        `(${ltr.firstCrumbLeft} vs ${ltr.lastCrumbLeft})`,
+    ).toBe(true);
+    expect(
+      rtl.firstCrumbLeft > rtl.lastCrumbLeft,
+      `RTL: the first crumb is not the rightmost — a direction reset leaked ` +
+        `into the trail (${rtl.firstCrumbLeft} vs ${rtl.lastCrumbLeft})`,
+    ).toBe(true);
+  });
 });

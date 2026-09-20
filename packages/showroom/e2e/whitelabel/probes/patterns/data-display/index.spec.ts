@@ -40,6 +40,7 @@ import { test, expect, type Page } from '@playwright/test';
 // ---------------------------------------------------------------------------
 
 type Source = 'bithire-static' | 'themanagement-db';
+type Locale = 'en' | 'es' | 'ar';
 
 const ROUTE = '/probe/patterns/data-display';
 const WITNESS = 'k3a-table';
@@ -64,13 +65,13 @@ const artifactDir = (): string =>
 
 const reportPath = (): string => join(artifactDir(), 'index.json');
 
-function cellUrl(source: Source): string {
-  return `${ROUTE}?source=${source}&locale=en&density=comfortable&state=rest`;
+function cellUrl(source: Source, locale: Locale = 'en'): string {
+  return `${ROUTE}?source=${source}&locale=${locale}&density=comfortable&state=rest`;
 }
 
 /** The deterministic render witness for one cell. */
-async function gotoCell(page: Page, source: Source): Promise<void> {
-  await page.goto(cellUrl(source), { waitUntil: 'networkidle' });
+async function gotoCell(page: Page, source: Source, locale: Locale = 'en'): Promise<void> {
+  await page.goto(cellUrl(source, locale), { waitUntil: 'networkidle' });
   await page.getByTestId(WITNESS).waitFor({ timeout: 30_000 });
   await page.waitForFunction(
     () =>
@@ -342,5 +343,183 @@ test.describe('K3 lane A keyboard evidence', () => {
       await page.keyboard.press('ArrowLeft');
       await expect(page.locator(firstItem)).toHaveAttribute('aria-expanded', 'false');
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// RTL evidence.
+// ---------------------------------------------------------------------------
+
+/**
+ * Both direction-dependent facts the lane's flagship families own, read as
+ * PHYSICAL values out of a real browser so a logical rule that silently
+ * regressed to a physical one is visible:
+ *
+ *   tree indent  the row carries its depth through `--ds-tree-row-indent`, and
+ *                the skin spends it as `padding-inline-start`. Physically that
+ *                must resolve to padding-LEFT in LTR and padding-RIGHT in RTL,
+ *                with the label geometry moving the same way. A rewrite to
+ *                `padding-left` keeps LTR green and pins the RTL hierarchy to
+ *                the wrong edge — this case fails on it.
+ *   tree caret   the collapsed caret is a physical right-pointing glyph that
+ *                the skin mirrors with a pinned `:dir(rtl)` `scaleX(-1)` (the
+ *                icon opts out of the facade auto-mirror so the two never
+ *                double-flip). Computed `transform` must be the mirror matrix
+ *                in RTL and `none` in LTR — deleting the pinned rule, or
+ *                re-enabling the auto-mirror on top of it, lands on `none` in
+ *                RTL and fails.
+ *   table        the columns are ordered by the inherited direction, so the
+ *                first header is the leftmost cell in LTR and the rightmost in
+ *                RTL. A `direction: ltr` reset leaking into the table box
+ *                fails here.
+ *
+ * Measured on both locale cells of the same source so the assertion is a
+ * SIGN FLIP, not a one-sided reading that a direction-blind layout passes.
+ */
+interface LaneARtlRead {
+  frameDir: string | null;
+  rowDir: string;
+  shallowPaddingLeft: number;
+  shallowPaddingRight: number;
+  deepPaddingLeft: number;
+  deepPaddingRight: number;
+  shallowLabelLeft: number;
+  shallowLabelRight: number;
+  deepLabelLeft: number;
+  deepLabelRight: number;
+  caretTransform: string;
+  firstHeaderLeft: number;
+  lastHeaderLeft: number;
+}
+
+const TREE = '[data-testid="k3a-tree"]';
+const SHALLOW_ROW = `${TREE} [role="treeitem"][data-tree-node-key="eng"]`;
+const DEEP_ROW = `${TREE} [role="treeitem"][data-tree-node-key="eng-fe-ds"]`;
+
+async function readLaneADirection(page: Page): Promise<LaneARtlRead> {
+  return page.evaluate(
+    ({ treeSel, shallowSel, deepSel }) => {
+      const need = <T extends Element>(selector: string): T => {
+        const el = document.querySelector<T>(selector);
+        if (!el) throw new Error(`RTL evidence target is missing: ${selector}`);
+        return el;
+      };
+
+      const shallow = need<HTMLElement>(shallowSel);
+      const deep = need<HTMLElement>(deepSel);
+      const shallowStyle = getComputedStyle(shallow);
+      const deepStyle = getComputedStyle(deep);
+      const shallowLabel = need<HTMLElement>(`${shallowSel} [data-part="tree-node-label"]`);
+      const deepLabel = need<HTMLElement>(`${deepSel} [data-part="tree-node-label"]`);
+      const caret = need<HTMLElement>(`${treeSel} [data-part="tree-node-toggle"] > span`);
+      const headerScope =
+        document.querySelector<HTMLElement>('[data-testid="k3a-table"] thead') ??
+        need<HTMLElement>('[data-testid="k3a-table"]');
+      const headers = headerScope.querySelectorAll<HTMLElement>('th');
+      if (headers.length < 2) throw new Error('RTL evidence needs at least two table headers');
+
+      return {
+        frameDir: document.querySelector('[data-testid="k3a-frame"]')?.getAttribute('dir') ?? null,
+        rowDir: shallowStyle.direction,
+        shallowPaddingLeft: Number.parseFloat(shallowStyle.paddingLeft) || 0,
+        shallowPaddingRight: Number.parseFloat(shallowStyle.paddingRight) || 0,
+        deepPaddingLeft: Number.parseFloat(deepStyle.paddingLeft) || 0,
+        deepPaddingRight: Number.parseFloat(deepStyle.paddingRight) || 0,
+        shallowLabelLeft: shallowLabel.getBoundingClientRect().left,
+        shallowLabelRight: shallowLabel.getBoundingClientRect().right,
+        deepLabelLeft: deepLabel.getBoundingClientRect().left,
+        deepLabelRight: deepLabel.getBoundingClientRect().right,
+        caretTransform: getComputedStyle(caret).transform,
+        firstHeaderLeft: headers[0].getBoundingClientRect().left,
+        lastHeaderLeft: headers[headers.length - 1].getBoundingClientRect().left,
+      };
+    },
+    { treeSel: TREE, shallowSel: SHALLOW_ROW, deepSel: DEEP_ROW },
+  );
+}
+
+test('k3-lane-a RTL: tree indent, collapse caret and table column order all flip under dir=rtl', async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  await gotoCell(page, 'bithire-static', 'en');
+  const ltr = await readLaneADirection(page);
+
+  await gotoCell(page, 'bithire-static', 'ar');
+  const rtl = await readLaneADirection(page);
+
+  await test.step('the Arabic cell actually renders under dir=rtl', async () => {
+    expect(ltr.frameDir).toBe('ltr');
+    expect(rtl.frameDir).toBe('rtl');
+    // The direction has to REACH the tree row, not just sit on the frame.
+    expect(ltr.rowDir).toBe('ltr');
+    expect(
+      rtl.rowDir,
+      'dir=rtl on the probe frame never reached the tree row',
+    ).toBe('rtl');
+  });
+
+  await test.step('the depth indent resolves to the reading-side padding', async () => {
+    // Compared depth-to-depth on ONE physical side, so a constant base padding
+    // can neither mask the flip nor make the assertion brittle.
+    expect(
+      ltr.deepPaddingLeft > ltr.shallowPaddingLeft,
+      `LTR: the depth-2 row did not indent from the left ` +
+        `(deep=${ltr.deepPaddingLeft}, shallow=${ltr.shallowPaddingLeft})`,
+    ).toBe(true);
+    expect(
+      ltr.deepPaddingRight,
+      'LTR: the depth indent leaked onto the trailing edge',
+    ).toBe(ltr.shallowPaddingRight);
+    expect(
+      rtl.deepPaddingRight > rtl.shallowPaddingRight,
+      `RTL: the depth-2 row indented from the wrong edge — the logical ` +
+        `padding-inline-start regressed to a physical padding-left ` +
+        `(deep-right=${rtl.deepPaddingRight}, shallow-right=${rtl.shallowPaddingRight}, ` +
+        `deep-left=${rtl.deepPaddingLeft})`,
+    ).toBe(true);
+    expect(
+      rtl.deepPaddingLeft,
+      'RTL: the depth indent stayed on the physical left',
+    ).toBe(rtl.shallowPaddingLeft);
+  });
+
+  await test.step('the hierarchy geometry mirrors', async () => {
+    expect(
+      ltr.deepLabelLeft > ltr.shallowLabelLeft,
+      `LTR: the deep label did not sit further right than the shallow one ` +
+        `(deep=${ltr.deepLabelLeft}, shallow=${ltr.shallowLabelLeft})`,
+    ).toBe(true);
+    expect(
+      rtl.deepLabelRight < rtl.shallowLabelRight,
+      `RTL: the deep label did not sit further left than the shallow one ` +
+        `(deep=${rtl.deepLabelRight}, shallow=${rtl.shallowLabelRight})`,
+    ).toBe(true);
+  });
+
+  await test.step('the collapse caret carries the pinned :dir(rtl) mirror', async () => {
+    expect(
+      ltr.caretTransform === 'none' || ltr.caretTransform === 'matrix(1, 0, 0, 1, 0, 0)',
+      `LTR: the caret is mirrored when it should not be (${ltr.caretTransform})`,
+    ).toBe(true);
+    expect(
+      rtl.caretTransform,
+      'RTL: the caret lost its pinned :dir(rtl) scaleX(-1) mirror — either the ' +
+        'skin rule is gone or the facade auto-mirror double-flipped it back',
+    ).toBe('matrix(-1, 0, 0, 1, 0, 0)');
+  });
+
+  await test.step('the table column order follows the inherited direction', async () => {
+    expect(
+      ltr.firstHeaderLeft < ltr.lastHeaderLeft,
+      `LTR: the first header is not the leftmost (${ltr.firstHeaderLeft} vs ${ltr.lastHeaderLeft})`,
+    ).toBe(true);
+    expect(
+      rtl.firstHeaderLeft > rtl.lastHeaderLeft,
+      `RTL: the first header is not the rightmost — a direction reset leaked ` +
+        `into the table box (${rtl.firstHeaderLeft} vs ${rtl.lastHeaderLeft})`,
+    ).toBe(true);
   });
 });

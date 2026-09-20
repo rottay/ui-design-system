@@ -149,3 +149,131 @@ test.describe('K0.6 first-party recipe-profile evidence', () => {
     for (const count of counts) expect(count).toBe(counts[0]);
   });
 });
+
+// ---------------------------------------------------------------------------
+// RTL evidence.
+// ---------------------------------------------------------------------------
+
+/**
+ * A recipe profile is allowed to change geometry and personality; it is NOT
+ * allowed to change which way the page reads. This case runs the direction
+ * claim over ALL THREE authored profiles, because the profile is what differs
+ * between the cells — a mirror that only survives on one vertical's authored
+ * geometry is exactly the regression the single-vertical version would miss.
+ *
+ * Read as PHYSICAL values out of a real browser, both locale cells of the same
+ * vertical, so every assertion is a SIGN FLIP rather than a one-sided reading
+ * a direction-blind layout would also pass:
+ *
+ *   button row  the primary Button is DOM-first, so it must sit LEFT of the
+ *               quiet one in LTR and RIGHT of it in RTL. A row pinned with a
+ *               physical `left`/`float`, or a `direction: ltr` reset carried in
+ *               a compiled artifact, keeps LTR green and fails here.
+ *   tab list    the first tab is the leftmost in LTR and the rightmost in RTL.
+ *   input       `direction` must resolve to rtl ON THE CONTROL. Form controls
+ *               are the classic place a direction reset gets pinned (numeric
+ *               fields), which would leave the placeholder and caret
+ *               left-anchored inside an otherwise mirrored page.
+ */
+interface ProfileRtlRead {
+  frameDir: string | null;
+  frameLocale: string | null;
+  primaryLeft: number;
+  primaryRight: number;
+  quietLeft: number;
+  quietRight: number;
+  firstTabLeft: number;
+  lastTabLeft: number;
+  inputDirection: string;
+  overflow: number;
+}
+
+async function readProfileDirection(page: Page): Promise<ProfileRtlRead> {
+  return page.evaluate(() => {
+    const need = (selector: string): HTMLElement => {
+      const el = document.querySelector<HTMLElement>(selector);
+      if (!el) throw new Error(`RTL evidence target is missing: ${selector}`);
+      return el;
+    };
+
+    // Addressed by DOM ORDER inside the probe's own wrappers rather than by a
+    // testid on the DS component, so the evidence does not depend on a
+    // primitive forwarding arbitrary data attributes.
+    const actions = document.querySelectorAll<HTMLElement>('[data-testid="pe-buttons"] button');
+    if (actions.length < 2) throw new Error('RTL evidence needs at least two action buttons');
+    const primary = actions[0].getBoundingClientRect();
+    const quiet = actions[actions.length - 1].getBoundingClientRect();
+    const tabs = document.querySelectorAll<HTMLElement>('[data-testid="pe-tabs"] [role="tab"]');
+    if (tabs.length < 2) throw new Error('RTL evidence needs at least two tabs');
+    const frame = document.querySelector('[data-testid="pe-frame"]');
+
+    return {
+      frameDir: frame?.getAttribute('dir') ?? null,
+      frameLocale: frame?.getAttribute('data-pe-locale') ?? null,
+      primaryLeft: primary.left,
+      primaryRight: primary.right,
+      quietLeft: quiet.left,
+      quietRight: quiet.right,
+      firstTabLeft: tabs[0].getBoundingClientRect().left,
+      lastTabLeft: tabs[tabs.length - 1].getBoundingClientRect().left,
+      inputDirection: getComputedStyle(need('[data-testid="pe-field"] input')).direction,
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    };
+  });
+}
+
+test('k0.6 RTL: every authored profile mirrors under dir=rtl', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  for (const cell of CELLS) {
+    await gotoCell(page, cell, 'en');
+    const ltr = await readProfileDirection(page);
+
+    await gotoCell(page, cell, 'ar');
+    const rtl = await readProfileDirection(page);
+
+    await test.step(`${cell.vertical}: the Arabic cell renders under dir=rtl`, async () => {
+      expect(ltr.frameDir).toBe('ltr');
+      expect(rtl.frameLocale).toBe('ar');
+      expect(rtl.frameDir).toBe('rtl');
+      expect(rtl.overflow, `${cell.vertical}: the RTL cell overflows horizontally`).toBeLessThanOrEqual(1);
+    });
+
+    await test.step(`${cell.vertical}: the action row mirrors`, async () => {
+      expect(
+        ltr.primaryLeft < ltr.quietLeft,
+        `${cell.vertical} LTR: the primary action is not first from the left ` +
+          `(primary=${ltr.primaryLeft}, quiet=${ltr.quietLeft})`,
+      ).toBe(true);
+      expect(
+        rtl.primaryRight > rtl.quietRight,
+        `${cell.vertical} RTL: the primary action did not move to the inline ` +
+          `start — this profile's action row is pinned to a physical edge ` +
+          `(primary=${rtl.primaryRight}, quiet=${rtl.quietRight})`,
+      ).toBe(true);
+    });
+
+    await test.step(`${cell.vertical}: the tab list mirrors`, async () => {
+      expect(
+        ltr.firstTabLeft < ltr.lastTabLeft,
+        `${cell.vertical} LTR: the first tab is not the leftmost ` +
+          `(${ltr.firstTabLeft} vs ${ltr.lastTabLeft})`,
+      ).toBe(true);
+      expect(
+        rtl.firstTabLeft > rtl.lastTabLeft,
+        `${cell.vertical} RTL: the first tab is not the rightmost — a direction ` +
+          `reset leaked into the tab list (${rtl.firstTabLeft} vs ${rtl.lastTabLeft})`,
+      ).toBe(true);
+    });
+
+    await test.step(`${cell.vertical}: the direction reaches the form control`, async () => {
+      expect(ltr.inputDirection).toBe('ltr');
+      expect(
+        rtl.inputDirection,
+        `${cell.vertical} RTL: the Input kept a physical ltr direction, so its ` +
+          `placeholder and caret stay left-anchored inside a mirrored page`,
+      ).toBe('rtl');
+    });
+  }
+});
